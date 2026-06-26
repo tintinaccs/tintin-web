@@ -1,0 +1,1135 @@
+{% liquid
+  assign sid = section.id | replace: '_', '-' | downcase
+%}
+
+<style>
+#tcl-{{ sid }} {
+  width: 100%;
+  background: {{ section.settings.bg_color }};
+  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+}
+
+#tcl-{{ sid }} .tcl-inner {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 5vw);
+  box-sizing: border-box;
+}
+
+#tcl-{{ sid }} .tcl-header {
+  text-align: center;
+  margin-bottom: clamp(20px, 3vw, 3vw);
+  padding: 0;
+}
+
+#tcl-{{ sid }} .tcl-eyebrow {
+  display: inline-block;
+  font-size: clamp(9px, 0.8vw, 0.8vw);
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #ea7ea3;
+  margin-bottom: clamp(8px, 1vw, 1vw);
+  opacity: 0.9;
+}
+
+#tcl-{{ sid }} .tcl-title {
+  margin: 0 0 clamp(8px, 1vw, 1vw);
+  font-family: var(--font-heading-family);
+  font-size: clamp(28px, 4vw, 4vw);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: {{ section.settings.title_color }};
+  line-height: 1.0;
+  text-shadow: none;
+}
+
+#tcl-{{ sid }} .tcl-subtitle {
+  margin: 0;
+  font-size: clamp(10px, 1vw, 1vw);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: {{ section.settings.subtitle_color }};
+  opacity: 0.85;
+}
+
+/* Combo counter badge */
+#tcl-{{ sid }} .tcl-combo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, 0.5vw, 0.5vw);
+  margin-top: clamp(14px, 1.8vw, 1.8vw);
+  margin-bottom: clamp(4px, 0.4vw, 0.4vw);
+}
+
+#tcl-{{ sid }} .tcl-combo-dot {
+  width: clamp(6px, 0.6vw, 0.6vw);
+  height: clamp(6px, 0.6vw, 0.6vw);
+  border-radius: 50%;
+  background: rgba(234,126,163,0.25);
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer;
+}
+
+#tcl-{{ sid }} .tcl-combo-dot.active {
+  background: #ea7ea3;
+  transform: scale(1.4);
+}
+
+/* Refresh btn */
+#tcl-{{ sid }} .tcl-refresh-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(10px, 1.5vw, 1.5vw);
+  margin-bottom: clamp(28px, 4vw, 4vw);
+}
+
+#tcl-{{ sid }} .tcl-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(6px, 0.8vw, 0.8vw);
+  padding: clamp(9px, 1.1vw, 1.1vw) clamp(18px, 2.2vw, 2.2vw);
+  border-radius: 999px;
+  border: 1.5px solid rgba(234,126,163,0.4);
+  background: transparent;
+  color: #ea7ea3;
+  font-size: clamp(10px, 1vw, 1vw);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+#tcl-{{ sid }} .tcl-refresh-btn:hover {
+  background: #ea7ea3;
+  color: #fff;
+  border-color: #ea7ea3;
+}
+
+#tcl-{{ sid }} .tcl-refresh-icon {
+  width: clamp(13px, 1.2vw, 1.2vw);
+  height: clamp(13px, 1.2vw, 1.2vw);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+#tcl-{{ sid }} .tcl-refresh-btn:hover .tcl-refresh-icon,
+#tcl-{{ sid }} .tcl-refresh-btn.spinning .tcl-refresh-icon {
+  transform: rotate(360deg);
+}
+
+/* Grid principal */
+#tcl-{{ sid }} .tcl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(10px, 2vw, 2vw);
+  margin-bottom: clamp(28px, 4vw, 4vw);
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Card de producto */
+#tcl-{{ sid }} .tcl-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: clamp(12px, 1.8vw, 1.8vw);
+  overflow: hidden;
+  padding: clamp(10px, 1.6vw, 1.6vw);
+  padding-bottom: clamp(16px, 2.2vw, 2.2vw);
+  box-sizing: border-box;
+  height: 100%;
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#tcl-{{ sid }} .tcl-card.tcl-loading {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+#tcl-{{ sid }} .tcl-card.tcl-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#tcl-{{ sid }} .tcl-card:hover {
+  transform: translateY(-3px);
+}
+
+#tcl-{{ sid }} .tcl-card-img-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #fbeef4;
+  border-radius: clamp(6px, 1.2vw, 1.2vw);
+  display: block;
+  text-decoration: none;
+  box-shadow: none;
+  width: 100%;
+  isolation: isolate;
+  flex-shrink: 0;
+  margin-bottom: clamp(8px, 1.2vw, 1.2vw);
+}
+
+#tcl-{{ sid }} .tcl-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#tcl-{{ sid }} .tcl-card:hover .tcl-card-img {
+  transform: scale(1.04);
+}
+
+#tcl-{{ sid }} .tcl-col-label {
+  position: absolute;
+  top: clamp(8px, 1vw, 1vw);
+  left: clamp(8px, 1vw, 1vw);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: clamp(4px, 0.5vw, 0.5vw) clamp(8px, 1vw, 1vw);
+  border-radius: 999px;
+  background: #ea7ea3;
+  color: #fff;
+  font-size: clamp(8px, 0.85vw, 0.85vw);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+#tcl-{{ sid }} .tcl-card-info {
+  padding: clamp(10px, 1.3vw, 1.3vw) clamp(4px, 0.5vw, 0.5vw) clamp(4px, 0.5vw, 0.5vw);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.6vw, 0.6vw);
+  flex: 1;
+}
+
+#tcl-{{ sid }} .tcl-card-name {
+  font-size: clamp(11px, 1.2vw, 1.2vw);
+  font-weight: 800;
+  color: #ea7ea3;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: opacity 0.25s ease;
+}
+
+#tcl-{{ sid }} .tcl-card-name:hover {
+  opacity: 0.75;
+}
+
+#tcl-{{ sid }} .tcl-card-price {
+  font-size: clamp(10px, 1.1vw, 1.1vw);
+  font-weight: 900;
+  color: #ea7ea3;
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+
+/* Botón agregar combinación */
+#tcl-{{ sid }} .tcl-add-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2vw, 28px);
+  padding-top: clamp(10px, 1.5vw, 1.5vw);
+}
+
+#tcl-{{ sid }} .tcl-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 1vw);
+  padding: clamp(13px, 1.5vw, 1.5vw) clamp(28px, 3.5vw, 3.5vw);
+  border-radius: 999px;
+  border: none;
+  background: #ea7ea3;
+  color: #fff;
+  font-size: clamp(11px, 1.1vw, 1.1vw);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease;
+  animation: tcl-breathe-{{ sid }} 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes tcl-breathe-{{ sid }} {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+}
+
+#tcl-{{ sid }} .tcl-add-btn:hover {
+  animation-play-state: paused;
+  transform: translateY(-4px) scale(1.04);
+  background: #d4608a;
+}
+
+#tcl-{{ sid }} .tcl-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation-play-state: paused;
+}
+
+#tcl-{{ sid }} .tcl-add-btn svg {
+  width: clamp(14px, 1.2vw, 1.2vw);
+  height: clamp(14px, 1.2vw, 1.2vw);
+  flex-shrink: 0;
+}
+
+/* ── Notificación flotante (toast elegante) ── */
+.tcl-notify-{{ sid }} {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 40px);
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.2vw, 16px);
+  background: #fff;
+  border: 2px solid #ea7ea3;
+  border-radius: clamp(16px, 2vw, 24px);
+  padding: clamp(16px, 2vw, 24px) clamp(20px, 3vw, 36px);
+  min-width: clamp(260px, 40vw, 420px);
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 8px 40px rgba(234,126,163,0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: center;
+}
+
+.tcl-notify-{{ sid }}.tcl-notify-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.tcl-notify-msg-{{ sid }} {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 12px);
+  font-size: clamp(11px, 1.1vw, 15px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ea7ea3;
+  line-height: 1.3;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .tcl-notify-msg-{{ sid }} {
+    font-size: clamp(10px, 3vw, 13px);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tcl-notify-{{ sid }} {
+    padding: clamp(14px, 4vw, 20px) clamp(16px, 4vw, 24px);
+    min-width: 0;
+    width: calc(100vw - 32px);
+  }
+  .tcl-notify-cart-btn-{{ sid }} {
+    font-size: clamp(10px, 2.8vw, 13px);
+    padding: clamp(10px, 2.5vw, 14px) clamp(18px, 4vw, 28px);
+  }
+}
+
+.tcl-notify-msg-{{ sid }} svg {
+  width: clamp(18px, 1.6vw, 24px);
+  height: clamp(18px, 1.6vw, 24px);
+  flex-shrink: 0;
+  color: #ea7ea3;
+}
+
+.tcl-notify-close-{{ sid }} {
+  position: absolute;
+  top: clamp(8px, 1vw, 12px);
+  right: clamp(10px, 1.2vw, 16px);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(234,126,163,0.5);
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.tcl-notify-close-{{ sid }}:hover {
+  color: #ea7ea3;
+}
+
+.tcl-notify-cart-btn-{{ sid }} {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(7px, 0.9vw, 11px);
+  padding: clamp(11px, 1.3vw, 15px) clamp(24px, 3vw, 40px);
+  border-radius: 999px;
+  border: none;
+  background: #ea7ea3;
+  color: #fff;
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease;
+  width: 100%;
+}
+
+.tcl-notify-cart-btn-{{ sid }}:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: #d4608a;
+}
+
+.tcl-notify-cart-btn-{{ sid }} svg {
+  width: clamp(14px, 1.1vw, 17px);
+  height: clamp(14px, 1.1vw, 17px);
+  flex-shrink: 0;
+}
+
+/* Toast */
+#tcl-toast-{{ sid }} {
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #20191b;
+  color: #fff;
+  font-size: clamp(12px, 1vw, 1vw);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: clamp(10px, 1vw, 1vw) clamp(20px, 2vw, 2vw);
+  border-radius: 999px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
+#tcl-toast-{{ sid }}.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Reveal reversible */
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-header,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-refresh-wrap,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-grid,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-add-wrap {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, 56px, 0) scale(0.98);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
+}
+
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-top-{{ sid }} .tcl-header,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-top-{{ sid }} .tcl-refresh-wrap,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-top-{{ sid }} .tcl-grid,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-top-{{ sid }} .tcl-add-wrap {
+  transform: translate3d(0, -56px, 0) scale(0.98);
+}
+
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-header,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-refresh-wrap,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-grid,
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-add-wrap {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-refresh-wrap {
+  transition-delay: 0.08s;
+}
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-grid {
+  transition-delay: 0.16s;
+}
+#tcl-{{ sid }}.tcl-anim-ready-{{ sid }}.tcl-anim-vis-{{ sid }} .tcl-add-wrap {
+  transition-delay: 0.24s;
+}
+
+/* Legacy reveal (dots, etc.) */
+#tcl-{{ sid }} .tcl-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#tcl-{{ sid }} .tcl-reveal.tcl-vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+#tcl-{{ sid }} .tcl-reveal-d0 { transition-delay: 0s; }
+#tcl-{{ sid }} .tcl-reveal-d1 { transition-delay: 0.10s; }
+#tcl-{{ sid }} .tcl-reveal-d2 { transition-delay: 0.20s; }
+#tcl-{{ sid }} .tcl-reveal-d3 { transition-delay: 0.30s; }
+
+@media (prefers-reduced-motion: reduce) {
+  #tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-header,
+  #tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-refresh-wrap,
+  #tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-grid,
+  #tcl-{{ sid }}.tcl-anim-ready-{{ sid }} .tcl-add-wrap {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Móvil ── */
+@media (max-width: 600px) {
+  #tcl-{{ sid }} .tcl-inner {
+    padding: 0 clamp(14px, 4vw, 24px);
+  }
+  #tcl-{{ sid }} .tcl-grid {
+    gap: clamp(8px, 2.5vw, 14px);
+    margin-bottom: clamp(24px, 5vw, 36px);
+  }
+  #tcl-{{ sid }} .tcl-card {
+    padding: clamp(7px, 2.5vw, 12px);
+    padding-bottom: clamp(10px, 3vw, 16px);
+    border-radius: clamp(10px, 3vw, 14px);
+  }
+  #tcl-{{ sid }} .tcl-card-img-wrap {
+    border-radius: clamp(6px, 2vw, 10px);
+    margin-bottom: clamp(6px, 2vw, 10px);
+  }
+  #tcl-{{ sid }} .tcl-card-info {
+    padding: clamp(6px, 2vw, 10px) clamp(2px, 0.5vw, 4px) clamp(2px, 0.5vw, 4px);
+    gap: clamp(3px, 1vw, 6px);
+  }
+  #tcl-{{ sid }} .tcl-card-name {
+    font-size: clamp(8px, 2.4vw, 11px);
+    letter-spacing: 0.03em;
+  }
+  #tcl-{{ sid }} .tcl-card-price {
+    font-size: clamp(8px, 2.2vw, 10px);
+  }
+  #tcl-{{ sid }} .tcl-col-label {
+    font-size: clamp(6px, 1.8vw, 8px);
+    padding: clamp(2px, 0.8vw, 4px) clamp(5px, 1.5vw, 8px);
+    top: clamp(4px, 1.2vw, 7px);
+    left: clamp(4px, 1.2vw, 7px);
+  }
+  #tcl-{{ sid }} .tcl-refresh-wrap {
+    margin-top: clamp(8px, 2vw, 14px);
+    margin-bottom: clamp(20px, 4.5vw, 30px);
+  }
+  #tcl-{{ sid }} .tcl-refresh-btn {
+    font-size: clamp(9px, 2.2vw, 11px);
+    padding: clamp(7px, 2vw, 11px) clamp(14px, 3.5vw, 20px);
+  }
+  #tcl-{{ sid }} .tcl-add-wrap {
+    padding-top: clamp(8px, 2.5vw, 16px);
+  }
+  #tcl-{{ sid }} .tcl-add-btn {
+    font-size: clamp(10px, 2.5vw, 12px);
+    padding: clamp(11px, 3vw, 15px) clamp(20px, 5vw, 30px);
+    gap: clamp(6px, 1.5vw, 9px);
+  }
+}
+
+/* ── Móvil pequeño ── */
+@media (max-width: 380px) {
+  #tcl-{{ sid }} .tcl-inner { padding: 0 12px; }
+  #tcl-{{ sid }} .tcl-grid { gap: 7px; margin-bottom: 22px; }
+  #tcl-{{ sid }} .tcl-card { padding: 6px; padding-bottom: 9px; border-radius: 10px; }
+  #tcl-{{ sid }} .tcl-card-img-wrap { border-radius: 6px; margin-bottom: 5px; }
+  #tcl-{{ sid }} .tcl-card-info { padding: 5px 2px 2px; gap: 3px; }
+  #tcl-{{ sid }} .tcl-card-name { font-size: 8px; }
+  #tcl-{{ sid }} .tcl-card-price { font-size: 8px; }
+  #tcl-{{ sid }} .tcl-col-label { font-size: 6px; padding: 2px 4px; top: 4px; left: 4px; }
+  #tcl-{{ sid }} .tcl-add-btn { font-size: 10px; padding: 10px 18px; }
+}
+
+@keyframes tcl-spin-{{ sid }} {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tcl-{{ sid }} .tcl-add-btn { animation: none !important; }
+  #tcl-{{ sid }} .tcl-card,
+  #tcl-{{ sid }} .tcl-reveal { transition: none !important; }
+}
+</style>
+
+{% liquid
+  assign valid_blocks = section.blocks | where: 'type', 'combo'
+%}
+
+<section id="tcl-{{ sid }}">
+  <div class="tcl-inner">
+
+    <div class="tcl-header tcl-reveal tcl-reveal-d0">
+      <span class="tcl-eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 class="tcl-title">{{ section.settings.title }}</h2>
+      <p class="tcl-subtitle">{{ section.settings.subtitle }}</p>
+      {% if valid_blocks.size > 1 %}
+        <div class="tcl-combo-badge" id="tcl-dots-{{ sid }}">
+          {% for block in valid_blocks %}
+            <span class="tcl-combo-dot{% if forloop.first %} active{% endif %}" data-idx="{{ forloop.index0 }}"></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="tcl-refresh-wrap tcl-reveal tcl-reveal-d1">
+      <button class="tcl-refresh-btn" id="tcl-refresh-{{ sid }}" aria-label="Cambiar combinación">
+        <svg class="tcl-refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 4v6h-6"/>
+          <path d="M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        {{ section.settings.refresh_label }}
+      </button>
+    </div>
+
+    <div class="tcl-grid tcl-reveal tcl-reveal-d2" id="tcl-grid-{{ sid }}">
+      <div class="tcl-card tcl-loading"></div>
+      <div class="tcl-card tcl-loading"></div>
+      <div class="tcl-card tcl-loading"></div>
+    </div>
+
+    <div class="tcl-add-wrap tcl-reveal tcl-reveal-d3">
+      <button class="tcl-add-btn" id="tcl-add-{{ sid }}" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        {{ section.settings.add_label }}
+      </button>
+
+      <!-- Notificación flotante elegante -->
+<div class="tcl-notify-{{ sid }}" id="tcl-notify-{{ sid }}" role="alert" aria-live="polite">
+  <button class="tcl-notify-close-{{ sid }}" id="tcl-notify-close-{{ sid }}" aria-label="Cerrar">✕</button>
+  <p class="tcl-notify-msg-{{ sid }}" id="tcl-notify-msg-{{ sid }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <span id="tcl-notify-text-{{ sid }}">¡Tus productos ya están en el carrito — te esperan!</span>
+  </p>
+  <a href="{{ routes.cart_url }}" class="tcl-notify-cart-btn-{{ sid }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    Ir al carrito
+  </a>
+</div>
+    </div>
+
+  </div>
+</section>
+
+<div id="tcl-toast-{{ sid }}">{{ section.settings.toast_label }}</div>
+
+{%- comment -%}Combos data para JS{%- endcomment -%}
+<script id="tcl-data-{{ sid }}" type="application/json">
+[
+  {% for block in valid_blocks %}
+    {
+      "p1": {
+        "title": {{ block.settings.p1.title | json }},
+        "url": {{ block.settings.p1.url | json }},
+        "img": {{ block.settings.p1.featured_media.preview_image | image_url: width: 600 | json }},
+        "price": {{ block.settings.p1.price }},
+        "vid": {{ block.settings.p1.selected_or_first_available_variant.id | json }},
+        "label": {{ block.settings.label1 | json }}
+      },
+      "p2": {
+        "title": {{ block.settings.p2.title | json }},
+        "url": {{ block.settings.p2.url | json }},
+        "img": {{ block.settings.p2.featured_media.preview_image | image_url: width: 600 | json }},
+        "price": {{ block.settings.p2.price }},
+        "vid": {{ block.settings.p2.selected_or_first_available_variant.id | json }},
+        "label": {{ block.settings.label2 | json }}
+      },
+      "p3": {
+        "title": {{ block.settings.p3.title | json }},
+        "url": {{ block.settings.p3.url | json }},
+        "img": {{ block.settings.p3.featured_media.preview_image | image_url: width: 600 | json }},
+        "price": {{ block.settings.p3.price }},
+        "vid": {{ block.settings.p3.selected_or_first_available_variant.id | json }},
+        "label": {{ block.settings.label3 | json }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]
+</script>
+
+<script>
+(function(){
+  var sid = '{{ sid }}';
+  var grid = document.getElementById('tcl-grid-' + sid);
+  var addBtn = document.getElementById('tcl-add-' + sid);
+  var refreshBtn = document.getElementById('tcl-refresh-' + sid);
+  var toast = document.getElementById('tcl-toast-' + sid);
+  var dataEl = document.getElementById('tcl-data-' + sid);
+
+  if (!grid || !addBtn || !dataEl) return;
+
+  var combos = [];
+  try { combos = JSON.parse(dataEl.textContent); } catch(e) {}
+
+  if (!combos.length) return;
+
+  var currentIdx = -1;
+  var toastTimer = null;
+
+  function formatPrice(guaranies) {
+    return new Intl.NumberFormat('es-PY', { style: 'decimal', maximumFractionDigits: 0 }).format(guaranies) + ' ₲';
+  }
+
+  function updateDots(idx) {
+    var dots = document.querySelectorAll('#tcl-dots-' + sid + ' .tcl-combo-dot');
+    dots.forEach(function(d, i) {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  function buildCard(p, index) {
+    var card = grid.querySelectorAll('.tcl-card')[index];
+    if (!card || !p) return;
+
+    card.classList.add('tcl-loading');
+    card.classList.remove('tcl-ready');
+
+    setTimeout(function() {
+      var imgHtml = p.img
+        ? '<img class="tcl-card-img" src="' + p.img + '" alt="' + (p.title || '').replace(/"/g, '&quot;') + '" loading="lazy" width="600" height="600">'
+        : '<div style="width:100%;height:100%;background:#f6dce6;"></div>';
+
+      card.innerHTML =
+        '<a href="' + (p.url || '#') + '" class="tcl-card-img-wrap">' +
+          '<span class="tcl-col-label">' + (p.label || '') + '</span>' +
+          imgHtml +
+        '</a>' +
+        '<div class="tcl-card-info">' +
+          '<a href="' + (p.url || '#') + '" class="tcl-card-name">' + (p.title || '') + '</a>' +
+          '<span class="tcl-card-price">' + formatPrice(p.price / 100) + '</span>' +
+        '</div>';
+
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          card.classList.remove('tcl-loading');
+          card.classList.add('tcl-ready');
+        });
+      });
+    }, index * 80);
+  }
+
+  function showCombo(idx) {
+    var combo = combos[idx];
+    if (!combo) return;
+    currentIdx = idx;
+    updateDots(idx);
+    [combo.p1, combo.p2, combo.p3].forEach(function(p, i) {
+      buildCard(p, i);
+    });
+    setTimeout(function() { addBtn.disabled = false; }, 350);
+  }
+
+  function nextCombo() {
+    var next = currentIdx;
+    if (combos.length > 1) {
+      while (next === currentIdx) {
+        next = Math.floor(Math.random() * combos.length);
+      }
+    }
+    showCombo(next);
+  }
+
+  function showToast(msg) {
+    if (toastTimer) clearTimeout(toastTimer);
+    if (msg) toast.textContent = msg;
+    toast.classList.add('show');
+    toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 2800);
+  }
+
+  var ADD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+
+  function resetAddBtn() {
+    addBtn.disabled = false;
+    addBtn.innerHTML = ADD_ICON + '{{ section.settings.add_label | escape }}';
+  }
+
+  var notify = document.getElementById('tcl-notify-' + sid);
+  var notifyText = document.getElementById('tcl-notify-text-' + sid);
+  var notifyClose = document.getElementById('tcl-notify-close-' + sid);
+  var notifyTimer = null;
+
+  function showNotify(msg, autohide) {
+    if (!notify) return;
+    if (notifyText) notifyText.textContent = msg;
+    notify.classList.add('tcl-notify-show');
+    if (notifyTimer) clearTimeout(notifyTimer);
+    if (autohide) {
+      notifyTimer = setTimeout(function() { hideNotify(); }, 4000);
+    }
+  }
+
+  function hideNotify() {
+    if (!notify) return;
+    notify.classList.remove('tcl-notify-show');
+    if (notifyTimer) clearTimeout(notifyTimer);
+    resetAddBtn();
+  }
+
+  if (notifyClose) {
+    notifyClose.addEventListener('click', function() { hideNotify(); });
+  }
+
+  /* Agregar al carrito — directo, sin pre-verificar */
+  addBtn.addEventListener('click', function() {
+    var combo = combos[currentIdx];
+    if (!combo) return;
+
+    var ids = [combo.p1.vid, combo.p2.vid, combo.p3.vid].filter(function(id) {
+      return id !== null && id !== undefined && id !== '' && id !== 'null';
+    });
+    if (!ids.length) return;
+
+    addBtn.disabled = true;
+    addBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;animation:tcl-spin-{{ sid }} 0.7s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Agregando...';
+
+    var items = ids.map(function(id) {
+      return { id: parseInt(id, 10), quantity: 1 };
+    });
+
+    fetch('{{ routes.cart_add_url }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ items: items })
+    })
+    .then(function(r) {
+      /* Leer JSON siempre, sea ok o error */
+      return r.json().then(function(data) {
+        return { ok: r.ok, status: r.status, data: data };
+      });
+    })
+    .then(function(res) {
+      if (res.ok) {
+        /* Agregado correctamente — redirigir */
+        resetAddBtn();
+        showNotify('¡Combinación agregada! Llevándote al carrito...', true);
+        setTimeout(function() {
+          window.location.href = '{{ routes.cart_url }}';
+        }, 1200);
+        return;
+      }
+
+      /* Shopify devolvió error — leer el carrito para saber si ya están */
+      return fetch('{{ routes.cart_url }}.js', { cache: 'no-store' })
+        .then(function(rc) { return rc.json(); })
+        .then(function(cart) {
+          var cartIds = (cart.items || []).map(function(item) {
+            return parseInt(item.variant_id, 10);
+          });
+          var algunoEnCarrito = ids.some(function(id) {
+            return cartIds.indexOf(parseInt(id, 10)) !== -1;
+          });
+          resetAddBtn();
+          if (algunoEnCarrito) {
+            showNotify('¡Tus productos ya están en el carrito — te esperan!', false);
+          } else {
+            showNotify('No se pudo agregar. Intentá de nuevo.', true);
+          }
+        })
+        .catch(function() {
+          resetAddBtn();
+          showNotify('No se pudo agregar. Intentá de nuevo.', true);
+        });
+    })
+    .catch(function() {
+      resetAddBtn();
+      showNotify('No se pudo agregar. Verificá tu conexión.', true);
+    });
+  });
+
+  /* Dots click */
+  var dotsEl = document.getElementById('tcl-dots-' + sid);
+  if (dotsEl) {
+    dotsEl.addEventListener('click', function(e) {
+      var dot = e.target.closest('.tcl-combo-dot');
+      if (!dot) return;
+      var idx = parseInt(dot.dataset.idx, 10);
+      if (!isNaN(idx) && idx !== currentIdx) showCombo(idx);
+    });
+  }
+
+  /* Refresh */
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function() {
+      refreshBtn.classList.add('spinning');
+      setTimeout(function() { refreshBtn.classList.remove('spinning'); }, 600);
+      hideNotify();
+      nextCombo();
+    });
+  }
+
+  /* Reveal reversible por elemento (dots, etc.) */
+  var revealEls = document.querySelectorAll('#tcl-' + sid + ' .tcl-reveal');
+  if ('IntersectionObserver' in window) {
+    var revealIO = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('tcl-vis');
+        } else {
+          entry.target.classList.remove('tcl-vis');
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function(el) { revealIO.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('tcl-vis'); });
+  }
+
+  /* Reveal reversible de sección completa */
+  (function(){
+    var root = document.getElementById('tcl-' + sid);
+    if (!root) return;
+
+    root.classList.add('tcl-anim-ready-' + sid);
+    var prevY = window.scrollY || 0;
+
+    function showRoot() {
+      root.classList.add('tcl-anim-vis-' + sid);
+      root.classList.remove('tcl-anim-top-' + sid, 'tcl-anim-bot-' + sid);
+    }
+
+    function hideRoot() {
+      var y = window.scrollY || 0;
+      var goingDown = y >= prevY;
+      prevY = y;
+      root.classList.remove('tcl-anim-vis-' + sid);
+      if (goingDown) {
+        root.classList.add('tcl-anim-top-' + sid);
+        root.classList.remove('tcl-anim-bot-' + sid);
+      } else {
+        root.classList.add('tcl-anim-bot-' + sid);
+        root.classList.remove('tcl-anim-top-' + sid);
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      var io2 = new IntersectionObserver(function(entries) {
+        prevY = window.scrollY || 0;
+        requestAnimationFrame(function() {
+          if (entries[0].isIntersecting) { showRoot(); } else { hideRoot(); }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px 0px 0px' });
+      io2.observe(root);
+    } else {
+      showRoot();
+    }
+
+    document.addEventListener('shopify:section:select', function(e) {
+      if (e.detail && e.detail.sectionId && root.closest('[id*="' + e.detail.sectionId + '"]')) showRoot();
+    });
+  })();
+
+  /* Init — combo aleatoria al cargar */
+  var initIdx = Math.floor(Math.random() * combos.length);
+  showCombo(initIdx);
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Completá tu look",
+  "tag": "section",
+  "class": "tintin-complete-look",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Textos"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Estilo completo"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Completá tu look"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Combinaciones elegidas para vos — cambian en cada visita"
+    },
+    {
+      "type": "text",
+      "id": "refresh_label",
+      "label": "Botón actualizar",
+      "default": "Otra combinación"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Botón agregar",
+      "default": "Agregar esta combinación"
+    },
+    {
+      "type": "text",
+      "id": "toast_label",
+      "label": "Mensaje de confirmación",
+      "default": "¡Combinación agregada al carrito! 🛍️"
+    },
+    {
+      "type": "header",
+      "content": "Colores"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fondo sección",
+      "default": "#fff7fa"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color título",
+      "default": "#a7214d"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color subtítulo",
+      "default": "#b07090"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado superior",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado inferior",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combinación",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Producto 1"
+        },
+        {
+          "type": "product",
+          "id": "p1",
+          "label": "Producto 1"
+        },
+        {
+          "type": "text",
+          "id": "label1",
+          "label": "Etiqueta 1",
+          "default": "Collar"
+        },
+        {
+          "type": "header",
+          "content": "Producto 2"
+        },
+        {
+          "type": "product",
+          "id": "p2",
+          "label": "Producto 2"
+        },
+        {
+          "type": "text",
+          "id": "label2",
+          "label": "Etiqueta 2",
+          "default": "Aros"
+        },
+        {
+          "type": "header",
+          "content": "Producto 3"
+        },
+        {
+          "type": "product",
+          "id": "p3",
+          "label": "Producto 3"
+        },
+        {
+          "type": "text",
+          "id": "label3",
+          "label": "Etiqueta 3",
+          "default": "Pulsera"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Completá tu look"
+    }
+  ]
+}
+{% endschema %}

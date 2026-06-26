@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tintin — Accesorios & Relojes</title>
+  <meta name="description" content="Tintin es tu tienda online de accesorios femeninos en tendencia: relojes, aros, anillos, collares y más. Envíos a todo Paraguay." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin.css" />
+</head>
+<body>
+
+<!-- =============================================
+     HEADER
+     ============================================= -->
+<header class="tt-header">
+  <div class="tt-header-inner">
+
+    <!-- Logo -->
+    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+
+    <!-- Nav desktop -->
+    <nav class="tt-nav">
+      <a href="index.html">Inicio</a>
+
+      <div class="tt-nav-tienda">
+        <button class="tt-nav-tienda-btn">Tienda ▾</button>
+        <div class="tt-dropdown">
+          <a href="catalogo.html?cat=anillos">Anillos</a>
+          <a href="catalogo.html?cat=armcuff">Armcuff</a>
+          <a href="catalogo.html?cat=bolsos">Bags</a>
+          <a href="catalogo.html?cat=aros">Aros</a>
+          <a href="catalogo.html?cat=brazaletes">Brazaletes</a>
+          <a href="catalogo.html?cat=collares">Collares</a>
+          <a href="catalogo.html?cat=earcuff">Earcuff</a>
+          <a href="catalogo.html?cat=gafas">Gafas</a>
+          <a href="catalogo.html?cat=joyeros">Joyeros</a>
+          <a href="catalogo.html?cat=pulseras">Pulseras</a>
+          <a href="catalogo.html?cat=relojes">Relojes</a>
+          <a href="catalogo.html?cat=tobilleras">Tobilleras</a>
+          <div class="tt-dropdown-footer">
+            <a href="catalogo.html">Ver todas las colecciones →</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="nosotros.html">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+      <a href="admin.html" id="link-admin">Admin</a>
+      <a href="login.html" id="btn-login" class="tt-btn" style="padding:9px 22px;font-size:12px">Ingresar</a>
+    </nav>
+
+    <!-- Acciones -->
+    <div class="tt-header-actions">
+      <button class="tt-search-btn" id="btn-buscar" title="Buscar">🔍</button>
+      <a href="perfil.html" class="tt-account-btn" id="btn-cuenta" title="Mi cuenta">👤</a>
+    </div>
+
+  </div>
+</header>
+
+<!-- Buscador overlay -->
+<div class="tt-search-overlay" id="search-overlay">
+  <div class="tt-search-box">
+    <button class="tt-search-close" id="search-close">✕</button>
+    <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--acc);margin-bottom:12px">🔍 Buscá productos</p>
+    <input type="text" id="search-input" placeholder="Ej: reloj dorado, collar, aros..." autocomplete="off" />
+    <div id="search-results" style="margin-top:16px"></div>
+  </div>
+</div>
+
+
+<!-- =============================================
+     HERO SLIDER
+     ============================================= -->
+<section class="tt-hero" id="hero">
+  <div class="tt-hero-slides" id="hero-slides">
+
+    <!-- Slide 1 -->
+    <div class="tt-hero-slide">
+      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=1600"
+           alt="TINTIN" loading="eager" />
+      <div class="tt-hero-overlay">
+        <p class="tt-hero-eyebrow">Bienvenidas a</p>
+        <h1 class="tt-hero-title">TINTIN</h1>
+        <p class="tt-hero-sub">Brillo, estilo y mucha personalidad</p>
+        <a href="#colecciones" class="tt-hero-cta">¿Quiénes somos? →</a>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="tt-hero-slide">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=1600"
+           alt="TINTIN" loading="lazy" />
+      <div class="tt-hero-overlay">
+        <p class="tt-hero-eyebrow">Nueva colección</p>
+        <h1 class="tt-hero-title">ACCESORIOS<br>ÚNICOS</h1>
+        <p class="tt-hero-sub">Edición limitada · Envíos a todo Paraguay</p>
+        <a href="catalogo.html" class="tt-hero-cta">Ver catálogo</a>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="tt-hero-slide">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=1600"
+           alt="TINTIN" loading="lazy" />
+      <div class="tt-hero-overlay">
+        <p class="tt-hero-eyebrow">Colección especial</p>
+        <h1 class="tt-hero-title">BRILLÁ<br>ESTE 2026</h1>
+        <p class="tt-hero-sub">Acero inoxidable · No se oxida</p>
+        <a href="catalogo.html?cat=relojes" class="tt-hero-cta">Ver relojes</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Flechas -->
+  <button class="tt-hero-arrow prev" id="hero-prev">‹</button>
+  <button class="tt-hero-arrow next" id="hero-next">›</button>
+
+  <!-- Dots -->
+  <div class="tt-hero-dots" id="hero-dots">
+    <button class="tt-hero-dot active"></button>
+    <button class="tt-hero-dot"></button>
+    <button class="tt-hero-dot"></button>
+  </div>
+</section>
+
+
+<!-- =============================================
+     TRUST BAR
+     ============================================= -->
+<div class="tt-trust" id="tt-trust">
+  <div class="tt-trust-item">
+    <span class="tt-trust-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+    <span class="tt-trust-label">Envío mismo día</span>
+    <span class="tt-trust-desc">Pedís hoy, recibís hoy</span>
+  </div>
+  <div class="tt-trust-item">
+    <span class="tt-trust-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+    <span class="tt-trust-label">Acero inoxidable</span>
+    <span class="tt-trust-desc">No se oxida ni decolora</span>
+  </div>
+  <div class="tt-trust-item">
+    <span class="tt-trust-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+    <span class="tt-trust-label">Pago seguro</span>
+    <span class="tt-trust-desc">Transferencia o efectivo</span>
+  </div>
+  <div class="tt-trust-item">
+    <span class="tt-trust-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+    <span class="tt-trust-label">Atención personalizada</span>
+    <span class="tt-trust-desc">Te ayudamos por WhatsApp</span>
+  </div>
+</div>
+
+
+<!-- =============================================
+     EDITORIAL — COLECCIÓN BAG
+     ============================================= -->
+<div class="tt-editorial tt-fadein">
+  <div class="tt-editorial-img">
+    <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=1200"
+         alt="Colección BAG" loading="lazy" />
+  </div>
+  <div class="tt-editorial-content">
+    <p class="tt-editorial-eyebrow">Colección BAG ✨</p>
+    <h2 class="tt-editorial-title">El complemento<br>que lo cambia todo</h2>
+    <p class="tt-editorial-body">
+      Las tintinas lo saben: un gran look siempre empieza por un accesorio inolvidable.
+      Descubrí la nueva propuesta de la colección BAG, diseñada para quienes aman los
+      detalles tiernos, la comodidad y ese toque vibrante que derrocha actitud.
+    </p>
+    <a href="catalogo.html?cat=bolsos" class="tt-btn">¡Lo quiero ya!</a>
+  </div>
+</div>
+
+
+<!-- =============================================
+     CARRUSEL COLECCIONES
+     ============================================= -->
+<section class="tt-carousel-section" id="colecciones">
+  <div class="tt-carousel-head">
+    <p class="tt-section-eyebrow">Descubrí todo lo que tenemos para vos</p>
+    <h2 class="tt-section-title" style="color:#ea7ea3">Nuestras colecciones</h2>
+  </div>
+
+  <div class="tt-carousel-wrap">
+    <div class="tt-carousel-track-outer" id="col-track-outer">
+      <div class="tt-carousel-track" id="col-track">
+
+        <div class="tt-cslide"><a href="catalogo.html?cat=bolsos" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=600" alt="Bags" loading="lazy" /><div class="tt-col-card-label">Bags</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=collares" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Collares" loading="lazy" /><div class="tt-col-card-label">Collares</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=relojes" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Relojes" loading="lazy" /><div class="tt-col-card-label">Relojes</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=aros" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=600" alt="Aros" loading="lazy" /><div class="tt-col-card-label">Aros</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=earcuff" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=600" alt="Earcuff" loading="lazy" /><div class="tt-col-card-label">Earcuff</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=pulseras" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=600" alt="Pulseras" loading="lazy" /><div class="tt-col-card-label">Pulseras</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=anillos" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Anillos" loading="lazy" /><div class="tt-col-card-label">Anillos</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=brazaletes" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Brazaletes" loading="lazy" /><div class="tt-col-card-label">Brazaletes</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=tobilleras" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=600" alt="Tobilleras" loading="lazy" /><div class="tt-col-card-label">Tobilleras</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=gafas" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=600" alt="Gafas" loading="lazy" /><div class="tt-col-card-label">Gafas</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=armcuff" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Armcuff" loading="lazy" /><div class="tt-col-card-label">Armcuff</div></a></div>
+        <div class="tt-cslide"><a href="catalogo.html?cat=joyeros" class="tt-col-card"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Joyeros" loading="lazy" /><div class="tt-col-card-label">Joyeros</div></a></div>
+
+      </div>
+    </div>
+
+    <div class="tt-carousel-nav">
+      <button class="tt-carousel-arrow" id="col-prev">‹</button>
+      <div class="tt-carousel-dots" id="col-dots"></div>
+      <button class="tt-carousel-arrow" id="col-next">›</button>
+    </div>
+  </div>
+
+  <div style="display:none"><!-- reemplaza el viejo grid -->
+    <a href="catalogo.html?cat=bolsos" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=600" alt="Bags" loading="lazy" />
+      <div class="tt-col-card-label">Bags</div>
+    </a>
+    <a href="catalogo.html?cat=collares" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Collares" loading="lazy" />
+      <div class="tt-col-card-label">Collares</div>
+    </a>
+    <a href="catalogo.html?cat=earcuff" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Earcuff" loading="lazy" />
+      <div class="tt-col-card-label">Earcuff</div>
+    </a>
+    <a href="catalogo.html?cat=gafas" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=600" alt="Gafas" loading="lazy" />
+      <div class="tt-col-card-label">Gafas</div>
+    </a>
+    <a href="catalogo.html?cat=brazaletes" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Brazaletes" loading="lazy" />
+      <div class="tt-col-card-label">Brazaletes</div>
+    </a>
+    <a href="catalogo.html?cat=aros" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=600" alt="Aros" loading="lazy" />
+      <div class="tt-col-card-label">Aros</div>
+    </a>
+    <a href="catalogo.html?cat=anillos" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=600" alt="Anillos" loading="lazy" />
+      <div class="tt-col-card-label">Anillos</div>
+    </a>
+    <a href="catalogo.html?cat=relojes" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Relojes" loading="lazy" />
+      <div class="tt-col-card-label">Relojes</div>
+    </a>
+    <a href="catalogo.html?cat=joyeros" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=600" alt="Joyeros" loading="lazy" />
+      <div class="tt-col-card-label">Joyeros</div>
+    </a>
+    <a href="catalogo.html?cat=pulseras" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=600" alt="Pulseras" loading="lazy" />
+      <div class="tt-col-card-label">Pulseras</div>
+    </a>
+    <a href="catalogo.html?cat=tobilleras" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=600" alt="Tobilleras" loading="lazy" />
+      <div class="tt-col-card-label">Tobilleras</div>
+    </a>
+    <a href="catalogo.html?cat=armcuff" class="tt-col-card tt-fadein">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" alt="Armcuff" loading="lazy" />
+      <div class="tt-col-card-label">Armcuff</div>
+    </a>
+  </div></div>
+</section>
+
+
+<!-- =============================================
+     COMPLETÁ TU LOOK
+     ============================================= -->
+<section class="tt-look tt-fadein" id="look">
+  <div class="tt-look-inner">
+    <p class="tt-section-eyebrow" style="text-align:center">Estilo completo</p>
+    <h2 class="tt-section-title" style="text-align:center;color:var(--text)">Completá tu look</h2>
+    <p style="font-size:13px;color:var(--text-muted);text-align:center;margin-top:6px;font-weight:500">
+      Combinaciones elegidas para vos — cambian en cada visita
+    </p>
+
+    <div class="tt-look-products" id="look-products">
+      <!-- Se llena dinámicamente desde Firestore -->
+      <div style="text-align:center;color:var(--text-muted);font-size:13px;padding:32px;width:100%">Cargando combinación...</div>
+    </div>
+
+    <div class="tt-look-actions">
+      <button class="tt-btn-outline" id="look-otro">🔄 Otra combinación</button>
+      <a id="look-wa-btn" href="#" target="_blank" class="tt-btn" style="display:none">
+        💬 Consultar combinación por WhatsApp
+      </a>
+    </div>
+
+    <div class="tt-look-toast" id="look-toast">
+      ✅ ¡Combinación enviada a WhatsApp! 🛍️
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================
+     EDITORIAL — RELOJES
+     ============================================= -->
+<div class="tt-editorial reverse tt-fadein">
+  <div class="tt-editorial-img">
+    <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1200"
+         alt="Relojes Tintin" loading="lazy" />
+  </div>
+  <div class="tt-editorial-content">
+    <p class="tt-editorial-eyebrow">Nueva colección</p>
+    <h2 class="tt-editorial-title">El reloj del que<br>todas se enamoran</h2>
+    <p class="tt-editorial-body">
+      Hay accesorios lindos… y después está este reloj. El modelo que más aman las tintinas
+      por su estilo elegante, cómodo y súper versátil. Queda bien con todo y hace que
+      cualquier look se vea muchísimo más chic.
+    </p>
+    <a href="catalogo.html?cat=relojes" class="tt-btn">Ver relojes</a>
+  </div>
+</div>
+
+
+<!-- =============================================
+     MÁS VENDIDOS (desde Firestore)
+     ============================================= -->
+<section class="tt-section" id="mas-vendidos">
+  <div class="tt-section-head">
+    <p class="tt-section-eyebrow">Mirá todo lo más vendido</p>
+    <h2 class="tt-section-title">Nuestros productos</h2>
+  </div>
+
+  <!-- Filtros -->
+  <div class="tt-filtros">
+    <button class="tt-filtro-btn activo" data-cat="todos">Todos</button>
+    <button class="tt-filtro-btn" data-cat="relojes">Relojes</button>
+    <button class="tt-filtro-btn" data-cat="bolsos">Bags</button>
+    <button class="tt-filtro-btn" data-cat="aros">Aros</button>
+    <button class="tt-filtro-btn" data-cat="collares">Collares</button>
+    <button class="tt-filtro-btn" data-cat="pulseras">Pulseras</button>
+    <button class="tt-filtro-btn" data-cat="anillos">Anillos</button>
+    <button class="tt-filtro-btn" data-cat="tobilleras">Tobilleras</button>
+  </div>
+
+  <!-- Carrusel productos -->
+  <div class="tt-carousel-wrap" style="margin-top:8px">
+    <div class="tt-carousel-track-outer" id="prod-track-outer">
+      <div class="tt-carousel-track" id="prod-track" style="align-items:stretch">
+    <!-- Skeletons mientras carga -->
+    <div class="tt-card" style="pointer-events:none">
+      <div class="tt-skeleton" style="aspect-ratio:1/1;width:100%"></div>
+      <div class="tt-card-info">
+        <div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div>
+        <div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div>
+        <div class="tt-skeleton" style="height:16px;width:40%"></div>
+      </div>
+    </div>
+    <div class="tt-card" style="pointer-events:none">
+      <div class="tt-skeleton" style="aspect-ratio:1/1;width:100%"></div>
+      <div class="tt-card-info">
+        <div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div>
+        <div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div>
+        <div class="tt-skeleton" style="height:16px;width:40%"></div>
+      </div>
+    </div>
+    <div class="tt-card" style="pointer-events:none">
+      <div class="tt-skeleton" style="aspect-ratio:1/1;width:100%"></div>
+      <div class="tt-card-info">
+        <div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div>
+        <div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div>
+        <div class="tt-skeleton" style="height:16px;width:40%"></div>
+      </div>
+    </div>
+    <div class="tt-card" style="pointer-events:none">
+      <div class="tt-skeleton" style="aspect-ratio:1/1;width:100%"></div>
+      <div class="tt-card-info">
+        <div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div>
+        <div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div>
+        <div class="tt-skeleton" style="height:16px;width:40%"></div>
+      </div>
+    </div>
+  </div>
+    </div>
+    <div class="tt-carousel-nav">
+      <button class="tt-carousel-arrow" id="prod-prev">‹</button>
+      <div class="tt-carousel-dots" id="prod-dots"></div>
+      <button class="tt-carousel-arrow" id="prod-next">›</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================
+     RESEÑAS
+     ============================================= -->
+<section class="tt-reviews tt-fadein">
+  <div class="tt-section-head">
+    <p class="tt-section-eyebrow">Lo que dicen nuestras clientas</p>
+    <h2 class="tt-section-title" style="color:var(--text)">Tintinas que ya eligieron brillar</h2>
+  </div>
+
+  <div class="tt-reviews-grid">
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"Me encantó la calidad y llegó el mismo día, definitivamente vuelvo a comprar"</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">V</div>
+        <div>
+          <div class="tt-review-name">Valentina G.</div>
+          <div class="tt-review-product">Reloj dorado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"El collar es exactamente como en las fotos, hermoso y súper delicado!!"</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">S</div>
+        <div>
+          <div class="tt-review-name">Sofía M.</div>
+          <div class="tt-review-product">Collar cadena fina</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"Buenísima atención con las chicas de tintin"</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">C</div>
+        <div>
+          <div class="tt-review-name">Camila R.</div>
+          <div class="tt-review-product">Aros argollas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"Hoy pedí a la mañana y a la tarde ya me llegó, muy bonito el paquete de entrega... Graciasss"</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">L</div>
+        <div>
+          <div class="tt-review-name">Luciana P.</div>
+          <div class="tt-review-product">Pulsera plata</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"Ya es mi 4ta compra y la vd que no me arrepiento, la atención es excelente y muy rápida"</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">M</div>
+        <div>
+          <div class="tt-review-name">Micaela T.</div>
+          <div class="tt-review-product">Anillo ajustable</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tt-review-card tt-fadein">
+      <div class="tt-review-stars">★★★★★</div>
+      <p class="tt-review-text">"Las tobilleras son divinas, no se oxidan ni se ponen verdes, me metí al mar y hasta ahora sigue reluciente! Gracias Bárbara..."</p>
+      <div class="tt-review-author">
+        <div class="tt-review-avatar">D</div>
+        <div>
+          <div class="tt-review-name">Daniela F.</div>
+          <div class="tt-review-product">Tobillera acero</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================
+     FOOTER
+     ============================================= -->
+<footer class="tt-footer" id="contacto">
+  <div class="tt-footer-logo">Tintin ✨</div>
+  <p class="tt-footer-copy">
+    © 2024–2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS<br>
+    Asunción, Paraguay
+  </p>
+  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+     target="_blank"
+     class="tt-footer-wa">
+    💬 Contactanos por WhatsApp
+  </a>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+   class="tt-wa-float"
+   target="_blank"
+   title="Contactar por WhatsApp">
+  💬
+</a>
+
+
+<!-- =============================================
+     SCRIPTS
+     ============================================= -->
+<script type="module">
+import { db, auth, provider } from "./js/firebase.js";
+import {
+  collection, getDocs, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  signInWithPopup, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const ADMIN_EMAIL = "tintinaccs@gmail.com";
+const WA_NUM = "595981299331";
+
+// ─── FORMATO PRECIO ───────────────────────────
+function fmt(n) {
+  return "Gs. " + new Intl.NumberFormat("es-PY").format(n);
+}
+
+// ─── AUTH ─────────────────────────────────────
+const btnLogin   = document.getElementById("btn-login");
+const btnCuenta  = document.getElementById("btn-cuenta");
+const linkAdmin  = document.getElementById("link-admin");
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    btnLogin.textContent = "Salir";
+    btnLogin.onclick = () => signOut(auth);
+    if (user.email === ADMIN_EMAIL) linkAdmin.style.display = "inline";
+    else linkAdmin.style.display = "none";
+  } else {
+    btnLogin.textContent = "Ingresar";
+    btnLogin.onclick = () => { window.location.href = "login.html"; };
+    linkAdmin.style.display = "none";
+  }
+});
+
+// ─── BUSCADOR ─────────────────────────────────
+const overlay     = document.getElementById("search-overlay");
+const searchClose = document.getElementById("search-close");
+const searchInput = document.getElementById("search-input");
+const searchRes   = document.getElementById("search-results");
+
+document.getElementById("btn-buscar").onclick = () => {
+  overlay.classList.add("open");
+  setTimeout(() => searchInput.focus(), 100);
+};
+searchClose.onclick = () => overlay.classList.remove("open");
+overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove("open"); };
+
+let todosLosProductos = [];
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q) { searchRes.innerHTML = ""; return; }
+  const hits = todosLosProductos.filter(p =>
+    p.name.toLowerCase().includes(q) || (p.category||"").toLowerCase().includes(q)
+  ).slice(0, 6);
+  if (!hits.length) {
+    searchRes.innerHTML = `<p style="color:var(--text-muted);font-size:13px">Sin resultados para "${q}"</p>`;
+    return;
+  }
+  searchRes.innerHTML = hits.map(p => `
+    <a href="producto.html?id=${p.id}" style="display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;text-decoration:none;color:var(--text);transition:background .2s"
+       onmouseover="this.style.background='var(--acc-pale)'"
+       onmouseout="this.style.background=''"
+    >
+      <img src="${p.imageUrl||''}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #f5d0de" onerror="this.style.display='none'" />
+      <div>
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase">${p.name}</div>
+        <div style="font-size:12px;color:var(--acc);font-weight:700">${fmt(p.price)}</div>
+      </div>
+    </a>
+  `).join("");
+});
+
+// ─── CARGAR PRODUCTOS DESDE FIRESTORE ─────────
+
+async function cargarProductos() {
+  try {
+    const q = query(collection(db, "products"), where("active", "==", true));
+    const snap = await getDocs(q);
+    todosLosProductos = [];
+    snap.forEach(doc => todosLosProductos.push({ id: doc.id, ...doc.data() }));
+    renderProductos(todosLosProductos);
+    cargarLook();
+  } catch (e) {
+    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#e57;padding:40px">Error al cargar productos.</p>`;
+    console.error(e);
+  }
+}
+
+// (renderProductos movido abajo con lógica de carrusel integrada)
+
+// ─── COMPLETÁ TU LOOK ─────────────────────────
+function cargarLook() {
+  if (todosLosProductos.length < 3) return;
+  mostrarCombinacion();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function mostrarCombinacion() {
+  const items = shuffle(todosLosProductos).slice(0, 3);
+  const lookDiv = document.getElementById("look-products");
+
+  lookDiv.innerHTML = items.map(p => `
+    <div class="tt-look-card">
+      <img src="${p.imageUrl||''}" alt="${p.name}"
+           onerror="this.src='https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Tintin'" />
+      <div class="tt-look-card-info">
+        <div class="tt-look-card-name">${p.name}</div>
+        <div class="tt-look-card-price">${fmt(p.price)}</div>
+      </div>
+    </div>
+  `).join("");
+
+  // Botón WhatsApp con los 3 productos
+  const msg = encodeURIComponent(
+    "Hola! Me interesa esta combinación:\n" +
+    items.map(p => `• *${p.name}* — ${fmt(p.price)}`).join("\n") +
+    "\n¿Están disponibles? 🌸"
+  );
+  const waBtn = document.getElementById("look-wa-btn");
+  waBtn.href = `https://wa.me/${WA_NUM}?text=${msg}`;
+  waBtn.style.display = "inline-block";
+}
+
+document.getElementById("look-otro").onclick = mostrarCombinacion;
+
+// ─── HERO SLIDER ──────────────────────────────
+(function() {
+  const slides = document.getElementById("hero-slides");
+  const dots   = document.querySelectorAll(".tt-hero-dot");
+  let current  = 0;
+  const total  = dots.length;
+
+  function goTo(n) {
+    current = (n + total) % total;
+    slides.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle("active", i === current));
+  }
+
+  document.getElementById("hero-prev").onclick = () => goTo(current - 1);
+  document.getElementById("hero-next").onclick = () => goTo(current + 1);
+  dots.forEach((d, i) => d.onclick = () => goTo(i));
+
+  // Auto-play cada 5s
+  setInterval(() => goTo(current + 1), 5000);
+})();
+
+// ─── FADE IN al scroll ────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add("visible");
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".tt-fadein").forEach(el => observer.observe(el));
+
+// ─── CARRUSEL GENÉRICO ────────────────────────
+function initCarrusel({ outerEl, trackEl, prevEl, nextEl, dotsEl, perViewDesktop = 4 }) {
+  if (!trackEl || !outerEl) return;
+  let current = 0;
+  let startX = 0, startTranslate = 0, currentTranslate = 0, dragging = false;
+
+  function perView() {
+    if (window.innerWidth < 750) return 2;
+    if (window.innerWidth < 990) return 3;
+    return perViewDesktop;
+  }
+
+  function slides() { return [...trackEl.children]; }
+
+  function slideW() {
+    const s = slides()[0];
+    if (!s) return 0;
+    const gap = parseInt(getComputedStyle(trackEl).gap) || 16;
+    return s.offsetWidth + gap;
+  }
+
+  function maxPage() {
+    return Math.max(0, Math.ceil(slides().length / perView()) - 1);
+  }
+
+  function buildDots() {
+    if (!dotsEl) return;
+    const total = maxPage() + 1;
+    dotsEl.innerHTML = Array.from({ length: total }, (_, i) =>
+      `<button class="tt-carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}"></button>`
+    ).join('');
+    dotsEl.querySelectorAll('.tt-carousel-dot').forEach(d =>
+      d.addEventListener('click', () => goTo(+d.dataset.i))
+    );
+  }
+
+  function setTranslate(x, animate = true) {
+    trackEl.style.transition = animate ? 'transform .38s cubic-bezier(.22,.61,.36,1)' : 'none';
+    trackEl.style.transform = `translate3d(${x}px,0,0)`;
+    currentTranslate = x;
+  }
+
+  function goTo(n) {
+    current = Math.max(0, Math.min(n, maxPage()));
+    setTranslate(-(current * perView() * slideW()));
+    if (prevEl) prevEl.disabled = current === 0;
+    if (nextEl) nextEl.disabled = current >= maxPage();
+    dotsEl?.querySelectorAll('.tt-carousel-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+  }
+
+  if (prevEl) prevEl.addEventListener('click', () => goTo(current - 1));
+  if (nextEl) nextEl.addEventListener('click', () => goTo(current + 1));
+
+  // Mouse drag
+  outerEl.addEventListener('mousedown', e => {
+    dragging = true; startX = e.clientX; startTranslate = currentTranslate;
+    outerEl.classList.add('is-dragging');
+    setTranslate(currentTranslate, false);
+  });
+  outerEl.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    setTranslate(startTranslate + (e.clientX - startX), false);
+  });
+  const endDrag = e => {
+    if (!dragging) return;
+    dragging = false;
+    outerEl.classList.remove('is-dragging');
+    const dx = e.clientX - startX;
+    goTo(dx < -50 ? current + 1 : dx > 50 ? current - 1 : current);
+  };
+  outerEl.addEventListener('mouseup', endDrag);
+  outerEl.addEventListener('mouseleave', endDrag);
+
+  // Touch swipe
+  outerEl.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startTranslate = currentTranslate;
+    setTranslate(currentTranslate, false);
+  }, { passive: true });
+  outerEl.addEventListener('touchmove', e => {
+    setTranslate(startTranslate + (e.touches[0].clientX - startX), false);
+  }, { passive: true });
+  outerEl.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    goTo(dx < -50 ? current + 1 : dx > 50 ? current - 1 : current);
+  });
+
+  // Evitar que el drag active links
+  outerEl.addEventListener('click', e => {
+    if (Math.abs(currentTranslate - startTranslate) > 8) e.preventDefault();
+  }, true);
+
+  buildDots();
+  goTo(0);
+  window.addEventListener('resize', () => { buildDots(); goTo(0); });
+}
+
+// ─── RENDERIZAR PRODUCTOS → carrusel ──────────
+function renderProductos(lista) {
+  const track = document.getElementById('prod-track');
+  if (!lista.length) {
+    track.innerHTML = `<p style="padding:40px;color:var(--text-muted);text-align:center">No hay productos en esta categoría.</p>`;
+    return;
+  }
+  track.innerHTML = lista.map(p => {
+    const msg = encodeURIComponent(`Hola! Me interesa *${p.name}* — Precio: ${fmt(p.price)}. ¿Está disponible? 🌸`);
+    const wa  = `https://wa.me/${WA_NUM}?text=${msg}`;
+    return `
+      <div class="tt-card tt-pslide" onclick="location.href='producto.html?id=${p.id}'">
+        <div class="tt-card-img-wrap">
+          <img src="${p.imageUrl||''}" alt="${p.name}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Tintin'" />
+          ${p.stock === 0 ? '<span class="tt-card-badge">AGOTADO</span>' : ''}
+          ${p.oferta ? '<span class="tt-card-badge" style="top:10px;left:auto;right:10px">OFERTA</span>' : ''}
+        </div>
+        <div class="tt-card-info">
+          <div class="tt-card-cat">${p.category||''}</div>
+          <div class="tt-card-name">${p.name}</div>
+          <div class="tt-card-price">${fmt(p.price)}</div>
+          <a class="tt-card-btn" href="${wa}" target="_blank" onclick="event.stopPropagation()">
+            💬 Comprar por WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Iniciar carrusel después de render
+  initCarrusel({
+    outerEl: document.getElementById('prod-track-outer'),
+    trackEl: document.getElementById('prod-track'),
+    prevEl:  document.getElementById('prod-prev'),
+    nextEl:  document.getElementById('prod-next'),
+    dotsEl:  document.getElementById('prod-dots'),
+    perViewDesktop: 4
+  });
+}
+
+// ─── FILTROS ──────────────────────────────────
+const filtros = document.querySelectorAll('.tt-filtro-btn');
+filtros.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filtros.forEach(b => b.classList.remove('activo'));
+    btn.classList.add('activo');
+    const cat = btn.dataset.cat;
+    renderProductos(cat === 'todos'
+      ? todosLosProductos
+      : todosLosProductos.filter(p => p.category === cat)
+    );
+  });
+});
+
+// ─── ARRANCAR ─────────────────────────────────
+cargarProductos();
+
+// ─── CARRUSEL COLECCIONES ─────────────────────
+initCarrusel({
+  outerEl: document.getElementById('col-track-outer'),
+  trackEl: document.getElementById('col-track'),
+  prevEl:  document.getElementById('col-prev'),
+  nextEl:  document.getElementById('col-next'),
+  dotsEl:  document.getElementById('col-dots'),
+  perViewDesktop: 4
+});
+
+// ─── TRUST BAR ANIMATION ──────────────────────
+(function() {
+  const items = document.querySelectorAll(".tt-trust-item");
+  if (!items.length) return;
+  const io = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      items.forEach(el => el.classList.add("ttb-visible"));
+      io.disconnect();
+    }
+  }, { threshold: 0.15 });
+  io.observe(document.getElementById("tt-trust"));
+})();
+
+// ─── CARRUSEL GENÉRICO ────────────────────────
+function initCarrusel({ trackId, prevId, nextId, dotsId, slidesPerView }) {
+  const track     = document.getElementById(trackId);
+  const outer     = track?.parentElement;
+  const prevBtn   = document.getElementById(prevId);
+  const nextBtn   = document.getElementById(nextId);
+  const dotsWrap  = document.getElementById(dotsId);
+  if (!track || !outer) return;
+
+  let current = 0;
+  let startX = 0, isDragging = false, startTranslate = 0, currentTranslate = 0;
+
+  function getSlides() { return track.querySelectorAll(".tt-cslide, .tt-pslide"); }
+
+  function getPerView() {
+    if (window.innerWidth < 750) return 2;
+    if (window.innerWidth < 990) return 3;
+    return slidesPerView || 4;
+  }
+
+  function buildDots() {
+    if (!dotsWrap) return;
+    const total = Math.ceil(getSlides().length / getPerView());
+    dotsWrap.innerHTML = Array.from({ length: total }, (_, i) =>
+      `<button class="tt-carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}"></button>`
+    ).join("");
+    dotsWrap.querySelectorAll(".tt-carousel-dot").forEach(d => {
+      d.onclick = () => goTo(parseInt(d.dataset.i));
+    });
+  }
+
+  function goTo(n) {
+    const slides = getSlides();
+    const perView = getPerView();
+    const max = Math.ceil(slides.length / perView) - 1;
+    current = Math.max(0, Math.min(n, max));
+    const slideW = slides[0]?.offsetWidth || 0;
+    const gap = 16;
+    currentTranslate = -(current * perView * (slideW + gap));
+    track.style.transition = "transform .38s cubic-bezier(.22,.61,.36,1)";
+    track.style.transform  = `translate3d(${currentTranslate}px,0,0)`;
+    if (prevBtn) prevBtn.disabled = current === 0;
+    if (nextBtn) nextBtn.disabled = current >= max;
+    dotsWrap?.querySelectorAll(".tt-carousel-dot").forEach((d, i) =>
+      d.classList.toggle("active", i === current)
+    );
+  }
+
+  if (prevBtn) prevBtn.onclick = () => goTo(current - 1);
+  if (nextBtn) nextBtn.onclick = () => goTo(current + 1);
+
+  // Drag/swipe
+  outer.addEventListener("mousedown",  e => { isDragging = true; startX = e.clientX; startTranslate = currentTranslate; outer.classList.add("is-dragging"); track.style.transition = "none"; });
+  outer.addEventListener("mousemove",  e => { if (!isDragging) return; const dx = e.clientX - startX; track.style.transform = `translate3d(${startTranslate + dx}px,0,0)`; });
+  outer.addEventListener("mouseup",    e => { if (!isDragging) return; isDragging = false; outer.classList.remove("is-dragging"); const dx = e.clientX - startX; goTo(dx < -40 ? current + 1 : dx > 40 ? current - 1 : current); });
+  outer.addEventListener("mouseleave", e => { if (isDragging) { isDragging = false; outer.classList.remove("is-dragging"); goTo(current); } });
+
+  outer.addEventListener("touchstart", e => { startX = e.touches[0].clientX; startTranslate = currentTranslate; track.style.transition = "none"; }, { passive: true });
+  outer.addEventListener("touchmove",  e => { const dx = e.touches[0].clientX - startX; track.style.transform = `translate3d(${startTranslate + dx}px,0,0)`; }, { passive: true });
+  outer.addEventListener("touchend",   e => { const dx = e.changedTouches[0].clientX - startX; goTo(dx < -40 ? current + 1 : dx > 40 ? current - 1 : current); });
+
+  // Prevent link clicks while dragging
+  outer.addEventListener("click", e => { if (Math.abs(currentTranslate - startTranslate) > 5) e.preventDefault(); }, true);
+
+  buildDots();
+  goTo(0);
+  window.addEventListener("resize", () => { buildDots(); goTo(0); });
+}
+
+// Iniciar carrusel colecciones
+initCarrusel({ trackId: "col-track", prevId: "col-prev", nextId: "col-next", dotsId: "col-dots", slidesPerView: 4 });
+
+// (carrusel de productos ya integrado en renderProductos)
+// ─── TAB BAR BUSCAR ───────────────────────────
+document.getElementById("tab-buscar").onclick = () => {
+  overlay.classList.add("open");
+  setTimeout(() => searchInput.focus(), 100);
+};
+
+// ─── TAB BAR: pill reveal al hacer scroll ─────
+(function() {
+  const bar = document.getElementById("tt-tabbar");
+  if (!bar) return;
+  let lastY = 0;
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 80) bar.classList.add("tt-tabbar-hidden");
+    else bar.classList.remove("tt-tabbar-hidden");
+    lastY = y;
+  }, { passive: true });
+})();
+</script>
+
+<!-- TAB BAR MOBILE — pill flotante igual al diseño Shopify -->
+<nav class="tt-tabbar" id="tt-tabbar">
+  <a href="index.html" class="tt-tab tt-tab-active" aria-label="Inicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </a>
+  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  </button>
+  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  </a>
+  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8" class="tt-tab" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+  <a href="perfil.html" class="tt-tab" aria-label="Perfil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </a>
+</nav>
+
+</body>
+</html>

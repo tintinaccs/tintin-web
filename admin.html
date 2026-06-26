@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Tintin Accesorios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin.css" />
+  <style>
+    body { background: #f8f8f8; }
+
+    .adm-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .adm-sidebar {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .adm-logo {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--acc);
+      padding: 0 20px 24px;
+      border-bottom: 1px solid #333;
+      margin-bottom: 16px;
+    }
+
+    .adm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .adm-nav-item:hover { color: #fff; background: #2a2a2a; }
+    .adm-nav-item.active { color: var(--acc); background: #2a2a2a; border-left: 3px solid var(--acc); }
+    .adm-nav-icon { font-size: 16px; }
+
+    .adm-sidebar-foot {
+      padding: 20px;
+      border-top: 1px solid #333;
+      margin-top: auto;
+    }
+
+    /* MAIN */
+    .adm-main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .adm-page { display: none; }
+    .adm-page.active { display: block; }
+
+    .adm-page-title {
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    /* STATS */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .adm-stat {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      border: 1.5px solid #eee;
+    }
+
+    .adm-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .adm-stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--acc);
+    }
+
+    .adm-stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* CARDS */
+    .adm-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1.5px solid #eee;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .adm-card-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid #f5d0de;
+    }
+
+    /* FORM */
+    .adm-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .adm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .adm-field.full { grid-column: 1 / -1; }
+
+    .adm-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+    }
+
+    .adm-input,
+    .adm-select,
+    .adm-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid #eee;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text);
+      transition: border .2s;
+      background: #fff;
+    }
+
+    .adm-input:focus,
+    .adm-select:focus,
+    .adm-textarea:focus {
+      outline: none;
+      border-color: var(--acc);
+    }
+
+    .adm-textarea { resize: vertical; min-height: 80px; }
+
+    .adm-img-preview {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      border: 1.5px dashed #f5d0de;
+      padding: 8px;
+      background: var(--acc-pale);
+      display: none;
+    }
+
+    .adm-img-preview.show { display: block; }
+
+    /* TOGGLE */
+    .adm-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .adm-toggle {
+      width: 44px;
+      height: 24px;
+      background: #ddd;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: background .2s;
+      border: none;
+      flex-shrink: 0;
+    }
+
+    .adm-toggle.on { background: var(--acc); }
+
+    .adm-toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: left .2s;
+    }
+
+    .adm-toggle.on::after { left: 23px; }
+
+    .adm-toggle-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* BTN */
+    .adm-btn {
+      padding: 11px 28px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .2s;
+      border: none;
+    }
+
+    .adm-btn-primary { background: var(--acc); color: #fff; }
+    .adm-btn-primary:hover { background: var(--acc-dark); }
+
+    .adm-btn-outline {
+      background: transparent;
+      border: 2px solid var(--acc);
+      color: var(--acc);
+    }
+    .adm-btn-outline:hover { background: var(--acc); color: #fff; }
+
+    .adm-btn-danger { background: #ff4d4f; color: #fff; }
+    .adm-btn-danger:hover { background: #d9363e; }
+
+    .adm-btn-sm {
+      padding: 6px 14px;
+      font-size: 11px;
+    }
+
+    .adm-btn-success { background: #25D366; color: #fff; }
+
+    /* TABLA */
+    .adm-table-wrap { overflow-x: auto; }
+
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .adm-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      border-bottom: 2px solid #f5d0de;
+      white-space: nowrap;
+    }
+
+    .adm-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f5f5f5;
+      vertical-align: middle;
+    }
+
+    .adm-table tr:hover td { background: var(--acc-pale); }
+
+    .adm-table-img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1.5px solid #f5d0de;
+    }
+
+    .adm-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .adm-badge-green { background: #e8f5e9; color: #2e7d32; }
+    .adm-badge-red   { background: #ffebee; color: #c62828; }
+    .adm-badge-gray  { background: #f5f5f5; color: #666; }
+    .adm-badge-pink  { background: var(--acc-light); color: var(--acc-dark); }
+
+    /* ACCIONES TABLA */
+    .adm-table-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* BUSCADOR TABLA */
+    .adm-table-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .adm-search-input {
+      padding: 9px 16px;
+      border: 1.5px solid #eee;
+      border-radius: 50px;
+      font-size: 13px;
+      font-family: var(--font);
+      outline: none;
+      width: 240px;
+    }
+    .adm-search-input:focus { border-color: var(--acc); }
+
+    /* MODAL */
+    .adm-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .adm-modal-overlay.open { display: flex; }
+
+    .adm-modal {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .adm-modal-title {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .adm-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      font-size: 22px;
+    }
+
+    /* TOAST */
+    .adm-toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      display: none;
+      animation: fadeUp .3s ease;
+    }
+    .adm-toast.show { display: block; }
+    .adm-toast.success { background: var(--acc); }
+    .adm-toast.error   { background: #ff4d4f; }
+
+    /* IMPORT/EXPORT */
+    .adm-import-zone {
+      border: 2px dashed #f5d0de;
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .adm-import-zone:hover { background: var(--acc-pale); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .adm-wrap { grid-template-columns: 1fr; }
+      .adm-sidebar { height: auto; position: static; display: flex; flex-wrap: wrap; padding: 12px; gap: 4px; }
+      .adm-logo { padding: 8px 12px; border: none; margin: 0; }
+      .adm-nav-item { padding: 8px 12px; font-size: 11px; width: auto; }
+      .adm-stats { grid-template-columns: repeat(2, 1fr); }
+      .adm-form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PANTALLA DE ACCESO DENEGADO -->
+<div id="adm-blocked" style="display:none;position:fixed;inset:0;background:#f8f8f8;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+  <div style="font-size:48px">🔒</div>
+  <div style="font-size:20px;font-weight:900;text-transform:uppercase;color:var(--text)">Acceso restringido</div>
+  <div style="font-size:14px;color:var(--text-muted)">Solo la administradora puede acceder a este panel</div>
+  <a href="index.html" class="adm-btn adm-btn-primary">Volver al inicio</a>
+</div>
+
+<div id="adm-content" style="display:none">
+<div class="adm-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="adm-sidebar">
+    <div class="adm-logo">✨ Tintin<br><span style="font-size:11px;color:#666;font-weight:500">Admin Panel</span></div>
+
+    <button class="adm-nav-item active" data-page="dashboard">
+      <span class="adm-nav-icon">📊</span> Dashboard
+    </button>
+    <button class="adm-nav-item" data-page="productos">
+      <span class="adm-nav-icon">🛍️</span> Productos
+    </button>
+    <button class="adm-nav-item" data-page="nuevo-producto">
+      <span class="adm-nav-icon">➕</span> Nuevo producto
+    </button>
+    <button class="adm-nav-item" data-page="pedidos">
+      <span class="adm-nav-icon">📦</span> Pedidos
+    </button>
+    <button class="adm-nav-item" data-page="usuarios">
+      <span class="adm-nav-icon">👥</span> Usuarios
+    </button>
+    <button class="adm-nav-item" data-page="importar">
+      <span class="adm-nav-icon">📥</span> Import / Export
+    </button>
+
+    <div class="adm-sidebar-foot">
+      <div style="font-size:11px;color:#666;margin-bottom:8px">Sesión iniciada:</div>
+      <div id="adm-user-email" style="font-size:12px;color:#aaa;margin-bottom:12px;word-break:break-all"></div>
+      <button class="adm-btn adm-btn-outline adm-btn-sm" id="adm-logout" style="width:100%">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="adm-main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="adm-page active" id="page-dashboard">
+      <h1 class="adm-page-title">📊 Dashboard</h1>
+
+      <div class="adm-stats">
+        <div class="adm-stat">
+          <div class="adm-stat-label">Productos activos</div>
+          <div class="adm-stat-value" id="stat-activos">—</div>
+          <div class="adm-stat-sub">en catálogo</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-label">Total productos</div>
+          <div class="adm-stat-value" id="stat-total">—</div>
+          <div class="adm-stat-sub">en base de datos</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-label">Agotados</div>
+          <div class="adm-stat-value" id="stat-agotados">—</div>
+          <div class="adm-stat-sub">stock = 0</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-label">Usuarios</div>
+          <div class="adm-stat-value" id="stat-usuarios">—</div>
+          <div class="adm-stat-sub">registrados</div>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-title">⚡ Acciones rápidas</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="adm-btn adm-btn-primary" onclick="showPage('nuevo-producto')">➕ Nuevo producto</button>
+          <button class="adm-btn adm-btn-outline" onclick="showPage('productos')">📋 Ver productos</button>
+          <a href="index.html" target="_blank" class="adm-btn adm-btn-outline">🌐 Ver tienda</a>
+          <button class="adm-btn adm-btn-outline" onclick="showPage('importar')">📥 Importar CSV</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-title">🕐 Últimos productos cargados</div>
+        <div class="adm-table-wrap">
+          <table class="adm-table" id="dash-recent-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="dash-recent-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PRODUCTOS ── -->
+    <div class="adm-page" id="page-productos">
+      <h1 class="adm-page-title">🛍️ Productos</h1>
+
+      <div class="adm-card">
+        <div class="adm-table-top">
+          <input type="text" class="adm-search-input" id="prod-search" placeholder="🔍 Buscar producto..." />
+          <div style="display:flex;gap:8px">
+            <select class="adm-input" id="prod-filter-cat" style="padding:9px 14px;border-radius:50px;font-size:12px">
+              <option value="">Todas las categorías</option>
+              <option value="relojes">Relojes</option>
+              <option value="bolsos">Bolsos</option>
+              <option value="aros">Aros</option>
+              <option value="collares">Collares</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="anillos">Anillos</option>
+              <option value="tobilleras">Tobilleras</option>
+              <option value="brazaletes">Brazaletes</option>
+              <option value="earcuff">Earcuff</option>
+              <option value="armcuff">Armcuff</option>
+              <option value="gafas">Gafas</option>
+              <option value="joyeros">Joyeros</option>
+            </select>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="showPage('nuevo-producto')">➕ Nuevo</button>
+          </div>
+        </div>
+
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="productos-body">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NUEVO / EDITAR PRODUCTO ── -->
+    <div class="adm-page" id="page-nuevo-producto">
+      <h1 class="adm-page-title" id="form-prod-title">➕ Nuevo producto</h1>
+
+      <div class="adm-card">
+        <div class="adm-card-title">Información del producto</div>
+        <div class="adm-form-grid">
+
+          <div class="adm-field full">
+            <label class="adm-label">Nombre del producto *</label>
+            <input type="text" class="adm-input" id="prod-nombre" placeholder="Ej: Reloj Dorado Elegante" />
+          </div>
+
+          <div class="adm-field">
+            <label class="adm-label">Categoría *</label>
+            <select class="adm-select" id="prod-cat">
+              <option value="">— Seleccioná —</option>
+              <option value="relojes">Relojes</option>
+              <option value="bolsos">Bolsos / Bags</option>
+              <option value="aros">Aros</option>
+              <option value="collares">Collares</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="anillos">Anillos</option>
+              <option value="tobilleras">Tobilleras</option>
+              <option value="brazaletes">Brazaletes</option>
+              <option value="earcuff">Earcuff</option>
+              <option value="armcuff">Armcuff</option>
+              <option value="gafas">Gafas</option>
+              <option value="joyeros">Joyeros</option>
+            </select>
+          </div>
+
+          <div class="adm-field">
+            <label class="adm-label">Precio (Gs.) *</label>
+            <input type="number" class="adm-input" id="prod-precio" placeholder="Ej: 85000" min="0" />
+          </div>
+
+          <div class="adm-field">
+            <label class="adm-label">Precio tachado / antes (Gs.)</label>
+            <input type="number" class="adm-input" id="prod-precio-antes" placeholder="Ej: 120000 (opcional)" min="0" />
+          </div>
+
+          <div class="adm-field">
+            <label class="adm-label">Stock disponible</label>
+            <input type="number" class="adm-input" id="prod-stock" placeholder="Ej: 5" min="0" value="1" />
+          </div>
+
+          <div class="adm-field full">
+            <label class="adm-label">URL de la foto principal *</label>
+            <input type="url" class="adm-input" id="prod-img" placeholder="https://..." />
+            <img id="prod-img-preview" class="adm-img-preview" alt="preview" />
+          </div>
+
+          <div class="adm-field full">
+            <label class="adm-label">URLs de fotos adicionales (una por línea)</label>
+            <textarea class="adm-textarea" id="prod-imgs-extra" placeholder="https://foto2.jpg&#10;https://foto3.jpg"></textarea>
+          </div>
+
+          <div class="adm-field full">
+            <label class="adm-label">Descripción</label>
+            <textarea class="adm-textarea" id="prod-desc" placeholder="Describí el producto: material, medidas, cómo usarlo..."></textarea>
+          </div>
+
+          <div class="adm-field full">
+            <label class="adm-label">Tags / etiquetas (separadas por coma)</label>
+            <input type="text" class="adm-input" id="prod-tags" placeholder="Ej: oferta, nuevo, acero inoxidable" />
+          </div>
+
+          <div class="adm-field full">
+            <div class="adm-toggle-wrap">
+              <button class="adm-toggle on" id="prod-active-toggle"></button>
+              <span class="adm-toggle-label" id="prod-active-label">Producto ACTIVO (visible en tienda)</span>
+            </div>
+          </div>
+
+          <div class="adm-field full">
+            <div class="adm-toggle-wrap">
+              <button class="adm-toggle" id="prod-oferta-toggle"></button>
+              <span class="adm-toggle-label">Marcar como OFERTA</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+          <button class="adm-btn adm-btn-primary" id="btn-guardar-producto">💾 Guardar producto</button>
+          <button class="adm-btn adm-btn-outline" onclick="resetFormProducto()">🔄 Limpiar formulario</button>
+          <button class="adm-btn adm-btn-outline" onclick="showPage('productos')">← Volver a lista</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PEDIDOS ── -->
+    <div class="adm-page" id="page-pedidos">
+      <h1 class="adm-page-title">📦 Pedidos</h1>
+      <div class="adm-card">
+        <div class="adm-card-title">Pedidos recibidos</div>
+        <div style="text-align:center;padding:40px;color:var(--text-muted)">
+          <div style="font-size:48px;margin-bottom:12px">📦</div>
+          <div style="font-weight:700">Los pedidos aparecerán aquí</div>
+          <div style="font-size:13px;margin-top:6px">Cuando los clientes completen el formulario de pedido por WhatsApp, podrás registrarlos acá.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── USUARIOS ── -->
+    <div class="adm-page" id="page-usuarios">
+      <h1 class="adm-page-title">👥 Usuarios</h1>
+      <div class="adm-card">
+        <div class="adm-card-title">Usuarios registrados</div>
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Registrado</th>
+              </tr>
+            </thead>
+            <tbody id="usuarios-body">
+              <tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── IMPORTAR / EXPORTAR ── -->
+    <div class="adm-page" id="page-importar">
+      <h1 class="adm-page-title">📥 Import / Export</h1>
+
+      <div class="adm-card">
+        <div class="adm-card-title">📤 Exportar productos</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Descargá todos los productos de Firestore como archivo JSON.</p>
+        <button class="adm-btn adm-btn-primary" id="btn-exportar">📥 Descargar JSON</button>
+      </div>
+
+      <!-- IMPORTAR CSV DE SHOPIFY -->
+      <div class="adm-card">
+        <div class="adm-card-title">🛍️ Importar CSV de Shopify</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Exportá tus productos desde <strong>Shopify → Productos → Exportar → CSV</strong> y subí el archivo acá. Se importan automáticamente a Firebase.
+        </p>
+
+        <!-- Zona de drop -->
+        <div id="csv-drop-zone" style="
+          border: 2px dashed #f5d0de;
+          border-radius: var(--radius);
+          padding: 40px 24px;
+          text-align: center;
+          cursor: pointer;
+          transition: all .2s;
+          background: var(--acc-pale);
+          margin-bottom: 16px;
+        ">
+          <div style="font-size:36px;margin-bottom:8px">📄</div>
+          <div style="font-size:14px;font-weight:700;color:var(--acc)">Arrastrá el CSV acá</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">o hacé click para seleccionar el archivo</div>
+          <input type="file" id="csv-file-input" accept=".csv" style="display:none" />
+        </div>
+
+        <!-- Preview tabla -->
+        <div id="csv-preview" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+            <div style="font-size:13px;font-weight:700;color:var(--text)" id="csv-preview-title"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">🗑️ Limpiar</button>
+              <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;max-height:360px;overflow-y:auto;border-radius:var(--radius-sm);border:1.5px solid #f5d0de">
+            <table class="adm-table" id="csv-preview-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Foto</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="csv-preview-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="csv-import-progress" style="display:none;margin-top:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px" id="csv-progress-label">Importando...</div>
+          <div style="background:#f5d0de;border-radius:50px;height:8px;overflow:hidden">
+            <div id="csv-progress-bar" style="height:100%;background:var(--acc);border-radius:50px;transition:width .3s ease;width:0%"></div>
+          </div>
+        </div>
+
+        <div id="csv-import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+      </div>
+
+      <!-- IMPORTAR JSON -->
+      <div class="adm-card">
+        <div class="adm-card-title">📥 Importar JSON manual</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Pegá un JSON con un array de productos. Cada item debe tener: <code>name, category, price, imageUrl, stock, active</code>.
+        </p>
+        <textarea class="adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
+        <div style="margin-top:12px;display:flex;gap:12px">
+          <button class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
+          <button class="adm-btn adm-btn-outline" id="btn-importar-sample">📋 Cargar ejemplo</button>
+        </div>
+        <div id="import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- MODAL EDITAR PRODUCTO -->
+<div class="adm-modal-overlay" id="modal-editar">
+  <div class="adm-modal">
+    <button class="adm-modal-close" onclick="cerrarModal()">✕</button>
+    <div class="adm-modal-title">✏️ Editar producto</div>
+    <input type="hidden" id="edit-id" />
+    <div class="adm-form-grid">
+      <div class="adm-field full">
+        <label class="adm-label">Nombre</label>
+        <input type="text" class="adm-input" id="edit-nombre" />
+      </div>
+      <div class="adm-field">
+        <label class="adm-label">Categoría</label>
+        <select class="adm-select" id="edit-cat">
+          <option value="relojes">Relojes</option>
+          <option value="bolsos">Bolsos</option>
+          <option value="aros">Aros</option>
+          <option value="collares">Collares</option>
+          <option value="pulseras">Pulseras</option>
+          <option value="anillos">Anillos</option>
+          <option value="tobilleras">Tobilleras</option>
+          <option value="brazaletes">Brazaletes</option>
+          <option value="earcuff">Earcuff</option>
+          <option value="armcuff">Armcuff</option>
+          <option value="gafas">Gafas</option>
+          <option value="joyeros">Joyeros</option>
+        </select>
+      </div>
+      <div class="adm-field">
+        <label class="adm-label">Precio (Gs.)</label>
+        <input type="number" class="adm-input" id="edit-precio" />
+      </div>
+      <div class="adm-field">
+        <label class="adm-label">Stock</label>
+        <input type="number" class="adm-input" id="edit-stock" />
+      </div>
+      <div class="adm-field full">
+        <label class="adm-label">URL imagen</label>
+        <input type="url" class="adm-input" id="edit-img" />
+      </div>
+      <div class="adm-field full">
+        <label class="adm-label">Descripción</label>
+        <textarea class="adm-textarea" id="edit-desc"></textarea>
+      </div>
+      <div class="adm-field full">
+        <div class="adm-toggle-wrap">
+          <button class="adm-toggle" id="edit-active-toggle"></button>
+          <span class="adm-toggle-label" id="edit-active-label">Activo</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px">
+      <button class="adm-btn adm-btn-primary" id="btn-guardar-edicion">💾 Guardar cambios</button>
+      <button class="adm-btn adm-btn-outline" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="adm-toast" id="adm-toast"></div>
+
+<script type="module">
+import { db, auth, provider } from "./js/firebase.js";
+import {
+  collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
+  doc, query, orderBy, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const ADMIN_EMAIL = "tintinaccs@gmail.com";
+let todosProductos = [];
+let editActiveState = false;
+let formActiveState = true;
+let formOfertaState = false;
+let editingId = null;
+
+// ── UTILS ──────────────────────────────────────
+function fmt(n) {
+  return "Gs. " + new Intl.NumberFormat("es-PY").format(n);
+}
+
+function toast(msg, tipo = "success") {
+  const t = document.getElementById("adm-toast");
+  t.textContent = msg;
+  t.className = "adm-toast show " + tipo;
+  setTimeout(() => t.className = "adm-toast", 3000);
+}
+
+// ── NAVEGACIÓN ────────────────────────────────
+window.showPage = function(id) {
+  document.querySelectorAll(".adm-page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".adm-nav-item").forEach(b => b.classList.remove("active"));
+  document.getElementById("page-" + id).classList.add("active");
+  document.querySelector(`[data-page="${id}"]`)?.classList.add("active");
+  if (id === "productos") cargarTablaProductos();
+  if (id === "dashboard") cargarDashboard();
+  if (id === "usuarios") cargarUsuarios();
+  if (id === "nuevo-producto") { resetFormProducto(); document.getElementById("form-prod-title").textContent = "➕ Nuevo producto"; }
+};
+
+document.querySelectorAll(".adm-nav-item[data-page]").forEach(btn => {
+  btn.onclick = () => showPage(btn.dataset.page);
+});
+
+// ── AUTH ──────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    document.getElementById("adm-blocked").style.display = "none";
+    document.getElementById("adm-content").style.display = "block";
+    document.getElementById("adm-user-email").textContent = user.email;
+    cargarDashboard();
+  } else if (user) {
+    document.getElementById("adm-blocked").style.display = "flex";
+    document.getElementById("adm-content").style.display = "none";
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+document.getElementById("adm-logout").onclick = () => signOut(auth).then(() => window.location.href = "index.html");
+
+// ── DASHBOARD ─────────────────────────────────
+async function cargarDashboard() {
+  try {
+    const snap = await getDocs(collection(db, "products"));
+    let activos = 0, agotados = 0;
+    const recientes = [];
+    snap.forEach(d => {
+      const p = { id: d.id, ...d.data() };
+      if (p.active) activos++;
+      if (p.stock === 0) agotados++;
+      recientes.push(p);
+    });
+    document.getElementById("stat-activos").textContent = activos;
+    document.getElementById("stat-total").textContent = snap.size;
+    document.getElementById("stat-agotados").textContent = agotados;
+
+    const uSnap = await getDocs(collection(db, "users"));
+    document.getElementById("stat-usuarios").textContent = uSnap.size;
+
+    const tbody = document.getElementById("dash-recent-body");
+    tbody.innerHTML = recientes.slice(0, 6).map(p => `
+      <tr>
+        <td><img src="${p.imageUrl||''}" class="adm-table-img" onerror="this.src=''" /></td>
+        <td style="font-weight:700">${p.name}</td>
+        <td><span class="adm-badge adm-badge-pink">${p.category||''}</span></td>
+        <td style="font-weight:700;color:var(--acc)">${fmt(p.price)}</td>
+        <td><span class="adm-badge ${p.active ? 'adm-badge-green' : 'adm-badge-gray'}">${p.active ? 'Activo' : 'Inactivo'}</span></td>
+      </tr>
+    `).join("");
+  } catch(e) { console.error(e); }
+}
+
+// ── TABLA PRODUCTOS ───────────────────────────
+async function cargarTablaProductos() {
+  const tbody = document.getElementById("productos-body");
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted)">Cargando...</td></tr>`;
+  try {
+    const snap = await getDocs(collection(db, "products"));
+    todosProductos = [];
+    snap.forEach(d => todosProductos.push({ id: d.id, ...d.data() }));
+    renderTablaProductos(todosProductos);
+  } catch(e) { toast("Error al cargar productos", "error"); }
+}
+
+function renderTablaProductos(lista) {
+  const tbody = document.getElementById("productos-body");
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted)">Sin productos</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map(p => `
+    <tr>
+      <td><img src="${p.imageUrl||''}" class="adm-table-img" onerror="this.style.display='none'" /></td>
+      <td style="font-weight:700;max-width:180px">${p.name}</td>
+      <td><span class="adm-badge adm-badge-pink">${p.category||''}</span></td>
+      <td style="font-weight:700;color:var(--acc)">${fmt(p.price)}</td>
+      <td style="font-weight:700">${p.stock ?? '—'}</td>
+      <td>
+        <span class="adm-badge ${p.active ? 'adm-badge-green' : 'adm-badge-gray'}">${p.active ? 'Activo' : 'Inactivo'}</span>
+        ${p.stock === 0 ? '<br><span class="adm-badge adm-badge-red" style="margin-top:4px">Agotado</span>' : ''}
+      </td>
+      <td>
+        <div class="adm-table-actions">
+          <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="abrirEditar('${p.id}')">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm ${p.active ? 'adm-btn-danger' : 'adm-btn-success'}"
+                  onclick="toggleActivo('${p.id}',${p.active})">
+            ${p.active ? '🚫 Ocultar' : '✅ Activar'}
+          </button>
+          <button class="adm-btn adm-btn-danger adm-btn-sm" onclick="eliminarProducto('${p.id}','${p.name}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+// FILTRO y BÚSQUEDA
+document.getElementById("prod-search").addEventListener("input", filtrarProductos);
+document.getElementById("prod-filter-cat").addEventListener("change", filtrarProductos);
+
+function filtrarProductos() {
+  const q = document.getElementById("prod-search").value.toLowerCase();
+  const cat = document.getElementById("prod-filter-cat").value;
+  renderTablaProductos(todosProductos.filter(p =>
+    (!q || p.name.toLowerCase().includes(q)) &&
+    (!cat || p.category === cat)
+  ));
+}
+
+// ── NUEVO PRODUCTO ────────────────────────────
+// Preview imagen
+document.getElementById("prod-img").addEventListener("input", function() {
+  const prev = document.getElementById("prod-img-preview");
+  if (this.value) { prev.src = this.value; prev.classList.add("show"); }
+  else prev.classList.remove("show");
+});
+
+// Toggles
+function setupToggle(btnId, labelId, defaultOn) {
+  let state = defaultOn;
+  const btn = document.getElementById(btnId);
+  if (labelId) {
+    btn.classList.toggle("on", state);
+    const updateLabel = () => {
+      if (btnId === "prod-active-toggle") {
+        document.getElementById(labelId).textContent = state
+          ? "Producto ACTIVO (visible en tienda)"
+          : "Producto INACTIVO (oculto)";
+      }
+      if (btnId === "edit-active-toggle") {
+        document.getElementById(labelId).textContent = state ? "Activo" : "Inactivo";
+      }
+    };
+    updateLabel();
+    btn.onclick = () => {
+      state = !state;
+      btn.classList.toggle("on", state);
+      updateLabel();
+      if (btnId === "prod-active-toggle") formActiveState = state;
+      if (btnId === "edit-active-toggle") editActiveState = state;
+    };
+  }
+  return () => state;
+}
+
+setupToggle("prod-active-toggle", "prod-active-label", true);
+formActiveState = true;
+document.getElementById("prod-active-toggle").onclick = function() {
+  formActiveState = !formActiveState;
+  this.classList.toggle("on", formActiveState);
+  document.getElementById("prod-active-label").textContent = formActiveState
+    ? "Producto ACTIVO (visible en tienda)"
+    : "Producto INACTIVO (oculto)";
+};
+
+document.getElementById("prod-oferta-toggle").onclick = function() {
+  formOfertaState = !formOfertaState;
+  this.classList.toggle("on", formOfertaState);
+};
+
+document.getElementById("btn-guardar-producto").onclick = async () => {
+  const nombre = document.getElementById("prod-nombre").value.trim();
+  const cat    = document.getElementById("prod-cat").value;
+  const precio = parseInt(document.getElementById("prod-precio").value);
+  const img    = document.getElementById("prod-img").value.trim();
+
+  if (!nombre || !cat || !precio || !img) {
+    toast("Completá nombre, categoría, precio e imagen", "error"); return;
+  }
+
+  const data = {
+    name:        nombre,
+    category:    cat,
+    price:       precio,
+    priceBefore: parseInt(document.getElementById("prod-precio-antes").value) || null,
+    stock:       parseInt(document.getElementById("prod-stock").value) || 0,
+    imageUrl:    img,
+    imagesExtra: document.getElementById("prod-imgs-extra").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    description: document.getElementById("prod-desc").value.trim(),
+    tags:        document.getElementById("prod-tags").value.split(",").map(s=>s.trim()).filter(Boolean),
+    active:      formActiveState,
+    oferta:      formOfertaState,
+    createdAt:   serverTimestamp(),
+    createdBy:   auth.currentUser.email,
+  };
+
+  try {
+    await addDoc(collection(db, "products"), data);
+    toast("✅ Producto guardado correctamente");
+    resetFormProducto();
+  } catch(e) { toast("Error al guardar: " + e.message, "error"); }
+};
+
+window.resetFormProducto = function() {
+  ["prod-nombre","prod-precio","prod-precio-antes","prod-stock","prod-img","prod-imgs-extra","prod-desc","prod-tags"]
+    .forEach(id => document.getElementById(id).value = "");
+  document.getElementById("prod-cat").value = "";
+  document.getElementById("prod-stock").value = "1";
+  document.getElementById("prod-img-preview").classList.remove("show");
+  formActiveState = true;
+  formOfertaState = false;
+  document.getElementById("prod-active-toggle").classList.add("on");
+  document.getElementById("prod-oferta-toggle").classList.remove("on");
+  document.getElementById("prod-active-label").textContent = "Producto ACTIVO (visible en tienda)";
+};
+
+// ── EDITAR PRODUCTO ───────────────────────────
+window.abrirEditar = async function(id) {
+  const snap = await getDoc(doc(db, "products", id));
+  if (!snap.exists()) return;
+  const p = snap.data();
+  editingId = id;
+  editActiveState = p.active;
+
+  document.getElementById("edit-id").value    = id;
+  document.getElementById("edit-nombre").value = p.name || "";
+  document.getElementById("edit-cat").value    = p.category || "";
+  document.getElementById("edit-precio").value = p.price || "";
+  document.getElementById("edit-stock").value  = p.stock ?? 0;
+  document.getElementById("edit-img").value    = p.imageUrl || "";
+  document.getElementById("edit-desc").value   = p.description || "";
+
+  const toggle = document.getElementById("edit-active-toggle");
+  toggle.classList.toggle("on", editActiveState);
+  document.getElementById("edit-active-label").textContent = editActiveState ? "Activo" : "Inactivo";
+
+  toggle.onclick = function() {
+    editActiveState = !editActiveState;
+    this.classList.toggle("on", editActiveState);
+    document.getElementById("edit-active-label").textContent = editActiveState ? "Activo" : "Inactivo";
+  };
+
+  document.getElementById("modal-editar").classList.add("open");
+};
+
+window.cerrarModal = function() {
+  document.getElementById("modal-editar").classList.remove("open");
+  editingId = null;
+};
+
+document.getElementById("btn-guardar-edicion").onclick = async () => {
+  if (!editingId) return;
+  const data = {
+    name:        document.getElementById("edit-nombre").value.trim(),
+    category:    document.getElementById("edit-cat").value,
+    price:       parseInt(document.getElementById("edit-precio").value),
+    stock:       parseInt(document.getElementById("edit-stock").value) || 0,
+    imageUrl:    document.getElementById("edit-img").value.trim(),
+    description: document.getElementById("edit-desc").value.trim(),
+    active:      editActiveState,
+  };
+  try {
+    await updateDoc(doc(db, "products", editingId), data);
+    toast("✅ Producto actualizado");
+    cerrarModal();
+    cargarTablaProductos();
+  } catch(e) { toast("Error: " + e.message, "error"); }
+};
+
+// ── TOGGLE ACTIVO ─────────────────────────────
+window.toggleActivo = async function(id, actual) {
+  try {
+    await updateDoc(doc(db, "products", id), { active: !actual });
+    toast(actual ? "🚫 Producto ocultado" : "✅ Producto activado");
+    cargarTablaProductos();
+  } catch(e) { toast("Error", "error"); }
+};
+
+// ── ELIMINAR ──────────────────────────────────
+window.eliminarProducto = async function(id, nombre) {
+  if (!confirm(`¿Eliminar "${nombre}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, "products", id));
+    toast("🗑️ Producto eliminado");
+    cargarTablaProductos();
+  } catch(e) { toast("Error", "error"); }
+};
+
+// ── USUARIOS ──────────────────────────────────
+async function cargarUsuarios() {
+  const tbody = document.getElementById("usuarios-body");
+  try {
+    const snap = await getDocs(collection(db, "users"));
+    if (snap.empty) {
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;color:var(--text-muted)">Sin usuarios registrados</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const u = d.data();
+      return `
+        <tr>
+          <td style="font-weight:700">${u.name||'—'}</td>
+          <td>${u.email||'—'}</td>
+          <td style="color:var(--text-muted);font-size:12px">${u.createdAt?.toDate?.().toLocaleDateString('es-PY')||'—'}</td>
+        </tr>
+      `;
+    }).join("");
+  } catch(e) { tbody.innerHTML = `<tr><td colspan="3" style="color:#e57;text-align:center;padding:20px">Error al cargar</td></tr>`; }
+}
+
+// ── EXPORTAR JSON ─────────────────────────────
+document.getElementById("btn-exportar").onclick = async () => {
+  const snap = await getDocs(collection(db, "products"));
+  const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "tintin-productos-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  toast("✅ JSON descargado");
+};
+
+// ── IMPORTAR JSON ─────────────────────────────
+document.getElementById("btn-importar-sample").onclick = () => {
+  document.getElementById("import-json").value = JSON.stringify([
+    { name: "Reloj Rosa Elegante", category: "relojes", price: 85000, imageUrl: "https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Reloj", stock: 3, active: true, description: "Reloj elegante de acero inoxidable" }
+  ], null, 2);
+};
+
+// ── IMPORTAR CSV DE SHOPIFY ───────────────────
+
+// Mapa de categorías Shopify → Tintin
+const CAT_MAP = {
+  'relojes': 'relojes', 'reloj': 'relojes', 'watches': 'relojes',
+  'bolsos': 'bolsos', 'bags': 'bolsos', 'bag': 'bolsos', 'cartera': 'bolsos',
+  'aros': 'aros', 'aretes': 'aros', 'earrings': 'aros',
+  'collares': 'collares', 'collar': 'collares', 'necklace': 'collares', 'cadenas': 'collares',
+  'pulseras': 'pulseras', 'pulsera': 'pulseras', 'bracelet': 'pulseras',
+  'anillos': 'anillos', 'anillo': 'anillos', 'ring': 'anillos',
+  'tobilleras': 'tobilleras', 'tobillera': 'tobilleras', 'ankle': 'tobilleras',
+  'brazaletes': 'brazaletes', 'brazalete': 'brazaletes',
+  'earcuff': 'earcuff', 'ear cuff': 'earcuff',
+  'armcuff': 'armcuff', 'arm cuff': 'armcuff',
+  'gafas': 'gafas', 'lentes': 'gafas', 'sunglasses': 'gafas',
+  'joyeros': 'joyeros', 'joyero': 'joyeros', 'jewelry box': 'joyeros',
+};
+
+function detectarCategoria(type, tags, title) {
+  const haystack = [type, tags, title].join(' ').toLowerCase();
+  for (const [key, val] of Object.entries(CAT_MAP)) {
+    if (haystack.includes(key)) return val;
+  }
+  return 'otros';
+}
+
+function parsearPrecio(str) {
+  if (!str) return 0;
+  // Shopify puede traer "85000.00" o "85,000.00"
+  const num = parseFloat(str.replace(/,/g, ''));
+  return isNaN(num) ? 0 : Math.round(num);
+}
+
+function parsearCSV(texto) {
+  const lineas = texto.split('\n');
+  if (lineas.length < 2) return [];
+
+  // Headers
+  const headers = lineas[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+
+  const col = name => headers.indexOf(name);
+
+  // Índices de columnas Shopify estándar
+  const iHandle  = col('handle');
+  const iTitle   = col('title');
+  const iType    = col('type');
+  const iTags    = col('tags');
+  const iStatus  = col('status');
+  const iPrice   = col('variant price');
+  const iCompare = col('variant compare at price');
+  const iStock   = col('variant inventory qty');
+  const iImg     = col('image src');
+  const iImgPos  = col('image position');
+
+  // Agrupar filas por handle (un producto puede tener múltiples filas por variantes/imágenes)
+  const productos = new Map();
+
+  for (let i = 1; i < lineas.length; i++) {
+    const linea = lineas[i];
+    if (!linea.trim()) continue;
+
+    // Parser CSV básico que maneja comillas
+    const cols = [];
+    let inQuote = false, cell = '';
+    for (let c = 0; c < linea.length; c++) {
+      const ch = linea[c];
+      if (ch === '"') { inQuote = !inQuote; continue; }
+      if (ch === ',' && !inQuote) { cols.push(cell.trim()); cell = ''; continue; }
+      cell += ch;
+    }
+    cols.push(cell.trim());
+
+    const handle = cols[iHandle] || '';
+    if (!handle) continue;
+
+    const title  = cols[iTitle]  || '';
+    const type   = cols[iType]   || '';
+    const tags   = cols[iTags]   || '';
+    const status = cols[iStatus] || 'active';
+    const price  = parsearPrecio(cols[iPrice]);
+    const compare = parsearPrecio(cols[iCompare]);
+    const stock  = parseInt(cols[iStock]) || 0;
+    const img    = cols[iImg]    || '';
+    const imgPos = parseInt(cols[iImgPos]) || 99;
+
+    if (!productos.has(handle)) {
+      productos.set(handle, {
+        name:        title || handle,
+        category:    detectarCategoria(type, tags, title),
+        price:       price,
+        priceBefore: compare || null,
+        stock:       stock,
+        imageUrl:    '',
+        imagesExtra: [],
+        tags:        tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+        active:      status.toLowerCase() === 'active',
+        _imgs:       [], // [ {pos, url} ]
+      });
+    }
+
+    const prod = productos.get(handle);
+
+    // Actualizar precio/stock si esta fila tiene datos (filas de variantes)
+    if (price && !prod.price) prod.price = price;
+    if (stock && !prod.stock) prod.stock = stock;
+
+    // Agregar imagen
+    if (img) {
+      prod._imgs.push({ pos: imgPos, url: img });
+    }
+  }
+
+  // Post-procesar: ordenar imágenes y asignar principal
+  const resultado = [];
+  for (const [, p] of productos) {
+    if (!p.name || !p.price) continue;
+    p._imgs.sort((a, b) => a.pos - b.pos);
+    p.imageUrl    = p._imgs[0]?.url || '';
+    p.imagesExtra = p._imgs.slice(1).map(i => i.url);
+    delete p._imgs;
+    resultado.push(p);
+  }
+
+  return resultado;
+}
+
+let csvProductos = [];
+
+const dropZone  = document.getElementById('csv-drop-zone');
+const fileInput = document.getElementById('csv-file-input');
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.style.background = '#fce4ec';
+  dropZone.style.borderColor = 'var(--acc)';
+});
+
+dropZone.addEventListener('dragleave', () => {
+  dropZone.style.background = 'var(--acc-pale)';
+  dropZone.style.borderColor = '#f5d0de';
+});
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.style.background = 'var(--acc-pale)';
+  dropZone.style.borderColor = '#f5d0de';
+  const file = e.dataTransfer.files[0];
+  if (file) procesarCSV(file);
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) procesarCSV(fileInput.files[0]);
+});
+
+function procesarCSV(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      csvProductos = parsearCSV(e.target.result);
+      mostrarPreviewCSV(csvProductos);
+    } catch(err) {
+      toast('Error al leer el CSV: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function mostrarPreviewCSV(lista) {
+  if (!lista.length) {
+    toast('No se encontraron productos válidos en el CSV', 'error');
+    return;
+  }
+
+  document.getElementById('csv-preview').style.display = 'block';
+  document.getElementById('csv-preview-title').textContent =
+    `${lista.length} productos encontrados — revisá antes de importar`;
+
+  const tbody = document.getElementById('csv-preview-body');
+  tbody.innerHTML = lista.map((p, i) => `
+    <tr>
+      <td style="color:var(--text-muted);font-size:12px">${i + 1}</td>
+      <td>
+        ${p.imageUrl
+          ? `<img src="${p.imageUrl}" class="adm-table-img" onerror="this.style.display='none'" />`
+          : '<div style="width:48px;height:48px;background:var(--acc-light);border-radius:8px"></div>'}
+      </td>
+      <td style="font-weight:700;max-width:200px;word-break:break-word">${p.name}</td>
+      <td>
+        <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px"
+                onchange="csvProductos[${i}].category = this.value">
+          ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras',
+             'brazaletes','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
+            `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td style="font-weight:700;color:var(--acc)">Gs. ${p.price.toLocaleString('es-PY')}</td>
+      <td style="font-weight:700">${p.stock}</td>
+      <td>
+        <span class="adm-badge ${p.active ? 'adm-badge-green' : 'adm-badge-gray'}">
+          ${p.active ? 'Activo' : 'Inactivo'}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('btn-csv-limpiar').addEventListener('click', () => {
+  csvProductos = [];
+  fileInput.value = '';
+  document.getElementById('csv-preview').style.display = 'none';
+  document.getElementById('csv-import-result').innerHTML = '';
+});
+
+document.getElementById('btn-csv-importar').addEventListener('click', async () => {
+  if (!csvProductos.length) return;
+
+  const progress    = document.getElementById('csv-import-progress');
+  const progressBar = document.getElementById('csv-progress-bar');
+  const progressLbl = document.getElementById('csv-progress-label');
+  const result      = document.getElementById('csv-import-result');
+  const btn         = document.getElementById('btn-csv-importar');
+
+  btn.disabled = true;
+  progress.style.display = 'block';
+  result.innerHTML = '';
+
+  let ok = 0, errores = 0;
+
+  for (let i = 0; i < csvProductos.length; i++) {
+    const p = csvProductos[i];
+    const pct = Math.round(((i + 1) / csvProductos.length) * 100);
+    progressBar.style.width = pct + '%';
+    progressLbl.textContent = `Importando ${i + 1} de ${csvProductos.length}: ${p.name}`;
+
+    try {
+      await addDoc(collection(db, 'products'), {
+        name:        p.name,
+        category:    p.category,
+        price:       p.price,
+        priceBefore: p.priceBefore || null,
+        stock:       p.stock,
+        imageUrl:    p.imageUrl,
+        imagesExtra: p.imagesExtra || [],
+        tags:        p.tags || [],
+        active:      p.active,
+        oferta:      false,
+        createdAt:   serverTimestamp(),
+        createdBy:   auth.currentUser?.email || 'import',
+        source:      'shopify-csv',
+      });
+      ok++;
+    } catch(e) {
+      errores++;
+      console.error('Error importando:', p.name, e);
+    }
+  }
+
+  btn.disabled = false;
+  progress.style.display = 'none';
+
+  if (ok > 0) {
+    result.innerHTML = `<span style="color:green">✅ ${ok} productos importados correctamente${errores > 0 ? ` (${errores} con error)` : ''}</span>`;
+    toast(`✅ ${ok} productos importados de Shopify`);
+    csvProductos = [];
+    fileInput.value = '';
+    setTimeout(() => {
+      document.getElementById('csv-preview').style.display = 'none';
+    }, 2000);
+  } else {
+    result.innerHTML = `<span style="color:#e57">❌ No se pudo importar ningún producto</span>`;
+  }
+});
+
+document.getElementById("btn-importar").onclick = async () => {
+  const raw = document.getElementById("import-json").value.trim();
+  const result = document.getElementById("import-result");
+  try {
+    const items = JSON.parse(raw);
+    if (!Array.isArray(items)) throw new Error("Debe ser un array JSON");
+    let ok = 0;
+    for (const item of items) {
+      if (!item.name || !item.category || !item.price) continue;
+      await addDoc(collection(db, "products"), {
+        name:        item.name,
+        category:    item.category,
+        price:       Number(item.price),
+        imageUrl:    item.imageUrl || "",
+        stock:       Number(item.stock) || 0,
+        active:      item.active !== false,
+        description: item.description || "",
+        createdAt:   serverTimestamp(),
+        createdBy:   auth.currentUser.email,
+      });
+      ok++;
+    }
+    result.innerHTML = `<span style="color:green">✅ ${ok} productos importados correctamente</span>`;
+    toast(`✅ ${ok} productos importados`);
+  } catch(e) {
+    result.innerHTML = `<span style="color:#e57">❌ Error: ${e.message}</span>`;
+  }
+};
+
+</script>
+</body>
+</html>

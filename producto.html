@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producto — Tintin Accesorios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin.css" />
+  <style>
+    body { background: var(--acc-pale); }
+
+    .prod-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .prod-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--acc);
+      margin-bottom: 24px;
+      text-decoration: none;
+    }
+    .prod-back:hover { text-decoration: underline; }
+
+    .prod-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      background: #fff;
+      border-radius: 24px;
+      border: 1.5px solid #f5d0de;
+      overflow: hidden;
+    }
+
+    /* GALERÍA */
+    .prod-gallery { padding: 24px; }
+
+    .prod-main-img-wrap {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--acc-pale);
+      margin-bottom: 12px;
+    }
+
+    .prod-main-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+      cursor: zoom-in;
+    }
+
+    .prod-main-img:hover { transform: scale(1.06); }
+
+    .prod-badge-wrap {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .prod-badge {
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .prod-badge-oferta { background: var(--acc); color: #fff; }
+    .prod-badge-ago    { background: #ff4d4f; color: #fff; }
+
+    .prod-thumbs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .prod-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid #eee;
+      cursor: pointer;
+      transition: border-color .2s;
+      flex-shrink: 0;
+    }
+    .prod-thumb.active { border-color: var(--acc); }
+    .prod-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* INFO */
+    .prod-info { padding: 32px 32px 32px 0; }
+
+    .prod-cat {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--acc);
+      margin-bottom: 8px;
+      opacity: .85;
+    }
+
+    .prod-name {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .prod-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .prod-price {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--acc);
+    }
+
+    .prod-price-before {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .prod-stock-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .prod-stock-ok  { background: #e8f5e9; color: #2e7d32; }
+    .prod-stock-low { background: #fff8e1; color: #f57f17; }
+    .prod-stock-out { background: #ffebee; color: #c62828; }
+
+    .prod-desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .prod-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .prod-tag {
+      padding: 4px 12px;
+      background: var(--acc-light);
+      color: var(--acc-dark);
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* BOTONES COMPRA */
+    .prod-actions { display: flex; flex-direction: column; gap: 12px; }
+
+    .prod-btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: var(--font);
+      transition: background .2s;
+    }
+    .prod-btn-wa:hover { background: #1ebe5d; }
+
+    .prod-btn-wa-outline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border: 2px solid #25D366;
+      color: #25D366;
+      background: transparent;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      cursor: pointer;
+      font-family: var(--font);
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .prod-btn-wa-outline:hover { background: #25D366; color: #fff; }
+
+    .prod-trust-mini {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1.5px solid var(--acc-light);
+    }
+
+    .prod-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* RELACIONADOS */
+    .prod-rel {
+      margin-top: 48px;
+    }
+
+    /* LIGHTBOX */
+    .prod-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .prod-lightbox.open { display: flex; }
+    .prod-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 12px; }
+    .prod-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .prod-grid { grid-template-columns: 1fr; }
+      .prod-info { padding: 0 24px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER simple -->
+<header class="tt-header">
+  <div class="tt-header-inner">
+    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+    <div class="tt-header-actions">
+      <a href="index.html" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text);text-decoration:none">← Volver</a>
+    </div>
+  </div>
+</header>
+
+<div class="prod-wrap" id="prod-wrap">
+
+  <a href="javascript:history.back()" class="prod-back">← Volver al catálogo</a>
+
+  <!-- SKELETON mientras carga -->
+  <div id="prod-loading">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;background:#fff;border-radius:24px;border:1.5px solid #f5d0de;overflow:hidden;padding:24px">
+      <div class="tt-skeleton" style="aspect-ratio:1/1;border-radius:var(--radius)"></div>
+      <div style="padding:32px 0;display:flex;flex-direction:column;gap:16px">
+        <div class="tt-skeleton" style="height:12px;width:30%"></div>
+        <div class="tt-skeleton" style="height:36px;width:80%"></div>
+        <div class="tt-skeleton" style="height:30px;width:40%"></div>
+        <div class="tt-skeleton" style="height:80px;width:100%"></div>
+        <div class="tt-skeleton" style="height:52px;width:100%;border-radius:50px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRODUCTO -->
+  <div id="prod-contenido" style="display:none">
+    <div class="prod-grid">
+
+      <!-- GALERÍA -->
+      <div class="prod-gallery">
+        <div class="prod-main-img-wrap" id="img-main-wrap">
+          <img id="prod-img-main" src="" alt="" class="prod-main-img" />
+          <div class="prod-badge-wrap" id="prod-badges"></div>
+        </div>
+        <div class="prod-thumbs" id="prod-thumbs"></div>
+      </div>
+
+      <!-- INFO -->
+      <div class="prod-info">
+        <div class="prod-cat" id="prod-cat"></div>
+        <h1 class="prod-name" id="prod-nombre"></h1>
+
+        <div class="prod-price-wrap">
+          <div class="prod-price" id="prod-precio"></div>
+          <div class="prod-price-before" id="prod-precio-antes" style="display:none"></div>
+        </div>
+
+        <div class="prod-stock-info" id="prod-stock-badge"></div>
+
+        <p class="prod-desc" id="prod-desc"></p>
+
+        <div class="prod-tags" id="prod-tags"></div>
+
+        <div class="prod-actions">
+          <a id="prod-wa-btn" href="#" target="_blank" class="prod-btn-wa">
+            💬 Comprar por WhatsApp
+          </a>
+          <a id="prod-wa-consulta" href="#" target="_blank" class="prod-btn-wa-outline">
+            ❓ Consultar disponibilidad
+          </a>
+        </div>
+
+        <div class="prod-trust-mini">
+          <div class="prod-trust-item">🚚 Envío mismo día</div>
+          <div class="prod-trust-item">💎 Acero inoxidable</div>
+          <div class="prod-trust-item">🔒 Pago seguro</div>
+          <div class="prod-trust-item">💬 Atención WhatsApp</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
+    <div class="prod-rel">
+      <div class="tt-section-head" style="text-align:center;margin-bottom:24px">
+        <p class="tt-section-eyebrow">También te puede gustar</p>
+        <h2 class="tt-section-title" style="color:var(--text)">Productos relacionados</h2>
+      </div>
+      <div class="tt-products-grid" id="prod-relacionados"></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO NO ENCONTRADO -->
+  <div id="prod-404" style="display:none;text-align:center;padding:80px 24px">
+    <div style="font-size:48px;margin-bottom:16px">😔</div>
+    <h2 style="font-size:22px;font-weight:900;text-transform:uppercase;color:var(--text);margin-bottom:8px">Producto no encontrado</h2>
+    <p style="color:var(--text-muted);margin-bottom:24px">Este producto ya no está disponible</p>
+    <a href="catalogo.html" class="tt-btn">Ver catálogo</a>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="prod-lightbox" id="prod-lightbox">
+  <button class="prod-lightbox-close" id="lb-close">✕</button>
+  <img id="lb-img" src="" alt="" />
+</div>
+
+<!-- WA FLOTANTE -->
+<a href="https://wa.me/595981299331" class="tt-wa-float" target="_blank">💬</a>
+
+<script type="module">
+import { db } from "./js/firebase.js";
+import {
+  doc, getDoc, collection, getDocs, query, where, limit
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const WA_NUM = "595981299331";
+const params = new URLSearchParams(location.search);
+const id     = params.get("id");
+
+function fmt(n) {
+  return "Gs. " + new Intl.NumberFormat("es-PY").format(n);
+}
+
+async function cargarProducto() {
+  if (!id) { mostrar404(); return; }
+
+  try {
+    const snap = await getDoc(doc(db, "products", id));
+    if (!snap.exists()) { mostrar404(); return; }
+    const p = { id: snap.id, ...snap.data() };
+    renderProducto(p);
+    cargarRelacionados(p.category, p.id);
+  } catch(e) {
+    console.error(e);
+    mostrar404();
+  }
+}
+
+function renderProducto(p) {
+  document.title = p.name + " — Tintin Accesorios";
+  document.getElementById("prod-loading").style.display    = "none";
+  document.getElementById("prod-contenido").style.display  = "block";
+
+  // Imagen principal
+  const mainImg = document.getElementById("prod-img-main");
+  mainImg.src = p.imageUrl || "";
+  mainImg.alt = p.name;
+  mainImg.onclick = () => abrirLightbox(p.imageUrl);
+
+  // Thumbs (imagen principal + extras)
+  const allImgs = [p.imageUrl, ...(p.imagesExtra || [])].filter(Boolean);
+  const thumbsEl = document.getElementById("prod-thumbs");
+
+  if (allImgs.length > 1) {
+    thumbsEl.innerHTML = allImgs.map((img, i) => `
+      <div class="prod-thumb ${i===0?'active':''}" onclick="cambiarImg('${img}', this)">
+        <img src="${img}" alt="foto ${i+1}" loading="lazy"
+             onerror="this.parentElement.style.display='none'" />
+      </div>
+    `).join("");
+  }
+
+  // Badges
+  const badges = [];
+  if (p.oferta) badges.push('<span class="prod-badge prod-badge-oferta">OFERTA</span>');
+  if (p.stock === 0) badges.push('<span class="prod-badge prod-badge-ago">AGOTADO</span>');
+  document.getElementById("prod-badges").innerHTML = badges.join("");
+
+  // Info
+  document.getElementById("prod-cat").textContent    = p.category || "";
+  document.getElementById("prod-nombre").textContent = p.name;
+  document.getElementById("prod-precio").textContent = fmt(p.price);
+
+  if (p.priceBefore) {
+    const el = document.getElementById("prod-precio-antes");
+    el.textContent = fmt(p.priceBefore);
+    el.style.display = "block";
+  }
+
+  // Stock badge
+  const stockEl = document.getElementById("prod-stock-badge");
+  if (p.stock === 0) {
+    stockEl.textContent = "● Agotado";
+    stockEl.className   = "prod-stock-info prod-stock-out";
+  } else if (p.stock <= 3) {
+    stockEl.textContent = `● Últimas ${p.stock} unidades`;
+    stockEl.className   = "prod-stock-info prod-stock-low";
+  } else {
+    stockEl.textContent = "● En stock";
+    stockEl.className   = "prod-stock-info prod-stock-ok";
+  }
+
+  // Descripción
+  document.getElementById("prod-desc").textContent = p.description || "";
+
+  // Tags
+  if (p.tags && p.tags.length) {
+    document.getElementById("prod-tags").innerHTML =
+      p.tags.map(t => `<span class="prod-tag">${t}</span>`).join("");
+  }
+
+  // Botones WhatsApp
+  const msgCompra = encodeURIComponent(
+    `Hola! Quiero comprar:\n*${p.name}*\nPrecio: ${fmt(p.price)}\n¿Está disponible? 🌸`
+  );
+  const msgConsulta = encodeURIComponent(
+    `Hola! Quiero consultar sobre:\n*${p.name}*\nPrecio: ${fmt(p.price)}\n¿Tienen stock? 🌸`
+  );
+
+  document.getElementById("prod-wa-btn").href      = `https://wa.me/${WA_NUM}?text=${msgCompra}`;
+  document.getElementById("prod-wa-consulta").href = `https://wa.me/${WA_NUM}?text=${msgConsulta}`;
+
+  // Deshabilitar si agotado
+  if (p.stock === 0) {
+    const btn = document.getElementById("prod-wa-btn");
+    btn.style.opacity = ".5";
+    btn.style.pointerEvents = "none";
+    btn.textContent = "Producto agotado";
+  }
+}
+
+async function cargarRelacionados(cat, excludeId) {
+  try {
+    const q = query(collection(db, "products"), where("category", "==", cat), where("active", "==", true), limit(5));
+    const snap = await getDocs(q);
+    const items = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(p => p.id !== excludeId)
+      .slice(0, 4);
+
+    const el = document.getElementById("prod-relacionados");
+    if (!items.length) { el.parentElement.style.display = "none"; return; }
+
+    el.innerHTML = items.map(p => {
+      const msg = encodeURIComponent(`Hola! Me interesa *${p.name}* — ${fmt(p.price)}. ¿Disponible? 🌸`);
+      return `
+        <div class="tt-card" onclick="location.href='producto.html?id=${p.id}'">
+          <div class="tt-card-img-wrap">
+            <img src="${p.imageUrl||''}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Tintin'" />
+          </div>
+          <div class="tt-card-info">
+            <div class="tt-card-cat">${p.category||''}</div>
+            <div class="tt-card-name">${p.name}</div>
+            <div class="tt-card-price">${fmt(p.price)}</div>
+            <a class="tt-card-btn" href="https://wa.me/${WA_NUM}?text=${msg}" target="_blank" onclick="event.stopPropagation()">
+              💬 Comprar por WhatsApp
+            </a>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } catch(e) { console.error(e); }
+}
+
+function mostrar404() {
+  document.getElementById("prod-loading").style.display = "none";
+  document.getElementById("prod-404").style.display     = "block";
+}
+
+// Cambiar imagen en galería
+window.cambiarImg = function(src, el) {
+  document.getElementById("prod-img-main").src = src;
+  document.querySelectorAll(".prod-thumb").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+};
+
+// Lightbox
+function abrirLightbox(src) {
+  document.getElementById("lb-img").src = src;
+  document.getElementById("prod-lightbox").classList.add("open");
+}
+
+document.getElementById("lb-close").onclick = () =>
+  document.getElementById("prod-lightbox").classList.remove("open");
+document.getElementById("prod-lightbox").onclick = e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove("open");
+};
+
+cargarProducto();
+</script>
+
+</body>
+</html>

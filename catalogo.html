@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo — Tintin Accesorios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin.css" />
+  <style>
+    body { background: var(--acc-pale); }
+
+    .cat-wrap {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* HERO CAT */
+    .cat-hero {
+      background: linear-gradient(135deg, #fce4ec, #fff0f5);
+      border-radius: 20px;
+      padding: 40px 32px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .cat-hero-title {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--acc);
+      line-height: 1;
+    }
+
+    .cat-hero-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 8px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* LAYOUT */
+    .cat-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* SIDEBAR FILTROS */
+    .cat-sidebar {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1.5px solid #f5d0de;
+      padding: 24px;
+      position: sticky;
+      top: 80px;
+    }
+
+    .cat-filter-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--acc);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--acc-light);
+    }
+
+    .cat-filter-group { margin-bottom: 24px; }
+
+    .cat-filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 0;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      transition: color .2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font);
+    }
+    .cat-filter-option:hover { color: var(--acc); }
+    .cat-filter-option.active { color: var(--acc); font-weight: 800; }
+
+    .cat-filter-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .cat-filter-option.active .cat-filter-dot { background: var(--acc); }
+
+    .cat-filter-count {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* PRECIO RANGE */
+    .cat-range {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .cat-range-input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1.5px solid #eee;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: var(--font);
+      outline: none;
+    }
+    .cat-range-input:focus { border-color: var(--acc); }
+
+    .cat-range-sep { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+    /* MAIN */
+    .cat-main { width: 100%; }
+
+    .cat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cat-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .cat-sort {
+      padding: 9px 16px;
+      border: 1.5px solid #eee;
+      border-radius: 50px;
+      font-size: 12px;
+      font-family: var(--font);
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .cat-sort:focus { border-color: var(--acc); }
+
+    .cat-search {
+      padding: 9px 16px;
+      border: 1.5px solid #eee;
+      border-radius: 50px;
+      font-size: 13px;
+      font-family: var(--font);
+      outline: none;
+      width: 200px;
+    }
+    .cat-search:focus { border-color: var(--acc); }
+
+    /* GRID */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    /* MOBILE FILTROS BTN */
+    .cat-filter-toggle {
+      display: none;
+      width: 100%;
+      padding: 12px;
+      background: var(--acc);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+      font-family: var(--font);
+      margin-bottom: 16px;
+    }
+
+    /* TABS MOBILE */
+    .cat-tabs-mobile {
+      display: none;
+      overflow-x: auto;
+      gap: 8px;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .cat-tabs-mobile::-webkit-scrollbar { display: none; }
+
+    /* SIN RESULTADOS */
+    .cat-empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-muted);
+    }
+    .cat-empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .cat-layout { grid-template-columns: 1fr; }
+      .cat-sidebar { display: none; position: static; }
+      .cat-sidebar.open { display: block; }
+      .cat-filter-toggle { display: block; }
+      .cat-tabs-mobile { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="tt-header">
+  <div class="tt-header-inner">
+    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+    <nav class="tt-nav">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html" style="color:var(--acc)">Tienda</a>
+      <a href="#" id="btn-login-cat">Ingresar</a>
+    </nav>
+    <div class="tt-header-actions">
+      <a href="index.html" style="font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em">🏠 Inicio</a>
+    </div>
+  </div>
+</header>
+
+<div class="cat-wrap">
+
+  <!-- HERO -->
+  <div class="cat-hero">
+    <div class="cat-hero-title" id="cat-titulo">Todo el catálogo</div>
+    <div class="cat-hero-sub" id="cat-subtitulo">Descubrí todos nuestros accesorios</div>
+  </div>
+
+  <!-- TABS MOBILE -->
+  <div class="cat-tabs-mobile" id="cat-tabs-mobile">
+    <button class="tt-filtro-btn activo" data-cat="todos">Todos</button>
+    <button class="tt-filtro-btn" data-cat="relojes">Relojes</button>
+    <button class="tt-filtro-btn" data-cat="bolsos">Bags</button>
+    <button class="tt-filtro-btn" data-cat="aros">Aros</button>
+    <button class="tt-filtro-btn" data-cat="collares">Collares</button>
+    <button class="tt-filtro-btn" data-cat="pulseras">Pulseras</button>
+    <button class="tt-filtro-btn" data-cat="anillos">Anillos</button>
+    <button class="tt-filtro-btn" data-cat="tobilleras">Tobilleras</button>
+    <button class="tt-filtro-btn" data-cat="brazaletes">Brazaletes</button>
+    <button class="tt-filtro-btn" data-cat="earcuff">Earcuff</button>
+    <button class="tt-filtro-btn" data-cat="armcuff">Armcuff</button>
+    <button class="tt-filtro-btn" data-cat="gafas">Gafas</button>
+    <button class="tt-filtro-btn" data-cat="joyeros">Joyeros</button>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="cat-layout">
+
+    <!-- SIDEBAR -->
+    <button class="cat-filter-toggle" id="filter-toggle">🔽 Filtrar por categoría</button>
+    <aside class="cat-sidebar" id="cat-sidebar">
+      <div class="cat-filter-group">
+        <div class="cat-filter-title">Categoría</div>
+        <button class="cat-filter-option active" data-cat="todos">
+          <span class="cat-filter-dot"></span> Todas
+          <span class="cat-filter-count" id="count-todos"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="relojes">
+          <span class="cat-filter-dot"></span> Relojes
+          <span class="cat-filter-count" id="count-relojes"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="bolsos">
+          <span class="cat-filter-dot"></span> Bags
+          <span class="cat-filter-count" id="count-bolsos"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="aros">
+          <span class="cat-filter-dot"></span> Aros
+          <span class="cat-filter-count" id="count-aros"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="collares">
+          <span class="cat-filter-dot"></span> Collares
+          <span class="cat-filter-count" id="count-collares"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="pulseras">
+          <span class="cat-filter-dot"></span> Pulseras
+          <span class="cat-filter-count" id="count-pulseras"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="anillos">
+          <span class="cat-filter-dot"></span> Anillos
+          <span class="cat-filter-count" id="count-anillos"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="tobilleras">
+          <span class="cat-filter-dot"></span> Tobilleras
+          <span class="cat-filter-count" id="count-tobilleras"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="brazaletes">
+          <span class="cat-filter-dot"></span> Brazaletes
+          <span class="cat-filter-count" id="count-brazaletes"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="earcuff">
+          <span class="cat-filter-dot"></span> Earcuff
+          <span class="cat-filter-count" id="count-earcuff"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="armcuff">
+          <span class="cat-filter-dot"></span> Armcuff
+          <span class="cat-filter-count" id="count-armcuff"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="gafas">
+          <span class="cat-filter-dot"></span> Gafas
+          <span class="cat-filter-count" id="count-gafas"></span>
+        </button>
+        <button class="cat-filter-option" data-cat="joyeros">
+          <span class="cat-filter-dot"></span> Joyeros
+          <span class="cat-filter-count" id="count-joyeros"></span>
+        </button>
+      </div>
+
+      <div class="cat-filter-group">
+        <div class="cat-filter-title">Precio (Gs.)</div>
+        <div class="cat-range">
+          <input type="number" class="cat-range-input" id="precio-min" placeholder="Min" min="0" />
+          <span class="cat-range-sep">—</span>
+          <input type="number" class="cat-range-input" id="precio-max" placeholder="Max" min="0" />
+        </div>
+        <button class="tt-filtro-btn" id="btn-aplicar-precio" style="margin-top:10px;width:100%">Aplicar</button>
+      </div>
+
+      <div class="cat-filter-group">
+        <div class="cat-filter-title">Disponibilidad</div>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600">
+          <input type="checkbox" id="filtro-stock" style="accent-color:var(--acc)" />
+          Solo con stock
+        </label>
+      </div>
+
+      <button class="tt-filtro-btn" id="btn-limpiar-filtros" style="width:100%;margin-top:8px">
+        🗑️ Limpiar filtros
+      </button>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="cat-main">
+      <div class="cat-top">
+        <div class="cat-count" id="cat-count">Cargando...</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="cat-search" id="cat-search" placeholder="🔍 Buscar..." />
+          <select class="cat-sort" id="cat-sort">
+            <option value="default">Ordenar por</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+            <option value="nombre">Nombre A-Z</option>
+            <option value="stock">Con stock primero</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cat-grid" id="cat-grid">
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WA FLOTANTE -->
+<a href="https://wa.me/595981299331" class="tt-wa-float" target="_blank">💬</a>
+
+<!-- TAB BAR MOBILE -->
+<nav class="tt-tabbar">
+  <a href="index.html" class="tt-tab">
+    <span class="tt-tab-icon">🏠</span>
+    <span class="tt-tab-label">Inicio</span>
+  </a>
+  <a href="catalogo.html" class="tt-tab active">
+    <span class="tt-tab-icon">🛍️</span>
+    <span class="tt-tab-label">Tienda</span>
+  </a>
+  <a href="https://wa.me/595981299331" class="tt-tab" target="_blank">
+    <span class="tt-tab-icon">💬</span>
+    <span class="tt-tab-label">WhatsApp</span>
+  </a>
+  <a href="perfil.html" class="tt-tab">
+    <span class="tt-tab-icon">👤</span>
+    <span class="tt-tab-label">Cuenta</span>
+  </a>
+</nav>
+
+<script type="module">
+import { db } from "./js/firebase.js";
+import {
+  collection, getDocs, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const WA_NUM = "595981299331";
+let todos = [];
+let catActual = "todos";
+
+function fmt(n) {
+  return "Gs. " + new Intl.NumberFormat("es-PY").format(n);
+}
+
+// Leer param de URL
+const params = new URLSearchParams(location.search);
+const catParam = params.get("cat");
+if (catParam) catActual = catParam;
+
+async function cargar() {
+  try {
+    const snap = await getDocs(query(collection(db, "products"), where("active", "==", true)));
+    todos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    actualizarContadores();
+    aplicarFiltros();
+    if (catParam) {
+      seleccionarCat(catParam);
+      document.getElementById("cat-titulo").textContent = catParam.toUpperCase();
+    }
+  } catch(e) { console.error(e); }
+}
+
+function actualizarContadores() {
+  const cats = ["todos","relojes","bolsos","aros","collares","pulseras","anillos","tobilleras","brazaletes","earcuff","armcuff","gafas","joyeros"];
+  cats.forEach(c => {
+    const el = document.getElementById("count-" + c);
+    if (el) el.textContent = c === "todos"
+      ? todos.length
+      : todos.filter(p => p.category === c).length;
+  });
+}
+
+function aplicarFiltros() {
+  let lista = [...todos];
+
+  // Categoría
+  if (catActual !== "todos") lista = lista.filter(p => p.category === catActual);
+
+  // Búsqueda
+  const q = document.getElementById("cat-search").value.toLowerCase().trim();
+  if (q) lista = lista.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    (p.category||"").toLowerCase().includes(q) ||
+    (p.description||"").toLowerCase().includes(q)
+  );
+
+  // Precio
+  const min = parseInt(document.getElementById("precio-min").value) || 0;
+  const max = parseInt(document.getElementById("precio-max").value) || Infinity;
+  lista = lista.filter(p => p.price >= min && p.price <= max);
+
+  // Stock
+  if (document.getElementById("filtro-stock").checked) {
+    lista = lista.filter(p => p.stock > 0);
+  }
+
+  // Ordenar
+  const sort = document.getElementById("cat-sort").value;
+  if (sort === "precio-asc")  lista.sort((a,b) => a.price - b.price);
+  if (sort === "precio-desc") lista.sort((a,b) => b.price - a.price);
+  if (sort === "nombre")      lista.sort((a,b) => a.name.localeCompare(b.name));
+  if (sort === "stock")       lista.sort((a,b) => (b.stock||0) - (a.stock||0));
+
+  renderGrid(lista);
+}
+
+function renderGrid(lista) {
+  const grid = document.getElementById("cat-grid");
+  document.getElementById("cat-count").textContent = lista.length + " productos";
+
+  if (!lista.length) {
+    grid.innerHTML = `
+      <div class="cat-empty">
+        <div class="cat-empty-icon">😔</div>
+        <div style="font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:6px">Sin resultados</div>
+        <div style="font-size:13px">Probá con otra categoría o quitá los filtros</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = lista.map(p => {
+    const msg = encodeURIComponent(`Hola! Me interesa *${p.name}* — ${fmt(p.price)}. ¿Disponible? 🌸`);
+    return `
+      <div class="tt-card" onclick="location.href='producto.html?id=${p.id}'">
+        <div class="tt-card-img-wrap">
+          <img src="${p.imageUrl||''}" alt="${p.name}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Tintin'" />
+          ${p.oferta ? '<span class="tt-card-badge">OFERTA</span>' : ''}
+          ${p.stock === 0 ? '<span class="tt-card-badge" style="background:#ff4d4f">AGOTADO</span>' : ''}
+        </div>
+        <div class="tt-card-info">
+          <div class="tt-card-cat">${p.category||''}</div>
+          <div class="tt-card-name">${p.name}</div>
+          <div class="tt-card-price">${fmt(p.price)}</div>
+          <a class="tt-card-btn" href="https://wa.me/${WA_NUM}?text=${msg}" target="_blank" onclick="event.stopPropagation()">
+            💬 Comprar por WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function seleccionarCat(cat) {
+  catActual = cat;
+  // Sidebar
+  document.querySelectorAll(".cat-filter-option").forEach(b => {
+    b.classList.toggle("active", b.dataset.cat === cat);
+  });
+  // Tabs mobile
+  document.querySelectorAll("#cat-tabs-mobile .tt-filtro-btn").forEach(b => {
+    b.classList.toggle("activo", b.dataset.cat === cat);
+  });
+  aplicarFiltros();
+}
+
+// EVENTOS
+document.querySelectorAll(".cat-filter-option").forEach(btn => {
+  btn.onclick = () => seleccionarCat(btn.dataset.cat);
+});
+document.querySelectorAll("#cat-tabs-mobile .tt-filtro-btn").forEach(btn => {
+  btn.onclick = () => seleccionarCat(btn.dataset.cat);
+});
+document.getElementById("cat-search").addEventListener("input", aplicarFiltros);
+document.getElementById("cat-sort").addEventListener("change", aplicarFiltros);
+document.getElementById("filtro-stock").addEventListener("change", aplicarFiltros);
+document.getElementById("btn-aplicar-precio").onclick = aplicarFiltros;
+document.getElementById("btn-limpiar-filtros").onclick = () => {
+  catActual = "todos";
+  document.getElementById("cat-search").value = "";
+  document.getElementById("precio-min").value = "";
+  document.getElementById("precio-max").value = "";
+  document.getElementById("filtro-stock").checked = false;
+  document.getElementById("cat-sort").value = "default";
+  seleccionarCat("todos");
+};
+
+// TOGGLE SIDEBAR MOBILE
+document.getElementById("filter-toggle").onclick = () => {
+  const sidebar = document.getElementById("cat-sidebar");
+  sidebar.classList.toggle("open");
+  document.getElementById("filter-toggle").textContent =
+    sidebar.classList.contains("open") ? "🔼 Ocultar filtros" : "🔽 Filtrar por categoría";
+};
+
+cargar();
+</script>
+
+</body>
+</html>

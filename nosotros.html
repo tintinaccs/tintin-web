@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiénes somos — Tintin Accesorios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin.css" />
+  <style>
+    body { background: #fff; }
+
+    /* HERO */
+    .nos-hero {
+      position: relative;
+      height: clamp(420px, 60vw, 680px);
+      overflow: hidden;
+      background: #fdf0f5;
+    }
+
+    .nos-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .nos-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(20,10,15,0.52) 0%, rgba(0,0,0,0.08) 65%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 clamp(24px, 8vw, 120px);
+      gap: 12px;
+    }
+
+    .nos-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+    }
+
+    .nos-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.05;
+      max-width: 680px;
+    }
+
+    .nos-line {
+      width: 48px;
+      height: 2px;
+      background: #ea7ea3;
+      border: none;
+      margin: 0;
+    }
+
+    .nos-desc {
+      font-size: clamp(13px, 1.4vw, 16px);
+      font-weight: 400;
+      color: rgba(255,255,255,.82);
+      max-width: 460px;
+      line-height: 1.7;
+    }
+
+    /* PUNTOS */
+    .nos-points {
+      display: flex;
+      gap: 32px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nos-point {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nos-point-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      color: #ea7ea3;
+      text-transform: uppercase;
+    }
+
+    .nos-point-txt {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,.75);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    /* BODY */
+    .nos-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+
+    .nos-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+      margin-bottom: 72px;
+    }
+
+    .nos-section.reverse { direction: rtl; }
+    .nos-section.reverse > * { direction: ltr; }
+
+    .nos-section-img {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+
+    .nos-section-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .nos-section-content { display: flex; flex-direction: column; gap: 16px; }
+
+    .nos-section-eyebrow {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #ea7ea3;
+    }
+
+    .nos-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 400;
+      color: #1a1a1a;
+      line-height: 1.1;
+    }
+
+    .nos-section-body {
+      font-size: 14px;
+      font-weight: 400;
+      color: #888;
+      line-height: 1.8;
+    }
+
+    /* VALORES */
+    .nos-valores {
+      background: #fdf0f5;
+      padding: 64px 24px;
+      text-align: center;
+    }
+
+    .nos-valores-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 900px;
+      margin: 40px auto 0;
+    }
+
+    .nos-valor {
+      background: #fff;
+      border-radius: 16px;
+      border: 1.5px solid #f5d0de;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nos-valor-icon {
+      width: 48px;
+      height: 48px;
+      background: #fce4ec;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .nos-valor-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #a7214d;
+    }
+
+    .nos-valor-desc {
+      font-size: 12px;
+      font-weight: 500;
+      color: #b07090;
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .nos-cta {
+      text-align: center;
+      padding: 72px 24px;
+      background: #fff;
+    }
+
+    .nos-cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 400;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .nos-cta-sub {
+      font-size: 13px;
+      color: #888;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .nos-cta-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .nos-section { grid-template-columns: 1fr; gap: 24px; }
+      .nos-section.reverse { direction: ltr; }
+      .nos-valores-grid { grid-template-columns: 1fr; }
+      .nos-hero-overlay { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="tt-header">
+  <div class="tt-header-inner">
+    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+    <nav class="tt-nav">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Tienda</a>
+      <a href="nosotros.html" style="color:var(--acc)">Nosotros</a>
+      <a href="login.html" class="tt-btn" style="padding:9px 22px;font-size:12px">Ingresar</a>
+    </nav>
+    <div class="tt-header-actions">
+      <button class="tt-search-btn" title="Buscar">🔍</button>
+      <a href="perfil.html" class="tt-account-btn">👤</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="nos-hero">
+  <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1600"
+       alt="Tintin Accesorios" loading="eager" />
+  <div class="nos-hero-overlay">
+    <p class="nos-eyebrow">Nuestra historia</p>
+    <h1 class="nos-title">Detalles que<br>cuentan historias</h1>
+    <hr class="nos-line" />
+    <p class="nos-desc">Tintin nace para acompañar esos momentos en los que un accesorio no solo completa un look, también expresa una parte de vos.</p>
+    <div class="nos-points">
+      <div class="nos-point">
+        <span class="nos-point-num">01</span>
+        <span class="nos-point-txt">Selección curada</span>
+      </div>
+      <div class="nos-point">
+        <span class="nos-point-num">02</span>
+        <span class="nos-point-txt">Estilo femenino</span>
+      </div>
+      <div class="nos-point">
+        <span class="nos-point-num">03</span>
+        <span class="nos-point-txt">Detalles para regalar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="nos-body">
+
+  <div class="nos-section tt-fadein">
+    <div class="nos-section-img">
+      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=800"
+           alt="Colección Tintin" loading="lazy" />
+    </div>
+    <div class="nos-section-content">
+      <p class="nos-section-eyebrow">Quiénes somos</p>
+      <h2 class="nos-section-title">Cada pieza es elegida con cuidado</h2>
+      <p class="nos-section-body">
+        Tintin Accesorios nace de la pasión por los detalles que hacen la diferencia.
+        Somos una tienda online especializada en accesorios femeninos de tendencia —
+        relojes, aros, anillos, collares y más — pensados para quienes aman expresarse
+        a través de lo que llevan puesto.
+      </p>
+      <p class="nos-section-body">
+        Cada pieza es elegida con cuidado, pensando en lo femenino, lo delicado y lo especial.
+        Trabajamos con materiales de calidad como el acero inoxidable porque creemos que
+        el estilo no debería comprometer la durabilidad.
+      </p>
+    </div>
+  </div>
+
+  <div class="nos-section reverse tt-fadein">
+    <div class="nos-section-img">
+      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=800"
+           alt="Tintin Relojes" loading="lazy" />
+    </div>
+    <div class="nos-section-content">
+      <p class="nos-section-eyebrow">Nuestra promesa</p>
+      <h2 class="nos-section-title">Brillo, estilo y mucha personalidad</h2>
+      <p class="nos-section-body">
+        Queremos que cada tintina encuentre ese accesorio que la haga sentir especial.
+        Por eso cuidamos cada detalle: desde la selección del producto hasta el momento
+        en que llega a tus manos — el mismo día que lo pedís.
+      </p>
+      <p class="nos-section-body">
+        Nuestra atención es personalizada, exclusiva y con mucho amor. Estamos en WhatsApp
+        para acompañarte en cada elección.
+      </p>
+      <a href="https://wa.me/595981299331" target="_blank" class="tt-btn" style="align-self:flex-start;margin-top:8px">
+        💬 Escribinos
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- VALORES -->
+<section class="nos-valores tt-fadein">
+  <p class="tt-section-eyebrow">Lo que nos define</p>
+  <h2 class="tt-section-title" style="color:#1a1a1a;margin-top:6px">Nuestros valores</h2>
+
+  <div class="nos-valores-grid">
+    <div class="nos-valor">
+      <div class="nos-valor-icon">💎</div>
+      <div class="nos-valor-title">Calidad real</div>
+      <p class="nos-valor-desc">Acero inoxidable que no se oxida ni decolora, incluso en el mar.</p>
+    </div>
+    <div class="nos-valor">
+      <div class="nos-valor-icon">🚚</div>
+      <div class="nos-valor-title">Envío mismo día</div>
+      <p class="nos-valor-desc">Pedís hoy, recibís hoy. Así de simple y así de rápido.</p>
+    </div>
+    <div class="nos-valor">
+      <div class="nos-valor-icon">💬</div>
+      <div class="nos-valor-title">Atención personal</div>
+      <p class="nos-valor-desc">Te ayudamos a elegir por WhatsApp. Sin robots, solo personas.</p>
+    </div>
+    <div class="nos-valor">
+      <div class="nos-valor-icon">✨</div>
+      <div class="nos-valor-title">Edición limitada</div>
+      <p class="nos-valor-desc">Colecciones únicas y curadas para que siempre estés en tendencia.</p>
+    </div>
+    <div class="nos-valor">
+      <div class="nos-valor-icon">🌸</div>
+      <div class="nos-valor-title">Estilo femenino</div>
+      <p class="nos-valor-desc">Diseñado para quienes aman los detalles tiernos y elegantes.</p>
+    </div>
+    <div class="nos-valor">
+      <div class="nos-valor-icon">🔒</div>
+      <div class="nos-valor-title">Pago seguro</div>
+      <p class="nos-valor-desc">Transferencia o efectivo, siempre con total confianza.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="nos-cta">
+  <h2 class="nos-cta-title">¿Lista para brillar?</h2>
+  <p class="nos-cta-sub">Descubrí toda nuestra colección de accesorios</p>
+  <div class="nos-cta-btns">
+    <a href="catalogo.html" class="tt-btn">Ver catálogo</a>
+    <a href="https://wa.me/595981299331?text=Hola!+Quiero+conocer+sus+productos+🌸"
+       target="_blank"
+       class="tt-btn" style="background:#25D366">
+      💬 Escribinos por WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="tt-footer">
+  <div class="tt-footer-logo">Tintin ✨</div>
+  <p class="tt-footer-copy">© 2024–2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS<br>Asunción, Paraguay</p>
+  <a href="https://wa.me/595981299331" target="_blank" class="tt-footer-wa">💬 Contactanos por WhatsApp</a>
+</footer>
+
+<a href="https://wa.me/595981299331" class="tt-wa-float" target="_blank">💬</a>
+
+<!-- TAB BAR MOBILE -->
+<nav class="tt-tabbar">
+  <a href="index.html" class="tt-tab" aria-label="Inicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </a>
+  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  </a>
+  <a href="https://wa.me/595981299331" class="tt-tab" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+  <a href="perfil.html" class="tt-tab" aria-label="Perfil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </a>
+</nav>
+
+<script>
+// Fade in al scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll(".tt-fadein").forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
