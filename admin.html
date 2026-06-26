@@ -466,6 +466,9 @@
     <button class="adm-nav-item" data-page="usuarios">
       <span class="adm-nav-icon">👥</span> Usuarios
     </button>
+    <button class="adm-nav-item" data-page="organizar">
+      <span class="adm-nav-icon">🗂️</span> Organizar
+    </button>
     <button class="adm-nav-item" data-page="importar">
       <span class="adm-nav-icon">📥</span> Import / Export
     </button>
@@ -695,21 +698,97 @@
     <div class="adm-page" id="page-usuarios">
       <h1 class="adm-page-title">👥 Usuarios</h1>
       <div class="adm-card">
-        <div class="adm-card-title">Usuarios registrados</div>
+        <div class="adm-table-top">
+          <input type="text" class="adm-search-input" id="usr-search" placeholder="🔍 Buscar por nombre o email..." oninput="filtrarUsuarios()" />
+        </div>
         <div class="adm-table-wrap">
           <table class="adm-table">
             <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Email</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
                 <th>Registrado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="usuarios-body">
-              <tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr>
+              <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- ── ORGANIZAR ── -->
+    <div class="adm-page" id="page-organizar">
+      <h1 class="adm-page-title">🗂️ Organizar Colecciones</h1>
+
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start">
+
+        <!-- Panel izquierdo: productos -->
+        <div class="adm-card" style="margin-bottom:0">
+          <div class="adm-card-title">Seleccionar productos</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+            <input type="text" class="adm-search-input" id="org-search" placeholder="🔍 Buscar..." style="flex:1;min-width:160px" oninput="filtrarOrganizar()" />
+            <select class="adm-input" id="org-filter-cat" style="padding:9px 14px;border-radius:50px;font-size:12px" onchange="filtrarOrganizar()">
+              <option value="">Todas las categorías</option>
+              <option value="relojes">Relojes</option>
+              <option value="bolsos">Bolsos</option>
+              <option value="aros">Aros</option>
+              <option value="collares">Collares</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="anillos">Anillos</option>
+              <option value="tobilleras">Tobilleras</option>
+              <option value="brazaletes">Brazaletes</option>
+              <option value="earcuff">Earcuff</option>
+              <option value="armcuff">Armcuff</option>
+              <option value="gafas">Gafas</option>
+              <option value="joyeros">Joyeros</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f5d0de">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:700">
+              <input type="checkbox" id="org-select-all" onchange="toggleSeleccionarTodos(this.checked)" style="width:16px;height:16px;accent-color:var(--acc)" />
+              Seleccionar todos (<span id="org-count-visible">0</span>)
+            </label>
+            <span id="org-count-sel" style="font-size:12px;color:var(--acc);font-weight:700;margin-left:auto"></span>
+          </div>
+          <div id="org-productos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;max-height:500px;overflow-y:auto">
+            <div style="text-align:center;color:var(--text-muted);padding:40px;grid-column:1/-1">Cargando productos...</div>
+          </div>
+        </div>
+
+        <!-- Panel derecho: colección -->
+        <div>
+          <div class="adm-card" style="margin-bottom:16px">
+            <div class="adm-card-title">Asignar a colección</div>
+            <div class="adm-field" style="margin-bottom:12px">
+              <label class="adm-label">Colección existente</label>
+              <select class="adm-input" id="org-col-select">
+                <option value="">— Nueva colección —</option>
+              </select>
+            </div>
+            <div id="org-nueva-col-wrap">
+              <div class="adm-field" style="margin-bottom:10px">
+                <label class="adm-label">Nombre de colección *</label>
+                <input type="text" class="adm-input" id="org-col-nombre" placeholder="Ej: Aros Dorados" />
+              </div>
+              <div class="adm-field" style="margin-bottom:10px">
+                <label class="adm-label">Descripción (opcional)</label>
+                <textarea class="adm-textarea" id="org-col-desc" placeholder="Descripción de la colección..." style="min-height:60px"></textarea>
+              </div>
+            </div>
+            <button class="adm-btn adm-btn-primary" style="width:100%;margin-top:8px" onclick="asignarColeccion()">🗂️ Asignar seleccionados</button>
+          </div>
+
+          <div class="adm-card">
+            <div class="adm-card-title">Mis colecciones</div>
+            <div id="org-lista-colecciones" style="font-size:13px;color:var(--text-muted)">Cargando...</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -861,6 +940,36 @@
   </div>
 </div>
 
+<!-- MODAL EDITAR USUARIO -->
+<div class="adm-modal-overlay" id="modal-usuario" style="display:none">
+  <div class="adm-modal">
+    <h3 class="adm-card-title">✏️ Editar usuario</h3>
+    <input type="hidden" id="edit-usr-id" />
+    <div class="adm-form-grid">
+      <div class="adm-field full">
+        <label class="adm-label">Nombre</label>
+        <input type="text" class="adm-input" id="edit-usr-nombre" placeholder="Nombre completo" />
+      </div>
+      <div class="adm-field full">
+        <label class="adm-label">Email (solo lectura)</label>
+        <input type="email" class="adm-input" id="edit-usr-email" disabled style="background:#f5f5f5" />
+      </div>
+      <div class="adm-field full">
+        <label class="adm-label">Teléfono / WhatsApp</label>
+        <input type="text" class="adm-input" id="edit-usr-phone" placeholder="Ej: 0981 123 456" />
+      </div>
+      <div class="adm-field full">
+        <label class="adm-label">Notas internas</label>
+        <textarea class="adm-textarea" id="edit-usr-notas" placeholder="Notas visibles solo para el admin..."></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px">
+      <button class="adm-btn adm-btn-primary" id="btn-guardar-usuario">💾 Guardar cambios</button>
+      <button class="adm-btn adm-btn-outline" onclick="document.getElementById('modal-usuario').style.display='none'">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="adm-toast" id="adm-toast"></div>
 
@@ -868,7 +977,7 @@
 import { db, auth, provider } from "./js/firebase.js";
 import {
   collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
-  doc, query, orderBy, where, serverTimestamp
+  doc, query, orderBy, where, serverTimestamp, setDoc, writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   signOut, onAuthStateChanged
@@ -902,6 +1011,7 @@ window.showPage = function(id) {
   if (id === "productos") cargarTablaProductos();
   if (id === "dashboard") cargarDashboard();
   if (id === "usuarios") cargarUsuarios();
+  if (id === "organizar") cargarOrganizar();
   if (id === "nuevo-producto") { resetFormProducto(); document.getElementById("form-prod-title").textContent = "➕ Nuevo producto"; }
 };
 
@@ -1184,26 +1294,279 @@ window.eliminarProducto = async function(id, nombre) {
 };
 
 // ── USUARIOS ──────────────────────────────────
+let todosUsuarios = [];
+
 async function cargarUsuarios() {
   const tbody = document.getElementById("usuarios-body");
   try {
     const snap = await getDocs(collection(db, "users"));
-    if (snap.empty) {
-      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;color:var(--text-muted)">Sin usuarios registrados</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = snap.docs.map(d => {
-      const u = d.data();
-      return `
-        <tr>
-          <td style="font-weight:700">${u.name||'—'}</td>
-          <td>${u.email||'—'}</td>
-          <td style="color:var(--text-muted);font-size:12px">${u.createdAt?.toDate?.().toLocaleDateString('es-PY')||'—'}</td>
-        </tr>
-      `;
-    }).join("");
-  } catch(e) { tbody.innerHTML = `<tr><td colspan="3" style="color:#e57;text-align:center;padding:20px">Error al cargar</td></tr>`; }
+    todosUsuarios = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderUsuarios(todosUsuarios);
+  } catch(e) { tbody.innerHTML = `<tr><td colspan="6" style="color:#e57;text-align:center;padding:20px">Error al cargar</td></tr>`; }
 }
+
+function renderUsuarios(lista) {
+  const tbody = document.getElementById("usuarios-body");
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted)">Sin usuarios registrados</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map(u => {
+    const bloqueado = u.blocked === true;
+    return `
+      <tr style="${bloqueado ? 'opacity:.5' : ''}">
+        <td style="font-weight:700">${u.name||'—'}</td>
+        <td style="font-size:12px">${u.email||'—'}</td>
+        <td style="font-size:12px">${u.phone||'—'}</td>
+        <td>
+          <span style="
+            display:inline-block;padding:3px 10px;border-radius:50px;font-size:10px;font-weight:800;text-transform:uppercase;
+            background:${bloqueado ? '#ffebee' : '#e8f5e9'};
+            color:${bloqueado ? '#c62828' : '#2e7d32'}
+          ">${bloqueado ? 'Bloqueado' : 'Activo'}</span>
+        </td>
+        <td style="color:var(--text-muted);font-size:12px">${u.createdAt?.toDate?.().toLocaleDateString('es-PY')||'—'}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="abrirEditarUsuario('${u.id}')">✏️ Editar</button>
+            <button class="adm-btn adm-btn-sm" style="background:${bloqueado ? '#e8f5e9' : '#fff3e0'};color:${bloqueado ? '#2e7d32' : '#e65100'};border:1.5px solid ${bloqueado ? '#2e7d32' : '#e65100'}" onclick="toggleBloquearUsuario('${u.id}', ${bloqueado})">${bloqueado ? '✅ Desbloquear' : '🚫 Bloquear'}</button>
+            <button class="adm-btn adm-btn-danger adm-btn-sm" onclick="eliminarUsuario('${u.id}', '${(u.email||'').replace(/'/g,"\\'")}')">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window.filtrarUsuarios = function() {
+  const q = document.getElementById("usr-search").value.toLowerCase();
+  const filtrados = q
+    ? todosUsuarios.filter(u => (u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q))
+    : todosUsuarios;
+  renderUsuarios(filtrados);
+};
+
+window.abrirEditarUsuario = function(uid) {
+  const u = todosUsuarios.find(u => u.id === uid);
+  if (!u) return;
+  document.getElementById("edit-usr-id").value = uid;
+  document.getElementById("edit-usr-nombre").value = u.name || "";
+  document.getElementById("edit-usr-email").value = u.email || "";
+  document.getElementById("edit-usr-phone").value = u.phone || "";
+  document.getElementById("edit-usr-notas").value = u.notes || "";
+  document.getElementById("modal-usuario").style.display = "flex";
+};
+
+document.getElementById("btn-guardar-usuario").onclick = async () => {
+  const uid = document.getElementById("edit-usr-id").value;
+  const nombre = document.getElementById("edit-usr-nombre").value.trim();
+  const phone = document.getElementById("edit-usr-phone").value.trim();
+  const notes = document.getElementById("edit-usr-notas").value.trim();
+  if (!uid) return;
+  try {
+    await updateDoc(doc(db, "users", uid), { name: nombre, phone, notes });
+    document.getElementById("modal-usuario").style.display = "none";
+    toast("✅ Usuario actualizado");
+    cargarUsuarios();
+  } catch(e) { toast("Error al guardar", "error"); }
+};
+
+window.toggleBloquearUsuario = async function(uid, actBloqueado) {
+  const nuevo = !actBloqueado;
+  const accion = nuevo ? "bloquear" : "desbloquear";
+  if (!confirm(`¿Querés ${accion} este usuario?`)) return;
+  try {
+    await updateDoc(doc(db, "users", uid), { blocked: nuevo });
+    toast(nuevo ? "🚫 Usuario bloqueado" : "✅ Usuario desbloqueado");
+    cargarUsuarios();
+  } catch(e) { toast("Error", "error"); }
+};
+
+window.eliminarUsuario = async function(uid, email) {
+  if (!confirm(`¿Eliminar al usuario ${email}? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, "users", uid));
+    toast("🗑️ Usuario eliminado");
+    cargarUsuarios();
+  } catch(e) { toast("Error al eliminar", "error"); }
+};
+
+// ── ORGANIZAR / COLECCIONES ───────────────────
+let orgProductos = [];
+let orgProductosFiltrados = [];
+let orgColecciones = [];
+
+async function cargarOrganizar() {
+  const grid = document.getElementById("org-productos-grid");
+  grid.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px;grid-column:1/-1">Cargando productos...</div>`;
+  try {
+    const [snapProd, snapCols] = await Promise.all([
+      getDocs(collection(db, "products")),
+      getDocs(collection(db, "collections"))
+    ]);
+    orgProductos = snapProd.docs.map(d => ({ id: d.id, ...d.data() }));
+    orgColecciones = snapCols.docs.map(d => ({ id: d.id, ...d.data() }));
+    filtrarOrganizar();
+    renderColeccionesSelect();
+    renderListaColecciones();
+  } catch(e) {
+    grid.innerHTML = `<div style="color:#e57;text-align:center;padding:40px;grid-column:1/-1">Error al cargar</div>`;
+  }
+}
+
+window.filtrarOrganizar = function() {
+  const q = (document.getElementById("org-search")?.value || "").toLowerCase();
+  const cat = document.getElementById("org-filter-cat")?.value || "";
+  orgProductosFiltrados = orgProductos.filter(p => {
+    const matchQ = !q || (p.name||"").toLowerCase().includes(q) || (p.category||"").toLowerCase().includes(q);
+    const matchCat = !cat || p.category === cat;
+    return matchQ && matchCat;
+  });
+  document.getElementById("org-count-visible").textContent = orgProductosFiltrados.length;
+  document.getElementById("org-select-all").checked = false;
+  actualizarContadorSel();
+  renderOrgGrid();
+};
+
+function renderOrgGrid() {
+  const grid = document.getElementById("org-productos-grid");
+  if (!orgProductosFiltrados.length) {
+    grid.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px;grid-column:1/-1">Sin productos</div>`;
+    return;
+  }
+  grid.innerHTML = orgProductosFiltrados.map(p => `
+    <label style="
+      display:flex;flex-direction:column;gap:6px;cursor:pointer;
+      border:2px solid #eee;border-radius:var(--radius-sm);overflow:hidden;
+      transition:border .15s;background:#fff;
+    " class="org-card" data-id="${p.id}">
+      <input type="checkbox" class="org-check" data-id="${p.id}" style="position:absolute;opacity:0;pointer-events:none"
+        onchange="actualizarContadorSel()" />
+      <div style="position:relative">
+        <img src="${p.imageUrl||''}" alt="${p.name||''}"
+          style="width:100%;height:120px;object-fit:cover;display:block;background:#f5f5f5"
+          onerror="this.style.background='#f5d0de';this.src=''" />
+        <div class="org-check-overlay" style="
+          position:absolute;top:6px;right:6px;width:22px;height:22px;
+          border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.25);
+          display:flex;align-items:center;justify-content:center;font-size:12px
+        ">✓</div>
+      </div>
+      <div style="padding:6px 8px 8px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.3">${p.name||'—'}</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">${p.category||'—'}</div>
+      </div>
+    </label>
+  `).join("");
+
+  grid.querySelectorAll(".org-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const cb = card.querySelector(".org-check");
+      cb.checked = !cb.checked;
+      card.style.borderColor = cb.checked ? "var(--acc)" : "#eee";
+      card.querySelector(".org-check-overlay").style.background = cb.checked ? "var(--acc)" : "rgba(0,0,0,.25)";
+      actualizarContadorSel();
+      sincronizarSelectAll();
+    });
+  });
+}
+
+function actualizarContadorSel() {
+  const sel = document.querySelectorAll(".org-check:checked").length;
+  const el = document.getElementById("org-count-sel");
+  el.textContent = sel > 0 ? `${sel} seleccionado${sel > 1 ? 's' : ''}` : "";
+}
+
+function sincronizarSelectAll() {
+  const total = document.querySelectorAll(".org-check").length;
+  const sel = document.querySelectorAll(".org-check:checked").length;
+  document.getElementById("org-select-all").checked = total > 0 && sel === total;
+}
+
+window.toggleSeleccionarTodos = function(checked) {
+  document.querySelectorAll(".org-card").forEach(card => {
+    const cb = card.querySelector(".org-check");
+    cb.checked = checked;
+    card.style.borderColor = checked ? "var(--acc)" : "#eee";
+    card.querySelector(".org-check-overlay").style.background = checked ? "var(--acc)" : "rgba(0,0,0,.25)";
+  });
+  actualizarContadorSel();
+};
+
+function renderColeccionesSelect() {
+  const sel = document.getElementById("org-col-select");
+  sel.innerHTML = `<option value="">— Nueva colección —</option>` +
+    orgColecciones.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+  sel.onchange = () => {
+    document.getElementById("org-nueva-col-wrap").style.display = sel.value ? "none" : "block";
+  };
+}
+
+function renderListaColecciones() {
+  const el = document.getElementById("org-lista-colecciones");
+  if (!orgColecciones.length) {
+    el.innerHTML = `<div style="color:var(--text-muted);font-size:13px">Sin colecciones creadas</div>`;
+    return;
+  }
+  el.innerHTML = orgColecciones.map(c => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5">
+      <div>
+        <div style="font-weight:700;font-size:13px">${c.name}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${(c.productIds||[]).length} productos</div>
+      </div>
+      <button class="adm-btn adm-btn-danger adm-btn-sm" onclick="eliminarColeccion('${c.id}')">🗑️</button>
+    </div>
+  `).join("");
+}
+
+window.asignarColeccion = async function() {
+  const seleccionados = [...document.querySelectorAll(".org-check:checked")].map(cb => cb.dataset.id);
+  if (!seleccionados.length) { toast("Seleccioná al menos un producto", "error"); return; }
+
+  const colSelect = document.getElementById("org-col-select");
+  let colId = colSelect.value;
+  let colNombre = "";
+
+  if (!colId) {
+    colNombre = document.getElementById("org-col-nombre").value.trim();
+    if (!colNombre) { toast("Ingresá un nombre para la colección", "error"); return; }
+    const desc = document.getElementById("org-col-desc").value.trim();
+    const ref = await addDoc(collection(db, "collections"), {
+      name: colNombre, description: desc, productIds: seleccionados, createdAt: serverTimestamp()
+    });
+    colId = ref.id;
+    toast(`✅ Colección "${colNombre}" creada con ${seleccionados.length} productos`);
+    document.getElementById("org-col-nombre").value = "";
+    document.getElementById("org-col-desc").value = "";
+  } else {
+    const colActual = orgColecciones.find(c => c.id === colId);
+    const idsActuales = colActual?.productIds || [];
+    const idsNuevos = [...new Set([...idsActuales, ...seleccionados])];
+    await updateDoc(doc(db, "collections", colId), { productIds: idsNuevos });
+    colNombre = colActual?.name || colId;
+    toast(`✅ ${seleccionados.length} productos asignados a "${colNombre}"`);
+  }
+
+  const batch = writeBatch(db);
+  seleccionados.forEach(pid => {
+    batch.update(doc(db, "products", pid), {
+      collections: [...new Set([...(orgProductos.find(p => p.id === pid)?.collections || []), colId])]
+    });
+  });
+  await batch.commit();
+
+  toggleSeleccionarTodos(false);
+  document.getElementById("org-select-all").checked = false;
+  await cargarOrganizar();
+};
+
+window.eliminarColeccion = async function(colId) {
+  const col = orgColecciones.find(c => c.id === colId);
+  if (!confirm(`¿Eliminar la colección "${col?.name||colId}"?`)) return;
+  await deleteDoc(doc(db, "collections", colId));
+  toast("🗑️ Colección eliminada");
+  await cargarOrganizar();
+};
 
 // ── EXPORTAR JSON ─────────────────────────────
 document.getElementById("btn-exportar").onclick = async () => {

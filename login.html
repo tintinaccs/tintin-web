@@ -250,15 +250,28 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Si ya está logueado, redirigir
+async function verificarYRedirigir(user) {
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists() && snap.data().blocked === true) {
+      await signOut(auth);
+      showError("Tu cuenta ha sido suspendida. Contactá a soporte.");
+      return;
+    }
+  } catch(_) {}
+  window.location.href = "perfil.html";
+}
+
+// Si ya está logueado, verificar y redirigir
 onAuthStateChanged(auth, user => {
-  if (user) window.location.href = "perfil.html";
+  if (user) verificarYRedirigir(user);
 });
 
 // TABS
@@ -316,7 +329,7 @@ document.getElementById("btn-login-email").onclick = async () => {
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pass);
     await guardarUsuario(cred.user, "");
-    window.location.href = "perfil.html";
+    await verificarYRedirigir(cred.user);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
@@ -331,7 +344,7 @@ document.getElementById("btn-registrar").onclick = async () => {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: nombre });
     await guardarUsuario(cred.user, nombre);
-    window.location.href = "perfil.html";
+    await verificarYRedirigir(cred.user);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
@@ -341,7 +354,7 @@ const loginConGoogle = async () => {
   try {
     const cred = await signInWithPopup(auth, provider);
     await guardarUsuario(cred.user, cred.user.displayName);
-    window.location.href = "perfil.html";
+    await verificarYRedirigir(cred.user);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
