@@ -17,44 +17,102 @@
      ============================================= -->
 <div id="tt-intro" class="tt-intro">
   <div class="tt-intro-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" class="tt-dragonfly" aria-hidden="true">
-      <!-- HEAD -->
-      <circle cx="120" cy="52" r="10" fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round"/>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 480" class="tt-dragonfly" aria-hidden="true">
+      <defs>
+        <!-- Wing fill gradient (glossy hot-pink) -->
+        <radialGradient id="wgl" cx="38%" cy="42%" r="62%" gradientUnits="objectBoundingBox">
+          <stop offset="0%"   stop-color="#ff5fa0"/>
+          <stop offset="55%"  stop-color="#e8005f"/>
+          <stop offset="100%" stop-color="#a8003f"/>
+        </radialGradient>
+        <radialGradient id="wgr" cx="62%" cy="42%" r="62%" gradientUnits="objectBoundingBox">
+          <stop offset="0%"   stop-color="#ff5fa0"/>
+          <stop offset="55%"  stop-color="#e8005f"/>
+          <stop offset="100%" stop-color="#a8003f"/>
+        </radialGradient>
+        <!-- Body gradient -->
+        <linearGradient id="bodyg" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#c8004a"/>
+          <stop offset="40%"  stop-color="#f0006a"/>
+          <stop offset="100%" stop-color="#c8004a"/>
+        </linearGradient>
+        <!-- Head gradient -->
+        <radialGradient id="headg" cx="38%" cy="36%" r="60%">
+          <stop offset="0%"   stop-color="#ff6aaa"/>
+          <stop offset="100%" stop-color="#cc0050"/>
+        </radialGradient>
+        <!-- Wing highlight (white gloss) -->
+        <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="rgba(255,255,255,0.45)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </linearGradient>
+      </defs>
 
-      <!-- ANTENNAE -->
-      <path d="M113,43 Q104,28 98,20" fill="none" stroke="#b5134d" stroke-width="3.5" stroke-linecap="round"/>
-      <path d="M127,43 Q136,28 142,20" fill="none" stroke="#b5134d" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- ═══ UPPER LEFT WING ═══ -->
+      <path d="M 248,192
+               C 220,168 148,138 72,148
+               C 24,154  8,180  30,206
+               C 52,232  118,224 178,210
+               C 218,200 244,196 248,192 Z"
+            fill="url(#wgl)"/>
+      <!-- gloss highlight upper-left -->
+      <path d="M 248,192
+               C 224,172 160,148 90,154
+               C 56,157  36,168  46,182
+               C 68,158 148,148 248,186 Z"
+            fill="url(#gloss)" opacity="0.7"/>
 
-      <!-- BODY -->
-      <path d="M120,62 C118,100 122,140 120,240" fill="none" stroke="#b5134d" stroke-width="5" stroke-linecap="round"/>
+      <!-- ═══ UPPER RIGHT WING ═══ -->
+      <path d="M 252,192
+               C 280,168 352,138 428,148
+               C 476,154 492,180 470,206
+               C 448,232 382,224 322,210
+               C 282,200 256,196 252,192 Z"
+            fill="url(#wgr)"/>
+      <!-- gloss highlight upper-right -->
+      <path d="M 252,192
+               C 276,172 340,148 410,154
+               C 444,157 464,168 454,182
+               C 432,158 352,148 252,186 Z"
+            fill="url(#gloss)" opacity="0.7"/>
 
-      <!-- UPPER-LEFT WING (outer) -->
-      <path d="M118,80 C90,64 38,58 22,88 C10,110 30,140 72,128 C94,120 112,104 118,92"
-            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- UPPER-LEFT WING (inner vein) -->
-      <path d="M116,84 C96,72 58,68 44,92 C34,108 50,128 80,118 C100,110 113,98 116,88"
-            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- ═══ LOWER LEFT WING ═══ -->
+      <path d="M 246,205
+               C 218,206 140,218 100,244
+               C 70,264  84,290 122,280
+               C 164,269 228,238 246,212 Z"
+            fill="url(#wgl)"/>
+      <!-- gloss highlight lower-left -->
+      <path d="M 246,205
+               C 225,208 158,220 118,244
+               C 100,254 104,266 122,270
+               C 108,258 180,230 246,208 Z"
+            fill="url(#gloss)" opacity="0.5"/>
 
-      <!-- UPPER-RIGHT WING (outer) -->
-      <path d="M122,80 C150,64 202,58 218,88 C230,110 210,140 168,128 C146,120 128,104 122,92"
-            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- UPPER-RIGHT WING (inner vein) -->
-      <path d="M124,84 C144,72 182,68 196,92 C206,108 190,128 160,118 C140,110 127,98 124,88"
-            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- ═══ LOWER RIGHT WING ═══ -->
+      <path d="M 254,205
+               C 282,206 360,218 400,244
+               C 430,264 416,290 378,280
+               C 336,269 272,238 254,212 Z"
+            fill="url(#wgr)"/>
+      <!-- gloss highlight lower-right -->
+      <path d="M 254,205
+               C 275,208 342,220 382,244
+               C 400,254 396,266 378,270
+               C 392,258 320,230 254,208 Z"
+            fill="url(#gloss)" opacity="0.5"/>
 
-      <!-- LOWER-LEFT WING (outer) -->
-      <path d="M118,110 C94,112 42,126 28,158 C18,180 38,208 76,194 C102,184 116,156 118,130"
-            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- LOWER-LEFT WING (inner vein) -->
-      <path d="M116,116 C96,118 52,132 40,160 C32,178 48,200 78,188 C102,178 115,154 116,132"
-            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- ═══ BODY / TORSO ═══ -->
+      <!-- neck -->
+      <ellipse cx="250" cy="195" rx="6" ry="8" fill="url(#bodyg)"/>
+      <!-- abdomen tapered to pointed tail -->
+      <path d="M 244,200 C 242,240 243,300 250,430 C 257,300 258,240 256,200 Z"
+            fill="url(#bodyg)"/>
 
-      <!-- LOWER-RIGHT WING (outer) -->
-      <path d="M122,110 C146,112 198,126 212,158 C222,180 202,208 164,194 C138,184 124,156 122,130"
-            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- LOWER-RIGHT WING (inner vein) -->
-      <path d="M124,116 C144,118 188,132 200,160 C208,178 192,200 162,188 C138,178 125,154 124,132"
-            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- ═══ HEAD ═══ -->
+      <circle cx="250" cy="176" r="20" fill="url(#headg)"/>
+      <!-- head gloss -->
+      <ellipse cx="243" cy="168" rx="9" ry="6" fill="rgba(255,255,255,0.35)" transform="rotate(-20,243,168)"/>
     </svg>
   </div>
 </div>
