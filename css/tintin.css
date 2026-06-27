@@ -105,16 +105,23 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   gap: 16px;
 }
 
-.tt-logo img {
-  height: 44px;
-  object-fit: contain;
+.tt-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
-.tt-logo-text {
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--acc);
+
+.tt-header-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Shrink on scroll — desktop/tablet only */
+.tt-header--scrolled .tt-header-logo {
+  height: 36px;
 }
 
 /* NAV desktop */
@@ -130,7 +137,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text);
+  color: #b03a6a;
   padding: 8px 14px;
   border-radius: 50px;
   transition: color var(--transition), background var(--transition);
@@ -141,7 +148,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-nav > a:hover,
-.tt-nav-tienda-btn:hover { color: var(--acc); }
+.tt-nav-tienda-btn:hover { color: #7a1a3e; }
 
 /* Dropdown Tienda */
 .tt-nav-tienda {
@@ -198,27 +205,35 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
-.tt-search-btn,
-.tt-account-btn {
-  width: 38px;
-  height: 38px;
+.tt-icon-btn {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  color: var(--text);
-  transition: background var(--transition), color var(--transition);
   background: transparent;
   border: none;
   cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  padding: 6px;
+  text-decoration: none;
 }
 
-.tt-search-btn:hover,
-.tt-account-btn:hover { background: var(--acc-light); color: var(--acc); }
+.tt-icon-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.tt-icon-btn:hover {
+  background: var(--acc-light);
+  transform: scale(1.08);
+}
 
 /* Buscador overlay */
 .tt-search-overlay {
@@ -1027,7 +1042,31 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   .tt-trust-item:last-child { border-bottom: none; }
   .tt-look-card        { width: 155px; }
   .tt-nav              { display: none; }
-  .tt-header-inner     { height: 56px; }
+  .tt-header-inner     { height: 60px; position: relative; justify-content: center; }
+
+  /* Logo centered on mobile */
+  .tt-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .tt-header-logo {
+    height: 42px;
+    transition: height 0.35s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Shrink on scroll — mobile */
+  .tt-header--scrolled .tt-header-logo {
+    height: 28px;
+  }
+
+  /* Icons stay right */
+  .tt-header-actions {
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+  }
 }
 
 @media (max-width: 480px) {

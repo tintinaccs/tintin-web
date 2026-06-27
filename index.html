@@ -28,7 +28,9 @@
   <div class="tt-header-inner">
 
     <!-- Logo -->
-    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+    <a href="index.html" class="tt-logo">
+      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
+    </a>
 
     <!-- Nav desktop -->
     <nav class="tt-nav">
@@ -63,8 +65,15 @@
 
     <!-- Acciones -->
     <div class="tt-header-actions">
-      <button class="tt-search-btn" id="btn-buscar" title="Buscar">🔍</button>
-      <a href="perfil.html" class="tt-account-btn" id="btn-cuenta" title="Mi cuenta">👤</a>
+      <button class="tt-icon-btn" id="btn-buscar" title="Buscar">
+        <img src="images/Busqueda.png" alt="Buscar" />
+      </button>
+      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta">
+        <img src="images/Mi cuenta.png" alt="Mi cuenta" />
+      </a>
+      <a href="#carrito" class="tt-icon-btn" title="Carrito">
+        <img src="images/Carrito.png" alt="Carrito" />
+      </a>
     </div>
 
   </div>
@@ -967,6 +976,21 @@ document.getElementById("tab-buscar").onclick = () => {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </a>
 </nav>
+
+<script>
+/* Mobile header logo shrink on scroll */
+(function(){
+  var header = document.querySelector('.tt-header');
+  if (!header) return;
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 40) {
+      header.classList.add('tt-header--scrolled');
+    } else {
+      header.classList.remove('tt-header--scrolled');
+    }
+  }, { passive: true });
+})();
+</script>
 
 <script>
 (function(){
