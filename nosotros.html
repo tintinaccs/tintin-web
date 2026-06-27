@@ -3,427 +3,919 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiénes somos — Tintin Accesorios</title>
+  <title>Quiénes Somos — Tintin Accesorios &amp; Relojes</title>
+  <meta name="description" content="Conocé la historia de Tintin Accesorios, tu tienda de accesorios femeninos en San Lorenzo, Paraguay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin.css" />
+
   <style>
-    body { background: #fff; }
+  /* ─── HERO BANNER — migrado de Shopify TintinHEROPREM ─── */
 
-    /* HERO */
-    .nos-hero {
-      position: relative;
-      height: clamp(420px, 60vw, 680px);
-      overflow: hidden;
-      background: #fdf0f5;
+  .ta-section {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    background: #fff7fa;
+    color: #20191b;
+    font-family: "DM Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ta-section *, .ta-section *::before, .ta-section *::after {
+    box-sizing: border-box;
+  }
+
+  .ta-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #f6dce6;
+  }
+
+  /* Imagen de fondo — capa absoluta */
+  .ta-image-shell {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ta-section.ta-visible .ta-image-shell {
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  .ta-section.ta-ready:not(.ta-visible) .ta-image-shell {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: 0s;
+  }
+
+  .ta-image-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #f6dce6;
+  }
+
+  .ta-img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transform: scale(1.12);
+    transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .ta-section.ta-visible .ta-img {
+    transform: scale(1);
+  }
+
+  .ta-section.ta-ready:not(.ta-visible) .ta-img {
+    transform: scale(1.12);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ta-img-desktop { display: block; }
+  .ta-img-tablet  { display: none; }
+  .ta-img-mobile  { display: none; }
+
+  .ta-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(255,255,255,0.75), transparent 28%),
+      linear-gradient(135deg, #fff7fa 0%, #f6dce6 45%, #edb6c8 100%);
+  }
+
+  /* Overlay */
+  .ta-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #20191b;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* Grid — contenido encima */
+  .ta-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .ta-content-col {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: min(calc(100% - 48px), 860px);
+    top: 50%;
+    left: 80px;
+    transform: translateY(-50%);
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  /* ── Eyebrow ── */
+  .ta-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    color: #EA7EA3;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .ta-eyebrow::before {
+    content: "";
+    width: 28px;
+    height: 1.5px;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── Title ── */
+  .ta-title {
+    margin: 0;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: clamp(28px, 4.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+
+  /* ── Línea decorativa ── */
+  .ta-line {
+    width: 48px;
+    height: 2px;
+    margin: 22px 0;
+    background: #c86b86;
+    opacity: 0.9;
+  }
+
+  /* ── Descripción ── */
+  .ta-desc {
+    margin: 0;
+    color: rgba(255,255,255,0.78);
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: clamp(10px, 1vw, 14px);
+    line-height: 1.7;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    max-width: 520px;
+  }
+
+  /* ── Points grid 3 cols ── */
+  .ta-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 42px;
+    padding: 26px 0;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .ta-point {
+    padding-right: 20px;
+  }
+
+  .ta-point:last-child { padding-right: 0; }
+
+  .ta-point-title {
+    display: block;
+    margin-bottom: 7px;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: clamp(24px, 2.6vw, 36px);
+    line-height: 1;
+    font-style: italic;
+    font-weight: 300;
+    color: #ffffff;
+  }
+
+  .ta-point-text {
+    display: block;
+    color: rgba(255,255,255,0.65);
+    font-size: 11px;
+    line-height: 1.45;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── Botón con animación breathe ── */
+  @keyframes ta-btn-breathe {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-2px) scale(1.015); }
+  }
+
+  .ta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 0.6vw, 10px);
+    width: fit-content;
+    max-width: 90%;
+    margin-top: clamp(12px, 1.4vw, 18px);
+    padding: clamp(10px, 1vw, 14px) clamp(22px, 2.2vw, 34px);
+    border-radius: 999px;
+    background: #EA7EA3;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: clamp(10px, 0.85vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    animation: ta-btn-breathe 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.35s ease,
+      letter-spacing 0.4s ease,
+      padding 0.4s ease;
+  }
+
+  .ta-button:hover {
+    animation-play-state: paused;
+    transform: translateY(-5px) scale(1.05);
+    background: #c86b86;
+    letter-spacing: 0.2em;
+    padding: clamp(10px, 1vw, 14px) clamp(28px, 2.8vw, 42px);
+  }
+
+  .ta-arrow {
+    display: inline-block;
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.3s ease;
+    opacity: 0.75;
+  }
+
+  .ta-button:hover .ta-arrow {
+    transform: translateX(10px) scale(1.25);
+    opacity: 1;
+  }
+
+  /* ─── REVEAL ANIMATION (reversible) ─── */
+  .ta-section.ta-ready .ta-reveal {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translate3d(0, 40px, 0) scale(0.96);
+    transition:
+      opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+    backface-visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ta-section.ta-ready.ta-from-top:not(.ta-visible) .ta-reveal {
+    transform: translate3d(0, -72px, 0) scale(0.98);
+  }
+
+  .ta-section.ta-ready.ta-visible .ta-reveal {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+    pointer-events: auto;
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Delays primera aparición */
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-eyebrow { transition-delay: 0.10s; }
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-title   { transition-delay: 0.20s; }
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-line    { transition-delay: 0.30s; }
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-desc    { transition-delay: 0.38s; }
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-points  { transition-delay: 0.46s; }
+  .ta-section.ta-ready.ta-visible:not(.ta-seen) .ta-button  { transition-delay: 0.54s; }
+
+  /* Delays apariciones siguientes */
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-eyebrow { transition-delay: 0.05s; }
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-title   { transition-delay: 0.12s; }
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-line    { transition-delay: 0.18s; }
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-desc    { transition-delay: 0.24s; }
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-points  { transition-delay: 0.30s; }
+  .ta-section.ta-ready.ta-visible.ta-seen .ta-button  { transition-delay: 0.36s; }
+
+  .ta-section.ta-ready:not(.ta-visible) .ta-reveal {
+    transition-delay: 0s;
+  }
+
+  /* ─── TABLET (≤990px) ─── */
+  @media (max-width: 990px) {
+    .ta-container { height: 700px; }
+
+    .ta-img-desktop { display: none; }
+    .ta-img-tablet  { display: block; }
+    .ta-img-mobile  { display: none; }
+
+    .ta-content-col {
+      top: unset !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      bottom: 60px;
+      width: min(calc(100% - 48px), 500px);
+      max-width: calc(100% - 48px);
+      text-align: center !important;
+      align-items: center !important;
     }
 
-    .nos-hero img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center top;
+    .ta-eyebrow { justify-content: center !important; }
+    .ta-line { margin-left: auto !important; margin-right: auto !important; }
+
+    .ta-title { font-size: clamp(28px, 3vw, 56px); }
+
+    .ta-points {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 24px 0;
     }
 
-    .nos-hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, rgba(20,10,15,0.52) 0%, rgba(0,0,0,0.08) 65%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 clamp(24px, 8vw, 120px);
-      gap: 12px;
-    }
+    .ta-point { padding-right: 0; padding-bottom: 18px; }
+    .ta-point:last-child { padding-bottom: 0; }
 
-    .nos-eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.75);
-    }
-
-    .nos-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 6vw, 80px);
-      font-weight: 300;
-      color: #fff;
-      line-height: 1.05;
-      max-width: 680px;
-    }
-
-    .nos-line {
-      width: 48px;
-      height: 2px;
-      background: #ea7ea3;
-      border: none;
-      margin: 0;
-    }
-
-    .nos-desc {
-      font-size: clamp(13px, 1.4vw, 16px);
-      font-weight: 400;
-      color: rgba(255,255,255,.82);
-      max-width: 460px;
-      line-height: 1.7;
-    }
-
-    /* PUNTOS */
-    .nos-points {
-      display: flex;
-      gap: 32px;
+    .ta-button {
+      min-width: 200px;
+      max-width: 90%;
       margin-top: 16px;
-      flex-wrap: wrap;
+      justify-content: center !important;
     }
+  }
 
-    .nos-point {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+  /* ─── MOBILE (≤767px) ─── */
+  @media (max-width: 767px) {
+    .ta-container { height: 620px; }
 
-    .nos-point-num {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .18em;
-      color: #ea7ea3;
-      text-transform: uppercase;
-    }
+    .ta-img-desktop { display: none; }
+    .ta-img-tablet  { display: none; }
+    .ta-img-mobile  { display: block; }
 
-    .nos-point-txt {
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255,255,255,.75);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    /* BODY */
-    .nos-body {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 72px 24px;
-    }
-
-    .nos-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center;
-      margin-bottom: 72px;
-    }
-
-    .nos-section.reverse { direction: rtl; }
-    .nos-section.reverse > * { direction: ltr; }
-
-    .nos-section-img {
-      border-radius: 20px;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-    }
-
-    .nos-section-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .nos-section-content { display: flex; flex-direction: column; gap: 16px; }
-
-    .nos-section-eyebrow {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #ea7ea3;
-    }
-
-    .nos-section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 3.5vw, 44px);
-      font-weight: 400;
-      color: #1a1a1a;
-      line-height: 1.1;
-    }
-
-    .nos-section-body {
-      font-size: 14px;
-      font-weight: 400;
-      color: #888;
-      line-height: 1.8;
-    }
-
-    /* VALORES */
-    .nos-valores {
-      background: #fdf0f5;
-      padding: 64px 24px;
+    .ta-content-col {
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(calc(100% - 32px), 360px);
       text-align: center;
-    }
-
-    .nos-valores-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 900px;
-      margin: 40px auto 0;
-    }
-
-    .nos-valor {
-      background: #fff;
-      border-radius: 16px;
-      border: 1.5px solid #f5d0de;
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
+      top: unset;
+      bottom: 90px;
       align-items: center;
-      gap: 12px;
     }
 
-    .nos-valor-icon {
-      width: 48px;
-      height: 48px;
-      background: #fce4ec;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
+    .ta-eyebrow { justify-content: center; }
+    .ta-title { font-size: clamp(32px, 9vw, 52px); }
+    .ta-desc { font-size: 13px; }
+
+    .ta-button {
+      min-width: 180px;
+      max-width: 90%;
       justify-content: center;
-      font-size: 22px;
     }
 
-    .nos-valor-title {
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: #a7214d;
-    }
+    .ta-line { margin-left: auto; margin-right: auto; }
+  }
 
-    .nos-valor-desc {
-      font-size: 12px;
-      font-weight: 500;
-      color: #b07090;
-      line-height: 1.6;
-    }
 
-    /* CTA */
-    .nos-cta {
-      text-align: center;
-      padding: 72px 24px;
-      background: #fff;
-    }
+  /* ─── SECCIÓN "NUESTRA HISTORIA" ─── */
+  .nos-historia {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
 
-    .nos-cta-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 4vw, 52px);
-      font-weight: 400;
-      color: #1a1a1a;
-      margin-bottom: 16px;
-      line-height: 1.1;
-    }
+  .nos-historia-img {
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+  }
 
-    .nos-cta-sub {
-      font-size: 13px;
-      color: #888;
-      font-weight: 500;
-      margin-bottom: 32px;
-    }
+  .nos-historia-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
-    .nos-cta-btns {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+  .nos-historia-content .nos-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #c86b86;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-    @media (max-width: 768px) {
-      .nos-section { grid-template-columns: 1fr; gap: 24px; }
-      .nos-section.reverse { direction: ltr; }
-      .nos-valores-grid { grid-template-columns: 1fr; }
-      .nos-hero-overlay { padding: 0 20px; }
+  .nos-historia-content .nos-eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1.5px;
+    background: currentColor;
+  }
+
+  .nos-historia-content h2 {
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #20191b;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  .nos-historia-content p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #6f6266;
+    margin-bottom: 16px;
+  }
+
+  .nos-historia-content .nos-values {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .nos-value-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .nos-value-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #EA7EA3;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .nos-value-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #20191b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 767px) {
+    .nos-historia {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin: 48px auto;
     }
+    .nos-historia-img { aspect-ratio: 3/2; }
+  }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- =============================================
+     HEADER
+     ============================================= -->
 <header class="tt-header">
   <div class="tt-header-inner">
-    <a href="index.html" class="tt-logo-text">Tintin ✨</a>
+    <a href="index.html" class="tt-logo">
+      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
+    </a>
+
     <nav class="tt-nav">
       <a href="index.html">Inicio</a>
-      <a href="catalogo.html">Tienda</a>
+
+      <div class="tt-nav-tienda">
+        <button class="tt-nav-tienda-btn">Tienda ▾</button>
+        <div class="tt-dropdown">
+          <div class="tt-dropdown-grid">
+            <a href="catalogo.html?cat=relojes" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div>
+              <span>Relojes</span>
+            </a>
+            <a href="catalogo.html?cat=aros" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div>
+              <span>Aros</span>
+            </a>
+            <a href="catalogo.html?cat=bolsos" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div>
+              <span>Bags</span>
+            </a>
+            <a href="catalogo.html?cat=collares" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div>
+              <span>Collares</span>
+            </a>
+            <a href="catalogo.html?cat=pulseras" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Pulseras" loading="lazy" /></div>
+              <span>Pulseras</span>
+            </a>
+            <a href="catalogo.html?cat=anillos" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Anillos" loading="lazy" /></div>
+              <span>Anillos</span>
+            </a>
+            <a href="catalogo.html?cat=earcuff" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div>
+              <span>Earcuff</span>
+            </a>
+            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Brazaletes" loading="lazy" /></div>
+              <span>Brazaletes</span>
+            </a>
+            <a href="catalogo.html?cat=gafas" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Gafas" loading="lazy" /></div>
+              <span>Gafas</span>
+            </a>
+            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Tobilleras" loading="lazy" /></div>
+              <span>Tobilleras</span>
+            </a>
+            <a href="catalogo.html?cat=armcuff" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Armcuff" loading="lazy" /></div>
+              <span>Armcuff</span>
+            </a>
+            <a href="catalogo.html?cat=joyeros" class="tt-drop-item">
+              <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Joyeros" loading="lazy" /></div>
+              <span>Joyeros</span>
+            </a>
+          </div>
+          <div class="tt-dropdown-footer">
+            <a href="catalogo.html">Ver todas las colecciones →</a>
+          </div>
+        </div>
+      </div>
+
       <a href="nosotros.html" style="color:var(--acc)">Nosotros</a>
-      <a href="login.html" class="tt-btn" style="padding:9px 22px;font-size:12px">Ingresar</a>
+      <a href="#contacto">Contacto</a>
+      <a href="admin.html" id="link-admin">Admin</a>
+      <a href="login.html" id="btn-login" class="tt-btn" style="padding:9px 22px;font-size:12px">Ingresar</a>
     </nav>
+
     <div class="tt-header-actions">
-      <button class="tt-search-btn" title="Buscar">🔍</button>
-      <a href="perfil.html" class="tt-account-btn">👤</a>
+      <button class="tt-icon-btn" id="btn-buscar" title="Buscar">
+        <img src="images/Busqueda.png" alt="Buscar" />
+      </button>
+      <a href="perfil.html" class="tt-icon-btn" title="Mi cuenta">
+        <img src="images/Mi cuenta.png" alt="Mi cuenta" />
+      </a>
+      <a href="index.html#carrito" class="tt-icon-btn" title="Carrito">
+        <img src="images/Carrito.png" alt="Carrito" />
+      </a>
     </div>
   </div>
 </header>
 
-<!-- HERO -->
-<section class="nos-hero">
-  <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1600"
-       alt="Tintin Accesorios" loading="eager" />
-  <div class="nos-hero-overlay">
-    <p class="nos-eyebrow">Nuestra historia</p>
-    <h1 class="nos-title">Detalles que<br>cuentan historias</h1>
-    <hr class="nos-line" />
-    <p class="nos-desc">Tintin nace para acompañar esos momentos en los que un accesorio no solo completa un look, también expresa una parte de vos.</p>
-    <div class="nos-points">
-      <div class="nos-point">
-        <span class="nos-point-num">01</span>
-        <span class="nos-point-txt">Selección curada</span>
-      </div>
-      <div class="nos-point">
-        <span class="nos-point-num">02</span>
-        <span class="nos-point-txt">Estilo femenino</span>
-      </div>
-      <div class="nos-point">
-        <span class="nos-point-num">03</span>
-        <span class="nos-point-txt">Detalles para regalar</span>
-      </div>
+<!-- Buscador luxury overlay -->
+<div class="tt-search-overlay" id="search-overlay" role="dialog" aria-label="Buscador">
+  <div class="tt-search-backdrop" id="search-close-backdrop"></div>
+  <div class="tt-search-panel">
+    <button class="tt-search-close" id="search-close" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="tt-search-header">
+      <p class="tt-search-eyebrow">Tintin Accesorios</p>
+      <h2 class="tt-search-title">¿Qué estás buscando?</h2>
+    </div>
+    <div class="tt-search-input-wrap">
+      <svg class="tt-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" placeholder="Relojes, aros, collares..." autocomplete="off" spellcheck="false" />
+    </div>
+    <div id="search-results"></div>
+    <div class="tt-search-suggestions">
+      <span class="tt-search-sug-label">Populares:</span>
+      <a href="catalogo.html?cat=relojes" class="tt-search-sug">Relojes</a>
+      <a href="catalogo.html?cat=aros" class="tt-search-sug">Aros</a>
+      <a href="catalogo.html?cat=collares" class="tt-search-sug">Collares</a>
+      <a href="catalogo.html?cat=bolsos" class="tt-search-sug">Bags</a>
     </div>
   </div>
-</section>
-
-<!-- BODY -->
-<div class="nos-body">
-
-  <div class="nos-section tt-fadein">
-    <div class="nos-section-img">
-      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=800"
-           alt="Colección Tintin" loading="lazy" />
-    </div>
-    <div class="nos-section-content">
-      <p class="nos-section-eyebrow">Quiénes somos</p>
-      <h2 class="nos-section-title">Cada pieza es elegida con cuidado</h2>
-      <p class="nos-section-body">
-        Tintin Accesorios nace de la pasión por los detalles que hacen la diferencia.
-        Somos una tienda online especializada en accesorios femeninos de tendencia —
-        relojes, aros, anillos, collares y más — pensados para quienes aman expresarse
-        a través de lo que llevan puesto.
-      </p>
-      <p class="nos-section-body">
-        Cada pieza es elegida con cuidado, pensando en lo femenino, lo delicado y lo especial.
-        Trabajamos con materiales de calidad como el acero inoxidable porque creemos que
-        el estilo no debería comprometer la durabilidad.
-      </p>
-    </div>
-  </div>
-
-  <div class="nos-section reverse tt-fadein">
-    <div class="nos-section-img">
-      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=800"
-           alt="Tintin Relojes" loading="lazy" />
-    </div>
-    <div class="nos-section-content">
-      <p class="nos-section-eyebrow">Nuestra promesa</p>
-      <h2 class="nos-section-title">Brillo, estilo y mucha personalidad</h2>
-      <p class="nos-section-body">
-        Queremos que cada tintina encuentre ese accesorio que la haga sentir especial.
-        Por eso cuidamos cada detalle: desde la selección del producto hasta el momento
-        en que llega a tus manos — el mismo día que lo pedís.
-      </p>
-      <p class="nos-section-body">
-        Nuestra atención es personalizada, exclusiva y con mucho amor. Estamos en WhatsApp
-        para acompañarte en cada elección.
-      </p>
-      <a href="https://wa.me/595981299331" target="_blank" class="tt-btn" style="align-self:flex-start;margin-top:8px">
-        💬 Escribinos
-      </a>
-    </div>
-  </div>
-
 </div>
 
-<!-- VALORES -->
-<section class="nos-valores tt-fadein">
-  <p class="tt-section-eyebrow">Lo que nos define</p>
-  <h2 class="tt-section-title" style="color:#1a1a1a;margin-top:6px">Nuestros valores</h2>
 
-  <div class="nos-valores-grid">
-    <div class="nos-valor">
-      <div class="nos-valor-icon">💎</div>
-      <div class="nos-valor-title">Calidad real</div>
-      <p class="nos-valor-desc">Acero inoxidable que no se oxida ni decolora, incluso en el mar.</p>
+<!-- =============================================
+     HERO BANNER — TintinHEROPREM migrado de Shopify
+     ============================================= -->
+<section
+  class="ta-section"
+  id="tintin-about"
+  aria-label="Nuestra historia"
+>
+  <div class="ta-container ta-reveal">
+
+    <!-- Imagen de fondo -->
+    <div class="ta-image-shell">
+      <div class="ta-image-wrap">
+
+        <!-- Desktop ≥991px -->
+        <img
+          class="ta-img ta-img-desktop"
+          src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=3840"
+          alt="Tintin Accesorios — Nuestra historia"
+          loading="eager"
+          width="1920"
+          height="1080"
+        />
+
+        <!-- Tablet 768–990px -->
+        <img
+          class="ta-img ta-img-tablet"
+          src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400"
+          alt="Tintin Accesorios — Nuestra historia"
+          loading="eager"
+        />
+
+        <!-- Mobile ≤767px -->
+        <img
+          class="ta-img ta-img-mobile"
+          src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=1080"
+          alt="Tintin Accesorios — Nuestra historia"
+          loading="eager"
+        />
+
+      </div>
     </div>
-    <div class="nos-valor">
-      <div class="nos-valor-icon">🚚</div>
-      <div class="nos-valor-title">Envío mismo día</div>
-      <p class="nos-valor-desc">Pedís hoy, recibís hoy. Así de simple y así de rápido.</p>
+
+    <!-- Overlay oscuro -->
+    <div class="ta-overlay" aria-hidden="true"></div>
+
+    <!-- Contenido -->
+    <div class="ta-grid">
+      <div class="ta-content-col">
+
+        <p class="ta-eyebrow ta-reveal">Nuestra historia</p>
+
+        <h1 class="ta-title ta-reveal">Detalles que<br>cuentan historias</h1>
+
+        <div class="ta-line ta-reveal" aria-hidden="true"></div>
+
+        <p class="ta-desc ta-reveal">
+          Tintin nace para acompañar esos momentos en los que<br>
+          un accesorio no solo completa un look, también expresa<br>
+          una parte de vos.
+        </p>
+
+        <div class="ta-points ta-reveal">
+          <div class="ta-point">
+            <span class="ta-point-title">01</span>
+            <span class="ta-point-text">Selección curada</span>
+          </div>
+          <div class="ta-point">
+            <span class="ta-point-title">02</span>
+            <span class="ta-point-text">Estilo femenino</span>
+          </div>
+          <div class="ta-point">
+            <span class="ta-point-title">03</span>
+            <span class="ta-point-text">Detalles para regalar</span>
+          </div>
+        </div>
+
+        <a
+          class="ta-button ta-reveal"
+          href="catalogo.html"
+        >
+          Conocer colección
+          <span class="ta-arrow" aria-hidden="true">→</span>
+        </a>
+
+      </div>
     </div>
-    <div class="nos-valor">
-      <div class="nos-valor-icon">💬</div>
-      <div class="nos-valor-title">Atención personal</div>
-      <p class="nos-valor-desc">Te ayudamos a elegir por WhatsApp. Sin robots, solo personas.</p>
+
+  </div>
+</section>
+
+
+<!-- =============================================
+     HISTORIA / ABOUT CONTENT
+     ============================================= -->
+<div class="nos-historia">
+  <div class="nos-historia-img">
+    <img
+      src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=900"
+      alt="Tintin Accesorios"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="nos-historia-content">
+    <p class="nos-eyebrow">Quiénes somos</p>
+    <h2>Accesorios con<br>alma femenina</h2>
+    <p>
+      Tintin Accesorios &amp; Relojes nació con una misión simple: hacer que cada mujer
+      se sienta especial con el accesorio perfecto. Desde San Lorenzo, Paraguay, llegamos
+      a todo el país con piezas pensadas para la mujer moderna.
+    </p>
+    <p>
+      Cada accesorio es seleccionado con cuidado: calidad, durabilidad y un estilo que
+      no pasa de moda. Nuestro acero inoxidable no se oxida ni descolora — porque
+      merecés lo mejor.
+    </p>
+
+    <div class="nos-values">
+      <div class="nos-value-item">
+        <div class="nos-value-dot"></div>
+        <span class="nos-value-text">Piezas de acero inoxidable — no se oxidan</span>
+      </div>
+      <div class="nos-value-item">
+        <div class="nos-value-dot"></div>
+        <span class="nos-value-text">Envíos a todo Paraguay</span>
+      </div>
+      <div class="nos-value-item">
+        <div class="nos-value-dot"></div>
+        <span class="nos-value-text">Delivery mismo día en Zona Central</span>
+      </div>
+      <div class="nos-value-item">
+        <div class="nos-value-dot"></div>
+        <span class="nos-value-text">Atención personalizada por WhatsApp</span>
+      </div>
     </div>
-    <div class="nos-valor">
-      <div class="nos-valor-icon">✨</div>
-      <div class="nos-valor-title">Edición limitada</div>
-      <p class="nos-valor-desc">Colecciones únicas y curadas para que siempre estés en tendencia.</p>
-    </div>
-    <div class="nos-valor">
-      <div class="nos-valor-icon">🌸</div>
-      <div class="nos-valor-title">Estilo femenino</div>
-      <p class="nos-valor-desc">Diseñado para quienes aman los detalles tiernos y elegantes.</p>
-    </div>
-    <div class="nos-valor">
-      <div class="nos-valor-icon">🔒</div>
-      <div class="nos-valor-title">Pago seguro</div>
-      <p class="nos-valor-desc">Transferencia o efectivo, siempre con total confianza.</p>
+  </div>
+</div>
+
+
+<!-- =============================================
+     CTA FINAL
+     ============================================= -->
+<section class="tt-cta-final">
+  <div class="tt-cta-final-inner">
+    <p class="tt-section-eyebrow" style="text-align:center">¿Lista para brillar?</p>
+    <h2 class="tt-cta-title">Encontrá tu accesorio favorito</h2>
+    <p class="tt-cta-sub">Envíos a todo Paraguay · Delivery en Zona Central · Retiro en San Lorenzo</p>
+    <div class="tt-cta-btns">
+      <a href="catalogo.html" class="tt-btn">Ver catálogo completo</a>
+      <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+         class="tt-btn tt-btn-wa" target="_blank">Consultar por WhatsApp</a>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="nos-cta">
-  <h2 class="nos-cta-title">¿Lista para brillar?</h2>
-  <p class="nos-cta-sub">Descubrí toda nuestra colección de accesorios</p>
-  <div class="nos-cta-btns">
-    <a href="catalogo.html" class="tt-btn">Ver catálogo</a>
-    <a href="https://wa.me/595981299331?text=Hola!+Quiero+conocer+sus+productos+🌸"
-       target="_blank"
-       class="tt-btn" style="background:#25D366">
-      💬 Escribinos por WhatsApp
-    </a>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer class="tt-footer">
-  <div class="tt-footer-logo">Tintin ✨</div>
-  <p class="tt-footer-copy">© 2024–2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS<br>Asunción, Paraguay</p>
-  <a href="https://wa.me/595981299331" target="_blank" class="tt-footer-wa">💬 Contactanos por WhatsApp</a>
+<!-- =============================================
+     FOOTER
+     ============================================= -->
+<footer class="tt-footer" id="contacto">
+  <div class="tt-footer-logo">
+    <img src="images/logo.png" alt="Tintin Accesorios" class="tt-footer-logo-img" />
+  </div>
+  <nav class="tt-footer-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Tienda</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <p class="tt-footer-copy">
+    &copy; 2024–2026 TINTIN ACCESORIOS &mdash; TODOS LOS DERECHOS RESERVADOS<br>
+    San Lorenzo, Paraguay
+  </p>
+  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+     target="_blank"
+     class="tt-footer-wa">
+    Contactanos por WhatsApp
+  </a>
 </footer>
 
-<a href="https://wa.me/595981299331" class="tt-wa-float" target="_blank">💬</a>
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+   class="tt-wa-float" target="_blank" title="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
 
-<!-- TAB BAR MOBILE -->
+<!-- Tab bar mobile -->
 <nav class="tt-tabbar">
   <a href="index.html" class="tt-tab" aria-label="Inicio">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
   </a>
+  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  </button>
   <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
   </a>
   <a href="https://wa.me/595981299331" class="tt-tab" target="_blank" aria-label="WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
   </a>
-  <a href="perfil.html" class="tt-tab" aria-label="Perfil">
+  <a href="perfil.html" class="tt-tab tt-tab-active" aria-label="Perfil">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </a>
 </nav>
 
+
+<!-- =============================================
+     SCRIPTS
+     ============================================= -->
 <script>
-// Fade in al scroll
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
-  });
-}, { threshold: 0.12 });
-document.querySelectorAll(".tt-fadein").forEach(el => obs.observe(el));
+/* Header scroll */
+(function(){
+  var h = document.querySelector('.tt-header');
+  if (!h) return;
+  window.addEventListener('scroll', function(){
+    h.classList.toggle('tt-header--scrolled', window.scrollY > 40);
+  }, { passive: true });
+})();
+</script>
+
+<script>
+/* Buscador */
+(function(){
+  var overlay   = document.getElementById('search-overlay');
+  var closeBtn  = document.getElementById('search-close');
+  var backdrop  = document.getElementById('search-close-backdrop');
+  var input     = document.getElementById('search-input');
+  var btnBuscar = document.getElementById('btn-buscar');
+  var tabBuscar = document.getElementById('tab-buscar');
+
+  function open()  { overlay.classList.add('open'); setTimeout(function(){ input && input.focus(); }, 100); }
+  function close() { overlay.classList.remove('open'); if(input) { input.value=''; } document.getElementById('search-results').innerHTML=''; }
+
+  if (btnBuscar) btnBuscar.onclick = open;
+  if (tabBuscar) tabBuscar.onclick = open;
+  if (closeBtn)  closeBtn.onclick  = close;
+  if (backdrop)  backdrop.onclick  = close;
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+})();
+</script>
+
+<script>
+/* ─── Hero reveal — TintinHEROPREM ─── */
+(function () {
+  var el = document.getElementById('tintin-about');
+  if (!el) return;
+
+  el.classList.add('ta-ready');
+
+  var prevY = window.scrollY || 0;
+
+  function show() {
+    el.classList.add('ta-visible');
+    el.classList.remove('ta-from-top', 'ta-from-bottom');
+    el.classList.add('ta-seen');
+  }
+
+  function hide() {
+    var y = window.scrollY || 0;
+    el.classList.remove('ta-visible');
+    el.classList.toggle('ta-from-top', y >= prevY);
+    el.classList.toggle('ta-from-bottom', y < prevY);
+    prevY = y;
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      prevY = window.scrollY || 0;
+      requestAnimationFrame(function () {
+        entries[0].isIntersecting ? show() : hide();
+      });
+    }, { threshold: 0.12 });
+    io.observe(el);
+  } else {
+    show();
+  }
+}());
+</script>
+
+<script type="module">
+import { db, auth } from "./js/firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const ADMIN_EMAIL = "tintinaccs@gmail.com";
+const btnLogin = document.getElementById("btn-login");
+const linkAdmin = document.getElementById("link-admin");
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    btnLogin.textContent = "Salir";
+    btnLogin.onclick = () => signOut(auth);
+    linkAdmin.style.display = user.email === ADMIN_EMAIL ? "inline" : "none";
+  } else {
+    btnLogin.textContent = "Ingresar";
+    btnLogin.onclick = () => { window.location.href = "login.html"; };
+    linkAdmin.style.display = "none";
+  }
+});
 </script>
 
 </body>
