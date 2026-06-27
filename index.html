@@ -28,7 +28,7 @@
 <!-- =============================================
      HEADER
      ============================================= -->
-<header class="tt-header">
+<header class="tt-header tt-hdr-init" id="tt-header">
   <div class="tt-header-inner">
 
     <!-- Logo -->
@@ -37,58 +37,64 @@
     </a>
 
     <!-- Nav desktop -->
-    <nav class="tt-nav">
-      <a href="index.html">Inicio</a>
+    <ul class="tt-nav">
 
-      <div class="tt-nav-tienda">
-        <button class="tt-nav-tienda-btn">Tienda ▾</button>
-        <div class="tt-dropdown">
+      <li class="tt-nav-item">
+        <a href="index.html" class="tt-nav-link">Inicio</a>
+      </li>
+
+      <li class="tt-nav-item tt-nav-item--has-drop" id="nav-tienda">
+        <button class="tt-nav-tienda-btn tt-nav-link" id="nav-tienda-btn" aria-expanded="false" aria-haspopup="true">
+          Tienda
+          <svg class="tt-nav-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tt-dropdown" id="nav-tienda-drop" role="menu">
           <div class="tt-dropdown-grid">
-            <a href="catalogo.html?cat=relojes" class="tt-drop-item">
+            <a href="catalogo.html?cat=relojes" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div>
               <span>Relojes</span>
             </a>
-            <a href="catalogo.html?cat=aros" class="tt-drop-item">
+            <a href="catalogo.html?cat=aros" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div>
               <span>Aros</span>
             </a>
-            <a href="catalogo.html?cat=bolsos" class="tt-drop-item">
+            <a href="catalogo.html?cat=bolsos" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div>
               <span>Bags</span>
             </a>
-            <a href="catalogo.html?cat=collares" class="tt-drop-item">
+            <a href="catalogo.html?cat=collares" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div>
               <span>Collares</span>
             </a>
-            <a href="catalogo.html?cat=pulseras" class="tt-drop-item">
+            <a href="catalogo.html?cat=pulseras" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Pulseras" loading="lazy" /></div>
               <span>Pulseras</span>
             </a>
-            <a href="catalogo.html?cat=anillos" class="tt-drop-item">
+            <a href="catalogo.html?cat=anillos" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Anillos" loading="lazy" /></div>
               <span>Anillos</span>
             </a>
-            <a href="catalogo.html?cat=earcuff" class="tt-drop-item">
+            <a href="catalogo.html?cat=earcuff" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div>
               <span>Earcuff</span>
             </a>
-            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item">
+            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Brazaletes" loading="lazy" /></div>
               <span>Brazaletes</span>
             </a>
-            <a href="catalogo.html?cat=gafas" class="tt-drop-item">
+            <a href="catalogo.html?cat=gafas" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Gafas" loading="lazy" /></div>
               <span>Gafas</span>
             </a>
-            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item">
+            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Tobilleras" loading="lazy" /></div>
               <span>Tobilleras</span>
             </a>
-            <a href="catalogo.html?cat=armcuff" class="tt-drop-item">
+            <a href="catalogo.html?cat=armcuff" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Armcuff" loading="lazy" /></div>
               <span>Armcuff</span>
             </a>
-            <a href="catalogo.html?cat=joyeros" class="tt-drop-item">
+            <a href="catalogo.html?cat=joyeros" class="tt-drop-item" role="menuitem">
               <div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Joyeros" loading="lazy" /></div>
               <span>Joyeros</span>
             </a>
@@ -97,52 +103,70 @@
             <a href="catalogo.html">Ver todas las colecciones →</a>
           </div>
         </div>
-      </div>
+      </li>
 
-      <a href="nosotros.html">Nosotros</a>
-      <a href="#contacto">Contacto</a>
-      <a href="admin.html" id="link-admin">Admin</a>
-      <a href="login.html" id="btn-login" class="tt-btn" style="padding:9px 22px;font-size:12px">Ingresar</a>
-    </nav>
+      <li class="tt-nav-item">
+        <a href="nosotros.html" class="tt-nav-link">Nosotros</a>
+      </li>
+      <li class="tt-nav-item">
+        <a href="#contacto" class="tt-nav-link">Contacto</a>
+      </li>
+      <li class="tt-nav-item">
+        <a href="admin.html" id="link-admin" class="tt-nav-link" style="display:none">Admin</a>
+      </li>
+      <li class="tt-nav-item">
+        <a href="login.html" id="btn-login" class="tt-nav-link tt-nav-link--login">Ingresar</a>
+      </li>
+
+    </ul>
 
     <!-- Acciones -->
     <div class="tt-header-actions">
-      <button class="tt-icon-btn" id="btn-buscar" title="Buscar">
-        <img src="images/Busqueda.png" alt="Buscar" />
+      <button class="tt-icon-btn" id="btn-buscar" title="Buscar" aria-label="Buscar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta">
-        <img src="images/Mi cuenta.png" alt="Mi cuenta" />
+      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="#carrito" class="tt-icon-btn" title="Carrito">
-        <img src="images/Carrito.png" alt="Carrito" />
-      </a>
+      <span class="tt-cart-wrap">
+        <a href="#carrito" class="tt-icon-btn" title="Carrito" aria-label="Carrito" id="btn-carrito">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </a>
+        <span class="tt-cart-badge" id="tt-cart-badge"></span>
+      </span>
     </div>
 
   </div>
 </header>
 
-<!-- Buscador luxury overlay -->
-<div class="tt-search-overlay" id="search-overlay" role="dialog" aria-label="Buscador">
-  <div class="tt-search-backdrop" id="search-close-backdrop"></div>
-  <div class="tt-search-panel">
-    <button class="tt-search-close" id="search-close" aria-label="Cerrar">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="tt-search-header">
-      <p class="tt-search-eyebrow">Tintin Accesorios</p>
-      <h2 class="tt-search-title">¿Qué estás buscando?</h2>
+<!-- Buscador panel -->
+<div class="tt-srch-backdrop" id="srch-backdrop"></div>
+<div class="tt-srch-panel" id="srch-panel" role="dialog" aria-label="Buscador">
+  <div class="tt-srch-inner">
+    <div class="tt-srch-top">
+      <div class="tt-srch-input-wrap">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" class="tt-srch-input" placeholder="Relojes, aros, collares…" autocomplete="off" spellcheck="false" />
+        <button class="tt-srch-close" id="srch-close" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="tt-srch-tags">
+        <span class="tt-srch-tag-label">Populares:</span>
+        <a href="catalogo.html?cat=relojes" class="tt-srch-tag">Relojes</a>
+        <a href="catalogo.html?cat=aros" class="tt-srch-tag">Aros</a>
+        <a href="catalogo.html?cat=collares" class="tt-srch-tag">Collares</a>
+        <a href="catalogo.html?cat=bolsos" class="tt-srch-tag">Bags</a>
+      </div>
     </div>
-    <div class="tt-search-input-wrap">
-      <svg class="tt-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="search-input" placeholder="Relojes, aros, collares..." autocomplete="off" spellcheck="false" />
-    </div>
-    <div id="search-results"></div>
-    <div class="tt-search-suggestions">
-      <span class="tt-search-sug-label">Populares:</span>
-      <a href="catalogo.html?cat=relojes" class="tt-search-sug">Relojes</a>
-      <a href="catalogo.html?cat=aros" class="tt-search-sug">Aros</a>
-      <a href="catalogo.html?cat=collares" class="tt-search-sug">Collares</a>
-      <a href="catalogo.html?cat=bolsos" class="tt-search-sug">Bags</a>
+    <div class="tt-srch-body" id="srch-body">
+      <ul class="tt-srch-results" id="search-results"></ul>
+      <div class="tt-srch-preview" id="srch-preview">
+        <div class="tt-srch-prev-placeholder">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <p>Empezá a escribir para ver resultados</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -555,14 +579,123 @@
 })();
 </script>
 
-<!-- Header scroll -->
+<!-- Header reveal + dropdown + search -->
 <script>
 (function(){
-  var header = document.querySelector('.tt-header');
+  var header  = document.getElementById('tt-header');
   if (!header) return;
+
+  // ── Reveal after intro ──────────────────────────────────────────
+  var intro = document.getElementById('tt-intro');
+  function showHeader() {
+    header.classList.remove('tt-hdr-init');
+    header.classList.add('tt-hdr-show');
+    setTimeout(function(){ header.classList.add('tt-hdr-seen'); }, 800);
+  }
+  if (intro) {
+    intro.addEventListener('animationend', showHeader, { once: true });
+    // Fallback if intro was already hidden
+    setTimeout(showHeader, 3200);
+  } else {
+    header.classList.remove('tt-hdr-init');
+    header.classList.add('tt-hdr-show', 'tt-hdr-seen');
+  }
+
+  // ── Hide on scroll down / show on scroll up ──────────────────────
+  var lastY = 0;
   window.addEventListener('scroll', function(){
-    header.classList.toggle('tt-header--scrolled', window.scrollY > 40);
+    var y = window.scrollY;
+    if (y > lastY && y > 90) {
+      header.classList.add('tt-hdr-hidden');
+      closeAllDrops();
+    } else {
+      header.classList.remove('tt-hdr-hidden');
+    }
+    lastY = y;
   }, { passive: true });
+
+  // ── Tienda dropdown (click toggle) ─────────────────────────────
+  var navTienda = document.getElementById('nav-tienda');
+  var tiendaBtn = document.getElementById('nav-tienda-btn');
+
+  function openDrop() {
+    navTienda.classList.add('tt-drop-open');
+    tiendaBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeDrop() {
+    navTienda.classList.remove('tt-drop-open');
+    tiendaBtn.setAttribute('aria-expanded', 'false');
+  }
+  function closeAllDrops() { closeDrop(); }
+
+  if (tiendaBtn) {
+    tiendaBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      navTienda.classList.contains('tt-drop-open') ? closeDrop() : openDrop();
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    if (navTienda && !navTienda.contains(e.target)) closeDrop();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') { closeDrop(); closeSearch(); }
+  });
+
+  // ── Search panel ────────────────────────────────────────────────
+  var srchBackdrop = document.getElementById('srch-backdrop');
+  var srchPanel    = document.getElementById('srch-panel');
+  var srchClose    = document.getElementById('srch-close');
+  var searchInput  = document.getElementById('search-input');
+
+  function openSearch() {
+    srchPanel.classList.add('tt-srch-open');
+    srchBackdrop.classList.add('tt-srch-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ if (searchInput) searchInput.focus(); }, 80);
+    var btnBuscar = document.getElementById('btn-buscar');
+    if (btnBuscar) btnBuscar.classList.add('tt-srch-active');
+  }
+  function closeSearch() {
+    srchPanel.classList.remove('tt-srch-open');
+    srchBackdrop.classList.remove('tt-srch-open');
+    document.body.style.overflow = '';
+    if (searchInput) { searchInput.value = ''; }
+    var res = document.getElementById('search-results');
+    if (res) res.innerHTML = '';
+    resetPreview();
+    var btnBuscar = document.getElementById('btn-buscar');
+    if (btnBuscar) btnBuscar.classList.remove('tt-srch-active');
+  }
+  function resetPreview() {
+    var prev = document.getElementById('srch-preview');
+    if (prev) prev.innerHTML = '<div class="tt-srch-prev-placeholder"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Empezá a escribir para ver resultados</p></div>';
+  }
+
+  var btnBuscarEl = document.getElementById('btn-buscar');
+  var tabBuscarEl = document.getElementById('tab-buscar');
+  if (btnBuscarEl) btnBuscarEl.addEventListener('click', openSearch);
+  if (tabBuscarEl) tabBuscarEl.addEventListener('click', openSearch);
+  if (srchClose)   srchClose.addEventListener('click', closeSearch);
+  if (srchBackdrop) srchBackdrop.addEventListener('click', closeSearch);
+
+  // Cart badge from localStorage
+  function updateCartBadge() {
+    var badge = document.getElementById('tt-cart-badge');
+    if (!badge) return;
+    try {
+      var cart = JSON.parse(localStorage.getItem('tt_carrito') || '[]');
+      var total = cart.reduce(function(s, i){ return s + (i.qty || 1); }, 0);
+      badge.textContent = total > 0 ? (total > 99 ? '99+' : total) : '';
+      badge.classList.toggle('tt-cart-badge--show', total > 0);
+    } catch(e) {}
+  }
+  updateCartBadge();
+  window.addEventListener('storage', updateCartBadge);
+
+  window._ttOpenSearch  = openSearch;
+  window._ttCloseSearch = closeSearch;
+  window._ttUpdateCart  = updateCartBadge;
 })();
 </script>
 
@@ -574,6 +707,10 @@ import {
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { applyIndexConfig } from "./js/site-config.js";
+
+// Apply admin-saved site content (non-blocking)
+applyIndexConfig().catch(() => {});
 
 const ADMIN_EMAIL = "tintinaccs@gmail.com";
 const WA_NUM     = "595981299331";
@@ -599,52 +736,65 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// ─── BUSCADOR ─────────────────────────────────
-const overlay     = document.getElementById("search-overlay");
-const searchClose = document.getElementById("search-close");
+// ─── BUSCADOR (search-as-you-type con preview) ────────────────
 const searchInput = document.getElementById("search-input");
 const searchRes   = document.getElementById("search-results");
+const srchPreview = document.getElementById("srch-preview");
 
-function openSearch() {
-  overlay.classList.add("open");
-  setTimeout(() => searchInput.focus(), 100);
+function fmt2(n) { return fmt(n); }
+
+function showPreview(p) {
+  if (!srchPreview) return;
+  srchPreview.innerHTML = `
+    <img class="tt-srch-prev-img" src="${p.imageUrl || ''}" alt="${p.name}"
+         onerror="this.style.display='none'" />
+    <div class="tt-srch-prev-info">
+      <div class="tt-srch-prev-cat">${p.category || ''}</div>
+      <div class="tt-srch-prev-name">${p.name}</div>
+      <div class="tt-srch-prev-price">${fmt(p.price)}</div>
+      <a href="producto.html?id=${p.id}" class="tt-srch-prev-btn">Ver producto →</a>
+    </div>
+  `;
 }
-function closeSearch() {
-  overlay.classList.remove("open");
-  searchInput.value = "";
-  searchRes.innerHTML = "";
-}
-
-document.getElementById("btn-buscar").onclick = openSearch;
-document.getElementById("tab-buscar").onclick  = openSearch;
-searchClose.onclick = closeSearch;
-document.getElementById("search-close-backdrop").onclick = closeSearch;
-
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && overlay.classList.contains("open")) closeSearch();
-});
 
 let todosLosProductos = [];
 
-searchInput.addEventListener("input", () => {
+if (searchInput) searchInput.addEventListener("input", () => {
   const q = searchInput.value.toLowerCase().trim();
-  if (!q) { searchRes.innerHTML = ""; return; }
-  const hits = todosLosProductos.filter(p =>
-    (p.name || "").toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
-  ).slice(0, 6);
-  if (!hits.length) {
-    searchRes.innerHTML = `<p class="tt-search-empty">Nada por "<strong>${q}</strong>" — probá con otra palabra ✨</p>`;
+  if (!q) {
+    if (searchRes) searchRes.innerHTML = "";
+    if (srchPreview) srchPreview.innerHTML = '<div class="tt-srch-prev-placeholder"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Empezá a escribir para ver resultados</p></div>';
     return;
   }
-  searchRes.innerHTML = hits.map((p, i) => `
-    <a href="producto.html?id=${p.id}" class="tt-search-result" style="animation-delay:${i * 0.05}s">
-      <img src="${p.imageUrl || ''}" alt="${p.name}" onerror="this.style.display='none'" />
-      <div class="tt-search-result-info">
-        <div class="tt-search-result-name">${p.name}</div>
-        <div class="tt-search-result-price">${fmt(p.price)}</div>
-      </div>
-    </a>
+  const hits = todosLosProductos.filter(p =>
+    (p.name || "").toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
+  ).slice(0, 8);
+  if (!hits.length) {
+    if (searchRes) searchRes.innerHTML = `<li class="tt-srch-empty">Nada por "<strong>${q}</strong>" — probá con otra palabra ✨</li>`;
+    if (srchPreview) srchPreview.innerHTML = '<div class="tt-srch-prev-placeholder"><p>Sin resultados</p></div>';
+    return;
+  }
+  if (searchRes) searchRes.innerHTML = hits.map((p, i) => `
+    <li class="tt-srch-item" style="animation-delay:${i * 0.04}s">
+      <a href="producto.html?id=${p.id}" class="tt-srch-item-link" data-pid="${p.id}">
+        <img class="tt-srch-thumb" src="${p.imageUrl || ''}" alt="${p.name}" onerror="this.style.display='none'" />
+        <div class="tt-srch-item-info">
+          <div class="tt-srch-title">${p.name}</div>
+          <div class="tt-srch-price">${fmt(p.price)}</div>
+        </div>
+      </a>
+    </li>
   `).join("");
+  // Show first hit in preview
+  showPreview(hits[0]);
+  // Hover to update preview
+  if (searchRes) searchRes.querySelectorAll('.tt-srch-item-link').forEach(link => {
+    link.addEventListener('mouseenter', () => {
+      const pid = link.dataset.pid;
+      const prod = todosLosProductos.find(p => p.id === pid);
+      if (prod) showPreview(prod);
+    });
+  });
 });
 
 // ─── CARRUSEL GENÉRICO ────────────────────────

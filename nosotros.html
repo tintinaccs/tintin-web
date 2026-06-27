@@ -918,5 +918,10 @@ onAuthStateChanged(auth, user => {
 });
 </script>
 
+<script type="module">
+import { applyNosotrosConfig } from "./js/site-config.js";
+applyNosotrosConfig().catch(() => {});
+</script>
+
 </body>
 </html>
