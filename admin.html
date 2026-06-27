@@ -1750,8 +1750,10 @@ const CONT_SCHEMA = {
           { key: "subtitle",  label: "Subtítulo",            type: "text",    def: "Brillo, estilo y mucha personalidad" },
           { key: "btnText",   label: "Texto del botón",      type: "text",    def: "¿Quiénes somos? →" },
           { key: "btnHref",   label: "URL del botón",        type: "url",     def: "nosotros.html" },
-          { key: "image",     label: "Imagen (col. derecha)", type: "image",   def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400" },
-          { key: "imageAlt",  label: "Alt de la imagen",     type: "text",    def: "Tintin Accesorios" },
+          { key: "image_desktop", label: "Imagen Desktop (≥1024px)", type: "image", def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400" },
+          { key: "image_tablet",  label: "Imagen Tablet (768–1023px)",  type: "image", def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=900" },
+          { key: "image_mobile",  label: "Imagen Móvil (≤767px)",       type: "image", def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" },
+          { key: "imageAlt",      label: "Alt de la imagen",            type: "text",  def: "Tintin Accesorios" },
         ]
       },
       trust: {
@@ -1943,7 +1945,7 @@ function contRenderField(field, value, sectionEl) {
         <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g, '&quot;')}" placeholder="https://... o subí una imagen" data-fkey="${field.key}" />
         <label class="adm-btn adm-btn-primary adm-btn-sm cont-upload-btn" title="Subir imagen desde tu dispositivo" style="cursor:pointer;white-space:nowrap">
           📁 Subir
-          <input type="file" accept="image/*" style="display:none" onchange="contUploadImage(this, '${id}')" />
+          <input type="file" accept="image/*" style="position:absolute;opacity:0;width:0;height:0;overflow:hidden" onchange="contUploadImage(this, '${id}')" />
         </label>
         <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
       </div>

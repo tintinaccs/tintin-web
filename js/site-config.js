@@ -58,10 +58,24 @@ export async function applyIndexConfig() {
     if (h.btnText) heroBtn.textContent = h.btnText;
     if (h.btnHref) heroBtn.href = h.btnHref;
   }
-  const heroImg = document.querySelector(".tt-hero-split-right img");
-  if (heroImg) {
-    if (h.image)    heroImg.src = h.image;
-    if (h.imageAlt) heroImg.alt = h.imageAlt;
+  const heroImgWrap = document.querySelector(".tt-hero-split-right");
+  if (heroImgWrap) {
+    const heroImg = heroImgWrap.querySelector("img");
+    if (heroImg) {
+      if (h.imageAlt) heroImg.alt = h.imageAlt;
+      // Responsive: swap src based on screen width
+      const desktop = h.image_desktop || h.image;
+      const tablet  = h.image_tablet  || desktop;
+      const mobile  = h.image_mobile  || tablet;
+      function applyHeroImg() {
+        const w = window.innerWidth;
+        heroImg.src = w <= 767 ? mobile : w <= 1023 ? tablet : desktop;
+      }
+      if (desktop || tablet || mobile) {
+        applyHeroImg();
+        window.addEventListener("resize", applyHeroImg, { passive: true });
+      }
+    }
   }
 
   // Trust bar
