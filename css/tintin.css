@@ -45,16 +45,12 @@
 }
 
 .tt-dragonfly {
-  width: clamp(220px, 55vw, 420px);
+  width: clamp(200px, 50vw, 380px);
   height: auto;
   display: block;
-  filter: drop-shadow(0 6px 32px rgba(200,0,80,0.22));
-}
-
-/* Wing flutter — applied to the 4 main wing paths */
-.tt-dragonfly path:nth-child(n+6):nth-child(-n+13) {
-  animation: tt-wings-flutter 1.6s ease-in-out infinite;
-  transform-origin: 250px 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 32px rgba(200,0,80,0.18));
+  animation: tt-logo-appear 1s cubic-bezier(.4,0,.2,1) forwards, tt-wings-flutter 1.8s ease-in-out 1s infinite;
 }
 
 :root {
