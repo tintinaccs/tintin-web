@@ -13,6 +13,53 @@
 <body>
 
 <!-- =============================================
+     INTRO / ENTRY LOGO SCREEN
+     ============================================= -->
+<div id="tt-intro" class="tt-intro">
+  <div class="tt-intro-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" class="tt-dragonfly" aria-hidden="true">
+      <!-- HEAD -->
+      <circle cx="120" cy="52" r="10" fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round"/>
+
+      <!-- ANTENNAE -->
+      <path d="M113,43 Q104,28 98,20" fill="none" stroke="#b5134d" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M127,43 Q136,28 142,20" fill="none" stroke="#b5134d" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- BODY -->
+      <path d="M120,62 C118,100 122,140 120,240" fill="none" stroke="#b5134d" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- UPPER-LEFT WING (outer) -->
+      <path d="M118,80 C90,64 38,58 22,88 C10,110 30,140 72,128 C94,120 112,104 118,92"
+            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- UPPER-LEFT WING (inner vein) -->
+      <path d="M116,84 C96,72 58,68 44,92 C34,108 50,128 80,118 C100,110 113,98 116,88"
+            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- UPPER-RIGHT WING (outer) -->
+      <path d="M122,80 C150,64 202,58 218,88 C230,110 210,140 168,128 C146,120 128,104 122,92"
+            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- UPPER-RIGHT WING (inner vein) -->
+      <path d="M124,84 C144,72 182,68 196,92 C206,108 190,128 160,118 C140,110 127,98 124,88"
+            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- LOWER-LEFT WING (outer) -->
+      <path d="M118,110 C94,112 42,126 28,158 C18,180 38,208 76,194 C102,184 116,156 118,130"
+            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- LOWER-LEFT WING (inner vein) -->
+      <path d="M116,116 C96,118 52,132 40,160 C32,178 48,200 78,188 C102,178 115,154 116,132"
+            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- LOWER-RIGHT WING (outer) -->
+      <path d="M122,110 C146,112 198,126 212,158 C222,180 202,208 164,194 C138,184 124,156 122,130"
+            fill="none" stroke="#b5134d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- LOWER-RIGHT WING (inner vein) -->
+      <path d="M124,116 C144,118 188,132 200,160 C208,178 192,200 162,188 C138,178 125,154 124,132"
+            fill="none" stroke="#b5134d" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+
+<!-- =============================================
      HEADER
      ============================================= -->
 <header class="tt-header">
@@ -958,6 +1005,21 @@ document.getElementById("tab-buscar").onclick = () => {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </a>
 </nav>
+
+<script>
+(function(){
+  var intro = document.getElementById('tt-intro');
+  if (!intro) return;
+  document.body.style.overflow = 'hidden';
+  setTimeout(function(){
+    intro.classList.add('tt-intro--exit');
+    intro.addEventListener('animationend', function(){
+      intro.style.display = 'none';
+      document.body.style.overflow = '';
+    }, { once: true });
+  }, 2400);
+})();
+</script>
 
 </body>
 </html>
