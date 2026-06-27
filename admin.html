@@ -2135,6 +2135,13 @@ async function contRenderPage(pageId) {
 window.contUploadImage = async function(fileInput, inputId) {
   const file = fileInput.files[0];
   if (!file) return;
+
+  // Guard: storage must be ready
+  if (!storage) {
+    toast('Firebase Storage no está inicializado', 'error');
+    return;
+  }
+
   const uid = inputId + '-upload';
   const progressWrap = document.getElementById(uid + '-progress');
   const bar          = document.getElementById(uid + '-bar');
@@ -2143,35 +2150,45 @@ window.contUploadImage = async function(fileInput, inputId) {
   const preview      = document.getElementById(uid + '-preview');
 
   progressWrap.style.display = 'flex';
-  bar.style.width = '0%';
-  pct.textContent = '0%';
+  bar.style.width = '5%';          // show activity immediately
+  pct.textContent = 'Subiendo…';
 
   try {
-    const storageRef = ref(storage, `site-content/${Date.now()}_${file.name}`);
-    const task = uploadBytesResumable(storageRef, file);
+    const path = `site-content/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+    const storageRef = ref(storage, path);
 
-    task.on('state_changed',
-      snapshot => {
-        const p = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        bar.style.width = p + '%';
-        pct.textContent = p + '%';
-      },
-      err => {
-        toast('Error al subir: ' + err.message, 'error');
-        progressWrap.style.display = 'none';
-      },
-      async () => {
-        const url = await getDownloadURL(task.snapshot.ref);
-        urlInput.value = url;
-        if (preview) { preview.src = url; preview.classList.add('show'); }
-        urlInput.dispatchEvent(new Event('input'));
-        progressWrap.style.display = 'none';
-        toast('✅ Imagen subida correctamente');
-      }
-    );
+    // Use simple uploadBytes for small files (avoids resumable-session CORS issue)
+    const { uploadBytes } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
+    bar.style.width = '40%';
+    pct.textContent = 'Enviando…';
+
+    const snapshot = await uploadBytes(storageRef, file);
+    bar.style.width = '80%';
+
+    const url = await getDownloadURL(snapshot.ref);
+    bar.style.width = '100%';
+    pct.textContent = '100%';
+
+    urlInput.value = url;
+    if (preview) { preview.src = url; preview.classList.add('show'); }
+    urlInput.dispatchEvent(new Event('input'));
+
+    setTimeout(() => { progressWrap.style.display = 'none'; }, 600);
+    toast('✅ Imagen subida correctamente');
+
   } catch (err) {
-    toast('Error al subir: ' + err.message, 'error');
+    console.error('[upload]', err);
     progressWrap.style.display = 'none';
+
+    // Translate common Firebase Storage errors to Spanish
+    let msg = err.message ?? String(err);
+    if (err.code === 'storage/unauthorized')    msg = 'Sin permiso para subir. Chequeá las reglas de Firebase Storage.';
+    else if (err.code === 'storage/canceled')   msg = 'Subida cancelada.';
+    else if (err.code === 'storage/unknown')    msg = 'Error desconocido. Revisá la consola.';
+    else if (msg.includes('CORS') || msg.includes('cors') || msg.includes('Failed to fetch'))
+      msg = 'Error de CORS — abrí Firebase Console → Storage → Rules y verificá los permisos, y agregá tu dominio en CORS.';
+
+    toast('❌ ' + msg, 'error');
   }
 };
 
