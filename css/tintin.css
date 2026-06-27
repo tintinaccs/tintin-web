@@ -115,7 +115,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-header-logo {
-  height: 36px;
+  height: 44px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -124,7 +124,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 /* Shrink on scroll — desktop/tablet */
 .tt-header--scrolled .tt-header-logo {
-  height: 26px;
+  height: 34px;
 }
 
 /* NAV desktop */
@@ -212,8 +212,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn {
-  height: 44px;
-  width: 44px;
+  height: 42px;
+  width: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,10 +228,10 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn img {
-  width: 22px;
-  height: 22px;
-  max-width: 22px;
-  max-height: 22px;
+  width: 28px;
+  height: 28px;
+  max-width: 28px;
+  max-height: 28px;
   object-fit: contain;
   display: block;
 }
@@ -1314,11 +1314,11 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   }
 
   .tt-header-logo {
-    height: 28px;
+    height: 36px;
   }
 
   .tt-header--scrolled .tt-header-logo {
-    height: 22px;
+    height: 28px;
   }
 
   .tt-header-actions {
