@@ -209,8 +209,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -219,13 +219,14 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   border: none;
   cursor: pointer;
   transition: background var(--transition), transform var(--transition);
-  padding: 6px;
+  padding: 0;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .tt-icon-btn img {
-  width: 100%;
-  height: 100%;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   display: block;
 }
