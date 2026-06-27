@@ -707,6 +707,10 @@ import {
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { applyIndexConfig } from "./js/site-config.js";
+
+// Apply admin-saved site content (non-blocking)
+applyIndexConfig().catch(() => {});
 
 const ADMIN_EMAIL = "tintinaccs@gmail.com";
 const WA_NUM     = "595981299331";

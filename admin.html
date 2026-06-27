@@ -423,6 +423,175 @@
     }
     .adm-import-zone:hover { background: var(--acc-pale); }
 
+    /* CONTENT EDITOR */
+    .cont-page-tab {
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      border: 2px solid #eee;
+      background: #fff;
+      color: var(--text-muted);
+      font-family: var(--font);
+      transition: all .2s;
+    }
+    .cont-page-tab:hover { border-color: var(--acc); color: var(--acc); }
+    .cont-page-tab.active { background: var(--acc); border-color: var(--acc); color: #fff; }
+
+    .cont-section {
+      background: #fff;
+      border: 1.5px solid #eee;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .cont-section.dirty { border-color: #ffc107; }
+    .cont-section.saved { border-color: #4caf50; }
+
+    .cont-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .15s;
+    }
+    .cont-section-head:hover { background: #f5f5f5; }
+    .cont-section-head.open { border-bottom: 1.5px solid #f5d0de; background: var(--acc-pale); }
+
+    .cont-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text);
+    }
+
+    .cont-section-icon { font-size: 18px; }
+
+    .cont-section-chevron {
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: transform .2s ease;
+    }
+    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
+
+    .cont-section-body {
+      display: none;
+      padding: 20px 24px 24px;
+    }
+    .cont-section-body.open { display: block; }
+
+    .cont-section-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .cont-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .cont-input, .cont-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid #eee;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text);
+      transition: border .2s;
+    }
+    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--acc); }
+    .cont-textarea { resize: vertical; min-height: 80px; }
+
+    .cont-img-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .cont-img-preview {
+      width: 100%;
+      max-height: 160px;
+      object-fit: contain;
+      border: 1.5px dashed #f5d0de;
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      background: var(--acc-pale);
+      display: none;
+      margin-top: 8px;
+    }
+    .cont-img-preview.show { display: block; }
+
+    /* Array field */
+    .cont-array-item {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: #fafafa;
+      border: 1.5px solid #eee;
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cont-array-item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .cont-array-item-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--acc);
+    }
+    .cont-array-del {
+      background: #ffebee;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      color: #c62828;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      transition: background .15s;
+    }
+    .cont-array-del:hover { background: #ffcdd2; }
+
+    .cont-dirty-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffc107;
+      display: inline-block;
+      margin-left: 6px;
+      display: none;
+    }
+    .cont-section.dirty .cont-dirty-dot { display: inline-block; }
+
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .adm-wrap { grid-template-columns: 1fr; }
@@ -465,6 +634,9 @@
     </button>
     <button class="adm-nav-item" data-page="usuarios">
       <span class="adm-nav-icon">👥</span> Usuarios
+    </button>
+    <button class="adm-nav-item" data-page="contenido">
+      <span class="adm-nav-icon">🎨</span> Contenido
     </button>
     <button class="adm-nav-item" data-page="importar">
       <span class="adm-nav-icon">📥</span> Import / Export
@@ -711,6 +883,35 @@
           </table>
         </div>
       </div>
+    </div>
+
+    <!-- ── CONTENIDO DEL SITIO ── -->
+    <div class="adm-page" id="page-contenido">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
+        <div>
+          <h1 class="adm-page-title" style="margin:0">🎨 Contenido del Sitio</h1>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:4px">Editá imágenes, textos y contenido de cada sección — los cambios se aplican automáticamente al sitio.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="adm-btn adm-btn-outline adm-btn-sm" id="cont-save-all">💾 Guardar todo</button>
+          <a href="index.html" target="_blank" class="adm-btn adm-btn-primary adm-btn-sm">🌐 Ver sitio</a>
+        </div>
+      </div>
+
+      <!-- Page tabs -->
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #f5d0de">
+        <div id="cont-page-tabs" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+        <button id="cont-add-page" class="adm-btn adm-btn-outline adm-btn-sm" style="white-space:nowrap">+ Agregar página</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="cont-loading" style="text-align:center;padding:48px;color:var(--text-muted)">
+        <div style="font-size:32px;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700">Cargando configuración...</div>
+      </div>
+
+      <!-- Sections container -->
+      <div id="cont-sections" style="display:none"></div>
     </div>
 
     <!-- ── IMPORTAR / EXPORTAR ── -->
@@ -1499,6 +1700,564 @@ document.getElementById('btn-csv-importar').addEventListener('click', async () =
     result.innerHTML = `<span style="color:#e57">❌ No se pudo importar ningún producto</span>`;
   }
 });
+
+// ══════════════════════════════════════════════
+// ── CONTENIDO DEL SITIO — Editor tipo Shopify
+// ══════════════════════════════════════════════
+
+// ── Schema: define todas las páginas y secciones editables
+const CONT_SCHEMA = {
+  index: {
+    label: "🏠 Página Principal",
+    url: "index.html",
+    sections: {
+      hero: {
+        label: "Hero Principal", icon: "🌟",
+        fields: [
+          { key: "eyebrow",   label: "Texto eyebrow",        type: "text",    def: "Bienvenidas a" },
+          { key: "title",     label: "Título grande (H1)",   type: "text",    def: "TINTIN" },
+          { key: "subtitle",  label: "Subtítulo",            type: "text",    def: "Brillo, estilo y mucha personalidad" },
+          { key: "btnText",   label: "Texto del botón",      type: "text",    def: "¿Quiénes somos? →" },
+          { key: "btnHref",   label: "URL del botón",        type: "url",     def: "nosotros.html" },
+          { key: "image",     label: "Imagen (col. derecha)", type: "image",   def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400" },
+          { key: "imageAlt",  label: "Alt de la imagen",     type: "text",    def: "Tintin Accesorios" },
+        ]
+      },
+      trust: {
+        label: "Barra de Confianza", icon: "✅",
+        fields: [
+          { key: "items", label: "Ítems (4 bloques)", type: "array",
+            itemFields: [
+              { key: "label", label: "Título",      type: "text" },
+              { key: "desc",  label: "Descripción", type: "text" },
+            ],
+            def: [
+              { label: "Envío mismo día",       desc: "Pedís hoy, recibís hoy" },
+              { label: "Acero inoxidable",      desc: "No se oxida ni decolora" },
+              { label: "Pago seguro",           desc: "Transferencia o efectivo" },
+              { label: "Atención personalizada",desc: "Te ayudamos por WhatsApp" },
+            ]
+          }
+        ]
+      },
+      editorial_bag: {
+        label: "Editorial — Bags", icon: "👜",
+        fields: [
+          { key: "eyebrow", label: "Eyebrow",     type: "text",     def: "Colección BAG ✨" },
+          { key: "title",   label: "Título",      type: "text",     def: "El complemento\nque lo cambia todo" },
+          { key: "body",    label: "Texto",       type: "textarea", def: "Las tintinas lo saben: un gran look siempre empieza por un accesorio inolvidable. Descubrí la nueva propuesta de la colección BAG, diseñada para quienes aman los detalles tiernos, la comodidad y ese toque vibrante que derrocha actitud." },
+          { key: "btnText", label: "Texto botón", type: "text",     def: "¡Lo quiero ya!" },
+          { key: "btnHref", label: "URL botón",   type: "url",      def: "catalogo.html?cat=bolsos" },
+          { key: "image",   label: "Imagen",      type: "image",    def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=1200" },
+        ]
+      },
+      editorial_relojes: {
+        label: "Editorial — Relojes", icon: "⌚",
+        fields: [
+          { key: "eyebrow", label: "Eyebrow",     type: "text",     def: "Nueva colección" },
+          { key: "title",   label: "Título",      type: "text",     def: "El reloj del que\ntodas se enamoran" },
+          { key: "body",    label: "Texto",       type: "textarea", def: "Hay accesorios lindos… y después está este reloj. El modelo que más aman las tintinas por su estilo elegante, cómodo y súper versátil. Queda bien con todo y hace que cualquier look se vea muchísimo más chic." },
+          { key: "btnText", label: "Texto botón", type: "text",     def: "Ver relojes" },
+          { key: "btnHref", label: "URL botón",   type: "url",      def: "catalogo.html?cat=relojes" },
+          { key: "image",   label: "Imagen",      type: "image",    def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1200" },
+        ]
+      },
+      cta: {
+        label: "CTA Final", icon: "🎯",
+        fields: [
+          { key: "eyebrow",  label: "Eyebrow",           type: "text", def: "¿Lista para brillar?" },
+          { key: "title",    label: "Título",             type: "text", def: "Encontrá tu accesorio favorito" },
+          { key: "sub",      label: "Subtítulo",          type: "text", def: "Envíos a todo Paraguay · Delivery en Zona Central · Retiro en San Lorenzo" },
+          { key: "btn1Text", label: "Botón 1 — texto",   type: "text", def: "Ver catálogo completo" },
+          { key: "btn1Href", label: "Botón 1 — URL",     type: "url",  def: "catalogo.html" },
+          { key: "btn2Text", label: "Botón WA — texto",  type: "text", def: "Consultar por WhatsApp" },
+        ]
+      },
+      footer: {
+        label: "Footer", icon: "🦶",
+        fields: [
+          { key: "logo",     label: "Logo (imagen)",       type: "image", def: "images/logo.png" },
+          { key: "copy",     label: "Texto copyright",     type: "text",  def: "© 2024–2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS. San Lorenzo, Paraguay" },
+          { key: "waText",   label: "Botón WhatsApp texto",type: "text",  def: "Contactanos por WhatsApp" },
+          { key: "waHref",   label: "Número WhatsApp",     type: "text",  def: "595981299331" },
+        ]
+      }
+    }
+  },
+  nosotros: {
+    label: "👥 Nosotros",
+    url: "nosotros.html",
+    sections: {
+      hero: {
+        label: "Hero Nosotros", icon: "🌟",
+        fields: [
+          { key: "eyebrow",        label: "Eyebrow",             type: "text",     def: "La esencia de Tintin" },
+          { key: "title",          label: "Título principal",    type: "text",     def: "Somos más que accesorios" },
+          { key: "desc",           label: "Descripción",         type: "textarea", def: "Somos una tienda familiar nacida en San Lorenzo, Paraguay, con el sueño de que cada mujer pueda brillar a su manera." },
+          { key: "point1",         label: "Punto 01",            type: "text",     def: "Calidad y diseño que dura" },
+          { key: "point2",         label: "Punto 02",            type: "text",     def: "Estilo con personalidad" },
+          { key: "point3",         label: "Punto 03",            type: "text",     def: "Atención cercana y rápida" },
+          { key: "btnText",        label: "Texto botón",         type: "text",     def: "Ver colección →" },
+          { key: "btnHref",        label: "URL botón",           type: "url",      def: "catalogo.html" },
+          { key: "image_desktop",  label: "Imagen desktop",      type: "image",    def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400" },
+          { key: "image_tablet",   label: "Imagen tablet",       type: "image",    def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=900" },
+          { key: "image_mobile",   label: "Imagen móvil",        type: "image",    def: "https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=600" },
+        ]
+      },
+      historia: {
+        label: "Nuestra Historia", icon: "📖",
+        fields: [
+          { key: "eyebrow", label: "Eyebrow",     type: "text",     def: "Desde San Lorenzo" },
+          { key: "title",   label: "Título",      type: "text",     def: "Nuestra historia" },
+          { key: "p1",      label: "Párrafo 1",   type: "textarea", def: "Tintin Accesorios nació de la pasión por los detalles que hacen brillar a cada mujer." },
+          { key: "p2",      label: "Párrafo 2",   type: "textarea", def: "Desde nuestro comienzo en San Lorenzo, nos dedicamos a ofrecer accesorios de calidad con estilo propio." },
+          { key: "image",   label: "Imagen",      type: "image",    def: "" },
+        ]
+      }
+    }
+  },
+  producto: {
+    label: "🛍️ Página de Producto",
+    url: "producto.html",
+    sections: {
+      ui: {
+        label: "Interfaz del producto", icon: "🖼️",
+        fields: [
+          { key: "btnWaText",      label: "Texto botón WhatsApp",  type: "text", def: "Comprar por WhatsApp" },
+          { key: "btnCartText",    label: "Texto botón carrito",   type: "text", def: "Agregar al carrito" },
+          { key: "relatedTitle",   label: "Título productos relacionados", type: "text", def: "También te puede gustar" },
+          { key: "agotadoText",    label: "Texto cuando agotado",  type: "text", def: "Sin stock disponible" },
+        ]
+      }
+    }
+  },
+  catalogo: {
+    label: "📋 Catálogo",
+    url: "catalogo.html",
+    sections: {
+      header: {
+        label: "Encabezado del catálogo", icon: "🏷️",
+        fields: [
+          { key: "title",    label: "Título",    type: "text",     def: "Nuestro Catálogo" },
+          { key: "eyebrow",  label: "Eyebrow",   type: "text",     def: "Toda la colección" },
+          { key: "desc",     label: "Descripción", type: "textarea", def: "Encontrá todos los accesorios de Tintin en un solo lugar." },
+          { key: "image",    label: "Imagen banner (opcional)", type: "image", def: "" },
+        ]
+      }
+    }
+  }
+};
+
+// Estado del editor de contenido
+let contCurrentPage = "index";
+let contSavedData = {};     // contSavedData[pageId] = { sectionId: {...fields}, ... }
+let contDirtyData = {};     // campos modificados no guardados
+let contExtraPages = [];    // páginas personalizadas agregadas por el admin
+
+// ── Cargar desde Firestore ─────────────────────
+async function contLoadPage(pageId) {
+  try {
+    const docRef = doc(db, "site_content", pageId);
+    const snap   = await getDoc(docRef);
+    if (snap.exists()) {
+      contSavedData[pageId] = snap.data();
+    } else {
+      contSavedData[pageId] = {};
+    }
+  } catch(e) {
+    console.error("Error cargando contenido:", e);
+    contSavedData[pageId] = {};
+  }
+}
+
+// ── Guardar sección en Firestore ───────────────
+async function contSaveSection(pageId, sectionId, data) {
+  const docRef = doc(db, "site_content", pageId);
+  const update = {};
+  update[sectionId] = data;
+  try {
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      await updateDoc(docRef, update);
+    } else {
+      // setDoc is not imported at top-level; use addDoc-style workaround via updateDoc on new doc
+      // Actually: just use updateDoc with merge-like behavior by using setDoc from same SDK
+      const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      await setDoc(docRef, update, { merge: true });
+    }
+    if (!contSavedData[pageId]) contSavedData[pageId] = {};
+    contSavedData[pageId][sectionId] = data;
+    return true;
+  } catch(e) {
+    console.error("Error guardando:", e);
+    return false;
+  }
+}
+
+// ── Render de campo individual ─────────────────
+function contRenderField(field, value, sectionEl) {
+  const id = `cont-f-${field.key}-${Date.now()}-${Math.random().toString(36).slice(2,6)}`;
+  let html = `<div class="cont-field" data-fkey="${field.key}">`;
+  html += `<label class="cont-label" for="${id}">${field.label}</label>`;
+
+  if (field.type === "text" || field.type === "url") {
+    html += `<input id="${id}" class="cont-input" type="text" value="${(value ?? field.def ?? '').replace(/"/g, '&quot;')}" placeholder="${field.def || ''}" data-fkey="${field.key}" />`;
+  } else if (field.type === "textarea") {
+    html += `<textarea id="${id}" class="cont-textarea" placeholder="${field.def || ''}" data-fkey="${field.key}">${value ?? field.def ?? ''}</textarea>`;
+  } else if (field.type === "image") {
+    const imgVal = value ?? field.def ?? '';
+    html += `
+      <div class="cont-img-wrap">
+        <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g, '&quot;')}" placeholder="https://..." data-fkey="${field.key}" />
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="this.previousElementSibling.value='';this.previousElementSibling.dispatchEvent(new Event('input'))" title="Borrar">✕</button>
+      </div>
+      <img class="cont-img-preview ${imgVal ? 'show' : ''}" src="${imgVal || ''}" alt="preview" data-preview-for="${id}" />
+    `;
+  } else if (field.type === "toggle") {
+    const checked = value ?? field.def ?? false;
+    html += `<div class="adm-toggle-wrap">
+      <button class="adm-toggle ${checked ? 'on' : ''}" data-fkey="${field.key}" id="${id}" onclick="this.classList.toggle('on');this.closest('.cont-section').classList.add('dirty');this.closest('.cont-section').querySelector('.cont-dirty-dot').style.display='inline-block'"></button>
+      <span class="adm-toggle-label">${field.label}</span>
+    </div>`;
+  } else if (field.type === "array") {
+    html += contRenderArrayField(field, value ?? field.def ?? [], id);
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function contRenderArrayField(field, items, baseId) {
+  let html = `<div class="cont-array-container" data-fkey="${field.key}" data-array-field>`;
+  items.forEach((item, i) => {
+    html += contRenderArrayItem(field, item, i);
+  });
+  html += `<button class="adm-btn adm-btn-outline adm-btn-sm" style="margin-top:8px" onclick="contAddArrayItem(this, '${JSON.stringify(field.itemFields).replace(/'/g,"&#39;")}')">+ Agregar ítem</button>`;
+  html += `</div>`;
+  return html;
+}
+
+function contRenderArrayItem(field, item, index) {
+  let html = `<div class="cont-array-item">
+    <div class="cont-array-item-head">
+      <span class="cont-array-item-label">Ítem ${index + 1}</span>
+      <button class="cont-array-del" onclick="this.closest('.cont-array-item').remove();this.closest('.cont-section').classList.add('dirty')" title="Eliminar">×</button>
+    </div>`;
+  field.itemFields.forEach(subf => {
+    html += `<div class="cont-field" data-fkey="${subf.key}">
+      <label class="cont-label">${subf.label}</label>
+      <input class="cont-input" type="text" value="${(item[subf.key] ?? '').replace(/"/g, '&quot;')}" placeholder="${subf.def || ''}" data-fkey="${subf.key}" />
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+window.contAddArrayItem = function(btn, fieldJson) {
+  const container = btn.closest('.cont-array-container');
+  const itemFields = JSON.parse(fieldJson);
+  const existing = container.querySelectorAll('.cont-array-item').length;
+  const pseudoField = { itemFields };
+  const html = contRenderArrayItem(pseudoField, {}, existing);
+  btn.insertAdjacentHTML('beforebegin', html);
+  container.closest('.cont-section').classList.add('dirty');
+};
+
+// ── Extraer valor de un campo del DOM ──────────
+function contExtractFieldValue(fieldEl, field) {
+  if (field.type === "array") {
+    const container = fieldEl.querySelector('[data-array-field]');
+    if (!container) return field.def ?? [];
+    const items = [];
+    container.querySelectorAll('.cont-array-item').forEach(itemEl => {
+      const obj = {};
+      field.itemFields.forEach(sf => {
+        const inp = itemEl.querySelector(`[data-fkey="${sf.key}"]`);
+        if (inp) obj[sf.key] = inp.value;
+      });
+      items.push(obj);
+    });
+    return items;
+  }
+  if (field.type === "toggle") {
+    const btn = fieldEl.querySelector('[data-fkey]');
+    return btn ? btn.classList.contains('on') : (field.def ?? false);
+  }
+  const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
+  return inp ? inp.value : (field.def ?? '');
+}
+
+// ── Extraer todos los datos de una sección ─────
+function contExtractSection(sectionEl, schema) {
+  const data = {};
+  Object.entries(schema.fields).forEach(([, field]) => {
+    const fieldEl = sectionEl.querySelector(`.cont-field[data-fkey="${field.key}"]`);
+    if (!fieldEl) return;
+    data[field.key] = contExtractFieldValue(fieldEl, field);
+  });
+  return data;
+}
+
+// ── Render de una sección completa ────────────
+function contRenderSection(pageId, sectionId, schema, savedValues) {
+  const sv = savedValues?.[sectionId] ?? {};
+  let html = `<div class="cont-section" data-section="${sectionId}" data-page="${pageId}">
+    <div class="cont-section-head" onclick="contToggleSection(this)">
+      <div class="cont-section-title">
+        <span class="cont-section-icon">${schema.icon || '📄'}</span>
+        ${schema.label}
+        <span class="cont-dirty-dot" title="Cambios sin guardar"></span>
+      </div>
+      <span class="cont-section-chevron">▼</span>
+    </div>
+    <div class="cont-section-body">`;
+
+  // Render each field
+  const fields = schema.fields ?? [];
+  const flist  = Array.isArray(fields) ? fields : Object.values(fields);
+  flist.forEach(field => {
+    html += contRenderField(field, sv[field.key], null);
+  });
+
+  html += `
+      <div class="cont-section-actions">
+        <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">💾 Guardar sección</button>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>
+        <a href="${CONT_SCHEMA[pageId]?.url || '#'}" target="_blank" class="adm-btn adm-btn-outline adm-btn-sm">👁 Ver en sitio</a>
+      </div>
+    </div>
+  </div>`;
+  return html;
+}
+
+// ── Render todas las secciones de una página ──
+async function contRenderPage(pageId) {
+  const loading  = document.getElementById("cont-loading");
+  const sections = document.getElementById("cont-sections");
+  loading.style.display = "block";
+  sections.style.display = "none";
+
+  // Load from Firestore if not cached
+  if (!contSavedData[pageId]) {
+    await contLoadPage(pageId);
+  }
+
+  // Build schema: built-in + extra pages
+  let pageSchema = CONT_SCHEMA[pageId];
+  if (!pageSchema) {
+    // Extra custom page
+    const ep = contExtraPages.find(p => p.id === pageId);
+    pageSchema = ep ? ep.schema : null;
+  }
+
+  sections.innerHTML = "";
+
+  if (pageSchema) {
+    Object.entries(pageSchema.sections).forEach(([sectionId, sSchema]) => {
+      sections.innerHTML += contRenderSection(pageId, sectionId, sSchema, contSavedData[pageId]);
+    });
+  } else {
+    sections.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted)">No hay secciones configuradas para esta página.</div>`;
+  }
+
+  // Attach change listeners for dirty tracking
+  sections.querySelectorAll(".cont-input, .cont-textarea").forEach(inp => {
+    inp.addEventListener("input", () => {
+      const section = inp.closest(".cont-section");
+      if (section) {
+        section.classList.add("dirty");
+        section.querySelector(".cont-dirty-dot").style.display = "inline-block";
+      }
+      // Image preview
+      if (inp.type === "text" && inp.nextElementSibling?.tagName === "IMG") {
+        inp.nextElementSibling.src = inp.value;
+        inp.nextElementSibling.classList.toggle("show", !!inp.value);
+      }
+      // Also handle preview img after cont-img-wrap
+      const previewId = `[data-preview-for="${inp.id}"]`;
+      const prevImg = document.querySelector(previewId);
+      if (prevImg) {
+        prevImg.src = inp.value;
+        prevImg.classList.toggle("show", !!inp.value);
+      }
+    });
+  });
+
+  loading.style.display = "none";
+  sections.style.display = "block";
+}
+
+// ── Toggle accordion section ──────────────────
+window.contToggleSection = function(head) {
+  const body = head.nextElementSibling;
+  head.classList.toggle("open");
+  body.classList.toggle("open");
+};
+
+// ── Guardar sección (botón) ───────────────────
+window.contSaveSectionBtn = async function(btn, pageId, sectionId) {
+  const sectionEl = btn.closest(".cont-section");
+  const schema    = CONT_SCHEMA[pageId]?.sections?.[sectionId];
+  if (!schema) return;
+
+  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
+  const data  = {};
+  flist.forEach(field => {
+    const fieldEl = sectionEl.querySelector(`.cont-field[data-fkey="${field.key}"]`);
+    if (!fieldEl) return;
+    data[field.key] = contExtractFieldValue(fieldEl, field);
+  });
+
+  btn.textContent = "⏳ Guardando...";
+  btn.disabled = true;
+  const ok = await contSaveSection(pageId, sectionId, data);
+  btn.disabled = false;
+  btn.textContent = "💾 Guardar sección";
+
+  if (ok) {
+    sectionEl.classList.remove("dirty");
+    sectionEl.classList.add("saved");
+    sectionEl.querySelector(".cont-dirty-dot").style.display = "none";
+    setTimeout(() => sectionEl.classList.remove("saved"), 2000);
+    toast("✅ Sección guardada — los cambios ya son visibles en el sitio");
+  } else {
+    toast("❌ Error al guardar la sección", "error");
+  }
+};
+
+// ── Restaurar defaults de sección ─────────────
+window.contRestoreSection = function(btn, pageId, sectionId) {
+  if (!confirm("¿Restaurar los valores por defecto de esta sección? Se perderán los cambios no guardados.")) return;
+  const sectionEl = btn.closest(".cont-section");
+  const schema    = CONT_SCHEMA[pageId]?.sections?.[sectionId];
+  if (!schema) return;
+
+  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
+  flist.forEach(field => {
+    if (field.type === "array") return;
+    const inp = sectionEl.querySelector(`[data-fkey="${field.key}"]`);
+    if (inp && (inp.tagName === "INPUT" || inp.tagName === "TEXTAREA")) {
+      inp.value = field.def ?? "";
+      inp.dispatchEvent(new Event("input"));
+    }
+  });
+};
+
+// ── Guardar TODO ──────────────────────────────
+document.addEventListener("click", async e => {
+  if (e.target && e.target.id === "cont-save-all") {
+    const pageId = contCurrentPage;
+    const schema = CONT_SCHEMA[pageId];
+    if (!schema) return;
+    e.target.textContent = "⏳ Guardando...";
+    e.target.disabled = true;
+    let saved = 0;
+    for (const [sectionId] of Object.entries(schema.sections)) {
+      const btn = document.querySelector(`.cont-section[data-section="${sectionId}"] .cont-section-actions button`);
+      if (btn) {
+        await contSaveSectionBtn(btn, pageId, sectionId);
+        saved++;
+      }
+    }
+    e.target.textContent = "💾 Guardar todo";
+    e.target.disabled = false;
+    toast(`✅ ${saved} secciones guardadas`);
+  }
+});
+
+// ── Render tabs de páginas ────────────────────
+async function contRenderTabs() {
+  const tabsEl = document.getElementById("cont-page-tabs");
+
+  // Load extra pages from Firestore
+  try {
+    const docRef = doc(db, "site_content", "_registry");
+    const snap   = await getDoc(docRef);
+    if (snap.exists() && snap.data().extraPages) {
+      contExtraPages = snap.data().extraPages;
+    }
+  } catch(e) {}
+
+  const allPages = [
+    ...Object.entries(CONT_SCHEMA).map(([id, s]) => ({ id, label: s.label })),
+    ...contExtraPages.map(p => ({ id: p.id, label: p.label })),
+  ];
+
+  tabsEl.innerHTML = allPages.map(p => `
+    <button class="cont-page-tab ${p.id === contCurrentPage ? 'active' : ''}"
+            data-pageid="${p.id}" onclick="contSwitchPage('${p.id}')">
+      ${p.label}
+    </button>
+  `).join("");
+}
+
+window.contSwitchPage = async function(pageId) {
+  contCurrentPage = pageId;
+  document.querySelectorAll(".cont-page-tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.pageid === pageId);
+  });
+  await contRenderPage(pageId);
+};
+
+// ── Agregar página personalizada ──────────────
+document.getElementById("cont-add-page").onclick = async () => {
+  const label = prompt("Nombre de la nueva página (ej: Blog, Contacto):");
+  if (!label) return;
+  const id = label.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+  const url = prompt(`URL del archivo HTML (ej: ${id}.html):`, `${id}.html`) || `${id}.html`;
+
+  contExtraPages.push({
+    id,
+    label: "📄 " + label,
+    url,
+    schema: { sections: {
+      general: {
+        label: "Contenido general", icon: "📄",
+        fields: [
+          { key: "image1", label: "Imagen 1", type: "image", def: "" },
+          { key: "image2", label: "Imagen 2", type: "image", def: "" },
+          { key: "image3", label: "Imagen 3", type: "image", def: "" },
+          { key: "title",  label: "Título",   type: "text",  def: "" },
+          { key: "desc",   label: "Texto",    type: "textarea", def: "" },
+        ]
+      }
+    }}
+  });
+
+  // Save registry to Firestore
+  try {
+    const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const docRef = doc(db, "site_content", "_registry");
+    await setDoc(docRef, { extraPages: contExtraPages }, { merge: true });
+    toast(`✅ Página "${label}" agregada`);
+    await contRenderTabs();
+    await contSwitchPage(id);
+  } catch(e) {
+    toast("Error al guardar la página: " + e.message, "error");
+  }
+};
+
+// ── Inicializar cuando se navega a "contenido" ─
+const _origShowPage = window.showPage;
+window.showPage = function(id) {
+  _origShowPage(id);
+  if (id === "contenido") {
+    contCurrentPage = "index";
+    contSavedData   = {};
+    contRenderTabs().then(() => contRenderPage("index"));
+  }
+};
+
+// Refresh button (delegated since it's inside an adm-page that may not be in DOM yet)
+document.addEventListener("click", async e => {
+  if (e.target && e.target.id === "cont-refresh") {
+    contSavedData = {};
+    await contRenderPage(contCurrentPage);
+    toast("🔄 Contenido recargado");
+  }
+});
+
+// ── FIN CONTENIDO ────────────────────────────────
 
 document.getElementById("btn-importar").onclick = async () => {
   const raw = document.getElementById("import-json").value.trim();

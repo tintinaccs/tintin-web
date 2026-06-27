@@ -426,5 +426,10 @@ const obs = new IntersectionObserver(entries => {
 document.querySelectorAll(".tt-fadein").forEach(el => obs.observe(el));
 </script>
 
+<script type="module">
+import { applyNosotrosConfig } from "./js/site-config.js";
+applyNosotrosConfig().catch(() => {});
+</script>
+
 </body>
 </html>
