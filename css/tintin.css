@@ -53,6 +53,9 @@
   animation: tt-logo-appear 1s cubic-bezier(.4,0,.2,1) forwards, tt-wings-flutter 1.8s ease-in-out 1s infinite;
 }
 
+/* =============================================
+   VARIABLES & RESET
+   ============================================= */
 :root {
   --acc:        #ea7ea3;
   --acc-dark:   #d4648a;
@@ -112,14 +115,14 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-header-logo {
-  height: 34px;
+  height: 36px;
   width: auto;
   object-fit: contain;
   display: block;
   transition: height 0.3s ease, opacity 0.3s ease;
 }
 
-/* Shrink on scroll — desktop/tablet only */
+/* Shrink on scroll — desktop/tablet */
 .tt-header--scrolled .tt-header-logo {
   height: 26px;
 }
@@ -148,7 +151,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-nav > a:hover,
-.tt-nav-tienda-btn:hover { color: #7a1a3e; }
+.tt-nav-tienda-btn:hover { color: #7a1a3e; background: var(--acc-light); }
 
 /* Dropdown Tienda */
 .tt-nav-tienda {
@@ -156,7 +159,6 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-dropdown {
-  display: none;
   position: absolute;
   top: calc(100% + 8px);
   left: 50%;
@@ -170,6 +172,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   grid-template-columns: 1fr 1fr;
   gap: 4px;
   z-index: 300;
+  box-shadow: 0 8px 32px rgba(200,0,80,0.08);
 }
 
 .tt-nav-tienda:hover .tt-dropdown,
@@ -209,7 +212,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn {
-  height: 64px;
+  height: 44px;
   width: 44px;
   display: flex;
   align-items: center;
@@ -217,15 +220,18 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: background var(--transition), transform var(--transition);
+  transition: background var(--transition);
   padding: 0;
   text-decoration: none;
   flex-shrink: 0;
+  border-radius: 50%;
 }
 
 .tt-icon-btn img {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
+  max-width: 22px;
+  max-height: 22px;
   object-fit: contain;
   display: block;
 }
@@ -234,12 +240,17 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: var(--acc-light);
 }
 
-/* Buscador overlay */
+/* Admin link oculto por defecto */
+#link-admin { display: none; }
+
+/* =============================================
+   BUSCADOR OVERLAY
+   ============================================= */
 .tt-search-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
   z-index: 500;
   align-items: flex-start;
   justify-content: center;
@@ -250,21 +261,24 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-search-box {
   background: #fff;
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 28px 24px 24px;
   width: 90%;
   max-width: 540px;
   position: relative;
+  box-shadow: 0 16px 48px rgba(200,0,80,0.12);
 }
 
 .tt-search-box input {
   width: 100%;
   border: 2px solid var(--acc);
   border-radius: 50px;
-  padding: 12px 20px;
+  padding: 13px 20px;
   font-size: 15px;
   font-family: var(--font);
   outline: none;
+  transition: border-color var(--transition);
 }
+.tt-search-box input:focus { border-color: var(--acc-dark); }
 
 .tt-search-close {
   position: absolute;
@@ -275,10 +289,9 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   color: var(--text-muted);
   background: none;
   border: none;
+  transition: color var(--transition);
 }
-
-/* Admin link oculto por defecto */
-#link-admin { display: none; }
+.tt-search-close:hover { color: var(--acc); }
 
 /* =============================================
    HERO SLIDER
@@ -309,7 +322,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.05) 60%);
+  background: linear-gradient(to right, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.05) 60%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -336,7 +349,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-hero-sub {
-  font-size: clamp(13px, 1.5vw, 17px);
+  font-size: clamp(12px, 1.4vw, 16px);
   font-weight: 600;
   color: rgba(255,255,255,0.85);
   letter-spacing: 0.06em;
@@ -391,7 +404,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 22px;
   color: #fff;
   cursor: pointer;
   transition: background var(--transition);
@@ -408,38 +421,68 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
    TRUST BAR
    ============================================= */
 .tt-trust {
-  background: var(--acc-light);
+  background: #fdf0f5;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0;
+  border-top: 1px solid rgba(234,126,163,0.15);
+  border-bottom: 1px solid rgba(234,126,163,0.15);
 }
 
 .tt-trust-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 20px 32px;
-  border-right: 1px solid rgba(234,126,163,0.25);
+  gap: 6px;
+  padding: 28px 40px;
+  border-right: 1px solid rgba(234,126,163,0.18);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
 }
-.tt-trust-item:last-child { border-right: none; }
 
-.tt-trust-icon { font-size: 22px; }
+.tt-trust-item.ttb-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tt-trust-item:nth-child(1) { transition-delay: 0s; }
+.tt-trust-item:nth-child(2) { transition-delay: .08s; }
+.tt-trust-item:nth-child(3) { transition-delay: .16s; }
+.tt-trust-item:nth-child(4) { transition-delay: .24s; }
+.tt-trust-item:last-child   { border-right: none; }
+
+.tt-trust-icon {
+  width: 36px;
+  height: 36px;
+  color: #ea7ea3;
+  flex-shrink: 0;
+}
+
+.tt-trust-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .tt-trust-label {
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--acc-dark);
+  letter-spacing: .1em;
+  color: #a7214d;
 }
 
 .tt-trust-desc {
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
+  color: #b07090;
+  letter-spacing: .04em;
 }
 
 /* =============================================
@@ -481,28 +524,32 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-editorial-eyebrow {
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--acc);
+  color: #ea7ea3;
 }
 
 .tt-editorial-title {
-  font-size: clamp(22px, 3vw, 40px);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text);
-  line-height: 1.1;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 3.5vw, 48px);
+  font-weight: 300;
+  letter-spacing: .02em;
+  color: #1a1a1a;
+  line-height: 1.08;
 }
 
 .tt-editorial-body {
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-muted);
-  line-height: 1.7;
-  max-width: 380px;
+  font-weight: 400;
+  color: #888;
+  line-height: 1.8;
+  max-width: 400px;
 }
 
+/* =============================================
+   BOTONES GLOBALES
+   ============================================= */
 .tt-btn {
   display: inline-block;
   padding: 13px 32px;
@@ -517,11 +564,33 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   align-self: flex-start;
   border: none;
   cursor: pointer;
+  font-family: var(--font);
 }
 .tt-btn:hover { background: var(--acc-dark); }
 
+.tt-btn-wa {
+  background: #25D366;
+}
+.tt-btn-wa:hover { background: #1ebe5d; }
+
+.tt-btn-outline {
+  padding: 11px 28px;
+  border: 2px solid var(--acc);
+  color: var(--acc);
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all var(--transition);
+  background: none;
+  font-family: var(--font);
+}
+.tt-btn-outline:hover { background: var(--acc); color: #fff; }
+
 /* =============================================
-   COLECCIONES GRID
+   SECCIONES — layout base
    ============================================= */
 .tt-section {
   padding: 48px 24px;
@@ -541,6 +610,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   text-transform: uppercase;
   color: var(--acc);
   margin-bottom: 6px;
+  display: block;
 }
 
 .tt-section-title {
@@ -552,34 +622,131 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   line-height: 1.1;
 }
 
-.tt-section-sub {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 6px;
+/* =============================================
+   CARRUSEL — colecciones y productos con swipe
+   ============================================= */
+.tt-carousel-section {
+  padding: 56px 0;
+  overflow: hidden;
+  background: #fdf0f5;
 }
 
-.tt-colecciones-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.tt-carousel-head {
+  text-align: center;
+  padding: 0 24px;
+  margin-bottom: 32px;
+}
+
+.tt-carousel-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.tt-carousel-track-outer {
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 8px 0 16px;
+}
+
+.tt-carousel-track-outer.is-dragging { cursor: grabbing; }
+
+.tt-carousel-track {
+  display: flex;
   gap: 16px;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+  transition: transform .38s cubic-bezier(.22,.61,.36,1);
+  backface-visibility: hidden;
+  padding-inline: 24px;
 }
 
+/* Slide colección */
+.tt-cslide {
+  flex: 0 0 calc((100% - 24px * 4) / 4 - 2px);
+  min-width: 0;
+}
+
+/* Slide producto */
+.tt-pslide {
+  flex: 0 0 calc((100% - 16px * 3) / 4 - 2px);
+  min-width: 0;
+}
+
+/* NAV arrows */
+.tt-carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.tt-carousel-arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid #f5d0de;
+  color: #ea7ea3;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.tt-carousel-arrow:hover {
+  background: #ea7ea3;
+  color: #fff;
+  border-color: #ea7ea3;
+}
+.tt-carousel-arrow:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+/* Dots */
+.tt-carousel-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.tt-carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f5d0de;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all .25s;
+}
+.tt-carousel-dot.active {
+  width: 20px;
+  border-radius: 3px;
+  background: #ea7ea3;
+}
+
+/* Col card dentro del carrusel */
 .tt-col-card {
   position: relative;
-  border-radius: var(--radius);
+  border-radius: 16px;
   overflow: hidden;
   aspect-ratio: 3/4;
   cursor: pointer;
+  display: block;
+  text-decoration: none;
 }
 
 .tt-col-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform .4s ease;
 }
 .tt-col-card:hover img { transform: scale(1.06); }
 
@@ -588,26 +755,13 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 24px 16px 16px;
-  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  padding: 28px 16px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,.52), transparent);
   font-size: 13px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   color: #fff;
-}
-
-/* Colecciones sin imagen (fallback con color) */
-.tt-col-card.no-img {
-  background: var(--acc-light);
-  display: flex;
-  align-items: flex-end;
-}
-
-.tt-col-card.no-img .tt-col-card-label {
-  background: none;
-  color: var(--acc-dark);
-  font-size: 14px;
 }
 
 /* =============================================
@@ -639,6 +793,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   width: 220px;
   border: 1.5px solid #f5d0de;
   transition: transform var(--transition);
+  display: block;
+  text-decoration: none;
 }
 .tt-look-card:hover { transform: translateY(-4px); }
 
@@ -675,22 +831,6 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   flex-wrap: wrap;
 }
 
-.tt-btn-outline {
-  padding: 11px 28px;
-  border: 2px solid var(--acc);
-  color: var(--acc);
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: all var(--transition);
-  background: none;
-  font-family: var(--font);
-}
-.tt-btn-outline:hover { background: var(--acc); color: #fff; }
-
 /* Toast look */
 .tt-look-toast {
   display: none;
@@ -704,19 +844,12 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-weight: 700;
   margin: 16px auto 0;
   width: fit-content;
-  animation: fadeUp 0.3s ease;
 }
 .tt-look-toast.show { display: flex; }
 
 /* =============================================
-   PRODUCTOS GRID (más vendidos)
+   PRODUCTOS — cards
    ============================================= */
-.tt-products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
 .tt-card {
   background: #fff;
   border-radius: var(--radius);
@@ -791,7 +924,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   color: #e57373;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .tt-card-btn {
@@ -847,6 +980,21 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-filtro-btn.activo {
   background: var(--acc);
   color: #fff;
+}
+
+/* =============================================
+   SKELETON LOADER
+   ============================================= */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.tt-skeleton {
+  background: linear-gradient(90deg, #f5d0de 25%, #fce4ec 50%, #f5d0de 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
 }
 
 /* =============================================
@@ -923,38 +1071,101 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 /* =============================================
+   CTA FINAL
+   ============================================= */
+.tt-cta-final {
+  background: var(--acc-light);
+  padding: 72px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(234,126,163,0.2);
+}
+
+.tt-cta-final-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.tt-cta-title {
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin: 10px 0 12px;
+}
+
+.tt-cta-sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.tt-cta-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.tt-cta-btns .tt-btn { align-self: auto; }
+
+/* =============================================
    FOOTER
    ============================================= */
 .tt-footer {
-  background: var(--acc-pale);
-  border-top: 1.5px solid #f5d0de;
-  padding: 40px 24px;
+  background: #1a1a1a;
+  border-top: 1.5px solid #333;
+  padding: 48px 24px 32px;
   text-align: center;
 }
 
 .tt-footer-logo {
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--acc);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
 }
+
+.tt-footer-logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.tt-footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.tt-footer-links a {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.55);
+  transition: color var(--transition);
+}
+.tt-footer-links a:hover { color: var(--acc); }
 
 .tt-footer-copy {
   font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 2;
+  margin-bottom: 16px;
 }
 
 .tt-footer-wa {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
   padding: 10px 24px;
   background: #25D366;
   color: #fff;
@@ -981,27 +1192,12 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  z-index: 999;
-  transition: transform var(--transition);
+  z-index: 400;
+  transition: transform var(--transition), box-shadow var(--transition);
   text-decoration: none;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.35);
 }
-.tt-wa-float:hover { transform: scale(1.1); }
-
-/* =============================================
-   SKELETON LOADER
-   ============================================= */
-@keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-
-.tt-skeleton {
-  background: linear-gradient(90deg, #f5d0de 25%, #fce4ec 50%, #f5d0de 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.4s infinite;
-  border-radius: var(--radius-sm);
-}
+.tt-wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
 
 /* =============================================
    ANIMACIONES
@@ -1013,67 +1209,13 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 .tt-fadein {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(24px);
+  transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
 }
+
 .tt-fadein.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-@media (max-width: 1024px) {
-  .tt-products-grid    { grid-template-columns: repeat(3, 1fr); }
-  .tt-colecciones-grid { grid-template-columns: repeat(3, 1fr); }
-  .tt-reviews-grid     { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .tt-editorial        { grid-template-columns: 1fr; min-height: unset; }
-  .tt-editorial.reverse { direction: ltr; }
-  .tt-editorial-img img { height: 280px; }
-  .tt-products-grid    { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .tt-colecciones-grid { grid-template-columns: repeat(2, 1fr); }
-  .tt-reviews-grid     { grid-template-columns: 1fr; }
-  .tt-trust-item       { padding: 14px 16px; border-right: none; border-bottom: 1px solid rgba(234,126,163,0.2); }
-  .tt-trust-item:last-child { border-bottom: none; }
-  .tt-look-card        { width: 155px; }
-  .tt-nav              { display: none; }
-  .tt-header-inner     { height: 60px; position: relative; justify-content: center; }
-
-  /* Logo centered on mobile */
-  .tt-logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .tt-header-logo {
-    height: 32px;
-    transition: height 0.35s cubic-bezier(.4,0,.2,1);
-  }
-
-  /* Shrink on scroll — mobile */
-  .tt-header--scrolled .tt-header-logo {
-    height: 22px;
-  }
-
-  /* Icons stay right */
-  .tt-header-actions {
-    margin-left: auto;
-    position: relative;
-    z-index: 1;
-  }
-}
-
-@media (max-width: 480px) {
-  .tt-products-grid    { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .tt-colecciones-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .tt-section          { padding: 32px 16px; }
-  .tt-hero-overlay     { padding: 0 20px; }
-  .tt-look-card        { width: 140px; }
 }
 
 /* =============================================
@@ -1121,8 +1263,6 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-tab svg {
   width: 22px;
   height: 22px;
-  stroke: currentColor;
-  fill: none;
   transition: width 0.2s, height 0.2s;
 }
 
@@ -1140,127 +1280,54 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 .tt-tab-active svg { width: 24px; height: 24px; }
 
-/* Solo visible en mobile */
-@media (max-width: 768px) {
-  .tt-tabbar { display: flex; }
-  body { padding-bottom: 90px; }
-  .tt-wa-float { display: none; }
-}
-
 /* =============================================
-   FADE IN — clase visible (IntersectionObserver)
+   RESPONSIVE
    ============================================= */
-.tt-fadein {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .tt-reviews-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.tt-fadein.visible {
-  opacity: 1;
-  transform: translateY(0);
+@media (max-width: 990px) {
+  .tt-cslide { flex: 0 0 calc((100% - 16px * 2) / 3 - 2px); }
+  .tt-pslide { flex: 0 0 calc((100% - 16px * 2) / 3 - 2px); }
 }
 
-/* Editorial con fuentes reales del .liquid */
-.tt-editorial-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(26px, 3.5vw, 48px);
-  font-weight: 300;
-  letter-spacing: .02em;
-  color: #1a1a1a;
-  line-height: 1.08;
-}
-
-.tt-editorial-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: #ea7ea3;
-}
-
-.tt-editorial-body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #888;
-  line-height: 1.8;
-  max-width: 400px;
-}
-
-/* Reseñas — section title negro */
-.tt-reviews .tt-section-title { color: #1a1a1a; }
-
-/* =============================================
-   TRUST BAR — versión mejorada con SVG icons
-   ============================================= */
-.tt-trust {
-  background: #fdf0f5;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0;
-  border-top: 1px solid rgba(234,126,163,0.15);
-  border-bottom: 1px solid rgba(234,126,163,0.15);
-}
-
-.tt-trust-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 28px 40px;
-  border-right: 1px solid rgba(234,126,163,0.18);
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
-}
-
-.tt-trust-item.ttb-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.tt-trust-item:nth-child(1) { transition-delay: 0s; }
-.tt-trust-item:nth-child(2) { transition-delay: .08s; }
-.tt-trust-item:nth-child(3) { transition-delay: .16s; }
-.tt-trust-item:nth-child(4) { transition-delay: .24s; }
-
-.tt-trust-item:last-child { border-right: none; }
-
-.tt-trust-icon {
-  width: 36px;
-  height: 36px;
-  color: #ea7ea3;
-  flex-shrink: 0;
-}
-
-.tt-trust-icon svg {
-  width: 100%;
-  height: 100%;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.tt-trust-label {
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: #a7214d;
-}
-
-.tt-trust-desc {
-  font-size: 11px;
-  font-weight: 500;
-  color: #b07090;
-  letter-spacing: .04em;
-}
-
+/* Mobile */
 @media (max-width: 768px) {
+  .tt-editorial        { grid-template-columns: 1fr; min-height: unset; margin: 24px 0; }
+  .tt-editorial.reverse { direction: ltr; }
+  .tt-editorial-img img { height: 260px; }
+
+  .tt-reviews-grid  { grid-template-columns: 1fr; }
+  .tt-look-card     { width: 155px; }
+
+  /* Header mobile */
+  .tt-nav           { display: none; }
+  .tt-header-inner  { height: 56px; position: relative; justify-content: center; }
+
+  .tt-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .tt-header-logo {
+    height: 28px;
+  }
+
+  .tt-header--scrolled .tt-header-logo {
+    height: 22px;
+  }
+
+  .tt-header-actions {
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Trust bar mobile */
   .tt-trust { flex-direction: column; }
   .tt-trust-item {
     flex-direction: row;
@@ -1272,166 +1339,20 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
     align-items: center;
   }
   .tt-trust-item:last-child { border-bottom: none; }
-}
 
-/* =============================================
-   CARRUSEL — colecciones y productos con swipe
-   ============================================= */
-.tt-carousel-section {
-  padding: 56px 0;
-  overflow: hidden;
-  background: #fdf0f5;
-}
+  /* Tab bar visible en mobile */
+  .tt-tabbar { display: flex; }
+  body        { padding-bottom: 90px; }
+  .tt-wa-float { display: none; }
 
-.tt-carousel-head {
-  text-align: center;
-  padding: 0 24px;
-  margin-bottom: 32px;
-}
-
-.tt-carousel-wrap {
-  position: relative;
-  width: 100%;
-}
-
-.tt-carousel-track-outer {
-  overflow: hidden;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-  padding: 8px 0 16px;
-}
-
-.tt-carousel-track-outer.is-dragging { cursor: grabbing; }
-
-.tt-carousel-track {
-  display: flex;
-  gap: 16px;
-  will-change: transform;
-  transform: translate3d(0,0,0);
-  transition: transform .38s cubic-bezier(.22,.61,.36,1);
-  backface-visibility: hidden;
-  padding-inline: 24px;
-}
-
-/* Slide colección */
-.tt-cslide {
-  flex: 0 0 calc((100% - 24px * 4) / 4 - 2px);
-  min-width: 0;
-}
-
-@media (max-width: 990px) {
-  .tt-cslide { flex: 0 0 calc((100% - 16px * 2) / 3 - 2px); }
-}
-
-@media (max-width: 749px) {
-  .tt-cslide { flex: 0 0 calc((100% - 16px * 1) / 2 - 12px); }
-}
-
-/* Slide producto */
-.tt-pslide {
-  flex: 0 0 calc((100% - 16px * 3) / 4 - 2px);
-  min-width: 0;
-}
-
-@media (max-width: 990px) {
-  .tt-pslide { flex: 0 0 calc((100% - 16px * 2) / 3 - 2px); }
-}
-
-@media (max-width: 749px) {
+  /* Carrusel slides mobile */
+  .tt-cslide { flex: 0 0 calc((100% - 16px) / 2 - 12px); }
   .tt-pslide { flex: 0 0 calc((100% - 16px) / 2 - 4px); }
 }
 
-/* NAV arrows */
-.tt-carousel-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.tt-carousel-arrow {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #fff;
-  border: 1.5px solid #f5d0de;
-  color: #ea7ea3;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all .2s;
-  flex-shrink: 0;
-}
-
-.tt-carousel-arrow:hover {
-  background: #ea7ea3;
-  color: #fff;
-  border-color: #ea7ea3;
-}
-
-.tt-carousel-arrow:disabled {
-  opacity: .35;
-  cursor: default;
-}
-
-/* Dots */
-.tt-carousel-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.tt-carousel-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #f5d0de;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all .25s;
-}
-
-.tt-carousel-dot.active {
-  width: 20px;
-  border-radius: 3px;
-  background: #ea7ea3;
-}
-
-/* ── Col card dentro del carrusel ── */
-.tt-col-card {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  aspect-ratio: 3/4;
-  cursor: pointer;
-  display: block;
-  text-decoration: none;
-}
-
-.tt-col-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .4s ease;
-}
-
-.tt-col-card:hover img { transform: scale(1.06); }
-
-.tt-col-card-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 28px 16px 16px;
-  background: linear-gradient(to top, rgba(0,0,0,.52), transparent);
-  font-size: 13px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: #fff;
+@media (max-width: 480px) {
+  .tt-section      { padding: 32px 16px; }
+  .tt-hero-overlay { padding: 0 20px; }
+  .tt-look-card    { width: 140px; }
+  .tt-cta-title    { font-size: 22px; }
 }
