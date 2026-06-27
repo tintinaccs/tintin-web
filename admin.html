@@ -540,6 +540,34 @@
     }
     .cont-img-preview.show { display: block; }
 
+    /* Upload progress */
+    .cont-upload-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .cont-upload-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: #f0d0de;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .cont-upload-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--acc);
+      border-radius: 999px;
+      transition: width .15s;
+    }
+    .cont-upload-pct {
+      font-size: 11px;
+      color: #888;
+      min-width: 32px;
+      text-align: right;
+    }
+
     /* Array field */
     .cont-array-item {
       display: grid;
@@ -1066,7 +1094,7 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module">
-import { db, auth, provider } from "./js/firebase.js";
+import { db, auth, provider, storage } from "./js/firebase.js";
 import {
   collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
   doc, query, orderBy, where, serverTimestamp
@@ -1074,6 +1102,9 @@ import {
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  ref, uploadBytesResumable, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const ADMIN_EMAIL = "tintinaccs@gmail.com";
 let todosProductos = [];
@@ -1906,12 +1937,23 @@ function contRenderField(field, value, sectionEl) {
     html += `<textarea id="${id}" class="cont-textarea" placeholder="${field.def || ''}" data-fkey="${field.key}">${value ?? field.def ?? ''}</textarea>`;
   } else if (field.type === "image") {
     const imgVal = value ?? field.def ?? '';
+    const uid = id + '-upload';
     html += `
       <div class="cont-img-wrap">
-        <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g, '&quot;')}" placeholder="https://..." data-fkey="${field.key}" />
-        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="this.previousElementSibling.value='';this.previousElementSibling.dispatchEvent(new Event('input'))" title="Borrar">✕</button>
+        <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g, '&quot;')}" placeholder="https://... o subí una imagen" data-fkey="${field.key}" />
+        <label class="adm-btn adm-btn-primary adm-btn-sm cont-upload-btn" title="Subir imagen desde tu dispositivo" style="cursor:pointer;white-space:nowrap">
+          📁 Subir
+          <input type="file" accept="image/*" style="display:none" onchange="contUploadImage(this, '${id}')" />
+        </label>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
       </div>
-      <img class="cont-img-preview ${imgVal ? 'show' : ''}" src="${imgVal || ''}" alt="preview" data-preview-for="${id}" />
+      <div class="cont-upload-progress" id="${uid}-progress" style="display:none">
+        <div class="cont-upload-bar-wrap">
+          <div class="cont-upload-bar" id="${uid}-bar"></div>
+        </div>
+        <span class="cont-upload-pct" id="${uid}-pct">0%</span>
+      </div>
+      <img class="cont-img-preview ${imgVal ? 'show' : ''}" src="${imgVal || ''}" alt="preview" data-preview-for="${id}" id="${uid}-preview" />
     `;
   } else if (field.type === "toggle") {
     const checked = value ?? field.def ?? false;
@@ -2086,6 +2128,50 @@ async function contRenderPage(pageId) {
   loading.style.display = "none";
   sections.style.display = "block";
 }
+
+// ── Upload image from device ──────────────────
+window.contUploadImage = async function(fileInput, inputId) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const uid = inputId + '-upload';
+  const progressWrap = document.getElementById(uid + '-progress');
+  const bar          = document.getElementById(uid + '-bar');
+  const pct          = document.getElementById(uid + '-pct');
+  const urlInput     = document.getElementById(inputId);
+  const preview      = document.getElementById(uid + '-preview');
+
+  progressWrap.style.display = 'flex';
+  bar.style.width = '0%';
+  pct.textContent = '0%';
+
+  try {
+    const storageRef = ref(storage, `site-content/${Date.now()}_${file.name}`);
+    const task = uploadBytesResumable(storageRef, file);
+
+    task.on('state_changed',
+      snapshot => {
+        const p = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        bar.style.width = p + '%';
+        pct.textContent = p + '%';
+      },
+      err => {
+        toast('Error al subir: ' + err.message, 'error');
+        progressWrap.style.display = 'none';
+      },
+      async () => {
+        const url = await getDownloadURL(task.snapshot.ref);
+        urlInput.value = url;
+        if (preview) { preview.src = url; preview.classList.add('show'); }
+        urlInput.dispatchEvent(new Event('input'));
+        progressWrap.style.display = 'none';
+        toast('✅ Imagen subida correctamente');
+      }
+    );
+  } catch (err) {
+    toast('Error al subir: ' + err.message, 'error');
+    progressWrap.style.display = 'none';
+  }
+};
 
 // ── Toggle accordion section ──────────────────
 window.contToggleSection = function(head) {
