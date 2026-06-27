@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin.css" />
 </head>
-<body>
+<body class="tt-index">
 
 <!-- =============================================
      INTRO / ENTRY LOGO SCREEN
@@ -149,59 +149,27 @@
 
 
 <!-- =============================================
-     HERO SLIDER
+     HERO SPLIT — estilo Shopify
      ============================================= -->
-<section class="tt-hero" id="hero">
-  <div class="tt-hero-slides" id="hero-slides">
+<section class="tt-hero-split" id="hero">
 
-    <!-- Slide 1 -->
-    <div class="tt-hero-slide">
-      <img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=1600"
-           alt="TINTIN" loading="eager" />
-      <div class="tt-hero-overlay">
-        <p class="tt-hero-eyebrow">Bienvenidas a</p>
-        <h1 class="tt-hero-title">TINTIN</h1>
-        <p class="tt-hero-sub">Brillo, estilo y mucha personalidad</p>
-        <a href="#colecciones" class="tt-hero-cta">Nuestras colecciones →</a>
-      </div>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="tt-hero-slide">
-      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=1600"
-           alt="TINTIN" loading="lazy" />
-      <div class="tt-hero-overlay">
-        <p class="tt-hero-eyebrow">Nueva colección</p>
-        <h1 class="tt-hero-title">ACCESORIOS<br>ÚNICOS</h1>
-        <p class="tt-hero-sub">Edición limitada · Envíos a todo Paraguay</p>
-        <a href="catalogo.html" class="tt-hero-cta">Ver catálogo</a>
-      </div>
-    </div>
-
-    <!-- Slide 3 -->
-    <div class="tt-hero-slide">
-      <img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=1600"
-           alt="TINTIN" loading="lazy" />
-      <div class="tt-hero-overlay">
-        <p class="tt-hero-eyebrow">Colección especial</p>
-        <h1 class="tt-hero-title">BRILLÁ<br>ESTE 2026</h1>
-        <p class="tt-hero-sub">Acero inoxidable · No se oxida</p>
-        <a href="catalogo.html?cat=relojes" class="tt-hero-cta">Ver relojes</a>
-      </div>
-    </div>
-
+  <!-- Columna izquierda: texto -->
+  <div class="tt-hero-split-left">
+    <p class="tt-hero-split-eyebrow"><span class="tt-hero-split-dash">—</span> Bienvenidas a</p>
+    <h1 class="tt-hero-split-title">TINTIN</h1>
+    <p class="tt-hero-split-sub">Brillo, estilo y mucha personalidad</p>
+    <a href="nosotros.html" class="tt-hero-split-btn">¿Quiénes somos? →</a>
   </div>
 
-  <!-- Flechas -->
-  <button class="tt-hero-arrow prev" id="hero-prev">&#8249;</button>
-  <button class="tt-hero-arrow next" id="hero-next">&#8250;</button>
-
-  <!-- Dots -->
-  <div class="tt-hero-dots" id="hero-dots">
-    <button class="tt-hero-dot active"></button>
-    <button class="tt-hero-dot"></button>
-    <button class="tt-hero-dot"></button>
+  <!-- Columna derecha: imagen scrapbook -->
+  <div class="tt-hero-split-right">
+    <img
+      src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=1400"
+      alt="Tintin Accesorios"
+      loading="eager"
+    />
   </div>
+
 </section>
 
 
@@ -787,25 +755,6 @@ initCarrusel({
   dotsEl:  document.getElementById('col-dots'),
   perViewDesktop: 4
 });
-
-// ─── HERO SLIDER ──────────────────────────────
-(function() {
-  const slides = document.getElementById("hero-slides");
-  const dots   = document.querySelectorAll(".tt-hero-dot");
-  let current  = 0;
-  const total  = dots.length;
-
-  function goTo(n) {
-    current = (n + total) % total;
-    slides.style.transform = `translateX(-${current * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle("active", i === current));
-  }
-
-  document.getElementById("hero-prev").onclick = () => goTo(current - 1);
-  document.getElementById("hero-next").onclick = () => goTo(current + 1);
-  dots.forEach((d, i) => d.onclick = () => goTo(i));
-  setInterval(() => goTo(current + 1), 5000);
-})();
 
 // ─── FADE IN al scroll ────────────────────────
 const observer = new IntersectionObserver(entries => {
