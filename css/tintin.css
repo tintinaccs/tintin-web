@@ -115,16 +115,16 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-header-logo {
-  height: 44px;
+  height: 52px;
   width: auto;
   object-fit: contain;
   display: block;
-  transition: height 0.3s ease, opacity 0.3s ease;
+  transition: height 0.3s ease;
 }
 
 /* Shrink on scroll — desktop/tablet */
 .tt-header--scrolled .tt-header-logo {
-  height: 34px;
+  height: 40px;
 }
 
 /* NAV desktop */
@@ -153,56 +153,97 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-nav > a:hover,
 .tt-nav-tienda-btn:hover { color: #7a1a3e; background: var(--acc-light); }
 
-/* Dropdown Tienda */
-.tt-nav-tienda {
-  position: relative;
-}
+/* ── MEGA DROPDOWN TIENDA ── */
+.tt-nav-tienda { position: relative; }
 
 .tt-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-8px);
   background: #fff;
-  border: 1.5px solid #f5d0de;
-  border-radius: var(--radius);
-  padding: 16px;
-  min-width: 260px;
-  display: none;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  border: 1px solid #f5d0de;
+  border-radius: 20px;
+  padding: 24px;
+  width: 680px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
   z-index: 300;
-  box-shadow: 0 8px 32px rgba(200,0,80,0.08);
+  box-shadow: 0 16px 48px rgba(180,0,70,0.10);
 }
 
 .tt-nav-tienda:hover .tt-dropdown,
-.tt-nav-tienda:focus-within .tt-dropdown { display: grid; }
-
-.tt-dropdown a {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  transition: background var(--transition), color var(--transition);
+.tt-nav-tienda:focus-within .tt-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
 }
 
-.tt-dropdown a:hover { background: var(--acc-light); color: var(--acc-dark); }
+.tt-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.tt-drop-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: #7a1a3e;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.tt-drop-item:hover {
+  color: var(--acc);
+  transform: translateY(-3px);
+}
+
+.tt-drop-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--acc-pale);
+  border: 1.5px solid #f5d0de;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.tt-drop-item:hover .tt-drop-img {
+  border-color: var(--acc);
+  box-shadow: 0 4px 16px rgba(200,0,80,0.15);
+}
+
+.tt-drop-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
 .tt-dropdown-footer {
-  grid-column: 1 / -1;
+  margin-top: 16px;
+  padding-top: 14px;
   border-top: 1px solid #f5d0de;
-  padding-top: 8px;
-  margin-top: 4px;
   text-align: center;
 }
 
 .tt-dropdown-footer a {
   color: var(--acc);
   font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
 }
+.tt-dropdown-footer a:hover { color: #7a1a3e; }
 
 /* Header acciones */
 .tt-header-actions {
@@ -212,15 +253,15 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn {
-  height: 42px;
-  width: 42px;
+  height: 44px;
+  width: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: background var(--transition);
+  transition: background var(--transition), transform var(--transition);
   padding: 0;
   text-decoration: none;
   flex-shrink: 0;
@@ -228,70 +269,200 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-icon-btn img {
-  width: 28px;
-  height: 28px;
-  max-width: 28px;
-  max-height: 28px;
+  width: 30px;
+  height: 30px;
+  max-width: 30px;
+  max-height: 30px;
   object-fit: contain;
   display: block;
 }
 
 .tt-icon-btn:hover {
   background: var(--acc-light);
+  transform: scale(1.08);
 }
 
 /* Admin link oculto por defecto */
 #link-admin { display: none; }
 
 /* =============================================
-   BUSCADOR OVERLAY
+   BUSCADOR LUXURY
    ============================================= */
+@keyframes tt-search-in {
+  from { opacity: 0; transform: translateY(-16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tt-result-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .tt-search-overlay {
-  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 500;
+  z-index: 900;
+  display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 100px;
+  padding-top: 80px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s ease, visibility 0.28s;
 }
-.tt-search-overlay.open { display: flex; }
 
-.tt-search-box {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 28px 24px 24px;
-  width: 90%;
-  max-width: 540px;
+.tt-search-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tt-search-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,240,246,0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.tt-search-panel {
   position: relative;
-  box-shadow: 0 16px 48px rgba(200,0,80,0.12);
+  width: 90%;
+  max-width: 620px;
+  background: #fff;
+  border-radius: 24px;
+  padding: 36px 36px 28px;
+  box-shadow: 0 24px 64px rgba(180,0,70,0.13), 0 2px 8px rgba(0,0,0,0.04);
+  animation: tt-search-in 0.3s cubic-bezier(.4,0,.2,1) both;
 }
-
-.tt-search-box input {
-  width: 100%;
-  border: 2px solid var(--acc);
-  border-radius: 50px;
-  padding: 13px 20px;
-  font-size: 15px;
-  font-family: var(--font);
-  outline: none;
-  transition: border-color var(--transition);
-}
-.tt-search-box input:focus { border-color: var(--acc-dark); }
 
 .tt-search-close {
   position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 20px;
+  top: 16px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: var(--text-muted);
-  background: none;
+  background: var(--acc-pale);
   border: none;
-  transition: color var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
-.tt-search-close:hover { color: var(--acc); }
+.tt-search-close:hover { background: var(--acc-light); color: var(--acc); }
+
+.tt-search-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--acc);
+  margin-bottom: 4px;
+}
+
+.tt-search-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.tt-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--acc);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  transition: border-color var(--transition);
+}
+.tt-search-input-wrap:focus-within { border-color: #7a1a3e; }
+
+.tt-search-icon { color: var(--acc); flex-shrink: 0; }
+
+.tt-search-input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  font-family: var(--font);
+  color: var(--text);
+  background: transparent;
+}
+.tt-search-input-wrap input::placeholder { color: #ccc; }
+
+/* Suggestions pills */
+.tt-search-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.tt-search-sug-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.tt-search-sug {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--acc);
+  border: 1.5px solid #f5d0de;
+  border-radius: 50px;
+  padding: 5px 14px;
+  text-decoration: none;
+  transition: background var(--transition), border-color var(--transition);
+}
+.tt-search-sug:hover { background: var(--acc-light); border-color: var(--acc); }
+
+/* Resultados */
+#search-results { display: flex; flex-direction: column; gap: 8px; }
+
+.tt-search-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background var(--transition);
+  animation: tt-result-in 0.2s ease both;
+}
+.tt-search-result:hover { background: var(--acc-pale); }
+
+.tt-search-result img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #f5d0de;
+  flex-shrink: 0;
+}
+
+.tt-search-result-info { flex: 1; }
+.tt-search-result-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.tt-search-result-price {
+  font-size: 13px;
+  color: var(--acc);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.tt-search-empty {
+  text-align: center;
+  padding: 20px 0 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
 
 /* =============================================
    HERO SLIDER
