@@ -914,6 +914,15 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
+<!-- PAGE LOADING OVERLAY -->
+<div id="tt-page-loading" style="position:fixed;inset:0;z-index:9999;background:rgba(252,228,236,.92);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="animation:tt-spin 1.4s linear infinite;">
+    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+  </svg>
+  <span style="font-size:13px;font-weight:700;color:#b84c72;letter-spacing:.08em;text-transform:uppercase;">Verificando acceso…</span>
+</div>
+<style>@keyframes tt-spin{to{transform:rotate(360deg)}}</style>
+
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
@@ -998,11 +1007,14 @@ document.getElementById('adm-logout').onclick = async () => {
 };
 
 // ======== AUTH GUARD ========
+const _overlay = document.getElementById('tt-page-loading');
+function hideOverlay() { if (_overlay) _overlay.style.display = 'none'; }
+
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href = 'login.html'; return; }
   currentUser = user;
 
-  const role = await getUserRole(user.uid);
+  const role = await getUserRole(user.uid, user.email);
   currentRole = role;
 
   if (role === 'client' || !role) {
@@ -1010,10 +1022,11 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  // Set up UI
+  // Set up UI and reveal page
   setupUserInfo(user, role);
   setupPermissions(role);
   loadDashboard();
+  hideOverlay();
 });
 
 function setupUserInfo(user, role) {

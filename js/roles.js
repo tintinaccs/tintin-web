@@ -108,11 +108,16 @@ export function can(role, permission) {
  * @param {string} uid
  * @returns {Promise<string>} role string
  */
-export async function getUserRole(uid) {
+export async function getUserRole(uid, email) {
+  // Superadmin always gets top role without a Firestore round-trip
+  if (email && email === SUPER_ADMIN) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (snap.exists()) {
-      return snap.data().role || 'client';
+      const data = snap.data();
+      // Also check email in the stored doc
+      if (data.email === SUPER_ADMIN) return 'superadmin';
+      return data.role || 'client';
     }
     return 'client';
   } catch (e) {

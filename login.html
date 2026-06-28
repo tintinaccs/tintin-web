@@ -5,449 +5,331 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
-  <meta property="og:title" content="Ingresar | Tintin Accesorios" />
-  <meta property="og:type" content="website" />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/login.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/tintin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    body {
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --acc:       #b84c72;
+      --acc-dark:  #8b2642;
+      --acc-light: #f5c6d8;
+      --acc-pale:  #fce4ec;
+      --text:      #2d1f28;
+      --muted:     #9e7a89;
+      --font:      'Poppins', sans-serif;
+      --serif:     'Playfair Display', serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--acc-pale);
+      overflow-x: hidden;
+    }
+
+    /* ── LOADING OVERLAY ── */
+    #tt-page-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(252,228,236,.95);
+      backdrop-filter: blur(10px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+    }
+    #tt-page-loading svg { animation: tt-spin 1.4s linear infinite; }
+    #tt-page-loading span { font-size: 12px; font-weight: 700; color: var(--acc); letter-spacing: .1em; text-transform: uppercase; }
+    @keyframes tt-spin { to { transform: rotate(360deg); } }
+
+    /* ── LAYOUT ── */
+    .login-page {
       min-height: 100vh;
-      background: #fce4ec;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      padding-top: 88px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 768px) {
+      .login-page { grid-template-columns: 1fr; }
+      .login-brand { display: none; }
     }
 
-    .login-card {
-      background: #fce4ec;
-      border-radius: 24px;
+    /* ── BRAND SIDE ── */
+    .login-brand {
+      background: linear-gradient(145deg, #b84c72 0%, #8b2642 50%, #6a1535 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 60px 48px;
+      position: relative; overflow: hidden;
+    }
+    .login-brand::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .login-brand-logo {
+      font-family: var(--font);
+      font-size: 42px; font-weight: 900;
+      letter-spacing: .18em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      position: relative;
+    }
+    .login-brand-sub {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .25em; color: rgba(255,255,255,.6);
+      text-transform: uppercase; margin-bottom: 48px;
+      position: relative;
+    }
+    .login-brand-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 26px; color: rgba(255,255,255,.9);
+      text-align: center; line-height: 1.4;
+      position: relative; max-width: 320px;
+    }
+    .login-brand-dots {
+      display: flex; gap: 8px; margin-top: 48px;
+      position: relative;
+    }
+    .login-brand-dots span {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.3);
+    }
+    .login-brand-dots span:first-child { background: #fff; }
+
+    /* ── FORM SIDE ── */
+    .login-form-side {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       padding: 48px 40px;
-      width: 100%;
-      max-width: 420px;
-      border: 1.5px solid #f5d0de;
+      background: #fff;
+      min-height: 100vh;
+    }
+    @media (max-width: 480px) {
+      .login-form-side { padding: 32px 24px; }
     }
 
-    .login-logo {
-      text-align: center;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: .1em;
+    .login-mobile-logo {
+      display: none;
+      text-align: center; margin-bottom: 32px;
+    }
+    @media (max-width: 768px) {
+      .login-mobile-logo { display: block; }
+    }
+    .login-mobile-logo-text {
+      font-size: 28px; font-weight: 900;
+      letter-spacing: .15em; color: var(--acc);
       text-transform: uppercase;
-      color: var(--acc);
-      margin-bottom: 8px;
+    }
+    .login-mobile-logo-sub {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: .2em; color: var(--muted);
+      text-transform: uppercase; margin-top: 2px;
     }
 
-    .login-sub {
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-    }
+    .login-box { width: 100%; max-width: 380px; }
 
-    .login-tabs {
-      display: flex;
-      gap: 0;
-      border: 2px solid var(--acc-light);
-      border-radius: 50px;
-      padding: 4px;
+    .login-heading {
+      font-size: 22px; font-weight: 800;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .login-heading-sub {
+      font-size: 13px; color: var(--muted);
       margin-bottom: 28px;
     }
 
+    /* TABS */
+    .login-tabs {
+      display: flex; gap: 0;
+      background: var(--acc-pale);
+      border-radius: 50px; padding: 4px;
+      margin-bottom: 24px;
+    }
     .login-tab {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      background: transparent;
+      flex: 1; padding: 10px;
+      border: none; background: transparent;
       border-radius: 50px;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all .2s;
-      font-family: var(--font);
+      font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); cursor: pointer;
+      transition: all .2s; font-family: var(--font);
     }
-
     .login-tab.active {
-      background: var(--acc);
-      color: #fff;
+      background: var(--acc); color: #fff;
+      box-shadow: 0 4px 12px rgba(184,76,114,.3);
     }
 
+    /* FORM */
     .login-form { display: none; flex-direction: column; gap: 14px; }
     .login-form.active { display: flex; }
 
-    .login-field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
+    .login-field { display: flex; flex-direction: column; gap: 5px; }
     .login-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted);
     }
-
     .login-input {
-      padding: 12px 16px;
-      border: 1.5px solid #eee;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-family: var(--font);
-      color: var(--text);
-      transition: border .2s;
+      padding: 13px 16px;
+      border: 1.5px solid #f0e0e8;
+      border-radius: 12px;
+      font-size: 14px; font-family: var(--font);
+      color: var(--text); background: #fafafa;
+      transition: border .2s, box-shadow .2s;
     }
-
     .login-input:focus {
-      outline: none;
-      border-color: var(--acc);
+      outline: none; border-color: var(--acc);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(184,76,114,.1);
     }
 
     .login-btn {
-      padding: 14px;
-      background: var(--acc);
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      cursor: pointer;
-      font-family: var(--font);
-      transition: background .2s;
-      margin-top: 4px;
+      padding: 14px; background: var(--acc);
+      color: #fff; border: none; border-radius: 50px;
+      font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .1em;
+      cursor: pointer; font-family: var(--font);
+      transition: all .2s; margin-top: 4px;
+      box-shadow: 0 4px 16px rgba(184,76,114,.35);
     }
-    .login-btn:hover { background: var(--acc-dark); }
+    .login-btn:hover { background: var(--acc-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(184,76,114,.4); }
+    .login-btn:active { transform: translateY(0); }
 
     .login-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
+      display: flex; align-items: center; gap: 12px;
+      color: var(--muted); font-size: 11px; font-weight: 600;
     }
-    .login-divider::before,
-    .login-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #eee;
+    .login-divider::before, .login-divider::after {
+      content: ''; flex: 1; height: 1px; background: #f0e0e8;
     }
 
     .login-google {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 13px;
-      border: 1.5px solid #eee;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      cursor: pointer;
-      background: #fce4ec;
-      font-family: var(--font);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 13px; border: 1.5px solid #f0e0e8; border-radius: 50px;
+      font-size: 13px; font-weight: 700; color: var(--text);
+      cursor: pointer; background: #fff; font-family: var(--font);
       transition: all .2s;
     }
     .login-google:hover { border-color: var(--acc); background: var(--acc-pale); }
 
+    /* ERROR */
     .login-error {
-      background: #ffebee;
-      color: #c62828;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 12px;
-      font-weight: 600;
-      display: none;
+      background: #ffebee; color: #c62828;
+      padding: 10px 14px; border-radius: 10px;
+      font-size: 12px; font-weight: 600; display: none;
+      border-left: 3px solid #e53935;
     }
     .login-error.show { display: block; }
 
+    /* BACK LINK */
     .login-back {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 12px;
-      color: var(--text-muted);
+      text-align: center; margin-top: 24px;
+      font-size: 12px; color: var(--muted);
     }
-    .login-back a { color: var(--acc); font-weight: 700; }
+    .login-back a { color: var(--acc); font-weight: 700; text-decoration: none; }
+    .login-back a:hover { text-decoration: underline; }
 
-    @media (max-width: 480px) {
-      .login-card { padding: 32px 24px; }
+    /* FORGOT */
+    .login-forgot {
+      text-align: right; margin-top: -8px;
     }
+    .login-forgot a { font-size: 11px; color: var(--muted); text-decoration: none; }
+    .login-forgot a:hover { color: var(--acc); }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="tt-header tt-hdr-show tt-hdr-seen" id="tt-header">
-  <div class="tt-header-inner">
-    <a href="index.html" class="tt-logo">
-      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
-    </a>
-    <ul class="tt-nav">
-      <li class="tt-nav-item"><a href="index.html" class="tt-nav-link">Inicio</a></li>
-      <li class="tt-nav-item tt-nav-item--has-drop" id="nav-tienda">
-        <button class="tt-nav-tienda-btn tt-nav-link" id="nav-tienda-btn" aria-expanded="false" aria-haspopup="true">
-          Tienda
-          <svg class="tt-nav-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tt-dropdown" id="nav-tienda-drop" role="menu">
-          <div class="tt-dropdown-grid">
-            <a href="catalogo.html?cat=relojes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div><span>Relojes</span></a>
-            <a href="catalogo.html?cat=aros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div><span>Aros</span></a>
-            <a href="catalogo.html?cat=bolsos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div><span>Bags</span></a>
-            <a href="catalogo.html?cat=collares" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div><span>Collares</span></a>
-            <a href="catalogo.html?cat=pulseras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Pulseras" loading="lazy" /></div><span>Pulseras</span></a>
-            <a href="catalogo.html?cat=anillos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Anillos" loading="lazy" /></div><span>Anillos</span></a>
-            <a href="catalogo.html?cat=earcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div><span>Earcuff</span></a>
-            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Brazaletes" loading="lazy" /></div><span>Brazaletes</span></a>
-            <a href="catalogo.html?cat=gafas" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Gafas" loading="lazy" /></div><span>Gafas</span></a>
-            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Tobilleras" loading="lazy" /></div><span>Tobilleras</span></a>
-            <a href="catalogo.html?cat=armcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Armcuff" loading="lazy" /></div><span>Armcuff</span></a>
-            <a href="catalogo.html?cat=joyeros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Joyeros" loading="lazy" /></div><span>Joyeros</span></a>
-          </div>
-          <div class="tt-dropdown-footer"><a href="catalogo.html">Ver todas las colecciones →</a></div>
-        </div>
-      </li>
-      <li class="tt-nav-item"><a href="nosotros.html" class="tt-nav-link">Nosotros</a></li>
-      <li class="tt-nav-item"><a href="index.html#contacto" class="tt-nav-link">Contacto</a></li>
-      <li class="tt-nav-item"><a href="admin.html" id="link-admin" class="tt-nav-link" style="display:none">Admin</a></li>
-      <li class="tt-nav-item"><a href="login.html" id="btn-login" class="tt-nav-link tt-nav-link--login">Ingresar</a></li>
-    </ul>
-    <div class="tt-header-actions">
-      <button class="tt-icon-btn" id="btn-buscar" title="Buscar" aria-label="Buscar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </a>
-      <span class="tt-cart-wrap">
-        <a href="index.html#carrito" class="tt-icon-btn" title="Carrito" aria-label="Carrito" id="btn-carrito">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </a>
-        <span class="tt-cart-badge" id="tt-cart-badge"></span>
-      </span>
-    </div>
-  </div>
-</header>
-
-<!-- Search panel -->
-<div class="tt-srch-backdrop" id="srch-backdrop"></div>
-<div class="tt-srch-panel" id="srch-panel" role="dialog" aria-label="Buscador" aria-modal="true">
-  <div class="tt-srch-inner">
-    <div class="tt-srch-top">
-      <div class="tt-srch-input-wrap">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-input" class="tt-srch-input" placeholder="Relojes, aros, collares…" autocomplete="off" spellcheck="false" />
-        <button class="tt-srch-close" id="srch-close" aria-label="Cerrar">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="tt-srch-tags">
-        <span class="tt-srch-tag-label">Populares:</span>
-        <a href="catalogo.html?cat=relojes" class="tt-srch-tag">Relojes</a>
-        <a href="catalogo.html?cat=aros" class="tt-srch-tag">Aros</a>
-        <a href="catalogo.html?cat=collares" class="tt-srch-tag">Collares</a>
-        <a href="catalogo.html?cat=bolsos" class="tt-srch-tag">Bags</a>
-      </div>
-    </div>
-    <div class="tt-srch-body" id="srch-body">
-      <ul class="tt-srch-results" id="search-results"></ul>
-      <div class="tt-srch-preview" id="srch-preview">
-        <div class="tt-srch-prev-placeholder">
-          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <p>Empezá a escribir para ver resultados</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- PAGE LOADING OVERLAY (shown while checking if already logged in) -->
+<div id="tt-page-loading">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+  </svg>
+  <span>Cargando…</span>
 </div>
 
-<div class="login-card">
-  <div class="login-logo">Tintin ✨</div>
-  <div class="login-sub">Tu cuenta</div>
+<div class="login-page">
 
-  <!-- TABS -->
-  <div class="login-tabs">
-    <button class="login-tab active" data-tab="login">Ingresar</button>
-    <button class="login-tab" data-tab="registro">Registrarse</button>
+  <!-- BRAND SIDE (desktop only) -->
+  <div class="login-brand">
+    <div class="login-brand-logo">TINTIN</div>
+    <div class="login-brand-sub">Accesorios &amp; Relojes</div>
+    <div class="login-brand-tagline">"El accesorio perfecto que completa tu look"</div>
+    <div class="login-brand-dots">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 
-  <!-- ERROR -->
-  <div class="login-error" id="login-error"></div>
+  <!-- FORM SIDE -->
+  <div class="login-form-side">
 
-  <!-- FORM LOGIN -->
-  <div class="login-form active" id="form-login">
-    <div class="login-field">
-      <label class="login-label">Email</label>
-      <input type="email" class="login-input" id="login-email" placeholder="tu@email.com" />
+    <!-- Logo solo mobile -->
+    <div class="login-mobile-logo">
+      <div class="login-mobile-logo-text">TINTIN</div>
+      <div class="login-mobile-logo-sub">Accesorios &amp; Relojes</div>
     </div>
-    <div class="login-field">
-      <label class="login-label">Contraseña</label>
-      <input type="password" class="login-input" id="login-pass" placeholder="••••••••" />
+
+    <div class="login-box">
+      <div class="login-heading">Bienvenida 💕</div>
+      <div class="login-heading-sub">Ingresá a tu cuenta o creá una nueva</div>
+
+      <!-- TABS -->
+      <div class="login-tabs">
+        <button class="login-tab active" data-tab="login">Ingresar</button>
+        <button class="login-tab" data-tab="registro">Registrarse</button>
+      </div>
+
+      <!-- ERROR -->
+      <div class="login-error" id="login-error"></div>
+
+      <!-- FORM LOGIN -->
+      <div class="login-form active" id="form-login">
+        <div class="login-field">
+          <label class="login-label">Email</label>
+          <input type="email" class="login-input" id="login-email" placeholder="tu@email.com" autocomplete="email" />
+        </div>
+        <div class="login-field">
+          <label class="login-label">Contraseña</label>
+          <input type="password" class="login-input" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <div class="login-forgot"><a href="#">¿Olvidaste tu contraseña?</a></div>
+        <button class="login-btn" id="btn-login-email">Ingresar</button>
+        <div class="login-divider">o</div>
+        <button class="login-google" id="btn-login-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
+          Continuar con Google
+        </button>
+      </div>
+
+      <!-- FORM REGISTRO -->
+      <div class="login-form" id="form-registro">
+        <div class="login-field">
+          <label class="login-label">Nombre completo</label>
+          <input type="text" class="login-input" id="reg-nombre" placeholder="Tu nombre" autocomplete="name" />
+        </div>
+        <div class="login-field">
+          <label class="login-label">Email</label>
+          <input type="email" class="login-input" id="reg-email" placeholder="tu@email.com" autocomplete="email" />
+        </div>
+        <div class="login-field">
+          <label class="login-label">Contraseña</label>
+          <input type="password" class="login-input" id="reg-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+        </div>
+        <button class="login-btn" id="btn-registrar">Crear cuenta</button>
+        <div class="login-divider">o</div>
+        <button class="login-google" id="btn-reg-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
+          Registrarse con Google
+        </button>
+      </div>
+
+      <div class="login-back">
+        <a href="index.html">← Volver a la tienda</a>
+      </div>
     </div>
-    <button class="login-btn" id="btn-login-email">Ingresar</button>
-    <div class="login-divider">o</div>
-    <button class="login-google" id="btn-login-google">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
-      Continuar con Google
-    </button>
   </div>
 
-  <!-- FORM REGISTRO -->
-  <div class="login-form" id="form-registro">
-    <div class="login-field">
-      <label class="login-label">Nombre completo</label>
-      <input type="text" class="login-input" id="reg-nombre" placeholder="Tu nombre" />
-    </div>
-    <div class="login-field">
-      <label class="login-label">Email</label>
-      <input type="email" class="login-input" id="reg-email" placeholder="tu@email.com" />
-    </div>
-    <div class="login-field">
-      <label class="login-label">Contraseña</label>
-      <input type="password" class="login-input" id="reg-pass" placeholder="Mínimo 6 caracteres" />
-    </div>
-    <button class="login-btn" id="btn-registrar">Crear cuenta</button>
-    <div class="login-divider">o</div>
-    <button class="login-google" id="btn-reg-google">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
-      Registrarse con Google
-    </button>
-  </div>
-
-  <div class="login-back">
-    <a href="index.html">← Volver a la tienda</a>
-  </div>
 </div>
-
-<footer class="tt-footer" id="contacto">
-  <div class="tt-footer-logo">
-    <img src="images/logo.png" alt="Tintin Accesorios" class="tt-footer-logo-img" />
-  </div>
-  <nav class="tt-footer-links">
-    <a href="index.html">Inicio</a>
-    <a href="catalogo.html">Tienda</a>
-    <a href="nosotros.html">Nosotros</a>
-    <a href="index.html#contacto">Contacto</a>
-  </nav>
-  <p class="tt-footer-copy">
-    &copy; 2024–2026 TINTIN ACCESORIOS &mdash; TODOS LOS DERECHOS RESERVADOS<br>
-    San Lorenzo, Paraguay
-  </p>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-     target="_blank" class="tt-footer-wa">Contactanos por WhatsApp</a>
-</footer>
-
-<!-- WhatsApp flotante -->
-<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-   class="tt-wa-float" target="_blank" title="Contactar por WhatsApp">
-  <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-</a>
-
-<!-- TAB BAR MOBILE -->
-<nav class="tt-tabbar" id="tt-tabbar">
-  <a href="index.html" class="tt-tab" aria-label="Inicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-  </a>
-  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  </button>
-  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-  </a>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8" class="tt-tab" target="_blank" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  </a>
-  <a href="login.html" id="tabbar-cuenta" class="tt-tab" aria-label="Perfil">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  </a>
-</nav>
-
-<script>
-(function(){
-  var header = document.getElementById('tt-header');
-  if (!header) return;
-  var lastY = 0;
-  window.addEventListener('scroll', function(){
-    var y = window.scrollY;
-    if (y > lastY && y > 90) header.classList.add('tt-hdr-hidden');
-    else header.classList.remove('tt-hdr-hidden');
-    lastY = y;
-  }, { passive: true });
-  var navTienda = document.getElementById('nav-tienda');
-  var tiendaBtn = document.getElementById('nav-tienda-btn');
-  if (tiendaBtn) {
-    tiendaBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      var open = navTienda.classList.contains('tt-drop-open');
-      navTienda.classList.toggle('tt-drop-open', !open);
-      tiendaBtn.setAttribute('aria-expanded', String(!open));
-    });
-  }
-  document.addEventListener('click', function(e){
-    if (navTienda && !navTienda.contains(e.target)) {
-      navTienda.classList.remove('tt-drop-open');
-      if (tiendaBtn) tiendaBtn.setAttribute('aria-expanded','false');
-    }
-  });
-  var srchBackdrop = document.getElementById('srch-backdrop');
-  var srchPanel = document.getElementById('srch-panel');
-  var srchClose = document.getElementById('srch-close');
-  var searchInput = document.getElementById('search-input');
-  function openSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.add('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.add('tt-srch-open');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function(){ if (searchInput) searchInput.focus(); }, 80);
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.add('tt-srch-active');
-  }
-  function closeSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.remove('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.remove('tt-srch-open');
-    document.body.style.overflow = '';
-    if (searchInput) searchInput.value = '';
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.remove('tt-srch-active');
-  }
-  var btnBuscar = document.getElementById('btn-buscar');
-  var tabBuscar = document.getElementById('tab-buscar');
-  if (btnBuscar) btnBuscar.addEventListener('click', openSearch);
-  if (tabBuscar) tabBuscar.addEventListener('click', openSearch);
-  if (srchClose) srchClose.addEventListener('click', closeSearch);
-  if (srchBackdrop) srchBackdrop.addEventListener('click', closeSearch);
-  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeSearch(); });
-  function updateCartBadge(){
-    var badge = document.getElementById('tt-cart-badge'); if (!badge) return;
-    try {
-      var cart = JSON.parse(localStorage.getItem('tt_carrito')||'[]');
-      var total = cart.reduce(function(s,i){ return s+(i.qty||1); },0);
-      badge.textContent = total>0?(total>99?'99+':total):'';
-      badge.classList.toggle('tt-cart-badge--show', total>0);
-    } catch(e){}
-  }
-  updateCartBadge();
-  window.addEventListener('storage', updateCartBadge);
-  window._ttOpenSearch = openSearch;
-  window._ttCloseSearch = closeSearch;
-  window._ttUpdateCart = updateCartBadge;
-})();
-</script>
 
 <script type="module">
 import { auth, db, provider } from "./js/firebase.js";
@@ -463,10 +345,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
 
-// Si ya está logueado, redirigir según rol
+const overlay = document.getElementById('tt-page-loading');
+function showOverlay() { if (overlay) overlay.style.display = 'flex'; }
+function hideLoginOverlay() { if (overlay) overlay.style.display = 'none'; }
+
+// Si ya está logueado → redirigir sin mostrar el formulario
 onAuthStateChanged(auth, async user => {
-  if (!user) return;
-  const role = await getUserRole(user.uid);
+  if (!user) { hideLoginOverlay(); return; }
+  // Keep overlay visible while redirecting
+  const role = await getUserRole(user.uid, user.email);
   redirectByRole(role);
 });
 
@@ -492,8 +379,7 @@ document.querySelectorAll(".login-tab").forEach(tab => {
 
 function showError(msg) {
   const el = document.getElementById("login-error");
-  el.textContent = msg;
-  el.classList.add("show");
+  el.textContent = msg; el.classList.add("show");
 }
 function hideError() {
   document.getElementById("login-error").classList.remove("show");
@@ -513,30 +399,33 @@ function errMsg(code) {
   return msgs[code] || "Error: " + code;
 }
 
-async function guardarUsuario(user, nombre, isNew = false) {
+async function guardarUsuario(user, nombre) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-
   if (!snap.exists()) {
-    // Determine role: superadmin email gets superadmin, everyone else gets client
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     await setDoc(ref, {
-      name:                nombre || user.displayName || "",
-      email:               user.email,
-      photoURL:            user.photoURL || "",
+      name: nombre || user.displayName || "",
+      email: user.email,
+      photoURL: user.photoURL || "",
       role,
       onboardingCompleted: false,
-      blocked:             false,
-      purchaseCount:       0,
-      totalSpent:          0,
-      createdAt:           serverTimestamp(),
-      lastLogin:           serverTimestamp(),
+      blocked: false,
+      purchaseCount: 0,
+      totalSpent: 0,
+      createdAt: serverTimestamp(),
+      lastLogin: serverTimestamp(),
     });
     return role;
   } else {
-    // Update last login
+    const data = snap.data();
+    // Ensure superadmin email always has correct role
+    if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
+      await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
+      return 'superadmin';
+    }
     await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
-    return snap.data().role || 'client';
+    return data.role || 'client';
   }
 }
 
@@ -547,10 +436,11 @@ document.getElementById("btn-login-email").onclick = async () => {
   const pass  = document.getElementById("login-pass").value;
   if (!email || !pass) { showError("Completá email y contraseña"); return; }
   try {
+    showOverlay();
     const cred = await signInWithEmailAndPassword(auth, email, pass);
     const role = await guardarUsuario(cred.user, "");
     redirectByRole(role);
-  } catch(e) { showError(errMsg(e.code)); }
+  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
 };
 
 // REGISTRO EMAIL
@@ -561,23 +451,24 @@ document.getElementById("btn-registrar").onclick = async () => {
   const pass   = document.getElementById("reg-pass").value;
   if (!nombre || !email || !pass) { showError("Completá todos los campos"); return; }
   try {
+    showOverlay();
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: nombre });
-    const role = await guardarUsuario(cred.user, nombre, true);
+    const role = await guardarUsuario(cred.user, nombre);
     redirectByRole(role);
-  } catch(e) { showError(errMsg(e.code)); }
+  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
 };
 
 // GOOGLE
 const loginConGoogle = async () => {
   hideError();
   try {
+    showOverlay();
     const cred = await signInWithPopup(auth, provider);
     const role = await guardarUsuario(cred.user, cred.user.displayName);
     redirectByRole(role);
-  } catch(e) { showError(errMsg(e.code)); }
+  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
 };
-
 document.getElementById("btn-login-google").onclick  = loginConGoogle;
 document.getElementById("btn-reg-google").onclick    = loginConGoogle;
 
@@ -589,7 +480,5 @@ document.getElementById("reg-pass").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("btn-registrar").click();
 });
 </script>
-
-<script type="module" src="js/auth-nav.js"></script>
 </body>
 </html>
