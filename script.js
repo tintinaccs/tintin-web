@@ -109,6 +109,23 @@ function getProductById(id) {
   return PRODUCTS.find(p => p.id === Number(id)) || null;
 }
 
+/* ──────────────────────────────────────
+   PRODUCT IMAGES (stored in localStorage)
+   Key: tt_product_images → { "1": "https://...", "2": "..." }
+────────────────────────────────────── */
+function getProductImages() {
+  try { return JSON.parse(localStorage.getItem('tt_product_images') || '{}'); } catch { return {}; }
+}
+function getProductImage(id) {
+  return getProductImages()[String(id)] || null;
+}
+function setProductImage(id, url) {
+  const imgs = getProductImages();
+  imgs[String(id)] = url;
+  localStorage.setItem('tt_product_images', JSON.stringify(imgs));
+}
+window.setProductImage = setProductImage;
+
 /**
  * Pick N unique random items from an array
  */
@@ -477,11 +494,15 @@ function renderProductsGrid(containerId, products) {
   container.innerHTML = products.map(p => {
     const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
     const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
+    const imgUrl = getProductImage(p.id);
+    const imgContent = imgUrl
+      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" />`
+      : `<div class="tt-product-img-placeholder"></div>`;
     return `
       <div class="tt-product-card" data-id="${p.id}">
         <div class="tt-product-img">
           ${badgeHTML}
-          <div class="tt-product-img-placeholder"></div>
+          ${imgContent}
         </div>
         <div class="tt-product-info">
           <div class="tt-product-cat">${p.cat}</div>
@@ -617,9 +638,22 @@ function initProductPage() {
     `).join('');
   }
 
-  // Gallery emoji
+  // Gallery — use real image if available, otherwise emoji
   const galleryMain = document.getElementById('gallery-main-emoji');
-  if (galleryMain) galleryMain.textContent = product.emoji || '⌚';
+  if (galleryMain) {
+    const storedImg = getProductImage(product.id);
+    if (storedImg) {
+      galleryMain.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = storedImg;
+      img.alt = product.name;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+      galleryMain.parentElement.style.position = 'relative';
+      galleryMain.parentElement.appendChild(img);
+    } else {
+      galleryMain.textContent = product.emoji || '⌚';
+    }
+  }
 
   // Add to cart button
   const btnAdd = document.getElementById('btn-product-add-cart');
