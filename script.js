@@ -289,6 +289,7 @@ function renderCart() {
       <div class="tt-cart-item-img">${imgHtml}</div>
       <div class="tt-cart-item-info">
         <div class="tt-cart-item-name">${item.name}</div>
+        ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${item.variant}</div>` : ''}
         <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
         <div class="tt-cart-qty">
           <button class="tt-cart-qty-btn" onclick="updateQty('${item.id}', -1)" aria-label="Restar">−</button>
@@ -666,117 +667,305 @@ function initLookCombinator() {
    PRODUCT DETAIL PAGE
 ────────────────────────────────────── */
 function initProductPage() {
+  if (!document.getElementById('product-detail')) return;
+  if (window._productPageRendered) return;
+
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-  const product = getProductById(id);
+  if (!id) { _showProductNotFound(); return; }
 
-  if (!product) {
-    const container = document.getElementById('product-detail');
-    if (container) {
-      container.innerHTML = `
-        <div style="text-align:center;padding:80px 0;">
-          <div style="font-size:3rem;margin-bottom:16px;">😢</div>
-          <h2 style="font-family:var(--font-heading);color:var(--pink-dark);margin-bottom:12px;">Producto no encontrado</h2>
-          <p style="color:var(--text-sec);margin-bottom:24px;">Este producto no existe o ya no está disponible.</p>
-          <a href="collections.html" class="tt-btn">Ver catálogo completo</a>
-        </div>
-      `;
-    }
-    return;
+  const immediate = getProductById(id);
+  if (immediate) {
+    window._productPageRendered = true;
+    _renderProductDetail(immediate);
+  } else {
+    // Products may still be loading from Firestore — poll for window.PRODUCTS
+    let attempts = 0;
+    const poll = setInterval(() => {
+      attempts++;
+      const p = getProductById(id);
+      if (p) { clearInterval(poll); window._productPageRendered = true; _renderProductDetail(p); return; }
+      if (attempts >= 20) { clearInterval(poll); _showProductNotFound(); }
+    }, 250);
   }
+}
 
-  // Update page title
+function _showProductNotFound() {
+  const loading = document.getElementById('product-loading');
+  const notFound = document.getElementById('product-not-found');
+  const grid = document.getElementById('product-grid');
+  if (loading) loading.style.display = 'none';
+  if (grid) grid.style.display = 'none';
+  if (notFound) notFound.style.display = '';
+}
+
+function _renderProductDetail(product) {
+  const loading = document.getElementById('product-loading');
+  const notFound = document.getElementById('product-not-found');
+  const grid = document.getElementById('product-grid');
+  if (loading) loading.style.display = 'none';
+  if (notFound) notFound.style.display = 'none';
+  if (grid) grid.style.display = '';
+
   document.title = `${product.name} | TINTIN Accesorios & Relojes`;
 
-  // Update breadcrumb
-  const breadcrumbProduct = document.getElementById('breadcrumb-product');
-  if (breadcrumbProduct) breadcrumbProduct.textContent = product.name;
+  const bc = document.getElementById('breadcrumb-product');
+  if (bc) bc.textContent = product.name;
 
-  // Update product info
+  // Basic info
   const nameEl = document.getElementById('product-name');
   const priceEl = document.getElementById('product-price');
   const catEl = document.getElementById('product-cat');
   const descEl = document.getElementById('product-desc');
   const badgeEl = document.getElementById('product-badge-label');
+  const statusEl = document.getElementById('product-status');
 
   if (nameEl) nameEl.textContent = product.name;
   if (priceEl) priceEl.textContent = formatPrice(product.price);
-  if (catEl) catEl.textContent = product.cat;
-  if (descEl) descEl.textContent = product.desc;
-
-  // Badge
-  if (badgeEl && product.badge) {
-    badgeEl.textContent = product.badge;
-    badgeEl.style.display = 'inline-block';
-  } else if (badgeEl) {
-    badgeEl.style.display = 'none';
+  if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
+  if (descEl) {
+    // desc may be HTML from Shopify
+    if (product.desc && /<[a-z][\s\S]*>/i.test(product.desc)) {
+      descEl.innerHTML = product.desc;
+    } else {
+      descEl.textContent = product.desc || '';
+    }
+  }
+  if (badgeEl) {
+    if (product.badge) { badgeEl.textContent = product.badge; badgeEl.style.display = 'inline-block'; }
+    else badgeEl.style.display = 'none';
   }
 
-  // Variants
-  const variantsContainer = document.getElementById('product-variants');
-  if (variantsContainer && product.variants) {
-    variantsContainer.innerHTML = Object.entries(product.variants).map(([key, values]) => `
-      <div class="tt-product-variants">
-        <div class="tt-variant-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
-        <div class="tt-variant-options">
-          ${values.map((v, i) => `
-            <button class="tt-variant-option${i === 0 ? ' active' : ''}"
-              onclick="selectVariant(this)">${v}</button>
-          `).join('')}
-        </div>
+  // Stock status
+  const stock = (product.stock !== null && product.stock !== undefined) ? Number(product.stock) : null;
+  if (statusEl) {
+    if (stock !== null && stock <= 0) {
+      statusEl.textContent = 'Sin stock';
+      statusEl.style.background = '#fce4ec';
+      statusEl.style.color = '#b84c72';
+      statusEl.style.setProperty('--dot-color', '#b84c72');
+    } else {
+      statusEl.textContent = '● Disponible';
+    }
+  }
+
+  // Gallery
+  const mainImgUrl = product.imageUrl || product.image || getProductImage(product.id) || '';
+  const extraImages = Array.isArray(product.imagesExtra) ? product.imagesExtra : [];
+  const allImages = mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages;
+
+  const galleryMain = document.getElementById('gallery-main');
+  if (galleryMain) {
+    if (mainImgUrl) {
+      galleryMain.innerHTML = `<img src="${mainImgUrl}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+    } else {
+      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+      galleryMain.style.display = 'flex';
+      galleryMain.style.alignItems = 'center';
+      galleryMain.style.justifyContent = 'center';
+    }
+  }
+
+  // Thumbs — only show if more than 1 image
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  if (thumbsEl && allImages.length > 1) {
+    thumbsEl.style.display = '';
+    thumbsEl.innerHTML = allImages.map((url, i) => `
+      <div class="tt-gallery-thumb${i === 0 ? ' active' : ''}" data-src="${url}" onclick="_galleryThumbClick(this)">
+        <img src="${url}" alt="Vista ${i + 1}" class="tt-gallery-thumb-img" style="object-fit:cover;width:100%;height:100%;">
       </div>
     `).join('');
   }
 
-  // Gallery — use Firebase imageUrl first, then localStorage fallback
-  const galleryMain = document.getElementById('gallery-main-emoji');
-  if (galleryMain) {
-    const storedImg = product.imageUrl || product.image || getProductImage(product.id);
-    if (storedImg) {
-      galleryMain.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = storedImg;
-      img.alt = product.name;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
-      galleryMain.parentElement.style.position = 'relative';
-      galleryMain.parentElement.appendChild(img);
+  // Variants
+  const variantsContainer = document.getElementById('product-variants');
+  if (variantsContainer) {
+    if (product.variants && Object.keys(product.variants).length) {
+      variantsContainer.innerHTML = Object.entries(product.variants).map(([key, values]) => `
+        <div class="tt-product-variants" data-variant-key="${key}">
+          <div class="tt-variant-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+          <div class="tt-variant-options" id="variants-${key}">
+            ${Array.isArray(values) ? values.map(v => `
+              <button class="tt-variant-option" onclick="selectVariant(this)">${v}</button>
+            `).join('') : ''}
+          </div>
+        </div>
+      `).join('');
     } else {
-      galleryMain.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
-      galleryMain.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);';
+      variantsContainer.innerHTML = '';
     }
   }
 
-  // Add to cart button
+  // Quantity selector
+  let qty = 1;
+  const maxQty = stock !== null ? stock : 99;
+  const qtyVal = document.getElementById('qty-val');
+  const qtyMinus = document.getElementById('btn-qty-minus');
+  const qtyPlus = document.getElementById('btn-qty-plus');
+  const qtyStock = document.getElementById('qty-stock');
+
+  if (qtyVal) qtyVal.textContent = qty;
+  if (qtyStock) {
+    if (stock !== null && stock <= 10 && stock > 0) qtyStock.textContent = `Solo ${stock} disponibles`;
+    else if (stock !== null && stock <= 0) qtyStock.textContent = 'Sin stock';
+    else qtyStock.textContent = '';
+  }
+
+  function updateQtyUI() {
+    if (qtyVal) qtyVal.textContent = qty;
+    if (qtyMinus) qtyMinus.disabled = qty <= 1;
+    if (qtyPlus) qtyPlus.disabled = qty >= maxQty;
+  }
+  updateQtyUI();
+
+  if (qtyMinus) qtyMinus.addEventListener('click', () => { if (qty > 1) { qty--; updateQtyUI(); } });
+  if (qtyPlus) qtyPlus.addEventListener('click', () => { if (qty < maxQty) { qty++; updateQtyUI(); } });
+
+  // Trust badges
+  const trustEl = document.getElementById('product-trust-badges');
+  if (trustEl) {
+    const cat = (product.category || product.cat || '').toLowerCase();
+    const isWatch = cat.includes('reloj') || cat.includes('watch');
+    const badges = [
+      { icon: '🚚', text: 'Entrega en todo Paraguay' },
+      { icon: '✅', text: 'Productos originales garantizados' },
+      { icon: '💬', text: 'Atención personalizada por WhatsApp' },
+      ...(isWatch ? [{ icon: '⌚', text: 'Ajuste de malla incluido' }] : [{ icon: '🎀', text: 'Empaque especial de regalo' }]),
+    ];
+    trustEl.innerHTML = badges.map(b => `
+      <div class="tt-trust-badge-item">
+        <span class="tt-trust-badge-icon">${b.icon}</span>
+        <span class="tt-trust-badge-text">${b.text}</span>
+      </div>
+    `).join('');
+  }
+
+  // WA button
+  const btnWA = document.getElementById('btn-product-wa');
+  if (btnWA) {
+    btnWA.onclick = () => directWAProduct(product);
+    btnWA.href = undefined;
+  }
+
+  // Helper: get selected variant string
+  function getSelectedVariant() {
+    if (!variantsContainer || !product.variants || !Object.keys(product.variants).length) return null;
+    const parts = [];
+    variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
+      const active = group.querySelector('.tt-variant-option.active');
+      if (active) parts.push(active.textContent.trim());
+    });
+    return parts.length ? parts.join(' / ') : null;
+  }
+
+  // Helper: validate variants selected
+  function validateVariants() {
+    if (!product.variants || !Object.keys(product.variants).length) return true;
+    let valid = true;
+    variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
+      const active = group.querySelector('.tt-variant-option.active');
+      if (!active) {
+        valid = false;
+        const existing = group.nextElementSibling;
+        if (existing && existing.classList.contains('tt-variant-required-msg')) return;
+        const msg = document.createElement('span');
+        msg.className = 'tt-variant-required-msg';
+        msg.textContent = 'Por favor seleccioná una opción';
+        group.classList.add('tt-variant-required');
+        group.parentNode.insertBefore(msg, group.nextSibling);
+        setTimeout(() => { group.classList.remove('tt-variant-required'); msg.remove(); }, 2500);
+      }
+    });
+    return valid;
+  }
+
+  // Add to cart
   const btnAdd = document.getElementById('btn-product-add-cart');
   if (btnAdd) {
+    if (stock !== null && stock <= 0) {
+      btnAdd.disabled = true;
+      btnAdd.textContent = 'Sin stock';
+      btnAdd.style.opacity = '0.5';
+    }
     btnAdd.addEventListener('click', () => {
-      addToCart(product.id);
+      if (!validateVariants()) return;
+      const variantStr = getSelectedVariant();
+      _addToCartWithQty(product, qty, variantStr);
+      _showProductToast(product.name);
     });
   }
 
-  // Buy now button (add to cart + go to checkout)
+  // Buy now
   const btnBuyNow = document.getElementById('btn-product-buy-now');
   if (btnBuyNow) {
+    if (stock !== null && stock <= 0) {
+      btnBuyNow.disabled = true;
+      btnBuyNow.style.opacity = '0.5';
+    }
     btnBuyNow.addEventListener('click', () => {
-      addToCart(product.id);
+      if (!validateVariants()) return;
+      const variantStr = getSelectedVariant();
+      _addToCartWithQty(product, qty, variantStr);
       window.location.href = 'checkout.html';
     });
   }
 
-  // WhatsApp direct button (secondary / support)
-  const btnWA = document.getElementById('btn-product-wa');
-  if (btnWA) {
-    btnWA.addEventListener('click', () => {
-      directWAProduct(product);
-    });
-  }
-
-  // Related products
-  const productPool = window.PRODUCTS || PRODUCTS;
-  const relatedProducts = productPool.filter(p => String(p.id) !== String(product.id));
-  const related = pickRandom(relatedProducts, 4);
+  // Related products — same category first
+  const pool = (window.PRODUCTS || PRODUCTS).filter(p => String(p.id) !== String(product.id) && p.active !== false);
+  const sameCat = pool.filter(p => (p.category || p.cat) === (product.category || product.cat));
+  const others  = pool.filter(p => (p.category || p.cat) !== (product.category || product.cat));
+  const related = [...pickRandom(sameCat, 4), ...pickRandom(others, 4 - Math.min(sameCat.length, 4))].slice(0, 4);
   renderProductsGrid('related-grid', related);
 }
+
+function _galleryThumbClick(thumb) {
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  const galleryMain = document.getElementById('gallery-main');
+  if (thumbsEl) thumbsEl.querySelectorAll('.tt-gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+  const src = thumb.dataset.src;
+  if (galleryMain && src) {
+    const img = galleryMain.querySelector('img');
+    if (img) img.src = src;
+    else galleryMain.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  }
+}
+window._galleryThumbClick = _galleryThumbClick;
+
+function _addToCartWithQty(product, qty, variantStr) {
+  const cart = getCart();
+  const sid = String(product.id);
+  const existing = cart.find(item => String(item.id) === sid && item.variant === (variantStr || undefined));
+  if (existing) {
+    existing.qty = Math.min(existing.qty + qty, 99);
+  } else {
+    const imgUrl = product.imageUrl || product.image || getProductImage(product.id) || '';
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      qty,
+      cat: product.category || product.cat || '',
+      imageUrl: imgUrl,
+      ...(variantStr ? { variant: variantStr } : {}),
+    });
+  }
+  saveCart(cart);
+  updateCartBadge();
+  renderCart();
+}
+window._addToCartWithQty = _addToCartWithQty;
+
+function _showProductToast(productName) {
+  const toast = document.getElementById('tt-added-toast');
+  const toastText = document.getElementById('tt-added-toast-text');
+  if (!toast) return;
+  if (toastText) toastText.textContent = `${productName} agregado al carrito`;
+  toast.style.display = '';
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+window._showProductToast = _showProductToast;
 
 function selectVariant(btn) {
   const group = btn.closest('.tt-variant-options');

@@ -100,93 +100,99 @@
 <!-- PRODUCT DETAIL -->
 <section class="tt-product-page" id="product-detail">
   <div class="container">
-    <div class="tt-product-detail-grid">
+
+    <!-- Loading state -->
+    <div id="product-loading" style="text-align:center;padding:80px 0;">
+      <div class="tt-prod-loading-spinner"></div>
+      <p style="color:var(--text-muted);margin-top:16px;font-size:0.9rem;">Cargando producto…</p>
+    </div>
+
+    <!-- Not found state (hidden by default) -->
+    <div id="product-not-found" style="display:none;text-align:center;padding:80px 0;">
+      <div style="font-size:3rem;margin-bottom:16px;">😢</div>
+      <h2 style="font-family:var(--font-heading);color:var(--pink-dark);margin-bottom:12px;">Producto no encontrado</h2>
+      <p style="color:var(--text-sec);margin-bottom:24px;">Este producto no existe o ya no está disponible.</p>
+      <a href="collections.html" class="tt-btn">Volver a la tienda</a>
+    </div>
+
+    <!-- Product grid (hidden until loaded) -->
+    <div class="tt-product-detail-grid" id="product-grid" style="display:none;">
 
       <!-- Gallery -->
       <div class="tt-product-gallery">
-        <div class="tt-gallery-main">
-          <span id="gallery-main-emoji" style="font-size:5rem;">⌚</span>
+        <div class="tt-gallery-main" id="gallery-main">
+          <!-- JS renders img here -->
         </div>
-        <div class="tt-gallery-thumbs">
-          <div class="tt-gallery-thumb active">
-            <div class="tt-gallery-thumb-img"></div>
-          </div>
-          <div class="tt-gallery-thumb">
-            <div class="tt-gallery-thumb-img"></div>
-          </div>
-          <div class="tt-gallery-thumb">
-            <div class="tt-gallery-thumb-img"></div>
-          </div>
+        <div class="tt-gallery-thumbs" id="gallery-thumbs" style="display:none;">
+          <!-- JS renders thumbs here -->
         </div>
       </div>
 
       <!-- Product Info Panel -->
       <div class="tt-product-info-panel">
-        <span class="tt-product-status">Estado: Disponible</span>
 
-        <div class="tt-product-detail-cat" id="product-cat">RELOJES</div>
-        <h1 class="tt-product-detail-name" id="product-name">RELOJ ALISSIA</h1>
+        <!-- Status badge -->
+        <span class="tt-product-status" id="product-status">● Disponible</span>
 
-        <!-- Badge -->
-        <span id="product-badge-label" class="tt-product-badge" style="display:inline-block;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;">Destacado</span>
+        <div class="tt-product-detail-cat" id="product-cat"></div>
+        <h1 class="tt-product-detail-name" id="product-name"></h1>
+        <span id="product-badge-label" class="tt-product-badge" style="display:none;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;"></span>
 
-        <div class="tt-product-detail-price" id="product-price">Gs. 210.000</div>
+        <div class="tt-product-detail-price" id="product-price"></div>
 
-        <p class="tt-product-detail-desc" id="product-desc">
-          Reloj de la marca SKMEI de lujo con elegante esfera cuadrada. Correa de acero inoxidable plateado con detalles dorados.
-        </p>
+        <p class="tt-product-detail-desc" id="product-desc"></p>
 
-        <!-- Variants -->
-        <div id="product-variants">
-          <!-- Rendered by JS -->
+        <!-- Variants (JS fills) -->
+        <div id="product-variants"></div>
+
+        <!-- Quantity selector -->
+        <div class="tt-qty-wrap" id="qty-wrap">
+          <span class="tt-qty-label">Cantidad</span>
+          <div class="tt-qty-selector">
+            <button class="tt-qty-btn" id="btn-qty-minus" aria-label="Restar">−</button>
+            <span class="tt-qty-val" id="qty-val">1</span>
+            <button class="tt-qty-btn" id="btn-qty-plus" aria-label="Sumar">+</button>
+          </div>
+          <span class="tt-qty-stock" id="qty-stock"></span>
         </div>
 
         <!-- Actions -->
         <div class="tt-product-actions-panel">
-          <button class="tt-btn tt-btn-lg" id="btn-product-add-cart" style="width:100%;">
+          <button class="tt-btn tt-btn-lg tt-btn-primary-full" id="btn-product-add-cart">
             Agregar al carrito
           </button>
-          <button class="tt-btn tt-btn-lg" id="btn-product-buy-now" style="width:100%;margin-top:10px;background:#fff;color:var(--pink-dark,#c2185b);border:2px solid var(--pink-dark,#c2185b);">
+          <button class="tt-btn tt-btn-lg tt-btn-outline-full" id="btn-product-buy-now">
             Comprar ahora →
           </button>
-          <div style="text-align:center;margin-top:12px;">
-            <a id="btn-product-wa" style="font-size:0.78rem;color:#888;text-decoration:underline;cursor:pointer;">
-              Consultar por WhatsApp
+          <div style="text-align:center;margin-top:4px;">
+            <a id="btn-product-wa" style="font-size:0.75rem;color:var(--text-muted);text-decoration:underline;cursor:pointer;">
+              ¿Tenés dudas? Consultanos por WhatsApp
             </a>
           </div>
         </div>
 
-        <!-- Trust Badges -->
-        <div class="tt-product-trust-badges">
-          <div class="tt-trust-badge-item">
-            <span class="tt-trust-badge-icon">🚀</span>
-            <span class="tt-trust-badge-text">Envíos a todo el país</span>
-          </div>
-          <div class="tt-trust-badge-item">
-            <span class="tt-trust-badge-icon">🏙️</span>
-            <span class="tt-trust-badge-text">Delivery zona central</span>
-          </div>
-          <div class="tt-trust-badge-item">
-            <span class="tt-trust-badge-icon">📦</span>
-            <span class="tt-trust-badge-text">Retiro disponible</span>
-          </div>
-          <div class="tt-trust-badge-item">
-            <span class="tt-trust-badge-icon">💕</span>
-            <span class="tt-trust-badge-text">Preparado con amor</span>
-          </div>
-        </div>
+        <!-- Trust badges (JS fills based on category) -->
+        <div class="tt-product-trust-badges" id="product-trust-badges"></div>
 
         <!-- Share -->
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
-          <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Compartir:</span>
-          <a href="https://wa.me/?text=¡Mirá%20este%20producto%20en%20Tintin%20Accesorios!" target="_blank" rel="noopener"
-             style="margin-left:12px;font-size:0.75rem;color:var(--pink-dark);text-decoration:underline;">WhatsApp</a>
-        </div>
-      </div>
+        <div class="tt-product-share" id="product-share"></div>
 
+      </div>
     </div>
   </div>
 </section>
+
+<!-- Added-to-cart toast -->
+<div id="tt-added-toast" class="tt-added-toast" style="display:none;">
+  <div class="tt-added-toast-msg">
+    <span class="tt-added-toast-icon">✓</span>
+    <span id="tt-added-toast-text">Producto agregado al carrito</span>
+  </div>
+  <div class="tt-added-toast-actions">
+    <button class="tt-added-toast-btn tt-added-toast-continue" onclick="document.getElementById('tt-added-toast').style.display='none'">Seguir comprando</button>
+    <a href="checkout.html" class="tt-added-toast-btn tt-added-toast-checkout">Finalizar compra →</a>
+  </div>
+</div>
 
 <!-- RELATED PRODUCTS -->
 <section class="tt-related-section">
