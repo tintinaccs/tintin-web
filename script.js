@@ -123,10 +123,23 @@ function getImagesCache() {
   try { return JSON.parse(localStorage.getItem('tt_images') || '{}'); } catch { return {}; }
 }
 function getProductImage(id) {
-  // Check new tt_images system first (prod_{id} slot)
+  // 1. Firebase product imageUrl (highest priority)
+  const product = getProductById(id);
+  if (product) {
+    const firebaseImg =
+      product.imageUrl  ||
+      product.image     ||
+      product.img       ||
+      product.photo     ||
+      product.imageSrc  ||
+      product.image_src ||
+      product['Image Src'] ||
+      product['Variant Image'];
+    if (firebaseImg && String(firebaseImg).trim()) return firebaseImg;
+  }
+  // 2. Legacy localStorage caches (fallback only)
   const imgCache = getImagesCache();
   if (imgCache[`prod_${id}`]) return imgCache[`prod_${id}`];
-  // Fall back to legacy tt_product_images
   return getProductImages()[String(id)] || null;
 }
 function setProductImage(id, url) {
@@ -181,16 +194,24 @@ function showAddedToCart(productName) {
 
 function addToCart(productId) {
   const cart = getCart();
-  const id = Number(productId);
-  const existing = cart.find(item => item.id === id);
+  const sid = String(productId);
+  const existing = cart.find(item => String(item.id) === sid);
   let productName = '';
   if (existing) {
     existing.qty += 1;
     productName = existing.name;
   } else {
-    const product = getProductById(id);
+    const product = getProductById(productId);
     if (!product) return;
-    cart.push({ id: product.id, name: product.name, price: product.price, qty: 1, cat: product.cat });
+    const imgUrl = product.imageUrl || product.image || getProductImage(product.id);
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      qty: 1,
+      cat: product.cat || product.category || '',
+      imageUrl: imgUrl || ''
+    });
     productName = product.name;
   }
   saveCart(cart);
@@ -201,17 +222,17 @@ function addToCart(productId) {
 }
 
 function removeFromCart(productId) {
-  const id = Number(productId);
-  let cart = getCart().filter(item => item.id !== id);
+  const sid = String(productId);
+  let cart = getCart().filter(item => String(item.id) !== sid);
   saveCart(cart);
   updateCartBadge();
   renderCart();
 }
 
 function updateQty(productId, delta) {
-  const id = Number(productId);
+  const sid = String(productId);
   const cart = getCart();
-  const item = cart.find(i => i.id === id);
+  const item = cart.find(i => String(i.id) === sid);
   if (!item) return;
   item.qty = Math.max(1, item.qty + delta);
   saveCart(cart);
@@ -259,7 +280,7 @@ function renderCart() {
   }
 
   body.innerHTML = cart.map(item => {
-    const imgUrl = getProductImage(item.id);
+    const imgUrl = item.imageUrl || getProductImage(item.id);
     const imgHtml = imgUrl
       ? `<img src="${imgUrl}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
@@ -270,12 +291,12 @@ function renderCart() {
         <div class="tt-cart-item-name">${item.name}</div>
         <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
         <div class="tt-cart-qty">
-          <button class="tt-cart-qty-btn" onclick="updateQty(${item.id}, -1)" aria-label="Restar">−</button>
+          <button class="tt-cart-qty-btn" onclick="updateQty('${item.id}', -1)" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button class="tt-cart-qty-btn" onclick="updateQty(${item.id}, 1)" aria-label="Sumar">+</button>
+          <button class="tt-cart-qty-btn" onclick="updateQty('${item.id}', 1)" aria-label="Sumar">+</button>
         </div>
       </div>
-      <button class="tt-cart-item-remove" onclick="removeFromCart(${item.id})" aria-label="Eliminar">✕</button>
+      <button class="tt-cart-item-remove" onclick="removeFromCart('${item.id}')" aria-label="Eliminar">✕</button>
     </div>
   `;
   }).join('');
@@ -541,7 +562,7 @@ function renderProductsGrid(containerId, products) {
   container.innerHTML = products.map(p => {
     const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
     const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
-    const imgUrl = getProductImage(p.id);
+    const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
     const imgContent = imgUrl
       ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\"tt-prod-placeholder tt-prod-ph-svg\\"></div>')">`
       : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
@@ -557,7 +578,7 @@ function renderProductsGrid(containerId, products) {
           <div class="tt-product-price">${formatPrice(p.price)}</div>
           <div class="tt-product-actions">
             <a href="product.html?id=${p.id}" class="tt-btn tt-btn-sm">Ver producto</a>
-            <button class="tt-btn-icon tt-add-to-cart" data-id="${p.id}" aria-label="Agregar al carrito">+</button>
+            <button class="tt-btn-icon tt-add-to-cart" data-id="${p.id}" data-id-str="${p.id}" aria-label="Agregar al carrito">+</button>
           </div>
         </div>
       </div>
@@ -577,7 +598,7 @@ function renderLookCombo() {
   currentCombo = pickRandom(PRODUCTS, 3);
 
   grid.innerHTML = currentCombo.map(p => {
-    const imgUrl = getProductImage(p.id);
+    const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
     const imgContent = imgUrl
       ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
       : '';
@@ -690,10 +711,10 @@ function initProductPage() {
     `).join('');
   }
 
-  // Gallery — use real image if available, otherwise emoji
+  // Gallery — use Firebase imageUrl first, then localStorage fallback
   const galleryMain = document.getElementById('gallery-main-emoji');
   if (galleryMain) {
-    const storedImg = getProductImage(product.id);
+    const storedImg = product.imageUrl || product.image || getProductImage(product.id);
     if (storedImg) {
       galleryMain.innerHTML = '';
       const img = document.createElement('img');

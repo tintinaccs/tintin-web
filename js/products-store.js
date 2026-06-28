@@ -9,7 +9,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const CACHE_KEY = 'tt_products_cache';
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 2 * 60 * 1000; // 2 minutes — short so image changes reflect quickly
 
 function fromCache() {
   try {
@@ -25,18 +25,37 @@ function toCache(data) {
   try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
 }
 
+function bustOldCache() {
+  // Force fresh Firestore load on next visit if we detect stale data
+  try { sessionStorage.removeItem(CACHE_KEY); } catch {}
+}
+
+function normalizeImageUrl(d) {
+  return (
+    d.imageUrl      ||
+    d.image         ||
+    d.img           ||
+    d.photo         ||
+    d.imageSrc      ||
+    d.image_src     ||
+    d['Image Src']  ||
+    d['Variant Image'] ||
+    ''
+  );
+}
+
 /** Map Firestore doc to the shape script.js expects */
 function mapProduct(id, d) {
   return {
     id,
-    name:     d.name     || '',
-    cat:      d.category || '',
-    category: d.category || '',
-    price:    d.price    || 0,
-    badge:    d.badge    || (d.oferta ? 'Oferta' : null),
-    desc:     d.description || d.desc || '',
-    imageUrl: d.imageUrl || d.image || '',
-    stock:    d.stock ?? null,
+    name:     d.name  || d.title || d.Title || '',
+    cat:      d.category || d.cat || d.Type || d['Product Category'] || '',
+    category: d.category || d.cat || d.Type || d['Product Category'] || '',
+    price:    Number(d.price || d.Price || d['Variant Price'] || 0),
+    badge:    d.badge || (d.oferta ? 'Oferta' : null),
+    desc:     d.description || d.desc || d['Body (HTML)'] || '',
+    imageUrl: normalizeImageUrl(d),
+    stock:    d.stock ?? d['Variant Inventory Qty'] ?? null,
     active:   d.active !== false,
     variants: d.variants || null,
   };
@@ -51,6 +70,8 @@ export async function loadProducts() {
     );
     const products = snap.docs.map(d => mapProduct(d.id, d.data()));
     toCache(products);
+    // Invalidate legacy image caches so Firestore imageUrl takes priority
+    try { sessionStorage.removeItem('tt_products_cache_old'); } catch {}
     return products;
   } catch (e) {
     console.warn('[products-store] Firestore load failed:', e);
