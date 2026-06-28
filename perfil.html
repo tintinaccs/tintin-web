@@ -480,19 +480,45 @@
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
-  signOut, onAuthStateChanged
+  signOut, onAuthStateChanged, deleteUser as fbDeleteUser
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  doc, getDoc, updateDoc, setDoc, serverTimestamp
+  doc, getDoc, getDocs, setDoc, serverTimestamp,
+  collection, query, where, orderBy, limit, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js";
+import { syncCartToFirestore } from "./js/cart-sync.js";
+import { initOnboarding } from "./js/onboarding.js";
 
-const ADMIN_EMAIL = "tintinaccs@gmail.com";
+const ROLE_COLORS = {
+  superadmin: '#8b2642',
+  admin:      '#b84c72',
+  agent:      '#7b68ee',
+  viewer:     '#4a90d9',
+  client:     '#888'
+};
 
 function toast(msg) {
   const t = document.getElementById("perfil-toast");
   t.textContent = msg;
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function formatPrice(n) {
+  return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function statusBadge(status) {
+  const colors = {
+    pendiente:  '#f59e0b',
+    confirmado: '#3b82f6',
+    enviado:    '#8b5cf6',
+    entregado:  '#10b981',
+    cancelado:  '#ef4444'
+  };
+  const c = colors[status] || '#888';
+  return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${status}</span>`;
 }
 
 onAuthStateChanged(auth, async user => {
@@ -509,21 +535,60 @@ onAuthStateChanged(auth, async user => {
   document.getElementById("perfil-nombre-display").textContent = user.displayName || user.email;
   document.getElementById("perfil-email-display").textContent  = user.email;
 
-  if (user.email === ADMIN_EMAIL) {
+  // Sync cart on login
+  await syncCartToFirestore(user.uid);
+
+  // Get role
+  const role = await getUserRole(user.uid);
+
+  // Show role badge
+  const roleCard = document.getElementById('perfil-role-card');
+  roleCard.style.display = 'block';
+  const badge = document.getElementById('perfil-role-badge');
+  badge.textContent = ROLE_LABELS[role] || 'Cliente';
+  badge.style.background = (ROLE_COLORS[role] || '#888') + '22';
+  badge.style.color = ROLE_COLORS[role] || '#888';
+  badge.style.border = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
+
+  // Admin panel link
+  if (role !== 'client') {
+    document.getElementById('link-admin-panel').style.display = 'inline-flex';
+  }
+
+  // Legacy admin link
+  if (user.email === SUPER_ADMIN || role === 'admin' || role === 'superadmin') {
     document.getElementById("link-admin-perfil").style.display = "inline-flex";
   }
 
-  // Cargar datos de Firestore
+  // Load Firestore user data
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
   if (snap.exists()) {
     const d = snap.data();
-    document.getElementById("perfil-nombre").value = d.name  || user.displayName || "";
-    document.getElementById("perfil-tel").value    = d.phone || "";
+    document.getElementById("perfil-nombre").value = d.name    || user.displayName || "";
+    document.getElementById("perfil-tel").value    = d.phone   || "";
     document.getElementById("perfil-dir").value    = d.address || "";
+
+    // Show orders card
+    const ordersCard = document.getElementById('perfil-orders-card');
+    ordersCard.style.display = 'block';
+
+    // Purchase stats
+    document.getElementById('perfil-purchase-count').textContent = d.purchaseCount || 0;
+    document.getElementById('perfil-total-spent').textContent = formatPrice(d.totalSpent || 0);
+
+    // Show delete account button for clients
+    if (role === 'client') {
+      document.getElementById('btn-delete-account').style.display = 'inline-block';
+    }
+  } else {
+    document.getElementById('perfil-orders-card').style.display = 'block';
   }
 
-  // Guardar
+  // Load user's orders
+  await loadUserOrders(user);
+
+  // Guardar perfil
   document.getElementById("btn-guardar-perfil").onclick = async () => {
     try {
       await setDoc(ref, {
@@ -540,7 +605,81 @@ onAuthStateChanged(auth, async user => {
   // Logout
   document.getElementById("btn-logout").onclick = () =>
     signOut(auth).then(() => window.location.href = "index.html");
+
+  // Delete account
+  const delBtn = document.getElementById('btn-delete-account');
+  if (delBtn) {
+    delBtn.onclick = async () => {
+      if (!confirm('¿Eliminar tu cuenta? Todos tus datos serán borrados permanentemente. Esta acción no se puede deshacer.')) return;
+      try {
+        await deleteDoc(doc(db, 'users', user.uid));
+        await fbDeleteUser(user);
+        window.location.href = 'index.html';
+      } catch(e) {
+        if (e.code === 'auth/requires-recent-login') {
+          toast('⚠️ Necesitás volver a iniciar sesión para eliminar tu cuenta.');
+        } else {
+          toast('❌ Error al eliminar cuenta');
+        }
+      }
+    };
+  }
+
+  // Init onboarding
+  await initOnboarding(user, role);
 });
+
+async function loadUserOrders(user) {
+  const listEl = document.getElementById('perfil-orders-list');
+  try {
+    let orders = [];
+    // Try with orderBy first, fallback if index missing
+    try {
+      const q = query(
+        collection(db, 'orders'),
+        where('userId', '==', user.uid),
+        orderBy('createdAt', 'desc'),
+        limit(5)
+      );
+      const snap = await getDocs(q);
+      orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch(e) {
+      const q2 = query(collection(db, 'orders'), where('userId', '==', user.uid));
+      const snap2 = await getDocs(q2);
+      orders = snap2.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a,b) => {
+          const da = a.createdAt?.toDate?.() || new Date(0);
+          const db_ = b.createdAt?.toDate?.() || new Date(0);
+          return db_ - da;
+        })
+        .slice(0, 5);
+    }
+
+    if (!orders.length) {
+      listEl.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:12px;font-size:13px">Todavía no tenés pedidos 🛒</div>';
+      return;
+    }
+
+    listEl.innerHTML = orders.map(o => {
+      const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
+      const dateStr = d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
+      const itemsText = (o.items || []).slice(0,2).map(i => `${i.qty}x ${i.name}`).join(', ') +
+        ((o.items?.length || 0) > 2 ? ` +${o.items.length-2} más` : '');
+      return `
+        <div style="padding:12px 0;border-bottom:1px solid #fce4ec">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:11px;color:var(--text-muted);font-weight:700">#${o.id.slice(-6).toUpperCase()} · ${dateStr}</span>
+            ${statusBadge(o.status || 'pendiente')}
+          </div>
+          <div style="font-size:13px;color:var(--text)">${itemsText || '—'}</div>
+          <div style="font-size:14px;font-weight:800;color:var(--acc);margin-top:2px">Total: ${formatPrice(o.total || 0)}</div>
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    listEl.innerHTML = '<div style="color:#ef4444;font-size:12px;padding:12px">Error al cargar pedidos</div>';
+  }
+}
 </script>
 
 </body>

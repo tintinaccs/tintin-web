@@ -461,11 +461,23 @@ import {
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
 
-// Si ya está logueado, redirigir
-onAuthStateChanged(auth, user => {
-  if (user) window.location.href = "perfil.html";
+// Si ya está logueado, redirigir según rol
+onAuthStateChanged(auth, async user => {
+  if (!user) return;
+  const role = await getUserRole(user.uid);
+  redirectByRole(role);
 });
+
+function redirectByRole(role) {
+  const from = new URLSearchParams(window.location.search).get('from');
+  if (role === 'client' || !role) {
+    window.location.href = from || "perfil.html";
+  } else {
+    window.location.href = "admin-panel.html";
+  }
+}
 
 // TABS
 document.querySelectorAll(".login-tab").forEach(tab => {
@@ -489,27 +501,42 @@ function hideError() {
 
 function errMsg(code) {
   const msgs = {
-    "auth/user-not-found":     "No existe una cuenta con ese email",
-    "auth/wrong-password":     "Contraseña incorrecta",
+    "auth/user-not-found":       "No existe una cuenta con ese email",
+    "auth/wrong-password":       "Contraseña incorrecta",
     "auth/email-already-in-use": "Ya existe una cuenta con ese email",
-    "auth/weak-password":      "La contraseña debe tener al menos 6 caracteres",
-    "auth/invalid-email":      "Email inválido",
-    "auth/too-many-requests":  "Demasiados intentos. Intentá más tarde.",
+    "auth/weak-password":        "La contraseña debe tener al menos 6 caracteres",
+    "auth/invalid-email":        "Email inválido",
+    "auth/too-many-requests":    "Demasiados intentos. Intentá más tarde.",
     "auth/popup-closed-by-user": "Cerraste el popup de Google",
+    "auth/invalid-credential":   "Email o contraseña incorrectos",
   };
   return msgs[code] || "Error: " + code;
 }
 
-async function guardarUsuario(user, nombre) {
-  const ref = doc(db, "users", user.uid);
+async function guardarUsuario(user, nombre, isNew = false) {
+  const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
+
   if (!snap.exists()) {
+    // Determine role: superadmin email gets superadmin, everyone else gets client
+    const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     await setDoc(ref, {
-      name:      nombre || user.displayName || "",
-      email:     user.email,
-      photoURL:  user.photoURL || "",
-      createdAt: serverTimestamp(),
+      name:                nombre || user.displayName || "",
+      email:               user.email,
+      photoURL:            user.photoURL || "",
+      role,
+      onboardingCompleted: false,
+      blocked:             false,
+      purchaseCount:       0,
+      totalSpent:          0,
+      createdAt:           serverTimestamp(),
+      lastLogin:           serverTimestamp(),
     });
+    return role;
+  } else {
+    // Update last login
+    await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
+    return snap.data().role || 'client';
   }
 }
 
@@ -521,8 +548,8 @@ document.getElementById("btn-login-email").onclick = async () => {
   if (!email || !pass) { showError("Completá email y contraseña"); return; }
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pass);
-    await guardarUsuario(cred.user, "");
-    window.location.href = "perfil.html";
+    const role = await guardarUsuario(cred.user, "");
+    redirectByRole(role);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
@@ -536,8 +563,8 @@ document.getElementById("btn-registrar").onclick = async () => {
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: nombre });
-    await guardarUsuario(cred.user, nombre);
-    window.location.href = "perfil.html";
+    const role = await guardarUsuario(cred.user, nombre, true);
+    redirectByRole(role);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
@@ -546,8 +573,8 @@ const loginConGoogle = async () => {
   hideError();
   try {
     const cred = await signInWithPopup(auth, provider);
-    await guardarUsuario(cred.user, cred.user.displayName);
-    window.location.href = "perfil.html";
+    const role = await guardarUsuario(cred.user, cred.user.displayName);
+    redirectByRole(role);
   } catch(e) { showError(errMsg(e.code)); }
 };
 
