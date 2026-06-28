@@ -867,10 +867,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-look-card-img {
   height: 220px;
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
+  overflow: hidden;
+  position: relative;
+}
+.tt-look-card-img-ph::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'%3E%3Cpath d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'%3E%3C/path%3E%3Ccircle cx='12' cy='13' r='4'%3E%3C/circle%3E%3C/svg%3E") center/48px no-repeat;
 }
 
 .tt-look-card-body { padding: 16px; }
