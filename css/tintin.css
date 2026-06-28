@@ -73,6 +73,8 @@
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -754,12 +756,6 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 /* =============================================
    HERO SPLIT — estilo Shopify
    ============================================= */
-
-/* Header transparente sobre el gradiente en la home */
-.tt-index .tt-header:not(.tt-hdr-hidden) {
-  background: rgba(255, 210, 232, 0.55);
-  border-bottom: 1px solid rgba(220,100,140,0.15);
-}
 
 .tt-hero-split {
   display: grid;
@@ -1839,3 +1835,6 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   .tt-look-card    { width: 140px; }
   .tt-cta-title    { font-size: 22px; }
 }
+
+/* Accessibility: touch target size */
+.tt-cart-qty-btn { min-width: 44px; min-height: 44px; }

@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ingresar — Tintin Accesorios</title>
+  <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
+  <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
+  <meta property="og:title" content="Ingresar | Tintin Accesorios" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/login.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin.css" />
   <style>
@@ -12,9 +17,11 @@
       min-height: 100vh;
       background: #fce4ec;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
+      padding-top: 88px;
     }
 
     .login-card {
@@ -185,6 +192,91 @@
 </head>
 <body>
 
+<!-- HEADER -->
+<header class="tt-header tt-hdr-show tt-hdr-seen" id="tt-header">
+  <div class="tt-header-inner">
+    <a href="index.html" class="tt-logo">
+      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
+    </a>
+    <ul class="tt-nav">
+      <li class="tt-nav-item"><a href="index.html" class="tt-nav-link">Inicio</a></li>
+      <li class="tt-nav-item tt-nav-item--has-drop" id="nav-tienda">
+        <button class="tt-nav-tienda-btn tt-nav-link" id="nav-tienda-btn" aria-expanded="false" aria-haspopup="true">
+          Tienda
+          <svg class="tt-nav-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tt-dropdown" id="nav-tienda-drop" role="menu">
+          <div class="tt-dropdown-grid">
+            <a href="catalogo.html?cat=relojes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div><span>Relojes</span></a>
+            <a href="catalogo.html?cat=aros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div><span>Aros</span></a>
+            <a href="catalogo.html?cat=bolsos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div><span>Bags</span></a>
+            <a href="catalogo.html?cat=collares" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div><span>Collares</span></a>
+            <a href="catalogo.html?cat=pulseras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Pulseras" loading="lazy" /></div><span>Pulseras</span></a>
+            <a href="catalogo.html?cat=anillos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Anillos" loading="lazy" /></div><span>Anillos</span></a>
+            <a href="catalogo.html?cat=earcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div><span>Earcuff</span></a>
+            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Brazaletes" loading="lazy" /></div><span>Brazaletes</span></a>
+            <a href="catalogo.html?cat=gafas" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Gafas" loading="lazy" /></div><span>Gafas</span></a>
+            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Tobilleras" loading="lazy" /></div><span>Tobilleras</span></a>
+            <a href="catalogo.html?cat=armcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Armcuff" loading="lazy" /></div><span>Armcuff</span></a>
+            <a href="catalogo.html?cat=joyeros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Joyeros" loading="lazy" /></div><span>Joyeros</span></a>
+          </div>
+          <div class="tt-dropdown-footer"><a href="catalogo.html">Ver todas las colecciones →</a></div>
+        </div>
+      </li>
+      <li class="tt-nav-item"><a href="nosotros.html" class="tt-nav-link">Nosotros</a></li>
+      <li class="tt-nav-item"><a href="index.html#contacto" class="tt-nav-link">Contacto</a></li>
+      <li class="tt-nav-item"><a href="admin.html" id="link-admin" class="tt-nav-link" style="display:none">Admin</a></li>
+      <li class="tt-nav-item"><a href="login.html" id="btn-login" class="tt-nav-link tt-nav-link--login">Ingresar</a></li>
+    </ul>
+    <div class="tt-header-actions">
+      <button class="tt-icon-btn" id="btn-buscar" title="Buscar" aria-label="Buscar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <span class="tt-cart-wrap">
+        <a href="index.html#carrito" class="tt-icon-btn" title="Carrito" aria-label="Carrito" id="btn-carrito">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </a>
+        <span class="tt-cart-badge" id="tt-cart-badge"></span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- Search panel -->
+<div class="tt-srch-backdrop" id="srch-backdrop"></div>
+<div class="tt-srch-panel" id="srch-panel" role="dialog" aria-label="Buscador" aria-modal="true">
+  <div class="tt-srch-inner">
+    <div class="tt-srch-top">
+      <div class="tt-srch-input-wrap">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" class="tt-srch-input" placeholder="Relojes, aros, collares…" autocomplete="off" spellcheck="false" />
+        <button class="tt-srch-close" id="srch-close" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="tt-srch-tags">
+        <span class="tt-srch-tag-label">Populares:</span>
+        <a href="catalogo.html?cat=relojes" class="tt-srch-tag">Relojes</a>
+        <a href="catalogo.html?cat=aros" class="tt-srch-tag">Aros</a>
+        <a href="catalogo.html?cat=collares" class="tt-srch-tag">Collares</a>
+        <a href="catalogo.html?cat=bolsos" class="tt-srch-tag">Bags</a>
+      </div>
+    </div>
+    <div class="tt-srch-body" id="srch-body">
+      <ul class="tt-srch-results" id="search-results"></ul>
+      <div class="tt-srch-preview" id="srch-preview">
+        <div class="tt-srch-prev-placeholder">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <p>Empezá a escribir para ver resultados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="login-card">
   <div class="login-logo">Tintin ✨</div>
   <div class="login-sub">Tu cuenta</div>
@@ -242,6 +334,120 @@
     <a href="index.html">← Volver a la tienda</a>
   </div>
 </div>
+
+<footer class="tt-footer" id="contacto">
+  <div class="tt-footer-logo">
+    <img src="images/logo.png" alt="Tintin Accesorios" class="tt-footer-logo-img" />
+  </div>
+  <nav class="tt-footer-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Tienda</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="index.html#contacto">Contacto</a>
+  </nav>
+  <p class="tt-footer-copy">
+    &copy; 2024–2026 TINTIN ACCESORIOS &mdash; TODOS LOS DERECHOS RESERVADOS<br>
+    San Lorenzo, Paraguay
+  </p>
+  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+     target="_blank" class="tt-footer-wa">Contactanos por WhatsApp</a>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
+   class="tt-wa-float" target="_blank" title="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
+<!-- TAB BAR MOBILE -->
+<nav class="tt-tabbar" id="tt-tabbar">
+  <a href="index.html" class="tt-tab" aria-label="Inicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </a>
+  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  </button>
+  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  </a>
+  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8" class="tt-tab" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+  <a href="perfil.html" class="tt-tab" aria-label="Perfil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </a>
+</nav>
+
+<script>
+(function(){
+  var header = document.getElementById('tt-header');
+  if (!header) return;
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if (y > lastY && y > 90) header.classList.add('tt-hdr-hidden');
+    else header.classList.remove('tt-hdr-hidden');
+    lastY = y;
+  }, { passive: true });
+  var navTienda = document.getElementById('nav-tienda');
+  var tiendaBtn = document.getElementById('nav-tienda-btn');
+  if (tiendaBtn) {
+    tiendaBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = navTienda.classList.contains('tt-drop-open');
+      navTienda.classList.toggle('tt-drop-open', !open);
+      tiendaBtn.setAttribute('aria-expanded', String(!open));
+    });
+  }
+  document.addEventListener('click', function(e){
+    if (navTienda && !navTienda.contains(e.target)) {
+      navTienda.classList.remove('tt-drop-open');
+      if (tiendaBtn) tiendaBtn.setAttribute('aria-expanded','false');
+    }
+  });
+  var srchBackdrop = document.getElementById('srch-backdrop');
+  var srchPanel = document.getElementById('srch-panel');
+  var srchClose = document.getElementById('srch-close');
+  var searchInput = document.getElementById('search-input');
+  function openSearch() {
+    if (!srchPanel) return;
+    srchPanel.classList.add('tt-srch-open');
+    if (srchBackdrop) srchBackdrop.classList.add('tt-srch-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ if (searchInput) searchInput.focus(); }, 80);
+    var b = document.getElementById('btn-buscar'); if (b) b.classList.add('tt-srch-active');
+  }
+  function closeSearch() {
+    if (!srchPanel) return;
+    srchPanel.classList.remove('tt-srch-open');
+    if (srchBackdrop) srchBackdrop.classList.remove('tt-srch-open');
+    document.body.style.overflow = '';
+    if (searchInput) searchInput.value = '';
+    var b = document.getElementById('btn-buscar'); if (b) b.classList.remove('tt-srch-active');
+  }
+  var btnBuscar = document.getElementById('btn-buscar');
+  var tabBuscar = document.getElementById('tab-buscar');
+  if (btnBuscar) btnBuscar.addEventListener('click', openSearch);
+  if (tabBuscar) tabBuscar.addEventListener('click', openSearch);
+  if (srchClose) srchClose.addEventListener('click', closeSearch);
+  if (srchBackdrop) srchBackdrop.addEventListener('click', closeSearch);
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeSearch(); });
+  function updateCartBadge(){
+    var badge = document.getElementById('tt-cart-badge'); if (!badge) return;
+    try {
+      var cart = JSON.parse(localStorage.getItem('tt_carrito')||'[]');
+      var total = cart.reduce(function(s,i){ return s+(i.qty||1); },0);
+      badge.textContent = total>0?(total>99?'99+':total):'';
+      badge.classList.toggle('tt-cart-badge--show', total>0);
+    } catch(e){}
+  }
+  updateCartBadge();
+  window.addEventListener('storage', updateCartBadge);
+  window._ttOpenSearch = openSearch;
+  window._ttCloseSearch = closeSearch;
+  window._ttUpdateCart = updateCartBadge;
+})();
+</script>
 
 <script type="module">
 import { auth, db, provider } from "./js/firebase.js";
