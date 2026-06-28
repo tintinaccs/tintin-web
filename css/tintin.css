@@ -61,6 +61,7 @@
   --acc-dark:   #d4648a;
   --acc-light:  #fce4ec;
   --acc-pale:   #fff5f8;
+  --bg-card:    #fff0f5;
   --bg:         #fce4ec;
   --text:       #1a1a1a;
   --text-muted: #888;
@@ -383,7 +384,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   transition: background .22s ease, transform .22s cubic-bezier(.34,1.56,.64,1), border-color .22s;
 }
 .tt-dropdown-footer a:hover {
-  background: #ffffff;
+  background: var(--bg-card);
   transform: translateY(-2px);
   border-color: rgba(167,33,77,.32);
 }
@@ -598,7 +599,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: rgba(255,255,255,.48);
   transition: background .18s ease, transform .2s ease;
 }
-.tt-srch-item:hover { background: #ffffff; transform: translateX(2px); }
+.tt-srch-item:hover { background: var(--bg-card); transform: translateX(2px); }
 
 .tt-srch-thumb {
   width: 52px;
@@ -629,7 +630,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   letter-spacing: .04em;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.tt-srch-viewall:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 14px 32px rgba(124,30,63,.18); }
+.tt-srch-viewall:hover { background: var(--bg-card); transform: translateY(-2px); box-shadow: 0 14px 32px rgba(124,30,63,.18); }
 
 .tt-srch-preview {
   display: flex;
@@ -725,7 +726,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   text-decoration: none;
   transition: background .18s ease, transform .18s ease;
 }
-.tt-srch-tag:hover { background: #fff; transform: translateY(-1px); }
+.tt-srch-tag:hover { background: var(--bg-card); transform: translateY(-1px); }
 
 /* List item wrapper — strip list styles */
 .tt-srch-results { list-style: none; margin: 0; padding: 10px; }
@@ -740,7 +741,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: rgba(255,255,255,.48);
   transition: background .18s ease, transform .2s ease;
 }
-.tt-srch-item-link:hover { background: #ffffff; transform: translateX(2px); }
+.tt-srch-item-link:hover { background: var(--bg-card); transform: translateX(2px); }
 
 /* Preview panel additional styles */
 .tt-srch-prev-info { text-align: center; }
@@ -1182,7 +1183,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg-card);
   border: 1.5px solid #f5d0de;
   color: #ea7ea3;
   font-size: 20px;
@@ -1282,7 +1283,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 
 .tt-look-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius);
   overflow: hidden;
   width: 220px;
@@ -1346,7 +1347,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
    PRODUCTOS — cards
    ============================================= */
 .tt-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius);
   overflow: hidden;
   border: 1.5px solid #f5d0de;
@@ -1496,7 +1497,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
    RESEÑAS
    ============================================= */
 .tt-reviews {
-  background: #fff;
+  background: var(--bg-card);
   padding: 56px 24px;
 }
 
