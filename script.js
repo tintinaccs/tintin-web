@@ -164,21 +164,38 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
+function showAddedToCart(productName) {
+  let toast = document.getElementById('tt-added-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'tt-added-toast';
+    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Poppins,sans-serif;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = `✓ ${productName} agregado al carrito`;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+}
+
 function addToCart(productId) {
   const cart = getCart();
   const id = Number(productId);
   const existing = cart.find(item => item.id === id);
+  let productName = '';
   if (existing) {
     existing.qty += 1;
+    productName = existing.name;
   } else {
     const product = getProductById(id);
     if (!product) return;
     cart.push({ id: product.id, name: product.name, price: product.price, qty: 1, cat: product.cat });
+    productName = product.name;
   }
   saveCart(cart);
   updateCartBadge();
   renderCart();
   openCart();
+  showAddedToCart(productName);
 }
 
 function removeFromCart(productId) {
@@ -239,9 +256,14 @@ function renderCart() {
     return;
   }
 
-  body.innerHTML = cart.map(item => `
+  body.innerHTML = cart.map(item => {
+    const imgUrl = getProductImage(item.id);
+    const imgHtml = imgUrl
+      ? `<img src="${imgUrl}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain;">`
+      : `<span style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;height:100%">${item.emoji || '🛍️'}</span>`;
+    return `
     <div class="tt-cart-item" data-id="${item.id}">
-      <div class="tt-cart-item-img"></div>
+      <div class="tt-cart-item-img">${imgHtml}</div>
       <div class="tt-cart-item-info">
         <div class="tt-cart-item-name">${item.name}</div>
         <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
@@ -253,9 +275,24 @@ function renderCart() {
       </div>
       <button class="tt-cart-item-remove" onclick="removeFromCart(${item.id})" aria-label="Eliminar">✕</button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
-  if (footer) footer.style.display = 'block';
+  if (footer) {
+    footer.style.display = 'block';
+    footer.innerHTML = `
+      <div class="tt-cart-subtotal">
+        <span>Subtotal</span>
+        <span>${formatPrice(getCartTotal())}</span>
+      </div>
+      <a href="checkout.html" class="tt-btn w-full" style="display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;margin-top:12px">
+        Finalizar compra →
+      </a>
+      <button onclick="closeCart()" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #eee;border-radius:50px;font-size:0.78rem;color:#888;cursor:pointer;font-family:inherit">
+        Seguir comprando
+      </button>
+    `;
+  }
   if (totalEl) totalEl.textContent = formatPrice(getCartTotal());
 }
 
@@ -476,7 +513,7 @@ function initCartEvents() {
   if (tabbarCart) tabbarCart.addEventListener('click', openCart);
   if (btnClose) btnClose.addEventListener('click', closeCart);
   if (overlay) overlay.addEventListener('click', closeCart);
-  if (btnWA) btnWA.addEventListener('click', checkoutWhatsApp);
+  // btnWA (btn-cart-wa) is now rendered dynamically as a link in renderCart()
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeCart();
