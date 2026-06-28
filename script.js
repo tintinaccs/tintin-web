@@ -106,7 +106,9 @@ function formatPrice(num) {
  * Get a product by ID
  */
 function getProductById(id) {
-  return PRODUCTS.find(p => p.id === Number(id)) || null;
+  // Search dynamic Firestore products first (string id), then hardcoded (numeric id)
+  const pool = window.PRODUCTS || PRODUCTS;
+  return pool.find(p => String(p.id) === String(id)) || PRODUCTS.find(p => p.id === Number(id)) || null;
 }
 
 /* ──────────────────────────────────────
@@ -260,7 +262,7 @@ function renderCart() {
     const imgUrl = getProductImage(item.id);
     const imgHtml = imgUrl
       ? `<img src="${imgUrl}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain;">`
-      : `<span style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;height:100%">${item.emoji || '🛍️'}</span>`;
+      : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
     return `
     <div class="tt-cart-item" data-id="${item.id}">
       <div class="tt-cart-item-img">${imgHtml}</div>
@@ -574,15 +576,20 @@ function renderLookCombo() {
 
   currentCombo = pickRandom(PRODUCTS, 3);
 
-  grid.innerHTML = currentCombo.map(p => `
+  grid.innerHTML = currentCombo.map(p => {
+    const imgUrl = getProductImage(p.id);
+    const imgContent = imgUrl
+      ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
+      : '';
+    return `
     <div class="tt-look-card">
-      <div class="tt-look-card-img">${p.emoji || '⌚'}</div>
+      <div class="tt-look-card-img${imgUrl ? '' : ' tt-look-card-img-ph'}">${imgContent}</div>
       <div class="tt-look-card-body">
         <div class="tt-look-card-name">${p.name}</div>
         <div class="tt-look-card-price">${formatPrice(p.price)}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function initLookCombinator() {
@@ -696,7 +703,8 @@ function initProductPage() {
       galleryMain.parentElement.style.position = 'relative';
       galleryMain.parentElement.appendChild(img);
     } else {
-      galleryMain.textContent = product.emoji || '⌚';
+      galleryMain.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+      galleryMain.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);';
     }
   }
 
@@ -708,7 +716,16 @@ function initProductPage() {
     });
   }
 
-  // WhatsApp direct button
+  // Buy now button (add to cart + go to checkout)
+  const btnBuyNow = document.getElementById('btn-product-buy-now');
+  if (btnBuyNow) {
+    btnBuyNow.addEventListener('click', () => {
+      addToCart(product.id);
+      window.location.href = 'checkout.html';
+    });
+  }
+
+  // WhatsApp direct button (secondary / support)
   const btnWA = document.getElementById('btn-product-wa');
   if (btnWA) {
     btnWA.addEventListener('click', () => {
@@ -843,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initScrollReveal, 100);
 });
 
-/* expose for inline onclick usage */
+/* expose for inline onclick usage and module re-render */
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateQty = updateQty;
@@ -854,3 +871,7 @@ window.initProductPage = initProductPage;
 window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
+window.renderProductsGrid = renderProductsGrid;
+window.renderCart = renderCart;
+window.initLookCombinator = initLookCombinator;
+window.PRODUCTS = PRODUCTS;

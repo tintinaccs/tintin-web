@@ -687,9 +687,14 @@ function renderGrid(lista) {
           <div class="tt-card-cat">${p.category||''}</div>
           <div class="tt-card-name">${p.name}</div>
           <div class="tt-card-price">${fmt(p.price)}</div>
-          <a class="tt-card-btn" href="https://wa.me/${WA_NUM}?text=${msg}" target="_blank" onclick="event.stopPropagation()">
-            💬 Comprar por WhatsApp
-          </a>
+          <div class="tt-card-btns" onclick="event.stopPropagation()">
+            <button class="tt-card-btn tt-card-btn-cart" data-pid="${p.id}">
+              + Agregar al carrito
+            </button>
+            <a class="tt-card-btn tt-card-btn-view" href="producto.html?id=${p.id}">
+              Ver producto →
+            </a>
+          </div>
         </div>
       </div>
     `;
@@ -739,6 +744,32 @@ document.getElementById("filter-toggle").onclick = () => {
 };
 
 cargar();
+
+// Add-to-cart via event delegation
+document.getElementById("cat-grid").addEventListener("click", async e => {
+  const btn = e.target.closest(".tt-card-btn-cart");
+  if (!btn) return;
+  const pid = btn.dataset.pid;
+  const p = todos.find(x => x.id === pid);
+  if (!p) return;
+  const cart = JSON.parse(localStorage.getItem("tt_cart") || "[]");
+  const existing = cart.find(x => x.id === pid);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({ id: p.id, name: p.name, cat: p.category || "", price: p.price, qty: 1, imageUrl: p.imageUrl || "" });
+  }
+  localStorage.setItem("tt_cart", JSON.stringify(cart));
+  // Update badge
+  const total = cart.reduce((s, x) => s + (x.qty || 1), 0);
+  document.querySelectorAll(".tt-cart-badge, #cart-badge").forEach(b => { b.textContent = total; b.style.display = total ? "" : "none"; });
+  // Feedback
+  const orig = btn.textContent;
+  btn.textContent = "✓ Agregado";
+  btn.style.background = "#4caf50";
+  btn.style.color = "#fff";
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ""; btn.style.color = ""; }, 1500);
+});
 </script>
 <script type="module" src="js/auth-nav.js"></script>
 </body>

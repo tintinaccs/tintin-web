@@ -1448,6 +1448,11 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-family: var(--font);
 }
 .tt-card-btn:hover { background: #1ebe5d; }
+.tt-card-btns { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.tt-card-btn-cart { background: var(--pink-dark, #c2185b); }
+.tt-card-btn-cart:hover { background: #ad1457; }
+.tt-card-btn-view { background: #fff; color: var(--pink-dark, #c2185b); border: 1.5px solid var(--pink-dark, #c2185b); }
+.tt-card-btn-view:hover { background: var(--pink-dark, #c2185b); color: #fff; }
 
 /* =============================================
    FILTROS CATEGORÍA

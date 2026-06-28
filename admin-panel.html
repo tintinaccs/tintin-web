@@ -459,6 +459,144 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
+    /* ======== CONTENT EDITOR (contenido) ======== */
+    .cont-page-tab {
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      border: 2px solid #eee;
+      background: #fff;
+      color: var(--adm-muted);
+      font-family: var(--adm-font);
+      transition: all .2s;
+    }
+    .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .cont-page-tab.active { background: var(--adm-accent); border-color: var(--adm-accent); color: #fff; }
+
+    .cont-section {
+      background: #fff;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .cont-section.dirty { border-color: #ffc107; }
+    .cont-section.saved { border-color: #4caf50; }
+
+    .cont-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .15s;
+    }
+    .cont-section-head:hover { background: #f5f5f5; }
+    .cont-section-head.open { border-bottom: 1.5px solid var(--adm-border); background: #fef5f8; }
+
+    .cont-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--adm-text);
+    }
+    .cont-section-icon { font-size: 18px; }
+    .cont-section-chevron {
+      font-size: 14px;
+      color: var(--adm-muted);
+      transition: transform .2s ease;
+    }
+    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
+    .cont-section-body { display: none; padding: 20px 24px 24px; }
+    .cont-section-body.open { display: block; }
+    .cont-section-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .cont-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--adm-muted);
+    }
+    .cont-input, .cont-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: var(--adm-font);
+      color: var(--adm-text);
+      transition: border .2s;
+      width: 100%;
+    }
+    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--adm-accent); }
+    .cont-textarea { resize: vertical; min-height: 80px; }
+
+    .cont-img-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .cont-img-preview {
+      width: 100%;
+      max-height: 160px;
+      object-fit: contain;
+      border: 1.5px dashed var(--adm-border);
+      border-radius: 8px;
+      padding: 8px;
+      background: #fef5f8;
+      display: none;
+      margin-top: 8px;
+    }
+    .cont-img-preview.show { display: block; }
+    .cont-upload-progress { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .cont-upload-bar-wrap { flex: 1; height: 6px; background: #f0d0de; border-radius: 999px; overflow: hidden; }
+    .cont-upload-bar { height: 100%; width: 0%; background: var(--adm-accent); border-radius: 999px; transition: width .15s; }
+    .cont-upload-pct { font-size: 11px; color: #888; min-width: 32px; text-align: right; }
+
+    .cont-array-item {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: #fafafa;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cont-array-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .cont-array-item-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--adm-accent); }
+    .cont-array-del {
+      background: #ffebee; border: none; border-radius: 50%; width: 24px; height: 24px;
+      cursor: pointer; color: #c62828; font-size: 14px; display: flex;
+      align-items: center; justify-content: center; font-weight: 900; transition: background .15s;
+    }
+    .cont-array-del:hover { background: #ffcdd2; }
+    .cont-dirty-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #ffc107;
+      display: none; margin-left: 6px;
+    }
+
     /* ======== SPINNER ======== */
     .adm-spinner {
       display: inline-block;
@@ -626,9 +764,12 @@
       <span class="adm-nav-icon">🛍️</span> Productos
     </button>
     <div class="adm-nav-divider"></div>
-    <a href="admin.html" class="adm-nav-item">
+    <button class="adm-nav-item" data-section="contenido">
       <span class="adm-nav-icon">📝</span> Contenido
-    </a>
+    </button>
+    <button class="adm-nav-item" data-section="importar">
+      <span class="adm-nav-icon">📥</span> Import/Export
+    </button>
     <a href="admin-images.html" class="adm-nav-item">
       <span class="adm-nav-icon">🖼️</span> Imágenes
     </a>
@@ -659,7 +800,8 @@
   <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon">👥</span>Usuarios</button>
   <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon">📦</span>Pedidos</button>
   <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon">🛍️</span>Productos</button>
-  <a href="admin.html" class="adm-mobile-tab"><span class="adm-nav-icon">📝</span>Contenido</a>
+  <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon">📝</span>Contenido</button>
+  <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon">📥</span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon">🖼️</span>Imágenes</a>
   <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon">💬</span>Mensajes</button>
   <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon">🤖</span>Onboarding</button>
@@ -807,19 +949,101 @@
 
     <!-- ===================== PRODUCTOS ===================== -->
     <div class="adm-section" id="section-productos">
-      <div class="adm-card">
+      <!-- PRODUCT LIST -->
+      <div class="adm-card" id="prod-list-card">
         <div class="adm-card-head">
           <div class="adm-card-title">🛍️ Productos</div>
-          <a href="admin.html" class="adm-btn adm-btn-primary adm-btn-sm">Gestionar en Admin</a>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input id="prod-search" type="text" placeholder="Buscar…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:160px;">
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="prodNuevo()">+ Nuevo producto</button>
+          </div>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div id="prod-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando productos…</div>
+          <div id="prod-table-wrap" style="display:none;overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead>
+                <tr style="background:var(--adm-bg);text-transform:uppercase;font-size:11px;letter-spacing:.06em;color:var(--adm-muted)">
+                  <th style="padding:10px 16px;text-align:left">Imagen</th>
+                  <th style="padding:10px 16px;text-align:left">Nombre</th>
+                  <th style="padding:10px 16px;text-align:left">Categoría</th>
+                  <th style="padding:10px 16px;text-align:right">Precio</th>
+                  <th style="padding:10px 16px;text-align:center">Stock</th>
+                  <th style="padding:10px 16px;text-align:center">Estado</th>
+                  <th style="padding:10px 16px;text-align:center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="prod-tbody"></tbody>
+            </table>
+          </div>
+          <div id="prod-empty" style="display:none;padding:32px;text-align:center;color:var(--adm-muted)">
+            No hay productos. ¡Creá el primero!
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT FORM (create / edit) -->
+      <div class="adm-card" id="prod-form-card" style="display:none">
+        <div class="adm-card-head">
+          <div class="adm-card-title" id="prod-form-title">Nuevo producto</div>
+          <button class="adm-btn adm-btn-sm" onclick="prodCancelForm()">← Volver</button>
         </div>
         <div class="adm-card-body">
-          <p style="color:var(--adm-muted);font-size:13px">
-            La gestión completa de productos está disponible en el panel de administración de contenido.
-            Hacé clic en "Contenido" en el menú lateral o en el botón de arriba.
-          </p>
-          <a href="admin.html" class="adm-btn adm-btn-primary" style="display:inline-block;margin-top:16px">
-            → Ir al panel de productos
-          </a>
+          <input type="hidden" id="prod-id">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Nombre *</label>
+              <input id="prod-name" type="text" class="adm-input" placeholder="Reloj Alissia">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Categoría *</label>
+              <select id="prod-category" class="adm-input">
+                <option value="">— Seleccionar —</option>
+                <option value="relojes">Relojes</option>
+                <option value="bolsos">Bolsos / Bags</option>
+                <option value="collares">Collares</option>
+                <option value="aros">Aros</option>
+                <option value="pulseras">Pulseras</option>
+                <option value="anillos">Anillos</option>
+                <option value="tobilleras">Tobilleras</option>
+                <option value="brazaletes">Brazaletes</option>
+                <option value="earcuff">Earcuff</option>
+                <option value="armcuff">Armcuff</option>
+                <option value="gafas">Gafas</option>
+                <option value="joyeros">Joyeros</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Precio (Gs.) *</label>
+              <input id="prod-price" type="number" class="adm-input" placeholder="70000" min="0">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Stock</label>
+              <input id="prod-stock" type="number" class="adm-input" placeholder="10" min="0">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen</label>
+              <input id="prod-imageUrl" type="url" class="adm-input" placeholder="https://...">
+              <img id="prod-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
+              <textarea id="prod-description" class="adm-input" rows="3" placeholder="Descripción del producto…" style="resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:20px;align-items:center">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="prod-active" type="checkbox" checked style="accent-color:var(--adm-primary)"> Activo (visible en tienda)
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="prod-oferta" type="checkbox" style="accent-color:var(--adm-primary)"> En oferta
+              </label>
+            </div>
+          </div>
+          <div id="prod-form-error" style="display:none;color:#e53935;font-size:13px;margin-top:12px;padding:10px;background:#fff5f5;border-radius:8px"></div>
+          <div style="display:flex;gap:10px;margin-top:20px">
+            <button class="adm-btn adm-btn-primary" onclick="prodGuardar()" id="prod-save-btn">Guardar producto</button>
+            <button class="adm-btn" onclick="prodCancelForm()">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -909,6 +1133,128 @@
       </div>
     </div>
 
+    <!-- ===================== IMPORT / EXPORT ===================== -->
+    <div class="adm-section" id="section-importar">
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📤 Exportar productos</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los productos de Firestore como archivo JSON.</p>
+          <button class="adm-btn adm-btn-primary" id="btn-exportar">📥 Descargar JSON</button>
+        </div>
+      </div>
+
+      <!-- IMPORTAR CSV DE SHOPIFY -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🛍️ Importar CSV de Shopify</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Exportá tus productos desde <strong>Shopify → Productos → Exportar → CSV</strong> y subí el archivo acá. Se importan automáticamente a Firebase.
+          </p>
+          <div id="csv-drop-zone" style="border:2px dashed var(--adm-border);border-radius:14px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fef5f8;margin-bottom:16px;">
+            <div style="font-size:36px;margin-bottom:8px">📄</div>
+            <div style="font-size:14px;font-weight:700;color:var(--adm-accent)">Arrastrá el CSV acá</div>
+            <div style="font-size:12px;color:var(--adm-muted);margin-top:4px">o hacé click para seleccionar el archivo</div>
+            <input type="file" id="csv-file-input" accept=".csv" style="display:none" />
+          </div>
+          <div id="csv-preview" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+              <div style="font-size:13px;font-weight:700;color:var(--adm-text)" id="csv-preview-title"></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">🗑️ Limpiar</button>
+                <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto;max-height:360px;overflow-y:auto;border-radius:8px;border:1.5px solid var(--adm-border)">
+              <table class="adm-table" id="csv-preview-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="csv-preview-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="csv-import-progress" style="display:none;margin-top:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--adm-text);margin-bottom:8px" id="csv-progress-label">Importando...</div>
+            <div style="background:var(--adm-border);border-radius:50px;height:8px;overflow:hidden">
+              <div id="csv-progress-bar" style="height:100%;background:var(--adm-accent);border-radius:50px;transition:width .3s ease;width:0%"></div>
+            </div>
+          </div>
+          <div id="csv-import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+
+      <!-- IMPORTAR JSON -->
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📥 Importar JSON manual</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Pegá un JSON con un array de productos. Cada item debe tener: <code>name, category, price, imageUrl, stock, active</code>.
+          </p>
+          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
+          <div style="margin-top:12px;display:flex;gap:12px">
+            <button class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
+            <button class="adm-btn adm-btn-outline" id="btn-importar-sample">📋 Cargar ejemplo</button>
+          </div>
+          <div id="import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CONTENIDO ===================== -->
+    <div class="adm-section" id="section-contenido">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
+        <div>
+          <h1 style="font-size:20px;font-weight:900;color:var(--adm-text);margin:0">🎨 Contenido del Sitio</h1>
+          <p style="font-size:13px;color:var(--adm-muted);margin-top:4px">Editá imágenes, textos y contenido de cada sección — los cambios se aplican automáticamente al sitio.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="adm-btn adm-btn-outline adm-btn-sm" id="cont-save-all">💾 Guardar todo</button>
+          <a href="index.html" target="_blank" class="adm-btn adm-btn-primary adm-btn-sm">🌐 Ver sitio</a>
+        </div>
+      </div>
+
+      <!-- Page tabs -->
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--adm-border)">
+        <div id="cont-page-tabs" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+        <button id="cont-add-page" class="adm-btn adm-btn-outline adm-btn-sm" style="white-space:nowrap">+ Agregar página</button>
+      </div>
+
+      <!-- ImgBB key banner -->
+      <div id="imgbb-banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:600;flex:1;min-width:200px">🔑 Pegá tu API key de <a href="https://api.imgbb.com" target="_blank" style="color:var(--adm-accent)">imgbb.com</a> para subir imágenes desde tu dispositivo:</span>
+        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
+        <button onclick="
+          const k=document.getElementById('imgbb-key-input').value.trim();
+          if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('✅ API key guardada');}
+          else toast('Pegá tu key primero');
+        " class="adm-btn adm-btn-primary adm-btn-sm">Guardar key</button>
+        <button onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="cont-loading" style="text-align:center;padding:48px;color:var(--adm-muted)">
+        <div style="font-size:32px;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700">Cargando configuración...</div>
+      </div>
+
+      <!-- Sections container -->
+      <div id="cont-sections" style="display:none"></div>
+    </div>
+
   </div><!-- /adm-content -->
 </main>
 
@@ -929,7 +1275,7 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
@@ -973,7 +1319,9 @@ const SECTION_LABELS = {
   productos: '🛍️ Productos',
   mensajes: '💬 Mensajes',
   onboarding: '🤖 Onboarding',
-  configuracion: '⚙️ Configuración'
+  configuracion: '⚙️ Configuración',
+  importar: '📥 Import / Export',
+  contenido: '🎨 Contenido del Sitio'
 };
 
 function switchSection(target) {
@@ -986,8 +1334,11 @@ function switchSection(target) {
   topbarTitle.textContent = SECTION_LABELS[target] || target;
   if (target === 'usuarios') loadUsers();
   if (target === 'pedidos') loadOrders();
+  if (target === 'productos') loadProductos();
   if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'configuracion') loadConfig();
+  if (target === 'importar') loadImportar();
+  if (target === 'contenido') loadContenido();
 }
 
 navItems.forEach(btn => {
@@ -1432,6 +1783,903 @@ document.getElementById('btn-save-config').onclick = async () => {
     toast('❌ Error al guardar configuración');
   }
 };
+
+/* =============================================
+   PRODUCTOS — CRUD
+   ============================================= */
+let _allProducts = [];
+
+async function loadProductos() {
+  document.getElementById('prod-loading').style.display = '';
+  document.getElementById('prod-table-wrap').style.display = 'none';
+  document.getElementById('prod-empty').style.display = 'none';
+  try {
+    const snap = await getDocs(query(collection(db, 'products'), orderBy('name')));
+    _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+    renderProductosTable(_allProducts);
+  } catch(e) {
+    document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
+    console.error(e);
+  }
+}
+
+function renderProductosTable(list) {
+  document.getElementById('prod-loading').style.display = 'none';
+  const tbody = document.getElementById('prod-tbody');
+  if (!list.length) {
+    document.getElementById('prod-empty').style.display = '';
+    document.getElementById('prod-table-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('prod-table-wrap').style.display = '';
+  document.getElementById('prod-empty').style.display = 'none';
+
+  const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
+  tbody.innerHTML = list.map(p => `
+    <tr style="border-top:1px solid var(--adm-border);transition:background .15s" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background=''">
+      <td style="padding:10px 16px">
+        ${p.imageUrl
+          ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
+          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px">📷</div>`}
+      </td>
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name||'—'}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
+      <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
+      <td style="padding:10px 16px;text-align:center">${p.stock != null ? p.stock : '—'}</td>
+      <td style="padding:10px 16px;text-align:center">
+        <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
+          ${p.active !== false ? 'Activo' : 'Inactivo'}
+        </span>
+      </td>
+      <td style="padding:10px 16px;text-align:center">
+        <div style="display:flex;gap:6px;justify-content:center">
+          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm" style="color:#e53935" onclick="prodEliminar('${p._docId}','${(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// Search
+document.getElementById('prod-search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  renderProductosTable(q ? _allProducts.filter(p =>
+    (p.name||'').toLowerCase().includes(q) ||
+    (p.category||'').toLowerCase().includes(q)
+  ) : _allProducts);
+});
+
+function prodNuevo() {
+  document.getElementById('prod-id').value = '';
+  document.getElementById('prod-form-title').textContent = 'Nuevo producto';
+  document.getElementById('prod-name').value = '';
+  document.getElementById('prod-category').value = '';
+  document.getElementById('prod-price').value = '';
+  document.getElementById('prod-stock').value = '';
+  document.getElementById('prod-imageUrl').value = '';
+  document.getElementById('prod-description').value = '';
+  document.getElementById('prod-active').checked = true;
+  document.getElementById('prod-oferta').checked = false;
+  document.getElementById('prod-img-preview').style.display = 'none';
+  document.getElementById('prod-form-error').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = 'none';
+  document.getElementById('prod-form-card').style.display = '';
+}
+
+function prodEditar(docId) {
+  const p = _allProducts.find(x => x._docId === docId);
+  if (!p) return;
+  document.getElementById('prod-id').value = docId;
+  document.getElementById('prod-form-title').textContent = 'Editar producto';
+  document.getElementById('prod-name').value = p.name || '';
+  document.getElementById('prod-category').value = p.category || '';
+  document.getElementById('prod-price').value = p.price || '';
+  document.getElementById('prod-stock').value = p.stock ?? '';
+  document.getElementById('prod-imageUrl').value = p.imageUrl || '';
+  document.getElementById('prod-description').value = p.description || '';
+  document.getElementById('prod-active').checked = p.active !== false;
+  document.getElementById('prod-oferta').checked = !!p.oferta;
+  const preview = document.getElementById('prod-img-preview');
+  if (p.imageUrl) { preview.src = p.imageUrl; preview.style.display = ''; }
+  else preview.style.display = 'none';
+  document.getElementById('prod-form-error').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = 'none';
+  document.getElementById('prod-form-card').style.display = '';
+}
+
+// Live image preview
+document.getElementById('prod-imageUrl').addEventListener('input', e => {
+  const preview = document.getElementById('prod-img-preview');
+  const url = e.target.value.trim();
+  if (url) { preview.src = url; preview.style.display = ''; }
+  else preview.style.display = 'none';
+});
+
+function prodCancelForm() {
+  document.getElementById('prod-form-card').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = '';
+}
+
+async function prodGuardar() {
+  const name = document.getElementById('prod-name').value.trim();
+  const category = document.getElementById('prod-category').value;
+  const price = parseInt(document.getElementById('prod-price').value);
+  const errEl = document.getElementById('prod-form-error');
+
+  if (!name || !category || !price) {
+    errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
+    errEl.style.display = '';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const btn = document.getElementById('prod-save-btn');
+  btn.textContent = 'Guardando…'; btn.disabled = true;
+
+  const data = {
+    name,
+    category,
+    price,
+    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+    imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
+    description: document.getElementById('prod-description').value.trim() || '',
+    active: document.getElementById('prod-active').checked,
+    oferta: document.getElementById('prod-oferta').checked,
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    const docId = document.getElementById('prod-id').value;
+    if (docId) {
+      await updateDoc(doc(db, 'products', docId), data);
+      toast('✅ Producto actualizado');
+    } else {
+      data.createdAt = serverTimestamp();
+      await setDoc(doc(collection(db, 'products')), data);
+      toast('✅ Producto creado');
+    }
+    prodCancelForm();
+    loadProductos();
+  } catch(e) {
+    errEl.textContent = 'Error al guardar: ' + e.message;
+    errEl.style.display = '';
+  } finally {
+    btn.textContent = 'Guardar producto'; btn.disabled = false;
+  }
+}
+
+async function prodEliminar(docId, name) {
+  if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'products', docId));
+    toast('🗑️ Producto eliminado');
+    loadProductos();
+  } catch(e) {
+    toast('❌ Error al eliminar: ' + e.message);
+  }
+}
+
+// Load products when section is shown
+document.querySelectorAll('[data-section="productos"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!_allProducts.length) loadProductos();
+  });
+});
+
+// ======== IMPORT / EXPORT ========
+let csvProductos = [];
+let _importarInited = false;
+
+function loadImportar() {
+  if (_importarInited) return;
+  _importarInited = true;
+
+  // ── EXPORTAR JSON
+  document.getElementById('btn-exportar').onclick = async () => {
+    const snap = await getDocs(collection(db, 'products'));
+    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'tintin-productos-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    toast('✅ JSON descargado');
+  };
+
+  // ── IMPORTAR JSON SAMPLE
+  document.getElementById('btn-importar-sample').onclick = () => {
+    document.getElementById('import-json').value = JSON.stringify([
+      { name: 'Reloj Rosa Elegante', category: 'relojes', price: 85000, imageUrl: 'https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Reloj', stock: 3, active: true, description: 'Reloj elegante de acero inoxidable' }
+    ], null, 2);
+  };
+
+  // ── IMPORTAR JSON
+  document.getElementById('btn-importar').onclick = async () => {
+    const raw = document.getElementById('import-json').value.trim();
+    const result = document.getElementById('import-result');
+    try {
+      const items = JSON.parse(raw);
+      if (!Array.isArray(items)) throw new Error('Debe ser un array JSON');
+      let ok = 0;
+      for (const item of items) {
+        if (!item.name || !item.category || !item.price) continue;
+        await addDoc(collection(db, 'products'), {
+          name:        item.name,
+          category:    item.category,
+          price:       Number(item.price),
+          imageUrl:    item.imageUrl || '',
+          stock:       Number(item.stock) || 0,
+          active:      item.active !== false,
+          description: item.description || '',
+          createdAt:   serverTimestamp(),
+          createdBy:   currentUser?.email || 'import',
+        });
+        ok++;
+      }
+      result.innerHTML = `<span style="color:green">✅ ${ok} productos importados correctamente</span>`;
+      toast(`✅ ${ok} productos importados`);
+    } catch(e) {
+      result.innerHTML = `<span style="color:#e57">❌ Error: ${e.message}</span>`;
+    }
+  };
+
+  // ── CSV DE SHOPIFY
+  const CAT_MAP = {
+    'relojes':'relojes','reloj':'relojes','watches':'relojes',
+    'bolsos':'bolsos','bags':'bolsos','bag':'bolsos','cartera':'bolsos',
+    'aros':'aros','aretes':'aros','earrings':'aros',
+    'collares':'collares','collar':'collares','necklace':'collares','cadenas':'collares',
+    'pulseras':'pulseras','pulsera':'pulseras','bracelet':'pulseras',
+    'anillos':'anillos','anillo':'anillos','ring':'anillos',
+    'tobilleras':'tobilleras','tobillera':'tobilleras','ankle':'tobilleras',
+    'brazaletes':'brazaletes','brazalete':'brazaletes',
+    'earcuff':'earcuff','ear cuff':'earcuff',
+    'armcuff':'armcuff','arm cuff':'armcuff',
+    'gafas':'gafas','lentes':'gafas','sunglasses':'gafas',
+    'joyeros':'joyeros','joyero':'joyeros','jewelry box':'joyeros',
+  };
+
+  function detectarCategoria(type, tags, title) {
+    const haystack = [type, tags, title].join(' ').toLowerCase();
+    for (const [key, val] of Object.entries(CAT_MAP)) {
+      if (haystack.includes(key)) return val;
+    }
+    return 'otros';
+  }
+
+  function parsearPrecio(str) {
+    if (!str) return 0;
+    const num = parseFloat(str.replace(/,/g, ''));
+    return isNaN(num) ? 0 : Math.round(num);
+  }
+
+  function parsearCSV(texto) {
+    const lineas = texto.split('\n');
+    if (lineas.length < 2) return [];
+    const headers = lineas[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+    const col = name => headers.indexOf(name);
+    const iHandle=col('handle'),iTitle=col('title'),iType=col('type'),iTags=col('tags'),
+          iStatus=col('status'),iPrice=col('variant price'),iCompare=col('variant compare at price'),
+          iStock=col('variant inventory qty'),iImg=col('image src'),iImgPos=col('image position');
+    const productos = new Map();
+    for (let i = 1; i < lineas.length; i++) {
+      const linea = lineas[i];
+      if (!linea.trim()) continue;
+      const cols = [];
+      let inQuote = false, cell = '';
+      for (let c = 0; c < linea.length; c++) {
+        const ch = linea[c];
+        if (ch === '"') { inQuote = !inQuote; continue; }
+        if (ch === ',' && !inQuote) { cols.push(cell.trim()); cell = ''; continue; }
+        cell += ch;
+      }
+      cols.push(cell.trim());
+      const handle = cols[iHandle] || '';
+      if (!handle) continue;
+      const title=cols[iTitle]||'',type=cols[iType]||'',tags=cols[iTags]||'',
+            status=cols[iStatus]||'active',price=parsearPrecio(cols[iPrice]),
+            compare=parsearPrecio(cols[iCompare]),stock=parseInt(cols[iStock])||0,
+            img=cols[iImg]||'',imgPos=parseInt(cols[iImgPos])||99;
+      if (!productos.has(handle)) {
+        productos.set(handle, {
+          name: title||handle, category: detectarCategoria(type,tags,title),
+          price, priceBefore: compare||null, stock, imageUrl:'', imagesExtra:[],
+          tags: tags ? tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
+          active: status.toLowerCase()==='active', _imgs:[],
+        });
+      }
+      const prod = productos.get(handle);
+      if (price && !prod.price) prod.price = price;
+      if (stock && !prod.stock) prod.stock = stock;
+      if (img) prod._imgs.push({ pos: imgPos, url: img });
+    }
+    const resultado = [];
+    for (const [, p] of productos) {
+      if (!p.name || !p.price) continue;
+      p._imgs.sort((a,b)=>a.pos-b.pos);
+      p.imageUrl = p._imgs[0]?.url || '';
+      p.imagesExtra = p._imgs.slice(1).map(i=>i.url);
+      delete p._imgs;
+      resultado.push(p);
+    }
+    return resultado;
+  }
+
+  const dropZone  = document.getElementById('csv-drop-zone');
+  const fileInput = document.getElementById('csv-file-input');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.style.background='#fce4ec';
+    dropZone.style.borderColor='var(--adm-accent)';
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.background='#fef5f8';
+    dropZone.style.borderColor='var(--adm-border)';
+  });
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.background='#fef5f8';
+    dropZone.style.borderColor='var(--adm-border)';
+    const file = e.dataTransfer.files[0];
+    if (file) procesarCSV(file);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) procesarCSV(fileInput.files[0]);
+  });
+
+  function procesarCSV(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        csvProductos = parsearCSV(e.target.result);
+        mostrarPreviewCSV(csvProductos);
+      } catch(err) {
+        toast('Error al leer el CSV: ' + err.message);
+      }
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  function mostrarPreviewCSV(lista) {
+    if (!lista.length) { toast('No se encontraron productos válidos en el CSV'); return; }
+    document.getElementById('csv-preview').style.display = 'block';
+    document.getElementById('csv-preview-title').textContent = `${lista.length} productos encontrados — revisá antes de importar`;
+    const tbody = document.getElementById('csv-preview-body');
+    tbody.innerHTML = lista.map((p, i) => `
+      <tr>
+        <td style="color:var(--adm-muted);font-size:12px">${i + 1}</td>
+        <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
+        <td style="font-weight:700;max-width:200px;word-break:break-word">${p.name}</td>
+        <td>
+          <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
+                  onchange="csvProductos[${i}].category = this.value">
+            ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
+              `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`
+            ).join('')}
+          </select>
+        </td>
+        <td style="font-weight:700;color:var(--adm-accent)">Gs. ${p.price.toLocaleString('es-PY')}</td>
+        <td style="font-weight:700">${p.stock}</td>
+        <td><span class="adm-badge ${p.active ? 'badge-entregado' : 'badge-cancelado'}">${p.active ? 'Activo' : 'Inactivo'}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('btn-csv-limpiar').addEventListener('click', () => {
+    csvProductos = [];
+    fileInput.value = '';
+    document.getElementById('csv-preview').style.display = 'none';
+    document.getElementById('csv-import-result').innerHTML = '';
+  });
+
+  document.getElementById('btn-csv-importar').addEventListener('click', async () => {
+    if (!csvProductos.length) return;
+    const progress=document.getElementById('csv-import-progress');
+    const progressBar=document.getElementById('csv-progress-bar');
+    const progressLbl=document.getElementById('csv-progress-label');
+    const result=document.getElementById('csv-import-result');
+    const btn=document.getElementById('btn-csv-importar');
+    btn.disabled=true; progress.style.display='block'; result.innerHTML='';
+    let ok=0, errores=0;
+    for (let i=0; i<csvProductos.length; i++) {
+      const p = csvProductos[i];
+      const pct = Math.round(((i+1)/csvProductos.length)*100);
+      progressBar.style.width=pct+'%';
+      progressLbl.textContent=`Importando ${i+1} de ${csvProductos.length}: ${p.name}`;
+      try {
+        await addDoc(collection(db,'products'), {
+          name:p.name, category:p.category, price:p.price,
+          priceBefore:p.priceBefore||null, stock:p.stock,
+          imageUrl:p.imageUrl, imagesExtra:p.imagesExtra||[],
+          tags:p.tags||[], active:p.active, oferta:false,
+          createdAt:serverTimestamp(), createdBy:currentUser?.email||'import', source:'shopify-csv',
+        });
+        ok++;
+      } catch(e) { errores++; console.error('Error importando:', p.name, e); }
+    }
+    btn.disabled=false; progress.style.display='none';
+    if (ok>0) {
+      result.innerHTML=`<span style="color:green">✅ ${ok} productos importados correctamente${errores>0?` (${errores} con error)`:''}</span>`;
+      toast(`✅ ${ok} productos importados de Shopify`);
+      csvProductos=[]; fileInput.value='';
+      setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+    } else {
+      result.innerHTML=`<span style="color:#e57">❌ No se pudo importar ningún producto</span>`;
+    }
+  });
+}
+
+// ======== CONTENIDO DEL SITIO ========
+let contCurrentPage = 'index';
+let contSavedData = {};
+let contExtraPages = [];
+let _contenidoInited = false;
+
+const CONT_SCHEMA = {
+  index: {
+    label: '🏠 Página Principal', url: 'index.html',
+    sections: {
+      hero: {
+        label: 'Hero Principal', icon: '🌟',
+        fields: [
+          { key:'eyebrow', label:'Texto eyebrow', type:'text', def:'Bienvenidas a' },
+          { key:'title', label:'Título grande (H1)', type:'text', def:'TINTIN' },
+          { key:'subtitle', label:'Subtítulo', type:'text', def:'Brillo, estilo y mucha personalidad' },
+          { key:'btnText', label:'Texto del botón', type:'text', def:'¿Quiénes somos? →' },
+          { key:'btnHref', label:'URL del botón', type:'url', def:'nosotros.html' },
+          { key:'image_desktop', label:'Imagen Desktop (≥1024px)', type:'image', def:'' },
+          { key:'image_tablet', label:'Imagen Tablet (768–1023px)', type:'image', def:'' },
+          { key:'image_mobile', label:'Imagen Móvil (≤767px)', type:'image', def:'' },
+          { key:'imageAlt', label:'Alt de la imagen', type:'text', def:'Tintin Accesorios' },
+        ]
+      },
+      trust: {
+        label: 'Barra de Confianza', icon: '✅',
+        fields: [
+          { key:'items', label:'Ítems (4 bloques)', type:'array',
+            itemFields: [
+              { key:'label', label:'Título', type:'text' },
+              { key:'desc', label:'Descripción', type:'text' },
+            ],
+            def: [
+              { label:'Envío mismo día', desc:'Pedís hoy, recibís hoy' },
+              { label:'Acero inoxidable', desc:'No se oxida ni decolora' },
+              { label:'Pago seguro', desc:'Transferencia o efectivo' },
+              { label:'Atención personalizada', desc:'Te ayudamos por WhatsApp' },
+            ]
+          }
+        ]
+      },
+      editorial_bag: {
+        label: 'Editorial — Bags', icon: '👜',
+        fields: [
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Colección BAG ✨' },
+          { key:'title', label:'Título', type:'text', def:'El complemento\nque lo cambia todo' },
+          { key:'body', label:'Texto', type:'textarea', def:'' },
+          { key:'btnText', label:'Texto botón', type:'text', def:'¡Lo quiero ya!' },
+          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=bolsos' },
+          { key:'image', label:'Imagen', type:'image', def:'' },
+        ]
+      },
+      editorial_relojes: {
+        label: 'Editorial — Relojes', icon: '⌚',
+        fields: [
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Nueva colección' },
+          { key:'title', label:'Título', type:'text', def:'El reloj del que\ntodas se enamoran' },
+          { key:'body', label:'Texto', type:'textarea', def:'' },
+          { key:'btnText', label:'Texto botón', type:'text', def:'Ver relojes' },
+          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=relojes' },
+          { key:'image', label:'Imagen', type:'image', def:'' },
+        ]
+      },
+      cta: {
+        label: 'CTA Final', icon: '🎯',
+        fields: [
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'¿Lista para brillar?' },
+          { key:'title', label:'Título', type:'text', def:'Encontrá tu accesorio favorito' },
+          { key:'sub', label:'Subtítulo', type:'text', def:'Envíos a todo Paraguay · Delivery en Zona Central · Retiro en San Lorenzo' },
+          { key:'btn1Text', label:'Botón 1 — texto', type:'text', def:'Ver catálogo completo' },
+          { key:'btn1Href', label:'Botón 1 — URL', type:'url', def:'catalogo.html' },
+          { key:'btn2Text', label:'Botón WA — texto', type:'text', def:'Consultar por WhatsApp' },
+        ]
+      },
+      footer: {
+        label: 'Footer', icon: '🦶',
+        fields: [
+          { key:'logo', label:'Logo (imagen)', type:'image', def:'images/logo.png' },
+          { key:'copy', label:'Texto copyright', type:'text', def:'© 2024–2026 TINTIN ACCESORIOS' },
+          { key:'waText', label:'Botón WhatsApp texto', type:'text', def:'Contactanos por WhatsApp' },
+          { key:'waHref', label:'Número WhatsApp', type:'text', def:'595981299331' },
+        ]
+      }
+    }
+  },
+  nosotros: {
+    label: '👥 Nosotros', url: 'nosotros.html',
+    sections: {
+      hero: {
+        label: 'Hero Nosotros', icon: '🌟',
+        fields: [
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'La esencia de Tintin' },
+          { key:'title', label:'Título principal', type:'text', def:'Somos más que accesorios' },
+          { key:'desc', label:'Descripción', type:'textarea', def:'' },
+          { key:'point1', label:'Punto 01', type:'text', def:'Calidad y diseño que dura' },
+          { key:'point2', label:'Punto 02', type:'text', def:'Estilo con personalidad' },
+          { key:'point3', label:'Punto 03', type:'text', def:'Atención cercana y rápida' },
+          { key:'btnText', label:'Texto botón', type:'text', def:'Ver colección →' },
+          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html' },
+          { key:'image_desktop', label:'Imagen desktop', type:'image', def:'' },
+          { key:'image_tablet', label:'Imagen tablet', type:'image', def:'' },
+          { key:'image_mobile', label:'Imagen móvil', type:'image', def:'' },
+        ]
+      },
+      historia: {
+        label: 'Nuestra Historia', icon: '📖',
+        fields: [
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Desde San Lorenzo' },
+          { key:'title', label:'Título', type:'text', def:'Nuestra historia' },
+          { key:'p1', label:'Párrafo 1', type:'textarea', def:'' },
+          { key:'p2', label:'Párrafo 2', type:'textarea', def:'' },
+          { key:'image', label:'Imagen', type:'image', def:'' },
+        ]
+      }
+    }
+  },
+  catalogo: {
+    label: '📋 Catálogo', url: 'catalogo.html',
+    sections: {
+      header: {
+        label: 'Encabezado del catálogo', icon: '🏷️',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Nuestro Catálogo' },
+          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Toda la colección' },
+          { key:'desc', label:'Descripción', type:'textarea', def:'' },
+          { key:'image', label:'Imagen banner (opcional)', type:'image', def:'' },
+        ]
+      }
+    }
+  }
+};
+
+async function contLoadPage(pageId) {
+  try {
+    const snap = await getDoc(doc(db, 'site_content', pageId));
+    contSavedData[pageId] = snap.exists() ? snap.data() : {};
+  } catch(e) {
+    contSavedData[pageId] = {};
+  }
+}
+
+async function contSaveSection(pageId, sectionId, data) {
+  const docRef = doc(db, 'site_content', pageId);
+  try {
+    await setDoc(docRef, { [sectionId]: data }, { merge: true });
+    if (!contSavedData[pageId]) contSavedData[pageId] = {};
+    contSavedData[pageId][sectionId] = data;
+    return true;
+  } catch(e) {
+    console.error('Error guardando:', e);
+    return false;
+  }
+}
+
+function contRenderField(field, value) {
+  const id = `cont-f-${field.key}-${Math.random().toString(36).slice(2,8)}`;
+  let html = `<div class="cont-field" data-fkey="${field.key}">`;
+  html += `<label class="cont-label" for="${id}">${field.label}</label>`;
+  if (field.type === 'text' || field.type === 'url') {
+    html += `<input id="${id}" class="cont-input" type="text" value="${(value ?? field.def ?? '').replace(/"/g,'&quot;')}" placeholder="${field.def||''}" data-fkey="${field.key}" />`;
+  } else if (field.type === 'textarea') {
+    html += `<textarea id="${id}" class="cont-textarea" placeholder="${field.def||''}" data-fkey="${field.key}">${value ?? field.def ?? ''}</textarea>`;
+  } else if (field.type === 'image') {
+    const imgVal = value ?? field.def ?? '';
+    const uid = id + '-upload';
+    html += `
+      <div class="cont-img-wrap">
+        <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g,'&quot;')}" placeholder="https://... o subí una imagen" data-fkey="${field.key}" />
+        <label class="adm-btn adm-btn-primary adm-btn-sm" title="Subir imagen" style="cursor:pointer;white-space:nowrap;position:relative;overflow:hidden">
+          📁 Subir
+          <input type="file" accept="image/*" style="position:absolute;opacity:0;width:0;height:0;overflow:hidden" onchange="contUploadImage(this, '${id}')" />
+        </label>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
+      </div>
+      <div class="cont-upload-progress" id="${uid}-progress" style="display:none">
+        <div class="cont-upload-bar-wrap"><div class="cont-upload-bar" id="${uid}-bar"></div></div>
+        <span class="cont-upload-pct" id="${uid}-pct">0%</span>
+      </div>
+      <img class="cont-img-preview ${imgVal ? 'show' : ''}" src="${imgVal||''}" alt="preview" data-preview-for="${id}" id="${uid}-preview" />
+    `;
+  } else if (field.type === 'array') {
+    html += contRenderArrayField(field, value ?? field.def ?? [], id);
+  }
+  html += `</div>`;
+  return html;
+}
+
+function contRenderArrayField(field, items, baseId) {
+  let html = `<div class="cont-array-container" data-fkey="${field.key}" data-array-field>`;
+  items.forEach((item, i) => { html += contRenderArrayItem(field, item, i); });
+  html += `<button class="adm-btn adm-btn-outline adm-btn-sm" style="margin-top:8px" onclick="contAddArrayItem(this, '${JSON.stringify(field.itemFields).replace(/'/g,'&#39;').replace(/"/g,'&quot;')}')">+ Agregar ítem</button>`;
+  html += `</div>`;
+  return html;
+}
+
+function contRenderArrayItem(field, item, index) {
+  let html = `<div class="cont-array-item">
+    <div class="cont-array-item-head">
+      <span class="cont-array-item-label">Ítem ${index + 1}</span>
+      <button class="cont-array-del" onclick="this.closest('.cont-array-item').remove();this.closest('.cont-section').classList.add('dirty')" title="Eliminar">×</button>
+    </div>`;
+  field.itemFields.forEach(subf => {
+    html += `<div class="cont-field" data-fkey="${subf.key}">
+      <label class="cont-label">${subf.label}</label>
+      <input class="cont-input" type="text" value="${(item[subf.key]??'').replace(/"/g,'&quot;')}" placeholder="${subf.def||''}" data-fkey="${subf.key}" />
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+window.contAddArrayItem = function(btn, fieldJson) {
+  const container = btn.closest('.cont-array-container');
+  const itemFields = JSON.parse(fieldJson.replace(/&quot;/g,'"'));
+  const existing = container.querySelectorAll('.cont-array-item').length;
+  const html = contRenderArrayItem({ itemFields }, {}, existing);
+  btn.insertAdjacentHTML('beforebegin', html);
+  container.closest('.cont-section').classList.add('dirty');
+};
+
+function contExtractFieldValue(fieldEl, field) {
+  if (field.type === 'array') {
+    const container = fieldEl.querySelector('[data-array-field]');
+    if (!container) return field.def ?? [];
+    const items = [];
+    container.querySelectorAll('.cont-array-item').forEach(itemEl => {
+      const obj = {};
+      field.itemFields.forEach(sf => {
+        const inp = itemEl.querySelector(`[data-fkey="${sf.key}"]`);
+        if (inp) obj[sf.key] = inp.value;
+      });
+      items.push(obj);
+    });
+    return items;
+  }
+  const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
+  return inp ? inp.value : (field.def ?? '');
+}
+
+function contRenderSection(pageId, sectionId, schema, savedValues) {
+  const sv = savedValues?.[sectionId] ?? {};
+  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
+  let html = `<div class="cont-section" data-section="${sectionId}" data-page="${pageId}">
+    <div class="cont-section-head" onclick="contToggleSection(this)">
+      <div class="cont-section-title">
+        <span class="cont-section-icon">${schema.icon || '📄'}</span>
+        ${schema.label}
+        <span class="cont-dirty-dot"></span>
+      </div>
+      <span class="cont-section-chevron">▼</span>
+    </div>
+    <div class="cont-section-body">`;
+  flist.forEach(field => { html += contRenderField(field, sv[field.key]); });
+  const pageUrl = CONT_SCHEMA[pageId]?.url || contExtraPages.find(p=>p.id===pageId)?.url || '#';
+  html += `
+      <div class="cont-section-actions">
+        <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">💾 Guardar sección</button>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>
+        <a href="${pageUrl}" target="_blank" class="adm-btn adm-btn-outline adm-btn-sm">👁 Ver en sitio</a>
+      </div>
+    </div>
+  </div>`;
+  return html;
+}
+
+async function contRenderPage(pageId) {
+  const loadingEl  = document.getElementById('cont-loading');
+  const sectionsEl = document.getElementById('cont-sections');
+  loadingEl.style.display = 'block';
+  sectionsEl.style.display = 'none';
+  if (!contSavedData[pageId]) await contLoadPage(pageId);
+  let pageSchema = CONT_SCHEMA[pageId] || contExtraPages.find(p=>p.id===pageId);
+  sectionsEl.innerHTML = '';
+  if (pageSchema) {
+    Object.entries(pageSchema.sections).forEach(([sectionId, sSchema]) => {
+      sectionsEl.innerHTML += contRenderSection(pageId, sectionId, sSchema, contSavedData[pageId]);
+    });
+  } else {
+    sectionsEl.innerHTML = `<div style="text-align:center;padding:40px;color:var(--adm-muted)">No hay secciones configuradas para esta página.</div>`;
+  }
+  sectionsEl.querySelectorAll('.cont-input, .cont-textarea').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const section = inp.closest('.cont-section');
+      if (section) {
+        section.classList.add('dirty');
+        section.querySelector('.cont-dirty-dot').style.display = 'inline-block';
+      }
+      const prevImg = document.querySelector(`[data-preview-for="${inp.id}"]`);
+      if (prevImg) { prevImg.src = inp.value; prevImg.classList.toggle('show', !!inp.value); }
+    });
+  });
+  loadingEl.style.display = 'none';
+  sectionsEl.style.display = 'block';
+}
+
+window.contUploadImage = async function(fileInput, inputId) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const apiKey = localStorage.getItem('tt_imgbb_key');
+  if (!apiKey) {
+    const banner = document.getElementById('imgbb-banner');
+    banner.style.display = 'flex';
+    banner.scrollIntoView({ behavior:'smooth', block:'center' });
+    toast('Primero ingresá tu API key de ImgBB (ver banner amarillo)');
+    return;
+  }
+  const uid = inputId + '-upload';
+  const progressWrap = document.getElementById(uid+'-progress');
+  const bar = document.getElementById(uid+'-bar');
+  const pct = document.getElementById(uid+'-pct');
+  const urlInput = document.getElementById(inputId);
+  const preview  = document.getElementById(uid+'-preview');
+  progressWrap.style.display = 'flex'; bar.style.width='10%'; pct.textContent='Leyendo…';
+  try {
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    bar.style.width='30%'; pct.textContent='Subiendo…';
+    const form = new FormData();
+    form.append('key', apiKey);
+    form.append('image', base64);
+    form.append('name', file.name.replace(/[^a-zA-Z0-9._-]/g,'_'));
+    const res = await fetch('https://api.imgbb.com/1/upload', { method:'POST', body:form });
+    bar.style.width='85%';
+    const json = await res.json();
+    if (!json.success) throw new Error(json.error?.message ?? 'ImgBB rechazó la imagen');
+    const url = json.data.url;
+    bar.style.width='100%'; pct.textContent='100%';
+    urlInput.value = url;
+    if (preview) { preview.src=url; preview.classList.add('show'); }
+    urlInput.dispatchEvent(new Event('input'));
+    setTimeout(() => { progressWrap.style.display='none'; }, 700);
+    toast('✅ Imagen subida correctamente');
+  } catch(err) {
+    progressWrap.style.display='none';
+    let msg = err.message ?? String(err);
+    if (msg.includes('Failed to fetch')) msg = 'Sin conexión o API key inválida.';
+    toast('❌ Error al subir: ' + msg);
+  }
+};
+
+window.contToggleSection = function(head) {
+  head.classList.toggle('open');
+  head.nextElementSibling.classList.toggle('open');
+};
+
+window.contSaveSectionBtn = async function(btn, pageId, sectionId) {
+  const sectionEl = btn.closest('.cont-section');
+  const schema = CONT_SCHEMA[pageId]?.sections?.[sectionId] || contExtraPages.find(p=>p.id===pageId)?.sections?.[sectionId];
+  if (!schema) return;
+  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
+  const data = {};
+  flist.forEach(field => {
+    const fieldEl = sectionEl.querySelector(`.cont-field[data-fkey="${field.key}"]`);
+    if (!fieldEl) return;
+    data[field.key] = contExtractFieldValue(fieldEl, field);
+  });
+  btn.textContent='⏳ Guardando...'; btn.disabled=true;
+  const ok = await contSaveSection(pageId, sectionId, data);
+  btn.disabled=false; btn.textContent='💾 Guardar sección';
+  if (ok) {
+    sectionEl.classList.remove('dirty'); sectionEl.classList.add('saved');
+    sectionEl.querySelector('.cont-dirty-dot').style.display='none';
+    setTimeout(()=>sectionEl.classList.remove('saved'), 2000);
+    toast('✅ Sección guardada — los cambios ya son visibles en el sitio');
+  } else {
+    toast('❌ Error al guardar la sección');
+  }
+};
+
+window.contRestoreSection = function(btn, pageId, sectionId) {
+  if (!confirm('¿Restaurar los valores por defecto de esta sección? Se perderán los cambios no guardados.')) return;
+  const sectionEl = btn.closest('.cont-section');
+  const schema = CONT_SCHEMA[pageId]?.sections?.[sectionId];
+  if (!schema) return;
+  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
+  flist.forEach(field => {
+    if (field.type === 'array') return;
+    const inp = sectionEl.querySelector(`[data-fkey="${field.key}"]`);
+    if (inp && (inp.tagName==='INPUT'||inp.tagName==='TEXTAREA')) {
+      inp.value = field.def ?? '';
+      inp.dispatchEvent(new Event('input'));
+    }
+  });
+};
+
+document.addEventListener('click', async e => {
+  if (e.target && e.target.id === 'cont-save-all') {
+    const pageId = contCurrentPage;
+    const schema = CONT_SCHEMA[pageId];
+    if (!schema) return;
+    e.target.textContent='⏳ Guardando...'; e.target.disabled=true;
+    let saved=0;
+    for (const [sectionId] of Object.entries(schema.sections)) {
+      const btn = document.querySelector(`.cont-section[data-section="${sectionId}"] .cont-section-actions button`);
+      if (btn) { await contSaveSectionBtn(btn, pageId, sectionId); saved++; }
+    }
+    e.target.textContent='💾 Guardar todo'; e.target.disabled=false;
+    toast(`✅ ${saved} secciones guardadas`);
+  }
+});
+
+async function contRenderTabs() {
+  const tabsEl = document.getElementById('cont-page-tabs');
+  try {
+    const snap = await getDoc(doc(db,'site_content','_registry'));
+    if (snap.exists() && snap.data().extraPages) contExtraPages = snap.data().extraPages;
+  } catch(e) {}
+  const allPages = [
+    ...Object.entries(CONT_SCHEMA).map(([id,s])=>({ id, label:s.label })),
+    ...contExtraPages.map(p=>({ id:p.id, label:p.label })),
+  ];
+  tabsEl.innerHTML = allPages.map(p => `
+    <button class="cont-page-tab ${p.id===contCurrentPage?'active':''}" data-pageid="${p.id}" onclick="contSwitchPage('${p.id}')">${p.label}</button>
+  `).join('');
+}
+
+window.contSwitchPage = async function(pageId) {
+  contCurrentPage = pageId;
+  document.querySelectorAll('.cont-page-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.pageid === pageId);
+  });
+  await contRenderPage(pageId);
+};
+
+document.addEventListener('click', async e => {
+  if (e.target && e.target.id === 'cont-add-page') {
+    const label = prompt('Nombre de la nueva página (ej: Blog, Contacto):');
+    if (!label) return;
+    const id = label.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-');
+    const url = prompt(`URL del archivo HTML (ej: ${id}.html):`, `${id}.html`) || `${id}.html`;
+    contExtraPages.push({
+      id, label:'📄 '+label, url,
+      sections: { general: { label:'Contenido general', icon:'📄', fields:[
+        { key:'image1', label:'Imagen 1', type:'image', def:'' },
+        { key:'image2', label:'Imagen 2', type:'image', def:'' },
+        { key:'title', label:'Título', type:'text', def:'' },
+        { key:'desc', label:'Texto', type:'textarea', def:'' },
+      ]}}
+    });
+    try {
+      await setDoc(doc(db,'site_content','_registry'), { extraPages:contExtraPages }, { merge:true });
+      toast(`✅ Página "${label}" agregada`);
+      await contRenderTabs();
+      await contSwitchPage(id);
+    } catch(e) {
+      toast('Error al guardar la página: '+e.message);
+    }
+  }
+});
+
+async function loadContenido() {
+  if (!_contenidoInited) {
+    _contenidoInited = true;
+    contCurrentPage = 'index';
+    contSavedData = {};
+    const banner = document.getElementById('imgbb-banner');
+    if (banner) {
+      const hasKey = !!localStorage.getItem('tt_imgbb_key');
+      banner.style.display = hasKey ? 'none' : 'flex';
+    }
+  }
+  await contRenderTabs();
+  await contRenderPage(contCurrentPage);
+}
 </script>
 
 </body>
