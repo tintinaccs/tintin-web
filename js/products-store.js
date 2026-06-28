@@ -31,27 +31,31 @@ function bustOldCache() {
 }
 
 function normalizeImageUrl(d) {
-  return (
-    d.imageUrl      ||
-    d.image         ||
-    d.img           ||
-    d.photo         ||
-    d.imageSrc      ||
-    d.image_src     ||
-    d['Image Src']  ||
+  const img =
+    d.imageUrl ||
+    d.image ||
+    d.img ||
+    d.photo ||
+    d.imageSrc ||
+    d.image_src ||
+    d['Image Src'] ||
     d['Variant Image'] ||
-    ''
-  );
+    d['Image'] ||
+    d['Imagen'] ||
+    d['Foto'] ||
+    '';
+
+  return String(img || '').trim();
 }
 
 /** Map Firestore doc to the shape script.js expects */
 function mapProduct(id, d) {
   return {
     id,
-    name:     d.name  || d.title || d.Title || '',
-    cat:      d.category || d.cat || d.Type || d['Product Category'] || '',
-    category: d.category || d.cat || d.Type || d['Product Category'] || '',
-    price:    Number(d.price || d.Price || d['Variant Price'] || 0),
+    name:     d.name || d.title || d.Title || d['Title'] || d.handle || d.Handle || '',
+    cat:      d.category || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || d['Tags'] || '',
+    category: d.category || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || d['Tags'] || '',
+    price:    Number(String(d.price || d.Price || d['Variant Price'] || 0).replace(/\./g, '').replace(',', '.')),
     badge:    d.badge || (d.oferta ? 'Oferta' : null),
     desc:     d.description || d.desc || d['Body (HTML)'] || '',
     imageUrl: normalizeImageUrl(d),
@@ -68,6 +72,10 @@ export async function loadProducts() {
     // No composite index needed — fetch all, filter & sort in JS
     const snap = await getDocs(collection(db, 'products'));
     const all = snap.docs.map(d => mapProduct(d.id, d.data()));
+
+    console.log('[products-store] productos cargados:', all);
+    console.log('[products-store] productos con imagen:', all.filter(p => p.imageUrl));
+
     const products = all
       .filter(p => p.active !== false)
       .sort((a, b) => a.name.localeCompare(b.name, 'es'));
@@ -88,6 +96,10 @@ loadProducts().then(products => {
 
   // Expose on window so script.js helpers can find them by id
   window.PRODUCTS = products;
+
+  window.dispatchEvent(new CustomEvent('tintin:products-loaded', {
+    detail: { products }
+  }));
 
   // Re-render homepage product grids
   if (typeof window.renderProductsGrid === 'function') {
