@@ -112,11 +112,19 @@ function getProductById(id) {
 /* ──────────────────────────────────────
    PRODUCT IMAGES (stored in localStorage)
    Key: tt_product_images → { "1": "https://...", "2": "..." }
+   Also checks tt_images for prod_{id} slots (new image management system)
 ────────────────────────────────────── */
 function getProductImages() {
   try { return JSON.parse(localStorage.getItem('tt_product_images') || '{}'); } catch { return {}; }
 }
+function getImagesCache() {
+  try { return JSON.parse(localStorage.getItem('tt_images') || '{}'); } catch { return {}; }
+}
 function getProductImage(id) {
+  // Check new tt_images system first (prod_{id} slot)
+  const imgCache = getImagesCache();
+  if (imgCache[`prod_${id}`]) return imgCache[`prod_${id}`];
+  // Fall back to legacy tt_product_images
   return getProductImages()[String(id)] || null;
 }
 function setProductImage(id, url) {
@@ -496,8 +504,8 @@ function renderProductsGrid(containerId, products) {
     const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
     const imgUrl = getProductImage(p.id);
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" />`
-      : `<div class="tt-product-img-placeholder"></div>`;
+      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"tt-prod-placeholder\\"><span class=\\"tt-prod-emoji\\">${p.emoji || '⌚'}</span></div>'">`
+      : `<div class="tt-prod-placeholder"><span class="tt-prod-emoji">${p.emoji || '⌚'}</span></div>`;
     return `
       <div class="tt-product-card" data-id="${p.id}">
         <div class="tt-product-img">

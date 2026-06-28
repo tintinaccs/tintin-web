@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tintin — Gestión de Imágenes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose: #b84c72;
+      --rose-light: #f5d4e0;
+      --rose-pale: #fff3f7;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --muted: #888;
+      --border: #eee;
+      --sidebar-w: 220px;
+      --header-h: 60px;
+      --font: 'Poppins', sans-serif;
+      --radius: 10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: #f8f8f8; color: var(--text); min-height: 100vh; }
+
+    /* ── AUTH GATE ── */
+    #auth-loading, #auth-denied {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: #fff; z-index: 1000; flex-direction: column; gap: 16px;
+    }
+    #auth-loading .spinner {
+      width: 36px; height: 36px; border: 3px solid var(--rose-light);
+      border-top-color: var(--rose); border-radius: 50%; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #auth-denied { display: none; }
+
+    /* ── HEADER ── */
+    .adm-header {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+      background: #fff; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; z-index: 200; box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    }
+    .adm-logo { font-weight: 700; font-size: 1rem; color: var(--rose); letter-spacing: .04em; display: flex; align-items: center; gap: 10px; }
+    .adm-logo span { font-size: 0.78rem; font-weight: 400; color: var(--muted); }
+    .adm-header-right { display: flex; align-items: center; gap: 16px; }
+    .adm-user-email { font-size: 0.78rem; color: var(--muted); }
+    .adm-back-btn {
+      font-size: 0.82rem; color: var(--rose); text-decoration: none; font-weight: 600;
+      padding: 6px 14px; border: 1.5px solid var(--rose-light); border-radius: 20px;
+      transition: background .2s;
+    }
+    .adm-back-btn:hover { background: var(--rose-pale); }
+    .adm-hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      font-size: 1.4rem; color: var(--rose); padding: 4px;
+    }
+
+    /* ── LAYOUT ── */
+    .adm-layout {
+      display: flex; min-height: 100vh; padding-top: var(--header-h);
+    }
+
+    /* ── SIDEBAR ── */
+    .adm-sidebar {
+      position: fixed; top: var(--header-h); left: 0; bottom: 0;
+      width: var(--sidebar-w); background: #fff; border-right: 1px solid var(--border);
+      overflow-y: auto; z-index: 100; padding: 20px 0;
+    }
+    .adm-sidebar-title {
+      font-size: 0.7rem; font-weight: 700; color: var(--muted);
+      letter-spacing: .1em; text-transform: uppercase; padding: 0 20px 8px;
+    }
+    .adm-nav-btn {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 11px 20px; border: none; background: none; text-align: left;
+      font-family: var(--font); font-size: 0.88rem; color: var(--text-sec);
+      cursor: pointer; border-left: 3px solid transparent; transition: all .15s;
+    }
+    .adm-nav-btn:hover { background: var(--rose-pale); color: var(--rose); }
+    .adm-nav-btn.active { background: var(--rose-pale); color: var(--rose); border-left-color: var(--rose); font-weight: 600; }
+    .adm-nav-btn .nav-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .adm-nav-badge {
+      margin-left: auto; background: var(--rose); color: #fff;
+      font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 99px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .adm-main {
+      margin-left: var(--sidebar-w); flex: 1; padding: 32px 28px;
+    }
+    .adm-section-header { margin-bottom: 24px; }
+    .adm-section-header h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .adm-section-header p { font-size: 0.85rem; color: var(--text-sec); }
+
+    /* ── CARDS GRID ── */
+    .adm-cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── IMAGE CARD ── */
+    .adm-img-card {
+      background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
+      padding: 20px; display: flex; flex-direction: column; gap: 14px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.04);
+    }
+    .adm-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .adm-card-label { font-weight: 600; font-size: 0.9rem; line-height: 1.3; }
+    .adm-card-desc { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+    .adm-section-badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: .08em;
+      padding: 2px 8px; border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-hero      { background: #fff0c0; color: #7a5800; }
+    .badge-productos { background: #e8f4ff; color: #1a5fa0; }
+    .badge-editorial { background: #f0ffe8; color: #2a6a10; }
+    .badge-iconos    { background: #fce4ff; color: #7a1a9a; }
+    .badge-nosotros  { background: #ffe4e8; color: #9a1a2a; }
+    .badge-branding  { background: #fff0e4; color: #9a4a0a; }
+
+    /* ── IMAGE PREVIEW ── */
+    .adm-preview {
+      width: 100%; height: 160px; border: 1px solid #eee; border-radius: 8px;
+      background: #fafafa;
+      /* checkerboard for transparency */
+      background-image:
+        linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+        linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+        linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .adm-preview img {
+      max-width: 100%; max-height: 100%; object-fit: contain; display: block;
+      position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+    .adm-preview-empty {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: var(--muted);
+    }
+    .adm-preview-empty .emoji { font-size: 2.5rem; }
+    .adm-preview-empty .label { font-size: 0.72rem; }
+
+    /* ── STATUS ── */
+    .adm-status {
+      display: flex; align-items: center; gap: 6px; font-size: 0.76rem;
+    }
+    .adm-status-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .adm-status-dot.on  { background: #22c55e; }
+    .adm-status-dot.off { background: #ccc; }
+
+    /* ── URL INPUT ── */
+    .adm-url-input {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: var(--font); font-size: 0.82rem;
+      color: var(--text); outline: none; transition: border-color .2s;
+    }
+    .adm-url-input:focus { border-color: var(--rose); }
+
+    /* ── BUTTONS ── */
+    .adm-card-btns { display: flex; gap: 8px; }
+    .adm-btn-save {
+      flex: 1; padding: 9px 0; background: var(--rose); color: #fff;
+      border: none; border-radius: 8px; font-family: var(--font); font-size: 0.82rem;
+      font-weight: 600; cursor: pointer; transition: opacity .2s;
+    }
+    .adm-btn-save:hover { opacity: .88; }
+    .adm-btn-clear {
+      padding: 9px 14px; background: #fff; color: var(--text-sec);
+      border: 1.5px solid var(--border); border-radius: 8px; font-family: var(--font);
+      font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all .2s;
+    }
+    .adm-btn-clear:hover { border-color: var(--rose); color: var(--rose); }
+
+    /* ── TOAST ── */
+    .adm-toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 99px;
+      font-size: 0.85rem; font-weight: 500; z-index: 9999; opacity: 0;
+      transition: opacity .3s; pointer-events: none; white-space: nowrap;
+    }
+    .adm-toast.show { opacity: 1; }
+
+    /* ── OVERLAY for mobile sidebar ── */
+    .adm-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 99;
+    }
+    .adm-overlay.show { display: block; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .adm-hamburger { display: block; }
+      .adm-user-email { display: none; }
+      .adm-sidebar {
+        transform: translateX(-100%); transition: transform .25s ease;
+      }
+      .adm-sidebar.open { transform: translateX(0); }
+      .adm-main { margin-left: 0; padding: 20px 16px; }
+      .adm-cards-grid { grid-template-columns: 1fr; }
+      .adm-card-btns { flex-direction: column; }
+      .adm-btn-save, .adm-btn-clear { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="auth-loading">
+  <div class="spinner"></div>
+  <p style="font-size:0.9rem;color:#888;">Verificando acceso…</p>
+</div>
+<div id="auth-denied">
+  <div style="font-size:2.5rem;">🔒</div>
+  <h2 style="font-size:1.1rem;">Acceso denegado</h2>
+  <p style="font-size:0.88rem;color:#888;">No tenés permisos para ver esta página.</p>
+  <a href="login.html" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
+</div>
+
+<!-- OVERLAY -->
+<div class="adm-overlay" id="adm-overlay"></div>
+
+<!-- HEADER -->
+<header class="adm-header" id="adm-header" style="display:none;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="adm-hamburger" id="adm-hamburger" aria-label="Menú">☰</button>
+    <div class="adm-logo">
+      Tintin <span>Gestión de Imágenes</span>
+    </div>
+  </div>
+  <div class="adm-header-right">
+    <span class="adm-user-email" id="adm-user-email"></span>
+    <a href="admin-panel.html" class="adm-back-btn">← Volver al panel</a>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="adm-sidebar" id="adm-sidebar" style="display:none;">
+  <div class="adm-sidebar-title">Secciones</div>
+  <button class="adm-nav-btn active" data-section="hero">
+    <span class="nav-icon">🏠</span> Inicio / Hero
+  </button>
+  <button class="adm-nav-btn" data-section="productos">
+    <span class="nav-icon">⌚</span> Productos
+  </button>
+  <button class="adm-nav-btn" data-section="editorial">
+    <span class="nav-icon">🖼️</span> Editorial / Colecciones
+  </button>
+  <button class="adm-nav-btn" data-section="iconos">
+    <span class="nav-icon">✨</span> Íconos / Trust
+  </button>
+  <button class="adm-nav-btn" data-section="nosotros">
+    <span class="nav-icon">🌸</span> Nosotros
+  </button>
+  <button class="adm-nav-btn" data-section="branding">
+    <span class="nav-icon">🏷️</span> Branding / Logo
+  </button>
+</aside>
+
+<!-- MAIN -->
+<div class="adm-layout" id="adm-layout" style="display:none;">
+  <main class="adm-main">
+    <div class="adm-section-header">
+      <h1 id="section-title">Inicio / Hero</h1>
+      <p id="section-desc">Configurá las imágenes de fondo del banner principal</p>
+    </div>
+    <div class="adm-cards-grid" id="adm-cards-grid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="adm-toast" id="adm-toast"></div>
+
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { IMAGE_SLOTS, loadImages, getImg, setImgCache } from "./js/images.js";
+
+const ALLOWED_ROLES = ['superadmin', 'admin'];
+const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
+
+const SECTION_META = {
+  hero:      { label: 'Inicio / Hero',            desc: 'Imagen de fondo del banner principal',            icon: '🏠' },
+  productos: { label: 'Productos',                 desc: 'Fotos de cada producto en la grilla de la tienda', icon: '⌚' },
+  editorial: { label: 'Editorial / Colecciones',   desc: 'Imágenes de secciones editoriales y tarjetas de categorías', icon: '🖼️' },
+  iconos:    { label: 'Íconos / Trust',            desc: 'Íconos del bloque de beneficios y confianza',    icon: '✨' },
+  nosotros:  { label: 'Nosotros',                  desc: 'Foto principal de la página Nosotros/About',      icon: '🌸' },
+  branding:  { label: 'Branding / Logo',           desc: 'Logo y elementos de marca del sitio',            icon: '🏷️' },
+};
+
+const BADGE_CLASS = {
+  hero: 'badge-hero', productos: 'badge-productos', editorial: 'badge-editorial',
+  iconos: 'badge-iconos', nosotros: 'badge-nosotros', branding: 'badge-branding',
+};
+
+let currentSection = 'hero';
+
+// ── Toast ──
+function showToast(msg, isError = false) {
+  const t = document.getElementById('adm-toast');
+  t.textContent = msg;
+  t.style.background = isError ? '#c0392b' : '#1a1a1a';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Render cards for a section ──
+function renderSection(section) {
+  currentSection = section;
+  const meta = SECTION_META[section] || {};
+  document.getElementById('section-title').textContent = meta.label || section;
+  document.getElementById('section-desc').textContent = meta.desc || '';
+
+  const slots = IMAGE_SLOTS.filter(s => s.section === section);
+  const grid = document.getElementById('adm-cards-grid');
+
+  grid.innerHTML = slots.map(slot => {
+    const url = getImg(slot.id) || '';
+    const configured = !!url;
+    const badgeClass = BADGE_CLASS[slot.section] || '';
+    const previewHtml = url
+      ? `<img src="${url}" alt="${slot.label}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="adm-preview-empty" style="display:none"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Error cargando imagen</span></div>`
+      : `<div class="adm-preview-empty"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Sin imagen</span></div>`;
+
+    return `
+      <div class="adm-img-card" data-slot-id="${slot.id}">
+        <div class="adm-card-top">
+          <div>
+            <div class="adm-card-label">${slot.label}</div>
+            <div class="adm-card-desc">${slot.desc}</div>
+          </div>
+          <span class="adm-section-badge ${badgeClass}">${slot.section}</span>
+        </div>
+        <div class="adm-preview" id="preview-${slot.id}">
+          ${previewHtml}
+        </div>
+        <div class="adm-status" id="status-${slot.id}">
+          <div class="adm-status-dot ${configured ? 'on' : 'off'}"></div>
+          <span>${configured ? 'Configurada' : 'Sin configurar'}</span>
+        </div>
+        <input type="url" class="adm-url-input" id="input-${slot.id}"
+          placeholder="https://… pegar URL aquí"
+          value="${url}" autocomplete="off" />
+        <div class="adm-card-btns">
+          <button class="adm-btn-save" data-save="${slot.id}">Guardar</button>
+          <button class="adm-btn-clear" data-clear="${slot.id}">Quitar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Update a single card's preview & status without full re-render ──
+function updateCardUI(slotId, url) {
+  const slot = IMAGE_SLOTS.find(s => s.id === slotId);
+  const preview = document.getElementById(`preview-${slotId}`);
+  const status = document.getElementById(`status-${slotId}`);
+  if (!preview || !status) return;
+
+  if (url) {
+    preview.innerHTML = `<img src="${url}" alt="${slot?.label || ''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="adm-preview-empty" style="display:none"><span class="emoji">${slot?.emoji || '🖼️'}</span><span class="label">Error cargando imagen</span></div>`;
+    status.innerHTML = `<div class="adm-status-dot on"></div><span>Configurada</span>`;
+  } else {
+    preview.innerHTML = `<div class="adm-preview-empty"><span class="emoji">${slot?.emoji || '🖼️'}</span><span class="label">Sin imagen</span></div>`;
+    status.innerHTML = `<div class="adm-status-dot off"></div><span>Sin configurar</span>`;
+  }
+}
+
+// ── Save a single slot ──
+async function saveSlot(slotId) {
+  const input = document.getElementById(`input-${slotId}`);
+  const url = input ? input.value.trim() : '';
+  try {
+    await setDoc(doc(db, 'settings', 'images'), { [slotId]: url || null }, { merge: true });
+    setImgCache(slotId, url);
+    updateCardUI(slotId, url);
+    showToast(url ? '✅ Imagen guardada' : '✅ Imagen quitada');
+  } catch (e) {
+    console.error(e);
+    showToast('❌ Error al guardar. Revisá la conexión.', true);
+  }
+}
+
+// ── Clear a single slot ──
+async function clearSlot(slotId) {
+  const input = document.getElementById(`input-${slotId}`);
+  if (input) input.value = '';
+  try {
+    await setDoc(doc(db, 'settings', 'images'), { [slotId]: null }, { merge: true });
+    setImgCache(slotId, '');
+    updateCardUI(slotId, '');
+    showToast('✅ Imagen quitada');
+  } catch (e) {
+    showToast('❌ Error al quitar imagen.', true);
+  }
+}
+
+// ── Event delegation on grid ──
+document.getElementById('adm-cards-grid').addEventListener('click', e => {
+  const saveBtn = e.target.closest('[data-save]');
+  const clearBtn = e.target.closest('[data-clear]');
+  if (saveBtn) saveSlot(saveBtn.dataset.save);
+  if (clearBtn) clearSlot(clearBtn.dataset.clear);
+});
+
+// ── Sidebar nav ──
+document.querySelectorAll('.adm-nav-btn[data-section]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.adm-nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSection(btn.dataset.section);
+    // close sidebar on mobile
+    if (window.innerWidth <= 768) {
+      document.getElementById('adm-sidebar').classList.remove('open');
+      document.getElementById('adm-overlay').classList.remove('show');
+    }
+  });
+});
+
+// ── Hamburger ──
+document.getElementById('adm-hamburger').addEventListener('click', () => {
+  document.getElementById('adm-sidebar').classList.toggle('open');
+  document.getElementById('adm-overlay').classList.toggle('show');
+});
+document.getElementById('adm-overlay').addEventListener('click', () => {
+  document.getElementById('adm-sidebar').classList.remove('open');
+  document.getElementById('adm-overlay').classList.remove('show');
+});
+
+// ── Auth guard ──
+onAuthStateChanged(auth, async (user) => {
+  const loading = document.getElementById('auth-loading');
+  const denied  = document.getElementById('auth-denied');
+
+  if (!user) {
+    loading.style.display = 'none';
+    denied.style.display = 'flex';
+    return;
+  }
+
+  // Check role
+  let allowed = user.email === SUPERADMIN_EMAIL;
+  if (!allowed) {
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      const role = snap.exists() ? snap.data().role : null;
+      allowed = ALLOWED_ROLES.includes(role);
+    } catch {}
+  }
+
+  if (!allowed) {
+    loading.style.display = 'none';
+    denied.style.display = 'flex';
+    return;
+  }
+
+  // Show UI
+  loading.style.display = 'none';
+  document.getElementById('adm-header').style.display = '';
+  document.getElementById('adm-sidebar').style.display = '';
+  document.getElementById('adm-layout').style.display = '';
+  document.getElementById('adm-user-email').textContent = user.email;
+
+  // Load images then render
+  await loadImages();
+  renderSection(currentSection);
+});
+</script>
+</body>
+</html>
