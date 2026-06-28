@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finalizar compra | Tintin Accesorios</title>
+  <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --acc: #b84c72;
+      --acc-dark: #9a3d5e;
+      --acc-light: #f5d0de;
+      --acc-pale: #fef5f8;
+      --text: #1a1a1a;
+      --text-muted: #888;
+      --border: #f0d8e0;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --font: 'Poppins', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: #f7f4f6;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ---- HEADER ---- */
+    .ck-header {
+      background: #fff;
+      border-bottom: 1.5px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .ck-header-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--acc);
+      text-decoration: none;
+    }
+    .ck-header-back {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .ck-header-back:hover { color: var(--acc); }
+
+    /* ---- STEP INDICATOR ---- */
+    .ck-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 24px 16px 16px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .ck-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+    .ck-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: calc(50% + 16px);
+      right: calc(-50% + 16px);
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .ck-step.done:not(:last-child)::after { background: var(--acc); }
+
+    .ck-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2.5px solid var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+      transition: all .3s;
+    }
+    .ck-step.active .ck-step-num {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #fff;
+    }
+    .ck-step.done .ck-step-num {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #fff;
+    }
+    .ck-step-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .ck-step.active .ck-step-label { color: var(--acc); }
+    .ck-step.done .ck-step-label { color: var(--acc); }
+
+    /* ---- MAIN LAYOUT ---- */
+    .ck-body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 8px 16px 80px;
+    }
+
+    /* ---- PANELS ---- */
+    .ck-panel {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      display: none;
+    }
+    .ck-panel.active { display: block; }
+
+    .ck-panel-head {
+      background: var(--acc-pale);
+      padding: 20px 24px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .ck-panel-title {
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--acc);
+    }
+    .ck-panel-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .ck-panel-body { padding: 24px; }
+
+    /* ---- CART ITEMS ---- */
+    .ck-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid #fce4ec;
+    }
+    .ck-item:last-child { border-bottom: none; }
+    .ck-item-img {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: #f9f0f4;
+      flex-shrink: 0;
+    }
+    .ck-item-img-placeholder {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-sm);
+      background: var(--acc-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .ck-item-info { flex: 1; min-width: 0; }
+    .ck-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ck-item-cat {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .ck-item-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--acc);
+      margin-top: 2px;
+    }
+    .ck-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ck-qty-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--acc);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+      line-height: 1;
+    }
+    .ck-qty-btn:hover { background: var(--acc); color: #fff; border-color: var(--acc); }
+    .ck-qty-num {
+      font-size: 14px;
+      font-weight: 800;
+      min-width: 24px;
+      text-align: center;
+    }
+    .ck-remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ccc;
+      font-size: 18px;
+      line-height: 1;
+      transition: color .15s;
+      padding: 4px;
+    }
+    .ck-remove-btn:hover { color: #ef4444; }
+
+    .ck-subtotal {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0 0;
+      margin-top: 8px;
+      border-top: 2px solid var(--border);
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .ck-subtotal-val { color: var(--acc); font-size: 16px; }
+
+    .ck-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .ck-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .ck-empty-text { font-size: 14px; font-weight: 600; }
+
+    /* ---- BUTTONS ---- */
+    .ck-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: var(--acc);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background .2s, transform .15s;
+      margin-top: 20px;
+    }
+    .ck-btn:hover { background: var(--acc-dark); }
+    .ck-btn:active { transform: scale(.98); }
+    .ck-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    .ck-btn-back {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .2s;
+      margin-top: 10px;
+    }
+    .ck-btn-back:hover { border-color: var(--acc); color: var(--acc); }
+
+    /* ---- FORM FIELDS ---- */
+    .ck-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .ck-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+    }
+    .ck-input, .ck-select, .ck-textarea {
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text);
+      transition: border .2s, box-shadow .2s;
+      background: #fff;
+      width: 100%;
+    }
+    .ck-input:focus, .ck-select:focus, .ck-textarea:focus {
+      outline: none;
+      border-color: var(--acc);
+      box-shadow: 0 0 0 3px rgba(184,76,114,.1);
+    }
+    .ck-textarea { resize: vertical; min-height: 80px; }
+
+    /* ---- SHIPPING INFO ---- */
+    .ck-ship-info {
+      background: var(--acc-pale);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-top: 12px;
+      display: none;
+    }
+    .ck-ship-info.show { display: block; }
+    .ck-ship-method {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--acc);
+      margin-bottom: 4px;
+    }
+    .ck-ship-cost {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ---- PAYMENT RADIO CARDS ---- */
+    .ck-pay-option {
+      display: none;
+    }
+    .ck-pay-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all .2s;
+    }
+    .ck-pay-label:hover { border-color: var(--acc); background: var(--acc-pale); }
+    .ck-pay-option:checked + .ck-pay-label {
+      border-color: var(--acc);
+      background: var(--acc-pale);
+    }
+    .ck-pay-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .ck-pay-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .ck-pay-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .ck-bank-details {
+      background: #f0f8f0;
+      border: 1.5px solid #c8e6c9;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-top: 4px;
+      display: none;
+      font-size: 13px;
+      color: #2e7d32;
+    }
+    .ck-bank-details.show { display: block; }
+    .ck-bank-line { margin-bottom: 4px; font-weight: 600; }
+
+    .ck-card-form {
+      background: var(--acc-pale);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 4px;
+      display: none;
+    }
+    .ck-card-form.show { display: block; }
+    .ck-card-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ck-pay-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #fffbf0;
+      border-radius: var(--radius-sm);
+      border: 1px solid #fde68a;
+    }
+
+    /* ---- ORDER SUMMARY ---- */
+    .ck-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #fce4ec;
+    }
+    .ck-summary-row:last-child { border-bottom: none; }
+    .ck-summary-label { color: var(--text-muted); font-weight: 600; }
+    .ck-summary-val { font-weight: 700; }
+    .ck-summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 0;
+      font-size: 16px;
+      font-weight: 900;
+      border-top: 2.5px solid var(--acc);
+      margin-top: 8px;
+    }
+    .ck-summary-total-val { color: var(--acc); }
+
+    .ck-summary-items {
+      margin-top: 8px;
+    }
+    .ck-summary-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 4px 0;
+      color: var(--text);
+    }
+    .ck-summary-item-name {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* ---- CONFIRM ---- */
+    .ck-confirm-check {
+      text-align: center;
+      padding: 32px 24px 20px;
+    }
+    .ck-confirm-icon {
+      width: 80px;
+      height: 80px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 40px;
+      animation: ckPop .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes ckPop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .ck-confirm-title {
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #2e7d32;
+      margin-bottom: 6px;
+    }
+    .ck-confirm-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .ck-wa-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+      font-family: var(--font);
+      text-decoration: none;
+      margin-top: 20px;
+      transition: background .2s;
+      width: 100%;
+    }
+    .ck-wa-btn:hover { background: #128c7e; }
+
+    /* ---- ERROR ---- */
+    .ck-error {
+      background: #ffebee;
+      color: #c62828;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 12px;
+      display: none;
+    }
+    .ck-error.show { display: block; }
+
+    /* ---- SPINNER ---- */
+    .ck-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 480px) {
+      .ck-panel-body { padding: 16px; }
+      .ck-step-label { display: none; }
+      .ck-card-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="ck-header">
+  <a href="index.html" class="ck-header-logo">Tintin ✨</a>
+  <a href="index.html" class="ck-header-back">← Seguir comprando</a>
+</header>
+
+<!-- STEP INDICATOR -->
+<div class="ck-steps" id="ck-steps">
+  <div class="ck-step active" data-step="0">
+    <div class="ck-step-num">1</div>
+    <div class="ck-step-label">Carrito</div>
+  </div>
+  <div class="ck-step" data-step="1">
+    <div class="ck-step-num">2</div>
+    <div class="ck-step-label">Envío</div>
+  </div>
+  <div class="ck-step" data-step="2">
+    <div class="ck-step-num">3</div>
+    <div class="ck-step-label">Datos</div>
+  </div>
+  <div class="ck-step" data-step="3">
+    <div class="ck-step-num">4</div>
+    <div class="ck-step-label">Pago</div>
+  </div>
+  <div class="ck-step" data-step="4">
+    <div class="ck-step-num">5</div>
+    <div class="ck-step-label">Confirmación</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="ck-body">
+
+  <!-- ===================== STEP 1: CARRITO ===================== -->
+  <div class="ck-panel active" id="panel-0">
+    <div class="ck-panel-head">
+      <div class="ck-panel-title">🛒 Tu carrito</div>
+      <div class="ck-panel-sub">Revisá tus productos antes de continuar</div>
+    </div>
+    <div class="ck-panel-body">
+      <div class="ck-items" id="ck-items"></div>
+      <div class="ck-subtotal">
+        <span>Subtotal:</span>
+        <span class="ck-subtotal-val" id="ck-subtotal-val">Gs. 0</span>
+      </div>
+      <div class="ck-error" id="error-0"></div>
+      <button class="ck-btn" id="btn-step1-next">Continuar con el envío →</button>
+    </div>
+  </div>
+
+  <!-- ===================== STEP 2: ENVÍO ===================== -->
+  <div class="ck-panel" id="panel-1">
+    <div class="ck-panel-head">
+      <div class="ck-panel-title">🚚 Información de envío</div>
+      <div class="ck-panel-sub">Elegí tu ciudad y método de entrega</div>
+    </div>
+    <div class="ck-panel-body">
+      <div class="ck-field">
+        <label class="ck-label">Ciudad *</label>
+        <select class="ck-select" id="ck-city">
+          <option value="">— Seleccioná tu ciudad —</option>
+          <optgroup label="🏙️ Zona Central (Delivery a domicilio)">
+            <!-- filled by JS -->
+          </optgroup>
+          <optgroup label="🌎 Interior del país (Encomienda)">
+            <!-- filled by JS -->
+          </optgroup>
+          <optgroup label="🏪 Retiro en tienda">
+            <option value="__retiro__">San Lorenzo (retiro en tienda)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="ck-ship-info" id="ck-ship-info">
+        <div class="ck-ship-method" id="ck-ship-method">—</div>
+        <div class="ck-ship-cost" id="ck-ship-cost">—</div>
+      </div>
+
+      <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
+        <label class="ck-label">Dirección de entrega *</label>
+        <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
+      </div>
+
+      <div class="ck-error" id="error-1"></div>
+      <button class="ck-btn" id="btn-step2-next">Continuar →</button>
+      <button class="ck-btn-back" id="btn-step2-back">← Volver al carrito</button>
+    </div>
+  </div>
+
+  <!-- ===================== STEP 3: DATOS ===================== -->
+  <div class="ck-panel" id="panel-2">
+    <div class="ck-panel-head">
+      <div class="ck-panel-title">👤 Tus datos</div>
+      <div class="ck-panel-sub">Para confirmar y coordinar la entrega</div>
+    </div>
+    <div class="ck-panel-body">
+      <div class="ck-field">
+        <label class="ck-label">Nombre completo *</label>
+        <input type="text" class="ck-input" id="ck-name" placeholder="Tu nombre y apellido" />
+      </div>
+      <div class="ck-field">
+        <label class="ck-label">Teléfono / WhatsApp *</label>
+        <input type="tel" class="ck-input" id="ck-phone" placeholder="Ej: 0981 123 456" />
+      </div>
+      <div class="ck-field">
+        <label class="ck-label">Notas opcionales</label>
+        <textarea class="ck-textarea" id="ck-notes" placeholder="Ej: Entregar después de las 17hs, timbre no funciona…"></textarea>
+      </div>
+
+      <div class="ck-error" id="error-2"></div>
+      <button class="ck-btn" id="btn-step3-next">Continuar al pago →</button>
+      <button class="ck-btn-back" id="btn-step3-back">← Volver al envío</button>
+    </div>
+  </div>
+
+  <!-- ===================== STEP 4: PAGO ===================== -->
+  <div class="ck-panel" id="panel-3">
+    <div class="ck-panel-head">
+      <div class="ck-panel-title">💳 Método de pago</div>
+      <div class="ck-panel-sub">Elegí cómo querés pagar</div>
+    </div>
+    <div class="ck-panel-body">
+
+      <!-- Efectivo -->
+      <input type="radio" name="ck-pay" id="pay-efectivo" value="efectivo" class="ck-pay-option" />
+      <label for="pay-efectivo" class="ck-pay-label">
+        <div class="ck-pay-icon">💵</div>
+        <div>
+          <div class="ck-pay-title">Efectivo</div>
+          <div class="ck-pay-desc">Pagás al recibir el pedido (contra entrega)</div>
+        </div>
+      </label>
+
+      <!-- Transferencia -->
+      <input type="radio" name="ck-pay" id="pay-transferencia" value="transferencia" class="ck-pay-option" />
+      <label for="pay-transferencia" class="ck-pay-label">
+        <div class="ck-pay-icon">🏦</div>
+        <div>
+          <div class="ck-pay-title">Transferencia bancaria</div>
+          <div class="ck-pay-desc">Envianos el comprobante por WhatsApp</div>
+        </div>
+      </label>
+      <div class="ck-bank-details" id="bank-details">
+        <div class="ck-bank-line">🏦 <strong>Ueno (Banco GNB):</strong> CI 4.123.456 — Alberto Giménez</div>
+        <div class="ck-bank-line">🏦 <strong>Atlas (Banco Nacional):</strong> CI 4.123.456 — Alberto Giménez</div>
+        <div style="margin-top:8px;font-size:12px;color:#555">Envianos el comprobante por WhatsApp al confirmar el pedido 📲</div>
+      </div>
+
+      <!-- Tarjeta -->
+      <input type="radio" name="ck-pay" id="pay-tarjeta" value="tarjeta" class="ck-pay-option" />
+      <label for="pay-tarjeta" class="ck-pay-label">
+        <div class="ck-pay-icon">💳</div>
+        <div>
+          <div class="ck-pay-title">Tarjeta de crédito/débito</div>
+          <div class="ck-pay-desc">Simulador de pago (no cobra dinero real)</div>
+        </div>
+      </label>
+      <div class="ck-card-form" id="card-form">
+        <div class="ck-field">
+          <label class="ck-label">Número de tarjeta</label>
+          <input type="text" class="ck-input" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" />
+        </div>
+        <div class="ck-card-row">
+          <div class="ck-field">
+            <label class="ck-label">Vencimiento</label>
+            <input type="text" class="ck-input" id="card-expiry" placeholder="MM/AA" maxlength="5" />
+          </div>
+          <div class="ck-field">
+            <label class="ck-label">CVV</label>
+            <input type="text" class="ck-input" id="card-cvv" placeholder="123" maxlength="4" />
+          </div>
+        </div>
+        <div id="card-approved-msg" style="display:none;background:#e8f5e9;color:#2e7d32;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;margin-top:8px">
+          ✅ Pago aprobado (simulación)
+        </div>
+      </div>
+
+      <div class="ck-pay-note">
+        🎉 Próximamente habilitamos <strong>PagoPar</strong> y más métodos de pago digital
+      </div>
+
+      <div class="ck-error" id="error-3"></div>
+      <button class="ck-btn" id="btn-step4-next">Ver resumen del pedido →</button>
+      <button class="ck-btn-back" id="btn-step4-back">← Volver a tus datos</button>
+    </div>
+  </div>
+
+  <!-- ===================== STEP 5: CONFIRMACIÓN ===================== -->
+  <div class="ck-panel" id="panel-4">
+    <div class="ck-confirm-check">
+      <div class="ck-confirm-icon">✅</div>
+      <div class="ck-confirm-title">¡Pedido listo!</div>
+      <div class="ck-confirm-sub">Revisá el resumen y finalizá por WhatsApp</div>
+    </div>
+    <div class="ck-panel-body" style="padding-top:0">
+      <div id="ck-confirm-summary"></div>
+
+      <a id="ck-wa-btn" href="#" target="_blank" class="ck-wa-btn">
+        <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Finalizar pedido por WhatsApp
+      </a>
+
+      <div style="text-align:center;margin-top:16px">
+        <a href="index.html" style="font-size:12px;color:var(--text-muted);font-weight:600;text-decoration:none">
+          🏠 Volver al inicio
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /ck-body -->
+
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  collection, addDoc, doc, getDoc, updateDoc, increment, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getCartLocal, setCartLocal, formatPrice, cartTotal,
+  removeFromCart, updateQty, clearCart
+} from "./js/cart-sync.js";
+
+// ---- CITY DATA ----
+const DELIVERY_CITIES = [
+  'Asunción','San Lorenzo','Luque','Lambaré','Fernando de la Mora',
+  'Capiatá','Mariano Roque Alonso','Ñemby','J. Augusto Saldivar','Limpio',
+  'Areguá','Itauguá','Villa Elisa','Ypané','San Antonio','Villeta',
+  'Nueva Italia','Guarambaré','Yaguarón','Paraguarí','Ita','Carapeguá'
+];
+const ENCOMIENDA_CITIES = [
+  'Ciudad del Este','Encarnación','Concepción','Pedro Juan Caballero',
+  'Coronel Oviedo','Villarrica','Caaguazú','Pilar','San Ignacio',
+  'Santa Rosa del Aguaray','San Pedro','Horqueta','Curuguaty',
+  'Minga Guazú','Hernandarias','Minga Porá','Salto del Guairá',
+  'San Juan Bautista','Caacupé','Tobatí','San Estanislao','Villa Hayes',
+  'Fuerte Olimpo','Bahía Negra','Filadelfia','Loma Plata','Mcal. Estigarribia'
+];
+
+const SHIPPING_COSTS = {
+  delivery:    15000,
+  encomienda:  25000,
+  retiro:      0
+};
+
+// ---- STATE ----
+let currentStep = 0;
+let cartItems = [];
+let currentUser = null;
+let orderData = {
+  city: '',
+  address: '',
+  shippingMethod: '',
+  shippingCost: 0,
+  name: '',
+  phone: '',
+  notes: '',
+  paymentMethod: ''
+};
+
+// ---- POPULATE CITY SELECT ----
+function populateCities() {
+  const select = document.getElementById('ck-city');
+  const deliveryGroup = select.querySelector('optgroup:nth-child(1)');
+  const encomiendaGroup = select.querySelector('optgroup:nth-child(2)');
+  DELIVERY_CITIES.forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    deliveryGroup.appendChild(opt);
+  });
+  ENCOMIENDA_CITIES.forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    encomiendaGroup.appendChild(opt);
+  });
+}
+
+// ---- CART RENDERING ----
+function renderCart() {
+  cartItems = getCartLocal();
+  const container = document.getElementById('ck-items');
+  const subtotalEl = document.getElementById('ck-subtotal-val');
+
+  if (!cartItems.length) {
+    container.innerHTML = `
+      <div class="ck-empty">
+        <div class="ck-empty-icon">🛒</div>
+        <div class="ck-empty-text">Tu carrito está vacío</div>
+        <a href="catalogo.html" style="display:inline-block;margin-top:12px;color:var(--acc);font-size:13px;font-weight:700;text-decoration:none">
+          → Ver productos
+        </a>
+      </div>`;
+    subtotalEl.textContent = 'Gs. 0';
+    return;
+  }
+
+  container.innerHTML = cartItems.map(item => `
+    <div class="ck-item" data-id="${item.id}">
+      ${item.imgUrl
+        ? `<img class="ck-item-img" src="${item.imgUrl}" alt="${item.name}" />`
+        : `<div class="ck-item-img-placeholder">🛍️</div>`
+      }
+      <div class="ck-item-info">
+        <div class="ck-item-name">${item.name}</div>
+        <div class="ck-item-cat">${item.cat || ''}</div>
+        <div class="ck-item-price">${formatPrice(item.price)}</div>
+      </div>
+      <div class="ck-item-controls">
+        <button class="ck-qty-btn" data-action="minus" data-id="${item.id}">−</button>
+        <span class="ck-qty-num">${item.qty}</span>
+        <button class="ck-qty-btn" data-action="plus" data-id="${item.id}">+</button>
+        <button class="ck-remove-btn" data-action="remove" data-id="${item.id}" title="Eliminar">×</button>
+      </div>
+    </div>
+  `).join('');
+
+  subtotalEl.textContent = formatPrice(cartTotal(cartItems));
+
+  // Controls
+  container.addEventListener('click', async e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+    if (action === 'plus')   await updateQty(id, 1);
+    if (action === 'minus')  await updateQty(id, -1);
+    if (action === 'remove') await removeFromCart(id);
+    renderCart();
+  });
+}
+
+// ---- STEP NAVIGATION ----
+function goToStep(n) {
+  // Update panels
+  document.querySelectorAll('.ck-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === n);
+  });
+  // Update step indicator
+  document.querySelectorAll('.ck-step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i === n) s.classList.add('active');
+    if (i < n)  s.classList.add('done');
+  });
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(stepIdx, msg) {
+  const el = document.getElementById(`error-${stepIdx}`);
+  if (el) { el.textContent = msg; el.classList.add('show'); }
+}
+function hideErrors() {
+  document.querySelectorAll('.ck-error').forEach(e => e.classList.remove('show'));
+}
+
+// ---- STEP 1: CART → STEP 2 ----
+document.getElementById('btn-step1-next').onclick = () => {
+  hideErrors();
+  cartItems = getCartLocal();
+  if (!cartItems.length) {
+    showError(0, 'Tu carrito está vacío. Agregá productos antes de continuar.');
+    return;
+  }
+  goToStep(1);
+};
+
+// ---- STEP 2: SHIPPING ----
+document.getElementById('ck-city').onchange = function() {
+  const val = this.value;
+  const infoEl = document.getElementById('ck-ship-info');
+  const methodEl = document.getElementById('ck-ship-method');
+  const costEl = document.getElementById('ck-ship-cost');
+  const addressField = document.getElementById('ck-address-field');
+
+  if (!val) {
+    infoEl.classList.remove('show');
+    addressField.style.display = 'none';
+    return;
+  }
+
+  infoEl.classList.add('show');
+
+  if (val === '__retiro__') {
+    methodEl.textContent = '🏪 Retiro en tienda — San Lorenzo';
+    costEl.textContent = '✅ Sin costo de envío';
+    orderData.shippingMethod = 'retiro';
+    orderData.shippingCost = 0;
+    addressField.style.display = 'none';
+  } else if (DELIVERY_CITIES.includes(val)) {
+    methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
+    costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.delivery)}`;
+    orderData.shippingMethod = 'delivery';
+    orderData.shippingCost = SHIPPING_COSTS.delivery;
+    addressField.style.display = 'block';
+  } else {
+    methodEl.textContent = '📦 Envío por encomienda — Interior del país';
+    costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.encomienda)}`;
+    orderData.shippingMethod = 'encomienda';
+    orderData.shippingCost = SHIPPING_COSTS.encomienda;
+    addressField.style.display = 'block';
+  }
+};
+
+document.getElementById('btn-step2-next').onclick = () => {
+  hideErrors();
+  const city = document.getElementById('ck-city').value;
+  if (!city) { showError(1, 'Seleccioná tu ciudad.'); return; }
+
+  if (orderData.shippingMethod !== 'retiro') {
+    const addr = document.getElementById('ck-address').value.trim();
+    if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
+    orderData.address = addr;
+  }
+
+  orderData.city = city === '__retiro__' ? 'San Lorenzo (retiro)' : city;
+  goToStep(2);
+
+  // Pre-fill from user profile
+  if (currentUser) {
+    if (!document.getElementById('ck-name').value) {
+      document.getElementById('ck-name').value = currentUser.displayName || '';
+    }
+  }
+};
+
+document.getElementById('btn-step2-back').onclick = () => goToStep(0);
+
+// ---- STEP 3: DATOS ----
+document.getElementById('btn-step3-next').onclick = () => {
+  hideErrors();
+  const name = document.getElementById('ck-name').value.trim();
+  const phone = document.getElementById('ck-phone').value.trim();
+  if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
+  if (!phone) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
+  orderData.name = name;
+  orderData.phone = phone;
+  orderData.notes = document.getElementById('ck-notes').value.trim();
+  goToStep(3);
+};
+document.getElementById('btn-step3-back').onclick = () => goToStep(1);
+
+// ---- STEP 4: PAYMENT ----
+document.querySelectorAll('input[name="ck-pay"]').forEach(radio => {
+  radio.onchange = function() {
+    document.getElementById('bank-details').classList.toggle('show', this.value === 'transferencia');
+    document.getElementById('card-form').classList.toggle('show', this.value === 'tarjeta');
+    orderData.paymentMethod = this.value;
+  };
+});
+
+// Card number formatting
+const cardNumInput = document.getElementById('card-number');
+if (cardNumInput) {
+  cardNumInput.oninput = function() {
+    let v = this.value.replace(/\D/g, '').substring(0, 16);
+    this.value = v.replace(/(.{4})/g, '$1 ').trim();
+  };
+}
+const cardExpiryInput = document.getElementById('card-expiry');
+if (cardExpiryInput) {
+  cardExpiryInput.oninput = function() {
+    let v = this.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2);
+    this.value = v;
+  };
+}
+
+document.getElementById('btn-step4-next').onclick = async () => {
+  hideErrors();
+  const selected = document.querySelector('input[name="ck-pay"]:checked');
+  if (!selected) { showError(3, 'Seleccioná un método de pago.'); return; }
+
+  orderData.paymentMethod = selected.value;
+
+  if (selected.value === 'tarjeta') {
+    const num = document.getElementById('card-number').value.replace(/\s/g,'');
+    const exp = document.getElementById('card-expiry').value;
+    const cvv = document.getElementById('card-cvv').value;
+    if (!num || num.length < 16) { showError(3, 'Ingresá un número de tarjeta válido.'); return; }
+    if (!exp || exp.length < 5) { showError(3, 'Ingresá la fecha de vencimiento.'); return; }
+    if (!cvv || cvv.length < 3) { showError(3, 'Ingresá el CVV.'); return; }
+    document.getElementById('card-approved-msg').style.display = 'block';
+    console.log('Payment approved (simulation)');
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  // Save order & go to confirmation
+  await buildConfirmation();
+  goToStep(4);
+};
+document.getElementById('btn-step4-back').onclick = () => goToStep(2);
+
+// ---- BUILD CONFIRMATION ----
+async function buildConfirmation() {
+  cartItems = getCartLocal();
+  const subtotal = cartTotal(cartItems);
+  const total = subtotal + orderData.shippingCost;
+
+  const payLabels = {
+    efectivo: '💵 Efectivo (contra entrega)',
+    transferencia: '🏦 Transferencia bancaria',
+    tarjeta: '💳 Tarjeta (simulación)'
+  };
+  const shipLabels = {
+    delivery: '🚚 Delivery a domicilio',
+    encomienda: '📦 Por encomienda',
+    retiro: '🏪 Retiro en tienda'
+  };
+
+  // Summary HTML
+  const summaryEl = document.getElementById('ck-confirm-summary');
+  summaryEl.innerHTML = `
+    <div class="ck-summary-items">
+      ${cartItems.map(i => `
+        <div class="ck-summary-item">
+          <span class="ck-summary-item-name">${i.qty}x ${i.name}</span>
+          <span style="font-weight:700">${formatPrice(i.price * i.qty)}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:16px">
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">👤 Cliente</span>
+        <span class="ck-summary-val">${orderData.name}</span>
+      </div>
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📞 Teléfono</span>
+        <span class="ck-summary-val">${orderData.phone}</span>
+      </div>
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📍 Ciudad</span>
+        <span class="ck-summary-val">${orderData.city}</span>
+      </div>
+      ${orderData.address ? `
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">🏠 Dirección</span>
+        <span class="ck-summary-val">${orderData.address}</span>
+      </div>` : ''}
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">🚚 Envío</span>
+        <span class="ck-summary-val">${shipLabels[orderData.shippingMethod] || orderData.shippingMethod}</span>
+      </div>
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">💳 Pago</span>
+        <span class="ck-summary-val">${payLabels[orderData.paymentMethod] || orderData.paymentMethod}</span>
+      </div>
+      ${orderData.notes ? `
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📝 Notas</span>
+        <span class="ck-summary-val">${orderData.notes}</span>
+      </div>` : ''}
+    </div>
+    <div class="ck-summary-total">
+      <span>Subtotal</span>
+      <span class="ck-summary-total-val">${formatPrice(subtotal)}</span>
+    </div>
+    <div class="ck-summary-total">
+      <span>Costo de envío</span>
+      <span class="ck-summary-total-val">${formatPrice(orderData.shippingCost)}</span>
+    </div>
+    <div class="ck-summary-total" style="font-size:18px">
+      <span>TOTAL</span>
+      <span class="ck-summary-total-val">${formatPrice(total)}</span>
+    </div>
+  `;
+
+  // Build WhatsApp message
+  const waMsg = buildWaMessage(cartItems, subtotal, total, payLabels, shipLabels);
+  document.getElementById('ck-wa-btn').href = `https://wa.me/595981299331?text=${encodeURIComponent(waMsg)}`;
+
+  // Save to Firestore
+  await saveOrder(cartItems, subtotal, total);
+}
+
+function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
+  const itemLines = items.map(i => `• ${i.qty}x ${i.name} — ${formatPrice(i.price * i.qty)}`).join('\n');
+  const payText = { efectivo:'Efectivo (contra entrega)', transferencia:'Transferencia bancaria', tarjeta:'Tarjeta (simulación)' }[orderData.paymentMethod] || orderData.paymentMethod;
+  const shipText = shipLabels[orderData.shippingMethod] || orderData.shippingMethod;
+
+  return `🛍️ *NUEVO PEDIDO — TINTIN ACCESORIOS*
+━━━━━━━━━━━━━━━━━━━━━━
+👤 *Cliente:* ${orderData.name}
+📞 *Tel:* ${orderData.phone}
+📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}
+🚚 *Envío:* ${shipText} — ${formatPrice(orderData.shippingCost)}
+━━━━━━━━━━━━━━━━━━━━━━
+🛒 *Productos:*
+${itemLines}
+━━━━━━━━━━━━━━━━━━━━━━
+💰 *Subtotal:* ${formatPrice(subtotal)}
+🚚 *Costo de envío:* ${formatPrice(orderData.shippingCost)}
+💰 *TOTAL:* ${formatPrice(total)}
+💳 *Método de pago:* ${payText}
+━━━━━━━━━━━━━━━━━━━━━━
+📝 *Notas:* ${orderData.notes || 'Sin notas'}`;
+}
+
+async function saveOrder(items, subtotal, total) {
+  try {
+    const orderDoc = {
+      userId:      currentUser?.uid || null,
+      userEmail:   currentUser?.email || orderData.phone,
+      userName:    orderData.name,
+      userPhone:   orderData.phone,
+      items:       items.map(i => ({
+        id:    i.id,
+        name:  i.name,
+        cat:   i.cat || '',
+        price: i.price,
+        qty:   i.qty
+      })),
+      subtotal,
+      shippingCost: orderData.shippingCost,
+      total,
+      shipping: {
+        method:  orderData.shippingMethod,
+        city:    orderData.city,
+        address: orderData.address || '',
+        zone:    DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
+      },
+      payment: {
+        method: orderData.paymentMethod,
+        status: 'pendiente'
+      },
+      status:    'pendiente',
+      notes:     orderData.notes || '',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+
+    await addDoc(collection(db, 'orders'), orderDoc);
+
+    // Update user stats if logged in
+    if (currentUser) {
+      try {
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          purchaseCount: increment(1),
+          totalSpent:    increment(total)
+        });
+      } catch(e) {}
+    }
+
+    // Clear cart after save
+    await clearCart();
+  } catch (e) {
+    console.error('Error saving order:', e);
+  }
+}
+
+// ---- INIT ----
+populateCities();
+renderCart();
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+});
+</script>
+
+</body>
+</html>
