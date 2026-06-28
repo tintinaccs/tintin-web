@@ -209,7 +209,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   padding: 9px 14px;
   border-radius: 999px;
   white-space: nowrap;
-  background: rgba(255,255,255,.36);
+  background: rgba(252,228,236,.55);
   border: 1px solid rgba(167,33,77,.055);
   cursor: pointer;
   text-transform: uppercase;
@@ -225,7 +225,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-nav-link:hover,
 .tt-nav-tienda-btn:hover,
 .tt-nav-item.tt-drop-open .tt-nav-tienda-btn {
-  background: rgba(255,255,255,.82);
+  background: rgba(252,210,228,.92);
   color: #7C1E3F;
   transform: translateY(-1px);
   border-color: rgba(167,33,77,.14);
@@ -263,7 +263,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background:
     radial-gradient(circle at 18% 0%, rgba(255,218,232,.68), transparent 28%),
     radial-gradient(circle at 82% 10%, rgba(255,241,246,.9), transparent 26%),
-    linear-gradient(180deg, #fffbfd 0%, #fff3f7 100%);
+    linear-gradient(180deg, #fce4ec 0%, #fad4e4 100%);
   padding: clamp(24px, 2.7vw, 44px) clamp(24px, 5vw, 96px);
   box-shadow: 0 22px 58px rgba(92,28,47,.105), 0 1px 0 rgba(255,255,255,.88) inset;
   border-top: 1px solid rgba(167,33,77,.08);
@@ -312,7 +312,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   gap: 10px;
   padding: 13px;
   border-radius: 24px;
-  background: rgba(255,255,255,.42);
+  background: rgba(252,228,236,.6);
   border: 1px solid rgba(167,33,77,.055);
   box-shadow: 0 10px 24px rgba(167,33,77,.035);
   color: #A7214D;
@@ -336,7 +336,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   transition-delay: .12s;
 }
 .tt-drop-item:hover {
-  background: rgba(255,255,255,.88);
+  background: rgba(252,210,228,.92);
   transform: translateY(-4px);
   border-color: rgba(167,33,77,.14);
   box-shadow: 0 18px 38px rgba(167,33,77,.10);
@@ -348,8 +348,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   border-radius: 18px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 35% 25%, #fff 0%, transparent 32%),
-    linear-gradient(135deg, #fff8fa 0%, #f6dce7 100%);
+    radial-gradient(circle at 35% 25%, #fce4ec 0%, transparent 32%),
+    linear-gradient(135deg, #fce4ec 0%, #f6dce7 100%);
   box-shadow: 0 10px 24px rgba(167,33,77,.08);
 }
 .tt-drop-img img {
@@ -373,7 +373,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   align-items: center;
   padding: 11px 26px;
   border-radius: 999px;
-  background: rgba(255,255,255,.86);
+  background: rgba(252,210,228,.9);
   border: 1px solid rgba(167,33,77,.18);
   color: #A7214D;
   text-decoration: none;
@@ -516,7 +516,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-srch-input-wrap {
   position: relative;
   margin-bottom: 20px;
-  background: rgba(255,255,255,.86);
+  background: rgba(252,210,228,.9);
   border: 1px solid rgba(167,33,77,.11);
   border-radius: 999px;
   box-shadow: 0 10px 26px rgba(167,33,77,.055);
@@ -585,7 +585,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   gap: 7px;
   padding: 10px;
   border-radius: 22px;
-  background: rgba(255,255,255,.58);
+  background: rgba(252,210,228,.7);
   border: 1px solid rgba(167,33,77,.06);
 }
 
@@ -596,7 +596,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   padding: 9px;
   border-radius: 16px;
   text-decoration: none;
-  background: rgba(255,255,255,.48);
+  background: rgba(252,228,236,.65);
   transition: background .18s ease, transform .2s ease;
 }
 .tt-srch-item:hover { background: var(--bg-card); transform: translateX(2px); }
@@ -620,7 +620,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   justify-content: center;
   margin-top: 14px;
   padding: 10px 22px;
-  background: rgba(255,255,255,.96);
+  background: rgba(252,228,236,.97);
   color: #A7214D;
   border: 1px solid rgba(167,33,77,.18);
   border-radius: 999px;
@@ -651,7 +651,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-srch-prev-name      { font-size: 14px; font-weight: 800; color: #2a111b; }
 .tt-srch-prev-price     { color: #A7214D; font-weight: 800; font-size: 14px; }
 .tt-srch-prev-actions   { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-.tt-srch-prev-pill      { background: rgba(255,255,255,.96); color: #A7214D; padding: 9px 18px; border-radius: 999px; border: 1px solid rgba(167,33,77,.18); text-decoration: none; font-size: 12px; font-weight: 800; transition: transform .2s ease; }
+.tt-srch-prev-pill      { background: rgba(252,228,236,.97); color: #A7214D; padding: 9px 18px; border-radius: 999px; border: 1px solid rgba(167,33,77,.18); text-decoration: none; font-size: 12px; font-weight: 800; transition: transform .2s ease; }
 .tt-srch-prev-pill:hover { transform: translateY(-2px); }
 
 .tt-srch-empty       { text-align: center; padding: 42px 16px; color: rgba(112,45,67,.48); font-size: 13px; }
@@ -718,7 +718,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-srch-tag {
   padding: 5px 14px;
   border-radius: 999px;
-  background: rgba(255,255,255,.76);
+  background: rgba(252,210,228,.85);
   border: 1px solid rgba(167,33,77,.14);
   color: #A7214D;
   font-size: 12px;
@@ -738,7 +738,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   padding: 9px;
   border-radius: 16px;
   text-decoration: none;
-  background: rgba(255,255,255,.48);
+  background: rgba(252,228,236,.65);
   transition: background .18s ease, transform .2s ease;
 }
 .tt-srch-item-link:hover { background: var(--bg-card); transform: translateX(2px); }
