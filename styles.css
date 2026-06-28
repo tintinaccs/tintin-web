@@ -8,7 +8,7 @@
 /* ── CSS Variables ── */
 :root {
   --bg:          #ffffff;
-  --bg-soft:     #fefaf9;
+  --bg-soft:     #ffffff;
   --card-bg:     #fef5f8;
   --pink-pale:   #fce4ec;
   --pink:        #e8a0b4;
@@ -619,15 +619,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 25%, #f0d8e0 50%, #ede0f0 75%, #f5ead0 100%);
+  background: linear-gradient(160deg, #fffbfd 0%, #fef5f8 60%, #fdfbff 100%);
 }
 
-.tt-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(180,76,114,0.06) 100%);
-}
+.tt-hero::before { display: none; }
 
 .tt-hero-content {
   position: relative;
@@ -678,7 +673,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
    TRUST BAR
 ═══════════════════════════════════════════════ */
 .tt-trust-bar {
-  background: var(--pink-pale);
+  background: #fff;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 48px 0;
 }
 
@@ -746,7 +743,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   flex-direction: column;
   justify-content: center;
   padding: 64px 72px;
-  background: var(--bg-soft);
+  background: #fff;
 }
 
 .tt-editorial-eyebrow {
@@ -782,7 +779,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    COLLECTIONS GRID
 ═══════════════════════════════════════════════ */
-.tt-collections-section { background: var(--bg); }
+.tt-collections-section { background: #fff; }
 
 .tt-collections-header {
   text-align: center;
@@ -843,7 +840,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    COMPLETÁ TU LOOK
 ═══════════════════════════════════════════════ */
-.tt-look-section { background: var(--card-bg); }
+.tt-look-section { background: #fff; border-top: 1px solid var(--border); }
 
 .tt-look-header {
   text-align: center;
@@ -908,7 +905,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 560px;
-  background: var(--bg-soft);
+  background: #fff;
+  border-top: 1px solid var(--border);
 }
 
 .tt-watch-feature-img {
@@ -959,7 +957,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    PRODUCTS GRID
 ═══════════════════════════════════════════════ */
-.tt-products-section { background: var(--bg); }
+.tt-products-section { background: #fff; }
 
 .tt-products-header {
   text-align: center;
@@ -1069,7 +1067,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    REVIEWS
 ═══════════════════════════════════════════════ */
-.tt-reviews-section { background: var(--card-bg); }
+.tt-reviews-section { background: #fff; border-top: 1px solid var(--border); }
 
 .tt-reviews-header {
   text-align: center;
