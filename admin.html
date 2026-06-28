@@ -2061,7 +2061,8 @@ function loadImportar() {
     const col = name => headers.indexOf(name);
     const iHandle=col('handle'),iTitle=col('title'),iType=col('type'),iTags=col('tags'),
           iStatus=col('status'),iPrice=col('variant price'),iCompare=col('variant compare at price'),
-          iStock=col('variant inventory qty'),iImg=col('image src'),iImgPos=col('image position');
+          iStock=col('variant inventory qty'),iImg=col('image src'),iImgPos=col('image position'),
+          iVariantImg=col('variant image'),iImgUrl=col('imageurl'),iImage=col('image');
     const productos = new Map();
     for (let i = 1; i < lineas.length; i++) {
       const linea = lineas[i];
@@ -2080,7 +2081,8 @@ function loadImportar() {
       const title=cols[iTitle]||'',type=cols[iType]||'',tags=cols[iTags]||'',
             status=cols[iStatus]||'active',price=parsearPrecio(cols[iPrice]),
             compare=parsearPrecio(cols[iCompare]),stock=parseInt(cols[iStock])||0,
-            img=cols[iImg]||'',imgPos=parseInt(cols[iImgPos])||99;
+            img=cols[iImg]||cols[iVariantImg]||cols[iImgUrl]||cols[iImage]||'',
+            imgPos=parseInt(cols[iImgPos])||99;
       if (!productos.has(handle)) {
         productos.set(handle, {
           name: title||handle, category: detectarCategoria(type,tags,title),
