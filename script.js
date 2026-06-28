@@ -541,8 +541,8 @@ function renderProductsGrid(containerId, products) {
     const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
     const imgUrl = getProductImage(p.id);
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"tt-prod-placeholder\\"><span class=\\"tt-prod-emoji\\">${p.emoji || '⌚'}</span></div>'">`
-      : `<div class="tt-prod-placeholder"><span class="tt-prod-emoji">${p.emoji || '⌚'}</span></div>`;
+      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\"tt-prod-placeholder tt-prod-ph-svg\\"></div>')">`
+      : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
     return `
       <div class="tt-product-card" data-id="${p.id}">
         <div class="tt-product-img">

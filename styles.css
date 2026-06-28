@@ -1015,9 +1015,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   object-fit: contain;
   display: block;
 }
-.tt-prod-emoji {
-  font-size: 3.5rem;
-  line-height: 1;
+.tt-prod-ph-svg {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+  position: relative;
+}
+.tt-prod-ph-svg::after {
+  content: '';
+  display: block;
+  width: 48px; height: 48px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23e8a0c0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E") center/contain no-repeat;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
 }
 .tt-product-card:hover .tt-prod-placeholder { transform: scale(1.05); }
 
@@ -1759,12 +1766,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-coll-page-img {
   height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
+  display: block;
+  overflow: hidden;
+  position: relative;
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
   transition: transform 0.4s ease;
+}
+.tt-coll-page-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .tt-coll-page-card:hover .tt-coll-page-img { transform: scale(1.04); }
