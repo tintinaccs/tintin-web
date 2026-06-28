@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Imágenes de Productos | Tintin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink:      #e8a0b4;
+      --pink-mid:  #d4748e;
+      --pink-dark: #b84c72;
+      --rose:      #8b2642;
+      --border:    #f0d8e0;
+      --card-bg:   #fef5f8;
+      --text:      #1a1a1a;
+      --text-sec:  #555;
+      --muted:     #888;
+      --gold:      #c9a96e;
+      --green:     #25d366;
+      --font:      'Poppins', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: #faf7f9; color: var(--text); min-height: 100vh; }
+
+    /* ── TOP BAR ── */
+    .adm-bar {
+      background: var(--pink-dark);
+      color: #fff;
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(184,76,114,.25);
+    }
+    .adm-bar-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: .06em;
+    }
+    .adm-bar-logo span { font-family: var(--font); font-size: 11px; font-weight: 400; opacity: .7; display: block; letter-spacing: .12em; }
+    .adm-bar-links { display: flex; gap: 16px; }
+    .adm-bar-links a {
+      color: rgba(255,255,255,.8);
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .adm-bar-links a:hover { color: #fff; }
+
+    /* ── LAYOUT ── */
+    .adm-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .adm-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--pink-dark);
+      margin-bottom: 6px;
+    }
+    .adm-subtitle { font-size: 13px; color: var(--text-sec); margin-bottom: 32px; }
+
+    /* ── IMGBB KEY BANNER ── */
+    .adm-key-box {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 36px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .adm-key-icon { font-size: 28px; flex-shrink: 0; align-self: center; }
+    .adm-key-info { flex: 1; min-width: 200px; }
+    .adm-key-info strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .adm-key-info p { font-size: 12px; color: var(--muted); }
+    .adm-key-info a { color: var(--pink-dark); font-weight: 600; }
+    .adm-key-input-wrap { display: flex; gap: 10px; flex: 2; min-width: 260px; }
+    .adm-key-input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: monospace;
+      color: var(--text);
+      outline: none;
+      transition: border .2s;
+    }
+    .adm-key-input:focus { border-color: var(--pink-mid); }
+    .adm-key-saved { font-size: 12px; color: #4caf50; font-weight: 600; display: none; margin-top: 6px; }
+    .adm-key-saved.show { display: block; }
+
+    .adm-btn {
+      padding: 11px 24px;
+      background: var(--pink-dark);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .adm-btn:hover { background: var(--rose); }
+    .adm-btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--pink-dark);
+      color: var(--pink-dark);
+    }
+    .adm-btn-outline:hover { background: var(--pink-dark); color: #fff; }
+    .adm-btn-sm { padding: 8px 16px; font-size: 11px; }
+    .adm-btn-gold { background: var(--gold); }
+    .adm-btn-gold:hover { background: #b8934e; }
+    .adm-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── PRODUCTS GRID ── */
+    .adm-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .adm-product-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .adm-product-card:hover { box-shadow: 0 6px 28px rgba(184,76,114,.1); }
+
+    /* Image area */
+    .adm-prod-img-wrap {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+      overflow: hidden;
+    }
+    .adm-prod-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .adm-prod-no-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--pink-mid);
+    }
+    .adm-prod-no-img svg { opacity: .4; }
+    .adm-prod-no-img span { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .5; }
+
+    .adm-prod-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .adm-product-card:hover .adm-prod-overlay { opacity: 1; }
+
+    .adm-upload-trigger {
+      background: rgba(255,255,255,.92);
+      color: var(--pink-dark);
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .2s;
+    }
+    .adm-upload-trigger:hover { background: #fff; }
+    .adm-file-input { display: none; }
+
+    /* Card body */
+    .adm-prod-body { padding: 18px 20px 20px; }
+    .adm-prod-cat { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--pink); margin-bottom: 2px; }
+    .adm-prod-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .adm-prod-price { font-size: 13px; font-weight: 600; color: var(--pink-dark); margin-bottom: 16px; }
+
+    /* URL input row */
+    .adm-url-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .adm-url-input {
+      flex: 1;
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      font-family: var(--font);
+      color: var(--text);
+      outline: none;
+      transition: border .2s;
+    }
+    .adm-url-input:focus { border-color: var(--pink-mid); }
+    .adm-url-input::placeholder { color: var(--muted); }
+
+    /* Progress */
+    .adm-progress {
+      height: 3px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .adm-progress.show { display: block; }
+    .adm-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink), var(--pink-dark));
+      border-radius: 99px;
+      transition: width .3s ease;
+    }
+
+    /* Status message */
+    .adm-prod-status {
+      font-size: 11px;
+      font-weight: 600;
+      min-height: 16px;
+      margin-top: 6px;
+    }
+    .adm-prod-status.ok { color: #4caf50; }
+    .adm-prod-status.err { color: #e53935; }
+    .adm-prod-status.loading { color: var(--pink-dark); }
+
+    /* ── TOAST ── */
+    .adm-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--pink-dark);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+    }
+    .adm-toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── SECTION HEADER ── */
+    .adm-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .adm-section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    /* ── INSTRUCTIONS ── */
+    .adm-info {
+      background: #fff8f0;
+      border: 1.5px solid #f5e0c0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 12px;
+      color: #7a5a20;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .adm-info strong { color: #5a3a0a; }
+
+    @media (max-width: 600px) {
+      .adm-bar { padding: 12px 16px; }
+      .adm-wrap { padding: 24px 16px 80px; }
+      .adm-products-grid { grid-template-columns: 1fr; }
+      .adm-key-box { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="adm-bar">
+  <div class="adm-bar-logo">
+    TINTIN
+    <span>PANEL DE IMÁGENES</span>
+  </div>
+  <div class="adm-bar-links">
+    <a href="index.html" target="_blank">Ver tienda ↗</a>
+    <a href="admin.html">Admin Firebase</a>
+  </div>
+</div>
+
+<div class="adm-wrap">
+
+  <div style="background:#fff3f7;border:1.5px solid #f5d4e0;border-radius:10px;padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <span style="font-size:1.3rem;">🖼️</span>
+    <span style="font-size:0.95rem;color:#555;">Para gestionar <strong>TODAS las imágenes del sitio</strong> (hero, editorial, colecciones, íconos y más), usá el nuevo</span>
+    <a href="admin-images.html" style="background:#b84c72;color:#fff;padding:7px 16px;border-radius:20px;font-size:0.88rem;font-weight:600;text-decoration:none;white-space:nowrap;">→ Panel de Imágenes</a>
+  </div>
+
+  <div class="adm-title">Imágenes de productos</div>
+  <p class="adm-subtitle">Subí fotos a ImgBB y asignalas a cada producto. Las imágenes se guardan en el navegador y aparecen automáticamente en la tienda.</p>
+
+  <!-- ImgBB API Key -->
+  <div class="adm-key-box">
+    <div class="adm-key-icon">🔑</div>
+    <div class="adm-key-info">
+      <strong>API Key de ImgBB</strong>
+      <p>Gratis en <a href="https://api.imgbb.com" target="_blank">api.imgbb.com</a> → Login → API → Get API key</p>
+    </div>
+    <div class="adm-key-input-wrap">
+      <div style="flex:1">
+        <input type="text" class="adm-key-input" id="imgbb-key" placeholder="Pegá tu API key aquí…" autocomplete="off" />
+        <div class="adm-key-saved" id="key-saved">✅ Key guardada correctamente</div>
+      </div>
+      <button class="adm-btn" onclick="saveKey()">Guardar key</button>
+    </div>
+  </div>
+
+  <div class="adm-info">
+    <strong>¿Cómo funciona?</strong><br>
+    1. Guardá tu API key de ImgBB arriba.<br>
+    2. Para cada producto, hacé clic en la foto → elegí una imagen desde tu computadora → se sube automáticamente a ImgBB.<br>
+    3. También podés pegar directamente la URL de una imagen que ya tengas.<br>
+    4. La imagen queda guardada y se muestra en la tienda al instante (sin recargar nada).
+  </div>
+
+  <div class="adm-section-header">
+    <h2>Productos ({{ count }})</h2>
+    <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="clearAllImages()">🗑 Borrar todas las imágenes</button>
+  </div>
+
+  <div class="adm-products-grid" id="products-grid"></div>
+
+</div>
+
+<div class="adm-toast" id="adm-toast"></div>
+
+<script src="script.js"></script>
+<script>
+/* ──────────────────────────────────────
+   ADMIN — IMAGE MANAGER
+────────────────────────────────────── */
+
+const IMGBB_KEY_LS = 'tt_imgbb_key';
+
+// Load saved key on init
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem(IMGBB_KEY_LS);
+  if (saved) {
+    document.getElementById('imgbb-key').value = saved;
+    document.getElementById('key-saved').classList.add('show');
+  }
+  renderAdminGrid();
+});
+
+function saveKey() {
+  const val = document.getElementById('imgbb-key').value.trim();
+  if (!val) { showToast('⚠️ Pegá tu API key primero'); return; }
+  localStorage.setItem(IMGBB_KEY_LS, val);
+  document.getElementById('key-saved').classList.add('show');
+  showToast('✅ API Key guardada');
+}
+
+function getKey() {
+  return localStorage.getItem(IMGBB_KEY_LS) || '';
+}
+
+/* ── RENDER GRID ── */
+function renderAdminGrid() {
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
+
+  // Update count in section header
+  document.querySelector('.adm-section-header h2').textContent =
+    `Productos (${PRODUCTS.length})`;
+
+  grid.innerHTML = PRODUCTS.map(p => {
+    const savedUrl = getProductImage(p.id);
+    const imgHTML = savedUrl
+      ? `<img src="${savedUrl}" alt="${p.name}" id="prod-img-${p.id}" />`
+      : `<div class="adm-prod-no-img" id="prod-img-${p.id}">
+           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+           <span>Sin imagen</span>
+         </div>`;
+
+    return `
+    <div class="adm-product-card" id="card-${p.id}">
+      <div class="adm-prod-img-wrap">
+        ${imgHTML}
+        <div class="adm-prod-overlay">
+          <button class="adm-upload-trigger" onclick="triggerUpload(${p.id})">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Subir foto
+          </button>
+        </div>
+        <input type="file" class="adm-file-input" id="file-${p.id}"
+               accept="image/jpeg,image/png,image/webp,image/gif"
+               onchange="handleFileUpload(event, ${p.id})" />
+      </div>
+      <div class="adm-prod-body">
+        <div class="adm-prod-cat">${p.cat}</div>
+        <div class="adm-prod-name">${p.name}</div>
+        <div class="adm-prod-price">${formatPrice(p.price)}</div>
+
+        <div class="adm-progress" id="prog-${p.id}">
+          <div class="adm-progress-bar" id="progbar-${p.id}"></div>
+        </div>
+
+        <div class="adm-url-row">
+          <input type="url" class="adm-url-input" id="url-${p.id}"
+                 value="${savedUrl || ''}"
+                 placeholder="https://i.ibb.co/… o pega cualquier URL"
+                 oninput="onUrlInput(${p.id}, this.value)" />
+          <button class="adm-btn adm-btn-sm" onclick="applyUrl(${p.id})">✓</button>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="triggerUpload(${p.id})">
+            📤 Subir imagen
+          </button>
+          ${savedUrl ? `<button class="adm-btn adm-btn-sm" style="background:#e53935" onclick="removeImage(${p.id})">🗑</button>` : ''}
+        </div>
+
+        <div class="adm-prod-status" id="status-${p.id}">
+          ${savedUrl ? '<span style="color:#4caf50">✅ Imagen configurada</span>' : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── TRIGGER FILE INPUT ── */
+function triggerUpload(productId) {
+  const key = getKey();
+  if (!key) {
+    showToast('⚠️ Primero guardá tu API key de ImgBB arriba');
+    document.getElementById('imgbb-key').focus();
+    return;
+  }
+  document.getElementById(`file-${productId}`).click();
+}
+
+/* ── HANDLE FILE UPLOAD ── */
+async function handleFileUpload(event, productId) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const key = getKey();
+  if (!key) { showToast('⚠️ Falta la API key de ImgBB'); return; }
+
+  // Max 10MB
+  if (file.size > 10 * 1024 * 1024) {
+    setStatus(productId, 'err', '❌ La imagen es demasiado grande (máx. 10MB)');
+    return;
+  }
+
+  setStatus(productId, 'loading', '⏳ Subiendo imagen…');
+  showProgress(productId, 20);
+
+  try {
+    // Convert to base64
+    const base64 = await fileToBase64(file);
+    showProgress(productId, 50);
+
+    const form = new FormData();
+    form.append('key', key);
+    form.append('image', base64);
+    form.append('name', sanitizeName(file.name));
+
+    showProgress(productId, 70);
+
+    const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: form });
+    const json = await res.json();
+
+    showProgress(productId, 100);
+
+    if (json.success) {
+      const url = json.data.url;
+      applyImageUrl(productId, url);
+      setStatus(productId, 'ok', '✅ Imagen subida y guardada');
+      showToast(`✅ ${PRODUCTS.find(p=>p.id===productId)?.name} — imagen lista`);
+    } else {
+      throw new Error(json.error?.message || 'ImgBB rechazó la imagen');
+    }
+  } catch (err) {
+    setStatus(productId, 'err', `❌ Error: ${err.message}`);
+    showToast('❌ Error al subir. Verificá tu API key.');
+  } finally {
+    setTimeout(() => hideProgress(productId), 800);
+    event.target.value = '';
+  }
+}
+
+/* ── URL PASTE APPLY ── */
+function onUrlInput(productId, val) {
+  // Live preview while typing
+  if (isValidUrl(val)) {
+    updateImgPreview(productId, val);
+  }
+}
+
+function applyUrl(productId) {
+  const val = document.getElementById(`url-${productId}`).value.trim();
+  if (!val) { removeImage(productId); return; }
+  if (!isValidUrl(val)) { setStatus(productId, 'err', '❌ URL inválida'); return; }
+  applyImageUrl(productId, val);
+  setStatus(productId, 'ok', '✅ URL guardada');
+  showToast('✅ Imagen guardada');
+}
+
+/* ── CORE: save + render image ── */
+function applyImageUrl(productId, url) {
+  setProductImage(productId, url);
+  document.getElementById(`url-${productId}`).value = url;
+  updateImgPreview(productId, url);
+  // Refresh remove button
+  const card = document.getElementById(`card-${productId}`);
+  const existingBtn = card.querySelector('button[style*="e53935"]');
+  if (!existingBtn) {
+    const btnGroup = card.querySelector('[style*="display:flex"]');
+    if (btnGroup) {
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'adm-btn adm-btn-sm';
+      removeBtn.style.background = '#e53935';
+      removeBtn.textContent = '🗑';
+      removeBtn.onclick = () => removeImage(productId);
+      btnGroup.appendChild(removeBtn);
+    }
+  }
+}
+
+function updateImgPreview(productId, url) {
+  const wrap = document.getElementById(`prod-img-${productId}`);
+  if (!wrap) return;
+  if (wrap.tagName === 'IMG') {
+    wrap.src = url;
+  } else {
+    // Replace placeholder div with img
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = '';
+    img.id = `prod-img-${productId}`;
+    img.onerror = () => setStatus(productId, 'err', '⚠️ No se pudo cargar la imagen');
+    wrap.parentNode.replaceChild(img, wrap);
+  }
+}
+
+function removeImage(productId) {
+  const imgs = getProductImages();
+  delete imgs[String(productId)];
+  localStorage.setItem('tt_product_images', JSON.stringify(imgs));
+  setStatus(productId, '', '');
+  renderAdminGrid(); // Full re-render to restore placeholder
+  showToast('🗑 Imagen eliminada');
+}
+
+function clearAllImages() {
+  if (!confirm('¿Borrar TODAS las imágenes de productos? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem('tt_product_images');
+  renderAdminGrid();
+  showToast('🗑 Todas las imágenes eliminadas');
+}
+
+/* ── HELPERS ── */
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function sanitizeName(name) {
+  return name.replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 80);
+}
+
+function isValidUrl(str) {
+  try { const u = new URL(str); return u.protocol.startsWith('http'); } catch { return false; }
+}
+
+function setStatus(productId, type, msg) {
+  const el = document.getElementById(`status-${productId}`);
+  if (!el) return;
+  el.className = `adm-prod-status${type ? ' ' + type : ''}`;
+  el.innerHTML = msg;
+}
+
+function showProgress(productId, pct) {
+  const prog = document.getElementById(`prog-${productId}`);
+  const bar  = document.getElementById(`progbar-${productId}`);
+  if (prog) prog.classList.add('show');
+  if (bar) bar.style.width = pct + '%';
+}
+function hideProgress(productId) {
+  const prog = document.getElementById(`prog-${productId}`);
+  if (prog) prog.classList.remove('show');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('adm-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>

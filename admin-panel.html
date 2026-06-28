@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Admin | Tintin Accesorios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --adm-sidebar:        #b84c72;
+      --adm-sidebar-hover:  rgba(255,255,255,.12);
+      --adm-sidebar-active: rgba(255,255,255,.95);
+      --adm-sidebar-text:   rgba(255,255,255,.85);
+      --adm-bg:             #f7f4f6;
+      --adm-card:           #ffffff;
+      --adm-accent:         #b84c72;
+      --adm-text:           #1a1a1a;
+      --adm-muted:          #888;
+      --adm-border:         #f0d8e0;
+      --adm-font:           'Poppins', sans-serif;
+      --sidebar-w:          260px;
+    }
+
+    body {
+      font-family: var(--adm-font);
+      background: var(--adm-bg);
+      color: var(--adm-text);
+      min-height: 100vh;
+    }
+
+    /* ======== SIDEBAR ======== */
+    .adm-sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--adm-sidebar);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 200;
+      transition: transform .3s ease;
+    }
+
+    .adm-sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+    .adm-sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .adm-sidebar-logo-sub {
+      font-size: 10px;
+      color: rgba(255,255,255,.6);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .adm-user-info {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .adm-user-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .adm-user-avatar img { width:100%;height:100%;object-fit:cover; }
+    .adm-user-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .adm-user-role-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-top: 3px;
+    }
+    .role-superadmin { background: #8b2642; color: #fff; }
+    .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
+    .role-agent      { background: #7b68ee; color: #fff; }
+    .role-viewer     { background: #4a90d9; color: #fff; }
+    .role-client     { background: #888; color: #fff; }
+
+    .adm-nav {
+      flex: 1;
+      padding: 12px 0;
+    }
+    .adm-nav-divider {
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin: 8px 16px;
+    }
+    .adm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--adm-sidebar-text);
+      cursor: pointer;
+      transition: all .15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+      font-family: var(--adm-font);
+    }
+    .adm-nav-item:hover { background: var(--adm-sidebar-hover); color: #fff; }
+    .adm-nav-item.active {
+      background: var(--adm-sidebar-active);
+      color: var(--adm-accent);
+      font-weight: 700;
+    }
+    .adm-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    .adm-nav-bottom {
+      padding: 12px 0 20px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    /* ======== MAIN ======== */
+    .adm-main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ======== TOPBAR ======== */
+    .adm-topbar {
+      background: #fff;
+      border-bottom: 1.5px solid var(--adm-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .adm-topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--adm-text);
+      flex: 1;
+    }
+    .adm-hamburger { display: none; }
+    .adm-topbar-btn {
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: var(--adm-font);
+      background: var(--adm-accent);
+      color: #fff;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .adm-topbar-btn:hover { background: #9a3d5e; }
+
+    /* ======== CONTENT ======== */
+    .adm-content {
+      padding: 28px;
+      flex: 1;
+    }
+
+    /* ======== SECTIONS ======== */
+    .adm-section { display: none; }
+    .adm-section.active { display: block; }
+
+    /* ======== CARDS ======== */
+    .adm-card {
+      background: var(--adm-card);
+      border-radius: 14px;
+      border: 1.5px solid var(--adm-border);
+      overflow: hidden;
+    }
+    .adm-card-head {
+      padding: 18px 22px;
+      border-bottom: 1.5px solid var(--adm-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .adm-card-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--adm-accent);
+    }
+    .adm-card-body { padding: 22px; }
+
+    /* ======== STAT CARDS ======== */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .adm-stat {
+      background: var(--adm-card);
+      border-radius: 14px;
+      border: 1.5px solid var(--adm-border);
+      padding: 20px;
+    }
+    .adm-stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .adm-stat-val {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--adm-accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .adm-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--adm-muted);
+    }
+
+    /* ======== TABLES ======== */
+    .adm-table-wrap { overflow-x: auto; }
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .adm-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--adm-muted);
+      border-bottom: 2px solid var(--adm-border);
+      white-space: nowrap;
+    }
+    .adm-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #fce4ec;
+      vertical-align: middle;
+    }
+    .adm-table tr:last-child td { border-bottom: none; }
+    .adm-table tr:hover td { background: #fef5f8; }
+
+    /* ======== BADGES ======== */
+    .adm-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .badge-pendiente  { background: #fef3c7; color: #92400e; }
+    .badge-confirmado { background: #dbeafe; color: #1e40af; }
+    .badge-enviado    { background: #ede9fe; color: #5b21b6; }
+    .badge-entregado  { background: #d1fae5; color: #065f46; }
+    .badge-cancelado  { background: #fee2e2; color: #991b1b; }
+
+    /* ======== FORM ELEMENTS ======== */
+    .adm-input, .adm-select, .adm-textarea {
+      padding: 9px 14px;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--adm-font);
+      color: var(--adm-text);
+      background: #fff;
+      transition: border .2s;
+      width: 100%;
+    }
+    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
+      outline: none;
+      border-color: var(--adm-accent);
+    }
+    .adm-textarea { resize: vertical; min-height: 80px; }
+
+    .adm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .adm-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--adm-muted);
+    }
+
+    .adm-btn {
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: var(--adm-font);
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .adm-btn-primary { background: var(--adm-accent); color: #fff; }
+    .adm-btn-primary:hover { background: #9a3d5e; }
+    .adm-btn-danger { background: #ef4444; color: #fff; }
+    .adm-btn-danger:hover { background: #dc2626; }
+    .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
+    .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
+
+    /* ======== SEARCH ======== */
+    .adm-search-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .adm-search-wrap input {
+      padding-left: 36px;
+    }
+    .adm-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--adm-muted);
+      font-size: 14px;
+    }
+
+    /* ======== FILTER ROW ======== */
+    .adm-filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .adm-filter-row .adm-select { width: auto; flex: 1; min-width: 120px; }
+
+    /* ======== USER AVATAR (table) ======== */
+    .adm-tbl-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--adm-accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 900; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .adm-tbl-avatar img { width:100%;height:100%;object-fit:cover; }
+
+    /* ======== ORDER DETAIL ======== */
+    .adm-order-detail {
+      background: var(--adm-bg);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 8px;
+      display: none;
+      font-size: 13px;
+    }
+    .adm-order-detail.open { display: block; }
+    .adm-detail-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .adm-detail-label {
+      font-weight: 700;
+      color: var(--adm-muted);
+      min-width: 100px;
+    }
+
+    /* ======== TOGGLE SWITCH ======== */
+    .adm-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .adm-toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .adm-toggle input {
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .adm-toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      border-radius: 28px;
+      transition: .3s;
+    }
+    .adm-toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      left: 4px; bottom: 4px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    .adm-toggle input:checked + .adm-toggle-slider { background: var(--adm-accent); }
+    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(24px); }
+
+    .adm-toggle-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .adm-toggle-desc {
+      font-size: 12px;
+      color: var(--adm-muted);
+      margin-top: 4px;
+    }
+
+    /* ======== TOAST ======== */
+    .adm-toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--adm-accent);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      display: none;
+      box-shadow: 0 4px 20px rgba(184,76,114,.4);
+    }
+    .adm-toast.show { display: block; animation: toastIn .3s ease; }
+    @keyframes toastIn {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ======== SPINNER ======== */
+    .adm-spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(184,76,114,.2);
+      border-top-color: var(--adm-accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .adm-loading {
+      text-align: center;
+      padding: 32px;
+      color: var(--adm-muted);
+      font-size: 13px;
+    }
+
+    /* ======== OVERLAY ======== */
+    .adm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 150;
+    }
+    .adm-overlay.show { display: block; }
+
+    /* ======== RESPONSIVE ======== */
+    /* ── TABLET: sidebar compacta siempre visible ── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 64px; }
+
+      .adm-sidebar {
+        width: 64px;
+        overflow: visible;
+      }
+      .adm-sidebar-logo,
+      .adm-user-info .adm-user-name,
+      .adm-user-info .adm-user-role-badge,
+      .adm-nav-divider { display: none; }
+
+      .adm-user-info {
+        justify-content: center;
+        padding: 12px 0;
+      }
+      .adm-nav-item {
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 0;
+        font-size: 9px;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .adm-nav-icon { font-size: 20px; width: auto; }
+
+      .adm-nav-bottom { padding: 8px 0 16px; }
+      .adm-hamburger { display: none; }
+      .adm-content { padding: 16px; }
+      .adm-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── MOBILE: bottom tab bar, sidebar oculta ── */
+    @media (max-width: 540px) {
+      :root { --sidebar-w: 0px; }
+
+      .adm-sidebar { display: none; }
+
+      .adm-main {
+        margin-left: 0;
+        padding-bottom: 70px;
+      }
+
+      .adm-mobile-tabs {
+        display: flex !important;
+      }
+
+      .adm-content { padding: 12px; }
+      .adm-topbar { padding: 12px 16px; }
+      .adm-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Tab bar mobile — oculto por defecto */
+    .adm-mobile-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--adm-sidebar);
+      z-index: 300;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      border-top: 1px solid rgba(255,255,255,.15);
+      height: 64px;
+      align-items: stretch;
+    }
+    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
+
+    .adm-mobile-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 14px;
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.75);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--adm-font);
+      text-decoration: none;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .adm-mobile-tab:hover,
+    .adm-mobile-tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.12);
+    }
+    .adm-mobile-tab svg,
+    .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="adm-overlay" id="adm-overlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="adm-sidebar" id="adm-sidebar">
+  <div class="adm-sidebar-logo">
+    <div class="adm-sidebar-logo-text">Tintin ✨</div>
+    <div class="adm-sidebar-logo-sub">Panel de Administración</div>
+  </div>
+
+  <div class="adm-user-info">
+    <div class="adm-user-avatar" id="adm-avatar">?</div>
+    <div>
+      <div class="adm-user-name" id="adm-user-name">—</div>
+      <div id="adm-role-badge" class="adm-user-role-badge role-admin">—</div>
+    </div>
+  </div>
+
+  <nav class="adm-nav" id="adm-nav">
+    <button class="adm-nav-item active" data-section="dashboard">
+      <span class="adm-nav-icon">📊</span> Dashboard
+    </button>
+    <button class="adm-nav-item" data-section="usuarios" id="nav-usuarios">
+      <span class="adm-nav-icon">👥</span> Usuarios
+    </button>
+    <button class="adm-nav-item" data-section="pedidos">
+      <span class="adm-nav-icon">📦</span> Pedidos
+    </button>
+    <button class="adm-nav-item" data-section="productos">
+      <span class="adm-nav-icon">🛍️</span> Productos
+    </button>
+    <div class="adm-nav-divider"></div>
+    <a href="admin.html" class="adm-nav-item">
+      <span class="adm-nav-icon">📝</span> Contenido
+    </a>
+    <a href="admin-images.html" class="adm-nav-item">
+      <span class="adm-nav-icon">🖼️</span> Imágenes
+    </a>
+    <button class="adm-nav-item" data-section="mensajes">
+      <span class="adm-nav-icon">💬</span> Mensajes
+    </button>
+    <button class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
+      <span class="adm-nav-icon">🤖</span> Onboarding
+    </button>
+    <button class="adm-nav-item" data-section="configuracion" id="nav-config">
+      <span class="adm-nav-icon">⚙️</span> Configuración
+    </button>
+  </nav>
+
+  <div class="adm-nav-bottom">
+    <a href="index.html" class="adm-nav-item">
+      <span class="adm-nav-icon">🏠</span> Ver tienda →
+    </a>
+    <button class="adm-nav-item" id="adm-logout">
+      <span class="adm-nav-icon">🚪</span> Cerrar sesión
+    </button>
+  </div>
+</aside>
+
+<!-- MOBILE BOTTOM TABS -->
+<nav class="adm-mobile-tabs" id="adm-mobile-tabs">
+  <button class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon">📊</span>Dashboard</button>
+  <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon">👥</span>Usuarios</button>
+  <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon">📦</span>Pedidos</button>
+  <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon">🛍️</span>Productos</button>
+  <a href="admin.html" class="adm-mobile-tab"><span class="adm-nav-icon">📝</span>Contenido</a>
+  <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon">🖼️</span>Imágenes</a>
+  <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon">💬</span>Mensajes</button>
+  <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon">🤖</span>Onboarding</button>
+  <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon">⚙️</span>Config</button>
+  <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon">🏠</span>Tienda</a>
+  <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon">🚪</span>Salir</button>
+</nav>
+
+<!-- MAIN -->
+<main class="adm-main">
+  <header class="adm-topbar">
+    <button class="adm-hamburger" id="adm-hamburger">☰</button>
+    <div class="adm-topbar-title" id="adm-topbar-title">Dashboard</div>
+    <a href="checkout.html" class="adm-topbar-btn">+ Nuevo pedido</a>
+  </header>
+
+  <div class="adm-content">
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <div class="adm-section active" id="section-dashboard">
+      <div class="adm-stats" id="dash-stats">
+        <div class="adm-stat">
+          <div class="adm-stat-icon">👥</div>
+          <div class="adm-stat-val" id="stat-users">—</div>
+          <div class="adm-stat-label">Total usuarios</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-icon">📦</div>
+          <div class="adm-stat-val" id="stat-orders-today">—</div>
+          <div class="adm-stat-label">Pedidos hoy</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-icon">💰</div>
+          <div class="adm-stat-val" id="stat-sales-month">—</div>
+          <div class="adm-stat-label">Ventas del mes</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-icon">🛍️</div>
+          <div class="adm-stat-val" id="stat-orders-total">—</div>
+          <div class="adm-stat-label">Total pedidos</div>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📋 Últimos pedidos</div>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Ciudad</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="dash-recent-orders">
+                <tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== USUARIOS ===================== -->
+    <div class="adm-section" id="section-usuarios">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">👥 Gestión de usuarios</div>
+        </div>
+        <div class="adm-card-body" style="padding:16px 22px 0">
+          <div class="adm-search-wrap">
+            <span class="adm-search-icon">🔍</span>
+            <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
+          </div>
+        </div>
+        <div style="padding:0">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Avatar</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody">
+                <tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PEDIDOS ===================== -->
+    <div class="adm-section" id="section-pedidos">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📦 Gestión de pedidos</div>
+        </div>
+        <div class="adm-card-body" style="padding:16px 22px 0">
+          <div class="adm-filter-row">
+            <select class="adm-select" id="filter-status">
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="confirmado">Confirmado</option>
+              <option value="enviado">Enviado</option>
+              <option value="entregado">Entregado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
+        </div>
+        <div style="padding:0">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Cliente</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Ciudad</th>
+                  <th>Pago</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody">
+                <tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PRODUCTOS ===================== -->
+    <div class="adm-section" id="section-productos">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🛍️ Productos</div>
+          <a href="admin.html" class="adm-btn adm-btn-primary adm-btn-sm">Gestionar en Admin</a>
+        </div>
+        <div class="adm-card-body">
+          <p style="color:var(--adm-muted);font-size:13px">
+            La gestión completa de productos está disponible en el panel de administración de contenido.
+            Hacé clic en "Contenido" en el menú lateral o en el botón de arriba.
+          </p>
+          <a href="admin.html" class="adm-btn adm-btn-primary" style="display:inline-block;margin-top:16px">
+            → Ir al panel de productos
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== MENSAJES ===================== -->
+    <div class="adm-section" id="section-mensajes">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">💬 Mensajes y contacto</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="color:var(--adm-muted);font-size:13px;margin-bottom:16px">
+            Los mensajes de clientes llegan por WhatsApp. Accedé directamente desde aquí.
+          </p>
+          <a href="https://wa.me/595981299331" target="_blank" class="adm-btn adm-btn-primary">
+            💬 Abrir WhatsApp Business
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ONBOARDING ===================== -->
+    <div class="adm-section" id="section-onboarding">
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🤖 Configuración de Onboarding</div>
+        </div>
+        <div class="adm-card-body">
+          <div class="adm-toggle-wrap" style="margin-bottom:20px">
+            <label class="adm-toggle">
+              <input type="checkbox" id="ob-toggle" />
+              <span class="adm-toggle-slider"></span>
+            </label>
+            <div>
+              <div class="adm-toggle-label">Activar tutorial de bienvenida para nuevos usuarios</div>
+              <div class="adm-toggle-desc">
+                Cuando está activado, los nuevos usuarios ven el asistente de bienvenida (Tina) al iniciar sesión por primera vez.
+              </div>
+            </div>
+          </div>
+          <button class="adm-btn adm-btn-primary" id="btn-save-ob">Guardar configuración</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🔄 Resetear onboarding</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Esto marca el onboarding como no completado para todos los usuarios. La próxima vez que inicien sesión, verán el tutorial de bienvenida.
+          </p>
+          <button class="adm-btn adm-btn-danger" id="btn-reset-ob">🔄 Resetear onboarding para todos los usuarios</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CONFIGURACIÓN ===================== -->
+    <div class="adm-section" id="section-configuracion">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">⚙️ Configuración general</div>
+        </div>
+        <div class="adm-card-body">
+          <div class="adm-field">
+            <label class="adm-label">Nombre de la tienda</label>
+            <input type="text" class="adm-input" id="cfg-store-name" placeholder="Tintin Accesorios" />
+          </div>
+          <div class="adm-field">
+            <label class="adm-label">Número de WhatsApp</label>
+            <input type="text" class="adm-input" id="cfg-wa-number" placeholder="595981299331" />
+          </div>
+          <div class="adm-field">
+            <label class="adm-label">Dirección de la tienda</label>
+            <input type="text" class="adm-input" id="cfg-store-address" placeholder="San Lorenzo, Paraguay" />
+          </div>
+          <div class="adm-field">
+            <label class="adm-label">Ciudades con delivery (una por línea)</label>
+            <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="6"></textarea>
+          </div>
+          <div class="adm-field">
+            <label class="adm-label">Ciudades con encomienda (una por línea)</label>
+            <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="6"></textarea>
+          </div>
+          <button class="adm-btn adm-btn-primary" id="btn-save-config">💾 Guardar configuración</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /adm-content -->
+</main>
+
+<div class="adm-toast" id="adm-toast"></div>
+
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import {
+  onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
+  query, orderBy, limit, where, writeBatch, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
+
+// ---- GLOBALS ----
+let currentUser = null;
+let currentRole = null;
+let allUsers = [];
+let allOrders = [];
+
+// ---- TOAST ----
+function toast(msg, duration = 3000) {
+  const el = document.getElementById('adm-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// ---- FORMAT ----
+function formatPrice(n) {
+  return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+function formatDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+function statusBadge(status) {
+  return `<span class="adm-badge badge-${status}">${status}</span>`;
+}
+
+// ---- SIDEBAR NAVIGATION ----
+const navItems = document.querySelectorAll('[data-section]');
+const sections = document.querySelectorAll('.adm-section');
+const topbarTitle = document.getElementById('adm-topbar-title');
+
+const SECTION_LABELS = {
+  dashboard: '📊 Dashboard',
+  usuarios: '👥 Usuarios',
+  pedidos: '📦 Pedidos',
+  productos: '🛍️ Productos',
+  mensajes: '💬 Mensajes',
+  onboarding: '🤖 Onboarding',
+  configuracion: '⚙️ Configuración'
+};
+
+function switchSection(target) {
+  navItems.forEach(b => b.classList.remove('active'));
+  // activate all items matching this section (sidebar + mobile tabs)
+  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
+  sections.forEach(s => s.classList.remove('active'));
+  const targetSection = document.getElementById(`section-${target}`);
+  if (targetSection) targetSection.classList.add('active');
+  topbarTitle.textContent = SECTION_LABELS[target] || target;
+  if (target === 'usuarios') loadUsers();
+  if (target === 'pedidos') loadOrders();
+  if (target === 'onboarding') loadOnboardingSettings();
+  if (target === 'configuracion') loadConfig();
+}
+
+navItems.forEach(btn => {
+  btn.addEventListener('click', () => switchSection(btn.dataset.section));
+});
+
+function closeSidebar() {}
+
+// ---- MOBILE TAB LOGOUT ----
+const mtabLogout = document.getElementById('mtab-logout');
+if (mtabLogout) mtabLogout.onclick = async () => { await signOut(auth); window.location.href = 'login.html'; };
+
+// ---- LOGOUT ----
+document.getElementById('adm-logout').onclick = async () => {
+  await signOut(auth);
+  window.location.href = 'login.html';
+};
+
+// ======== AUTH GUARD ========
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  currentUser = user;
+
+  const role = await getUserRole(user.uid);
+  currentRole = role;
+
+  if (role === 'client' || !role) {
+    window.location.href = 'perfil.html';
+    return;
+  }
+
+  // Set up UI
+  setupUserInfo(user, role);
+  setupPermissions(role);
+  loadDashboard();
+});
+
+function setupUserInfo(user, role) {
+  const avatarEl = document.getElementById('adm-avatar');
+  if (user.photoURL) {
+    avatarEl.innerHTML = `<img src="${user.photoURL}" alt="" />`;
+  } else {
+    avatarEl.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+  }
+  document.getElementById('adm-user-name').textContent = user.displayName || user.email;
+  const badge = document.getElementById('adm-role-badge');
+  badge.textContent = ROLE_LABELS[role] || role;
+  badge.className = `adm-user-role-badge role-${role}`;
+}
+
+function setupPermissions(role) {
+  // Hide usuarios nav for non-admins
+  if (!can(role, 'manageUsers')) {
+    document.getElementById('nav-usuarios').style.display = 'none';
+  }
+  // Hide settings for non-admins
+  if (!can(role, 'manageSettings')) {
+    document.getElementById('nav-onboarding').style.display = 'none';
+    document.getElementById('nav-config').style.display = 'none';
+  }
+}
+
+// ======== DASHBOARD ========
+async function loadDashboard() {
+  try {
+    // Users count
+    const usersSnap = await getDocs(collection(db, 'users'));
+    document.getElementById('stat-users').textContent = usersSnap.size;
+
+    // Orders
+    const ordersSnap = await getDocs(collection(db, 'orders'));
+    const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    allOrders = orders;
+
+    document.getElementById('stat-orders-total').textContent = orders.length;
+
+    // Orders today
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const todayOrders = orders.filter(o => {
+      if (!o.createdAt) return false;
+      const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+      return d >= today;
+    });
+    document.getElementById('stat-orders-today').textContent = todayOrders.length;
+
+    // Sales this month
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    const monthSales = orders
+      .filter(o => {
+        if (!o.createdAt) return false;
+        const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+        return d >= monthStart;
+      })
+      .reduce((s, o) => s + (o.total || 0), 0);
+    document.getElementById('stat-sales-month').textContent = formatPrice(monthSales);
+
+    // Recent orders (last 5)
+    const recent = [...orders]
+      .sort((a,b) => {
+        const da = a.createdAt?.toDate?.() || new Date(0);
+        const db_ = b.createdAt?.toDate?.() || new Date(0);
+        return db_ - da;
+      })
+      .slice(0, 5);
+
+    const tbody = document.getElementById('dash-recent-orders');
+    if (!recent.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+      return;
+    }
+    tbody.innerHTML = recent.map(o => `
+      <tr>
+        <td><strong>${o.userName || o.userEmail || '—'}</strong><br><small style="color:#aaa">${o.userPhone || ''}</small></td>
+        <td style="font-weight:700;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
+        <td>${statusBadge(o.status || 'pendiente')}</td>
+        <td>${o.shipping?.city || '—'}</td>
+        <td>${formatDate(o.createdAt)}</td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    console.error('Dashboard error:', e);
+  }
+}
+
+// ======== USUARIOS ========
+async function loadUsers() {
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+    renderUsersTable(allUsers);
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
+  }
+}
+
+function renderUsersTable(users) {
+  const tbody = document.getElementById('users-tbody');
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin usuarios</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(u => {
+    const isSuperAdmin = u.email === SUPER_ADMIN;
+    const canEdit = currentRole === 'superadmin' || (currentRole === 'admin' && !isSuperAdmin);
+    const roleBadge = `<span class="adm-badge role-${u.role || 'client'}">${ROLE_LABELS[u.role] || 'Cliente'}</span>`;
+    const blockedBadge = u.blocked
+      ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
+      : '<span class="adm-badge badge-entregado">Activo</span>';
+
+    const roleSelect = canEdit && can(currentRole, 'assignRoles') ? `
+      <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
+        onchange="window.updateUserRole('${u.uid}', this.value, '${u.email}')"
+        ${isSuperAdmin ? 'disabled' : ''}>
+        <option value="superadmin" ${u.role==='superadmin'?'selected':''} ${!isSuperAdmin?'style="display:none"':''}>Super Admin</option>
+        <option value="admin"      ${u.role==='admin'?'selected':''}>Admin</option>
+        <option value="agent"      ${u.role==='agent'?'selected':''}>Agente</option>
+        <option value="viewer"     ${u.role==='viewer'?'selected':''}>Viewer</option>
+        <option value="client"     ${u.role==='client'?'selected':''}>Cliente</option>
+      </select>
+    ` : roleBadge;
+
+    const actions = canEdit ? `
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${!isSuperAdmin ? `<button class="adm-btn adm-btn-sm adm-btn-outline"
+          onclick="window.toggleBlock('${u.uid}', ${!!u.blocked})">
+          ${u.blocked ? '🔓 Desbloquear' : '🔒 Bloquear'}
+        </button>` : ''}
+        ${can(currentRole,'deleteUsers') && !isSuperAdmin ? `
+          <button class="adm-btn adm-btn-sm adm-btn-danger"
+            onclick="window.deleteUser('${u.uid}', '${(u.name||u.email||'').replace(/'/g,"\\'")}')">
+            🗑️ Eliminar
+          </button>` : ''}
+      </div>
+    ` : '<span style="color:#ccc;font-size:12px">—</span>';
+
+    const avatar = u.photoURL
+      ? `<div class="adm-tbl-avatar"><img src="${u.photoURL}" alt="" /></div>`
+      : `<div class="adm-tbl-avatar">${(u.name || u.email || '?')[0].toUpperCase()}</div>`;
+
+    return `
+      <tr>
+        <td>${avatar}</td>
+        <td><strong>${u.name || '—'}</strong></td>
+        <td style="font-size:12px;color:#666">${u.email || '—'}</td>
+        <td>${roleSelect}</td>
+        <td>${blockedBadge}</td>
+        <td>${actions}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// User search
+document.getElementById('user-search').oninput = function() {
+  const q = this.value.toLowerCase();
+  const filtered = allUsers.filter(u =>
+    (u.name||'').toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q)
+  );
+  renderUsersTable(filtered);
+};
+
+window.updateUserRole = async (uid, role, email) => {
+  if (email === SUPER_ADMIN && currentRole !== 'superadmin') {
+    toast('❌ No podés cambiar el rol del Super Admin');
+    return;
+  }
+  try {
+    await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
+    const u = allUsers.find(u => u.uid === uid);
+    if (u) u.role = role;
+    toast(`✅ Rol actualizado a ${ROLE_LABELS[role]}`);
+    renderUsersTable(allUsers);
+  } catch(e) {
+    toast('❌ Error al actualizar rol');
+  }
+};
+
+window.toggleBlock = async (uid, currentlyBlocked) => {
+  try {
+    await updateDoc(doc(db, 'users', uid), {
+      blocked: !currentlyBlocked,
+      updatedAt: serverTimestamp()
+    });
+    const u = allUsers.find(u => u.uid === uid);
+    if (u) u.blocked = !currentlyBlocked;
+    toast(currentlyBlocked ? '🔓 Usuario desbloqueado' : '🔒 Usuario bloqueado');
+    renderUsersTable(allUsers);
+  } catch(e) {
+    toast('❌ Error al actualizar usuario');
+  }
+};
+
+window.deleteUser = async (uid, name) => {
+  if (!confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'users', uid));
+    allUsers = allUsers.filter(u => u.uid !== uid);
+    toast('🗑️ Usuario eliminado');
+    renderUsersTable(allUsers);
+  } catch(e) {
+    toast('❌ Error al eliminar usuario');
+  }
+};
+
+// ======== PEDIDOS ========
+async function loadOrders() {
+  const tbody = document.getElementById('orders-tbody');
+  tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+    allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderOrdersTable(allOrders);
+  } catch(e) {
+    // Try without orderBy if index missing
+    try {
+      const snap2 = await getDocs(collection(db, 'orders'));
+      allOrders = snap2.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a,b) => {
+          const da = a.createdAt?.toDate?.() || new Date(0);
+          const db_ = b.createdAt?.toDate?.() || new Date(0);
+          return db_ - da;
+        });
+      renderOrdersTable(allOrders);
+    } catch(e2) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
+    }
+  }
+}
+
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('orders-tbody');
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.map((o, i) => {
+    const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
+      (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
+    const payStatus = o.payment?.status || '—';
+    const canUpdate = can(currentRole, 'manageOrders');
+
+    return `
+      <tr style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
+        <td style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
+        <td>
+          <strong>${o.userName || '—'}</strong><br>
+          <small style="color:#aaa">${o.userPhone || ''}</small>
+        </td>
+        <td style="font-size:12px;max-width:160px">${itemsText || '—'}</td>
+        <td style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
+        <td>${statusBadge(o.status || 'pendiente')}</td>
+        <td>${o.shipping?.city || '—'}</td>
+        <td>
+          <span style="font-size:12px">${o.payment?.method || '—'}</span><br>
+          <span class="adm-badge ${payStatus==='pagado'?'badge-entregado':'badge-pendiente'}" style="font-size:9px">${payStatus}</span>
+        </td>
+        <td style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
+        <td onclick="event.stopPropagation()">
+          ${canUpdate ? `
+            <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
+              onchange="window.updateOrderStatus('${o.id}', this.value)">
+              <option value="pendiente"  ${o.status==='pendiente'?'selected':''}>Pendiente</option>
+              <option value="confirmado" ${o.status==='confirmado'?'selected':''}>Confirmado</option>
+              <option value="enviado"    ${o.status==='enviado'?'selected':''}>Enviado</option>
+              <option value="entregado"  ${o.status==='entregado'?'selected':''}>Entregado</option>
+              <option value="cancelado"  ${o.status==='cancelado'?'selected':''}>Cancelado</option>
+            </select>` : statusBadge(o.status || 'pendiente')
+          }
+        </td>
+      </tr>
+      <tr id="order-detail-${o.id}" style="display:none">
+        <td colspan="9" style="padding:0 14px 12px;background:#fef5f8">
+          <div class="adm-order-detail open">
+            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido</div>
+            <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${o.userName || '—'}</div>
+            <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${o.userEmail || '—'}</div>
+            <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${o.userPhone || '—'}</div>
+            <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${o.shipping?.method || '—'} — ${o.shipping?.city || ''}</div>
+            ${o.shipping?.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${o.shipping.address}</div>` : ''}
+            <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${o.payment?.method || '—'} (${o.payment?.status || '—'})</div>
+            ${o.notes ? `<div class="adm-detail-row"><span class="adm-detail-label">Notas:</span> ${o.notes}</div>` : ''}
+            <div style="margin-top:8px">
+              <strong>Productos:</strong>
+              ${(o.items||[]).map(it => `<div style="margin-left:12px;font-size:13px">• ${it.qty}x ${it.name} — ${formatPrice(it.price*it.qty)}</div>`).join('')}
+            </div>
+            <div style="margin-top:8px;font-weight:800">
+              Subtotal: ${formatPrice(o.subtotal||0)} |
+              Envío: ${formatPrice(o.shippingCost||0)} |
+              <span style="color:var(--adm-accent)">TOTAL: ${formatPrice(o.total||0)}</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.toggleOrderDetail = (id) => {
+  const row = document.getElementById(id);
+  if (!row) return;
+  const isHidden = row.style.display === 'none';
+  row.style.display = isHidden ? 'table-row' : 'none';
+};
+
+window.updateOrderStatus = async (orderId, status) => {
+  try {
+    await updateDoc(doc(db, 'orders', orderId), {
+      status,
+      updatedAt: serverTimestamp()
+    });
+    const o = allOrders.find(o => o.id === orderId);
+    if (o) o.status = status;
+    toast(`✅ Estado actualizado: ${status}`);
+  } catch(e) {
+    toast('❌ Error al actualizar estado');
+  }
+};
+
+// Filter orders by status
+document.getElementById('filter-status').onchange = function() {
+  const val = this.value;
+  const filtered = val ? allOrders.filter(o => o.status === val) : allOrders;
+  renderOrdersTable(filtered);
+};
+
+// ======== ONBOARDING ========
+async function loadOnboardingSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'general'));
+    const enabled = snap.exists() ? snap.data().onboardingEnabled !== false : true;
+    document.getElementById('ob-toggle').checked = enabled;
+  } catch(e) {}
+}
+
+document.getElementById('btn-save-ob').onclick = async () => {
+  const enabled = document.getElementById('ob-toggle').checked;
+  try {
+    await setDoc(doc(db, 'settings', 'general'), {
+      onboardingEnabled: enabled,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    toast(`✅ Onboarding ${enabled ? 'activado' : 'desactivado'}`);
+  } catch(e) {
+    toast('❌ Error al guardar configuración');
+  }
+};
+
+document.getElementById('btn-reset-ob').onclick = async () => {
+  if (!confirm('¿Resetear el onboarding para TODOS los usuarios? Verán el tutorial de nuevo.')) return;
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    const batch = writeBatch(db);
+    snap.docs.forEach(d => {
+      batch.update(d.ref, { onboardingCompleted: false });
+    });
+    await batch.commit();
+    toast(`✅ Onboarding reseteado para ${snap.size} usuarios`);
+  } catch(e) {
+    toast('❌ Error al resetear onboarding');
+  }
+};
+
+// ======== CONFIGURACIÓN ========
+async function loadConfig() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'general'));
+    if (!snap.exists()) return;
+    const d = snap.data();
+    document.getElementById('cfg-store-name').value = d.storeName || 'Tintin Accesorios';
+    document.getElementById('cfg-wa-number').value = d.whatsappNumber || '595981299331';
+    document.getElementById('cfg-store-address').value = d.storeAddress || 'San Lorenzo, Paraguay';
+    document.getElementById('cfg-delivery-cities').value = (d.deliveryCities || []).join('\n');
+    document.getElementById('cfg-encomienda-cities').value = (d.encomiendaCities || []).join('\n');
+  } catch(e) {}
+}
+
+document.getElementById('btn-save-config').onclick = async () => {
+  try {
+    const deliveryCities = document.getElementById('cfg-delivery-cities').value
+      .split('\n').map(s => s.trim()).filter(Boolean);
+    const encomiendaCities = document.getElementById('cfg-encomienda-cities').value
+      .split('\n').map(s => s.trim()).filter(Boolean);
+
+    await setDoc(doc(db, 'settings', 'general'), {
+      storeName:        document.getElementById('cfg-store-name').value.trim(),
+      whatsappNumber:   document.getElementById('cfg-wa-number').value.trim(),
+      storeAddress:     document.getElementById('cfg-store-address').value.trim(),
+      deliveryCities,
+      encomiendaCities,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    toast('✅ Configuración guardada');
+  } catch(e) {
+    toast('❌ Error al guardar configuración');
+  }
+};
+</script>
+
+</body>
+</html>
