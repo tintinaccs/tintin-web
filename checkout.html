@@ -270,11 +270,23 @@
 
     .ck-empty {
       text-align: center;
-      padding: 40px 20px;
+      padding: 32px 20px 16px;
       color: var(--text-muted);
     }
     .ck-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .ck-empty-text { font-size: 14px; font-weight: 600; }
+    .ck-suggested { padding: 0 0 16px; }
+    .ck-suggested-title { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+    .ck-suggested-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (max-width: 500px) { .ck-suggested-grid { grid-template-columns: repeat(2, 1fr); } }
+    .ck-sug-card { border: 1px solid #f0e0e8; border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .ck-sug-img { font-size: 2rem; }
+    .ck-sug-name { font-size: 12px; font-weight: 700; color: #333; line-height: 1.2; }
+    .ck-sug-cat { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: .05em; }
+    .ck-sug-price { font-size: 12px; font-weight: 700; color: var(--acc); margin: 2px 0; }
+    .ck-sug-add { background: var(--acc); color: #fff; border: none; border-radius: 20px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 4px; }
+    .ck-sug-add:hover { background: #9c1e5a; }
+    .ck-sug-add:disabled { background: #4caf50; cursor: default; }
 
     /* ---- BUTTONS ---- */
     .ck-btn {
@@ -866,15 +878,51 @@ function renderCart() {
   const subtotalEl = document.getElementById('ck-subtotal-val');
 
   if (!cartItems.length) {
+    const FEATURED = [
+      { id:'p1', name:'Collar Perlas', cat:'Collares', price:85000, emoji:'📿' },
+      { id:'p2', name:'Aros Dorados', cat:'Aros', price:65000, emoji:'💫' },
+      { id:'p3', name:'Pulsera Charms', cat:'Pulseras', price:55000, emoji:'🎀' },
+      { id:'p4', name:'Anillo Flor', cat:'Anillos', price:45000, emoji:'💍' },
+      { id:'p5', name:'Bolso Mini', cat:'Bags', price:120000, emoji:'👜' },
+      { id:'p6', name:'Gafas Cat Eye', cat:'Gafas', price:75000, emoji:'🕶️' },
+    ];
     container.innerHTML = `
       <div class="ck-empty">
         <div class="ck-empty-icon">🛒</div>
         <div class="ck-empty-text">Tu carrito está vacío</div>
-        <a href="collections.html" style="display:inline-block;margin-top:12px;color:var(--acc);font-size:13px;font-weight:700;text-decoration:none">
-          → Ver productos
+        <p style="color:#999;font-size:13px;margin:6px 0 16px">¡Agregá productos para continuar!</p>
+        <a href="collections.html" class="ck-btn-primary" style="display:inline-block;padding:12px 28px;font-size:14px;text-decoration:none;border-radius:30px;background:var(--acc);color:#fff;font-weight:700;margin-bottom:24px;">
+          Ver catálogo completo →
         </a>
+      </div>
+      <div class="ck-suggested">
+        <div class="ck-suggested-title">✨ Productos destacados</div>
+        <div class="ck-suggested-grid">
+          ${FEATURED.map(p => `
+            <div class="ck-sug-card">
+              <div class="ck-sug-img">${p.emoji}</div>
+              <div class="ck-sug-name">${p.name}</div>
+              <div class="ck-sug-cat">${p.cat}</div>
+              <div class="ck-sug-price">${formatPrice(p.price)}</div>
+              <button class="ck-sug-add" data-id="${p.id}" data-name="${p.name}" data-cat="${p.cat}" data-price="${p.price}" data-emoji="${p.emoji}">+ Agregar</button>
+            </div>
+          `).join('')}
+        </div>
       </div>`;
+
     subtotalEl.textContent = 'Gs. 0';
+
+    container.querySelectorAll('.ck-sug-add').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const { id, name, cat, price, emoji } = btn.dataset;
+        const { addToCart } = await import('./js/cart-sync.js');
+        await addToCart({ id, name, cat, price: Number(price), emoji, qty: 1 });
+        btn.textContent = '✓ Agregado';
+        btn.disabled = true;
+        btn.style.background = '#4caf50';
+        renderCart();
+      });
+    });
     return;
   }
 
