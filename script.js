@@ -497,24 +497,32 @@ function initSearch() {
         return;
       }
 
-      const matches = PRODUCTS.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.cat.toLowerCase().includes(q) ||
-        p.desc.toLowerCase().includes(q)
+      const productPool = window.PRODUCTS || PRODUCTS;
+
+      const matches = productPool.filter(p =>
+        String(p.name || '').toLowerCase().includes(q) ||
+        String(p.cat || p.category || '').toLowerCase().includes(q) ||
+        String(p.desc || '').toLowerCase().includes(q)
       );
 
       if (matches.length === 0) {
         results.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:0.9rem;">No encontramos productos con esa búsqueda.</div>';
       } else {
-        results.innerHTML = matches.map(p => `
+        results.innerHTML = matches.map(p => {
+          const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
+          const thumb = imgUrl
+            ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+            : '';
+          return `
           <div class="tt-search-result-item" onclick="window.location.href='product.html?id=${p.id}'">
-            <div class="tt-search-result-thumb"></div>
+            <div class="tt-search-result-thumb">${thumb}</div>
             <div class="tt-search-result-info">
               <div class="tt-search-result-name">${p.name}</div>
               <div class="tt-search-result-price">${formatPrice(p.price)}</div>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
 
       results.style.display = 'block';
@@ -595,7 +603,8 @@ function renderLookCombo() {
   const grid = document.getElementById('look-grid');
   if (!grid) return;
 
-  currentCombo = pickRandom(PRODUCTS, 3);
+ const productPool = window.PRODUCTS || PRODUCTS;
+  currentCombo = pickRandom(productPool, 3);
 
   grid.innerHTML = currentCombo.map(p => {
     const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
@@ -630,11 +639,19 @@ function initLookCombinator() {
       if (currentCombo.length === 0) return;
       currentCombo.forEach(p => {
         const cart = getCart();
-        const existing = cart.find(i => i.id === p.id);
+        const existing = cart.find(i => String(i.id) === String(p.id));
         if (existing) {
           existing.qty += 1;
         } else {
-          cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, cat: p.cat });
+          const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
+          cart.push({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            qty: 1,
+            cat: p.cat || p.category || '',
+            imageUrl: imgUrl || ''
+          });
         }
         saveCart(cart);
       });
@@ -755,7 +772,8 @@ function initProductPage() {
   }
 
   // Related products
-  const relatedProducts = PRODUCTS.filter(p => p.id !== product.id);
+  const productPool = window.PRODUCTS || PRODUCTS;
+  const relatedProducts = productPool.filter(p => String(p.id) !== String(product.id));
   const related = pickRandom(relatedProducts, 4);
   renderProductsGrid('related-grid', related);
 }
@@ -867,6 +885,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactForm();
   }
 
+  // Product page
+  if (document.getElementById('product-detail')) {
+    initProductPage();
+  }
+
   // Gallery thumbs (product page)
   if (document.querySelector('.tt-gallery-thumb')) {
     initGalleryThumbs();
@@ -879,6 +902,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Scroll reveal
   setTimeout(initScrollReveal, 100);
+});
+
+/* expose for inline onclick usage and module re-render */
+window.addEventListener('tintin:products-loaded', () => {
+  if (document.getElementById('products-grid')) {
+    renderProductsGrid('products-grid', window.PRODUCTS || PRODUCTS);
+  }
+
+  if (document.getElementById('colls-products-grid')) {
+    renderProductsGrid('colls-products-grid', window.PRODUCTS || PRODUCTS);
+  }
+
+  if (document.getElementById('look-grid')) {
+    renderLookCombo();
+  }
+
+  if (document.getElementById('product-detail')) {
+    initProductPage();
+  }
+
+  renderCart();
 });
 
 /* expose for inline onclick usage and module re-render */
@@ -895,4 +939,4 @@ window.directWAProduct = directWAProduct;
 window.renderProductsGrid = renderProductsGrid;
 window.renderCart = renderCart;
 window.initLookCombinator = initLookCombinator;
-window.PRODUCTS = PRODUCTS;
+window.PRODUCTS = window.PRODUCTS || PRODUCTS;
