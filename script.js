@@ -858,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initScrollReveal, 100);
 });
 
-/* expose for inline onclick usage */
+/* expose for inline onclick usage and module re-render */
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateQty = updateQty;
@@ -869,3 +869,7 @@ window.initProductPage = initProductPage;
 window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
+window.renderProductsGrid = renderProductsGrid;
+window.renderCart = renderCart;
+window.initLookCombinator = initLookCombinator;
+window.PRODUCTS = PRODUCTS;
