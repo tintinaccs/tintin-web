@@ -708,7 +708,16 @@ function initProductPage() {
     });
   }
 
-  // WhatsApp direct button
+  // Buy now button (add to cart + go to checkout)
+  const btnBuyNow = document.getElementById('btn-product-buy-now');
+  if (btnBuyNow) {
+    btnBuyNow.addEventListener('click', () => {
+      addToCart(product.id);
+      window.location.href = 'checkout.html';
+    });
+  }
+
+  // WhatsApp direct button (secondary / support)
   const btnWA = document.getElementById('btn-product-wa');
   if (btnWA) {
     btnWA.addEventListener('click', () => {
