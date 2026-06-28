@@ -63,8 +63,11 @@
   --acc-pale:   #fce4ec;
   --bg-card:    #fce4ec;
   --bg:         #fce4ec;
-  --text:       #1a1a1a;
-  --text-muted: #888;
+  --hdr-bg:     #c0537a;
+  --hdr-bg-idx: rgba(192,83,122,.88);
+  --footer-bg:  #b84c72;
+  --text:       #3a0f1f;
+  --text-muted: #9a5070;
   --radius:     16px;
   --radius-sm:  10px;
   --font:       'Poppins', sans-serif;
@@ -95,10 +98,10 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255,247,249,0.96);
+  background: var(--hdr-bg);
   border-bottom: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   /* reveal + hide transition */
   transition:
     transform 0.4s cubic-bezier(0.22,1,0.36,1),
@@ -142,19 +145,19 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   transition-delay: 0s;
 }
 
-/* Homepage: transparent over gradient hero */
+/* Homepage: slightly transparent over hero */
 .tt-index .tt-header:not(.tt-hdr-hidden) {
-  background: rgba(255,210,232,0.55);
-  border-bottom: 1px solid rgba(220,100,140,0.15);
+  background: var(--hdr-bg-idx);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
 }
 .tt-index .tt-header.tt-hdr-scrolled {
-  background: rgba(255,247,249,0.97);
+  background: var(--hdr-bg);
   border-bottom: none;
 }
 
 /* Other pages: solid when scrolled */
 .tt-header.tt-hdr-scrolled {
-  background: rgba(255,247,249,0.97);
+  background: var(--hdr-bg);
 }
 
 .tt-header-inner {
@@ -182,6 +185,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   object-fit: contain;
   display: block;
   transition: height 0.3s ease;
+  filter: brightness(0) invert(1);
 }
 .tt-hdr-scrolled .tt-header-logo { height: 40px; }
 
@@ -204,15 +208,15 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #A7214D;
+  color: rgba(255,255,255,.92);
   font-size: clamp(11px, 0.86vw, 13px);
   font-weight: 600;
   letter-spacing: 0.05em;
   padding: 9px 14px;
   border-radius: 999px;
   white-space: nowrap;
-  background: rgba(252,228,236,.55);
-  border: 1px solid rgba(167,33,77,.055);
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.14);
   cursor: pointer;
   text-transform: uppercase;
   text-decoration: none;
@@ -227,20 +231,21 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .tt-nav-link:hover,
 .tt-nav-tienda-btn:hover,
 .tt-nav-item.tt-drop-open .tt-nav-tienda-btn {
-  background: rgba(252,210,228,.92);
-  color: #7C1E3F;
+  background: rgba(255,255,255,.20);
+  color: #fff;
   transform: translateY(-1px);
-  border-color: rgba(167,33,77,.14);
+  border-color: rgba(255,255,255,.25);
 }
 
 .tt-nav-link--login {
-  background: #A7214D;
-  color: #fff !important;
+  background: rgba(255,255,255,.92);
+  color: var(--hdr-bg) !important;
   border-color: transparent;
+  font-weight: 800;
 }
 .tt-nav-link--login:hover {
-  background: #7C1E3F;
-  color: #fff !important;
+  background: #fff;
+  color: var(--footer-bg) !important;
 }
 
 .tt-nav-chevron {
@@ -300,9 +305,9 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 .tt-dropdown-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: clamp(14px, 1.5vw, 24px);
-  max-width: 1280px;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 9vw, 165px), 1fr));
+  gap: clamp(12px, 1.5vw, 22px);
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -409,16 +414,16 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #A7214D;
+  color: rgba(255,255,255,.92);
   text-decoration: none;
   transition: background 0.2s ease, transform 0.1s ease;
   padding: 0;
   flex-shrink: 0;
 }
-.tt-icon-btn:hover   { background: rgba(167,33,77,.08); }
+.tt-icon-btn:hover   { background: rgba(255,255,255,.14); }
 .tt-icon-btn:active  { transform: scale(0.95); }
 .tt-icon-btn svg     { width: 25px; height: 25px; stroke: currentColor; }
-.tt-icon-btn.tt-srch-active { background: rgba(167,33,77,.15); color: #7C1E3F; }
+.tt-icon-btn.tt-srch-active { background: rgba(255,255,255,.20); color: #fff; }
 
 /* Cart badge */
 .tt-cart-wrap { position: relative; display: inline-flex; }
@@ -436,7 +441,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-weight: 800;
   line-height: 18px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(167,33,77,.32), 0 0 0 2px #fff7f9;
+  box-shadow: 0 4px 10px rgba(167,33,77,.32), 0 0 0 2px var(--hdr-bg);
   opacity: 0;
   transform: scale(0.6);
   transition: opacity .25s cubic-bezier(.34,1.56,.64,1), transform .25s cubic-bezier(.34,1.56,.64,1);
@@ -448,8 +453,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   animation: tt-cart-pulse 2.2s ease-in-out infinite;
 }
 @keyframes tt-cart-pulse {
-  0%, 100% { box-shadow: 0 4px 10px rgba(167,33,77,.32), 0 0 0 2px #fff7f9; }
-  50%       { box-shadow: 0 4px 14px rgba(167,33,77,.46), 0 0 0 2px #fff7f9, 0 0 0 6px rgba(234,126,163,.28); }
+  0%, 100% { box-shadow: 0 4px 10px rgba(167,33,77,.32), 0 0 0 2px var(--hdr-bg); }
+  50%       { box-shadow: 0 4px 14px rgba(167,33,77,.46), 0 0 0 2px var(--hdr-bg), 0 0 0 6px rgba(234,126,163,.28); }
 }
 @media (prefers-reduced-motion: reduce) {
   .tt-cart-badge.tt-cart-badge--show { animation: none !important; }
@@ -1026,7 +1031,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-size: clamp(26px, 3.5vw, 48px);
   font-weight: 300;
   letter-spacing: .02em;
-  color: #1a1a1a;
+  color: var(--text);
   line-height: 1.08;
 }
 
@@ -1606,8 +1611,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
    FOOTER
    ============================================= */
 .tt-footer {
-  background: #1a1a1a;
-  border-top: 1.5px solid #333;
+  background: var(--footer-bg);
+  border-top: 1.5px solid rgba(255,255,255,.12);
   padding: 48px 24px 32px;
   text-align: center;
 }
@@ -1639,15 +1644,15 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,.82);
   transition: color var(--transition);
 }
-.tt-footer-links a:hover { color: var(--acc); }
+.tt-footer-links a:hover { color: #fff; }
 
 .tt-footer-copy {
   font-size: 11px;
   font-weight: 500;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,.55);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 2;
@@ -1838,3 +1843,20 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 /* Accessibility: touch target size */
 .tt-cart-qty-btn { min-width: 44px; min-height: 44px; }
+
+/* =============================================
+   LARGE SCREENS (≥1440px)
+   ============================================= */
+@media (min-width: 1440px) {
+  .tt-header-inner { max-width: 1800px; padding: 8px 48px; }
+  .tt-section      { padding: 80px clamp(48px, 6vw, 120px); }
+  .tt-hero-overlay { max-width: 1800px; padding: 0 clamp(48px, 6vw, 120px); }
+  .tt-dropdown     { padding: clamp(32px, 3vw, 56px) clamp(48px, 7vw, 140px); }
+  .tt-dropdown-grid { max-width: 1600px; }
+}
+
+@media (min-width: 1920px) {
+  html { font-size: 110%; }
+  .tt-header-inner { max-width: 2100px; }
+  .tt-hero-overlay { max-width: 2100px; }
+}

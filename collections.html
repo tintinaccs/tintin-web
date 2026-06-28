@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colecciones | TINTIN Accesorios & Relojes</title>
+  <meta name="description" content="Explorá todas las colecciones de Tintin Accesorios & Relojes — Bags, Collares, Earcuff, Gafas, Brazaletes, Aros, Armcuff, Anillos, Joyeros, Pulseras, Relojes y Tobilleras.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="tt-header" id="tt-header">
+  <div class="tt-header-inner">
+    <a href="index.html" class="tt-logo-link">
+      <div class="tt-logo-text">TINTIN</div>
+      <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
+    </a>
+    <nav class="tt-nav">
+      <a href="index.html">INICIO</a>
+      <div class="tt-nav-dropdown" id="tienda-dropdown">
+        <button id="btn-tienda">TIENDA ▾</button>
+        <div class="tt-dropdown">
+          <div class="tt-dropdown-grid">
+            <a href="#bags" class="tt-dropdown-card"><div class="tt-dropdown-icon">👜</div><div class="tt-dropdown-label">BAGS</div></a>
+            <a href="#collares" class="tt-dropdown-card"><div class="tt-dropdown-icon">📿</div><div class="tt-dropdown-label">COLLARES</div></a>
+            <a href="#earcuff" class="tt-dropdown-card"><div class="tt-dropdown-icon">✨</div><div class="tt-dropdown-label">EARCUFF</div></a>
+            <a href="#gafas" class="tt-dropdown-card"><div class="tt-dropdown-icon">🕶️</div><div class="tt-dropdown-label">GAFAS</div></a>
+            <a href="#brazaletes" class="tt-dropdown-card"><div class="tt-dropdown-icon">💎</div><div class="tt-dropdown-label">BRAZALETES</div></a>
+            <a href="#aros" class="tt-dropdown-card"><div class="tt-dropdown-icon">💫</div><div class="tt-dropdown-label">AROS</div></a>
+            <a href="#armcuff" class="tt-dropdown-card"><div class="tt-dropdown-icon">🌸</div><div class="tt-dropdown-label">ARMCUFF</div></a>
+            <a href="#anillos" class="tt-dropdown-card"><div class="tt-dropdown-icon">💍</div><div class="tt-dropdown-label">ANILLOS</div></a>
+            <a href="#joyeros" class="tt-dropdown-card"><div class="tt-dropdown-icon">🪞</div><div class="tt-dropdown-label">JOYEROS</div></a>
+            <a href="#pulseras" class="tt-dropdown-card"><div class="tt-dropdown-icon">🎀</div><div class="tt-dropdown-label">PULSERAS</div></a>
+            <a href="#relojes" class="tt-dropdown-card"><div class="tt-dropdown-icon">⌚</div><div class="tt-dropdown-label">RELOJES</div></a>
+            <a href="#tobilleras" class="tt-dropdown-card"><div class="tt-dropdown-icon">🦋</div><div class="tt-dropdown-label">TOBILLERAS</div></a>
+          </div>
+        </div>
+      </div>
+      <a href="collections.html" class="active">COLECCIONES</a>
+      <a href="about.html">NOSOTROS</a>
+      <a href="contact.html">CONTACTO</a>
+    </nav>
+    <div class="tt-header-actions">
+      <button id="btn-search" title="Buscar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <a href="about.html" title="Mi cuenta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <button id="btn-cart" title="Carrito" style="position:relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="tt-cart-badge hidden" id="cart-badge">0</span>
+      </button>
+    </div>
+    <button class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú">☰</button>
+  </div>
+  <div class="tt-search-panel" id="search-panel">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="tt-search-input" id="search-input" placeholder="¿Qué estás buscando?">
+    <button class="tt-search-close" id="btn-search-close">✕</button>
+    <div class="tt-search-results" id="search-results" style="display:none;"></div>
+  </div>
+</header>
+
+<div class="tt-mobile-menu" id="mobile-menu">
+  <div class="tt-mobile-menu-header">
+    <div class="tt-logo-link"><div class="tt-logo-text" style="color:var(--pink-dark)">TINTIN</div><div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div></div>
+    <button class="tt-mobile-close" id="btn-mobile-close">✕</button>
+  </div>
+  <nav class="tt-mobile-nav">
+    <a href="index.html">INICIO</a>
+    <button id="btn-mobile-tienda">TIENDA ▾</button>
+    <div class="tt-mobile-cats" id="mobile-cats" style="display:none;">
+      <a href="#bags">BAGS</a><a href="#collares">COLLARES</a><a href="#earcuff">EARCUFF</a>
+      <a href="#gafas">GAFAS</a><a href="#brazaletes">BRAZALETES</a><a href="#aros">AROS</a>
+      <a href="#armcuff">ARMCUFF</a><a href="#anillos">ANILLOS</a><a href="#joyeros">JOYEROS</a>
+      <a href="#pulseras">PULSERAS</a><a href="#relojes">RELOJES</a><a href="#tobilleras">TOBILLERAS</a>
+    </div>
+    <a href="collections.html">COLECCIONES</a>
+    <a href="about.html">NOSOTROS</a>
+    <a href="contact.html">CONTACTO</a>
+  </nav>
+</div>
+
+<!-- PAGE HERO -->
+<section class="tt-page-hero">
+  <div class="container">
+    <p class="tt-section-sub">Toda nuestra selección</p>
+    <h1 class="tt-page-hero-title">NUESTRAS COLECCIONES</h1>
+    <p class="tt-page-hero-sub">Accesorios femeninos de acero inoxidable, bolsos, relojes y mucho más — elegidos con amor para que brillés cada día.</p>
+  </div>
+</section>
+
+<!-- COLLECTIONS PAGE GRID -->
+<section class="section tt-colls-page-section">
+  <div class="container">
+    <div class="tt-colls-page-grid">
+
+      <div class="tt-coll-page-card" id="bags">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#fce4ec,#e8a0b4,#d4748e);">👜</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">B</div>
+          <div class="tt-coll-page-name">BAGS</div>
+          <p class="tt-coll-page-desc">Bolsos modernos y elegantes para cada ocasión. Desde el look diario hasta la noche más especial — el complemento que lo cambia todo.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="collares">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#f5d4e0,#d4748e,#b84c72);">📿</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">C</div>
+          <div class="tt-coll-page-name">COLLARES</div>
+          <p class="tt-coll-page-desc">Collares de acero inoxidable que no se oxidan ni decoloran. Diseños minimalistas, llamativos y todo lo que hay entre medio.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="earcuff">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#ede0f0,#b890c8,#8b5a9a);">✨</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">E</div>
+          <div class="tt-coll-page-name">EARCUFF</div>
+          <p class="tt-coll-page-desc">Earcuffs sin necesidad de perforación. La tendencia que arrasa en todo el mundo, ahora disponible en Tintin a precios accesibles.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="gafas">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#f5ead0,#c9a96e,#b8934e);">🕶️</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">G</div>
+          <div class="tt-coll-page-name">GAFAS</div>
+          <p class="tt-coll-page-desc">Gafas de sol con estilo. Protección UV y mucha actitud — para completar tu look veraniego con un toque de misterio y glamour.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="brazaletes">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#fce4ec,#d4748e,#b84c72);">💎</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">B</div>
+          <div class="tt-coll-page-name">BRAZALETES</div>
+          <p class="tt-coll-page-desc">Brazaletes de acero inoxidable premium. Rígidos, ajustables, abiertos, cerrados — encontrá el que hace brillar tu muñeca.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="aros">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#f5d4e0,#b84c72,#8b2642);">💫</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">A</div>
+          <div class="tt-coll-page-name">AROS</div>
+          <p class="tt-coll-page-desc">Aros para cada estilo y ocasión. Argollas, colgantes, pegados, con piedras — encontrá los que son perfectos para vos.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="armcuff">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#ede0f0,#e8a0b4,#d4748e);">🌸</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">A</div>
+          <div class="tt-coll-page-name">ARMCUFF</div>
+          <p class="tt-coll-page-desc">Armcuffs — la joya que decora la parte superior del brazo. Tendencia que suma muchísima elegancia y actitud a cualquier look.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="anillos">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#f5ead0,#c9a96e,#b84c72);">💍</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">A</div>
+          <div class="tt-coll-page-name">ANILLOS</div>
+          <p class="tt-coll-page-desc">Anillos de acero inoxidable en diferentes tallas. Lisos, con piedras, abiertos, apilables — construí tu stack perfecto.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="joyeros">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#fce4ec,#f5ead0,#c9a96e);">🪞</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">J</div>
+          <div class="tt-coll-page-name">JOYEROS</div>
+          <p class="tt-coll-page-desc">Joyeros lindos y prácticos para guardar y organizar tus accesorios. Porque tus tesoros merecen el mejor hogar.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="pulseras">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#f5d4e0,#e8a0b4,#fce4ec);">🎀</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">P</div>
+          <div class="tt-coll-page-name">PULSERAS</div>
+          <p class="tt-coll-page-desc">Pulseras delicadas o llamativas — para usar solas o en stack. De acero, cuentas, piedras naturales y más diseños únicos.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="relojes">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#c9a96e,#f5ead0,#fce4ec);">⌚</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">R</div>
+          <div class="tt-coll-page-name">RELOJES</div>
+          <p class="tt-coll-page-desc">Relojes femeninos de acero inoxidable marca SKMEI y más. Elegantes, precisos y waterproof. El accesorio más sofisticado de tu look.</p>
+          <a href="product.html?id=1" class="tt-btn tt-btn-sm">Ver relojes →</a>
+        </div>
+      </div>
+
+      <div class="tt-coll-page-card" id="tobilleras">
+        <div class="tt-coll-page-img" style="background:linear-gradient(135deg,#ede0f0,#fce4ec,#f5d4e0);">🦋</div>
+        <div class="tt-coll-page-body">
+          <div class="tt-coll-page-initial">T</div>
+          <div class="tt-coll-page-name">TOBILLERAS</div>
+          <p class="tt-coll-page-desc">Tobilleras delicadas que adornan tus pies. El detalle romántico que completa el look en verano — perfectas para la playa o la ciudad.</p>
+          <a href="contact.html" class="tt-btn tt-btn-sm">Ver colección →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section tt-products-section" style="background:var(--card-bg);">
+  <div class="container">
+    <div class="tt-products-header">
+      <p class="tt-section-sub">Lo más destacado</p>
+      <h2 class="tt-section-title">RELOJES DESTACADOS</h2>
+    </div>
+    <div class="tt-products-grid" id="colls-products-grid">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="https://wa.me/595981299331?text=¡Hola%20Tintin!%20Quiero%20ver%20más%20productos%20del%20catálogo%20💕" target="_blank" rel="noopener" class="tt-btn tt-btn-lg">Ver catálogo completo por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="tt-footer">
+  <div class="container">
+    <div class="tt-footer-grid">
+      <div class="tt-footer-brand">
+        <div class="tt-logo-link">
+          <div class="tt-logo-text">TINTIN</div>
+          <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
+        </div>
+        <p class="tt-footer-tagline">Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay.</p>
+        <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribirnos por WhatsApp
+        </a>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Categorías</div>
+        <ul>
+          <li><a href="#relojes">Relojes</a></li>
+          <li><a href="#bags">Bags</a></li>
+          <li><a href="#collares">Collares</a></li>
+          <li><a href="#aros">Aros</a></li>
+          <li><a href="#pulseras">Pulseras</a></li>
+          <li><a href="#anillos">Anillos</a></li>
+        </ul>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Información</div>
+        <ul>
+          <li><a href="about.html">Quiénes somos</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Contacto</div>
+        <ul>
+          <li><a href="https://wa.me/595981299331" target="_blank" rel="noopener">+595 981 299 331</a></li>
+          <li><a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener">@tintinaccs</a></li>
+          <li><a href="#">Paraguay</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS</div>
+</footer>
+
+<a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-wa-float" id="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<div class="tt-tabbar" id="tt-tabbar">
+  <a href="index.html" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a>
+  <button class="tt-tabbar-btn" id="tabbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Buscar</span></button>
+  <button class="tt-tabbar-btn" id="tabbar-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Carrito</span></button>
+  <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span>WhatsApp</span></a>
+  <a href="about.html" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Cuenta</span></a>
+</div>
+
+<div class="tt-cart-overlay" id="cart-overlay"></div>
+<div class="tt-cart-drawer" id="cart-drawer">
+  <div class="tt-cart-header"><h2 class="tt-cart-title">MI CARRITO</h2><button class="tt-cart-close" id="btn-cart-close">✕</button></div>
+  <div class="tt-cart-body" id="cart-body"></div>
+  <div class="tt-cart-footer" id="cart-footer" style="display:none;">
+    <div class="tt-cart-total-row"><span class="tt-cart-total-label">TOTAL</span><span class="tt-cart-total-value" id="cart-total">Gs. 0</span></div>
+    <button class="tt-cart-wa-btn" id="btn-cart-wa"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>FINALIZAR POR WHATSAPP</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
