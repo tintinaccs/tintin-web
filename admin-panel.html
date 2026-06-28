@@ -807,19 +807,101 @@
 
     <!-- ===================== PRODUCTOS ===================== -->
     <div class="adm-section" id="section-productos">
-      <div class="adm-card">
+      <!-- PRODUCT LIST -->
+      <div class="adm-card" id="prod-list-card">
         <div class="adm-card-head">
           <div class="adm-card-title">🛍️ Productos</div>
-          <a href="admin.html" class="adm-btn adm-btn-primary adm-btn-sm">Gestionar en Admin</a>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input id="prod-search" type="text" placeholder="Buscar…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:160px;">
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="prodNuevo()">+ Nuevo producto</button>
+          </div>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div id="prod-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando productos…</div>
+          <div id="prod-table-wrap" style="display:none;overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead>
+                <tr style="background:var(--adm-bg);text-transform:uppercase;font-size:11px;letter-spacing:.06em;color:var(--adm-muted)">
+                  <th style="padding:10px 16px;text-align:left">Imagen</th>
+                  <th style="padding:10px 16px;text-align:left">Nombre</th>
+                  <th style="padding:10px 16px;text-align:left">Categoría</th>
+                  <th style="padding:10px 16px;text-align:right">Precio</th>
+                  <th style="padding:10px 16px;text-align:center">Stock</th>
+                  <th style="padding:10px 16px;text-align:center">Estado</th>
+                  <th style="padding:10px 16px;text-align:center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="prod-tbody"></tbody>
+            </table>
+          </div>
+          <div id="prod-empty" style="display:none;padding:32px;text-align:center;color:var(--adm-muted)">
+            No hay productos. ¡Creá el primero!
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT FORM (create / edit) -->
+      <div class="adm-card" id="prod-form-card" style="display:none">
+        <div class="adm-card-head">
+          <div class="adm-card-title" id="prod-form-title">Nuevo producto</div>
+          <button class="adm-btn adm-btn-sm" onclick="prodCancelForm()">← Volver</button>
         </div>
         <div class="adm-card-body">
-          <p style="color:var(--adm-muted);font-size:13px">
-            La gestión completa de productos está disponible en el panel de administración de contenido.
-            Hacé clic en "Contenido" en el menú lateral o en el botón de arriba.
-          </p>
-          <a href="admin.html" class="adm-btn adm-btn-primary" style="display:inline-block;margin-top:16px">
-            → Ir al panel de productos
-          </a>
+          <input type="hidden" id="prod-id">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Nombre *</label>
+              <input id="prod-name" type="text" class="adm-input" placeholder="Reloj Alissia">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Categoría *</label>
+              <select id="prod-category" class="adm-input">
+                <option value="">— Seleccionar —</option>
+                <option value="relojes">Relojes</option>
+                <option value="bolsos">Bolsos / Bags</option>
+                <option value="collares">Collares</option>
+                <option value="aros">Aros</option>
+                <option value="pulseras">Pulseras</option>
+                <option value="anillos">Anillos</option>
+                <option value="tobilleras">Tobilleras</option>
+                <option value="brazaletes">Brazaletes</option>
+                <option value="earcuff">Earcuff</option>
+                <option value="armcuff">Armcuff</option>
+                <option value="gafas">Gafas</option>
+                <option value="joyeros">Joyeros</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Precio (Gs.) *</label>
+              <input id="prod-price" type="number" class="adm-input" placeholder="70000" min="0">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Stock</label>
+              <input id="prod-stock" type="number" class="adm-input" placeholder="10" min="0">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen</label>
+              <input id="prod-imageUrl" type="url" class="adm-input" placeholder="https://...">
+              <img id="prod-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
+              <textarea id="prod-description" class="adm-input" rows="3" placeholder="Descripción del producto…" style="resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:20px;align-items:center">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="prod-active" type="checkbox" checked style="accent-color:var(--adm-primary)"> Activo (visible en tienda)
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="prod-oferta" type="checkbox" style="accent-color:var(--adm-primary)"> En oferta
+              </label>
+            </div>
+          </div>
+          <div id="prod-form-error" style="display:none;color:#e53935;font-size:13px;margin-top:12px;padding:10px;background:#fff5f5;border-radius:8px"></div>
+          <div style="display:flex;gap:10px;margin-top:20px">
+            <button class="adm-btn adm-btn-primary" onclick="prodGuardar()" id="prod-save-btn">Guardar producto</button>
+            <button class="adm-btn" onclick="prodCancelForm()">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -986,6 +1068,7 @@ function switchSection(target) {
   topbarTitle.textContent = SECTION_LABELS[target] || target;
   if (target === 'usuarios') loadUsers();
   if (target === 'pedidos') loadOrders();
+  if (target === 'productos') loadProductos();
   if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'configuracion') loadConfig();
 }
@@ -1432,6 +1515,189 @@ document.getElementById('btn-save-config').onclick = async () => {
     toast('❌ Error al guardar configuración');
   }
 };
+
+/* =============================================
+   PRODUCTOS — CRUD
+   ============================================= */
+let _allProducts = [];
+
+async function loadProductos() {
+  document.getElementById('prod-loading').style.display = '';
+  document.getElementById('prod-table-wrap').style.display = 'none';
+  document.getElementById('prod-empty').style.display = 'none';
+  try {
+    const snap = await getDocs(query(collection(db, 'products'), orderBy('name')));
+    _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+    renderProductosTable(_allProducts);
+  } catch(e) {
+    document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
+    console.error(e);
+  }
+}
+
+function renderProductosTable(list) {
+  document.getElementById('prod-loading').style.display = 'none';
+  const tbody = document.getElementById('prod-tbody');
+  if (!list.length) {
+    document.getElementById('prod-empty').style.display = '';
+    document.getElementById('prod-table-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('prod-table-wrap').style.display = '';
+  document.getElementById('prod-empty').style.display = 'none';
+
+  const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
+  tbody.innerHTML = list.map(p => `
+    <tr style="border-top:1px solid var(--adm-border);transition:background .15s" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background=''">
+      <td style="padding:10px 16px">
+        ${p.imageUrl
+          ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
+          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px">📷</div>`}
+      </td>
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name||'—'}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
+      <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
+      <td style="padding:10px 16px;text-align:center">${p.stock != null ? p.stock : '—'}</td>
+      <td style="padding:10px 16px;text-align:center">
+        <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
+          ${p.active !== false ? 'Activo' : 'Inactivo'}
+        </span>
+      </td>
+      <td style="padding:10px 16px;text-align:center">
+        <div style="display:flex;gap:6px;justify-content:center">
+          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm" style="color:#e53935" onclick="prodEliminar('${p._docId}','${(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// Search
+document.getElementById('prod-search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  renderProductosTable(q ? _allProducts.filter(p =>
+    (p.name||'').toLowerCase().includes(q) ||
+    (p.category||'').toLowerCase().includes(q)
+  ) : _allProducts);
+});
+
+function prodNuevo() {
+  document.getElementById('prod-id').value = '';
+  document.getElementById('prod-form-title').textContent = 'Nuevo producto';
+  document.getElementById('prod-name').value = '';
+  document.getElementById('prod-category').value = '';
+  document.getElementById('prod-price').value = '';
+  document.getElementById('prod-stock').value = '';
+  document.getElementById('prod-imageUrl').value = '';
+  document.getElementById('prod-description').value = '';
+  document.getElementById('prod-active').checked = true;
+  document.getElementById('prod-oferta').checked = false;
+  document.getElementById('prod-img-preview').style.display = 'none';
+  document.getElementById('prod-form-error').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = 'none';
+  document.getElementById('prod-form-card').style.display = '';
+}
+
+function prodEditar(docId) {
+  const p = _allProducts.find(x => x._docId === docId);
+  if (!p) return;
+  document.getElementById('prod-id').value = docId;
+  document.getElementById('prod-form-title').textContent = 'Editar producto';
+  document.getElementById('prod-name').value = p.name || '';
+  document.getElementById('prod-category').value = p.category || '';
+  document.getElementById('prod-price').value = p.price || '';
+  document.getElementById('prod-stock').value = p.stock ?? '';
+  document.getElementById('prod-imageUrl').value = p.imageUrl || '';
+  document.getElementById('prod-description').value = p.description || '';
+  document.getElementById('prod-active').checked = p.active !== false;
+  document.getElementById('prod-oferta').checked = !!p.oferta;
+  const preview = document.getElementById('prod-img-preview');
+  if (p.imageUrl) { preview.src = p.imageUrl; preview.style.display = ''; }
+  else preview.style.display = 'none';
+  document.getElementById('prod-form-error').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = 'none';
+  document.getElementById('prod-form-card').style.display = '';
+}
+
+// Live image preview
+document.getElementById('prod-imageUrl').addEventListener('input', e => {
+  const preview = document.getElementById('prod-img-preview');
+  const url = e.target.value.trim();
+  if (url) { preview.src = url; preview.style.display = ''; }
+  else preview.style.display = 'none';
+});
+
+function prodCancelForm() {
+  document.getElementById('prod-form-card').style.display = 'none';
+  document.getElementById('prod-list-card').style.display = '';
+}
+
+async function prodGuardar() {
+  const name = document.getElementById('prod-name').value.trim();
+  const category = document.getElementById('prod-category').value;
+  const price = parseInt(document.getElementById('prod-price').value);
+  const errEl = document.getElementById('prod-form-error');
+
+  if (!name || !category || !price) {
+    errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
+    errEl.style.display = '';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const btn = document.getElementById('prod-save-btn');
+  btn.textContent = 'Guardando…'; btn.disabled = true;
+
+  const data = {
+    name,
+    category,
+    price,
+    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+    imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
+    description: document.getElementById('prod-description').value.trim() || '',
+    active: document.getElementById('prod-active').checked,
+    oferta: document.getElementById('prod-oferta').checked,
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    const docId = document.getElementById('prod-id').value;
+    if (docId) {
+      await updateDoc(doc(db, 'products', docId), data);
+      toast('✅ Producto actualizado');
+    } else {
+      data.createdAt = serverTimestamp();
+      await setDoc(doc(collection(db, 'products')), data);
+      toast('✅ Producto creado');
+    }
+    prodCancelForm();
+    loadProductos();
+  } catch(e) {
+    errEl.textContent = 'Error al guardar: ' + e.message;
+    errEl.style.display = '';
+  } finally {
+    btn.textContent = 'Guardar producto'; btn.disabled = false;
+  }
+}
+
+async function prodEliminar(docId, name) {
+  if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'products', docId));
+    toast('🗑️ Producto eliminado');
+    loadProductos();
+  } catch(e) {
+    toast('❌ Error al eliminar: ' + e.message);
+  }
+}
+
+// Load products when section is shown
+document.querySelectorAll('[data-section="productos"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!_allProducts.length) loadProductos();
+  });
+});
 </script>
 
 </body>

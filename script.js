@@ -106,7 +106,9 @@ function formatPrice(num) {
  * Get a product by ID
  */
 function getProductById(id) {
-  return PRODUCTS.find(p => p.id === Number(id)) || null;
+  // Search dynamic Firestore products first (string id), then hardcoded (numeric id)
+  const pool = window.PRODUCTS || PRODUCTS;
+  return pool.find(p => String(p.id) === String(id)) || PRODUCTS.find(p => p.id === Number(id)) || null;
 }
 
 /* ──────────────────────────────────────
