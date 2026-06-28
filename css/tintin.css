@@ -414,7 +414,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 }
 .tt-icon-btn:hover   { background: rgba(167,33,77,.08); }
 .tt-icon-btn:active  { transform: scale(0.95); }
-.tt-icon-btn svg     { width: 38px; height: 38px; stroke: currentColor; }
+.tt-icon-btn svg     { width: 50px; height: 50px; stroke: currentColor; }
 .tt-icon-btn.tt-srch-active { background: rgba(167,33,77,.15); color: #7C1E3F; }
 
 /* Cart badge */
