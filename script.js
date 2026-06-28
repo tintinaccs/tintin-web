@@ -587,7 +587,7 @@ function renderProductsGrid(containerId, products) {
           <div class="tt-product-price">${formatPrice(p.price)}</div>
           <div class="tt-product-actions">
             <a href="product.html?id=${p.id}" class="tt-btn tt-btn-sm">Ver producto</a>
-            <button class="tt-btn-icon tt-add-to-cart" data-id="${p.id}" data-id-str="${p.id}" aria-label="Agregar al carrito">+</button>
+            <button class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${p.id}" aria-label="Agregar al carrito">+ Carrito</button>
           </div>
         </div>
       </div>
@@ -614,10 +614,15 @@ function renderLookCombo() {
       : '';
     return `
     <div class="tt-look-card">
-      <div class="tt-look-card-img${imgUrl ? '' : ' tt-look-card-img-ph'}">${imgContent}</div>
-      <div class="tt-look-card-body">
-        <div class="tt-look-card-name">${p.name}</div>
-        <div class="tt-look-card-price">${formatPrice(p.price)}</div>
+      <a href="product.html?id=${p.id}" class="tt-look-card-inner">
+        <div class="tt-look-card-img${imgUrl ? '' : ' tt-look-card-img-ph'}">${imgContent}</div>
+        <div class="tt-look-card-body">
+          <div class="tt-look-card-name">${p.name}</div>
+          <div class="tt-look-card-price">${formatPrice(p.price)}</div>
+        </div>
+      </a>
+      <div class="tt-look-card-foot">
+        <button class="tt-btn tt-btn-sm tt-add-to-cart" data-id="${p.id}" style="width:100%;">+ Agregar al carrito</button>
       </div>
     </div>`;
   }).join('');

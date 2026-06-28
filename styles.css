@@ -877,7 +877,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'%3E%3Cpath d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'%3E%3C/path%3E%3Ccircle cx='12' cy='13' r='4'%3E%3C/circle%3E%3C/svg%3E") center/48px no-repeat;
 }
 
-.tt-look-card-body { padding: 16px; }
+.tt-look-card-inner {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tt-look-card-foot {
+  padding: 0 16px 14px;
+}
+
+.tt-look-card-body { padding: 14px 16px 8px; }
 
 .tt-look-card-name {
   font-family: var(--font-body);
@@ -2362,4 +2372,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
   .tt-product-detail-grid { gap: 32px; }
   .tt-product-detail-name { font-size: 1.6rem; }
+
+  /* Product card: stack buttons vertically on small phones */
+  .tt-product-actions { flex-direction: column; gap: 6px; }
+  .tt-product-actions .tt-btn { width: 100%; }
 }
