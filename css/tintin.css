@@ -60,7 +60,7 @@
   --acc:        #ea7ea3;
   --acc-dark:   #d4648a;
   --acc-light:  #fce4ec;
-  --acc-pale:   #fff5f8;
+  --acc-pale:   #fce4ec;
   --bg-card:    #fce4ec;
   --bg:         #fce4ec;
   --text:       #1a1a1a;
@@ -486,8 +486,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   left: 0;
   right: 0;
   background:
-    radial-gradient(circle at 18% 0%, rgba(255,221,233,.55), transparent 24%),
-    linear-gradient(180deg, #ffffff 0%, #fff5f8 100%);
+    radial-gradient(circle at 18% 0%, rgba(255,200,220,.55), transparent 24%),
+    linear-gradient(180deg, #fce4ec 0%, #fad4e4 100%);
   box-shadow: 0 22px 58px rgba(92,28,47,.105), 0 1px 0 rgba(255,255,255,.88) inset;
   z-index: 9998;
   opacity: 0;
