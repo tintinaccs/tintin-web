@@ -194,18 +194,52 @@
     .adm-overlay.show { display: block; }
 
     /* ── MOBILE ── */
+    /* ── TABLET: sidebar compacta ── */
     @media (max-width: 768px) {
-      .adm-hamburger { display: block; }
+      :root { --sidebar-w: 56px; }
+      .adm-hamburger { display: none; }
       .adm-user-email { display: none; }
-      .adm-sidebar {
-        transform: translateX(-100%); transition: transform .25s ease;
-      }
-      .adm-sidebar.open { transform: translateX(0); }
-      .adm-main { margin-left: 0; padding: 20px 16px; }
+      .adm-sidebar { width: 56px; padding: 12px 0; }
+      .adm-sidebar-title { display: none; }
+      .adm-nav-btn { flex-direction: column; gap: 2px; padding: 10px 0; font-size: 8px; align-items: center; text-align: center; border-left: none; border-bottom: 3px solid transparent; }
+      .adm-nav-btn.active { border-left: none; border-bottom-color: var(--rose); }
+      .adm-nav-btn .nav-icon { font-size: 1.4rem; }
+      .adm-main { margin-left: 56px; padding: 20px 16px; }
       .adm-cards-grid { grid-template-columns: 1fr; }
       .adm-card-btns { flex-direction: column; }
       .adm-btn-save, .adm-btn-clear { width: 100%; }
     }
+
+    /* ── MOBILE: bottom tabs ── */
+    @media (max-width: 480px) {
+      :root { --sidebar-w: 0px; }
+      .adm-sidebar { display: none; }
+      .adm-main { margin-left: 0; padding: 12px; padding-bottom: 72px; }
+      .adm-mobile-tabs { display: flex !important; }
+      .adm-cards-grid { grid-template-columns: 1fr; }
+      .adm-card-btns { flex-direction: column; }
+      .adm-btn-save, .adm-btn-clear { width: 100%; }
+    }
+
+    .adm-mobile-tabs {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid var(--border);
+      z-index: 200; height: 60px; align-items: stretch;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
+    .adm-mobile-tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 4px 14px; flex-shrink: 0;
+      font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      color: var(--text-sec); cursor: pointer; background: none; border: none;
+      font-family: var(--font); text-decoration: none; white-space: nowrap;
+      border-bottom: 2px solid transparent; transition: color .15s;
+    }
+    .adm-mobile-tab.active, .adm-mobile-tab:hover { color: var(--rose); border-bottom-color: var(--rose); }
+    .adm-mobile-tab .nav-icon { font-size: 1.2rem; }
   </style>
 </head>
 <body>
@@ -261,6 +295,17 @@
     <span class="nav-icon">🏷️</span> Branding / Logo
   </button>
 </aside>
+
+<!-- MOBILE BOTTOM TABS -->
+<nav class="adm-mobile-tabs" id="adm-mobile-tabs">
+  <button class="adm-mobile-tab active" data-section="hero"><span class="nav-icon">🏠</span>Hero</button>
+  <button class="adm-mobile-tab" data-section="productos"><span class="nav-icon">🛍️</span>Productos</button>
+  <button class="adm-mobile-tab" data-section="editorial"><span class="nav-icon">✨</span>Editorial</button>
+  <button class="adm-mobile-tab" data-section="iconos"><span class="nav-icon">⭐</span>Íconos</button>
+  <button class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
+  <button class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
+  <a href="admin-panel.html" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
+</nav>
 
 <!-- MAIN -->
 <div class="adm-layout" id="adm-layout" style="display:none;">
@@ -412,25 +457,19 @@ document.getElementById('adm-cards-grid').addEventListener('click', e => {
   if (clearBtn) clearSlot(clearBtn.dataset.clear);
 });
 
-// ── Sidebar nav ──
-document.querySelectorAll('.adm-nav-btn[data-section]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.adm-nav-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderSection(btn.dataset.section);
-    // close sidebar on mobile
-    if (window.innerWidth <= 768) {
-      document.getElementById('adm-sidebar').classList.remove('open');
-      document.getElementById('adm-overlay').classList.remove('show');
-    }
-  });
+// ── Unified section switch (sidebar + mobile tabs) ──
+function switchImgSection(target) {
+  document.querySelectorAll('[data-section]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
+  renderSection(target);
+}
+document.querySelectorAll('[data-section]').forEach(btn => {
+  btn.addEventListener('click', () => switchImgSection(btn.dataset.section));
 });
 
-// ── Hamburger ──
-document.getElementById('adm-hamburger').addEventListener('click', () => {
-  document.getElementById('adm-sidebar').classList.toggle('open');
-  document.getElementById('adm-overlay').classList.toggle('show');
-});
+// ── Hamburger (no-op, kept for compatibility) ──
+const hamburgerBtn = document.getElementById('adm-hamburger');
+if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => {});
 document.getElementById('adm-overlay').addEventListener('click', () => {
   document.getElementById('adm-sidebar').classList.remove('open');
   document.getElementById('adm-overlay').classList.remove('show');

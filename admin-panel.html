@@ -163,15 +163,7 @@
       color: var(--adm-text);
       flex: 1;
     }
-    .adm-hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      font-size: 22px;
-      color: var(--adm-accent);
-    }
+    .adm-hamburger { display: none; }
     .adm-topbar-btn {
       padding: 8px 16px;
       border-radius: 50px;
@@ -497,30 +489,107 @@
     .adm-overlay.show { display: block; }
 
     /* ======== RESPONSIVE ======== */
+    /* ── TABLET: sidebar compacta siempre visible ── */
     @media (max-width: 900px) {
+      :root { --sidebar-w: 64px; }
+
       .adm-sidebar {
-        transform: translateX(-100%);
+        width: 64px;
+        overflow: visible;
       }
-      .adm-sidebar.open {
-        transform: translateX(0);
-        box-shadow: 4px 0 20px rgba(0,0,0,.2);
+      .adm-sidebar-logo,
+      .adm-user-info .adm-user-name,
+      .adm-user-info .adm-user-role-badge,
+      .adm-nav-divider { display: none; }
+
+      .adm-user-info {
+        justify-content: center;
+        padding: 12px 0;
       }
-      .adm-main {
-        margin-left: 0;
+      .adm-nav-item {
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 0;
+        font-size: 9px;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
       }
-      .adm-hamburger {
-        display: block;
-      }
+      .adm-nav-icon { font-size: 20px; width: auto; }
+
+      .adm-nav-bottom { padding: 8px 0 16px; }
+      .adm-hamburger { display: none; }
       .adm-content { padding: 16px; }
-      .adm-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .adm-stats { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 480px) {
-      .adm-stats { grid-template-columns: 1fr 1fr; }
+    /* ── MOBILE: bottom tab bar, sidebar oculta ── */
+    @media (max-width: 540px) {
+      :root { --sidebar-w: 0px; }
+
+      .adm-sidebar { display: none; }
+
+      .adm-main {
+        margin-left: 0;
+        padding-bottom: 70px;
+      }
+
+      .adm-mobile-tabs {
+        display: flex !important;
+      }
+
+      .adm-content { padding: 12px; }
       .adm-topbar { padding: 12px 16px; }
+      .adm-stats { grid-template-columns: 1fr 1fr; }
     }
+
+    /* Tab bar mobile — oculto por defecto */
+    .adm-mobile-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--adm-sidebar);
+      z-index: 300;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      border-top: 1px solid rgba(255,255,255,.15);
+      height: 64px;
+      align-items: stretch;
+    }
+    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
+
+    .adm-mobile-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 14px;
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.75);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--adm-font);
+      text-decoration: none;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .adm-mobile-tab:hover,
+    .adm-mobile-tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.12);
+    }
+    .adm-mobile-tab svg,
+    .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
   </style>
 </head>
 <body>
@@ -583,6 +652,21 @@
     </button>
   </div>
 </aside>
+
+<!-- MOBILE BOTTOM TABS -->
+<nav class="adm-mobile-tabs" id="adm-mobile-tabs">
+  <button class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon">📊</span>Dashboard</button>
+  <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon">👥</span>Usuarios</button>
+  <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon">📦</span>Pedidos</button>
+  <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon">🛍️</span>Productos</button>
+  <a href="admin.html" class="adm-mobile-tab"><span class="adm-nav-icon">📝</span>Contenido</a>
+  <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon">🖼️</span>Imágenes</a>
+  <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon">💬</span>Mensajes</button>
+  <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon">🤖</span>Onboarding</button>
+  <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon">⚙️</span>Config</button>
+  <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon">🏠</span>Tienda</a>
+  <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon">🚪</span>Salir</button>
+</nav>
 
 <!-- MAIN -->
 <main class="adm-main">
@@ -883,38 +967,29 @@ const SECTION_LABELS = {
   configuracion: '⚙️ Configuración'
 };
 
+function switchSection(target) {
+  navItems.forEach(b => b.classList.remove('active'));
+  // activate all items matching this section (sidebar + mobile tabs)
+  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
+  sections.forEach(s => s.classList.remove('active'));
+  const targetSection = document.getElementById(`section-${target}`);
+  if (targetSection) targetSection.classList.add('active');
+  topbarTitle.textContent = SECTION_LABELS[target] || target;
+  if (target === 'usuarios') loadUsers();
+  if (target === 'pedidos') loadOrders();
+  if (target === 'onboarding') loadOnboardingSettings();
+  if (target === 'configuracion') loadConfig();
+}
+
 navItems.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.dataset.section;
-    navItems.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    sections.forEach(s => s.classList.remove('active'));
-    const targetSection = document.getElementById(`section-${target}`);
-    if (targetSection) targetSection.classList.add('active');
-    topbarTitle.textContent = SECTION_LABELS[target] || target;
-    closeSidebar();
-    // Lazy load data
-    if (target === 'usuarios') loadUsers();
-    if (target === 'pedidos') loadOrders();
-    if (target === 'onboarding') loadOnboardingSettings();
-    if (target === 'configuracion') loadConfig();
-  });
+  btn.addEventListener('click', () => switchSection(btn.dataset.section));
 });
 
-// ---- HAMBURGER ----
-const hamburger = document.getElementById('adm-hamburger');
-const sidebar   = document.getElementById('adm-sidebar');
-const overlay   = document.getElementById('adm-overlay');
+function closeSidebar() {}
 
-hamburger.onclick = () => {
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('show');
-};
-overlay.onclick = closeSidebar;
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  overlay.classList.remove('show');
-}
+// ---- MOBILE TAB LOGOUT ----
+const mtabLogout = document.getElementById('mtab-logout');
+if (mtabLogout) mtabLogout.onclick = async () => { await signOut(auth); window.location.href = 'login.html'; };
 
 // ---- LOGOUT ----
 document.getElementById('adm-logout').onclick = async () => {
