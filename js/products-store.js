@@ -5,7 +5,7 @@
  */
 import { db } from './firebase.js';
 import {
-  collection, getDocs, query, where, orderBy, limit
+  collection, getDocs
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const CACHE_KEY = 'tt_products_cache';
@@ -65,19 +65,22 @@ export async function loadProducts() {
   const cached = fromCache();
   if (cached) return cached;
   try {
-    const snap = await getDocs(
-      query(collection(db, 'products'), where('active', '==', true), orderBy('name'))
-    );
-    const products = snap.docs.map(d => mapProduct(d.id, d.data()));
+    // No composite index needed — fetch all, filter & sort in JS
+    const snap = await getDocs(collection(db, 'products'));
+    const all = snap.docs.map(d => mapProduct(d.id, d.data()));
+    const products = all
+      .filter(p => p.active !== false)
+      .sort((a, b) => a.name.localeCompare(b.name, 'es'));
     toCache(products);
-    // Invalidate legacy image caches so Firestore imageUrl takes priority
-    try { sessionStorage.removeItem('tt_products_cache_old'); } catch {}
     return products;
   } catch (e) {
-    console.warn('[products-store] Firestore load failed:', e);
+    console.error('[products-store] Firestore load failed:', e);
     return [];
   }
 }
+
+// Clear any stale cache from failed previous loads
+try { sessionStorage.removeItem('tt_products_cache'); } catch {}
 
 /** Render homepage and look combinator with Firestore products */
 loadProducts().then(products => {
