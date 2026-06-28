@@ -459,6 +459,144 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
+    /* ======== CONTENT EDITOR (contenido) ======== */
+    .cont-page-tab {
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      border: 2px solid #eee;
+      background: #fff;
+      color: var(--adm-muted);
+      font-family: var(--adm-font);
+      transition: all .2s;
+    }
+    .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .cont-page-tab.active { background: var(--adm-accent); border-color: var(--adm-accent); color: #fff; }
+
+    .cont-section {
+      background: #fff;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .cont-section.dirty { border-color: #ffc107; }
+    .cont-section.saved { border-color: #4caf50; }
+
+    .cont-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .15s;
+    }
+    .cont-section-head:hover { background: #f5f5f5; }
+    .cont-section-head.open { border-bottom: 1.5px solid var(--adm-border); background: #fef5f8; }
+
+    .cont-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--adm-text);
+    }
+    .cont-section-icon { font-size: 18px; }
+    .cont-section-chevron {
+      font-size: 14px;
+      color: var(--adm-muted);
+      transition: transform .2s ease;
+    }
+    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
+    .cont-section-body { display: none; padding: 20px 24px 24px; }
+    .cont-section-body.open { display: block; }
+    .cont-section-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .cont-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--adm-muted);
+    }
+    .cont-input, .cont-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: var(--adm-font);
+      color: var(--adm-text);
+      transition: border .2s;
+      width: 100%;
+    }
+    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--adm-accent); }
+    .cont-textarea { resize: vertical; min-height: 80px; }
+
+    .cont-img-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .cont-img-preview {
+      width: 100%;
+      max-height: 160px;
+      object-fit: contain;
+      border: 1.5px dashed var(--adm-border);
+      border-radius: 8px;
+      padding: 8px;
+      background: #fef5f8;
+      display: none;
+      margin-top: 8px;
+    }
+    .cont-img-preview.show { display: block; }
+    .cont-upload-progress { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .cont-upload-bar-wrap { flex: 1; height: 6px; background: #f0d0de; border-radius: 999px; overflow: hidden; }
+    .cont-upload-bar { height: 100%; width: 0%; background: var(--adm-accent); border-radius: 999px; transition: width .15s; }
+    .cont-upload-pct { font-size: 11px; color: #888; min-width: 32px; text-align: right; }
+
+    .cont-array-item {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: #fafafa;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cont-array-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .cont-array-item-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--adm-accent); }
+    .cont-array-del {
+      background: #ffebee; border: none; border-radius: 50%; width: 24px; height: 24px;
+      cursor: pointer; color: #c62828; font-size: 14px; display: flex;
+      align-items: center; justify-content: center; font-weight: 900; transition: background .15s;
+    }
+    .cont-array-del:hover { background: #ffcdd2; }
+    .cont-dirty-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #ffc107;
+      display: none; margin-left: 6px;
+    }
+
     /* ======== SPINNER ======== */
     .adm-spinner {
       display: inline-block;
@@ -626,9 +764,12 @@
       <span class="adm-nav-icon">🛍️</span> Productos
     </button>
     <div class="adm-nav-divider"></div>
-    <a href="admin.html" class="adm-nav-item">
+    <button class="adm-nav-item" data-section="contenido">
       <span class="adm-nav-icon">📝</span> Contenido
-    </a>
+    </button>
+    <button class="adm-nav-item" data-section="importar">
+      <span class="adm-nav-icon">📥</span> Import/Export
+    </button>
     <a href="admin-images.html" class="adm-nav-item">
       <span class="adm-nav-icon">🖼️</span> Imágenes
     </a>
@@ -659,7 +800,8 @@
   <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon">👥</span>Usuarios</button>
   <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon">📦</span>Pedidos</button>
   <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon">🛍️</span>Productos</button>
-  <a href="admin.html" class="adm-mobile-tab"><span class="adm-nav-icon">📝</span>Contenido</a>
+  <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon">📝</span>Contenido</button>
+  <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon">📥</span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon">🖼️</span>Imágenes</a>
   <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon">💬</span>Mensajes</button>
   <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon">🤖</span>Onboarding</button>
@@ -991,6 +1133,128 @@
       </div>
     </div>
 
+    <!-- ===================== IMPORT / EXPORT ===================== -->
+    <div class="adm-section" id="section-importar">
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📤 Exportar productos</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los productos de Firestore como archivo JSON.</p>
+          <button class="adm-btn adm-btn-primary" id="btn-exportar">📥 Descargar JSON</button>
+        </div>
+      </div>
+
+      <!-- IMPORTAR CSV DE SHOPIFY -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🛍️ Importar CSV de Shopify</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Exportá tus productos desde <strong>Shopify → Productos → Exportar → CSV</strong> y subí el archivo acá. Se importan automáticamente a Firebase.
+          </p>
+          <div id="csv-drop-zone" style="border:2px dashed var(--adm-border);border-radius:14px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fef5f8;margin-bottom:16px;">
+            <div style="font-size:36px;margin-bottom:8px">📄</div>
+            <div style="font-size:14px;font-weight:700;color:var(--adm-accent)">Arrastrá el CSV acá</div>
+            <div style="font-size:12px;color:var(--adm-muted);margin-top:4px">o hacé click para seleccionar el archivo</div>
+            <input type="file" id="csv-file-input" accept=".csv" style="display:none" />
+          </div>
+          <div id="csv-preview" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+              <div style="font-size:13px;font-weight:700;color:var(--adm-text)" id="csv-preview-title"></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">🗑️ Limpiar</button>
+                <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto;max-height:360px;overflow-y:auto;border-radius:8px;border:1.5px solid var(--adm-border)">
+              <table class="adm-table" id="csv-preview-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="csv-preview-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="csv-import-progress" style="display:none;margin-top:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--adm-text);margin-bottom:8px" id="csv-progress-label">Importando...</div>
+            <div style="background:var(--adm-border);border-radius:50px;height:8px;overflow:hidden">
+              <div id="csv-progress-bar" style="height:100%;background:var(--adm-accent);border-radius:50px;transition:width .3s ease;width:0%"></div>
+            </div>
+          </div>
+          <div id="csv-import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+
+      <!-- IMPORTAR JSON -->
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📥 Importar JSON manual</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Pegá un JSON con un array de productos. Cada item debe tener: <code>name, category, price, imageUrl, stock, active</code>.
+          </p>
+          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
+          <div style="margin-top:12px;display:flex;gap:12px">
+            <button class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
+            <button class="adm-btn adm-btn-outline" id="btn-importar-sample">📋 Cargar ejemplo</button>
+          </div>
+          <div id="import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CONTENIDO ===================== -->
+    <div class="adm-section" id="section-contenido">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
+        <div>
+          <h1 style="font-size:20px;font-weight:900;color:var(--adm-text);margin:0">🎨 Contenido del Sitio</h1>
+          <p style="font-size:13px;color:var(--adm-muted);margin-top:4px">Editá imágenes, textos y contenido de cada sección — los cambios se aplican automáticamente al sitio.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="adm-btn adm-btn-outline adm-btn-sm" id="cont-save-all">💾 Guardar todo</button>
+          <a href="index.html" target="_blank" class="adm-btn adm-btn-primary adm-btn-sm">🌐 Ver sitio</a>
+        </div>
+      </div>
+
+      <!-- Page tabs -->
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--adm-border)">
+        <div id="cont-page-tabs" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+        <button id="cont-add-page" class="adm-btn adm-btn-outline adm-btn-sm" style="white-space:nowrap">+ Agregar página</button>
+      </div>
+
+      <!-- ImgBB key banner -->
+      <div id="imgbb-banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:600;flex:1;min-width:200px">🔑 Pegá tu API key de <a href="https://api.imgbb.com" target="_blank" style="color:var(--adm-accent)">imgbb.com</a> para subir imágenes desde tu dispositivo:</span>
+        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
+        <button onclick="
+          const k=document.getElementById('imgbb-key-input').value.trim();
+          if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('✅ API key guardada');}
+          else toast('Pegá tu key primero');
+        " class="adm-btn adm-btn-primary adm-btn-sm">Guardar key</button>
+        <button onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="cont-loading" style="text-align:center;padding:48px;color:var(--adm-muted)">
+        <div style="font-size:32px;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700">Cargando configuración...</div>
+      </div>
+
+      <!-- Sections container -->
+      <div id="cont-sections" style="display:none"></div>
+    </div>
+
   </div><!-- /adm-content -->
 </main>
 
@@ -1011,7 +1275,7 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
@@ -1055,7 +1319,9 @@ const SECTION_LABELS = {
   productos: '🛍️ Productos',
   mensajes: '💬 Mensajes',
   onboarding: '🤖 Onboarding',
-  configuracion: '⚙️ Configuración'
+  configuracion: '⚙️ Configuración',
+  importar: '📥 Import / Export',
+  contenido: '🎨 Contenido del Sitio'
 };
 
 function switchSection(target) {
@@ -1071,6 +1337,8 @@ function switchSection(target) {
   if (target === 'productos') loadProductos();
   if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'configuracion') loadConfig();
+  if (target === 'importar') loadImportar();
+  if (target === 'contenido') loadContenido();
 }
 
 navItems.forEach(btn => {
