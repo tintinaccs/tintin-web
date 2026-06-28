@@ -317,12 +317,43 @@
     </div>
   </div>
 
+  <!-- ROL BADGE -->
+  <div class="perfil-card" id="perfil-role-card" style="display:none">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mi rol</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span id="perfil-role-badge" style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em"></span>
+        <a href="admin-panel.html" class="perfil-btn perfil-btn-primary" id="link-admin-panel" style="display:none">⚙️ Ir al panel de administración</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MIS PEDIDOS (clients) -->
+  <div class="perfil-card" id="perfil-orders-card" style="display:none">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mis últimos pedidos</div>
+      <div id="perfil-orders-list">
+        <div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando pedidos…</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <div style="font-size:13px;color:var(--text-muted)">
+          Compras: <strong id="perfil-purchase-count">0</strong> &nbsp;|&nbsp;
+          Total gastado: <strong id="perfil-total-spent" style="color:var(--acc)">Gs. 0</strong>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <button class="perfil-btn perfil-btn-danger" id="btn-delete-account" style="display:none">🗑️ Eliminar mi cuenta</button>
+      </div>
+    </div>
+  </div>
+
   <!-- LINKS RÁPIDOS -->
   <div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title">Accesos rápidos</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a href="catalogo.html" class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
+        <a href="checkout.html" class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
         <a href="index.html" class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
         <a href="admin.html" class="perfil-btn perfil-btn-outline" id="link-admin-perfil" style="display:none">⚙️ Admin</a>
       </div>
