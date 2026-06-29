@@ -1605,13 +1605,13 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   color: var(--pink-dark);
 }
 
-.tt-cart-wa-btn {
+.tt-cart-checkout-btn {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: #25d366;
+  background: var(--pink-dark);
   color: var(--white);
   padding: 14px;
   border-radius: var(--radius-pill);
@@ -1623,11 +1623,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   cursor: pointer;
   transition: var(--transition);
   margin-bottom: 10px;
+  text-decoration: none;
 }
 
-.tt-cart-wa-btn:hover { background: #128c3c; transform: translateY(-1px); }
-
-.tt-cart-wa-btn svg { width: 20px; height: 20px; fill: white; }
+.tt-cart-checkout-btn:hover { background: var(--rose); transform: translateY(-1px); }
 
 /* ═══════════════════════════════════════════════
    INNER PAGES HERO

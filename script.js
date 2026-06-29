@@ -309,7 +309,7 @@ function renderCart() {
         <span>Subtotal</span>
         <span>${formatPrice(getCartTotal())}</span>
       </div>
-      <a href="checkout.html" class="tt-btn w-full" style="display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;margin-top:12px">
+      <a href="checkout.html" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
       <button onclick="closeCart()" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #eee;border-radius:50px;font-size:0.78rem;color:#888;cursor:pointer;font-family:inherit">
@@ -357,14 +357,13 @@ function buildWAMessage() {
   return msg;
 }
 
-function checkoutWhatsApp() {
-  const msg = buildWAMessage();
-  if (!msg) {
+function goToCheckout() {
+  const cart = getCart();
+  if (!cart.length) {
     alert('Tu carrito está vacío. ¡Agregá productos primero!');
     return;
   }
-  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank', 'noopener');
+  window.location.href = 'checkout.html';
 }
 
 function directWAProduct(product) {
@@ -1153,7 +1152,7 @@ window.removeFromCart = removeFromCart;
 window.updateQty = updateQty;
 window.openCart = openCart;
 window.closeCart = closeCart;
-window.checkoutWhatsApp = checkoutWhatsApp;
+window.goToCheckout = goToCheckout;
 window.initProductPage = initProductPage;
 window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
