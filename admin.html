@@ -1787,7 +1787,7 @@ window.deleteUser = async (uid, name) => {
 // ======== PEDIDOS ========
 async function loadOrders() {
   const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1804,7 +1804,7 @@ async function loadOrders() {
         });
       renderOrdersTable(allOrders);
     } catch(e2) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
     }
   }
 }
@@ -1828,9 +1828,9 @@ function renderOrdersTable(orders) {
   };
 
   const NOTIF_BADGE = {
-    sent:    { cls: 'badge-entregado', icon: '✅', label: 'Notificado' },
-    pending: { cls: 'badge-pendiente', icon: '⏳', label: 'Pendiente' },
-    error:   { cls: 'badge-cancelado', icon: '❌', label: 'Error notif.' },
+    sent:    { cls: 'badge-entregado', icon: '', label: 'Notificado' },
+    pending: { cls: 'badge-pendiente', icon: '', label: 'Pendiente' },
+    error:   { cls: 'badge-cancelado', icon: '', label: 'Error notif.' },
   };
   function notifBadge(status) {
     const b = NOTIF_BADGE[status] || NOTIF_BADGE.pending;
