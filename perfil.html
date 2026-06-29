@@ -4,271 +4,250 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
-  <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y favoritos." />
-  <meta property="og:title" content="Mi Perfil | Tintin Accesorios" />
-  <meta property="og:type" content="website" />
-  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/perfil.html" />
+  <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/tintin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    body { background: var(--acc-pale); min-height: 100vh; }
+    /* Alias variables para que los estilos de perfil funcionen con styles.css */
+    :root {
+      --acc:       var(--pink-dark);
+      --acc-dark:  var(--rose);
+      --acc-light: var(--pink-mid);
+      --acc-pale:  var(--pink-pale);
+      --radius:    var(--radius-md);
+      --font:      var(--font-body);
+    }
 
+    body { background: var(--pink-pale); }
+
+    /* Loading overlay */
+    #perfil-loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(252,228,236,.97);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+    }
+    #perfil-loading svg { animation: pf-spin 1.4s linear infinite; }
+    #perfil-loading span {
+      font-size: 12px; font-weight: 700; color: var(--pink-dark);
+      letter-spacing: .1em; text-transform: uppercase;
+      font-family: var(--font-body);
+    }
+    @keyframes pf-spin { to { transform: rotate(360deg); } }
+
+    /* Profile layout */
     .perfil-wrap {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 88px 24px 32px;
+      max-width: 700px; margin: 0 auto;
+      padding: 100px 24px 120px;
     }
 
     .perfil-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--acc);
-      margin-bottom: 24px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--acc);
+      text-decoration: none; margin-bottom: 24px;
     }
+    .perfil-back:hover { opacity: .75; }
 
     .perfil-card {
-      background: #fce4ec;
-      border-radius: var(--radius);
-      border: 1.5px solid #f5d0de;
-      overflow: hidden;
-      margin-bottom: 20px;
+      background: #fff; border-radius: var(--radius);
+      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 20px;
     }
 
     .perfil-header {
-      background: #fce4ec;
-      padding: 32px 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      background: var(--pink-pale); padding: 28px 24px;
+      display: flex; align-items: center; gap: 20px;
     }
 
     .perfil-avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: var(--acc);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      font-weight: 900;
-      color: #fff;
-      flex-shrink: 0;
-      overflow: hidden;
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--acc); display: flex; align-items: center;
+      justify-content: center; font-size: 28px; font-weight: 900;
+      color: #fff; flex-shrink: 0; overflow: hidden;
     }
-
-    .perfil-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .perfil-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .perfil-name {
-      font-size: 22px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: var(--text);
+      font-size: 20px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: .04em; color: var(--text);
     }
-
     .perfil-email {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-top: 2px;
+      font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 2px;
     }
 
     .perfil-body { padding: 24px; }
 
     .perfil-section-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--acc);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1.5px solid var(--acc-light);
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--acc); margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1.5px solid var(--border);
     }
 
-    .perfil-field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 16px;
-    }
-
+    .perfil-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
     .perfil-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-muted);
     }
-
     .perfil-input {
-      padding: 11px 16px;
-      border: 1.5px solid #eee;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-family: var(--font);
-      color: var(--text);
-      transition: border .2s;
+      padding: 11px 16px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 14px;
+      font-family: var(--font-body); color: var(--text); background: #fafafa;
+      transition: border .2s, box-shadow .2s;
     }
-    .perfil-input:focus { outline: none; border-color: var(--acc); }
+    .perfil-input:focus {
+      outline: none; border-color: var(--acc); background: #fff;
+      box-shadow: 0 0 0 3px rgba(184,76,114,.08);
+    }
 
     .perfil-btn {
-      padding: 11px 28px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      cursor: pointer;
-      font-family: var(--font);
-      border: none;
-      transition: all .2s;
+      padding: 11px 24px; border-radius: 50px; font-size: 12px;
+      font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
+      cursor: pointer; font-family: var(--font-body); border: none; transition: all .2s;
+      text-decoration: none; display: inline-flex; align-items: center;
     }
     .perfil-btn-primary { background: var(--acc); color: #fff; }
-    .perfil-btn-primary:hover { background: var(--acc-dark); }
-    .perfil-btn-outline { background: transparent; border: 2px solid var(--acc); color: var(--acc); }
+    .perfil-btn-primary:hover { background: var(--acc-dark); transform: translateY(-1px); }
+    .perfil-btn-outline { background: transparent; border: 1.5px solid var(--acc); color: var(--acc); }
     .perfil-btn-outline:hover { background: var(--acc); color: #fff; }
-    .perfil-btn-danger { background: transparent; border: 2px solid #ff4d4f; color: #ff4d4f; }
-    .perfil-btn-danger:hover { background: #ff4d4f; color: #fff; }
+    .perfil-btn-danger { background: transparent; border: 1.5px solid #ef4444; color: #ef4444; }
+    .perfil-btn-danger:hover { background: #ef4444; color: #fff; }
 
     .perfil-wa-box {
-      background: #e8f5e9;
-      border-radius: var(--radius);
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      text-decoration: none;
-      color: var(--text);
-      transition: background .2s;
-      border: 1.5px solid #c8e6c9;
+      background: #e8f5e9; border-radius: var(--radius-sm); padding: 20px;
+      display: flex; align-items: center; gap: 16px; text-decoration: none;
+      color: var(--text); transition: background .2s; border: 1.5px solid #c8e6c9;
     }
     .perfil-wa-box:hover { background: #c8e6c9; }
-
     .perfil-wa-icon { font-size: 32px; }
     .perfil-wa-title { font-size: 14px; font-weight: 800; text-transform: uppercase; }
-    .perfil-wa-desc  { font-size: 12px; color: #555; margin-top: 2px; }
+    .perfil-wa-desc { font-size: 12px; color: #555; margin-top: 2px; }
+
+    .perfil-order-row {
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .perfil-order-row:last-child { border-bottom: none; }
 
     .perfil-toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--acc);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      display: none;
-      z-index: 999;
-      animation: fadeUp .3s ease;
+      position: fixed; bottom: 90px; right: 20px;
+      background: var(--acc); color: #fff; padding: 12px 24px;
+      border-radius: 50px; font-size: 13px; font-weight: 700;
+      display: none; z-index: 999; box-shadow: 0 4px 16px rgba(0,0,0,.18);
+      font-family: var(--font-body);
     }
     .perfil-toast.show { display: block; }
+
+    @media (max-width: 480px) {
+      .perfil-wrap { padding: 84px 16px 100px; }
+      .perfil-header { padding: 20px 16px; gap: 14px; }
+      .perfil-body { padding: 16px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="tt-header tt-hdr-show tt-hdr-seen" id="tt-header">
+<!-- Loading overlay — visible while Firebase auth resolves -->
+<div id="perfil-loading">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+  </svg>
+  <span>Cargando…</span>
+</div>
+
+<!-- ══════════════════════════════════════
+     HEADER (same as index.html)
+══════════════════════════════════════ -->
+<header class="tt-header" id="tt-header">
   <div class="tt-header-inner">
-    <a href="index.html" class="tt-logo">
-      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
+
+    <a href="index.html" class="tt-logo-link">
+      <div class="tt-logo-text">TINTIN</div>
+      <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
     </a>
-    <ul class="tt-nav">
-      <li class="tt-nav-item"><a href="index.html" class="tt-nav-link">Inicio</a></li>
-      <li class="tt-nav-item tt-nav-item--has-drop" id="nav-tienda">
-        <button class="tt-nav-tienda-btn tt-nav-link" id="nav-tienda-btn" aria-expanded="false" aria-haspopup="true">
-          Tienda
-          <svg class="tt-nav-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tt-dropdown" id="nav-tienda-drop" role="menu">
+
+    <nav class="tt-nav" id="tt-nav">
+      <a href="index.html">INICIO</a>
+      <div class="tt-nav-dropdown" id="tienda-dropdown">
+        <button id="btn-tienda">TIENDA ▾</button>
+        <div class="tt-dropdown">
           <div class="tt-dropdown-grid">
-            <a href="catalogo.html?cat=relojes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div><span>Relojes</span></a>
-            <a href="catalogo.html?cat=aros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div><span>Aros</span></a>
-            <a href="catalogo.html?cat=bolsos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div><span>Bags</span></a>
-            <a href="catalogo.html?cat=collares" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div><span>Collares</span></a>
-            <a href="catalogo.html?cat=pulseras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Pulseras" loading="lazy" /></div><span>Pulseras</span></a>
-            <a href="catalogo.html?cat=anillos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Anillos" loading="lazy" /></div><span>Anillos</span></a>
-            <a href="catalogo.html?cat=earcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div><span>Earcuff</span></a>
-            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Brazaletes" loading="lazy" /></div><span>Brazaletes</span></a>
-            <a href="catalogo.html?cat=gafas" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Gafas" loading="lazy" /></div><span>Gafas</span></a>
-            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Tobilleras" loading="lazy" /></div><span>Tobilleras</span></a>
-            <a href="catalogo.html?cat=armcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Armcuff" loading="lazy" /></div><span>Armcuff</span></a>
-            <a href="catalogo.html?cat=joyeros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Joyeros" loading="lazy" /></div><span>Joyeros</span></a>
+            <a href="catalogo.html?cat=bolsos"    class="tt-dropdown-card"><div class="tt-dropdown-icon">👜</div><div class="tt-dropdown-label">BAGS</div></a>
+            <a href="catalogo.html?cat=collares"  class="tt-dropdown-card"><div class="tt-dropdown-icon">📿</div><div class="tt-dropdown-label">COLLARES</div></a>
+            <a href="catalogo.html?cat=earcuff"   class="tt-dropdown-card"><div class="tt-dropdown-icon">✨</div><div class="tt-dropdown-label">EARCUFF</div></a>
+            <a href="catalogo.html?cat=gafas"     class="tt-dropdown-card"><div class="tt-dropdown-icon">🕶️</div><div class="tt-dropdown-label">GAFAS</div></a>
+            <a href="catalogo.html?cat=brazaletes" class="tt-dropdown-card"><div class="tt-dropdown-icon">💎</div><div class="tt-dropdown-label">BRAZALETES</div></a>
+            <a href="catalogo.html?cat=aros"      class="tt-dropdown-card"><div class="tt-dropdown-icon">💫</div><div class="tt-dropdown-label">AROS</div></a>
+            <a href="catalogo.html?cat=armcuff"   class="tt-dropdown-card"><div class="tt-dropdown-icon">🌸</div><div class="tt-dropdown-label">ARMCUFF</div></a>
+            <a href="catalogo.html?cat=anillos"   class="tt-dropdown-card"><div class="tt-dropdown-icon">💍</div><div class="tt-dropdown-label">ANILLOS</div></a>
+            <a href="catalogo.html?cat=joyeros"   class="tt-dropdown-card"><div class="tt-dropdown-icon">🪞</div><div class="tt-dropdown-label">JOYEROS</div></a>
+            <a href="catalogo.html?cat=pulseras"  class="tt-dropdown-card"><div class="tt-dropdown-icon">🎀</div><div class="tt-dropdown-label">PULSERAS</div></a>
+            <a href="catalogo.html?cat=relojes"   class="tt-dropdown-card"><div class="tt-dropdown-icon">⌚</div><div class="tt-dropdown-label">RELOJES</div></a>
+            <a href="catalogo.html?cat=tobilleras" class="tt-dropdown-card"><div class="tt-dropdown-icon">🦋</div><div class="tt-dropdown-label">TOBILLERAS</div></a>
           </div>
-          <div class="tt-dropdown-footer"><a href="catalogo.html">Ver todas las colecciones →</a></div>
         </div>
-      </li>
-      <li class="tt-nav-item"><a href="nosotros.html" class="tt-nav-link">Nosotros</a></li>
-      <li class="tt-nav-item"><a href="index.html#contacto" class="tt-nav-link">Contacto</a></li>
-      <li class="tt-nav-item"><a href="admin.html" id="link-admin" class="tt-nav-link" style="display:none">Admin</a></li>
-      <li class="tt-nav-item"><a href="login.html" id="btn-login" class="tt-nav-link tt-nav-link--login">Ingresar</a></li>
-    </ul>
+      </div>
+      <a href="collections.html">COLECCIONES</a>
+      <a href="about.html">NOSOTROS</a>
+      <a href="contact.html">CONTACTO</a>
+    </nav>
+
     <div class="tt-header-actions">
-      <button class="tt-icon-btn" id="btn-buscar" title="Buscar" aria-label="Buscar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <button id="btn-search" title="Buscar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <a href="perfil.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="perfil.html" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--pink-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <span class="tt-cart-wrap">
-        <a href="index.html#carrito" class="tt-icon-btn" title="Carrito" aria-label="Carrito" id="btn-carrito">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </a>
-        <span class="tt-cart-badge" id="tt-cart-badge"></span>
-      </span>
+      <button id="btn-cart" title="Carrito" style="position:relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="tt-cart-badge hidden" id="cart-badge">0</span>
+      </button>
     </div>
+
+    <button class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú">☰</button>
+  </div>
+
+  <div class="tt-search-panel" id="search-panel">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="tt-search-input" id="search-input" placeholder="¿Qué estás buscando? Ej: reloj, collar, bag…">
+    <button class="tt-search-close" id="btn-search-close" aria-label="Cerrar búsqueda">✕</button>
+    <div class="tt-search-results" id="search-results" style="display:none;"></div>
   </div>
 </header>
 
-<!-- Search panel -->
-<div class="tt-srch-backdrop" id="srch-backdrop"></div>
-<div class="tt-srch-panel" id="srch-panel" role="dialog" aria-label="Buscador" aria-modal="true">
-  <div class="tt-srch-inner">
-    <div class="tt-srch-top">
-      <div class="tt-srch-input-wrap">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-input" class="tt-srch-input" placeholder="Relojes, aros, collares…" autocomplete="off" spellcheck="false" />
-        <button class="tt-srch-close" id="srch-close" aria-label="Cerrar">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="tt-srch-tags">
-        <span class="tt-srch-tag-label">Populares:</span>
-        <a href="catalogo.html?cat=relojes" class="tt-srch-tag">Relojes</a>
-        <a href="catalogo.html?cat=aros" class="tt-srch-tag">Aros</a>
-        <a href="catalogo.html?cat=collares" class="tt-srch-tag">Collares</a>
-        <a href="catalogo.html?cat=bolsos" class="tt-srch-tag">Bags</a>
-      </div>
+<!-- Mobile Menu -->
+<div class="tt-mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+  <div class="tt-mobile-menu-header">
+    <div class="tt-logo-link">
+      <div class="tt-logo-text" style="color:var(--pink-dark)">TINTIN</div>
+      <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
     </div>
-    <div class="tt-srch-body" id="srch-body">
-      <ul class="tt-srch-results" id="search-results"></ul>
-      <div class="tt-srch-preview" id="srch-preview">
-        <div class="tt-srch-prev-placeholder">
-          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <p>Empezá a escribir para ver resultados</p>
-        </div>
-      </div>
-    </div>
+    <button class="tt-mobile-close" id="btn-mobile-close" aria-label="Cerrar menú">✕</button>
   </div>
+  <nav class="tt-mobile-nav">
+    <a href="index.html">INICIO</a>
+    <button id="btn-mobile-tienda">TIENDA ▾</button>
+    <div class="tt-mobile-cats" id="mobile-cats" style="display:none;">
+      <a href="catalogo.html?cat=bolsos">BAGS</a><a href="catalogo.html?cat=collares">COLLARES</a><a href="catalogo.html?cat=earcuff">EARCUFF</a>
+      <a href="catalogo.html?cat=gafas">GAFAS</a><a href="catalogo.html?cat=brazaletes">BRAZALETES</a><a href="catalogo.html?cat=aros">AROS</a>
+      <a href="catalogo.html?cat=armcuff">ARMCUFF</a><a href="catalogo.html?cat=anillos">ANILLOS</a><a href="catalogo.html?cat=joyeros">JOYEROS</a>
+      <a href="catalogo.html?cat=pulseras">PULSERAS</a><a href="catalogo.html?cat=relojes">RELOJES</a><a href="catalogo.html?cat=tobilleras">TOBILLERAS</a>
+    </div>
+    <a href="collections.html">COLECCIONES</a>
+    <a href="about.html">NOSOTROS</a>
+    <a href="contact.html">CONTACTO</a>
+  </nav>
 </div>
 
+<!-- ══════════════════════════════════════
+     PROFILE CONTENT
+══════════════════════════════════════ -->
 <div class="perfil-wrap">
   <a href="index.html" class="perfil-back">← Volver a la tienda</a>
 
-  <!-- HEADER PERFIL -->
+  <!-- Avatar + datos básicos -->
   <div class="perfil-card">
     <div class="perfil-header">
       <div class="perfil-avatar" id="perfil-avatar">?</div>
@@ -277,10 +256,8 @@
         <div class="perfil-email" id="perfil-email-display">—</div>
       </div>
     </div>
-
     <div class="perfil-body">
       <div class="perfil-section-title">Mis datos</div>
-
       <div class="perfil-field">
         <label class="perfil-label">Nombre</label>
         <input type="text" class="perfil-input" id="perfil-nombre" placeholder="Tu nombre completo" />
@@ -293,7 +270,6 @@
         <label class="perfil-label">Dirección de entrega (opcional)</label>
         <input type="text" class="perfil-input" id="perfil-dir" placeholder="Ej: Av. España 1234, Asunción" />
       </div>
-
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
         <button class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil">💾 Guardar cambios</button>
         <button class="perfil-btn perfil-btn-danger" id="btn-logout">🚪 Cerrar sesión</button>
@@ -301,13 +277,37 @@
     </div>
   </div>
 
-  <!-- CONTACTO WA -->
+  <!-- Mis pedidos -->
+  <div class="perfil-card" id="perfil-orders-card" style="display:none">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mis pedidos</div>
+      <div id="perfil-orders-list">
+        <div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando pedidos…</div>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:var(--text-muted)">
+        Compras: <strong id="perfil-purchase-count">0</strong> &nbsp;|&nbsp;
+        Total gastado: <strong id="perfil-total-spent" style="color:var(--pink-dark)">Gs. 0</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rol (solo si no es cliente) -->
+  <div class="perfil-card" id="perfil-role-card" style="display:none">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mi rol</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span id="perfil-role-badge" style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em"></span>
+        <a href="admin.html" class="perfil-btn perfil-btn-primary" id="link-admin-panel" style="display:none">⚙️ Panel de administración</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp ayuda -->
   <div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title">¿Necesitás ayuda?</div>
       <a href="https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8"
-         target="_blank"
-         class="perfil-wa-box">
+         target="_blank" rel="noopener" class="perfil-wa-box">
         <div class="perfil-wa-icon">💬</div>
         <div>
           <div class="perfil-wa-title">Contactar por WhatsApp</div>
@@ -317,45 +317,15 @@
     </div>
   </div>
 
-  <!-- ROL BADGE -->
-  <div class="perfil-card" id="perfil-role-card" style="display:none">
-    <div class="perfil-body">
-      <div class="perfil-section-title">Mi rol</div>
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <span id="perfil-role-badge" style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em"></span>
-        <a href="admin.html" class="perfil-btn perfil-btn-primary" id="link-admin-panel" style="display:none">⚙️ Ir al panel de administración</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- MIS PEDIDOS (clients) -->
-  <div class="perfil-card" id="perfil-orders-card" style="display:none">
-    <div class="perfil-body">
-      <div class="perfil-section-title">Mis últimos pedidos</div>
-      <div id="perfil-orders-list">
-        <div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando pedidos…</div>
-      </div>
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-        <div style="font-size:13px;color:var(--text-muted)">
-          Compras: <strong id="perfil-purchase-count">0</strong> &nbsp;|&nbsp;
-          Total gastado: <strong id="perfil-total-spent" style="color:var(--acc)">Gs. 0</strong>
-        </div>
-      </div>
-      <div style="margin-top:12px">
-        <button class="perfil-btn perfil-btn-danger" id="btn-delete-account" style="display:none">🗑️ Eliminar mi cuenta</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- LINKS RÁPIDOS -->
+  <!-- Accesos rápidos -->
   <div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title">Accesos rápidos</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="catalogo.html" class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
-        <a href="checkout.html" class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
-        <a href="index.html" class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
-        <a href="admin.html" class="perfil-btn perfil-btn-outline" id="link-admin-perfil" style="display:none">⚙️ Admin</a>
+        <a href="catalogo.html"  class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
+        <a href="checkout.html"  class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
+        <a href="index.html"     class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
+        <a href="admin.html"     class="perfil-btn perfil-btn-outline" id="link-admin-perfil" style="display:none">⚙️ Admin</a>
       </div>
     </div>
   </div>
@@ -363,146 +333,110 @@
 
 <div class="perfil-toast" id="perfil-toast"></div>
 
-<footer class="tt-footer" id="contacto">
-  <div class="tt-footer-logo">
-    <img src="images/logo.png" alt="Tintin Accesorios" class="tt-footer-logo-img" />
+<!-- ══════════════════════════════════════
+     CART DRAWER
+══════════════════════════════════════ -->
+<div class="tt-cart-overlay" id="cart-overlay"></div>
+<div class="tt-cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+  <div class="tt-cart-header">
+    <h2 class="tt-cart-title">MI CARRITO</h2>
+    <button class="tt-cart-close" id="btn-cart-close" aria-label="Cerrar carrito">✕</button>
   </div>
-  <nav class="tt-footer-links">
-    <a href="index.html">Inicio</a>
-    <a href="catalogo.html">Tienda</a>
-    <a href="nosotros.html">Nosotros</a>
-    <a href="index.html#contacto">Contacto</a>
-  </nav>
-  <p class="tt-footer-copy">
-    &copy; 2024–2026 TINTIN ACCESORIOS &mdash; TODOS LOS DERECHOS RESERVADOS<br>
-    San Lorenzo, Paraguay
-  </p>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-     target="_blank" class="tt-footer-wa">Contactanos por WhatsApp</a>
-</footer>
+  <div class="tt-cart-body" id="cart-body"></div>
+  <div class="tt-cart-footer" id="cart-footer" style="display:none;">
+    <div class="tt-cart-total-row">
+      <span class="tt-cart-total-label">TOTAL</span>
+      <span class="tt-cart-total-value" id="cart-total">Gs. 0</span>
+    </div>
+  </div>
+</div>
 
-<!-- WhatsApp flotante -->
-<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-   class="tt-wa-float" target="_blank" title="Contactar por WhatsApp">
-  <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-</a>
-
-<!-- TAB BAR MOBILE -->
-<nav class="tt-tabbar" id="tt-tabbar">
-  <a href="index.html" class="tt-tab" aria-label="Inicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<!-- ══════════════════════════════════════
+     MOBILE TABBAR
+══════════════════════════════════════ -->
+<div class="tt-tabbar" id="tt-tabbar">
+  <a href="index.html" class="tt-tabbar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Inicio</span>
   </a>
-  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <button class="tt-tabbar-btn" id="tabbar-tienda">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h12M10 20a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
+    <span>Tienda</span>
   </button>
-  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  <button class="tt-tabbar-btn" id="tabbar-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Buscar</span>
+  </button>
+  <button class="tt-tabbar-btn" id="tabbar-cart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span>Carrito</span>
+  </button>
+  <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-tabbar-btn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span>WhatsApp</span>
   </a>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8" class="tt-tab" target="_blank" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  <a href="login.html" id="tabbar-cuenta" class="tt-tabbar-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--pink-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Cuenta</span>
   </a>
-  <a href="login.html" id="tabbar-cuenta" class="tt-tab" aria-label="Perfil">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  </a>
-</nav>
+</div>
 
-<script>
-(function(){
-  var header = document.getElementById('tt-header');
-  if (!header) return;
-  var lastY = 0;
-  window.addEventListener('scroll', function(){
-    var y = window.scrollY;
-    if (y > lastY && y > 90) header.classList.add('tt-hdr-hidden');
-    else header.classList.remove('tt-hdr-hidden');
-    lastY = y;
-  }, { passive: true });
-  var navTienda = document.getElementById('nav-tienda');
-  var tiendaBtn = document.getElementById('nav-tienda-btn');
-  if (tiendaBtn) {
-    tiendaBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      var open = navTienda.classList.contains('tt-drop-open');
-      navTienda.classList.toggle('tt-drop-open', !open);
-      tiendaBtn.setAttribute('aria-expanded', String(!open));
-    });
-  }
-  document.addEventListener('click', function(e){
-    if (navTienda && !navTienda.contains(e.target)) {
-      navTienda.classList.remove('tt-drop-open');
-      if (tiendaBtn) tiendaBtn.setAttribute('aria-expanded','false');
-    }
-  });
-  var srchBackdrop = document.getElementById('srch-backdrop');
-  var srchPanel = document.getElementById('srch-panel');
-  var srchClose = document.getElementById('srch-close');
-  var searchInput = document.getElementById('search-input');
-  function openSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.add('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.add('tt-srch-open');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function(){ if (searchInput) searchInput.focus(); }, 80);
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.add('tt-srch-active');
-  }
-  function closeSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.remove('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.remove('tt-srch-open');
-    document.body.style.overflow = '';
-    if (searchInput) searchInput.value = '';
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.remove('tt-srch-active');
-  }
-  var btnBuscar = document.getElementById('btn-buscar');
-  var tabBuscar = document.getElementById('tab-buscar');
-  if (btnBuscar) btnBuscar.addEventListener('click', openSearch);
-  if (tabBuscar) tabBuscar.addEventListener('click', openSearch);
-  if (srchClose) srchClose.addEventListener('click', closeSearch);
-  if (srchBackdrop) srchBackdrop.addEventListener('click', closeSearch);
-  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeSearch(); });
-  function updateCartBadge(){
-    var badge = document.getElementById('tt-cart-badge'); if (!badge) return;
-    try {
-      var cart = JSON.parse(localStorage.getItem('tt_carrito')||'[]');
-      var total = cart.reduce(function(s,i){ return s+(i.qty||1); },0);
-      badge.textContent = total>0?(total>99?'99+':total):'';
-      badge.classList.toggle('tt-cart-badge--show', total>0);
-    } catch(e){}
-  }
-  updateCartBadge();
-  window.addEventListener('storage', updateCartBadge);
-  window._ttOpenSearch = openSearch;
-  window._ttCloseSearch = closeSearch;
-  window._ttUpdateCart = updateCartBadge;
-})();
-</script>
+<!-- Mobile Collections Bottom Sheet -->
+<div class="tt-collections-sheet" id="collections-sheet">
+  <div class="tt-sheet-handle"></div>
+  <div class="tt-sheet-header">
+    <span>Colecciones</span>
+    <button id="btn-close-sheet" aria-label="Cerrar">✕</button>
+  </div>
+  <div class="tt-sheet-grid">
+    <a href="catalogo.html?cat=bolsos"    class="tt-sheet-item"><span>👜</span><span>BAGS</span></a>
+    <a href="catalogo.html?cat=collares"  class="tt-sheet-item"><span>📿</span><span>COLLARES</span></a>
+    <a href="catalogo.html?cat=earcuff"   class="tt-sheet-item"><span>✨</span><span>EARCUFF</span></a>
+    <a href="catalogo.html?cat=gafas"     class="tt-sheet-item"><span>🕶️</span><span>GAFAS</span></a>
+    <a href="catalogo.html?cat=brazaletes" class="tt-sheet-item"><span>💎</span><span>BRAZALETES</span></a>
+    <a href="catalogo.html?cat=aros"      class="tt-sheet-item"><span>💫</span><span>AROS</span></a>
+    <a href="catalogo.html?cat=armcuff"   class="tt-sheet-item"><span>🌸</span><span>ARMCUFF</span></a>
+    <a href="catalogo.html?cat=anillos"   class="tt-sheet-item"><span>💍</span><span>ANILLOS</span></a>
+    <a href="catalogo.html?cat=joyeros"   class="tt-sheet-item"><span>🪞</span><span>JOYEROS</span></a>
+    <a href="catalogo.html?cat=pulseras"  class="tt-sheet-item"><span>🎀</span><span>PULSERAS</span></a>
+    <a href="catalogo.html?cat=relojes"   class="tt-sheet-item"><span>⌚</span><span>RELOJES</span></a>
+    <a href="catalogo.html?cat=tobilleras" class="tt-sheet-item"><span>🦋</span><span>TOBILLERAS</span></a>
+  </div>
+  <div class="tt-sheet-footer">
+    <a href="catalogo.html" class="tt-btn" style="display:block;text-align:center;text-decoration:none">Ver todas las colecciones</a>
+  </div>
+</div>
+<div class="tt-sheet-backdrop" id="sheet-backdrop"></div>
+
+<!-- Scripts -->
+<script src="script.js"></script>
 
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
-  signOut, onAuthStateChanged, deleteUser as fbDeleteUser
+  signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
-  collection, query, where, orderBy, limit, deleteDoc
+  collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js";
 import { syncCartToFirestore } from "./js/cart-sync.js";
 import { initOnboarding } from "./js/onboarding.js";
 
 const ROLE_COLORS = {
-  superadmin: '#8b2642',
-  admin:      '#b84c72',
-  agent:      '#7b68ee',
-  viewer:     '#4a90d9',
-  client:     '#888'
+  superadmin: '#8b2642', admin: '#b84c72',
+  agent: '#7b68ee', viewer: '#4a90d9', client: '#888'
 };
 
+const loadingEl = document.getElementById('perfil-loading');
+function hideLoading() { if (loadingEl) loadingEl.style.display = 'none'; }
+
 function toast(msg) {
-  const t = document.getElementById("perfil-toast");
+  const t = document.getElementById('perfil-toast');
   t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 3000);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function formatPrice(n) {
@@ -510,130 +444,97 @@ function formatPrice(n) {
 }
 
 function statusBadge(status) {
-  const colors = {
+  const map = {
     pendiente:  '#f59e0b',
     confirmado: '#3b82f6',
     enviado:    '#8b5cf6',
     entregado:  '#10b981',
     cancelado:  '#ef4444'
   };
-  const c = colors[status] || '#888';
+  const c = map[status] || '#888';
   return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${status}</span>`;
 }
 
 onAuthStateChanged(auth, async user => {
-  if (!user) { window.location.href = "login.html"; return; }
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  hideLoading();
 
-  // Header
-  const avatarEl = document.getElementById("perfil-avatar");
+  // Avatar
+  const avatarEl = document.getElementById('perfil-avatar');
   if (user.photoURL) {
     avatarEl.innerHTML = `<img src="${user.photoURL}" alt="foto" />`;
   } else {
-    avatarEl.textContent = (user.displayName || user.email || "?")[0].toUpperCase();
+    avatarEl.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
   }
+  document.getElementById('perfil-nombre-display').textContent = user.displayName || user.email;
+  document.getElementById('perfil-email-display').textContent  = user.email;
 
-  document.getElementById("perfil-nombre-display").textContent = user.displayName || user.email;
-  document.getElementById("perfil-email-display").textContent  = user.email;
-
-  // Sync cart on login
+  // Sync cart
   await syncCartToFirestore(user.uid);
 
-  // Get role
+  // Role
   const role = await getUserRole(user.uid);
 
-  // Show role badge
-  const roleCard = document.getElementById('perfil-role-card');
-  roleCard.style.display = 'block';
-  const badge = document.getElementById('perfil-role-badge');
-  badge.textContent = ROLE_LABELS[role] || 'Cliente';
-  badge.style.background = (ROLE_COLORS[role] || '#888') + '22';
-  badge.style.color = ROLE_COLORS[role] || '#888';
-  badge.style.border = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
-
-  // Admin panel link
   if (role !== 'client') {
+    const roleCard = document.getElementById('perfil-role-card');
+    roleCard.style.display = 'block';
+    const badge = document.getElementById('perfil-role-badge');
+    badge.textContent = ROLE_LABELS[role] || 'Cliente';
+    badge.style.background = (ROLE_COLORS[role] || '#888') + '22';
+    badge.style.color      = ROLE_COLORS[role] || '#888';
+    badge.style.border     = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
     document.getElementById('link-admin-panel').style.display = 'inline-flex';
   }
 
-  // Legacy admin link
   if (user.email === SUPER_ADMIN || role === 'admin' || role === 'superadmin') {
-    document.getElementById("link-admin-perfil").style.display = "inline-flex";
+    document.getElementById('link-admin-perfil').style.display = 'inline-flex';
   }
 
   // Load Firestore user data
-  const ref  = doc(db, "users", user.uid);
+  const ref  = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
   if (snap.exists()) {
     const d = snap.data();
-    document.getElementById("perfil-nombre").value = d.name    || user.displayName || "";
-    document.getElementById("perfil-tel").value    = d.phone   || "";
-    document.getElementById("perfil-dir").value    = d.address || "";
-
-    // Show orders card
-    const ordersCard = document.getElementById('perfil-orders-card');
-    ordersCard.style.display = 'block';
-
-    // Purchase stats
+    document.getElementById('perfil-nombre').value = d.name    || user.displayName || '';
+    document.getElementById('perfil-tel').value    = d.phone   || '';
+    document.getElementById('perfil-dir').value    = d.address || '';
     document.getElementById('perfil-purchase-count').textContent = d.purchaseCount || 0;
-    document.getElementById('perfil-total-spent').textContent = formatPrice(d.totalSpent || 0);
-
-    // Show delete account button for clients
-    if (role === 'client') {
-      document.getElementById('btn-delete-account').style.display = 'inline-block';
-    }
-  } else {
-    document.getElementById('perfil-orders-card').style.display = 'block';
+    document.getElementById('perfil-total-spent').textContent    = formatPrice(d.totalSpent || 0);
   }
 
-  // Load user's orders
+  // Orders
+  document.getElementById('perfil-orders-card').style.display = 'block';
   await loadUserOrders(user);
 
-  // Guardar perfil
-  document.getElementById("btn-guardar-perfil").onclick = async () => {
+  // Save
+  document.getElementById('btn-guardar-perfil').onclick = async () => {
     try {
       await setDoc(ref, {
-        name:      document.getElementById("perfil-nombre").value.trim(),
-        phone:     document.getElementById("perfil-tel").value.trim(),
-        address:   document.getElementById("perfil-dir").value.trim(),
+        name:      document.getElementById('perfil-nombre').value.trim(),
+        phone:     document.getElementById('perfil-tel').value.trim(),
+        address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
         updatedAt: serverTimestamp(),
       }, { merge: true });
-      toast("✅ Perfil actualizado");
-    } catch(e) { toast("❌ Error al guardar"); }
+      toast('✅ Perfil actualizado');
+    } catch(e) { toast('❌ Error al guardar'); }
   };
 
   // Logout
-  document.getElementById("btn-logout").onclick = () =>
-    signOut(auth).then(() => window.location.href = "index.html");
+  document.getElementById('btn-logout').onclick = () =>
+    signOut(auth).then(() => { window.location.href = 'index.html'; });
 
-  // Delete account
-  const delBtn = document.getElementById('btn-delete-account');
-  if (delBtn) {
-    delBtn.onclick = async () => {
-      if (!confirm('¿Eliminar tu cuenta? Todos tus datos serán borrados permanentemente. Esta acción no se puede deshacer.')) return;
-      try {
-        await deleteDoc(doc(db, 'users', user.uid));
-        await fbDeleteUser(user);
-        window.location.href = 'index.html';
-      } catch(e) {
-        if (e.code === 'auth/requires-recent-login') {
-          toast('⚠️ Necesitás volver a iniciar sesión para eliminar tu cuenta.');
-        } else {
-          toast('❌ Error al eliminar cuenta');
-        }
-      }
-    };
-  }
-
-  // Init onboarding
-  await initOnboarding(user, role);
+  // Onboarding (non-blocking)
+  initOnboarding(user, role).catch(() => {});
 });
 
 async function loadUserOrders(user) {
   const listEl = document.getElementById('perfil-orders-list');
   try {
     let orders = [];
-    // Try with orderBy first, fallback if index missing
     try {
       const q = query(
         collection(db, 'orders'),
@@ -643,11 +544,12 @@ async function loadUserOrders(user) {
       );
       const snap = await getDocs(q);
       orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch(e) {
+    } catch {
       const q2 = query(collection(db, 'orders'), where('userId', '==', user.uid));
       const snap2 = await getDocs(q2);
-      orders = snap2.docs.map(d => ({ id: d.id, ...d.data() }))
-        .sort((a,b) => {
+      orders = snap2.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
           const da = a.createdAt?.toDate?.() || new Date(0);
           const db_ = b.createdAt?.toDate?.() || new Date(0);
           return db_ - da;
@@ -656,25 +558,28 @@ async function loadUserOrders(user) {
     }
 
     if (!orders.length) {
-      listEl.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:12px;font-size:13px">Todavía no tenés pedidos 🛒</div>';
+      listEl.innerHTML = `
+        <div style="text-align:center;color:var(--text-muted);padding:16px 0;font-size:13px">
+          Todavía no tenés pedidos 🛒<br>
+          <a href="catalogo.html" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a>
+        </div>`;
       return;
     }
 
     listEl.innerHTML = orders.map(o => {
       const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
       const dateStr = d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
-      const itemsText = (o.items || []).slice(0,2).map(i => `${i.qty}x ${i.name}`).join(', ') +
-        ((o.items?.length || 0) > 2 ? ` +${o.items.length-2} más` : '');
+      const itemsText = (o.items || []).slice(0, 2).map(i => `${i.qty}x ${i.name}`).join(', ')
+        + ((o.items?.length || 0) > 2 ? ` +${o.items.length - 2} más` : '');
       return `
-        <div style="padding:12px 0;border-bottom:1px solid #fce4ec">
+        <div class="perfil-order-row">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
             <span style="font-size:11px;color:var(--text-muted);font-weight:700">#${o.id.slice(-6).toUpperCase()} · ${dateStr}</span>
             ${statusBadge(o.status || 'pendiente')}
           </div>
           <div style="font-size:13px;color:var(--text)">${itemsText || '—'}</div>
-          <div style="font-size:14px;font-weight:800;color:var(--acc);margin-top:2px">Total: ${formatPrice(o.total || 0)}</div>
-        </div>
-      `;
+          <div style="font-size:14px;font-weight:800;color:var(--pink-dark);margin-top:2px">Total: ${formatPrice(o.total || 0)}</div>
+        </div>`;
     }).join('');
   } catch(e) {
     listEl.innerHTML = '<div style="color:#ef4444;font-size:12px;padding:12px">Error al cargar pedidos</div>';
