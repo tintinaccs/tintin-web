@@ -280,7 +280,7 @@
     .ck-suggested-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     @media (max-width: 500px) { .ck-suggested-grid { grid-template-columns: repeat(2, 1fr); } }
     .ck-sug-card { border: 1px solid #f0e0e8; border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
-    .ck-sug-img { font-size: 2rem; }
+    .ck-sug-img { display:flex; justify-content:center; align-items:center; height:56px; margin-bottom:6px; }
     .ck-sug-name { font-size: 12px; font-weight: 700; color: #333; line-height: 1.2; }
     .ck-sug-cat { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: .05em; }
     .ck-sug-price { font-size: 12px; font-weight: 700; color: var(--acc); margin: 2px 0; }
@@ -851,7 +851,8 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  collection, addDoc, doc, getDoc, updateDoc, increment, serverTimestamp
+  collection, addDoc, doc, getDoc, getDocs, query, limit, where,
+  updateDoc, increment, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
@@ -940,29 +941,34 @@ function renderCart() {
   const subtotalEl = document.getElementById('ck-subtotal-val');
 
   if (!cartItems.length) {
-    const FALLBACK = [
-      { id:'p1', name:'Collar Perlas', cat:'Collares', price:85000, emoji:'📿' },
-      { id:'p2', name:'Aros Dorados', cat:'Aros', price:65000, emoji:'💫' },
-      { id:'p3', name:'Pulsera Charms', cat:'Pulseras', price:55000, emoji:'🎀' },
-      { id:'p4', name:'Anillo Flor', cat:'Anillos', price:45000, emoji:'💍' },
-      { id:'p5', name:'Bolso Mini', cat:'Bags', price:120000, emoji:'👜' },
-      { id:'p6', name:'Gafas Cat Eye', cat:'Gafas', price:75000, emoji:'🕶️' },
-    ];
-
-    // Try to use real products from sessionStorage cache
-    let realProducts = [];
+    // Load real products from Firebase (active ones with images)
+    let featured = [];
     try {
+      // 1. Try window.PRODUCTS (already loaded by products-store.js)
       if (window.PRODUCTS && window.PRODUCTS.length) {
-        realProducts = window.PRODUCTS.slice(0, 6);
-      } else {
+        featured = window.PRODUCTS.filter(p => p.active !== false && (p.imageUrl || p.image)).slice(0, 6);
+        if (!featured.length) featured = window.PRODUCTS.filter(p => p.active !== false).slice(0, 6);
+      }
+      // 2. Try sessionStorage cache
+      if (!featured.length) {
         const cached = JSON.parse(sessionStorage.getItem('tt_products_cache') || 'null');
-        if (cached && Array.isArray(cached.products) && cached.products.length) {
-          realProducts = cached.products.slice(0, 6);
+        if (cached?.products?.length) {
+          featured = cached.products.filter(p => p.active !== false && (p.imageUrl || p.image)).slice(0, 6);
+          if (!featured.length) featured = cached.products.filter(p => p.active !== false).slice(0, 6);
         }
       }
-    } catch {}
-
-    const featured = realProducts.length ? realProducts : FALLBACK;
+      // 3. Fetch directly from Firestore
+      if (!featured.length) {
+        const snap = await getDocs(query(collection(db, 'products'), where('active', '==', true), limit(6)));
+        featured = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (!featured.length) {
+          const snap2 = await getDocs(query(collection(db, 'products'), limit(6)));
+          featured = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+      }
+    } catch(e) {
+      console.warn('Error cargando productos sugeridos:', e);
+    }
 
     container.innerHTML = `
       <div class="ck-empty">
@@ -974,13 +980,13 @@ function renderCart() {
         </a>
       </div>
       <div class="ck-suggested">
-        <div class="ck-suggested-title">✨ Productos destacados</div>
+        <div class="ck-suggested-title">Productos destacados</div>
         <div class="ck-suggested-grid">
           ${featured.map(p => {
             const img = p.imageUrl || p.image || '';
             const imgHtml = img
-              ? `<img src="${img}" alt="${p.name}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;margin-bottom:4px" onerror="this.style.display='none'">`
-              : `<div class="ck-sug-img">${p.emoji || '🛍️'}</div>`;
+              ? `<img src="${img}" alt="${p.name}" style="width:56px;height:56px;object-fit:cover;border-radius:10px;margin-bottom:6px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-sug-img" style="display:none"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`
+              : `<div class="ck-sug-img"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`;
             return `
             <div class="ck-sug-card">
               ${imgHtml}
