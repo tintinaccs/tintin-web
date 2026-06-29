@@ -1053,6 +1053,33 @@ function initScrollReveal() {
 }
 
 /* ──────────────────────────────────────
+   COLLECTIONS BOTTOM SHEET
+────────────────────────────────────── */
+function initCollectionsSheet() {
+  const sheet = document.getElementById('collections-sheet');
+  const backdrop = document.getElementById('sheet-backdrop');
+  if (!sheet) return;
+  function openSheet() {
+    sheet.classList.add('open');
+    if (backdrop) backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet() {
+    sheet.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  const closeBtn = document.getElementById('btn-close-sheet');
+  if (closeBtn) closeBtn.addEventListener('click', closeSheet);
+  if (backdrop) backdrop.addEventListener('click', closeSheet);
+  const tiendaTab = document.getElementById('tabbar-tienda');
+  if (tiendaTab) tiendaTab.addEventListener('click', e => { e.preventDefault(); openSheet(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
+  });
+}
+
+/* ──────────────────────────────────────
    MAIN INIT
 ────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1062,6 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initSearch();
   initCartEvents();
+  initCollectionsSheet();
   updateCartBadge();
   renderCart();
 
