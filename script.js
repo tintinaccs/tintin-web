@@ -1132,5 +1132,12 @@ window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
 window.renderProductsGrid = renderProductsGrid;
 window.renderCart = renderCart;
+window.updateCartBadge = updateCartBadge;
 window.initLookCombinator = initLookCombinator;
 window.PRODUCTS = window.PRODUCTS || PRODUCTS;
+
+// Re-render badge and drawer on external cart changes (cart-sync.js events)
+window.addEventListener('tt_cart_updated', () => {
+  updateCartBadge();
+  renderCart();
+});

@@ -670,6 +670,11 @@
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
       </div>
 
+      <div class="ck-field" id="ck-referencia-field" style="display:none">
+        <label class="ck-label">Referencia (opcional)</label>
+        <input type="text" class="ck-input" id="ck-referencia" placeholder="Ej: casa azul, frente al semáforo" />
+      </div>
+
       <div class="ck-error" id="error-1"></div>
       <button class="ck-btn" id="btn-step2-next">Continuar →</button>
       <button class="ck-btn-back" id="btn-step2-back">← Volver al carrito</button>
@@ -690,6 +695,10 @@
       <div class="ck-field">
         <label class="ck-label">Teléfono / WhatsApp *</label>
         <input type="tel" class="ck-input" id="ck-phone" placeholder="Ej: 0981 123 456" />
+      </div>
+      <div class="ck-field">
+        <label class="ck-label">Email (opcional)</label>
+        <input type="email" class="ck-input" id="ck-email" placeholder="Ej: nombre@email.com" />
       </div>
       <div class="ck-field">
         <label class="ck-label">Notas opcionales</label>
@@ -779,58 +788,57 @@
 
   <!-- ===================== STEP 5: CONFIRMACIÓN ===================== -->
   <div class="ck-panel" id="panel-4">
-    <div class="ck-confirm-check">
+    <!-- Review header (shown initially) -->
+    <div id="ck-review-head" class="ck-panel-head">
+      <div class="ck-panel-title">📋 Resumen del pedido</div>
+      <div class="ck-panel-sub">Revisá tu pedido antes de confirmar</div>
+    </div>
+    <!-- Success header (shown after confirming) -->
+    <div id="ck-success-head" class="ck-confirm-check" style="display:none">
       <div class="ck-confirm-icon">✅</div>
       <div class="ck-confirm-title">¡Pedido confirmado!</div>
       <div class="ck-confirm-sub">Tu pedido fue registrado. Te contactaremos para coordinar el pago y envío.</div>
     </div>
-    <div class="ck-panel-body" style="padding-top:0">
+    <div class="ck-panel-body">
       <div id="ck-confirm-summary"></div>
-      <div id="ck-order-num" style="text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:12px;font-weight:600;"></div>
+      <div id="ck-order-num" style="text-align:center;font-size:13px;color:var(--acc);margin:8px 0 12px;font-weight:700;letter-spacing:.06em;display:none;"></div>
 
       <!-- BOTÓN PRINCIPAL: Confirmar pedido -->
-      <button id="ck-confirm-btn" class="ck-btn-primary" style="width:100%;padding:16px;font-size:15px;font-weight:800;border:none;border-radius:50px;background:var(--acc);color:#fff;cursor:pointer;letter-spacing:.06em;margin-bottom:12px;">
+      <button id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
         ✓ Confirmar pedido
       </button>
+      <div class="ck-error" id="error-4"></div>
 
       <!-- PAGOPARK — Preparado para integración futura -->
       <!--
         TODO: Integración PagoPark
-        Cuando tengas las credenciales de PagoPark, descomentar y completar:
+        Cuando tengas las credenciales, descomentar y completar:
 
         const PAGOPARK_CONFIG = {
-          merchantId:  'TU_MERCHANT_ID',    // Proporcionado por PagoPark
-          publicKey:   'TU_PUBLIC_KEY',     // Proporcionado por PagoPark
-          environment: 'sandbox',           // Cambiar a 'production' cuando esté listo
+          merchantId:  'TU_MERCHANT_ID',
+          publicKey:   'TU_PUBLIC_KEY',
+          environment: 'sandbox',
           currency:    'PYG',
           callbackUrl: 'https://tintinaccs.github.io/tintin-web/checkout.html?status=success',
           cancelUrl:   'https://tintinaccs.github.io/tintin-web/checkout.html?status=cancel',
         };
 
-        Flujo esperado de PagoPark:
-        1. Crear sesión de pago con el total del pedido
-        2. Redirigir a PagoPark para el pago con tarjeta
-        3. PagoPark redirige de vuelta con ?status=success o ?status=cancel
-        4. En el retorno, verificar el pago y actualizar el pedido en Firestore
-        5. Estados del pedido: 'pendiente' → 'pagado' / 'rechazado' / 'error'
-
-        <button id="ck-pagopark-btn" style="...">
-          💳 Pagar con tarjeta — PagoPark
-        </button>
+        Estados del pedido: 'pendiente' → 'pagado' / 'rechazado' / 'error'
       -->
 
-      <!-- WhatsApp como canal de soporte, NO de compra -->
-      <div style="text-align:center;margin-top:16px;padding:12px;background:#f9f9f9;border-radius:12px;">
-        <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">¿Tenés alguna duda sobre tu pedido?</p>
-        <a id="ck-wa-support" href="#" target="_blank" rel="noopener" style="font-size:12px;color:#25D366;font-weight:700;text-decoration:none;">
-          💬 Consultanos por WhatsApp
-        </a>
-      </div>
-
-      <div style="text-align:center;margin-top:16px">
-        <a href="index.html" style="font-size:12px;color:var(--text-muted);font-weight:600;text-decoration:none">
-          🏠 Volver al inicio
-        </a>
+      <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
+      <div id="ck-post-confirm" style="display:none;margin-top:16px">
+        <div style="text-align:center;padding:12px;background:#f9f9f9;border-radius:12px;">
+          <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">¿Tenés alguna duda sobre tu pedido?</p>
+          <a id="ck-wa-support" href="#" target="_blank" rel="noopener" style="font-size:12px;color:#25D366;font-weight:700;text-decoration:none;">
+            💬 Consultanos por WhatsApp
+          </a>
+        </div>
+        <div style="text-align:center;margin-top:16px">
+          <a href="index.html" style="font-size:12px;color:var(--text-muted);font-weight:600;text-decoration:none">
+            🏠 Volver al inicio
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -879,10 +887,12 @@ let currentUser = null;
 let orderData = {
   city: '',
   address: '',
+  referencia: '',
   shippingMethod: '',
   shippingCost: 0,
   name: '',
   phone: '',
+  email: '',
   notes: '',
   paymentMethod: ''
 };
@@ -913,7 +923,7 @@ function renderCart() {
   const subtotalEl = document.getElementById('ck-subtotal-val');
 
   if (!cartItems.length) {
-    const FEATURED = [
+    const FALLBACK = [
       { id:'p1', name:'Collar Perlas', cat:'Collares', price:85000, emoji:'📿' },
       { id:'p2', name:'Aros Dorados', cat:'Aros', price:65000, emoji:'💫' },
       { id:'p3', name:'Pulsera Charms', cat:'Pulseras', price:55000, emoji:'🎀' },
@@ -921,27 +931,48 @@ function renderCart() {
       { id:'p5', name:'Bolso Mini', cat:'Bags', price:120000, emoji:'👜' },
       { id:'p6', name:'Gafas Cat Eye', cat:'Gafas', price:75000, emoji:'🕶️' },
     ];
+
+    // Try to use real products from sessionStorage cache
+    let realProducts = [];
+    try {
+      if (window.PRODUCTS && window.PRODUCTS.length) {
+        realProducts = window.PRODUCTS.slice(0, 6);
+      } else {
+        const cached = JSON.parse(sessionStorage.getItem('tt_products_cache') || 'null');
+        if (cached && Array.isArray(cached.products) && cached.products.length) {
+          realProducts = cached.products.slice(0, 6);
+        }
+      }
+    } catch {}
+
+    const featured = realProducts.length ? realProducts : FALLBACK;
+
     container.innerHTML = `
       <div class="ck-empty">
         <div class="ck-empty-icon">🛒</div>
         <div class="ck-empty-text">Tu carrito está vacío</div>
         <p style="color:#999;font-size:13px;margin:6px 0 16px">¡Agregá productos para continuar!</p>
-        <a href="collections.html" class="ck-btn-primary" style="display:inline-block;padding:12px 28px;font-size:14px;text-decoration:none;border-radius:30px;background:var(--acc);color:#fff;font-weight:700;margin-bottom:24px;">
+        <a href="catalogo.html" style="display:inline-block;padding:12px 28px;font-size:14px;text-decoration:none;border-radius:30px;background:var(--acc);color:#fff;font-weight:700;margin-bottom:24px;">
           Ver catálogo completo →
         </a>
       </div>
       <div class="ck-suggested">
         <div class="ck-suggested-title">✨ Productos destacados</div>
         <div class="ck-suggested-grid">
-          ${FEATURED.map(p => `
+          ${featured.map(p => {
+            const img = p.imageUrl || p.image || '';
+            const imgHtml = img
+              ? `<img src="${img}" alt="${p.name}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;margin-bottom:4px" onerror="this.style.display='none'">`
+              : `<div class="ck-sug-img">${p.emoji || '🛍️'}</div>`;
+            return `
             <div class="ck-sug-card">
-              <div class="ck-sug-img">${p.emoji}</div>
+              ${imgHtml}
               <div class="ck-sug-name">${p.name}</div>
-              <div class="ck-sug-cat">${p.cat}</div>
+              <div class="ck-sug-cat">${p.cat || p.category || ''}</div>
               <div class="ck-sug-price">${formatPrice(p.price)}</div>
-              <button class="ck-sug-add" data-id="${p.id}" data-name="${p.name}" data-cat="${p.cat}" data-price="${p.price}" data-emoji="${p.emoji}">+ Agregar</button>
-            </div>
-          `).join('')}
+              <button class="ck-sug-add" data-id="${p.id}" data-name="${p.name}" data-cat="${p.cat || p.category || ''}" data-price="${p.price}" data-img="${img}">+ Agregar</button>
+            </div>`;
+          }).join('')}
         </div>
       </div>`;
 
@@ -949,9 +980,9 @@ function renderCart() {
 
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const { id, name, cat, price, emoji } = btn.dataset;
+        const { id, name, cat, price, img } = btn.dataset;
         const { addToCart } = await import('./js/cart-sync.js');
-        await addToCart({ id, name, cat, price: Number(price), emoji, qty: 1 });
+        await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         btn.textContent = '✓ Agregado';
         btn.disabled = true;
         btn.style.background = '#4caf50';
@@ -963,8 +994,8 @@ function renderCart() {
 
   container.innerHTML = cartItems.map(item => `
     <div class="ck-item" data-id="${item.id}">
-      ${item.imgUrl
-        ? `<img class="ck-item-img" src="${item.imgUrl}" alt="${item.name}" />`
+      ${(item.imgUrl || item.imageUrl)
+        ? `<img class="ck-item-img" src="${item.imgUrl || item.imageUrl}" alt="${item.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="ck-item-img-placeholder" style="display:none">🛍️</div>`
         : `<div class="ck-item-img-placeholder">🛍️</div>`
       }
       <div class="ck-item-info">
@@ -1038,10 +1069,12 @@ document.getElementById('ck-city').onchange = function() {
   const methodEl = document.getElementById('ck-ship-method');
   const costEl = document.getElementById('ck-ship-cost');
   const addressField = document.getElementById('ck-address-field');
+  const referenciaField = document.getElementById('ck-referencia-field');
 
   if (!val) {
     infoEl.classList.remove('show');
     addressField.style.display = 'none';
+    referenciaField.style.display = 'none';
     return;
   }
 
@@ -1053,18 +1086,21 @@ document.getElementById('ck-city').onchange = function() {
     orderData.shippingMethod = 'retiro';
     orderData.shippingCost = 0;
     addressField.style.display = 'none';
+    referenciaField.style.display = 'none';
   } else if (DELIVERY_CITIES.includes(val)) {
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
     costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.delivery)}`;
     orderData.shippingMethod = 'delivery';
     orderData.shippingCost = SHIPPING_COSTS.delivery;
     addressField.style.display = 'block';
+    referenciaField.style.display = 'block';
   } else {
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
     costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.encomienda)}`;
     orderData.shippingMethod = 'encomienda';
     orderData.shippingCost = SHIPPING_COSTS.encomienda;
     addressField.style.display = 'block';
+    referenciaField.style.display = 'block';
   }
 };
 
@@ -1077,6 +1113,7 @@ document.getElementById('btn-step2-next').onclick = () => {
     const addr = document.getElementById('ck-address').value.trim();
     if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
     orderData.address = addr;
+    orderData.referencia = document.getElementById('ck-referencia').value.trim();
   }
 
   orderData.city = city === '__retiro__' ? 'San Lorenzo (retiro)' : city;
@@ -1097,10 +1134,16 @@ document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();
   const name = document.getElementById('ck-name').value.trim();
   const phone = document.getElementById('ck-phone').value.trim();
+  const email = document.getElementById('ck-email').value.trim();
   if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
   if (!phone) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError(2, 'Ingresá un email válido o dejalo en blanco.');
+    return;
+  }
   orderData.name = name;
   orderData.phone = phone;
+  orderData.email = email;
   orderData.notes = document.getElementById('ck-notes').value.trim();
   goToStep(3);
 };
@@ -1194,6 +1237,11 @@ async function buildConfirmation() {
         <span class="ck-summary-label">📞 Teléfono</span>
         <span class="ck-summary-val">${orderData.phone}</span>
       </div>
+      ${orderData.email ? `
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📧 Email</span>
+        <span class="ck-summary-val">${orderData.email}</span>
+      </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">📍 Ciudad</span>
         <span class="ck-summary-val">${orderData.city}</span>
@@ -1202,6 +1250,11 @@ async function buildConfirmation() {
       <div class="ck-summary-row">
         <span class="ck-summary-label">🏠 Dirección</span>
         <span class="ck-summary-val">${orderData.address}</span>
+      </div>` : ''}
+      ${orderData.referencia ? `
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📌 Referencia</span>
+        <span class="ck-summary-val">${orderData.referencia}</span>
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">🚚 Envío</span>
@@ -1231,24 +1284,36 @@ async function buildConfirmation() {
     </div>
   `;
 
-  // WhatsApp support link (not primary purchase path)
+  // WhatsApp support link (set up in advance, shown post-confirm)
   const waMsg = buildWaMessage(cartItems, subtotal, total, payLabels, shipLabels);
   const waSupport = document.getElementById('ck-wa-support');
   if (waSupport) waSupport.href = `https://wa.me/595981299331?text=${encodeURIComponent(waMsg)}`;
 
-  // Confirm button: save order and show success state
+  // Confirm button: save order then show success state
   const confirmBtn = document.getElementById('ck-confirm-btn');
   if (confirmBtn) {
-    confirmBtn.addEventListener('click', async () => {
+    confirmBtn.onclick = async () => {
       confirmBtn.disabled = true;
-      confirmBtn.textContent = 'Guardando pedido…';
-      await saveOrder(cartItems, subtotal, total);
-      confirmBtn.textContent = '✓ Pedido registrado';
-      confirmBtn.style.background = '#4caf50';
-      // Show order number from Firestore (set by saveOrder)
-      const orderNumEl = document.getElementById('ck-order-num');
-      if (orderNumEl && window._lastOrderId) orderNumEl.textContent = `Número de pedido: ${window._lastOrderId}`;
-    });
+      confirmBtn.innerHTML = '<span class="ck-spinner"></span> Guardando pedido…';
+      try {
+        await saveOrder(cartItems, subtotal, total);
+        // Transition to success state
+        document.getElementById('ck-review-head').style.display = 'none';
+        document.getElementById('ck-success-head').style.display = 'block';
+        confirmBtn.style.display = 'none';
+        document.getElementById('ck-post-confirm').style.display = 'block';
+        const orderNumEl = document.getElementById('ck-order-num');
+        if (orderNumEl) {
+          orderNumEl.style.display = 'block';
+          orderNumEl.textContent = window._lastOrderId ? `N° de pedido: ${window._lastOrderId}` : '';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        showError(4, 'Hubo un error al guardar el pedido. Intentá de nuevo.');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = '✓ Confirmar pedido';
+      }
+    };
   }
 }
 
@@ -1260,8 +1325,8 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
   return `🛍️ *NUEVO PEDIDO — TINTIN ACCESORIOS*
 ━━━━━━━━━━━━━━━━━━━━━━
 👤 *Cliente:* ${orderData.name}
-📞 *Tel:* ${orderData.phone}
-📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}
+📞 *Tel:* ${orderData.phone}${orderData.email ? `\n📧 *Email:* ${orderData.email}` : ''}
+📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}
 🚚 *Envío:* ${shipText} — ${formatPrice(orderData.shippingCost)}
 ━━━━━━━━━━━━━━━━━━━━━━
 🛒 *Productos:*
@@ -1279,7 +1344,7 @@ async function saveOrder(items, subtotal, total) {
   try {
     const orderDoc = {
       userId:      currentUser?.uid || null,
-      userEmail:   currentUser?.email || orderData.phone,
+      userEmail:   currentUser?.email || orderData.email || '',
       userName:    orderData.name,
       userPhone:   orderData.phone,
       items:       items.map(i => ({
@@ -1293,10 +1358,11 @@ async function saveOrder(items, subtotal, total) {
       shippingCost: orderData.shippingCost,
       total,
       shipping: {
-        method:  orderData.shippingMethod,
-        city:    orderData.city,
-        address: orderData.address || '',
-        zone:    DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
+        method:     orderData.shippingMethod,
+        city:       orderData.city,
+        address:    orderData.address || '',
+        referencia: orderData.referencia || '',
+        zone:       DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
       },
       payment: {
         method: orderData.paymentMethod,
