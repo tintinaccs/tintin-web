@@ -941,34 +941,21 @@ function renderCart() {
   const subtotalEl = document.getElementById('ck-subtotal-val');
 
   if (!cartItems.length) {
-    // Load real products from Firebase (active ones with images)
+    // Load real products — try cache first, then Firestore
     let featured = [];
     try {
-      // 1. Try window.PRODUCTS (already loaded by products-store.js)
-      if (window.PRODUCTS && window.PRODUCTS.length) {
-        featured = window.PRODUCTS.filter(p => p.active !== false && (p.imageUrl || p.image)).slice(0, 6);
-        if (!featured.length) featured = window.PRODUCTS.filter(p => p.active !== false).slice(0, 6);
+      if (window.PRODUCTS?.length) {
+        featured = window.PRODUCTS.filter(p => p.active !== false).slice(0, 6);
       }
-      // 2. Try sessionStorage cache
       if (!featured.length) {
         const cached = JSON.parse(sessionStorage.getItem('tt_products_cache') || 'null');
-        if (cached?.products?.length) {
-          featured = cached.products.filter(p => p.active !== false && (p.imageUrl || p.image)).slice(0, 6);
-          if (!featured.length) featured = cached.products.filter(p => p.active !== false).slice(0, 6);
-        }
+        if (cached?.products?.length) featured = cached.products.slice(0, 6);
       }
-      // 3. Fetch directly from Firestore
       if (!featured.length) {
-        const snap = await getDocs(query(collection(db, 'products'), where('active', '==', true), limit(6)));
+        const snap = await getDocs(query(collection(db, 'products'), limit(6)));
         featured = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        if (!featured.length) {
-          const snap2 = await getDocs(query(collection(db, 'products'), limit(6)));
-          featured = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
       }
-    } catch(e) {
-      console.warn('Error cargando productos sugeridos:', e);
-    }
+    } catch(e) { console.warn('Suggested products error:', e); }
 
     container.innerHTML = `
       <div class="ck-empty">
@@ -979,7 +966,7 @@ function renderCart() {
           Ver catálogo completo →
         </a>
       </div>
-      <div class="ck-suggested">
+      ${featured.length ? `<div class="ck-suggested">
         <div class="ck-suggested-title">Productos destacados</div>
         <div class="ck-suggested-grid">
           ${featured.map(p => {
@@ -997,7 +984,7 @@ function renderCart() {
             </div>`;
           }).join('')}
         </div>
-      </div>`;
+      </div>` : ''}`;
 
     subtotalEl.textContent = 'Gs. 0';
 
