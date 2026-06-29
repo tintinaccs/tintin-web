@@ -1832,8 +1832,9 @@ function renderProductosTable(list) {
         </span>
       </td>
       <td style="padding:10px 16px;text-align:center">
-        <div style="display:flex;gap:6px;justify-content:center">
+        <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
           <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})">${p.active !== false ? '🙈 Desactivar' : '👁 Activar'}</button>
           <button class="adm-btn adm-btn-sm" style="color:#e53935" onclick="prodEliminar('${p._docId}','${(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
         </div>
       </td>
@@ -1949,6 +1950,18 @@ async function prodGuardar() {
   }
 }
 
+window.prodToggleActive = async (docId, currentlyActive) => {
+  try {
+    await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+    const p = _allProducts.find(x => x._docId === docId);
+    if (p) p.active = !currentlyActive;
+    toast(currentlyActive ? '🙈 Producto desactivado' : '👁 Producto activado');
+    renderProductosTable(_allProducts);
+  } catch(e) {
+    toast('❌ Error: ' + e.message);
+  }
+};
+
 async function prodEliminar(docId, name) {
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
   try {
@@ -2062,7 +2075,14 @@ function loadImportar() {
     const iHandle=col('handle'),iTitle=col('title'),iType=col('type'),iTags=col('tags'),
           iStatus=col('status'),iPrice=col('variant price'),iCompare=col('variant compare at price'),
           iStock=col('variant inventory qty'),iImg=col('image src'),iImgPos=col('image position'),
-          iVariantImg=col('variant image'),iImgUrl=col('imageurl'),iImage=col('image');
+          iVariantImg=col('variant image'),iImgUrl=col('imageurl'),iImage=col('image'),
+          iFoto=col('foto'),iImagen=col('imagen'),
+          iOpt1N=col('option1 name'),iOpt1V=col('option1 value'),
+          iOpt2N=col('option2 name'),iOpt2V=col('option2 value'),
+          iOpt3N=col('option3 name'),iOpt3V=col('option3 value'),
+          iVariantSku=col('variant sku');
+    const iDesc = col('body (html)') >= 0 ? col('body (html)') : col('body html');
+    function stripHtml(html) { return (html||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim(); }
     const productos = new Map();
     for (let i = 1; i < lineas.length; i++) {
       const linea = lineas[i];
@@ -2081,20 +2101,36 @@ function loadImportar() {
       const title=cols[iTitle]||'',type=cols[iType]||'',tags=cols[iTags]||'',
             status=cols[iStatus]||'active',price=parsearPrecio(cols[iPrice]),
             compare=parsearPrecio(cols[iCompare]),stock=parseInt(cols[iStock])||0,
-            img=cols[iImg]||cols[iVariantImg]||cols[iImgUrl]||cols[iImage]||'',
-            imgPos=parseInt(cols[iImgPos])||99;
+            img=cols[iImg]||(iVariantImg>=0?cols[iVariantImg]:'')||(iImgUrl>=0?cols[iImgUrl]:'')||(iImage>=0?cols[iImage]:'')||(iFoto>=0?cols[iFoto]:'')||(iImagen>=0?cols[iImagen]:'')||'',
+            imgPos=parseInt(cols[iImgPos])||99,
+            desc=iDesc>=0?cols[iDesc]||'':'',
+            opt1n=iOpt1N>=0?cols[iOpt1N]||'':'', opt1v=iOpt1V>=0?cols[iOpt1V]||'':'',
+            opt2n=iOpt2N>=0?cols[iOpt2N]||'':'', opt2v=iOpt2V>=0?cols[iOpt2V]||'':'',
+            opt3n=iOpt3N>=0?cols[iOpt3N]||'':'', opt3v=iOpt3V>=0?cols[iOpt3V]||'':'',
+            variantSku=iVariantSku>=0?cols[iVariantSku]||'':'',
+            variantImg=iVariantImg>=0?cols[iVariantImg]||'':'';
       if (!productos.has(handle)) {
         productos.set(handle, {
           name: title||handle, category: detectarCategoria(type,tags,title),
           price, priceBefore: compare||null, stock, imageUrl:'', imagesExtra:[],
+          description: stripHtml(desc),
           tags: tags ? tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
-          active: status.toLowerCase()==='active', _imgs:[],
+          active: status.toLowerCase()==='active', _imgs:[], variants:[],
         });
       }
       const prod = productos.get(handle);
+      if (!prod.description && desc) prod.description = stripHtml(desc);
       if (price && !prod.price) prod.price = price;
       if (stock && !prod.stock) prod.stock = stock;
       if (img) prod._imgs.push({ pos: imgPos, url: img });
+      if (opt1v) {
+        const variant = { price, sku: variantSku };
+        if (opt1n) variant[opt1n] = opt1v;
+        if (opt2n && opt2v) variant[opt2n] = opt2v;
+        if (opt3n && opt3v) variant[opt3n] = opt3v;
+        if (variantImg) variant.imageUrl = variantImg;
+        prod.variants.push(variant);
+      }
     }
     const resultado = [];
     for (const [, p] of productos) {
@@ -2193,11 +2229,21 @@ function loadImportar() {
       progressLbl.textContent=`Importando ${i+1} de ${csvProductos.length}: ${p.name}`;
       try {
         await addDoc(collection(db,'products'), {
-          name:p.name, category:p.category, price:p.price,
-          priceBefore:p.priceBefore||null, stock:p.stock,
-          imageUrl:p.imageUrl, imagesExtra:p.imagesExtra||[],
-          tags:p.tags||[], active:p.active, oferta:false,
-          createdAt:serverTimestamp(), createdBy:currentUser?.email||'import', source:'shopify-csv',
+          name:        p.name,
+          category:    p.category,
+          price:       p.price,
+          priceBefore: p.priceBefore||null,
+          stock:       p.stock,
+          imageUrl:    p.imageUrl,
+          imagesExtra: p.imagesExtra||[],
+          description: p.description||'',
+          variants:    p.variants?.length ? p.variants : [],
+          tags:        p.tags||[],
+          active:      p.active,
+          oferta:      false,
+          createdAt:   serverTimestamp(),
+          createdBy:   currentUser?.email||'import',
+          source:      'shopify-csv',
         });
         ok++;
       } catch(e) { errores++; console.error('Error importando:', p.name, e); }
