@@ -498,8 +498,11 @@ const CAT_LABELS = {
 let todos = [];
 let catActual = 'todos';
 
+// Normalize URL aliases → canonical Firestore category names
+const CAT_ALIASES = { bags: 'bolsos', bag: 'bolsos', bolso: 'bolsos' };
 const params = new URLSearchParams(location.search);
-const catParam = params.get('cat') || '';
+const rawCatParam = (params.get('cat') || '').toLowerCase().trim();
+const catParam = CAT_ALIASES[rawCatParam] || rawCatParam;
 if (catParam) catActual = catParam;
 
 function fmt(n) {
@@ -509,7 +512,7 @@ function fmt(n) {
 function catMatches(product, cat) {
   if (cat === 'todos') return true;
   const pc = (product.category || product.cat || '').toLowerCase().trim();
-  if (cat === 'bolsos') return ['bolsos', 'bolso', 'bags', 'bag'].some(a => pc === a || pc.includes(a));
+  if (cat === 'bolsos' || cat === 'bags') return ['bolsos', 'bolso', 'bags', 'bag'].some(a => pc === a || pc.includes(a));
   return pc === cat || pc.startsWith(cat);
 }
 
