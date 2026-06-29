@@ -7,8 +7,9 @@
   <meta name="description" content="Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="styles.css" as="style">
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -560,7 +561,8 @@
 </div>
 <div class="tt-sheet-backdrop" id="sheet-backdrop"></div>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
+<script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/auth-nav.js"></script>
 <script type="module" src="js/load-images-init.js"></script>
 <script type="module" src="js/products-store.js"></script>

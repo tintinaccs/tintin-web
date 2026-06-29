@@ -1092,7 +1092,19 @@ function initScrollReveal() {
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.tt-trust-item, .tt-product-card, .tt-review-card, .tt-look-card, .tt-coll-card, .tt-coll-page-card').forEach(el => {
+  document.querySelectorAll([
+    '.tt-trust-item',
+    '.tt-product-card',
+    '.tt-review-card',
+    '.tt-look-card',
+    '.tt-coll-card',
+    '.tt-coll-page-card',
+    '.tt-editorial-item',
+    '.tt-editorial-card',
+    '.tt-look-item',
+    '.tt-featured-item',
+  ].join(',')).forEach(el => {
+    if (el.classList.contains('reveal')) return;
     el.classList.add('reveal');
     observer.observe(el);
   });
