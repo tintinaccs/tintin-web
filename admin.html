@@ -909,16 +909,29 @@
       <div class="adm-card">
         <div class="adm-card-head">
           <div class="adm-card-title">📦 Gestión de pedidos</div>
+          <div style="font-size:13px;color:var(--adm-muted)" id="orders-count-label"></div>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
           <div class="adm-filter-row">
-            <select class="adm-select" id="filter-status">
+            <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
+              <span class="adm-search-icon">🔍</span>
+              <input type="text" class="adm-input" id="order-search" placeholder="Buscar por cliente, teléfono, email…" />
+            </div>
+            <select class="adm-select" id="filter-status" style="flex:1">
               <option value="">Todos los estados</option>
               <option value="pendiente">Pendiente</option>
               <option value="confirmado">Confirmado</option>
+              <option value="preparando">Preparando</option>
               <option value="enviado">Enviado</option>
               <option value="entregado">Entregado</option>
               <option value="cancelado">Cancelado</option>
+            </select>
+            <select class="adm-select" id="filter-pay-status" style="flex:1">
+              <option value="">Todos los pagos</option>
+              <option value="pendiente">Pago pendiente</option>
+              <option value="pagado">Pagado</option>
+              <option value="rechazado">Rechazado</option>
+              <option value="reembolsado">Reembolsado</option>
             </select>
           </div>
         </div>
@@ -935,11 +948,12 @@
                   <th>Ciudad</th>
                   <th>Pago</th>
                   <th>Fecha</th>
-                  <th>Acciones</th>
+                  <th>Estado pedido</th>
+                  <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="10" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1021,8 +1035,22 @@
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Stock</label>
               <input id="prod-stock" type="number" class="adm-input" placeholder="10" min="0">
             </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Badge / Etiqueta</label>
+              <select id="prod-badge" class="adm-input">
+                <option value="">Sin badge</option>
+                <option value="Nuevo">Nuevo</option>
+                <option value="Destacado">Destacado</option>
+                <option value="Oferta">Oferta</option>
+                <option value="Agotado">Agotado</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Precio anterior (Gs.)</label>
+              <input id="prod-price-before" type="number" class="adm-input" placeholder="0 si no aplica" min="0">
+            </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
-              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen</label>
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen principal</label>
               <input id="prod-imageUrl" type="url" class="adm-input" placeholder="https://...">
               <img id="prod-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
             </div>
@@ -1030,12 +1058,23 @@
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
               <textarea id="prod-description" class="adm-input" rows="3" placeholder="Descripción del producto…" style="resize:vertical"></textarea>
             </div>
-            <div style="display:flex;gap:20px;align-items:center">
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Tags (separados por coma)</label>
+              <input id="prod-tags" type="text" class="adm-input" placeholder="reloj, dorado, regalo, mujer">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Variantes (una por línea: Color: Rojo, Dorado)</label>
+              <textarea id="prod-variants-text" class="adm-input" rows="3" placeholder="Color: Rojo&#10;Color: Dorado&#10;Material: Acero inoxidable" style="resize:vertical;font-size:12px;font-family:monospace"></textarea>
+            </div>
+            <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
                 <input id="prod-active" type="checkbox" checked style="accent-color:var(--adm-primary)"> Activo (visible en tienda)
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
                 <input id="prod-oferta" type="checkbox" style="accent-color:var(--adm-primary)"> En oferta
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="prod-destacado" type="checkbox" style="accent-color:var(--adm-primary)"> Destacado (aparece en home)
               </label>
             </div>
           </div>
@@ -1103,34 +1142,134 @@
 
     <!-- ===================== CONFIGURACIÓN ===================== -->
     <div class="adm-section" id="section-configuracion">
-      <div class="adm-card">
+      <!-- Estado de la tienda -->
+      <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
-          <div class="adm-card-title">⚙️ Configuración general</div>
+          <div class="adm-card-title">🏪 Estado de la tienda</div>
         </div>
         <div class="adm-card-body">
-          <div class="adm-field">
-            <label class="adm-label">Nombre de la tienda</label>
-            <input type="text" class="adm-input" id="cfg-store-name" placeholder="Tintin Accesorios" />
+          <div class="adm-toggle-wrap" style="margin-bottom:16px">
+            <label class="adm-toggle">
+              <input type="checkbox" id="cfg-store-open" checked />
+              <span class="adm-toggle-slider"></span>
+            </label>
+            <div>
+              <div class="adm-toggle-label">Tienda activa / abierta</div>
+              <div class="adm-toggle-desc">Si está desactivada, los clientes verán un mensaje de "Próximamente".</div>
+            </div>
           </div>
-          <div class="adm-field">
-            <label class="adm-label">Número de WhatsApp</label>
-            <input type="text" class="adm-input" id="cfg-wa-number" placeholder="595981299331" />
-          </div>
-          <div class="adm-field">
-            <label class="adm-label">Dirección de la tienda</label>
-            <input type="text" class="adm-input" id="cfg-store-address" placeholder="San Lorenzo, Paraguay" />
-          </div>
-          <div class="adm-field">
-            <label class="adm-label">Ciudades con delivery (una por línea)</label>
-            <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="6"></textarea>
-          </div>
-          <div class="adm-field">
-            <label class="adm-label">Ciudades con encomienda (una por línea)</label>
-            <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="6"></textarea>
-          </div>
-          <button class="adm-btn adm-btn-primary" id="btn-save-config">💾 Guardar configuración</button>
         </div>
       </div>
+
+      <!-- Datos generales -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">⚙️ Datos generales</div>
+        </div>
+        <div class="adm-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="adm-field">
+              <label class="adm-label">Nombre de la tienda</label>
+              <input type="text" class="adm-input" id="cfg-store-name" placeholder="Tintin Accesorios" />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Número de WhatsApp (soporte)</label>
+              <input type="text" class="adm-input" id="cfg-wa-number" placeholder="595981299331" />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Email de contacto</label>
+              <input type="email" class="adm-input" id="cfg-contact-email" placeholder="tintinaccs@gmail.com" />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Dirección / ciudad base</label>
+              <input type="text" class="adm-input" id="cfg-store-address" placeholder="San Lorenzo, Paraguay" />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Moneda</label>
+              <select class="adm-select" id="cfg-currency">
+                <option value="PYG">Guaraní (Gs.)</option>
+                <option value="USD">Dólar (USD)</option>
+                <option value="ARS">Peso Argentino (ARS)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Envíos y costos -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🚚 Envíos y costos</div>
+        </div>
+        <div class="adm-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div class="adm-field">
+              <label class="adm-label">Costo delivery (Gs.) — Zona Central</label>
+              <input type="number" class="adm-input" id="cfg-delivery-cost" placeholder="15000" min="0" />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Costo encomienda (Gs.) — Interior</label>
+              <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="adm-field">
+              <label class="adm-label">Ciudades con delivery (una por línea)</label>
+              <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="8" style="font-size:12px;font-family:monospace"></textarea>
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Ciudades con encomienda (una por línea)</label>
+              <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="8" style="font-size:12px;font-family:monospace"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Redes sociales -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">📲 Redes sociales</div>
+        </div>
+        <div class="adm-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="adm-field">
+              <label class="adm-label">Instagram (URL o @usuario)</label>
+              <input type="text" class="adm-input" id="cfg-instagram" placeholder="https://instagram.com/tintin..." />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Facebook (URL)</label>
+              <input type="text" class="adm-input" id="cfg-facebook" placeholder="https://facebook.com/tintin..." />
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">TikTok (URL o @usuario)</label>
+              <input type="text" class="adm-input" id="cfg-tiktok" placeholder="https://tiktok.com/@tintin..." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagos -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">💳 Métodos de pago disponibles</div>
+        </div>
+        <div class="adm-card-body">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="cfg-pay-efectivo" checked style="accent-color:var(--adm-accent);width:16px;height:16px"> 💵 Efectivo (contra entrega)
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="cfg-pay-transferencia" checked style="accent-color:var(--adm-accent);width:16px;height:16px"> 🏦 Transferencia bancaria
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="cfg-pay-pagopark" style="accent-color:var(--adm-accent);width:16px;height:16px"> 🟡 PagoPark (requiere integración backend — pendiente)
+            </label>
+          </div>
+          <p style="font-size:12px;color:var(--adm-muted);margin-top:12px">ℹ️ La integración de pagos online (PagoPark, tarjeta) requiere un backend seguro con credenciales privadas. Está pendiente de implementación.</p>
+        </div>
+      </div>
+
+      <button class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px">💾 Guardar toda la configuración</button>
     </div>
 
     <!-- ===================== IMPORT / EXPORT ===================== -->
@@ -1618,30 +1757,50 @@ async function loadOrders() {
 
 function renderOrdersTable(orders) {
   const tbody = document.getElementById('orders-tbody');
+  const countEl = document.getElementById('orders-count-label');
+  if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
+
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
-  tbody.innerHTML = orders.map((o, i) => {
+
+  const PAY_BADGE = {
+    pagado:      'badge-entregado',
+    pendiente:   'badge-pendiente',
+    rechazado:   'badge-cancelado',
+    reembolsado: 'badge-enviado',
+    error:       'badge-cancelado',
+  };
+
+  tbody.innerHTML = orders.map(o => {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
       (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
-    const payStatus = o.payment?.status || '—';
+    const payStatus = o.payment?.status || o.paymentStatus || 'pendiente';
     const canUpdate = can(currentRole, 'manageOrders');
+    const canDelete = can(currentRole, 'manageOrders') && (currentRole === 'superadmin' || currentRole === 'admin');
 
     return `
       <tr style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
         <td style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
         <td>
           <strong>${o.userName || '—'}</strong><br>
-          <small style="color:#aaa">${o.userPhone || ''}</small>
+          <small style="color:#aaa">${o.userPhone || ''}</small><br>
+          <small style="color:#aaa;font-size:10px">${o.userEmail || ''}</small>
         </td>
         <td style="font-size:12px;max-width:160px">${itemsText || '—'}</td>
         <td style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
         <td>${statusBadge(o.status || 'pendiente')}</td>
-        <td>${o.shipping?.city || '—'}</td>
-        <td>
-          <span style="font-size:12px">${o.payment?.method || '—'}</span><br>
-          <span class="adm-badge ${payStatus==='pagado'?'badge-entregado':'badge-pendiente'}" style="font-size:9px">${payStatus}</span>
+        <td>${o.shipping?.city || o.city || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          <div style="font-size:11px;color:#666">${o.payment?.method || o.paymentMethod || '—'}</div>
+          <span class="adm-badge ${PAY_BADGE[payStatus] || 'badge-pendiente'}" style="font-size:9px">${payStatus}</span>
+          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
+            <option value="pendiente"   ${payStatus==='pendiente'?'selected':''}>Pago pendiente</option>
+            <option value="pagado"      ${payStatus==='pagado'?'selected':''}>Pagado</option>
+            <option value="rechazado"   ${payStatus==='rechazado'?'selected':''}>Rechazado</option>
+            <option value="reembolsado" ${payStatus==='reembolsado'?'selected':''}>Reembolsado</option>
+          </select>` : ''}
         </td>
         <td style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
         <td onclick="event.stopPropagation()">
@@ -1650,32 +1809,50 @@ function renderOrdersTable(orders) {
               onchange="window.updateOrderStatus('${o.id}', this.value)">
               <option value="pendiente"  ${o.status==='pendiente'?'selected':''}>Pendiente</option>
               <option value="confirmado" ${o.status==='confirmado'?'selected':''}>Confirmado</option>
+              <option value="preparando" ${o.status==='preparando'?'selected':''}>Preparando</option>
               <option value="enviado"    ${o.status==='enviado'?'selected':''}>Enviado</option>
               <option value="entregado"  ${o.status==='entregado'?'selected':''}>Entregado</option>
               <option value="cancelado"  ${o.status==='cancelado'?'selected':''}>Cancelado</option>
             </select>` : statusBadge(o.status || 'pendiente')
           }
         </td>
+        <td onclick="event.stopPropagation()">
+          ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')">🗑️</button>` : '—'}
+        </td>
       </tr>
       <tr id="order-detail-${o.id}" style="display:none">
-        <td colspan="9" style="padding:0 14px 12px;background:#fef5f8">
+        <td colspan="10" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
-            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido</div>
-            <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${o.userName || '—'}</div>
-            <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${o.userEmail || '—'}</div>
-            <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${o.userPhone || '—'}</div>
-            <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${o.shipping?.method || '—'} — ${o.shipping?.city || ''}</div>
-            ${o.shipping?.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${o.shipping.address}</div>` : ''}
-            <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${o.payment?.method || '—'} (${o.payment?.status || '—'})</div>
-            ${o.notes ? `<div class="adm-detail-row"><span class="adm-detail-label">Notas:</span> ${o.notes}</div>` : ''}
+            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+              <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${o.userName || '—'}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${o.userEmail || '—'}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${o.userPhone || '—'}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${o.shipping?.method || o.shippingMethod || '—'} — ${o.shipping?.city || o.city || ''}</div>
+              ${o.shipping?.address || o.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${o.shipping?.address || o.address}</div>` : ''}
+              ${o.shipping?.referencia || o.referencia ? `<div class="adm-detail-row"><span class="adm-detail-label">Referencia:</span> ${o.shipping?.referencia || o.referencia}</div>` : ''}
+              <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${o.payment?.method || o.paymentMethod || '—'}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Estado pago:</span> ${payStatus}</div>
+            </div>
+            ${o.notes || o.customerNotes ? `<div class="adm-detail-row" style="grid-column:1/-1"><span class="adm-detail-label">Notas:</span> <em>${o.notes || o.customerNotes}</em></div>` : ''}
             <div style="margin-top:8px">
               <strong>Productos:</strong>
-              ${(o.items||[]).map(it => `<div style="margin-left:12px;font-size:13px">• ${it.qty}x ${it.name} — ${formatPrice(it.price*it.qty)}</div>`).join('')}
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px">
+                ${(o.items||[]).map(it => `
+                  <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #f0d8e0;border-radius:8px;padding:8px 12px;font-size:12px">
+                    ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'">` : ''}
+                    <div>
+                      <div style="font-weight:700">${it.qty}x ${it.name}</div>
+                      <div style="color:var(--adm-accent)">${formatPrice(it.price * it.qty)}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
             </div>
-            <div style="margin-top:8px;font-weight:800">
-              Subtotal: ${formatPrice(o.subtotal||0)} |
-              Envío: ${formatPrice(o.shippingCost||0)} |
-              <span style="color:var(--adm-accent)">TOTAL: ${formatPrice(o.total||0)}</span>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid #f0d8e0;font-size:13px">
+              Subtotal: <strong>${formatPrice(o.subtotal||0)}</strong> &nbsp;|&nbsp;
+              Envío: <strong>${formatPrice(o.shippingCost||0)}</strong> &nbsp;|&nbsp;
+              <span style="color:var(--adm-accent);font-weight:900;font-size:15px">TOTAL: ${formatPrice(o.total||0)}</span>
             </div>
           </div>
         </td>
@@ -1705,12 +1882,53 @@ window.updateOrderStatus = async (orderId, status) => {
   }
 };
 
-// Filter orders by status
-document.getElementById('filter-status').onchange = function() {
-  const val = this.value;
-  const filtered = val ? allOrders.filter(o => o.status === val) : allOrders;
-  renderOrdersTable(filtered);
+window.updatePayStatus = async (orderId, status) => {
+  try {
+    await updateDoc(doc(db, 'orders', orderId), {
+      'payment.status': status,
+      paymentStatus: status,
+      updatedAt: serverTimestamp()
+    });
+    const o = allOrders.find(o => o.id === orderId);
+    if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
+    toast(`✅ Estado de pago: ${status}`);
+  } catch(e) {
+    toast('❌ Error al actualizar estado de pago');
+  }
 };
+
+window.deleteOrder = async (orderId) => {
+  if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return;
+  try {
+    await deleteDoc(doc(db, 'orders', orderId));
+    allOrders = allOrders.filter(o => o.id !== orderId);
+    toast('🗑️ Pedido eliminado');
+    renderOrdersTable(allOrders);
+  } catch(e) {
+    toast('❌ Error al eliminar pedido');
+  }
+};
+
+function applyOrderFilters() {
+  const search = (document.getElementById('order-search')?.value || '').toLowerCase();
+  const statusVal = document.getElementById('filter-status')?.value || '';
+  const payVal = document.getElementById('filter-pay-status')?.value || '';
+  let filtered = allOrders;
+  if (statusVal) filtered = filtered.filter(o => o.status === statusVal);
+  if (payVal) filtered = filtered.filter(o => (o.payment?.status || o.paymentStatus || 'pendiente') === payVal);
+  if (search) filtered = filtered.filter(o =>
+    (o.userName||'').toLowerCase().includes(search) ||
+    (o.userEmail||'').toLowerCase().includes(search) ||
+    (o.userPhone||'').toLowerCase().includes(search) ||
+    (o.id||'').toLowerCase().includes(search)
+  );
+  renderOrdersTable(filtered);
+}
+
+// Filter orders by status
+document.getElementById('filter-status').onchange = applyOrderFilters;
+document.getElementById('filter-pay-status').onchange = applyOrderFilters;
+document.getElementById('order-search').oninput = applyOrderFilters;
 
 // ======== ONBOARDING ========
 async function loadOnboardingSettings() {
@@ -1753,14 +1971,28 @@ document.getElementById('btn-reset-ob').onclick = async () => {
 async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
-    if (!snap.exists()) return;
-    const d = snap.data();
+    const d = snap.exists() ? snap.data() : {};
     document.getElementById('cfg-store-name').value = d.storeName || 'Tintin Accesorios';
     document.getElementById('cfg-wa-number').value = d.whatsappNumber || '595981299331';
+    document.getElementById('cfg-contact-email').value = d.contactEmail || '';
     document.getElementById('cfg-store-address').value = d.storeAddress || 'San Lorenzo, Paraguay';
+    document.getElementById('cfg-currency').value = d.currency || 'PYG';
+    document.getElementById('cfg-delivery-cost').value = d.deliveryCost ?? 15000;
+    document.getElementById('cfg-encomienda-cost').value = d.encomiendaCost ?? 25000;
     document.getElementById('cfg-delivery-cities').value = (d.deliveryCities || []).join('\n');
     document.getElementById('cfg-encomienda-cities').value = (d.encomiendaCities || []).join('\n');
-  } catch(e) {}
+    document.getElementById('cfg-instagram').value = d.instagram || '';
+    document.getElementById('cfg-facebook').value = d.facebook || '';
+    document.getElementById('cfg-tiktok').value = d.tiktok || '';
+    document.getElementById('cfg-store-open').checked = d.storeOpen !== false;
+    // Payment methods
+    const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
+    document.getElementById('cfg-pay-efectivo').checked = pays.efectivo !== false;
+    document.getElementById('cfg-pay-transferencia').checked = pays.transferencia !== false;
+    document.getElementById('cfg-pay-pagopark').checked = !!pays.pagopark;
+  } catch(e) {
+    console.error('loadConfig error:', e);
+  }
 }
 
 document.getElementById('btn-save-config').onclick = async () => {
@@ -1771,16 +2003,29 @@ document.getElementById('btn-save-config').onclick = async () => {
       .split('\n').map(s => s.trim()).filter(Boolean);
 
     await setDoc(doc(db, 'settings', 'general'), {
-      storeName:        document.getElementById('cfg-store-name').value.trim(),
-      whatsappNumber:   document.getElementById('cfg-wa-number').value.trim(),
-      storeAddress:     document.getElementById('cfg-store-address').value.trim(),
+      storeName:       document.getElementById('cfg-store-name').value.trim(),
+      whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
+      contactEmail:    document.getElementById('cfg-contact-email').value.trim(),
+      storeAddress:    document.getElementById('cfg-store-address').value.trim(),
+      currency:        document.getElementById('cfg-currency').value,
+      deliveryCost:    parseInt(document.getElementById('cfg-delivery-cost').value) || 15000,
+      encomiendaCost:  parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000,
       deliveryCities,
       encomiendaCities,
+      instagram:       document.getElementById('cfg-instagram').value.trim(),
+      facebook:        document.getElementById('cfg-facebook').value.trim(),
+      tiktok:          document.getElementById('cfg-tiktok').value.trim(),
+      storeOpen:       document.getElementById('cfg-store-open').checked,
+      paymentMethods: {
+        efectivo:       document.getElementById('cfg-pay-efectivo').checked,
+        transferencia:  document.getElementById('cfg-pay-transferencia').checked,
+        pagopark:       document.getElementById('cfg-pay-pagopark').checked,
+      },
       updatedAt: serverTimestamp()
     }, { merge: true });
-    toast('✅ Configuración guardada');
+    toast('✅ Configuración guardada correctamente');
   } catch(e) {
-    toast('❌ Error al guardar configuración');
+    toast('❌ Error al guardar configuración: ' + e.message);
   }
 };
 
@@ -1857,11 +2102,16 @@ function prodNuevo() {
   document.getElementById('prod-name').value = '';
   document.getElementById('prod-category').value = '';
   document.getElementById('prod-price').value = '';
+  document.getElementById('prod-price-before').value = '';
   document.getElementById('prod-stock').value = '';
   document.getElementById('prod-imageUrl').value = '';
   document.getElementById('prod-description').value = '';
+  document.getElementById('prod-tags').value = '';
+  document.getElementById('prod-variants-text').value = '';
+  document.getElementById('prod-badge').value = '';
   document.getElementById('prod-active').checked = true;
   document.getElementById('prod-oferta').checked = false;
+  document.getElementById('prod-destacado').checked = false;
   document.getElementById('prod-img-preview').style.display = 'none';
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
@@ -1876,11 +2126,25 @@ function prodEditar(docId) {
   document.getElementById('prod-name').value = p.name || '';
   document.getElementById('prod-category').value = p.category || '';
   document.getElementById('prod-price').value = p.price || '';
+  document.getElementById('prod-price-before').value = p.priceBefore || '';
   document.getElementById('prod-stock').value = p.stock ?? '';
   document.getElementById('prod-imageUrl').value = p.imageUrl || '';
   document.getElementById('prod-description').value = p.description || '';
+  document.getElementById('prod-badge').value = p.badge || '';
+  document.getElementById('prod-tags').value = Array.isArray(p.tags) ? p.tags.join(', ') : (p.tags || '');
+  // Variants: convert object/array to readable text
+  let variantsText = '';
+  if (p.variants) {
+    if (Array.isArray(p.variants)) {
+      variantsText = p.variants.map(v => Object.entries(v).filter(([k]) => k !== 'price' && k !== 'sku' && k !== 'imageUrl').map(([k,val]) => `${k}: ${val}`).join(', ')).join('\n');
+    } else if (typeof p.variants === 'object') {
+      variantsText = Object.entries(p.variants).flatMap(([k, vals]) => Array.isArray(vals) ? vals.map(v => `${k}: ${v}`) : [`${k}: ${vals}`]).join('\n');
+    }
+  }
+  document.getElementById('prod-variants-text').value = variantsText;
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
+  document.getElementById('prod-destacado').checked = !!p.destacado;
   const preview = document.getElementById('prod-img-preview');
   if (p.imageUrl) { preview.src = p.imageUrl; preview.style.display = ''; }
   else preview.style.display = 'none';
@@ -1918,15 +2182,43 @@ async function prodGuardar() {
   const btn = document.getElementById('prod-save-btn');
   btn.textContent = 'Guardando…'; btn.disabled = true;
 
+  // Parse variants from text: "Color: Rojo\nColor: Dorado" → {Color: ['Rojo','Dorado']}
+  const variantsRaw = document.getElementById('prod-variants-text').value.trim();
+  let variantsParsed = null;
+  if (variantsRaw) {
+    const vObj = {};
+    variantsRaw.split('\n').forEach(line => {
+      const idx = line.indexOf(':');
+      if (idx < 0) return;
+      const key = line.slice(0, idx).trim();
+      const val = line.slice(idx + 1).trim();
+      if (!key || !val) return;
+      if (!vObj[key]) vObj[key] = [];
+      if (!vObj[key].includes(val)) vObj[key].push(val);
+    });
+    if (Object.keys(vObj).length) variantsParsed = vObj;
+  }
+
+  const tagsRaw = document.getElementById('prod-tags').value.trim();
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+  const priceBefore = parseInt(document.getElementById('prod-price-before').value) || null;
+  const badge = document.getElementById('prod-badge').value || null;
+
   const data = {
     name,
     category,
     price,
+    priceBefore,
     stock: parseInt(document.getElementById('prod-stock').value) || 0,
     imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
     description: document.getElementById('prod-description').value.trim() || '',
+    tags,
+    badge,
     active: document.getElementById('prod-active').checked,
     oferta: document.getElementById('prod-oferta').checked,
+    destacado: document.getElementById('prod-destacado').checked,
+    ...(variantsParsed ? { variants: variantsParsed } : {}),
     updatedAt: serverTimestamp(),
   };
 

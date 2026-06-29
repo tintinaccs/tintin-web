@@ -24,7 +24,7 @@ onAuthStateChanged(auth, user => {
   if (linkAdmin && user) {
     const ADMIN_EMAILS = ["tintinaccs@gmail.com"];
     import("./roles.js").then(({ getUserRole, ROLES }) => {
-      getUserRole(user.uid).then(role => {
+      getUserRole(user.uid, user.email).then(role => {
         if (role && role !== ROLES.CLIENT) linkAdmin.style.display = "";
       });
     });

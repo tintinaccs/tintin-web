@@ -858,14 +858,14 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js";
 
-// ---- CITY DATA ----
-const DELIVERY_CITIES = [
+// ---- CITY DATA (defaults, overridden by Firestore settings) ----
+let DELIVERY_CITIES = [
   'Asunción','San Lorenzo','Luque','Lambaré','Fernando de la Mora',
   'Capiatá','Mariano Roque Alonso','Ñemby','J. Augusto Saldivar','Limpio',
   'Areguá','Itauguá','Villa Elisa','Ypané','San Antonio','Villeta',
   'Nueva Italia','Guarambaré','Yaguarón','Paraguarí','Ita','Carapeguá'
 ];
-const ENCOMIENDA_CITIES = [
+let ENCOMIENDA_CITIES = [
   'Ciudad del Este','Encarnación','Concepción','Pedro Juan Caballero',
   'Coronel Oviedo','Villarrica','Caaguazú','Pilar','San Ignacio',
   'Santa Rosa del Aguaray','San Pedro','Horqueta','Curuguaty',
@@ -874,11 +874,28 @@ const ENCOMIENDA_CITIES = [
   'Fuerte Olimpo','Bahía Negra','Filadelfia','Loma Plata','Mcal. Estigarribia'
 ];
 
-const SHIPPING_COSTS = {
+let SHIPPING_COSTS = {
   delivery:    15000,
   encomienda:  25000,
   retiro:      0
 };
+
+let WA_NUMBER = '595981299331';
+
+async function loadStoreConfig() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'general'));
+    if (!snap.exists()) return;
+    const cfg = snap.data();
+    if (Array.isArray(cfg.deliveryCities) && cfg.deliveryCities.length) DELIVERY_CITIES = cfg.deliveryCities;
+    if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length) ENCOMIENDA_CITIES = cfg.encomiendaCities;
+    if (cfg.deliveryCost > 0) SHIPPING_COSTS.delivery = cfg.deliveryCost;
+    if (cfg.encomiendaCost > 0) SHIPPING_COSTS.encomienda = cfg.encomiendaCost;
+    if (cfg.whatsapp) WA_NUMBER = cfg.whatsapp.replace(/\D/g, '');
+  } catch(e) {
+    // fall back to hardcoded defaults
+  }
+}
 
 // ---- STATE ----
 let currentStep = 0;
@@ -1287,7 +1304,7 @@ async function buildConfirmation() {
   // WhatsApp support link (set up in advance, shown post-confirm)
   const waMsg = buildWaMessage(cartItems, subtotal, total, payLabels, shipLabels);
   const waSupport = document.getElementById('ck-wa-support');
-  if (waSupport) waSupport.href = `https://wa.me/595981299331?text=${encodeURIComponent(waMsg)}`;
+  if (waSupport) waSupport.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`;
 
   // Confirm button: save order then show success state
   const confirmBtn = document.getElementById('ck-confirm-btn');
@@ -1395,7 +1412,9 @@ async function saveOrder(items, subtotal, total) {
 }
 
 // ---- INIT ----
-populateCities();
+loadStoreConfig().then(() => {
+  populateCities();
+});
 renderCart();
 
 onAuthStateChanged(auth, user => {
