@@ -1,0 +1,52 @@
+# Tintin — Cloud Functions: Email Notification
+
+## Qué hace
+Cuando se crea un nuevo pedido en Firestore (`orders/{orderId}`), esta función
+envía un email a `tintinaccs@gmail.com` con el resumen completo del pedido.
+
+## Requisitos
+- Node.js 20+
+- Firebase CLI: `npm install -g firebase-tools`
+- Cuenta Firebase con Blaze plan (pay-as-you-go) activado
+  - Las Cloud Functions requieren Blaze, pero el costo real para pocos pedidos es $0.
+
+## Configuración de credenciales (una sola vez)
+
+### 1. Crear contraseña de aplicación en Gmail
+- Ir a: Google Account → Seguridad → Verificación en dos pasos → Contraseñas de aplicación
+- Crear una contraseña para "Tintin Tienda"
+- Copiar el código de 16 caracteres (ejemplo: `abcd efgh ijkl mnop`)
+
+### 2. Guardar las credenciales como secretos de Firebase (SEGURO, no van al código)
+```bash
+firebase functions:secrets:set GMAIL_USER
+# Ingresar: tintinaccs@gmail.com
+
+firebase functions:secrets:set GMAIL_PASS
+# Ingresar: la contraseña de aplicación (sin espacios)
+```
+
+### 3. Instalar dependencias y desplegar
+```bash
+cd functions
+npm install
+cd ..
+firebase deploy --only functions
+```
+
+## Verificar que funciona
+1. Crear un pedido de prueba desde checkout.html
+2. Revisar en Firebase Console → Firestore → orders → el pedido nuevo
+3. El campo `notificationStatus` debe cambiar de `"pending"` a `"sent"` en segundos
+4. Revisar la bandeja de entrada de tintinaccs@gmail.com
+
+## Si algo falla
+- El campo `notificationStatus` quedará en `"error"`
+- El campo `notificationError` mostrará el mensaje de error
+- Ver logs: `firebase functions:log`
+
+## Canales alternativos (futuro)
+- **Telegram**: Reemplazar nodemailer por `node-telegram-bot-api`, usar Bot Token como secreto
+- **WhatsApp Business API**: Usar Meta Cloud API o Twilio, credenciales como secretos
+- **Zapier/Make**: En vez de Cloud Functions, conectar Firestore → Zapier → Gmail/WA/Slack
+  sin necesidad de código backend

@@ -1358,57 +1358,58 @@ ${itemLines}
 }
 
 async function saveOrder(items, subtotal, total) {
-  try {
-    const orderDoc = {
-      userId:      currentUser?.uid || null,
-      userEmail:   currentUser?.email || orderData.email || '',
-      userName:    orderData.name,
-      userPhone:   orderData.phone,
-      items:       items.map(i => ({
-        id:    i.id,
-        name:  i.name,
-        cat:   i.cat || '',
-        price: i.price,
-        qty:   i.qty
-      })),
-      subtotal,
-      shippingCost: orderData.shippingCost,
-      total,
-      shipping: {
-        method:     orderData.shippingMethod,
-        city:       orderData.city,
-        address:    orderData.address || '',
-        referencia: orderData.referencia || '',
-        zone:       DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
-      },
-      payment: {
-        method: orderData.paymentMethod,
-        status: 'pendiente'
-      },
-      status:    'pendiente',
-      notes:     orderData.notes || '',
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    };
+  const orderDoc = {
+    userId:      currentUser?.uid || null,
+    userEmail:   currentUser?.email || orderData.email || '',
+    userName:    orderData.name,
+    userPhone:   orderData.phone,
+    items:       items.map(i => ({
+      id:       i.id,
+      name:     i.name,
+      cat:      i.cat || '',
+      price:    i.price,
+      qty:      i.qty,
+      imageUrl: i.imageUrl || i.imgUrl || ''
+    })),
+    subtotal,
+    shippingCost: orderData.shippingCost,
+    total,
+    shipping: {
+      method:     orderData.shippingMethod,
+      city:       orderData.city,
+      address:    orderData.address || '',
+      referencia: orderData.referencia || '',
+      zone:       DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
+    },
+    payment: {
+      method: orderData.paymentMethod,
+      status: 'pendiente'
+    },
+    paymentStatus:      'pendiente',
+    status:             'pendiente',
+    notes:              orderData.notes || '',
+    notificationStatus: 'pending',
+    createdAt:          serverTimestamp(),
+    updatedAt:          serverTimestamp()
+  };
 
-    const docRef = await addDoc(collection(db, 'orders'), orderDoc);
-    window._lastOrderId = docRef.id.slice(0, 8).toUpperCase(); // Short order ID for display
+  const docRef = await addDoc(collection(db, 'orders'), orderDoc);
+  const shortId = docRef.id.slice(0, 8).toUpperCase();
+  window._lastOrderId = shortId;
 
-    // Update user stats if logged in
-    if (currentUser) {
-      try {
-        await updateDoc(doc(db, 'users', currentUser.uid), {
-          purchaseCount: increment(1),
-          totalSpent:    increment(total)
-        });
-      } catch(e) {}
-    }
+  // Store shortId on the document for easy reference
+  await updateDoc(docRef, { shortId });
 
-    // Clear cart after save
-    await clearCart();
-  } catch (e) {
-    console.error('Error saving order:', e);
+  // Update user stats if logged in
+  if (currentUser) {
+    updateDoc(doc(db, 'users', currentUser.uid), {
+      purchaseCount: increment(1),
+      totalSpent:    increment(total)
+    }).catch(() => {});
   }
+
+  // Clear cart
+  await clearCart();
 }
 
 // ---- INIT ----

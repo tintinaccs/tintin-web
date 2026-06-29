@@ -948,12 +948,13 @@
                   <th>Ciudad</th>
                   <th>Pago</th>
                   <th>Fecha</th>
+                  <th>Notif.</th>
                   <th>Estado pedido</th>
                   <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="10" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1761,7 +1762,7 @@ function renderOrdersTable(orders) {
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
 
@@ -1772,6 +1773,16 @@ function renderOrdersTable(orders) {
     reembolsado: 'badge-enviado',
     error:       'badge-cancelado',
   };
+
+  const NOTIF_BADGE = {
+    sent:    { cls: 'badge-entregado', icon: '✅', label: 'Notificado' },
+    pending: { cls: 'badge-pendiente', icon: '⏳', label: 'Pendiente' },
+    error:   { cls: 'badge-cancelado', icon: '❌', label: 'Error notif.' },
+  };
+  function notifBadge(status) {
+    const b = NOTIF_BADGE[status] || NOTIF_BADGE.pending;
+    return `<span class="adm-badge ${b.cls}" style="font-size:9px">${b.icon} ${b.label}</span>`;
+  }
 
   tbody.innerHTML = orders.map(o => {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
@@ -1803,6 +1814,10 @@ function renderOrdersTable(orders) {
           </select>` : ''}
         </td>
         <td style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
+        <td onclick="event.stopPropagation()" style="text-align:center">
+          ${notifBadge(o.notificationStatus || 'pending')}
+          ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
+        </td>
         <td onclick="event.stopPropagation()">
           ${canUpdate ? `
             <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
@@ -1821,7 +1836,7 @@ function renderOrdersTable(orders) {
         </td>
       </tr>
       <tr id="order-detail-${o.id}" style="display:none">
-        <td colspan="10" style="padding:0 14px 12px;background:#fef5f8">
+        <td colspan="11" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
             <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
