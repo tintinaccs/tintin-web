@@ -935,7 +935,7 @@ function populateCities() {
 }
 
 // ---- CART RENDERING ----
-function renderCart() {
+async function renderCart() {
   cartItems = getCartLocal();
   const container = document.getElementById('ck-items');
   const subtotalEl = document.getElementById('ck-subtotal-val');
