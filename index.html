@@ -568,6 +568,22 @@
 import { loadImages, getImg } from './js/images.js';
 (async () => {
   await loadImages();
+
+  // Apply responsive hero background
+  const heroEl = document.getElementById('hero');
+  if (heroEl) {
+    const applyHeroBg = () => {
+      const w = window.innerWidth;
+      const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
+      const url = getImg(slotId);
+      if (url) {
+        heroEl.style.backgroundImage = `url('${url}')`;
+      }
+    };
+    applyHeroBg();
+    window.addEventListener('resize', applyHeroBg);
+  }
+
   // Populate all data-img-slot elements
   document.querySelectorAll('[data-img-slot]').forEach(el => {
     const slotId = el.dataset.imgSlot;

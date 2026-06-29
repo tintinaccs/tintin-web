@@ -10,8 +10,10 @@ const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
 
 export const IMAGE_SLOTS = [
-  // HERO
-  { id: 'hero_bg',              label: 'Hero — Fondo principal',     section: 'hero',       emoji: null,  desc: 'Imagen de fondo del banner principal' },
+  // HERO (3 breakpoints)
+  { id: 'hero_bg_desktop', label: 'Hero — Desktop (≥1024px)',  section: 'hero', emoji: null, desc: 'Fondo del banner en pantallas grandes (PC / laptop)' },
+  { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1023px)', section: 'hero', emoji: null, desc: 'Fondo del banner en tablets' },
+  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)',     section: 'hero', emoji: null, desc: 'Fondo del banner en celulares' },
   // PRODUCTOS (8 products matching PRODUCTS array in script.js)
   { id: 'prod_1',               label: 'Reloj Alissia',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Alissia' },
   { id: 'prod_2',               label: 'Reloj Allegra',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Allegra' },
