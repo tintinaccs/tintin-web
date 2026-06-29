@@ -249,15 +249,14 @@ function getCartCount() {
 }
 
 function updateCartBadge() {
-  const badge = document.getElementById('cart-badge');
-  if (!badge) return;
   const count = getCartCount();
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
+  const text = count > 99 ? '99+' : String(count);
+  ['cart-badge', 'cart-badge-mobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle('hidden', count === 0);
+  });
 }
 
 function renderCart() {

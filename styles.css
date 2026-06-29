@@ -425,6 +425,26 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-cart-badge.hidden { display: none; }
 
+/* Mobile tabbar cart badge */
+#cart-badge-mobile {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--pink-dark);
+  color: var(--white);
+  font-size: 0.55rem;
+  font-weight: 700;
+  min-width: 15px;
+  height: 15px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 3px;
+}
+#cart-badge-mobile.hidden { display: none; }
+
 /* Mobile Menu Toggle */
 .tt-menu-toggle {
   display: none;
@@ -2408,6 +2428,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   html, body { overflow-x: hidden; max-width: 100%; }
   * { box-sizing: border-box; }
   .section { padding: 56px 0; }
+
+  /* Hide desktop header on mobile — only tabbar is shown */
+  .tt-header { display: none !important; }
 
   .tt-tabbar { display: flex; }
   .tt-wa-float { bottom: 88px; right: 16px; width: 48px; height: 48px; }
