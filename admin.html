@@ -130,7 +130,7 @@
       color: var(--adm-accent);
       font-weight: 700;
     }
-    .adm-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
 
     .adm-nav-bottom {
       padding: 12px 0 20px;
@@ -225,7 +225,7 @@
       border: 1.5px solid var(--adm-border);
       padding: 20px;
     }
-    .adm-stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .adm-stat-icon { margin-bottom: 8px; display:flex; align-items:center; }
     .adm-stat-val {
       font-size: 28px;
       font-weight: 900;
@@ -282,6 +282,10 @@
     .badge-enviado    { background: #ede9fe; color: #5b21b6; }
     .badge-entregado  { background: #d1fae5; color: #065f46; }
     .badge-cancelado  { background: #fee2e2; color: #991b1b; }
+    .badge-preparando  { background: #fef9c3; color: #713f12; }
+    .badge-pagado      { background: #d1fae5; color: #065f46; }
+    .badge-rechazado   { background: #fee2e2; color: #991b1b; }
+    .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
 
     /* ======== FORM ELEMENTS ======== */
     .adm-input, .adm-select, .adm-textarea {
@@ -752,62 +756,62 @@
 
   <nav class="adm-nav" id="adm-nav">
     <button class="adm-nav-item active" data-section="dashboard">
-      <span class="adm-nav-icon">📊</span> Dashboard
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard
     </button>
     <button class="adm-nav-item" data-section="usuarios" id="nav-usuarios">
-      <span class="adm-nav-icon">👥</span> Usuarios
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> Usuarios
     </button>
     <button class="adm-nav-item" data-section="pedidos">
-      <span class="adm-nav-icon">📦</span> Pedidos
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span> Pedidos
     </button>
     <button class="adm-nav-item" data-section="productos">
-      <span class="adm-nav-icon">🛍️</span> Productos
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span> Productos
     </button>
     <div class="adm-nav-divider"></div>
     <button class="adm-nav-item" data-section="contenido">
-      <span class="adm-nav-icon">📝</span> Contenido
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> Contenido
     </button>
     <button class="adm-nav-item" data-section="importar">
-      <span class="adm-nav-icon">📥</span> Import/Export
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Import/Export
     </button>
     <a href="admin-images.html" class="adm-nav-item">
-      <span class="adm-nav-icon">🖼️</span> Imágenes
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span> Imágenes
     </a>
     <button class="adm-nav-item" data-section="mensajes">
-      <span class="adm-nav-icon">💬</span> Mensajes
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> Mensajes
     </button>
     <button class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
-      <span class="adm-nav-icon">🤖</span> Onboarding
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Onboarding
     </button>
     <button class="adm-nav-item" data-section="configuracion" id="nav-config">
-      <span class="adm-nav-icon">⚙️</span> Configuración
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Configuración
     </button>
   </nav>
 
   <div class="adm-nav-bottom">
     <a href="index.html" class="adm-nav-item">
-      <span class="adm-nav-icon">🏠</span> Ver tienda →
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Ver tienda →
     </a>
     <button class="adm-nav-item" id="adm-logout">
-      <span class="adm-nav-icon">🚪</span> Cerrar sesión
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Cerrar sesión
     </button>
   </div>
 </aside>
 
 <!-- MOBILE BOTTOM TABS -->
 <nav class="adm-mobile-tabs" id="adm-mobile-tabs">
-  <button class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon">📊</span>Dashboard</button>
-  <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon">👥</span>Usuarios</button>
-  <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon">📦</span>Pedidos</button>
-  <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon">🛍️</span>Productos</button>
-  <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon">📝</span>Contenido</button>
-  <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon">📥</span>Import</button>
-  <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon">🖼️</span>Imágenes</a>
-  <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon">💬</span>Mensajes</button>
-  <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon">🤖</span>Onboarding</button>
-  <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon">⚙️</span>Config</button>
-  <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon">🏠</span>Tienda</a>
-  <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon">🚪</span>Salir</button>
+  <button class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
+  <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
+  <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
+  <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
+  <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Contenido</button>
+  <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
+  <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
+  <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
+  <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
+  <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
+  <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
+  <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
 </nav>
 
 <!-- MAIN -->
@@ -824,22 +828,22 @@
     <div class="adm-section active" id="section-dashboard">
       <div class="adm-stats" id="dash-stats">
         <div class="adm-stat">
-          <div class="adm-stat-icon">👥</div>
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
           <div class="adm-stat-val" id="stat-users">—</div>
           <div class="adm-stat-label">Total usuarios</div>
         </div>
         <div class="adm-stat">
-          <div class="adm-stat-icon">📦</div>
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></div>
           <div class="adm-stat-val" id="stat-orders-today">—</div>
           <div class="adm-stat-label">Pedidos hoy</div>
         </div>
         <div class="adm-stat">
-          <div class="adm-stat-icon">💰</div>
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
           <div class="adm-stat-val" id="stat-sales-month">—</div>
           <div class="adm-stat-label">Ventas del mes</div>
         </div>
         <div class="adm-stat">
-          <div class="adm-stat-icon">🛍️</div>
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
           <div class="adm-stat-val" id="stat-orders-total">—</div>
           <div class="adm-stat-label">Total pedidos</div>
         </div>
@@ -847,7 +851,7 @@
 
       <div class="adm-card">
         <div class="adm-card-head">
-          <div class="adm-card-title">📋 Últimos pedidos</div>
+          <div class="adm-card-title">Últimos pedidos</div>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div class="adm-table-wrap">
@@ -874,11 +878,11 @@
     <div class="adm-section" id="section-usuarios">
       <div class="adm-card">
         <div class="adm-card-head">
-          <div class="adm-card-title">👥 Gestión de usuarios</div>
+          <div class="adm-card-title">Gestión de usuarios</div>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
           <div class="adm-search-wrap">
-            <span class="adm-search-icon">🔍</span>
+            <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
           </div>
         </div>
@@ -908,13 +912,13 @@
     <div class="adm-section" id="section-pedidos">
       <div class="adm-card">
         <div class="adm-card-head">
-          <div class="adm-card-title">📦 Gestión de pedidos</div>
+          <div class="adm-card-title">Gestión de pedidos</div>
           <div style="font-size:13px;color:var(--adm-muted)" id="orders-count-label"></div>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
           <div class="adm-filter-row">
             <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
-              <span class="adm-search-icon">🔍</span>
+              <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
               <input type="text" class="adm-input" id="order-search" placeholder="Buscar por cliente, teléfono, email…" />
             </div>
             <select class="adm-select" id="filter-status" style="flex:1">
@@ -968,7 +972,7 @@
       <!-- PRODUCT LIST -->
       <div class="adm-card" id="prod-list-card">
         <div class="adm-card-head">
-          <div class="adm-card-title">🛍️ Productos</div>
+          <div class="adm-card-title">Productos</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <input id="prod-search" type="text" placeholder="Buscar por nombre o categoría…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
             <select id="prod-filter-cat" class="adm-select" style="font-size:13px;padding:6px 10px">
@@ -993,7 +997,7 @@
         <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
           <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
           <input id="bulk-collection-input" type="text" placeholder="Nombre de colección" class="adm-input" style="font-size:12px;padding:5px 10px;width:200px">
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados">📁 Asignar colección</button>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
             <option value="">— Cambiar categoría —</option>
             <option value="relojes">Relojes</option>
@@ -1009,10 +1013,10 @@
             <option value="gafas">Gafas</option>
             <option value="joyeros">Joyeros</option>
           </select>
-          <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados">🔖 Cambiar cat.</button>
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados">👁 Activar</button>
-          <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados">🙈 Desactivar</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente (solo superadmin)" style="display:none">🗑️ Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Cambiar cat.</button>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
+          <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente (solo superadmin)" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -1141,14 +1145,14 @@
     <div class="adm-section" id="section-mensajes">
       <div class="adm-card">
         <div class="adm-card-head">
-          <div class="adm-card-title">💬 Mensajes y contacto</div>
+          <div class="adm-card-title">Mensajes y contacto</div>
         </div>
         <div class="adm-card-body">
           <p style="color:var(--adm-muted);font-size:13px;margin-bottom:16px">
             Los mensajes de clientes llegan por WhatsApp. Accedé directamente desde aquí.
           </p>
           <a href="https://wa.me/595981299331" target="_blank" class="adm-btn adm-btn-primary">
-            💬 Abrir WhatsApp Business
+            Abrir WhatsApp Business
           </a>
         </div>
       </div>
@@ -1214,7 +1218,7 @@
       <!-- Datos generales -->
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
-          <div class="adm-card-title">⚙️ Datos generales</div>
+          <div class="adm-card-title">Datos generales</div>
         </div>
         <div class="adm-card-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -1337,7 +1341,7 @@
       <!-- IMPORTAR CSV DE SHOPIFY -->
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
-          <div class="adm-card-title">🛍️ Importar CSV de Shopify</div>
+          <div class="adm-card-title">Importar CSV de Shopify</div>
         </div>
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
@@ -1396,7 +1400,7 @@
           <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
           <div style="margin-top:12px;display:flex;gap:12px">
             <button class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
-            <button class="adm-btn adm-btn-outline" id="btn-importar-sample">📋 Cargar ejemplo</button>
+            <button class="adm-btn adm-btn-outline" id="btn-importar-sample">Cargar ejemplo</button>
           </div>
           <div id="import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
         </div>
@@ -1428,7 +1432,7 @@
         <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
         <button onclick="
           const k=document.getElementById('imgbb-key-input').value.trim();
-          if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('✅ API key guardada');}
+          if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('API key guardada');}
           else toast('Pegá tu key primero');
         " class="adm-btn adm-btn-primary adm-btn-sm">Guardar key</button>
         <button onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
@@ -1502,15 +1506,15 @@ const sections = document.querySelectorAll('.adm-section');
 const topbarTitle = document.getElementById('adm-topbar-title');
 
 const SECTION_LABELS = {
-  dashboard: '📊 Dashboard',
-  usuarios: '👥 Usuarios',
-  pedidos: '📦 Pedidos',
-  productos: '🛍️ Productos',
-  mensajes: '💬 Mensajes',
-  onboarding: '🤖 Onboarding',
-  configuracion: '⚙️ Configuración',
-  importar: '📥 Import / Export',
-  contenido: '🎨 Contenido del Sitio'
+  dashboard: 'Dashboard',
+  usuarios: 'Usuarios',
+  pedidos: 'Pedidos',
+  productos: 'Productos',
+  mensajes: 'Mensajes',
+  onboarding: 'Onboarding',
+  configuracion: 'Configuración',
+  importar: 'Import / Export',
+  contenido: 'Contenido del Sitio'
 };
 
 function switchSection(target) {
@@ -1739,17 +1743,17 @@ document.getElementById('user-search').oninput = function() {
 
 window.updateUserRole = async (uid, role, email) => {
   if (email === SUPER_ADMIN && currentRole !== 'superadmin') {
-    toast('❌ No podés cambiar el rol del Super Admin');
+    toast('No podés cambiar el rol del Super Admin');
     return;
   }
   try {
     await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
     const u = allUsers.find(u => u.uid === uid);
     if (u) u.role = role;
-    toast(`✅ Rol actualizado a ${ROLE_LABELS[role]}`);
+    toast(`Rol actualizado a ${ROLE_LABELS[role]}`);
     renderUsersTable(allUsers);
   } catch(e) {
-    toast('❌ Error al actualizar rol');
+    toast('Error al actualizar rol');
   }
 };
 
@@ -1761,10 +1765,10 @@ window.toggleBlock = async (uid, currentlyBlocked) => {
     });
     const u = allUsers.find(u => u.uid === uid);
     if (u) u.blocked = !currentlyBlocked;
-    toast(currentlyBlocked ? '🔓 Usuario desbloqueado' : '🔒 Usuario bloqueado');
+    toast(currentlyBlocked ? 'Usuario desbloqueado' : 'Usuario bloqueado');
     renderUsersTable(allUsers);
   } catch(e) {
-    toast('❌ Error al actualizar usuario');
+    toast('Error al actualizar usuario');
   }
 };
 
@@ -1773,10 +1777,10 @@ window.deleteUser = async (uid, name) => {
   try {
     await deleteDoc(doc(db, 'users', uid));
     allUsers = allUsers.filter(u => u.uid !== uid);
-    toast('🗑️ Usuario eliminado');
+    toast('Usuario eliminado');
     renderUsersTable(allUsers);
   } catch(e) {
-    toast('❌ Error al eliminar usuario');
+    toast('Error al eliminar usuario');
   }
 };
 
@@ -1868,7 +1872,7 @@ function renderOrdersTable(orders) {
           ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
         </td>
         <td onclick="event.stopPropagation()">
-          ${canUpdate ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo">✏️ Editar</button>` : '—'}
+          ${canUpdate ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td onclick="event.stopPropagation()">
           ${canUpdate ? `
@@ -1884,13 +1888,13 @@ function renderOrdersTable(orders) {
           }
         </td>
         <td onclick="event.stopPropagation()">
-          ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')">🗑️</button>` : '—'}
+          ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
       <tr id="order-detail-${o.id}" style="display:none">
         <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
-            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
+            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
               <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${o.userName || '—'}</div>
               <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${o.userEmail || '—'}</div>
@@ -1943,9 +1947,9 @@ window.updateOrderStatus = async (orderId, status) => {
     });
     const o = allOrders.find(o => o.id === orderId);
     if (o) o.status = status;
-    toast(`✅ Estado actualizado: ${status}`);
+    toast(`Estado actualizado: ${status}`);
   } catch(e) {
-    toast('❌ Error al actualizar estado');
+    toast('Error al actualizar estado');
   }
 };
 
@@ -1958,9 +1962,9 @@ window.updatePayStatus = async (orderId, status) => {
     });
     const o = allOrders.find(o => o.id === orderId);
     if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
-    toast(`✅ Estado de pago: ${status}`);
+    toast(`Estado de pago: ${status}`);
   } catch(e) {
-    toast('❌ Error al actualizar estado de pago');
+    toast('Error al actualizar estado de pago');
   }
 };
 
@@ -1969,10 +1973,10 @@ window.deleteOrder = async (orderId) => {
   try {
     await deleteDoc(doc(db, 'orders', orderId));
     allOrders = allOrders.filter(o => o.id !== orderId);
-    toast('🗑️ Pedido eliminado');
+    toast('Pedido eliminado');
     renderOrdersTable(allOrders);
   } catch(e) {
-    toast('❌ Error al eliminar pedido');
+    toast('Error al eliminar pedido');
   }
 };
 
@@ -2013,9 +2017,9 @@ document.getElementById('btn-save-ob').onclick = async () => {
       onboardingEnabled: enabled,
       updatedAt: serverTimestamp()
     }, { merge: true });
-    toast(`✅ Onboarding ${enabled ? 'activado' : 'desactivado'}`);
+    toast(`Onboarding ${enabled ? 'activado' : 'desactivado'}`);
   } catch(e) {
-    toast('❌ Error al guardar configuración');
+    toast('Error al guardar configuración');
   }
 };
 
@@ -2028,9 +2032,9 @@ document.getElementById('btn-reset-ob').onclick = async () => {
       batch.update(d.ref, { onboardingCompleted: false });
     });
     await batch.commit();
-    toast(`✅ Onboarding reseteado para ${snap.size} usuarios`);
+    toast(`Onboarding reseteado para ${snap.size} usuarios`);
   } catch(e) {
-    toast('❌ Error al resetear onboarding');
+    toast('Error al resetear onboarding');
   }
 };
 
@@ -2090,9 +2094,9 @@ document.getElementById('btn-save-config').onclick = async () => {
       },
       updatedAt: serverTimestamp()
     }, { merge: true });
-    toast('✅ Configuración guardada correctamente');
+    toast('Configuración guardada correctamente');
   } catch(e) {
-    toast('❌ Error al guardar configuración: ' + e.message);
+    toast('Error al guardar configuración: ' + e.message);
   }
 };
 
@@ -2138,7 +2142,7 @@ function renderProductosTable(list) {
       <td style="padding:10px 16px">
         ${p.imageUrl
           ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
-          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px">📷</div>`}
+          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
       <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name||'—'}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
@@ -2152,9 +2156,9 @@ function renderProductosTable(list) {
       </td>
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
           <button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? '🙈 Desactivar' : '👁 Activar'}</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente">🗑️ Eliminar</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
         </div>
       </td>
     </tr>
@@ -2313,7 +2317,7 @@ async function prodGuardar() {
     const docId = document.getElementById('prod-id').value;
     if (docId) {
       await updateDoc(doc(db, 'products', docId), data);
-      toast('✅ Producto actualizado');
+      toast('Producto actualizado');
     } else {
       data.createdAt = serverTimestamp();
       await setDoc(doc(collection(db, 'products')), data);
@@ -3261,7 +3265,7 @@ function renderOeItems() {
   const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
   el.innerHTML = items.map((it, idx) => `
     <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
-      ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center">📷</div>`}
+      ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       <div style="flex:1;font-size:13px;font-weight:600">${it.name||'—'}</div>
       <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
@@ -3289,7 +3293,7 @@ window.updateOeItemQty = function(idx, val) {
 
 window.removeOeItem = function(idx) {
   if (!_editingOrder) return;
-  if (_editingOrder.items.length <= 1) { toast('❌ El pedido debe tener al menos un producto'); return; }
+  if (_editingOrder.items.length <= 1) { toast('El pedido debe tener al menos un producto'); return; }
   _editingOrder.items.splice(idx, 1);
   renderOeItems();
 };
@@ -3313,6 +3317,17 @@ function recalcOeTotals() {
 window.saveOrderEdit = async function() {
   const orderId = document.getElementById('oe-id').value;
   if (!orderId || !_editingOrder) return;
+
+  // Validations
+  const name  = document.getElementById('oe-name').value.trim();
+  const phone = document.getElementById('oe-phone').value.trim();
+  if (!name)  { toast('El nombre del cliente es obligatorio'); document.getElementById('oe-name').focus(); return; }
+  if (!phone) { toast('El teléfono del cliente es obligatorio'); document.getElementById('oe-phone').focus(); return; }
+  const items = _editingOrder.items || [];
+  if (items.some(i => !i.qty || i.qty < 1)) { toast('Las cantidades deben ser al menos 1'); return; }
+  const total = (_editingOrder._calcTotal ?? (_editingOrder.total || 0));
+  if (total < 0) { toast('El total no puede ser negativo'); return; }
+
   const btn = document.getElementById('oe-save-btn');
   btn.disabled = true; btn.textContent = 'Guardando…';
 
@@ -3362,13 +3377,13 @@ window.saveOrderEdit = async function() {
         },
       });
     }
-    toast('✅ Pedido actualizado');
+    toast('Pedido actualizado');
     closeOrderEdit();
     renderOrdersTable(allOrders);
   } catch(e) {
-    toast('❌ Error al guardar: ' + e.message);
+    toast('Error al guardar: ' + e.message);
   } finally {
-    btn.disabled = false; btn.textContent = '💾 Guardar cambios';
+    btn.disabled = false; btn.textContent = 'Guardar cambios';
   }
 };
 
@@ -3381,7 +3396,7 @@ window.saveOrderEdit = async function() {
 <div id="order-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
   <div style="background:#fff;border-radius:16px;max-width:780px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
-      <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">✏️ Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
+      <div style="font-weight:800;font-size:16px;color:var(--adm-primary)"> Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
       <button onclick="closeOrderEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
     </div>
     <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px" id="oe-body">
@@ -3467,7 +3482,7 @@ window.saveOrderEdit = async function() {
     </div>
     <div style="padding:16px 24px;border-top:1px solid var(--adm-border);display:flex;gap:10px;justify-content:flex-end">
       <button class="adm-btn" onclick="closeOrderEdit()">Cancelar</button>
-      <button class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn">💾 Guardar cambios</button>
+      <button class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios</button>
     </div>
   </div>
 </div>
