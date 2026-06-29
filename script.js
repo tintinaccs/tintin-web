@@ -270,8 +270,11 @@ function renderCart() {
   if (cart.length === 0) {
     body.innerHTML = `
       <div class="tt-cart-empty">
-        <div class="tt-cart-empty-icon">🛍️</div>
+        <div class="tt-cart-empty-icon">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
+        <a href="checkout.html" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
       </div>
     `;
     if (footer) footer.style.display = 'none';
