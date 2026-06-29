@@ -321,6 +321,25 @@ function renderCart() {
 }
 
 /* ──────────────────────────────────────
+   SCROLL LOCK — tracks which panels are open
+   so closing one panel doesn't unlock scroll
+   while another is still open
+────────────────────────────────────── */
+const _scrollLockPanels = new Set();
+
+function lockScroll(panelId) {
+  _scrollLockPanels.add(panelId);
+  document.body.style.overflow = 'hidden';
+}
+
+function unlockScroll(panelId) {
+  _scrollLockPanels.delete(panelId);
+  if (_scrollLockPanels.size === 0) {
+    document.body.style.overflow = '';
+  }
+}
+
+/* ──────────────────────────────────────
    CART DRAWER OPEN/CLOSE
 ────────────────────────────────────── */
 function openCart() {
@@ -328,7 +347,7 @@ function openCart() {
   const overlay = document.getElementById('cart-overlay');
   if (drawer) drawer.classList.add('open');
   if (overlay) overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockScroll('cart');
 }
 
 function closeCart() {
@@ -336,7 +355,7 @@ function closeCart() {
   const overlay = document.getElementById('cart-overlay');
   if (drawer) drawer.classList.remove('open');
   if (overlay) overlay.classList.remove('open');
-  document.body.style.overflow = '';
+  unlockScroll('cart');
 }
 
 /* ──────────────────────────────────────
@@ -429,12 +448,12 @@ function initMobileMenu() {
 
   function openMenu() {
     menu.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    lockScroll('mobile-menu');
   }
 
   function closeMenu() {
     menu.classList.remove('open');
-    document.body.style.overflow = '';
+    unlockScroll('mobile-menu');
   }
 
   if (btnOpen) btnOpen.addEventListener('click', openMenu);
@@ -468,7 +487,7 @@ function initSearch() {
 
   function openSearch() {
     panel.classList.add('open');
-    setTimeout(() => input && input.focus(), 150);
+    if (input) input.focus();
   }
 
   function closeSearch() {
@@ -558,6 +577,25 @@ function initCartEvents() {
       if (id) addToCart(id);
     }
   });
+}
+
+/* ──────────────────────────────────────
+   SKELETON LOADING STATE
+────────────────────────────────────── */
+function _showProductsSkeleton(containerId, count = 4) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = Array.from({ length: count }, () => `
+    <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
+      <div class="tt-product-img tt-skeleton-img"></div>
+      <div class="tt-product-info">
+        <div class="tt-skeleton-line" style="width:40%;height:10px;margin-bottom:8px;"></div>
+        <div class="tt-skeleton-line" style="width:80%;height:14px;margin-bottom:8px;"></div>
+        <div class="tt-skeleton-line" style="width:50%;height:12px;margin-bottom:16px;"></div>
+        <div class="tt-skeleton-line" style="width:100%;height:32px;border-radius:50px;"></div>
+      </div>
+    </div>
+  `).join('');
 }
 
 /* ──────────────────────────────────────
@@ -683,14 +721,21 @@ function initProductPage() {
     window._productPageRendered = true;
     _renderProductDetail(immediate);
   } else {
-    // Products may still be loading from Firestore — poll for window.PRODUCTS
-    let attempts = 0;
-    const poll = setInterval(() => {
-      attempts++;
+    // Wait for Firebase products to load via tintin:products-loaded event
+    function onProductsLoaded() {
+      window.removeEventListener('tintin:products-loaded', onProductsLoaded);
       const p = getProductById(id);
-      if (p) { clearInterval(poll); window._productPageRendered = true; _renderProductDetail(p); return; }
-      if (attempts >= 20) { clearInterval(poll); _showProductNotFound(); }
-    }, 250);
+      if (p) { window._productPageRendered = true; _renderProductDetail(p); }
+      else _showProductNotFound();
+    }
+    window.addEventListener('tintin:products-loaded', onProductsLoaded);
+    // Fallback: if Firebase never fires (offline / no products), show not-found after 5s
+    setTimeout(() => {
+      if (!window._productPageRendered) {
+        window.removeEventListener('tintin:products-loaded', onProductsLoaded);
+        _showProductNotFound();
+      }
+    }, 5000);
   }
 }
 
@@ -1061,12 +1106,12 @@ function initCollectionsSheet() {
   function openSheet() {
     sheet.classList.add('open');
     if (backdrop) backdrop.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    lockScroll('collections-sheet');
   }
   function closeSheet() {
     sheet.classList.remove('open');
     if (backdrop) backdrop.classList.remove('open');
-    document.body.style.overflow = '';
+    unlockScroll('collections-sheet');
   }
   const closeBtn = document.getElementById('btn-close-sheet');
   if (closeBtn) closeBtn.addEventListener('click', closeSheet);
@@ -1092,9 +1137,15 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCart();
 
-  // Homepage specific
+  // Homepage specific — show skeleton while Firebase loads, fallback to hardcoded after 4s
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', PRODUCTS);
+    _showProductsSkeleton('products-grid');
+    setTimeout(() => {
+      const grid = document.getElementById('products-grid');
+      if (grid && grid.querySelector('.tt-skeleton-card')) {
+        renderProductsGrid('products-grid', window.PRODUCTS || PRODUCTS);
+      }
+    }, 4000);
   }
 
   if (document.getElementById('look-grid')) {
@@ -1116,9 +1167,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryThumbs();
   }
 
-  // Collections page — render related cards if container exists
+  // Collections page — show skeleton while Firebase loads
   if (document.getElementById('colls-products-grid')) {
-    renderProductsGrid('colls-products-grid', PRODUCTS);
+    _showProductsSkeleton('colls-products-grid');
   }
 
   // Scroll reveal
