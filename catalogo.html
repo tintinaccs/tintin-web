@@ -1,235 +1,190 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo | Tintin Accesorios &amp; Relojes</title>
-  <meta name="description" content="Catálogo completo de Tintin Accesorios. Relojes, aros, collares, bolsos, pulseras y más. Envíos a todo Paraguay." />
-  <meta property="og:title" content="Catálogo | Tintin Accesorios &amp; Relojes" />
-  <meta property="og:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar." />
-  <meta property="og:image" content="images/logo.png" />
-  <meta property="og:type" content="website" />
-  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/catalogo.html" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/tintin.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo | TINTIN Accesorios &amp; Relojes</title>
+  <meta name="description" content="Catálogo completo de Tintin Accesorios. Relojes, aros, collares, bolsos, pulseras y más. Envíos a todo Paraguay.">
+  <meta property="og:title" content="Catálogo | TINTIN Accesorios &amp; Relojes">
+  <meta property="og:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/catalogo.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <style>
-    body { background: var(--acc-pale); }
-
-    .cat-wrap {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
+    /* Alias variables so catalog styles stay consistent with the rest of the site */
+    :root {
+      --acc: var(--pink-dark, #c9597a);
+      --acc-pale: var(--pink-pale, #fce4ec);
+      --acc-light: #f5d0de;
     }
 
-    /* HERO CAT */
+    body { background: #fce4ec; }
+
+    /* ── Product Cards ── */
+    .tt-card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #f0e0e8;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .tt-card:hover { box-shadow: 0 8px 32px rgba(200,80,120,.12); transform: translateY(-2px); }
+
+    .tt-card-img-wrap {
+      display: block;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: #fce4ec;
+      position: relative;
+      text-decoration: none;
+    }
+    .tt-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+    .tt-card:hover .tt-card-img-wrap img { transform: scale(1.04); }
+
+    .tt-card-info { padding: 12px; }
+    .tt-card-cat {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--acc); margin-bottom: 4px;
+    }
+    .tt-card-name { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; color: #1a1a1a; }
+    .tt-card-price { font-size: 14px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; }
+    .tt-card-btns { display: flex; gap: 8px; }
+    .tt-card-btn {
+      flex: 1; padding: 8px 6px; border-radius: 50px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: center;
+      border: 1.5px solid var(--acc, #c9597a); transition: background .2s, color .2s;
+      font-family: 'Poppins', sans-serif; text-decoration: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tt-card-btn-cart { background: var(--acc, #c9597a); color: #fff; }
+    .tt-card-btn-cart:hover { background: #a03060; border-color: #a03060; }
+    .tt-card-btn-view { background: transparent; color: var(--acc, #c9597a); }
+    .tt-card-btn-view:hover { background: #fce4ec; }
+    .tt-card-badge {
+      position: absolute; top: 10px; right: 10px; background: var(--acc, #c9597a);
+      color: #fff; font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; padding: 3px 8px; border-radius: 50px;
+    }
+    .tt-card-badge--out { background: #e53935; }
+    .cat-card-placeholder {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%; font-size: 48px;
+    }
+
+    /* ── Loading Skeleton ── */
+    .tt-skeleton {
+      background: linear-gradient(90deg, #f5d0de 25%, #fce4ec 50%, #f5d0de 75%);
+      background-size: 200% 100%;
+      animation: tt-skeleton-shimmer 1.4s ease infinite;
+      border-radius: 6px;
+    }
+    @keyframes tt-skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── Filter Tab Buttons ── */
+    .tt-filtro-btn {
+      padding: 8px 16px; border-radius: 50px;
+      border: 1.5px solid var(--acc, #c9597a);
+      background: #fff; color: var(--acc, #c9597a);
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      white-space: nowrap; font-family: 'Poppins', sans-serif;
+      text-transform: uppercase; letter-spacing: .06em; transition: .2s;
+    }
+    .tt-filtro-btn:hover, .tt-filtro-btn.activo { background: var(--acc, #c9597a); color: #fff; }
+
+    /* ── Catalog Layout ── */
+    .cat-wrap { max-width: 1300px; margin: 0 auto; padding: 32px 24px 80px; }
+
     .cat-hero {
-      background: #fce4ec;
-      border-radius: 20px;
-      padding: 40px 32px;
-      margin-bottom: 32px;
-      text-align: center;
+      background: #fce4ec; border-radius: 20px;
+      padding: 40px 32px; margin-bottom: 32px; text-align: center;
     }
-
     .cat-hero-title {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: var(--acc);
-      line-height: 1;
+      font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; color: var(--acc); line-height: 1;
     }
-
     .cat-hero-sub {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 8px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+      font-size: 13px; font-weight: 600; color: var(--text-muted);
+      margin-top: 8px; letter-spacing: .1em; text-transform: uppercase;
     }
 
-    /* LAYOUT */
-    .cat-layout {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 28px;
-      align-items: start;
-    }
+    .cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
 
-    /* SIDEBAR FILTROS */
     .cat-sidebar {
-      background: #fce4ec;
-      border-radius: var(--radius);
-      border: 1.5px solid #f5d0de;
-      padding: 24px;
-      position: sticky;
-      top: 80px;
+      background: #fce4ec; border-radius: 14px; border: 1.5px solid #f5d0de;
+      padding: 24px; position: sticky; top: 80px;
     }
-
     .cat-filter-title {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--acc);
-      margin-bottom: 12px;
-      padding-bottom: 8px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--acc); margin-bottom: 12px; padding-bottom: 8px;
       border-bottom: 1.5px solid var(--acc-light);
     }
-
     .cat-filter-group { margin-bottom: 24px; }
-
     .cat-filter-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 0;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      transition: color .2s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      font-family: var(--font);
+      display: flex; align-items: center; gap: 8px; padding: 7px 0; cursor: pointer;
+      font-size: 13px; font-weight: 600; color: #1a1a1a; transition: color .2s;
+      border: none; background: none; width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
     }
     .cat-filter-option:hover { color: var(--acc); }
     .cat-filter-option.active { color: var(--acc); font-weight: 800; }
-
     .cat-filter-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ddd;
-      flex-shrink: 0;
-      transition: background .2s;
+      width: 8px; height: 8px; border-radius: 50%; background: #ddd; flex-shrink: 0; transition: background .2s;
     }
     .cat-filter-option.active .cat-filter-dot { background: var(--acc); }
+    .cat-filter-count { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--text-muted); }
 
-    .cat-filter-count {
-      margin-left: auto;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    /* PRECIO RANGE */
-    .cat-range {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
+    .cat-range { display: flex; gap: 8px; align-items: center; }
     .cat-range-input {
-      flex: 1;
-      padding: 8px 10px;
-      border: 1.5px solid #eee;
-      border-radius: var(--radius-sm);
-      font-size: 12px;
-      font-family: var(--font);
-      outline: none;
+      flex: 1; padding: 8px 10px; border: 1.5px solid #eee; border-radius: 8px;
+      font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
     }
     .cat-range-input:focus { border-color: var(--acc); }
-
     .cat-range-sep { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 
-    /* MAIN */
     .cat-main { width: 100%; }
-
     .cat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      gap: 12px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
     }
-
-    .cat-count {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
+    .cat-count { font-size: 13px; font-weight: 700; color: var(--text-muted); }
     .cat-sort {
-      padding: 9px 16px;
-      border: 1.5px solid #eee;
-      border-radius: 50px;
-      font-size: 12px;
-      font-family: var(--font);
-      background: #fce4ec;
-      color: var(--text);
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
+      padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
+      font-size: 12px; font-family: 'Poppins', sans-serif; background: #fce4ec;
+      color: #1a1a1a; font-weight: 600; cursor: pointer; outline: none;
     }
     .cat-sort:focus { border-color: var(--acc); }
-
     .cat-search {
-      padding: 9px 16px;
-      border: 1.5px solid #eee;
-      border-radius: 50px;
-      font-size: 13px;
-      font-family: var(--font);
-      outline: none;
-      width: 200px;
+      padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
+      font-size: 13px; font-family: 'Poppins', sans-serif; outline: none; width: 200px;
     }
     .cat-search:focus { border-color: var(--acc); }
 
-    /* GRID */
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
-    /* MOBILE FILTROS BTN */
     .cat-filter-toggle {
-      display: none;
-      width: 100%;
-      padding: 12px;
-      background: var(--acc);
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      cursor: pointer;
-      font-family: var(--font);
-      margin-bottom: 16px;
+      display: none; width: 100%; padding: 12px; background: var(--acc); color: #fff;
+      border: none; border-radius: 50px; font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em; cursor: pointer;
+      font-family: 'Poppins', sans-serif; margin-bottom: 16px;
     }
 
-    /* TABS MOBILE */
     .cat-tabs-mobile {
-      display: none;
-      overflow-x: auto;
-      gap: 8px;
-      padding-bottom: 4px;
-      margin-bottom: 16px;
-      scrollbar-width: none;
+      display: none; overflow-x: auto; gap: 8px; padding-bottom: 4px;
+      margin-bottom: 16px; scrollbar-width: none;
     }
     .cat-tabs-mobile::-webkit-scrollbar { display: none; }
 
-    /* SIN RESULTADOS */
     .cat-empty {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 60px 24px;
-      color: var(--text-muted);
+      grid-column: 1/-1; text-align: center; padding: 60px 24px; color: var(--text-muted);
     }
     .cat-empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      .cat-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
+    @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) {
       .cat-layout { grid-template-columns: 1fr; }
       .cat-sidebar { display: none; position: static; }
@@ -237,97 +192,87 @@
       .cat-filter-toggle { display: block; }
       .cat-tabs-mobile { display: flex; }
     }
-
     @media (max-width: 480px) {
       .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .cat-wrap { padding: 20px 12px 80px; }
+      .cat-hero { padding: 24px 16px; }
     }
   </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header class="tt-header tt-hdr-show tt-hdr-seen" id="tt-header">
+<header class="tt-header" id="tt-header">
   <div class="tt-header-inner">
-    <a href="index.html" class="tt-logo">
-      <img src="images/logo.png" alt="Tintin Accesorios" class="tt-header-logo" />
+    <a href="index.html" class="tt-logo-link">
+      <div class="tt-logo-text">TINTIN</div>
+      <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
     </a>
-    <ul class="tt-nav">
-      <li class="tt-nav-item"><a href="index.html" class="tt-nav-link">Inicio</a></li>
-      <li class="tt-nav-item tt-nav-item--has-drop" id="nav-tienda">
-        <button class="tt-nav-tienda-btn tt-nav-link" id="nav-tienda-btn" aria-expanded="false" aria-haspopup="true">
-          Tienda
-          <svg class="tt-nav-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tt-dropdown" id="nav-tienda-drop" role="menu">
+    <nav class="tt-nav">
+      <a href="index.html">INICIO</a>
+      <div class="tt-nav-dropdown" id="tienda-dropdown">
+        <button id="btn-tienda">TIENDA ▾</button>
+        <div class="tt-dropdown">
           <div class="tt-dropdown-grid">
-            <a href="catalogo.html?cat=relojes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Relojes" loading="lazy" /></div><span>Relojes</span></a>
-            <a href="catalogo.html?cat=aros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Aros" loading="lazy" /></div><span>Aros</span></a>
-            <a href="catalogo.html?cat=bolsos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_10.png?v=1781909062&width=300" alt="Bags" loading="lazy" /></div><span>Bags</span></a>
-            <a href="catalogo.html?cat=collares" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Collares" loading="lazy" /></div><span>Collares</span></a>
-            <a href="catalogo.html?cat=pulseras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Pulseras" loading="lazy" /></div><span>Pulseras</span></a>
-            <a href="catalogo.html?cat=anillos" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Anillos" loading="lazy" /></div><span>Anillos</span></a>
-            <a href="catalogo.html?cat=earcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Earcuff" loading="lazy" /></div><span>Earcuff</span></a>
-            <a href="catalogo.html?cat=brazaletes" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Brazaletes" loading="lazy" /></div><span>Brazaletes</span></a>
-            <a href="catalogo.html?cat=gafas" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/32.png?v=1781567731&width=300" alt="Gafas" loading="lazy" /></div><span>Gafas</span></a>
-            <a href="catalogo.html?cat=tobilleras" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_2_8d501109-5ac2-46fb-b7e3-ce18953995ea.png?v=1781714081&width=300" alt="Tobilleras" loading="lazy" /></div><span>Tobilleras</span></a>
-            <a href="catalogo.html?cat=armcuff" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_3.png?v=1781568571&width=300" alt="Armcuff" loading="lazy" /></div><span>Armcuff</span></a>
-            <a href="catalogo.html?cat=joyeros" class="tt-drop-item" role="menuitem"><div class="tt-drop-img"><img src="https://tintinaccs.com/cdn/shop/files/Monthly_Photo_Dump_Floral_Scrapbook_Carousel_Instagram_Post_9.png?v=1781654528&width=300" alt="Joyeros" loading="lazy" /></div><span>Joyeros</span></a>
+            <a href="catalogo.html?cat=bolsos" class="tt-dropdown-card"><div class="tt-dropdown-icon">👜</div><div class="tt-dropdown-label">BAGS</div></a>
+            <a href="catalogo.html?cat=collares" class="tt-dropdown-card"><div class="tt-dropdown-icon">📿</div><div class="tt-dropdown-label">COLLARES</div></a>
+            <a href="catalogo.html?cat=earcuff" class="tt-dropdown-card"><div class="tt-dropdown-icon">✨</div><div class="tt-dropdown-label">EARCUFF</div></a>
+            <a href="catalogo.html?cat=gafas" class="tt-dropdown-card"><div class="tt-dropdown-icon">🕶️</div><div class="tt-dropdown-label">GAFAS</div></a>
+            <a href="catalogo.html?cat=brazaletes" class="tt-dropdown-card"><div class="tt-dropdown-icon">💎</div><div class="tt-dropdown-label">BRAZALETES</div></a>
+            <a href="catalogo.html?cat=aros" class="tt-dropdown-card"><div class="tt-dropdown-icon">💫</div><div class="tt-dropdown-label">AROS</div></a>
+            <a href="catalogo.html?cat=armcuff" class="tt-dropdown-card"><div class="tt-dropdown-icon">🌸</div><div class="tt-dropdown-label">ARMCUFF</div></a>
+            <a href="catalogo.html?cat=anillos" class="tt-dropdown-card"><div class="tt-dropdown-icon">💍</div><div class="tt-dropdown-label">ANILLOS</div></a>
+            <a href="catalogo.html?cat=joyeros" class="tt-dropdown-card"><div class="tt-dropdown-icon">🪞</div><div class="tt-dropdown-label">JOYEROS</div></a>
+            <a href="catalogo.html?cat=pulseras" class="tt-dropdown-card"><div class="tt-dropdown-icon">🎀</div><div class="tt-dropdown-label">PULSERAS</div></a>
+            <a href="catalogo.html?cat=relojes" class="tt-dropdown-card"><div class="tt-dropdown-icon">⌚</div><div class="tt-dropdown-label">RELOJES</div></a>
+            <a href="catalogo.html?cat=tobilleras" class="tt-dropdown-card"><div class="tt-dropdown-icon">🦋</div><div class="tt-dropdown-label">TOBILLERAS</div></a>
           </div>
-          <div class="tt-dropdown-footer"><a href="catalogo.html">Ver todas las colecciones →</a></div>
         </div>
-      </li>
-      <li class="tt-nav-item"><a href="nosotros.html" class="tt-nav-link">Nosotros</a></li>
-      <li class="tt-nav-item"><a href="index.html#contacto" class="tt-nav-link">Contacto</a></li>
-      <li class="tt-nav-item"><a href="admin.html" id="link-admin" class="tt-nav-link" style="display:none">Admin</a></li>
-      <li class="tt-nav-item"><a href="login.html" id="btn-login" class="tt-nav-link tt-nav-link--login">Ingresar</a></li>
-    </ul>
+      </div>
+      <a href="collections.html">COLECCIONES</a>
+      <a href="about.html">NOSOTROS</a>
+      <a href="contact.html">CONTACTO</a>
+    </nav>
     <div class="tt-header-actions">
-      <button class="tt-icon-btn" id="btn-buscar" title="Buscar" aria-label="Buscar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <button id="btn-search" title="Buscar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <a href="login.html" class="tt-icon-btn" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="login.html" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <span class="tt-cart-wrap">
-        <a href="index.html#carrito" class="tt-icon-btn" title="Carrito" aria-label="Carrito" id="btn-carrito">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </a>
-        <span class="tt-cart-badge" id="tt-cart-badge"></span>
-      </span>
+      <button id="btn-cart" title="Carrito" style="position:relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="tt-cart-badge hidden" id="cart-badge">0</span>
+      </button>
     </div>
+    <button class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú">☰</button>
+  </div>
+  <div class="tt-search-panel" id="search-panel">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="tt-search-input" id="search-input" placeholder="¿Qué estás buscando?">
+    <button class="tt-search-close" id="btn-search-close">✕</button>
+    <div class="tt-search-results" id="search-results" style="display:none;"></div>
   </div>
 </header>
 
-<!-- Search panel -->
-<div class="tt-srch-backdrop" id="srch-backdrop"></div>
-<div class="tt-srch-panel" id="srch-panel" role="dialog" aria-label="Buscador" aria-modal="true">
-  <div class="tt-srch-inner">
-    <div class="tt-srch-top">
-      <div class="tt-srch-input-wrap">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-input" class="tt-srch-input" placeholder="Relojes, aros, collares…" autocomplete="off" spellcheck="false" />
-        <button class="tt-srch-close" id="srch-close" aria-label="Cerrar">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="tt-srch-tags">
-        <span class="tt-srch-tag-label">Populares:</span>
-        <a href="catalogo.html?cat=relojes" class="tt-srch-tag">Relojes</a>
-        <a href="catalogo.html?cat=aros" class="tt-srch-tag">Aros</a>
-        <a href="catalogo.html?cat=collares" class="tt-srch-tag">Collares</a>
-        <a href="catalogo.html?cat=bolsos" class="tt-srch-tag">Bags</a>
-      </div>
-    </div>
-    <div class="tt-srch-body" id="srch-body">
-      <ul class="tt-srch-results" id="search-results"></ul>
-      <div class="tt-srch-preview" id="srch-preview">
-        <div class="tt-srch-prev-placeholder">
-          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <p>Empezá a escribir para ver resultados</p>
-        </div>
-      </div>
-    </div>
+<div class="tt-mobile-menu" id="mobile-menu">
+  <div class="tt-mobile-menu-header">
+    <div class="tt-logo-link"><div class="tt-logo-text" style="color:var(--pink-dark)">TINTIN</div><div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div></div>
+    <button class="tt-mobile-close" id="btn-mobile-close">✕</button>
   </div>
+  <nav class="tt-mobile-nav">
+    <a href="index.html">INICIO</a>
+    <button id="btn-mobile-tienda">TIENDA ▾</button>
+    <div class="tt-mobile-cats" id="mobile-cats" style="display:none;">
+      <a href="catalogo.html?cat=bolsos">BAGS</a><a href="catalogo.html?cat=collares">COLLARES</a><a href="catalogo.html?cat=earcuff">EARCUFF</a>
+      <a href="catalogo.html?cat=gafas">GAFAS</a><a href="catalogo.html?cat=brazaletes">BRAZALETES</a><a href="catalogo.html?cat=aros">AROS</a>
+      <a href="catalogo.html?cat=armcuff">ARMCUFF</a><a href="catalogo.html?cat=anillos">ANILLOS</a><a href="catalogo.html?cat=joyeros">JOYEROS</a>
+      <a href="catalogo.html?cat=pulseras">PULSERAS</a><a href="catalogo.html?cat=relojes">RELOJES</a><a href="catalogo.html?cat=tobilleras">TOBILLERAS</a>
+    </div>
+    <a href="collections.html">COLECCIONES</a>
+    <a href="about.html">NOSOTROS</a>
+    <a href="contact.html">CONTACTO</a>
+  </nav>
 </div>
 
 <div class="cat-wrap">
@@ -420,9 +365,9 @@
       <div class="cat-filter-group">
         <div class="cat-filter-title">Precio (Gs.)</div>
         <div class="cat-range">
-          <input type="number" class="cat-range-input" id="precio-min" placeholder="Min" min="0" />
+          <input type="number" class="cat-range-input" id="precio-min" placeholder="Min" min="0">
           <span class="cat-range-sep">—</span>
-          <input type="number" class="cat-range-input" id="precio-max" placeholder="Max" min="0" />
+          <input type="number" class="cat-range-input" id="precio-max" placeholder="Max" min="0">
         </div>
         <button class="tt-filtro-btn" id="btn-aplicar-precio" style="margin-top:10px;width:100%">Aplicar</button>
       </div>
@@ -430,13 +375,13 @@
       <div class="cat-filter-group">
         <div class="cat-filter-title">Disponibilidad</div>
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600">
-          <input type="checkbox" id="filtro-stock" style="accent-color:var(--acc)" />
+          <input type="checkbox" id="filtro-stock" style="accent-color:var(--acc)">
           Solo con stock
         </label>
       </div>
 
       <button class="tt-filtro-btn" id="btn-limpiar-filtros" style="width:100%;margin-top:8px">
-        🗑️ Limpiar filtros
+        Limpiar filtros
       </button>
     </aside>
 
@@ -445,7 +390,7 @@
       <div class="cat-top">
         <div class="cat-count" id="cat-count">Cargando...</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input type="text" class="cat-search" id="cat-search" placeholder="🔍 Buscar..." />
+          <input type="text" class="cat-search" id="cat-search" placeholder="🔍 Buscar...">
           <select class="cat-sort" id="cat-sort">
             <option value="default">Ordenar por</option>
             <option value="precio-asc">Precio: menor a mayor</option>
@@ -457,6 +402,7 @@
       </div>
 
       <div class="cat-grid" id="cat-grid">
+        <!-- Skeleton loading state -->
         <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
         <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
         <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
@@ -469,308 +415,267 @@
   </div>
 </div>
 
-<footer class="tt-footer" id="contacto">
-  <div class="tt-footer-logo">
-    <img src="images/logo.png" alt="Tintin Accesorios" class="tt-footer-logo-img" />
+<!-- FOOTER -->
+<footer class="tt-footer">
+  <div class="container">
+    <div class="tt-footer-grid">
+      <div class="tt-footer-brand">
+        <div class="tt-logo-link">
+          <div class="tt-logo-text">TINTIN</div>
+          <div class="tt-logo-sub">ACCESORIOS &amp; RELOJES</div>
+        </div>
+        <p class="tt-footer-tagline">Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay.</p>
+        <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribirnos por WhatsApp
+        </a>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Categorías</div>
+        <ul>
+          <li><a href="catalogo.html?cat=relojes">Relojes</a></li>
+          <li><a href="catalogo.html?cat=bolsos">Bags</a></li>
+          <li><a href="catalogo.html?cat=collares">Collares</a></li>
+          <li><a href="catalogo.html?cat=aros">Aros</a></li>
+          <li><a href="catalogo.html?cat=pulseras">Pulseras</a></li>
+          <li><a href="catalogo.html?cat=anillos">Anillos</a></li>
+        </ul>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Información</div>
+        <ul>
+          <li><a href="about.html">Quiénes somos</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="tt-footer-col">
+        <div class="tt-footer-col-title">Contacto</div>
+        <ul>
+          <li><a href="https://wa.me/595981299331" target="_blank" rel="noopener">+595 981 299 331</a></li>
+          <li><a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener">@tintinaccs</a></li>
+          <li>Paraguay</li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <nav class="tt-footer-links">
-    <a href="index.html">Inicio</a>
-    <a href="catalogo.html">Tienda</a>
-    <a href="nosotros.html">Nosotros</a>
-    <a href="index.html#contacto">Contacto</a>
-  </nav>
-  <p class="tt-footer-copy">
-    &copy; 2024–2026 TINTIN ACCESORIOS &mdash; TODOS LOS DERECHOS RESERVADOS<br>
-    San Lorenzo, Paraguay
-  </p>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-     target="_blank" class="tt-footer-wa">Contactanos por WhatsApp</a>
+  <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS</div>
 </footer>
 
-<!-- WhatsApp flotante -->
-<a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8"
-   class="tt-wa-float" target="_blank" title="Contactar por WhatsApp">
-  <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+<a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-wa-float" id="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- TAB BAR MOBILE -->
-<nav class="tt-tabbar" id="tt-tabbar">
-  <a href="index.html" class="tt-tab" aria-label="Inicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-  </a>
-  <button class="tt-tab" id="tab-buscar" aria-label="Buscar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  </button>
-  <a href="catalogo.html" class="tt-tab" aria-label="Tienda">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-  </a>
-  <a href="https://wa.me/595981299331?text=Hola%21+Me+interesa+saber+m%C3%A1s+sobre+sus+productos+%F0%9F%8C%B8" class="tt-tab" target="_blank" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  </a>
-  <a href="login.html" id="tabbar-cuenta" class="tt-tab" aria-label="Perfil">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  </a>
-</nav>
+<div class="tt-tabbar" id="tt-tabbar">
+  <a href="index.html" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></a>
+  <button class="tt-tabbar-btn" id="tabbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Buscar</span></button>
+  <button class="tt-tabbar-btn" id="tabbar-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>Carrito</span></button>
+  <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span>WhatsApp</span></a>
+  <a href="login.html" id="tabbar-cuenta" class="tt-tabbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Cuenta</span></a>
+</div>
 
-<script>
-(function(){
-  var header = document.getElementById('tt-header');
-  if (!header) return;
-  var lastY = 0;
-  window.addEventListener('scroll', function(){
-    var y = window.scrollY;
-    if (y > lastY && y > 90) header.classList.add('tt-hdr-hidden');
-    else header.classList.remove('tt-hdr-hidden');
-    lastY = y;
-  }, { passive: true });
-  var navTienda = document.getElementById('nav-tienda');
-  var tiendaBtn = document.getElementById('nav-tienda-btn');
-  if (tiendaBtn) {
-    tiendaBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      var open = navTienda.classList.contains('tt-drop-open');
-      navTienda.classList.toggle('tt-drop-open', !open);
-      tiendaBtn.setAttribute('aria-expanded', String(!open));
-    });
-  }
-  document.addEventListener('click', function(e){
-    if (navTienda && !navTienda.contains(e.target)) {
-      navTienda.classList.remove('tt-drop-open');
-      if (tiendaBtn) tiendaBtn.setAttribute('aria-expanded','false');
-    }
-  });
-  var srchBackdrop = document.getElementById('srch-backdrop');
-  var srchPanel = document.getElementById('srch-panel');
-  var srchClose = document.getElementById('srch-close');
-  var searchInput = document.getElementById('search-input');
-  function openSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.add('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.add('tt-srch-open');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function(){ if (searchInput) searchInput.focus(); }, 80);
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.add('tt-srch-active');
-  }
-  function closeSearch() {
-    if (!srchPanel) return;
-    srchPanel.classList.remove('tt-srch-open');
-    if (srchBackdrop) srchBackdrop.classList.remove('tt-srch-open');
-    document.body.style.overflow = '';
-    if (searchInput) searchInput.value = '';
-    var b = document.getElementById('btn-buscar'); if (b) b.classList.remove('tt-srch-active');
-  }
-  var btnBuscar = document.getElementById('btn-buscar');
-  var tabBuscar = document.getElementById('tab-buscar');
-  if (btnBuscar) btnBuscar.addEventListener('click', openSearch);
-  if (tabBuscar) tabBuscar.addEventListener('click', openSearch);
-  if (srchClose) srchClose.addEventListener('click', closeSearch);
-  if (srchBackdrop) srchBackdrop.addEventListener('click', closeSearch);
-  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeSearch(); });
-  function updateCartBadge(){
-    var badge = document.getElementById('tt-cart-badge'); if (!badge) return;
-    try {
-      var cart = JSON.parse(localStorage.getItem('tt_carrito')||'[]');
-      var total = cart.reduce(function(s,i){ return s+(i.qty||1); },0);
-      badge.textContent = total>0?(total>99?'99+':total):'';
-      badge.classList.toggle('tt-cart-badge--show', total>0);
-    } catch(e){}
-  }
-  updateCartBadge();
-  window.addEventListener('storage', updateCartBadge);
-  window._ttOpenSearch = openSearch;
-  window._ttCloseSearch = closeSearch;
-  window._ttUpdateCart = updateCartBadge;
-})();
-</script>
+<div class="tt-cart-overlay" id="cart-overlay"></div>
+<div class="tt-cart-drawer" id="cart-drawer">
+  <div class="tt-cart-header"><h2 class="tt-cart-title">MI CARRITO</h2><button class="tt-cart-close" id="btn-cart-close">✕</button></div>
+  <div class="tt-cart-body" id="cart-body"></div>
+  <div class="tt-cart-footer" id="cart-footer" style="display:none;">
+    <div class="tt-cart-total-row"><span class="tt-cart-total-label">TOTAL</span><span class="tt-cart-total-value" id="cart-total">Gs. 0</span></div>
+  </div>
+</div>
 
+<script src="script.js"></script>
+<script type="module" src="js/products-store.js"></script>
 <script type="module">
-import { db } from "./js/firebase.js";
-import {
-  collection, getDocs, query, where
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const CAT_LABELS = {
+  todos: 'Todo el catálogo',
+  relojes: 'Relojes', aros: 'Aros', bolsos: 'Bags',
+  collares: 'Collares', pulseras: 'Pulseras', anillos: 'Anillos',
+  tobilleras: 'Tobilleras', brazaletes: 'Brazaletes', earcuff: 'Earcuff',
+  armcuff: 'Armcuff', gafas: 'Gafas', joyeros: 'Joyeros'
+};
 
-const WA_NUM = "595981299331";
 let todos = [];
-let catActual = "todos";
+let catActual = 'todos';
 
-function fmt(n) {
-  return "Gs. " + new Intl.NumberFormat("es-PY").format(n);
-}
-
-// Leer param de URL
 const params = new URLSearchParams(location.search);
-const catParam = params.get("cat");
+const catParam = params.get('cat') || '';
 if (catParam) catActual = catParam;
 
-async function cargar() {
-  try {
-    const snap = await getDocs(query(collection(db, "products"), where("active", "==", true)));
-    todos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    actualizarContadores();
-    aplicarFiltros();
-    if (catParam) {
-      seleccionarCat(catParam);
-      document.getElementById("cat-titulo").textContent = catParam.toUpperCase();
-    }
-  } catch(e) { console.error(e); }
+function fmt(n) {
+  return 'Gs. ' + new Intl.NumberFormat('es-PY').format(n);
+}
+
+function catMatches(product, cat) {
+  if (cat === 'todos') return true;
+  const pc = (product.category || product.cat || '').toLowerCase().trim();
+  if (cat === 'bolsos') return ['bolsos', 'bolso', 'bags', 'bag'].some(a => pc === a || pc.includes(a));
+  return pc === cat || pc.startsWith(cat);
 }
 
 function actualizarContadores() {
-  const cats = ["todos","relojes","bolsos","aros","collares","pulseras","anillos","tobilleras","brazaletes","earcuff","armcuff","gafas","joyeros"];
+  const cats = ['todos','relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros'];
   cats.forEach(c => {
-    const el = document.getElementById("count-" + c);
-    if (el) el.textContent = c === "todos"
-      ? todos.length
-      : todos.filter(p => p.category === c).length;
+    const el = document.getElementById('count-' + c);
+    if (el) el.textContent = c === 'todos' ? todos.length : todos.filter(p => catMatches(p, c)).length;
   });
 }
 
 function aplicarFiltros() {
   let lista = [...todos];
 
-  // Categoría
-  if (catActual !== "todos") lista = lista.filter(p => p.category === catActual);
+  if (catActual !== 'todos') lista = lista.filter(p => catMatches(p, catActual));
 
-  // Búsqueda
-  const q = document.getElementById("cat-search").value.toLowerCase().trim();
+  const q = (document.getElementById('cat-search').value || '').toLowerCase().trim();
   if (q) lista = lista.filter(p =>
-    p.name.toLowerCase().includes(q) ||
-    (p.category||"").toLowerCase().includes(q) ||
-    (p.description||"").toLowerCase().includes(q)
+    (p.name || '').toLowerCase().includes(q) ||
+    (p.category || p.cat || '').toLowerCase().includes(q) ||
+    (p.desc || p.description || '').toLowerCase().includes(q)
   );
 
-  // Precio
-  const min = parseInt(document.getElementById("precio-min").value) || 0;
-  const max = parseInt(document.getElementById("precio-max").value) || Infinity;
+  const min = parseInt(document.getElementById('precio-min').value) || 0;
+  const max = parseInt(document.getElementById('precio-max').value) || Infinity;
   lista = lista.filter(p => p.price >= min && p.price <= max);
 
-  // Stock
-  if (document.getElementById("filtro-stock").checked) {
-    lista = lista.filter(p => p.stock > 0);
+  if (document.getElementById('filtro-stock').checked) {
+    lista = lista.filter(p => (p.stock ?? 1) > 0);
   }
 
-  // Ordenar
-  const sort = document.getElementById("cat-sort").value;
-  if (sort === "precio-asc")  lista.sort((a,b) => a.price - b.price);
-  if (sort === "precio-desc") lista.sort((a,b) => b.price - a.price);
-  if (sort === "nombre")      lista.sort((a,b) => a.name.localeCompare(b.name));
-  if (sort === "stock")       lista.sort((a,b) => (b.stock||0) - (a.stock||0));
+  const sort = document.getElementById('cat-sort').value;
+  if (sort === 'precio-asc')  lista.sort((a, b) => a.price - b.price);
+  if (sort === 'precio-desc') lista.sort((a, b) => b.price - a.price);
+  if (sort === 'nombre')      lista.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
+  if (sort === 'stock')       lista.sort((a, b) => (b.stock ?? 0) - (a.stock ?? 0));
 
   renderGrid(lista);
 }
 
 function renderGrid(lista) {
-  const grid = document.getElementById("cat-grid");
-  document.getElementById("cat-count").textContent = lista.length + " productos";
+  const grid = document.getElementById('cat-grid');
+  document.getElementById('cat-count').textContent = lista.length + ' producto' + (lista.length !== 1 ? 's' : '');
 
   if (!lista.length) {
     grid.innerHTML = `
       <div class="cat-empty">
         <div class="cat-empty-icon">😔</div>
         <div style="font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:6px">Sin resultados</div>
-        <div style="font-size:13px">Probá con otra categoría o quitá los filtros</div>
+        <div style="font-size:13px;margin-bottom:20px">No hay productos disponibles en esta categoría</div>
+        <a href="catalogo.html" class="tt-btn tt-btn-sm">Ver todas las colecciones →</a>
       </div>`;
     return;
   }
 
   grid.innerHTML = lista.map(p => {
-    const msg = encodeURIComponent(`Hola! Me interesa *${p.name}* — ${fmt(p.price)}. ¿Disponible? 🌸`);
+    const safeAlt = (p.name || '').replace(/"/g, '&quot;');
+    const imgHtml = p.imageUrl
+      ? `<img src="${p.imageUrl}" alt="${safeAlt}" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="cat-card-placeholder">✨</div>`;
+    const badgeHtml = p.badge
+      ? `<span class="tt-card-badge">${p.badge}</span>`
+      : p.stock === 0 ? `<span class="tt-card-badge tt-card-badge--out">AGOTADO</span>` : '';
+    const catLabel = p.category || p.cat || '';
     return `
-      <div class="tt-card" onclick="location.href='producto.html?id=${p.id}'">
-        <div class="tt-card-img-wrap">
-          <img src="${p.imageUrl||''}" alt="${p.name}" loading="lazy"
-               onerror="this.src='https://via.placeholder.com/400x400/fce4ec/ea7ea3?text=Tintin'" />
-          ${p.oferta ? '<span class="tt-card-badge">OFERTA</span>' : ''}
-          ${p.stock === 0 ? '<span class="tt-card-badge" style="background:#ff4d4f">AGOTADO</span>' : ''}
-        </div>
+      <div class="tt-card">
+        <a href="product.html?id=${p.id}" class="tt-card-img-wrap">
+          ${imgHtml}
+          ${badgeHtml}
+        </a>
         <div class="tt-card-info">
-          <div class="tt-card-cat">${p.category||''}</div>
-          <div class="tt-card-name">${p.name}</div>
+          ${catLabel ? `<div class="tt-card-cat">${catLabel}</div>` : ''}
+          <div class="tt-card-name">${p.name || ''}</div>
           <div class="tt-card-price">${fmt(p.price)}</div>
-          <div class="tt-card-btns" onclick="event.stopPropagation()">
-            <button class="tt-card-btn tt-card-btn-cart" data-pid="${p.id}">
-              + Agregar al carrito
-            </button>
-            <a class="tt-card-btn tt-card-btn-view" href="producto.html?id=${p.id}">
-              Ver producto →
-            </a>
+          <div class="tt-card-btns">
+            <a class="tt-card-btn tt-card-btn-view" href="product.html?id=${p.id}">Ver producto</a>
+            <button class="tt-card-btn tt-card-btn-cart" data-pid="${p.id}">+ Carrito</button>
           </div>
         </div>
-      </div>
-    `;
-  }).join("");
+      </div>`;
+  }).join('');
 }
 
 function seleccionarCat(cat) {
   catActual = cat;
-  // Sidebar
-  document.querySelectorAll(".cat-filter-option").forEach(b => {
-    b.classList.toggle("active", b.dataset.cat === cat);
-  });
-  // Tabs mobile
-  document.querySelectorAll("#cat-tabs-mobile .tt-filtro-btn").forEach(b => {
-    b.classList.toggle("activo", b.dataset.cat === cat);
-  });
+  document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === cat));
+  const titulo = document.getElementById('cat-titulo');
+  if (titulo) titulo.textContent = CAT_LABELS[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
   aplicarFiltros();
 }
 
-// EVENTOS
-document.querySelectorAll(".cat-filter-option").forEach(btn => {
+function init(products) {
+  todos = products;
+  actualizarContadores();
+  if (catParam) seleccionarCat(catParam);
+  else aplicarFiltros();
+}
+
+// Bootstrap: products may already be loaded or arrive via event
+if (window.PRODUCTS && window.PRODUCTS.length) {
+  init(window.PRODUCTS);
+} else {
+  window.addEventListener('tintin:products-loaded', e => init(e.detail.products), { once: true });
+}
+
+// Filter events
+document.querySelectorAll('.cat-filter-option').forEach(btn => {
   btn.onclick = () => seleccionarCat(btn.dataset.cat);
 });
-document.querySelectorAll("#cat-tabs-mobile .tt-filtro-btn").forEach(btn => {
+document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(btn => {
   btn.onclick = () => seleccionarCat(btn.dataset.cat);
 });
-document.getElementById("cat-search").addEventListener("input", aplicarFiltros);
-document.getElementById("cat-sort").addEventListener("change", aplicarFiltros);
-document.getElementById("filtro-stock").addEventListener("change", aplicarFiltros);
-document.getElementById("btn-aplicar-precio").onclick = aplicarFiltros;
-document.getElementById("btn-limpiar-filtros").onclick = () => {
-  catActual = "todos";
-  document.getElementById("cat-search").value = "";
-  document.getElementById("precio-min").value = "";
-  document.getElementById("precio-max").value = "";
-  document.getElementById("filtro-stock").checked = false;
-  document.getElementById("cat-sort").value = "default";
-  seleccionarCat("todos");
+document.getElementById('cat-search').addEventListener('input', aplicarFiltros);
+document.getElementById('cat-sort').addEventListener('change', aplicarFiltros);
+document.getElementById('filtro-stock').addEventListener('change', aplicarFiltros);
+document.getElementById('btn-aplicar-precio').onclick = aplicarFiltros;
+document.getElementById('btn-limpiar-filtros').onclick = () => {
+  catActual = 'todos';
+  document.getElementById('cat-search').value = '';
+  document.getElementById('precio-min').value = '';
+  document.getElementById('precio-max').value = '';
+  document.getElementById('filtro-stock').checked = false;
+  document.getElementById('cat-sort').value = 'default';
+  seleccionarCat('todos');
 };
 
-// TOGGLE SIDEBAR MOBILE
-document.getElementById("filter-toggle").onclick = () => {
-  const sidebar = document.getElementById("cat-sidebar");
-  sidebar.classList.toggle("open");
-  document.getElementById("filter-toggle").textContent =
-    sidebar.classList.contains("open") ? "🔼 Ocultar filtros" : "🔽 Filtrar por categoría";
+document.getElementById('filter-toggle').onclick = () => {
+  const sidebar = document.getElementById('cat-sidebar');
+  sidebar.classList.toggle('open');
+  document.getElementById('filter-toggle').textContent =
+    sidebar.classList.contains('open') ? '🔼 Ocultar filtros' : '🔽 Filtrar por categoría';
 };
 
-cargar();
-
-// Add-to-cart via event delegation
-document.getElementById("cat-grid").addEventListener("click", async e => {
-  const btn = e.target.closest(".tt-card-btn-cart");
+// Add-to-cart via event delegation — uses tt_cart (same key as the rest of the site)
+document.getElementById('cat-grid').addEventListener('click', e => {
+  const btn = e.target.closest('.tt-card-btn-cart');
   if (!btn) return;
+  e.stopPropagation();
   const pid = btn.dataset.pid;
   const p = todos.find(x => x.id === pid);
   if (!p) return;
-  const cart = JSON.parse(localStorage.getItem("tt_cart") || "[]");
-  const existing = cart.find(x => x.id === pid);
+
+  const cart = JSON.parse(localStorage.getItem('tt_cart') || '[]');
+  const existing = cart.find(x => x.id === pid && !x.variant);
   if (existing) {
-    existing.qty = (existing.qty || 1) + 1;
+    existing.qty = Math.min((existing.qty || 1) + 1, 99);
   } else {
-    cart.push({ id: p.id, name: p.name, cat: p.category || "", price: p.price, qty: 1, imageUrl: p.imageUrl || "" });
+    cart.push({
+      id: p.id,
+      name: p.name,
+      cat: p.category || p.cat || '',
+      price: p.price,
+      qty: 1,
+      imageUrl: p.imageUrl || ''
+    });
   }
-  localStorage.setItem("tt_cart", JSON.stringify(cart));
-  // Update badge
-  const total = cart.reduce((s, x) => s + (x.qty || 1), 0);
-  document.querySelectorAll(".tt-cart-badge, #cart-badge").forEach(b => { b.textContent = total; b.style.display = total ? "" : "none"; });
-  // Feedback
+  localStorage.setItem('tt_cart', JSON.stringify(cart));
+
+  if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
+  if (typeof window.renderCart === 'function') window.renderCart();
+
   const orig = btn.textContent;
-  btn.textContent = "✓ Agregado";
-  btn.style.background = "#4caf50";
-  btn.style.color = "#fff";
-  setTimeout(() => { btn.textContent = orig; btn.style.background = ""; btn.style.color = ""; }, 1500);
+  btn.textContent = '✓ Agregado';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1500);
 });
 </script>
-<script type="module" src="js/auth-nav.js"></script>
 </body>
 </html>
