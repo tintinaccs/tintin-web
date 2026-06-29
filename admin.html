@@ -949,12 +949,13 @@
                   <th>Pago</th>
                   <th>Fecha</th>
                   <th>Notif.</th>
+                  <th>Editar</th>
                   <th>Estado pedido</th>
                   <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -969,9 +970,50 @@
         <div class="adm-card-head">
           <div class="adm-card-title">🛍️ Productos</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input id="prod-search" type="text" placeholder="Buscar…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:160px;">
+            <input id="prod-search" type="text" placeholder="Buscar por nombre o categoría…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
+            <select id="prod-filter-cat" class="adm-select" style="font-size:13px;padding:6px 10px">
+              <option value="">Todas las categorías</option>
+              <option value="relojes">Relojes</option>
+              <option value="bolsos">Bolsos / Bags</option>
+              <option value="collares">Collares</option>
+              <option value="aros">Aros</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="anillos">Anillos</option>
+              <option value="tobilleras">Tobilleras</option>
+              <option value="brazaletes">Brazaletes</option>
+              <option value="earcuff">Earcuff</option>
+              <option value="armcuff">Armcuff</option>
+              <option value="gafas">Gafas</option>
+              <option value="joyeros">Joyeros</option>
+            </select>
             <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
+        </div>
+        <!-- Bulk action toolbar (shown when products are selected) -->
+        <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
+          <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
+          <input id="bulk-collection-input" type="text" placeholder="Nombre de colección" class="adm-input" style="font-size:12px;padding:5px 10px;width:200px">
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados">📁 Asignar colección</button>
+          <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
+            <option value="">— Cambiar categoría —</option>
+            <option value="relojes">Relojes</option>
+            <option value="bolsos">Bolsos / Bags</option>
+            <option value="collares">Collares</option>
+            <option value="aros">Aros</option>
+            <option value="pulseras">Pulseras</option>
+            <option value="anillos">Anillos</option>
+            <option value="tobilleras">Tobilleras</option>
+            <option value="brazaletes">Brazaletes</option>
+            <option value="earcuff">Earcuff</option>
+            <option value="armcuff">Armcuff</option>
+            <option value="gafas">Gafas</option>
+            <option value="joyeros">Joyeros</option>
+          </select>
+          <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados">🔖 Cambiar cat.</button>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados">👁 Activar</button>
+          <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados">🙈 Desactivar</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente (solo superadmin)" style="display:none">🗑️ Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="prod-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando productos…</div>
@@ -979,9 +1021,11 @@
             <table style="width:100%;border-collapse:collapse;font-size:13px">
               <thead>
                 <tr style="background:var(--adm-bg);text-transform:uppercase;font-size:11px;letter-spacing:.06em;color:var(--adm-muted)">
+                  <th style="padding:10px 16px;text-align:center;width:38px"><input type="checkbox" id="check-all-prods" title="Seleccionar todos" onclick="toggleSelectAll(this)"></th>
                   <th style="padding:10px 16px;text-align:left">Imagen</th>
                   <th style="padding:10px 16px;text-align:left">Nombre</th>
                   <th style="padding:10px 16px;text-align:left">Categoría</th>
+                  <th style="padding:10px 16px;text-align:left">Colección</th>
                   <th style="padding:10px 16px;text-align:right">Precio</th>
                   <th style="padding:10px 16px;text-align:center">Stock</th>
                   <th style="padding:10px 16px;text-align:center">Estado</th>
@@ -1027,6 +1071,11 @@
                 <option value="gafas">Gafas</option>
                 <option value="joyeros">Joyeros</option>
               </select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Colección</label>
+              <input id="prod-collection" type="text" class="adm-input" placeholder="Ej: anillos dorados, collares acero…">
+              <small style="color:var(--adm-muted);font-size:11px">Permite agrupar productos. Ej: <code>anillos-dorados</code></small>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Precio (Gs.) *</label>
@@ -1762,7 +1811,7 @@ function renderOrdersTable(orders) {
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
 
@@ -1819,6 +1868,9 @@ function renderOrdersTable(orders) {
           ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
         </td>
         <td onclick="event.stopPropagation()">
+          ${canUpdate ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo">✏️ Editar</button>` : '—'}
+        </td>
+        <td onclick="event.stopPropagation()">
           ${canUpdate ? `
             <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
               onchange="window.updateOrderStatus('${o.id}', this.value)">
@@ -1836,7 +1888,7 @@ function renderOrdersTable(orders) {
         </td>
       </tr>
       <tr id="order-detail-${o.id}" style="display:none">
-        <td colspan="11" style="padding:0 14px 12px;background:#fef5f8">
+        <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
             <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">📋 Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
@@ -2075,8 +2127,14 @@ function renderProductosTable(list) {
   document.getElementById('prod-empty').style.display = 'none';
 
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
-  tbody.innerHTML = list.map(p => `
-    <tr style="border-top:1px solid var(--adm-border);transition:background .15s" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background=''">
+  tbody.innerHTML = list.map(p => {
+    const isSelected = _selectedProducts.has(p._docId);
+    const nameSafe = (p.name||'').replace(/'/g,"\\'");
+    return `
+    <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
+      <td style="padding:10px 16px;text-align:center">
+        <input type="checkbox" class="prod-row-check" data-id="${p._docId}" ${isSelected ? 'checked' : ''} onclick="toggleProductSelect(this)" style="cursor:pointer;width:15px;height:15px">
+      </td>
       <td style="padding:10px 16px">
         ${p.imageUrl
           ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
@@ -2084,6 +2142,7 @@ function renderProductosTable(list) {
       </td>
       <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name||'—'}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${p.collection||'—'}</td>
       <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
       <td style="padding:10px 16px;text-align:center">${p.stock != null ? p.stock : '—'}</td>
       <td style="padding:10px 16px;text-align:center">
@@ -2093,23 +2152,31 @@ function renderProductosTable(list) {
       </td>
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')">✏️ Editar</button>
-          <button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})">${p.active !== false ? '🙈 Desactivar' : '👁 Activar'}</button>
-          <button class="adm-btn adm-btn-sm" style="color:#e53935" onclick="prodEliminar('${p._docId}','${(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto">✏️ Editar</button>
+          <button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? '🙈 Desactivar' : '👁 Activar'}</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente">🗑️ Eliminar</button>
         </div>
       </td>
     </tr>
-  `).join('');
+  `}).join('');
 }
 
-// Search
-document.getElementById('prod-search').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  renderProductosTable(q ? _allProducts.filter(p =>
+// Search + category filter
+function applyProductFilters() {
+  const q = (document.getElementById('prod-search')?.value || '').toLowerCase();
+  const cat = document.getElementById('prod-filter-cat')?.value || '';
+  let result = _allProducts;
+  if (q) result = result.filter(p =>
     (p.name||'').toLowerCase().includes(q) ||
-    (p.category||'').toLowerCase().includes(q)
-  ) : _allProducts);
-});
+    (p.category||'').toLowerCase().includes(q) ||
+    (p.collection||'').toLowerCase().includes(q) ||
+    (p.tags||[]).join(' ').toLowerCase().includes(q)
+  );
+  if (cat) result = result.filter(p => (p.category||'') === cat);
+  renderProductosTable(result);
+}
+document.getElementById('prod-search').addEventListener('input', applyProductFilters);
+document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
 
 function prodNuevo() {
   document.getElementById('prod-id').value = '';
@@ -2124,6 +2191,7 @@ function prodNuevo() {
   document.getElementById('prod-tags').value = '';
   document.getElementById('prod-variants-text').value = '';
   document.getElementById('prod-badge').value = '';
+  document.getElementById('prod-collection').value = '';
   document.getElementById('prod-active').checked = true;
   document.getElementById('prod-oferta').checked = false;
   document.getElementById('prod-destacado').checked = false;
@@ -2146,6 +2214,7 @@ function prodEditar(docId) {
   document.getElementById('prod-imageUrl').value = p.imageUrl || '';
   document.getElementById('prod-description').value = p.description || '';
   document.getElementById('prod-badge').value = p.badge || '';
+  document.getElementById('prod-collection').value = p.collection || '';
   document.getElementById('prod-tags').value = Array.isArray(p.tags) ? p.tags.join(', ') : (p.tags || '');
   // Variants: convert object/array to readable text
   let variantsText = '';
@@ -2220,9 +2289,12 @@ async function prodGuardar() {
   const priceBefore = parseInt(document.getElementById('prod-price-before').value) || null;
   const badge = document.getElementById('prod-badge').value || null;
 
+  const collection_ = document.getElementById('prod-collection').value.trim() || null;
+
   const data = {
     name,
     category,
+    collection: collection_,
     price,
     priceBefore,
     stock: parseInt(document.getElementById('prod-stock').value) || 0,
@@ -3035,7 +3107,370 @@ async function loadContenido() {
   await contRenderTabs();
   await contRenderPage(contCurrentPage);
 }
+
+
+// ══════════════════════════════════════════════
+// PRODUCTS: SELECTION & BULK ACTIONS
+// ══════════════════════════════════════════════
+let _selectedProducts = new Set();
+
+window.toggleSelectAll = function(masterCb) {
+  _selectedProducts.clear();
+  document.querySelectorAll('.prod-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedProducts.add(cb.dataset.id);
+  });
+  updateBulkToolbar();
+};
+
+window.toggleProductSelect = function(cb) {
+  if (cb.checked) _selectedProducts.add(cb.dataset.id);
+  else _selectedProducts.delete(cb.dataset.id);
+  const master = document.getElementById('check-all-prods');
+  if (master) {
+    const total = document.querySelectorAll('.prod-row-check').length;
+    master.indeterminate = _selectedProducts.size > 0 && _selectedProducts.size < total;
+    master.checked = _selectedProducts.size === total && total > 0;
+  }
+  updateBulkToolbar();
+};
+
+function updateBulkToolbar() {
+  const count = _selectedProducts.size;
+  const toolbar = document.getElementById('bulk-toolbar');
+  const selCount = document.getElementById('bulk-sel-count');
+  const delBtn = document.getElementById('bulk-delete-btn');
+  if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
+  if (selCount) selCount.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+  if (delBtn) delBtn.style.display = currentRole === 'superadmin' ? '' : 'none';
+}
+
+window.clearSelection = function() {
+  _selectedProducts.clear();
+  document.querySelectorAll('.prod-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-prods');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateBulkToolbar();
+};
+
+window.bulkAssignCollection = async function() {
+  if (!_selectedProducts.size) return;
+  const colInput = document.getElementById('bulk-collection-input');
+  const col = colInput?.value.trim();
+  if (!col) { toast('❌ Escribí el nombre de la colección'); return; }
+  if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
+  const batch = writeBatch(db);
+  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { collection: col, updatedAt: serverTimestamp() }));
+  try {
+    await batch.commit();
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
+    toast(`✅ Colección "${col}" asignada a ${_selectedProducts.size} productos`);
+    if (colInput) colInput.value = '';
+    clearSelection();
+    applyProductFilters();
+  } catch(e) { toast('❌ Error: ' + e.message); }
+};
+
+window.bulkActivate = async function(activate) {
+  if (!_selectedProducts.size) return;
+  const label = activate ? 'activar' : 'desactivar';
+  if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${_selectedProducts.size} producto(s)?`)) return;
+  const batch = writeBatch(db);
+  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { active: activate, updatedAt: serverTimestamp() }));
+  try {
+    await batch.commit();
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.active = activate; });
+    toast(`✅ ${_selectedProducts.size} productos ${activate ? 'activados' : 'desactivados'}`);
+    clearSelection();
+    applyProductFilters();
+  } catch(e) { toast('❌ Error: ' + e.message); }
+};
+
+window.bulkSetCategory = async function() {
+  if (!_selectedProducts.size) return;
+  const cat = document.getElementById('bulk-category-input')?.value;
+  if (!cat) { toast('❌ Seleccioná una categoría'); return; }
+  if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
+  const batch = writeBatch(db);
+  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { category: cat, updatedAt: serverTimestamp() }));
+  try {
+    await batch.commit();
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
+    toast(`✅ Categoría actualizada en ${_selectedProducts.size} productos`);
+    clearSelection();
+    applyProductFilters();
+  } catch(e) { toast('❌ Error: ' + e.message); }
+};
+
+window.bulkDelete = async function() {
+  if (!_selectedProducts.size) return;
+  if (currentRole !== 'superadmin') { toast('❌ Solo el superadmin puede eliminar masivamente'); return; }
+  const n = _selectedProducts.size;
+  if (!confirm(`⚠️ ¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;
+  if (!confirm(`Segunda confirmación: ¿confirmar la eliminación de ${n} productos?`)) return;
+  const batch = writeBatch(db);
+  _selectedProducts.forEach(id => batch.delete(doc(db, 'products', id)));
+  try {
+    await batch.commit();
+    const ids = new Set(_selectedProducts);
+    _allProducts = _allProducts.filter(p => !ids.has(p._docId));
+    toast(`🗑️ ${n} productos eliminados definitivamente`);
+    clearSelection();
+    applyProductFilters();
+  } catch(e) { toast('❌ Error: ' + e.message); }
+};
+
+// ══════════════════════════════════════════════
+// ORDERS: EDIT MODAL
+// ══════════════════════════════════════════════
+let _editingOrder = null;
+
+window.openOrderEdit = function(orderId) {
+  const o = allOrders.find(x => x.id === orderId);
+  if (!o) return;
+  _editingOrder = JSON.parse(JSON.stringify(o)); // deep copy
+
+  document.getElementById('oe-id').value = orderId;
+  document.getElementById('oe-short-id').textContent = '#' + orderId.slice(-6).toUpperCase();
+  document.getElementById('oe-name').value = o.userName || '';
+  document.getElementById('oe-phone').value = o.userPhone || '';
+  document.getElementById('oe-email').value = o.userEmail || '';
+  document.getElementById('oe-city').value = o.shipping?.city || o.city || '';
+  document.getElementById('oe-address').value = o.shipping?.address || o.address || '';
+  document.getElementById('oe-referencia').value = o.shipping?.referencia || o.referencia || '';
+  document.getElementById('oe-ship-method').value = o.shipping?.method || o.shippingMethod || 'delivery';
+  document.getElementById('oe-pay-method').value = o.payment?.method || o.paymentMethod || 'efectivo';
+  document.getElementById('oe-pay-status').value = o.payment?.status || o.paymentStatus || 'pendiente';
+  document.getElementById('oe-status').value = o.status || 'pendiente';
+  document.getElementById('oe-notes').value = o.adminNotes || o.notes || '';
+
+  renderOeItems();
+  document.getElementById('order-edit-overlay').style.display = '';
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeOrderEdit = function() {
+  document.getElementById('order-edit-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  _editingOrder = null;
+};
+
+function renderOeItems() {
+  const items = _editingOrder?.items || [];
+  const el = document.getElementById('oe-items');
+  const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
+  el.innerHTML = items.map((it, idx) => `
+    <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
+      ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center">📷</div>`}
+      <div style="flex:1;font-size:13px;font-weight:600">${it.name||'—'}</div>
+      <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
+      <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
+        onchange="updateOeItemQty(${idx}, this.value)" oninput="updateOeItemQty(${idx}, this.value)">
+      <div style="font-size:13px;font-weight:700;color:var(--adm-primary);min-width:90px;text-align:right">${fmt((it.price||0)*(it.qty||1))}</div>
+      <button onclick="removeOeItem(${idx})" style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
+    </div>
+  `).join('');
+  recalcOeTotals();
+}
+
+window.updateOeItemQty = function(idx, val) {
+  const q = Math.max(1, parseInt(val) || 1);
+  if (_editingOrder?.items[idx]) {
+    _editingOrder.items[idx].qty = q;
+    recalcOeTotals();
+    // update displayed subtotal for this item inline
+    const row = document.getElementById(`oe-item-${idx}`);
+    if (row) {
+      const priceEl = row.querySelectorAll('div')[3];
+      if (priceEl) priceEl.textContent = 'Gs. ' + Math.round((_editingOrder.items[idx].price||0)*q).toLocaleString('es-PY');
+    }
+  }
+};
+
+window.removeOeItem = function(idx) {
+  if (!_editingOrder) return;
+  if (_editingOrder.items.length <= 1) { toast('❌ El pedido debe tener al menos un producto'); return; }
+  _editingOrder.items.splice(idx, 1);
+  renderOeItems();
+};
+
+function recalcOeTotals() {
+  if (!_editingOrder) return;
+  const subtotal = (_editingOrder.items||[]).reduce((s, i) => s + (i.price||0)*(i.qty||1), 0);
+  const shipCost = _editingOrder.shippingCost || 0;
+  const total = subtotal + shipCost;
+  const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
+  const sub = document.getElementById('oe-subtotal-display');
+  const ship = document.getElementById('oe-ship-cost-display');
+  const tot = document.getElementById('oe-total-display');
+  if (sub) sub.textContent = fmt(subtotal);
+  if (ship) ship.textContent = fmt(shipCost);
+  if (tot) tot.textContent = fmt(total);
+  _editingOrder._calcSubtotal = subtotal;
+  _editingOrder._calcTotal = total;
+}
+
+window.saveOrderEdit = async function() {
+  const orderId = document.getElementById('oe-id').value;
+  if (!orderId || !_editingOrder) return;
+  const btn = document.getElementById('oe-save-btn');
+  btn.disabled = true; btn.textContent = 'Guardando…';
+
+  const subtotal = _editingOrder._calcSubtotal ?? (_editingOrder.subtotal || 0);
+  const total    = _editingOrder._calcTotal ?? (_editingOrder.total || 0);
+
+  const updateData = {
+    userName:    document.getElementById('oe-name').value.trim(),
+    userPhone:   document.getElementById('oe-phone').value.trim(),
+    userEmail:   document.getElementById('oe-email').value.trim(),
+    status:      document.getElementById('oe-status').value,
+    paymentStatus: document.getElementById('oe-pay-status').value,
+    adminNotes:  document.getElementById('oe-notes').value.trim(),
+    items:       _editingOrder.items,
+    subtotal,
+    total,
+    'payment.method': document.getElementById('oe-pay-method').value,
+    'payment.status': document.getElementById('oe-pay-status').value,
+    'shipping.city':       document.getElementById('oe-city').value.trim(),
+    'shipping.address':    document.getElementById('oe-address').value.trim(),
+    'shipping.referencia': document.getElementById('oe-referencia').value.trim(),
+    'shipping.method':     document.getElementById('oe-ship-method').value,
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    await updateDoc(doc(db, 'orders', orderId), updateData);
+    // Sync local array
+    const idx = allOrders.findIndex(x => x.id === orderId);
+    if (idx >= 0) {
+      Object.assign(allOrders[idx], {
+        userName: updateData.userName,
+        userPhone: updateData.userPhone,
+        userEmail: updateData.userEmail,
+        status: updateData.status,
+        paymentStatus: updateData.paymentStatus,
+        adminNotes: updateData.adminNotes,
+        items: updateData.items,
+        subtotal,
+        total,
+        payment: { method: updateData['payment.method'], status: updateData['payment.status'] },
+        shipping: {
+          city: updateData['shipping.city'],
+          address: updateData['shipping.address'],
+          referencia: updateData['shipping.referencia'],
+          method: updateData['shipping.method'],
+        },
+      });
+    }
+    toast('✅ Pedido actualizado');
+    closeOrderEdit();
+    renderOrdersTable(allOrders);
+  } catch(e) {
+    toast('❌ Error al guardar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Guardar cambios';
+  }
+};
+
 </script>
+
+
+<!-- ══════════════════════════════════════
+     ORDER EDIT MODAL
+══════════════════════════════════════ -->
+<div id="order-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
+  <div style="background:#fff;border-radius:16px;max-width:780px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
+      <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">✏️ Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
+      <button onclick="closeOrderEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+    </div>
+    <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px" id="oe-body">
+      <input type="hidden" id="oe-id">
+      <!-- Cliente -->
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Nombre del cliente</label>
+        <input id="oe-name" type="text" class="adm-input" placeholder="Nombre">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Teléfono</label>
+        <input id="oe-phone" type="text" class="adm-input" placeholder="+595 981 000 000">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;grid-column:1/-1">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Email</label>
+        <input id="oe-email" type="email" class="adm-input" placeholder="cliente@email.com">
+      </div>
+      <!-- Envío -->
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Ciudad</label>
+        <input id="oe-city" type="text" class="adm-input" placeholder="Asunción">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Método de entrega</label>
+        <select id="oe-ship-method" class="adm-input">
+          <option value="delivery">🚚 Delivery</option>
+          <option value="encomienda">📦 Encomienda</option>
+          <option value="retiro">🏪 Retiro en tienda</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Dirección</label>
+        <input id="oe-address" type="text" class="adm-input" placeholder="Calle y número">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Referencia</label>
+        <input id="oe-referencia" type="text" class="adm-input" placeholder="Cerca de…">
+      </div>
+      <!-- Pago y estado -->
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Método de pago</label>
+        <select id="oe-pay-method" class="adm-input">
+          <option value="efectivo">💵 Efectivo</option>
+          <option value="transferencia">🏦 Transferencia</option>
+          <option value="pagopark">📱 PagoPark</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Estado de pago</label>
+        <select id="oe-pay-status" class="adm-input">
+          <option value="pendiente">⏳ Pendiente</option>
+          <option value="pagado">✅ Pagado</option>
+          <option value="rechazado">❌ Rechazado</option>
+          <option value="reembolsado">↩️ Reembolsado</option>
+          <option value="error">⚠️ Error</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Estado del pedido</label>
+        <select id="oe-status" class="adm-input">
+          <option value="pendiente">⏳ Pendiente</option>
+          <option value="confirmado">✅ Confirmado</option>
+          <option value="preparando">📦 Preparando</option>
+          <option value="enviado">🚚 Enviado</option>
+          <option value="entregado">🏠 Entregado</option>
+          <option value="cancelado">❌ Cancelado</option>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Nota interna</label>
+        <input id="oe-notes" type="text" class="adm-input" placeholder="Nota del admin…">
+      </div>
+      <!-- Items -->
+      <div style="grid-column:1/-1">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted);margin-bottom:10px">Productos del pedido</div>
+        <div id="oe-items" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+        <div style="display:flex;justify-content:flex-end;gap:16px;font-size:13px;padding:10px 0;border-top:1px solid var(--adm-border)">
+          <span>Subtotal: <strong id="oe-subtotal-display">—</strong></span>
+          <span>Envío: <strong id="oe-ship-cost-display">—</strong></span>
+          <span style="color:var(--adm-primary);font-weight:800;font-size:15px">TOTAL: <strong id="oe-total-display">—</strong></span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--adm-border);display:flex;gap:10px;justify-content:flex-end">
+      <button class="adm-btn" onclick="closeOrderEdit()">Cancelar</button>
+      <button class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn">💾 Guardar cambios</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
