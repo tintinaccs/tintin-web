@@ -3338,14 +3338,12 @@ window.saveOrderEdit = async function() {
   if (!phone) { toast('El teléfono del cliente es obligatorio'); document.getElementById('oe-phone').focus(); return; }
   const items = _editingOrder.items || [];
   if (items.some(i => !i.qty || i.qty < 1)) { toast('Las cantidades deben ser al menos 1'); return; }
-  const total = (_editingOrder._calcTotal ?? (_editingOrder.total || 0));
+  const total    = _editingOrder._calcTotal ?? (_editingOrder.total || 0);
+  const subtotal = _editingOrder._calcSubtotal ?? (_editingOrder.subtotal || 0);
   if (total < 0) { toast('El total no puede ser negativo'); return; }
 
   const btn = document.getElementById('oe-save-btn');
   btn.disabled = true; btn.textContent = 'Guardando…';
-
-  const subtotal = _editingOrder._calcSubtotal ?? (_editingOrder.subtotal || 0);
-  const total    = _editingOrder._calcTotal ?? (_editingOrder.total || 0);
 
   const updateData = {
     userName:    document.getElementById('oe-name').value.trim(),
