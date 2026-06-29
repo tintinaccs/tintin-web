@@ -575,9 +575,16 @@ import { loadImages, getImg } from './js/images.js';
     const applyHeroBg = () => {
       const w = window.innerWidth;
       const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
-      const url = getImg(slotId);
+      const url  = getImg(slotId);
+      const size = getImg(slotId + '_size') || 'cover';
+      const pos  = getImg(slotId + '_pos')  || 'center center';
       if (url) {
-        heroEl.style.backgroundImage = `url('${url}')`;
+        heroEl.style.backgroundImage    = `url('${url}')`;
+        heroEl.style.backgroundSize     = size;
+        heroEl.style.backgroundPosition = pos;
+        heroEl.style.backgroundRepeat   = 'no-repeat';
+      } else {
+        heroEl.style.backgroundImage = '';
       }
     };
     applyHeroBg();

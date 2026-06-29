@@ -163,6 +163,17 @@
     }
     .adm-url-input:focus { border-color: var(--rose); }
 
+    /* ── HERO CONTROLS ── */
+    .adm-hero-controls { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+    .adm-hero-ctrl-row { display: flex; align-items: center; gap: 10px; }
+    .adm-hero-ctrl-row label { font-size: 0.75rem; font-weight: 600; color: #888; min-width: 64px; }
+    .adm-hero-select {
+      flex: 1; padding: 7px 10px; border: 1.5px solid #e8d0d9; border-radius: 8px;
+      font-family: var(--font); font-size: 0.82rem; background: #fff; color: #333;
+      cursor: pointer; outline: none;
+    }
+    .adm-hero-select:focus { border-color: var(--rose); }
+
     /* ── BUTTONS ── */
     .adm-card-btns { display: flex; gap: 8px; }
     .adm-btn-save {
@@ -376,6 +387,40 @@ function renderSection(section) {
         + `<div class="adm-preview-empty" style="display:none"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Error cargando imagen</span></div>`
       : `<div class="adm-preview-empty"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Sin imagen</span></div>`;
 
+    const isHero = slot.id.startsWith('hero_bg_');
+    const curSize = isHero ? (getImg(slot.id + '_size') || 'cover') : '';
+    const curPos  = isHero ? (getImg(slot.id + '_pos')  || 'center center') : '';
+
+    const heroControls = isHero ? `
+      <div class="adm-hero-controls">
+        <div class="adm-hero-ctrl-row">
+          <label>Tamaño</label>
+          <select id="size-${slot.id}" class="adm-hero-select">
+            <option value="cover"   ${curSize==='cover'   ?'selected':''}>Cubrir todo (cover)</option>
+            <option value="contain" ${curSize==='contain' ?'selected':''}>Contener (contain)</option>
+            <option value="auto"    ${curSize==='auto'    ?'selected':''}>Tamaño real (auto)</option>
+            <option value="80%"     ${curSize==='80%'     ?'selected':''}>80%</option>
+            <option value="60%"     ${curSize==='60%'     ?'selected':''}>60%</option>
+            <option value="50%"     ${curSize==='50%'     ?'selected':''}>50%</option>
+            <option value="40%"     ${curSize==='40%'     ?'selected':''}>40%</option>
+          </select>
+        </div>
+        <div class="adm-hero-ctrl-row">
+          <label>Posición</label>
+          <select id="pos-${slot.id}" class="adm-hero-select">
+            <option value="center center" ${curPos==='center center'?'selected':''}>Centro</option>
+            <option value="center top"    ${curPos==='center top'   ?'selected':''}>Arriba centro</option>
+            <option value="center bottom" ${curPos==='center bottom'?'selected':''}>Abajo centro</option>
+            <option value="left center"   ${curPos==='left center'  ?'selected':''}>Izquierda</option>
+            <option value="right center"  ${curPos==='right center' ?'selected':''}>Derecha</option>
+            <option value="left top"      ${curPos==='left top'     ?'selected':''}>Arriba izquierda</option>
+            <option value="right top"     ${curPos==='right top'    ?'selected':''}>Arriba derecha</option>
+            <option value="left bottom"   ${curPos==='left bottom'  ?'selected':''}>Abajo izquierda</option>
+            <option value="right bottom"  ${curPos==='right bottom' ?'selected':''}>Abajo derecha</option>
+          </select>
+        </div>
+      </div>` : '';
+
     return `
       <div class="adm-img-card" data-slot-id="${slot.id}">
         <div class="adm-card-top">
@@ -395,6 +440,7 @@ function renderSection(section) {
         <input type="url" class="adm-url-input" id="input-${slot.id}"
           placeholder="https://… pegar URL aquí"
           value="${url}" autocomplete="off" />
+        ${heroControls}
         <div class="adm-card-btns">
           <button class="adm-btn-save" data-save="${slot.id}">Guardar</button>
           <button class="adm-btn-clear" data-clear="${slot.id}">Quitar</button>
@@ -424,9 +470,17 @@ function updateCardUI(slotId, url) {
 async function saveSlot(slotId) {
   const input = document.getElementById(`input-${slotId}`);
   const url = input ? input.value.trim() : '';
+  const isHero = slotId.startsWith('hero_bg_');
+  const sizeEl = isHero ? document.getElementById(`size-${slotId}`) : null;
+  const posEl  = isHero ? document.getElementById(`pos-${slotId}`)  : null;
+  const size = sizeEl ? sizeEl.value : null;
+  const pos  = posEl  ? posEl.value  : null;
   try {
-    await setDoc(doc(db, 'settings', 'images'), { [slotId]: url || null }, { merge: true });
+    const data = { [slotId]: url || null };
+    if (isHero) { data[slotId + '_size'] = size; data[slotId + '_pos'] = pos; }
+    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
     setImgCache(slotId, url);
+    if (isHero) { setImgCache(slotId + '_size', size); setImgCache(slotId + '_pos', pos); }
     updateCardUI(slotId, url);
     showToast(url ? '✅ Imagen guardada' : '✅ Imagen quitada');
   } catch (e) {
@@ -439,9 +493,13 @@ async function saveSlot(slotId) {
 async function clearSlot(slotId) {
   const input = document.getElementById(`input-${slotId}`);
   if (input) input.value = '';
+  const isHero = slotId.startsWith('hero_bg_');
   try {
-    await setDoc(doc(db, 'settings', 'images'), { [slotId]: null }, { merge: true });
+    const data = { [slotId]: null };
+    if (isHero) { data[slotId + '_size'] = null; data[slotId + '_pos'] = null; }
+    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
     setImgCache(slotId, '');
+    if (isHero) { setImgCache(slotId + '_size', ''); setImgCache(slotId + '_pos', ''); }
     updateCardUI(slotId, '');
     showToast('✅ Imagen quitada');
   } catch (e) {
