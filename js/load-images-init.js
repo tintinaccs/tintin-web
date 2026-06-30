@@ -10,11 +10,14 @@ import { loadImages } from './images.js';
 loadImages().then(() => {
   // Re-render product grids now that tt_images is populated
   if (typeof window.renderProductsGrid === 'function' && Array.isArray(window.PRODUCTS)) {
-    ['products-grid', 'colls-products-grid', 'related-grid'].forEach(id => {
+    ['colls-products-grid', 'related-grid'].forEach(id => {
       if (document.getElementById(id)) {
         window.renderProductsGrid(id, window.PRODUCTS);
       }
     });
+    if (document.getElementById('products-grid')) {
+      window.renderProductsGrid('products-grid', window.PRODUCTS.slice(0, 6));
+    }
   }
   // Re-render look combinator
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {

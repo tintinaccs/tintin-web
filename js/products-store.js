@@ -103,9 +103,12 @@ loadProducts().then(products => {
 
   // Re-render homepage product grids
   if (typeof window.renderProductsGrid === 'function') {
-    ['products-grid', 'colls-products-grid', 'related-grid'].forEach(id => {
+    ['colls-products-grid', 'related-grid'].forEach(id => {
       if (document.getElementById(id)) window.renderProductsGrid(id, products);
     });
+    if (document.getElementById('products-grid')) {
+      window.renderProductsGrid('products-grid', products.slice(0, 6));
+    }
   }
 
   // Re-render look combinator
