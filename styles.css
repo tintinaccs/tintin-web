@@ -262,35 +262,22 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* Logo */
 .tt-logo-link {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   text-decoration: none;
   flex-shrink: 0;
 }
 
-.tt-logo-text {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  transition: color var(--transition);
+.tt-logo-img {
+  height: 44px;   /* desktop */
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
-.tt-logo-sub {
-  font-family: var(--font-body);
-  font-size: 0.55rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-top: 2px;
-  transition: color var(--transition);
+/* Menu drawer logo — slightly larger since it's on white bg */
+.tt-logo-img--menu {
+  height: 52px;
 }
-
-.tt-header.scrolled .tt-logo-text { color: var(--pink-dark); }
-.tt-header.scrolled .tt-logo-sub  { color: var(--text-muted); }
 
 /* Nav */
 .tt-nav {
@@ -2744,6 +2731,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     order: 2;
     align-items: center;
   }
+  .tt-logo-img { height: 36px; }  /* tablet/mobile — slightly smaller */
   .tt-header-actions {
     justify-self: end;
     order: 3;
