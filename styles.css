@@ -834,10 +834,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-quick-cats {
   display: none; /* hidden on desktop */
   background: var(--bg);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
   overflow: hidden;
-  /* Normal block flow — no sticky/fixed, no z-index conflicts */
 }
 
 .tt-quick-cats-inner {
@@ -877,8 +874,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 ═══════════════════════════════════════════════ */
 .tt-trust-bar {
   background: var(--bg);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
   padding: 48px 0;
 }
 
@@ -945,7 +940,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   flex-direction: column;
   justify-content: center;
   padding: 64px 72px;
-  background: #fff;
+  background: var(--bg);
 }
 
 .tt-editorial-eyebrow {
@@ -1048,7 +1043,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    COMPLETÁ TU LOOK
 ═══════════════════════════════════════════════ */
-.tt-look-section { background: var(--bg); border-top: 1px solid var(--border); }
+.tt-look-section { background: var(--bg); }
 
 .tt-look-header {
   text-align: center;
@@ -1128,7 +1123,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   grid-template-columns: 1fr 1fr;
   min-height: 560px;
   background: var(--bg);
-  border-top: 1px solid var(--border);
 }
 
 .tt-watch-feature-img {
@@ -1337,7 +1331,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    REVIEWS
 ═══════════════════════════════════════════════ */
-.tt-reviews-section { background: var(--bg); border-top: 1px solid var(--border); }
+.tt-reviews-section { background: var(--bg); }
 
 .tt-reviews-header {
   text-align: center;
