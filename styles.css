@@ -841,27 +841,25 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 /* ═══════════════════════════════════════════════
    QUICK CATEGORIES STRIP
-   Only visible on mobile/tablet — desktop uses TIENDA dropdown
+   Desktop (>1024px): hidden — TIENDA dropdown covers all categories
+   Tablet/Mobile (≤1024px): visible block after the hero section
 ═══════════════════════════════════════════════ */
 .tt-quick-cats {
   display: none; /* hidden on desktop */
   background: #fff;
+  border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 0;
   overflow: hidden;
-  position: sticky;
-  top: var(--header-h);   /* sticks just below the fixed header */
-  z-index: calc(var(--z-header) - 1);
+  /* Normal block flow — no sticky/fixed, no z-index conflicts */
 }
 
 .tt-quick-cats-inner {
   display: flex;
   align-items: center;
-  gap: 0;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  padding: 0 12px;
+  padding: 0 8px;
 }
 .tt-quick-cats-inner::-webkit-scrollbar { display: none; }
 
@@ -869,11 +867,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  padding: 10px 14px;
+  padding: 11px 14px;
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-mid);
   text-decoration: none;
