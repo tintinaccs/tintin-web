@@ -619,6 +619,12 @@ function _showProductsSkeleton(containerId, count = 4) {
 /* ──────────────────────────────────────
    RENDER PRODUCTS GRID
 ────────────────────────────────────── */
+function _onProductImgError(img) {
+  img.style.display = 'none';
+  img.insertAdjacentHTML('afterend', '<div class="tt-prod-placeholder tt-prod-ph-svg"></div>');
+}
+window._onProductImgError = _onProductImgError;
+
 function renderProductsGrid(containerId, products) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -628,7 +634,7 @@ function renderProductsGrid(containerId, products) {
     const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
     const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\"tt-prod-placeholder tt-prod-ph-svg\\"></div>')">`
+      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
       : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
     return `
       <div class="tt-product-card" data-id="${p.id}">
