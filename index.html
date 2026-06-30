@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="tt-splash-lock">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -279,8 +279,16 @@
   }, SAFETY_MS);
 })();
 </script>
-<!-- Fallback: hide splash on window load in case the script above crashed -->
-<script>window.addEventListener('load',function(){var e=document.getElementById('tt-intro');if(e&&!e.classList.contains('tt-out')){e.classList.add('tt-out');setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},600);}});</script>
+<!-- Fallback: hide splash + unlock scroll on window load in case main script crashed -->
+<script>
+function _ttUnlock(){document.documentElement.classList.remove('tt-splash-lock');if(document.body)document.body.classList.remove('tt-splash-lock');}
+window.addEventListener('load',function(){
+  _ttUnlock();
+  var e=document.getElementById('tt-intro');
+  if(e&&!e.classList.contains('tt-out')){e.classList.add('tt-out');setTimeout(function(){_ttUnlock();if(e.parentNode)e.parentNode.removeChild(e);},600);}
+});
+setTimeout(function(){_ttUnlock();},5500);
+</script>
 
 <!-- ══════════════════════════════════════
      HEADER
