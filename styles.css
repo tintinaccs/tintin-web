@@ -3022,6 +3022,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   background: #ffffff;
   transition: opacity 0.25s ease, visibility 0.25s ease;
   overflow: hidden;
+  /* CSS-only safety: auto-fade after 5s even if JS crashes */
+  animation: tt-splash-autofade 0.6s ease 5s forwards;
+}
+
+@keyframes tt-splash-autofade {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
 }
 
 #tt-intro.tt-out,
@@ -3029,6 +3035,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  animation: none;
 }
 
 /* ── Home intro: logo ── */

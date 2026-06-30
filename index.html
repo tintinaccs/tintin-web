@@ -318,6 +318,8 @@
   }, SAFETY_MS);
 })();
 </script>
+<!-- Fallback: hide splash on window load in case the script above crashed -->
+<script>window.addEventListener('load',function(){var e=document.getElementById('tt-intro');if(e&&!e.classList.contains('tt-out')){e.classList.add('tt-out');setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e);},600);}});</script>
 
 <!-- ══════════════════════════════════════
      HEADER
