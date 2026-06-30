@@ -2740,8 +2740,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Hide desktop nav */
   .tt-nav { display: none; }
 
-  /* Show quick cats on tablet/mobile */
-  .tt-quick-cats { display: block; }
+  /* Quick cats hidden on all screen sizes */
 
   .tt-collections-grid { grid-template-columns: repeat(4, 1fr); }
   .tt-products-grid { grid-template-columns: repeat(3, 1fr); }
