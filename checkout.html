@@ -634,6 +634,20 @@
       </div>
       <div class="ck-error" id="error-0"></div>
       <button class="ck-btn" id="btn-step1-next">Continuar con el envío →</button>
+      <div class="ck-trust-bar">
+        <div class="ck-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra protegida
+        </div>
+        <div class="ck-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Envíos a todo Paraguay
+        </div>
+        <div class="ck-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Atención por WhatsApp
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1200,7 +1214,7 @@ document.getElementById('btn-step4-next').onclick = async () => {
     if (!exp || exp.length < 5) { showError(3, 'Ingresá la fecha de vencimiento.'); return; }
     if (!cvv || cvv.length < 3) { showError(3, 'Ingresá el CVV.'); return; }
     document.getElementById('card-approved-msg').style.display = 'block';
-    console.log('Payment approved (simulation)');
+    /* payment simulation approved */
     await new Promise(r => setTimeout(r, 800));
   }
 

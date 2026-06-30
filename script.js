@@ -506,7 +506,23 @@ function initSearch() {
   if (btnClose) btnClose.addEventListener('click', closeSearch);
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && panel.classList.contains('open')) closeSearch();
+    if (!panel.classList.contains('open')) return;
+    if (e.key === 'Escape') { closeSearch(); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const items = results.querySelectorAll('.tt-search-result-item');
+      if (!items.length) return;
+      const focused = results.querySelector('.tt-search-focus');
+      let idx = focused ? Array.from(items).indexOf(focused) : -1;
+      if (focused) focused.classList.remove('tt-search-focus');
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, items.length - 1) : Math.max(idx - 1, 0);
+      items[idx].classList.add('tt-search-focus');
+      items[idx].scrollIntoView({ block: 'nearest' });
+    }
+    if (e.key === 'Enter') {
+      const focused = results.querySelector('.tt-search-focus');
+      if (focused) focused.click();
+    }
   });
 
   if (input && results) {
@@ -898,6 +914,60 @@ function _renderProductDetail(product) {
     btnWA.href = undefined;
   }
 
+  // Share buttons
+  const shareEl = document.getElementById('product-share');
+  if (shareEl) {
+    const shareUrl = window.location.href;
+    const shareText = `¡Mirá este accesorio de TINTIN! ${product.name} — ${formatPrice(product.price)}`;
+    const waHref = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+    let html = `<span class="tt-share-label">Compartir</span>`;
+    if (navigator.share) {
+      html += `<button class="tt-share-btn" id="btn-native-share">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartir
+      </button>`;
+    }
+    html += `<a href="${waHref}" target="_blank" rel="noopener" class="tt-share-btn tt-share-btn-wa">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.543 4.09 1.5 5.828L0 24l6.343-1.475A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.868 0-3.636-.498-5.17-1.37l-.371-.21-3.768.877.895-3.669-.231-.389C2.51 15.583 2 13.84 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      WhatsApp
+    </a>`;
+    html += `<button class="tt-share-btn" id="btn-copy-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      Copiar enlace
+    </button>`;
+    shareEl.innerHTML = html;
+
+    const btnNative = document.getElementById('btn-native-share');
+    if (btnNative) btnNative.addEventListener('click', () => {
+      navigator.share({ title: product.name, text: shareText, url: shareUrl }).catch(() => {});
+    });
+
+    const btnCopy = document.getElementById('btn-copy-link');
+    if (btnCopy) btnCopy.addEventListener('click', () => {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const orig = btnCopy.innerHTML;
+        btnCopy.textContent = '✓ ¡Copiado!';
+        setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
+      }).catch(() => {});
+    });
+  }
+
+  // Gallery: click to open lightbox
+  if (galleryMain && allImages.length > 0) {
+    let _lbIdx = 0;
+    galleryMain.addEventListener('click', () => _openLightbox(allImages, _lbIdx));
+    // Update index when thumb changes
+    const thumbsContainer = document.getElementById('gallery-thumbs');
+    if (thumbsContainer) {
+      const origThumbClick = window._galleryThumbClick;
+      window._galleryThumbClick = (el) => {
+        if (origThumbClick) origThumbClick(el);
+        const thumbs = thumbsContainer.querySelectorAll('.tt-gallery-thumb');
+        thumbs.forEach((t, i) => { if (t === el || t.contains(el)) _lbIdx = i; });
+      };
+    }
+  }
+
   // Helper: get selected variant string
   function getSelectedVariant() {
     if (!variantsContainer || !product.variants || !Object.keys(product.variants).length) return null;
@@ -1035,6 +1105,116 @@ function initGalleryThumbs() {
       thumbs.forEach(t => t.classList.remove('active'));
       thumb.classList.add('active');
     });
+  });
+}
+
+/* ──────────────────────────────────────
+   LIGHTBOX
+────────────────────────────────────── */
+let _lbImages = [], _lbCur = 0;
+
+function _openLightbox(images, startIdx) {
+  _lbImages = images.filter(Boolean);
+  if (!_lbImages.length) return;
+  _lbCur = startIdx || 0;
+
+  let lb = document.getElementById('tt-lightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'tt-lightbox';
+    lb.className = 'tt-lightbox';
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-label', 'Imagen ampliada');
+    lb.innerHTML = `
+      <button class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <button class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
+      <img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false">
+      <button class="tt-lightbox-nav tt-lightbox-next" id="lb-next" aria-label="Siguiente">›</button>
+      <div class="tt-lightbox-counter" id="lb-counter"></div>
+    `;
+    document.body.appendChild(lb);
+
+    document.getElementById('lb-close').addEventListener('click', _closeLightbox);
+    lb.addEventListener('click', (e) => { if (e.target === lb) _closeLightbox(); });
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); _lbNav(-1); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); _lbNav(1); });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') _closeLightbox();
+      if (e.key === 'ArrowLeft') _lbNav(-1);
+      if (e.key === 'ArrowRight') _lbNav(1);
+    });
+
+    // Swipe support (mobile)
+    let _tsx = 0;
+    lb.addEventListener('touchstart', (e) => { _tsx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - _tsx;
+      if (Math.abs(dx) > 50) _lbNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+
+  _lbUpdate();
+  requestAnimationFrame(() => lb.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function _lbUpdate() {
+  const img = document.getElementById('lb-img');
+  const counter = document.getElementById('lb-counter');
+  const prev = document.getElementById('lb-prev');
+  const next = document.getElementById('lb-next');
+  if (img) img.src = _lbImages[_lbCur];
+  if (counter) counter.textContent = _lbImages.length > 1 ? `${_lbCur + 1} / ${_lbImages.length}` : '';
+  if (prev) prev.style.display = _lbImages.length > 1 ? '' : 'none';
+  if (next) next.style.display = _lbImages.length > 1 ? '' : 'none';
+}
+
+function _lbNav(dir) {
+  _lbCur = (_lbCur + dir + _lbImages.length) % _lbImages.length;
+  _lbUpdate();
+}
+
+function _closeLightbox() {
+  const lb = document.getElementById('tt-lightbox');
+  if (lb) lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ──────────────────────────────────────
+   BACK TO TOP
+────────────────────────────────────── */
+function initBackToTop() {
+  const btn = document.createElement('button');
+  btn.className = 'tt-back-to-top';
+  btn.setAttribute('aria-label', 'Volver al inicio');
+  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
+  document.body.appendChild(btn);
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 320);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+/* ──────────────────────────────────────
+   FAQ ACCORDION
+────────────────────────────────────── */
+function initFaqAccordion() {
+  document.querySelectorAll('.tt-faq-item').forEach(item => {
+    const q = item.querySelector('.tt-faq-q');
+    if (!q) return;
+    q.setAttribute('role', 'button');
+    q.setAttribute('tabindex', '0');
+    const toggle = () => {
+      const isOpen = item.classList.contains('tt-faq-open');
+      document.querySelectorAll('.tt-faq-item.tt-faq-open').forEach(i => i.classList.remove('tt-faq-open'));
+      if (!isOpen) item.classList.add('tt-faq-open');
+    };
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
   });
 }
 
@@ -1188,6 +1368,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Scroll reveal
   setTimeout(initScrollReveal, 100);
+  // Back to top
+  initBackToTop();
+  // FAQ accordion
+  initFaqAccordion();
 });
 
 /* expose for inline onclick usage and module re-render */

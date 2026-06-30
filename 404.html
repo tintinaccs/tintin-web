@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página no encontrada | TINTIN Accesorios & Relojes</title>
+  <meta name="description" content="La página que buscás no existe. Volvé al inicio de Tintin Accesorios & Relojes.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .tt-404-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      background: linear-gradient(160deg, #fffbfd 0%, #fef5f8 60%, #fdfbff 100%);
+    }
+    .tt-404-icon {
+      width: 120px;
+      height: 120px;
+      background: var(--pink-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      animation: tt-404-float 3s ease-in-out infinite;
+    }
+    @keyframes tt-404-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .tt-404-code {
+      font-family: var(--font-heading);
+      font-size: clamp(5rem, 20vw, 9rem);
+      font-weight: 700;
+      color: var(--pink-pale);
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .tt-404-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .tt-404-sub {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 380px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+    .tt-404-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tt-404-cats {
+      margin-top: 48px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 480px;
+    }
+    .tt-404-cat-link {
+      padding: 8px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-sec);
+      text-decoration: none;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+    .tt-404-cat-link:hover {
+      border-color: var(--pink-dark);
+      color: var(--pink-dark);
+      transform: translateY(-1px);
+    }
+    .tt-404-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="tt-404-wrap">
+
+  <div class="tt-404-icon">
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--pink-dark)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      <line x1="11" y1="8" x2="11" y2="12"/>
+      <circle cx="11" cy="15" r="0.5" fill="var(--pink-dark)"/>
+    </svg>
+  </div>
+
+  <div class="tt-404-code">404</div>
+  <h1 class="tt-404-title">Esta página no existe</h1>
+  <p class="tt-404-sub">Parece que el accesorio que buscabas se agotó… o nunca estuvo aquí. No te preocupes, tenemos miles de cositas hermosas esperándote.</p>
+
+  <div class="tt-404-actions">
+    <a href="index.html" class="tt-btn tt-btn-lg">← Volver al inicio</a>
+    <a href="catalogo.html" class="tt-btn tt-btn-lg tt-btn-outline">Ver catálogo</a>
+  </div>
+
+  <div class="tt-404-cats">
+    <a href="catalogo.html?cat=relojes" class="tt-404-cat-link">Relojes</a>
+    <a href="catalogo.html?cat=aros" class="tt-404-cat-link">Aros</a>
+    <a href="catalogo.html?cat=collares" class="tt-404-cat-link">Collares</a>
+    <a href="catalogo.html?cat=bolsos" class="tt-404-cat-link">Bags</a>
+    <a href="catalogo.html?cat=pulseras" class="tt-404-cat-link">Pulseras</a>
+    <a href="catalogo.html?cat=anillos" class="tt-404-cat-link">Anillos</a>
+  </div>
+
+  <p class="tt-404-hint">¿Necesitás ayuda? <a href="https://wa.me/595981299331" target="_blank" rel="noopener" style="color:var(--pink-dark)">Escribinos por WhatsApp</a></p>
+
+</div>
+
+<script type="module" src="js/auth-nav.js"></script>
+</body>
+</html>
