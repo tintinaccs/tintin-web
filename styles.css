@@ -726,19 +726,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* No transition on first paint — avoids flash */
 }
 
-/* ── Dark gradient overlay: makes text readable over any photo ── */
-.tt-hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.18) 0%,
-    rgba(0,0,0,0.28) 45%,
-    rgba(0,0,0,0.40) 100%
-  );
-}
 
 /* ── Text content sits above overlay ── */
 .tt-hero-content {
