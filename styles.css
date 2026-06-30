@@ -696,8 +696,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* Fallback color shown for the split-second before the img paints */
-  background-color: #8b2642;
+  background-color: transparent;
 }
 
 /* ── Media container: fills hero, sits behind everything ── */
@@ -707,7 +706,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   z-index: 0;
   width: 100%;
   height: 100%;
-  background-color: #8b2642; /* placeholder while img decodes */
+  background-color: transparent;
 }
 
 .tt-hero-media picture {
