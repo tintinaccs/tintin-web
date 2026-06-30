@@ -3018,8 +3018,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fce4ec;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  background: #0d0009;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
   overflow: hidden;
 }
 
@@ -3032,21 +3032,29 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 /* ── Home intro: logo ── */
 #tt-intro-logo {
-  width: clamp(100px, 28vw, 200px);
+  width: clamp(120px, 30vw, 220px);
   height: auto;
   aspect-ratio: 320 / 400;
   object-fit: contain;
   opacity: 0;
   transform: scale(0.88);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
   user-select: none;
   will-change: opacity, transform;
+  filter: drop-shadow(0 0 32px rgba(184,76,114,0.55));
 }
 
 #tt-intro-logo.tt-visible {
   opacity: 1;
   transform: scale(1);
+  animation: tt-logo-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tt-logo-pulse {
+  0%   { transform: scale(1);    filter: drop-shadow(0 0 28px rgba(184,76,114,0.45)); }
+  50%  { transform: scale(1.07); filter: drop-shadow(0 0 48px rgba(184,76,114,0.75)); }
+  100% { transform: scale(1);    filter: drop-shadow(0 0 28px rgba(184,76,114,0.45)); }
 }
 
 /* ── Page loader: gear + dots ── */
@@ -3098,5 +3106,5 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   }
   .tt-gear-svg  { animation: none; }
   .tt-loader-dots span { animation: none; opacity: 0.6; }
-  #tt-intro-logo { transition: none; }
+  #tt-intro-logo { transition: none; animation: none; }
 }
