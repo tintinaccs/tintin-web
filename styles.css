@@ -2731,6 +2731,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Mobile hero */
   .tt-hero { min-height: 560px; }
   .tt-hero-content { padding: 0 20px; padding-bottom: 72px; /* clear tabbar */ }
+  .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
   .tt-hero-pills { gap: 7px; }
   .tt-hero-pill { font-size: 0.68rem; padding: 5px 11px; }
   .tt-hero-actions { flex-direction: column; gap: 10px; align-items: center; }
