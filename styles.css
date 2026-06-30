@@ -15,9 +15,10 @@
   --gold:        #c9a96e;
   --gold-hover:  #b8934e;
   --gold-light:  #f5ead0;
-  --text:        #1a1a1a;
-  --text-sec:    #555555;
-  --text-muted:  #888888;
+  --text:        #C86B86;
+  --text-sec:    #C86B86;
+  --text-muted:  #d48fa6;
+  --text-title:  #EA7EA3;
   --border:      #f0d8e0;
   --white:       #ffffff;
   --whatsapp:    #25d366;
@@ -70,13 +71,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 input, textarea, select { font-family: inherit; }
 
 /* ── Typography ── */
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; color: var(--text-title); }
 
 .tt-section-title {
   font-family: var(--font-heading);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-title);
   letter-spacing: 0.02em;
   margin-bottom: 0.5rem;
 }
@@ -849,7 +850,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: var(--font-heading);
   font-size: clamp(3.5rem, 8vw, 7rem);
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-title);
   line-height: 0.95;
   letter-spacing: 0.05em;
   margin-bottom: 16px;
@@ -1053,7 +1054,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: var(--font-heading);
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-title);
   line-height: 1.15;
   margin-bottom: 20px;
 }
@@ -1254,7 +1255,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: var(--font-heading);
   font-size: clamp(1.8rem, 3vw, 2.8rem);
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-title);
   line-height: 1.15;
   margin-bottom: 20px;
 }
