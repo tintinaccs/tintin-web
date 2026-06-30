@@ -232,16 +232,21 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
    HEADER
 ═══════════════════════════════════════════════ */
 .tt-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  transition: box-shadow var(--transition), padding var(--transition);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: var(--z-header);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
 .tt-header.scrolled {
-  box-shadow: 0 2px 20px rgba(180,76,114,0.1);
+  background: var(--white);
+  border-bottom-color: var(--border);
+  box-shadow: 0 2px 20px rgba(180,76,114,0.08);
 }
 
 .tt-header-inner {
@@ -266,20 +271,25 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--pink-dark);
+  color: #fff;
   letter-spacing: 0.12em;
   line-height: 1;
+  transition: color var(--transition);
 }
 
 .tt-logo-sub {
   font-family: var(--font-body);
   font-size: 0.55rem;
   font-weight: 500;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.75);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   margin-top: 2px;
+  transition: color var(--transition);
 }
+
+.tt-header.scrolled .tt-logo-text { color: var(--pink-dark); }
+.tt-header.scrolled .tt-logo-sub  { color: var(--text-muted); }
 
 /* Nav */
 .tt-nav {
@@ -297,7 +307,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text);
+  color: #fff;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   transition: color var(--transition), background var(--transition);
@@ -310,6 +320,18 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-nav > a:hover,
 .tt-nav-dropdown > button:hover,
 .tt-nav > a.active {
+  color: #fff;
+  background: rgba(255,255,255,0.18);
+}
+
+.tt-header.scrolled .tt-nav > a,
+.tt-header.scrolled .tt-nav-dropdown > button {
+  color: var(--text);
+}
+
+.tt-header.scrolled .tt-nav > a:hover,
+.tt-header.scrolled .tt-nav-dropdown > button:hover,
+.tt-header.scrolled .tt-nav > a.active {
   color: var(--pink-dark);
   background: var(--pink-pale);
 }
@@ -408,7 +430,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-pill);
-  color: var(--text);
+  color: #fff;
   transition: var(--transition);
   position: relative;
   background: none;
@@ -418,6 +440,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-header-actions button:hover,
 .tt-header-actions a:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+
+.tt-header.scrolled .tt-header-actions button,
+.tt-header.scrolled .tt-header-actions a {
+  color: var(--text);
+}
+
+.tt-header.scrolled .tt-header-actions button:hover,
+.tt-header.scrolled .tt-header-actions a:hover {
   background: var(--pink-pale);
   color: var(--pink-dark);
 }
@@ -465,12 +498,15 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-menu-toggle {
   display: none;
   font-size: 1.4rem;
-  color: var(--text);
+  color: #fff;
   background: none;
   border: none;
   cursor: pointer;
   padding: 8px;
+  transition: color var(--transition);
 }
+
+.tt-header.scrolled .tt-menu-toggle { color: var(--text); }
 
 /* ── Mobile Menu Overlay ── */
 .tt-mobile-menu {
@@ -1719,7 +1755,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 ═══════════════════════════════════════════════ */
 .tt-page-hero {
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-  padding: 80px 0 64px;
+  padding: calc(var(--header-h) + 48px) 0 64px;
   text-align: center;
 }
 
