@@ -795,9 +795,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   min-height: 680px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  /* dark placeholder that matches the hero tone — hides progressive WebP load */
+  justify-content: flex-start;
+  text-align: left;
   background: #1a0610;
 }
 
@@ -842,7 +841,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.78);
+  color: var(--text);
   margin-bottom: 14px;
 }
 
@@ -850,11 +849,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: var(--font-heading);
   font-size: clamp(3.5rem, 8vw, 7rem);
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   line-height: 0.95;
   letter-spacing: 0.05em;
   margin-bottom: 16px;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
 }
 
 .tt-hero-tagline {
@@ -901,29 +899,28 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-hero-actions {
   display: flex;
   gap: 14px;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
-/* Primary hero button: white fill / pink text */
+/* Primary hero button: pink fill */
 .tt-hero-actions .tt-btn:not(.tt-btn-outline) {
-  background: #fff;
-  color: var(--pink-dark);
-  border-color: #fff;
+  background: var(--pink-dark);
+  color: #fff;
+  border-color: var(--pink-dark);
   font-weight: 700;
 }
 .tt-hero-actions .tt-btn:not(.tt-btn-outline):hover {
-  background: rgba(255,255,255,0.92);
-  color: var(--rose);
+  background: var(--rose);
+  border-color: var(--rose);
 }
-/* Outline hero button: white border / white text */
+/* Outline hero button: dark border / dark text */
 .tt-hero-actions .tt-btn-outline {
-  border-color: rgba(255,255,255,0.65);
-  color: #fff;
+  border-color: var(--text);
+  color: var(--text);
 }
 .tt-hero-actions .tt-btn-outline:hover {
-  background: rgba(255,255,255,0.14);
-  border-color: #fff;
+  background: rgba(0,0,0,0.06);
 }
 
 /* ═══════════════════════════════════════════════
@@ -2817,10 +2814,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-product-trust-badges { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* Tablet hero */
-  .tt-hero { min-height: 620px; }
+  /* Tablet hero — content lower, image anchored to top */
+  .tt-hero { min-height: 620px; align-items: flex-end; justify-content: flex-start; }
+  .tt-hero-content { padding: 0 28px 60px; }
+  .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(3rem, 10vw, 5rem); }
-  .tt-hero-sub { display: none; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -2830,13 +2828,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .container { padding: 0 16px; }
   .section { padding: 40px 0; }
 
-  /* Mobile hero */
-  .tt-hero { min-height: 560px; }
-  .tt-hero-content { padding: 0 20px; padding-bottom: 72px; /* clear tabbar */ }
+  /* Mobile hero — content lower, image anchored to top */
+  .tt-hero { min-height: 560px; align-items: flex-end; justify-content: flex-start; }
+  .tt-hero-content { padding: 0 20px 80px; /* clear tabbar */ }
+  .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
-  .tt-hero-pills { gap: 7px; }
-  .tt-hero-pill { font-size: 0.68rem; padding: 5px 11px; }
-  .tt-hero-actions { flex-direction: column; gap: 10px; align-items: center; }
+  .tt-hero-actions { flex-direction: column; gap: 10px; align-items: flex-start; }
   .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
