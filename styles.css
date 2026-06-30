@@ -3018,7 +3018,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: #fce4ec;
   transition: opacity 0.55s ease, visibility 0.55s ease;
   overflow: hidden;
 }
