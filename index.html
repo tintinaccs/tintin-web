@@ -243,16 +243,17 @@
 (function(){try{var c=JSON.parse(localStorage.getItem('tt_images')||'null');if(!c)return;var w=window.innerWidth,s=w>=1024?'hero_bg_desktop':w>=768?'hero_bg_tablet':'hero_bg_mobile',u=c[s];if(!u)return;var el=document.getElementById('hero');if(el){el.style.backgroundImage='url(\''+u+'\')';el.style.backgroundSize=c[s+'_size']||'cover';el.style.backgroundPosition=c[s+'_pos']||'center center';el.style.backgroundRepeat='no-repeat';}}catch(e){}}());
 </script>
   <div class="tt-hero-content">
-    <p class="tt-hero-eyebrow">Bienvenidas a</p>
+    <p class="tt-hero-eyebrow">Accesorios exclusivos &middot; Paraguay</p>
     <h1 class="tt-hero-title">TINTIN</h1>
-    <p class="tt-hero-tagline">BRILLO, ESTILO Y MUCHA PERSONALIDAD</p>
+    <p class="tt-hero-tagline">Relojes y accesorios únicos — 1 unidad por modelo</p>
+    <p class="tt-hero-sub">Elegí tu favorito antes de que se vaya</p>
     <div class="tt-hero-pills">
       <span class="tt-hero-pill">1 unidad por modelo</span>
       <span class="tt-hero-pill">Envíos a todo Paraguay</span>
       <span class="tt-hero-pill">Atención personalizada</span>
     </div>
     <div class="tt-hero-actions">
-      <a href="catalogo.html" class="tt-btn tt-btn-lg">Comprar ahora →</a>
+      <a href="catalogo.html" class="tt-btn tt-btn-lg">Comprar ahora</a>
       <a href="collections.html" class="tt-btn tt-btn-lg tt-btn-outline">Ver colecciones</a>
     </div>
   </div>
@@ -302,7 +303,7 @@
       </div>
     </div>
     <div class="tt-editorial-content">
-      <div class="tt-editorial-eyebrow">Colección BAG ✨</div>
+      <div class="tt-editorial-eyebrow">Colección Exclusiva</div>
       <h2 class="tt-editorial-title">EL COMPLEMENTO<br>QUE LO CAMBIA TODO</h2>
       <p class="tt-editorial-desc">
         Descubrí nuestra exclusiva colección de bags — el accesorio que transforma cualquier outfit en un look de revista. Diseños únicos pensados para la mujer moderna que quiere brillar sin esfuerzo.
@@ -381,7 +382,7 @@
   <div class="container">
     <div class="tt-look-header">
       <p class="tt-section-sub">Estilizate completa</p>
-      <h2 class="tt-section-title">COMPLETÁ TU LOOK ✨</h2>
+      <h2 class="tt-section-title">COMPLETÁ TU LOOK</h2>
       <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Combinaciones que se complementan perfectamente — armadas por nosotras para que vos solo elijas.</p>
     </div>
 
@@ -389,8 +390,8 @@
       <!-- Rendered by JS -->
     </div>
 
-    <div class="tt-look-actions">
-      <button class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación 🔀</button>
+    <div class="tt-look-actions" id="look-actions" style="display:none;">
+      <button class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación</button>
       <button class="tt-btn" id="btn-add-combo">Agregar esta combinación al carrito</button>
     </div>
   </div>
@@ -410,7 +411,7 @@
       </div>
     </div>
     <div class="tt-watch-feature-content">
-      <div class="tt-watch-eyebrow">Nueva colección ⌚</div>
+      <div class="tt-watch-eyebrow">Nueva colección</div>
       <h2 class="tt-watch-title">EL RELOJ DEL QUE<br>TODAS SE ENAMORAN</h2>
       <p class="tt-watch-desc">
         Relojes de acero inoxidable de alta calidad de la marca SKMEI y otras marcas de lujo asequible. Diseños elegantes, modernos y femeninos que se adaptan a cada estilo — del casual al más sofisticado.

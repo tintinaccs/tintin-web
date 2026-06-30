@@ -691,23 +691,58 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, #fffbfd 0%, #fef5f8 60%, #fdfbff 100%);
-  background-attachment: local;
-  /* Fade in the background image once it paints */
-  transition: background-image 0s, background-color 0.3s ease;
+  /* Rich brand gradient — intentional design, not a placeholder */
+  background: linear-gradient(145deg, #6b1a35 0%, #8b2642 25%, #b84c72 60%, #d4748e 85%, #e8a0b4 100%);
+  background-size: cover;
+  background-position: center;
 }
 
-/* When a BG image is applied, fade it in smoothly */
+/* Decorative blurry circle — top-right accent */
+.tt-hero::before {
+  content: '';
+  position: absolute;
+  top: -15%;
+  right: -10%;
+  width: clamp(280px, 50vw, 580px);
+  height: clamp(280px, 50vw, 580px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Warm shimmer — bottom-left accent */
+.tt-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -12%;
+  width: clamp(240px, 45vw, 520px);
+  height: clamp(240px, 45vw, 520px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.06) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+/* When a real photo is loaded via admin: dark overlay keeps text readable */
+.tt-hero[style*="background-image"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.08) 100%);
+}
+
+/* Smooth fade-in when BG image is applied */
 .tt-hero[style*="background-image"] {
-  animation: tt-hero-bg-in 0.6s ease both;
+  animation: tt-hero-bg-in 0.5s ease both;
 }
 
 @keyframes tt-hero-bg-in {
-  from { opacity: 0.5; }
+  from { opacity: 0.6; }
   to   { opacity: 1; }
 }
-
-.tt-hero::before { display: none; }
 
 .tt-hero-content {
   position: relative;
@@ -718,33 +753,43 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-hero-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--pink-dark);
-  margin-bottom: 12px;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 14px;
 }
 
 .tt-hero-title {
   font-family: var(--font-heading);
   font-size: clamp(3.5rem, 8vw, 7rem);
   font-weight: 700;
-  color: var(--pink-dark);
+  color: #fff;
   line-height: 0.95;
   letter-spacing: 0.05em;
   margin-bottom: 16px;
-  text-shadow: 0 2px 20px rgba(180,76,114,0.15);
+  text-shadow: 0 4px 32px rgba(0,0,0,0.25);
 }
 
 .tt-hero-tagline {
   font-family: var(--font-body);
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--rose);
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 8px;
+}
+
+.tt-hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 1.3vw, 0.82rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.65);
   margin-bottom: 32px;
+  font-style: italic;
 }
 
 .tt-hero-pills {
@@ -752,25 +797,45 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 .tt-hero-pill {
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.35);
-  color: #fff;
-  font-size: 0.78rem;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.32);
+  color: rgba(255,255,255,0.92);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 6px 14px;
+  letter-spacing: 0.06em;
+  padding: 7px 16px;
   border-radius: 20px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .tt-hero-actions {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+/* Hero buttons: primary solid white on this dark bg */
+.tt-hero-actions .tt-btn:not(.tt-btn-outline) {
+  background: #fff;
+  color: var(--pink-dark);
+  border-color: #fff;
+}
+.tt-hero-actions .tt-btn:not(.tt-btn-outline):hover {
+  background: rgba(255,255,255,0.9);
+  color: var(--rose);
+}
+.tt-hero-actions .tt-btn-outline {
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
+}
+.tt-hero-actions .tt-btn-outline:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
 }
 
 /* ═══════════════════════════════════════════════
@@ -878,6 +943,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* Reverse layout */
 .tt-editorial.reverse .tt-editorial-img { order: 2; }
 .tt-editorial.reverse .tt-editorial-content { order: 1; }
+
+/* Hide hardcoded SVG icon placeholders inside editorial/watch — gradient alone looks clean */
+.tt-editorial-img .tt-img-placeholder > div,
+.tt-watch-feature-img .tt-img-placeholder > div {
+  display: none;
+}
 
 /* ═══════════════════════════════════════════════
    COLLECTIONS GRID
@@ -2595,6 +2666,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
 
   .tt-hero-title { font-size: clamp(3rem, 12vw, 5rem); }
+  .tt-hero-sub { display: none; } /* clean up on tablet */
 }
 
 /* ═══════════════════════════════════════════════
@@ -2604,7 +2676,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .container { padding: 0 16px; }
   .section { padding: 40px 0; }
 
-  .tt-hero { height: 85vh; }
+  .tt-hero { height: 90vh; min-height: 520px; }
+  .tt-hero::before { width: 200px; height: 200px; top: -8%; right: -8%; }
+  .tt-hero::after  { width: 180px; height: 180px; bottom: -8%; left: -8%; }
+  .tt-hero-pills { gap: 8px; }
+  .tt-hero-pill { font-size: 0.7rem; padding: 5px 12px; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
 

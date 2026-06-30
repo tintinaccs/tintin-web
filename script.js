@@ -684,10 +684,19 @@ function renderLookCombo() {
 }
 
 function initLookCombinator() {
-  const btnOtra = document.getElementById('btn-otra-combo');
-  const btnAdd = document.getElementById('btn-add-combo');
+  const btnOtra    = document.getElementById('btn-otra-combo');
+  const btnAdd     = document.getElementById('btn-add-combo');
+  const lookActions = document.getElementById('look-actions');
+  const lookSection = document.getElementById('look-section');
+
+  const productPool = window.PRODUCTS || PRODUCTS;
+  if (!productPool || productPool.length === 0) {
+    if (lookSection) lookSection.style.display = 'none';
+    return;
+  }
 
   renderLookCombo();
+  if (lookActions) lookActions.style.display = '';
 
   if (btnOtra) {
     btnOtra.addEventListener('click', () => {
