@@ -1346,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       const grid = document.getElementById('products-grid');
       if (grid && grid.querySelector('.tt-skeleton-card')) {
-        renderProductsGrid('products-grid', window.PRODUCTS || PRODUCTS);
+        renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).slice(0, 6));
       }
     }, 4000);
   }
@@ -1386,7 +1386,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* expose for inline onclick usage and module re-render */
 window.addEventListener('tintin:products-loaded', () => {
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', window.PRODUCTS || PRODUCTS);
+    renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).slice(0, 6));
   }
 
   if (document.getElementById('colls-products-grid')) {
