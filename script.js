@@ -314,7 +314,7 @@ function renderCart() {
       <a href="checkout.html" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button onclick="closeCart()" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #eee;border-radius:50px;font-size:0.78rem;color:#888;cursor:pointer;font-family:inherit">
+      <button onclick="closeCart()" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #eee;border-radius:50px;font-size:0.78rem;color:#C86B86;cursor:pointer;font-family:inherit">
         Seguir comprando
       </button>
     `;
