@@ -19,10 +19,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="styles.css" as="style">
+  <link rel="preload" href="images/logo.png" as="image">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- ══ INTRO SPLASH (home only) ══ -->
+<div id="tt-intro" aria-hidden="true" role="presentation">
+  <img id="tt-intro-logo" src="images/logo.png" alt="" draggable="false" fetchpriority="high">
+</div>
+<script>
+(function () {
+  var START = Date.now();
+  var MIN_MS = 1100;
+  var logo = document.getElementById('tt-intro-logo');
+  if (logo) {
+    function onLogoReady() { logo.classList.add('tt-visible'); }
+    if (logo.complete && logo.naturalWidth) { onLogoReady(); }
+    else { logo.addEventListener('load', onLogoReady); }
+  }
+  function hideIntro() {
+    var el = document.getElementById('tt-intro');
+    if (!el || el.classList.contains('tt-out')) return;
+    el.classList.add('tt-out');
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+  }
+  window.addEventListener('load', function () {
+    var elapsed = Date.now() - START;
+    var wait = Math.max(0, MIN_MS - elapsed);
+    setTimeout(hideIntro, wait);
+  });
+  setTimeout(hideIntro, 4000); // safety cap
+})();
+</script>
 
 <!-- ══════════════════════════════════════
      HEADER
@@ -579,30 +609,33 @@
 <script type="module" src="js/products-store.js"></script>
 <script type="module">
 import { loadImages, getImg } from './js/images.js';
-(async () => {
-  await loadImages();
 
-  // Apply responsive hero background
-  const heroEl = document.getElementById('hero');
-  if (heroEl) {
-    const applyHeroBg = () => {
-      const w = window.innerWidth;
-      const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
-      const url  = getImg(slotId);
-      const size = getImg(slotId + '_size') || 'cover';
-      const pos  = getImg(slotId + '_pos')  || 'center center';
-      if (url) {
-        heroEl.style.backgroundImage    = `url('${url}')`;
-        heroEl.style.backgroundSize     = size;
-        heroEl.style.backgroundPosition = pos;
-        heroEl.style.backgroundRepeat   = 'no-repeat';
-      } else {
-        heroEl.style.backgroundImage = '';
-      }
-    };
-    applyHeroBg();
-    window.addEventListener('resize', applyHeroBg);
+const heroEl = document.getElementById('hero');
+
+const applyHeroBg = () => {
+  if (!heroEl) return;
+  const w = window.innerWidth;
+  const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
+  const url  = getImg(slotId);
+  const size = getImg(slotId + '_size') || 'cover';
+  const pos  = getImg(slotId + '_pos')  || 'center center';
+  if (url) {
+    heroEl.style.backgroundImage    = `url('${url}')`;
+    heroEl.style.backgroundSize     = size;
+    heroEl.style.backgroundPosition = pos;
+    heroEl.style.backgroundRepeat   = 'no-repeat';
+  } else {
+    heroEl.style.backgroundImage = '';
   }
+};
+
+// Apply from localStorage cache immediately (synchronous, no Firestore wait)
+applyHeroBg();
+window.addEventListener('resize', applyHeroBg);
+
+(async () => {
+  await loadImages(); // Fetches Firestore only when localStorage is empty
+  applyHeroBg();     // Re-apply in case data was refreshed
 
   // Populate all data-img-slot elements
   document.querySelectorAll('[data-img-slot]').forEach(el => {
