@@ -20,6 +20,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="styles.css" as="style">
   <link rel="preload" href="images/logo-splash.png" as="image" fetchpriority="high">
+  <!-- Hero image preloads — browser picks the matching one per breakpoint -->
+  <link rel="preload" as="image" href="images/hero/hero-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
+  <link rel="preload" as="image" href="images/hero/hero-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
+  <link rel="preload" as="image" href="images/hero/hero-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -31,14 +35,14 @@
 </div>
 <script>
 (function () {
-  var START        = Date.now();
-  var MIN_SHOW_MS  = 2200;   // minimum time intro is visible
-  var SAFETY_MS    = 6500;   // hard cap — never blocks longer than this
-  var logoReady    = false;
-  var heroReady    = false;
-  var hiding       = false;
+  var START       = Date.now();
+  var MIN_SHOW_MS = 1000;  // short minimum — hero image is local, loads fast
+  var SAFETY_MS   = 3000;  // hard cap
+  var logoReady   = false;
+  var heroReady   = false;
+  var hiding      = false;
 
-  /* ── Step 1: Show logo as soon as its tiny image loads ── */
+  /* ── 1. Logo splash ── */
   var logo = document.getElementById('tt-intro-logo');
   function onLogoLoad() {
     if (logoReady) return;
@@ -49,26 +53,24 @@
   if (logo.complete && logo.naturalWidth) { onLogoLoad(); }
   else { logo.addEventListener('load', onLogoLoad); logo.addEventListener('error', onLogoLoad); }
 
-  /* ── Step 2: Pre-load hero background from localStorage cache ── */
-  function preloadHero() {
-    try {
-      var cache = JSON.parse(localStorage.getItem('tt_images') || 'null');
-      if (!cache) { heroReady = true; return; }
-      var w = window.innerWidth;
-      var slot = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
-      var url = cache[slot];
-      if (!url) { heroReady = true; return; }
-      var img = new Image();
-      img.onload = img.onerror = function () { heroReady = true; tryHide(); };
-      img.src = url;
-    } catch (e) { heroReady = true; }
+  /* ── 2. Wait for the actual HTML hero <img> to decode — it's local, so fast ── */
+  function waitForHeroImg() {
+    var heroImg = document.getElementById('tt-hero-img');
+    if (!heroImg) { heroReady = true; return; }
+    if (heroImg.complete && heroImg.naturalWidth) { heroReady = true; return; }
+    heroImg.addEventListener('load',  function () { heroReady = true; tryHide(); });
+    heroImg.addEventListener('error', function () { heroReady = true; tryHide(); });
   }
-  preloadHero();
+  // Hero img is in the DOM after this script runs, so we can find it
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForHeroImg);
+  } else {
+    waitForHeroImg();
+  }
 
-  /* ── Step 3: Hide only when logo shown + hero loaded + min time elapsed ── */
+  /* ── 3. Hide when both ready + min time ── */
   function tryHide() {
-    if (hiding) return;
-    if (!logoReady || !heroReady) return;
+    if (hiding || !logoReady || !heroReady) return;
     var elapsed = Date.now() - START;
     var wait = Math.max(0, MIN_SHOW_MS - elapsed);
     hiding = true;
@@ -79,10 +81,9 @@
     var el = document.getElementById('tt-intro');
     if (!el || el.classList.contains('tt-out')) return;
     el.classList.add('tt-out');
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
   }
 
-  /* Safety cap */
   setTimeout(doHide, SAFETY_MS);
 })();
 </script>
@@ -238,10 +239,30 @@
      HERO
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero">
-<script>
-/* Apply hero BG from localStorage synchronously — zero latency on cached visits */
-(function(){try{var c=JSON.parse(localStorage.getItem('tt_images')||'null');if(!c)return;var w=window.innerWidth,s=w>=1024?'hero_bg_desktop':w>=768?'hero_bg_tablet':'hero_bg_mobile',u=c[s];if(!u)return;var el=document.getElementById('hero');if(el){el.style.backgroundImage='url(\''+u+'\')';el.style.backgroundSize=c[s+'_size']||'cover';el.style.backgroundPosition=c[s+'_pos']||'center center';el.style.backgroundRepeat='no-repeat';}}catch(e){}}());
-</script>
+
+  <!-- Real image: loads immediately, no JS, no Firestore dependency -->
+  <div class="tt-hero-media">
+    <picture>
+      <source media="(max-width: 767px)"  srcset="images/hero/hero-mobile.webp"  type="image/webp">
+      <source media="(max-width: 1023px)" srcset="images/hero/hero-tablet.webp"  type="image/webp">
+      <img
+        id="tt-hero-img"
+        class="tt-hero-img"
+        src="images/hero/hero-desktop.webp"
+        alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
+        width="1920"
+        height="1080"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      >
+    </picture>
+  </div>
+
+  <!-- Overlay: keeps text readable over any image -->
+  <div class="tt-hero-overlay" aria-hidden="true"></div>
+
+  <!-- Content -->
   <div class="tt-hero-content">
     <p class="tt-hero-eyebrow">Accesorios exclusivos &middot; Paraguay</p>
     <h1 class="tt-hero-title">TINTIN</h1>
@@ -257,6 +278,7 @@
       <a href="collections.html" class="tt-btn tt-btn-lg tt-btn-outline">Ver colecciones</a>
     </div>
   </div>
+
 </section>
 
 <!-- ══════════════════════════════════════
@@ -648,34 +670,37 @@
 <script type="module">
 import { loadImages, getImg } from './js/images.js';
 
-const heroEl = document.getElementById('hero');
-
-const applyHeroBg = () => {
-  if (!heroEl) return;
+/* ── Hero: upgrade to admin image after Firestore loads (non-blocking) ──
+   The local WebP already shows instantly. This only swaps it if the admin
+   has configured a custom image via admin-images.html. */
+function upgradeHeroFromFirestore() {
+  const heroImg = document.getElementById('tt-hero-img');
+  if (!heroImg) return;
   const w = window.innerWidth;
   const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
-  const url  = getImg(slotId);
-  const size = getImg(slotId + '_size') || 'cover';
-  const pos  = getImg(slotId + '_pos')  || 'center center';
-  if (url) {
-    heroEl.style.backgroundImage    = `url('${url}')`;
-    heroEl.style.backgroundSize     = size;
-    heroEl.style.backgroundPosition = pos;
-    heroEl.style.backgroundRepeat   = 'no-repeat';
-  } else {
-    heroEl.style.backgroundImage = '';
+  const customUrl = getImg(slotId);
+  const customPos = getImg(slotId + '_pos') || 'center';
+  if (customUrl && customUrl !== heroImg.src) {
+    // Pre-load before swapping so there's no flash
+    const tmp = new Image();
+    tmp.onload = () => {
+      heroImg.style.transition = 'opacity 0.4s ease';
+      heroImg.style.opacity = '0';
+      setTimeout(() => {
+        heroImg.src = customUrl;
+        heroImg.style.objectPosition = customPos;
+        heroImg.style.opacity = '1';
+      }, 200);
+    };
+    tmp.src = customUrl;
   }
-};
-
-// Apply from localStorage cache immediately (synchronous, no Firestore wait)
-applyHeroBg();
-window.addEventListener('resize', applyHeroBg);
+}
 
 (async () => {
-  await loadImages(); // Fetches Firestore only when localStorage is empty
-  applyHeroBg();     // Re-apply in case data was refreshed
+  await loadImages(); // Firestore fetch (or instant from localStorage)
+  upgradeHeroFromFirestore();
 
-  // Populate all data-img-slot elements
+  // Populate all other data-img-slot elements (editorial, collections, etc.)
   document.querySelectorAll('[data-img-slot]').forEach(el => {
     const slotId = el.dataset.imgSlot;
     const url = getImg(slotId);
@@ -685,8 +710,7 @@ window.addEventListener('resize', applyHeroBg);
       el.src = url;
       el.style.display = '';
     } else {
-      // Replace inner content with image, keep background gradient
-      el.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.parentElement.textContent='${emoji}'">`;
+      el.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.textContent='${emoji}'">`;
     }
   });
 })();

@@ -682,82 +682,80 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* ═══════════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   HERO BANNER — img-based, Shopify-style
+   Image loads instantly from local WebP, no JS
+   ════════════════════════════════════════════════ */
 .tt-hero {
-  height: 100vh;
-  min-height: 600px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 100svh;           /* svh = safe viewport height, no mobile bar jump */
+  min-height: 680px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-  /* Rich brand gradient — intentional design, not a placeholder */
-  background: linear-gradient(145deg, #6b1a35 0%, #8b2642 25%, #b84c72 60%, #d4748e 85%, #e8a0b4 100%);
-  background-size: cover;
-  background-position: center;
+  /* Fallback color shown for the split-second before the img paints */
+  background-color: #8b2642;
 }
 
-/* Decorative blurry circle — top-right accent */
-.tt-hero::before {
-  content: '';
-  position: absolute;
-  top: -15%;
-  right: -10%;
-  width: clamp(280px, 50vw, 580px);
-  height: clamp(280px, 50vw, 580px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Warm shimmer — bottom-left accent */
-.tt-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -20%;
-  left: -12%;
-  width: clamp(240px, 45vw, 520px);
-  height: clamp(240px, 45vw, 520px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.06) 50%, transparent 70%);
-  pointer-events: none;
-}
-
-/* When a real photo is loaded via admin: dark overlay keeps text readable */
-.tt-hero[style*="background-image"]::after {
-  content: '';
+/* ── Media container: fills hero, sits behind everything ── */
+.tt-hero-media {
   position: absolute;
   inset: 0;
-  width: auto;
-  height: auto;
-  border-radius: 0;
-  background: linear-gradient(0deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.08) 100%);
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #8b2642; /* placeholder while img decodes */
 }
 
-/* Smooth fade-in when BG image is applied */
-.tt-hero[style*="background-image"] {
-  animation: tt-hero-bg-in 0.5s ease both;
+.tt-hero-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes tt-hero-bg-in {
-  from { opacity: 0.6; }
-  to   { opacity: 1; }
+.tt-hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* No transition on first paint — avoids flash */
 }
 
+/* ── Dark gradient overlay: makes text readable over any photo ── */
+.tt-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.12) 0%,
+    rgba(0,0,0,0.28) 40%,
+    rgba(0,0,0,0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Text content sits above overlay ── */
 .tt-hero-content {
   position: relative;
-  z-index: 1;
-  max-width: 800px;
+  z-index: 2;
+  max-width: 820px;
   padding: 0 24px;
+  /* Push content slightly up from dead-center for visual balance */
+  margin-top: -32px;
 }
 
 .tt-hero-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255,255,255,0.78);
   margin-bottom: 14px;
 }
 
@@ -769,26 +767,26 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   line-height: 0.95;
   letter-spacing: 0.05em;
   margin-bottom: 16px;
-  text-shadow: 0 4px 32px rgba(0,0,0,0.25);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
 }
 
 .tt-hero-tagline {
   font-family: var(--font-body);
-  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+  font-size: clamp(0.78rem, 1.4vw, 0.92rem);
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.88);
-  margin-bottom: 8px;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 6px;
 }
 
 .tt-hero-sub {
   font-family: var(--font-body);
-  font-size: clamp(0.72rem, 1.3vw, 0.82rem);
+  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
   font-weight: 400;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 32px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 34px;
   font-style: italic;
 }
 
@@ -799,17 +797,18 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   flex-wrap: wrap;
   margin-bottom: 32px;
 }
+
 .tt-hero-pill {
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.32);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.3);
   color: rgba(255,255,255,0.92);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   padding: 7px 16px;
   border-radius: 20px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .tt-hero-actions {
@@ -819,22 +818,24 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   flex-wrap: wrap;
 }
 
-/* Hero buttons: primary solid white on this dark bg */
+/* Primary hero button: white fill / pink text */
 .tt-hero-actions .tt-btn:not(.tt-btn-outline) {
   background: #fff;
   color: var(--pink-dark);
   border-color: #fff;
+  font-weight: 700;
 }
 .tt-hero-actions .tt-btn:not(.tt-btn-outline):hover {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.92);
   color: var(--rose);
 }
+/* Outline hero button: white border / white text */
 .tt-hero-actions .tt-btn-outline {
-  border-color: rgba(255,255,255,0.6);
+  border-color: rgba(255,255,255,0.65);
   color: #fff;
 }
 .tt-hero-actions .tt-btn-outline:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.14);
   border-color: #fff;
 }
 
@@ -2665,8 +2666,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-product-trust-badges { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .tt-hero-title { font-size: clamp(3rem, 12vw, 5rem); }
-  .tt-hero-sub { display: none; } /* clean up on tablet */
+  /* Tablet hero */
+  .tt-hero { min-height: 620px; }
+  .tt-hero-title { font-size: clamp(3rem, 10vw, 5rem); }
+  .tt-hero-sub { display: none; }
+  .tt-hero-content { margin-top: -20px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -2676,11 +2680,13 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .container { padding: 0 16px; }
   .section { padding: 40px 0; }
 
-  .tt-hero { height: 90vh; min-height: 520px; }
-  .tt-hero::before { width: 200px; height: 200px; top: -8%; right: -8%; }
-  .tt-hero::after  { width: 180px; height: 180px; bottom: -8%; left: -8%; }
-  .tt-hero-pills { gap: 8px; }
-  .tt-hero-pill { font-size: 0.7rem; padding: 5px 12px; }
+  /* Mobile hero */
+  .tt-hero { min-height: 560px; }
+  .tt-hero-content { margin-top: 0; padding: 0 20px; padding-bottom: 72px; /* clear tabbar */ }
+  .tt-hero-pills { gap: 7px; }
+  .tt-hero-pill { font-size: 0.68rem; padding: 5px 11px; }
+  .tt-hero-actions { flex-direction: column; gap: 10px; align-items: center; }
+  .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
 
