@@ -151,45 +151,6 @@
 </head>
 <body>
 
-<!-- ══ INTRO SPLASH (home only) ══ -->
-<div id="tt-intro" aria-hidden="true" role="presentation">
-  <img id="tt-intro-logo" src="images/logo-splash.png" alt="" draggable="false" fetchpriority="high" width="320" height="400">
-</div>
-<script>
-(function () {
-  var START       = Date.now();
-  var MIN_SHOW_MS = 400;   // allow at least 1 pulse cycle to complete
-  var SAFETY_MS   = 4000;  // hard cap
-  var logoReady   = false;
-  var heroReady   = false;
-  var hiding      = false;
-
-  /* ── 1. Logo splash ── */
-  var logo = document.getElementById('tt-intro-logo');
-  function onLogoLoad() {
-    if (logoReady) return;
-    logoReady = true;
-    logo.classList.add('tt-visible');
-    tryHide();
-  }
-  if (logo.complete && logo.naturalWidth) { onLogoLoad(); }
-  else { logo.addEventListener('load', onLogoLoad); logo.addEventListener('error', onLogoLoad); }
-
-  /* ── 2. Wait for the actual HTML hero <img> to decode — it's local, so fast ── */
-  function waitForHeroImg() {
-    var heroImg = document.getElementById('tt-hero-img');
-    if (!heroImg) { heroReady = true; return; }
-    if (heroImg.complete && heroImg.naturalWidth) { heroReady = true; return; }
-    heroImg.addEventListener('load',  function () { heroReady = true; tryHide(); });
-    heroImg.addEventListener('error', function () { heroReady = true; tryHide(); });
-  }
-  // Hero img is in the DOM after this script runs, so we can find it
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', waitForHeroImg);
-  } else {
-    waitForHeroImg();
-  }
-
 <!-- ══ INTRO SPLASH — home only ══ -->
 <div id="tt-intro" aria-hidden="true" role="presentation">
   <img
