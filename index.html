@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="tt-splash-lock">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,11 +26,128 @@
   <link rel="preload" as="image" href="images/hero/hero-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Critical: paint splash pink before external CSS arrives -->
-  <style>
-    html,body{margin:0;padding:0;background:#fce4ec}
-    #tt-intro{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#fce4ec}
-  </style>
+<!-- Critical Splash: fondo rosa inmediato antes de cargar CSS externo -->
+<style>
+  html.tt-splash-lock,
+  html.tt-splash-lock body {
+    margin: 0;
+    padding: 0;
+    background: #ffb6c8 !important;
+    overflow: hidden !important;
+  }
+
+  #tt-intro {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100svh !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 24px !important;
+    background: #ffb6c8 !important;
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden !important;
+    pointer-events: auto;
+    transition:
+      opacity .6s cubic-bezier(.25,.46,.45,.94),
+      visibility .6s cubic-bezier(.25,.46,.45,.94);
+  }
+
+  #tt-intro.tt-out {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #tt-intro-logo {
+    width: clamp(160px, 26vw, 420px) !important;
+    max-width: 86vw !important;
+    height: auto !important;
+    display: block !important;
+    opacity: 0;
+    transform: scale(.72) translateY(18px);
+    filter: drop-shadow(0 6px 18px rgba(184, 76, 114, .28));
+    will-change: transform, opacity;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  #tt-intro-logo.tt-ready {
+    animation:
+      tt-splash-enter .75s cubic-bezier(.34,1.56,.64,1) both,
+      tt-splash-heartbeat 1.15s ease-in-out .75s infinite;
+  }
+
+  .tt-splash-line {
+    width: clamp(110px, 24vw, 210px);
+    height: 3px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255,255,255,.24);
+  }
+
+  .tt-splash-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -65%;
+    width: 65%;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+    animation: tt-splash-sweep 1.25s ease-in-out infinite;
+  }
+
+  @keyframes tt-splash-enter {
+    from {
+      opacity: 0;
+      transform: scale(.72) translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes tt-splash-heartbeat {
+    0%, 100% {
+      transform: scale(1) translateY(0);
+    }
+    14% {
+      transform: scale(1.10) translateY(-2px);
+    }
+    28% {
+      transform: scale(.98) translateY(0);
+    }
+    42% {
+      transform: scale(1.07) translateY(-1px);
+    }
+    70% {
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes tt-splash-sweep {
+    0% { left: -65%; }
+    100% { left: 110%; }
+  }
+
+  @media (max-width: 767px) {
+    #tt-intro-logo {
+      width: clamp(150px, 46vw, 260px) !important;
+    }
+
+    .tt-splash-line {
+      width: clamp(100px, 38vw, 180px);
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -73,23 +190,132 @@
     waitForHeroImg();
   }
 
-  /* ── 3. Hide when both ready + min time ── */
+<!-- ══ INTRO SPLASH — home only ══ -->
+<div id="tt-intro" aria-hidden="true" role="presentation">
+  <img
+    id="tt-intro-logo"
+    src="images/logo-splash.png"
+    alt=""
+    draggable="false"
+    fetchpriority="high"
+    width="400"
+    height="400"
+  >
+  <div class="tt-splash-line" aria-hidden="true"></div>
+</div>
+
+<script>
+(function () {
+  var splash = document.getElementById('tt-intro');
+  if (!splash) return;
+
+  var START = Date.now();
+  var MIN_SHOW_MS = 1600;
+  var SAFETY_MS = 4200;
+
+  var logoReady = false;
+  var heroReady = false;
+  var hiding = false;
+
+  document.documentElement.classList.add('tt-splash-lock');
+  if (document.body) document.body.classList.add('tt-splash-lock');
+
+  var logo = document.getElementById('tt-intro-logo');
+
+  function markLogoReady() {
+    if (logoReady) return;
+    logoReady = true;
+
+    if (logo) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          logo.classList.add('tt-ready');
+        });
+      });
+    }
+
+    tryHide();
+  }
+
+  function getHeroUrl() {
+    var w = window.innerWidth || document.documentElement.clientWidth || 390;
+
+    if (w >= 1024) return 'images/hero/hero-desktop.webp';
+    if (w >= 768) return 'images/hero/hero-tablet.webp';
+    return 'images/hero/hero-mobile.webp';
+  }
+
+  function preloadHero() {
+    var url = getHeroUrl();
+
+    if (!url) {
+      heroReady = true;
+      tryHide();
+      return;
+    }
+
+    var img = new Image();
+    img.decoding = 'async';
+
+    img.onload = function () {
+      heroReady = true;
+      tryHide();
+    };
+
+    img.onerror = function () {
+      heroReady = true;
+      tryHide();
+    };
+
+    img.src = url;
+  }
+
   function tryHide() {
-    if (hiding || !logoReady || !heroReady) return;
+    if (hiding) return;
+    if (!logoReady || !heroReady) return;
+
     var elapsed = Date.now() - START;
     var wait = Math.max(0, MIN_SHOW_MS - elapsed);
+
     hiding = true;
-    setTimeout(doHide, wait);
+    setTimeout(hideSplash, wait);
   }
 
-  function doHide() {
-    var el = document.getElementById('tt-intro');
-    if (!el || el.classList.contains('tt-out')) return;
-    el.classList.add('tt-out');
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+  function hideSplash() {
+    if (!splash || splash.classList.contains('tt-out')) return;
+
+    splash.classList.add('tt-out');
+
+    document.documentElement.classList.remove('tt-splash-lock');
+    if (document.body) document.body.classList.remove('tt-splash-lock');
+
+    document.dispatchEvent(new CustomEvent('tintin:splash:done'));
+
+    setTimeout(function () {
+      if (splash && splash.parentNode) {
+        splash.parentNode.removeChild(splash);
+      }
+    }, 650);
   }
 
-  setTimeout(doHide, SAFETY_MS);
+  if (logo) {
+    if (logo.complete && logo.naturalWidth) {
+      markLogoReady();
+    } else {
+      logo.addEventListener('load', markLogoReady, { once: true });
+      logo.addEventListener('error', markLogoReady, { once: true });
+    }
+  } else {
+    markLogoReady();
+  }
+
+  preloadHero();
+
+  setTimeout(function () {
+    logoReady = true;
+    heroReady = true;
+    hideSplash();
+  }, SAFETY_MS);
 })();
 </script>
 
@@ -675,47 +901,30 @@
 <script type="module">
 import { loadImages, getImg } from './js/images.js';
 
-/* ── Hero: upgrade to admin image after Firestore loads (non-blocking) ──
-   The local WebP already shows instantly. This only swaps it if the admin
-   has configured a custom image via admin-images.html. */
-function upgradeHeroFromFirestore() {
-  const heroImg = document.getElementById('tt-hero-img');
-  if (!heroImg) return;
-  const w = window.innerWidth;
-  const slotId = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
-  const customUrl = getImg(slotId);
-  const customPos = getImg(slotId + '_pos') || 'center';
-  if (customUrl && customUrl !== heroImg.src) {
-    // Pre-load before swapping so there's no flash
-    const tmp = new Image();
-    tmp.onload = () => {
-      heroImg.style.transition = 'opacity 0.4s ease';
-      heroImg.style.opacity = '0';
-      setTimeout(() => {
-        heroImg.src = customUrl;
-        heroImg.style.objectPosition = customPos;
-        heroImg.style.opacity = '1';
-      }, 200);
-    };
-    tmp.src = customUrl;
-  }
-}
-
 (async () => {
-  await loadImages(); // Firestore fetch (or instant from localStorage)
-  upgradeHeroFromFirestore();
+  await loadImages();
 
-  // Populate all other data-img-slot elements (editorial, collections, etc.)
+  // Solo carga imágenes de secciones internas.
+  // El hero NO se toca acá para evitar parpadeos, retrasos o cambios raros.
   document.querySelectorAll('[data-img-slot]').forEach(el => {
     const slotId = el.dataset.imgSlot;
     const url = getImg(slotId);
     if (!url) return;
-    const emoji = el.dataset.imgSlotEmoji || '';
+
     if (el.tagName === 'IMG') {
       el.src = url;
       el.style.display = '';
     } else {
-      el.innerHTML = `<img src="${url}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.textContent='${emoji}'">`;
+      el.innerHTML = `
+        <img
+          src="${url}"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+          onerror="this.remove();"
+        >
+      `;
     }
   });
 })();
