@@ -2951,14 +2951,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 /* ── Home intro: logo ── */
 #tt-intro-logo {
-  width: clamp(96px, 26vw, 172px);
+  width: clamp(100px, 28vw, 200px);
   height: auto;
+  aspect-ratio: 320 / 400;
   object-fit: contain;
   opacity: 0;
   transform: scale(0.88);
-  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
   user-select: none;
+  will-change: opacity, transform;
 }
 
 #tt-intro-logo.tt-visible {

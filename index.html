@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="styles.css" as="style">
-  <link rel="preload" href="images/logo.png" as="image">
+  <link rel="preload" href="images/logo-splash.png" as="image" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -27,30 +27,63 @@
 
 <!-- ══ INTRO SPLASH (home only) ══ -->
 <div id="tt-intro" aria-hidden="true" role="presentation">
-  <img id="tt-intro-logo" src="images/logo.png" alt="" draggable="false" fetchpriority="high">
+  <img id="tt-intro-logo" src="images/logo-splash.png" alt="" draggable="false" fetchpriority="high" width="320" height="400">
 </div>
 <script>
 (function () {
-  var START = Date.now();
-  var MIN_MS = 1100;
+  var START        = Date.now();
+  var MIN_SHOW_MS  = 2200;   // minimum time intro is visible
+  var SAFETY_MS    = 6500;   // hard cap — never blocks longer than this
+  var logoReady    = false;
+  var heroReady    = false;
+  var hiding       = false;
+
+  /* ── Step 1: Show logo as soon as its tiny image loads ── */
   var logo = document.getElementById('tt-intro-logo');
-  if (logo) {
-    function onLogoReady() { logo.classList.add('tt-visible'); }
-    if (logo.complete && logo.naturalWidth) { onLogoReady(); }
-    else { logo.addEventListener('load', onLogoReady); }
+  function onLogoLoad() {
+    if (logoReady) return;
+    logoReady = true;
+    logo.classList.add('tt-visible');
+    tryHide();
   }
-  function hideIntro() {
+  if (logo.complete && logo.naturalWidth) { onLogoLoad(); }
+  else { logo.addEventListener('load', onLogoLoad); logo.addEventListener('error', onLogoLoad); }
+
+  /* ── Step 2: Pre-load hero background from localStorage cache ── */
+  function preloadHero() {
+    try {
+      var cache = JSON.parse(localStorage.getItem('tt_images') || 'null');
+      if (!cache) { heroReady = true; return; }
+      var w = window.innerWidth;
+      var slot = w >= 1024 ? 'hero_bg_desktop' : w >= 768 ? 'hero_bg_tablet' : 'hero_bg_mobile';
+      var url = cache[slot];
+      if (!url) { heroReady = true; return; }
+      var img = new Image();
+      img.onload = img.onerror = function () { heroReady = true; tryHide(); };
+      img.src = url;
+    } catch (e) { heroReady = true; }
+  }
+  preloadHero();
+
+  /* ── Step 3: Hide only when logo shown + hero loaded + min time elapsed ── */
+  function tryHide() {
+    if (hiding) return;
+    if (!logoReady || !heroReady) return;
+    var elapsed = Date.now() - START;
+    var wait = Math.max(0, MIN_SHOW_MS - elapsed);
+    hiding = true;
+    setTimeout(doHide, wait);
+  }
+
+  function doHide() {
     var el = document.getElementById('tt-intro');
     if (!el || el.classList.contains('tt-out')) return;
     el.classList.add('tt-out');
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
   }
-  window.addEventListener('load', function () {
-    var elapsed = Date.now() - START;
-    var wait = Math.max(0, MIN_MS - elapsed);
-    setTimeout(hideIntro, wait);
-  });
-  setTimeout(hideIntro, 4000); // safety cap
+
+  /* Safety cap */
+  setTimeout(doHide, SAFETY_MS);
 })();
 </script>
 
@@ -205,6 +238,10 @@
      HERO
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero">
+<script>
+/* Apply hero BG from localStorage synchronously — zero latency on cached visits */
+(function(){try{var c=JSON.parse(localStorage.getItem('tt_images')||'null');if(!c)return;var w=window.innerWidth,s=w>=1024?'hero_bg_desktop':w>=768?'hero_bg_tablet':'hero_bg_mobile',u=c[s];if(!u)return;var el=document.getElementById('hero');if(el){el.style.backgroundImage='url(\''+u+'\')';el.style.backgroundSize=c[s+'_size']||'cover';el.style.backgroundPosition=c[s+'_pos']||'center center';el.style.backgroundRepeat='no-repeat';}}catch(e){}}());
+</script>
   <div class="tt-hero-content">
     <p class="tt-hero-eyebrow">Bienvenidas a</p>
     <h1 class="tt-hero-title">TINTIN</h1>
