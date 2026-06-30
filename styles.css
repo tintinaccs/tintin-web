@@ -563,28 +563,128 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-mobile-nav a:hover,
 .tt-mobile-nav button:hover { color: var(--pink-dark); }
 
+/* Mobile tienda toggle button */
+.tt-mobile-tienda-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between !important;
+  width: 100%;
+}
+.tt-mobile-chevron {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.tt-mobile-tienda-btn[aria-expanded="true"] .tt-mobile-chevron {
+  transform: rotate(180deg);
+}
+
+/* Collapsible TIENDA panel */
 .tt-mobile-cats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 16px 0;
+  display: none;
+  padding: 12px 0 8px;
   border-bottom: 1px solid var(--border);
 }
+.tt-mobile-cats.open { display: block; }
 
-.tt-mobile-cats a {
-  font-size: 0.7rem !important;
-  padding: 10px 8px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius-sm) !important;
-  text-align: center !important;
-  display: block;
-  color: var(--text);
-  transition: var(--transition);
+.tt-mobile-cats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding-bottom: 12px;
 }
 
-.tt-mobile-cats a:hover {
-  background: var(--pink-pale);
+.tt-mobile-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: color 0.2s;
+}
+.tt-mobile-cat-card:hover { color: var(--pink-dark); }
+
+.tt-mobile-cat-img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.tt-mobile-cat-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tt-mobile-ver-todo {
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--pink-dark);
+  padding: 10px 0 4px;
+  text-decoration: none;
+}
+.tt-mobile-ver-todo:hover { text-decoration: underline; }
+
+/* Mobile menu user panel */
+.tt-mobile-user {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.tt-mobile-user-login,
+.tt-mobile-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.2s;
+}
+.tt-mobile-user-login:hover,
+.tt-mobile-user-profile:hover { background: var(--pink-pale); }
+
+.tt-mobile-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--pink-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.tt-mobile-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tt-mobile-user-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+.tt-mobile-user-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 /* ── Search Panel ── */
@@ -2628,13 +2728,34 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 @media (max-width: 1024px) {
   :root { --header-h: 64px; }
 
-  .tt-header-inner { padding: 0 20px; }
-
+  /* 3-zone header: hamburger LEFT | logo CENTER | actions RIGHT */
+  .tt-header-inner {
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0;
+  }
+  .tt-menu-toggle {
+    display: flex;
+    justify-self: start;
+    order: 1;
+  }
+  .tt-logo-link {
+    justify-self: center;
+    order: 2;
+    align-items: center;
+  }
+  .tt-header-actions {
+    justify-self: end;
+    order: 3;
+    gap: 4px;
+  }
+  /* Hide desktop nav */
   .tt-nav { display: none; }
 
   /* Show quick cats on tablet/mobile */
   .tt-quick-cats { display: block; }
-  .tt-menu-toggle { display: flex; }
 
   .tt-collections-grid { grid-template-columns: repeat(4, 1fr); }
   .tt-products-grid { grid-template-columns: repeat(3, 1fr); }

@@ -463,11 +463,12 @@ function initMobileMenu() {
 
   if (btnTienda && mobileCats) {
     btnTienda.addEventListener('click', () => {
-      const isOpen = mobileCats.style.display !== 'none';
-      mobileCats.style.display = isOpen ? 'none' : 'grid';
-      btnTienda.textContent = isOpen ? 'TIENDA ▾' : 'TIENDA ▴';
+      const isOpen = mobileCats.classList.contains('open');
+      mobileCats.classList.toggle('open', !isOpen);
+      btnTienda.setAttribute('aria-expanded', String(!isOpen));
     });
   }
+
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
