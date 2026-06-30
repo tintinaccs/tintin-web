@@ -841,12 +841,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 /* ═══════════════════════════════════════════════
    QUICK CATEGORIES STRIP
+   Only visible on mobile/tablet — desktop uses TIENDA dropdown
 ═══════════════════════════════════════════════ */
 .tt-quick-cats {
+  display: none; /* hidden on desktop */
   background: #fff;
   border-bottom: 1px solid var(--border);
   padding: 0;
   overflow: hidden;
+  position: sticky;
+  top: var(--header-h);   /* sticks just below the fixed header */
+  z-index: calc(var(--z-header) - 1);
 }
 
 .tt-quick-cats-inner {
@@ -856,7 +861,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  padding: 0 16px;
+  padding: 0 12px;
 }
 .tt-quick-cats-inner::-webkit-scrollbar { display: none; }
 
@@ -864,9 +869,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  padding: 12px 16px;
+  padding: 10px 14px;
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2647,6 +2652,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-header-inner { padding: 0 20px; }
 
   .tt-nav { display: none; }
+
+  /* Show quick cats on tablet/mobile */
+  .tt-quick-cats { display: block; }
   .tt-menu-toggle { display: flex; }
 
   .tt-collections-grid { grid-template-columns: repeat(4, 1fr); }
