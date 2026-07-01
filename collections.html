@@ -371,6 +371,23 @@ import { onCollectionsUpdate, FALLBACK_COLLECTIONS } from './js/collections-stor
 
 const isDefaultSet = (cols) => cols === FALLBACK_COLLECTIONS;
 
+/** Conditional rendering: an empty/missing value means the element does not
+ *  exist in the DOM at all — not display:none, not an empty tag. If a value
+ *  arrives later it's (re)created in the right spot. */
+function syncOptionalEl(container, selector, value, build) {
+  const existing = container.querySelector(selector);
+  const hasValue = value && String(value).trim();
+  if (!hasValue) {
+    if (existing) existing.remove();
+    return;
+  }
+  if (existing) {
+    existing.textContent = value;
+  } else {
+    build(value);
+  }
+}
+
 onCollectionsUpdate(cols => {
   const grid = document.querySelector('.tt-colls-page-grid');
   if (!grid) return;
@@ -392,8 +409,13 @@ onCollectionsUpdate(cols => {
     card.style.display = '';
     const nameEl = card.querySelector('.tt-coll-page-name');
     if (nameEl && c.name) nameEl.textContent = c.name.toUpperCase();
-    const descEl = card.querySelector('.tt-coll-page-desc');
-    if (descEl && c.description) descEl.textContent = c.description;
+    // Conditional rendering: no description saved → the paragraph doesn't exist in the DOM, period.
+    syncOptionalEl(card.querySelector('.tt-coll-page-body'), '.tt-coll-page-desc', c.description, (value) => {
+      const p = document.createElement('p');
+      p.className = 'tt-coll-page-desc';
+      p.textContent = value;
+      card.querySelector('.tt-coll-page-name').after(p);
+    });
     if (c.image) {
       const imgEl = card.querySelector('.tt-coll-page-img');
       if (imgEl) imgEl.style.background = `url('${c.image}') center/cover`;
@@ -406,12 +428,13 @@ onCollectionsUpdate(cols => {
     const card = document.createElement('div');
     card.className = 'tt-coll-page-card';
     card.dataset.slug = c.slug;
+    const hasDesc = c.description && String(c.description).trim();
     card.innerHTML = `
       <div class="tt-coll-page-img" style="background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4,#d4748e)'}"></div>
       <div class="tt-coll-page-body">
         <div class="tt-coll-page-initial">${(c.name || c.slug).charAt(0).toUpperCase()}</div>
         <div class="tt-coll-page-name">${(c.name || c.slug).toUpperCase()}</div>
-        <p class="tt-coll-page-desc">${c.description || ''}</p>
+        ${hasDesc ? `<p class="tt-coll-page-desc">${c.description}</p>` : ''}
         <a href="catalogo.html?cat=${c.slug}" class="tt-btn tt-btn-sm">Ver productos →</a>
       </div>`;
     grid.appendChild(card);

@@ -843,12 +843,17 @@ function _renderProductDetail(product) {
   if (nameEl) nameEl.textContent = product.name;
   if (priceEl) priceEl.textContent = formatPrice(product.price);
   if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
+  // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {
-    // desc may be HTML from Shopify
-    if (product.desc && /<[a-z][\s\S]*>/i.test(product.desc)) {
-      descEl.innerHTML = product.desc;
+    const hasDesc = product.desc && String(product.desc).trim();
+    if (hasDesc) {
+      // desc may be HTML from Shopify
+      if (/<[a-z][\s\S]*>/i.test(product.desc)) descEl.innerHTML = product.desc;
+      else descEl.textContent = product.desc;
+      descEl.style.display = '';
     } else {
-      descEl.textContent = product.desc || '';
+      descEl.textContent = '';
+      descEl.style.display = 'none';
     }
   }
   if (badgeEl) {

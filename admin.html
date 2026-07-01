@@ -1614,7 +1614,14 @@ function switchSection(target) {
 }
 
 navItems.forEach(btn => {
-  btn.addEventListener('click', () => switchSection(btn.dataset.section));
+  btn.addEventListener('click', () => {
+    // Leaving Productos/Colecciones with an open, unsaved form? Confirm first.
+    if (typeof UnsavedGuard !== 'undefined') {
+      UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section));
+    } else {
+      switchSection(btn.dataset.section);
+    }
+  });
 });
 
 function closeSidebar() {}
@@ -2204,6 +2211,52 @@ document.getElementById('btn-save-config').onclick = async () => {
 };
 
 /* =============================================
+   UNSAVED CHANGES GUARD — reusable for product & collection editors
+   ============================================= */
+const UnsavedGuard = {
+  _serializeFn: null,
+  _original: null,
+  _onSave: null,
+
+  /** Call once the form is populated with the item being edited/created. */
+  track(serializeFn, onSave) {
+    this._serializeFn = serializeFn;
+    this._original = JSON.stringify(serializeFn());
+    this._onSave = onSave;
+  },
+  clear() {
+    this._serializeFn = null;
+    this._original = null;
+    this._onSave = null;
+  },
+  isDirty() {
+    if (!this._serializeFn) return false;
+    return JSON.stringify(this._serializeFn()) !== this._original;
+  },
+  /** Call before navigating away from the form. Runs `proceed` immediately
+   *  if nothing changed; otherwise blocks with a Guardar/Descartar modal. */
+  confirmLeave(proceed) {
+    if (!this.isDirty()) { this.clear(); proceed(); return; }
+    const modal = document.getElementById('unsaved-modal');
+    const btnSave = document.getElementById('unsaved-modal-save');
+    const btnDiscard = document.getElementById('unsaved-modal-discard');
+    modal.style.display = 'flex';
+    const cleanup = () => { modal.style.display = 'none'; btnSave.onclick = null; btnDiscard.onclick = null; };
+    btnSave.onclick = async () => {
+      btnSave.disabled = true;
+      try {
+        const ok = await this._onSave();
+        cleanup();
+        if (ok === false) return; // validation/save failed — form stays open with its error message
+        this.clear();
+        proceed();
+      } finally { btnSave.disabled = false; }
+    };
+    btnDiscard.onclick = () => { this.clear(); cleanup(); proceed(); };
+  }
+};
+
+/* =============================================
    PRODUCTOS — CRUD
    ============================================= */
 let _allProducts = [];
@@ -2296,7 +2349,30 @@ function applyProductFilters() {
 document.getElementById('prod-search').addEventListener('input', applyProductFilters);
 document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
 
-function prodNuevo() {
+function serializeProductForm() {
+  return {
+    name: document.getElementById('prod-name').value,
+    category: document.getElementById('prod-category').value,
+    price: document.getElementById('prod-price').value,
+    priceBefore: document.getElementById('prod-price-before').value,
+    stock: document.getElementById('prod-stock').value,
+    imageUrl: document.getElementById('prod-imageUrl').value,
+    description: document.getElementById('prod-description').value,
+    tags: document.getElementById('prod-tags').value,
+    variants: document.getElementById('prod-variants-text').value,
+    badge: document.getElementById('prod-badge').value,
+    collection: document.getElementById('prod-collection').value,
+    active: document.getElementById('prod-active').checked,
+    oferta: document.getElementById('prod-oferta').checked,
+    destacado: document.getElementById('prod-destacado').checked,
+  };
+}
+
+window.prodNuevo = function() {
+  UnsavedGuard.confirmLeave(_prodNuevoNow);
+};
+
+function _prodNuevoNow() {
   document.getElementById('prod-id').value = '';
   document.getElementById('prod-form-title').textContent = 'Nuevo producto';
   document.getElementById('prod-name').value = '';
@@ -2317,9 +2393,14 @@ function prodNuevo() {
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
+  UnsavedGuard.track(serializeProductForm, prodGuardar);
 }
 
-function prodEditar(docId) {
+window.prodEditar = function(docId) {
+  UnsavedGuard.confirmLeave(() => _prodEditarNow(docId));
+};
+
+function _prodEditarNow(docId) {
   const p = _allProducts.find(x => x._docId === docId);
   if (!p) return;
   document.getElementById('prod-id').value = docId;
@@ -2353,6 +2434,7 @@ function prodEditar(docId) {
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
+  UnsavedGuard.track(serializeProductForm, prodGuardar);
 }
 
 // Live image preview
@@ -2363,10 +2445,13 @@ document.getElementById('prod-imageUrl').addEventListener('input', e => {
   else preview.style.display = 'none';
 });
 
-function prodCancelForm() {
+function _prodCloseForm() {
   document.getElementById('prod-form-card').style.display = 'none';
   document.getElementById('prod-list-card').style.display = '';
 }
+window.prodCancelForm = function() {
+  UnsavedGuard.confirmLeave(_prodCloseForm);
+};
 
 async function prodGuardar() {
   const name = document.getElementById('prod-name').value.trim();
@@ -2377,7 +2462,7 @@ async function prodGuardar() {
   if (!name || !category || !price) {
     errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
     errEl.style.display = '';
-    return;
+    return false;
   }
   errEl.style.display = 'none';
 
@@ -2437,11 +2522,14 @@ async function prodGuardar() {
       await setDoc(doc(collection(db, 'products')), data);
       toast('Producto creado');
     }
-    prodCancelForm();
+    UnsavedGuard.clear();
+    _prodCloseForm();
     loadProductos();
+    return true;
   } catch(e) {
     errEl.textContent = 'Error al guardar: ' + e.message;
     errEl.style.display = '';
+    return false;
   } finally {
     btn.textContent = 'Guardar producto'; btn.disabled = false;
   }
@@ -2558,7 +2646,22 @@ window.collVerProductos = function(slug) {
   applyProductFilters();
 };
 
+function serializeCollForm() {
+  return {
+    name: document.getElementById('coll-name').value,
+    slug: document.getElementById('coll-slug').value,
+    description: document.getElementById('coll-description').value,
+    image: document.getElementById('coll-image').value,
+    order: document.getElementById('coll-order').value,
+    visible: document.getElementById('coll-visible').checked,
+  };
+}
+
 window.collNueva = function() {
+  UnsavedGuard.confirmLeave(_collNuevaNow);
+};
+
+function _collNuevaNow() {
   document.getElementById('coll-form-title').textContent = 'Nueva colección';
   document.getElementById('coll-original-slug').value = '';
   document.getElementById('coll-name').value = '';
@@ -2571,7 +2674,8 @@ window.collNueva = function() {
   document.getElementById('coll-form-error').style.display = 'none';
   document.getElementById('coll-list-card').style.display = 'none';
   document.getElementById('coll-form-card').style.display = '';
-};
+  UnsavedGuard.track(serializeCollForm, collGuardar);
+}
 
 window.collAutoSlug = function() {
   const slugEl = document.getElementById('coll-slug');
@@ -2581,6 +2685,10 @@ window.collAutoSlug = function() {
 };
 
 window.collEditar = function(slug) {
+  UnsavedGuard.confirmLeave(() => _collEditarNow(slug));
+};
+
+function _collEditarNow(slug) {
   const c = _allCollections.find(x => x.slug === slug);
   if (!c) return;
   document.getElementById('coll-form-title').textContent = 'Editar colección';
@@ -2596,11 +2704,15 @@ window.collEditar = function(slug) {
   document.getElementById('coll-form-error').style.display = 'none';
   document.getElementById('coll-list-card').style.display = 'none';
   document.getElementById('coll-form-card').style.display = '';
-};
+  UnsavedGuard.track(serializeCollForm, collGuardar);
+}
 
-window.collCancelForm = function() {
+function _collCloseForm() {
   document.getElementById('coll-form-card').style.display = 'none';
   document.getElementById('coll-list-card').style.display = '';
+}
+window.collCancelForm = function() {
+  UnsavedGuard.confirmLeave(_collCloseForm);
 };
 
 document.getElementById('coll-image').addEventListener('input', function() {
@@ -2622,13 +2734,13 @@ window.collGuardar = async function() {
   if (!name || !slug) {
     errEl.textContent = 'Completá nombre y slug.';
     errEl.style.display = '';
-    return;
+    return false;
   }
   const dup = _allCollections.find(c => c.slug === slug && c.slug !== originalSlug);
   if (dup) {
     errEl.textContent = `Ya existe una colección con el slug "${slug}". Elegí otro.`;
     errEl.style.display = '';
-    return;
+    return false;
   }
 
   const btn = document.getElementById('coll-save-btn');
@@ -2655,10 +2767,13 @@ window.collGuardar = async function() {
       await setDoc(doc(db, 'collections', slug), data);
       toast('Colección creada');
     }
-    collCancelForm();
+    UnsavedGuard.clear();
+    _collCloseForm();
+    return true;
   } catch (e) {
     errEl.textContent = 'Error al guardar: ' + e.message;
     errEl.style.display = '';
+    return false;
   } finally {
     btn.textContent = 'Guardar colección'; btn.disabled = false;
   }
@@ -3745,6 +3860,21 @@ window.saveOrderEdit = async function() {
 
 </script>
 
+
+<!-- ══════════════════════════════════════
+     UNSAVED CHANGES MODAL (shared: products + collections)
+══════════════════════════════════════ -->
+<div id="unsaved-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 8px 48px rgba(0,0,0,.2);text-align:center">
+    <div style="font-size:32px;margin-bottom:10px">⚠️</div>
+    <div style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
+    <div style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="adm-btn adm-btn-primary" id="unsaved-modal-save">Guardar cambios</button>
+      <button class="adm-btn adm-btn-danger" id="unsaved-modal-discard">Descartar cambios</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════
      ORDER EDIT MODAL
