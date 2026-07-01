@@ -259,13 +259,33 @@ function updateCartBadge() {
   });
 }
 
+// Drop cart items whose product was deleted/deactivated, and refresh price/name/image
+// from the live catalog so the cart never shows stale data. No-ops until real
+// Firestore products have loaded (window.PRODUCTS unset).
+function syncCartWithCatalog() {
+  const pool = window.PRODUCTS;
+  if (!pool || !pool.length) return getCart();
+  const cart = getCart();
+  const synced = cart
+    .map(item => {
+      const live = pool.find(p => String(p.id) === String(item.id));
+      if (!live || live.active === false) return null;
+      return { ...item, name: live.name, price: live.price, imageUrl: live.imageUrl || item.imageUrl };
+    })
+    .filter(Boolean);
+  if (synced.length !== cart.length || synced.some((it, i) => it.price !== cart[i].price || it.name !== cart[i].name)) {
+    saveCart(synced);
+  }
+  return synced;
+}
+
 function renderCart() {
   const body = document.getElementById('cart-body');
   const footer = document.getElementById('cart-footer');
   const totalEl = document.getElementById('cart-total');
   if (!body) return;
 
-  const cart = getCart();
+  const cart = syncCartWithCatalog();
 
   if (cart.length === 0) {
     body.innerHTML = `
@@ -1392,6 +1412,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* expose for inline onclick usage and module re-render */
 window.addEventListener('tintin:products-loaded', () => {
+  renderCart();
+  updateCartBadge();
   if (document.getElementById('products-grid')) {
     renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).slice(0, 6));
   }
@@ -1426,7 +1448,10 @@ window.renderProductsGrid = renderProductsGrid;
 window.renderCart = renderCart;
 window.updateCartBadge = updateCartBadge;
 window.initLookCombinator = initLookCombinator;
-window.PRODUCTS = window.PRODUCTS || PRODUCTS;
+// NOTE: do NOT seed window.PRODUCTS with the hardcoded fallback array here.
+// window.PRODUCTS must only ever hold real Firestore data (set by products-store.js)
+// so pages that check `if (window.PRODUCTS && window.PRODUCTS.length)` don't mistake
+// the offline sample data for a real, loaded catalog.
 
 // Re-render badge and drawer on external cart changes (cart-sync.js events)
 window.addEventListener('tt_cart_updated', () => {

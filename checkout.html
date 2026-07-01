@@ -989,6 +989,23 @@ function getCityPrice(cityName) {
 // ---- CART RENDERING ----
 async function renderCart() {
   cartItems = getCartLocal();
+
+  // Drop items whose product was deleted/deactivated and refresh price/name from
+  // the live catalog, so checkout never lets someone pay for a stale/removed product.
+  if (window.PRODUCTS?.length && cartItems.length) {
+    const before = cartItems.length;
+    cartItems = cartItems
+      .map(item => {
+        const live = window.PRODUCTS.find(p => String(p.id) === String(item.id));
+        if (!live || live.active === false) return null;
+        return { ...item, name: live.name, price: live.price, imageUrl: live.imageUrl || item.imageUrl };
+      })
+      .filter(Boolean);
+    if (cartItems.length !== before || cartItems.some(it => it.price !== getCartLocal().find(c => String(c.id) === String(it.id))?.price)) {
+      setCartLocal(cartItems);
+    }
+  }
+
   const container = document.getElementById('ck-items');
   const subtotalEl = document.getElementById('ck-subtotal-val');
 
@@ -1503,6 +1520,8 @@ loadStoreConfig().then(() => {
   populateCities();
 });
 renderCart();
+// Re-sync cart once real Firestore products arrive (in case they load after this page renders)
+window.addEventListener('tintin:products-loaded', () => renderCart(), { once: true });
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
