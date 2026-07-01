@@ -1433,3 +1433,26 @@ window.addEventListener('tt_cart_updated', () => {
   updateCartBadge();
   renderCart();
 });
+
+/* ──────────────────────────────────────
+   SCROLL REVEAL — IntersectionObserver
+────────────────────────────────────── */
+(function initScrollReveal() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('tt-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.tt-reveal').forEach(el => observer.observe(el));
+
+  // Also observe dynamically added elements after products load
+  document.addEventListener('tintin:products-loaded', () => {
+    document.querySelectorAll('.tt-reveal:not(.tt-visible)').forEach(el => observer.observe(el));
+  });
+})();

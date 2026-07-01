@@ -245,7 +245,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-header.scrolled {
-  background: var(--white);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom-color: var(--border);
   box-shadow: 0 2px 20px rgba(180,76,114,0.08);
 }
@@ -296,12 +298,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #fff;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  transition: color var(--transition), background var(--transition);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
   white-space: nowrap;
-  background: none;
-  border: none;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
   cursor: pointer;
 }
 
@@ -309,12 +311,15 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-nav-dropdown > button:hover,
 .tt-nav > a.active {
   color: #fff;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.28);
+  border-color: rgba(255,255,255,0.36);
 }
 
 .tt-header.scrolled .tt-nav > a,
 .tt-header.scrolled .tt-nav-dropdown > button {
   color: var(--text);
+  background: rgba(212,120,154,0.06);
+  border-color: rgba(212,120,154,0.14);
 }
 
 .tt-header.scrolled .tt-nav > a:hover,
@@ -322,6 +327,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-header.scrolled .tt-nav > a.active {
   color: var(--pink-dark);
   background: var(--pink-pale);
+  border-color: rgba(212,120,154,0.28);
 }
 
 /* Dropdown */
@@ -824,6 +830,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 500;
@@ -831,6 +840,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   text-transform: uppercase;
   color: var(--text);
   margin-bottom: 14px;
+}
+
+.tt-hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1.5px;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.7;
 }
 
 .tt-hero-title {
@@ -891,16 +910,25 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   flex-wrap: wrap;
 }
 
-/* Primary hero button: pink fill */
+/* Primary hero button: pink fill + breathing */
 .tt-hero-actions .tt-btn:not(.tt-btn-outline) {
   background: var(--pink-dark);
   color: #fff;
   border-color: var(--pink-dark);
   font-weight: 700;
+  animation: tt-btn-breathe 3s ease-in-out 1.2s infinite;
 }
 .tt-hero-actions .tt-btn:not(.tt-btn-outline):hover {
   background: var(--rose);
   border-color: var(--rose);
+  animation-play-state: paused;
+  transform: translateY(-2px) scale(1.03);
+  letter-spacing: 0.14em;
+}
+
+@keyframes tt-btn-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184,76,114,0); }
+  50%       { box-shadow: 0 0 0 8px rgba(184,76,114,0.22); }
 }
 /* Outline hero button: dark border / dark text */
 .tt-hero-actions .tt-btn-outline {
@@ -974,17 +1002,42 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   align-items: center;
   text-align: center;
   gap: 12px;
+  background: var(--white);
+  border: 1px solid rgba(212,120,154,0.12);
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
+.tt-trust-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--pink-dark), rgba(212,120,154,0.3), var(--pink-dark));
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.tt-trust-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(212,120,154,0.12);
+  border-color: rgba(212,120,154,0.28);
+}
+
+.tt-trust-item:hover::before { opacity: 1; }
+
 .tt-trust-icon {
-  width: 56px;
-  height: 56px;
-  background: var(--white);
+  width: 52px;
+  height: 52px;
+  background: rgba(212,120,154,0.1);
   border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
 }
 
 .tt-trust-title {
@@ -3251,4 +3304,29 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-gear-svg  { animation: none; }
   .tt-loader-dots span { animation: none; opacity: 0.6; }
   #tt-intro-logo { transition: none; animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SCROLL REVEAL — lightweight IntersectionObserver system
+══════════════════════════════════════════════════════════════ */
+.tt-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.6s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+.tt-reveal.tt-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tt-reveal-delay-1 { transition-delay: 0.1s; }
+.tt-reveal-delay-2 { transition-delay: 0.2s; }
+.tt-reveal-delay-3 { transition-delay: 0.3s; }
+.tt-reveal-delay-4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-reveal { opacity: 1; transform: none; transition: none; }
+  .tt-hero-actions .tt-btn:not(.tt-btn-outline) { animation: none; }
 }
