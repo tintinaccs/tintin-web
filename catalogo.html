@@ -623,11 +623,21 @@ function init(products) {
   aplicarFiltros();
 }
 
-// Bootstrap: products may already be loaded or arrive via event
+// Bootstrap: register listener first, then check if already loaded (avoids race condition)
+window.addEventListener('tintin:products-loaded', e => {
+  if (!todos.length) init(e.detail.products);
+}, { once: true });
+
 if (window.PRODUCTS && window.PRODUCTS.length) {
   init(window.PRODUCTS);
 } else {
-  window.addEventListener('tintin:products-loaded', e => init(e.detail.products), { once: true });
+  // Fallback poll — catches the case where the event fired before this script ran
+  const _pollStart = Date.now();
+  (function poll() {
+    if (todos.length) return;
+    if (window.PRODUCTS && window.PRODUCTS.length) { init(window.PRODUCTS); return; }
+    if (Date.now() - _pollStart < 8000) setTimeout(poll, 200);
+  })();
 }
 
 // Filter events
