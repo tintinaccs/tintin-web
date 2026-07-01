@@ -2467,9 +2467,22 @@ function loadImportar() {
   };
 
   function detectarCategoria(type, tags, title) {
-    const haystack = [type, tags, title].join(' ').toLowerCase();
+    const wordMatch = (s, key) => new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(s);
+    // 1. Product Type is the most authoritative signal — check it alone first
+    const t = (type || '').toLowerCase().trim();
     for (const [key, val] of Object.entries(CAT_MAP)) {
-      if (haystack.includes(key)) return val;
+      if (t === key || wordMatch(t, key)) return val;
+    }
+    // 2. Tags — checked as individual tokens, not substring-of-everything
+    const tagList = (tags || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+    for (const [key, val] of Object.entries(CAT_MAP)) {
+      if (tagList.includes(key)) return val;
+    }
+    // 3. Title — last resort, word-boundary match only (avoids "reloj" matching every product
+    //    when a shared tagline/brand tag is present across the whole catalog)
+    const ti = (title || '').toLowerCase();
+    for (const [key, val] of Object.entries(CAT_MAP)) {
+      if (wordMatch(ti, key)) return val;
     }
     return 'otros';
   }

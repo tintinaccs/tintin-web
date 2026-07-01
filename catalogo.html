@@ -496,11 +496,28 @@ const CAT_LABELS = {
 let todos = [];
 let catActual = 'todos';
 
-// Normalize URL aliases → canonical Firestore category names
-const CAT_ALIASES = { bags: 'bolsos', bag: 'bolsos', bolso: 'bolsos' };
+// Normalize any category spelling/alias → canonical internal slug
+const CAT_ALIASES = {
+  bags: 'bolsos', bag: 'bolsos', bolso: 'bolsos',
+  reloj: 'relojes', watch: 'relojes', watches: 'relojes',
+  arete: 'aros', aretes: 'aros', earring: 'aros', earrings: 'aros',
+  collar: 'collares', necklace: 'collares', cadena: 'collares', cadenas: 'collares',
+  pulsera: 'pulseras', bracelet: 'pulseras',
+  anillo: 'anillos', ring: 'anillos',
+  tobillera: 'tobilleras', ankle: 'tobilleras',
+  brazalete: 'brazaletes',
+  'ear cuff': 'earcuff', earcuffs: 'earcuff',
+  'arm cuff': 'armcuff', armcuffs: 'armcuff',
+  lente: 'gafas', lentes: 'gafas', sunglasses: 'gafas',
+  joyero: 'joyeros', 'jewelry box': 'joyeros'
+};
+function normalizeCategory(value) {
+  const v = (value || '').toLowerCase().trim();
+  return CAT_ALIASES[v] || v;
+}
+
 const params = new URLSearchParams(location.search);
-const rawCatParam = (params.get('cat') || '').toLowerCase().trim();
-const catParam = CAT_ALIASES[rawCatParam] || rawCatParam;
+const catParam = normalizeCategory(params.get('cat') || '');
 if (catParam) catActual = catParam;
 
 function fmt(n) {
@@ -509,9 +526,8 @@ function fmt(n) {
 
 function catMatches(product, cat) {
   if (cat === 'todos') return true;
-  const pc = (product.category || product.cat || '').toLowerCase().trim();
-  if (cat === 'bolsos' || cat === 'bags') return ['bolsos', 'bolso', 'bags', 'bag'].some(a => pc === a || pc.includes(a));
-  return pc === cat || pc.startsWith(cat);
+  const pc = normalizeCategory(product.category || product.cat || '');
+  return pc === cat;
 }
 
 function actualizarContadores() {
