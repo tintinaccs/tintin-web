@@ -1157,7 +1157,7 @@
           </div>
         </div>
         <div class="adm-card-body" style="padding:0">
-          <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando colecciones…</div>
+          <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)"><span class="adm-spinner"></span> Cargando colecciones…</div>
           <div id="coll-grid-wrap" style="display:none;padding:20px">
             <div id="coll-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"></div>
           </div>
@@ -1660,6 +1660,10 @@ onAuthStateChanged(auth, async user => {
     setupUserInfo(user, role);
     setupPermissions(role);
     loadDashboard();
+    // Load eagerly (not just on nav click) so category/collection selects in
+    // Productos stay correct even if the admin never opens Colecciones first.
+    loadProductos();
+    loadColecciones();
   } catch(e) {
     console.error('[Admin] Auth init error:', e);
   } finally {
@@ -2589,12 +2593,37 @@ function loadColecciones() {
     snap => {
       _allCollections = snap.docs.map(d => ({ slug: d.id, ...d.data() }));
       renderColeccionesGrid(applyCollFilter(_allCollections));
+      syncCategorySelects();
     },
     e => {
       document.getElementById('coll-loading').textContent = 'Error al cargar colecciones: ' + e.message;
-      console.error(e);
+      console.error('[colecciones] listener failed:', e);
+      toast('No se pudieron cargar las colecciones: ' + e.message);
     }
   );
+}
+
+// Any collection created in Super Admin → Colecciones automatically becomes
+// an assignable option in Productos (new/edit form, filter, bulk-assign).
+function syncCategorySelects() {
+  ['prod-category', 'prod-filter-cat', 'bulk-category-input'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const current = sel.value;
+    sel.querySelectorAll('option[data-dynamic]').forEach(o => o.remove());
+    const known = new Set([...sel.options].map(o => o.value));
+    _allCollections
+      .filter(c => c.visible !== false && !known.has(c.slug))
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.slug;
+        opt.textContent = c.name || c.slug;
+        opt.dataset.dynamic = '1';
+        sel.appendChild(opt);
+      });
+    if ([...sel.options].some(o => o.value === current)) sel.value = current;
+  });
 }
 
 function applyCollFilter(list) {
@@ -2604,9 +2633,24 @@ function applyCollFilter(list) {
 }
 document.getElementById('coll-search').addEventListener('input', () => renderColeccionesGrid(applyCollFilter(_allCollections)));
 
+// Categories already in use by real products but with no matching doc in
+// `collections` yet — e.g. products imported/assigned before this module
+// existed. Surfaced so nothing "disappears" from the admin's view.
+function getUnmanagedCategories() {
+  const known = new Set(_allCollections.map(c => c.slug));
+  const found = new Map();
+  _allProducts.forEach(p => {
+    const cat = (p.category || '').trim();
+    if (!cat || known.has(cat)) return;
+    found.set(cat, (found.get(cat) || 0) + 1);
+  });
+  return [...found.entries()].map(([slug, count]) => ({ slug, count }));
+}
+
 function renderColeccionesGrid(list) {
   document.getElementById('coll-loading').style.display = 'none';
-  if (!_allCollections.length) {
+  const unmanaged = getUnmanagedCategories();
+  if (!_allCollections.length && !unmanaged.length) {
     document.getElementById('coll-empty').style.display = '';
     document.getElementById('coll-grid-wrap').style.display = 'none';
     document.getElementById('coll-empty').innerHTML = `
@@ -2636,14 +2680,43 @@ function renderColeccionesGrid(list) {
         </div>
       </div>
     </div>`;
-  }).join('');
+  }).join('') + unmanaged.map(u => `
+    <div class="adm-card" style="margin:0;overflow:hidden;border:1.5px dashed #e8a0b4">
+      <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#e65100">SIN GESTIONAR</div>
+      <div style="padding:14px">
+        <div style="font-weight:800;font-size:14px">${u.slug}</div>
+        <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">Categoría usada en productos, sin colección creada</div>
+        <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${u.count} producto${u.count===1?'':'s'}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${u.slug}')">Ver productos</button>
+          <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collCrearDesdeCategoria('${u.slug}')">Crear colección</button>
+        </div>
+      </div>
+    </div>`).join('');
 }
 
 window.collVerProductos = function(slug) {
   switchSection('productos');
   const sel = document.getElementById('prod-filter-cat');
-  if (sel) sel.value = slug;
+  const search = document.getElementById('prod-search');
+  const hasOption = sel && [...sel.options].some(o => o.value === slug);
+  if (hasOption) {
+    sel.value = slug;
+    if (search) search.value = '';
+  } else {
+    // Category not yet a formal collection/select option — fall back to search
+    if (sel) sel.value = '';
+    if (search) search.value = slug;
+  }
   applyProductFilters();
+};
+
+window.collCrearDesdeCategoria = function(slug) {
+  UnsavedGuard.confirmLeave(() => {
+    _collNuevaNow();
+    document.getElementById('coll-name').value = slug.charAt(0).toUpperCase() + slug.slice(1);
+    document.getElementById('coll-slug').value = slug;
+  });
 };
 
 function serializeCollForm() {
@@ -2780,12 +2853,38 @@ window.collGuardar = async function() {
 };
 
 window.collEliminar = async function(slug, count) {
+  const c = _allCollections.find(x => x.slug === slug);
+  const label = c?.name || slug;
+
   if (count > 0) {
-    toast(`No se puede eliminar: hay ${count} producto(s) en esta colección. Reasignalos primero desde "Ver productos".`);
+    const others = _allCollections.filter(x => x.slug !== slug).map(x => `${x.slug} (${x.name || x.slug})`).join(', ') || 'ninguna otra creada';
+    const target = prompt(
+      `"${label}" tiene ${count} producto(s) asociados. No se puede eliminar sin reasignarlos primero.\n\n` +
+      `Escribí el slug de la colección a la que mover esos productos (colecciones disponibles: ${others}), ` +
+      `o dejá vacío y aceptá para quitarles la categoría (quedan sin colección).`,
+      ''
+    );
+    if (target === null) return; // cancelled
+    const targetSlug = collSlugify(target);
+    if (targetSlug && !_allCollections.some(x => x.slug === targetSlug)) {
+      toast(`"${targetSlug}" no es una colección existente. Cancelado — no se movió ningún producto.`);
+      return;
+    }
+    if (!confirm(`¿Mover ${count} producto(s) de "${label}" a "${targetSlug || '(sin colección)'}" y luego eliminar "${label}"?`)) return;
+    try {
+      const affected = _allProducts.filter(p => (p.category || '') === slug);
+      const batch = writeBatch(db);
+      affected.forEach(p => batch.update(doc(db, 'products', p._docId), { category: targetSlug, updatedAt: serverTimestamp() }));
+      await batch.commit();
+      await deleteDoc(doc(db, 'collections', slug));
+      toast(`${affected.length} producto(s) movidos y "${label}" eliminada`);
+    } catch (e) {
+      toast('Error al eliminar: ' + e.message);
+    }
     return;
   }
-  const c = _allCollections.find(x => x.slug === slug);
-  if (!confirm(`¿Eliminar la colección "${c?.name || slug}"? Esta acción no se puede deshacer.`)) return;
+
+  if (!confirm(`¿Eliminar la colección "${label}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'collections', slug));
     toast('Colección eliminada');
