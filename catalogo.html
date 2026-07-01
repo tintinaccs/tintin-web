@@ -286,18 +286,7 @@
   <!-- TABS MOBILE -->
   <div class="cat-tabs-mobile" id="cat-tabs-mobile">
     <button class="tt-filtro-btn activo" data-cat="todos">Todos</button>
-    <button class="tt-filtro-btn" data-cat="relojes">Relojes</button>
-    <button class="tt-filtro-btn" data-cat="bolsos">Bags</button>
-    <button class="tt-filtro-btn" data-cat="aros">Aros</button>
-    <button class="tt-filtro-btn" data-cat="collares">Collares</button>
-    <button class="tt-filtro-btn" data-cat="pulseras">Pulseras</button>
-    <button class="tt-filtro-btn" data-cat="anillos">Anillos</button>
-    <button class="tt-filtro-btn" data-cat="tobilleras">Tobilleras</button>
-    <button class="tt-filtro-btn" data-cat="brazaletes">Brazaletes</button>
-    <button class="tt-filtro-btn" data-cat="earcuff">Earcuff</button>
-    <button class="tt-filtro-btn" data-cat="armcuff">Armcuff</button>
-    <button class="tt-filtro-btn" data-cat="gafas">Gafas</button>
-    <button class="tt-filtro-btn" data-cat="joyeros">Joyeros</button>
+    <!-- Rest rendered live from Super Admin → Colecciones -->
   </div>
 
   <!-- LAYOUT -->
@@ -312,54 +301,7 @@
           <span class="cat-filter-dot"></span> Todas
           <span class="cat-filter-count" id="count-todos"></span>
         </button>
-        <button class="cat-filter-option" data-cat="relojes">
-          <span class="cat-filter-dot"></span> Relojes
-          <span class="cat-filter-count" id="count-relojes"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="bolsos">
-          <span class="cat-filter-dot"></span> Bags
-          <span class="cat-filter-count" id="count-bolsos"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="aros">
-          <span class="cat-filter-dot"></span> Aros
-          <span class="cat-filter-count" id="count-aros"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="collares">
-          <span class="cat-filter-dot"></span> Collares
-          <span class="cat-filter-count" id="count-collares"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="pulseras">
-          <span class="cat-filter-dot"></span> Pulseras
-          <span class="cat-filter-count" id="count-pulseras"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="anillos">
-          <span class="cat-filter-dot"></span> Anillos
-          <span class="cat-filter-count" id="count-anillos"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="tobilleras">
-          <span class="cat-filter-dot"></span> Tobilleras
-          <span class="cat-filter-count" id="count-tobilleras"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="brazaletes">
-          <span class="cat-filter-dot"></span> Brazaletes
-          <span class="cat-filter-count" id="count-brazaletes"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="earcuff">
-          <span class="cat-filter-dot"></span> Earcuff
-          <span class="cat-filter-count" id="count-earcuff"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="armcuff">
-          <span class="cat-filter-dot"></span> Armcuff
-          <span class="cat-filter-count" id="count-armcuff"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="gafas">
-          <span class="cat-filter-dot"></span> Gafas
-          <span class="cat-filter-count" id="count-gafas"></span>
-        </button>
-        <button class="cat-filter-option" data-cat="joyeros">
-          <span class="cat-filter-dot"></span> Joyeros
-          <span class="cat-filter-count" id="count-joyeros"></span>
-        </button>
+        <!-- Rest rendered live from Super Admin → Colecciones -->
       </div>
 
       <div class="cat-filter-group">
@@ -489,6 +431,8 @@ import { initSiteContent } from './js/site-content.js';
 initSiteContent('catalogo');
 </script>
 <script type="module">
+import { onCollectionsUpdate } from './js/collections-store.js';
+
 const CAT_LABELS = {
   todos: 'Todo el catálogo',
   relojes: 'Relojes', aros: 'Aros', bolsos: 'Bags',
@@ -496,6 +440,42 @@ const CAT_LABELS = {
   tobilleras: 'Tobilleras', brazaletes: 'Brazaletes', earcuff: 'Earcuff',
   armcuff: 'Armcuff', gafas: 'Gafas', joyeros: 'Joyeros'
 };
+
+// Live collections from Super Admin → Colecciones (falls back to the 12
+// canonical ones above until/unless Firestore has real collection docs).
+let liveCollections = [];
+function catLabel(slug) {
+  const c = liveCollections.find(x => x.slug === slug);
+  return (c && c.name) || CAT_LABELS[slug] || (slug.charAt(0).toUpperCase() + slug.slice(1));
+}
+function renderCollectionButtons(cols) {
+  liveCollections = cols;
+  const sidebarGroup = document.querySelector('.cat-filter-group');
+  const mobileTabs = document.getElementById('cat-tabs-mobile');
+  if (sidebarGroup) {
+    sidebarGroup.querySelectorAll('.cat-filter-option[data-cat]:not([data-cat="todos"])').forEach(b => b.remove());
+    cols.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-filter-option' + (catActual === c.slug ? ' active' : '');
+      btn.dataset.cat = c.slug;
+      btn.innerHTML = `<span class="cat-filter-dot"></span> ${c.name || c.slug} <span class="cat-filter-count" id="count-${c.slug}"></span>`;
+      btn.onclick = () => seleccionarCat(c.slug);
+      sidebarGroup.appendChild(btn);
+    });
+  }
+  if (mobileTabs) {
+    mobileTabs.querySelectorAll('.tt-filtro-btn[data-cat]:not([data-cat="todos"])').forEach(b => b.remove());
+    cols.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'tt-filtro-btn' + (catActual === c.slug ? ' activo' : '');
+      btn.dataset.cat = c.slug;
+      btn.textContent = c.name || c.slug;
+      btn.onclick = () => seleccionarCat(c.slug);
+      mobileTabs.appendChild(btn);
+    });
+  }
+  actualizarContadores();
+}
 
 let todos = [];
 let catActual = 'todos';
@@ -535,7 +515,7 @@ function catMatches(product, cat) {
 }
 
 function actualizarContadores() {
-  const cats = ['todos','relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros'];
+  const cats = ['todos', ...liveCollections.map(c => c.slug)];
   const validos = todos.filter(p => p.name && String(p.name).trim());
   cats.forEach(c => {
     const el = document.getElementById('count-' + c);
@@ -630,7 +610,7 @@ function seleccionarCat(cat) {
   document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
   document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === cat));
   const titulo = document.getElementById('cat-titulo');
-  if (titulo) titulo.textContent = CAT_LABELS[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
+  if (titulo) titulo.textContent = cat === 'todos' ? CAT_LABELS.todos : catLabel(cat);
   aplicarFiltros();
 }
 
@@ -642,7 +622,7 @@ function init(products) {
     document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catParam));
     document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catParam));
     const titulo = document.getElementById('cat-titulo');
-    if (titulo) titulo.textContent = CAT_LABELS[catParam] || (catParam.charAt(0).toUpperCase() + catParam.slice(1));
+    if (titulo) titulo.textContent = catLabel(catParam);
     // Check if the category has matching products; if not, show all
     const matching = todos.filter(p => catMatches(p, catParam));
     if (matching.length > 0) {
@@ -653,6 +633,15 @@ function init(products) {
   }
   aplicarFiltros();
 }
+
+onCollectionsUpdate(cols => {
+  renderCollectionButtons(cols);
+  // Re-apply the active highlight now that the dynamic buttons exist
+  document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catActual));
+  document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catActual));
+  const titulo = document.getElementById('cat-titulo');
+  if (titulo && catActual !== 'todos') titulo.textContent = catLabel(catActual);
+});
 
 // Bootstrap + live updates: first load runs full init() (reads ?cat= from URL),
 // every later update (real-time Firestore listener) just refreshes the product

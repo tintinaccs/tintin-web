@@ -768,6 +768,9 @@
     <button class="adm-nav-item" data-section="productos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span> Productos
     </button>
+    <button class="adm-nav-item" data-section="colecciones">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span> Colecciones
+    </button>
     <div class="adm-nav-divider"></div>
     <button class="adm-nav-item" data-section="contenido">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> Contenido
@@ -805,6 +808,7 @@
   <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
   <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
   <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
+  <button class="adm-mobile-tab" data-section="colecciones"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Colecciones</button>
   <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Contenido</button>
   <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
@@ -1137,6 +1141,73 @@
           <div style="display:flex;gap:10px;margin-top:20px">
             <button class="adm-btn adm-btn-primary" onclick="prodGuardar()" id="prod-save-btn">Guardar producto</button>
             <button class="adm-btn" onclick="prodCancelForm()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== COLECCIONES ===================== -->
+    <div class="adm-section" id="section-colecciones">
+      <div class="adm-card" id="coll-list-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Colecciones</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input id="coll-search" type="text" placeholder="Buscar colección…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collNueva()">+ Nueva colección</button>
+          </div>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando colecciones…</div>
+          <div id="coll-grid-wrap" style="display:none;padding:20px">
+            <div id="coll-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"></div>
+          </div>
+          <div id="coll-empty" style="display:none;padding:32px;text-align:center;color:var(--adm-muted)">
+            No hay colecciones todavía.
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLECTION FORM (create / edit) -->
+      <div class="adm-card" id="coll-form-card" style="display:none">
+        <div class="adm-card-head">
+          <div class="adm-card-title" id="coll-form-title">Nueva colección</div>
+          <button class="adm-btn adm-btn-sm" onclick="collCancelForm()">← Volver</button>
+        </div>
+        <div class="adm-card-body">
+          <input type="hidden" id="coll-original-slug">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Nombre visible *</label>
+              <input id="coll-name" type="text" class="adm-input" placeholder="Ej: Bags" oninput="collAutoSlug()">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Slug interno *</label>
+              <input id="coll-slug" type="text" class="adm-input" placeholder="bags">
+              <small style="color:var(--adm-muted);font-size:11px">Se usa en <code>catalogo.html?cat=slug</code>. Solo minúsculas, sin espacios ni tildes.</small>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
+              <textarea id="coll-description" class="adm-input" rows="2" placeholder="Descripción breve de la colección…" style="resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Imagen de portada</label>
+              <input id="coll-image" type="url" class="adm-input" placeholder="https://...">
+              <img id="coll-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Orden</label>
+              <input id="coll-order" type="number" class="adm-input" placeholder="0" min="0">
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding-top:24px">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+                <input id="coll-visible" type="checkbox" checked style="accent-color:var(--adm-primary)"> Visible en el sitio público
+              </label>
+            </div>
+          </div>
+          <div id="coll-form-error" style="display:none;color:#e53935;font-size:13px;margin-top:12px;padding:10px;background:#fff5f5;border-radius:8px"></div>
+          <div style="display:flex;gap:10px;margin-top:20px">
+            <button class="adm-btn adm-btn-primary" onclick="collGuardar()" id="coll-save-btn">Guardar colección</button>
+            <button class="adm-btn" onclick="collCancelForm()">Cancelar</button>
           </div>
         </div>
       </div>
@@ -1516,6 +1587,7 @@ const SECTION_LABELS = {
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
   productos: 'Productos',
+  colecciones: 'Colecciones',
   mensajes: 'Mensajes',
   onboarding: 'Onboarding',
   configuracion: 'Configuración',
@@ -1534,6 +1606,7 @@ function switchSection(target) {
   if (target === 'usuarios') loadUsers();
   if (target === 'pedidos') loadOrders();
   if (target === 'productos') loadProductos();
+  if (target === 'colecciones') loadColecciones();
   if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
@@ -2401,6 +2474,237 @@ async function prodEliminar(docId, name) {
 document.querySelectorAll('[data-section="productos"]').forEach(btn => {
   btn.addEventListener('click', () => {
     if (!_allProducts.length) loadProductos();
+  });
+});
+
+/* =============================================
+   COLECCIONES — CRUD (real-time, synced to public site)
+   ============================================= */
+let _allCollections = [];
+let _collectionsUnsub = null;
+
+function collSlugify(s) {
+  return (s || '')
+    .toString().trim().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '') // strip accents
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function loadColecciones() {
+  document.getElementById('coll-loading').style.display = '';
+  document.getElementById('coll-grid-wrap').style.display = 'none';
+  document.getElementById('coll-empty').style.display = 'none';
+  if (_collectionsUnsub) { renderColeccionesGrid(_allCollections); return; }
+  _collectionsUnsub = onSnapshot(
+    query(collection(db, 'collections'), orderBy('order')),
+    snap => {
+      _allCollections = snap.docs.map(d => ({ slug: d.id, ...d.data() }));
+      renderColeccionesGrid(applyCollFilter(_allCollections));
+    },
+    e => {
+      document.getElementById('coll-loading').textContent = 'Error al cargar colecciones: ' + e.message;
+      console.error(e);
+    }
+  );
+}
+
+function applyCollFilter(list) {
+  const q = (document.getElementById('coll-search')?.value || '').toLowerCase();
+  if (!q) return list;
+  return list.filter(c => (c.name||'').toLowerCase().includes(q) || (c.slug||'').toLowerCase().includes(q));
+}
+document.getElementById('coll-search').addEventListener('input', () => renderColeccionesGrid(applyCollFilter(_allCollections)));
+
+function renderColeccionesGrid(list) {
+  document.getElementById('coll-loading').style.display = 'none';
+  if (!_allCollections.length) {
+    document.getElementById('coll-empty').style.display = '';
+    document.getElementById('coll-grid-wrap').style.display = 'none';
+    document.getElementById('coll-empty').innerHTML = `
+      No hay colecciones configuradas todavía — el sitio público está usando las 12 categorías por defecto.
+      <div style="margin-top:14px"><button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collImportarDefaults()">Importar las 12 colecciones actuales</button></div>
+    `;
+    return;
+  }
+  document.getElementById('coll-grid-wrap').style.display = '';
+  document.getElementById('coll-empty').style.display = 'none';
+  const grid = document.getElementById('coll-grid');
+  grid.innerHTML = list.map(c => {
+    const count = _allProducts.filter(p => (p.category || '') === c.slug).length;
+    return `
+    <div class="adm-card" style="margin:0;overflow:hidden">
+      <div style="height:120px;background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
+        ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#e65100;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
+      </div>
+      <div style="padding:14px">
+        <div style="font-weight:800;font-size:14px">${c.name || c.slug}</div>
+        <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">/${c.slug} · orden ${c.order ?? 0}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${count} producto${count===1?'':'s'}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${c.slug}')">Ver productos</button>
+          <button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.collVerProductos = function(slug) {
+  switchSection('productos');
+  const sel = document.getElementById('prod-filter-cat');
+  if (sel) sel.value = slug;
+  applyProductFilters();
+};
+
+window.collNueva = function() {
+  document.getElementById('coll-form-title').textContent = 'Nueva colección';
+  document.getElementById('coll-original-slug').value = '';
+  document.getElementById('coll-name').value = '';
+  document.getElementById('coll-slug').value = '';
+  document.getElementById('coll-description').value = '';
+  document.getElementById('coll-image').value = '';
+  document.getElementById('coll-img-preview').style.display = 'none';
+  document.getElementById('coll-order').value = _allCollections.length;
+  document.getElementById('coll-visible').checked = true;
+  document.getElementById('coll-form-error').style.display = 'none';
+  document.getElementById('coll-list-card').style.display = 'none';
+  document.getElementById('coll-form-card').style.display = '';
+};
+
+window.collAutoSlug = function() {
+  const slugEl = document.getElementById('coll-slug');
+  const originalSlug = document.getElementById('coll-original-slug').value;
+  if (originalSlug) return; // don't auto-rewrite the slug of an existing collection
+  slugEl.value = collSlugify(document.getElementById('coll-name').value);
+};
+
+window.collEditar = function(slug) {
+  const c = _allCollections.find(x => x.slug === slug);
+  if (!c) return;
+  document.getElementById('coll-form-title').textContent = 'Editar colección';
+  document.getElementById('coll-original-slug').value = c.slug;
+  document.getElementById('coll-name').value = c.name || '';
+  document.getElementById('coll-slug').value = c.slug || '';
+  document.getElementById('coll-description').value = c.description || '';
+  document.getElementById('coll-image').value = c.image || '';
+  const prev = document.getElementById('coll-img-preview');
+  prev.src = c.image || ''; prev.style.display = c.image ? '' : 'none';
+  document.getElementById('coll-order').value = c.order ?? 0;
+  document.getElementById('coll-visible').checked = c.visible !== false;
+  document.getElementById('coll-form-error').style.display = 'none';
+  document.getElementById('coll-list-card').style.display = 'none';
+  document.getElementById('coll-form-card').style.display = '';
+};
+
+window.collCancelForm = function() {
+  document.getElementById('coll-form-card').style.display = 'none';
+  document.getElementById('coll-list-card').style.display = '';
+};
+
+document.getElementById('coll-image').addEventListener('input', function() {
+  const prev = document.getElementById('coll-img-preview');
+  prev.src = this.value; prev.style.display = this.value ? '' : 'none';
+});
+
+window.collGuardar = async function() {
+  const errEl = document.getElementById('coll-form-error');
+  errEl.style.display = 'none';
+  const originalSlug = document.getElementById('coll-original-slug').value;
+  const name = document.getElementById('coll-name').value.trim();
+  const slug = collSlugify(document.getElementById('coll-slug').value);
+  const description = document.getElementById('coll-description').value.trim();
+  const image = document.getElementById('coll-image').value.trim();
+  const order = parseInt(document.getElementById('coll-order').value) || 0;
+  const visible = document.getElementById('coll-visible').checked;
+
+  if (!name || !slug) {
+    errEl.textContent = 'Completá nombre y slug.';
+    errEl.style.display = '';
+    return;
+  }
+  const dup = _allCollections.find(c => c.slug === slug && c.slug !== originalSlug);
+  if (dup) {
+    errEl.textContent = `Ya existe una colección con el slug "${slug}". Elegí otro.`;
+    errEl.style.display = '';
+    return;
+  }
+
+  const btn = document.getElementById('coll-save-btn');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    const data = { name, description, image, order, visible, updatedAt: serverTimestamp() };
+    if (originalSlug && originalSlug !== slug) {
+      // Slug changed: create new doc, move products over, delete old doc
+      data.createdAt = serverTimestamp();
+      await setDoc(doc(db, 'collections', slug), data);
+      const affected = _allProducts.filter(p => (p.category || '') === originalSlug);
+      if (affected.length) {
+        const batch = writeBatch(db);
+        affected.forEach(p => batch.update(doc(db, 'products', p._docId), { category: slug, updatedAt: serverTimestamp() }));
+        await batch.commit();
+      }
+      await deleteDoc(doc(db, 'collections', originalSlug));
+      toast(`Colección renombrada — ${affected.length} producto(s) actualizados`);
+    } else if (originalSlug) {
+      await updateDoc(doc(db, 'collections', originalSlug), data);
+      toast('Colección actualizada');
+    } else {
+      data.createdAt = serverTimestamp();
+      await setDoc(doc(db, 'collections', slug), data);
+      toast('Colección creada');
+    }
+    collCancelForm();
+  } catch (e) {
+    errEl.textContent = 'Error al guardar: ' + e.message;
+    errEl.style.display = '';
+  } finally {
+    btn.textContent = 'Guardar colección'; btn.disabled = false;
+  }
+};
+
+window.collEliminar = async function(slug, count) {
+  if (count > 0) {
+    toast(`No se puede eliminar: hay ${count} producto(s) en esta colección. Reasignalos primero desde "Ver productos".`);
+    return;
+  }
+  const c = _allCollections.find(x => x.slug === slug);
+  if (!confirm(`¿Eliminar la colección "${c?.name || slug}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'collections', slug));
+    toast('Colección eliminada');
+  } catch (e) {
+    toast('Error al eliminar: ' + e.message);
+  }
+};
+
+window.collImportarDefaults = async function() {
+  if (!confirm('Esto crea las 12 colecciones actuales en la base de datos para que puedas administrarlas (renombrar, ocultar, reordenar, agregar imagen). ¿Continuar?')) return;
+  const DEFAULTS = [
+    ['relojes','Relojes'], ['bolsos','Bags'], ['aros','Aros'], ['collares','Collares'],
+    ['pulseras','Pulseras'], ['anillos','Anillos'], ['tobilleras','Tobilleras'],
+    ['brazaletes','Brazaletes'], ['earcuff','Earcuff'], ['armcuff','Armcuff'],
+    ['gafas','Gafas'], ['joyeros','Joyeros'],
+  ];
+  try {
+    const batch = writeBatch(db);
+    DEFAULTS.forEach(([slug, name], i) => {
+      batch.set(doc(db, 'collections', slug), {
+        name, description: '', image: '', order: i, visible: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+      });
+    });
+    await batch.commit();
+    toast('Colecciones importadas');
+  } catch (e) {
+    toast('Error al importar: ' + e.message);
+  }
+};
+
+// Load collections when section is shown
+document.querySelectorAll('[data-section="colecciones"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!_collectionsUnsub) loadColecciones();
   });
 });
 
