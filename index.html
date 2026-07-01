@@ -967,16 +967,18 @@ setTimeout(function(){_ttUnlock();},5500);
 <script type="module" src="js/load-images-init.js"></script>
 <script type="module" src="js/products-store.js"></script>
 <script type="module">
-import { loadImages, getImg } from './js/images.js';
+import { initSiteContent } from './js/site-content.js';
+initSiteContent('index');
+</script>
+<script type="module">
+import { onImagesUpdate } from './js/images.js';
 
-(async () => {
-  await loadImages();
-
-  // Solo carga imágenes de secciones internas.
-  // El hero NO se toca acá para evitar parpadeos, retrasos o cambios raros.
+// Real-time: applies immediately with cached data, then re-applies live every
+// time Super Admin saves a new image — no reload needed.
+onImagesUpdate((images) => {
   document.querySelectorAll('[data-img-slot]').forEach(el => {
     const slotId = el.dataset.imgSlot;
-    const url = getImg(slotId);
+    const url = images[slotId];
     if (!url) return;
 
     if (el.tagName === 'IMG') {
@@ -995,7 +997,7 @@ import { loadImages, getImg } from './js/images.js';
       `;
     }
   });
-})();
+});
 </script>
 <script type="application/ld+json">
 {

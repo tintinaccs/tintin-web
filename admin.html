@@ -2710,11 +2710,8 @@ const CONT_SCHEMA = {
           { key:'title', label:'Título grande (H1)', type:'text', def:'TINTIN' },
           { key:'subtitle', label:'Subtítulo', type:'text', def:'Brillo, estilo y mucha personalidad' },
           { key:'btnText', label:'Texto del botón', type:'text', def:'¿Quiénes somos? →' },
-          { key:'btnHref', label:'URL del botón', type:'url', def:'nosotros.html' },
-          { key:'image_desktop', label:'Imagen Desktop (≥1024px)', type:'image', def:'' },
-          { key:'image_tablet', label:'Imagen Tablet (768–1023px)', type:'image', def:'' },
-          { key:'image_mobile', label:'Imagen Móvil (≤767px)', type:'image', def:'' },
-          { key:'imageAlt', label:'Alt de la imagen', type:'text', def:'Tintin Accesorios' },
+          { key:'btnHref', label:'URL del botón', type:'url', def:'about.html' },
+          { key:'_note', label:'Las imágenes del Hero se administran en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
         ]
       },
       trust: {
@@ -2779,7 +2776,7 @@ const CONT_SCHEMA = {
     }
   },
   nosotros: {
-    label: 'Nosotros', url: 'nosotros.html',
+    label: 'Nosotros', url: 'about.html',
     sections: {
       hero: {
         label: 'Hero Nosotros', icon: 'hero',
@@ -2848,6 +2845,9 @@ async function contSaveSection(pageId, sectionId, data) {
 }
 
 function contRenderField(field, value) {
+  if (field.type === 'note') {
+    return `<div class="cont-field-note" style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:10px 14px;font-size:12px;color:#b84c72;margin-bottom:12px">${field.label}</div>`;
+  }
   const id = `cont-f-${field.key}-${Math.random().toString(36).slice(2,8)}`;
   let html = `<div class="cont-field" data-fkey="${field.key}">`;
   html += `<label class="cont-label" for="${id}">${field.label}</label>`;

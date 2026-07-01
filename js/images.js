@@ -4,7 +4,7 @@
    ============================================================ */
 
 import { db } from "./firebase.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
@@ -117,4 +117,23 @@ export function setImgCache(id, url) {
     delete _cache[id];
   }
   _toLocalStorage(_cache);
+}
+
+let _listenerStarted = false;
+const _subscribers = new Set();
+
+/**
+ * Real-time: subscribe to image slot changes. Callback fires immediately with
+ * whatever is cached, then again every time Super Admin saves a new image.
+ */
+export function onImagesUpdate(cb) {
+  _subscribers.add(cb);
+  if (_cache) cb(_cache);
+  if (_listenerStarted) return;
+  _listenerStarted = true;
+  onSnapshot(doc(db, 'settings', 'images'), snap => {
+    _cache = snap.exists() ? snap.data() : {};
+    _toLocalStorage(_cache);
+    _subscribers.forEach(fn => { try { fn(_cache); } catch (e) { console.warn('[images] subscriber error:', e); } });
+  }, e => console.warn('[images] realtime listener failed:', e));
 }

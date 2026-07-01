@@ -347,25 +347,24 @@
 <script src="script.js" defer></script>
 <script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/products-store.js"></script>
-<script>
-// Load category images from tt_images localStorage (set via admin-images.html)
-(function() {
-  try {
-    const cache = JSON.parse(localStorage.getItem('tt_images') || '{}');
-    document.querySelectorAll('[data-cat-slot]').forEach(el => {
-      const url = cache[el.dataset.catSlot];
-      if (url) {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = el.dataset.catSlot;
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;';
-        img.onerror = () => img.remove();
-        el.innerHTML = '';
-        el.appendChild(img);
-      }
-    });
-  } catch(e) {}
-})();
+<script type="module">
+import { onImagesUpdate } from './js/images.js';
+
+// Real-time: applies immediately with cached data, then live on every
+// Super Admin image update — no reload, no dependency on stale localStorage.
+onImagesUpdate((images) => {
+  document.querySelectorAll('[data-cat-slot]').forEach(el => {
+    const url = images[el.dataset.catSlot];
+    if (!url) return;
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = el.dataset.catSlot;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;';
+    img.onerror = () => img.remove();
+    el.innerHTML = '';
+    el.appendChild(img);
+  });
+});
 </script>
 <script type="module" src="js/auth-nav.js"></script>
 </body>
