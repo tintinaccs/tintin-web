@@ -1475,7 +1475,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp
+  query, orderBy, limit, where, writeBatch, serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
 
@@ -2134,19 +2134,26 @@ document.getElementById('btn-save-config').onclick = async () => {
    PRODUCTOS — CRUD
    ============================================= */
 let _allProducts = [];
+let _productosUnsub = null;
 
-async function loadProductos() {
+// Live listener: any create/edit/delete/activate/deactivate — from this session
+// or another admin's — updates the table immediately, no manual refresh needed.
+function loadProductos() {
   document.getElementById('prod-loading').style.display = '';
   document.getElementById('prod-table-wrap').style.display = 'none';
   document.getElementById('prod-empty').style.display = 'none';
-  try {
-    const snap = await getDocs(query(collection(db, 'products'), orderBy('name')));
-    _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
-    renderProductosTable(_allProducts);
-  } catch(e) {
-    document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
-    console.error(e);
-  }
+  if (_productosUnsub) return; // listener already active, just re-show current data
+  _productosUnsub = onSnapshot(
+    query(collection(db, 'products'), orderBy('name')),
+    snap => {
+      _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+      applyProductFilters();
+    },
+    e => {
+      document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
+      console.error(e);
+    }
+  );
 }
 
 function renderProductosTable(list) {

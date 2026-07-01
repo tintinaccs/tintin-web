@@ -639,19 +639,31 @@ function init(products) {
   aplicarFiltros();
 }
 
-// Bootstrap: register listener first, then check if already loaded (avoids race condition)
-window.addEventListener('tintin:products-loaded', e => {
-  if (!todos.length) init(e.detail.products);
-}, { once: true });
+// Bootstrap + live updates: first load runs full init() (reads ?cat= from URL),
+// every later update (real-time Firestore listener) just refreshes the product
+// list and re-applies whatever filter the user currently has selected.
+let _catalogInitialized = false;
+function handleProductsUpdate(products) {
+  if (!_catalogInitialized) {
+    _catalogInitialized = true;
+    init(products);
+  } else {
+    todos = products;
+    actualizarContadores();
+    aplicarFiltros();
+  }
+}
+
+window.addEventListener('tintin:products-loaded', e => handleProductsUpdate(e.detail.products));
 
 if (window.PRODUCTS && window.PRODUCTS.length) {
-  init(window.PRODUCTS);
+  handleProductsUpdate(window.PRODUCTS);
 } else {
   // Fallback poll — catches the case where the event fired before this script ran
   const _pollStart = Date.now();
   (function poll() {
-    if (todos.length) return;
-    if (window.PRODUCTS && window.PRODUCTS.length) { init(window.PRODUCTS); return; }
+    if (_catalogInitialized) return;
+    if (window.PRODUCTS && window.PRODUCTS.length) { handleProductsUpdate(window.PRODUCTS); return; }
     if (Date.now() - _pollStart < 8000) setTimeout(poll, 200);
   })();
 }
