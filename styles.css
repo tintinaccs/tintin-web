@@ -1625,17 +1625,28 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   justify-content: center;
   box-shadow: 0 4px 20px rgba(37,211,102,0.4);
   z-index: 900;
-  transition: var(--transition);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
   text-decoration: none;
   cursor: pointer;
+  animation: ttn-wa-breathe 3.2s ease-in-out 2s infinite;
+}
+
+@keyframes ttn-wa-breathe {
+  0%, 100% { transform: translateY(0) scale(1);       box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  50%       { transform: translateY(-3px) scale(1.04); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
 }
 
 .tt-wa-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 28px rgba(37,211,102,0.5);
+  animation-play-state: paused;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 10px 36px rgba(37,211,102,0.6);
 }
 
 .tt-wa-float svg { width: 28px; height: 28px; fill: white; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-wa-float { animation: none; }
+}
 
 /* ═══════════════════════════════════════════════
    MOBILE BOTTOM TABBAR
