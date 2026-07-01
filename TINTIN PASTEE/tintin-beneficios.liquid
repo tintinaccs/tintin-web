@@ -1,0 +1,277 @@
+{% comment %}
+  ╔══════════════════════════════════════════════════════╗
+  ║  TINTIN — 02 BENEFICIOS RÁPIDOS                     ║
+  ║  Archivo: 02-tintin-beneficios.liquid                ║
+  ║  Posición: 2° en la plantilla de producto            ║
+  ║  Sin sincronización de carrito necesaria             ║
+  ╚══════════════════════════════════════════════════════╝
+{% endcomment %}
+
+{%- assign g = 'tinben' -%}
+
+{% style %}
+.{{ g }}{
+  --acc: {{ section.settings.accent_color }};
+  --bg:  {{ section.settings.background_color }};
+  --fg:  {{ section.settings.text_color }};
+  --card-bg: {{ section.settings.card_background }};
+  --r: {{ section.settings.border_radius }}px;
+  background: var(--bg);
+  width: 100%;
+}
+.{{ g }}-wrap{
+  max-width: {{ section.settings.max_width }}px;
+  margin: 0 auto;
+  padding: clamp(24px,3vw,{{ section.settings.section_padding }}px) clamp(16px,4vw,72px);
+  box-sizing: border-box;
+}
+.{{ g }}-heading{
+  text-align: center;
+  margin-bottom: clamp(20px,2.5vw,36px);
+}
+.{{ g }}-title{
+  font-size: clamp(20px,2.2vw,{{ section.settings.title_size }}px);
+  font-weight: 500;
+  color: var(--fg);
+  margin: 0 0 6px;
+  letter-spacing: -.02em;
+}
+.{{ g }}-subtitle{
+  font-size: 13px;
+  color: rgba(45,45,45,.52);
+}
+.{{ g }}-grid{
+  display: grid;
+  grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+  gap: clamp(12px,2vw,24px);
+}
+.{{ g }}-card{
+  background: var(--card-bg);
+  border: 1px solid rgba(212,120,154,.12);
+  border-radius: calc(var(--r) * 1.5);
+  padding: clamp(18px,2vw,28px) clamp(16px,1.8vw,24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.{{ g }}-card::before{
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--acc), rgba(212,120,154,.3), var(--acc));
+  opacity: 0;
+  transition: opacity .22s ease;
+}
+.{{ g }}-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(212,120,154,.12);
+  border-color: rgba(212,120,154,.28);
+}
+.{{ g }}-card:hover::before{ opacity: 1; }
+
+.{{ g }}-icon{
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(212,120,154,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.{{ g }}-icon-img{
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  display: block;
+}
+.{{ g }}-card-title{
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0;
+}
+.{{ g }}-card-text{
+  font-size: 13px;
+  color: rgba(45,45,45,.6);
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media(max-width:768px){
+  .{{ g }}-grid{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .{{ g }}-card{ padding: 16px 12px; gap: 8px; }
+  .{{ g }}-icon{ width: 42px; height: 42px; font-size: 18px; }
+.{{ g }}-icon-img{ width: 72%; height: 72%; }
+  .{{ g }}-card-title{ font-size: 13px; }
+  .{{ g }}-card-text{ font-size: 12px; }
+  .{{ g }}-wrap{ padding: clamp(20px,3vw,32px) 16px; }
+}
+@media(max-width:400px){
+  .{{ g }}-grid{ grid-template-columns: 1fr; }
+}
+{% endstyle %}
+
+{%- if section.settings.show_section -%}
+<section class="{{ g }}" aria-label="Beneficios">
+  <div class="{{ g }}-wrap">
+
+    {%- if section.settings.show_heading -%}
+      <div class="{{ g }}-heading">
+        {%- if section.settings.title != blank -%}
+          <h2 class="{{ g }}-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="{{ g }}-subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="{{ g }}-grid">
+
+      {%- if section.settings.card1_show -%}
+        <div class="{{ g }}-card">
+          <div class="{{ g }}-icon">
+  {%- if section.settings.card1_icon_image != blank -%}
+    <img
+      class="{{ g }}-icon-img"
+      src="{{ section.settings.card1_icon_image | image_url: width: 120 }}"
+      alt="{{ section.settings.card1_title | escape }}"
+      loading="lazy"
+      width="60"
+      height="60">
+  {%- else -%}
+    {{ section.settings.card1_icon }}
+  {%- endif -%}
+</div>
+          <p class="{{ g }}-card-title">{{ section.settings.card1_title }}</p>
+          <p class="{{ g }}-card-text">{{ section.settings.card1_text }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.card2_show -%}
+        <div class="{{ g }}-card">
+          <div class="{{ g }}-icon">
+  {%- if section.settings.card2_icon_image != blank -%}
+    <img
+      class="{{ g }}-icon-img"
+      src="{{ section.settings.card2_icon_image | image_url: width: 120 }}"
+      alt="{{ section.settings.card2_title | escape }}"
+      loading="lazy"
+      width="60"
+      height="60">
+  {%- else -%}
+    {{ section.settings.card2_icon }}
+  {%- endif -%}
+</div>
+          <p class="{{ g }}-card-title">{{ section.settings.card2_title }}</p>
+          <p class="{{ g }}-card-text">{{ section.settings.card2_text }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.card3_show -%}
+        <div class="{{ g }}-card">
+          <div class="{{ g }}-icon">
+  {%- if section.settings.card3_icon_image != blank -%}
+    <img
+      class="{{ g }}-icon-img"
+      src="{{ section.settings.card3_icon_image | image_url: width: 120 }}"
+      alt="{{ section.settings.card3_title | escape }}"
+      loading="lazy"
+      width="60"
+      height="60">
+  {%- else -%}
+    {{ section.settings.card3_icon }}
+  {%- endif -%}
+</div>
+          <p class="{{ g }}-card-title">{{ section.settings.card3_title }}</p>
+          <p class="{{ g }}-card-text">{{ section.settings.card3_text }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.card4_show -%}
+        <div class="{{ g }}-card">
+          <div class="{{ g }}-icon">
+  {%- if section.settings.card4_icon_image != blank -%}
+    <img
+      class="{{ g }}-icon-img"
+      src="{{ section.settings.card4_icon_image | image_url: width: 120 }}"
+      alt="{{ section.settings.card4_title | escape }}"
+      loading="lazy"
+      width="60"
+      height="60">
+  {%- else -%}
+    {{ section.settings.card4_icon }}
+  {%- endif -%}
+</div>
+          <p class="{{ g }}-card-title">{{ section.settings.card4_title }}</p>
+          <p class="{{ g }}-card-text">{{ section.settings.card4_text }}</p>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "02 — Beneficios",
+  "settings": [
+    { "type": "header", "content": "━━━ Visibilidad ━━━" },
+    { "type": "checkbox", "id": "show_section", "label": "Mostrar sección", "default": true },
+    { "type": "checkbox", "id": "show_heading", "label": "Mostrar título", "default": true },
+    { "type": "header", "content": "━━━ Diseño ━━━" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo (px)", "min": 800, "max": 2560, "step": 40, "default": 1600 },
+    { "type": "range", "id": "section_padding", "label": "Espaciado vertical (px)", "min": 16, "max": 120, "step": 4, "default": 48 },
+    { "type": "range", "id": "border_radius", "label": "Radio de bordes (px)", "min": 0, "max": 40, "step": 2, "default": 16 },
+    { "type": "range", "id": "columns", "label": "Columnas desktop", "min": 2, "max": 4, "step": 1, "default": 4 },
+    { "type": "header", "content": "━━━ Colores ━━━" },
+    { "type": "color", "id": "background_color", "label": "Fondo sección", "default": "#fdf0f5" },
+    { "type": "color", "id": "card_background", "label": "Fondo tarjetas", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Texto", "default": "#2d2d2d" },
+    { "type": "color", "id": "accent_color", "label": "Acento", "default": "#d4789a" },
+    { "type": "header", "content": "━━━ Encabezado ━━━" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Comprá con confianza 💕" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Cada pedido preparado con amor y dedicación" },
+    { "type": "range", "id": "title_size", "label": "Tamaño título (px)", "min": 16, "max": 40, "step": 2, "default": 28 },
+    { "type": "header", "content": "━━━ Tarjeta 1 ━━━" },
+    { "type": "checkbox", "id": "card1_show", "label": "Mostrar", "default": true },
+    { "type": "text", "id": "card1_icon", "label": "Ícono (emoji)", "default": "📦" },
+    { "type": "image_picker", "id": "card1_icon_image", "label": "Ícono personalizado PNG" },
+    { "type": "text", "id": "card1_title", "label": "Título", "default": "Envíos a todo el país" },
+    { "type": "textarea", "id": "card1_text", "label": "Texto", "default": "Recibí tus accesorios Tintin por encomienda a donde estés." },
+    { "type": "header", "content": "━━━ Tarjeta 2 ━━━" },
+    { "type": "checkbox", "id": "card2_show", "label": "Mostrar", "default": true },
+    { "type": "text", "id": "card2_icon", "label": "Ícono (emoji)", "default": "🛵" },
+    { "type": "image_picker", "id": "card2_icon_image", "label": "Ícono personalizado PNG" },
+    { "type": "text", "id": "card2_title", "label": "Título", "default": "Delivery zona central" },
+    { "type": "textarea", "id": "card2_text", "label": "Texto", "default": "Coordinamos tu entrega según disponibilidad en zona central." },
+    { "type": "header", "content": "━━━ Tarjeta 3 ━━━" },
+    { "type": "checkbox", "id": "card3_show", "label": "Mostrar", "default": true },
+    { "type": "text", "id": "card3_icon", "label": "Ícono (emoji)", "default": "🏪" },
+   { "type": "image_picker", "id": "card3_icon_image", "label": "Ícono personalizado PNG" },
+    { "type": "text", "id": "card3_title", "label": "Título", "default": "Retiro disponible" },
+    { "type": "textarea", "id": "card3_text", "label": "Texto", "default": "Podés retirar tu pedido desde nuestra ubicación." },
+    { "type": "header", "content": "━━━ Tarjeta 4 ━━━" },
+    { "type": "checkbox", "id": "card4_show", "label": "Mostrar", "default": true },
+    { "type": "text", "id": "card4_icon", "label": "Ícono (emoji)", "default": "✨" },
+    { "type": "image_picker", "id": "card4_icon_image", "label": "Ícono personalizado PNG" },
+    { "type": "text", "id": "card4_title", "label": "Título", "default": "Preparado con amor" },
+    { "type": "textarea", "id": "card4_text", "label": "Texto", "default": "Cada pedido va con detalles Tintin y mucho cariño." }
+  ],
+  "presets": [{ "name": "02 — Beneficios" }]
+}
+{% endschema %}
