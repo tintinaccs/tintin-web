@@ -606,8 +606,21 @@ function seleccionarCat(cat) {
 function init(products) {
   todos = products;
   actualizarContadores();
-  if (catParam) seleccionarCat(catParam);
-  else aplicarFiltros();
+  if (catParam) {
+    // Highlight category visually in sidebar
+    document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catParam));
+    document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catParam));
+    const titulo = document.getElementById('cat-titulo');
+    if (titulo) titulo.textContent = CAT_LABELS[catParam] || (catParam.charAt(0).toUpperCase() + catParam.slice(1));
+    // Check if the category has matching products; if not, show all
+    const matching = todos.filter(p => catMatches(p, catParam));
+    if (matching.length > 0) {
+      catActual = catParam;
+    } else {
+      catActual = 'todos';
+    }
+  }
+  aplicarFiltros();
 }
 
 // Bootstrap: products may already be loaded or arrive via event
