@@ -554,6 +554,10 @@ function aplicarFiltros() {
   if (sort === 'precio-desc') lista.sort((a, b) => b.price - a.price);
   if (sort === 'nombre')      lista.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
   if (sort === 'stock')       lista.sort((a, b) => (b.stock ?? 0) - (a.stock ?? 0));
+  if (sort === 'default' && catActual !== 'todos') {
+    // Manual order set from Super Admin → Colecciones → Gestionar productos
+    lista.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999));
+  }
 
   // Out-of-stock products may appear when browsing a category or searching,
   // but always sink to the end regardless of the chosen sort order.

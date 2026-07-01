@@ -3,7 +3,9 @@
 // =============================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
@@ -18,7 +20,22 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
+// Persistent local cache (IndexedDB): onSnapshot listeners resolve instantly
+// from disk on every load after the first — no more staring at "Cargando…"
+// while waiting on a network round-trip. Firestore still syncs live in the
+// background and reconciles automatically. Falls back to plain in-memory
+// Firestore (old behavior) if IndexedDB is unavailable (private browsing, etc).
+let db;
+try {
+  db = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+  });
+} catch (e) {
+  console.warn('[firebase] Persistent cache unavailable, falling back to in-memory:', e);
+  db = getFirestore(app);
+}
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });

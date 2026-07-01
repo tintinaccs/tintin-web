@@ -1211,6 +1211,42 @@
           </div>
         </div>
       </div>
+
+      <!-- PRODUCTS WORKSPACE — only shown while editing an existing collection -->
+      <div class="adm-card" id="coll-products-card" style="display:none">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Productos de esta colección — <span id="coll-products-count">0</span></div>
+          <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collOpenPicker()">+ Agregar productos</button>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div id="coll-current-empty" style="display:none;padding:24px;text-align:center;color:var(--adm-muted)">
+            Todavía no hay productos en esta colección. Usá "+ Agregar productos".
+          </div>
+          <div id="coll-current-list" style="max-height:520px;overflow-y:auto"></div>
+          <div style="padding:10px 16px;font-size:11px;color:var(--adm-muted);border-top:1px solid var(--adm-border)">
+            Los productos sin stock siempre van al final, aunque los muevas manualmente. El orden se guarda automáticamente.
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT PICKER — search all products, bulk add -->
+      <div class="adm-card" id="coll-picker-card" style="display:none">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Agregar productos</div>
+          <button class="adm-btn adm-btn-sm" onclick="collClosePicker()">← Volver a la colección</button>
+        </div>
+        <div class="adm-card-body" style="padding:0">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--adm-border)">
+            <input id="coll-picker-search" type="text" placeholder="Buscar producto por nombre…" class="adm-input" style="max-width:280px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="coll-picker-select-all" onclick="collPickerToggleAll(this)"> Seleccionar todo (filtrados)
+            </label>
+            <span id="coll-picker-sel-count" style="font-size:12px;font-weight:700;color:var(--adm-primary)">0 seleccionados</span>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" style="margin-left:auto" onclick="collPickerAddSelected()">Agregar a la colección</button>
+          </div>
+          <div id="coll-picker-list" style="max-height:520px;overflow-y:auto"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ===================== MENSAJES ===================== -->
@@ -2286,22 +2322,11 @@ function loadProductos() {
   );
 }
 
-function renderProductosTable(list) {
-  document.getElementById('prod-loading').style.display = 'none';
-  const tbody = document.getElementById('prod-tbody');
-  if (!list.length) {
-    document.getElementById('prod-empty').style.display = '';
-    document.getElementById('prod-table-wrap').style.display = 'none';
-    return;
-  }
-  document.getElementById('prod-table-wrap').style.display = '';
-  document.getElementById('prod-empty').style.display = 'none';
-
+function productRowHtml(p) {
+  const isSelected = _selectedProducts.has(p._docId);
+  const nameSafe = (p.name||'').replace(/'/g,"\\'");
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
-  tbody.innerHTML = list.map(p => {
-    const isSelected = _selectedProducts.has(p._docId);
-    const nameSafe = (p.name||'').replace(/'/g,"\\'");
-    return `
+  return `
     <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
       <td style="padding:10px 16px;text-align:center">
         <input type="checkbox" class="prod-row-check" data-id="${p._docId}" ${isSelected ? 'checked' : ''} onclick="toggleProductSelect(this)" style="cursor:pointer;width:15px;height:15px">
@@ -2329,7 +2354,56 @@ function renderProductosTable(list) {
         </div>
       </td>
     </tr>
-  `}).join('');
+  `;
+}
+
+function renderProductosTable(list) {
+  document.getElementById('prod-loading').style.display = 'none';
+  const tbody = document.getElementById('prod-tbody');
+  if (!list.length) {
+    document.getElementById('prod-empty').style.display = '';
+    document.getElementById('prod-table-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('prod-table-wrap').style.display = '';
+  document.getElementById('prod-empty').style.display = 'none';
+  tbody.innerHTML = list.map(productRowHtml).join('');
+}
+
+// Default view (no search, no category filter): grouped by collection so the
+// admin never lands on an empty-looking screen and can scan everything at once.
+function renderProductosGrouped(list) {
+  document.getElementById('prod-loading').style.display = 'none';
+  if (!list.length) {
+    document.getElementById('prod-empty').style.display = '';
+    document.getElementById('prod-table-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('prod-table-wrap').style.display = '';
+  document.getElementById('prod-empty').style.display = 'none';
+
+  const labelFor = (slug) => {
+    const c = _allCollections.find(x => x.slug === slug);
+    return c ? (c.name || slug) : (slug || 'Sin categoría');
+  };
+  const groups = new Map();
+  list.forEach(p => {
+    const key = p.category || '';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(p);
+  });
+  const orderedKeys = [...groups.keys()].sort((a, b) => {
+    const oa = _allCollections.find(c => c.slug === a)?.order ?? 999;
+    const ob = _allCollections.find(c => c.slug === b)?.order ?? 999;
+    return oa - ob || labelFor(a).localeCompare(labelFor(b), 'es');
+  });
+
+  document.getElementById('prod-tbody').innerHTML = orderedKeys.map(key => `
+    <tr><td colspan="9" style="padding:14px 16px 8px;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);background:var(--adm-bg)">
+      ${labelFor(key)} <span style="color:var(--adm-muted);font-weight:600">(${groups.get(key).length})</span>
+    </td></tr>
+    ${groups.get(key).map(productRowHtml).join('')}
+  `).join('');
 }
 
 // Search + category filter
@@ -2348,7 +2422,12 @@ function applyProductFilters() {
     );
   }
   if (cat) result = result.filter(p => (p.category||'') === cat);
-  renderProductosTable(result);
+  if (!q && !cat) renderProductosGrouped(result);
+  else renderProductosTable(result);
+
+  // Keep the collection products workspace live if it's currently open
+  if (_collProductsSlug && document.getElementById('coll-products-card').style.display !== 'none') renderCollCurrentList();
+  if (document.getElementById('coll-picker-card').style.display !== 'none') renderCollPicker();
 }
 document.getElementById('prod-search').addEventListener('input', applyProductFilters);
 document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
@@ -2747,6 +2826,9 @@ function _collNuevaNow() {
   document.getElementById('coll-form-error').style.display = 'none';
   document.getElementById('coll-list-card').style.display = 'none';
   document.getElementById('coll-form-card').style.display = '';
+  document.getElementById('coll-products-card').style.display = 'none';
+  document.getElementById('coll-picker-card').style.display = 'none';
+  _collProductsSlug = null;
   UnsavedGuard.track(serializeCollForm, collGuardar);
 }
 
@@ -2777,12 +2859,19 @@ function _collEditarNow(slug) {
   document.getElementById('coll-form-error').style.display = 'none';
   document.getElementById('coll-list-card').style.display = 'none';
   document.getElementById('coll-form-card').style.display = '';
+  document.getElementById('coll-picker-card').style.display = 'none';
+  document.getElementById('coll-products-card').style.display = '';
+  _collProductsSlug = slug;
+  renderCollCurrentList();
   UnsavedGuard.track(serializeCollForm, collGuardar);
 }
 
 function _collCloseForm() {
   document.getElementById('coll-form-card').style.display = 'none';
+  document.getElementById('coll-products-card').style.display = 'none';
+  document.getElementById('coll-picker-card').style.display = 'none';
   document.getElementById('coll-list-card').style.display = '';
+  _collProductsSlug = null;
 }
 window.collCancelForm = function() {
   UnsavedGuard.confirmLeave(_collCloseForm);
@@ -2792,6 +2881,162 @@ document.getElementById('coll-image').addEventListener('input', function() {
   const prev = document.getElementById('coll-img-preview');
   prev.src = this.value; prev.style.display = this.value ? '' : 'none';
 });
+
+/* =============================================
+   COLECCIONES — Products workspace (bulk add/remove, manual reorder)
+   ============================================= */
+let _collProductsSlug = null;
+let _collPickerSelected = new Set();
+
+function _collInStock(p) { return !(p.stock != null && Number(p.stock) <= 0); }
+
+function renderCollCurrentList() {
+  if (!_collProductsSlug) return;
+  const items = _allProducts.filter(p => (p.category || '') === _collProductsSlug);
+  document.getElementById('coll-products-count').textContent = items.length;
+  document.getElementById('coll-current-empty').style.display = items.length ? 'none' : '';
+
+  // In-stock sorted by manual order (or name if never ordered); out-of-stock always last.
+  const inStock = items.filter(_collInStock).sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999) || (a.name||'').localeCompare(b.name||'', 'es'));
+  const outStock = items.filter(p => !_collInStock(p)).sort((a, b) => (a.name||'').localeCompare(b.name||'', 'es'));
+  const ordered = [...inStock, ...outStock];
+  const fmt = n => 'Gs. ' + Number(n||0).toLocaleString('es-PY');
+
+  document.getElementById('coll-current-list').innerHTML = ordered.map((p, i) => {
+    const inStockRow = _collInStock(p);
+    return `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--adm-border)">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === 0) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', -1)" title="Mover arriba">↑</button>
+        <button class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === inStock.length - 1) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', 1)" title="Mover abajo">↓</button>
+      </div>
+      ${p.imageUrl
+        ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border);flex-shrink:0">`
+        : `<div style="width:44px;height:44px;background:#fce4ec;border-radius:6px;flex-shrink:0"></div>`}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name || '(sin nombre)'}</div>
+        <div style="font-size:11px;color:var(--adm-muted)">${fmt(p.price)} · ${p.stock != null ? p.stock + ' en stock' : 'stock no definido'}</div>
+      </div>
+      ${!inStockRow ? `<span style="font-size:10px;font-weight:800;background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:20px;flex-shrink:0">SIN STOCK</span>` : ''}
+      <button class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>
+    </div>`;
+  }).join('');
+}
+
+window.collMoveProduct = async function(docId, direction) {
+  const items = _allProducts.filter(p => (p.category || '') === _collProductsSlug && _collInStock(p));
+  const sorted = items.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999) || (a.name||'').localeCompare(b.name||'', 'es'));
+  const idx = sorted.findIndex(p => p._docId === docId);
+  const swapIdx = idx + direction;
+  if (idx < 0 || swapIdx < 0 || swapIdx >= sorted.length) return;
+  // Normalize order values 0..n-1, then swap the two affected items
+  sorted.forEach((p, i) => { p.collectionOrder = i; });
+  const a = sorted[idx], b = sorted[swapIdx];
+  [a.collectionOrder, b.collectionOrder] = [b.collectionOrder, a.collectionOrder];
+  try {
+    const batch = writeBatch(db);
+    sorted.forEach(p => batch.update(doc(db, 'products', p._docId), { collectionOrder: p.collectionOrder }));
+    await batch.commit();
+  } catch (e) {
+    toast('No se pudo reordenar: ' + e.message);
+  }
+};
+
+window.collRemoveFromCollection = async function(docId) {
+  const p = _allProducts.find(x => x._docId === docId);
+  if (!confirm(`¿Quitar "${p?.name || 'este producto'}" de la colección?`)) return;
+  try {
+    await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
+    toast('Producto quitado de la colección');
+  } catch (e) {
+    toast('Error: ' + e.message);
+  }
+};
+
+window.collOpenPicker = function() {
+  _collPickerSelected = new Set();
+  document.getElementById('coll-products-card').style.display = 'none';
+  document.getElementById('coll-picker-card').style.display = '';
+  document.getElementById('coll-picker-search').value = '';
+  renderCollPicker();
+};
+
+window.collClosePicker = function() {
+  document.getElementById('coll-picker-card').style.display = 'none';
+  document.getElementById('coll-products-card').style.display = '';
+  renderCollCurrentList();
+};
+
+function renderCollPicker() {
+  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
+  const filtered = q
+    ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q))
+    : _allProducts;
+
+  document.getElementById('coll-picker-list').innerHTML = filtered.map(p => {
+    const checked = _collPickerSelected.has(p._docId);
+    const currentColl = p.category ? (_allCollections.find(c => c.slug === p.category)?.name || p.category) : '—';
+    return `
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 16px;border-top:1px solid var(--adm-border)">
+      <input type="checkbox" data-picker-id="${p._docId}" ${checked ? 'checked' : ''} onclick="collPickerToggleOne(this)" style="width:16px;height:16px;cursor:pointer;flex-shrink:0">
+      ${p.imageUrl
+        ? `<img src="${p.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">`
+        : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;flex-shrink:0"></div>`}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name || '(sin nombre)'}</div>
+        <div style="font-size:11px;color:var(--adm-muted)">Gs. ${Number(p.price||0).toLocaleString('es-PY')} · ${p.stock != null && p.stock <= 0 ? 'Sin stock' : 'Con stock'}</div>
+      </div>
+      <div style="font-size:11px;color:var(--adm-muted);flex-shrink:0">${currentColl}</div>
+    </div>`;
+  }).join('');
+  updatePickerSelCount();
+}
+document.getElementById('coll-picker-search').addEventListener('input', renderCollPicker);
+
+function updatePickerSelCount() {
+  document.getElementById('coll-picker-sel-count').textContent = `${_collPickerSelected.size} seleccionados`;
+  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
+  const filtered = q ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q)) : _allProducts;
+  document.getElementById('coll-picker-select-all').checked = filtered.length > 0 && filtered.every(p => _collPickerSelected.has(p._docId));
+}
+
+window.collPickerToggleOne = function(input) {
+  const id = input.dataset.pickerId;
+  if (input.checked) _collPickerSelected.add(id);
+  else _collPickerSelected.delete(id);
+  updatePickerSelCount();
+};
+
+window.collPickerToggleAll = function(checkbox) {
+  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
+  const filtered = q ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q)) : _allProducts;
+  if (checkbox.checked) filtered.forEach(p => _collPickerSelected.add(p._docId));
+  else filtered.forEach(p => _collPickerSelected.delete(p._docId));
+  renderCollPicker();
+};
+
+// Firestore batches cap at 500 writes — chunk so bulk actions scale to
+// thousands of products without silently failing.
+async function batchUpdateChunked(ids, dataFn) {
+  const CHUNK = 450;
+  for (let i = 0; i < ids.length; i += CHUNK) {
+    const batch = writeBatch(db);
+    ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, 'products', id), dataFn(id)));
+    await batch.commit();
+  }
+}
+
+window.collPickerAddSelected = async function() {
+  if (!_collPickerSelected.size) { toast('Seleccioná al menos un producto'); return; }
+  try {
+    const ids = [..._collPickerSelected];
+    await batchUpdateChunked(ids, () => ({ category: _collProductsSlug, updatedAt: serverTimestamp() }));
+    toast(`${ids.length} producto(s) agregados a la colección`);
+    collClosePicker();
+  } catch (e) {
+    toast('Error al agregar: ' + e.message);
+  }
+};
 
 window.collGuardar = async function() {
   const errEl = document.getElementById('coll-form-error');
@@ -3735,10 +3980,8 @@ window.bulkAssignCollection = async function() {
   const col = colInput?.value.trim();
   if (!col) { toast('Escribí el nombre de la colección'); return; }
   if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
-  const batch = writeBatch(db);
-  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { collection: col, updatedAt: serverTimestamp() }));
   try {
-    await batch.commit();
+    await batchUpdateChunked([..._selectedProducts], () => ({ collection: col, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
     toast(`Colección "${col}" asignada a ${_selectedProducts.size} productos`);
     if (colInput) colInput.value = '';
@@ -3751,10 +3994,8 @@ window.bulkActivate = async function(activate) {
   if (!_selectedProducts.size) return;
   const label = activate ? 'activar' : 'desactivar';
   if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${_selectedProducts.size} producto(s)?`)) return;
-  const batch = writeBatch(db);
-  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { active: activate, updatedAt: serverTimestamp() }));
   try {
-    await batch.commit();
+    await batchUpdateChunked([..._selectedProducts], () => ({ active: activate, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.active = activate; });
     toast(`${_selectedProducts.size} productos ${activate ? 'activados' : 'desactivados'}`);
     clearSelection();
@@ -3767,10 +4008,8 @@ window.bulkSetCategory = async function() {
   const cat = document.getElementById('bulk-category-input')?.value;
   if (!cat) { toast('Seleccioná una categoría'); return; }
   if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
-  const batch = writeBatch(db);
-  _selectedProducts.forEach(id => batch.update(doc(db, 'products', id), { category: cat, updatedAt: serverTimestamp() }));
   try {
-    await batch.commit();
+    await batchUpdateChunked([..._selectedProducts], () => ({ category: cat, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
     toast(`Categoría actualizada en ${_selectedProducts.size} productos`);
     clearSelection();
@@ -3784,10 +4023,14 @@ window.bulkDelete = async function() {
   const n = _selectedProducts.size;
   if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;
   if (!confirm(`Segunda confirmación: ¿confirmar la eliminación de ${n} productos?`)) return;
-  const batch = writeBatch(db);
-  _selectedProducts.forEach(id => batch.delete(doc(db, 'products', id)));
   try {
-    await batch.commit();
+    const ids0 = [..._selectedProducts];
+    const CHUNK = 450;
+    for (let i = 0; i < ids0.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids0.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'products', id)));
+      await batch.commit();
+    }
     const ids = new Set(_selectedProducts);
     _allProducts = _allProducts.filter(p => !ids.has(p._docId));
     toast(`${n} productos eliminados definitivamente`);
