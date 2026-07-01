@@ -536,14 +536,21 @@ function catMatches(product, cat) {
 
 function actualizarContadores() {
   const cats = ['todos','relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros'];
+  const validos = todos.filter(p => p.name && String(p.name).trim());
   cats.forEach(c => {
     const el = document.getElementById('count-' + c);
-    if (el) el.textContent = c === 'todos' ? todos.length : todos.filter(p => catMatches(p, c)).length;
+    if (el) el.textContent = c === 'todos' ? validos.length : validos.filter(p => catMatches(p, c)).length;
   });
 }
 
+function isInStockCat(p) {
+  return !(p.stock != null && Number(p.stock) <= 0);
+}
+
 function aplicarFiltros() {
-  let lista = [...todos];
+  // Broken/incomplete product records (no real name — e.g. a malformed import
+  // row) never show on the public storefront, in any view.
+  let lista = todos.filter(p => p.name && String(p.name).trim());
 
   if (catActual !== 'todos') lista = lista.filter(p => catMatches(p, catActual));
 
@@ -567,6 +574,10 @@ function aplicarFiltros() {
   if (sort === 'precio-desc') lista.sort((a, b) => b.price - a.price);
   if (sort === 'nombre')      lista.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
   if (sort === 'stock')       lista.sort((a, b) => (b.stock ?? 0) - (a.stock ?? 0));
+
+  // Out-of-stock products may appear when browsing a category or searching,
+  // but always sink to the end regardless of the chosen sort order.
+  lista = [...lista.filter(isInStockCat), ...lista.filter(p => !isInStockCat(p))];
 
   renderGrid(lista);
 }

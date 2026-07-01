@@ -975,7 +975,7 @@
         <div class="adm-card-head">
           <div class="adm-card-title">Productos</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input id="prod-search" type="text" placeholder="Buscar por nombre o categoría…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
+            <input id="prod-search" type="text" placeholder="Buscar por nombre o categoría… (o 'sin nombre' para ver productos rotos)" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
             <select id="prod-filter-cat" class="adm-select" style="font-size:13px;padding:6px 10px">
               <option value="">Todas las categorías</option>
               <option value="relojes">Relojes</option>
@@ -2181,7 +2181,7 @@ function renderProductosTable(list) {
           ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
           : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
-      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name||'—'}</td>
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? p.name : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${p.collection||'—'}</td>
       <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
@@ -2207,12 +2207,16 @@ function applyProductFilters() {
   const q = (document.getElementById('prod-search')?.value || '').toLowerCase();
   const cat = document.getElementById('prod-filter-cat')?.value || '';
   let result = _allProducts;
-  if (q) result = result.filter(p =>
-    (p.name||'').toLowerCase().includes(q) ||
-    (p.category||'').toLowerCase().includes(q) ||
-    (p.collection||'').toLowerCase().includes(q) ||
-    (p.tags||[]).join(' ').toLowerCase().includes(q)
-  );
+  if (q === 'sin nombre' || q === 'sin-nombre') {
+    result = result.filter(p => !p.name || !p.name.trim());
+  } else if (q) {
+    result = result.filter(p =>
+      (p.name||'').toLowerCase().includes(q) ||
+      (p.category||'').toLowerCase().includes(q) ||
+      (p.collection||'').toLowerCase().includes(q) ||
+      (p.tags||[]).join(' ').toLowerCase().includes(q)
+    );
+  }
   if (cat) result = result.filter(p => (p.category||'') === cat);
   renderProductosTable(result);
 }

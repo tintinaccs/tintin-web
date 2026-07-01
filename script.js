@@ -102,6 +102,23 @@ function formatPrice(num) {
   return 'Gs. ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+/** Out-of-stock (stock explicitly 0 or negative) products never show in
+ *  featured/recommended/look-combinator spots — only in category browsing
+ *  and search results (catalogo.html handles that separately). */
+function isInStock(p) {
+  return !(p.stock != null && Number(p.stock) <= 0);
+}
+
+/** Guards against malformed/incomplete product docs (no real name — e.g. a
+ *  broken CSV row) leaking into the public storefront. */
+function hasValidName(p) {
+  return !!(p.name && String(p.name).trim());
+}
+
+function isFeaturable(p) {
+  return p.active !== false && isInStock(p) && hasValidName(p);
+}
+
 /**
  * Get a product by ID
  */
@@ -686,7 +703,7 @@ function renderLookCombo() {
   const grid = document.getElementById('look-grid');
   if (!grid) return;
 
- const productPool = window.PRODUCTS || PRODUCTS;
+ const productPool = (window.PRODUCTS || PRODUCTS).filter(isFeaturable);
   currentCombo = pickRandom(productPool, 3);
 
   grid.innerHTML = currentCombo.map(p => {
@@ -1068,7 +1085,7 @@ function _renderProductDetail(product) {
   }
 
   // Related products — same category first
-  const pool = (window.PRODUCTS || PRODUCTS).filter(p => String(p.id) !== String(product.id) && p.active !== false);
+  const pool = (window.PRODUCTS || PRODUCTS).filter(p => String(p.id) !== String(product.id) && isFeaturable(p));
   const sameCat = pool.filter(p => (p.category || p.cat) === (product.category || product.cat));
   const others  = pool.filter(p => (p.category || p.cat) !== (product.category || product.cat));
   const related = [...pickRandom(sameCat, 4), ...pickRandom(others, 4 - Math.min(sameCat.length, 4))].slice(0, 4);
@@ -1373,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       const grid = document.getElementById('products-grid');
       if (grid && grid.querySelector('.tt-skeleton-card')) {
-        renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).slice(0, 6));
+        renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
       }
     }, 4000);
   }
@@ -1415,11 +1432,11 @@ window.addEventListener('tintin:products-loaded', () => {
   renderCart();
   updateCartBadge();
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).slice(0, 6));
+    renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
   }
 
   if (document.getElementById('colls-products-grid')) {
-    renderProductsGrid('colls-products-grid', window.PRODUCTS || PRODUCTS);
+    renderProductsGrid('colls-products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable));
   }
 
   if (document.getElementById('look-grid')) {
