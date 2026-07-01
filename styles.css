@@ -829,6 +829,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   margin-top: 0;
 }
 
+@media (min-width: 1025px) {
+  .tt-hero-content {
+    max-width: 50%;
+  }
+}
+
 .tt-hero-eyebrow {
   display: flex;
   align-items: center;
