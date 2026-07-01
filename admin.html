@@ -1257,24 +1257,29 @@
           <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Envíos y costos</div>
         </div>
         <div class="adm-card-body">
+          <div style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#b84c72;line-height:1.6">
+            <strong>Formato:</strong> <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Ciudad | Precio</code> — una por línea.<br>
+            Ejemplo: <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Asunción | 15000</code>&nbsp;&nbsp;<code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">San Lorenzo | 12000</code><br>
+            Si no ponés precio, se usa el costo por defecto de abajo.
+          </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
             <div class="adm-field">
-              <label class="adm-label">Costo delivery (Gs.) — Zona Central</label>
+              <label class="adm-label">Costo delivery por defecto (Gs.) — si la ciudad no tiene precio propio</label>
               <input type="number" class="adm-input" id="cfg-delivery-cost" placeholder="15000" min="0" />
             </div>
             <div class="adm-field">
-              <label class="adm-label">Costo encomienda (Gs.) — Interior</label>
+              <label class="adm-label">Costo encomienda por defecto (Gs.) — si la ciudad no tiene precio propio</label>
               <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div class="adm-field">
-              <label class="adm-label">Ciudades con delivery (una por línea)</label>
-              <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="8" style="font-size:12px;font-family:monospace"></textarea>
+              <label class="adm-label">🚚 Ciudades con DELIVERY — formato: Ciudad | Precio</label>
+              <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Asunción | 15000&#10;San Lorenzo | 12000&#10;Luque | 14000&#10;Lambaré | 13000"></textarea>
             </div>
             <div class="adm-field">
-              <label class="adm-label">Ciudades con encomienda (una por línea)</label>
-              <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="8" style="font-size:12px;font-family:monospace"></textarea>
+              <label class="adm-label">📦 Ciudades con ENCOMIENDA — formato: Ciudad | Precio</label>
+              <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Ciudad del Este | 25000&#10;Encarnación | 28000&#10;Coronel Oviedo | 22000"></textarea>
             </div>
           </div>
         </div>
@@ -2064,8 +2069,12 @@ async function loadConfig() {
     document.getElementById('cfg-currency').value = d.currency || 'PYG';
     document.getElementById('cfg-delivery-cost').value = d.deliveryCost ?? 15000;
     document.getElementById('cfg-encomienda-cost').value = d.encomiendaCost ?? 25000;
-    document.getElementById('cfg-delivery-cities').value = (d.deliveryCities || []).join('\n');
-    document.getElementById('cfg-encomienda-cities').value = (d.encomiendaCities || []).join('\n');
+    // Support both old string[] and new {name,price}[] formats
+    const toLines = (arr) => (arr || []).map(c =>
+      typeof c === 'string' ? c : `${c.name} | ${c.price}`
+    ).join('\n');
+    document.getElementById('cfg-delivery-cities').value = toLines(d.deliveryCities);
+    document.getElementById('cfg-encomienda-cities').value = toLines(d.encomiendaCities);
     document.getElementById('cfg-instagram').value = d.instagram || '';
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
@@ -2082,10 +2091,17 @@ async function loadConfig() {
 
 document.getElementById('btn-save-config').onclick = async () => {
   try {
-    const deliveryCities = document.getElementById('cfg-delivery-cities').value
-      .split('\n').map(s => s.trim()).filter(Boolean);
-    const encomiendaCities = document.getElementById('cfg-encomienda-cities').value
-      .split('\n').map(s => s.trim()).filter(Boolean);
+    const defaultDeliveryCost   = parseInt(document.getElementById('cfg-delivery-cost').value)   || 15000;
+    const defaultEncomiendaCost = parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000;
+    const parseLines = (raw, defaultCost) => raw
+      .split('\n').map(s => s.trim()).filter(Boolean)
+      .map(line => {
+        const [name, priceStr] = line.split('|').map(s => s.trim());
+        const price = parseInt(priceStr) || defaultCost;
+        return { name, price };
+      });
+    const deliveryCities   = parseLines(document.getElementById('cfg-delivery-cities').value, defaultDeliveryCost);
+    const encomiendaCities = parseLines(document.getElementById('cfg-encomienda-cities').value, defaultEncomiendaCost);
 
     await setDoc(doc(db, 'settings', 'general'), {
       storeName:       document.getElementById('cfg-store-name').value.trim(),

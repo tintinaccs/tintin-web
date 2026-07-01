@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -564,6 +565,37 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ---- MAP ---- */
+    .ck-map-wrap {
+      display: none;
+      margin-top: 16px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+    }
+    .ck-map-wrap.show { display: block; }
+    .ck-map-tip {
+      background: var(--acc-pale);
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--acc);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #ck-map { height: 260px; width: 100%; }
+    .ck-map-coords {
+      background: #f9f9f9;
+      padding: 8px 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 480px) { #ck-map { height: 200px; } }
+
     /* ---- TRUST BAR (step 1) ---- */
     .ck-trust-bar {
       display: flex;
@@ -698,6 +730,15 @@
       <div class="ck-field" id="ck-referencia-field" style="display:none">
         <label class="ck-label">Referencia (opcional)</label>
         <input type="text" class="ck-input" id="ck-referencia" placeholder="Ej: casa azul, frente al semáforo" />
+      </div>
+
+      <!-- MAP — solo para delivery -->
+      <div class="ck-map-wrap" id="ck-map-wrap">
+        <div class="ck-map-tip">
+          📍 Marcá tu ubicación exacta en el mapa (opcional pero ayuda al repartidor)
+        </div>
+        <div id="ck-map"></div>
+        <div class="ck-map-coords" id="ck-map-coords">Tocá el mapa para marcar tu ubicación</div>
       </div>
 
       <div class="ck-error" id="error-1"></div>
@@ -852,27 +893,33 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js";
 
-// ---- CITY DATA (defaults, overridden by Firestore settings) ----
-let DELIVERY_CITIES = [
+// ---- CITY DATA — {name, price}[] — overridden by Firestore ----
+// Default costs used when city has no individual price
+let DEFAULT_DELIVERY_COST   = 15000;
+let DEFAULT_ENCOMIENDA_COST = 25000;
+
+// Normalize Firestore data: supports old string[] and new {name,price}[]
+function normalizeCities(arr, defaultCost) {
+  return (arr || []).map(c =>
+    typeof c === 'string' ? { name: c, price: defaultCost } : { name: c.name, price: c.price ?? defaultCost }
+  );
+}
+
+let DELIVERY_CITIES = normalizeCities([
   'Asunción','San Lorenzo','Luque','Lambaré','Fernando de la Mora',
   'Capiatá','Mariano Roque Alonso','Ñemby','J. Augusto Saldivar','Limpio',
   'Areguá','Itauguá','Villa Elisa','Ypané','San Antonio','Villeta',
   'Nueva Italia','Guarambaré','Yaguarón','Paraguarí','Ita','Carapeguá'
-];
-let ENCOMIENDA_CITIES = [
+], DEFAULT_DELIVERY_COST);
+
+let ENCOMIENDA_CITIES = normalizeCities([
   'Ciudad del Este','Encarnación','Concepción','Pedro Juan Caballero',
   'Coronel Oviedo','Villarrica','Caaguazú','Pilar','San Ignacio',
   'Santa Rosa del Aguaray','San Pedro','Horqueta','Curuguaty',
   'Minga Guazú','Hernandarias','Minga Porá','Salto del Guairá',
   'San Juan Bautista','Caacupé','Tobatí','San Estanislao','Villa Hayes',
   'Fuerte Olimpo','Bahía Negra','Filadelfia','Loma Plata','Mcal. Estigarribia'
-];
-
-let SHIPPING_COSTS = {
-  delivery:    15000,
-  encomienda:  25000,
-  retiro:      0
-};
+], DEFAULT_ENCOMIENDA_COST);
 
 let WA_NUMBER = '595981299331';
 
@@ -881,10 +928,12 @@ async function loadStoreConfig() {
     const snap = await getDoc(doc(db, 'settings', 'general'));
     if (!snap.exists()) return;
     const cfg = snap.data();
-    if (Array.isArray(cfg.deliveryCities) && cfg.deliveryCities.length) DELIVERY_CITIES = cfg.deliveryCities;
-    if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length) ENCOMIENDA_CITIES = cfg.encomiendaCities;
-    if (cfg.deliveryCost > 0) SHIPPING_COSTS.delivery = cfg.deliveryCost;
-    if (cfg.encomiendaCost > 0) SHIPPING_COSTS.encomienda = cfg.encomiendaCost;
+    if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
+    if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
+    if (Array.isArray(cfg.deliveryCities)   && cfg.deliveryCities.length)
+      DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
+    if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length)
+      ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
     if (cfg.whatsapp) WA_NUMBER = cfg.whatsapp.replace(/\D/g, '');
   } catch(e) {
     // fall back to hardcoded defaults
@@ -901,6 +950,7 @@ let orderData = {
   referencia: '',
   shippingMethod: '',
   shippingCost: 0,
+  mapLocation: null,
   name: '',
   phone: '',
   email: '',
@@ -915,16 +965,25 @@ function populateCities() {
   const encomiendaGroup = select.querySelector('optgroup:nth-child(2)');
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
-    opt.value = city;
-    opt.textContent = city;
+    opt.value = city.name;
+    opt.textContent = `${city.name} — ${formatPrice(city.price)}`;
     deliveryGroup.appendChild(opt);
   });
   ENCOMIENDA_CITIES.forEach(city => {
     const opt = document.createElement('option');
-    opt.value = city;
-    opt.textContent = city;
+    opt.value = city.name;
+    opt.textContent = `${city.name} — ${formatPrice(city.price)}`;
     encomiendaGroup.appendChild(opt);
   });
+}
+
+// ---- FIND CITY PRICE ----
+function getCityPrice(cityName) {
+  const d = DELIVERY_CITIES.find(c => c.name === cityName);
+  if (d) return d.price;
+  const e = ENCOMIENDA_CITIES.find(c => c.name === cityName);
+  if (e) return e.price;
+  return 0;
 }
 
 // ---- CART RENDERING ----
@@ -1073,15 +1132,19 @@ document.getElementById('ck-city').onchange = function() {
   const costEl = document.getElementById('ck-ship-cost');
   const addressField = document.getElementById('ck-address-field');
   const referenciaField = document.getElementById('ck-referencia-field');
+  const mapWrap = document.getElementById('ck-map-wrap');
 
   if (!val) {
     infoEl.classList.remove('show');
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
+    mapWrap.classList.remove('show');
     return;
   }
 
   infoEl.classList.add('show');
+  const isDelivery = DELIVERY_CITIES.some(c => c.name === val);
+  const isEncomienda = ENCOMIENDA_CITIES.some(c => c.name === val);
 
   if (val === '__retiro__') {
     methodEl.textContent = '🏪 Retiro en tienda — San Lorenzo';
@@ -1090,20 +1153,26 @@ document.getElementById('ck-city').onchange = function() {
     orderData.shippingCost = 0;
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
-  } else if (DELIVERY_CITIES.includes(val)) {
+    mapWrap.classList.remove('show');
+  } else if (isDelivery) {
+    const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
-    costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.delivery)}`;
+    costEl.textContent = `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'delivery';
-    orderData.shippingCost = SHIPPING_COSTS.delivery;
+    orderData.shippingCost = price;
     addressField.style.display = 'block';
     referenciaField.style.display = 'block';
-  } else {
+    mapWrap.classList.add('show');
+    initMap();
+  } else if (isEncomienda) {
+    const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
-    costEl.textContent = `Costo de envío: ${formatPrice(SHIPPING_COSTS.encomienda)}`;
+    costEl.textContent = `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'encomienda';
-    orderData.shippingCost = SHIPPING_COSTS.encomienda;
+    orderData.shippingCost = price;
     addressField.style.display = 'block';
     referenciaField.style.display = 'block';
+    mapWrap.classList.remove('show');
   }
 };
 
@@ -1291,11 +1360,14 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
   const payText = { efectivo:'Efectivo (contra entrega)', transferencia:'Transferencia bancaria', tarjeta:'Tarjeta (simulación)' }[orderData.paymentMethod] || orderData.paymentMethod;
   const shipText = shipLabels[orderData.shippingMethod] || orderData.shippingMethod;
 
+  const mapLine = orderData.mapLocation
+    ? `\n🗺️ *Ubicación GPS:* https://maps.google.com/?q=${orderData.mapLocation.lat},${orderData.mapLocation.lng}`
+    : '';
   return `🛍️ *NUEVO PEDIDO — TINTIN ACCESORIOS*${window._lastOrderId ? ` #${window._lastOrderId}` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━
 👤 *Cliente:* ${orderData.name}
 📞 *Tel:* ${orderData.phone}${orderData.email ? `\n📧 *Email:* ${orderData.email}` : ''}
-📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}
+📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}${mapLine}
 🚚 *Envío:* ${shipText} — ${formatPrice(orderData.shippingCost)}
 ━━━━━━━━━━━━━━━━━━━━━━
 🛒 *Productos:*
@@ -1327,11 +1399,12 @@ async function saveOrder(items, subtotal, total) {
     shippingCost: orderData.shippingCost,
     total,
     shipping: {
-      method:     orderData.shippingMethod,
-      city:       orderData.city,
-      address:    orderData.address || '',
-      referencia: orderData.referencia || '',
-      zone:       DELIVERY_CITIES.includes(orderData.city) ? 'central' : 'interior'
+      method:      orderData.shippingMethod,
+      city:        orderData.city,
+      address:     orderData.address || '',
+      referencia:  orderData.referencia || '',
+      zone:        DELIVERY_CITIES.some(c => c.name === orderData.city) ? 'central' : 'interior',
+      mapLocation: orderData.mapLocation || null
     },
     payment: {
       method: orderData.paymentMethod,
@@ -1362,6 +1435,67 @@ async function saveOrder(items, subtotal, total) {
 
   // Clear cart
   await clearCart();
+}
+
+// ---- MAP (Leaflet — only for delivery) ----
+let _mapInstance = null;
+let _mapMarker   = null;
+
+function initMap() {
+  // Only initialize once
+  if (_mapInstance) {
+    setTimeout(() => _mapInstance.invalidateSize(), 200);
+    return;
+  }
+  // Lazy-load Leaflet JS
+  if (!window.L) {
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.onload = () => _buildMap();
+    document.head.appendChild(s);
+  } else {
+    _buildMap();
+  }
+}
+
+function _buildMap() {
+  const L = window.L;
+  // Center on Asunción, Paraguay
+  _mapInstance = L.map('ck-map', { zoomControl: true }).setView([-25.2867, -57.6467], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(_mapInstance);
+
+  const pinIcon = L.divIcon({
+    className: '',
+    html: '<div style="font-size:32px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">📍</div>',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32]
+  });
+
+  function placeMarker(latlng) {
+    if (_mapMarker) _mapMarker.setLatLng(latlng);
+    else _mapMarker = L.marker(latlng, { icon: pinIcon, draggable: true }).addTo(_mapInstance);
+
+    _mapMarker.off('dragend').on('dragend', () => {
+      const pos = _mapMarker.getLatLng();
+      saveMapLocation(pos.lat, pos.lng);
+    });
+
+    saveMapLocation(latlng.lat, latlng.lng);
+  }
+
+  function saveMapLocation(lat, lng) {
+    orderData.mapLocation = { lat: +lat.toFixed(6), lng: +lng.toFixed(6) };
+    document.getElementById('ck-map-coords').textContent =
+      `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+  }
+
+  _mapInstance.on('click', e => placeMarker(e.latlng));
+
+  // Resize fix when map container becomes visible
+  setTimeout(() => _mapInstance.invalidateSize(), 300);
 }
 
 // ---- INIT ----
