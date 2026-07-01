@@ -1,0 +1,440 @@
+{% comment %}
+  Tintin - Productos recomendados sincronizados
+  Archivo sugerido: sections/tintin-product-recommendations.liquid
+{% endcomment %}
+
+{%- assign sid = section.id | replace: '_', '' | downcase -%}
+{%- assign trecs_product_id = product.id | default: 0 -%}
+
+<section id="tintin-recs-{{ sid }}" class="trecs-{{ sid }}" data-product-id="{{ trecs_product_id }}">
+  <div class="trecs-wrap-{{ sid }}">
+    <div class="trecs-head-{{ sid }}">
+      <div>
+        {% if section.settings.kicker != blank %}<span>{{ section.settings.kicker }}</span>{% endif %}
+        <h2>{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}<p>{{ section.settings.subtitle }}</p>{% endif %}
+      </div>
+
+      {% if section.settings.show_refresh %}
+        <button type="button" class="trecs-refresh-{{ sid }}" data-trecs-refresh aria-label="Refrescar recomendaciones">↻</button>
+      {% endif %}
+    </div>
+
+    <div class="trecs-grid-{{ sid }}" data-trecs-grid>
+      {% for i in (1..4) %}
+        <div class="trecs-skeleton-{{ sid }}"></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="trecs-toast-{{ sid }}" data-trecs-toast hidden></div>
+</section>
+
+<style>
+  .trecs-{{ sid }}{
+    --bg: {{ section.settings.background_color }};
+    --card: {{ section.settings.card_color }};
+    --fg: {{ section.settings.text_color }};
+    --muted: {{ section.settings.text_color }}99;
+    --accent: {{ section.settings.accent_color }};
+    --btn: {{ section.settings.button_color }};
+    --btn-text: {{ section.settings.button_text_color }};
+    background:var(--bg);
+    color:var(--fg);
+    padding:{{ section.settings.padding_top }}px 18px {{ section.settings.padding_bottom }}px;
+  }
+  .trecs-wrap-{{ sid }}{max-width:{{ section.settings.max_width }}px;margin:0 auto;}
+  .trecs-head-{{ sid }}{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;}
+  .trecs-head-{{ sid }} span{display:block;color:var(--accent);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;margin-bottom:5px;}
+  .trecs-head-{{ sid }} h2{margin:0;font-size:clamp(24px,3vw,{{ section.settings.title_size }}px);letter-spacing:-.03em;line-height:1.05;}
+  .trecs-head-{{ sid }} p{margin:8px 0 0;color:var(--muted);line-height:1.6;font-size:14px;}
+  .trecs-refresh-{{ sid }}{width:40px;height:40px;border-radius:50%;border:1.5px solid {{ section.settings.accent_color }}33;background:#fff;color:var(--accent);font-size:20px;cursor:pointer;}
+  .trecs-grid-{{ sid }}{display:grid;grid-template-columns:repeat({{ section.settings.columns }},1fr);gap:14px;}
+  .trecs-card-{{ sid }}{background:var(--card);border:1px solid {{ section.settings.accent_color }}22;border-radius:24px;overflow:hidden;box-shadow:0 14px 42px rgba(0,0,0,.045);display:flex;flex-direction:column;min-width:0;}
+  .trecs-img-{{ sid }}{position:relative;aspect-ratio:1/1;background:#fff7fa;display:block;overflow:hidden;}
+  .trecs-img-{{ sid }} img{width:100%;height:100%;object-fit:cover;display:block;transition:.25s ease;}
+  .trecs-card-{{ sid }}:hover .trecs-img-{{ sid }} img{transform:scale(1.05);}
+  .trecs-badge-{{ sid }}{position:absolute;top:10px;left:10px;background:var(--accent);color:#fff;border-radius:999px;padding:4px 9px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;}
+  .trecs-body-{{ sid }}{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .trecs-title-{{ sid }}{margin:0;font-size:13px;font-weight:800;line-height:1.25;color:var(--fg);text-decoration:none;}
+  .trecs-price-{{ sid }}{color:var(--accent);font-weight:900;font-size:13px;}
+  .trecs-actions-{{ sid }}{padding:0 14px 14px;display:flex;justify-content:flex-end;}
+  .trecs-add-{{ sid }}{width:38px;height:38px;border-radius:50%;border:0;background:var(--btn);color:var(--btn-text);font-size:22px;line-height:1;cursor:pointer;font-weight:800;}
+  .trecs-add-{{ sid }}:disabled{opacity:.45;cursor:not-allowed;}
+  .trecs-empty-{{ sid }}{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px 10px;font-size:14px;}
+  .trecs-card-{{ sid }}{transition:opacity .26s ease, transform .26s cubic-bezier(.22,1,.36,1), filter .26s ease;}
+  .trecs-card-{{ sid }}.trecs-card-leaving-{{ sid }},
+  .trecs-card-{{ sid }}.trecs-card-entering-{{ sid }}{opacity:0;transform:scale(.94) translateY(6px);filter:blur(4px);}
+  @media (prefers-reduced-motion: reduce){
+    .trecs-card-{{ sid }}{transition:none !important;}
+  }
+  .trecs-skeleton-{{ sid }}{aspect-ratio:.78;border-radius:24px;background:linear-gradient(110deg,{{ section.settings.accent_color }}10 28%,{{ section.settings.accent_color }}18 50%,{{ section.settings.accent_color }}10 72%);background-size:200% 100%;animation:trecs-sk-{{ sid }} 1.3s infinite;}
+  @keyframes trecs-sk-{{ sid }}{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .trecs-toast-{{ sid }}{position:fixed;left:50%;bottom:105px;transform:translateX(-50%);z-index:9999;background:#fff;color:var(--accent);border:1px solid {{ section.settings.accent_color }}22;box-shadow:0 12px 38px rgba(0,0,0,.12);border-radius:999px;padding:12px 22px;font-weight:800;font-size:13px;}
+  @media(max-width:1100px){.trecs-grid-{{ sid }}{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:760px){
+    .trecs-{{ sid }}{padding:{{ section.settings.mobile_padding_top }}px 14px {{ section.settings.mobile_padding_bottom }}px;}
+    .trecs-grid-{{ sid }}{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .trecs-head-{{ sid }}{align-items:flex-end;}
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('tintin-recs-{{ sid }}');
+  if(!root || root.dataset.ready) return;
+  root.dataset.ready = 'true';
+
+  const grid = root.querySelector('[data-trecs-grid]');
+  const productId = root.dataset.productId || '0';
+  const limit = Math.max(4, Number({{ section.settings.limit | json }} || 4));
+  const hideUnavailable = {{ section.settings.hide_unavailable | json }};
+  const catalogPagesToScan = 4;
+  let pool = [];
+  let offset = 0;
+
+  const shopRoot = (() => {
+    const rootPath = window.Shopify?.routes?.root || '/';
+    return rootPath.endsWith('/') ? rootPath : rootPath + '/';
+  })();
+
+  function centsOf(value){
+    if(value == null || value === '') return 0;
+    const str = String(value).trim().replace(/,/g, '.');
+    const n = Number(str);
+    if(!Number.isFinite(n)) return 0;
+
+    /*
+      /collections/all/products.json normalmente trae precio como "290000.00".
+      Algunos endpoints de Shopify lo traen en centavos.
+      Esta normalización evita mostrar ₲ 2.900 cuando el precio real es ₲ 290.000.
+    */
+    if(str.includes('.')) return Math.round(n * 100);
+    return n < 1000000 ? Math.round(n * 100) : Math.round(n);
+  }
+
+  const money = value => '₲\u202f' + (centsOf(value) / 100).toLocaleString('es-PY', { maximumFractionDigits: 0 });
+  const safe = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  function productImage(p){
+    const source = p?.featured_image || p?.image || (Array.isArray(p?.images) ? p.images[0] : '');
+    if(!source) return '';
+    if(typeof source === 'string') return source;
+    return source.src || source.url || source.original_src || '';
+  }
+
+  function productUrl(p){
+    if(p?.url) return p.url;
+    if(p?.handle) return shopRoot + 'products/' + p.handle;
+    return '#';
+  }
+
+  function isVariantAvailable(v){
+    if(!v) return false;
+    if(typeof v.available === 'boolean') return v.available;
+    if(typeof v.inventory_quantity === 'number'){
+      return v.inventory_quantity > 0 || v.inventory_policy === 'continue';
+    }
+    return true;
+  }
+
+  function isProductAvailable(p){
+    if(typeof p?.available === 'boolean') return p.available;
+    return Array.isArray(p?.variants) ? p.variants.some(isVariantAvailable) : true;
+  }
+
+  function availableVariant(p){
+    const variants = Array.isArray(p?.variants) ? p.variants : [];
+    return variants.find(isVariantAvailable) || variants[0] || null;
+  }
+
+  function shuffle(arr){
+    const copy = arr.slice();
+    for(let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function diverseShuffle(products){
+    const groups = new Map();
+
+    products.forEach(p => {
+      const key = (p.product_type || p.type || p.vendor || (Array.isArray(p.tags) ? p.tags[0] : '') || 'otros').toString().trim().toLowerCase();
+      if(!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(p);
+    });
+
+    const buckets = shuffle(Array.from(groups.values()).map(group => shuffle(group)));
+    const mixed = [];
+    let added = true;
+
+    while(added){
+      added = false;
+      buckets.forEach(bucket => {
+        const item = bucket.shift();
+        if(item){
+          mixed.push(item);
+          added = true;
+        }
+      });
+    }
+
+    return mixed;
+  }
+
+  function pickVisibleProducts(){
+    if(!pool.length) return [];
+
+    const list = [];
+    let steps = 0;
+    const maxSteps = Math.max(pool.length * 3, limit * 3);
+
+    while(list.length < limit && steps < maxSteps){
+      const p = pool[(offset + steps) % pool.length];
+      const already = list.some(x => String(x.id) === String(p.id));
+
+      if(!already || pool.length < limit){
+        list.push(p);
+      }
+      steps++;
+    }
+
+    return list;
+  }
+
+  function toast(text){
+    const t = root.querySelector('[data-trecs-toast]');
+    if(!t) return;
+    t.textContent = text;
+    t.hidden = false;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.hidden = true, 1700);
+  }
+
+  function broadcast(cart){
+    document.querySelectorAll('[data-cart-count],[data-cart-item-count],.cart-count,.cart__count,.cart-count-bubble,#cart-icon-bubble span,.header__cart-count')
+      .forEach(el => { el.textContent = Number(cart.item_count || 0); });
+    ['cart:refresh','cart:updated','cart-update','theme:cart:add'].forEach(name => {
+      document.dispatchEvent(new CustomEvent(name, { detail: cart, bubbles: true }));
+    });
+  }
+
+  let currentList = [];
+
+  function cardMarkup(p){
+    const v = availableVariant(p);
+    const image = productImage(p);
+    const price = v?.price ?? p.price_min ?? p.price ?? 0;
+    const ok = !!v && isProductAvailable(p);
+
+    return `
+      <article class="trecs-card-{{ sid }}" data-product-card="${safe(p.id)}">
+        <a class="trecs-img-{{ sid }}" href="${safe(productUrl(p))}">
+          ${image ? `<img src="${safe(image)}" alt="${safe(p.title)}" loading="lazy">` : ''}
+          ${ok ? `<span class="trecs-badge-{{ sid }}">Disponible</span>` : `<span class="trecs-badge-{{ sid }}">Agotado</span>`}
+        </a>
+        <div class="trecs-body-{{ sid }}">
+          <a href="${safe(productUrl(p))}" class="trecs-title-{{ sid }}">${safe(p.title)}</a>
+          <span class="trecs-price-{{ sid }}">${money(price)}</span>
+        </div>
+        <div class="trecs-actions-{{ sid }}">
+          <button type="button" class="trecs-add-{{ sid }}" data-variant="${v ? safe(v.id) : ''}" ${ok ? '' : 'disabled'} aria-label="Agregar">+</button>
+        </div>
+      </article>
+    `;
+  }
+
+  function render(){
+    currentList = pickVisibleProducts();
+
+    if(!currentList.length){
+      grid.innerHTML = Array.from({length: limit}).map(() => `
+        <article class="trecs-card-{{ sid }}">
+          <div class="trecs-img-{{ sid }}"></div>
+          <div class="trecs-body-{{ sid }}">
+            <p class="trecs-title-{{ sid }}">{{ section.settings.empty_text | escape }}</p>
+            <span class="trecs-price-{{ sid }}">₲ 0</span>
+          </div>
+          <div class="trecs-actions-{{ sid }}">
+            <button type="button" class="trecs-add-{{ sid }}" disabled aria-label="Agregar">+</button>
+          </div>
+        </article>
+      `).join('');
+      return;
+    }
+
+    grid.innerHTML = currentList.map(cardMarkup).join('');
+  }
+
+  function replaceOneProduct(productIdToReplace, cardEl){
+    if(!pool.length || !cardEl) return;
+
+    const visibleIds = new Set(currentList.map(p => String(p.id)));
+
+    let candidates = pool.filter(p => !visibleIds.has(String(p.id)));
+    if(!candidates.length){
+      candidates = pool.filter(p => String(p.id) !== String(productIdToReplace));
+    }
+    if(!candidates.length) return;
+
+    const replacedProduct = currentList.find(p => String(p.id) === String(productIdToReplace));
+    const replacedKey = (replacedProduct?.product_type || replacedProduct?.type || replacedProduct?.vendor || (Array.isArray(replacedProduct?.tags) ? replacedProduct.tags[0] : '') || 'otros').toString().trim().toLowerCase();
+
+    const diversified = shuffle(candidates).filter(p => {
+      const key = (p.product_type || p.type || p.vendor || (Array.isArray(p.tags) ? p.tags[0] : '') || 'otros').toString().trim().toLowerCase();
+      return key !== replacedKey;
+    });
+
+    const finalPool = diversified.length ? diversified : shuffle(candidates);
+    const newProduct = finalPool[0];
+
+    const idx = currentList.findIndex(p => String(p.id) === String(productIdToReplace));
+    if(idx !== -1) currentList[idx] = newProduct;
+
+    cardEl.classList.add('trecs-card-leaving-{{ sid }}');
+
+    setTimeout(() => {
+      if(!cardEl.isConnected) return;
+      const temp = document.createElement('div');
+      temp.innerHTML = cardMarkup(newProduct).trim();
+      const newCard = temp.firstElementChild;
+      newCard.classList.add('trecs-card-entering-{{ sid }}');
+      cardEl.replaceWith(newCard);
+      requestAnimationFrame(() => {
+        newCard.classList.remove('trecs-card-entering-{{ sid }}');
+      });
+    }, 260);
+  }
+
+  async function fetchProductsFrom(path, page){
+    const url = `${shopRoot}${path}?limit=250&page=${page}`;
+    const res = await fetch(url, { cache:'no-store', headers:{ 'Accept':'application/json' } });
+    if(!res.ok) throw new Error('No se pudo cargar ' + path);
+    const data = await res.json();
+    return Array.isArray(data.products) ? data.products : [];
+  }
+
+  async function fetchCatalogProducts(){
+    const sources = ['collections/all/products.json', 'products.json'];
+
+    for(const source of sources){
+      const all = [];
+
+      for(let page = 1; page <= catalogPagesToScan; page++){
+        try{
+          const products = await fetchProductsFrom(source, page);
+          if(!products.length) break;
+          all.push(...products);
+          if(products.length < 250) break;
+        }catch(err){
+          break;
+        }
+      }
+
+      if(all.length) return all;
+    }
+
+    return [];
+  }
+
+  async function load(){
+    try{
+      grid.innerHTML = Array.from({length: limit}).map(() => `<div class="trecs-skeleton-{{ sid }}"></div>`).join('');
+
+      let products = await fetchCatalogProducts();
+      products = products.filter(p => String(p.id) !== String(productId));
+
+      const withImage = products.filter(productImage);
+      if(withImage.length >= limit) products = withImage;
+
+      if(hideUnavailable){
+        const availableProducts = products.filter(isProductAvailable);
+        if(availableProducts.length) products = availableProducts;
+      }
+
+      pool = diverseShuffle(products);
+      offset = pool.length ? Math.floor(Math.random() * pool.length) : 0;
+      render();
+    }catch(e){
+      pool = [];
+      render();
+    }
+  }
+
+  root.addEventListener('click', async e => {
+    const btn = e.target.closest('[data-variant]');
+    if(!btn) return;
+    const id = btn.dataset.variant;
+    if(!id) return;
+
+    const cardEl = btn.closest('[data-product-card]');
+    const replacedProductId = cardEl?.dataset.productCard;
+
+    const old = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '✓';
+
+    try{
+      await fetch('/cart/add.js', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ id:Number(id), quantity:1 })
+      }).then(r => { if(!r.ok) throw new Error('cart'); return r.json(); });
+      const cart = await fetch('/cart.js', { cache:'no-store' }).then(r => r.json());
+      broadcast(cart);
+      toast('Agregado a tu selección.');
+
+      if(cardEl && replacedProductId){
+        setTimeout(() => replaceOneProduct(replacedProductId, cardEl), 500);
+      }
+    }catch(err){
+      toast('No se pudo agregar.');
+    }finally{
+      setTimeout(() => { btn.disabled = false; btn.textContent = old; }, 900);
+    }
+  });
+
+  root.querySelector('[data-trecs-refresh]')?.addEventListener('click', () => {
+    if(!pool.length){ load(); return; }
+    offset = Math.floor(Math.random() * pool.length);
+    render();
+  });
+
+  load();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tintin recomendados",
+  "tag": "section",
+  "class": "section-tintin-recs",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Texto pequeño", "default": "Completá tu look" },
+    { "type": "text", "id": "title", "label": "Título", "default": "También te puede gustar" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Piezas elegidas para combinar con este accesorio." },
+    { "type": "checkbox", "id": "show_refresh", "label": "Mostrar botón refrescar", "default": true },
+    { "type": "checkbox", "id": "hide_unavailable", "label": "Ocultar agotados", "default": true },
+    { "type": "range", "id": "limit", "label": "Cantidad visible", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "columns", "label": "Columnas escritorio", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "text", "id": "empty_text", "label": "Texto vacío", "default": "No encontramos recomendaciones por ahora." },
+    { "type": "color", "id": "background_color", "label": "Fondo", "default": "#fff7fa" },
+    { "type": "color", "id": "card_color", "label": "Fondo tarjeta", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Texto", "default": "#2d2d2d" },
+    { "type": "color", "id": "accent_color", "label": "Acento", "default": "#d4789a" },
+    { "type": "color", "id": "button_color", "label": "Botón", "default": "#d4789a" },
+    { "type": "color", "id": "button_text_color", "label": "Texto botón", "default": "#ffffff" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo", "min": 800, "max": 1600, "step": 50, "unit": "px", "default": 1300 },
+    { "type": "range", "id": "title_size", "label": "Tamaño título", "min": 22, "max": 46, "step": 2, "unit": "px", "default": 34 },
+    { "type": "range", "id": "padding_top", "label": "Espaciado superior", "min": 0, "max": 100, "step": 10, "unit": "px", "default": 30 },
+    { "type": "range", "id": "padding_bottom", "label": "Espaciado inferior", "min": 0, "max": 120, "step": 10, "unit": "px", "default": 60 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Espaciado superior móvil", "min": 0, "max": 80, "step": 10, "unit": "px", "default": 20 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Espaciado inferior móvil", "min": 0, "max": 100, "step": 10, "unit": "px", "default": 40 }
+  ],
+  "presets": [
+    { "name": "Tintin recomendados" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,444 @@
+{% doc %}
+  @prompt
+    Banner hero full-width minimalista y elegante estilo Apple para tienda de accesorios femeninos premium Tintin. Scroll reveal profesional con IntersectionObserver, stagger, velocidad configurable. Variables CSS, mobile first, schema completo, accesibilidad. Theme Trade.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .tintin-hero-{{ ai_gen_id }} {
+    --bg: {{ block.settings.background_gradient }};
+    --text: {{ block.settings.text_color }};
+    --accent: {{ block.settings.accent_color }};
+    --eyebrow: {{ block.settings.eyebrow_color }};
+    --btn-bg: {{ block.settings.button_bg }};
+    --btn-text: {{ block.settings.button_text_color }};
+    --radius: {{ block.settings.border_radius }}px;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 16px 50px rgba(0, 0, 0, 0.14);
+    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --container: {{ block.settings.content_width }}px;
+    {% case block.settings.reveal_speed %}
+      {% when 'fast' %}--reveal-duration: 0.5s;
+      {% when 'slow' %}--reveal-duration: 0.8s;
+      {% else %}--reveal-duration: 0.65s;
+    {% endcase %}
+
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    padding-top: {{ block.settings.padding_top_mobile }}px;
+    padding-bottom: {{ block.settings.padding_bottom_mobile }}px;
+  }
+
+  .tintin-hero__content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: var(--text);
+    padding: 0 20px;
+    max-width: var(--container);
+    width: 100%;
+  }
+
+  .shopify-section:has(.tintin-hero-{{ ai_gen_id }}) {
+    background: transparent !important;
+  }
+
+  .tintin-hero__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size_mobile }}px;
+    font-weight: {{ block.settings.title_weight }};
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: {{ block.settings.title_letter_spacing | times: 0.6 }}px;
+    text-transform: uppercase;
+  }
+
+  .tintin-hero__line-{{ ai_gen_id }} {
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    margin: 22px auto;
+    transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+  }
+
+  .tintin-hero__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size_mobile }}px;
+    margin: 0 auto;
+    max-width: 90%;
+    line-height: 1.75;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+  }
+
+  .tintin-hero__description-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  {% if block.settings.enable_reveal %}
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__reveal-{{ ai_gen_id }} {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(22px) scale(0.985);
+      transition: opacity var(--reveal-duration) cubic-bezier(0.22, 1, 0.36, 1),
+                  transform var(--reveal-duration) cubic-bezier(0.22, 1, 0.36, 1),
+                  filter var(--reveal-duration) cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .tintin-hero-{{ ai_gen_id }}.is-visible .tintin-hero__reveal-{{ ai_gen_id }} {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+    }
+
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__reveal-{{ ai_gen_id }}:nth-child(1) { transition-delay: 0.05s; }
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__reveal-{{ ai_gen_id }}:nth-child(2) { transition-delay: 0.16s; }
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__reveal-{{ ai_gen_id }}:nth-child(3) { transition-delay: 0.27s; }
+
+    .tintin-hero-{{ ai_gen_id }}.is-visible .tintin-hero__line-{{ ai_gen_id }} {
+      width: {{ block.settings.line_width }}px;
+      transition-delay: 0.3s;
+    }
+  {% else %}
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__line-{{ ai_gen_id }} {
+      width: {{ block.settings.line_width }}px;
+    }
+  {% endif %}
+
+  @media (prefers-reduced-motion: reduce) {
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__reveal-{{ ai_gen_id }} {
+      transition: none;
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+    .tintin-hero-{{ ai_gen_id }} .tintin-hero__line-{{ ai_gen_id }} {
+      transition: none;
+      width: {{ block.settings.line_width }}px;
+    }
+    .tintin-hero__button-{{ ai_gen_id }} {
+      transition: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .tintin-hero-{{ ai_gen_id }} {
+      padding-top: {{ block.settings.padding_top }}px;
+      padding-bottom: {{ block.settings.padding_bottom }}px;
+    }
+    .tintin-hero__content-{{ ai_gen_id }} {
+      padding: 0 24px;
+    }
+    .tintin-hero__eyebrow-{{ ai_gen_id }} {
+      font-size: {{ block.settings.eyebrow_size }}px;
+      margin-bottom: 24px;
+    }
+    .tintin-hero__title-{{ ai_gen_id }} {
+      font-size: clamp({{ block.settings.title_size }}px, {{ block.settings.title_size | divided_by: 19.2 }}vw, {{ block.settings.title_size }}px);
+      letter-spacing: {{ block.settings.title_letter_spacing }}px;
+    }
+    .tintin-hero__line-{{ ai_gen_id }} {
+      margin: 30px auto;
+    }
+    .tintin-hero__description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size }}px;
+      max-width: min(85%, 80ch);
+    }
+  }
+{% endstyle %}
+
+<section
+  class="tintin-hero-{{ ai_gen_id }}"
+  data-tintin-hero="{{ ai_gen_id }}"
+  aria-label="{{ block.settings.title | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="tintin-hero__content-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="tintin-hero__title-{{ ai_gen_id }} tintin-hero__reveal-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    {% if block.settings.show_line %}
+      <div class="tintin-hero__line-{{ ai_gen_id }}" aria-hidden="true"></div>
+    {% endif %}
+
+    {% if block.settings.description != blank %}
+      <div class="tintin-hero__description-{{ ai_gen_id }} tintin-hero__reveal-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+    {% endif %}
+
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.querySelector('[data-tintin-hero="{{ ai_gen_id }}"]');
+    if (!section) return;
+
+    {% if block.settings.enable_reveal %}
+      var reveal = function () { section.classList.add('is-visible'); };
+      var hide = function () { section.classList.remove('is-visible'); };
+
+      if (!('IntersectionObserver' in window)) {
+        reveal();
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            reveal();
+          } else {
+            hide();
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+
+      observer.observe(section);
+
+      if (window.Shopify && window.Shopify.designMode) {
+        document.addEventListener('shopify:block:select', function (e) {
+          if (section.contains(e.target) || e.target === section) reveal();
+        });
+      }
+    {% else %}
+      section.classList.add('is-visible');
+    {% endif %}
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Tintin Hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Fondo"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Fondo",
+      "default": "linear-gradient(180deg, rgba(253, 240, 245, 1) 0%, rgba(250, 220, 233, 1) 100%)"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding superior",
+      "min": 0,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding inferior",
+      "min": 0,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Espaciado (móvil)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding superior",
+      "min": 0,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding inferior",
+      "min": 0,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Ancho máximo del contenido",
+      "min": 500,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Radio de esquinas (botón)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Título"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "GAFAS"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Tamaño del título (desktop)",
+      "min": 24,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Tamaño del título (móvil)",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Grosor del título",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing",
+      "label": "Espaciado de letras",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Línea decorativa"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line",
+      "label": "Mostrar línea decorativa",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "label": "Ancho de la línea",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Descripción"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descripción",
+      "default": "<p>Descubre nuestra colección exclusiva de gafas de sol y monturas ópticas</p>"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Tamaño de la descripción (desktop)",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "description_size_mobile",
+      "label": "Tamaño de la descripción (móvil)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colores de texto"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del texto principal",
+      "default": "#ea7ea3"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Color de la línea",
+      "default": "#f19fb9"
+    },
+    {
+      "type": "header",
+      "content": "Animaciones"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_reveal",
+      "label": "Activar scroll reveal",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "reveal_speed",
+      "label": "Velocidad del reveal",
+      "options": [
+        { "value": "fast", "label": "Rápida" },
+        { "value": "normal", "label": "Normal" },
+        { "value": "slow", "label": "Lenta" }
+      ],
+      "default": "normal"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tintin Hero"
+    }
+  ]
+}
+{% endschema %}
