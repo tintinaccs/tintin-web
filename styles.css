@@ -854,7 +854,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 700;
   color: var(--text-title);
   line-height: 0.95;
