@@ -1659,14 +1659,36 @@ let _mapSearchDebounce = null;
 // Nominatim hacia resultados relevantes y acotar las búsquedas por categoría.
 const DELIVERY_BBOX = { south: -25.75, west: -57.75, north: -25.05, east: -57.15 };
 
+// Cada categoría puede mapear a más de una etiqueta OSM (ej. restaurante
+// incluye fast_food) — searchOverpassCategory las combina en una sola
+// consulta, así que agregar categorías no agrega llamadas de red extra.
 const CATEGORY_MAP = [
-  { keys: ['estacion de servicio', 'gasolinera', 'combustible', 'nafta', 'servicentro'], tag: 'amenity=fuel', label: 'Estación de servicio' },
-  { keys: ['farmacia'], tag: 'amenity=pharmacy', label: 'Farmacia' },
-  { keys: ['supermercado', 'super'], tag: 'shop=supermarket', label: 'Supermercado' },
-  { keys: ['shopping', 'centro comercial', 'mall'], tag: 'shop=mall', label: 'Shopping' },
-  { keys: ['banco'], tag: 'amenity=bank', label: 'Banco' },
-  { keys: ['hospital'], tag: 'amenity=hospital', label: 'Hospital' },
-  { keys: ['terminal de omnibus', 'terminal de ómnibus', 'terminal'], tag: 'amenity=bus_station', label: 'Terminal de ómnibus' },
+  { keys: ['estacion de servicio', 'gasolinera', 'combustible', 'nafta', 'servicentro'], tags: ['amenity=fuel'], label: 'Estación de servicio' },
+  { keys: ['farmacia'], tags: ['amenity=pharmacy'], label: 'Farmacia' },
+  { keys: ['supermercado', 'super', 'almacen', 'despensa'], tags: ['shop=supermarket', 'shop=convenience'], label: 'Supermercado' },
+  { keys: ['kiosco', 'kiosko'], tags: ['shop=kiosk', 'shop=convenience'], label: 'Kiosco' },
+  { keys: ['shopping', 'centro comercial', 'mall'], tags: ['shop=mall'], label: 'Shopping' },
+  { keys: ['banco'], tags: ['amenity=bank'], label: 'Banco' },
+  { keys: ['cajero automatico', 'cajero'], tags: ['amenity=atm'], label: 'Cajero automático' },
+  { keys: ['hospital', 'sanatorio', 'clinica', 'clínica'], tags: ['amenity=hospital', 'amenity=clinic'], label: 'Hospital' },
+  { keys: ['terminal de omnibus', 'terminal de ómnibus', 'terminal'], tags: ['amenity=bus_station'], label: 'Terminal de ómnibus' },
+  { keys: ['ferreteria', 'ferretería'], tags: ['shop=hardware'], label: 'Ferretería' },
+  { keys: ['panaderia', 'panadería'], tags: ['shop=bakery'], label: 'Panadería' },
+  { keys: ['veterinaria'], tags: ['amenity=veterinary'], label: 'Veterinaria' },
+  { keys: ['peluqueria', 'peluquería', 'salon de belleza', 'salón de belleza'], tags: ['shop=hairdresser', 'shop=beauty'], label: 'Peluquería' },
+  { keys: ['restaurante', 'restaurant'], tags: ['amenity=restaurant', 'amenity=fast_food'], label: 'Restaurante' },
+  { keys: ['heladeria', 'heladería'], tags: ['amenity=ice_cream'], label: 'Heladería' },
+  { keys: ['ropa', 'tienda de ropa'], tags: ['shop=clothes'], label: 'Tienda de ropa' },
+  { keys: ['iglesia', 'parroquia', 'capilla'], tags: ['amenity=place_of_worship'], label: 'Iglesia' },
+  { keys: ['escuela', 'colegio'], tags: ['amenity=school'], label: 'Escuela/Colegio' },
+  { keys: ['universidad'], tags: ['amenity=university', 'amenity=college'], label: 'Universidad' },
+  { keys: ['plaza', 'parque'], tags: ['leisure=park'], label: 'Plaza/Parque' },
+  { keys: ['comisaria', 'comisaría', 'policia', 'policía'], tags: ['amenity=police'], label: 'Comisaría' },
+  { keys: ['municipalidad', 'intendencia'], tags: ['amenity=townhall', 'office=government'], label: 'Municipalidad' },
+  { keys: ['papeleria', 'papelería', 'libreria', 'librería'], tags: ['shop=stationery', 'shop=books'], label: 'Papelería/Librería' },
+  { keys: ['correo'], tags: ['amenity=post_office'], label: 'Correo' },
+  { keys: ['lavanderia', 'lavandería'], tags: ['shop=laundry'], label: 'Lavandería' },
+  { keys: ['gimnasio'], tags: ['leisure=fitness_centre'], label: 'Gimnasio' },
 ];
 
 function normalizeSearchText(s) {
@@ -1725,10 +1747,17 @@ async function searchNominatim(query) {
 // Category search ("farmacia", "estación de servicio"...) — everything tagged
 // with that type inside the delivery zone, since these are category words,
 // not proper names, and plain name-matching search won't find them.
+// A category can list more than one OSM tag (e.g. restaurante = restaurant +
+// fast_food) — they're all combined into this same single request, so more
+// categories/tags never means more network calls per search.
 async function searchOverpassCategory(cat) {
   const { south, west, north, east } = DELIVERY_BBOX;
-  const [tagKey, tagVal] = cat.tag.split('=');
-  const query = `[out:json][timeout:8];(node["${tagKey}"="${tagVal}"](${south},${west},${north},${east});way["${tagKey}"="${tagVal}"](${south},${west},${north},${east}););out center 12;`;
+  const bbox = `${south},${west},${north},${east}`;
+  const filters = cat.tags.map(t => {
+    const [tagKey, tagVal] = t.split('=');
+    return `node["${tagKey}"="${tagVal}"](${bbox});way["${tagKey}"="${tagVal}"](${bbox});`;
+  }).join('');
+  const query = `[out:json][timeout:8];(${filters});out center 15;`;
   const res = await fetch('https://overpass-api.de/api/interpreter', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
