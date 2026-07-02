@@ -1,4 +1,12 @@
-# Tintin — Cloud Functions: Email Notification
+# Tintin — Cloud Functions: Email Notification (requiere plan Blaze)
+
+> ⚠️ **El sitio HOY NO usa este método** — requiere el plan Blaze de Firebase
+> (pago por uso, con tarjeta cargada). Como se decidió no cargar tarjeta, el
+> sitio usa en su lugar **Google Apps Script**, que es gratis y no la pide.
+> Ver `EMAIL_SETUP.md` para el método que está activo actualmente.
+>
+> Este archivo (y `functions/index.js`) quedan listos por si en el futuro
+> se prefiere pasar a Cloud Functions.
 
 ## Qué hace
 - `notifyNewOrder`: cuando se crea un nuevo pedido en Firestore (`orders/{orderId}`),

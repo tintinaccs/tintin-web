@@ -1613,15 +1613,15 @@
 <style>@keyframes tt-spin{to{transform:rotate(360deg)}}</style>
 
 <script type="module">
-import { auth, db, functions } from "./js/firebase.js";
+import { auth, db } from "./js/firebase.js";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, onSnapshot
+  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+import { sendOrderNotification } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
 
 // ---- GLOBALS ----
@@ -2140,14 +2140,20 @@ window.resendOrderEmail = async (orderId) => {
   const btn = document.getElementById(`resend-btn-${orderId}`);
   if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
   try {
-    const resend = httpsCallable(functions, 'resendOrderEmail');
-    const res = await resend({ orderId });
     const o = allOrders.find(x => x.id === orderId);
-    if (o) {
-      o.resendCount = res.data?.resendCount ?? ((o.resendCount || 0) + 1);
-      o.notificationStatus = 'sent';
-      o.notificationError = null;
-    }
+    if (!o) throw new Error('Pedido no encontrado');
+    const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
+    const result = await sendOrderNotification(orderId, orderForEmail, true);
+    if (!result.success) throw new Error(result.error || 'Error desconocido — revisá que js/email-config.js esté configurado');
+
+    await updateDoc(doc(db, 'orders', orderId), {
+      resendCount: increment(1),
+      lastResendAt: serverTimestamp(),
+      notificationStatus: 'sent',
+      updatedAt: serverTimestamp()
+    });
+    o.resendCount = (o.resendCount || 0) + 1;
+    o.notificationStatus = 'sent';
     toast('Correo reenviado correctamente');
     renderOrdersTable(allOrders);
   } catch (e) {

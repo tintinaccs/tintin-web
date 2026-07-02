@@ -892,6 +892,7 @@ import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js";
+import { sendOrderNotification } from "./js/email-notify.js";
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -1412,8 +1413,21 @@ ${itemLines}
 📝 *Notas:* ${orderData.notes || 'Sin notas'}`;
 }
 
+// Generated up front (not via a follow-up updateDoc) because customers can only
+// ever CREATE their order, never update it afterward — see firestore.rules.
+function generateShortId() {
+  const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // no O/I, avoids visual confusion
+  let s = '';
+  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
 async function saveOrder(items, subtotal, total) {
+  const shortId = generateShortId();
+  window._lastOrderId = shortId;
+
   const orderDoc = {
+    shortId,
     userId:      currentUser?.uid || null,
     userEmail:   currentUser?.email || orderData.email || '',
     userName:    orderData.name,
@@ -1450,12 +1464,13 @@ async function saveOrder(items, subtotal, total) {
     updatedAt:          serverTimestamp()
   };
 
-  const docRef = await addDoc(collection(db, 'orders'), orderDoc);
-  const shortId = docRef.id.slice(0, 8).toUpperCase();
-  window._lastOrderId = shortId;
+  await addDoc(collection(db, 'orders'), orderDoc);
 
-  // Store shortId on the document for easy reference
-  await updateDoc(docRef, { shortId });
+  // Fire-and-forget: the order is already safely saved above regardless of
+  // whether this notification succeeds. `serverTimestamp()` only resolves
+  // after Firestore commits, so send the actual current time instead.
+  sendOrderNotification('', { ...orderDoc, createdAt: new Date().toISOString() }, false)
+    .catch(() => {});
 
   // Update user stats if logged in with a real account (not a guest/anonymous session)
   if (currentUser && !currentUser.isAnonymous) {

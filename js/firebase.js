@@ -8,7 +8,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-import { getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
@@ -41,6 +40,5 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 const storage = getStorage(app);
-const functions = getFunctions(app);
 
-export { db, auth, provider, storage, functions };
+export { db, auth, provider, storage };
