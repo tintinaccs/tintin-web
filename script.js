@@ -943,7 +943,10 @@ function _renderProductDetail(product) {
       statusEl.style.color = '#b84c72';
       statusEl.style.setProperty('--dot-color', '#b84c72');
     } else {
-      statusEl.textContent = '● Disponible';
+      statusEl.textContent = 'Disponible';
+      statusEl.style.background = '';
+      statusEl.style.color = '';
+      statusEl.style.removeProperty('--dot-color');
     }
   }
 
