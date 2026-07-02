@@ -1613,7 +1613,7 @@
 <style>@keyframes tt-spin{to{transform:rotate(360deg)}}</style>
 
 <script type="module">
-import { auth, db } from "./js/firebase.js";
+import { auth, db, functions } from "./js/firebase.js";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -1621,6 +1621,7 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
 
 // ---- GLOBALS ----
@@ -2045,7 +2046,9 @@ function renderOrdersTable(orders) {
         <td style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
         <td onclick="event.stopPropagation()" style="text-align:center">
           ${notifBadge(o.notificationStatus || 'pending')}
+          ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
           ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
+          <button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>
         </td>
         <td onclick="event.stopPropagation()">
           ${canUpdate ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
@@ -2098,9 +2101,13 @@ function renderOrdersTable(orders) {
             </div>
             <div style="margin-top:12px;padding-top:10px;border-top:1px solid #f0d8e0;font-size:13px">
               Subtotal: <strong>${formatPrice(o.subtotal||0)}</strong> &nbsp;|&nbsp;
-              Envío: <strong>${formatPrice(o.shippingCost||0)}</strong> &nbsp;|&nbsp;
+              Envío: <strong>${o.shippingCost == null ? 'Consultar precio' : formatPrice(o.shippingCost)}</strong> &nbsp;|&nbsp;
               <span style="color:var(--adm-accent);font-weight:900;font-size:15px">TOTAL: ${formatPrice(o.total||0)}</span>
             </div>
+            ${o.userPhone ? `
+            <div style="margin-top:12px">
+              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
+            </div>` : ''}
           </div>
         </td>
       </tr>
@@ -2126,6 +2133,26 @@ window.updateOrderStatus = async (orderId, status) => {
     toast(`Estado actualizado: ${status}`);
   } catch(e) {
     toast('Error al actualizar estado');
+  }
+};
+
+window.resendOrderEmail = async (orderId) => {
+  const btn = document.getElementById(`resend-btn-${orderId}`);
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
+  try {
+    const resend = httpsCallable(functions, 'resendOrderEmail');
+    const res = await resend({ orderId });
+    const o = allOrders.find(x => x.id === orderId);
+    if (o) {
+      o.resendCount = res.data?.resendCount ?? ((o.resendCount || 0) + 1);
+      o.notificationStatus = 'sent';
+      o.notificationError = null;
+    }
+    toast('Correo reenviado correctamente');
+    renderOrdersTable(allOrders);
+  } catch (e) {
+    toast('Error al reenviar el correo: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = '✉️ Reenviar'; }
   }
 };
 
@@ -3049,6 +3076,10 @@ function renderCollCurrentList() {
         <div style="font-size:11px;color:var(--adm-muted)">${fmt(p.price)} · ${p.stock != null ? p.stock + ' en stock' : 'stock no definido'}</div>
       </div>
       ${!inStockRow ? `<span style="font-size:10px;font-weight:800;background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:20px;flex-shrink:0">SIN STOCK</span>` : ''}
+      <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
+        ${p.active !== false ? 'Activo' : 'Inactivo'}
+      </span>
+      <button class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>
       <button class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>
     </div>`;
   }).join('');
@@ -3079,6 +3110,19 @@ window.collRemoveFromCollection = async function(docId) {
   try {
     await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
     toast('Producto quitado de la colección');
+  } catch (e) {
+    toast('Error: ' + e.message);
+  }
+};
+
+window.collToggleActive = async function(docId, currentlyActive) {
+  try {
+    await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+    const p = _allProducts.find(x => x._docId === docId);
+    if (p) p.active = !currentlyActive;
+    toast(currentlyActive ? 'Producto desactivado' : 'Producto activado');
+    renderCollCurrentList();
+    renderProductosTable(_allProducts);
   } catch (e) {
     toast('Error: ' + e.message);
   }

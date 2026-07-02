@@ -1238,6 +1238,7 @@ document.getElementById('btn-step3-next').onclick = () => {
   const email = document.getElementById('ck-email').value.trim();
   if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
   if (!phone) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
+  if (phone.replace(/\D/g, '').length < 6) { showError(2, 'Ingresá un número de teléfono/WhatsApp válido.'); return; }
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     showError(2, 'Ingresá un email válido o dejalo en blanco.');
     return;

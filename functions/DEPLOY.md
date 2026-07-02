@@ -1,8 +1,13 @@
 # Tintin — Cloud Functions: Email Notification
 
 ## Qué hace
-Cuando se crea un nuevo pedido en Firestore (`orders/{orderId}`), esta función
-envía un email a `tintinaccs@gmail.com` con el resumen completo del pedido.
+- `notifyNewOrder`: cuando se crea un nuevo pedido en Firestore (`orders/{orderId}`),
+  envía un email a `tintinaccs@gmail.com` con el resumen completo del pedido
+  (cliente, WhatsApp, dirección, zona, productos, pago, envío, fecha/hora en horario de Paraguay).
+- `resendOrderEmail`: función que Super Admin → Pedidos llama con el botón
+  "✉️ Reenviar" para reenviar el correo de un pedido ya existente. Solo un
+  usuario admin/superadmin puede llamarla. Cada reenvío suma 1 a `resendCount`,
+  que se muestra en el panel como "Reenviado (N)".
 
 ## Requisitos
 - Node.js 20+
