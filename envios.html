@@ -96,7 +96,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero">
+<section class="tt-page-hero" data-tt-editable="envios" data-tt-section="header">
   <div class="container">
     <p class="tt-section-sub">Información</p>
     <h1 class="tt-page-hero-title">Política de Envíos 🚚</h1>
@@ -112,9 +112,12 @@
       <h2 class="tt-info-title">Delivery — Zona Central</h2>
       <p>Realizamos delivery a domicilio en Asunción y Gran Asunción (San Lorenzo, Lambaré, Fernando de la Mora, Luque, Capiatá, Mariano Roque Alonso, Villa Elisa, Ñemby, y zonas aledañas).</p>
       <ul>
-        <li><strong>Costo:</strong> se confirma al momento del pedido según tu ubicación.</li>
+        <li><strong>Costo:</strong> según tu ciudad — mirá la lista de precios abajo.</li>
         <li><strong>Tiempo:</strong> generalmente el mismo día o al día siguiente hábil.</li>
         <li><strong>Coordinación:</strong> por WhatsApp antes del despacho.</li>
+      </ul>
+      <ul class="tt-city-price-list" id="envios-delivery-cities">
+        <li class="tt-city-price-loading">Cargando ciudades…</li>
       </ul>
     </div>
 
@@ -122,9 +125,12 @@
       <h2 class="tt-info-title">Encomienda — Interior del País</h2>
       <p>Enviamos al interior de Paraguay mediante encomienda (Saeta, Rysa u otras empresas de transporte).</p>
       <ul>
-        <li><strong>Costo:</strong> depende del destino, generalmente entre Gs. 15.000 y Gs. 35.000.</li>
+        <li><strong>Costo:</strong> según el destino — mirá la lista de precios abajo.</li>
         <li><strong>Tiempo:</strong> 1 a 3 días hábiles según la ciudad.</li>
         <li><strong>Retiro:</strong> en la terminal de la empresa de transporte más cercana a vos.</li>
+      </ul>
+      <ul class="tt-city-price-list" id="envios-encomienda-cities">
+        <li class="tt-city-price-loading">Cargando ciudades…</li>
       </ul>
     </div>
 
@@ -271,5 +277,43 @@
 <script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/auth-nav.js"></script>
 <script type="module" src="js/nav-collections.js"></script>
+<script type="module">
+  import { initSiteContent } from './js/site-content.js';
+  initSiteContent('envios');
+</script>
+<script type="module" src="js/edit-badge.js"></script>
+<script type="module">
+  import { db } from "./js/firebase.js";
+  import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  function fmtGs(n) { return `Gs. ${Number(n).toLocaleString('es-PY')}`; }
+  function costLabel(price) { return price == null ? 'Consultar precio con un vendedor' : fmtGs(price); }
+  function normalize(arr, defaultCost) {
+    return (arr || []).map(c => {
+      if (typeof c === 'string') return { name: c, price: defaultCost };
+      const price = c.price === null ? null : (c.price ?? defaultCost);
+      return { name: c.name, price };
+    });
+  }
+  function renderList(elId, cities) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (!cities.length) { el.innerHTML = '<li class="tt-city-price-empty">Todavía no cargamos ciudades acá. Consultanos por WhatsApp.</li>'; return; }
+    el.innerHTML = cities
+      .slice().sort((a, b) => a.name.localeCompare(b.name, 'es'))
+      .map(c => `<li><span>${c.name}</span><span class="tt-city-price-val">${costLabel(c.price)}</span></li>`)
+      .join('');
+  }
+
+  onSnapshot(doc(db, 'settings', 'general'), (snap) => {
+    const cfg = snap.exists() ? snap.data() : {};
+    renderList('envios-delivery-cities', normalize(cfg.deliveryCities, cfg.deliveryCost || 15000));
+    renderList('envios-encomienda-cities', normalize(cfg.encomiendaCities, cfg.encomiendaCost || 25000));
+  }, (err) => {
+    console.error('No se pudieron cargar las ciudades de envío:', err);
+    renderList('envios-delivery-cities', []);
+    renderList('envios-encomienda-cities', []);
+  });
+</script>
 </body>
 </html>

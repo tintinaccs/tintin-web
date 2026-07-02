@@ -339,6 +339,51 @@
     .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
     .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
 
+    /* ======== SHIPPING CITY MANAGER (Envíos y costos) ======== */
+    .adm-city-form {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .adm-city-form-actions { grid-column: 1 / -1; display: flex; gap: 8px; }
+    .adm-city-list {
+      max-height: 340px;
+      overflow-y: auto;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .adm-city-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--adm-border);
+      font-size: 12.5px;
+    }
+    .adm-city-row:last-child { border-bottom: none; }
+    .adm-city-name { flex: 1; font-weight: 600; color: var(--adm-text); }
+    .adm-city-cost { color: var(--adm-muted); white-space: nowrap; }
+    .adm-city-edit, .adm-city-del {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      line-height: 1;
+    }
+    .adm-city-edit:hover { background: #fef5f8; }
+    .adm-city-del:hover { background: #fee2e2; }
+    .adm-city-empty {
+      padding: 18px 12px;
+      text-align: center;
+      color: var(--adm-muted);
+      font-size: 12px;
+      font-style: italic;
+    }
+
     /* ======== SEARCH ======== */
     .adm-search-wrap {
       position: relative;
@@ -491,6 +536,7 @@
     }
     .cont-section.dirty { border-color: #ffc107; }
     .cont-section.saved { border-color: #4caf50; }
+    .cont-section.cont-section-highlight { border-color: var(--adm-accent); box-shadow: 0 0 0 4px rgba(184,76,114,.16); }
 
     .cont-section-head {
       display: flex;
@@ -1001,10 +1047,8 @@
         <!-- Bulk action toolbar (shown when products are selected) -->
         <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
           <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
-          <input id="bulk-collection-input" type="text" placeholder="Nombre de colección" class="adm-input" style="font-size:12px;padding:5px 10px;width:200px">
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
-            <option value="">— Cambiar categoría —</option>
+            <option value="">— Asignar a colección —</option>
             <option value="relojes">Relojes</option>
             <option value="bolsos">Bolsos / Bags</option>
             <option value="collares">Collares</option>
@@ -1018,7 +1062,8 @@
             <option value="gafas">Gafas</option>
             <option value="joyeros">Joyeros</option>
           </select>
-          <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Cambiar cat.</button>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente (solo superadmin)" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
@@ -1365,11 +1410,12 @@
         </div>
         <div class="adm-card-body">
           <div style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#b84c72;line-height:1.6">
-            <strong>Formato:</strong> <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Ciudad | Precio</code> — una por línea.<br>
-            Ejemplo: <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Asunción | 15000</code>&nbsp;&nbsp;<code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">San Lorenzo | 12000</code><br>
-            Si no ponés precio, se usa el costo por defecto de abajo.
+            Cargá cada ciudad con su costo de envío. Si dejás el costo vacío, en el checkout va a
+            aparecer <strong>"Consultar precio con un vendedor"</strong> en vez de un número — el
+            envío se coordina después por WhatsApp. Los cambios se guardan al instante y se reflejan
+            en el checkout y en la página de Envíos automáticamente.
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
             <div class="adm-field">
               <label class="adm-label">Costo delivery por defecto (Gs.) — si la ciudad no tiene precio propio</label>
               <input type="number" class="adm-input" id="cfg-delivery-cost" placeholder="15000" min="0" />
@@ -1379,14 +1425,30 @@
               <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div class="adm-field">
-              <label class="adm-label">🚚 Ciudades con DELIVERY — formato: Ciudad | Precio</label>
-              <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Asunción | 15000&#10;San Lorenzo | 12000&#10;Luque | 14000&#10;Lambaré | 13000"></textarea>
+              <label class="adm-label">🚚 Ciudades con DELIVERY (Zona Central)</label>
+              <div class="adm-city-form">
+                <input type="text" class="adm-input" id="cfg-delivery-city-name" placeholder="Nombre de la ciudad">
+                <input type="number" class="adm-input" id="cfg-delivery-city-price" placeholder="Costo (Gs.) — opcional" min="0">
+                <div class="adm-city-form-actions">
+                  <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="cfg-delivery-city-add">+ Agregar</button>
+                  <button type="button" class="adm-btn adm-btn-sm" id="cfg-delivery-city-cancel" style="display:none">Cancelar</button>
+                </div>
+              </div>
+              <div class="adm-city-list" id="cfg-delivery-city-list"></div>
             </div>
             <div class="adm-field">
-              <label class="adm-label">📦 Ciudades con ENCOMIENDA — formato: Ciudad | Precio</label>
-              <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Ciudad del Este | 25000&#10;Encarnación | 28000&#10;Coronel Oviedo | 22000"></textarea>
+              <label class="adm-label">📦 Ciudades con ENCOMIENDA (Interior del país)</label>
+              <div class="adm-city-form">
+                <input type="text" class="adm-input" id="cfg-encomienda-city-name" placeholder="Nombre de la ciudad">
+                <input type="number" class="adm-input" id="cfg-encomienda-city-price" placeholder="Costo (Gs.) — opcional" min="0">
+                <div class="adm-city-form-actions">
+                  <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="cfg-encomienda-city-add">+ Agregar</button>
+                  <button type="button" class="adm-btn adm-btn-sm" id="cfg-encomienda-city-cancel" style="display:none">Cancelar</button>
+                </div>
+              </div>
+              <div class="adm-city-list" id="cfg-encomienda-city-list"></div>
             </div>
           </div>
         </div>
@@ -1700,6 +1762,7 @@ onAuthStateChanged(auth, async user => {
     // Productos stay correct even if the admin never opens Colecciones first.
     loadProductos();
     loadColecciones();
+    handleContentDeepLink();
   } catch(e) {
     console.error('[Admin] Auth init error:', e);
   } finally {
@@ -2178,6 +2241,113 @@ document.getElementById('btn-reset-ob').onclick = async () => {
 };
 
 // ======== CONFIGURACIÓN ========
+
+// Reusable add/edit/delete manager for a shipping-city list ({name, price}[])
+// stored in settings/general.<firestoreField>. Every action saves immediately —
+// no need to click "Guardar configuración" for city changes.
+function makeCityManager(prefix, firestoreField) {
+  let items = [];
+  let editIndex = null;
+
+  const $ = (suffix) => document.getElementById(`${prefix}-city-${suffix}`);
+
+  function render() {
+    const el = $('list');
+    if (!items.length) {
+      el.innerHTML = '<div class="adm-city-empty">Todavía no cargaste ciudades acá.</div>';
+      return;
+    }
+    el.innerHTML = items.map((c, i) => `
+      <div class="adm-city-row">
+        <span class="adm-city-name">${c.name}</span>
+        <span class="adm-city-cost">${c.price == null ? 'Sin precio — se consulta' : 'Gs. ' + Number(c.price).toLocaleString('es-PY')}</span>
+        <button type="button" class="adm-city-edit" data-i="${i}" title="Editar">✏️</button>
+        <button type="button" class="adm-city-del" data-i="${i}" title="Eliminar">🗑️</button>
+      </div>
+    `).join('');
+    el.querySelectorAll('.adm-city-edit').forEach(b => b.onclick = () => startEdit(+b.dataset.i));
+    el.querySelectorAll('.adm-city-del').forEach(b => b.onclick = () => removeCity(+b.dataset.i));
+  }
+
+  function resetForm() {
+    editIndex = null;
+    $('name').value = '';
+    $('price').value = '';
+    $('add').textContent = '+ Agregar';
+    $('cancel').style.display = 'none';
+  }
+
+  function startEdit(i) {
+    editIndex = i;
+    $('name').value = items[i].name;
+    $('price').value = items[i].price ?? '';
+    $('add').textContent = 'Guardar cambios';
+    $('cancel').style.display = '';
+    $('name').focus();
+  }
+
+  async function persist() {
+    await setDoc(doc(db, 'settings', 'general'), { [firestoreField]: items, updatedAt: serverTimestamp() }, { merge: true });
+  }
+
+  async function submit() {
+    const name = $('name').value.trim();
+    if (!name) { toast('Escribí el nombre de la ciudad'); return; }
+    const priceRaw = $('price').value.trim();
+    const price = priceRaw === '' ? null : (parseInt(priceRaw) || 0);
+    const dup = items.findIndex((c, i) => c.name.toLowerCase() === name.toLowerCase() && i !== editIndex);
+    if (dup !== -1) { toast('Esa ciudad ya está cargada'); return; }
+    const prev = items.slice();
+    const wasEdit = editIndex != null;
+    if (wasEdit) items[editIndex] = { name, price }; else items.push({ name, price });
+    $('add').disabled = true;
+    try {
+      await persist();
+      render();
+      resetForm();
+      toast(wasEdit ? 'Ciudad actualizada' : 'Ciudad agregada');
+    } catch (e) {
+      items = prev;
+      toast('Error al guardar: ' + e.message);
+    } finally {
+      $('add').disabled = false;
+    }
+  }
+
+  async function removeCity(i) {
+    if (!confirm(`¿Eliminar "${items[i].name}"?`)) return;
+    const prev = items.slice();
+    items.splice(i, 1);
+    try {
+      await persist();
+      if (editIndex === i) resetForm();
+      render();
+      toast('Ciudad eliminada');
+    } catch (e) {
+      items = prev;
+      toast('Error al eliminar: ' + e.message);
+      render();
+    }
+  }
+
+  $('add').onclick = submit;
+  $('cancel').onclick = resetForm;
+
+  return {
+    setItems(arr, defaultCost) {
+      items = (arr || []).map(c => {
+        if (typeof c === 'string') return { name: c, price: defaultCost };
+        return { name: c.name, price: c.price === null ? null : (c.price ?? defaultCost) };
+      });
+      resetForm();
+      render();
+    }
+  };
+}
+
+const deliveryCityMgr   = makeCityManager('cfg-delivery',   'deliveryCities');
+const encomiendaCityMgr = makeCityManager('cfg-encomienda', 'encomiendaCities');
+
 async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
@@ -2187,14 +2357,12 @@ async function loadConfig() {
     document.getElementById('cfg-contact-email').value = d.contactEmail || '';
     document.getElementById('cfg-store-address').value = d.storeAddress || 'San Lorenzo, Paraguay';
     document.getElementById('cfg-currency').value = d.currency || 'PYG';
-    document.getElementById('cfg-delivery-cost').value = d.deliveryCost ?? 15000;
-    document.getElementById('cfg-encomienda-cost').value = d.encomiendaCost ?? 25000;
-    // Support both old string[] and new {name,price}[] formats
-    const toLines = (arr) => (arr || []).map(c =>
-      typeof c === 'string' ? c : `${c.name} | ${c.price}`
-    ).join('\n');
-    document.getElementById('cfg-delivery-cities').value = toLines(d.deliveryCities);
-    document.getElementById('cfg-encomienda-cities').value = toLines(d.encomiendaCities);
+    const defaultDeliveryCost   = d.deliveryCost ?? 15000;
+    const defaultEncomiendaCost = d.encomiendaCost ?? 25000;
+    document.getElementById('cfg-delivery-cost').value = defaultDeliveryCost;
+    document.getElementById('cfg-encomienda-cost').value = defaultEncomiendaCost;
+    deliveryCityMgr.setItems(d.deliveryCities, defaultDeliveryCost);
+    encomiendaCityMgr.setItems(d.encomiendaCities, defaultEncomiendaCost);
     document.getElementById('cfg-instagram').value = d.instagram || '';
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
@@ -2211,18 +2379,6 @@ async function loadConfig() {
 
 document.getElementById('btn-save-config').onclick = async () => {
   try {
-    const defaultDeliveryCost   = parseInt(document.getElementById('cfg-delivery-cost').value)   || 15000;
-    const defaultEncomiendaCost = parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000;
-    const parseLines = (raw, defaultCost) => raw
-      .split('\n').map(s => s.trim()).filter(Boolean)
-      .map(line => {
-        const [name, priceStr] = line.split('|').map(s => s.trim());
-        const price = parseInt(priceStr) || defaultCost;
-        return { name, price };
-      });
-    const deliveryCities   = parseLines(document.getElementById('cfg-delivery-cities').value, defaultDeliveryCost);
-    const encomiendaCities = parseLines(document.getElementById('cfg-encomienda-cities').value, defaultEncomiendaCost);
-
     await setDoc(doc(db, 'settings', 'general'), {
       storeName:       document.getElementById('cfg-store-name').value.trim(),
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
@@ -2231,8 +2387,6 @@ document.getElementById('btn-save-config').onclick = async () => {
       currency:        document.getElementById('cfg-currency').value,
       deliveryCost:    parseInt(document.getElementById('cfg-delivery-cost').value) || 15000,
       encomiendaCost:  parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000,
-      deliveryCities,
-      encomiendaCities,
       instagram:       document.getElementById('cfg-instagram').value.trim(),
       facebook:        document.getElementById('cfg-facebook').value.trim(),
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
@@ -3484,6 +3638,7 @@ const CONT_SCHEMA = {
       trust: {
         label: 'Barra de Confianza', icon: 'trust',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'items', label:'Ítems (4 bloques)', type:'array',
             itemFields: [
               { key:'label', label:'Título', type:'text' },
@@ -3501,6 +3656,7 @@ const CONT_SCHEMA = {
       editorial_bag: {
         label: 'Editorial — Bags', icon: 'bags',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Colección BAG' },
           { key:'title', label:'Título', type:'text', def:'El complemento\nque lo cambia todo' },
           { key:'body', label:'Texto', type:'textarea', def:'' },
@@ -3512,6 +3668,7 @@ const CONT_SCHEMA = {
       editorial_relojes: {
         label: 'Editorial — Relojes', icon: '⌚',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Nueva colección' },
           { key:'title', label:'Título', type:'text', def:'El reloj del que\ntodas se enamoran' },
           { key:'body', label:'Texto', type:'textarea', def:'' },
@@ -3586,6 +3743,66 @@ const CONT_SCHEMA = {
         ]
       }
     }
+  },
+  collections: {
+    label: 'Colecciones', url: 'collections.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Colecciones', icon: 'catalog',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'NUESTRAS COLECCIONES' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  contact: {
+    label: 'Contacto', url: 'contact.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Contacto', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'¿Dudas o consultas?' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  faq: {
+    label: 'Preguntas Frecuentes', url: 'preguntas-frecuentes.html',
+    sections: {
+      header: {
+        label: 'Encabezado de FAQ', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Preguntas Frecuentes 💬' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  cambios: {
+    label: 'Cambios y Devoluciones', url: 'cambios-devoluciones.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Cambios y Devoluciones', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Cambios y Devoluciones 🔄' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  envios: {
+    label: 'Política de Envíos', url: 'envios.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Envíos', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Política de Envíos 🚚' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
   }
 };
 
@@ -3642,6 +3859,15 @@ function contRenderField(field, value) {
     `;
   } else if (field.type === 'array') {
     html += contRenderArrayField(field, value ?? field.def ?? [], id);
+  } else if (field.type === 'checkbox') {
+    const checked = (value ?? field.def) !== false;
+    html = `<div class="cont-field" data-fkey="${field.key}">
+      <label class="cont-label" style="display:flex;align-items:center;gap:8px;cursor:pointer" for="${id}">
+        <input id="${id}" type="checkbox" data-fkey="${field.key}" data-fcheckbox="1" ${checked ? 'checked' : ''} style="width:16px;height:16px;accent-color:var(--adm-accent)" />
+        ${field.label}
+      </label>
+    </div>`;
+    return html;
   }
   html += `</div>`;
   return html;
@@ -3694,6 +3920,10 @@ function contExtractFieldValue(fieldEl, field) {
       items.push(obj);
     });
     return items;
+  }
+  if (field.type === 'checkbox') {
+    const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
+    return inp ? inp.checked : (field.def !== false);
   }
   const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
   return inp ? inp.value : (field.def ?? '');
@@ -3749,6 +3979,15 @@ async function contRenderPage(pageId) {
       }
       const prevImg = document.querySelector(`[data-preview-for="${inp.id}"]`);
       if (prevImg) { prevImg.src = inp.value; prevImg.classList.toggle('show', !!inp.value); }
+    });
+  });
+  sectionsEl.querySelectorAll('[data-fcheckbox]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const section = inp.closest('.cont-section');
+      if (section) {
+        section.classList.add('dirty');
+        section.querySelector('.cont-dirty-dot').style.display = 'inline-block';
+      }
     });
   });
   loadingEl.style.display = 'none';
@@ -3929,6 +4168,29 @@ async function loadContenido() {
   await contRenderPage(contCurrentPage);
 }
 
+// Deep link from the public site's "✏️ editar" badge (js/edit-badge.js):
+// admin.html?tab=contenido&page=<id>&section=<id> — jumps straight to that
+// page/section in Contenido and highlights it.
+async function handleContentDeepLink() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('tab') !== 'contenido') return;
+  const targetPage = params.get('page');
+  const targetSection = params.get('section');
+  switchSection('contenido');
+  if (!targetPage) return;
+  await loadContenido();
+  if (targetPage !== contCurrentPage) await contSwitchPage(targetPage);
+  if (!targetSection) return;
+  const el = document.querySelector(`.cont-section[data-section="${targetSection}"]`);
+  if (!el) return;
+  const head = el.querySelector('.cont-section-head');
+  const body = el.querySelector('.cont-section-body');
+  if (head && body && !body.classList.contains('open')) { head.classList.add('open'); body.classList.add('open'); }
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.classList.add('cont-section-highlight');
+  setTimeout(() => el.classList.remove('cont-section-highlight'), 2200);
+}
+
 
 // ══════════════════════════════════════════════
 // PRODUCTS: SELECTION & BULK ACTIONS
@@ -3974,17 +4236,13 @@ window.clearSelection = function() {
   updateBulkToolbar();
 };
 
-window.bulkAssignCollection = async function() {
+window.bulkRemoveFromCollection = async function() {
   if (!_selectedProducts.size) return;
-  const colInput = document.getElementById('bulk-collection-input');
-  const col = colInput?.value.trim();
-  if (!col) { toast('Escribí el nombre de la colección'); return; }
-  if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
+  if (!confirm(`¿Quitar de su colección a ${_selectedProducts.size} producto(s)?`)) return;
   try {
-    await batchUpdateChunked([..._selectedProducts], () => ({ collection: col, updatedAt: serverTimestamp() }));
-    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
-    toast(`Colección "${col}" asignada a ${_selectedProducts.size} productos`);
-    if (colInput) colInput.value = '';
+    await batchUpdateChunked([..._selectedProducts], () => ({ category: '', updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = ''; });
+    toast(`${_selectedProducts.size} productos quitados de su colección`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }
@@ -4006,12 +4264,13 @@ window.bulkActivate = async function(activate) {
 window.bulkSetCategory = async function() {
   if (!_selectedProducts.size) return;
   const cat = document.getElementById('bulk-category-input')?.value;
-  if (!cat) { toast('Seleccioná una categoría'); return; }
-  if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
+  if (!cat) { toast('Elegí una colección'); return; }
+  const label = document.getElementById('bulk-category-input')?.selectedOptions?.[0]?.textContent || cat;
+  if (!confirm(`¿Asignar la colección "${label}" a ${_selectedProducts.size} producto(s)?`)) return;
   try {
     await batchUpdateChunked([..._selectedProducts], () => ({ category: cat, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
-    toast(`Categoría actualizada en ${_selectedProducts.size} productos`);
+    toast(`Colección "${label}" asignada a ${_selectedProducts.size} productos`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }

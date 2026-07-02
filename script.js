@@ -1419,9 +1419,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryThumbs();
   }
 
-  // Collections page — show skeleton while Firebase loads
+  // Collections page — show skeleton while Firebase loads, same skeleton→fallback
+  // pattern as the homepage so a failed/slow Firestore listener never leaves it
+  // spinning forever.
   if (document.getElementById('colls-products-grid')) {
     _showProductsSkeleton('colls-products-grid');
+    const _fallbackColls = () => {
+      const grid = document.getElementById('colls-products-grid');
+      if (grid && grid.querySelector('.tt-skeleton-card')) {
+        renderProductsGrid('colls-products-grid', window.PRODUCTS || PRODUCTS);
+      }
+    };
+    setTimeout(_fallbackColls, 4000);
+    window.addEventListener('tintin:products-error', _fallbackColls);
   }
 
   // Scroll reveal

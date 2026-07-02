@@ -45,6 +45,8 @@
     '.tt-about-section',
     // Trust bar heading (about)
     '.tt-trust-bar .tt-section-title',
+    // Perfil (cuenta de usuario)
+    '.perfil-card',
   ].join(',');
 
   function observe() {

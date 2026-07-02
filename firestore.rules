@@ -24,14 +24,37 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // La web pública (checkout, envios.html) necesita leer costos/ciudades de envío,
+    // nombre de tienda, redes, métodos de pago, etc.
+    match /settings/general {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Otros documentos de settings quedan protegidos
     match /settings/{doc} {
       allow read, write: if isAdmin();
     }
 
     match /users/{userId} {
-      allow read, create, update: if isSignedIn() && request.auth.uid == userId;
-      allow delete: if false;
+      // El dueño puede leer/crear su doc; el admin puede leer/listar cualquiera
+      // (pestaña Usuarios, Dashboard, Onboarding en Super Admin).
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      // Al crear su propio doc (signup), el rol solo puede ser "client", o
+      // "superadmin" si es el email dueño de la tienda — igual que hace login.html.
+      // Evita que alguien se cree el doc con role:"admin" a mano.
+      allow create: if isSignedIn() && request.auth.uid == userId && (
+        !('role' in request.resource.data) ||
+        request.resource.data.role == 'client' ||
+        (request.resource.data.role == 'superadmin' && request.auth.token.email == "tintinaccs@gmail.com")
+      );
+      // El dueño puede actualizar su propio doc pero NO puede tocar su propio
+      // campo "role" (evita que se auto-asigne admin/superadmin). El admin sí puede.
+      allow update: if isAdmin() || (
+        isSignedIn() && request.auth.uid == userId &&
+        request.resource.data.role == resource.data.role
+      );
+      allow delete: if isAdmin();
 
       // Carrito sincronizado del usuario (js/cart-sync.js)
       match /cart/{itemId} {

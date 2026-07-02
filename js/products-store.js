@@ -50,8 +50,6 @@ function mapProduct(id, d) {
 function handleSnapshot(snap) {
   const all = snap.docs.map(d => mapProduct(d.id, d.data()));
 
-  console.log('[products-store] productos actualizados (tiempo real):', all);
-
   const products = all
     .filter(p => p.active !== false)
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
@@ -92,4 +90,7 @@ function handleSnapshot(snap) {
 // pushes to every open tab immediately, no reload needed.
 onSnapshot(collection(db, 'products'), handleSnapshot, e => {
   console.error('[products-store] Firestore realtime listener failed:', e);
+  // Let pages waiting on window.PRODUCTS (catalogo/collections skeletons) know
+  // the listener failed, instead of spinning forever with no feedback.
+  window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error: e } }));
 });

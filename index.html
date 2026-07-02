@@ -523,7 +523,7 @@ setTimeout(function(){_ttUnlock();},5500);
 <!-- ══════════════════════════════════════
      HERO
 ══════════════════════════════════════ -->
-<section class="tt-hero" id="hero">
+<section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
   <!-- Real image: loads immediately, no JS, no Firestore dependency -->
   <div class="tt-hero-media">
@@ -582,7 +582,7 @@ setTimeout(function(){_ttUnlock();},5500);
 <!-- ══════════════════════════════════════
      TRUST BAR
 ══════════════════════════════════════ -->
-<section class="tt-trust-bar">
+<section class="tt-trust-bar" data-tt-editable="index" data-tt-section="trust">
   <div class="container">
     <div class="tt-trust-grid">
       <div class="tt-trust-item tt-reveal tt-reveal-delay-1">
@@ -612,7 +612,7 @@ setTimeout(function(){_ttUnlock();},5500);
 <!-- ══════════════════════════════════════
      EDITORIAL — BAG
 ══════════════════════════════════════ -->
-<section class="section-sm">
+<section class="section-sm" data-tt-editable="index" data-tt-section="editorial_bag">
   <div class="tt-editorial">
     <div class="tt-editorial-img">
       <div class="tt-img-placeholder tt-img-placeholder-rose" data-img-slot="edit_bolsos" style="height:100%; min-height:440px;">
@@ -721,7 +721,7 @@ setTimeout(function(){_ttUnlock();},5500);
 <!-- ══════════════════════════════════════
      WATCH FEATURE
 ══════════════════════════════════════ -->
-<section class="section-sm">
+<section class="section-sm" data-tt-editable="index" data-tt-section="editorial_relojes">
   <div class="tt-watch-feature">
     <div class="tt-watch-feature-img">
       <div class="tt-img-placeholder" style="height:100%;min-height:500px;background:linear-gradient(135deg,#c9a96e 0%,#f5ead0 40%,#fce4ec 70%,#e8a0b4 100%);">
@@ -971,6 +971,7 @@ setTimeout(function(){_ttUnlock();},5500);
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('index');
 </script>
+<script type="module" src="js/edit-badge.js"></script>
 <script type="module">
 import { onCollectionsUpdate, FALLBACK_COLLECTIONS } from './js/collections-store.js';
 

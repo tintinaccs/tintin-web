@@ -96,7 +96,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero">
+<section class="tt-page-hero" data-tt-editable="cambios" data-tt-section="header">
   <div class="container">
     <p class="tt-section-sub">Información</p>
     <h1 class="tt-page-hero-title">Cambios y Devoluciones 🔄</h1>
@@ -276,5 +276,10 @@
 <script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/auth-nav.js"></script>
 <script type="module" src="js/nav-collections.js"></script>
+<script type="module">
+import { initSiteContent } from './js/site-content.js';
+initSiteContent('cambios');
+</script>
+<script type="module" src="js/edit-badge.js"></script>
 </body>
 </html>
