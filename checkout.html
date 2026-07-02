@@ -596,6 +596,34 @@
     }
     @media (max-width: 480px) { #ck-map { height: 200px; } }
 
+    /* ---- MAP SEARCH ---- */
+    .ck-map-search-wrap { position: relative; padding: 12px 14px 0; background: #fff; }
+    .ck-map-search-results {
+      position: absolute;
+      top: 100%; left: 14px; right: 14px;
+      z-index: 500;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-top: 4px;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    }
+    .ck-map-search-results.show { display: block; }
+    .ck-map-search-item {
+      padding: 10px 14px;
+      font-size: 12.5px;
+      cursor: pointer;
+      border-bottom: 1px solid #f5f5f5;
+      line-height: 1.4;
+    }
+    .ck-map-search-item:last-child { border-bottom: none; }
+    .ck-map-search-item:hover { background: var(--acc-pale); }
+    .ck-map-search-item.ck-map-search-empty { color: var(--text-muted); cursor: default; }
+    .ck-map-search-item.ck-map-search-empty:hover { background: none; }
+
     /* ---- TRUST BAR (step 1) ---- */
     .ck-trust-bar {
       display: flex;
@@ -735,10 +763,14 @@
       <!-- MAP — solo para delivery -->
       <div class="ck-map-wrap" id="ck-map-wrap">
         <div class="ck-map-tip">
-          📍 Marcá tu ubicación exacta en el mapa (opcional pero ayuda al repartidor)
+          📍 Buscá tu ubicación o marcala directo en el mapa
+        </div>
+        <div class="ck-map-search-wrap">
+          <input type="text" class="ck-input" id="ck-map-search" placeholder="Buscar local, calle o punto de referencia…" autocomplete="off" />
+          <div class="ck-map-search-results" id="ck-map-search-results"></div>
         </div>
         <div id="ck-map"></div>
-        <div class="ck-map-coords" id="ck-map-coords">Tocá el mapa para marcar tu ubicación</div>
+        <div class="ck-map-coords" id="ck-map-coords">Tocá el mapa, buscá arriba, o escribí tu dirección</div>
       </div>
 
       <div class="ck-error" id="error-1"></div>
@@ -760,7 +792,10 @@
       </div>
       <div class="ck-field">
         <label class="ck-label">Teléfono / WhatsApp *</label>
-        <input type="tel" class="ck-input" id="ck-phone" placeholder="Ej: 0981 123 456" />
+        <div style="display:flex;gap:8px">
+          <select class="ck-select" id="ck-phone-country" style="flex:0 0 128px"></select>
+          <input type="tel" class="ck-input" id="ck-phone-number" placeholder="Ej: 0981 123 456" style="flex:1" />
+        </div>
       </div>
       <div class="ck-field">
         <label class="ck-label">Email (opcional)</label>
@@ -893,6 +928,7 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js";
 import { sendOrderNotification } from "./js/email-notify.js";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js";
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -1213,7 +1249,13 @@ document.getElementById('btn-step2-next').onclick = () => {
 
   if (orderData.shippingMethod !== 'retiro') {
     const addr = document.getElementById('ck-address').value.trim();
-    if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
+    const hasMapLocation = orderData.shippingMethod === 'delivery' && !!orderData.mapLocation;
+    if (!addr && !hasMapLocation) {
+      showError(1, orderData.shippingMethod === 'delivery'
+        ? 'Ingresá tu dirección o marcá/buscá tu ubicación en el mapa para continuar.'
+        : 'Ingresá tu dirección de entrega.');
+      return;
+    }
     orderData.address = addr;
     orderData.referencia = document.getElementById('ck-referencia').value.trim();
   }
@@ -1232,14 +1274,30 @@ document.getElementById('btn-step2-next').onclick = () => {
 document.getElementById('btn-step2-back').onclick = () => goToStep(0);
 
 // ---- STEP 3: DATOS ----
+
+// Populate country selector (Paraguay first/default)
+const phoneCountrySelect = document.getElementById('ck-phone-country');
+phoneCountrySelect.innerHTML = COUNTRIES.map(c =>
+  `<option value="${c.code}">${c.flag} +${c.dial}</option>`
+).join('');
+phoneCountrySelect.value = DEFAULT_COUNTRY.code;
+
 document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();
   const name = document.getElementById('ck-name').value.trim();
-  const phone = document.getElementById('ck-phone').value.trim();
+  const phoneRaw = document.getElementById('ck-phone-number').value.trim();
+  const country = findCountryByCode(phoneCountrySelect.value);
   const email = document.getElementById('ck-email').value.trim();
   if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
-  if (!phone) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
-  if (phone.replace(/\D/g, '').length < 6) { showError(2, 'Ingresá un número de teléfono/WhatsApp válido.'); return; }
+  if (!phoneRaw) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
+  if (!isValidPhone(phoneRaw, country)) {
+    showError(2, `Ingresá un número de teléfono/WhatsApp válido para ${country.flag} ${country.name}.`);
+    return;
+  }
+  const { value: phone, country: detectedCountry } = normalizePhone(phoneRaw, country);
+  if (detectedCountry && detectedCountry.code !== country.code) {
+    phoneCountrySelect.value = detectedCountry.code; // reflect auto-detected country back in the UI
+  }
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     showError(2, 'Ingresá un email válido o dejalo en blanco.');
     return;
@@ -1505,6 +1563,38 @@ function initMap() {
   }
 }
 
+// Shared by map clicks, marker drag, and the search box below —
+// a single place that decides "the delivery location changed".
+function saveMapLocation(lat, lng) {
+  orderData.mapLocation = { lat: +lat.toFixed(6), lng: +lng.toFixed(6) };
+  document.getElementById('ck-map-coords').textContent =
+    `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+}
+
+function placeMarker(lat, lng) {
+  const L = window.L;
+  const latlng = L.latLng(lat, lng);
+  if (!_mapPinIcon) {
+    _mapPinIcon = L.divIcon({
+      className: '',
+      html: '<div style="font-size:32px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">📍</div>',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32]
+    });
+  }
+  if (_mapMarker) _mapMarker.setLatLng(latlng);
+  else _mapMarker = L.marker(latlng, { icon: _mapPinIcon, draggable: true }).addTo(_mapInstance);
+
+  _mapMarker.off('dragend').on('dragend', () => {
+    const pos = _mapMarker.getLatLng();
+    saveMapLocation(pos.lat, pos.lng);
+  });
+
+  saveMapLocation(lat, lng);
+}
+
+let _mapPinIcon = null;
+
 function _buildMap() {
   const L = window.L;
   // Center on Asunción, Paraguay
@@ -1514,35 +1604,64 @@ function _buildMap() {
     maxZoom: 19
   }).addTo(_mapInstance);
 
-  const pinIcon = L.divIcon({
-    className: '',
-    html: '<div style="font-size:32px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">📍</div>',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32]
-  });
-
-  function placeMarker(latlng) {
-    if (_mapMarker) _mapMarker.setLatLng(latlng);
-    else _mapMarker = L.marker(latlng, { icon: pinIcon, draggable: true }).addTo(_mapInstance);
-
-    _mapMarker.off('dragend').on('dragend', () => {
-      const pos = _mapMarker.getLatLng();
-      saveMapLocation(pos.lat, pos.lng);
-    });
-
-    saveMapLocation(latlng.lat, latlng.lng);
-  }
-
-  function saveMapLocation(lat, lng) {
-    orderData.mapLocation = { lat: +lat.toFixed(6), lng: +lng.toFixed(6) };
-    document.getElementById('ck-map-coords').textContent =
-      `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
-  }
-
-  _mapInstance.on('click', e => placeMarker(e.latlng));
+  _mapInstance.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+  initMapSearch();
 
   // Resize fix when map container becomes visible
   setTimeout(() => _mapInstance.invalidateSize(), 300);
+}
+
+// ---- MAP SEARCH (Nominatim / OpenStreetMap — free, no API key) ----
+let _mapSearchDebounce = null;
+
+function initMapSearch() {
+  const input = document.getElementById('ck-map-search');
+  const results = document.getElementById('ck-map-search-results');
+  if (!input || input.dataset.wired) return;
+  input.dataset.wired = '1';
+
+  input.addEventListener('input', () => {
+    clearTimeout(_mapSearchDebounce);
+    const q = input.value.trim();
+    if (q.length < 3) { results.classList.remove('show'); results.innerHTML = ''; return; }
+    _mapSearchDebounce = setTimeout(() => searchMapPlace(q), 450);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target !== input && !results.contains(e.target)) results.classList.remove('show');
+  });
+}
+
+async function searchMapPlace(query) {
+  const results = document.getElementById('ck-map-search-results');
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=py&addressdetails=1&limit=6&accept-language=es`;
+    const res = await fetch(url);
+    const places = await res.json();
+
+    if (!places.length) {
+      results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Sin resultados — probá con otro nombre o marcá manualmente en el mapa</div>';
+      results.classList.add('show');
+      return;
+    }
+
+    results.innerHTML = places.map((p, i) => `<div class="ck-map-search-item" data-idx="${i}">📍 ${p.display_name}</div>`).join('');
+    results.classList.add('show');
+    results.querySelectorAll('.ck-map-search-item[data-idx]').forEach(el => {
+      el.onclick = () => {
+        const p = places[+el.dataset.idx];
+        const lat = +p.lat, lng = +p.lon;
+        _mapInstance.setView([lat, lng], 17);
+        placeMarker(lat, lng);
+        document.getElementById('ck-map-search').value = p.display_name;
+        results.classList.remove('show');
+      };
+    });
+  } catch (e) {
+    console.error('Error buscando ubicación:', e);
+    results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">No se pudo buscar — probá de nuevo o marcá manualmente en el mapa</div>';
+    results.classList.add('show');
+  }
 }
 
 // ---- INIT ----

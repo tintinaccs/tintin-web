@@ -83,30 +83,43 @@ async function clearCartFromFirestore(uid) {
 // ---- Public API ----
 
 /**
- * Get cart — merges localStorage + Firestore if logged in
+ * Get cart — merges localStorage + Firestore if logged in.
+ *
+ * IMPORTANT: this does a Firestore round-trip, so the user can add/remove
+ * items locally (via addToCart/removeFromCart, both synchronous on
+ * localStorage) *while this is in flight*. To never lose that work, this
+ * re-reads localStorage right before writing and only ever ADDS remote-only
+ * items on top of whatever is currently local — it must never treat the
+ * remote copy as the source of truth and overwrite local with it.
  * @returns {Promise<Array>}
  */
 export async function getCart() {
   const uid = currentUid();
-  const local = getCartLocal();
-
-  if (!uid) return local;
+  if (!uid) return getCartLocal();
 
   try {
     const remote = await getCartFromFirestore(uid);
-    // Merge: remote takes priority, but add local items not in remote
-    const merged = [...remote];
-    for (const localItem of local) {
-      const exists = merged.find(r => String(r.id) === String(localItem.id));
-      if (!exists) {
-        merged.push(localItem);
-        await saveItemToFirestore(uid, localItem);
+    const localNow = getCartLocal(); // fresh read, not the snapshot from before the await
+    const merged = [...localNow];
+    let addedFromRemote = false;
+
+    for (const remoteItem of remote) {
+      if (!merged.find(l => String(l.id) === String(remoteItem.id))) {
+        merged.push(remoteItem);
+        addedFromRemote = true;
       }
     }
-    setCartLocal(merged);
+    // Push anything local-only up to Firestore too, so both sides end up in sync
+    for (const localItem of localNow) {
+      if (!remote.find(r => String(r.id) === String(localItem.id))) {
+        saveItemToFirestore(uid, localItem);
+      }
+    }
+
+    if (addedFromRemote) setCartLocal(merged);
     return merged;
   } catch (e) {
-    return local;
+    return getCartLocal();
   }
 }
 

@@ -1367,6 +1367,11 @@
               </select>
             </div>
           </div>
+          <div class="adm-field" style="margin-top:14px">
+            <label class="adm-label">Mensaje de WhatsApp al confirmar un pedido (al cliente)</label>
+            <textarea class="adm-textarea adm-input" id="cfg-wa-confirm-msg" rows="3" placeholder="Hola! Te escribo por tu pedido realizado en nuestra página web..."></textarea>
+            <p style="font-size:11px;color:var(--adm-muted);margin-top:4px">Se usa en el botón "💬 WhatsApp del cliente" de cada pedido en Pedidos. Podés usar <code>{nombre}</code> para que se reemplace por el nombre del cliente.</p>
+          </div>
         </div>
       </div>
 
@@ -1629,6 +1634,10 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+let waConfirmMessageTemplate = 'Hola {nombre}! Te escribo por tu pedido realizado en nuestra página web. Ya recibimos todos tus datos para el envío y estamos preparando tu pedido. Te escribimos para confirmar los últimos detalles.';
+getDoc(doc(db, 'settings', 'general')).then(snap => {
+  if (snap.exists() && snap.data().waConfirmMessage) waConfirmMessageTemplate = snap.data().waConfirmMessage;
+}).catch(() => {});
 
 // ---- TOAST ----
 function toast(msg, duration = 3000) {
@@ -2106,7 +2115,7 @@ function renderOrdersTable(orders) {
             </div>
             ${o.userPhone ? `
             <div style="margin-top:12px">
-              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
+              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}?text=${encodeURIComponent(waConfirmMessageTemplate.replace(/\{nombre\}/g, o.userName || ''))}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
             </div>` : ''}
           </div>
         </td>
@@ -2248,12 +2257,15 @@ document.getElementById('btn-reset-ob').onclick = async () => {
 };
 
 // ======== CONFIGURACIÓN ========
+const DEFAULT_WA_CONFIRM_MSG = 'Hola {nombre}! Te escribo por tu pedido realizado en nuestra página web. Ya recibimos todos tus datos para el envío y estamos preparando tu pedido. Te escribimos para confirmar los últimos detalles.';
+
 async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
     const d = snap.exists() ? snap.data() : {};
     document.getElementById('cfg-store-name').value = d.storeName || 'Tintin Accesorios';
     document.getElementById('cfg-wa-number').value = d.whatsappNumber || '595981299331';
+    document.getElementById('cfg-wa-confirm-msg').value = d.waConfirmMessage || DEFAULT_WA_CONFIRM_MSG;
     document.getElementById('cfg-contact-email').value = d.contactEmail || '';
     document.getElementById('cfg-store-address').value = d.storeAddress || 'San Lorenzo, Paraguay';
     document.getElementById('cfg-currency').value = d.currency || 'PYG';
@@ -2278,6 +2290,7 @@ document.getElementById('btn-save-config').onclick = async () => {
     await setDoc(doc(db, 'settings', 'general'), {
       storeName:       document.getElementById('cfg-store-name').value.trim(),
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
+      waConfirmMessage: document.getElementById('cfg-wa-confirm-msg').value.trim() || DEFAULT_WA_CONFIRM_MSG,
       contactEmail:    document.getElementById('cfg-contact-email').value.trim(),
       storeAddress:    document.getElementById('cfg-store-address').value.trim(),
       currency:        document.getElementById('cfg-currency').value,
