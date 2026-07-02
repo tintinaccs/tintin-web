@@ -835,6 +835,29 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   }
 }
 
+/* Tablet real (iPad, Android tablets) — el contenido arranca desde la mitad del
+   hero hacia abajo, centrado, en vez de quedar centrado en todo el alto como en desktop. */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tt-hero {
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+  }
+  .tt-hero-content {
+    height: 50%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 48px 56px;
+  }
+  .tt-hero-pills,
+  .tt-hero-actions {
+    justify-content: center;
+  }
+}
+
 .tt-hero-eyebrow {
   display: flex;
   align-items: center;

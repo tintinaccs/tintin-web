@@ -21,6 +21,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="js/page-loader.js"></script>
+  <style>
+    .tt-ship-city-list { list-style:none; margin:14px 0 0; padding:0; display:grid; gap:6px; }
+    .tt-ship-city-list li { display:flex; justify-content:space-between; gap:12px; padding:8px 12px; background:var(--pink-pale); border-radius:8px; font-size:14px; }
+    .tt-ship-price { font-weight:600; color:var(--pink-dark); }
+    .tt-ship-loading { font-size:13px; color:var(--text-muted); margin-top:10px; }
+  </style>
 </head>
 <body>
 
@@ -110,22 +116,22 @@
 
     <div class="tt-info-block">
       <h2 class="tt-info-title">Delivery — Zona Central</h2>
-      <p>Realizamos delivery a domicilio en Asunción y Gran Asunción (San Lorenzo, Lambaré, Fernando de la Mora, Luque, Capiatá, Mariano Roque Alonso, Villa Elisa, Ñemby, y zonas aledañas).</p>
+      <p>Realizamos delivery a domicilio en Asunción, Gran Asunción y zonas aledañas.</p>
       <ul>
-        <li><strong>Costo:</strong> se confirma al momento del pedido según tu ubicación.</li>
         <li><strong>Tiempo:</strong> generalmente el mismo día o al día siguiente hábil.</li>
         <li><strong>Coordinación:</strong> por WhatsApp antes del despacho.</li>
       </ul>
+      <div id="envios-delivery-cities"><p class="tt-ship-loading">Cargando ciudades y costos…</p></div>
     </div>
 
     <div class="tt-info-block">
       <h2 class="tt-info-title">Encomienda — Interior del País</h2>
       <p>Enviamos al interior de Paraguay mediante encomienda (Saeta, Rysa u otras empresas de transporte).</p>
       <ul>
-        <li><strong>Costo:</strong> depende del destino, generalmente entre Gs. 15.000 y Gs. 35.000.</li>
         <li><strong>Tiempo:</strong> 1 a 3 días hábiles según la ciudad.</li>
         <li><strong>Retiro:</strong> en la terminal de la empresa de transporte más cercana a vos.</li>
       </ul>
+      <div id="envios-encomienda-cities"><p class="tt-ship-loading">Cargando ciudades y costos…</p></div>
     </div>
 
     <div class="tt-info-block">
@@ -271,5 +277,34 @@
 <script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/auth-nav.js"></script>
 <script type="module" src="js/nav-collections.js"></script>
+<script type="module">
+import { db } from "./js/firebase.js";
+import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+function formatGs(n) {
+  return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function renderCityRows(containerId, cities) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!Array.isArray(cities) || !cities.length) { el.innerHTML = ''; return; }
+  el.innerHTML = '<ul class="tt-ship-city-list">' + cities.map(c =>
+    `<li><span>${c.name}</span><span class="tt-ship-price">${c.price == null ? 'Consultar precio' : formatGs(c.price)}</span></li>`
+  ).join('') + '</ul>';
+}
+
+// Mismos datos que carga Super Admin → Configuración → Envíos, en vivo.
+onSnapshot(doc(db, 'settings', 'general'), snap => {
+  if (!snap.exists()) return;
+  const d = snap.data();
+  renderCityRows('envios-delivery-cities', d.deliveryCities);
+  renderCityRows('envios-encomienda-cities', d.encomiendaCities);
+}, err => console.error('No se pudo cargar la configuración de envíos:', err));
+</script>
+<script type="module">
+import { initSiteContent } from './js/site-content.js';
+initSiteContent('envios');
+</script>
 </body>
 </html>

@@ -97,7 +97,20 @@ function applyCatalogo(data) {
   setText(document.getElementById('cat-subtitulo'), header.desc || header.eyebrow);
 }
 
-const PAGE_APPLIERS = { index: applyIndex, nosotros: applyNosotros, catalogo: applyCatalogo };
+/** Generic page-hero applier for simple info pages (Contacto, Envíos) */
+function applyPageHero(data) {
+  const hero = data.hero || {};
+  setHtml(document.querySelector('.tt-page-hero-title'), hero.title);
+  setText(document.querySelector('.tt-page-hero-sub'), hero.desc);
+}
+
+const PAGE_APPLIERS = {
+  index: applyIndex,
+  nosotros: applyNosotros,
+  catalogo: applyCatalogo,
+  contact: applyPageHero,
+  envios: applyPageHero,
+};
 
 export function initSiteContent(pageId) {
   const applier = PAGE_APPLIERS[pageId];

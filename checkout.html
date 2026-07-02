@@ -882,7 +882,7 @@
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
-  onAuthStateChanged
+  onAuthStateChanged, signInAnonymously
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
@@ -898,11 +898,20 @@ import {
 let DEFAULT_DELIVERY_COST   = 15000;
 let DEFAULT_ENCOMIENDA_COST = 25000;
 
-// Normalize Firestore data: supports old string[] and new {name,price}[]
+// Normalize Firestore data: supports old string[] and new {name,price}[].
+// A city can have no price on purpose (price: null) — that means "consultar con un vendedor",
+// it must NOT silently fall back to the default cost.
 function normalizeCities(arr, defaultCost) {
-  return (arr || []).map(c =>
-    typeof c === 'string' ? { name: c, price: defaultCost } : { name: c.name, price: c.price ?? defaultCost }
-  );
+  return (arr || []).map(c => {
+    if (typeof c === 'string') return { name: c, price: defaultCost };
+    const hasPrice = c.price !== null && c.price !== undefined && c.price !== '' && !isNaN(c.price);
+    return { name: c.name, price: hasPrice ? c.price : null };
+  });
+}
+
+// A null price means the city has no cost loaded yet — show a human message instead of $NaN.
+function formatShipping(cost) {
+  return (cost === null || cost === undefined) ? 'Consultar por el precio con algún vendedor' : formatPrice(cost);
 }
 
 let DELIVERY_CITIES = normalizeCities([
@@ -934,9 +943,11 @@ async function loadStoreConfig() {
       DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
     if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length)
       ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
-    if (cfg.whatsapp) WA_NUMBER = cfg.whatsapp.replace(/\D/g, '');
+    // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
+    const waRaw = cfg.whatsappNumber || cfg.whatsapp;
+    if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
   } catch(e) {
-    // fall back to hardcoded defaults
+    console.error('No se pudo cargar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
   }
 }
 
@@ -966,13 +977,13 @@ function populateCities() {
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
-    opt.textContent = `${city.name} — ${formatPrice(city.price)}`;
+    opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
     deliveryGroup.appendChild(opt);
   });
   ENCOMIENDA_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
-    opt.textContent = `${city.name} — ${formatPrice(city.price)}`;
+    opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
     encomiendaGroup.appendChild(opt);
   });
 }
@@ -1174,7 +1185,7 @@ document.getElementById('ck-city').onchange = function() {
   } else if (isDelivery) {
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
-    costEl.textContent = `Costo de envío: ${formatPrice(price)}`;
+    costEl.textContent = price == null ? 'Consultar por el precio con algún vendedor' : `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'delivery';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
@@ -1184,7 +1195,7 @@ document.getElementById('ck-city').onchange = function() {
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
-    costEl.textContent = `Costo de envío: ${formatPrice(price)}`;
+    costEl.textContent = price == null ? 'Consultar por el precio con algún vendedor' : `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'encomienda';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
@@ -1260,7 +1271,8 @@ document.getElementById('btn-step4-back').onclick = () => goToStep(2);
 async function buildConfirmation() {
   cartItems = getCartLocal();
   const subtotal = cartTotal(cartItems);
-  const total = subtotal + orderData.shippingCost;
+  const shippingPending = orderData.shippingCost == null;
+  const total = subtotal + (orderData.shippingCost || 0);
 
   const payLabels = {
     efectivo: '💵 Efectivo (contra entrega)',
@@ -1332,10 +1344,10 @@ async function buildConfirmation() {
     </div>
     <div class="ck-summary-total">
       <span>Costo de envío</span>
-      <span class="ck-summary-total-val">${formatPrice(orderData.shippingCost)}</span>
+      <span class="ck-summary-total-val">${formatShipping(orderData.shippingCost)}</span>
     </div>
     <div class="ck-summary-total" style="font-size:18px">
-      <span>TOTAL</span>
+      <span>TOTAL${shippingPending ? ' (+ envío a coordinar)' : ''}</span>
       <span class="ck-summary-total-val">${formatPrice(total)}</span>
     </div>
   `;
@@ -1385,13 +1397,13 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
 👤 *Cliente:* ${orderData.name}
 📞 *Tel:* ${orderData.phone}${orderData.email ? `\n📧 *Email:* ${orderData.email}` : ''}
 📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}${mapLine}
-🚚 *Envío:* ${shipText} — ${formatPrice(orderData.shippingCost)}
+🚚 *Envío:* ${shipText} — ${formatShipping(orderData.shippingCost)}
 ━━━━━━━━━━━━━━━━━━━━━━
 🛒 *Productos:*
 ${itemLines}
 ━━━━━━━━━━━━━━━━━━━━━━
 💰 *Subtotal:* ${formatPrice(subtotal)}
-🚚 *Costo de envío:* ${formatPrice(orderData.shippingCost)}
+🚚 *Costo de envío:* ${formatShipping(orderData.shippingCost)}
 💰 *TOTAL:* ${formatPrice(total)}
 💳 *Método de pago:* ${payText}
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -1414,6 +1426,7 @@ async function saveOrder(items, subtotal, total) {
     })),
     subtotal,
     shippingCost: orderData.shippingCost,
+    shippingPending: orderData.shippingCost == null,
     total,
     shipping: {
       method:      orderData.shippingMethod,
@@ -1442,8 +1455,8 @@ async function saveOrder(items, subtotal, total) {
   // Store shortId on the document for easy reference
   await updateDoc(docRef, { shortId });
 
-  // Update user stats if logged in
-  if (currentUser) {
+  // Update user stats if logged in with a real account (not a guest/anonymous session)
+  if (currentUser && !currentUser.isAnonymous) {
     updateDoc(doc(db, 'users', currentUser.uid), {
       purchaseCount: increment(1),
       totalSpent:    increment(total)
@@ -1525,6 +1538,11 @@ window.addEventListener('tintin:products-loaded', () => renderCart(), { once: tr
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  // No hay sesión: iniciamos una sesión anónima transparente para que el checkout de
+  // invitados (sin cuenta) pueda guardar el pedido — `orders` exige un usuario autenticado.
+  if (!user) {
+    signInAnonymously(auth).catch(e => console.error('No se pudo iniciar sesión de invitado:', e));
+  }
 });
 </script>
 <script src="js/scroll-reveal.js" defer></script>

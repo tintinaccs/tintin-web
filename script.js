@@ -236,6 +236,9 @@ function addToCart(productId) {
   renderCart();
   openCart();
   showAddedToCart(productName);
+  // Sync to Firestore too when logged in (js/cart-sync.js bridge, if loaded on this page)
+  const savedItem = existing || cart[cart.length - 1];
+  window.CartFirestoreSync?.saveItem(savedItem);
 }
 
 function removeFromCart(productId) {
@@ -244,6 +247,7 @@ function removeFromCart(productId) {
   saveCart(cart);
   updateCartBadge();
   renderCart();
+  window.CartFirestoreSync?.removeItem(sid);
 }
 
 function updateQty(productId, delta) {
@@ -255,6 +259,7 @@ function updateQty(productId, delta) {
   saveCart(cart);
   updateCartBadge();
   renderCart();
+  window.CartFirestoreSync?.saveItem(item);
 }
 
 function getCartTotal() {
@@ -1309,46 +1314,6 @@ function initContactForm() {
 }
 
 /* ──────────────────────────────────────
-   SCROLL REVEAL (simple fade-in)
-────────────────────────────────────── */
-function initScrollReveal() {
-  if (!('IntersectionObserver' in window)) return;
-
-  const style = document.createElement('style');
-  style.textContent = `
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-  `;
-  document.head.appendChild(style);
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll([
-    '.tt-trust-item',
-    '.tt-product-card',
-    '.tt-review-card',
-    '.tt-look-card',
-    '.tt-coll-card',
-    '.tt-coll-page-card',
-    '.tt-editorial-item',
-    '.tt-editorial-card',
-    '.tt-look-item',
-    '.tt-featured-item',
-  ].join(',')).forEach(el => {
-    if (el.classList.contains('reveal')) return;
-    el.classList.add('reveal');
-    observer.observe(el);
-  });
-}
-
-/* ──────────────────────────────────────
    COLLECTIONS BOTTOM SHEET
 ────────────────────────────────────── */
 function initCollectionsSheet() {
@@ -1424,8 +1389,6 @@ document.addEventListener('DOMContentLoaded', () => {
     _showProductsSkeleton('colls-products-grid');
   }
 
-  // Scroll reveal
-  setTimeout(initScrollReveal, 100);
   // Back to top
   initBackToTop();
   // FAQ accordion

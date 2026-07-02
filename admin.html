@@ -1365,28 +1365,39 @@
         </div>
         <div class="adm-card-body">
           <div style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#b84c72;line-height:1.6">
-            <strong>Formato:</strong> <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Ciudad | Precio</code> — una por línea.<br>
-            Ejemplo: <code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">Asunción | 15000</code>&nbsp;&nbsp;<code style="background:#fff;padding:2px 6px;border-radius:4px;font-family:monospace">San Lorenzo | 12000</code><br>
-            Si no ponés precio, se usa el costo por defecto de abajo.
+            Cargá cada ciudad por separado. Si dejás el costo vacío, en el checkout se va a mostrar
+            <strong>“Consultar por el precio con algún vendedor”</strong> en vez de un precio incorrecto.
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
             <div class="adm-field">
-              <label class="adm-label">Costo delivery por defecto (Gs.) — si la ciudad no tiene precio propio</label>
+              <label class="adm-label">Costo delivery por defecto (Gs.) — solo para compatibilidad con datos antiguos</label>
               <input type="number" class="adm-input" id="cfg-delivery-cost" placeholder="15000" min="0" />
             </div>
             <div class="adm-field">
-              <label class="adm-label">Costo encomienda por defecto (Gs.) — si la ciudad no tiene precio propio</label>
+              <label class="adm-label">Costo encomienda por defecto (Gs.) — solo para compatibilidad con datos antiguos</label>
               <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-            <div class="adm-field">
-              <label class="adm-label">🚚 Ciudades con DELIVERY — formato: Ciudad | Precio</label>
-              <textarea class="adm-textarea adm-input" id="cfg-delivery-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Asunción | 15000&#10;San Lorenzo | 12000&#10;Luque | 14000&#10;Lambaré | 13000"></textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div>
+              <label class="adm-label" style="display:block;margin-bottom:8px">🚚 Delivery a domicilio — Zona Central</label>
+              <div style="display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:6px">
+                <input type="text" class="adm-input" id="ship-delivery-name" placeholder="Nombre de la ciudad" />
+                <input type="number" class="adm-input" id="ship-delivery-price" placeholder="Costo (Gs.)" min="0" />
+                <button class="adm-btn adm-btn-primary" id="ship-delivery-add" type="button" style="white-space:nowrap">Agregar</button>
+              </div>
+              <button class="adm-btn" id="ship-delivery-cancel" type="button" style="display:none;font-size:11px;padding:4px 10px;margin-bottom:10px">Cancelar edición</button>
+              <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
             </div>
-            <div class="adm-field">
-              <label class="adm-label">📦 Ciudades con ENCOMIENDA — formato: Ciudad | Precio</label>
-              <textarea class="adm-textarea adm-input" id="cfg-encomienda-cities" rows="12" style="font-size:12px;font-family:monospace;line-height:1.7" placeholder="Ciudad del Este | 25000&#10;Encarnación | 28000&#10;Coronel Oviedo | 22000"></textarea>
+            <div>
+              <label class="adm-label" style="display:block;margin-bottom:8px">📦 Encomienda — Interior del país</label>
+              <div style="display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:6px">
+                <input type="text" class="adm-input" id="ship-encomienda-name" placeholder="Nombre de la ciudad" />
+                <input type="number" class="adm-input" id="ship-encomienda-price" placeholder="Costo (Gs.)" min="0" />
+                <button class="adm-btn adm-btn-primary" id="ship-encomienda-add" type="button" style="white-space:nowrap">Agregar</button>
+              </div>
+              <button class="adm-btn" id="ship-encomienda-cancel" type="button" style="display:none;font-size:11px;padding:4px 10px;margin-bottom:10px">Cancelar edición</button>
+              <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
             </div>
           </div>
         </div>
@@ -2189,12 +2200,6 @@ async function loadConfig() {
     document.getElementById('cfg-currency').value = d.currency || 'PYG';
     document.getElementById('cfg-delivery-cost').value = d.deliveryCost ?? 15000;
     document.getElementById('cfg-encomienda-cost').value = d.encomiendaCost ?? 25000;
-    // Support both old string[] and new {name,price}[] formats
-    const toLines = (arr) => (arr || []).map(c =>
-      typeof c === 'string' ? c : `${c.name} | ${c.price}`
-    ).join('\n');
-    document.getElementById('cfg-delivery-cities').value = toLines(d.deliveryCities);
-    document.getElementById('cfg-encomienda-cities').value = toLines(d.encomiendaCities);
     document.getElementById('cfg-instagram').value = d.instagram || '';
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
@@ -2211,18 +2216,6 @@ async function loadConfig() {
 
 document.getElementById('btn-save-config').onclick = async () => {
   try {
-    const defaultDeliveryCost   = parseInt(document.getElementById('cfg-delivery-cost').value)   || 15000;
-    const defaultEncomiendaCost = parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000;
-    const parseLines = (raw, defaultCost) => raw
-      .split('\n').map(s => s.trim()).filter(Boolean)
-      .map(line => {
-        const [name, priceStr] = line.split('|').map(s => s.trim());
-        const price = parseInt(priceStr) || defaultCost;
-        return { name, price };
-      });
-    const deliveryCities   = parseLines(document.getElementById('cfg-delivery-cities').value, defaultDeliveryCost);
-    const encomiendaCities = parseLines(document.getElementById('cfg-encomienda-cities').value, defaultEncomiendaCost);
-
     await setDoc(doc(db, 'settings', 'general'), {
       storeName:       document.getElementById('cfg-store-name').value.trim(),
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
@@ -2231,8 +2224,6 @@ document.getElementById('btn-save-config').onclick = async () => {
       currency:        document.getElementById('cfg-currency').value,
       deliveryCost:    parseInt(document.getElementById('cfg-delivery-cost').value) || 15000,
       encomiendaCost:  parseInt(document.getElementById('cfg-encomienda-cost').value) || 25000,
-      deliveryCities,
-      encomiendaCities,
       instagram:       document.getElementById('cfg-instagram').value.trim(),
       facebook:        document.getElementById('cfg-facebook').value.trim(),
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
@@ -2249,6 +2240,111 @@ document.getElementById('btn-save-config').onclick = async () => {
     toast('Error al guardar configuración: ' + e.message);
   }
 };
+
+// ======== ENVÍOS: ciudades (CRUD real, con lista en tiempo real) ========
+let shipCities  = { delivery: [], encomienda: [] };
+let shipEditing = { delivery: null, encomienda: null }; // índice en edición, o null = alta nueva
+
+function renderShipList(type) {
+  const container = document.getElementById(`ship-${type}-list`);
+  const list = shipCities[type];
+  if (!list.length) {
+    container.innerHTML = '<p style="font-size:12px;color:var(--adm-muted);padding:6px 0">Todavía no cargaste ninguna ciudad.</p>';
+    return;
+  }
+  container.innerHTML = list.map((c, i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
+      <span style="font-weight:600;flex:1">${c.name}</span>
+      <span style="font-size:12px;color:${c.price == null ? '#b8934e' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
+      <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
+      <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
+    </div>
+  `).join('');
+}
+
+async function saveShipCities() {
+  await setDoc(doc(db, 'settings', 'general'), {
+    deliveryCities:   shipCities.delivery,
+    encomiendaCities: shipCities.encomienda,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+}
+
+function resetShipForm(type) {
+  document.getElementById(`ship-${type}-name`).value = '';
+  document.getElementById(`ship-${type}-price`).value = '';
+  document.getElementById(`ship-${type}-add`).textContent = 'Agregar';
+  document.getElementById(`ship-${type}-cancel`).style.display = 'none';
+  shipEditing[type] = null;
+}
+
+['delivery', 'encomienda'].forEach(type => {
+  document.getElementById(`ship-${type}-add`).onclick = async () => {
+    const nameInput  = document.getElementById(`ship-${type}-name`);
+    const priceInput = document.getElementById(`ship-${type}-price`);
+    const name = nameInput.value.trim();
+    if (!name) { toast('Ingresá el nombre de la ciudad'); return; }
+    const priceRaw = priceInput.value.trim();
+    const price = priceRaw === '' ? null : (parseInt(priceRaw) || 0);
+    const idx = shipEditing[type];
+    const dupIdx = shipCities[type].findIndex((c, i) => c.name.toLowerCase() === name.toLowerCase() && i !== idx);
+    if (dupIdx !== -1) { toast('Esa ciudad ya está cargada'); return; }
+
+    const prevList = shipCities[type].slice();
+    if (idx != null) shipCities[type][idx] = { name, price };
+    else shipCities[type].push({ name, price });
+
+    try {
+      await saveShipCities();
+      renderShipList(type);
+      resetShipForm(type);
+      toast(idx != null ? 'Ciudad actualizada' : 'Ciudad agregada');
+    } catch (e) {
+      shipCities[type] = prevList; // revert on failure
+      toast('Error al guardar la ciudad: ' + e.message);
+    }
+  };
+
+  document.getElementById(`ship-${type}-cancel`).onclick = () => resetShipForm(type);
+
+  document.getElementById(`ship-${type}-list`).addEventListener('click', async (e) => {
+    const editBtn = e.target.closest('[data-ship-edit]');
+    const delBtn  = e.target.closest('[data-ship-del]');
+    if (editBtn) {
+      const idx = parseInt(editBtn.dataset.shipEdit.split(':')[1]);
+      const city = shipCities[type][idx];
+      document.getElementById(`ship-${type}-name`).value  = city.name;
+      document.getElementById(`ship-${type}-price`).value = city.price ?? '';
+      document.getElementById(`ship-${type}-add`).textContent = 'Guardar cambios';
+      document.getElementById(`ship-${type}-cancel`).style.display = 'inline-block';
+      shipEditing[type] = idx;
+    } else if (delBtn) {
+      const idx = parseInt(delBtn.dataset.shipDel.split(':')[1]);
+      const city = shipCities[type][idx];
+      if (!confirm(`¿Eliminar "${city.name}"?`)) return;
+      const prevList = shipCities[type].slice();
+      shipCities[type].splice(idx, 1);
+      try {
+        await saveShipCities();
+        renderShipList(type);
+        if (shipEditing[type] === idx) resetShipForm(type);
+      } catch (e) {
+        shipCities[type] = prevList;
+        toast('Error al eliminar: ' + e.message);
+      }
+    }
+  });
+});
+
+// Tiempo real: si se edita desde otra pestaña/dispositivo, la lista se refresca sola
+onSnapshot(doc(db, 'settings', 'general'), snap => {
+  if (!snap.exists()) return;
+  const d = snap.data();
+  shipCities.delivery   = Array.isArray(d.deliveryCities)   ? d.deliveryCities   : [];
+  shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
+  renderShipList('delivery');
+  renderShipList('encomienda');
+});
 
 /* =============================================
    UNSAVED CHANGES GUARD — reusable for product & collection editors
@@ -3548,17 +3644,8 @@ const CONT_SCHEMA = {
       hero: {
         label: 'Hero Nosotros', icon: 'hero',
         fields: [
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'La esencia de Tintin' },
           { key:'title', label:'Título principal', type:'text', def:'Somos más que accesorios' },
           { key:'desc', label:'Descripción', type:'textarea', def:'' },
-          { key:'point1', label:'Punto 01', type:'text', def:'Calidad y diseño que dura' },
-          { key:'point2', label:'Punto 02', type:'text', def:'Estilo con personalidad' },
-          { key:'point3', label:'Punto 03', type:'text', def:'Atención cercana y rápida' },
-          { key:'btnText', label:'Texto botón', type:'text', def:'Ver colección →' },
-          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html' },
-          { key:'image_desktop', label:'Imagen desktop', type:'image', def:'' },
-          { key:'image_tablet', label:'Imagen tablet', type:'image', def:'' },
-          { key:'image_mobile', label:'Imagen móvil', type:'image', def:'' },
         ]
       },
       historia: {
@@ -3566,9 +3653,6 @@ const CONT_SCHEMA = {
         fields: [
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Desde San Lorenzo' },
           { key:'title', label:'Título', type:'text', def:'Nuestra historia' },
-          { key:'p1', label:'Párrafo 1', type:'textarea', def:'' },
-          { key:'p2', label:'Párrafo 2', type:'textarea', def:'' },
-          { key:'image', label:'Imagen', type:'image', def:'' },
         ]
       }
     }
@@ -3583,6 +3667,31 @@ const CONT_SCHEMA = {
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Toda la colección' },
           { key:'desc', label:'Descripción', type:'textarea', def:'' },
           { key:'image', label:'Imagen banner (opcional)', type:'image', def:'' },
+        ]
+      }
+    }
+  },
+  contact: {
+    label: 'Contacto', url: 'contact.html',
+    sections: {
+      hero: {
+        label: 'Encabezado', icon: 'contact',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'¿Dudas o consultas?' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  envios: {
+    label: 'Envíos (encabezado)', url: 'envios.html',
+    sections: {
+      hero: {
+        label: 'Encabezado', icon: 'shipping',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Política de Envíos 🚚' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+          { key:'_note', label:'Las ciudades y costos de envío se administran en Configuración → Envíos, no acá.', type:'note' },
         ]
       }
     }

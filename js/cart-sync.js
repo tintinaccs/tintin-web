@@ -9,6 +9,7 @@ import { auth, db } from "./firebase.js";
 import {
   collection, doc, getDocs, setDoc, deleteDoc, writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // ---- Local helpers ----
 
@@ -195,3 +196,25 @@ export async function syncCartToFirestore(uid) {
     console.error('Error syncing cart to Firestore:', e);
   }
 }
+
+// ---- Bridge for classic (non-module) scripts ----
+// script.js is loaded as a plain <script>, so it can't `import` this module.
+// It writes to the same localStorage key directly, and calls this bridge
+// (if present on the page) to also push the change to Firestore when logged in.
+window.CartFirestoreSync = {
+  saveItem: (item) => {
+    const uid = currentUid();
+    if (uid) saveItemToFirestore(uid, item);
+  },
+  removeItem: (id) => {
+    const uid = currentUid();
+    if (uid) deleteItemFromFirestore(uid, id);
+  },
+};
+
+// When a user logs in on a page that only knows the synchronous, localStorage-only
+// cart (product/catalog listings via script.js), pull in whatever they already had
+// saved in Firestore from another device/session, so it's not silently missing.
+onAuthStateChanged(auth, user => {
+  if (user) getCart();
+});

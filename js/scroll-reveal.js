@@ -45,6 +45,15 @@
     '.tt-about-section',
     // Trust bar heading (about)
     '.tt-trust-bar .tt-section-title',
+    // Cards / grids (migrated from script.js's old duplicate reveal observer)
+    '.tt-trust-item',
+    '.tt-product-card',
+    '.tt-review-card',
+    '.tt-look-card',
+    '.tt-coll-card',
+    '.tt-coll-page-card',
+    '.tt-look-item',
+    '.tt-featured-item',
   ].join(',');
 
   function observe() {

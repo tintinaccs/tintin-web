@@ -24,14 +24,37 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Config general de la tienda (nombre, WhatsApp, envíos/ciudades, redes, pagos).
+    // El checkout público necesita leerla sin estar logueado para calcular el costo de envío.
+    // No contiene datos sensibles (ninguna credencial/secreto vive acá).
+    match /settings/general {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Otros documentos de settings quedan protegidos
     match /settings/{doc} {
       allow read, write: if isAdmin();
     }
 
     match /users/{userId} {
-      allow read, create, update: if isSignedIn() && request.auth.uid == userId;
-      allow delete: if false;
+      // El dueño del doc puede leer el suyo; el admin puede leer cualquiera (panel Usuarios).
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+
+      // Alta de cuenta: solo el propio usuario, y no puede auto-asignarse un rol
+      // distinto de 'client' (excepto el Super Admin real, ya validado por email).
+      allow create: if isSignedIn() && request.auth.uid == userId &&
+        (!('role' in request.resource.data) || request.resource.data.role == 'client' || isAdmin());
+
+      // El dueño puede editar su propio perfil pero NO su rol ni su estado de bloqueo
+      // (evita auto-escalación de privilegios). El admin puede editar cualquier doc.
+      allow update: if isSignedIn() && (
+        (request.auth.uid == userId &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
+        isAdmin()
+      );
+
+      allow delete: if isAdmin();
 
       // Carrito sincronizado del usuario (js/cart-sync.js)
       match /cart/{itemId} {
