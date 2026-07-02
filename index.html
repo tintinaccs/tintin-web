@@ -19,11 +19,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="styles.css" as="style">
-  <link rel="preload" href="images/logo-splash.png" as="image" fetchpriority="high">
+  <link rel="preload" href="assets-tintin/images/general/logo-splash.webp" as="image" fetchpriority="high">
   <!-- Hero image preloads — browser picks the matching one per breakpoint -->
-  <link rel="preload" as="image" href="images/hero/hero-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
-  <link rel="preload" as="image" href="images/hero/hero-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
-  <link rel="preload" as="image" href="images/hero/hero-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Critical Splash: fondo rosa inmediato antes de cargar CSS externo -->
@@ -155,7 +155,7 @@
 <div id="tt-intro" aria-hidden="true" role="presentation">
   <img
     id="tt-intro-logo"
-    src="images/logo-splash.png"
+    src="assets-tintin/images/general/logo-splash.webp"
     alt=""
     draggable="false"
     fetchpriority="high"
@@ -201,9 +201,9 @@
   function getHeroUrl() {
     var w = window.innerWidth || document.documentElement.clientWidth || 390;
 
-    if (w >= 1024) return 'images/hero/hero-desktop.webp';
-    if (w >= 768) return 'images/hero/hero-tablet.webp';
-    return 'images/hero/hero-mobile.webp';
+    if (w >= 1024) return 'assets-tintin/images/home/hero-banner/hero-banner-desktop.webp';
+    if (w >= 768) return 'assets-tintin/images/home/hero-banner/hero-banner-tablet.webp';
+    return 'assets-tintin/images/home/hero-banner/hero-banner-mobile.webp';
   }
 
   function preloadHero() {
@@ -303,7 +303,7 @@ setTimeout(function(){_ttUnlock();},5500);
 
     <!-- Logo (center on mobile/tablet, left on desktop) -->
     <a href="index.html" class="tt-logo-link">
-      <img src="images/logo.png" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
+      <img src="assets-tintin/images/general/logo-tintin.webp" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
     </a>
 
     <!-- Desktop Nav -->
@@ -409,7 +409,7 @@ setTimeout(function(){_ttUnlock();},5500);
 <div class="tt-mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
   <div class="tt-mobile-menu-header">
     <a href="index.html" class="tt-logo-link">
-      <img src="images/logo.png" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+      <img src="assets-tintin/images/general/logo-tintin.webp" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
     </a>
     <button class="tt-mobile-close" id="btn-mobile-close" aria-label="Cerrar menú">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -528,18 +528,19 @@ setTimeout(function(){_ttUnlock();},5500);
   <!-- Real image: loads immediately, no JS, no Firestore dependency -->
   <div class="tt-hero-media">
     <picture>
-      <source media="(max-width: 767px)"  srcset="images/hero/hero-mobile.webp"  type="image/webp">
-      <source media="(max-width: 1023px)" srcset="images/hero/hero-tablet.webp"  type="image/webp">
+      <source media="(max-width: 767px)"  srcset="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  type="image/webp">
+      <source media="(max-width: 1023px)" srcset="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  type="image/webp">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
-        src="images/hero/hero-desktop.webp"
+        src="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp"
         alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
         width="1920"
         height="1080"
         loading="eager"
         decoding="async"
         fetchpriority="high"
+        onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
       >
     </picture>
   </div>
@@ -616,10 +617,18 @@ setTimeout(function(){_ttUnlock();},5500);
   <div class="tt-editorial">
     <div class="tt-editorial-img">
       <div class="tt-img-placeholder tt-img-placeholder-rose" data-img-slot="edit_bolsos" style="height:100%; min-height:440px;">
-        <div style="position:relative;z-index:1;text-align:center;padding:32px;">
-          <div style="margin-bottom:12px;"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-          <div style="font-family:var(--font-heading);font-size:1.4rem;color:white;font-weight:700;letter-spacing:0.08em;">COLECCIÓN BAG</div>
-        </div>
+        <picture>
+          <source media="(max-width: 767px)"  srcset="assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp"  type="image/webp">
+          <source media="(max-width: 1023px)" srcset="assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp"  type="image/webp">
+          <img
+            src="assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp"
+            alt="Colección Bag Tintin"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;object-fit:cover;display:block;"
+            onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
+          >
+        </picture>
       </div>
     </div>
     <div class="tt-editorial-content">
@@ -645,51 +654,75 @@ setTimeout(function(){_ttUnlock();},5500);
     </div>
     <div class="tt-collections-grid">
       <a href="catalogo.html?cat=bolsos" class="tt-coll-card" data-slug="bolsos">
-        <div class="tt-coll-card-img" data-img-slot="coll_bags" style="background:linear-gradient(135deg,#fce4ec,#e8a0b4);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_bags" style="background:linear-gradient(135deg,#fce4ec,#e8a0b4);">
+          <img src="assets-tintin/images/collections/col-bags.webp" alt="Colección Bags" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">BAGS</span></div>
       </a>
       <a href="catalogo.html?cat=collares" class="tt-coll-card" data-slug="collares">
-        <div class="tt-coll-card-img" data-img-slot="coll_collares" style="background:linear-gradient(135deg,#f5d4e0,#d4748e);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_collares" style="background:linear-gradient(135deg,#f5d4e0,#d4748e);">
+          <img src="assets-tintin/images/collections/col-collares.webp" alt="Colección Collares" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">COLLARES</span></div>
       </a>
       <a href="catalogo.html?cat=earcuff" class="tt-coll-card" data-slug="earcuff">
-        <div class="tt-coll-card-img" data-img-slot="coll_earcuff" style="background:linear-gradient(135deg,#ede0f0,#b890c8);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_earcuff" style="background:linear-gradient(135deg,#ede0f0,#b890c8);">
+          <img src="assets-tintin/images/collections/col-earcuff.webp" alt="Colección Earcuff" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">EARCUFF</span></div>
       </a>
       <a href="catalogo.html?cat=gafas" class="tt-coll-card" data-slug="gafas">
-        <div class="tt-coll-card-img" data-img-slot="coll_gafas" style="background:linear-gradient(135deg,#f5ead0,#c9a96e);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_gafas" style="background:linear-gradient(135deg,#f5ead0,#c9a96e);">
+          <img src="assets-tintin/images/collections/col-gafas.webp" alt="Colección Gafas" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">GAFAS</span></div>
       </a>
       <a href="catalogo.html?cat=brazaletes" class="tt-coll-card" data-slug="brazaletes">
-        <div class="tt-coll-card-img" data-img-slot="coll_brazaletes" style="background:linear-gradient(135deg,#fce4ec,#b84c72);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_brazaletes" style="background:linear-gradient(135deg,#fce4ec,#b84c72);">
+          <img src="assets-tintin/images/collections/col-brazaletes.webp" alt="Colección Brazaletes" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">BRAZALETES</span></div>
       </a>
       <a href="catalogo.html?cat=aros" class="tt-coll-card" data-slug="aros">
-        <div class="tt-coll-card-img" data-img-slot="coll_aros" style="background:linear-gradient(135deg,#f5d4e0,#8b2642);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_aros" style="background:linear-gradient(135deg,#f5d4e0,#8b2642);">
+          <img src="assets-tintin/images/collections/col-aros.webp" alt="Colección Aros" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">AROS</span></div>
       </a>
       <a href="catalogo.html?cat=armcuff" class="tt-coll-card" data-slug="armcuff">
-        <div class="tt-coll-card-img" data-img-slot="coll_armcuff" style="background:linear-gradient(135deg,#ede0f0,#d4748e);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_armcuff" style="background:linear-gradient(135deg,#ede0f0,#d4748e);">
+          <img src="assets-tintin/images/collections/col-armcuff.webp" alt="Colección Armcuff" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">ARMCUFF</span></div>
       </a>
       <a href="catalogo.html?cat=anillos" class="tt-coll-card" data-slug="anillos">
-        <div class="tt-coll-card-img" data-img-slot="coll_anillos" style="background:linear-gradient(135deg,#f5ead0,#b84c72);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_anillos" style="background:linear-gradient(135deg,#f5ead0,#b84c72);">
+          <img src="assets-tintin/images/collections/col-anillos.webp" alt="Colección Anillos" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">ANILLOS</span></div>
       </a>
       <a href="catalogo.html?cat=joyeros" class="tt-coll-card" data-slug="joyeros">
-        <div class="tt-coll-card-img" data-img-slot="coll_joyeros" style="background:linear-gradient(135deg,#fce4ec,#c9a96e);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_joyeros" style="background:linear-gradient(135deg,#fce4ec,#c9a96e);">
+          <img src="assets-tintin/images/collections/col-joyeros.webp" alt="Colección Joyeros" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">JOYEROS</span></div>
       </a>
       <a href="catalogo.html?cat=pulseras" class="tt-coll-card" data-slug="pulseras">
-        <div class="tt-coll-card-img" data-img-slot="coll_pulseras" style="background:linear-gradient(135deg,#f5d4e0,#e8a0b4);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_pulseras" style="background:linear-gradient(135deg,#f5d4e0,#e8a0b4);">
+          <img src="assets-tintin/images/collections/col-pulseras.webp" alt="Colección Pulseras" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">PULSERAS</span></div>
       </a>
       <a href="catalogo.html?cat=relojes" class="tt-coll-card" data-slug="relojes">
-        <div class="tt-coll-card-img" data-img-slot="coll_relojes" style="background:linear-gradient(135deg,#c9a96e,#f5ead0);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_relojes" style="background:linear-gradient(135deg,#c9a96e,#f5ead0);">
+          <img src="assets-tintin/images/collections/col-relojes.webp" alt="Colección Relojes" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">RELOJES</span></div>
       </a>
       <a href="catalogo.html?cat=tobilleras" class="tt-coll-card" data-slug="tobilleras">
-        <div class="tt-coll-card-img" data-img-slot="coll_tobilleras" style="background:linear-gradient(135deg,#ede0f0,#fce4ec);"></div>
+        <div class="tt-coll-card-img" data-img-slot="coll_tobilleras" style="background:linear-gradient(135deg,#ede0f0,#fce4ec);">
+          <img src="assets-tintin/images/collections/col-tobilleras.webp" alt="Colección Tobilleras" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
+        </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">TOBILLERAS</span></div>
       </a>
     </div>
@@ -724,11 +757,19 @@ setTimeout(function(){_ttUnlock();},5500);
 <section class="section-sm">
   <div class="tt-watch-feature">
     <div class="tt-watch-feature-img">
-      <div class="tt-img-placeholder" style="height:100%;min-height:500px;background:linear-gradient(135deg,#c9a96e 0%,#f5ead0 40%,#fce4ec 70%,#e8a0b4 100%);">
-        <div style="position:relative;z-index:1;text-align:center;padding:32px;">
-          <div style="margin-bottom:12px;"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><polyline points="12 9 12 12 13.5 13.5"/><path d="M16.51 17.35l-.35 3.83a2 2 0 01-1.99 1.82H9.83a2 2 0 01-1.99-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 019.83 1h4.35a2 2 0 011.99 1.82l.35 3.83"/></svg></div>
-          <div style="font-family:var(--font-heading);font-size:1.3rem;color:var(--rose);font-weight:700;letter-spacing:0.08em;">NUEVA COLECCIÓN</div>
-        </div>
+      <div class="tt-img-placeholder" data-img-slot="edit_relojes" style="height:100%;min-height:500px;background:linear-gradient(135deg,#c9a96e 0%,#f5ead0 40%,#fce4ec 70%,#e8a0b4 100%);">
+        <picture>
+          <source media="(max-width: 767px)"  srcset="assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp"  type="image/webp">
+          <source media="(max-width: 1023px)" srcset="assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp"  type="image/webp">
+          <img
+            src="assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp"
+            alt="Nueva colección de relojes Tintin"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;object-fit:cover;display:block;"
+            onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
+          >
+        </picture>
       </div>
     </div>
     <div class="tt-watch-feature-content">
@@ -975,6 +1016,32 @@ initSiteContent('index');
 <script type="module">
 import { onCollectionsUpdate, FALLBACK_COLLECTIONS } from './js/collections-store.js';
 
+const COLL_IMG_BASE = 'assets-tintin/images/collections/';
+const COLL_PLACEHOLDER = COLL_IMG_BASE + 'col-placeholder.webp';
+
+// Custom image from Super Admin wins; otherwise try the static cover that
+// matches the slug; if that file doesn't exist either, fall back to the
+// generic placeholder. Never leaves a broken/empty image.
+function setCollCardImage(imgWrap, c) {
+  let img = imgWrap.querySelector('img');
+  if (!img) {
+    img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+    imgWrap.appendChild(img);
+  }
+  img.alt = c.name || c.slug;
+  const bySlugFallback = `${COLL_IMG_BASE}col-${c.slug}.webp`;
+  img.onerror = () => {
+    if (img.src.indexOf(COLL_PLACEHOLDER) === -1) {
+      img.onerror = null;
+      img.src = COLL_PLACEHOLDER;
+    }
+  };
+  img.src = c.image || bySlugFallback;
+}
+
 onCollectionsUpdate(cols => {
   const grid = document.querySelector('.tt-collections-grid');
   if (!grid || cols === FALLBACK_COLLECTIONS) return; // keep curated cards as-is until Super Admin has real data
@@ -988,10 +1055,8 @@ onCollectionsUpdate(cols => {
     card.style.display = '';
     const label = card.querySelector('.tt-coll-card-label');
     if (label && c.name) label.textContent = c.name.toUpperCase();
-    if (c.image) {
-      const imgEl = card.querySelector('.tt-coll-card-img');
-      if (imgEl) imgEl.style.background = `url('${c.image}') center/cover`;
-    }
+    const imgEl = card.querySelector('.tt-coll-card-img');
+    if (imgEl && c.image) setCollCardImage(imgEl, c);
     delete bySlug[card.dataset.slug];
   });
 
@@ -1001,8 +1066,9 @@ onCollectionsUpdate(cols => {
     a.className = 'tt-coll-card';
     a.dataset.slug = c.slug;
     a.innerHTML = `
-      <div class="tt-coll-card-img" style="background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'}"></div>
+      <div class="tt-coll-card-img"></div>
       <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">${(c.name || c.slug).toUpperCase()}</span></div>`;
+    setCollCardImage(a.querySelector('.tt-coll-card-img'), c);
     grid.appendChild(a);
   });
 });
