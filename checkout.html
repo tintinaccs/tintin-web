@@ -972,8 +972,9 @@ let orderData = {
 // ---- POPULATE CITY SELECT ----
 function populateCities() {
   const select = document.getElementById('ck-city');
-  const deliveryGroup = select.querySelector('optgroup:nth-child(1)');
-  const encomiendaGroup = select.querySelector('optgroup:nth-child(2)');
+  const groups = select.querySelectorAll('optgroup');
+  const deliveryGroup = groups[0];
+  const encomiendaGroup = groups[1];
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
