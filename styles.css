@@ -367,6 +367,77 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   gap: 12px;
 }
 
+/* Account dropdown (user icon) — same open/close mechanics as the Tienda
+   dropdown above (.tt-nav-dropdown.open / :focus-within), but a short list
+   instead of a grid, right-aligned under the icon instead of centered. */
+.tt-account-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  width: 210px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+  pointer-events: none;
+  z-index: 200;
+}
+
+.tt-nav-dropdown.open .tt-account-panel,
+.tt-nav-dropdown:focus-within .tt-account-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.tt-account-header {
+  padding: 10px 12px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scoped as ".tt-account-panel .tt-account-item" (not just ".tt-account-item")
+   so this wins specificity over ".tt-header-actions button/a" — the account
+   dropdown lives inside .tt-header-actions, which otherwise forces these
+   into 40x40 icon boxes and wraps the text. */
+.tt-account-panel .tt-account-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.tt-account-panel .tt-account-item:hover { background: var(--pink-pale); color: var(--pink-dark); }
+.tt-account-panel .tt-account-item.tt-account-logout { color: var(--rose); }
+.tt-account-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+
 .tt-dropdown-card {
   display: flex;
   flex-direction: column;

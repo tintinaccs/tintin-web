@@ -25,7 +25,7 @@ export function findCountryByCode(code) {
 }
 
 /** Longest-prefix match against known dial codes (for numbers pasted with their own '+55...' etc.) */
-function detectCountryFromDigits(digits) {
+export function detectCountryFromDigits(digits) {
   let best = null;
   for (const c of COUNTRIES) {
     if (digits.startsWith(c.dial) && (!best || c.dial.length > best.dial.length)) best = c;

@@ -930,7 +930,7 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js";
 import { sendOrderNotification } from "./js/email-notify.js";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -970,6 +970,7 @@ let ENCOMIENDA_CITIES = normalizeCities([
 ], DEFAULT_ENCOMIENDA_COST);
 
 let WA_NUMBER = '595981299331';
+let STORE_INSTAGRAM = '';
 
 async function loadStoreConfig() {
   try {
@@ -985,6 +986,7 @@ async function loadStoreConfig() {
     // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
     const waRaw = cfg.whatsappNumber || cfg.whatsapp;
     if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
+    if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
   } catch(e) {
     console.error('No se pudo cargar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
   }
@@ -994,6 +996,7 @@ async function loadStoreConfig() {
 let currentStep = 0;
 let cartItems = [];
 let currentUser = null;
+let currentUserProfile = null; // caché de users/{uid} (name, phone) para prellenar el paso 3
 let orderData = {
   city: '',
   address: '',
@@ -1286,10 +1289,19 @@ document.getElementById('btn-step2-next').onclick = () => {
   orderData.city = city === '__retiro__' ? 'San Lorenzo (retiro)' : city;
   goToStep(2);
 
-  // Pre-fill from user profile
-  if (currentUser) {
-    if (!document.getElementById('ck-name').value) {
-      document.getElementById('ck-name').value = currentUser.displayName || '';
+  // Pre-fill nombre/email/teléfono desde la cuenta — solo si el campo sigue
+  // vacío, para no pisar lo que el cliente ya haya escrito a mano.
+  if (currentUser && !currentUser.isAnonymous) {
+    const nameEl  = document.getElementById('ck-name');
+    const emailEl = document.getElementById('ck-email');
+    const phoneEl = document.getElementById('ck-phone-number');
+    if (!nameEl.value)  nameEl.value  = currentUserProfile?.name || currentUser.displayName || '';
+    if (!emailEl.value) emailEl.value = currentUser.email || '';
+    if (!phoneEl.value && currentUserProfile?.phone) {
+      const digits  = currentUserProfile.phone.replace(/\D/g, '');
+      const country = detectCountryFromDigits(digits) || DEFAULT_COUNTRY;
+      phoneCountrySelect.value = country.code;
+      phoneEl.value = digits.slice(country.dial.length);
     }
   }
 };
@@ -1508,7 +1520,23 @@ function generateShortId() {
   return s;
 }
 
+// On a slow connection the anonymous/guest sign-in (below, on page load) can
+// still be resolving when the customer reaches "Confirmar pedido" — orders
+// now require a real matching userId (firestore.rules), so we can't let
+// saveOrder() run with a stale/null currentUser. Waits for the auth state
+// that's already being tracked; times out instead of hanging forever.
+function waitForAuthUser() {
+  if (currentUser) return Promise.resolve(currentUser);
+  return new Promise(resolve => {
+    const timer = setTimeout(() => { unsub(); resolve(currentUser); }, 8000);
+    const unsub = onAuthStateChanged(auth, user => {
+      if (user) { clearTimeout(timer); unsub(); resolve(user); }
+    });
+  });
+}
+
 async function saveOrder(items, subtotal, total) {
+  currentUser = await waitForAuthUser();
   const shortId = generateShortId();
   window._lastOrderId = shortId;
 
@@ -1524,12 +1552,15 @@ async function saveOrder(items, subtotal, total) {
       cat:      i.cat || '',
       price:    i.price,
       qty:      i.qty,
+      variant:  i.variant || '',
       imageUrl: i.imageUrl || i.imgUrl || ''
     })),
     subtotal,
     shippingCost: orderData.shippingCost,
     shippingPending: orderData.shippingCost == null,
     total,
+    storeWhatsapp:  WA_NUMBER,
+    storeInstagram: STORE_INSTAGRAM,
     shipping: {
       method:      orderData.shippingMethod,
       city:        orderData.city,
@@ -1843,11 +1874,18 @@ window.addEventListener('tintin:products-loaded', () => renderCart(), { once: tr
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  currentUserProfile = null;
   // No hay sesión: iniciamos una sesión anónima transparente para que el checkout de
   // invitados (sin cuenta) pueda guardar el pedido — `orders` exige un usuario autenticado.
   if (!user) {
     signInAnonymously(auth).catch(e => console.error('No se pudo iniciar sesión de invitado:', e));
+    return;
   }
+  if (user.isAnonymous) return;
+  // Cuenta real logueada: precargamos su perfil (nombre/teléfono) para el paso 3.
+  getDoc(doc(db, 'users', user.uid))
+    .then(snap => { currentUserProfile = snap.exists() ? snap.data() : null; })
+    .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
 <script src="js/scroll-reveal.js" defer></script>

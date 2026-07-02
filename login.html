@@ -183,6 +183,48 @@
       background: #fff;
       box-shadow: 0 0 0 3px rgba(184,76,114,.1);
     }
+    .login-hint { font-size: 11px; color: var(--muted); }
+
+    /* Password field with show/hide toggle */
+    .login-pass-wrap { position: relative; }
+    .login-pass-wrap .login-input { width: 100%; padding-right: 44px; }
+    .login-pass-toggle {
+      position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; color: var(--muted);
+      border-radius: 50%; transition: background .2s, color .2s;
+    }
+    .login-pass-toggle:hover { background: var(--acc-pale); color: var(--acc); }
+
+    /* Phone field: country select + number */
+    .login-phone-row { display: flex; gap: 8px; }
+    .login-phone-row select.login-input { flex: 0 0 108px; padding-left: 10px; padding-right: 10px; }
+    .login-phone-row input.login-input { flex: 1; min-width: 0; }
+
+    /* SUCCESS banner (green) — mirrors .login-error but for confirmations */
+    .login-success {
+      background: #e8f5e9; color: #2e7d32;
+      padding: 10px 14px; border-radius: 10px;
+      font-size: 12px; font-weight: 600; display: none;
+      border-left: 3px solid #4caf50;
+    }
+    .login-success.show { display: block; }
+
+    /* Verification-pending panel — shown instead of the tabs/forms right after
+       registering, until the customer verifies or goes to log in later */
+    .login-verify-panel { display: none; flex-direction: column; gap: 16px; text-align: center; }
+    .login-verify-panel.active { display: flex; }
+    .login-verify-icon { font-size: 40px; }
+    .login-verify-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .login-verify-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .login-verify-text strong { color: var(--text); }
+    .login-resend-btn {
+      background: none; border: 1.5px solid #f0e0e8; border-radius: 50px;
+      padding: 12px; font-size: 12px; font-weight: 700; color: var(--acc);
+      cursor: pointer; font-family: var(--font); transition: all .2s;
+    }
+    .login-resend-btn:hover:not(:disabled) { background: var(--acc-pale); border-color: var(--acc); }
+    .login-resend-btn:disabled { color: var(--muted); cursor: default; opacity: .7; }
 
     .login-btn {
       padding: 14px; background: var(--acc);
@@ -271,17 +313,19 @@
     </div>
 
     <div class="login-box">
-      <div class="login-heading">Bienvenida 💕</div>
-      <div class="login-heading-sub">Ingresá a tu cuenta o creá una nueva</div>
+      <div class="login-heading" id="login-heading">Bienvenida 💕</div>
+      <div class="login-heading-sub" id="login-heading-sub">Ingresá a tu cuenta o creá una nueva</div>
 
       <!-- TABS -->
-      <div class="login-tabs">
+      <div class="login-tabs" id="login-tabs">
         <button class="login-tab active" data-tab="login">Ingresar</button>
         <button class="login-tab" data-tab="registro">Registrarse</button>
+        <button class="login-tab" data-tab="recuperar">Recuperar</button>
       </div>
 
-      <!-- ERROR -->
+      <!-- ERROR / SUCCESS -->
       <div class="login-error" id="login-error"></div>
+      <div class="login-success" id="login-success"></div>
 
       <!-- FORM LOGIN -->
       <div class="login-form active" id="form-login">
@@ -291,9 +335,12 @@
         </div>
         <div class="login-field">
           <label class="login-label">Contraseña</label>
-          <input type="password" class="login-input" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+          <div class="login-pass-wrap">
+            <input type="password" class="login-input" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="login-pass-toggle" data-toggle-for="login-pass" aria-label="Mostrar contraseña">👁️</button>
+          </div>
         </div>
-        <div class="login-forgot"><a href="#">¿Olvidaste tu contraseña?</a></div>
+        <div class="login-forgot"><a href="#" id="link-forgot">¿Olvidaste tu contraseña?</a></div>
         <button class="login-btn" id="btn-login-email">Ingresar</button>
         <div class="login-divider">o</div>
         <button class="login-google" id="btn-login-google">
@@ -313,8 +360,25 @@
           <input type="email" class="login-input" id="reg-email" placeholder="tu@email.com" autocomplete="email" />
         </div>
         <div class="login-field">
+          <label class="login-label">Teléfono</label>
+          <div class="login-phone-row">
+            <select class="login-input" id="reg-phone-country"></select>
+            <input type="tel" class="login-input" id="reg-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="login-field">
           <label class="login-label">Contraseña</label>
-          <input type="password" class="login-input" id="reg-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+          <div class="login-pass-wrap">
+            <input type="password" class="login-input" id="reg-pass" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
+            <button type="button" class="login-pass-toggle" data-toggle-for="reg-pass" aria-label="Mostrar contraseña">👁️</button>
+          </div>
+        </div>
+        <div class="login-field">
+          <label class="login-label">Confirmar contraseña</label>
+          <div class="login-pass-wrap">
+            <input type="password" class="login-input" id="reg-pass2" placeholder="Repetí tu contraseña" autocomplete="new-password" />
+            <button type="button" class="login-pass-toggle" data-toggle-for="reg-pass2" aria-label="Mostrar contraseña">👁️</button>
+          </div>
         </div>
         <button class="login-btn" id="btn-registrar">Crear cuenta</button>
         <div class="login-divider">o</div>
@@ -324,7 +388,31 @@
         </button>
       </div>
 
-      <div class="login-back">
+      <!-- FORM RECUPERAR CONTRASEÑA -->
+      <div class="login-form" id="form-recuperar">
+        <div class="login-field">
+          <label class="login-label">Email de tu cuenta</label>
+          <input type="email" class="login-input" id="recover-email" placeholder="tu@email.com" autocomplete="email" />
+        </div>
+        <div class="login-hint">Te enviamos un enlace para restablecer tu contraseña si el correo tiene una cuenta.</div>
+        <button class="login-btn" id="btn-recuperar">Enviar enlace de recuperación</button>
+      </div>
+
+      <!-- PANEL: VERIFICÁ TU CORREO (se muestra tras registrarse) -->
+      <div class="login-verify-panel" id="verify-panel">
+        <div class="login-verify-icon">📩</div>
+        <div class="login-verify-title">¡Casi listo!</div>
+        <div class="login-verify-text">
+          Te enviamos un correo a <strong id="verify-email-shown"></strong> para confirmar tu cuenta.
+          Abrí ese correo y hacé clic en el enlace de verificación — después ya vas a poder iniciar sesión.
+        </div>
+        <button class="login-resend-btn" id="btn-resend-verify">Reenviar correo de verificación</button>
+        <div class="login-back" style="margin-top:0">
+          <a href="#" id="link-verify-to-login">Ya verifiqué, ir a iniciar sesión</a>
+        </div>
+      </div>
+
+      <div class="login-back" id="login-back-link">
         <a href="index.html">← Volver a la tienda</a>
       </div>
     </div>
@@ -339,21 +427,38 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  reload
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js";
+
+// El link "Continuar" en la página de Firebase (tras verificar el correo o
+// restablecer la contraseña) vuelve acá.
+const actionCodeSettings = { url: 'https://tintinaccs.github.io/tintin-web/login.html' };
 
 const overlay = document.getElementById('tt-page-loading');
 function showOverlay() { if (overlay) overlay.style.display = 'flex'; }
 function hideLoginOverlay() { if (overlay) overlay.style.display = 'none'; }
 
-// Si ya está logueado → redirigir sin mostrar el formulario
+// Si ya está logueada y con el correo verificado → redirigir sin mostrar el
+// formulario. Si está logueada pero SIN verificar (por ej. se registró, cerró
+// la pestaña sin confirmar, y vuelve a entrar acá más tarde), se queda viendo
+// el panel de verificación en vez de pasar a perfil.html.
 onAuthStateChanged(auth, async user => {
-  if (!user) { hideLoginOverlay(); return; }
-  // Keep overlay visible while redirecting
+  if (!user) {
+    hideLoginOverlay();
+    // Deep link desde el header ("Crear cuenta" → login.html#registro)
+    if (location.hash === '#registro') switchTab('registro');
+    return;
+  }
+  try { await reload(user); } catch {} // trae el emailVerified más reciente del servidor
+  if (!user.emailVerified) { hideLoginOverlay(); showVerifyPanel(user.email); return; }
   const role = await getUserRole(user.uid, user.email);
   redirectByRole(role);
 });
@@ -367,40 +472,67 @@ function redirectByRole(role) {
   }
 }
 
+function normalizeEmail(s) { return String(s || '').trim().toLowerCase(); }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // TABS
 document.querySelectorAll(".login-tab").forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll(".login-tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".login-form").forEach(f => f.classList.remove("active"));
-    tab.classList.add("active");
-    document.getElementById("form-" + tab.dataset.tab).classList.add("active");
-    hideError();
-  };
+  tab.onclick = () => switchTab(tab.dataset.tab);
 });
-
-function showError(msg) {
-  const el = document.getElementById("login-error");
-  el.textContent = msg; el.classList.add("show");
+function switchTab(name) {
+  document.querySelectorAll(".login-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".login-form").forEach(f => f.classList.remove("active"));
+  document.getElementById("form-" + name).classList.add("active");
+  document.getElementById('verify-panel').classList.remove('active');
+  document.getElementById('login-tabs').style.display = '';
+  hideMessages();
 }
-function hideError() {
+
+function showError(html) {
+  hideMessages();
+  const el = document.getElementById("login-error");
+  el.innerHTML = html; el.classList.add("show");
+}
+function showSuccess(html) {
+  hideMessages();
+  const el = document.getElementById("login-success");
+  el.innerHTML = html; el.classList.add("show");
+}
+function hideMessages() {
   document.getElementById("login-error").classList.remove("show");
+  document.getElementById("login-success").classList.remove("show");
+}
+
+// Si el error trae un link accionable (ej. "Ya existe una cuenta... Iniciá
+// sesión"), lo conecta después de insertarlo en el DOM.
+function wireDupeLoginLink() {
+  const link = document.getElementById('err-goto-login');
+  if (link) link.onclick = (e) => {
+    e.preventDefault();
+    switchTab('login');
+    document.getElementById('login-email').value = document.getElementById('reg-email').value;
+  };
 }
 
 function errMsg(code) {
   const msgs = {
-    "auth/user-not-found":       "No existe una cuenta con ese email",
-    "auth/wrong-password":       "Contraseña incorrecta",
-    "auth/email-already-in-use": "Ya existe una cuenta con ese email",
-    "auth/weak-password":        "La contraseña debe tener al menos 6 caracteres",
-    "auth/invalid-email":        "Email inválido",
-    "auth/too-many-requests":    "Demasiados intentos. Intentá más tarde.",
-    "auth/popup-closed-by-user": "Cerraste el popup de Google",
-    "auth/invalid-credential":   "Email o contraseña incorrectos",
+    "auth/user-not-found":       "No existe una cuenta con ese email.",
+    "auth/wrong-password":       "Contraseña incorrecta.",
+    "auth/email-already-in-use": 'Este correo ya tiene una cuenta registrada. <a href="#" id="err-goto-login">Iniciá sesión</a> para continuar.',
+    "auth/weak-password":        "La contraseña debe tener al menos 8 caracteres.",
+    "auth/invalid-email":        "Ingresá un correo válido.",
+    "auth/too-many-requests":    "Demasiados intentos. Esperá un momento e intentá de nuevo.",
+    "auth/popup-closed-by-user": "Cerraste la ventana de Google antes de terminar.",
+    "auth/invalid-credential":   "Email o contraseña incorrectos.",
+    "auth/user-disabled":        "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
+    "auth/network-request-failed": "Sin conexión — revisá tu internet e intentá de nuevo.",
+    "auth/account-exists-with-different-credential": "Ya existe una cuenta con este correo usando otro método de acceso. Iniciá sesión con tu contraseña.",
+    "auth/missing-password":     "Ingresá una contraseña.",
   };
-  return msgs[code] || "Error: " + code;
+  return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
-async function guardarUsuario(user, nombre) {
+async function guardarUsuario(user, nombre, phone) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
@@ -408,6 +540,7 @@ async function guardarUsuario(user, nombre) {
     await setDoc(ref, {
       name: nombre || user.displayName || "",
       email: user.email,
+      phone: phone || "",
       photoURL: user.photoURL || "",
       role,
       onboardingCompleted: false,
@@ -425,60 +558,183 @@ async function guardarUsuario(user, nombre) {
       await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
       return 'superadmin';
     }
-    await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
+    const patch = { lastLogin: serverTimestamp() };
+    if (phone && !data.phone) patch.phone = phone; // completa el teléfono si faltaba, sin pisar uno ya guardado
+    await setDoc(ref, patch, { merge: true });
     return data.role || 'client';
   }
 }
 
+// MOSTRAR/OCULTAR CONTRASEÑA
+document.querySelectorAll('.login-pass-toggle').forEach(btn => {
+  btn.onclick = () => {
+    const input = document.getElementById(btn.dataset.toggleFor);
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.textContent = showing ? '👁️' : '🙈';
+  };
+});
+
+// SELECTOR DE PAÍS PARA EL TELÉFONO (registro)
+const regPhoneCountry = document.getElementById('reg-phone-country');
+regPhoneCountry.innerHTML = COUNTRIES.map(c => `<option value="${c.code}">${c.flag} +${c.dial}</option>`).join('');
+regPhoneCountry.value = DEFAULT_COUNTRY.code;
+
+// PANEL DE VERIFICACIÓN
+function showVerifyPanel(email) {
+  document.getElementById('verify-email-shown').textContent = email || '';
+  document.querySelectorAll(".login-form").forEach(f => f.classList.remove("active"));
+  document.getElementById('login-tabs').style.display = 'none';
+  document.getElementById('verify-panel').classList.add('active');
+  hideMessages();
+}
+document.getElementById('link-verify-to-login').onclick = (e) => {
+  e.preventDefault();
+  switchTab('login');
+};
+
+let resendCooldownTimer = null;
+function startResendCooldown() {
+  const btn = document.getElementById('btn-resend-verify');
+  let seconds = 60;
+  btn.disabled = true;
+  btn.textContent = `Reenviar en ${seconds}s`;
+  clearInterval(resendCooldownTimer);
+  resendCooldownTimer = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(resendCooldownTimer);
+      btn.disabled = false;
+      btn.textContent = 'Reenviar correo de verificación';
+    } else {
+      btn.textContent = `Reenviar en ${seconds}s`;
+    }
+  }, 1000);
+}
+document.getElementById('btn-resend-verify').onclick = async () => {
+  if (!auth.currentUser) {
+    showError('Tu sesión expiró — iniciá sesión de nuevo para reenviar el correo.');
+    switchTab('login');
+    return;
+  }
+  try {
+    await sendEmailVerification(auth.currentUser, actionCodeSettings);
+    showSuccess('Te reenviamos el correo de verificación. Revisá también la carpeta de spam.');
+  } catch (e) {
+    showError(errMsg(e.code));
+  }
+  startResendCooldown(); // cooldown siempre, haya salido bien o mal (evita reintentos en cadena)
+};
+
 // LOGIN EMAIL
 document.getElementById("btn-login-email").onclick = async () => {
-  hideError();
-  const email = document.getElementById("login-email").value.trim();
+  hideMessages();
+  const email = normalizeEmail(document.getElementById("login-email").value);
   const pass  = document.getElementById("login-pass").value;
-  if (!email || !pass) { showError("Completá email y contraseña"); return; }
+  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
+  if (!pass) { showError("Ingresá tu contraseña."); return; }
   try {
     showOverlay();
     const cred = await signInWithEmailAndPassword(auth, email, pass);
-    const role = await guardarUsuario(cred.user, "");
+    if (!cred.user.emailVerified) {
+      hideLoginOverlay();
+      showVerifyPanel(cred.user.email);
+      return;
+    }
+    const role = await guardarUsuario(cred.user, "", "");
     redirectByRole(role);
-  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
+  } catch(e) {
+    hideLoginOverlay();
+    showError(errMsg(e.code));
+  }
 };
 
 // REGISTRO EMAIL
 document.getElementById("btn-registrar").onclick = async () => {
-  hideError();
-  const nombre = document.getElementById("reg-nombre").value.trim();
-  const email  = document.getElementById("reg-email").value.trim();
-  const pass   = document.getElementById("reg-pass").value;
-  if (!nombre || !email || !pass) { showError("Completá todos los campos"); return; }
+  hideMessages();
+  const nombre       = document.getElementById("reg-nombre").value.trim();
+  const email        = normalizeEmail(document.getElementById("reg-email").value);
+  const phoneRaw     = document.getElementById("reg-phone").value.trim();
+  const phoneCountry = findCountryByCode(regPhoneCountry.value);
+  const pass         = document.getElementById("reg-pass").value;
+  const pass2        = document.getElementById("reg-pass2").value;
+
+  if (!nombre) { showError("Ingresá tu nombre completo."); return; }
+  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
+  if (!phoneRaw) { showError("Ingresá tu teléfono."); return; }
+  if (!isValidPhone(phoneRaw, phoneCountry)) {
+    showError(`Ingresá un número de teléfono válido para ${phoneCountry.flag} ${phoneCountry.name}.`);
+    return;
+  }
+  if (!pass || pass.length < 8) { showError("La contraseña debe tener al menos 8 caracteres."); return; }
+  if (pass !== pass2) { showError("Las contraseñas no coinciden."); return; }
+
+  const { value: phone } = normalizePhone(phoneRaw, phoneCountry);
+
   try {
     showOverlay();
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: nombre });
-    const role = await guardarUsuario(cred.user, nombre);
-    redirectByRole(role);
-  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
+    await guardarUsuario(cred.user, nombre, phone);
+    await sendEmailVerification(cred.user, actionCodeSettings);
+    hideLoginOverlay();
+    showVerifyPanel(cred.user.email);
+    startResendCooldown();
+  } catch(e) {
+    hideLoginOverlay();
+    showError(errMsg(e.code));
+    wireDupeLoginLink();
+  }
 };
 
-// GOOGLE
+// RECUPERAR CONTRASEÑA — mensaje siempre igual exista o no la cuenta (evita
+// que alguien confirme qué correos tienen cuenta probando uno por uno).
+document.getElementById("btn-recuperar").onclick = async () => {
+  hideMessages();
+  const email = normalizeEmail(document.getElementById("recover-email").value);
+  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
+  const btn = document.getElementById('btn-recuperar');
+  btn.disabled = true;
+  try {
+    await sendPasswordResetEmail(auth, email, actionCodeSettings);
+  } catch (e) {
+    if (e.code === 'auth/too-many-requests') {
+      btn.disabled = false;
+      showError(errMsg(e.code));
+      return;
+    }
+    // cualquier otro error (incluido user-not-found) se trata igual que un éxito
+  }
+  btn.disabled = false;
+  showSuccess("Si ese correo tiene una cuenta, te enviamos un enlace para restablecer tu contraseña. Revisá tu bandeja de entrada y spam.");
+};
+
+// GOOGLE — el correo de Google ya viene verificado por Google, así que estas
+// cuentas nunca pasan por el panel de verificación.
 const loginConGoogle = async () => {
-  hideError();
+  hideMessages();
   try {
     showOverlay();
     const cred = await signInWithPopup(auth, provider);
-    const role = await guardarUsuario(cred.user, cred.user.displayName);
+    const role = await guardarUsuario(cred.user, cred.user.displayName, "");
     redirectByRole(role);
   } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
 };
 document.getElementById("btn-login-google").onclick  = loginConGoogle;
 document.getElementById("btn-reg-google").onclick    = loginConGoogle;
 
+// "¿Olvidaste tu contraseña?" pasa a la pestaña Recuperar en vez de un href muerto
+document.getElementById('link-forgot').onclick = (e) => { e.preventDefault(); switchTab('recuperar'); };
+
 // Enter para submit
 document.getElementById("login-pass").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("btn-login-email").click();
 });
-document.getElementById("reg-pass").addEventListener("keydown", e => {
+document.getElementById("reg-pass2").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("btn-registrar").click();
+});
+document.getElementById("recover-email").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btn-recuperar").click();
 });
 </script>
 </body>

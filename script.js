@@ -504,6 +504,32 @@ function initDropdown() {
 }
 
 /* ──────────────────────────────────────
+   ACCOUNT DROPDOWN (user icon) — same open/close pattern as Tienda above,
+   kept separate since its content is built dynamically by js/auth-nav.js
+   depending on login state, not fixed markup.
+────────────────────────────────────── */
+function initAccountDropdown() {
+  const dropdown = document.getElementById('account-dropdown');
+  const btn = document.getElementById('btn-cuenta');
+  if (!dropdown || !btn) return;
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') dropdown.classList.remove('open');
+  });
+}
+
+/* ──────────────────────────────────────
    MOBILE MENU
 ────────────────────────────────────── */
 function initMobileMenu() {
@@ -1461,6 +1487,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Core functionality on all pages
   initHeaderScroll();
   initDropdown();
+  initAccountDropdown();
   initMobileMenu();
   initSearch();
   initCartEvents();

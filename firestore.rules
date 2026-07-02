@@ -80,8 +80,14 @@ service cloud.firestore {
     }
 
     match /orders/{orderId} {
-      allow create: if isSignedIn();
-      allow read, update, delete: if isAdmin();
+      // El pedido debe quedar asignado a quien realmente lo crea — evita que
+      // alguien guarde un pedido a nombre de otro uid.
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+
+      // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
+      // el admin puede leer cualquiera. Solo el admin puede modificar/eliminar.
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
     }
 
     match /{document=**} {
