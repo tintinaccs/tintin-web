@@ -183,8 +183,8 @@
       width: 64px;
       height: 64px;
       border-radius: var(--radius-sm);
-      object-fit: cover;
-      background: #f9f0f4;
+      object-fit: contain;
+      background: transparent;
       flex-shrink: 0;
     }
     .ck-item-img-placeholder {
@@ -1095,7 +1095,7 @@ async function renderCart() {
           ${featured.map(p => {
             const img = p.imageUrl || p.image || '';
             const imgHtml = img
-              ? `<img src="${img}" alt="${p.name}" style="width:56px;height:56px;object-fit:cover;border-radius:10px;margin-bottom:6px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-sug-img" style="display:none"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`
+              ? `<img src="${img}" alt="${p.name}" style="width:56px;height:56px;object-fit:contain;background:transparent;border-radius:10px;margin-bottom:6px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-sug-img" style="display:none"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`
               : `<div class="ck-sug-img"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`;
             return `
             <div class="ck-sug-card">

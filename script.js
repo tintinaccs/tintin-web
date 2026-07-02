@@ -765,7 +765,7 @@ function renderLookCombo() {
   grid.innerHTML = currentCombo.map(p => {
     const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
+      ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;background:transparent;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
       : '';
     return `
     <div class="tt-look-card">
@@ -984,7 +984,7 @@ function _renderProductDetail(product) {
   const galleryMain = document.getElementById('gallery-main');
   if (galleryMain) {
     if (mainImgUrl) {
-      galleryMain.innerHTML = `<img src="${mainImgUrl}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+      galleryMain.innerHTML = `<img src="${mainImgUrl}" alt="${product.name}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
       galleryMain.style.display = 'flex';
@@ -999,7 +999,7 @@ function _renderProductDetail(product) {
     thumbsEl.style.display = '';
     thumbsEl.innerHTML = allImages.map((url, i) => `
       <div class="tt-gallery-thumb${i === 0 ? ' active' : ''}" data-src="${url}" onclick="_galleryThumbClick(this)">
-        <img src="${url}" alt="Vista ${i + 1}" class="tt-gallery-thumb-img" style="object-fit:cover;width:100%;height:100%;">
+        <img src="${url}" alt="Vista ${i + 1}" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </div>
     `).join('');
   }
@@ -1238,7 +1238,7 @@ function _galleryThumbClick(thumb) {
   if (galleryMain && src) {
     const img = galleryMain.querySelector('img');
     if (img) img.src = src;
-    else galleryMain.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+    else galleryMain.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
   }
 }
 window._galleryThumbClick = _galleryThumbClick;

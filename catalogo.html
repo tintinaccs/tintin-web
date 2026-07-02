@@ -37,11 +37,11 @@
       display: block;
       aspect-ratio: 1/1;
       overflow: hidden;
-      background: #fce4ec;
+      background: transparent;
       position: relative;
       text-decoration: none;
     }
-    .tt-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+    .tt-card-img-wrap img { width: 100%; height: 100%; object-fit: contain; background: transparent; display: block; transition: transform .3s; }
     .tt-card:hover .tt-card-img-wrap img { transform: scale(1.04); }
 
     .tt-card-info { padding: 12px; }

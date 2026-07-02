@@ -64,7 +64,7 @@ body {
   overflow-x: hidden;
 }
 
-img { max-width: 100%; height: auto; display: block; }
+img { max-width: 100%; height: auto; display: block; object-position: center; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
@@ -96,6 +96,36 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   color: var(--text-sec);
   max-width: 560px;
   line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════════════
+   SISTEMA GLOBAL DE IMÁGENES RESPONSIVE
+   Base reutilizable para cualquier imagen que venga de
+   assets-tintin/images (o de Firestore) en cualquier sección,
+   actual o futura. No forzar fondos acá — si una sección
+   necesita fondo, se define en la sección misma, nunca pegado
+   a la imagen (así se respeta la transparencia real del archivo).
+═══════════════════════════════════════════════ */
+.tintin-img,
+.tt-responsive-img,
+.tt-section-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-position: center;
+}
+
+/* Para fotos de producto/colección dentro de un contenedor de tamaño fijo
+   (aspect-ratio + overflow:hidden): se ve la pieza completa, nunca recortada,
+   y jamás se agrega un color sólido detrás — si el archivo tiene transparencia,
+   se respeta. */
+.tt-media-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  display: block;
 }
 
 /* ── Utility Classes ── */
@@ -1252,7 +1282,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-coll-card-img {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1307,7 +1337,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-look-card-img {
   height: 220px;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
+  background: transparent;
   overflow: hidden;
   position: relative;
 }
@@ -1499,7 +1529,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: transparent;
   transition: transform 0.4s ease;
   display: block;
 }
@@ -1976,7 +2007,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   width: 72px;
   height: 80px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, #fce4ec, #f5d4e0);
+  background: transparent;
   flex-shrink: 0;
 }
 
@@ -2380,13 +2411,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: block;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: transparent;
   transition: transform 0.4s ease;
 }
 .tt-coll-page-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: transparent;
   display: block;
 }
 
@@ -2442,7 +2474,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 3/4;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2455,7 +2487,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: transparent;
   display: block;
 }
 
@@ -2479,15 +2512,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-gallery-thumb-img {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-}
-
-.tt-gallery-thumb:nth-child(2) .tt-gallery-thumb-img {
-  background: linear-gradient(135deg, #f5ead0 0%, #f0d8c0 50%, #e8cba8 100%);
-}
-
-.tt-gallery-thumb:nth-child(3) .tt-gallery-thumb-img {
-  background: linear-gradient(135deg, #ede0f0 0%, #d4b8e0 50%, #c0a0d0 100%);
+  object-fit: contain;
+  background: transparent;
 }
 
 .tt-product-info-panel {}
