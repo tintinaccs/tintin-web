@@ -196,7 +196,7 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function showAddedToCart(productName) {
+function showCartToast(message) {
   let toast = document.getElementById('tt-added-toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -204,22 +204,43 @@ function showAddedToCart(productName) {
     toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Poppins,sans-serif;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
     document.body.appendChild(toast);
   }
-  toast.textContent = `✓ ${productName} agregado al carrito`;
+  toast.textContent = message;
   toast.style.opacity = '1';
-  setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+}
+
+function showAddedToCart(productName) {
+  showCartToast(`✓ ${productName} agregado al carrito`);
+}
+
+// null/undefined stock means "not tracked" — treat as unlimited
+function getStockLimit(productId) {
+  const product = getProductById(productId);
+  if (!product || product.stock === null || product.stock === undefined) return Infinity;
+  return Math.max(Number(product.stock), 0);
 }
 
 function addToCart(productId) {
   const cart = getCart();
   const sid = String(productId);
   const existing = cart.find(item => String(item.id) === sid);
+  const limit = getStockLimit(productId);
   let productName = '';
   if (existing) {
+    if (existing.qty >= limit) {
+      showCartToast(`Ya tenés el máximo disponible de "${existing.name}" en el carrito`);
+      return;
+    }
     existing.qty += 1;
     productName = existing.name;
   } else {
     const product = getProductById(productId);
     if (!product) return;
+    if (limit <= 0) {
+      showCartToast(`"${product.name}" está sin stock`);
+      return;
+    }
     const imgUrl = product.imageUrl || product.image || getProductImage(product.id);
     cart.push({
       id: product.id,
@@ -255,6 +276,10 @@ function updateQty(productId, delta) {
   const cart = getCart();
   const item = cart.find(i => String(i.id) === sid);
   if (!item) return;
+  if (delta > 0 && item.qty >= getStockLimit(productId)) {
+    showCartToast(`Ya tenés el máximo disponible de "${item.name}" en el carrito`);
+    return;
+  }
   item.qty = Math.max(1, item.qty + delta);
   saveCart(cart);
   updateCartBadge();
@@ -747,21 +772,33 @@ function initLookCombinator() {
   renderLookCombo();
   if (lookActions) lookActions.style.display = '';
 
-  if (btnOtra) {
+  // Bind exactly once: initLookCombinator() is re-invoked on every Firestore
+  // products snapshot (script.js, products-store.js and load-images-init.js
+  // all call it so the combo refreshes with live data/images), but
+  // #btn-otra-combo/#btn-add-combo are static persistent buttons — without
+  // this guard each re-invocation stacked another click handler on top of
+  // the last, so a single real click added the combo to the cart N times.
+  if (btnOtra && !btnOtra.dataset.ttBound) {
+    btnOtra.dataset.ttBound = '1';
     btnOtra.addEventListener('click', () => {
       renderLookCombo();
     });
   }
 
-  if (btnAdd) {
+  if (btnAdd && !btnAdd.dataset.ttBound) {
+    btnAdd.dataset.ttBound = '1';
     btnAdd.addEventListener('click', () => {
       if (currentCombo.length === 0) return;
+      let anySkipped = false;
       currentCombo.forEach(p => {
         const cart = getCart();
         const existing = cart.find(i => String(i.id) === String(p.id));
+        const limit = getStockLimit(p.id);
         if (existing) {
+          if (existing.qty >= limit) { anySkipped = true; return; }
           existing.qty += 1;
         } else {
+          if (limit <= 0) { anySkipped = true; return; }
           const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
           cart.push({
             id: p.id,
@@ -774,6 +811,7 @@ function initLookCombinator() {
         }
         saveCart(cart);
       });
+      if (anySkipped) showCartToast('Algunos productos de la combinación ya llegaron a su stock máximo');
       updateCartBadge();
       renderCart();
       openCart();
@@ -786,7 +824,13 @@ function initLookCombinator() {
 ────────────────────────────────────── */
 function initProductPage() {
   if (!document.getElementById('product-detail')) return;
-  if (window._productPageRendered) return;
+  // One-time only: finds the product for the current URL and does the first
+  // render. Later Firestore updates for this same product go straight through
+  // _renderProductDetail (called directly from products-store.js), which is
+  // idempotent and safe to call any number of times — it never re-runs this
+  // lookup/registration logic, so it can't stack up duplicate listeners.
+  if (window._productPageInited) return;
+  window._productPageInited = true;
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -794,25 +838,45 @@ function initProductPage() {
 
   const immediate = getProductById(id);
   if (immediate) {
-    window._productPageRendered = true;
     _renderProductDetail(immediate);
   } else {
     // Wait for Firebase products to load via tintin:products-loaded event
     function onProductsLoaded() {
       window.removeEventListener('tintin:products-loaded', onProductsLoaded);
       const p = getProductById(id);
-      if (p) { window._productPageRendered = true; _renderProductDetail(p); }
+      if (p) _renderProductDetail(p);
       else _showProductNotFound();
     }
     window.addEventListener('tintin:products-loaded', onProductsLoaded);
     // Fallback: if Firebase never fires (offline / no products), show not-found after 5s
     setTimeout(() => {
-      if (!window._productPageRendered) {
+      if (!_pdProduct) {
         window.removeEventListener('tintin:products-loaded', onProductsLoaded);
         _showProductNotFound();
       }
     }, 5000);
   }
+}
+
+// Product detail page: state shared across re-renders. Firestore pushes a
+// fresh snapshot of the *entire* products collection on every single change
+// (any product, not just this one), and each delivery re-renders this page
+// so price/stock stay live. Event listeners on the static buttons below are
+// bound exactly once (guarded by dataset.ttBound) and always read the latest
+// values from here — never from a particular render's closure — so repeated
+// snapshots refresh the displayed data without ever stacking up duplicate
+// click handlers (which was the root cause of one click adding N units).
+let _pdProduct = null;
+let _pdQty = 1;
+let _pdMaxQty = 99;
+
+function _pdUpdateQtyUI() {
+  const qtyVal = document.getElementById('qty-val');
+  const qtyMinus = document.getElementById('btn-qty-minus');
+  const qtyPlus = document.getElementById('btn-qty-plus');
+  if (qtyVal) qtyVal.textContent = _pdQty;
+  if (qtyMinus) qtyMinus.disabled = _pdQty <= 1;
+  if (qtyPlus) qtyPlus.disabled = _pdQty >= _pdMaxQty;
 }
 
 function _showProductNotFound() {
@@ -825,6 +889,10 @@ function _showProductNotFound() {
 }
 
 function _renderProductDetail(product) {
+  const isSameProduct = _pdProduct && String(_pdProduct.id) === String(product.id);
+  _pdProduct = product;
+  if (!isSameProduct) _pdQty = 1; // fresh quantity only when it's actually a different product
+
   const loading = document.getElementById('product-loading');
   const notFound = document.getElementById('product-not-found');
   const grid = document.getElementById('product-grid');
@@ -926,30 +994,33 @@ function _renderProductDetail(product) {
     }
   }
 
-  // Quantity selector
-  let qty = 1;
-  const maxQty = stock !== null ? stock : 99;
-  const qtyVal = document.getElementById('qty-val');
+  // Quantity selector — _pdQty/_pdMaxQty are shared across re-renders (see
+  // definition above _showProductNotFound) so the +/- buttons stay correct
+  // even after a live stock/price update re-renders this same product.
+  _pdMaxQty = stock !== null ? Math.max(stock, 0) : 99;
+  if (_pdQty > _pdMaxQty) _pdQty = Math.max(1, _pdMaxQty);
   const qtyMinus = document.getElementById('btn-qty-minus');
   const qtyPlus = document.getElementById('btn-qty-plus');
   const qtyStock = document.getElementById('qty-stock');
 
-  if (qtyVal) qtyVal.textContent = qty;
   if (qtyStock) {
     if (stock !== null && stock <= 10 && stock > 0) qtyStock.textContent = `Solo ${stock} disponibles`;
     else if (stock !== null && stock <= 0) qtyStock.textContent = 'Sin stock';
     else qtyStock.textContent = '';
   }
+  _pdUpdateQtyUI();
 
-  function updateQtyUI() {
-    if (qtyVal) qtyVal.textContent = qty;
-    if (qtyMinus) qtyMinus.disabled = qty <= 1;
-    if (qtyPlus) qtyPlus.disabled = qty >= maxQty;
+  // Bind exactly once: these buttons are static/persistent in the page HTML,
+  // so re-running this render on every Firestore snapshot must never attach
+  // a second listener on top of the first.
+  if (qtyMinus && !qtyMinus.dataset.ttBound) {
+    qtyMinus.dataset.ttBound = '1';
+    qtyMinus.addEventListener('click', () => { if (_pdQty > 1) { _pdQty--; _pdUpdateQtyUI(); } });
   }
-  updateQtyUI();
-
-  if (qtyMinus) qtyMinus.addEventListener('click', () => { if (qty > 1) { qty--; updateQtyUI(); } });
-  if (qtyPlus) qtyPlus.addEventListener('click', () => { if (qty < maxQty) { qty++; updateQtyUI(); } });
+  if (qtyPlus && !qtyPlus.dataset.ttBound) {
+    qtyPlus.dataset.ttBound = '1';
+    qtyPlus.addEventListener('click', () => { if (_pdQty < _pdMaxQty) { _pdQty++; _pdUpdateQtyUI(); } });
+  }
 
   // Trust badges
   const trustEl = document.getElementById('product-trust-badges');
@@ -1015,10 +1086,19 @@ function _renderProductDetail(product) {
     });
   }
 
-  // Gallery: click to open lightbox
-  if (galleryMain && allImages.length > 0) {
+  // Gallery: click to open lightbox. Bound once; reads the current image
+  // list fresh from _pdProduct at click time instead of a closure snapshot,
+  // so it never goes stale across re-renders.
+  if (galleryMain && !galleryMain.dataset.ttBound) {
+    galleryMain.dataset.ttBound = '1';
     let _lbIdx = 0;
-    galleryMain.addEventListener('click', () => _openLightbox(allImages, _lbIdx));
+    galleryMain.addEventListener('click', () => {
+      const p = _pdProduct;
+      const main = p.imageUrl || p.image || getProductImage(p.id) || '';
+      const extra = Array.isArray(p.imagesExtra) ? p.imagesExtra : [];
+      const images = main ? [main, ...extra] : extra;
+      if (images.length > 0) _openLightbox(images, Math.min(_lbIdx, images.length - 1));
+    });
     // Update index when thumb changes
     const thumbsContainer = document.getElementById('gallery-thumbs');
     if (thumbsContainer) {
@@ -1031,9 +1111,11 @@ function _renderProductDetail(product) {
     }
   }
 
-  // Helper: get selected variant string
+  // Helper: get selected variant string. Reads _pdProduct (always current)
+  // rather than the `product` param, since these helpers are only captured
+  // once by the add-to-cart/buy-now listeners below.
   function getSelectedVariant() {
-    if (!variantsContainer || !product.variants || !Object.keys(product.variants).length) return null;
+    if (!variantsContainer || !_pdProduct.variants || !Object.keys(_pdProduct.variants).length) return null;
     const parts = [];
     variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
       const active = group.querySelector('.tt-variant-option.active');
@@ -1044,7 +1126,7 @@ function _renderProductDetail(product) {
 
   // Helper: validate variants selected
   function validateVariants() {
-    if (!product.variants || !Object.keys(product.variants).length) return true;
+    if (!_pdProduct.variants || !Object.keys(_pdProduct.variants).length) return true;
     let valid = true;
     variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
       const active = group.querySelector('.tt-variant-option.active');
@@ -1063,20 +1145,30 @@ function _renderProductDetail(product) {
     return valid;
   }
 
-  // Add to cart
+  // Add to cart. Stock-driven enable/disable state is safe to re-run on every
+  // render; the click listener itself is bound exactly once and reads
+  // _pdProduct/_pdQty fresh at click time, so it always acts on the latest
+  // price/stock even though it was attached during an earlier render.
   const btnAdd = document.getElementById('btn-product-add-cart');
   if (btnAdd) {
     if (stock !== null && stock <= 0) {
       btnAdd.disabled = true;
       btnAdd.textContent = 'Sin stock';
       btnAdd.style.opacity = '0.5';
+    } else {
+      btnAdd.disabled = false;
+      btnAdd.textContent = 'Agregar al carrito';
+      btnAdd.style.opacity = '';
     }
-    btnAdd.addEventListener('click', () => {
-      if (!validateVariants()) return;
-      const variantStr = getSelectedVariant();
-      _addToCartWithQty(product, qty, variantStr);
-      _showProductToast(product.name);
-    });
+    if (!btnAdd.dataset.ttBound) {
+      btnAdd.dataset.ttBound = '1';
+      btnAdd.addEventListener('click', () => {
+        if (!validateVariants()) return;
+        const variantStr = getSelectedVariant();
+        _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+        _showProductToast(_pdProduct.name);
+      });
+    }
   }
 
   // Buy now
@@ -1085,13 +1177,19 @@ function _renderProductDetail(product) {
     if (stock !== null && stock <= 0) {
       btnBuyNow.disabled = true;
       btnBuyNow.style.opacity = '0.5';
+    } else {
+      btnBuyNow.disabled = false;
+      btnBuyNow.style.opacity = '';
     }
-    btnBuyNow.addEventListener('click', () => {
-      if (!validateVariants()) return;
-      const variantStr = getSelectedVariant();
-      _addToCartWithQty(product, qty, variantStr);
-      window.location.href = 'checkout.html';
-    });
+    if (!btnBuyNow.dataset.ttBound) {
+      btnBuyNow.dataset.ttBound = '1';
+      btnBuyNow.addEventListener('click', () => {
+        if (!validateVariants()) return;
+        const variantStr = getSelectedVariant();
+        _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+        window.location.href = 'checkout.html';
+      });
+    }
   }
 
   // Related products — same category first
@@ -1119,16 +1217,29 @@ window._galleryThumbClick = _galleryThumbClick;
 function _addToCartWithQty(product, qty, variantStr) {
   const cart = getCart();
   const sid = String(product.id);
+  const stockTracked = product.stock !== null && product.stock !== undefined;
+  const limit = stockTracked ? Math.max(Number(product.stock), 0) : 99; // 99 = generic anti-abuse ceiling, not real stock
+  const limitMsg = stockTracked
+    ? `Solo hay ${limit} unidades disponibles de "${product.name}"`
+    : `Ya alcanzaste la cantidad máxima para "${product.name}"`;
   const existing = cart.find(item => String(item.id) === sid && item.variant === (variantStr || undefined));
   if (existing) {
-    existing.qty = Math.min(existing.qty + qty, 99);
+    const wanted = existing.qty + qty;
+    existing.qty = Math.min(wanted, limit);
+    if (wanted > limit) showCartToast(limitMsg);
   } else {
+    const cappedQty = Math.min(qty, limit);
+    if (cappedQty <= 0) {
+      showCartToast(`"${product.name}" está sin stock`);
+      return;
+    }
+    if (cappedQty < qty) showCartToast(limitMsg);
     const imgUrl = product.imageUrl || product.image || getProductImage(product.id) || '';
     cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
-      qty,
+      qty: cappedQty,
       cat: product.category || product.cat || '',
       imageUrl: imgUrl,
       ...(variantStr ? { variant: variantStr } : {}),
@@ -1426,6 +1537,7 @@ window.openCart = openCart;
 window.closeCart = closeCart;
 window.goToCheckout = goToCheckout;
 window.initProductPage = initProductPage;
+window._renderProductDetail = _renderProductDetail;
 window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;

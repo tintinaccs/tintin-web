@@ -1110,7 +1110,11 @@ async function renderCart() {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, img } = btn.dataset;
         const { addToCart } = await import('./js/cart-sync.js');
-        await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
+        const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
+        if (!result?.item) {
+          showCkToast(`"${name}" está sin stock`);
+          return;
+        }
         btn.textContent = '✓ Agregado';
         btn.disabled = true;
         btn.style.background = '#4caf50';
@@ -1143,13 +1147,30 @@ async function renderCart() {
   subtotalEl.textContent = formatPrice(cartTotal(cartItems));
 }
 
+function showCkToast(message) {
+  let toast = document.getElementById('ck-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'ck-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:99999;opacity:0;transition:opacity .3s;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2600);
+}
+
 // Single delegated listener — set up once, never duplicated
 document.getElementById('ck-items').addEventListener('click', async e => {
   const btn = e.target.closest('[data-action]');
   if (!btn) return;
   const id = btn.dataset.id;
   const action = btn.dataset.action;
-  if (action === 'plus')   await updateQty(id, 1);
+  if (action === 'plus') {
+    const res = await updateQty(id, 1);
+    if (res?.capped) showCkToast('Ya alcanzaste el máximo disponible de este producto');
+  }
   if (action === 'minus')  await updateQty(id, -1);
   if (action === 'remove') await removeFromCart(id);
   renderCart();

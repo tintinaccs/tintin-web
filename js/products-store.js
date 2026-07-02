@@ -81,10 +81,21 @@ function handleSnapshot(snap) {
   // Re-render cart (product may have been deleted/deactivated or price/image changed)
   if (typeof window.renderCart === 'function') window.renderCart();
 
-  // Product page: re-init with fresh product data if on product page
-  if (document.getElementById('product-detail') && typeof window.initProductPage === 'function') {
-    window._productPageRendered = false;
-    window.initProductPage();
+  // Product page: refresh with live data (price/stock/etc. may have changed
+  // on ANY product, since this fires on every snapshot of the whole
+  // collection). _renderProductDetail is idempotent — it never re-attaches
+  // event listeners on repeat calls — so it's safe to call on every update.
+  // Do NOT reset/re-run initProductPage() here: that re-triggers the one-time
+  // id lookup and used to re-register everything, which is what caused a
+  // single real click to add multiple units to the cart.
+  if (document.getElementById('product-detail')) {
+    const id = new URLSearchParams(window.location.search).get('id');
+    const p = products.find(pr => String(pr.id) === String(id));
+    if (p && typeof window._renderProductDetail === 'function') {
+      window._renderProductDetail(p);
+    } else if (typeof window.initProductPage === 'function') {
+      window.initProductPage(); // first load: page not inited yet, or product not found yet
+    }
   }
 }
 

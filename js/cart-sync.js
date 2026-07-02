@@ -123,25 +123,47 @@ export async function getCart() {
   }
 }
 
+// null/undefined stock (not tracked by Super Admin) means unlimited.
+// window.PRODUCTS is populated by products-store.js and kept live via
+// onSnapshot, so this always reflects the latest stock count.
+function getStockLimit(id) {
+  const pool = window.PRODUCTS;
+  if (!Array.isArray(pool)) return Infinity;
+  const p = pool.find(x => String(x.id) === String(id));
+  if (!p || p.stock === null || p.stock === undefined) return Infinity;
+  return Math.max(Number(p.stock), 0);
+}
+
 /**
- * Add item to cart
+ * Add item to cart. Clamps to available stock when Super Admin tracks it —
+ * returns { item, capped } so callers can show a "limit reached" message.
  * @param {{id, name, cat, price, qty, imgUrl?}} item
  */
 export async function addToCart(item) {
   const items = getCartLocal();
   const idx = items.findIndex(i => String(i.id) === String(item.id));
+  const limit = getStockLimit(item.id);
+  let capped = false;
+
   if (idx >= 0) {
-    items[idx].qty = (items[idx].qty || 1) + (item.qty || 1);
+    const wanted = (items[idx].qty || 1) + (item.qty || 1);
+    items[idx].qty = Math.min(wanted, limit);
+    capped = wanted > limit;
   } else {
-    items.push({ ...item, qty: item.qty || 1 });
+    const wanted = item.qty || 1;
+    const qty = Math.min(wanted, limit);
+    if (qty <= 0) return { item: null, capped: true };
+    items.push({ ...item, qty });
+    capped = qty < wanted;
   }
   setCartLocal(items);
 
   const uid = currentUid();
+  const updatedItem = idx >= 0 ? items[idx] : items[items.length - 1];
   if (uid) {
-    const updatedItem = idx >= 0 ? items[idx] : items[items.length - 1];
     await saveItemToFirestore(uid, updatedItem);
   }
+  return { item: updatedItem, capped };
 }
 
 /**
@@ -159,22 +181,27 @@ export async function removeFromCart(id) {
 }
 
 /**
- * Update item quantity by delta
+ * Update item quantity by delta. Clamps to available stock on increments —
+ * returns { capped } so callers can show a "limit reached" message.
  * @param {string|number} id
  * @param {number} delta - positive or negative
  */
 export async function updateQty(id, delta) {
   const items = getCartLocal();
   const idx = items.findIndex(i => String(i.id) === String(id));
-  if (idx < 0) return;
+  if (idx < 0) return { capped: false };
 
-  items[idx].qty = Math.max(1, (items[idx].qty || 1) + delta);
+  const limit = getStockLimit(id);
+  const wanted = (items[idx].qty || 1) + delta;
+  const capped = delta > 0 && wanted > limit;
+  items[idx].qty = Math.max(1, Math.min(wanted, limit));
   setCartLocal(items);
 
   const uid = currentUid();
   if (uid) {
     await saveItemToFirestore(uid, items[idx]);
   }
+  return { capped };
 }
 
 /**
