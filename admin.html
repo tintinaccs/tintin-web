@@ -305,6 +305,18 @@
     }
     .adm-textarea { resize: vertical; min-height: 80px; }
 
+    /* Píldoras — usadas en Envíos (Ciudad / Costo) */
+    .adm-pill-input { border-radius: 999px; padding: 11px 22px; }
+    .ship-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .ship-tab-btn {
+      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+    }
+    .ship-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .ship-tab-panel { display: none; }
+    .ship-tab-panel.active { display: block; }
+
     .adm-field {
       display: flex;
       flex-direction: column;
@@ -1378,27 +1390,41 @@
               <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-            <div>
-              <label class="adm-label" style="display:block;margin-bottom:8px">🚚 Delivery a domicilio — Zona Central</label>
-              <div style="display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:6px">
-                <input type="text" class="adm-input" id="ship-delivery-name" placeholder="Nombre de la ciudad" />
-                <input type="number" class="adm-input" id="ship-delivery-price" placeholder="Costo (Gs.)" min="0" />
-                <button class="adm-btn adm-btn-primary" id="ship-delivery-add" type="button" style="white-space:nowrap">Agregar</button>
+          <div class="ship-tabs">
+            <button type="button" class="ship-tab-btn active" data-ship-tab="delivery">🚚 Delivery a domicilio</button>
+            <button type="button" class="ship-tab-btn" data-ship-tab="encomienda">📦 Encomienda</button>
+          </div>
+
+          <div id="ship-panel-delivery" class="ship-tab-panel active">
+            <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+              <div style="flex:1;min-width:180px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Ciudad</label>
+                <input type="text" class="adm-input adm-pill-input" id="ship-delivery-name" placeholder="Nombre de la ciudad" />
               </div>
-              <button class="adm-btn" id="ship-delivery-cancel" type="button" style="display:none;font-size:11px;padding:4px 10px;margin-bottom:10px">Cancelar edición</button>
-              <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
-            </div>
-            <div>
-              <label class="adm-label" style="display:block;margin-bottom:8px">📦 Encomienda — Interior del país</label>
-              <div style="display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:6px">
-                <input type="text" class="adm-input" id="ship-encomienda-name" placeholder="Nombre de la ciudad" />
-                <input type="number" class="adm-input" id="ship-encomienda-price" placeholder="Costo (Gs.)" min="0" />
-                <button class="adm-btn adm-btn-primary" id="ship-encomienda-add" type="button" style="white-space:nowrap">Agregar</button>
+              <div style="width:180px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Costo del envío</label>
+                <input type="number" class="adm-input adm-pill-input" id="ship-delivery-price" placeholder="Gs. (opcional)" min="0" />
               </div>
-              <button class="adm-btn" id="ship-encomienda-cancel" type="button" style="display:none;font-size:11px;padding:4px 10px;margin-bottom:10px">Cancelar edición</button>
-              <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
+              <button class="adm-btn adm-btn-primary" id="ship-delivery-add" type="button" style="white-space:nowrap">Guardar</button>
             </div>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-delivery-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
+          </div>
+
+          <div id="ship-panel-encomienda" class="ship-tab-panel">
+            <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+              <div style="flex:1;min-width:180px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Ciudad</label>
+                <input type="text" class="adm-input adm-pill-input" id="ship-encomienda-name" placeholder="Nombre de la ciudad" />
+              </div>
+              <div style="width:180px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Costo del envío</label>
+                <input type="number" class="adm-input adm-pill-input" id="ship-encomienda-price" placeholder="Gs. (opcional)" min="0" />
+              </div>
+              <button class="adm-btn adm-btn-primary" id="ship-encomienda-add" type="button" style="white-space:nowrap">Guardar</button>
+            </div>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-encomienda-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
         </div>
       </div>
@@ -2344,6 +2370,15 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
   renderShipList('delivery');
   renderShipList('encomienda');
+});
+
+// Pestañas Delivery / Encomienda dentro de Envíos
+document.querySelectorAll('.ship-tab-btn').forEach(btn => {
+  btn.onclick = () => {
+    const type = btn.dataset.shipTab;
+    document.querySelectorAll('.ship-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.ship-tab-panel').forEach(p => p.classList.toggle('active', p.id === `ship-panel-${type}`));
+  };
 });
 
 /* =============================================
