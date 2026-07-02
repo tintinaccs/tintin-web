@@ -623,6 +623,8 @@
     .ck-map-search-item:hover { background: var(--acc-pale); }
     .ck-map-search-item.ck-map-search-empty { color: var(--text-muted); cursor: default; }
     .ck-map-search-item.ck-map-search-empty:hover { background: none; }
+    .ck-map-search-item-name { font-weight: 700; color: var(--text); }
+    .ck-map-search-item-addr { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
 
     /* ---- TRUST BAR (step 1) ---- */
     .ck-trust-bar {
@@ -1401,6 +1403,11 @@ async function buildConfirmation() {
         <span class="ck-summary-label">🏠 Dirección</span>
         <span class="ck-summary-val">${orderData.address}</span>
       </div>` : ''}
+      ${orderData.mapLocation?.name ? `
+      <div class="ck-summary-row">
+        <span class="ck-summary-label">📍 Lugar</span>
+        <span class="ck-summary-val">${orderData.mapLocation.name}</span>
+      </div>` : ''}
       ${orderData.referencia ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">📌 Referencia</span>
@@ -1472,7 +1479,7 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
   const shipText = shipLabels[orderData.shippingMethod] || orderData.shippingMethod;
 
   const mapLine = orderData.mapLocation
-    ? `\n🗺️ *Ubicación GPS:* https://maps.google.com/?q=${orderData.mapLocation.lat},${orderData.mapLocation.lng}`
+    ? `\n🗺️ *Ubicación:* ${orderData.mapLocation.name ? orderData.mapLocation.name + ' — ' : ''}https://maps.google.com/?q=${orderData.mapLocation.lat},${orderData.mapLocation.lng}`
     : '';
   return `🛍️ *NUEVO PEDIDO — TINTIN ACCESORIOS*${window._lastOrderId ? ` #${window._lastOrderId}` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -1586,13 +1593,22 @@ function initMap() {
 
 // Shared by map clicks, marker drag, and the search box below —
 // a single place that decides "the delivery location changed".
-function saveMapLocation(lat, lng) {
-  orderData.mapLocation = { lat: +lat.toFixed(6), lng: +lng.toFixed(6) };
-  document.getElementById('ck-map-coords').textContent =
-    `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+// `place` (optional) is {name, address} from a search result; dragging the
+// pin or clicking a raw spot on the map has no place info, so it correctly
+// clears any previously-selected business name (it's now just a manual pin).
+function saveMapLocation(lat, lng, place) {
+  orderData.mapLocation = {
+    lat: +lat.toFixed(6),
+    lng: +lng.toFixed(6),
+    ...(place && place.name ? { name: place.name } : {}),
+    ...(place && place.address ? { address: place.address } : {})
+  };
+  document.getElementById('ck-map-coords').textContent = (place && place.name)
+    ? `📍 ${place.name} — podés arrastrar el pin para ajustar`
+    : `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
 }
 
-function placeMarker(lat, lng) {
+function placeMarker(lat, lng, place) {
   const L = window.L;
   const latlng = L.latLng(lat, lng);
   if (!_mapPinIcon) {
@@ -1608,10 +1624,10 @@ function placeMarker(lat, lng) {
 
   _mapMarker.off('dragend').on('dragend', () => {
     const pos = _mapMarker.getLatLng();
-    saveMapLocation(pos.lat, pos.lng);
+    saveMapLocation(pos.lat, pos.lng); // dragged away from the searched spot — treat as a manual pin now
   });
 
-  saveMapLocation(lat, lng);
+  saveMapLocation(lat, lng, place);
 }
 
 let _mapPinIcon = null;
@@ -1632,8 +1648,41 @@ function _buildMap() {
   setTimeout(() => _mapInstance.invalidateSize(), 300);
 }
 
-// ---- MAP SEARCH (Nominatim / OpenStreetMap — free, no API key) ----
+// ---- MAP SEARCH (Nominatim + Overpass / OpenStreetMap — free, no API key) ----
+// Two free OSM services combined so category words ("farmacia", "estación de
+// servicio") work like Google's "search nearby type" instead of only matching
+// literal names: Nominatim finds named places/addresses; Overpass finds
+// everything tagged with a given category inside the delivery zone.
 let _mapSearchDebounce = null;
+
+// Gran Asunción / zona de reparto (ver DELIVERY_CITIES) — usado para sesgar
+// Nominatim hacia resultados relevantes y acotar las búsquedas por categoría.
+const DELIVERY_BBOX = { south: -25.75, west: -57.75, north: -25.05, east: -57.15 };
+
+const CATEGORY_MAP = [
+  { keys: ['estacion de servicio', 'gasolinera', 'combustible', 'nafta', 'servicentro'], tag: 'amenity=fuel', label: 'Estación de servicio' },
+  { keys: ['farmacia'], tag: 'amenity=pharmacy', label: 'Farmacia' },
+  { keys: ['supermercado', 'super'], tag: 'shop=supermarket', label: 'Supermercado' },
+  { keys: ['shopping', 'centro comercial', 'mall'], tag: 'shop=mall', label: 'Shopping' },
+  { keys: ['banco'], tag: 'amenity=bank', label: 'Banco' },
+  { keys: ['hospital'], tag: 'amenity=hospital', label: 'Hospital' },
+  { keys: ['terminal de omnibus', 'terminal de ómnibus', 'terminal'], tag: 'amenity=bus_station', label: 'Terminal de ómnibus' },
+];
+
+function normalizeSearchText(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(new RegExp('[\u0300-\u036f]', 'g'), '').trim();
+}
+
+function matchCategory(query) {
+  const q = normalizeSearchText(query);
+  return CATEGORY_MAP.find(c => c.keys.some(k => q.includes(normalizeSearchText(k)))) || null;
+}
+
+function escapeSearchHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
 
 function initMapSearch() {
   const input = document.getElementById('ck-map-search');
@@ -1653,36 +1702,106 @@ function initMapSearch() {
   });
 }
 
+// Named places, addresses, streets, barrios — matches by name/text.
+async function searchNominatim(query) {
+  const { south, west, north, east } = DELIVERY_BBOX;
+  // viewbox without bounded=1 is a soft bias (closer to the delivery zone
+  // ranks higher) — it doesn't exclude valid results from elsewhere in Paraguay.
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}` +
+    `&countrycodes=py&addressdetails=1&namedetails=1&limit=6&accept-language=es` +
+    `&viewbox=${west},${north},${east},${south}`;
+  const res = await fetch(url);
+  const places = await res.json();
+  return places.map(p => {
+    const name = p.namedetails?.name || p.display_name.split(',')[0].trim();
+    // Address = display_name without the leading name segment, when we have one
+    const address = p.namedetails?.name
+      ? p.display_name.replace(new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ',\\s*'), '')
+      : p.display_name;
+    return { lat: +p.lat, lon: +p.lon, name, address };
+  });
+}
+
+// Category search ("farmacia", "estación de servicio"...) — everything tagged
+// with that type inside the delivery zone, since these are category words,
+// not proper names, and plain name-matching search won't find them.
+async function searchOverpassCategory(cat) {
+  const { south, west, north, east } = DELIVERY_BBOX;
+  const [tagKey, tagVal] = cat.tag.split('=');
+  const query = `[out:json][timeout:8];(node["${tagKey}"="${tagVal}"](${south},${west},${north},${east});way["${tagKey}"="${tagVal}"](${south},${west},${north},${east}););out center 12;`;
+  const res = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'data=' + encodeURIComponent(query)
+  });
+  const data = await res.json();
+  return (data.elements || [])
+    .map(el => {
+      const lat = el.lat ?? el.center?.lat;
+      const lon = el.lon ?? el.center?.lon;
+      const tags = el.tags || {};
+      const street = [tags['addr:street'], tags['addr:housenumber']].filter(Boolean).join(' ');
+      const locality = tags['addr:city'] || tags['addr:suburb'] || '';
+      return {
+        lat, lon,
+        name: tags.name || cat.label,
+        address: [street, locality].filter(Boolean).join(', ') || cat.label
+      };
+    })
+    .filter(r => r.lat && r.lon);
+}
+
 async function searchMapPlace(query) {
   const results = document.getElementById('ck-map-search-results');
+  results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Buscando…</div>';
+  results.classList.add('show');
+
+  const cat = matchCategory(query);
+  let places;
   try {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=py&addressdetails=1&limit=6&accept-language=es`;
-    const res = await fetch(url);
-    const places = await res.json();
-
-    if (!places.length) {
-      results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Sin resultados — probá con otro nombre o marcá manualmente en el mapa</div>';
-      results.classList.add('show');
-      return;
-    }
-
-    results.innerHTML = places.map((p, i) => `<div class="ck-map-search-item" data-idx="${i}">📍 ${p.display_name}</div>`).join('');
-    results.classList.add('show');
-    results.querySelectorAll('.ck-map-search-item[data-idx]').forEach(el => {
-      el.onclick = () => {
-        const p = places[+el.dataset.idx];
-        const lat = +p.lat, lng = +p.lon;
-        _mapInstance.setView([lat, lng], 17);
-        placeMarker(lat, lng);
-        document.getElementById('ck-map-search').value = p.display_name;
-        results.classList.remove('show');
-      };
-    });
+    const [nominatimResults, overpassResults] = await Promise.all([
+      searchNominatim(query),
+      // Overpass is a secondary/best-effort source: if it fails or times out,
+      // the search still works with Nominatim's name-based results alone.
+      cat ? searchOverpassCategory(cat).catch(() => []) : Promise.resolve([])
+    ]);
+    // Category matches surface first since that's literally what was typed.
+    places = [...overpassResults, ...nominatimResults];
   } catch (e) {
     console.error('Error buscando ubicación:', e);
     results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">No se pudo buscar — probá de nuevo o marcá manualmente en el mapa</div>';
-    results.classList.add('show');
+    return;
   }
+
+  // Overpass and Nominatim can both return the same POI — dedupe by rounded coords.
+  const seen = new Set();
+  places = places.filter(p => {
+    const key = `${p.lat.toFixed(4)},${p.lon.toFixed(4)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 8);
+
+  if (!places.length) {
+    results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Sin resultados — probá con otro nombre o marcá manualmente en el mapa</div>';
+    return;
+  }
+
+  results.innerHTML = places.map((p, i) => `
+    <div class="ck-map-search-item" data-idx="${i}">
+      <div class="ck-map-search-item-name">📍 ${escapeSearchHtml(p.name)}</div>
+      <div class="ck-map-search-item-addr">${escapeSearchHtml(p.address)}</div>
+    </div>
+  `).join('');
+  results.querySelectorAll('.ck-map-search-item[data-idx]').forEach(el => {
+    el.onclick = () => {
+      const p = places[+el.dataset.idx];
+      _mapInstance.setView([p.lat, p.lon], 17);
+      placeMarker(p.lat, p.lon, { name: p.name, address: p.address });
+      document.getElementById('ck-map-search').value = p.name;
+      results.classList.remove('show');
+    };
+  });
 }
 
 // ---- INIT ----

@@ -4264,6 +4264,17 @@ window.openOrderEdit = function(orderId) {
   document.getElementById('oe-city').value = o.shipping?.city || o.city || '';
   document.getElementById('oe-address').value = o.shipping?.address || o.address || '';
   document.getElementById('oe-referencia').value = o.shipping?.referencia || o.referencia || '';
+  const oeMapLoc = o.shipping?.mapLocation || null;
+  const oeMapWrap = document.getElementById('oe-map-location-wrap');
+  if (oeMapLoc) {
+    oeMapWrap.style.display = 'flex';
+    const mapUrl = `https://maps.google.com/?q=${oeMapLoc.lat},${oeMapLoc.lng}`;
+    document.getElementById('oe-map-location-info').innerHTML =
+      (oeMapLoc.name ? `<strong>${oeMapLoc.name}</strong><br>` : '') +
+      `<a href="${mapUrl}" target="_blank" rel="noopener">Ver en Google Maps →</a>`;
+  } else {
+    oeMapWrap.style.display = 'none';
+  }
   document.getElementById('oe-ship-method').value = o.shipping?.method || o.shippingMethod || 'delivery';
   document.getElementById('oe-pay-method').value = o.payment?.method || o.paymentMethod || 'efectivo';
   document.getElementById('oe-pay-status').value = o.payment?.status || o.paymentStatus || 'pendiente';
@@ -4469,6 +4480,10 @@ window.saveOrderEdit = async function() {
       <div style="display:flex;flex-direction:column;gap:5px">
         <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Referencia</label>
         <input id="oe-referencia" type="text" class="adm-input" placeholder="Cerca de…">
+      </div>
+      <div id="oe-map-location-wrap" style="display:none;flex-direction:column;gap:5px;grid-column:1/-1">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Ubicación del mapa (elegida por la clienta)</label>
+        <div id="oe-map-location-info" style="font-size:13px;color:var(--adm-text)"></div>
       </div>
       <!-- Pago y estado -->
       <div style="display:flex;flex-direction:column;gap:5px">

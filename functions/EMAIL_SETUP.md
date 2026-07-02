@@ -120,6 +120,7 @@ function buildText(shortId, order) {
     '📍 Ciudad:   ' + (shipping.city || '—') + '\n' +
     '🗺️ Zona:     ' + zoneLabel(order) + '\n' +
     (shipping.address ? '🏠 Dirección: ' + shipping.address + '\n' : '') +
+    (shipping.mapLocation && shipping.mapLocation.name ? '📍 Lugar: ' + shipping.mapLocation.name + '\n' : '') +
     (shipping.referencia ? '📌 Referencia: ' + shipping.referencia + '\n' : '') +
     (shipping.mapLocation ? '📌 Ubicación GPS: https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '\n' : '') +
     line + '\n' +
@@ -154,6 +155,7 @@ function buildHtml(shortId, order) {
     '<tr><td style="color:#888;padding:4px 0">Ciudad</td><td>' + (shipping.city || '—') + '</td></tr>' +
     '<tr><td style="color:#888;padding:4px 0">Zona</td><td>' + zoneLabel(order) + '</td></tr>' +
     (shipping.address ? '<tr><td style="color:#888;padding:4px 0">Dirección</td><td>' + shipping.address + '</td></tr>' : '') +
+    (shipping.mapLocation && shipping.mapLocation.name ? '<tr><td style="color:#888;padding:4px 0">Lugar</td><td>' + shipping.mapLocation.name + '</td></tr>' : '') +
     (shipping.referencia ? '<tr><td style="color:#888;padding:4px 0">Referencia</td><td>' + shipping.referencia + '</td></tr>' : '') +
     (shipping.mapLocation ? '<tr><td style="color:#888;padding:4px 0">Ubicación</td><td><a href="https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '">Ver en el mapa</a></td></tr>' : '') +
     '<tr><td style="color:#888;padding:4px 0">Entrega</td><td>' + shipMethodLabel(order) + '</td></tr>' +
