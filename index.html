@@ -314,15 +314,18 @@
   }, SAFETY_MS);
 })();
 </script>
-<!-- Fallback: hide splash + unlock scroll on window load in case main script crashed -->
+<!-- Fallback real: solo actúa si el script principal del splash se rompió
+     y nunca lo cerró. Corre después de su propio SAFETY_MS (4200ms) para
+     no competir con la duración mínima elegante — antes disparaba en
+     window.load, que en conexiones rápidas/con caché ocurre en menos de
+     1600ms y cortaba el splash de golpe (efecto de parpadeo). -->
 <script>
 function _ttUnlock(){document.documentElement.classList.remove('tt-splash-lock');if(document.body)document.body.classList.remove('tt-splash-lock');}
-window.addEventListener('load',function(){
+setTimeout(function(){
   _ttUnlock();
   var e=document.getElementById('tt-intro');
   if(e&&!e.classList.contains('tt-out')){e.classList.add('tt-out');setTimeout(function(){_ttUnlock();if(e.parentNode)e.parentNode.removeChild(e);},600);}
-});
-setTimeout(function(){_ttUnlock();},5500);
+},5500);
 </script>
 
 <!-- ══════════════════════════════════════
