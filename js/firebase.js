@@ -37,11 +37,9 @@ try {
 }
 
 const auth = getAuth(app);
-// Todos los correos de Firebase Auth (recuperar contraseña, verificación,
-// etc.) salen en el idioma acá configurado — se fija una sola vez en el
-// punto central de inicialización para que aplique en todas las páginas
-// que importan `auth` de este archivo (login.html, checkout.html, etc.),
-// sin tener que repetirlo antes de cada sendPasswordResetEmail/sendEmailVerification.
+// Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
+// en el punto central de inicialización para que aplique en todas las
+// páginas que importan `auth` de este archivo.
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });

@@ -128,7 +128,7 @@
       text-transform: uppercase; margin-top: 2px;
     }
 
-    .login-box { width: 100%; max-width: 380px; }
+    .login-box { width: 100%; max-width: 380px; text-align: center; }
 
     .login-heading {
       font-size: 22px; font-weight: 800;
@@ -139,128 +139,37 @@
       margin-bottom: 28px;
     }
 
-    /* TABS */
-    .login-tabs {
-      display: flex; gap: 0;
-      background: var(--acc-pale);
-      border-radius: 50px; padding: 4px;
-      margin-bottom: 24px;
-    }
-    .login-tab {
-      flex: 1; padding: 10px;
-      border: none; background: transparent;
-      border-radius: 50px;
-      font-size: 12px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: var(--muted); cursor: pointer;
-      transition: all .2s; font-family: var(--font);
-    }
-    .login-tab.active {
-      background: var(--acc); color: #fff;
-      box-shadow: 0 4px 12px rgba(184,76,114,.3);
-    }
-
-    /* FORM */
-    .login-form { display: none; flex-direction: column; gap: 14px; }
-    .login-form.active { display: flex; }
-
-    .login-field { display: flex; flex-direction: column; gap: 5px; }
-    .login-label {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: var(--muted);
-    }
-    .login-input {
-      padding: 13px 16px;
-      border: 1.5px solid #f0e0e8;
-      border-radius: 12px;
-      font-size: 14px; font-family: var(--font);
-      color: var(--text); background: #fafafa;
-      transition: border .2s, box-shadow .2s;
-    }
-    .login-input:focus {
-      outline: none; border-color: var(--acc);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(184,76,114,.1);
-    }
-    .login-hint { font-size: 11px; color: var(--muted); }
-
-    /* Password field with show/hide toggle */
-    .login-pass-wrap { position: relative; }
-    .login-pass-wrap .login-input { width: 100%; padding-right: 44px; }
-    .login-pass-toggle {
-      position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-      background: none; border: none; cursor: pointer; color: var(--muted);
-      border-radius: 50%; transition: background .2s, color .2s;
-    }
-    .login-pass-toggle:hover { background: var(--acc-pale); color: var(--acc); }
-
-    /* Phone field: country select + number */
-    .login-phone-row { display: flex; gap: 8px; }
-    .login-phone-row select.login-input { flex: 0 0 108px; padding-left: 10px; padding-right: 10px; }
-    .login-phone-row input.login-input { flex: 1; min-width: 0; }
+    .login-hint { font-size: 11px; color: var(--muted); line-height: 1.6; }
 
     /* SUCCESS banner (green) — mirrors .login-error but for confirmations */
     .login-success {
       background: #e8f5e9; color: #2e7d32;
       padding: 10px 14px; border-radius: 10px;
       font-size: 12px; font-weight: 600; display: none;
-      border-left: 3px solid #4caf50;
+      border-left: 3px solid #4caf50; text-align: left;
+      margin-bottom: 16px;
     }
     .login-success.show { display: block; }
 
-    /* Verification-pending panel — shown instead of the tabs/forms right after
-       registering, until the customer verifies or goes to log in later */
-    .login-verify-panel { display: none; flex-direction: column; gap: 16px; text-align: center; }
-    .login-verify-panel.active { display: flex; }
-    .login-verify-icon { font-size: 40px; }
-    .login-verify-title { font-size: 18px; font-weight: 800; color: var(--text); }
-    .login-verify-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
-    .login-verify-text strong { color: var(--text); }
-    .login-resend-btn {
-      background: none; border: 1.5px solid #f0e0e8; border-radius: 50px;
-      padding: 12px; font-size: 12px; font-weight: 700; color: var(--acc);
-      cursor: pointer; font-family: var(--font); transition: all .2s;
-    }
-    .login-resend-btn:hover:not(:disabled) { background: var(--acc-pale); border-color: var(--acc); }
-    .login-resend-btn:disabled { color: var(--muted); cursor: default; opacity: .7; }
-
-    .login-btn {
-      padding: 14px; background: var(--acc);
-      color: #fff; border: none; border-radius: 50px;
-      font-size: 13px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: .1em;
-      cursor: pointer; font-family: var(--font);
-      transition: all .2s; margin-top: 4px;
-      box-shadow: 0 4px 16px rgba(184,76,114,.35);
-    }
-    .login-btn:hover { background: var(--acc-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(184,76,114,.4); }
-    .login-btn:active { transform: translateY(0); }
-
-    .login-divider {
-      display: flex; align-items: center; gap: 12px;
-      color: var(--muted); font-size: 11px; font-weight: 600;
-    }
-    .login-divider::before, .login-divider::after {
-      content: ''; flex: 1; height: 1px; background: #f0e0e8;
-    }
-
     .login-google {
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 13px; border: 1.5px solid #f0e0e8; border-radius: 50px;
-      font-size: 13px; font-weight: 700; color: var(--text);
+      width: 100%;
+      padding: 15px; border: 1.5px solid #f0e0e8; border-radius: 50px;
+      font-size: 14px; font-weight: 700; color: var(--text);
       cursor: pointer; background: #fff; font-family: var(--font);
       transition: all .2s;
+      box-shadow: 0 4px 16px rgba(184,76,114,.12);
     }
     .login-google:hover { border-color: var(--acc); background: var(--acc-pale); }
+    .login-google:active { transform: translateY(1px); }
 
     /* ERROR */
     .login-error {
       background: #ffebee; color: #c62828;
       padding: 10px 14px; border-radius: 10px;
       font-size: 12px; font-weight: 600; display: none;
-      border-left: 3px solid #e53935;
+      border-left: 3px solid #e53935; text-align: left;
+      margin-bottom: 16px;
     }
     .login-error.show { display: block; }
 
@@ -271,13 +180,6 @@
     }
     .login-back a { color: var(--acc); font-weight: 700; text-decoration: none; }
     .login-back a:hover { text-decoration: underline; }
-
-    /* FORGOT */
-    .login-forgot {
-      text-align: right; margin-top: -8px;
-    }
-    .login-forgot a { font-size: 11px; color: var(--muted); text-decoration: none; }
-    .login-forgot a:hover { color: var(--acc); }
   </style>
   <script src="js/page-loader.js"></script>
 </head>
@@ -314,171 +216,23 @@
 
     <div class="login-box">
       <div class="login-heading" id="login-heading">Bienvenida 💕</div>
-      <div class="login-heading-sub" id="login-heading-sub">Ingresá a tu cuenta o creá una nueva</div>
-
-      <!-- TABS -->
-      <div class="login-tabs" id="login-tabs">
-        <button class="login-tab active" data-tab="login">Ingresar</button>
-        <button class="login-tab" data-tab="registro">Registrarse</button>
-        <button class="login-tab" data-tab="recuperar">Recuperar</button>
-      </div>
+      <div class="login-heading-sub" id="login-heading-sub">Ingresá con tu cuenta de Google para continuar</div>
 
       <!-- ERROR / SUCCESS -->
       <div class="login-error" id="login-error"></div>
       <div class="login-success" id="login-success"></div>
 
-      <!-- FORM LOGIN -->
-      <div class="login-form active" id="form-login">
-        <div class="login-field">
-          <label class="login-label">Email</label>
-          <input type="email" class="login-input" id="login-email" placeholder="tu@email.com" autocomplete="email" />
-        </div>
-        <div class="login-field">
-          <label class="login-label">Contraseña</label>
-          <div class="login-pass-wrap">
-            <input type="password" class="login-input" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
-            <button type="button" class="login-pass-toggle" data-toggle-for="login-pass" aria-label="Mostrar contraseña">👁️</button>
-          </div>
-        </div>
-        <div class="login-forgot"><a href="#" id="link-forgot">¿Olvidaste tu contraseña?</a></div>
-        <button class="login-btn" id="btn-login-email">Ingresar</button>
-        <div class="login-divider">o</div>
-        <button class="login-google" id="btn-login-google">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
-          Continuar con Google
-        </button>
-      </div>
+      <!-- ÚNICO MÉTODO DE INGRESO: Google. Sirve tanto para crear la cuenta
+           la primera vez como para iniciar sesión las siguientes. -->
+      <button type="button" class="login-google" id="btn-google">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" alt="Google" />
+        Continuar con Google
+      </button>
 
-      <!-- FORM REGISTRO -->
-      <div class="login-form" id="form-registro">
-        <div class="login-field">
-          <label class="login-label">Nombre completo</label>
-          <input type="text" class="login-input" id="reg-nombre" placeholder="Tu nombre" autocomplete="name" />
-        </div>
-        <div class="login-field">
-          <label class="login-label">Email</label>
-          <input type="email" class="login-input" id="reg-email" placeholder="tu@email.com" autocomplete="email" />
-        </div>
-        <div class="login-field">
-          <label class="login-label">Teléfono</label>
-          <div class="login-phone-row">
-            <select class="login-input" id="reg-phone-country"></select>
-            <input type="tel" class="login-input" id="reg-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" />
-          </div>
-        </div>
-        <div class="login-field">
-          <label class="login-label">Contraseña</label>
-          <div class="login-pass-wrap">
-            <input type="password" class="login-input" id="reg-pass" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
-            <button type="button" class="login-pass-toggle" data-toggle-for="reg-pass" aria-label="Mostrar contraseña">👁️</button>
-          </div>
-        </div>
-        <div class="login-field">
-          <label class="login-label">Confirmar contraseña</label>
-          <div class="login-pass-wrap">
-            <input type="password" class="login-input" id="reg-pass2" placeholder="Repetí tu contraseña" autocomplete="new-password" />
-            <button type="button" class="login-pass-toggle" data-toggle-for="reg-pass2" aria-label="Mostrar contraseña">👁️</button>
-          </div>
-        </div>
-        <button class="login-btn" id="btn-registrar">Crear cuenta</button>
-        <div class="login-divider">o</div>
-        <button class="login-google" id="btn-reg-google">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
-          Registrarse con Google
-        </button>
-      </div>
-
-      <!-- FORM RECUPERAR CONTRASEÑA -->
-      <div class="login-form" id="form-recuperar">
-        <div class="login-field">
-          <label class="login-label">Email de tu cuenta</label>
-          <input type="email" class="login-input" id="recover-email" placeholder="tu@email.com" autocomplete="email" />
-        </div>
-        <div class="login-hint">Te enviamos un enlace para restablecer tu contraseña si el correo tiene una cuenta.</div>
-        <button class="login-btn" id="btn-recuperar">Enviar enlace de recuperación</button>
-
-        <!-- Aviso genérico (no depende del email escrito, no revela si esa
-             cuenta puntual existe ni qué proveedor usa — evita el riesgo de
-             enumeración de fetchSignInMethodsForEmail, que Firebase mismo
-             discontinuó por eso). Ayuda igual a quien se registró con Google
-             y no entiende por qué "recuperar" no le sirve. -->
-        <div class="login-divider" style="margin:4px 0">o</div>
-        <div class="login-hint" style="text-align:center">¿Te registraste con Google? Ahí no tenés contraseña de Tintin para restablecer.</div>
-        <button type="button" class="login-google" id="btn-recover-google">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
-          Continuar con Google
-        </button>
-      </div>
-
-      <!-- PANEL: VERIFICÁ TU CORREO (se muestra tras registrarse) -->
-      <div class="login-verify-panel" id="verify-panel">
-        <div class="login-verify-icon">📩</div>
-        <div class="login-verify-title">¡Casi listo!</div>
-        <div class="login-verify-text">
-          Te enviamos un correo a <strong id="verify-email-shown"></strong> para confirmar tu cuenta.
-          Abrí ese correo y hacé clic en el enlace de verificación — después ya vas a poder iniciar sesión.
-        </div>
-        <button class="login-resend-btn" id="btn-resend-verify">Reenviar correo de verificación</button>
-        <div class="login-back" style="margin-top:0">
-          <a href="#" id="link-verify-to-login">Ya verifiqué, ir a iniciar sesión</a>
-        </div>
-      </div>
-
-      <!-- PANEL: RESTABLECER CONTRASEÑA — reemplaza la pantalla genérica de
-           Firebase cuando el link del correo trae ?mode=resetPassword&oobCode=…
-           (requiere configurar la "Customize action URL" en Firebase Console,
-           ver functions/FIREBASE_AUTH_EMAILS.md) -->
-      <div class="login-verify-panel" id="reset-action-panel">
-        <div id="reset-action-loading">
-          <div class="login-verify-icon">🔑</div>
-          <div class="login-verify-title">Verificando el enlace…</div>
-        </div>
-        <div id="reset-action-form" style="display:none;flex-direction:column;gap:14px">
-          <div class="login-verify-icon">🔑</div>
-          <div class="login-verify-title">Elegí tu nueva contraseña</div>
-          <div class="login-verify-text">Cuenta: <strong id="reset-action-email"></strong></div>
-          <div class="login-field" style="text-align:left">
-            <label class="login-label">Nueva contraseña</label>
-            <input type="password" class="login-input" id="reset-new-pass" autocomplete="new-password" placeholder="Mínimo 8 caracteres" />
-          </div>
-          <div class="login-field" style="text-align:left">
-            <label class="login-label">Repetí la contraseña</label>
-            <input type="password" class="login-input" id="reset-new-pass2" autocomplete="new-password" />
-          </div>
-          <button class="login-btn" id="btn-reset-confirm" style="margin-top:0">Guardar nueva contraseña</button>
-        </div>
-        <div id="reset-action-expired" style="display:none">
-          <div class="login-verify-icon">⏰</div>
-          <div class="login-verify-title">Este enlace ya fue usado o caducó</div>
-          <div class="login-verify-text">Solicitá uno nuevo para recuperar tu contraseña.</div>
-          <button class="login-resend-btn" id="btn-reset-request-new">Solicitar nuevo enlace</button>
-        </div>
-        <div id="reset-action-success" style="display:none">
-          <div class="login-verify-icon">✅</div>
-          <div class="login-verify-title">¡Contraseña actualizada!</div>
-          <div class="login-verify-text">Ya podés iniciar sesión con tu nueva contraseña.</div>
-          <button class="login-btn" id="btn-reset-goto-login" style="margin-top:12px">Ir a iniciar sesión</button>
-        </div>
-      </div>
-
-      <!-- PANEL: VERIFICACIÓN DE CORREO vía link (?mode=verifyEmail&oobCode=…) -->
-      <div class="login-verify-panel" id="verify-action-panel">
-        <div id="verify-action-loading">
-          <div class="login-verify-icon">📩</div>
-          <div class="login-verify-title">Verificando tu correo…</div>
-        </div>
-        <div id="verify-action-success" style="display:none">
-          <div class="login-verify-icon">✅</div>
-          <div class="login-verify-title">¡Correo verificado!</div>
-          <div class="login-verify-text">Ya podés iniciar sesión.</div>
-          <button class="login-btn" id="btn-verify-action-goto-login" style="margin-top:12px">Ir a iniciar sesión</button>
-        </div>
-        <div id="verify-action-expired" style="display:none">
-          <div class="login-verify-icon">⏰</div>
-          <div class="login-verify-title">Este enlace ya fue usado o caducó</div>
-          <div class="login-verify-text">Iniciá sesión con tu cuenta y te ofrecemos reenviar el correo de verificación.</div>
-          <button class="login-btn" id="btn-verify-action-goto-login2" style="margin-top:12px">Ir a iniciar sesión</button>
-        </div>
+      <div class="login-hint" style="text-align:center;margin-top:18px">
+        Es gratis y toma unos segundos. Usamos tu cuenta de Google para guardar
+        tu pedido y enviarte la confirmación por correo — no creamos ni
+        guardamos ninguna contraseña de Tintin.
       </div>
 
       <div class="login-back" id="login-back-link">
@@ -492,201 +246,25 @@
 <script type="module">
 import { auth, db, provider } from "./js/firebase.js";
 import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   signInWithPopup,
-  updateProfile,
   onAuthStateChanged,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  verifyPasswordResetCode,
-  confirmPasswordReset,
-  applyActionCode,
-  signOut,
-  reload
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, BLOCKED_MESSAGE } from "./js/roles.js";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js";
-
-// El link "Continuar" en la página de Firebase (tras verificar el correo o
-// restablecer la contraseña) vuelve acá.
-const actionCodeSettings = { url: 'https://tintinaccs.github.io/tintin-web/login.html' };
 
 const overlay = document.getElementById('tt-page-loading');
 const overlayTextEl = document.getElementById('tt-page-loading-text');
 function showOverlay() { if (overlay) overlay.style.display = 'flex'; }
-// Siempre vuelve el texto a "Cargando…" al ocultarlo — el overlay es
-// compartido (login/registro/Google), así que no puede quedar pegado el
-// texto de un caso puntual (ej. "Esperando a Google…") la próxima vez que
-// se use para otra cosa.
+// Siempre vuelve el texto a "Cargando…" al ocultarlo — por si se reusa para
+// otra cosa más adelante en la misma carga de página.
 function hideLoginOverlay() {
   if (overlay) overlay.style.display = 'none';
   setOverlayText('Cargando…');
 }
 function setOverlayText(text) { if (overlayTextEl) overlayTextEl.textContent = text; }
-
-// ══════════════════════════════════════════════
-// ACCIÓN DESDE EL CORREO: ?mode=resetPassword|verifyEmail&oobCode=…
-// Reemplaza la pantalla genérica de Firebase (a veces en inglés, sin el
-// diseño de Tintin) por una propia. Para que el link del correo traiga acá
-// en vez de a firebaseapp.com hace falta configurar la "Customize action
-// URL" en Firebase Console — ver functions/FIREBASE_AUTH_EMAILS.md. Si esa
-// configuración no está hecha todavía, esto simplemente nunca se activa (el
-// link sigue yendo a la pantalla de Firebase como antes) — no rompe nada.
-const actionParams  = new URLSearchParams(window.location.search);
-const actionMode    = actionParams.get('mode');
-const actionOobCode = actionParams.get('oobCode');
-
-function showActionOnlyPanel(panelId) {
-  document.getElementById('login-tabs').style.display = 'none';
-  document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
-  document.querySelectorAll('.login-verify-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(panelId).classList.add('active');
-}
-// Usado por los botones "Ir a iniciar sesión" / "Solicitar nuevo enlace" de
-// los paneles de acción — vuelve a los tabs normales sin recargar la página.
-function returnToTabs(tabName) {
-  document.querySelectorAll('.login-verify-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('login-tabs').style.display = '';
-  switchTab(tabName);
-}
-
-if (actionMode === 'resetPassword' && actionOobCode) {
-  hideLoginOverlay();
-  showActionOnlyPanel('reset-action-panel');
-  runResetPasswordAction(actionOobCode);
-} else if (actionMode === 'verifyEmail' && actionOobCode) {
-  hideLoginOverlay();
-  showActionOnlyPanel('verify-action-panel');
-  runVerifyEmailAction(actionOobCode);
-} else {
-
-// Si ya está logueada y con el correo verificado → redirigir sin mostrar el
-// formulario. Si está logueada pero SIN verificar (por ej. se registró, cerró
-// la pestaña sin confirmar, y vuelve a entrar acá más tarde), se queda viendo
-// el panel de verificación en vez de pasar a perfil.html.
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    hideLoginOverlay();
-    // Deep link desde el header ("Crear cuenta" → login.html#registro)
-    if (location.hash === '#registro') switchTab('registro');
-    // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
-    // detectar una cuenta bloqueada (Fase E).
-    if (new URLSearchParams(window.location.search).get('blocked') === '1') {
-      showError(BLOCKED_MESSAGE);
-    }
-    return;
-  }
-  try { await reload(user); } catch {} // trae el emailVerified más reciente del servidor
-  if (!user.emailVerified) { hideLoginOverlay(); showVerifyPanel(user.email); return; }
-  if (await checkBlocked(user.uid, user.email)) {
-    await signOut(auth);
-    hideLoginOverlay();
-    showError(BLOCKED_MESSAGE);
-    return;
-  }
-  const role = await getUserRole(user.uid, user.email);
-  redirectByRole(role);
-});
-
-} // fin del else (actionMode !== resetPassword/verifyEmail)
-
-// Cuenta bloqueada (Fase E) — tintinaccs@gmail.com nunca puede estarlo.
-async function checkBlocked(uid, email) {
-  if (email === SUPER_ADMIN) return false;
-  try {
-    const snap = await getDoc(doc(db, 'users', uid));
-    return snap.exists() && snap.data().blocked === true;
-  } catch {
-    return false;
-  }
-}
-
-// ---- ACCIÓN: RESTABLECER CONTRASEÑA (?mode=resetPassword&oobCode=…) ----
-// verifyPasswordResetCode/confirmPasswordReset son 100% client-side y
-// seguras: el código se valida del lado del servidor de Firebase, nunca se
-// maneja ninguna clave ni token propio — no hace falta backend ni Blaze.
-async function runResetPasswordAction(oobCode) {
-  try {
-    const email = await verifyPasswordResetCode(auth, oobCode);
-    document.getElementById('reset-action-loading').style.display = 'none';
-    document.getElementById('reset-action-email').textContent = email;
-    document.getElementById('reset-action-form').style.display = 'flex';
-  } catch (e) {
-    // auth/expired-action-code, auth/invalid-action-code (ya usado), etc.
-    document.getElementById('reset-action-loading').style.display = 'none';
-    document.getElementById('reset-action-expired').style.display = 'block';
-  }
-
-  document.getElementById('btn-reset-confirm').onclick = async () => {
-    hideMessages();
-    const pass  = document.getElementById('reset-new-pass').value;
-    const pass2 = document.getElementById('reset-new-pass2').value;
-    if (!pass || pass.length < 8) { showError('La contraseña debe tener al menos 8 caracteres.'); return; }
-    if (pass !== pass2) { showError('Las contraseñas no coinciden.'); return; }
-    const btn = document.getElementById('btn-reset-confirm');
-    btn.disabled = true;
-    try {
-      await confirmPasswordReset(auth, oobCode, pass);
-      document.getElementById('reset-action-form').style.display = 'none';
-      document.getElementById('reset-action-success').style.display = 'block';
-    } catch (e) {
-      btn.disabled = false;
-      // El código puede vencer justo entre "verificar" y "confirmar" — mismo
-      // mensaje de "caducó" que en la verificación inicial.
-      if (e.code === 'auth/expired-action-code' || e.code === 'auth/invalid-action-code') {
-        document.getElementById('reset-action-form').style.display = 'none';
-        document.getElementById('reset-action-expired').style.display = 'block';
-      } else {
-        showError(errMsg(e.code));
-      }
-    }
-  };
-  document.getElementById('btn-reset-request-new').onclick = () => returnToTabs('recuperar');
-  document.getElementById('btn-reset-goto-login').onclick = () => returnToTabs('login');
-}
-
-// ---- ACCIÓN: VERIFICAR CORREO (?mode=verifyEmail&oobCode=…) ----
-async function runVerifyEmailAction(oobCode) {
-  try {
-    await applyActionCode(auth, oobCode);
-    document.getElementById('verify-action-loading').style.display = 'none';
-    document.getElementById('verify-action-success').style.display = 'block';
-  } catch (e) {
-    document.getElementById('verify-action-loading').style.display = 'none';
-    document.getElementById('verify-action-expired').style.display = 'block';
-  }
-  document.getElementById('btn-verify-action-goto-login').onclick  = () => returnToTabs('login');
-  document.getElementById('btn-verify-action-goto-login2').onclick = () => returnToTabs('login');
-}
-
-function redirectByRole(role) {
-  const from = new URLSearchParams(window.location.search).get('from');
-  if (role === 'client' || !role) {
-    window.location.href = from || "perfil.html";
-  } else {
-    window.location.href = "admin.html";
-  }
-}
-
-function normalizeEmail(s) { return String(s || '').trim().toLowerCase(); }
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// TABS
-document.querySelectorAll(".login-tab").forEach(tab => {
-  tab.onclick = () => switchTab(tab.dataset.tab);
-});
-function switchTab(name) {
-  document.querySelectorAll(".login-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-  document.querySelectorAll(".login-form").forEach(f => f.classList.remove("active"));
-  document.getElementById("form-" + name).classList.add("active");
-  document.getElementById('verify-panel').classList.remove('active');
-  document.getElementById('login-tabs').style.display = '';
-  hideMessages();
-}
 
 function showError(html) {
   hideMessages();
@@ -703,74 +281,53 @@ function hideMessages() {
   document.getElementById("login-success").classList.remove("show");
 }
 
-// Si el error trae un link accionable (ej. "Ya existe una cuenta... Iniciá
-// sesión"), lo conecta después de insertarlo en el DOM.
-function wireDupeLoginLink() {
-  const link = document.getElementById('err-goto-login');
-  if (link) link.onclick = (e) => {
-    e.preventDefault();
-    switchTab('login');
-    document.getElementById('login-email').value = document.getElementById('reg-email').value;
-  };
-}
-
 function errMsg(code) {
   const msgs = {
-    "auth/user-not-found":       "No existe una cuenta con ese email.",
-    "auth/wrong-password":       "Contraseña incorrecta.",
-    "auth/email-already-in-use": 'Este correo ya tiene una cuenta registrada. <a href="#" id="err-goto-login">Iniciá sesión</a> para continuar.',
-    "auth/weak-password":        "La contraseña debe tener al menos 8 caracteres.",
-    "auth/invalid-email":        "Ingresá un correo válido.",
-    "auth/too-many-requests":    "Demasiados intentos. Esperá un momento e intentá de nuevo.",
-    "auth/popup-closed-by-user": "Cerraste la ventana de Google antes de terminar.",
-    "auth/invalid-credential":   "Email o contraseña incorrectos.",
-    "auth/user-disabled":        "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
-    "auth/network-request-failed": "Sin conexión — revisá tu internet e intentá de nuevo.",
-    "auth/account-exists-with-different-credential": "Ya existe una cuenta con este correo usando otro método de acceso. Iniciá sesión con tu contraseña.",
-    "auth/missing-password":     "Ingresá una contraseña.",
+    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
+    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
+    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
+    "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
+    "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
+    "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
   };
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
-// Devuelve { role, blocked } — una cuenta recién creada nunca está bloqueada;
-// una existente puede estarlo (Fase E), y quien llama debe revisarlo antes
-// de redirigir a ningún lado.
-//
-// authProvider: se lee directo de user.providerData (dato propio de la
-// cuenta ya autenticada, sin ninguna consulta por email) — nunca 'fetchSignInMethodsForEmail',
-// que Firebase discontinuó porque permite adivinar qué cuentas existen.
-// Guarda 'password' o 'google.com' según con qué se creó/inició sesión esa
-// cuenta — lo usa el flujo de "Recuperar contraseña" más abajo.
-function detectAuthProvider(user) {
-  return user.providerData?.[0]?.providerId || 'password';
-}
-
-// Espejo mínimo en emailProviders/{email} — SOLO { provider } — para que el
-// formulario de "Recuperar contraseña" pueda consultarlo sin estar logueado.
-// Best-effort: si falla (ej. sin conexión), no bloquea el login/registro.
-async function saveEmailProvider(email, authProvider) {
-  try {
-    const emailId = email.trim().toLowerCase();
-    await setDoc(doc(db, 'emailProviders', emailId), { provider: authProvider }, { merge: true });
-  } catch (e) {
-    console.error('No se pudo guardar emailProviders:', e);
+function redirectByRole(role) {
+  const from = new URLSearchParams(window.location.search).get('from');
+  if (role === 'client' || !role) {
+    window.location.href = from || "perfil.html";
+  } else {
+    window.location.href = "admin.html";
   }
 }
 
-async function guardarUsuario(user, nombre, phone) {
+// Cuenta bloqueada (Fase E) — tintinaccs@gmail.com nunca puede estarlo.
+async function checkBlocked(uid, email) {
+  if (email === SUPER_ADMIN) return false;
+  try {
+    const snap = await getDoc(doc(db, 'users', uid));
+    return snap.exists() && snap.data().blocked === true;
+  } catch {
+    return false;
+  }
+}
+
+// Crea el perfil la primera vez que alguien entra con Google, o solo
+// actualiza lastLogin las siguientes veces — Google ya entrega nombre, foto
+// y correo verificado, así que no hace falta ningún formulario de registro
+// aparte ni un paso de verificación de correo.
+async function guardarUsuario(user) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-  const authProvider = detectAuthProvider(user);
-  saveEmailProvider(user.email, authProvider); // no bloquea el flujo principal
   if (!snap.exists()) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     await setDoc(ref, {
-      name: nombre || user.displayName || "",
+      name: user.displayName || "",
       email: user.email,
-      phone: phone || "",
+      phone: "",
       photoURL: user.photoURL || "",
       role,
-      authProvider,
       onboardingCompleted: false,
       blocked: false,
       purchaseCount: 0,
@@ -783,189 +340,38 @@ async function guardarUsuario(user, nombre, phone) {
     const data = snap.data();
     // Ensure superadmin email always has correct role
     if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
-      await setDoc(ref, { role: 'superadmin', authProvider, lastLogin: serverTimestamp() }, { merge: true });
+      await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
       return { role: 'superadmin', blocked: false };
     }
-    // authProvider se guarda/actualiza en cada login — así las cuentas viejas
-    // que se crearon antes de este cambio quedan completadas solas, sin
-    // necesitar ninguna migración aparte.
-    const patch = { lastLogin: serverTimestamp(), authProvider };
-    if (phone && !data.phone) patch.phone = phone; // completa el teléfono si faltaba, sin pisar uno ya guardado
-    await setDoc(ref, patch, { merge: true });
+    await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
     return { role: data.role || 'client', blocked: !!data.blocked };
   }
 }
 
-// MOSTRAR/OCULTAR CONTRASEÑA
-document.querySelectorAll('.login-pass-toggle').forEach(btn => {
-  btn.onclick = () => {
-    const input = document.getElementById(btn.dataset.toggleFor);
-    const showing = input.type === 'text';
-    input.type = showing ? 'password' : 'text';
-    btn.textContent = showing ? '👁️' : '🙈';
-  };
+// Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
+// un estado "correo sin verificar" — Google ya lo entrega verificado.
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    hideLoginOverlay();
+    // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
+    // detectar una cuenta bloqueada (Fase E).
+    if (new URLSearchParams(window.location.search).get('blocked') === '1') {
+      showError(BLOCKED_MESSAGE);
+    }
+    return;
+  }
+  if (await checkBlocked(user.uid, user.email)) {
+    await signOut(auth);
+    hideLoginOverlay();
+    showError(BLOCKED_MESSAGE);
+    return;
+  }
+  const role = await getUserRole(user.uid, user.email);
+  redirectByRole(role);
 });
 
-// SELECTOR DE PAÍS PARA EL TELÉFONO (registro)
-const regPhoneCountry = document.getElementById('reg-phone-country');
-regPhoneCountry.innerHTML = COUNTRIES.map(c => `<option value="${c.code}">${c.flag} +${c.dial}</option>`).join('');
-regPhoneCountry.value = DEFAULT_COUNTRY.code;
-
-// PANEL DE VERIFICACIÓN
-function showVerifyPanel(email) {
-  document.getElementById('verify-email-shown').textContent = email || '';
-  document.querySelectorAll(".login-form").forEach(f => f.classList.remove("active"));
-  document.getElementById('login-tabs').style.display = 'none';
-  document.getElementById('verify-panel').classList.add('active');
-  hideMessages();
-}
-document.getElementById('link-verify-to-login').onclick = (e) => {
-  e.preventDefault();
-  switchTab('login');
-};
-
-let resendCooldownTimer = null;
-function startResendCooldown() {
-  const btn = document.getElementById('btn-resend-verify');
-  let seconds = 60;
-  btn.disabled = true;
-  btn.textContent = `Reenviar en ${seconds}s`;
-  clearInterval(resendCooldownTimer);
-  resendCooldownTimer = setInterval(() => {
-    seconds--;
-    if (seconds <= 0) {
-      clearInterval(resendCooldownTimer);
-      btn.disabled = false;
-      btn.textContent = 'Reenviar correo de verificación';
-    } else {
-      btn.textContent = `Reenviar en ${seconds}s`;
-    }
-  }, 1000);
-}
-document.getElementById('btn-resend-verify').onclick = async () => {
-  if (!auth.currentUser) {
-    showError('Tu sesión expiró — iniciá sesión de nuevo para reenviar el correo.');
-    switchTab('login');
-    return;
-  }
-  try {
-    await sendEmailVerification(auth.currentUser, actionCodeSettings);
-    showSuccess('Te reenviamos el correo de verificación. Revisá también la carpeta de spam.');
-  } catch (e) {
-    showError(errMsg(e.code));
-  }
-  startResendCooldown(); // cooldown siempre, haya salido bien o mal (evita reintentos en cadena)
-};
-
-// LOGIN EMAIL
-document.getElementById("btn-login-email").onclick = async () => {
-  hideMessages();
-  const email = normalizeEmail(document.getElementById("login-email").value);
-  const pass  = document.getElementById("login-pass").value;
-  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
-  if (!pass) { showError("Ingresá tu contraseña."); return; }
-  try {
-    showOverlay();
-    const cred = await signInWithEmailAndPassword(auth, email, pass);
-    if (!cred.user.emailVerified) {
-      hideLoginOverlay();
-      showVerifyPanel(cred.user.email);
-      return;
-    }
-    const { role, blocked } = await guardarUsuario(cred.user, "", "");
-    if (blocked) {
-      await signOut(auth);
-      hideLoginOverlay();
-      showError(BLOCKED_MESSAGE);
-      return;
-    }
-    redirectByRole(role);
-  } catch(e) {
-    hideLoginOverlay();
-    showError(errMsg(e.code));
-  }
-};
-
-// REGISTRO EMAIL
-document.getElementById("btn-registrar").onclick = async () => {
-  hideMessages();
-  const nombre       = document.getElementById("reg-nombre").value.trim();
-  const email        = normalizeEmail(document.getElementById("reg-email").value);
-  const phoneRaw     = document.getElementById("reg-phone").value.trim();
-  const phoneCountry = findCountryByCode(regPhoneCountry.value);
-  const pass         = document.getElementById("reg-pass").value;
-  const pass2        = document.getElementById("reg-pass2").value;
-
-  if (!nombre) { showError("Ingresá tu nombre completo."); return; }
-  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
-  if (!phoneRaw) { showError("Ingresá tu teléfono."); return; }
-  if (!isValidPhone(phoneRaw, phoneCountry)) {
-    showError(`Ingresá un número de teléfono válido para ${phoneCountry.flag} ${phoneCountry.name}.`);
-    return;
-  }
-  if (!pass || pass.length < 8) { showError("La contraseña debe tener al menos 8 caracteres."); return; }
-  if (pass !== pass2) { showError("Las contraseñas no coinciden."); return; }
-
-  const { value: phone } = normalizePhone(phoneRaw, phoneCountry);
-
-  try {
-    showOverlay();
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    await updateProfile(cred.user, { displayName: nombre });
-    await guardarUsuario(cred.user, nombre, phone);
-    await sendEmailVerification(cred.user, actionCodeSettings);
-    hideLoginOverlay();
-    showVerifyPanel(cred.user.email);
-    startResendCooldown();
-  } catch(e) {
-    hideLoginOverlay();
-    showError(errMsg(e.code));
-    wireDupeLoginLink();
-  }
-};
-
-// RECUPERAR CONTRASEÑA — mensaje siempre igual exista o no la cuenta (evita
-// que alguien confirme qué correos tienen cuenta probando uno por uno),
-// EXCEPTO para el caso puntual de una cuenta de Google: ahí sí se le avisa
-// específicamente que use "Continuar con Google" en vez de mandarle un
-// correo de restablecimiento que no le sirve para nada (Tintin lo pidió
-// explícitamente — ver emailProviders en firestore.rules para el alcance
-// acotado de esta consulta).
-document.getElementById("btn-recuperar").onclick = async () => {
-  hideMessages();
-  const email = normalizeEmail(document.getElementById("recover-email").value);
-  if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
-  const btn = document.getElementById('btn-recuperar');
-  btn.disabled = true;
-
-  try {
-    const providerSnap = await getDoc(doc(db, 'emailProviders', email));
-    if (providerSnap.exists() && providerSnap.data().provider === 'google.com') {
-      btn.disabled = false;
-      showError('Te registraste con Google. Para ingresar de nuevo, usá el botón "Continuar con Google".');
-      return;
-    }
-  } catch (e) {
-    // Si esta consulta puntual falla (ej. sin conexión), seguimos con el
-    // flujo normal de recuperación en vez de trabar a alguien con contraseña real.
-  }
-
-  try {
-    await sendPasswordResetEmail(auth, email, actionCodeSettings);
-  } catch (e) {
-    if (e.code === 'auth/too-many-requests') {
-      btn.disabled = false;
-      showError(errMsg(e.code));
-      return;
-    }
-    // cualquier otro error (incluido user-not-found) se trata igual que un éxito
-  }
-  btn.disabled = false;
-  showSuccess("Si ese correo tiene una cuenta, te enviamos un enlace para restablecer tu contraseña. Revisá tu bandeja de entrada y spam.");
-};
-
-// GOOGLE — el correo de Google ya viene verificado por Google, así que estas
-// cuentas nunca pasan por el panel de verificación.
+// GOOGLE — único método de ingreso del sitio. El mismo botón sirve tanto
+// para crear la cuenta la primera vez como para iniciar sesión después.
 //
 // Sobre la demora al cerrar la ventana emergente: Firebase Auth detecta que
 // la clienta cerró la ventana de Google recién cuando su propio sondeo
@@ -987,7 +393,7 @@ const loginConGoogle = async () => {
     const cred = await signInWithPopup(auth, provider);
     clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
-    const { role, blocked } = await guardarUsuario(cred.user, cred.user.displayName, "");
+    const { role, blocked } = await guardarUsuario(cred.user);
     if (blocked) {
       await signOut(auth);
       hideLoginOverlay();
@@ -1002,23 +408,7 @@ const loginConGoogle = async () => {
     showError(errMsg(e.code));
   }
 };
-document.getElementById("btn-login-google").onclick  = loginConGoogle;
-document.getElementById("btn-reg-google").onclick    = loginConGoogle;
-document.getElementById("btn-recover-google").onclick = loginConGoogle;
-
-// "¿Olvidaste tu contraseña?" pasa a la pestaña Recuperar en vez de un href muerto
-document.getElementById('link-forgot').onclick = (e) => { e.preventDefault(); switchTab('recuperar'); };
-
-// Enter para submit
-document.getElementById("login-pass").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("btn-login-email").click();
-});
-document.getElementById("reg-pass2").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("btn-registrar").click();
-});
-document.getElementById("recover-email").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("btn-recuperar").click();
-});
+document.getElementById("btn-google").onclick = loginConGoogle;
 </script>
 </body>
 </html>

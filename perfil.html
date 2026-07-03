@@ -408,7 +408,7 @@
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
-  signOut, onAuthStateChanged, reload
+  signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
@@ -454,12 +454,6 @@ onAuthStateChanged(auth, async user => {
     window.location.href = 'login.html';
     return;
   }
-  try { await reload(user); } catch {} // emailVerified más reciente del servidor
-  if (!user.emailVerified) {
-    window.location.href = 'login.html?from=' + encodeURIComponent('perfil.html');
-    return;
-  }
-
   // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
   // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
   // para no duplicar el getDoc.

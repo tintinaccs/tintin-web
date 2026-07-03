@@ -83,33 +83,6 @@ service cloud.firestore {
       allow read, write: if isSuperAdmin();
     }
 
-    // Colección mínima y separada de `users` — existe SOLO para que el
-    // formulario público de "Recuperar contraseña" pueda saber, antes de
-    // enviar nada, si el email escrito es de una cuenta creada con Google
-    // (sin contraseña de Tintin) y así NO reenviarle un correo de
-    // restablecimiento que no le sirve.
-    //
-    // Alcance deliberadamente mínimo para acotar el riesgo de enumeración
-    // (el mismo motivo por el que Firebase discontinuó fetchSignInMethodsForEmail):
-    //   - el documento SOLO guarda { provider: 'password' | 'google.com' },
-    //     nunca nombre/teléfono/rol ni ningún otro dato de la cuenta;
-    //   - se puede leer un email puntual (`get`) pero NUNCA listar/consultar
-    //     en bloque (`list: false`) — no se puede "recorrer" la colección
-    //     para descubrir qué emails tienen cuenta, solo confirmar un email
-    //     que ya se escribió a mano;
-    //   - solo el dueño de esa cuenta (su propio token) puede escribir su
-    //     propio documento, y solo con el proveedor real que Firebase le
-    //     asignó — nadie puede escribir el proveedor de otra persona.
-    match /emailProviders/{emailId} {
-      allow get: if true;
-      allow list: if false;
-      allow write: if isSignedIn() &&
-        request.auth.token.email != null &&
-        emailId == request.auth.token.email.lower() &&
-        request.resource.data.keys().hasOnly(['provider']) &&
-        request.resource.data.provider in ['password', 'google.com'];
-    }
-
     match /users/{userId} {
       // El dueño del doc puede leer el suyo; ver cualquier otra cuenta (panel
       // Usuarios) es exclusivo del Super Admin — ni "admin" ni el Modder
