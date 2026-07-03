@@ -31,7 +31,11 @@ onAuthStateChanged(auth, user => {
 });
 
 // ---- Ícono de cuenta en el header (#btn-cuenta) — foto de Google en vez
-// del ícono genérico apenas hay sesión, en cualquier página. ----
+// del ícono genérico apenas hay sesión, en cualquier página. El tamaño se
+// fija en línea (no solo por clase CSS) y el botón tiene overflow:hidden en
+// styles.css, para que la foto NUNCA se vea estirada/rota sin importar el
+// orden o la caché con que cargue el resto del CSS. Si la foto no carga
+// (red, bloqueo, etc.), vuelve sola al ícono genérico.
 function renderAccountButtonPhoto(user) {
   const btn = document.getElementById("btn-cuenta");
   if (!btn) return;
@@ -39,7 +43,17 @@ function renderAccountButtonPhoto(user) {
 
   if (user && user.photoURL) {
     const name = user.displayName || user.email || "Mi cuenta";
-    btn.innerHTML = `<img class="tt-account-avatar-btn" src="${user.photoURL}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer">`;
+    const img = document.createElement("img");
+    img.className = "tt-account-avatar-btn";
+    img.src = user.photoURL;
+    img.alt = name;
+    img.referrerPolicy = "no-referrer";
+    img.width = 26;
+    img.height = 26;
+    img.style.cssText = "width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block";
+    img.onerror = () => { btn.innerHTML = accountBtnDefaults.get(btn); };
+    btn.innerHTML = "";
+    btn.appendChild(img);
   } else {
     btn.innerHTML = accountBtnDefaults.get(btn);
   }
@@ -61,7 +75,7 @@ function renderAccountPanel(user) {
   const photo = user.photoURL || "";
   panel.innerHTML = `
     <div class="tt-account-header" style="display:flex;align-items:center;gap:10px">
-      ${photo ? `<img src="${photo}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0">` : ''}
+      ${photo ? `<img src="${photo}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer" width="32" height="32" style="width:32px;height:32px;max-width:none;max-height:none;border-radius:50%;object-fit:cover;flex-shrink:0;display:block" onerror="this.style.display='none'">` : ''}
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtmlNav(name)}</span>
     </div>
     <a class="tt-account-item" href="perfil.html">Mi cuenta</a>
@@ -101,7 +115,7 @@ function renderMobileUserPanel(user) {
       <a href="perfil.html" class="tt-mobile-user-profile">
         <div class="tt-mobile-user-avatar">
           ${photo
-            ? `<img src="${photo}" alt="${firstName}" referrerpolicy="no-referrer">`
+            ? `<img src="${photo}" alt="${firstName}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.style.display='none'">`
             : PERSON_ICON
           }
         </div>

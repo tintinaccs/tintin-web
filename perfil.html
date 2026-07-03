@@ -67,7 +67,7 @@
       justify-content: center; font-size: 28px; font-weight: 900;
       color: #fff; flex-shrink: 0; overflow: hidden;
     }
-    .perfil-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .perfil-avatar img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; flex-shrink: 0; }
 
     .perfil-name {
       font-size: 20px; font-weight: 900; text-transform: uppercase;
@@ -510,10 +510,11 @@ onAuthStateChanged(auth, async user => {
 
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
+  const avatarInitial = (user.displayName || user.email || '?')[0].toUpperCase();
   if (user.photoURL) {
-    avatarEl.innerHTML = `<img src="${user.photoURL}" alt="foto" />`;
+    avatarEl.innerHTML = `<img src="${user.photoURL}" alt="foto" width="72" height="72" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.parentNode.textContent='${avatarInitial}'" />`;
   } else {
-    avatarEl.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+    avatarEl.textContent = avatarInitial;
   }
   document.getElementById('perfil-nombre-display').textContent = user.displayName || user.email;
   document.getElementById('perfil-email-display').textContent  = user.email;

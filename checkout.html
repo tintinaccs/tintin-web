@@ -90,7 +90,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 800; flex-shrink: 0; overflow: hidden;
     }
-    .ck-account-badge-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ck-account-badge-avatar img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; flex-shrink: 0; }
     .ck-account-badge-name {
       font-size: 11.5px; font-weight: 700; color: var(--text);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -2189,9 +2189,10 @@ function renderAccountBadge(user) {
   const nameEl = document.getElementById('ck-account-badge-name');
   if (!user) { badge.classList.remove('show'); return; }
   const label = user.displayName || user.email || 'Mi cuenta';
+  const initial = label[0].toUpperCase();
   avatar.innerHTML = user.photoURL
-    ? `<img src="${user.photoURL}" alt="${label}" referrerpolicy="no-referrer">`
-    : label[0].toUpperCase();
+    ? `<img src="${user.photoURL}" alt="${label}" referrerpolicy="no-referrer" width="26" height="26" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.parentNode.textContent='${initial}'">`
+    : initial;
   nameEl.textContent = label.split(' ')[0];
   badge.title = `Sesión iniciada como ${user.email || label}`;
   badge.classList.add('show');
