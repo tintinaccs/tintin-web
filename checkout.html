@@ -4,25 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Finalizar compra | Tintin Accesorios</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#b84c72">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/tintin-tokens.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+       estos nombres cortos se mantienen porque los usa toda la hoja de acá
+       abajo, pero ahora apuntan al mismo valor real en todas las superficies. */
     :root {
-      --acc: #b84c72;
-      --acc-dark: #9a3d5e;
-      --acc-light: #f5d0de;
-      --acc-pale: #fef5f8;
-      --text: #1a1a1a;
+      --acc: var(--pink-dark);
+      --acc-dark: var(--rose);
+      --acc-light: var(--pink-lightest);
+      --acc-pale: var(--card-bg);
+      --text: var(--ink);
       --text-muted: #888;
-      --border: #f0d8e0;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --font: 'Poppins', sans-serif;
+      /* --border y --radius-sm ya vienen de css/tintin-tokens.css con el
+         mismo valor (#f0d8e0 / 8px) — no se redeclaran acá para no caer en
+         una auto-referencia var(--x) dentro de --x, que en CSS invalida la
+         propiedad en vez de heredar el valor anterior de la cascada. */
+      --radius: var(--radius-md);
+      --font: var(--font-body);
     }
 
     body {
@@ -316,7 +329,7 @@
     .ck-suggested-title { font-size: 13px; font-weight: 700; color: #C86B86; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
     .ck-suggested-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     @media (max-width: 500px) { .ck-suggested-grid { grid-template-columns: repeat(2, 1fr); } }
-    .ck-sug-card { border: 1px solid #f0e0e8; border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .ck-sug-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
     .ck-sug-img { display:flex; justify-content:center; align-items:center; height:56px; margin-bottom:6px; }
     .ck-sug-name { font-size: 12px; font-weight: 700; color: #C86B86; line-height: 1.2; }
     .ck-sug-cat { font-size: 10px; color: #C86B86; text-transform: uppercase; letter-spacing: .05em; }
@@ -418,6 +431,30 @@
       font-size: 13px;
       color: var(--text-muted);
       font-weight: 600;
+    }
+
+    /* ---- SHIPPING TIMING REMINDER (llamativo, debajo del método elegido) ---- */
+    .ck-ship-reminder {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      background: #fff8e6;
+      border: 1.5px solid #f0c96b;
+      border-left: 4px solid #d9a520;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #7a5a10;
+    }
+    .ck-ship-reminder.show { display: flex; }
+    .ck-ship-reminder-icon { font-size: 17px; line-height: 1.4; flex-shrink: 0; }
+    .ck-ship-reminder-text strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #8a6410;
+      font-size: 12.5px;
     }
 
     /* ---- PAYMENT RADIO CARDS ---- */
@@ -679,7 +716,7 @@
       max-height: 220px;
       overflow-y: auto;
       display: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      box-shadow: 0 8px 24px rgba(180,76,114,.15);
     }
     .ck-map-search-results.show { display: block; }
     .ck-map-search-item {
@@ -829,6 +866,11 @@
         <div class="ck-ship-cost" id="ck-ship-cost">—</div>
       </div>
 
+      <div class="ck-ship-reminder" id="ck-ship-reminder">
+        <div class="ck-ship-reminder-icon">⏰</div>
+        <div class="ck-ship-reminder-text" id="ck-ship-reminder-text"></div>
+      </div>
+
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
         <label class="ck-label" id="ck-address-label">Dirección de entrega *</label>
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
@@ -913,36 +955,43 @@
     </div>
     <div class="ck-panel-body">
 
-      <!-- Efectivo -->
-      <input type="radio" name="ck-pay" id="pay-efectivo" value="efectivo" class="ck-pay-option" />
-      <label for="pay-efectivo" class="ck-pay-label">
-        <div class="ck-pay-icon">💵</div>
-        <div>
-          <div class="ck-pay-title">Efectivo</div>
-          <div class="ck-pay-desc">Pagás al recibir el pedido (contra entrega)</div>
-        </div>
-      </label>
-
-      <!-- Transferencia -->
-      <input type="radio" name="ck-pay" id="pay-transferencia" value="transferencia" class="ck-pay-option" />
-      <label for="pay-transferencia" class="ck-pay-label">
-        <div class="ck-pay-icon">🏦</div>
-        <div>
-          <div class="ck-pay-title">Transferencia bancaria</div>
-          <div class="ck-pay-desc">Envianos el comprobante por WhatsApp</div>
-        </div>
-      </label>
-      <div class="ck-bank-details" id="bank-details">
-        <div class="ck-bank-line">🏦 <strong>Ueno (Banco GNB):</strong> CI 4.123.456 — Alberto Giménez</div>
-        <div class="ck-bank-line">🏦 <strong>Atlas (Banco Nacional):</strong> CI 4.123.456 — Alberto Giménez</div>
-        <div style="margin-top:8px;font-size:12px;color:#C86B86">Envianos el comprobante por WhatsApp al confirmar el pedido 📲</div>
+      <!-- Efectivo — visibilidad real desde Super Admin → Configuración → Métodos de pago -->
+      <div id="pay-option-efectivo">
+        <input type="radio" name="ck-pay" id="pay-efectivo" value="efectivo" class="ck-pay-option" />
+        <label for="pay-efectivo" class="ck-pay-label">
+          <div class="ck-pay-icon">💵</div>
+          <div>
+            <div class="ck-pay-title">Efectivo</div>
+            <div class="ck-pay-desc">Pagás al recibir el pedido (contra entrega)</div>
+          </div>
+        </label>
       </div>
 
+      <!-- Transferencia — misma fuente que Efectivo -->
+      <div id="pay-option-transferencia">
+        <input type="radio" name="ck-pay" id="pay-transferencia" value="transferencia" class="ck-pay-option" />
+        <label for="pay-transferencia" class="ck-pay-label">
+          <div class="ck-pay-icon">🏦</div>
+          <div>
+            <div class="ck-pay-title">Transferencia bancaria</div>
+            <div class="ck-pay-desc">Envianos el comprobante por WhatsApp</div>
+          </div>
+        </label>
+        <div class="ck-bank-details" id="bank-details">
+          <div class="ck-bank-line">🏦 <strong>Ueno (Banco GNB):</strong> CI 4.123.456 — Alberto Giménez</div>
+          <div class="ck-bank-line">🏦 <strong>Atlas (Banco Nacional):</strong> CI 4.123.456 — Alberto Giménez</div>
+          <div style="margin-top:8px;font-size:12px;color:#C86B86">Envianos el comprobante por WhatsApp al confirmar el pedido 📲</div>
+        </div>
+      </div>
+
+      <!-- PagoPark no está integrado todavía — se muestra siempre como nota
+           informativa "próximamente", nunca como opción seleccionable real. -->
       <div class="ck-pay-note" style="margin-top:4px">
         🔒 Próximamente habilitamos <strong>PagoPark</strong> y pago con tarjeta mediante pasarela segura. Por ahora usá efectivo o transferencia.
       </div>
 
       <div class="ck-error" id="error-3"></div>
+      <div class="ck-error" id="error-3-none" style="display:none">No hay métodos de pago disponibles en este momento — escribinos por WhatsApp para coordinar tu compra.</div>
       <button class="ck-btn" id="btn-step4-next">Ver resumen del pedido →</button>
       <button class="ck-btn-back" id="btn-step4-back">← Volver a tus datos</button>
     </div>
@@ -1014,7 +1063,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
-  updateDoc, increment, serverTimestamp, setDoc
+  updateDoc, increment, serverTimestamp, setDoc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
@@ -1045,42 +1094,74 @@ function formatShipping(cost) {
   return (cost === null || cost === undefined) ? 'Consultar por el precio con algún vendedor' : formatPrice(cost);
 }
 
-let DELIVERY_CITIES = normalizeCities([
-  'Asunción','San Lorenzo','Luque','Lambaré','Fernando de la Mora',
-  'Capiatá','Mariano Roque Alonso','Ñemby','J. Augusto Saldivar','Limpio',
-  'Areguá','Itauguá','Villa Elisa','Ypané','San Antonio','Villeta',
-  'Nueva Italia','Guarambaré','Yaguarón','Paraguarí','Ita','Carapeguá'
-], DEFAULT_DELIVERY_COST);
-
-let ENCOMIENDA_CITIES = normalizeCities([
-  'Ciudad del Este','Encarnación','Concepción','Pedro Juan Caballero',
-  'Coronel Oviedo','Villarrica','Caaguazú','Pilar','San Ignacio',
-  'Santa Rosa del Aguaray','San Pedro','Horqueta','Curuguaty',
-  'Minga Guazú','Hernandarias','Minga Porá','Salto del Guairá',
-  'San Juan Bautista','Caacupé','Tobatí','San Estanislao','Villa Hayes',
-  'Fuerte Olimpo','Bahía Negra','Filadelfia','Loma Plata','Mcal. Estigarribia'
-], DEFAULT_ENCOMIENDA_COST);
+// Sin fallback hardcodeado: si Super Admin no cargó ninguna ciudad para un
+// método, ese optgroup queda vacío — nunca se inventan ciudades ni precios.
+let DELIVERY_CITIES = [];
+let ENCOMIENDA_CITIES = [];
 
 let WA_NUMBER = '595981299331';
 let STORE_INSTAGRAM = '';
 
-async function loadStoreConfig() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'general'));
-    if (!snap.exists()) return;
-    const cfg = snap.data();
-    if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
-    if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
-    if (Array.isArray(cfg.deliveryCities)   && cfg.deliveryCities.length)
+// Tiempo real: escucha settings/general en vivo, así un cambio de ciudades/
+// precios hecho en Super Admin se refleja acá sin necesidad de recargar la
+// página (si el cliente ya está en el paso de envío, se re-popula el select).
+function subscribeStoreConfig() {
+  return new Promise((resolveFirst) => {
+    let first = true;
+    onSnapshot(doc(db, 'settings', 'general'), snap => {
+      if (!snap.exists()) {
+        if (first) { first = false; resolveFirst(); }
+        return;
+      }
+      const cfg = snap.data();
+      if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
+      if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
       DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
-    if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length)
       ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
-    // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
-    const waRaw = cfg.whatsappNumber || cfg.whatsapp;
-    if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
-    if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
-  } catch(e) {
-    console.error('No se pudo cargar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
+      // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
+      const waRaw = cfg.whatsappNumber || cfg.whatsapp;
+      if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
+      if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
+      applyPaymentMethods(cfg.paymentMethods);
+      populateCities();
+      if (first) { first = false; resolveFirst(); }
+    }, e => {
+      console.error('No se pudo escuchar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
+      if (first) { first = false; resolveFirst(); }
+    });
+  });
+}
+
+// Muestra/oculta Efectivo y Transferencia según Super Admin → Configuración
+// → Métodos de pago. PagoPark no forma parte de esto — no está integrado,
+// así que nunca se ofrece como opción seleccionable real (ver nota fija
+// "Próximamente" en el HTML), sin importar lo que diga ese toggle.
+function applyPaymentMethods(paymentMethods) {
+  const pm = paymentMethods || {};
+  const efectivoOn = pm.efectivo !== false;
+  const transferenciaOn = pm.transferencia !== false;
+
+  // Red de seguridad: si quedaran los dos desactivados a la vez, se muestran
+  // igual — nunca se deja el checkout sin ninguna forma de pagar.
+  const anyOn = efectivoOn || transferenciaOn;
+  const showEfectivo = anyOn ? efectivoOn : true;
+  const showTransferencia = anyOn ? transferenciaOn : true;
+
+  const efectivoEl = document.getElementById('pay-option-efectivo');
+  const transferenciaEl = document.getElementById('pay-option-transferencia');
+  const noneEl = document.getElementById('error-3-none');
+
+  if (efectivoEl) efectivoEl.style.display = showEfectivo ? '' : 'none';
+  if (transferenciaEl) transferenciaEl.style.display = showTransferencia ? '' : 'none';
+  if (noneEl) noneEl.style.display = (showEfectivo || showTransferencia) ? 'none' : 'block';
+
+  // Si la opción que tenía elegida quedó oculta en vivo, se limpia la
+  // selección para que el paso la vuelva a pedir en vez de dejar un radio
+  // invisible marcado.
+  const checked = document.querySelector('input[name="ck-pay"]:checked');
+  if (checked) {
+    const stillVisible = checked.id === 'pay-efectivo' ? showEfectivo : showTransferencia;
+    if (!stillVisible) checked.checked = false;
   }
 }
 
@@ -1106,11 +1187,17 @@ let orderData = {
 };
 
 // ---- POPULATE CITY SELECT ----
+// Se puede llamar más de una vez (settings/general se escucha en tiempo real),
+// así que primero limpia los optgroups y, si la ciudad ya elegida sigue
+// existiendo, la mantiene seleccionada.
 function populateCities() {
   const select = document.getElementById('ck-city');
+  const previousValue = select.value;
   const groups = select.querySelectorAll('optgroup');
   const deliveryGroup = groups[0];
   const encomiendaGroup = groups[1];
+  deliveryGroup.innerHTML = '';
+  encomiendaGroup.innerHTML = '';
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
@@ -1123,6 +1210,8 @@ function populateCities() {
     opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
     encomiendaGroup.appendChild(opt);
   });
+  const stillExists = Array.from(select.options).some(o => o.value === previousValue);
+  if (previousValue && stillExists) select.value = previousValue;
 }
 
 // ---- FIND CITY PRICE ----
@@ -1445,12 +1534,15 @@ document.getElementById('ck-city').onchange = function() {
   const addressLabel = document.getElementById('ck-address-label');
   const referenciaField = document.getElementById('ck-referencia-field');
   const mapWrap = document.getElementById('ck-map-wrap');
+  const reminderEl = document.getElementById('ck-ship-reminder');
+  const reminderTextEl = document.getElementById('ck-ship-reminder-text');
 
   if (!val) {
     infoEl.classList.remove('show');
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
+    reminderEl.classList.remove('show');
     return;
   }
 
@@ -1473,6 +1565,7 @@ document.getElementById('ck-city').onchange = function() {
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
+    reminderEl.classList.remove('show');
   } else if (isDelivery) {
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
@@ -1485,6 +1578,8 @@ document.getElementById('ck-city').onchange = function() {
     mapWrap.classList.add('show');
     initMap();
     maybeApplySavedLocation();
+    reminderTextEl.innerHTML = '<strong>Recordatorio de entrega</strong>Tu pedido será entregado por nuestro delivery, en el horario de la tarde. Los pedidos realizados entre las 07:00 y las 11:00 hs se envían y entregan el mismo día — pasado ese horario, la entrega pasa para el día siguiente.';
+    reminderEl.classList.add('show');
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
@@ -1495,6 +1590,8 @@ document.getElementById('ck-city').onchange = function() {
     addressLabel.textContent = 'Dirección de entrega *';
     referenciaField.style.display = 'block';
     mapWrap.classList.remove('show');
+    reminderTextEl.innerHTML = '<strong>Recordatorio de envío</strong>Los pedidos por encomienda se envían en 24 a 48 hs, según el día de despacho y la transportadora asignada. Pagar hoy no significa que el pedido llegue hoy — el envío por encomienda tiene su propio tiempo de trámite y traslado.';
+    reminderEl.classList.add('show');
   }
 };
 
@@ -1790,6 +1887,21 @@ function waitForAuthUser() {
   });
 }
 
+// El Apps Script prueba el correo a la tienda y el correo a la clienta por
+// separado (ver functions/EMAIL_SETUP.md) y devuelve adminSent/customerSent
+// en vez de un único success — acá se traduce eso a los 3 estados que
+// entiende el admin. customerSent en null significa "ni se intentó" (ej.
+// reenvío manual, que nunca reintenta el correo a la clienta), no una falla.
+function notificationStatusFromResult(result) {
+  if (!result) return 'failed';
+  if (result.customerSent === null || result.customerSent === undefined) {
+    return result.adminSent ? 'sent' : 'failed';
+  }
+  if (result.adminSent && result.customerSent) return 'sent';
+  if (result.adminSent || result.customerSent) return 'partial';
+  return 'failed';
+}
+
 async function saveOrder(items, subtotal, total) {
   currentUser = await waitForAuthUser();
 
@@ -1856,12 +1968,19 @@ async function saveOrder(items, subtotal, total) {
     updatedAt:          serverTimestamp()
   };
 
-  await addDoc(collection(db, 'orders'), orderDoc);
+  const orderRef = await addDoc(collection(db, 'orders'), orderDoc);
 
-  // Fire-and-forget: the order is already safely saved above regardless of
-  // whether this notification succeeds. `serverTimestamp()` only resolves
-  // after Firestore commits, so send the actual current time instead.
-  sendOrderNotification('', { ...orderDoc, createdAt: new Date().toISOString() }, false)
+  // Fire-and-forget: la orden ya quedó guardada arriba pase lo que pase acá.
+  // A diferencia de antes, ahora sí se registra el resultado real del envío
+  // en vez de dejar `notificationStatus` pegado en "pending" para siempre —
+  // firestore.rules permite a la dueña del pedido tocar únicamente ese campo
+  // del suyo. `serverTimestamp()` recién resuelve después de que Firestore
+  // confirma el commit, así que acá se manda la hora actual real.
+  sendOrderNotification(orderRef.id, { ...orderDoc, createdAt: new Date().toISOString() }, false)
+    .then(result => updateDoc(orderRef, {
+      notificationStatus: notificationStatusFromResult(result),
+      updatedAt: serverTimestamp()
+    }))
     .catch(() => {});
 
   // Update user stats if logged in with a real account (not a guest/anonymous session)
@@ -2200,7 +2319,7 @@ function renderAccountBadge(user) {
 }
 
 // ---- INIT ----
-loadStoreConfig().then(() => {
+subscribeStoreConfig().then(() => {
   populateCities();
 });
 renderCart();

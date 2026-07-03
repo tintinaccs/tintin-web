@@ -4,24 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel Admin | Tintin Accesorios</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin-tokens.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
+       abajo, pero ahora apuntan al mismo valor real en todas las
+       superficies. --adm-bg queda con su propio valor a propósito: es un
+       gris-rosado más neutro, pensado para un panel de uso prolongado,
+       distinto del fondo más saturado del sitio público. */
     :root {
-      --adm-sidebar:        #b84c72;
+      --adm-sidebar:        var(--pink-dark);
       --adm-sidebar-hover:  rgba(255,255,255,.12);
       --adm-sidebar-active: rgba(255,255,255,.95);
       --adm-sidebar-text:   rgba(255,255,255,.85);
       --adm-bg:             #f7f4f6;
       --adm-card:           #ffffff;
-      --adm-accent:         #b84c72;
-      --adm-text:           #1a1a1a;
+      --adm-accent:         var(--pink-dark);
+      --adm-text:           var(--ink);
       --adm-muted:          #888;
-      --adm-border:         #f0d8e0;
-      --adm-font:           'Poppins', sans-serif;
+      --adm-border:         var(--border);
+      --adm-font:           var(--font-body);
+      --adm-radius-sm:      var(--radius-sm);
+      --adm-radius-md:      var(--radius-md);
       --sidebar-w:          260px;
     }
 
@@ -177,7 +191,7 @@
       text-decoration: none;
       transition: background .2s;
     }
-    .adm-topbar-btn:hover { background: #9a3d5e; }
+    .adm-topbar-btn:hover { background: var(--rose); }
 
     /* ======== CONTENT ======== */
     .adm-content {
@@ -317,6 +331,18 @@
     .ship-tab-panel { display: none; }
     .ship-tab-panel.active { display: block; }
 
+    /* Usuarios / Bloqueados — mismas píldoras que ship-tabs, clases propias
+       para no compartir el querySelectorAll global de Envíos. */
+    .user-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+    .user-tab-btn {
+      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
+
     .adm-field {
       display: flex;
       flex-direction: column;
@@ -344,7 +370,7 @@
       letter-spacing: .07em;
     }
     .adm-btn-primary { background: var(--adm-accent); color: #fff; }
-    .adm-btn-primary:hover { background: #9a3d5e; }
+    .adm-btn-primary:hover { background: var(--rose); }
     .adm-btn-danger { background: #ef4444; color: #fff; }
     .adm-btn-danger:hover { background: #dc2626; }
     .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
@@ -800,6 +826,9 @@
     <button class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Onboarding
     </button>
+    <button class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
+    </button>
     <button class="adm-nav-item" data-section="configuracion" id="nav-config">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Configuración
     </button>
@@ -827,6 +856,7 @@
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
   <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
+  <button class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
   <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
   <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
@@ -897,19 +927,17 @@
       <div class="adm-card">
         <div class="adm-card-head">
           <div class="adm-card-title">Gestión de usuarios</div>
-          <span id="users-blocked-count" class="adm-badge badge-cancelado" style="display:none;cursor:pointer" title="Ver solo bloqueados" onclick="window.filterUsersByStatus('blocked')"></span>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
+          <div class="user-tabs">
+            <button type="button" class="user-tab-btn active" data-user-tab="active">Usuarios</button>
+            <button type="button" class="user-tab-btn" data-user-tab="blocked">🔒 Bloqueados <span id="users-blocked-count" class="user-tab-count"></span></button>
+          </div>
           <div class="adm-filter-row">
             <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
               <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
               <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
             </div>
-            <select class="adm-select" id="user-status-filter" style="flex:1">
-              <option value="all">Todos los usuarios</option>
-              <option value="active">Solo activos</option>
-              <option value="blocked">Solo bloqueados</option>
-            </select>
           </div>
         </div>
         <div style="padding:0">
@@ -1280,7 +1308,7 @@
           <p style="color:var(--adm-muted);font-size:13px;margin-bottom:16px">
             Los mensajes de clientes llegan por WhatsApp. Accedé directamente desde aquí.
           </p>
-          <a href="https://wa.me/595981299331" target="_blank" class="adm-btn adm-btn-primary">
+          <a href="https://wa.me/595981299331" target="_blank" id="mensajes-wa-link" class="adm-btn adm-btn-primary">
             Abrir WhatsApp Business
           </a>
         </div>
@@ -1319,6 +1347,35 @@
             Esto marca el onboarding como no completado para todos los usuarios. La próxima vez que inicien sesión, verán el tutorial de bienvenida.
           </p>
           <button class="adm-btn adm-btn-danger" id="btn-reset-ob">Resetear onboarding para todos los usuarios</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== AUDITORÍA (Fase 2) ===================== -->
+    <div class="adm-section" id="section-auditoria">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Registro de auditoría</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Quién editó un pedido, cambió su estado, editó un producto o su stock, cambió un rol, o bloqueó/restauró una cuenta — las últimas 200 acciones, más recientes primero. Solo Super Admin puede ver esta sección; el Modder no tiene acceso, aunque sus propias acciones sí queden registradas acá.
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Quién</th>
+                  <th>Acción</th>
+                  <th>Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody">
+                <tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -1466,6 +1523,22 @@
         </div>
       </div>
 
+      <!-- Analytics (Fase 2) -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</div>
+        </div>
+        <div class="adm-card-body">
+          <div class="adm-field">
+            <label class="adm-label">Google Analytics 4 — Measurement ID</label>
+            <input type="text" class="adm-input" id="cfg-ga4-id" placeholder="G-XXXXXXXXXX (dejalo vacío para no medir nada)" />
+            <small style="color:var(--adm-muted);font-size:11px;display:block;margin-top:6px">
+              Creá una propiedad en <strong>analytics.google.com</strong> y pegá acá el Measurement ID. Mientras esto quede vacío, el sitio no carga ningún script de Analytics ni mide nada.
+            </small>
+          </div>
+        </div>
+      </div>
+
       <!-- Pagos -->
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
@@ -1499,6 +1572,28 @@
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los productos de Firestore como archivo JSON.</p>
           <button class="adm-btn adm-btn-primary" id="btn-exportar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar JSON</button>
+        </div>
+      </div>
+
+      <!-- EXPORTAR PEDIDOS (Fase 2) -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Exportar pedidos</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los pedidos como CSV (se abre bien en Excel/Google Sheets) — número, fecha, cliente, contacto, estados, productos, total, entrega y ciudad/zona.</p>
+          <button class="adm-btn adm-btn-primary" id="btn-exportar-pedidos"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
+        </div>
+      </div>
+
+      <!-- EXPORTAR USUARIOS (Fase 2) -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Exportar usuarios</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todas las cuentas como CSV — nombre, email, teléfono, rol, si está bloqueado y fecha de creación.</p>
+          <button class="adm-btn adm-btn-primary" id="btn-exportar-usuarios"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
         </div>
       </div>
 
@@ -1647,6 +1742,66 @@ function toast(msg, duration = 3000) {
   setTimeout(() => el.classList.remove('show'), duration);
 }
 
+// ======== AUDITORÍA (Fase 2) ========
+// Registro simple e inmutable de acciones sensibles — no un sistema de
+// logging completo, solo lo necesario para poder responder "quién hizo qué
+// y cuándo". Nunca bloquea la acción real: si el registro falla, la acción
+// ya hecha (bloquear, cambiar rol, etc.) queda igual, solo se avisa en consola.
+async function logAudit(action, targetType, targetId, targetLabel, details) {
+  try {
+    await addDoc(collection(db, 'auditLog'), {
+      action,
+      targetType,
+      targetId: targetId || '',
+      targetLabel: targetLabel || '',
+      details: details || '',
+      actorEmail: currentUser?.email || '',
+      actorRole: currentRole || '',
+      createdAt: serverTimestamp()
+    });
+  } catch (e) {
+    console.error('No se pudo registrar en auditLog:', e);
+  }
+}
+
+const AUDIT_ACTION_LABELS = {
+  editar_pedido:          '📋 Editó pedido',
+  cambiar_estado_pedido:  '🔄 Cambió estado de pedido',
+  cambiar_estado_pago:    '💳 Cambió estado de pago',
+  crear_producto:         '➕ Creó producto',
+  editar_producto:        '✏️ Editó producto',
+  eliminar_producto:      '🗑️ Eliminó producto',
+  cambiar_rol:            '👤 Cambió rol',
+  bloquear_usuario:       '🚫 Bloqueó usuario',
+  restaurar_usuario:      '✅ Restauró usuario'
+};
+
+async function loadAuditLog() {
+  const tbody = document.getElementById('audit-tbody');
+  tbody.innerHTML = '<tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)));
+    if (snap.empty) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Todavía no hay acciones registradas</td></tr>';
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const l = d.data();
+      const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
+      return `
+        <tr>
+          <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
+          <td style="font-size:12px">${l.actorEmail || '—'}</td>
+          <td style="font-size:12px">${actionLabel}</td>
+          <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
+        </tr>
+      `;
+    }).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
+  }
+}
+
 // ---- FORMAT ----
 function formatPrice(n) {
   return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -1655,6 +1810,22 @@ function formatDate(ts) {
   if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+// ---- CSV (Fase 2) ----
+// Excel en Windows necesita el BOM UTF-8 al principio del archivo para no
+// mostrar los acentos rotos (mojibake) — de ahí el '﻿'.
+function toCsvValue(v) {
+  const s = String(v ?? '');
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function downloadCsv(filename, rows) {
+  const csv = rows.map(row => row.map(toCsvValue).join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
 }
 function statusBadge(status) {
   return `<span class="adm-badge badge-${status}">${status}</span>`;
@@ -1673,6 +1844,7 @@ const SECTION_LABELS = {
   colecciones: 'Colecciones',
   mensajes: 'Mensajes',
   onboarding: 'Onboarding',
+  auditoria: 'Auditoría',
   configuracion: 'Configuración',
   importar: 'Import / Export',
   contenido: 'Contenido del Sitio'
@@ -1690,7 +1862,11 @@ const SECTION_PERMISSION = {
   // — es una acción de riesgo distinto a editar un producto por vez, así que
   // se reserva a admin/superadmin igual que Configuración, no forma parte de
   // lo "operativo" del Modder.
-  importar:      'manageSettings'
+  importar:      'manageSettings',
+  // Auditoría: mismo criterio que Usuarios/Configuración — exclusivo Super
+  // Admin. El Modder puede aparecer COMO ACTOR dentro del registro (sus
+  // acciones se anotan igual), pero no puede abrir esta sección a verlo.
+  auditoria:     'manageSettings'
 };
 
 function switchSection(target) {
@@ -1711,6 +1887,7 @@ function switchSection(target) {
   if (target === 'productos') loadProductos();
   if (target === 'colecciones') loadColecciones();
   if (target === 'onboarding') loadOnboardingSettings();
+  if (target === 'auditoria') loadAuditLog();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
   if (target === 'contenido') loadContenido();
@@ -1899,7 +2076,10 @@ async function loadDashboard() {
 }
 
 // ======== USUARIOS ========
-let userStatusFilter = 'all';
+// Ahora son dos pestañas ('active' | 'blocked'), no un dropdown Todos/Activos/
+// Bloqueados — un usuario bloqueado desaparece de "Usuarios" y solo aparece
+// en "Bloqueados", nunca en las dos a la vez.
+let userStatusFilter = 'active';
 
 async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
@@ -1914,15 +2094,17 @@ async function loadUsers() {
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
-// búsqueda con el filtro Todos/Activos/Bloqueados — usada por ambos inputs.
+// búsqueda con la pestaña activa (Usuarios = solo activos, Bloqueados = solo
+// bloqueados) — usada por ambos inputs.
 function applyUserFilters() {
   const q = document.getElementById('user-search').value.toLowerCase();
   let filtered = allUsers.filter(u =>
     (u.name||'').toLowerCase().includes(q) ||
     (u.email||'').toLowerCase().includes(q)
   );
-  if (userStatusFilter === 'blocked') filtered = filtered.filter(u => u.blocked);
-  if (userStatusFilter === 'active')  filtered = filtered.filter(u => !u.blocked);
+  filtered = userStatusFilter === 'blocked'
+    ? filtered.filter(u => u.blocked)
+    : filtered.filter(u => !u.blocked);
   renderUsersTable(filtered);
   updateBlockedCount();
 }
@@ -1931,20 +2113,20 @@ function updateBlockedCount() {
   const el = document.getElementById('users-blocked-count');
   if (!el) return;
   const n = allUsers.filter(u => u.blocked).length;
-  el.textContent = n ? `🔒 ${n} bloqueado${n !== 1 ? 's' : ''}` : '';
-  el.style.display = n ? 'inline-block' : 'none';
+  el.textContent = n ? `(${n})` : '';
 }
 
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
-  document.getElementById('user-status-filter').value = status;
+  document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
   applyUserFilters();
 };
 
 function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin usuarios</td></tr>';
+    const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -2020,12 +2202,11 @@ function renderUsersTable(users) {
   }).join('');
 }
 
-// Búsqueda y filtro de estado — comparten applyUserFilters()
+// Búsqueda y pestañas Usuarios/Bloqueados — comparten applyUserFilters()
 document.getElementById('user-search').oninput = applyUserFilters;
-document.getElementById('user-status-filter').onchange = function() {
-  userStatusFilter = this.value;
-  applyUserFilters();
-};
+document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
+});
 
 window.updateUserRole = async (uid, role, email) => {
   if (email === SUPER_ADMIN && currentRole !== 'superadmin') {
@@ -2033,9 +2214,11 @@ window.updateUserRole = async (uid, role, email) => {
     return;
   }
   try {
-    await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
     const u = allUsers.find(u => u.uid === uid);
+    const prevRole = u?.role || 'client';
+    await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
     if (u) u.role = role;
+    logAudit('cambiar_rol', 'usuario', uid, email, `Rol: ${ROLE_LABELS[prevRole] || prevRole} → ${ROLE_LABELS[role]}`);
     toast(`Rol actualizado a ${ROLE_LABELS[role]}`);
     applyUserFilters();
   } catch(e) {
@@ -2066,6 +2249,7 @@ window.blockUser = async (uid, email) => {
       updatedAt: serverTimestamp()
     });
     Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: prevRole, role: 'client' });
+    logAudit('bloquear_usuario', 'usuario', uid, u.name || email, reason ? `Motivo: ${reason}` : 'Sin motivo especificado');
     toast('Usuario bloqueado');
     applyUserFilters();
   } catch(e) {
@@ -2102,6 +2286,7 @@ window.restoreUser = async (uid) => {
     });
     Object.assign(u, { blocked: false, role: targetRole });
     delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
+    logAudit('restaurar_usuario', 'usuario', uid, u.name || u.email, `Restaurado como ${ROLE_LABELS[targetRole]}`);
     toast(`Usuario restaurado como ${ROLE_LABELS[targetRole]}`);
     applyUserFilters();
   } catch(e) {
@@ -2175,9 +2360,11 @@ function renderOrdersTable(orders) {
   };
 
   const NOTIF_BADGE = {
-    sent:    { cls: 'badge-entregado', icon: '', label: 'Notificado' },
-    pending: { cls: 'badge-pendiente', icon: '', label: 'Pendiente' },
-    error:   { cls: 'badge-cancelado', icon: '', label: 'Error notif.' },
+    sent:    { cls: 'badge-entregado',  icon: '', label: 'Notificado' },
+    pending: { cls: 'badge-pendiente',  icon: '', label: 'Pendiente' },
+    partial: { cls: 'badge-preparando', icon: '', label: 'Parcial (1 de 2)' },
+    failed:  { cls: 'badge-cancelado',  icon: '', label: 'Falló el envío' },
+    error:   { cls: 'badge-cancelado',  icon: '', label: 'Error notif.' }, // legado, ya no se escribe
   };
   function notifBadge(status) {
     const b = NOTIF_BADGE[status] || NOTIF_BADGE.pending;
@@ -2300,12 +2487,14 @@ window.toggleOrderDetail = (id) => {
 
 window.updateOrderStatus = async (orderId, status) => {
   try {
+    const o = allOrders.find(o => o.id === orderId);
+    const prevStatus = o?.status || 'pendiente';
     await updateDoc(doc(db, 'orders', orderId), {
       status,
       updatedAt: serverTimestamp()
     });
-    const o = allOrders.find(o => o.id === orderId);
     if (o) o.status = status;
+    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.shortId || orderId, `Estado: ${prevStatus} → ${status}`);
     toast(`Estado actualizado: ${status}`);
   } catch(e) {
     toast('Error al actualizar estado');
@@ -2340,13 +2529,15 @@ window.resendOrderEmail = async (orderId) => {
 
 window.updatePayStatus = async (orderId, status) => {
   try {
+    const o = allOrders.find(o => o.id === orderId);
+    const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
     await updateDoc(doc(db, 'orders', orderId), {
       'payment.status': status,
       paymentStatus: status,
       updatedAt: serverTimestamp()
     });
-    const o = allOrders.find(o => o.id === orderId);
     if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
+    logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId, `Estado de pago: ${prevStatus} → ${status}`);
     toast(`Estado de pago: ${status}`);
   } catch(e) {
     toast('Error al actualizar estado de pago');
@@ -2441,6 +2632,7 @@ async function loadConfig() {
     document.getElementById('cfg-instagram').value = d.instagram || '';
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
+    document.getElementById('cfg-ga4-id').value = d.ga4MeasurementId || '';
     document.getElementById('cfg-store-open').checked = d.storeOpen !== false;
     // Payment methods
     const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
@@ -2466,6 +2658,7 @@ document.getElementById('btn-save-config').onclick = async () => {
       instagram:       document.getElementById('cfg-instagram').value.trim(),
       facebook:        document.getElementById('cfg-facebook').value.trim(),
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
+      ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
       storeOpen:       document.getElementById('cfg-store-open').checked,
       paymentMethods: {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
@@ -2494,7 +2687,7 @@ function renderShipList(type) {
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
       <span style="font-weight:600;flex:1">${c.name}</span>
-      <span style="font-size:12px;color:${c.price == null ? '#b8934e' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
+      <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
     </div>
@@ -2583,6 +2776,13 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
   renderShipList('delivery');
   renderShipList('encomienda');
+
+  // "Abrir WhatsApp Business" en Mensajes — única fuente: whatsappNumber de
+  // Configuración. No se toca acá ningún link de "escribirle a esta clienta"
+  // (esos usan el teléfono de cada pedido, no el de la tienda).
+  const waLink = document.getElementById('mensajes-wa-link');
+  const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
+  if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
 });
 
 // Pestañas Delivery / Encomienda dentro de Envíos
@@ -2945,11 +3145,25 @@ async function prodGuardar() {
   try {
     const docId = document.getElementById('prod-id').value;
     if (docId) {
+      const oldProd = _allProducts.find(p => p._docId === docId);
       await updateDoc(doc(db, 'products', docId), data);
+      const changes = [];
+      if (oldProd && Number(oldProd.stock || 0) !== Number(data.stock || 0)) {
+        changes.push(`Stock: ${oldProd.stock ?? 0} → ${data.stock}`);
+      }
+      if (oldProd && Number(oldProd.price || 0) !== Number(data.price || 0)) {
+        changes.push(`Precio: ${oldProd.price ?? 0} → ${data.price}`);
+      }
+      if (oldProd && (oldProd.active !== false) !== data.active) {
+        changes.push(`Activo: ${oldProd.active !== false} → ${data.active}`);
+      }
+      logAudit('editar_producto', 'producto', docId, name, changes.join(' · ') || 'Datos actualizados');
       toast('Producto actualizado');
     } else {
       data.createdAt = serverTimestamp();
-      await setDoc(doc(collection(db, 'products')), data);
+      const newRef = doc(collection(db, 'products'));
+      await setDoc(newRef, data);
+      logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
       toast('Producto creado');
     }
     UnsavedGuard.clear();
@@ -2981,12 +3195,20 @@ async function prodEliminar(docId, name) {
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'products', docId));
+    logAudit('eliminar_producto', 'producto', docId, name, 'Producto eliminado');
     toast('Producto eliminado');
     loadProductos();
   } catch(e) {
     toast('Error al eliminar: ' + e.message);
   }
 }
+// Fix (Fase 2): estaban declaradas solo en el scope del módulo, pero el HTML
+// las llama desde onclick="..." inline — eso solo puede resolver identificadores
+// en window, así que sin esto, "Guardar producto" y "Eliminar" tiraban
+// "ReferenceError: ... is not defined" y no hacían nada (bug preexistente,
+// encontrado al conectar el registro de auditoría de productos de esta fase).
+window.prodGuardar = prodGuardar;
+window.prodEliminar = prodEliminar;
 
 // Load products when section is shown
 document.querySelectorAll('[data-section="productos"]').forEach(btn => {
@@ -3551,6 +3773,56 @@ function loadImportar() {
     toast('JSON descargado');
   };
 
+  // ── EXPORTAR PEDIDOS (CSV) — Fase 2
+  document.getElementById('btn-exportar-pedidos').onclick = async () => {
+    const snap = await getDocs(collection(db, 'orders'));
+    const SHIP_LABELS = { delivery: 'Delivery', encomienda: 'Encomienda', retiro: 'Retiro en tienda' };
+    const rows = [[
+      'Número de pedido', 'Fecha', 'Cliente', 'Email', 'Teléfono', 'Estado',
+      'Estado de pago', 'Productos', 'Total', 'Método de entrega', 'Ciudad/Zona'
+    ]];
+    snap.docs.forEach(d => {
+      const o = d.data();
+      const productos = (o.items || []).map(i => `${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''}`).join('; ');
+      const metodo = SHIP_LABELS[o.shipping?.method] || o.shipping?.method || '—';
+      const ciudadZona = [o.shipping?.city, o.shipping?.zone].filter(Boolean).join(' / ') || '—';
+      rows.push([
+        o.shortId || d.id.slice(0, 8).toUpperCase(),
+        formatDate(o.createdAt),
+        o.userName || '—',
+        o.userEmail || '—',
+        o.userPhone || '—',
+        o.status || 'pendiente',
+        o.paymentStatus || o.payment?.status || 'pendiente',
+        productos,
+        o.total ?? 0,
+        metodo,
+        ciudadZona
+      ]);
+    });
+    downloadCsv('tintin-pedidos-' + new Date().toISOString().slice(0, 10) + '.csv', rows);
+    toast(`${snap.size} pedidos exportados`);
+  };
+
+  // ── EXPORTAR USUARIOS (CSV) — Fase 2
+  document.getElementById('btn-exportar-usuarios').onclick = async () => {
+    const snap = await getDocs(collection(db, 'users'));
+    const rows = [['Nombre', 'Email', 'Teléfono', 'Rol', 'Bloqueado', 'Fecha de creación']];
+    snap.docs.forEach(d => {
+      const u = d.data();
+      rows.push([
+        u.name || '—',
+        u.email || '—',
+        u.phone || '—',
+        ROLE_LABELS[u.role] || u.role || 'Cliente',
+        u.blocked ? 'Sí' : 'No',
+        u.createdAt ? formatDate(u.createdAt) : '—'
+      ]);
+    });
+    downloadCsv('tintin-usuarios-' + new Date().toISOString().slice(0, 10) + '.csv', rows);
+    toast(`${snap.size} usuarios exportados`);
+  };
+
   // ── IMPORTAR JSON SAMPLE
   document.getElementById('btn-importar-sample').onclick = () => {
     document.getElementById('import-json').value = JSON.stringify([
@@ -3901,7 +4173,8 @@ const CONT_SCHEMA = {
           { key:'logo', label:'Logo (imagen)', type:'image', def:'assets-tintin/images/general/logo-tintin.webp' },
           { key:'copy', label:'Texto copyright', type:'text', def:'© 2024–2026 TINTIN ACCESORIOS' },
           { key:'waText', label:'Botón WhatsApp texto', type:'text', def:'Contactanos por WhatsApp' },
-          { key:'waHref', label:'Número WhatsApp', type:'text', def:'595981299331' },
+          // El número de WhatsApp se configura en Configuración → WhatsApp,
+          // única fuente para todo el sitio — ya no se edita por página.
         ]
       }
     }
@@ -4523,6 +4796,11 @@ function recalcOeTotals() {
 window.saveOrderEdit = async function() {
   const orderId = document.getElementById('oe-id').value;
   if (!orderId || !_editingOrder) return;
+  // Snapshot ANTES de tocar allOrders (más abajo se sobreescribe con
+  // Object.assign) — así se puede armar un resumen simple de qué cambió.
+  const _before = allOrders.find(x => x.id === orderId);
+  const _beforeStatus = _before?.status;
+  const _beforeTotal = _before?.total;
 
   // Validations
   const name  = document.getElementById('oe-name').value.trim();
@@ -4581,6 +4859,10 @@ window.saveOrderEdit = async function() {
         },
       });
     }
+    const changes = [];
+    if (_beforeStatus !== updateData.status) changes.push(`Estado: ${_beforeStatus || '—'} → ${updateData.status}`);
+    if (_beforeTotal !== total) changes.push(`Total: ${_beforeTotal ?? 0} → ${total}`);
+    logAudit('editar_pedido', 'pedido', orderId, _before?.shortId || orderId, changes.join(' · ') || 'Datos del pedido actualizados');
     toast('Pedido actualizado');
     closeOrderEdit();
     renderOrdersTable(allOrders);
@@ -4598,7 +4880,7 @@ window.saveOrderEdit = async function() {
      UNSAVED CHANGES MODAL (shared: products + collections)
 ══════════════════════════════════════ -->
 <div id="unsaved-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 8px 48px rgba(0,0,0,.2);text-align:center">
+  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:var(--shadow-lg);text-align:center">
     <div style="font-size:32px;margin-bottom:10px">⚠️</div>
     <div style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
     <div style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>

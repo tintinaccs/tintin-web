@@ -915,6 +915,43 @@ function _showProductNotFound() {
   window.ttPageReady && window.ttPageReady();
 }
 
+// JSON-LD structured data (Schema.org Product) for search engines. Rebuilt on
+// every render — not just the first one — since Firestore can push a fresh
+// price/stock snapshot at any time and the markup must never advertise a
+// stale price or an out-of-stock item as available (or vice versa).
+function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
+  let tag = document.getElementById('tt-product-jsonld');
+  if (!tag) {
+    tag = document.createElement('script');
+    tag.type = 'application/ld+json';
+    tag.id = 'tt-product-jsonld';
+    document.head.appendChild(tag);
+  }
+  const images = mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages;
+  const description = product.desc
+    ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    : undefined;
+  const available = !(stock !== null && stock <= 0);
+  const data = {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: product.name,
+    image: images.length ? images : undefined,
+    description: description || undefined,
+    sku: String(product.id),
+    category: product.category || product.cat || undefined,
+    offers: {
+      '@type': 'Offer',
+      url: window.location.href,
+      priceCurrency: 'PYG',
+      price: product.price != null ? Number(product.price) : undefined,
+      availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  };
+  tag.textContent = JSON.stringify(data);
+}
+
 function _renderProductDetail(product) {
   const isSameProduct = _pdProduct && String(_pdProduct.id) === String(product.id);
   _pdProduct = product;
@@ -1005,6 +1042,8 @@ function _renderProductDetail(product) {
       </div>
     `).join('');
   }
+
+  _injectProductJsonLd(product, mainImgUrl, extraImages, stock);
 
   // Variants
   const variantsContainer = document.getElementById('product-variants');

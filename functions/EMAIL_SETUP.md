@@ -9,9 +9,15 @@ cuenta de Gmail (100 correos/día, de sobra para una tienda).
 > el código ya está listo en `functions/index.js` — ver `DEPLOY.md`. Pero
 > requiere activar el plan Blaze (pago por uso, con tarjeta cargada).
 
+**Cuenta que envía los correos: `tintinpedidos@gmail.com`.** El proyecto de
+Apps Script vive ahí (no en `tintinaccs@gmail.com`) porque `MailApp.sendEmail`
+siempre envía como la cuenta que autorizó/desplegó el script — no hay forma
+de pasarle un remitente distinto. `tintinaccs@gmail.com` sigue siendo el
+destinatario del correo interno, pero ya no envía nada.
+
 ## 1. Crear el proyecto de Apps Script
 
-1. Andá a **https://script.google.com** (con la cuenta `tintinaccs@gmail.com`)
+1. Andá a **https://script.google.com** (con la cuenta `tintinpedidos@gmail.com`)
 2. Click en **"Nuevo proyecto"**
 3. Borrá todo el código de ejemplo que aparece
 4. Pegá el código completo de la sección "2. Código" de más abajo
@@ -23,25 +29,33 @@ cuenta de Gmail (100 correos/día, de sobra para una tienda).
 
 ## 2. Código para pegar
 
-Este script manda **dos correos distintos** por cada pedido nuevo:
+Este script manda **dos correos distintos** por cada pedido nuevo, cada uno
+en su propio `try/catch` (para poder distinguir si salió uno solo de los
+dos, no solo "todo bien" o "todo mal"):
 
-1. **A vos** (`tintinaccs@gmail.com`) — el correo operativo completo: todos los
+1. **A la tienda** (`tintinaccs@gmail.com`) — el correo operativo completo: todos los
    datos del cliente, dirección/mapa, productos con imagen y variante, totales
    y un botón de WhatsApp con un mensaje ya redactado (lo podés editar antes
    de enviarlo, como cualquier link de `wa.me`).
-2. **Al cliente** (solo si dejó su email en el checkout) — una confirmación
+2. **A la clienta** (solo si dejó su email en el checkout) — una confirmación
    corta y prolija, con el número de pedido, sus productos, el total, la
-   dirección de entrega y un mensaje de agradecimiento estilo Tintin.
+   dirección de entrega y un botón "Escribinos por WhatsApp" con un mensaje
+   de consulta ya redactado.
 
 Cuando usás el botón **"✉️ Reenviar"** de Super Admin → Pedidos, por defecto
-solo se reenvía tu copia operativa (no se le vuelve a mandar la confirmación
-al cliente, para no ser repetitiva). Si alguna vez preferís que el reenvío
-también le llegue de nuevo al cliente, buscá el comentario `!isResend` en
-`doPost` y quitalo.
+solo se reenvía la copia operativa de la tienda (no se le vuelve a mandar la
+confirmación a la clienta, para no ser repetitiva). Si alguna vez preferís
+que el reenvío también le llegue de nuevo a la clienta, buscá el comentario
+`!isResend` en `doPost` y quitalo.
+
+El resultado que devuelve `doPost` ya no es un único `success: true/false`:
+incluye `adminSent`/`customerSent` por separado, para que el sitio pueda
+guardar `notificationStatus: 'sent'` (los dos salieron), `'partial'` (salió
+uno solo) o `'failed'` (fallaron los dos) en vez de un simple sí/no.
 
 ```javascript
 const SHARED_SECRET   = 'TU_SECRETO_AQUI';
-const ADMIN_EMAIL     = 'tintinaccs@gmail.com';
+const ADMIN_EMAIL     = 'tintinaccs@gmail.com';  // a quién le llega el correo interno — NO es quien envía
 const STORE_NAME      = 'Tintin Accesorios';
 const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
 // Se usa solo si el pedido no trae su propio número (pedidos viejos, antes de este cambio).
@@ -58,30 +72,57 @@ function doPost(e) {
     const isResend = !!data.isResend;
     const shortId  = order.shortId || (orderId ? orderId.slice(0, 8).toUpperCase() : '—');
 
-    // 1) Correo operativo — siempre, a la tienda
-    const adminSubject = (isResend ? '🔁 [Reenviado] ' : '') +
-      'Nuevo pedido #' + shortId + ' — ' + fmtPrice(order.total) + ' — ' + (order.userName || 'Cliente');
-    MailApp.sendEmail({
-      to: ADMIN_EMAIL,
-      subject: adminSubject,
-      body: buildAdminText(shortId, order),
-      htmlBody: buildAdminHtml(shortId, order)
-    });
-
-    // 2) Confirmación al cliente — solo si dejó su email, y solo en el envío
-    //    original (no en cada reenvío manual desde el admin).
-    if (order.userEmail && !isResend) {
+    // 1) Correo operativo — siempre, a la tienda. Se prueba en su propio
+    // try/catch, separado del correo a la clienta, para poder reportar un
+    // resultado PARCIAL si uno de los dos falla sin que eso oculte que el
+    // otro sí salió bien.
+    let adminSent = false, adminError = '';
+    try {
+      const adminSubject = (isResend ? '🔁 [Reenviado] ' : '') +
+        'Nuevo pedido #' + shortId + ' — ' + fmtPrice(order.total) + ' — ' + (order.userName || 'Cliente');
       MailApp.sendEmail({
-        to: order.userEmail,
-        subject: 'Recibimos tu pedido en Tintin 💗 Pedido #' + shortId,
-        body: buildCustomerText(shortId, order),
-        htmlBody: buildCustomerHtml(shortId, order)
+        to: ADMIN_EMAIL,
+        subject: adminSubject,
+        body: buildAdminText(shortId, order),
+        htmlBody: buildAdminHtml(shortId, order)
       });
+      adminSent = true;
+    } catch (err) {
+      adminError = String(err);
     }
 
-    return jsonOut({ success: true });
+    // 2) Confirmación a la clienta — solo si dejó su email, y solo en el
+    //    envío original (no en cada reenvío manual desde el admin).
+    //    `customerSent` queda en null (no false) cuando ni siquiera
+    //    correspondía intentarlo — así no cuenta como una falla real.
+    let customerSent = null, customerError = '';
+    if (order.userEmail && !isResend) {
+      try {
+        MailApp.sendEmail({
+          to: order.userEmail,
+          subject: 'Recibimos tu pedido en Tintin 💗 Pedido #' + shortId,
+          body: buildCustomerText(shortId, order),
+          htmlBody: buildCustomerHtml(shortId, order)
+        });
+        customerSent = true;
+      } catch (err) {
+        customerSent = false;
+        customerError = String(err);
+      }
+    }
+
+    // `success` se mantiene por compatibilidad con lo que ya usa el sitio;
+    // `adminSent`/`customerSent` son los que permiten calcular
+    // 'sent' / 'partial' / 'failed' del lado del frontend.
+    const success = adminSent && customerSent !== false;
+    return jsonOut({
+      success,
+      adminSent,
+      customerSent,
+      error: [adminError, customerError].filter(Boolean).join(' | ') || undefined
+    });
   } catch (err) {
-    return jsonOut({ success: false, error: String(err) });
+    return jsonOut({ success: false, adminSent: false, customerSent: null, error: String(err) });
   }
 }
 
@@ -125,16 +166,16 @@ function waLink(phone, text) {
   return 'https://wa.me/' + digits + (text ? '?text=' + encodeURIComponent(text) : '');
 }
 
-// Mensaje que la tienda le manda al CLIENTE (editable antes de enviar en WhatsApp)
+// Mensaje que la tienda le manda a la CLIENTA (editable antes de enviar en WhatsApp)
 function waGreetingToCustomer(shortId, order) {
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   return 'Hola' + (first ? ' ' + first : '') + '! 👋 Soy de ' + STORE_NAME +
     ', te escribo por tu pedido #' + shortId + '. 💗';
 }
 
-// Mensaje que el CLIENTE le manda a la tienda (botón "contactanos" del correo de confirmación)
+// Mensaje que la CLIENTA le manda a la tienda (botón "Escribinos por WhatsApp" del correo de confirmación)
 function waGreetingToStore(shortId) {
-  return 'Hola! Tengo una consulta sobre mi pedido #' + shortId + ' en Tintin.';
+  return 'Hola Tintin, acabo de realizar mi pedido N° ' + shortId + ' y quiero consultar el estado.';
 }
 
 function shipMethodLabel(order) {
@@ -254,7 +295,7 @@ function buildAdminHtml(shortId, order) {
 }
 
 // ============================================================
-// CORREO 2 — al cliente (confirmación, solo si dejó su email)
+// CORREO 2 — a la clienta (confirmación, solo si dejó su email)
 // ============================================================
 
 function buildCustomerText(shortId, order) {
@@ -320,31 +361,48 @@ function buildCustomerHtml(shortId, order) {
 2. Click en el ícono de engranaje ⚙️ al lado de "Seleccionar tipo" → elegí **"Aplicación web"**
 3. Configurá:
    - **Descripción**: `Emails de pedidos Tintin`
-   - **Ejecutar como**: `Yo (tintinaccs@gmail.com)`
+   - **Ejecutar como**: `Yo (tintinpedidos@gmail.com)`
    - **Quién tiene acceso**: **`Cualquier usuario`** (importante — sin esto, el checkout público no va a poder llamarlo)
 4. Click en **"Implementar"**
-5. Te va a pedir autorizar permisos — elegí tu cuenta, puede avisar "Google no verificó esta app": hacé clic en **"Configuración avanzada"** → **"Ir a Tintin - Emails de pedidos (no seguro)"** → **"Permitir"** (es tu propio script, es seguro)
+5. Te va a pedir autorizar permisos — elegí la cuenta `tintinpedidos@gmail.com`, puede avisar "Google no verificó esta app": hacé clic en **"Configuración avanzada"** → **"Ir a Tintin - Emails de pedidos (no seguro)"** → **"Permitir"** (es tu propio script, es seguro)
 6. Copiá la **URL de la aplicación web** que te da al final (termina en `/exec`)
 
 ## 4. Conectar la URL al sitio
 
-Abrí el archivo `js/email-config.js` del repositorio y reemplazá:
+**Ya hecho — estado actual (migración completada):** `js/email-config.js` ya apunta a la
+implementación desplegada desde `tintinpedidos@gmail.com`:
 
 ```javascript
-export const EMAIL_WEBHOOK_URL = 'PEGAR_URL_DE_APPS_SCRIPT_AQUI';
-export const EMAIL_SECRET = 'PEGAR_TU_SECRETO_AQUI';
+export const EMAIL_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxia47SEM2GmGrjSF2Cy1cviYhTt9PVF7n3M_vYVuIl26PQeoZ-f2OqSC0IyMBr5Ob0lA/exec';
+export const EMAIL_SECRET = '58964bb773a19a7b207be3c75673866b914a070c106bec92';
 ```
 
-por la URL que copiaste y el mismo secreto que pusiste en `SHARED_SECRET` en el paso 1. Guardá, subí el cambio (commit + push) a la rama `main`.
+Si en algún momento se vuelve a implementar el script de cero (URL `/exec` nueva) o se
+rota el secreto, hay que actualizar esas dos líneas en `js/email-config.js` — el
+`EMAIL_SECRET` del sitio y el `SHARED_SECRET` del script deben coincidir exacto.
+
+El proyecto viejo bajo `tintinaccs@gmail.com` ya no está conectado a nada — el
+sitio no le manda ninguna llamada. Si todavía existe una implementación activa
+ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actual.
 
 ## 5. Probar
 
 1. Hacé un pedido de prueba desde el checkout público
-2. Revisá la bandeja de `tintinaccs@gmail.com` — debería llegar en segundos
-3. En Super Admin → Pedidos, probá el botón **"✉️ Reenviar"** en cualquier pedido
+2. Revisá la bandeja de `tintinaccs@gmail.com` — debería llegar en segundos, con
+   remitente **`tintinpedidos@gmail.com`**
+3. Revisá que también llegue la confirmación a la cuenta de la clienta de prueba,
+   mismo remitente
+4. En Super Admin → Pedidos, probá el botón **"✉️ Reenviar"** en cualquier pedido —
+   también debe salir desde `tintinpedidos@gmail.com`
+5. Confirmá en Super Admin → Pedidos que la columna de notificación muestra
+   "Notificado" cuando salieron los dos correos — para probar `partial`/`failed`
+   hace falta forzar un error real (ej. un `order.userEmail` con formato inválido)
 
 ## Si algo falla
 - Si no llega nada: abrí la consola del navegador (F12) en el checkout y buscá mensajes que empiecen con `[email-notify]`
 - Revisá que la URL en `js/email-config.js` termine en `/exec` (no `/dev`)
 - Revisá que en el paso 3 hayas elegido "Cualquier usuario" con acceso, no "Solo yo"
 - Si editaste el script después de implementarlo, tenés que crear una **nueva implementación** (Implementar → Administrar implementaciones → editar → nueva versión) para que los cambios tomen efecto
+- Si el correo sigue llegando "De: tintinaccs@gmail.com", es porque `js/email-config.js`
+  todavía apunta a la URL vieja, o la implementación activa en Apps Script sigue
+  siendo la del proyecto bajo `tintinaccs@gmail.com`

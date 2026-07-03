@@ -191,14 +191,37 @@ service cloud.firestore {
       // estado de pago, reenvío de correo) — nunca los datos del pedido en sí
       // (productos, montos, dirección, datos del cliente). Esos campos completos
       // solo los puede reescribir un admin/superadmin desde "Editar pedido".
+      //
+      // La dueña del pedido puede tocar ÚNICAMENTE `notificationStatus` del
+      // suyo — nada más (ni total, ni productos, ni datos personales). Existe
+      // para que checkout.html pueda registrar si el correo de confirmación
+      // salió bien o falló, en vez de quedar pegado en "pending" para
+      // siempre (antes no tenía ningún permiso de update sobre su propio
+      // pedido, así que ese resultado nunca se podía guardar).
       allow update: if isAdmin() || (
         isAgent() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(
           ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
         )
+      ) || (
+        isSignedIn() && !isBlockedUser() &&
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
       );
 
       allow delete: if isAdmin();
+    }
+
+    // Registro de auditoría (Fase 2): quién editó un pedido, cambió su estado,
+    // editó un producto/stock, cambió un rol, o bloqueó/restauró una cuenta.
+    // Cualquier admin/agente puede CREAR una entrada (así queda registrada su
+    // propia acción), pero solo Super Admin puede LEER el historial — el
+    // Modder no ve la auditoría, aunque sus propias acciones sí queden
+    // anotadas ahí. Es un registro inmutable: nadie edita ni borra entradas.
+    match /auditLog/{logId} {
+      allow read: if isSuperAdmin();
+      allow create: if isAdmin() || isAgent();
+      allow update, delete: if false;
     }
 
     match /{document=**} {

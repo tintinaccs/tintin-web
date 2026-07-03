@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TINTIN Accesorios & Relojes | Accesorios Femeninos — Paraguay</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#b84c72">
+  <!-- Google Search Console (Fase 2): creá la propiedad en
+       https://search.google.com/search-console con esta misma URL, elegí
+       verificación por "etiqueta HTML" y pegá el content= que te dé acá
+       abajo (descomentando la línea). Después, en "Sitemaps", cargá
+       sitemap.xml — ya está publicado en la raíz del sitio. -->
+  <!-- <meta name="google-site-verification" content="PEGAR_CODIGO_AQUI"> -->
   <meta name="description" content="Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.">
   <meta property="og:title" content="TINTIN Accesorios & Relojes — Boutique Femenina Paraguay">
   <meta property="og:description" content="Tienda de accesorios femeninos en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más. Envíos a todo el país.">
@@ -314,15 +326,18 @@
   }, SAFETY_MS);
 })();
 </script>
-<!-- Fallback: hide splash + unlock scroll on window load in case main script crashed -->
+<!-- Fallback real: solo actúa si el script principal del splash se rompió
+     y nunca lo cerró. Corre después de su propio SAFETY_MS (4200ms) para
+     no competir con la duración mínima elegante — antes disparaba en
+     window.load, que en conexiones rápidas/con caché ocurre en menos de
+     1600ms y cortaba el splash de golpe (efecto de parpadeo). -->
 <script>
 function _ttUnlock(){document.documentElement.classList.remove('tt-splash-lock');if(document.body)document.body.classList.remove('tt-splash-lock');}
-window.addEventListener('load',function(){
+setTimeout(function(){
   _ttUnlock();
   var e=document.getElementById('tt-intro');
   if(e&&!e.classList.contains('tt-out')){e.classList.add('tt-out');setTimeout(function(){_ttUnlock();if(e.parentNode)e.parentNode.removeChild(e);},600);}
-});
-setTimeout(function(){_ttUnlock();},5500);
+},5500);
 </script>
 
 <!-- ══════════════════════════════════════
@@ -923,6 +938,8 @@ setTimeout(function(){_ttUnlock();},5500);
           <li><a href="envios.html">Política de envíos</a></li>
           <li><a href="cambios-devoluciones.html">Cambios y devoluciones</a></li>
           <li><a href="preguntas-frecuentes.html">Preguntas frecuentes</a></li>
+          <li><a href="terminos.html">Términos y condiciones</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
         </ul>
       </div>
 
@@ -1042,6 +1059,8 @@ setTimeout(function(){_ttUnlock();},5500);
 <script src="js/scroll-reveal.js" defer></script>
 <script type="module" src="js/auth-nav.js"></script>
 <script type="module" src="js/nav-collections.js"></script>
+<script type="module" src="js/whatsapp.js"></script>
+<script type="module" src="js/analytics.js"></script>
 <script type="module" src="js/load-images-init.js"></script>
 <script type="module" src="js/products-store.js"></script>
 <script type="module" src="js/cart-sync.js"></script>
