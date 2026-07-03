@@ -30,18 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* ── LOADING OVERLAY ── */
-    #tt-page-loading {
-      position: fixed; inset: 0; z-index: 9999;
-      background: rgba(252,228,236,.95);
-      backdrop-filter: blur(10px);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 14px;
-    }
-    #tt-page-loading svg { animation: tt-spin 1.4s linear infinite; }
-    #tt-page-loading span { font-size: 12px; font-weight: 700; color: var(--acc); letter-spacing: .1em; text-transform: uppercase; }
-    @keyframes tt-spin { to { transform: rotate(360deg); } }
-
     /* ── LAYOUT ── */
     .login-page {
       min-height: 100vh;
@@ -181,17 +169,10 @@
     .login-back a { color: var(--acc); font-weight: 700; text-decoration: none; }
     .login-back a:hover { text-decoration: underline; }
   </style>
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
-
-<!-- PAGE LOADING OVERLAY (shown while checking if already logged in) -->
-<div id="tt-page-loading">
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-  </svg>
-  <span id="tt-page-loading-text">Cargando…</span>
-</div>
 
 <div class="login-page">
 
@@ -255,16 +236,18 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, BLOCKED_MESSAGE } from "./js/roles.js";
 
-const overlay = document.getElementById('tt-page-loading');
-const overlayTextEl = document.getElementById('tt-page-loading-text');
-function showOverlay() { if (overlay) overlay.style.display = 'flex'; }
+// El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
+// js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
+// cambiarle el texto durante el flujo interactivo de Google, en vez de
+// tener un segundo overlay propio compitiendo con el genérico.
+function showOverlay() { window.TintinLoader && window.TintinLoader.show(); }
 // Siempre vuelve el texto a "Cargando…" al ocultarlo — por si se reusa para
 // otra cosa más adelante en la misma carga de página.
 function hideLoginOverlay() {
-  if (overlay) overlay.style.display = 'none';
+  window.TintinLoader && window.TintinLoader.hide();
   setOverlayText('Cargando…');
 }
-function setOverlayText(text) { if (overlayTextEl) overlayTextEl.textContent = text; }
+function setOverlayText(text) { window.TintinLoader && window.TintinLoader.setText(text); }
 
 function showError(html) {
   hideMessages();
@@ -351,6 +334,7 @@ async function guardarUsuario(user) {
 // Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
 // un estado "correo sin verificar" — Google ya lo entrega verificado.
 onAuthStateChanged(auth, async user => {
+  window.ttPageReady && window.ttPageReady(); // ya sabemos si hay sesión o no — la página está lista
   if (!user) {
     hideLoginOverlay();
     // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras

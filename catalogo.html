@@ -199,6 +199,7 @@
       .cat-hero { padding: 24px 16px; }
     }
   </style>
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
@@ -657,6 +658,7 @@ function handleProductsUpdate(products) {
   if (!_catalogInitialized) {
     _catalogInitialized = true;
     init(products);
+    window.ttPageReady && window.ttPageReady();
   } else {
     todos = products;
     actualizarContadores();

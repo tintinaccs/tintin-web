@@ -22,21 +22,6 @@
 
     body { background: var(--pink-pale); }
 
-    /* Loading overlay */
-    #perfil-loading {
-      position: fixed; inset: 0; z-index: 9999;
-      background: rgba(252,228,236,.97);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 14px;
-    }
-    #perfil-loading svg { animation: pf-spin 1.4s linear infinite; }
-    #perfil-loading span {
-      font-size: 12px; font-weight: 700; color: var(--pink-dark);
-      letter-spacing: .1em; text-transform: uppercase;
-      font-family: var(--font-body);
-    }
-    @keyframes pf-spin { to { transform: rotate(360deg); } }
-
     /* Profile layout */
     .perfil-wrap {
       max-width: 700px; margin: 0 auto;
@@ -144,18 +129,10 @@
       .perfil-body { padding: 16px; }
     }
   </style>
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
-
-<!-- Loading overlay — visible while Firebase auth resolves -->
-<div id="perfil-loading">
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-  </svg>
-  <span>Cargando…</span>
-</div>
 
 <!-- ══════════════════════════════════════
      HEADER (same as index.html)
@@ -431,8 +408,7 @@ const ROLE_COLORS = {
   agent: '#7b68ee', viewer: '#4a90d9', client: '#888'
 };
 
-const loadingEl = document.getElementById('perfil-loading');
-function hideLoading() { if (loadingEl) loadingEl.style.display = 'none'; }
+function hideLoading() { window.ttPageReady && window.ttPageReady(); }
 
 function toast(msg) {
   const t = document.getElementById('perfil-toast');

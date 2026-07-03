@@ -83,6 +83,24 @@
       tt-splash-heartbeat 1.15s ease-in-out .75s infinite;
   }
 
+  /* Si el logo no carga, nunca se muestra una imagen rota: texto de marca. */
+  #tt-intro-fallback {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 900;
+    letter-spacing: .22em;
+    color: #fff;
+    text-shadow: 0 4px 18px rgba(139,38,66,.4);
+    opacity: 0;
+    transform: scale(.72) translateY(18px);
+  }
+
+  #tt-intro-fallback.tt-ready {
+    animation:
+      tt-splash-enter .75s cubic-bezier(.34,1.56,.64,1) both,
+      tt-splash-heartbeat 1.15s ease-in-out .75s infinite;
+  }
+
   .tt-splash-line {
     width: clamp(110px, 24vw, 210px);
     height: 3px;
@@ -251,6 +269,7 @@
     if (document.body) document.body.classList.remove('tt-splash-lock');
 
     document.dispatchEvent(new CustomEvent('tintin:splash:done'));
+    document.dispatchEvent(new CustomEvent('tintin:page-ready'));
 
     setTimeout(function () {
       if (splash && splash.parentNode) {
@@ -259,12 +278,28 @@
     }, 650);
   }
 
+  // Si el logo no carga, nunca queda una imagen rota: texto "TINTIN" en su lugar.
+  function showLogoFallback() {
+    if (!logo || !logo.parentNode) return;
+    var span = document.createElement('span');
+    span.id = 'tt-intro-fallback';
+    span.textContent = 'TINTIN';
+    logo.replaceWith(span);
+    logo = span;
+  }
+
   if (logo) {
-    if (logo.complete && logo.naturalWidth) {
+    if (logo.tagName === 'IMG' && logo.complete && logo.naturalWidth === 0) {
+      showLogoFallback();
+      markLogoReady();
+    } else if (logo.complete && logo.naturalWidth) {
       markLogoReady();
     } else {
       logo.addEventListener('load', markLogoReady, { once: true });
-      logo.addEventListener('error', markLogoReady, { once: true });
+      logo.addEventListener('error', function () {
+        showLogoFallback();
+        markLogoReady();
+      }, { once: true });
     }
   } else {
     markLogoReady();

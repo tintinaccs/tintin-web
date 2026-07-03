@@ -726,6 +726,7 @@
       .ck-trust-item { font-size: 10px; }
     }
   </style>
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
@@ -2210,6 +2211,7 @@ onAuthStateChanged(auth, user => {
   currentUser = user;
   currentUserProfile = null;
   authReady = true;
+  window.ttPageReady && window.ttPageReady(); // carrito ya renderizado + estado de sesión ya conocido
   renderAccountBadge(user);
   // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
   // anónima acá — solo se sigue el estado de auth tal cual está. Ver una y

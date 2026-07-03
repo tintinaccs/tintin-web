@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
@@ -441,6 +442,7 @@ function syncOptionalEl(container, selector, value, build) {
 }
 
 onCollectionsUpdate(cols => {
+  window.ttPageReady && window.ttPageReady();
   const grid = document.querySelector('.tt-colls-page-grid');
   if (!grid) return;
   const staticCards = grid.querySelectorAll('.tt-coll-page-card[data-slug]');

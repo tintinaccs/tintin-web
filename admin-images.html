@@ -23,17 +23,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: #f8f8f8; color: var(--text); min-height: 100vh; }
 
-    /* ── AUTH GATE ── */
-    #auth-loading, #auth-denied {
-      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    /* ── AUTH GATE (denegado) — la carga la cubre el loader de marca ── */
+    #auth-denied {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
       background: #fff; z-index: 1000; flex-direction: column; gap: 16px;
     }
-    #auth-loading .spinner {
-      width: 36px; height: 36px; border: 3px solid var(--rose-light);
-      border-top-color: var(--rose); border-radius: 50%; animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #auth-denied { display: none; }
 
     /* ── HEADER ── */
     .adm-header {
@@ -252,15 +246,12 @@
     .adm-mobile-tab.active, .adm-mobile-tab:hover { color: var(--rose); border-bottom-color: var(--rose); }
     .adm-mobile-tab .nav-icon { font-size: 1.2rem; }
   </style>
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
 <body>
 
-<!-- AUTH GATE -->
-<div id="auth-loading">
-  <div class="spinner"></div>
-  <p style="font-size:0.9rem;color:#888;">Verificando acceso…</p>
-</div>
+<!-- AUTH GATE (denegado) — la carga la cubre el loader de marca -->
 <div id="auth-denied">
   <div style="font-size:2.5rem;">🔒</div>
   <h2 style="font-size:1.1rem;">Acceso denegado</h2>
@@ -536,11 +527,10 @@ document.getElementById('adm-overlay').addEventListener('click', () => {
 
 // ── Auth guard ──
 onAuthStateChanged(auth, async (user) => {
-  const loading = document.getElementById('auth-loading');
-  const denied  = document.getElementById('auth-denied');
+  const denied = document.getElementById('auth-denied');
 
   if (!user) {
-    loading.style.display = 'none';
+    window.ttPageReady && window.ttPageReady();
     denied.style.display = 'flex';
     return;
   }
@@ -556,13 +546,13 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   if (!allowed) {
-    loading.style.display = 'none';
+    window.ttPageReady && window.ttPageReady();
     denied.style.display = 'flex';
     return;
   }
 
   // Show UI
-  loading.style.display = 'none';
+  window.ttPageReady && window.ttPageReady();
   document.getElementById('adm-header').style.display = '';
   document.getElementById('adm-sidebar').style.display = '';
   document.getElementById('adm-layout').style.display = '';

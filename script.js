@@ -912,6 +912,7 @@ function _showProductNotFound() {
   if (loading) loading.style.display = 'none';
   if (grid) grid.style.display = 'none';
   if (notFound) notFound.style.display = '';
+  window.ttPageReady && window.ttPageReady();
 }
 
 function _renderProductDetail(product) {
@@ -923,6 +924,7 @@ function _renderProductDetail(product) {
   const notFound = document.getElementById('product-not-found');
   const grid = document.getElementById('product-grid');
   if (loading) loading.style.display = 'none';
+  window.ttPageReady && window.ttPageReady();
   if (notFound) notFound.style.display = 'none';
   if (grid) grid.style.display = '';
 
