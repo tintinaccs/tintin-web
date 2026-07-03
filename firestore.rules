@@ -164,11 +164,23 @@ service cloud.firestore {
     }
 
     match /orders/{orderId} {
-      // El pedido debe quedar asignado a quien realmente lo crea — evita que
-      // alguien guarde un pedido a nombre de otro uid. Una cuenta bloqueada
-      // (Fase E) no puede crear pedidos nuevos, ni siquiera llamando a
-      // Firestore directamente sin pasar por la UI de checkout.
-      allow create: if isSignedIn() && !isBlockedUser() && request.resource.data.userId == request.auth.uid;
+      // Fase F: no hay más compra como invitada. El pedido debe quedar
+      // asignado a quien realmente lo crea (nunca a nombre de otro uid), con
+      // un correo real y verificado — no alcanza con que la UI oculte el
+      // botón de invitada, esto lo hace imposible aunque alguien llame a
+      // Firestore directamente desde la consola:
+      //   - la cuenta no puede estar bloqueada (Fase E);
+      //   - el token tiene que traer un email (los usuarios anónimos NO
+      //     tienen email en el token, así que esto ya los excluye solo);
+      //   - ese email tiene que estar verificado;
+      //   - el pedido tiene que guardar el UID y el email de esa MISMA
+      //     cuenta (nunca el uid/email de otra persona, ni un campo vacío).
+      allow create: if isSignedIn() && !isBlockedUser() &&
+        request.auth.token.email != null &&
+        request.auth.token.email_verified == true &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.userEmail is string &&
+        request.resource.data.userEmail.lower() == request.auth.token.email.lower();
 
       // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
       // admin y Modder pueden leer cualquiera (el Modder necesita ver los datos

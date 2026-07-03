@@ -919,7 +919,7 @@
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import {
-  onAuthStateChanged, signInAnonymously
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
@@ -1185,6 +1185,48 @@ function showBlockedOverlay() {
   document.body.style.overflow = 'hidden';
 }
 
+// Fase F: sin cuenta real y verificada no se puede avanzar del carrito en
+// adelante. `currentUser` puede ser: null (sin sesión), anónimo (ya no se usa
+// pero se contempla igual por las dudas), o una cuenta real sin verificar.
+function isCheckoutAuthorized() {
+  return !!(
+    currentUser &&
+    !currentUser.isAnonymous &&
+    currentUser.emailVerified &&
+    !currentUserProfile?.blocked
+  );
+}
+
+// Modal obligatorio (Fase F): no tiene "Continuar como invitada" a propósito.
+// Cerrarlo (X o click afuera) deja al carrito y al paso 1 completamente
+// intactos — no toca localStorage ni el estado del carrito para nada.
+function showLoginRequiredModal() {
+  if (document.getElementById('ck-login-required-overlay')) return;
+  const from = encodeURIComponent('checkout.html');
+  const ov = document.createElement('div');
+  ov.id = 'ck-login-required-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px';
+  ov.innerHTML = `
+    <div style="position:relative;background:#fff;border-radius:20px;max-width:420px;width:100%;padding:38px 26px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.28)">
+      <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:none;background:#f5eef1;color:#888;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <div style="font-size:36px;margin-bottom:14px">🔐</div>
+      <div style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Necesitás una cuenta para continuar</div>
+      <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 24px">Para continuar con tu compra, necesitás iniciar sesión o crear una cuenta. Solo toma un minuto y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación por correo.</p>
+      <a id="ck-login-required-login" class="ck-btn" style="text-decoration:none;margin-top:0" href="login.html?from=${from}">Iniciar sesión</a>
+      <a id="ck-login-required-register" class="ck-btn-back" style="text-decoration:none;margin-top:10px" href="login.html?from=${from}#registro">Crear cuenta</a>
+    </div>`;
+  document.body.appendChild(ov);
+  document.body.style.overflow = 'hidden';
+  document.getElementById('ck-login-required-close').onclick = closeLoginRequiredModal;
+  ov.addEventListener('click', (e) => { if (e.target === ov) closeLoginRequiredModal(); });
+}
+
+function closeLoginRequiredModal() {
+  const ov = document.getElementById('ck-login-required-overlay');
+  if (ov) ov.remove();
+  document.body.style.overflow = '';
+}
+
 // Single delegated listener — set up once, never duplicated
 document.getElementById('ck-items').addEventListener('click', async e => {
   const btn = e.target.closest('[data-action]');
@@ -1201,7 +1243,14 @@ document.getElementById('ck-items').addEventListener('click', async e => {
 });
 
 // ---- STEP NAVIGATION ----
+// Fase F: el chequeo vive ACÁ (no solo en el botón "Continuar con el envío")
+// a propósito — así también corta el paso si alguien llama a goToStep(n) a
+// mano desde la consola para saltarse el paso 1, no solo con clicks reales.
 function goToStep(n) {
+  if (n >= 1 && !isCheckoutAuthorized()) {
+    showLoginRequiredModal();
+    n = 0;
+  }
   // Update panels
   document.querySelectorAll('.ck-panel').forEach((p, i) => {
     p.classList.toggle('active', i === n);
@@ -1539,11 +1588,10 @@ function generateShortId() {
   return s;
 }
 
-// On a slow connection the anonymous/guest sign-in (below, on page load) can
-// still be resolving when the customer reaches "Confirmar pedido" — orders
-// now require a real matching userId (firestore.rules), so we can't let
-// saveOrder() run with a stale/null currentUser. Waits for the auth state
-// that's already being tracked; times out instead of hanging forever.
+// En una conexión lenta, el estado de auth puede seguir resolviendo cuando
+// la clienta llega a "Confirmar pedido" — esto espera al estado que ya se
+// venía siguiendo en vez de asumir currentUser; tiene timeout para no
+// quedarse colgado para siempre.
 function waitForAuthUser() {
   if (currentUser) return Promise.resolve(currentUser);
   return new Promise(resolve => {
@@ -1556,17 +1604,33 @@ function waitForAuthUser() {
 
 async function saveOrder(items, subtotal, total) {
   currentUser = await waitForAuthUser();
+
+  // Fase F, última barrera antes de guardar: sin cuenta real, verificada y
+  // sin bloquear, no hay pedido — por más que alguien haya llegado hasta acá
+  // saltándose el modal (sesión vencida a mitad de checkout, por ejemplo).
+  if (!currentUser || currentUser.isAnonymous || !currentUser.emailVerified) {
+    showLoginRequiredModal();
+    goToStep(0);
+    throw new Error('LOGIN_REQUIRED');
+  }
   if (currentUserProfile?.blocked) {
     showBlockedOverlay();
     throw new Error('BLOCKED_ACCOUNT');
   }
+
+  // Fuerza un token fresco: si el correo se verificó hace instantes, el ID
+  // token que el navegador tiene cacheado todavía podría decir
+  // email_verified:false, y firestore.rules (que exige email_verified==true)
+  // rechazaría el pedido con un permission-denied confuso.
+  try { await currentUser.getIdToken(true); } catch {}
+
   const shortId = generateShortId();
   window._lastOrderId = shortId;
 
   const orderDoc = {
     shortId,
-    userId:      currentUser?.uid || null,
-    userEmail:   currentUser?.email || orderData.email || '',
+    userId:      currentUser.uid,
+    userEmail:   currentUser.email.trim().toLowerCase(),
     userName:    orderData.name,
     userPhone:   orderData.phone,
     items:       items.map(i => ({
@@ -1898,13 +1962,11 @@ window.addEventListener('tintin:products-loaded', () => renderCart(), { once: tr
 onAuthStateChanged(auth, user => {
   currentUser = user;
   currentUserProfile = null;
-  // No hay sesión: iniciamos una sesión anónima transparente para que el checkout de
-  // invitados (sin cuenta) pueda guardar el pedido — `orders` exige un usuario autenticado.
-  if (!user) {
-    signInAnonymously(auth).catch(e => console.error('No se pudo iniciar sesión de invitado:', e));
-    return;
-  }
-  if (user.isAnonymous) return;
+  // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
+  // anónima acá — solo se sigue el estado de auth tal cual está. Ver una y
+  // otra colección/producto/paso 1 del checkout sigue funcionando sin login,
+  // porque esos son de lectura pública (products/collections/settings).
+  if (!user || user.isAnonymous) return;
   // Cuenta real logueada: precargamos su perfil (nombre/teléfono) para el paso 3.
   getDoc(doc(db, 'users', user.uid))
     .then(snap => {
