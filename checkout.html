@@ -582,8 +582,15 @@
       color: var(--acc);
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
-      gap: 6px;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ck-map-tip strong { color: var(--acc-dark); }
+    .ck-map-tip-steps {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--acc);
+      opacity: .85;
     }
     #ck-map { height: 260px; width: 100%; }
     .ck-map-coords {
@@ -594,6 +601,7 @@
       font-weight: 600;
       border-top: 1px solid var(--border);
     }
+    .ck-map-coords.ck-map-coords-missing { color: #c0392b; }
     @media (max-width: 480px) { #ck-map { height: 200px; } }
 
     /* ---- MAP SEARCH ---- */
@@ -753,7 +761,7 @@
       </div>
 
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
-        <label class="ck-label">Dirección de entrega *</label>
+        <label class="ck-label" id="ck-address-label">Dirección de entrega *</label>
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
       </div>
 
@@ -762,17 +770,20 @@
         <input type="text" class="ck-input" id="ck-referencia" placeholder="Ej: casa azul, frente al semáforo" />
       </div>
 
-      <!-- MAP — solo para delivery -->
+      <!-- MAP — solo para delivery. Marcar la ubicación acá es obligatorio
+           (no alcanza con escribir la dirección a mano): así el repartidor
+           tiene el punto exacto, no una interpretación de un texto. -->
       <div class="ck-map-wrap" id="ck-map-wrap">
         <div class="ck-map-tip">
-          📍 Buscá tu ubicación o marcala directo en el mapa
+          <div>📍 Marcá tu ubicación exacta en el mapa <strong>(obligatorio)</strong></div>
+          <div class="ck-map-tip-steps">1) Buscala arriba&nbsp; o &nbsp;2) tocá el mapa para marcar el punto</div>
         </div>
         <div class="ck-map-search-wrap">
           <input type="text" class="ck-input" id="ck-map-search" placeholder="Buscar local, calle o punto de referencia…" autocomplete="off" />
           <div class="ck-map-search-results" id="ck-map-search-results"></div>
         </div>
         <div id="ck-map"></div>
-        <div class="ck-map-coords" id="ck-map-coords">Tocá el mapa, buscá arriba, o escribí tu dirección</div>
+        <div class="ck-map-coords ck-map-coords-missing" id="ck-map-coords">⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar</div>
       </div>
 
       <div class="ck-error" id="error-1"></div>
@@ -1351,6 +1362,7 @@ document.getElementById('ck-city').onchange = function() {
   const methodEl = document.getElementById('ck-ship-method');
   const costEl = document.getElementById('ck-ship-cost');
   const addressField = document.getElementById('ck-address-field');
+  const addressLabel = document.getElementById('ck-address-label');
   const referenciaField = document.getElementById('ck-referencia-field');
   const mapWrap = document.getElementById('ck-map-wrap');
 
@@ -1381,6 +1393,7 @@ document.getElementById('ck-city').onchange = function() {
     orderData.shippingMethod = 'delivery';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
+    addressLabel.textContent = 'Dirección de entrega (opcional — dato extra para el repartidor)';
     referenciaField.style.display = 'block';
     mapWrap.classList.add('show');
     initMap();
@@ -1391,6 +1404,7 @@ document.getElementById('ck-city').onchange = function() {
     orderData.shippingMethod = 'encomienda';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
+    addressLabel.textContent = 'Dirección de entrega *';
     referenciaField.style.display = 'block';
     mapWrap.classList.remove('show');
   }
@@ -1401,15 +1415,19 @@ document.getElementById('btn-step2-next').onclick = () => {
   const city = document.getElementById('ck-city').value;
   if (!city) { showError(1, 'Seleccioná tu ciudad.'); return; }
 
-  if (orderData.shippingMethod !== 'retiro') {
-    const addr = document.getElementById('ck-address').value.trim();
-    const hasMapLocation = orderData.shippingMethod === 'delivery' && !!orderData.mapLocation;
-    if (!addr && !hasMapLocation) {
-      showError(1, orderData.shippingMethod === 'delivery'
-        ? 'Ingresá tu dirección o marcá/buscá tu ubicación en el mapa para continuar.'
-        : 'Ingresá tu dirección de entrega.');
+  if (orderData.shippingMethod === 'delivery') {
+    // La ubicación marcada en el mapa es obligatoria para delivery — el
+    // texto de dirección queda como dato extra opcional, no la reemplaza.
+    if (!orderData.mapLocation) {
+      showError(1, 'Marcá tu ubicación en el mapa (buscándola o tocando el mapa) para continuar.');
+      document.getElementById('ck-map-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
+    orderData.address = document.getElementById('ck-address').value.trim();
+    orderData.referencia = document.getElementById('ck-referencia').value.trim();
+  } else if (orderData.shippingMethod === 'encomienda') {
+    const addr = document.getElementById('ck-address').value.trim();
+    if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
     orderData.address = addr;
     orderData.referencia = document.getElementById('ck-referencia').value.trim();
   }
@@ -1781,7 +1799,9 @@ function saveMapLocation(lat, lng, place) {
     ...(place && place.name ? { name: place.name } : {}),
     ...(place && place.address ? { address: place.address } : {})
   };
-  document.getElementById('ck-map-coords').textContent = (place && place.name)
+  const coordsEl = document.getElementById('ck-map-coords');
+  coordsEl.classList.remove('ck-map-coords-missing');
+  coordsEl.textContent = (place && place.name)
     ? `📍 ${place.name} — podés arrastrar el pin para ajustar`
     : `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
 }
