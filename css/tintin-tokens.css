@@ -1,0 +1,46 @@
+/* =============================================================
+   TINTIN — Design tokens compartidos (Fase 3)
+   =============================================================
+   Única fuente de verdad de la paleta de marca — la misma que ya usa
+   styles.css (sitio público). checkout.html, login.html y admin.html
+   cargan este archivo y hacen que sus propias variables locales
+   (--acc, --adm-accent, etc.) apunten para acá con var(...), en vez de
+   repetir valores hex sueltos que con el tiempo se empiezan a desviar
+   entre superficies. No define ningún estilo de componente — solo
+   tokens (colores, radios, sombras, tipografía).
+   ============================================================= */
+:root {
+  --bg:          #fcf0f6;
+  --bg-soft:     #fcf0f6;
+  --card-bg:     #fef5f8;
+  --pink-pale:   #fce4ec;
+  --pink:        #e8a0b4;
+  --pink-mid:    #d4748e;
+  --pink-dark:   #b84c72;
+  --pink-lightest: #f5d0de;
+  --rose:        #8b2642;
+  --gold:        #c9a96e;
+  --gold-hover:  #b8934e;
+  --gold-light:  #f5ead0;
+  --ink:         #1a1a1a;
+  --text:        #C86B86;
+  --text-sec:    #C86B86;
+  --text-muted:  #d48fa6;
+  --text-title:  #EA7EA3;
+  --border:      #f0d8e0;
+  --white:       #ffffff;
+  --whatsapp:    #25d366;
+  --whatsapp-h:  #1fba58;
+  --error:       #e53935;
+  --success:     #4caf50;
+  --shadow-sm:   0 2px 8px rgba(180,76,114,0.08);
+  --shadow-md:   0 4px 20px rgba(180,76,114,0.12);
+  --shadow-lg:   0 8px 40px rgba(180,76,114,0.18);
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-pill: 999px;
+  --transition:  0.3s cubic-bezier(0.4,0,0.2,1);
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'Poppins', sans-serif;
+}

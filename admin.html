@@ -12,21 +12,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tintin-tokens.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
+       abajo, pero ahora apuntan al mismo valor real en todas las
+       superficies. --adm-bg queda con su propio valor a propósito: es un
+       gris-rosado más neutro, pensado para un panel de uso prolongado,
+       distinto del fondo más saturado del sitio público. */
     :root {
-      --adm-sidebar:        #b84c72;
+      --adm-sidebar:        var(--pink-dark);
       --adm-sidebar-hover:  rgba(255,255,255,.12);
       --adm-sidebar-active: rgba(255,255,255,.95);
       --adm-sidebar-text:   rgba(255,255,255,.85);
       --adm-bg:             #f7f4f6;
       --adm-card:           #ffffff;
-      --adm-accent:         #b84c72;
-      --adm-text:           #1a1a1a;
+      --adm-accent:         var(--pink-dark);
+      --adm-text:           var(--ink);
       --adm-muted:          #888;
-      --adm-border:         #f0d8e0;
-      --adm-font:           'Poppins', sans-serif;
+      --adm-border:         var(--border);
+      --adm-font:           var(--font-body);
+      --adm-radius-sm:      var(--radius-sm);
+      --adm-radius-md:      var(--radius-md);
       --sidebar-w:          260px;
     }
 
@@ -182,7 +191,7 @@
       text-decoration: none;
       transition: background .2s;
     }
-    .adm-topbar-btn:hover { background: #9a3d5e; }
+    .adm-topbar-btn:hover { background: var(--rose); }
 
     /* ======== CONTENT ======== */
     .adm-content {
@@ -361,7 +370,7 @@
       letter-spacing: .07em;
     }
     .adm-btn-primary { background: var(--adm-accent); color: #fff; }
-    .adm-btn-primary:hover { background: #9a3d5e; }
+    .adm-btn-primary:hover { background: var(--rose); }
     .adm-btn-danger { background: #ef4444; color: #fff; }
     .adm-btn-danger:hover { background: #dc2626; }
     .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
@@ -2676,7 +2685,7 @@ function renderShipList(type) {
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
       <span style="font-weight:600;flex:1">${c.name}</span>
-      <span style="font-size:12px;color:${c.price == null ? '#b8934e' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
+      <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
     </div>
@@ -4869,7 +4878,7 @@ window.saveOrderEdit = async function() {
      UNSAVED CHANGES MODAL (shared: products + collections)
 ══════════════════════════════════════ -->
 <div id="unsaved-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 8px 48px rgba(0,0,0,.2);text-align:center">
+  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:var(--shadow-lg);text-align:center">
     <div style="font-size:32px;margin-bottom:10px">⚠️</div>
     <div style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
     <div style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>

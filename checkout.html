@@ -9,25 +9,33 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#b84c72">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/tintin-tokens.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+       estos nombres cortos se mantienen porque los usa toda la hoja de acá
+       abajo, pero ahora apuntan al mismo valor real en todas las superficies. */
     :root {
-      --acc: #b84c72;
-      --acc-dark: #9a3d5e;
-      --acc-light: #f5d0de;
-      --acc-pale: #fef5f8;
-      --text: #1a1a1a;
+      --acc: var(--pink-dark);
+      --acc-dark: var(--rose);
+      --acc-light: var(--pink-lightest);
+      --acc-pale: var(--card-bg);
+      --text: var(--ink);
       --text-muted: #888;
-      --border: #f0d8e0;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --font: 'Poppins', sans-serif;
+      /* --border y --radius-sm ya vienen de css/tintin-tokens.css con el
+         mismo valor (#f0d8e0 / 8px) — no se redeclaran acá para no caer en
+         una auto-referencia var(--x) dentro de --x, que en CSS invalida la
+         propiedad en vez de heredar el valor anterior de la cascada. */
+      --radius: var(--radius-md);
+      --font: var(--font-body);
     }
 
     body {
@@ -321,7 +329,7 @@
     .ck-suggested-title { font-size: 13px; font-weight: 700; color: #C86B86; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
     .ck-suggested-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     @media (max-width: 500px) { .ck-suggested-grid { grid-template-columns: repeat(2, 1fr); } }
-    .ck-sug-card { border: 1px solid #f0e0e8; border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .ck-sug-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
     .ck-sug-img { display:flex; justify-content:center; align-items:center; height:56px; margin-bottom:6px; }
     .ck-sug-name { font-size: 12px; font-weight: 700; color: #C86B86; line-height: 1.2; }
     .ck-sug-cat { font-size: 10px; color: #C86B86; text-transform: uppercase; letter-spacing: .05em; }
@@ -708,7 +716,7 @@
       max-height: 220px;
       overflow-y: auto;
       display: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      box-shadow: 0 8px 24px rgba(180,76,114,.15);
     }
     .ck-map-search-results.show { display: block; }
     .ck-map-search-item {
