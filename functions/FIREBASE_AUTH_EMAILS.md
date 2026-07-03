@@ -9,8 +9,10 @@ dos cosas:
   pestaña "Recuperar" de `login.html`).
 
 Esto es 100% gratis (plan Spark de Firebase), no requiere activar Billing ni
-tarjeta, y **no se configura desde el código** — el asunto, el nombre del
-remitente y el texto del correo se editan desde la consola de Firebase.
+tarjeta. El **idioma** del correo se fuerza desde el código (`js/firebase.js`,
+`auth.languageCode = "es"` — ver más abajo), pero el asunto, el nombre del
+remitente, el reply-to y el texto del correo se editan **a mano en la consola
+de Firebase**, no hay forma de configurarlos desde el código.
 
 ## Dónde editarlo
 
@@ -29,32 +31,75 @@ Para ambos templates podés editar:
 - **Nombre del remitente**: poner `Tintin Accesorios` (por defecto dice
   "escrito por tu-proyecto.firebaseapp.com", que no se ve profesional).
 - **Responder a**: opcional, podés dejarlo en blanco o poner `tintinaccs@gmail.com`.
-- **Asunto**: reemplazar por:
+- **Asunto**: reemplazar el texto en inglés por defecto ("Reset your password
+  for...") por uno en español, por ejemplo:
   - Verificación → `Verificá tu cuenta de Tintin`
-  - Restablecimiento → `Recuperá tu contraseña de Tintin`
+  - Restablecimiento → `Recuperá tu contraseña de Tintin` (o `Restablecé tu
+    contraseña de Tintin`)
 - **Mensaje**: Firebase te deja editar el cuerpo (con formato limitado). El
   placeholder `%LINK%` es obligatorio — es el botón/enlace que activa la
-  verificación o el cambio de contraseña, no lo borres. Podés agregar arriba
-  o abajo un saludo con la voz de Tintin, por ejemplo:
+  verificación o el cambio de contraseña, no lo borres. Reemplazá TODO el
+  texto en inglés ("Hello", "Follow this link", "Thanks") por algo así:
 
+  **Restablecimiento de contraseña:**
+  > Hola,
+  > Recibimos una solicitud para restablecer la contraseña de tu cuenta Tintin.
+  > Tocá el siguiente enlace para crear una nueva contraseña:
+  > %LINK%
+  > Si no solicitaste este cambio, podés ignorar este correo.
+  > Gracias, Equipo Tintin
+
+  **Verificación de correo:**
   > ¡Hola! 💗 Gracias por registrarte en Tintin Accesorios. Para activar tu
   > cuenta, confirmá tu correo con el siguiente enlace:
   > %LINK%
   > Si no creaste esta cuenta, podés ignorar este mensaje.
+  > Gracias, Equipo Tintin
 
 5. Click en **Guardar**. El cambio es inmediato, no hace falta ningún deploy
    ni tocar el código del sitio.
 
 ## Idioma de los correos
 
-Si los correos te llegan en inglés, es porque el proyecto no tiene definido
-un idioma por defecto:
+Antes, los correos llegaban en inglés ("Reset your password for...") porque
+Firebase no sabía en qué idioma mandarlos. Esto se corrigió en dos frentes —
+hacen falta los DOS, uno no reemplaza al otro:
 
-1. **Authentication → Templates**, arriba de la lista de templates hay un
-   selector **"Idioma de la plantilla"** — elegí **Español**.
-2. Si no aparece la opción ahí, andá a **Configuración del proyecto**
-   (ícono de engranaje) → pestaña **General** → **Idioma predeterminado** →
-   elegí **Español**.
+1. **Código** (ya hecho, no requiere nada de tu parte): `js/firebase.js`
+   tiene `auth.languageCode = "es";` justo después de inicializar `auth`. Con
+   esto, cada vez que el sitio pide un correo (`sendPasswordResetEmail`,
+   `sendEmailVerification`), le dice a Firebase "mandalo en español" — esto
+   aplica automáticamente en todas las páginas (login, checkout, etc.)
+   porque todas importan el mismo `auth` desde ese archivo.
+2. **Consola** (esto sí lo tenés que hacer vos, una sola vez): el paso 1 le
+   dice a Firebase QUÉ IDIOMA usar, pero el CONTENIDO en español de cada
+   plantilla lo tenés que escribir vos —Firebase no traduce solo el texto
+   que vos mismo escribiste. Dos lugares para revisar:
+   - **Authentication → Templates**, arriba de la lista hay un selector
+     **"Idioma de la plantilla"** — elegí **Español** antes de editar cada
+     plantilla (si no, puede que edites la versión en inglés sin darte cuenta).
+   - **Configuración del proyecto** (ícono de engranaje) → pestaña
+     **General** → **Idioma predeterminado del proyecto** → **Español**.
+     Esto es un respaldo por si algún correo cae al idioma por defecto del
+     proyecto en vez del que pide el código.
+
+## Por qué aparece "TINTIN-accesorios" y cómo cambiarlo
+
+Ese nombre feo (todo en mayúsculas con guion) no sale del código — es el
+**"Public-facing name"** (nombre público) del proyecto de Firebase, que por
+defecto Firebase arma solo a partir del ID técnico del proyecto
+(`tintin-accesorios`). Ese nombre se usa como reemplazo automático en los
+asuntos/cuerpos que NO editaste a mano, y también aparece en la pantalla de
+consentimiento de Google al iniciar sesión con Google. Para cambiarlo:
+
+1. **Configuración del proyecto** (ícono de engranaje, arriba a la izquierda)
+   → pestaña **General**.
+2. Buscá el campo **"Nombre público del proyecto"** ("Public-facing name").
+3. Cambialo a `Tintin Accesorios` (o simplemente `Tintin`).
+4. Guardá.
+
+Con este cambio más el asunto/cuerpo personalizado del paso anterior, en
+ningún lado debería volver a aparecer "TINTIN-accesorios".
 
 ## El link de "Continuar" ya apunta al sitio — no toques eso
 
