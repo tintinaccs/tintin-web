@@ -273,6 +273,14 @@
     </div>
   </div>
 
+  <!-- Ubicación guardada (se completa sola en el checkout) -->
+  <div class="perfil-card">
+    <div class="perfil-body">
+      <div class="perfil-section-title">📍 Mi ubicación guardada</div>
+      <div id="perfil-location-content"></div>
+    </div>
+  </div>
+
   <!-- Mis pedidos -->
   <a id="mis-pedidos"></a>
   <div class="perfil-card" id="perfil-orders-card" style="display:none">
@@ -437,6 +445,38 @@ function formatPrice(n) {
   return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+function escapeHtmlPerfil(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
+
+// Ubicación guardada — se completa sola en el checkout (paso Envío, delivery
+// a domicilio) cuando la clienta marca "Guardar esta ubicación en mi perfil".
+// Acá es solo de lectura + borrar: para cambiarla, se vuelve a marcar en el
+// mapa del checkout (ahí está el buscador completo por nombre/negocio).
+function renderSavedLocation(loc) {
+  const el = document.getElementById('perfil-location-content');
+  if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && loc.name) {
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:800;font-size:14px;color:var(--text)">📍 ${escapeHtmlPerfil(loc.name)}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Se usa para completar sola tu ubicación la próxima vez que compres con envío a domicilio.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://maps.google.com/?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener" class="perfil-btn perfil-btn-outline">🗺️ Ver en el mapa</a>
+          <button type="button" class="perfil-btn perfil-btn-danger" id="btn-borrar-ubicacion">🗑️ Borrar</button>
+        </div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.6">
+        Todavía no guardaste una ubicación. La próxima vez que hagas un pedido con envío a domicilio, marcá tu ubicación en el mapa del checkout y activá la casilla "Guardar esta ubicación en mi perfil" — así se completa sola la próxima vez.
+      </div>`;
+  }
+}
+
 function statusBadge(status) {
   const map = {
     pendiente:  '#f59e0b',
@@ -507,6 +547,17 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
   }
+
+  // Ubicación guardada (se completa sola al elegir delivery en el checkout)
+  renderSavedLocation(userData?.savedLocation);
+  document.getElementById('perfil-location-content').addEventListener('click', async (e) => {
+    if (e.target.id !== 'btn-borrar-ubicacion') return;
+    try {
+      await setDoc(ref, { savedLocation: null }, { merge: true });
+      renderSavedLocation(null);
+      toast('✅ Ubicación borrada');
+    } catch (e) { toast('❌ Error al borrar'); }
+  });
 
   // Orders
   document.getElementById('perfil-orders-card').style.display = 'block';

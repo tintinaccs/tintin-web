@@ -550,6 +550,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   color: var(--pink-dark);
 }
 
+/* Foto de cuenta (Google) en el ícono del header — reemplaza el ícono
+   genérico apenas hay sesión iniciada, para saber de un vistazo con qué
+   cuenta se está navegando/comprando en cualquier página del sitio. */
+.tt-account-avatar-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 .tt-cart-badge {
   position: absolute;
   top: 4px;

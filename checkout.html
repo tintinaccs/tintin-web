@@ -67,6 +67,40 @@
     }
     .ck-header-back:hover { color: var(--acc); }
 
+    /* ---- HEADER ACCOUNT BADGE (visible en todos los pasos: Carrito a
+       Confirmación) — así siempre es fácil saber con qué cuenta estás
+       comprando, sin tener que ir a Mi cuenta. ---- */
+    .ck-header-right { display: flex; align-items: center; gap: 14px; }
+    .ck-account-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background: var(--acc-pale);
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 4px 12px 4px 4px;
+      max-width: 180px;
+    }
+    .ck-account-badge.show { display: flex; }
+    .ck-account-badge:hover { border-color: var(--acc); }
+    .ck-account-badge-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--acc); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0; overflow: hidden;
+    }
+    .ck-account-badge-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ck-account-badge-name {
+      font-size: 11.5px; font-weight: 700; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    @media (max-width: 480px) {
+      .ck-header-back-text { display: none; }
+      .ck-account-badge { max-width: 40px; padding: 3px; }
+      .ck-account-badge-name { display: none; }
+    }
+
     /* ---- STEP INDICATOR ---- */
     .ck-steps {
       display: flex;
@@ -604,6 +638,34 @@
     .ck-map-coords.ck-map-coords-missing { color: #c0392b; }
     @media (max-width: 480px) { #ck-map { height: 200px; } }
 
+    /* Aviso "usando tu ubicación guardada" — aparece solo si el perfil ya
+       tiene una ubicación con nombre guardada y se precargó sola. */
+    .ck-saved-location-hint {
+      display: none;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .ck-saved-location-hint.show { display: block; }
+    .ck-saved-location-hint button {
+      background: none; border: none; padding: 0; margin-left: 4px;
+      color: #2e7d32; font-weight: 800; text-decoration: underline;
+      cursor: pointer; font-size: 11px; font-family: var(--font);
+    }
+
+    /* Nombre obligatorio de la ubicación + guardar en el perfil */
+    .ck-map-name-wrap { background: #fff; padding: 12px 14px 14px; }
+    .ck-map-name-wrap .ck-label { font-size: 11px; margin-bottom: 5px; display: block; }
+    .ck-checkbox-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      margin-top: 10px; font-size: 11.5px; color: var(--text-muted);
+      cursor: pointer; line-height: 1.4;
+    }
+    .ck-checkbox-row input { margin-top: 2px; flex-shrink: 0; }
+
     /* ---- MAP SEARCH ---- */
     .ck-map-search-wrap { position: relative; padding: 12px 14px 0; background: #fff; }
     .ck-map-search-results {
@@ -671,7 +733,13 @@
 <!-- HEADER -->
 <header class="ck-header">
   <a href="index.html" class="ck-header-logo"><img src="assets-tintin/images/general/logo-tintin.webp" alt="Tintin Accesorios"></a>
-  <a href="index.html" class="ck-header-back">← Seguir comprando</a>
+  <div class="ck-header-right">
+    <a href="perfil.html" class="ck-account-badge" id="ck-account-badge" title="Ver mi cuenta">
+      <span class="ck-account-badge-avatar" id="ck-account-badge-avatar">?</span>
+      <span class="ck-account-badge-name" id="ck-account-badge-name"></span>
+    </a>
+    <a href="index.html" class="ck-header-back">← <span class="ck-header-back-text">Seguir comprando</span></a>
+  </div>
 </header>
 
 <!-- STEP INDICATOR -->
@@ -778,12 +846,23 @@
           <div>📍 Marcá tu ubicación exacta en el mapa <strong>(obligatorio)</strong></div>
           <div class="ck-map-tip-steps">1) Buscala arriba&nbsp; o &nbsp;2) tocá el mapa para marcar el punto</div>
         </div>
+        <div class="ck-saved-location-hint" id="ck-saved-location-hint">
+          📍 Usamos tu ubicación guardada. <button type="button" id="ck-saved-location-change">Marcar otra</button>
+        </div>
         <div class="ck-map-search-wrap">
           <input type="text" class="ck-input" id="ck-map-search" placeholder="Buscar local, calle o punto de referencia…" autocomplete="off" />
           <div class="ck-map-search-results" id="ck-map-search-results"></div>
         </div>
         <div id="ck-map"></div>
         <div class="ck-map-coords ck-map-coords-missing" id="ck-map-coords">⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar</div>
+        <div class="ck-map-name-wrap">
+          <label class="ck-label">Nombre de esta ubicación *</label>
+          <input type="text" class="ck-input" id="ck-location-name" placeholder="Ej: Mi casa, Local del trabajo, Casa de mi tía" maxlength="60" />
+          <label class="ck-checkbox-row" id="ck-save-location-row">
+            <input type="checkbox" id="ck-save-location" checked />
+            <span>Guardar esta ubicación en mi perfil, para completarla sola la próxima vez</span>
+          </label>
+        </div>
       </div>
 
       <div class="ck-error" id="error-1"></div>
@@ -934,7 +1013,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
-  updateDoc, increment, serverTimestamp
+  updateDoc, increment, serverTimestamp, setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
@@ -1378,6 +1457,13 @@ document.getElementById('ck-city').onchange = function() {
   const isDelivery = DELIVERY_CITIES.some(c => c.name === val);
   const isEncomienda = ENCOMIENDA_CITIES.some(c => c.name === val);
 
+  // Dato guardado en el perfil (perfil.html → "Dirección de entrega") — se
+  // usa solo para prellenar, nunca pisa lo que la clienta ya haya escrito.
+  const addressInput = document.getElementById('ck-address');
+  if (!addressInput.value && currentUserProfile?.address) {
+    addressInput.value = currentUserProfile.address;
+  }
+
   if (val === '__retiro__') {
     methodEl.textContent = '🏪 Retiro en tienda — San Lorenzo';
     costEl.textContent = '✅ Sin costo de envío';
@@ -1397,6 +1483,7 @@ document.getElementById('ck-city').onchange = function() {
     referenciaField.style.display = 'block';
     mapWrap.classList.add('show');
     initMap();
+    maybeApplySavedLocation();
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
@@ -1423,8 +1510,20 @@ document.getElementById('btn-step2-next').onclick = () => {
       document.getElementById('ck-map-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
+    // El nombre es obligatorio para que quede clarísimo de qué ubicación se
+    // trata (una casa, un local, la casa de un familiar) y no solo un par
+    // de coordenadas sin contexto.
+    const locationName = document.getElementById('ck-location-name').value.trim();
+    if (!locationName) {
+      showError(1, 'Ponele un nombre a tu ubicación (ej: Mi casa) para continuar.');
+      document.getElementById('ck-location-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('ck-location-name')?.focus();
+      return;
+    }
+    orderData.mapLocation.name = locationName;
     orderData.address = document.getElementById('ck-address').value.trim();
     orderData.referencia = document.getElementById('ck-referencia').value.trim();
+    saveLocationToProfileIfChecked();
   } else if (orderData.shippingMethod === 'encomienda') {
     const addr = document.getElementById('ck-address').value.trim();
     if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
@@ -1453,6 +1552,16 @@ document.getElementById('btn-step2-next').onclick = () => {
 };
 
 document.getElementById('btn-step2-back').onclick = () => goToStep(0);
+
+document.getElementById('ck-saved-location-change').onclick = () => {
+  hideSavedLocationHint();
+  orderData.mapLocation = null;
+  document.getElementById('ck-location-name').value = '';
+  const coordsEl = document.getElementById('ck-map-coords');
+  coordsEl.classList.add('ck-map-coords-missing');
+  coordsEl.textContent = '⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar';
+  document.getElementById('ck-map-search')?.focus();
+};
 
 // ---- STEP 3: DATOS ----
 
@@ -1790,8 +1899,8 @@ function initMap() {
 // Shared by map clicks, marker drag, and the search box below —
 // a single place that decides "the delivery location changed".
 // `place` (optional) is {name, address} from a search result; dragging the
-// pin or clicking a raw spot on the map has no place info, so it correctly
-// clears any previously-selected business name (it's now just a manual pin).
+// pin or clicking a raw spot on the map has no place info, so el nombre que
+// ya haya escrito la clienta se deja tal cual (solo está ajustando el pin).
 function saveMapLocation(lat, lng, place) {
   orderData.mapLocation = {
     lat: +lat.toFixed(6),
@@ -1804,6 +1913,16 @@ function saveMapLocation(lat, lng, place) {
   coordsEl.textContent = (place && place.name)
     ? `📍 ${place.name} — podés arrastrar el pin para ajustar`
     : `📍 Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+  // Un resultado de búsqueda ya trae su propio nombre de negocio/lugar — se
+  // usa para completar el campo de nombre solo. Un click/arrastre manual NO
+  // toca lo que la clienta ya haya escrito ahí.
+  if (place && place.name) {
+    document.getElementById('ck-location-name').value = place.name;
+  }
+}
+
+function hideSavedLocationHint() {
+  document.getElementById('ck-saved-location-hint')?.classList.remove('show');
 }
 
 function placeMarker(lat, lng, place) {
@@ -1822,10 +1941,36 @@ function placeMarker(lat, lng, place) {
 
   _mapMarker.off('dragend').on('dragend', () => {
     const pos = _mapMarker.getLatLng();
+    hideSavedLocationHint(); // ajustó el pin a mano — ya no es "la guardada tal cual"
     saveMapLocation(pos.lat, pos.lng); // dragged away from the searched spot — treat as a manual pin now
   });
 
   saveMapLocation(lat, lng, place);
+}
+
+// Si el perfil ya tiene una ubicación guardada (con nombre) y todavía no se
+// marcó ninguna en este checkout, se precarga sola — así no hay que buscarla
+// de nuevo cada vez. Se puede cambiar en cualquier momento tocando el mapa,
+// buscando otra, o con el botón "Marcar otra" del aviso.
+function maybeApplySavedLocation() {
+  if (orderData.mapLocation) return;
+  if (!_mapInstance) return;
+  const saved = currentUserProfile?.savedLocation;
+  if (!saved || typeof saved.lat !== 'number' || typeof saved.lng !== 'number' || !saved.name) return;
+  _mapInstance.setView([saved.lat, saved.lng], 16);
+  placeMarker(saved.lat, saved.lng, { name: saved.name, address: saved.address });
+  document.getElementById('ck-saved-location-hint')?.classList.add('show');
+}
+
+// "Guardar esta ubicación en mi perfil" — no bloquea el avance del checkout
+// si falla (es una comodidad, no un requisito de la compra).
+function saveLocationToProfileIfChecked() {
+  const checkbox = document.getElementById('ck-save-location');
+  if (!checkbox?.checked || !currentUser || currentUser.isAnonymous || !orderData.mapLocation) return;
+  const { lat, lng, name, address } = orderData.mapLocation;
+  setDoc(doc(db, 'users', currentUser.uid), {
+    savedLocation: { lat, lng, name, ...(address ? { address } : {}) }
+  }, { merge: true }).catch(() => {});
 }
 
 let _mapPinIcon = null;
@@ -1839,11 +1984,14 @@ function _buildMap() {
     maxZoom: 19
   }).addTo(_mapInstance);
 
-  _mapInstance.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+  _mapInstance.on('click', e => { hideSavedLocationHint(); placeMarker(e.latlng.lat, e.latlng.lng); });
   initMapSearch();
 
   // Resize fix when map container becomes visible
-  setTimeout(() => _mapInstance.invalidateSize(), 300);
+  setTimeout(() => {
+    _mapInstance.invalidateSize();
+    maybeApplySavedLocation();
+  }, 300);
 }
 
 // ---- MAP SEARCH (Nominatim + Overpass / OpenStreetMap — free, no API key) ----
@@ -2023,12 +2171,30 @@ async function searchMapPlace(query) {
   results.querySelectorAll('.ck-map-search-item[data-idx]').forEach(el => {
     el.onclick = () => {
       const p = places[+el.dataset.idx];
+      hideSavedLocationHint();
       _mapInstance.setView([p.lat, p.lon], 17);
       placeMarker(p.lat, p.lon, { name: p.name, address: p.address });
       document.getElementById('ck-map-search').value = p.name;
       results.classList.remove('show');
     };
   });
+}
+
+// Insignia de cuenta en el header — visible en TODOS los pasos (el header
+// queda fuera de los ck-panel), para que nunca haya dudas de con qué cuenta
+// se está comprando. Usa la foto de Google apenas está disponible.
+function renderAccountBadge(user) {
+  const badge  = document.getElementById('ck-account-badge');
+  const avatar = document.getElementById('ck-account-badge-avatar');
+  const nameEl = document.getElementById('ck-account-badge-name');
+  if (!user) { badge.classList.remove('show'); return; }
+  const label = user.displayName || user.email || 'Mi cuenta';
+  avatar.innerHTML = user.photoURL
+    ? `<img src="${user.photoURL}" alt="${label}" referrerpolicy="no-referrer">`
+    : label[0].toUpperCase();
+  nameEl.textContent = label.split(' ')[0];
+  badge.title = `Sesión iniciada como ${user.email || label}`;
+  badge.classList.add('show');
 }
 
 // ---- INIT ----
@@ -2043,6 +2209,7 @@ onAuthStateChanged(auth, user => {
   currentUser = user;
   currentUserProfile = null;
   authReady = true;
+  renderAccountBadge(user);
   // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
   // anónima acá — solo se sigue el estado de auth tal cual está. Ver una y
   // otra colección/producto/paso 1 del checkout sigue funcionando sin login,
@@ -2052,7 +2219,8 @@ onAuthStateChanged(auth, user => {
     tryResumeCheckoutStep();
     return;
   }
-  // Cuenta real logueada: precargamos su perfil (nombre/teléfono) para el paso 3.
+  // Cuenta real logueada: precargamos su perfil (nombre/teléfono/ubicación
+  // guardada) para prellenar los pasos siguientes.
   getDoc(doc(db, 'users', user.uid))
     .then(snap => {
       currentUserProfile = snap.exists() ? snap.data() : null;
@@ -2064,6 +2232,7 @@ onAuthStateChanged(auth, user => {
       // falta, y se retoma el paso pendiente si venía de loguearse.
       enforceCheckoutGuard();
       tryResumeCheckoutStep();
+      maybeApplySavedLocation();
     })
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });

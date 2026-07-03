@@ -13,15 +13,37 @@ function doLogout() {
   signOut(auth).then(() => { window.location.href = "index.html"; });
 }
 
+// El ícono genérico del botón de cuenta (#btn-cuenta) se guarda tal cual
+// está en el HTML de cada página, para poder volver a él al cerrar sesión —
+// mientras hay sesión iniciada, ese botón muestra la foto de Google en su
+// lugar, en todas las páginas del sitio.
+const accountBtnDefaults = new Map();
+
 onAuthStateChanged(auth, user => {
   // Mobile tabbar account icon — simple link, no dropdown at that breakpoint
   document.querySelectorAll("#tabbar-cuenta, [data-auth-link='cuenta']").forEach(el => {
     el.href = user ? "perfil.html" : "login.html";
   });
 
+  renderAccountButtonPhoto(user);
   renderAccountPanel(user);
   renderMobileUserPanel(user);
 });
+
+// ---- Ícono de cuenta en el header (#btn-cuenta) — foto de Google en vez
+// del ícono genérico apenas hay sesión, en cualquier página. ----
+function renderAccountButtonPhoto(user) {
+  const btn = document.getElementById("btn-cuenta");
+  if (!btn) return;
+  if (!accountBtnDefaults.has(btn)) accountBtnDefaults.set(btn, btn.innerHTML);
+
+  if (user && user.photoURL) {
+    const name = user.displayName || user.email || "Mi cuenta";
+    btn.innerHTML = `<img class="tt-account-avatar-btn" src="${user.photoURL}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer">`;
+  } else {
+    btn.innerHTML = accountBtnDefaults.get(btn);
+  }
+}
 
 // ---- Desktop header dropdown (#account-panel, inside #account-dropdown) ----
 function renderAccountPanel(user) {
@@ -36,8 +58,12 @@ function renderAccountPanel(user) {
   }
 
   const name = user.displayName || user.email || "Mi cuenta";
+  const photo = user.photoURL || "";
   panel.innerHTML = `
-    <div class="tt-account-header">${escapeHtmlNav(name)}</div>
+    <div class="tt-account-header" style="display:flex;align-items:center;gap:10px">
+      ${photo ? `<img src="${photo}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0">` : ''}
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtmlNav(name)}</span>
+    </div>
     <a class="tt-account-item" href="perfil.html">Mi cuenta</a>
     <a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a>
     <div class="tt-account-divider"></div>
