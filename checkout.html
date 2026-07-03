@@ -998,6 +998,8 @@ let currentStep = 0;
 let cartItems = [];
 let currentUser = null;
 let currentUserProfile = null; // caché de users/{uid} (name, phone) para prellenar el paso 3
+let authReady = false; // true recién cuando el primer onAuthStateChanged ya disparó
+const CHECKOUT_RESUME_KEY = 'tt_checkout_resume_step';
 let orderData = {
   city: '',
   address: '',
@@ -1200,8 +1202,12 @@ function isCheckoutAuthorized() {
 // Modal obligatorio (Fase F): no tiene "Continuar como invitada" a propósito.
 // Cerrarlo (X o click afuera) deja al carrito y al paso 1 completamente
 // intactos — no toca localStorage ni el estado del carrito para nada.
-function showLoginRequiredModal() {
+// `targetStep` es el paso al que la clienta quería avanzar (1 = Envío/Ciudad
+// casi siempre) — se guarda para volver directo ahí después de loguearse,
+// en vez de dejarla de nuevo en el Carrito.
+function showLoginRequiredModal(targetStep) {
   if (document.getElementById('ck-login-required-overlay')) return;
+  try { sessionStorage.setItem(CHECKOUT_RESUME_KEY, String(targetStep ?? 1)); } catch {}
   const from = encodeURIComponent('checkout.html');
   const ov = document.createElement('div');
   ov.id = 'ck-login-required-overlay';
@@ -1227,6 +1233,53 @@ function closeLoginRequiredModal() {
   document.body.style.overflow = '';
 }
 
+// Espera a que el SDK de Firebase resuelva el estado de auth por primera vez
+// (normalmente es casi instantáneo) en vez de asumir "no logueada" mientras
+// todavía está cargando — evita un falso modal para alguien que sí tiene
+// sesión pero hizo click justo antes de que onAuthStateChanged disparara.
+function waitForAuthReady(timeoutMs = 4000) {
+  if (authReady) return Promise.resolve();
+  return new Promise(resolve => {
+    const iv = setInterval(() => {
+      if (authReady) { clearInterval(iv); resolve(); }
+    }, 50);
+    setTimeout(() => { clearInterval(iv); resolve(); }, timeoutMs);
+  });
+}
+
+// Después de loguearse/registrarse desde el modal, vuelve exactamente al
+// paso al que quería avanzar (Envío/Ciudad casi siempre) — no la deja de
+// nuevo en el Carrito. Si por algún motivo sigue sin cumplir los requisitos
+// (no verificó el correo, quedó bloqueada, etc.) se lo vuelve a mostrar en
+// vez de dejarla varada sin explicación.
+function tryResumeCheckoutStep() {
+  let raw = null;
+  try { raw = sessionStorage.getItem(CHECKOUT_RESUME_KEY); } catch {}
+  if (raw == null) return;
+  const step = parseInt(raw, 10);
+  if (!Number.isInteger(step) || step < 1) {
+    try { sessionStorage.removeItem(CHECKOUT_RESUME_KEY); } catch {}
+    return;
+  }
+  if (isCheckoutAuthorized()) {
+    try { sessionStorage.removeItem(CHECKOUT_RESUME_KEY); } catch {}
+    goToStep(step);
+  } else {
+    showLoginRequiredModal(step);
+  }
+}
+
+// Autocorrección (pedida explícitamente): si por lo que sea el panel activo
+// quedó en un paso protegido sin que la cuenta cumpla los requisitos —por
+// ejemplo la sesión se venció, o Super Admin la bloqueó mientras estaba a
+// mitad de checkout— esto la devuelve al Carrito y muestra el modal, en vez
+// de dejarla completar Ciudad/Envío con una cuenta que ya no es válida.
+function enforceCheckoutGuard() {
+  const panels = Array.from(document.querySelectorAll('.ck-panel'));
+  const activeIdx = panels.findIndex(p => p.classList.contains('active'));
+  if (activeIdx >= 1) goToStep(activeIdx);
+}
+
 // Single delegated listener — set up once, never duplicated
 document.getElementById('ck-items').addEventListener('click', async e => {
   const btn = e.target.closest('[data-action]');
@@ -1248,7 +1301,7 @@ document.getElementById('ck-items').addEventListener('click', async e => {
 // mano desde la consola para saltarse el paso 1, no solo con clicks reales.
 function goToStep(n) {
   if (n >= 1 && !isCheckoutAuthorized()) {
-    showLoginRequiredModal();
+    showLoginRequiredModal(n);
     n = 0;
   }
   // Update panels
@@ -1274,13 +1327,21 @@ function hideErrors() {
 }
 
 // ---- STEP 1: CART → STEP 2 ----
-document.getElementById('btn-step1-next').onclick = () => {
+document.getElementById('btn-step1-next').onclick = async () => {
   hideErrors();
   cartItems = getCartLocal();
   if (!cartItems.length) {
     showError(0, 'Tu carrito está vacío. Agregá productos antes de continuar.');
     return;
   }
+  // Si el estado de auth todavía está resolviendo (recién se cargó la
+  // página), espera un instante en vez de asumir "no logueada" — así una
+  // clienta que sí tiene sesión no ve el modal por error si toca el botón
+  // muy rápido.
+  const btn = document.getElementById('btn-step1-next');
+  btn.disabled = true;
+  await waitForAuthReady();
+  btn.disabled = false;
   goToStep(1);
 };
 
@@ -1609,7 +1670,7 @@ async function saveOrder(items, subtotal, total) {
   // sin bloquear, no hay pedido — por más que alguien haya llegado hasta acá
   // saltándose el modal (sesión vencida a mitad de checkout, por ejemplo).
   if (!currentUser || currentUser.isAnonymous || !currentUser.emailVerified) {
-    showLoginRequiredModal();
+    showLoginRequiredModal(1);
     goToStep(0);
     throw new Error('LOGIN_REQUIRED');
   }
@@ -1962,11 +2023,16 @@ window.addEventListener('tintin:products-loaded', () => renderCart(), { once: tr
 onAuthStateChanged(auth, user => {
   currentUser = user;
   currentUserProfile = null;
+  authReady = true;
   // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
   // anónima acá — solo se sigue el estado de auth tal cual está. Ver una y
   // otra colección/producto/paso 1 del checkout sigue funcionando sin login,
   // porque esos son de lectura pública (products/collections/settings).
-  if (!user || user.isAnonymous) return;
+  if (!user || user.isAnonymous) {
+    enforceCheckoutGuard();
+    tryResumeCheckoutStep();
+    return;
+  }
   // Cuenta real logueada: precargamos su perfil (nombre/teléfono) para el paso 3.
   getDoc(doc(db, 'users', user.uid))
     .then(snap => {
@@ -1974,6 +2040,11 @@ onAuthStateChanged(auth, user => {
       // Fase E: cuenta bloqueada — no puede comprar, se tapa el checkout entero
       // apenas se sabe, sin esperar a que llegue a "Confirmar pedido".
       if (currentUserProfile?.blocked) showBlockedOverlay();
+      // Fase F: recién acá se sabe con certeza si la cuenta cumple todo
+      // (real + verificada + no bloqueada) — se corrige el paso si hace
+      // falta, y se retoma el paso pendiente si venía de loguearse.
+      enforceCheckoutGuard();
+      tryResumeCheckoutStep();
     })
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
