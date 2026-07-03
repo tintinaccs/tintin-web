@@ -317,6 +317,18 @@
     .ship-tab-panel { display: none; }
     .ship-tab-panel.active { display: block; }
 
+    /* Usuarios / Bloqueados — mismas píldoras que ship-tabs, clases propias
+       para no compartir el querySelectorAll global de Envíos. */
+    .user-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+    .user-tab-btn {
+      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
+
     .adm-field {
       display: flex;
       flex-direction: column;
@@ -897,19 +909,17 @@
       <div class="adm-card">
         <div class="adm-card-head">
           <div class="adm-card-title">Gestión de usuarios</div>
-          <span id="users-blocked-count" class="adm-badge badge-cancelado" style="display:none;cursor:pointer" title="Ver solo bloqueados" onclick="window.filterUsersByStatus('blocked')"></span>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
+          <div class="user-tabs">
+            <button type="button" class="user-tab-btn active" data-user-tab="active">Usuarios</button>
+            <button type="button" class="user-tab-btn" data-user-tab="blocked">🔒 Bloqueados <span id="users-blocked-count" class="user-tab-count"></span></button>
+          </div>
           <div class="adm-filter-row">
             <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
               <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
               <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
             </div>
-            <select class="adm-select" id="user-status-filter" style="flex:1">
-              <option value="all">Todos los usuarios</option>
-              <option value="active">Solo activos</option>
-              <option value="blocked">Solo bloqueados</option>
-            </select>
           </div>
         </div>
         <div style="padding:0">
@@ -1899,7 +1909,10 @@ async function loadDashboard() {
 }
 
 // ======== USUARIOS ========
-let userStatusFilter = 'all';
+// Ahora son dos pestañas ('active' | 'blocked'), no un dropdown Todos/Activos/
+// Bloqueados — un usuario bloqueado desaparece de "Usuarios" y solo aparece
+// en "Bloqueados", nunca en las dos a la vez.
+let userStatusFilter = 'active';
 
 async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
@@ -1914,15 +1927,17 @@ async function loadUsers() {
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
-// búsqueda con el filtro Todos/Activos/Bloqueados — usada por ambos inputs.
+// búsqueda con la pestaña activa (Usuarios = solo activos, Bloqueados = solo
+// bloqueados) — usada por ambos inputs.
 function applyUserFilters() {
   const q = document.getElementById('user-search').value.toLowerCase();
   let filtered = allUsers.filter(u =>
     (u.name||'').toLowerCase().includes(q) ||
     (u.email||'').toLowerCase().includes(q)
   );
-  if (userStatusFilter === 'blocked') filtered = filtered.filter(u => u.blocked);
-  if (userStatusFilter === 'active')  filtered = filtered.filter(u => !u.blocked);
+  filtered = userStatusFilter === 'blocked'
+    ? filtered.filter(u => u.blocked)
+    : filtered.filter(u => !u.blocked);
   renderUsersTable(filtered);
   updateBlockedCount();
 }
@@ -1931,20 +1946,20 @@ function updateBlockedCount() {
   const el = document.getElementById('users-blocked-count');
   if (!el) return;
   const n = allUsers.filter(u => u.blocked).length;
-  el.textContent = n ? `🔒 ${n} bloqueado${n !== 1 ? 's' : ''}` : '';
-  el.style.display = n ? 'inline-block' : 'none';
+  el.textContent = n ? `(${n})` : '';
 }
 
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
-  document.getElementById('user-status-filter').value = status;
+  document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
   applyUserFilters();
 };
 
 function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin usuarios</td></tr>';
+    const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -2020,12 +2035,11 @@ function renderUsersTable(users) {
   }).join('');
 }
 
-// Búsqueda y filtro de estado — comparten applyUserFilters()
+// Búsqueda y pestañas Usuarios/Bloqueados — comparten applyUserFilters()
 document.getElementById('user-search').oninput = applyUserFilters;
-document.getElementById('user-status-filter').onchange = function() {
-  userStatusFilter = this.value;
-  applyUserFilters();
-};
+document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
+});
 
 window.updateUserRole = async (uid, role, email) => {
   if (email === SUPER_ADMIN && currentRole !== 'superadmin') {
