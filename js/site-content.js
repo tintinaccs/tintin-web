@@ -19,14 +19,6 @@ function setHtml(el, value) {
   if (el && value) el.innerHTML = withBreaks(value);
 }
 
-/** Rewrite every static wa.me link on the page to a single WhatsApp number source */
-function applyWaNumber(number) {
-  if (!number) return;
-  document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
-    a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + number);
-  });
-}
-
 function applyIndex(data) {
   const hero = data.hero || {};
   setText(document.querySelector('.tt-hero-eyebrow'), hero.eyebrow);
@@ -75,7 +67,9 @@ function applyIndex(data) {
 
   const footer = data.footer || {};
   setText(document.querySelector('.tt-footer-bottom'), footer.copy);
-  applyWaNumber(footer.waHref);
+  // El número de WhatsApp ya NO se maneja acá — única fuente:
+  // settings/general.whatsappNumber (ver js/whatsapp.js), no más
+  // site_content/index.footer.waHref.
 }
 
 function applyNosotros(data) {

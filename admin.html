@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel Admin | Tintin Accesorios</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -1290,7 +1295,7 @@
           <p style="color:var(--adm-muted);font-size:13px;margin-bottom:16px">
             Los mensajes de clientes llegan por WhatsApp. Accedé directamente desde aquí.
           </p>
-          <a href="https://wa.me/595981299331" target="_blank" class="adm-btn adm-btn-primary">
+          <a href="https://wa.me/595981299331" target="_blank" id="mensajes-wa-link" class="adm-btn adm-btn-primary">
             Abrir WhatsApp Business
           </a>
         </div>
@@ -2597,6 +2602,13 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
   renderShipList('delivery');
   renderShipList('encomienda');
+
+  // "Abrir WhatsApp Business" en Mensajes — única fuente: whatsappNumber de
+  // Configuración. No se toca acá ningún link de "escribirle a esta clienta"
+  // (esos usan el teléfono de cada pedido, no el de la tienda).
+  const waLink = document.getElementById('mensajes-wa-link');
+  const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
+  if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
 });
 
 // Pestañas Delivery / Encomienda dentro de Envíos
@@ -3915,7 +3927,8 @@ const CONT_SCHEMA = {
           { key:'logo', label:'Logo (imagen)', type:'image', def:'assets-tintin/images/general/logo-tintin.webp' },
           { key:'copy', label:'Texto copyright', type:'text', def:'© 2024–2026 TINTIN ACCESORIOS' },
           { key:'waText', label:'Botón WhatsApp texto', type:'text', def:'Contactanos por WhatsApp' },
-          { key:'waHref', label:'Número WhatsApp', type:'text', def:'595981299331' },
+          // El número de WhatsApp se configura en Configuración → WhatsApp,
+          // única fuente para todo el sitio — ya no se edita por página.
         ]
       }
     }
