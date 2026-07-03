@@ -459,6 +459,19 @@ onAuthStateChanged(auth, async user => {
     window.location.href = 'login.html?from=' + encodeURIComponent('perfil.html');
     return;
   }
+
+  // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
+  // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
+  // para no duplicar el getDoc.
+  const ref  = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  const userData = snap.exists() ? snap.data() : null;
+  if (userData?.blocked) {
+    await signOut(auth);
+    window.location.href = 'login.html?blocked=1';
+    return;
+  }
+
   hideLoading();
 
   // Avatar
@@ -492,16 +505,13 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('link-admin-perfil').style.display = 'inline-flex';
   }
 
-  // Load Firestore user data
-  const ref  = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
-  if (snap.exists()) {
-    const d = snap.data();
-    document.getElementById('perfil-nombre').value = d.name    || user.displayName || '';
-    document.getElementById('perfil-tel').value    = d.phone   || '';
-    document.getElementById('perfil-dir').value    = d.address || '';
-    document.getElementById('perfil-purchase-count').textContent = d.purchaseCount || 0;
-    document.getElementById('perfil-total-spent').textContent    = formatPrice(d.totalSpent || 0);
+  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo)
+  if (userData) {
+    document.getElementById('perfil-nombre').value = userData.name    || user.displayName || '';
+    document.getElementById('perfil-tel').value    = userData.phone   || '';
+    document.getElementById('perfil-dir').value    = userData.address || '';
+    document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
+    document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
   }
 
   // Orders

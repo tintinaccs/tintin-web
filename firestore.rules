@@ -7,8 +7,19 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // Fase E: una cuenta bloqueada pierde todo poder de admin/agent/superadmin
+    // en las reglas mismas (no solo en la UI) apenas Super Admin la bloquea.
+    // tintinaccs@gmail.com queda excluida a propósito, aunque en la práctica
+    // nunca puede llegar a tener blocked==true (ver más abajo).
+    function isBlockedUser() {
+      return isSignedIn() &&
+        request.auth.token.email != "tintinaccs@gmail.com" &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.blocked == true;
+    }
+
     function isAdmin() {
-      return isSignedIn() && (
+      return isSignedIn() && !isBlockedUser() && (
         request.auth.token.email == "tintinaccs@gmail.com" ||
         (
           exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
@@ -22,7 +33,7 @@ service cloud.firestore {
     // a propósito, para que cada match deje explícito qué le toca a cada uno
     // y nunca herede por accidente algo pensado solo para admin/superadmin.
     function isAgent() {
-      return isSignedIn() &&
+      return isSignedIn() && !isBlockedUser() &&
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
     }
@@ -35,6 +46,7 @@ service cloud.firestore {
       return isSignedIn() && (
         request.auth.token.email == "tintinaccs@gmail.com" ||
         (
+          !isBlockedUser() &&
           exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "superadmin"
         )
@@ -103,7 +115,7 @@ service cloud.firestore {
       //   - nadie puede asignarle el rol "superadmin" a NINGUNA cuenta salvo
       //     que quien escribe sea tintinaccs@gmail.com.
       allow update: if isSignedIn() && (
-        (request.auth.uid == userId &&
+        (request.auth.uid == userId && !isBlockedUser() &&
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
         (
           isSuperAdmin() &&
@@ -153,8 +165,10 @@ service cloud.firestore {
 
     match /orders/{orderId} {
       // El pedido debe quedar asignado a quien realmente lo crea — evita que
-      // alguien guarde un pedido a nombre de otro uid.
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      // alguien guarde un pedido a nombre de otro uid. Una cuenta bloqueada
+      // (Fase E) no puede crear pedidos nuevos, ni siquiera llamando a
+      // Firestore directamente sin pasar por la UI de checkout.
+      allow create: if isSignedIn() && !isBlockedUser() && request.resource.data.userId == request.auth.uid;
 
       // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
       // admin y Modder pueden leer cualquiera (el Modder necesita ver los datos

@@ -430,12 +430,13 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
+  signOut,
   reload
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
+import { getUserRole, SUPER_ADMIN, BLOCKED_MESSAGE } from "./js/roles.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js";
 
 // El link "Continuar" en la página de Firebase (tras verificar el correo o
@@ -455,13 +456,35 @@ onAuthStateChanged(auth, async user => {
     hideLoginOverlay();
     // Deep link desde el header ("Crear cuenta" → login.html#registro)
     if (location.hash === '#registro') switchTab('registro');
+    // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
+    // detectar una cuenta bloqueada (Fase E).
+    if (new URLSearchParams(window.location.search).get('blocked') === '1') {
+      showError(BLOCKED_MESSAGE);
+    }
     return;
   }
   try { await reload(user); } catch {} // trae el emailVerified más reciente del servidor
   if (!user.emailVerified) { hideLoginOverlay(); showVerifyPanel(user.email); return; }
+  if (await checkBlocked(user.uid, user.email)) {
+    await signOut(auth);
+    hideLoginOverlay();
+    showError(BLOCKED_MESSAGE);
+    return;
+  }
   const role = await getUserRole(user.uid, user.email);
   redirectByRole(role);
 });
+
+// Cuenta bloqueada (Fase E) — tintinaccs@gmail.com nunca puede estarlo.
+async function checkBlocked(uid, email) {
+  if (email === SUPER_ADMIN) return false;
+  try {
+    const snap = await getDoc(doc(db, 'users', uid));
+    return snap.exists() && snap.data().blocked === true;
+  } catch {
+    return false;
+  }
+}
 
 function redirectByRole(role) {
   const from = new URLSearchParams(window.location.search).get('from');
@@ -532,6 +555,9 @@ function errMsg(code) {
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
+// Devuelve { role, blocked } — una cuenta recién creada nunca está bloqueada;
+// una existente puede estarlo (Fase E), y quien llama debe revisarlo antes
+// de redirigir a ningún lado.
 async function guardarUsuario(user, nombre, phone) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
@@ -550,18 +576,18 @@ async function guardarUsuario(user, nombre, phone) {
       createdAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
-    return role;
+    return { role, blocked: false };
   } else {
     const data = snap.data();
     // Ensure superadmin email always has correct role
     if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
       await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
-      return 'superadmin';
+      return { role: 'superadmin', blocked: false };
     }
     const patch = { lastLogin: serverTimestamp() };
     if (phone && !data.phone) patch.phone = phone; // completa el teléfono si faltaba, sin pisar uno ya guardado
     await setDoc(ref, patch, { merge: true });
-    return data.role || 'client';
+    return { role: data.role || 'client', blocked: !!data.blocked };
   }
 }
 
@@ -641,7 +667,13 @@ document.getElementById("btn-login-email").onclick = async () => {
       showVerifyPanel(cred.user.email);
       return;
     }
-    const role = await guardarUsuario(cred.user, "", "");
+    const { role, blocked } = await guardarUsuario(cred.user, "", "");
+    if (blocked) {
+      await signOut(auth);
+      hideLoginOverlay();
+      showError(BLOCKED_MESSAGE);
+      return;
+    }
     redirectByRole(role);
   } catch(e) {
     hideLoginOverlay();
@@ -716,7 +748,13 @@ const loginConGoogle = async () => {
   try {
     showOverlay();
     const cred = await signInWithPopup(auth, provider);
-    const role = await guardarUsuario(cred.user, cred.user.displayName, "");
+    const { role, blocked } = await guardarUsuario(cred.user, cred.user.displayName, "");
+    if (blocked) {
+      await signOut(auth);
+      hideLoginOverlay();
+      showError(BLOCKED_MESSAGE);
+      return;
+    }
     redirectByRole(role);
   } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
 };

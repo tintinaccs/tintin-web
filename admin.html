@@ -896,11 +896,19 @@
       <div class="adm-card">
         <div class="adm-card-head">
           <div class="adm-card-title">Gestión de usuarios</div>
+          <span id="users-blocked-count" class="adm-badge badge-cancelado" style="display:none;cursor:pointer" title="Ver solo bloqueados" onclick="window.filterUsersByStatus('blocked')"></span>
         </div>
         <div class="adm-card-body" style="padding:16px 22px 0">
-          <div class="adm-search-wrap">
-            <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-            <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
+          <div class="adm-filter-row">
+            <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
+              <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
+            </div>
+            <select class="adm-select" id="user-status-filter" style="flex:1">
+              <option value="all">Todos los usuarios</option>
+              <option value="active">Solo activos</option>
+              <option value="blocked">Solo bloqueados</option>
+            </select>
           </div>
         </div>
         <div style="padding:0">
@@ -1623,7 +1631,7 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendOrderNotification } from "./js/email-notify.js";
@@ -1753,6 +1761,18 @@ onAuthStateChanged(auth, async user => {
 
     const role = await getUserRole(user.uid, user.email);
     currentRole = role;
+
+    // Cuenta bloqueada (Fase E): afuera del panel con mensaje claro, sin
+    // esperar a que el rol demovido a 'client' la saque por la vía indirecta
+    // de perfil.html. tintinaccs@gmail.com nunca puede estar bloqueada.
+    if (user.email !== SUPER_ADMIN) {
+      const selfSnap = await getDoc(doc(db, 'users', user.uid));
+      if (selfSnap.exists() && selfSnap.data().blocked) {
+        await signOut(auth);
+        window.location.href = 'login.html?blocked=1';
+        return;
+      }
+    }
 
     if (role === 'client' || !role) {
       window.location.href = 'perfil.html';
@@ -1889,17 +1909,47 @@ async function loadDashboard() {
 }
 
 // ======== USUARIOS ========
+let userStatusFilter = 'all';
+
 async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
   tbody.innerHTML = '<tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(collection(db, 'users'));
     allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
-    renderUsersTable(allUsers);
+    applyUserFilters();
   } catch(e) {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
   }
 }
+
+// Única fuente de verdad para lo que se ve en la tabla: combina el texto de
+// búsqueda con el filtro Todos/Activos/Bloqueados — usada por ambos inputs.
+function applyUserFilters() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  let filtered = allUsers.filter(u =>
+    (u.name||'').toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q)
+  );
+  if (userStatusFilter === 'blocked') filtered = filtered.filter(u => u.blocked);
+  if (userStatusFilter === 'active')  filtered = filtered.filter(u => !u.blocked);
+  renderUsersTable(filtered);
+  updateBlockedCount();
+}
+
+function updateBlockedCount() {
+  const el = document.getElementById('users-blocked-count');
+  if (!el) return;
+  const n = allUsers.filter(u => u.blocked).length;
+  el.textContent = n ? `🔒 ${n} bloqueado${n !== 1 ? 's' : ''}` : '';
+  el.style.display = n ? 'inline-block' : 'none';
+}
+
+window.filterUsersByStatus = (status) => {
+  userStatusFilter = status;
+  document.getElementById('user-status-filter').value = status;
+  applyUserFilters();
+};
 
 function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
@@ -1918,7 +1968,26 @@ function renderUsersTable(users) {
       ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
       : '<span class="adm-badge badge-entregado">Activo</span>';
 
-    const roleSelect = canEdit && can(currentRole, 'assignRoles') ? `
+    // Ficha ampliada de la Fase E: solo se arma para usuarios bloqueados, para
+    // no recargar la tabla en el caso normal. IP de registro deliberadamente
+    // NO se captura (no hay backend seguro en este proyecto sin facturación) —
+    // se explicita acá en vez de omitirlo en silencio.
+    const blockedDetail = u.blocked ? `
+      <div style="margin-top:6px;font-size:11px;color:#888;line-height:1.6;max-width:230px">
+        ${u.phone ? `<div>📞 ${u.phone}</div>` : ''}
+        ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock}</strong></div>` : ''}
+        ${u.blockedAt ? `<div>Bloqueado: ${formatDate(u.blockedAt)}</div>` : ''}
+        ${u.blockedBy ? `<div>Por: ${u.blockedBy}</div>` : ''}
+        <div>Motivo: ${u.blockReason ? u.blockReason : '<span style="color:#bbb">sin especificar</span>'}</div>
+        ${u.lastLogin ? `<div>Última actividad: ${formatDate(u.lastLogin)}</div>` : ''}
+        <div style="color:#ccc">IP de registro: no disponible (requiere backend seguro)</div>
+      </div>
+    ` : '';
+
+    // Mientras está bloqueado el rol no se edita a mano — cambiar el rol de
+    // una cuenta bloqueada pasa exclusivamente por "Restaurar", para que
+    // nunca quede el estado inconsistente blocked:true + role:'agent'/'admin'.
+    const roleSelect = canEdit && can(currentRole, 'assignRoles') && !u.blocked ? `
       <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
         onchange="window.updateUserRole('${u.uid}', this.value, '${u.email}')"
         ${isSuperAdmin ? 'disabled' : ''}>
@@ -1932,10 +2001,10 @@ function renderUsersTable(users) {
 
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${!isSuperAdmin ? `<button class="adm-btn adm-btn-sm adm-btn-outline"
-          onclick="window.toggleBlock('${u.uid}', ${!!u.blocked})">
-          ${u.blocked ? 'Desbloquear' : 'Bloquear'}
-        </button>` : ''}
+        ${!isSuperAdmin ? (u.blocked
+          ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser('${u.uid}')">Restaurar</button>`
+          : `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser('${u.uid}', '${u.email}')">Bloquear</button>`
+        ) : ''}
         ${can(currentRole,'deleteUsers') && !isSuperAdmin ? `
           <button class="adm-btn adm-btn-sm adm-btn-danger"
             onclick="window.deleteUser('${u.uid}', '${(u.name||u.email||'').replace(/'/g,"\\'")}')">
@@ -1954,21 +2023,18 @@ function renderUsersTable(users) {
         <td><strong>${u.name || '—'}</strong></td>
         <td style="font-size:12px;color:#666">${u.email || '—'}</td>
         <td>${roleSelect}</td>
-        <td>${blockedBadge}</td>
+        <td>${blockedBadge}${blockedDetail}</td>
         <td>${actions}</td>
       </tr>
     `;
   }).join('');
 }
 
-// User search
-document.getElementById('user-search').oninput = function() {
-  const q = this.value.toLowerCase();
-  const filtered = allUsers.filter(u =>
-    (u.name||'').toLowerCase().includes(q) ||
-    (u.email||'').toLowerCase().includes(q)
-  );
-  renderUsersTable(filtered);
+// Búsqueda y filtro de estado — comparten applyUserFilters()
+document.getElementById('user-search').oninput = applyUserFilters;
+document.getElementById('user-status-filter').onchange = function() {
+  userStatusFilter = this.value;
+  applyUserFilters();
 };
 
 window.updateUserRole = async (uid, role, email) => {
@@ -1981,34 +2047,95 @@ window.updateUserRole = async (uid, role, email) => {
     const u = allUsers.find(u => u.uid === uid);
     if (u) u.role = role;
     toast(`Rol actualizado a ${ROLE_LABELS[role]}`);
-    renderUsersTable(allUsers);
+    applyUserFilters();
   } catch(e) {
     toast('Error al actualizar rol');
   }
 };
 
-window.toggleBlock = async (uid, currentlyBlocked) => {
+// Bloquear: pide un motivo opcional, guarda quién y cuándo, y guarda el rol
+// que tenía ANTES de bloquear (roleBeforeBlock) para poder restaurarlo bien
+// — mientras está bloqueado, su rol pasa a 'client' así pierde de una todo
+// permiso operativo (además de perderlo también en firestore.rules).
+window.blockUser = async (uid, email) => {
+  if (email === SUPER_ADMIN) { toast('No se puede bloquear al Super Admin'); return; }
+  const u = allUsers.find(x => x.uid === uid);
+  if (!u) return;
+  const reason = window.prompt('Motivo del bloqueo (opcional, se puede dejar en blanco):', '') ?? null;
+  if (reason === null) return; // canceló el diálogo, no bloqueamos nada
+  const prevRole = u.role || 'client';
+  if (!confirm(`¿Bloquear a "${u.name || u.email}"?\n\nNo va a poder comprar, entrar a Mi Cuenta${prevRole !== 'client' ? ' ni acceder al panel' : ''} hasta que la restaures.`)) return;
   try {
     await updateDoc(doc(db, 'users', uid), {
-      blocked: !currentlyBlocked,
+      blocked: true,
+      blockedAt: serverTimestamp(),
+      blockedBy: currentUser?.email || '',
+      blockReason: reason,
+      roleBeforeBlock: prevRole,
+      role: 'client',
       updatedAt: serverTimestamp()
     });
-    const u = allUsers.find(u => u.uid === uid);
-    if (u) u.blocked = !currentlyBlocked;
-    toast(currentlyBlocked ? 'Usuario desbloqueado' : 'Usuario bloqueado');
-    renderUsersTable(allUsers);
+    Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: prevRole, role: 'client' });
+    toast('Usuario bloqueado');
+    applyUserFilters();
   } catch(e) {
-    toast('Error al actualizar usuario');
+    toast('Error al bloquear usuario');
+  }
+};
+
+// Restaurar: si tenía un rol elevado antes del bloqueo, pide confirmación
+// explícita para devolvérselo; si no hay historial (o decide no confirmarlo),
+// restaura como Cliente por seguridad — tal como pidió Tintin.
+window.restoreUser = async (uid) => {
+  const u = allUsers.find(x => x.uid === uid);
+  if (!u) return;
+  let targetRole = 'client';
+  const prevRole = u.roleBeforeBlock;
+  if (prevRole && prevRole !== 'client') {
+    const roleLabel = ROLE_LABELS[prevRole] || prevRole;
+    const restoreElevated = confirm(
+      `Este usuario tenía el rol "${roleLabel}" antes de bloquearse.\n\n` +
+      `Aceptar = restaurar como ${roleLabel}\n` +
+      `Cancelar = restaurar como Cliente (opción más segura)`
+    );
+    targetRole = restoreElevated ? prevRole : 'client';
+  }
+  try {
+    await updateDoc(doc(db, 'users', uid), {
+      blocked: false,
+      role: targetRole,
+      blockedAt: deleteField(),
+      blockedBy: deleteField(),
+      blockReason: deleteField(),
+      roleBeforeBlock: deleteField(),
+      updatedAt: serverTimestamp()
+    });
+    Object.assign(u, { blocked: false, role: targetRole });
+    delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
+    toast(`Usuario restaurado como ${ROLE_LABELS[targetRole]}`);
+    applyUserFilters();
+  } catch(e) {
+    toast('Error al restaurar usuario');
   }
 };
 
 window.deleteUser = async (uid, name) => {
-  if (!confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) return;
+  // Aclaración honesta (Fase E): esto borra la FICHA de Firestore, no la cuenta
+  // real de acceso en Firebase Authentication — eso requeriría Cloud Functions
+  // con facturación habilitada (Blaze), que este proyecto no usa. Si la persona
+  // vuelve a entrar con el mismo correo, se le crea una ficha nueva como Cliente.
+  if (!confirm(
+    `¿Eliminar el perfil de "${name}" de la base de datos?\n\n` +
+    `Esto borra su ficha de Firestore (datos, rol, historial de bloqueo) pero NO elimina su cuenta real de acceso ` +
+    `(Firebase Authentication) — eso necesita un backend con Cloud Functions y facturación, que este proyecto no tiene. ` +
+    `Si vuelve a entrar con el mismo correo, se le crea una ficha nueva como Cliente.\n\n` +
+    `Esta acción no se puede deshacer.`
+  )) return;
   try {
     await deleteDoc(doc(db, 'users', uid));
     allUsers = allUsers.filter(u => u.uid !== uid);
-    toast('Usuario eliminado');
-    renderUsersTable(allUsers);
+    toast('Perfil eliminado de Firestore');
+    applyUserFilters();
   } catch(e) {
     toast('Error al eliminar usuario');
   }

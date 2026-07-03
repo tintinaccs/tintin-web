@@ -9,6 +9,10 @@ import {
 
 export const SUPER_ADMIN = 'tintinaccs@gmail.com';
 
+// Mensaje único para cuentas bloqueadas (Fase E) — una sola fuente de verdad
+// para que login.html y checkout.html muestren exactamente el mismo texto.
+export const BLOCKED_MESSAGE = 'Tu cuenta se encuentra bloqueada. Contactá con Tintin para más información.';
+
 export const ROLES = {
   SUPERADMIN: 'superadmin',
   ADMIN:      'admin',
