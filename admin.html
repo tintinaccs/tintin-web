@@ -1033,7 +1033,7 @@
           <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Cambiar cat.</button>
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente (solo superadmin)" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -1909,7 +1909,10 @@ function renderUsersTable(users) {
   }
   tbody.innerHTML = users.map(u => {
     const isSuperAdmin = u.email === SUPER_ADMIN;
-    const canEdit = currentRole === 'superadmin' || (currentRole === 'admin' && !isSuperAdmin);
+    // Se usa can(role,'manageUsers') en vez de comparar el nombre del rol a mano
+    // — hoy solo superadmin tiene ese permiso, pero si el día de mañana cambia
+    // la matriz de permisos, esta línea sigue siendo correcta sin tocarla.
+    const canEdit = can(currentRole, 'manageUsers') && !isSuperAdmin;
     const roleBadge = `<span class="adm-badge role-${u.role || 'client'}">${ROLE_LABELS[u.role] || 'Cliente'}</span>`;
     const blockedBadge = u.blocked
       ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
@@ -4220,7 +4223,10 @@ function updateBulkToolbar() {
   const delBtn = document.getElementById('bulk-delete-btn');
   if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
   if (selCount) selCount.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
-  if (delBtn) delBtn.style.display = currentRole === 'superadmin' ? '' : 'none';
+  // Antes esto era exclusivo de "superadmin" a mano; ahora sigue el mismo
+  // permiso que ya gatea el botón de eliminar de a un producto (deleteProducts)
+  // — si podés borrar uno, tiene sentido que también puedas borrar varios.
+  if (delBtn) delBtn.style.display = can(currentRole, 'deleteProducts') ? '' : 'none';
 }
 
 window.clearSelection = function() {
@@ -4276,7 +4282,7 @@ window.bulkSetCategory = async function() {
 
 window.bulkDelete = async function() {
   if (!_selectedProducts.size) return;
-  if (currentRole !== 'superadmin') { toast('Solo el superadmin puede eliminar masivamente'); return; }
+  if (!can(currentRole, 'deleteProducts')) { toast('No tenés permiso para eliminar productos'); return; }
   const n = _selectedProducts.size;
   if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;
   if (!confirm(`Segunda confirmación: ¿confirmar la eliminación de ${n} productos?`)) return;

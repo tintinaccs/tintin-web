@@ -27,6 +27,28 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
     }
 
+    // Super Admin real — únicamente tintinaccs@gmail.com. "admin" (el gerente
+    // operativo, Fase D) NO cuenta acá aunque isAdmin() sí lo incluya: esto es
+    // a propósito, para que Usuarios/Configuración queden 100% exclusivos del
+    // Super Admin y nunca un "admin" tenga el mismo poder por error.
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "tintinaccs@gmail.com" ||
+        (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "superadmin"
+        )
+      );
+    }
+
+    // ¿El documento de usuario que se está tocando es el del Super Admin?
+    // Se usa para blindarlo: nadie, ni siquiera otro superadmin/admin, puede
+    // bloquearlo, eliminarlo, ni cambiarle el rol — solo su propio token puede
+    // tocar su propio documento.
+    function isSuperAdminAccount(data) {
+      return data.email == "tintinaccs@gmail.com";
+    }
+
     // IMPORTANTE:
     // La web pública necesita leer estas imágenes para mostrar hero, categorías, editoriales, etc.
     match /settings/images {
@@ -37,34 +59,66 @@ service cloud.firestore {
     // Config general de la tienda (nombre, WhatsApp, envíos/ciudades, redes, pagos).
     // El checkout público necesita leerla sin estar logueado para calcular el costo de envío.
     // No contiene datos sensibles (ninguna credencial/secreto vive acá).
+    // Escritura: solo Super Admin — es la sección "Configuración", fuera del
+    // alcance de "admin" (gerente operativo) y del Modder (Fase D).
     match /settings/general {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isSuperAdmin();
     }
 
-    // Otros documentos de settings quedan protegidos
+    // Otros documentos de settings quedan protegidos — exclusivo Super Admin.
     match /settings/{doc} {
-      allow read, write: if isAdmin();
+      allow read, write: if isSuperAdmin();
     }
 
     match /users/{userId} {
-      // El dueño del doc puede leer el suyo; el admin puede leer cualquiera (panel Usuarios).
-      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      // El dueño del doc puede leer el suyo; ver cualquier otra cuenta (panel
+      // Usuarios) es exclusivo del Super Admin — ni "admin" ni el Modder
+      // tienen acceso a la lista de usuarios (Fase D).
+      allow read: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
 
-      // Alta de cuenta: solo el propio usuario, y no puede auto-asignarse un rol
-      // distinto de 'client' (excepto el Super Admin real, ya validado por email).
+      // Alta de cuenta: solo el propio usuario. No puede autoasignarse un rol
+      // distinto de 'client', y el rol "superadmin" NUNCA se puede asignar
+      // salvo que quien escribe sea literalmente tintinaccs@gmail.com — así
+      // se cumple "solo tintinaccs@gmail.com puede ser Super Admin" incluso
+      // si alguien lo intenta a mano desde la consola del navegador.
       allow create: if isSignedIn() && request.auth.uid == userId &&
-        (!('role' in request.resource.data) || request.resource.data.role == 'client' || isAdmin());
+        (
+          !('role' in request.resource.data) ||
+          request.resource.data.role == 'client' ||
+          isSuperAdmin()
+        ) &&
+        (
+          !('role' in request.resource.data) ||
+          request.resource.data.role != 'superadmin' ||
+          request.auth.token.email == "tintinaccs@gmail.com"
+        );
 
-      // El dueño puede editar su propio perfil pero NO su rol ni su estado de bloqueo
-      // (evita auto-escalación de privilegios). El admin puede editar cualquier doc.
+      // El dueño puede editar su propio perfil pero NO su rol ni su estado de
+      // bloqueo (evita auto-escalación de privilegios). Tocar el documento de
+      // OTRO usuario (incluido cambiar rol/bloqueo) es exclusivo del Super
+      // Admin. Blindaje extra, sin excepciones:
+      //   - nadie puede tocar el rol/bloqueo del documento de tintinaccs@gmail.com,
+      //     salvo ella misma (ni siquiera otro superadmin/admin puede degradarla);
+      //   - nadie puede asignarle el rol "superadmin" a NINGUNA cuenta salvo
+      //     que quien escribe sea tintinaccs@gmail.com.
       allow update: if isSignedIn() && (
         (request.auth.uid == userId &&
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
-        isAdmin()
+        (
+          isSuperAdmin() &&
+          (request.auth.token.email == "tintinaccs@gmail.com" || !isSuperAdminAccount(resource.data)) &&
+          (
+            !('role' in request.resource.data) ||
+            request.resource.data.role != 'superadmin' ||
+            request.auth.token.email == "tintinaccs@gmail.com"
+          )
+        )
       );
 
-      allow delete: if isAdmin();
+      // Eliminar una cuenta es exclusivo del Super Admin, y el documento de
+      // tintinaccs@gmail.com no se puede eliminar bajo ninguna circunstancia.
+      allow delete: if isSuperAdmin() && !isSuperAdminAccount(resource.data);
 
       // Carrito sincronizado del usuario (js/cart-sync.js)
       match /cart/{itemId} {

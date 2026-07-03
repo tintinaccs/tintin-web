@@ -42,10 +42,15 @@ export const PERMISSIONS = {
     manageSettings:   true,
     viewDashboard:    true
   },
+  // Admin: gerente operativo de la tienda con control total sobre pedidos,
+  // productos, colecciones y contenido (incluido eliminar) — pero CERO acceso
+  // a Usuarios, Configuración e Importar. No es un segundo Super Admin: no
+  // puede tocar cuentas, roles, ni nada de configuración/seguridad interna.
+  // (Antes esta matriz era idéntica a superadmin — ver Fase D.)
   admin: {
-    manageUsers:      true,
-    assignRoles:      true,
-    deleteUsers:      true,
+    manageUsers:      false,
+    assignRoles:      false,
+    deleteUsers:      false,
     viewOrders:       true,
     manageOrders:     true,
     manageOrdersFull: true,
@@ -55,7 +60,7 @@ export const PERMISSIONS = {
     manageContent:    true,
     deleteCollections: true,
     deleteContent:    true,
-    manageSettings:   true,
+    manageSettings:   false,
     viewDashboard:    true
   },
   // Modder: permisos operativos del día a día (pedidos, stock, productos,
