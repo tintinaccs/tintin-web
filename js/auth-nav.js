@@ -68,6 +68,11 @@ function wireLogout(panel) {
   if (btn) btn.onclick = doLogout;
 }
 
+function wireMobileLogout(panel) {
+  const btn = panel.querySelector("#mobile-user-logout-btn");
+  if (btn) btn.onclick = doLogout;
+}
+
 function escapeHtmlNav(s) {
   const div = document.createElement('div');
   div.textContent = s || '';
@@ -87,7 +92,9 @@ function renderMobileUserPanel(user, verified) {
           <div class="tt-mobile-user-name">Verificá tu correo</div>
           <div class="tt-mobile-user-sub">Confirmá tu cuenta para continuar</div>
         </div>
-      </a>`;
+      </a>
+      <button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button>`;
+    wireMobileLogout(panel);
     return;
   }
 
@@ -107,7 +114,9 @@ function renderMobileUserPanel(user, verified) {
           <div class="tt-mobile-user-name">${escapeHtmlNav(firstName)}</div>
           <div class="tt-mobile-user-sub">Ver mi perfil →</div>
         </div>
-      </a>`;
+      </a>
+      <button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button>`;
+    wireMobileLogout(panel);
   } else {
     panel.innerHTML = `
       <a href="login.html" class="tt-mobile-user-login">
