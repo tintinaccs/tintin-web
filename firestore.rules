@@ -212,6 +212,18 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // Registro de auditoría (Fase 2): quién editó un pedido, cambió su estado,
+    // editó un producto/stock, cambió un rol, o bloqueó/restauró una cuenta.
+    // Cualquier admin/agente puede CREAR una entrada (así queda registrada su
+    // propia acción), pero solo Super Admin puede LEER el historial — el
+    // Modder no ve la auditoría, aunque sus propias acciones sí queden
+    // anotadas ahí. Es un registro inmutable: nadie edita ni borra entradas.
+    match /auditLog/{logId} {
+      allow read: if isSuperAdmin();
+      allow create: if isAdmin() || isAgent();
+      allow update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
