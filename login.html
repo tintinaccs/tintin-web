@@ -396,6 +396,18 @@
         </div>
         <div class="login-hint">Te enviamos un enlace para restablecer tu contraseña si el correo tiene una cuenta.</div>
         <button class="login-btn" id="btn-recuperar">Enviar enlace de recuperación</button>
+
+        <!-- Aviso genérico (no depende del email escrito, no revela si esa
+             cuenta puntual existe ni qué proveedor usa — evita el riesgo de
+             enumeración de fetchSignInMethodsForEmail, que Firebase mismo
+             discontinuó por eso). Ayuda igual a quien se registró con Google
+             y no entiende por qué "recuperar" no le sirve. -->
+        <div class="login-divider" style="margin:4px 0">o</div>
+        <div class="login-hint" style="text-align:center">¿Te registraste con Google? Ahí no tenés contraseña de Tintin para restablecer.</div>
+        <button type="button" class="login-google" id="btn-recover-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google" />
+          Continuar con Google
+        </button>
       </div>
 
       <!-- PANEL: VERIFICÁ TU CORREO (se muestra tras registrarse) -->
@@ -409,6 +421,63 @@
         <button class="login-resend-btn" id="btn-resend-verify">Reenviar correo de verificación</button>
         <div class="login-back" style="margin-top:0">
           <a href="#" id="link-verify-to-login">Ya verifiqué, ir a iniciar sesión</a>
+        </div>
+      </div>
+
+      <!-- PANEL: RESTABLECER CONTRASEÑA — reemplaza la pantalla genérica de
+           Firebase cuando el link del correo trae ?mode=resetPassword&oobCode=…
+           (requiere configurar la "Customize action URL" en Firebase Console,
+           ver functions/FIREBASE_AUTH_EMAILS.md) -->
+      <div class="login-verify-panel" id="reset-action-panel">
+        <div id="reset-action-loading">
+          <div class="login-verify-icon">🔑</div>
+          <div class="login-verify-title">Verificando el enlace…</div>
+        </div>
+        <div id="reset-action-form" style="display:none;flex-direction:column;gap:14px">
+          <div class="login-verify-icon">🔑</div>
+          <div class="login-verify-title">Elegí tu nueva contraseña</div>
+          <div class="login-verify-text">Cuenta: <strong id="reset-action-email"></strong></div>
+          <div class="login-field" style="text-align:left">
+            <label class="login-label">Nueva contraseña</label>
+            <input type="password" class="login-input" id="reset-new-pass" autocomplete="new-password" placeholder="Mínimo 8 caracteres" />
+          </div>
+          <div class="login-field" style="text-align:left">
+            <label class="login-label">Repetí la contraseña</label>
+            <input type="password" class="login-input" id="reset-new-pass2" autocomplete="new-password" />
+          </div>
+          <button class="login-btn" id="btn-reset-confirm" style="margin-top:0">Guardar nueva contraseña</button>
+        </div>
+        <div id="reset-action-expired" style="display:none">
+          <div class="login-verify-icon">⏰</div>
+          <div class="login-verify-title">Este enlace ya fue usado o caducó</div>
+          <div class="login-verify-text">Solicitá uno nuevo para recuperar tu contraseña.</div>
+          <button class="login-resend-btn" id="btn-reset-request-new">Solicitar nuevo enlace</button>
+        </div>
+        <div id="reset-action-success" style="display:none">
+          <div class="login-verify-icon">✅</div>
+          <div class="login-verify-title">¡Contraseña actualizada!</div>
+          <div class="login-verify-text">Ya podés iniciar sesión con tu nueva contraseña.</div>
+          <button class="login-btn" id="btn-reset-goto-login" style="margin-top:12px">Ir a iniciar sesión</button>
+        </div>
+      </div>
+
+      <!-- PANEL: VERIFICACIÓN DE CORREO vía link (?mode=verifyEmail&oobCode=…) -->
+      <div class="login-verify-panel" id="verify-action-panel">
+        <div id="verify-action-loading">
+          <div class="login-verify-icon">📩</div>
+          <div class="login-verify-title">Verificando tu correo…</div>
+        </div>
+        <div id="verify-action-success" style="display:none">
+          <div class="login-verify-icon">✅</div>
+          <div class="login-verify-title">¡Correo verificado!</div>
+          <div class="login-verify-text">Ya podés iniciar sesión.</div>
+          <button class="login-btn" id="btn-verify-action-goto-login" style="margin-top:12px">Ir a iniciar sesión</button>
+        </div>
+        <div id="verify-action-expired" style="display:none">
+          <div class="login-verify-icon">⏰</div>
+          <div class="login-verify-title">Este enlace ya fue usado o caducó</div>
+          <div class="login-verify-text">Iniciá sesión con tu cuenta y te ofrecemos reenviar el correo de verificación.</div>
+          <button class="login-btn" id="btn-verify-action-goto-login2" style="margin-top:12px">Ir a iniciar sesión</button>
         </div>
       </div>
 
@@ -430,6 +499,9 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  applyActionCode,
   signOut,
   reload
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -455,6 +527,42 @@ function hideLoginOverlay() {
   setOverlayText('Cargando…');
 }
 function setOverlayText(text) { if (overlayTextEl) overlayTextEl.textContent = text; }
+
+// ══════════════════════════════════════════════
+// ACCIÓN DESDE EL CORREO: ?mode=resetPassword|verifyEmail&oobCode=…
+// Reemplaza la pantalla genérica de Firebase (a veces en inglés, sin el
+// diseño de Tintin) por una propia. Para que el link del correo traiga acá
+// en vez de a firebaseapp.com hace falta configurar la "Customize action
+// URL" en Firebase Console — ver functions/FIREBASE_AUTH_EMAILS.md. Si esa
+// configuración no está hecha todavía, esto simplemente nunca se activa (el
+// link sigue yendo a la pantalla de Firebase como antes) — no rompe nada.
+const actionParams  = new URLSearchParams(window.location.search);
+const actionMode    = actionParams.get('mode');
+const actionOobCode = actionParams.get('oobCode');
+
+function showActionOnlyPanel(panelId) {
+  document.getElementById('login-tabs').style.display = 'none';
+  document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.login-verify-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+// Usado por los botones "Ir a iniciar sesión" / "Solicitar nuevo enlace" de
+// los paneles de acción — vuelve a los tabs normales sin recargar la página.
+function returnToTabs(tabName) {
+  document.querySelectorAll('.login-verify-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('login-tabs').style.display = '';
+  switchTab(tabName);
+}
+
+if (actionMode === 'resetPassword' && actionOobCode) {
+  hideLoginOverlay();
+  showActionOnlyPanel('reset-action-panel');
+  runResetPasswordAction(actionOobCode);
+} else if (actionMode === 'verifyEmail' && actionOobCode) {
+  hideLoginOverlay();
+  showActionOnlyPanel('verify-action-panel');
+  runVerifyEmailAction(actionOobCode);
+} else {
 
 // Si ya está logueada y con el correo verificado → redirigir sin mostrar el
 // formulario. Si está logueada pero SIN verificar (por ej. se registró, cerró
@@ -484,6 +592,8 @@ onAuthStateChanged(auth, async user => {
   redirectByRole(role);
 });
 
+} // fin del else (actionMode !== resetPassword/verifyEmail)
+
 // Cuenta bloqueada (Fase E) — tintinaccs@gmail.com nunca puede estarlo.
 async function checkBlocked(uid, email) {
   if (email === SUPER_ADMIN) return false;
@@ -493,6 +603,64 @@ async function checkBlocked(uid, email) {
   } catch {
     return false;
   }
+}
+
+// ---- ACCIÓN: RESTABLECER CONTRASEÑA (?mode=resetPassword&oobCode=…) ----
+// verifyPasswordResetCode/confirmPasswordReset son 100% client-side y
+// seguras: el código se valida del lado del servidor de Firebase, nunca se
+// maneja ninguna clave ni token propio — no hace falta backend ni Blaze.
+async function runResetPasswordAction(oobCode) {
+  try {
+    const email = await verifyPasswordResetCode(auth, oobCode);
+    document.getElementById('reset-action-loading').style.display = 'none';
+    document.getElementById('reset-action-email').textContent = email;
+    document.getElementById('reset-action-form').style.display = 'flex';
+  } catch (e) {
+    // auth/expired-action-code, auth/invalid-action-code (ya usado), etc.
+    document.getElementById('reset-action-loading').style.display = 'none';
+    document.getElementById('reset-action-expired').style.display = 'block';
+  }
+
+  document.getElementById('btn-reset-confirm').onclick = async () => {
+    hideMessages();
+    const pass  = document.getElementById('reset-new-pass').value;
+    const pass2 = document.getElementById('reset-new-pass2').value;
+    if (!pass || pass.length < 8) { showError('La contraseña debe tener al menos 8 caracteres.'); return; }
+    if (pass !== pass2) { showError('Las contraseñas no coinciden.'); return; }
+    const btn = document.getElementById('btn-reset-confirm');
+    btn.disabled = true;
+    try {
+      await confirmPasswordReset(auth, oobCode, pass);
+      document.getElementById('reset-action-form').style.display = 'none';
+      document.getElementById('reset-action-success').style.display = 'block';
+    } catch (e) {
+      btn.disabled = false;
+      // El código puede vencer justo entre "verificar" y "confirmar" — mismo
+      // mensaje de "caducó" que en la verificación inicial.
+      if (e.code === 'auth/expired-action-code' || e.code === 'auth/invalid-action-code') {
+        document.getElementById('reset-action-form').style.display = 'none';
+        document.getElementById('reset-action-expired').style.display = 'block';
+      } else {
+        showError(errMsg(e.code));
+      }
+    }
+  };
+  document.getElementById('btn-reset-request-new').onclick = () => returnToTabs('recuperar');
+  document.getElementById('btn-reset-goto-login').onclick = () => returnToTabs('login');
+}
+
+// ---- ACCIÓN: VERIFICAR CORREO (?mode=verifyEmail&oobCode=…) ----
+async function runVerifyEmailAction(oobCode) {
+  try {
+    await applyActionCode(auth, oobCode);
+    document.getElementById('verify-action-loading').style.display = 'none';
+    document.getElementById('verify-action-success').style.display = 'block';
+  } catch (e) {
+    document.getElementById('verify-action-loading').style.display = 'none';
+    document.getElementById('verify-action-expired').style.display = 'block';
+  }
+  document.getElementById('btn-verify-action-goto-login').onclick  = () => returnToTabs('login');
+  document.getElementById('btn-verify-action-goto-login2').onclick = () => returnToTabs('login');
 }
 
 function redirectByRole(role) {
@@ -567,9 +735,20 @@ function errMsg(code) {
 // Devuelve { role, blocked } — una cuenta recién creada nunca está bloqueada;
 // una existente puede estarlo (Fase E), y quien llama debe revisarlo antes
 // de redirigir a ningún lado.
+//
+// authProvider: se lee directo de user.providerData (dato propio de la
+// cuenta ya autenticada, sin ninguna consulta por email) — nunca 'fetchSignInMethodsForEmail',
+// que Firebase discontinuó porque permite adivinar qué cuentas existen.
+// Guarda 'password' o 'google.com' según con qué se creó/inició sesión esa
+// cuenta — lo usa el flujo de "Recuperar contraseña" más abajo.
+function detectAuthProvider(user) {
+  return user.providerData?.[0]?.providerId || 'password';
+}
+
 async function guardarUsuario(user, nombre, phone) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
+  const authProvider = detectAuthProvider(user);
   if (!snap.exists()) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     await setDoc(ref, {
@@ -578,6 +757,7 @@ async function guardarUsuario(user, nombre, phone) {
       phone: phone || "",
       photoURL: user.photoURL || "",
       role,
+      authProvider,
       onboardingCompleted: false,
       blocked: false,
       purchaseCount: 0,
@@ -590,10 +770,13 @@ async function guardarUsuario(user, nombre, phone) {
     const data = snap.data();
     // Ensure superadmin email always has correct role
     if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
-      await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
+      await setDoc(ref, { role: 'superadmin', authProvider, lastLogin: serverTimestamp() }, { merge: true });
       return { role: 'superadmin', blocked: false };
     }
-    const patch = { lastLogin: serverTimestamp() };
+    // authProvider se guarda/actualiza en cada login — así las cuentas viejas
+    // que se crearon antes de este cambio quedan completadas solas, sin
+    // necesitar ninguna migración aparte.
+    const patch = { lastLogin: serverTimestamp(), authProvider };
     if (phone && !data.phone) patch.phone = phone; // completa el teléfono si faltaba, sin pisar uno ya guardado
     await setDoc(ref, patch, { merge: true });
     return { role: data.role || 'client', blocked: !!data.blocked };
@@ -790,6 +973,7 @@ const loginConGoogle = async () => {
 };
 document.getElementById("btn-login-google").onclick  = loginConGoogle;
 document.getElementById("btn-reg-google").onclick    = loginConGoogle;
+document.getElementById("btn-recover-google").onclick = loginConGoogle;
 
 // "¿Olvidaste tu contraseña?" pasa a la pestaña Recuperar en vez de un href muerto
 document.getElementById('link-forgot').onclick = (e) => { e.preventDefault(); switchTab('recuperar'); };

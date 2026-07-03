@@ -101,22 +101,62 @@ consentimiento de Google al iniciar sesión con Google. Para cambiarlo:
 Con este cambio más el asunto/cuerpo personalizado del paso anterior, en
 ningún lado debería volver a aparecer "TINTIN-accesorios".
 
-## El link de "Continuar" ya apunta al sitio — no toques eso
+## Página propia para "restablecer contraseña" y "verificar correo" — REQUIERE UN PASO MANUAL
 
-Firebase muestra una página propia (`tintin-accesorios.firebaseapp.com/...`)
-cuando alguien hace clic en el link del correo, con un botón **"Continuar"**
-que vuelve a `https://tintinaccs.github.io/tintin-web/login.html`. Esa
-redirección ya está configurada en el código (`login.html`, variable
-`actionCodeSettings`) — no hace falta configurar nada más en la consola para
-que funcione.
+Antes, al hacer clic en el link del correo, Firebase mostraba su propia
+página genérica (`tintin-accesorios.firebaseapp.com/__/auth/action`, a veces
+en inglés) y solo al final un botón "Continuar" que volvía a `login.html`.
+
+Ahora `login.html` sabe manejar esos links directamente (mismo diseño de
+Tintin, en español, con mensaje claro si el link ya se usó o caducó) — pero
+para que el link del correo venga DIRECTO a `login.html` en vez de pasar por
+la pantalla de Firebase, hay que activarlo a mano, una sola vez, por cada
+plantilla:
+
+1. **Authentication → Templates**.
+2. Abrí (ícono de lápiz ✏️) la plantilla **Restablecimiento de contraseña**.
+3. Buscá el enlace **"Personalizar URL de acción"** ("Customize action URL"),
+   generalmente abajo del todo del editor.
+4. Poné: `https://tintinaccs.github.io/tintin-web/login.html`
+5. Guardá.
+6. Repetí los pasos 2 a 5 para la plantilla **Verificación de dirección de
+   correo electrónico**.
+
+**Si no hacés este paso**, no pasa nada malo — el link del correo simplemente
+sigue yendo a la pantalla de Firebase como antes (el código de `login.html`
+detecta `?mode=…&oobCode=…` en la URL; si esos parámetros no están, ni se
+entera de que existe esta función nueva).
+
+Una vez activado, así se comporta cada caso:
+
+- **Restablecer contraseña** → `login.html` valida el enlace
+  (`verifyPasswordResetCode`) y muestra el formulario de nueva contraseña con
+  el diseño de Tintin. Si el enlace ya se usó o caducó, muestra "Este enlace
+  ya fue usado o caducó" con un botón **Solicitar nuevo enlace** que la lleva
+  directo a la pestaña Recuperar.
+- **Verificar correo** → `login.html` confirma el correo (`applyActionCode`)
+  y muestra "¡Correo verificado!" con un botón para ir a iniciar sesión. Si
+  el enlace ya se usó o caducó, se le indica que inicie sesión (ahí el
+  sistema ya le ofrece reenviar la verificación si todavía hace falta).
+
+Todo esto es 100% client-side con el SDK de Firebase Auth — el código nunca
+ve ni maneja la contraseña de nadie más que la de la propia clienta en su
+propio navegador, y el enlace (`oobCode`) se valida del lado del servidor de
+Google, igual que con la pantalla genérica de antes. No se agregó ningún
+backend ni Cloud Function.
 
 ## Cómo probarlo
 
 1. Registrate con una cuenta de prueba desde `login.html`.
 2. Revisá la bandeja de esa cuenta de prueba — debería llegar el correo de
-   verificación con el asunto y el remitente que configuraste.
-3. Para probar el de recuperación, andá a la pestaña "Recuperar" con ese
-   mismo email.
+   verificación con el asunto y el remitente que configuraste, en español.
+3. Hacé clic en el enlace del correo — si configuraste la URL de acción
+   personalizada (arriba), deberías ver la pantalla de Tintin, no la de
+   Firebase.
+4. Para probar el de recuperación, andá a la pestaña "Recuperar" con ese
+   mismo email, y hacé clic en el enlace que te llega.
+5. Probá también un enlace viejo/ya usado — debería mostrar el mensaje de
+   "caducó" con el botón para pedir uno nuevo, no un error críptico.
 
 ## Por qué no un servicio de email externo (Resend, SendGrid, etc.)
 
@@ -129,3 +169,30 @@ cliente) usa un mecanismo distinto — un script propio en Google Apps Script,
 ver `functions/EMAIL_SETUP.md` — porque ese correo necesita lógica
 personalizada (dos destinatarios, HTML con productos e imágenes) que el
 sistema de templates de Firebase Auth no permite.
+
+## Cuentas de Google vs. cuentas con contraseña — por qué no hay un mensaje por email
+
+Una cuenta creada con el botón de Google no tiene contraseña de Tintin, así
+que "Recuperar contraseña" no le sirve. Sería más claro mostrarle un mensaje
+específico tipo "esta cuenta es de Google" — pero eso requiere poder
+consultar, a partir de un email suelto y SIN estar logueada, qué proveedor
+usa esa cuenta. Firebase tenía una función para eso
+(`fetchSignInMethodsForEmail`) y la discontinuó a propósito: permitía que
+cualquiera fuera probando emails y aprendiendo cuáles tienen cuenta y con qué
+proveedor ("email enumeration"). Construir el mismo lookup a mano (por
+ejemplo, una colección pública en Firestore consultable por email) sería
+reinventar exactamente el problema de seguridad que Google decidió cerrar.
+
+Por eso la pestaña "Recuperar" de `login.html` muestra un aviso **genérico**,
+igual para cualquier persona sin importar qué escribió en el campo de email:
+"¿Te registraste con Google? Ahí no tenés contraseña de Tintin para
+restablecer" + un botón **Continuar con Google**. No revela si un email
+puntual existe ni qué proveedor usa — solo ayuda a quien ya sabe que se
+registró con Google a encontrar la salida correcta.
+
+Sí guardamos el proveedor (`authProvider: 'password'` o `'google.com'`) en
+`users/{uid}` en cada login/registro — leído directo de
+`user.providerData` del usuario ya autenticado, nunca por una consulta
+pública. Hoy se usa solo como dato de referencia (por ejemplo para vos, si
+alguna vez lo necesitás en el panel), no para diferenciar mensajes en el
+flujo de recuperación por lo explicado arriba.
