@@ -745,10 +745,23 @@ function detectAuthProvider(user) {
   return user.providerData?.[0]?.providerId || 'password';
 }
 
+// Espejo mínimo en emailProviders/{email} — SOLO { provider } — para que el
+// formulario de "Recuperar contraseña" pueda consultarlo sin estar logueado.
+// Best-effort: si falla (ej. sin conexión), no bloquea el login/registro.
+async function saveEmailProvider(email, authProvider) {
+  try {
+    const emailId = email.trim().toLowerCase();
+    await setDoc(doc(db, 'emailProviders', emailId), { provider: authProvider }, { merge: true });
+  } catch (e) {
+    console.error('No se pudo guardar emailProviders:', e);
+  }
+}
+
 async function guardarUsuario(user, nombre, phone) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
   const authProvider = detectAuthProvider(user);
+  saveEmailProvider(user.email, authProvider); // no bloquea el flujo principal
   if (!snap.exists()) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     await setDoc(ref, {
@@ -912,13 +925,31 @@ document.getElementById("btn-registrar").onclick = async () => {
 };
 
 // RECUPERAR CONTRASEÑA — mensaje siempre igual exista o no la cuenta (evita
-// que alguien confirme qué correos tienen cuenta probando uno por uno).
+// que alguien confirme qué correos tienen cuenta probando uno por uno),
+// EXCEPTO para el caso puntual de una cuenta de Google: ahí sí se le avisa
+// específicamente que use "Continuar con Google" en vez de mandarle un
+// correo de restablecimiento que no le sirve para nada (Tintin lo pidió
+// explícitamente — ver emailProviders en firestore.rules para el alcance
+// acotado de esta consulta).
 document.getElementById("btn-recuperar").onclick = async () => {
   hideMessages();
   const email = normalizeEmail(document.getElementById("recover-email").value);
   if (!email || !EMAIL_RE.test(email)) { showError("Ingresá un correo válido."); return; }
   const btn = document.getElementById('btn-recuperar');
   btn.disabled = true;
+
+  try {
+    const providerSnap = await getDoc(doc(db, 'emailProviders', email));
+    if (providerSnap.exists() && providerSnap.data().provider === 'google.com') {
+      btn.disabled = false;
+      showError('Te registraste con Google. Para ingresar de nuevo, usá el botón "Continuar con Google".');
+      return;
+    }
+  } catch (e) {
+    // Si esta consulta puntual falla (ej. sin conexión), seguimos con el
+    // flujo normal de recuperación en vez de trabar a alguien con contraseña real.
+  }
+
   try {
     await sendPasswordResetEmail(auth, email, actionCodeSettings);
   } catch (e) {

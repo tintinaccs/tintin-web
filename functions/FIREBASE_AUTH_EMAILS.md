@@ -170,29 +170,43 @@ ver `functions/EMAIL_SETUP.md` — porque ese correo necesita lógica
 personalizada (dos destinatarios, HTML con productos e imágenes) que el
 sistema de templates de Firebase Auth no permite.
 
-## Cuentas de Google vs. cuentas con contraseña — por qué no hay un mensaje por email
+## Cuentas de Google vs. cuentas con contraseña — bloqueo real del reenvío
 
 Una cuenta creada con el botón de Google no tiene contraseña de Tintin, así
-que "Recuperar contraseña" no le sirve. Sería más claro mostrarle un mensaje
-específico tipo "esta cuenta es de Google" — pero eso requiere poder
-consultar, a partir de un email suelto y SIN estar logueada, qué proveedor
-usa esa cuenta. Firebase tenía una función para eso
-(`fetchSignInMethodsForEmail`) y la discontinuó a propósito: permitía que
-cualquiera fuera probando emails y aprendiendo cuáles tienen cuenta y con qué
-proveedor ("email enumeration"). Construir el mismo lookup a mano (por
-ejemplo, una colección pública en Firestore consultable por email) sería
-reinventar exactamente el problema de seguridad que Google decidió cerrar.
+que "Recuperar contraseña" no le sirve — y antes, aunque se le mostrara un
+aviso genérico al lado, el botón "Enviar enlace de recuperación" igual le
+mandaba el correo (Firebase no lo bloqueaba). Tintin pidió explícitamente
+que ESO no pase: si el email es de una cuenta de Google, no se debe reenviar
+nada, solo mostrarle el aviso de usar "Continuar con Google".
 
-Por eso la pestaña "Recuperar" de `login.html` muestra un aviso **genérico**,
-igual para cualquier persona sin importar qué escribió en el campo de email:
-"¿Te registraste con Google? Ahí no tenés contraseña de Tintin para
-restablecer" + un botón **Continuar con Google**. No revela si un email
-puntual existe ni qué proveedor usa — solo ayuda a quien ya sabe que se
-registró con Google a encontrar la salida correcta.
+Para lograrlo hace falta poder consultar, a partir de un email suelto y SIN
+estar logueada, qué proveedor usa esa cuenta puntual. Firebase tenía una
+función para eso (`fetchSignInMethodsForEmail`) y la discontinuó a propósito
+por permitir "email enumeration" (probar emails al voleo y aprender cuáles
+tienen cuenta). La solución acá reconstruye ese lookup pero acotado al
+mínimo posible, para no reabrir ese riesgo más de lo estrictamente necesario:
 
-Sí guardamos el proveedor (`authProvider: 'password'` o `'google.com'`) en
-`users/{uid}` en cada login/registro — leído directo de
-`user.providerData` del usuario ya autenticado, nunca por una consulta
-pública. Hoy se usa solo como dato de referencia (por ejemplo para vos, si
-alguna vez lo necesitás en el panel), no para diferenciar mensajes en el
-flujo de recuperación por lo explicado arriba.
+- Colección aparte `emailProviders/{email}`, con un ÚNICO campo:
+  `{ provider: 'password' | 'google.com' }`. Nunca nombre, teléfono, rol,
+  ni ningún otro dato — si alguien la consulta, lo único que puede llegar a
+  saber es "esta cuenta puntual, si existe, es de Google o no", nada más.
+- Se puede leer un email puntual (`allow get: if true`) pero la colección
+  **nunca se puede listar/recorrer** (`allow list: if false`) — no hay forma
+  de "iterar" para descubrir qué emails tienen cuenta, solo confirmar uno
+  que ya se escribió a mano en el formulario.
+- Solo el dueño de una cuenta (con su propio token ya autenticado) puede
+  escribir su propio documento, y solo con el proveedor real que Firebase
+  le asignó — nadie puede escribir el proveedor de otra persona ni inventar
+  un valor.
+
+`login.html` guarda este dato en cada login/registro (junto con
+`authProvider` en `users/{uid}`, que sigue existiendo igual que antes). En
+"Recuperar contraseña", antes de llamar a `sendPasswordResetEmail`, se
+consulta `emailProviders/{email}`: si el proveedor es `google.com`, se
+corta ahí con el mensaje de Google y **no se envía ningún correo**; en
+cualquier otro caso (proveedor `password`, o el email no está en la
+colección — es decir, probablemente no tiene cuenta) sigue el flujo de
+siempre, con el mismo mensaje genérico de éxito. La pregunta "¿existe una
+cuenta con este email?" sigue protegida igual que antes — lo único que deja
+de estar protegido es, específicamente, "si existe, ¿es de Google?", que es
+justo el dato que hacía falta para cumplir el pedido.
