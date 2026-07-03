@@ -300,7 +300,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-logo-img {
-  height: 44px;   /* desktop */
+  height: 56px;   /* desktop */
   width: auto;
   display: block;
   object-fit: contain;
@@ -549,6 +549,21 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-header.scrolled .tt-header-actions a:hover {
   background: var(--pink-pale);
   color: var(--pink-dark);
+}
+
+/* #btn-cuenta vive dentro de .tt-nav-dropdown (el mismo wrapper que el botón
+   de texto "TIENDA ▾"), así que sin esto heredaba el padding/fondo/borde de
+   botón-pill de esa regla compartida (.tt-nav-dropdown > button) — eso le
+   dejaba mucho menos espacio interno que a búsqueda/carrito y el ícono se
+   veía más chico/apretado que sus vecinos. Se resetea acá para que quede
+   exactamente del mismo tamaño que los otros dos íconos del header. */
+#account-dropdown > button {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: inherit;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 /* Foto de cuenta (Google) en el ícono del header — reemplaza el ícono
@@ -2981,7 +2996,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     order: 2;
     align-items: center;
   }
-  .tt-logo-img { height: 36px; }  /* tablet/mobile — slightly smaller */
+  .tt-logo-img { height: 44px; }  /* tablet/mobile — slightly smaller */
   .tt-header-actions {
     justify-self: end;
     order: 3;
