@@ -1899,12 +1899,19 @@ async function saveOrder(items, subtotal, total) {
     updatedAt:          serverTimestamp()
   };
 
-  await addDoc(collection(db, 'orders'), orderDoc);
+  const orderRef = await addDoc(collection(db, 'orders'), orderDoc);
 
-  // Fire-and-forget: the order is already safely saved above regardless of
-  // whether this notification succeeds. `serverTimestamp()` only resolves
-  // after Firestore commits, so send the actual current time instead.
-  sendOrderNotification('', { ...orderDoc, createdAt: new Date().toISOString() }, false)
+  // Fire-and-forget: la orden ya quedó guardada arriba pase lo que pase acá.
+  // A diferencia de antes, ahora sí se registra el resultado real del envío
+  // en vez de dejar `notificationStatus` pegado en "pending" para siempre —
+  // firestore.rules permite a la dueña del pedido tocar únicamente ese campo
+  // del suyo. `serverTimestamp()` recién resuelve después de que Firestore
+  // confirma el commit, así que acá se manda la hora actual real.
+  sendOrderNotification(orderRef.id, { ...orderDoc, createdAt: new Date().toISOString() }, false)
+    .then(result => updateDoc(orderRef, {
+      notificationStatus: result?.success ? 'sent' : 'failed',
+      updatedAt: serverTimestamp()
+    }))
     .catch(() => {});
 
   // Update user stats if logged in with a real account (not a guest/anonymous session)
