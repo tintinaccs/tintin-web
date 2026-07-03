@@ -1685,7 +1685,12 @@ const SECTION_LABELS = {
 const SECTION_PERMISSION = {
   usuarios:      'manageUsers',
   onboarding:    'manageSettings',
-  configuracion: 'manageSettings'
+  configuracion: 'manageSettings',
+  // La importación CSV puede sobrescribir el catálogo entero de una sola vez
+  // — es una acción de riesgo distinto a editar un producto por vez, así que
+  // se reserva a admin/superadmin igual que Configuración, no forma parte de
+  // lo "operativo" del Modder.
+  importar:      'manageSettings'
 };
 
 function switchSection(target) {
