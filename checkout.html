@@ -420,6 +420,30 @@
       font-weight: 600;
     }
 
+    /* ---- SHIPPING TIMING REMINDER (llamativo, debajo del método elegido) ---- */
+    .ck-ship-reminder {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      background: #fff8e6;
+      border: 1.5px solid #f0c96b;
+      border-left: 4px solid #d9a520;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #7a5a10;
+    }
+    .ck-ship-reminder.show { display: flex; }
+    .ck-ship-reminder-icon { font-size: 17px; line-height: 1.4; flex-shrink: 0; }
+    .ck-ship-reminder-text strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #8a6410;
+      font-size: 12.5px;
+    }
+
     /* ---- PAYMENT RADIO CARDS ---- */
     .ck-pay-option {
       display: none;
@@ -829,6 +853,11 @@
         <div class="ck-ship-cost" id="ck-ship-cost">—</div>
       </div>
 
+      <div class="ck-ship-reminder" id="ck-ship-reminder">
+        <div class="ck-ship-reminder-icon">⏰</div>
+        <div class="ck-ship-reminder-text" id="ck-ship-reminder-text"></div>
+      </div>
+
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
         <label class="ck-label" id="ck-address-label">Dirección de entrega *</label>
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
@@ -1014,7 +1043,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
-  updateDoc, increment, serverTimestamp, setDoc
+  updateDoc, increment, serverTimestamp, setDoc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
@@ -1045,43 +1074,41 @@ function formatShipping(cost) {
   return (cost === null || cost === undefined) ? 'Consultar por el precio con algún vendedor' : formatPrice(cost);
 }
 
-let DELIVERY_CITIES = normalizeCities([
-  'Asunción','San Lorenzo','Luque','Lambaré','Fernando de la Mora',
-  'Capiatá','Mariano Roque Alonso','Ñemby','J. Augusto Saldivar','Limpio',
-  'Areguá','Itauguá','Villa Elisa','Ypané','San Antonio','Villeta',
-  'Nueva Italia','Guarambaré','Yaguarón','Paraguarí','Ita','Carapeguá'
-], DEFAULT_DELIVERY_COST);
-
-let ENCOMIENDA_CITIES = normalizeCities([
-  'Ciudad del Este','Encarnación','Concepción','Pedro Juan Caballero',
-  'Coronel Oviedo','Villarrica','Caaguazú','Pilar','San Ignacio',
-  'Santa Rosa del Aguaray','San Pedro','Horqueta','Curuguaty',
-  'Minga Guazú','Hernandarias','Minga Porá','Salto del Guairá',
-  'San Juan Bautista','Caacupé','Tobatí','San Estanislao','Villa Hayes',
-  'Fuerte Olimpo','Bahía Negra','Filadelfia','Loma Plata','Mcal. Estigarribia'
-], DEFAULT_ENCOMIENDA_COST);
+// Sin fallback hardcodeado: si Super Admin no cargó ninguna ciudad para un
+// método, ese optgroup queda vacío — nunca se inventan ciudades ni precios.
+let DELIVERY_CITIES = [];
+let ENCOMIENDA_CITIES = [];
 
 let WA_NUMBER = '595981299331';
 let STORE_INSTAGRAM = '';
 
-async function loadStoreConfig() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'general'));
-    if (!snap.exists()) return;
-    const cfg = snap.data();
-    if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
-    if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
-    if (Array.isArray(cfg.deliveryCities)   && cfg.deliveryCities.length)
+// Tiempo real: escucha settings/general en vivo, así un cambio de ciudades/
+// precios hecho en Super Admin se refleja acá sin necesidad de recargar la
+// página (si el cliente ya está en el paso de envío, se re-popula el select).
+function subscribeStoreConfig() {
+  return new Promise((resolveFirst) => {
+    let first = true;
+    onSnapshot(doc(db, 'settings', 'general'), snap => {
+      if (!snap.exists()) {
+        if (first) { first = false; resolveFirst(); }
+        return;
+      }
+      const cfg = snap.data();
+      if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
+      if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
       DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
-    if (Array.isArray(cfg.encomiendaCities) && cfg.encomiendaCities.length)
       ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
-    // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
-    const waRaw = cfg.whatsappNumber || cfg.whatsapp;
-    if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
-    if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
-  } catch(e) {
-    console.error('No se pudo cargar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
-  }
+      // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
+      const waRaw = cfg.whatsappNumber || cfg.whatsapp;
+      if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
+      if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
+      populateCities();
+      if (first) { first = false; resolveFirst(); }
+    }, e => {
+      console.error('No se pudo escuchar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
+      if (first) { first = false; resolveFirst(); }
+    });
+  });
 }
 
 // ---- STATE ----
@@ -1106,11 +1133,17 @@ let orderData = {
 };
 
 // ---- POPULATE CITY SELECT ----
+// Se puede llamar más de una vez (settings/general se escucha en tiempo real),
+// así que primero limpia los optgroups y, si la ciudad ya elegida sigue
+// existiendo, la mantiene seleccionada.
 function populateCities() {
   const select = document.getElementById('ck-city');
+  const previousValue = select.value;
   const groups = select.querySelectorAll('optgroup');
   const deliveryGroup = groups[0];
   const encomiendaGroup = groups[1];
+  deliveryGroup.innerHTML = '';
+  encomiendaGroup.innerHTML = '';
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
@@ -1123,6 +1156,8 @@ function populateCities() {
     opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
     encomiendaGroup.appendChild(opt);
   });
+  const stillExists = Array.from(select.options).some(o => o.value === previousValue);
+  if (previousValue && stillExists) select.value = previousValue;
 }
 
 // ---- FIND CITY PRICE ----
@@ -1445,12 +1480,15 @@ document.getElementById('ck-city').onchange = function() {
   const addressLabel = document.getElementById('ck-address-label');
   const referenciaField = document.getElementById('ck-referencia-field');
   const mapWrap = document.getElementById('ck-map-wrap');
+  const reminderEl = document.getElementById('ck-ship-reminder');
+  const reminderTextEl = document.getElementById('ck-ship-reminder-text');
 
   if (!val) {
     infoEl.classList.remove('show');
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
+    reminderEl.classList.remove('show');
     return;
   }
 
@@ -1473,6 +1511,7 @@ document.getElementById('ck-city').onchange = function() {
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
+    reminderEl.classList.remove('show');
   } else if (isDelivery) {
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
@@ -1485,6 +1524,8 @@ document.getElementById('ck-city').onchange = function() {
     mapWrap.classList.add('show');
     initMap();
     maybeApplySavedLocation();
+    reminderTextEl.innerHTML = '<strong>Recordatorio de entrega</strong>Tu pedido será entregado por nuestro delivery, en el horario de la tarde. Los pedidos realizados entre las 07:00 y las 11:00 hs se envían y entregan el mismo día — pasado ese horario, la entrega pasa para el día siguiente.';
+    reminderEl.classList.add('show');
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
@@ -1495,6 +1536,8 @@ document.getElementById('ck-city').onchange = function() {
     addressLabel.textContent = 'Dirección de entrega *';
     referenciaField.style.display = 'block';
     mapWrap.classList.remove('show');
+    reminderTextEl.innerHTML = '<strong>Recordatorio de envío</strong>Los pedidos por encomienda se envían en 24 a 48 hs, según el día de despacho y la transportadora asignada. Pagar hoy no significa que el pedido llegue hoy — el envío por encomienda tiene su propio tiempo de trámite y traslado.';
+    reminderEl.classList.add('show');
   }
 };
 
@@ -2200,7 +2243,7 @@ function renderAccountBadge(user) {
 }
 
 // ---- INIT ----
-loadStoreConfig().then(() => {
+subscribeStoreConfig().then(() => {
   populateCities();
 });
 renderCart();
