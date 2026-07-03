@@ -288,7 +288,7 @@
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
   </svg>
-  <span>Cargando…</span>
+  <span id="tt-page-loading-text">Cargando…</span>
 </div>
 
 <div class="login-page">
@@ -444,8 +444,17 @@ import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidP
 const actionCodeSettings = { url: 'https://tintinaccs.github.io/tintin-web/login.html' };
 
 const overlay = document.getElementById('tt-page-loading');
+const overlayTextEl = document.getElementById('tt-page-loading-text');
 function showOverlay() { if (overlay) overlay.style.display = 'flex'; }
-function hideLoginOverlay() { if (overlay) overlay.style.display = 'none'; }
+// Siempre vuelve el texto a "Cargando…" al ocultarlo — el overlay es
+// compartido (login/registro/Google), así que no puede quedar pegado el
+// texto de un caso puntual (ej. "Esperando a Google…") la próxima vez que
+// se use para otra cosa.
+function hideLoginOverlay() {
+  if (overlay) overlay.style.display = 'none';
+  setOverlayText('Cargando…');
+}
+function setOverlayText(text) { if (overlayTextEl) overlayTextEl.textContent = text; }
 
 // Si ya está logueada y con el correo verificado → redirigir sin mostrar el
 // formulario. Si está logueada pero SIN verificar (por ej. se registró, cerró
@@ -743,11 +752,27 @@ document.getElementById("btn-recuperar").onclick = async () => {
 
 // GOOGLE — el correo de Google ya viene verificado por Google, así que estas
 // cuentas nunca pasan por el panel de verificación.
+//
+// Sobre la demora al cerrar la ventana emergente: Firebase Auth detecta que
+// la clienta cerró la ventana de Google recién cuando su propio sondeo
+// interno lo nota (algunos segundos, según el navegador) — no depende de
+// nuestro código ni de un setTimeout nuestro, y no hay una API pública para
+// acortarlo. Lo que sí controlamos es que, apenas signInWithPopup rechaza
+// (con el código que sea), la reacción de acá sea inmediata — sin ningún
+// timeout ni espera extra de nuestra parte — y que mientras tanto no se vea
+// como si la página se hubiera congelado.
+let _googleLoginToken = 0;
 const loginConGoogle = async () => {
   hideMessages();
+  const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
+  showOverlay();
+  const slowHintTimer = setTimeout(() => {
+    setOverlayText('Esperando que completes el inicio de sesión con Google…');
+  }, 1500);
   try {
-    showOverlay();
     const cred = await signInWithPopup(auth, provider);
+    clearTimeout(slowHintTimer);
+    if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
     const { role, blocked } = await guardarUsuario(cred.user, cred.user.displayName, "");
     if (blocked) {
       await signOut(auth);
@@ -756,7 +781,12 @@ const loginConGoogle = async () => {
       return;
     }
     redirectByRole(role);
-  } catch(e) { hideLoginOverlay(); showError(errMsg(e.code)); }
+  } catch(e) {
+    clearTimeout(slowHintTimer);
+    if (myAttempt !== _googleLoginToken) return;
+    hideLoginOverlay();
+    showError(errMsg(e.code));
+  }
 };
 document.getElementById("btn-login-google").onclick  = loginConGoogle;
 document.getElementById("btn-reg-google").onclick    = loginConGoogle;
