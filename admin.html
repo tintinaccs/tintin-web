@@ -1678,7 +1678,22 @@ const SECTION_LABELS = {
   contenido: 'Contenido del Sitio'
 };
 
+// Secciones sensibles y el permiso que hace falta para entrar — una sola
+// fuente de verdad usada tanto para ocultar el botón (sidebar Y tabs mobile,
+// que comparten el mismo data-section) como para bloquear el acceso directo
+// (consola, hash, o cualquier otro camino que no pase por el botón).
+const SECTION_PERMISSION = {
+  usuarios:      'manageUsers',
+  onboarding:    'manageSettings',
+  configuracion: 'manageSettings'
+};
+
 function switchSection(target) {
+  const requiredPerm = SECTION_PERMISSION[target];
+  if (requiredPerm && !can(currentRole, requiredPerm)) {
+    toast('No tenés permiso para ver esta sección');
+    target = 'dashboard';
+  }
   navItems.forEach(b => b.classList.remove('active'));
   // activate all items matching this section (sidebar + mobile tabs)
   document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
@@ -1773,15 +1788,18 @@ function setupUserInfo(user, role) {
 }
 
 function setupPermissions(role) {
-  // Hide usuarios nav for non-admins
-  if (!can(role, 'manageUsers')) {
-    document.getElementById('nav-usuarios').style.display = 'none';
-  }
-  // Hide settings for non-admins
-  if (!can(role, 'manageSettings')) {
-    document.getElementById('nav-onboarding').style.display = 'none';
-    document.getElementById('nav-config').style.display = 'none';
-  }
+  // [data-section="X"] agarra el botón del sidebar de escritorio Y el de la
+  // barra de pestañas de mobile en un solo paso — así los dos superficies
+  // quedan siempre sincronizadas y no hace falta duplicar esta lógica por
+  // pantalla (antes esto solo ocultaba el ID de escritorio, dejando visibles
+  // en mobile pestañas que en desktop ya estaban ocultas).
+  Object.entries(SECTION_PERMISSION).forEach(([section, perm]) => {
+    if (!can(role, perm)) {
+      document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+  });
 }
 
 // ======== DASHBOARD ========
