@@ -27,69 +27,91 @@ export const ROLE_LABELS = {
 
 export const PERMISSIONS = {
   superadmin: {
-    manageUsers:    true,
-    assignRoles:    true,
-    deleteUsers:    true,
-    viewOrders:     true,
-    manageOrders:   true,
-    addProducts:    true,
-    editProducts:   true,
-    deleteProducts: true,
-    manageContent:  true,
-    manageSettings: true,
-    viewDashboard:  true
+    manageUsers:      true,
+    assignRoles:      true,
+    deleteUsers:      true,
+    viewOrders:       true,
+    manageOrders:     true,
+    manageOrdersFull: true,
+    addProducts:      true,
+    editProducts:     true,
+    deleteProducts:   true,
+    manageContent:    true,
+    deleteCollections: true,
+    deleteContent:    true,
+    manageSettings:   true,
+    viewDashboard:    true
   },
   admin: {
-    manageUsers:    true,
-    assignRoles:    true,
-    deleteUsers:    true,
-    viewOrders:     true,
-    manageOrders:   true,
-    addProducts:    true,
-    editProducts:   true,
-    deleteProducts: true,
-    manageContent:  true,
-    manageSettings: true,
-    viewDashboard:  true
+    manageUsers:      true,
+    assignRoles:      true,
+    deleteUsers:      true,
+    viewOrders:       true,
+    manageOrders:     true,
+    manageOrdersFull: true,
+    addProducts:      true,
+    editProducts:     true,
+    deleteProducts:   true,
+    manageContent:    true,
+    deleteCollections: true,
+    deleteContent:    true,
+    manageSettings:   true,
+    viewDashboard:    true
   },
+  // Modder: permisos operativos del día a día (pedidos, stock, productos,
+  // colecciones, contenido) pero SIN nada que sea irreversible o sensible
+  // (borrar, usuarios, configuración). Esta matriz es solo la mitad del
+  // control — la otra mitad, la que de verdad importa, son las reglas de
+  // Firestore (firestore.rules), que están escritas para permitir EXACTAMENTE
+  // esto mismo y nada más, sin importar lo que diga esta matriz del lado
+  // del cliente.
   agent: {
-    manageUsers:    false,
-    assignRoles:    false,
-    deleteUsers:    false,
-    viewOrders:     true,
-    manageOrders:   true,
-    addProducts:    true,
-    editProducts:   true,
-    deleteProducts: false,
-    manageContent:  true,
-    manageSettings: false,
-    viewDashboard:  true
+    manageUsers:      false,
+    assignRoles:      false,
+    deleteUsers:      false,
+    viewOrders:       true,
+    manageOrders:     true,   // cambiar estado/pago, reenviar correo
+    manageOrdersFull: false,  // NO editar productos/montos/dirección del pedido, NO eliminar pedido
+    addProducts:      true,
+    editProducts:     true,
+    deleteProducts:   false,
+    manageContent:    true,   // crear/editar colecciones y contenido
+    deleteCollections: false,
+    deleteContent:    false,
+    manageSettings:   false,
+    viewDashboard:    true
   },
   viewer: {
-    manageUsers:    false,
-    assignRoles:    false,
-    deleteUsers:    false,
-    viewOrders:     true,
-    manageOrders:   false,
-    addProducts:    true,
-    editProducts:   false,
-    deleteProducts: false,
-    manageContent:  false,
-    manageSettings: false,
-    viewDashboard:  true
+    manageUsers:      false,
+    assignRoles:      false,
+    deleteUsers:      false,
+    viewOrders:       true,
+    manageOrders:     false,
+    manageOrdersFull: false,
+    addProducts:      true,
+    editProducts:     false,
+    deleteProducts:   false,
+    manageContent:    false,
+    deleteCollections: false,
+    deleteContent:    false,
+    manageSettings:   false,
+    viewDashboard:    true
   },
   client: {
-    manageUsers:    false,
-    assignRoles:    false,
-    deleteUsers:    false,
-    viewOrders:     false,
-    manageOrders:   false,
-    addProducts:    false,
-    editProducts:   false,
-    deleteProducts: false,
-    manageContent:  false,
-    manageSettings: false,
-    viewDashboard:  false
+    manageUsers:      false,
+    assignRoles:      false,
+    deleteUsers:      false,
+    viewOrders:       false,
+    manageOrders:     false,
+    manageOrdersFull: false,
+    addProducts:      false,
+    editProducts:     false,
+    deleteProducts:   false,
+    manageContent:    false,
+    deleteCollections: false,
+    deleteContent:    false,
+    manageSettings:   false,
+    viewDashboard:    false
   }
 };
 

@@ -17,6 +17,16 @@ service cloud.firestore {
       );
     }
 
+    // Modder (rol "agent" en el código, "Modder" de cara a la tienda): permisos
+    // operativos acotados — NUNCA se combina con isAdmin() en un solo helper
+    // a propósito, para que cada match deje explícito qué le toca a cada uno
+    // y nunca herede por accidente algo pensado solo para admin/superadmin.
+    function isAgent() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
+    }
+
     // IMPORTANTE:
     // La web pública necesita leer estas imágenes para mostrar hero, categorías, editoriales, etc.
     match /settings/images {
@@ -62,21 +72,29 @@ service cloud.firestore {
       }
     }
 
+    // Productos: Modder puede cargar/editar (agregar, cambiar stock, precio,
+    // datos del producto) — pero eliminar un producto de la tienda queda
+    // reservado a admin/superadmin, es una acción más irreversible.
     match /products/{productId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow create, update: if isAdmin() || isAgent();
+      allow delete: if isAdmin();
     }
 
-    // Colecciones — panel Super Admin → Colecciones, y catálogo/home/menú públicos
+    // Colecciones — panel Super Admin → Colecciones, y catálogo/home/menú públicos.
+    // Mismo criterio que Productos: Modder edita, no elimina.
     match /collections/{collectionId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow create, update: if isAdmin() || isAgent();
+      allow delete: if isAdmin();
     }
 
-    // Textos editables del Hero/Home/Nosotros/Catálogo (Super Admin → Contenido)
+    // Textos editables del Hero/Home/Nosotros/Catálogo (Super Admin → Contenido).
+    // Mismo criterio: Modder edita, no elimina una sección entera.
     match /site_content/{pageId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow create, update: if isAdmin() || isAgent();
+      allow delete: if isAdmin();
     }
 
     match /orders/{orderId} {
@@ -85,9 +103,22 @@ service cloud.firestore {
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
 
       // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
-      // el admin puede leer cualquiera. Solo el admin puede modificar/eliminar.
-      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
-      allow update, delete: if isAdmin();
+      // admin y Modder pueden leer cualquiera (el Modder necesita ver los datos
+      // del pedido para prepararlo: productos, dirección, teléfono).
+      allow read: if isAdmin() || isAgent() || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      // El Modder solo puede tocar el seguimiento operativo del pedido (estado,
+      // estado de pago, reenvío de correo) — nunca los datos del pedido en sí
+      // (productos, montos, dirección, datos del cliente). Esos campos completos
+      // solo los puede reescribir un admin/superadmin desde "Editar pedido".
+      allow update: if isAdmin() || (
+        isAgent() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+          ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
+        )
+      );
+
+      allow delete: if isAdmin();
     }
 
     match /{document=**} {

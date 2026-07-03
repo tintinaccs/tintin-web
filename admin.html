@@ -1007,7 +1007,7 @@
               <option value="gafas">Gafas</option>
               <option value="joyeros">Joyeros</option>
             </select>
-            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="prodNuevo()">+ Nuevo producto</button>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
         </div>
         <!-- Bulk action toolbar (shown when products are selected) -->
@@ -1165,7 +1165,7 @@
           <div class="adm-card-title">Colecciones</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <input id="coll-search" type="text" placeholder="Buscar colección…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
-            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collNueva()">+ Nueva colección</button>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nueva-coleccion" onclick="collNueva()">+ Nueva colección</button>
           </div>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -1800,14 +1800,32 @@ function setupPermissions(role) {
       });
     }
   });
+
+  // Botones de "crear nuevo" que viven fuera de las filas de la tabla (no se
+  // regeneran por producto/colección, así que se ocultan una sola vez acá).
+  const ACTION_PERMISSION = {
+    'btn-nuevo-producto':   'addProducts',
+    'btn-nueva-coleccion':  'manageContent'
+  };
+  Object.entries(ACTION_PERMISSION).forEach(([id, perm]) => {
+    const el = document.getElementById(id);
+    if (el && !can(role, perm)) el.style.display = 'none';
+  });
 }
 
 // ======== DASHBOARD ========
 async function loadDashboard() {
   try {
-    // Users count
-    const usersSnap = await getDocs(collection(db, 'users'));
-    document.getElementById('stat-users').textContent = usersSnap.size;
+    // Users count — el Modder no tiene permiso para leer la colección users
+    // (ni debería: expondría emails/teléfonos de todas las clientas), así que
+    // ni se intenta la lectura para no generar un error de permisos silencioso.
+    const statUsersEl = document.getElementById('stat-users');
+    if (can(currentRole, 'manageUsers')) {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      statUsersEl.textContent = usersSnap.size;
+    } else {
+      statUsersEl.textContent = '—';
+    }
 
     // Orders
     const ordersSnap = await getDocs(collection(db, 'orders'));
@@ -2045,8 +2063,14 @@ function renderOrdersTable(orders) {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
       (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
     const payStatus = o.payment?.status || o.paymentStatus || 'pendiente';
+    // manageOrders: cambiar estado/estado de pago — esto es lo único que el
+    // Modder puede tocar, y coincide exactamente con lo que firestore.rules
+    // le permite escribir en el pedido (ver comentario en firestore.rules).
     const canUpdate = can(currentRole, 'manageOrders');
-    const canDelete = can(currentRole, 'manageOrders') && (currentRole === 'superadmin' || currentRole === 'admin');
+    // manageOrdersFull: reescribir el pedido completo (productos, montos,
+    // dirección, datos del cliente) o eliminarlo — reservado a admin/superadmin.
+    const canEditFull = can(currentRole, 'manageOrdersFull');
+    const canDelete = can(currentRole, 'manageOrdersFull');
 
     return `
       <tr style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
@@ -2078,7 +2102,7 @@ function renderOrdersTable(orders) {
           <button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>
         </td>
         <td onclick="event.stopPropagation()">
-          ${canUpdate ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
+          ${canEditFull ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td onclick="event.stopPropagation()">
           ${canUpdate ? `
@@ -2521,6 +2545,8 @@ function productRowHtml(p) {
   const isSelected = _selectedProducts.has(p._docId);
   const nameSafe = (p.name||'').replace(/'/g,"\\'");
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
+  const canEditProd = can(currentRole, 'editProducts');
+  const canDeleteProd = can(currentRole, 'deleteProducts');
   return `
     <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
       <td style="padding:10px 16px;text-align:center">
@@ -2543,9 +2569,10 @@ function productRowHtml(p) {
       </td>
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
-          <button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
+          ${canEditProd ? `<button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
+          ${canEditProd ? `<button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+          ${canDeleteProd ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
+          ${!canEditProd && !canDeleteProd ? '—' : ''}
         </div>
       </td>
     </tr>
@@ -2949,8 +2976,8 @@ function renderColeccionesGrid(list) {
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${count} producto${count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${c.slug}')">Ver productos</button>
-          <button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>
+          ${can(currentRole, 'manageContent') ? `<button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>` : ''}
+          ${can(currentRole, 'deleteCollections') ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>` : ''}
         </div>
       </div>
     </div>`;
