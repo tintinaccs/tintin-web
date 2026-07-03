@@ -1887,6 +1887,21 @@ function waitForAuthUser() {
   });
 }
 
+// El Apps Script prueba el correo a la tienda y el correo a la clienta por
+// separado (ver functions/EMAIL_SETUP.md) y devuelve adminSent/customerSent
+// en vez de un único success — acá se traduce eso a los 3 estados que
+// entiende el admin. customerSent en null significa "ni se intentó" (ej.
+// reenvío manual, que nunca reintenta el correo a la clienta), no una falla.
+function notificationStatusFromResult(result) {
+  if (!result) return 'failed';
+  if (result.customerSent === null || result.customerSent === undefined) {
+    return result.adminSent ? 'sent' : 'failed';
+  }
+  if (result.adminSent && result.customerSent) return 'sent';
+  if (result.adminSent || result.customerSent) return 'partial';
+  return 'failed';
+}
+
 async function saveOrder(items, subtotal, total) {
   currentUser = await waitForAuthUser();
 
@@ -1963,7 +1978,7 @@ async function saveOrder(items, subtotal, total) {
   // confirma el commit, así que acá se manda la hora actual real.
   sendOrderNotification(orderRef.id, { ...orderDoc, createdAt: new Date().toISOString() }, false)
     .then(result => updateDoc(orderRef, {
-      notificationStatus: result?.success ? 'sent' : 'failed',
+      notificationStatus: notificationStatusFromResult(result),
       updatedAt: serverTimestamp()
     }))
     .catch(() => {});

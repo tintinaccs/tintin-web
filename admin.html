@@ -2360,9 +2360,11 @@ function renderOrdersTable(orders) {
   };
 
   const NOTIF_BADGE = {
-    sent:    { cls: 'badge-entregado', icon: '', label: 'Notificado' },
-    pending: { cls: 'badge-pendiente', icon: '', label: 'Pendiente' },
-    error:   { cls: 'badge-cancelado', icon: '', label: 'Error notif.' },
+    sent:    { cls: 'badge-entregado',  icon: '', label: 'Notificado' },
+    pending: { cls: 'badge-pendiente',  icon: '', label: 'Pendiente' },
+    partial: { cls: 'badge-preparando', icon: '', label: 'Parcial (1 de 2)' },
+    failed:  { cls: 'badge-cancelado',  icon: '', label: 'Falló el envío' },
+    error:   { cls: 'badge-cancelado',  icon: '', label: 'Error notif.' }, // legado, ya no se escribe
   };
   function notifBadge(status) {
     const b = NOTIF_BADGE[status] || NOTIF_BADGE.pending;
