@@ -224,6 +224,48 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // ======== MÓDULO CORREOS (Super Admin → Correos) ========
+    // Todo el módulo (configuración, plantillas, historial, campañas de
+    // promociones) es 100% exclusivo de Super Admin — ni "admin" ni el
+    // Modder tienen ningún acceso de lectura ni escritura acá, igual que
+    // Usuarios/Configuración/Auditoría (Fase D).
+
+    // Configuración de correos (switches, remitente, límites diarios, etc.)
+    match /emailSettings/{docId} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // Plantillas editables (asunto, saludo, cierre, firma, etc.) — CRUD
+    // completo, incluido eliminar una plantilla propia (nunca las variables
+    // protegidas, esas viven hardcodeadas en el propio Apps Script/frontend).
+    match /emailTemplates/{templateId} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // Historial de envíos: registro inmutable, mismo criterio que auditLog.
+    // La lectura del historial es exclusiva de Super Admin (vive dentro del
+    // módulo Correos, que la UI ya oculta por completo a cualquier otro
+    // rol) — pero la ESCRITURA de una entrada la puede hacer cualquier rol
+    // operativo (admin/agent), porque cambiar el estado de un pedido desde
+    // Pedidos puede disparar un correo automático configurado en Correos
+    // (Fase Correos), y esa entrada tiene que poder registrarse sin
+    // importar quién cambió el estado. Nunca se edita ni se borra una
+    // entrada ya creada.
+    match /emailLogs/{logId} {
+      allow read: if isSuperAdmin();
+      allow create: if isAdmin() || isAgent();
+      allow update, delete: if false;
+    }
+
+    // Campañas de promociones (destinatarios, progreso, resultados por
+    // destinatario) — Super Admin puede crearlas y actualizarlas mientras
+    // se van enviando las tandas, pero no eliminar el registro de una
+    // campaña ya iniciada.
+    match /emailCampaigns/{campaignId} {
+      allow read, create, update: if isSuperAdmin();
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

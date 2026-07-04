@@ -350,6 +350,111 @@
     .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
     .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
 
+    /* ======== MÓDULO CORREOS ======== */
+    .correos-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+      padding-bottom: 14px; border-bottom: 1.5px solid var(--adm-border);
+    }
+    .correos-tab-btn {
+      padding: 9px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s; white-space: nowrap;
+    }
+    .correos-tab-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .correos-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .correos-panel { display: none; }
+    .correos-panel.active { display: block; }
+    @media (max-width: 640px) {
+      .correos-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 10px; }
+      .correos-tabs::-webkit-scrollbar { display: none; }
+      .correos-tab-btn { flex-shrink: 0; }
+    }
+
+    /* Switches on/off con etiqueta — variante compacta del adm-toggle para
+       usarlo dentro de una fila de tabla (Correos de pedidos) sin romper el
+       alto de línea. */
+    .correos-mini-toggle { display: inline-flex; align-items: center; gap: 8px; }
+    .correos-mini-toggle .adm-toggle { width: 40px; height: 22px; }
+    .correos-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
+    .correos-mini-toggle .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
+
+    /* Chips de destinatarias seleccionadas (Promociones) */
+    .correos-chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+    .correos-chip {
+      display: inline-flex; align-items: center; gap: 6px; background: #fef5f8; color: var(--adm-accent);
+      border: 1px solid #f0d8e0; border-radius: 999px; padding: 5px 8px 5px 14px; font-size: 12px; font-weight: 600;
+    }
+    .correos-chip button {
+      background: none; border: none; color: var(--adm-accent); cursor: pointer; font-size: 14px; line-height: 1;
+      padding: 2px 4px; border-radius: 50%;
+    }
+    .correos-chip button:hover { background: rgba(184,76,114,.15); }
+    .correos-chip.blocked { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+
+    /* Barra de progreso de envío por tandas (Promociones) */
+    .correos-progress-wrap { background: #f1f1f1; border-radius: 999px; height: 10px; overflow: hidden; margin: 12px 0; }
+    .correos-progress-bar { background: var(--adm-accent); height: 100%; width: 0%; transition: width .3s; }
+
+    /* ======== CLIENTAS: tabla → cards en mobile (mismo patrón que Pedidos) ======== */
+    @media (max-width: 640px) {
+      .adm-table-clientas thead { display: none; }
+      .adm-table-clientas, .adm-table-clientas tbody,
+      .adm-table-clientas tr, .adm-table-clientas td { display: block; width: 100%; }
+      .adm-table-clientas tr.adm-cliente-row {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-clientas td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-clientas tr.adm-cliente-row td:last-child { border-bottom: none; }
+      .adm-table-clientas td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
+    /* ======== HISTORIAL: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-historial thead { display: none; }
+      .adm-table-historial, .adm-table-historial tbody,
+      .adm-table-historial tr, .adm-table-historial td { display: block; width: 100%; }
+      .adm-table-historial tr.adm-log-row {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-historial td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-historial tr.adm-log-row td:last-child { border-bottom: none; }
+      .adm-table-historial td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
+    /* ======== PEDIDOS DE CORREOS: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-correos-pedidos thead { display: none; }
+      .adm-table-correos-pedidos, .adm-table-correos-pedidos tbody,
+      .adm-table-correos-pedidos tr, .adm-table-correos-pedidos td { display: block; width: 100%; }
+      .adm-table-correos-pedidos tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-correos-pedidos td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-correos-pedidos tr td:last-child { border-bottom: none; }
+      .adm-table-correos-pedidos td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
     .adm-field {
       display: flex;
       flex-direction: column;
@@ -891,6 +996,9 @@
     <button class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
+    <button class="adm-nav-item" data-section="correos" id="nav-correos">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> Correos
+    </button>
     <button class="adm-nav-item" data-section="configuracion" id="nav-config">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Configuración
     </button>
@@ -919,6 +1027,7 @@
   <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
   <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
   <button class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
+  <button class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
   <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
   <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
@@ -1445,6 +1554,315 @@
     </div>
 
     <!-- ===================== CONFIGURACIÓN ===================== -->
+    <!-- ===================== CORREOS (Super Admin) ===================== -->
+    <div class="adm-section" id="section-correos">
+      <div class="correos-tabs" id="correos-tabs">
+        <button type="button" class="correos-tab-btn active" data-correos-tab="dashboard">Dashboard</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="pedidos">Correos de pedidos</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="prueba">Correos de prueba</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="plantillas">Plantillas</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="clientas">Clientas registradas</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="promociones">Promociones</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="historial">Historial</button>
+        <button type="button" class="correos-tab-btn" data-correos-tab="config">Configuración</button>
+      </div>
+
+      <!-- ---- Dashboard ---- -->
+      <div class="correos-panel active" id="correos-panel-dashboard">
+        <div class="adm-stats" id="correos-stats"></div>
+        <div class="adm-card" style="margin-bottom:20px">
+          <div class="adm-card-head"><div class="adm-card-title">Estado del sistema</div></div>
+          <div class="adm-card-body">
+            <div id="correos-system-status" style="display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13px"></div>
+          </div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head"><div class="adm-card-title">Últimos envíos</div></div>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead><tr><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th></tr></thead>
+              <tbody id="correos-dash-recent"><tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Correos de pedidos ---- -->
+      <div class="correos-panel" id="correos-panel-pedidos">
+        <div class="adm-card">
+          <div class="adm-card-head"><div class="adm-card-title">Correos de pedidos</div></div>
+          <div class="adm-card-body" style="padding-bottom:0">
+            <p style="font-size:12px;color:var(--adm-muted);margin-bottom:6px">
+              "Pedido recibido para clienta/Tintin" es el correo real que ya manda el checkout — desactivarlo acá corta ese envío real. Los demás son correos automáticos nuevos: quedan desactivados por defecto y no cambian nada hasta que actives cada uno a propósito.
+            </p>
+          </div>
+          <div class="adm-table-wrap">
+            <table class="adm-table adm-table-correos-pedidos">
+              <thead><tr><th>Tipo de correo</th><th>Activo</th><th>Plantilla asociada</th><th>Último envío</th><th>Vista previa</th></tr></thead>
+              <tbody id="correos-pedidos-tbody"><tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Correos de prueba ---- -->
+      <div class="correos-panel" id="correos-panel-prueba">
+        <div class="adm-card" style="margin-bottom:20px">
+          <div class="adm-card-head">
+            <div class="adm-card-title">Enviar correo de prueba a clienta</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <label class="adm-toggle" style="width:40px;height:22px">
+                <input type="checkbox" id="prueba-enabled-toggle" />
+                <span class="adm-toggle-slider"></span>
+              </label>
+              <span style="font-size:11px;color:var(--adm-muted)">Envíos de prueba</span>
+            </div>
+          </div>
+          <div class="adm-card-body">
+            <div class="correos-tabs" style="margin-bottom:16px;border-bottom:none;padding-bottom:0">
+              <button type="button" class="correos-tab-btn active" data-prueba-mode="manual">Escribir email manual</button>
+              <button type="button" class="correos-tab-btn" data-prueba-mode="cliente">Elegir clienta registrada</button>
+            </div>
+            <div id="prueba-mode-manual" class="adm-field">
+              <label class="adm-label">Email de destino</label>
+              <input type="email" class="adm-input" id="test-email-input" placeholder="cliente@email.com" autocomplete="off" />
+            </div>
+            <div id="prueba-mode-cliente" class="adm-field" style="display:none">
+              <label class="adm-label">Clienta registrada</label>
+              <select class="adm-select" id="prueba-cliente-select"><option value="">Elegí una clienta…</option></select>
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Plantilla a usar</label>
+              <select class="adm-select" id="prueba-template-select"></select>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+              <button class="adm-btn adm-btn-primary" id="btn-test-email">Enviar prueba</button>
+              <button class="adm-btn adm-btn-outline" id="btn-test-preview" type="button">Vista previa</button>
+            </div>
+            <div id="test-email-result" style="font-size:13px;margin-top:10px"></div>
+            <p style="font-size:12px;color:var(--adm-muted);margin-top:14px;border-top:1px solid var(--adm-border);padding-top:12px">
+              Datos ficticios fijos: Pedido <strong>#TEST123</strong> · Cliente de prueba · 1x BAG RUBY · Total Gs. 190.000 · Delivery · San Lorenzo · Pendiente de confirmación.
+              El correo incluye el aviso "Este es un correo de prueba de Tintin Accesorios. No corresponde a un pedido real." No crea ningún pedido, no toca stock, no manda el correo interno a Tintin.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Plantillas ---- -->
+      <div class="correos-panel" id="correos-panel-plantillas">
+        <div class="adm-card">
+          <div class="adm-card-head">
+            <div class="adm-card-title">Plantillas de correo</div>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-tpl-nueva" type="button">+ Mensaje libre nuevo</button>
+          </div>
+          <div class="adm-card-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+              <input type="text" class="adm-input" id="tpl-search" placeholder="Buscar plantilla…" style="flex:1;min-width:200px" />
+              <select class="adm-select" id="tpl-filter-category" style="width:auto">
+                <option value="">Todas las categorías</option>
+                <option value="pedido">Pedidos</option>
+                <option value="promo">Promociones</option>
+                <option value="libre">Mensaje libre</option>
+              </select>
+              <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--adm-muted);white-space:nowrap">
+                <input type="checkbox" id="tpl-show-archived" /> Ver archivadas
+              </label>
+            </div>
+            <div class="adm-table-wrap">
+              <table class="adm-table">
+                <thead><tr><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
+                <tbody id="tpl-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Clientas registradas ---- -->
+      <div class="correos-panel" id="correos-panel-clientas">
+        <div class="adm-card">
+          <div class="adm-card-head"><div class="adm-card-title">Clientas registradas</div></div>
+          <div class="adm-card-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+              <input type="text" class="adm-input" id="cli-search" placeholder="Buscar por nombre o email…" style="flex:1;min-width:200px" />
+              <select class="adm-select" id="cli-filter" style="width:auto">
+                <option value="all">Todas</option>
+                <option value="active">Activas</option>
+                <option value="blocked">Bloqueadas</option>
+                <option value="with_orders">Con pedidos</option>
+                <option value="without_orders">Sin pedidos</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:6px;font-size:12px">
+                <input type="checkbox" id="cli-select-all" /> Seleccionar todas las visibles
+              </label>
+              <span id="cli-selected-count" style="font-size:12px;color:var(--adm-muted)">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm adm-btn-outline" id="cli-clear-selection" type="button">Quitar seleccionadas</button>
+              <button class="adm-btn adm-btn-sm adm-btn-primary" id="cli-use-in-promo" type="button" style="margin-left:auto;white-space:nowrap">Usar en Promociones →</button>
+            </div>
+            <div class="adm-table-wrap">
+              <table class="adm-table adm-table-clientas">
+                <thead><tr><th></th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Registro</th><th>Pedidos</th><th>Última compra</th><th>Estado</th><th>Promos</th></tr></thead>
+                <tbody id="cli-tbody"><tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Promociones ---- -->
+      <div class="correos-panel" id="correos-panel-promociones">
+        <div class="adm-card">
+          <div class="adm-card-head">
+            <div class="adm-card-title">Enviar promoción</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <label class="adm-toggle" style="width:40px;height:22px">
+                <input type="checkbox" id="promo-enabled-toggle" />
+                <span class="adm-toggle-slider"></span>
+              </label>
+              <span style="font-size:11px;color:var(--adm-muted)">Promociones</span>
+            </div>
+          </div>
+          <div class="adm-card-body">
+            <div class="adm-field">
+              <label class="adm-label">Plantilla promocional</label>
+              <select class="adm-select" id="promo-template-select"></select>
+            </div>
+            <div class="adm-field">
+              <label class="adm-label">Agregar destinataria por email</label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <input type="email" class="adm-input" id="promo-add-email" placeholder="agregar@email.com" style="flex:1;min-width:200px" />
+                <button class="adm-btn adm-btn-outline" id="promo-add-email-btn" type="button">Agregar</button>
+              </div>
+            </div>
+            <div id="promo-recipients-chips" class="correos-chip-list"></div>
+            <div id="promo-recipients-count" style="font-size:12px;color:var(--adm-muted);margin-bottom:10px">0 destinatarias</div>
+            <div id="promo-limit-warning" style="display:none;background:#fff3cd;color:#856404;padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:14px"></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="adm-btn adm-btn-outline" id="promo-preview-btn" type="button">Ver previsualización</button>
+              <button class="adm-btn adm-btn-primary" id="promo-open-confirm-btn" type="button">Enviar promoción</button>
+            </div>
+            <div class="correos-progress-wrap" id="promo-progress-wrap" style="display:none">
+              <div class="correos-progress-bar" id="promo-progress-bar"></div>
+            </div>
+            <div id="promo-progress-text" style="font-size:12px;color:var(--adm-muted);margin-top:6px"></div>
+            <div id="promo-result" style="font-size:13px;margin-top:10px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Historial ---- -->
+      <div class="correos-panel" id="correos-panel-historial">
+        <div class="adm-card">
+          <div class="adm-card-head"><div class="adm-card-title">Historial de correos</div></div>
+          <div class="adm-card-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+              <input type="text" class="adm-input" id="hist-search" placeholder="Buscar por email…" style="flex:1;min-width:180px" />
+              <select class="adm-select" id="hist-filter-status" style="width:auto">
+                <option value="">Todos los estados</option>
+                <option value="sent">Enviado</option>
+                <option value="failed">Fallido</option>
+                <option value="partial">Parcial</option>
+                <option value="pending">Pendiente</option>
+              </select>
+              <select class="adm-select" id="hist-filter-type" style="width:auto"><option value="">Todos los tipos</option></select>
+              <input type="date" class="adm-input" id="hist-filter-from" style="width:auto" title="Desde" />
+              <input type="date" class="adm-input" id="hist-filter-to" style="width:auto" title="Hasta" />
+            </div>
+            <div class="adm-table-wrap">
+              <table class="adm-table adm-table-historial">
+                <thead><tr><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
+                <tbody id="hist-tbody"><tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Configuración de correos ---- -->
+      <div class="correos-panel" id="correos-panel-config">
+        <div class="adm-card" style="margin-bottom:20px">
+          <div class="adm-card-head"><div class="adm-card-title">Activar / desactivar</div></div>
+          <div class="adm-card-body" style="display:flex;flex-direction:column;gap:16px">
+            <div class="adm-toggle-wrap">
+              <label class="adm-toggle"><input type="checkbox" id="cec-order-enabled" /><span class="adm-toggle-slider"></span></label>
+              <div><div class="adm-toggle-label">Correos automáticos de pedidos</div><div class="adm-toggle-desc">Apaga todo correo de pedidos (interno + clienta). El checkout sigue creando el pedido igual, solo deja de mandar el correo.</div></div>
+            </div>
+            <div class="adm-toggle-wrap">
+              <label class="adm-toggle"><input type="checkbox" id="cec-internal-enabled" /><span class="adm-toggle-slider"></span></label>
+              <div><div class="adm-toggle-label">Correo interno a Tintin</div><div class="adm-toggle-desc">El correo operativo que llega a tintinaccs@gmail.com por cada pedido nuevo.</div></div>
+            </div>
+            <div class="adm-toggle-wrap">
+              <label class="adm-toggle"><input type="checkbox" id="cec-customer-enabled" /><span class="adm-toggle-slider"></span></label>
+              <div><div class="adm-toggle-label">Correo de confirmación a la clienta</div><div class="adm-toggle-desc">La confirmación que recibe la clienta al hacer su pedido.</div></div>
+            </div>
+            <div class="adm-toggle-wrap">
+              <label class="adm-toggle"><input type="checkbox" id="cec-test-enabled" /><span class="adm-toggle-slider"></span></label>
+              <div><div class="adm-toggle-label">Correos de prueba</div><div class="adm-toggle-desc">Si está desactivado, "Enviar prueba" no manda nada.</div></div>
+            </div>
+            <div class="adm-toggle-wrap">
+              <label class="adm-toggle"><input type="checkbox" id="cec-promo-enabled" /><span class="adm-toggle-slider"></span></label>
+              <div><div class="adm-toggle-label">Promociones</div><div class="adm-toggle-desc">Si está desactivado, no se puede enviar ninguna promoción.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-card" style="margin-bottom:20px">
+          <div class="adm-card-head"><div class="adm-card-title">Remitente y contacto</div></div>
+          <div class="adm-card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="adm-field">
+                <label class="adm-label">Nombre visible del remitente</label>
+                <input type="text" class="adm-input" id="cec-sender-name" placeholder="Tintin Accesorios" />
+              </div>
+              <div class="adm-field">
+                <label class="adm-label">Email remitente actual (fijo por Apps Script)</label>
+                <input type="text" class="adm-input" id="cec-sender-email" disabled />
+              </div>
+              <div class="adm-field">
+                <label class="adm-label">Email interno de recepción</label>
+                <input type="email" class="adm-input" id="cec-internal-email" placeholder="tintinaccs@gmail.com" />
+              </div>
+              <div class="adm-field">
+                <label class="adm-label">WhatsApp (para pie de correo, si se usa)</label>
+                <input type="text" class="adm-input" id="cec-whatsapp" placeholder="595981299331" />
+              </div>
+            </div>
+            <div class="adm-field" style="margin-top:14px">
+              <label class="adm-label">Firma por defecto</label>
+              <textarea class="adm-textarea adm-input" id="cec-signature" rows="2"></textarea>
+            </div>
+            <div class="adm-field" style="margin-top:14px">
+              <label class="adm-label">Pie de correo por defecto</label>
+              <textarea class="adm-textarea adm-input" id="cec-footer" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-card" style="margin-bottom:20px">
+          <div class="adm-card-head"><div class="adm-card-title">Límites diarios</div></div>
+          <div class="adm-card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="adm-field">
+                <label class="adm-label">Límite diario de correos de prueba</label>
+                <input type="number" class="adm-input" id="cec-test-limit" min="1" />
+              </div>
+              <div class="adm-field">
+                <label class="adm-label">Límite diario de promociones</label>
+                <input type="number" class="adm-input" id="cec-promo-limit" min="1" />
+              </div>
+            </div>
+            <p style="font-size:11px;color:var(--adm-muted);margin-top:10px">
+              Una cuenta de Gmail gratuita (no Workspace) tiene un tope real de aproximadamente 100 correos/día para todo lo que mande este Apps Script — dejá estos límites por debajo de eso, sobre todo si el mismo día también se mandan correos reales de pedidos.
+            </p>
+          </div>
+        </div>
+
+        <button class="adm-btn adm-btn-primary" id="btn-save-correos-config" style="font-size:14px;padding:12px 28px">Guardar configuración de correos</button>
+      </div>
+    </div>
+
     <div class="adm-section" id="section-configuracion">
       <!-- Estado de la tienda -->
       <div class="adm-card" style="margin-bottom:20px">
@@ -1624,27 +2042,17 @@
         </div>
       </div>
 
-      <!-- Prueba de correo — exclusivo Super Admin: vive dentro de
-           section-configuracion, que setupPermissions() ya oculta por
-           completo (sidebar + tabs de mobile) para cualquier rol sin
-           manageSettings (admin, agent, viewer, client) — no hace falta
-           ninguna comprobación de permiso extra acá. -->
+      <!-- La herramienta de "Prueba de correo" y toda la configuración de
+           correos (remitente, límites, activar/desactivar) se mudaron al
+           módulo dedicado Super Admin → Correos → Correos de prueba /
+           Configuración — se saca de acá para no duplicar el mismo control
+           en dos lugares distintos del panel. -->
       <div class="adm-card" style="margin-bottom:20px">
-        <div class="adm-card-head">
-          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Prueba de correo</div>
-        </div>
-        <div class="adm-card-body">
-          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:14px">
-            Enviá el correo de confirmación que recibe una clienta al hacer un pedido — mismo diseño, mismo remitente (<code>tintinpedidos@gmail.com</code>) — a cualquier dirección, con datos de pedido ficticios. No crea ningún pedido real, no toca stock, no manda el correo interno a Tintin.
+        <div class="adm-card-body" style="display:flex;align-items:center;gap:12px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--adm-accent)" stroke-width="2" style="flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <p style="font-size:13px;color:var(--adm-muted);margin:0">
+            La prueba de correo, las plantillas, las promociones y el resto de la configuración de correos ahora viven en <strong style="color:var(--adm-text)">Super Admin → Correos</strong>.
           </p>
-          <div class="adm-field">
-            <label class="adm-label">Enviar correo de prueba a clienta</label>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <input type="email" class="adm-input" id="test-email-input" placeholder="cliente@email.com" style="flex:1;min-width:220px" autocomplete="off" />
-              <button class="adm-btn adm-btn-primary" id="btn-test-email" style="white-space:nowrap">Enviar prueba</button>
-            </div>
-          </div>
-          <div id="test-email-result" style="font-size:13px;margin-top:10px"></div>
         </div>
       </div>
 
@@ -1809,8 +2217,9 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { sendOrderNotification, sendTestCustomerEmail } from "./js/email-notify.js";
+import { sendOrderNotification, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
+import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2002,6 +2411,7 @@ const SECTION_LABELS = {
   mensajes: 'Mensajes',
   onboarding: 'Onboarding',
   auditoria: 'Auditoría',
+  correos: 'Correos',
   configuracion: 'Configuración',
   importar: 'Import / Export',
   contenido: 'Contenido del Sitio'
@@ -2023,7 +2433,11 @@ const SECTION_PERMISSION = {
   // Auditoría: mismo criterio que Usuarios/Configuración — exclusivo Super
   // Admin. El Modder puede aparecer COMO ACTOR dentro del registro (sus
   // acciones se anotan igual), pero no puede abrir esta sección a verlo.
-  auditoria:     'manageSettings'
+  auditoria:     'manageSettings',
+  // Correos: mismo criterio que Usuarios/Configuración/Auditoría — exclusivo
+  // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
+  // acciones en Pedidos puedan disparar un correo automático configurado acá).
+  correos:       'manageSettings'
 };
 
 function switchSection(target) {
@@ -2045,6 +2459,7 @@ function switchSection(target) {
   if (target === 'colecciones') loadColecciones();
   if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'auditoria') loadAuditLog();
+  if (target === 'correos') loadCorreos();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
   if (target === 'contenido') loadContenido();
@@ -2642,6 +3057,12 @@ window.updateOrderStatus = async (orderId, status) => {
     // la próxima carga de la sección. applyOrderFilters() en vez de
     // renderOrdersTable(allOrders) directo para no perder un filtro activo.
     applyOrderFilters();
+    // Correo automático opcional (Super Admin → Correos → Correos de
+    // pedidos) — desactivado por defecto para cada estado nuevo, así que no
+    // cambia nada hasta que se active a propósito. Nunca bloquea ni revierte
+    // el cambio de estado si el envío falla (fire-and-forget, con su propio
+    // try/catch interno).
+    if (o) maybeSendOrderStatusEmail_(o, 'status', status);
   } catch(e) {
     // El <select> ya muestra el valor nuevo por su cuenta (comportamiento
     // nativo del navegador) aunque el guardado haya fallado — como allOrders
@@ -2691,6 +3112,7 @@ window.updatePayStatus = async (orderId, status) => {
       `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
     toast(`Estado de pago: ${PAY_STATUS_LABELS[status] || status}`);
     applyOrderFilters();
+    if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
   } catch(e) {
     toast('No se pudo guardar el estado de pago. Probá de nuevo.');
     applyOrderFilters();
@@ -2826,31 +3248,536 @@ document.getElementById('btn-save-config').onclick = async () => {
   }
 };
 
-// ======== PRUEBA DE CORREO (Super Admin) ========
-// Simple regex de formato, no de validación exhaustiva de RFC — alcanza
-// para atajar errores de tipeo antes de gastar el envío.
+// ======== CORREOS (Super Admin) ========
+// Módulo completo de correos: dashboard, correos de pedidos configurables,
+// correos de prueba, plantillas (CRUD), clientas registradas, promociones
+// controladas, historial y configuración. Todo persiste en Firestore
+// (emailSettings/emailTemplates/emailLogs/emailCampaigns) — ver
+// firestore.rules y functions/EMAIL_SETUP.md.
+
+const EMAIL_SENDER_ADDRESS = 'tintinpedidos@gmail.com'; // fijo por Apps Script — informativo, no editable
 const TEST_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PROMO_BATCH_SIZE = 20;
+
+// {{variable}} protegidas — siempre las calcula el sitio a partir del pedido
+// real, del perfil real de la clienta, o de datos ficticios de prueba. El
+// Super Admin nunca escribe el valor final a mano en su lugar.
+const PROTECTED_VARS = ['clienteNombre','pedidoNumero','productos','total','estadoPedido','metodoEntrega','fechaPedido'];
+
+const ORDER_TYPE_KEYS = [
+  'pedido_recibido_clienta','pedido_recibido_tintin','pedido_confirmado','pedido_cancelado',
+  'pedido_rechazado','pago_recibido','pedido_listo_retiro','pedido_en_camino','pedido_entregado'
+];
+const ORDER_TYPE_NAMES = {
+  pedido_recibido_clienta: 'Pedido recibido (clienta)',
+  pedido_recibido_tintin:  'Pedido recibido (Tintin)',
+  pedido_confirmado:       'Pedido confirmado',
+  pedido_cancelado:        'Pedido cancelado',
+  pedido_rechazado:        'Pedido rechazado',
+  pago_recibido:           'Pago recibido',
+  pedido_listo_retiro:     'Pedido listo para retirar',
+  pedido_en_camino:        'Pedido en camino',
+  pedido_entregado:        'Pedido entregado'
+};
+// Mapea el status/estado de pago real de un pedido (Pedidos) al tipo de
+// correo configurable acá — solo estos 6 disparan el nuevo correo automático
+// opcional; "recibido" ya funciona desde siempre vía checkout, aparte de esto.
+const ORDER_STATUS_TO_TYPE = {
+  confirmado: 'pedido_confirmado', cancelado: 'pedido_cancelado', rechazado: 'pedido_rechazado',
+  listo_retiro: 'pedido_listo_retiro', en_camino: 'pedido_en_camino', entregado: 'pedido_entregado'
+};
+const PAY_STATUS_TO_TYPE = { pagado: 'pago_recibido' };
+
+// Contenido inicial de las 15 plantillas — se crean en Firestore la primera
+// vez que se abre Correos (ensureTemplatesSeeded_), una sola vez por key.
+const TEMPLATE_SEEDS = {
+  pedido_recibido_clienta: { name: 'Pedido recibido para clienta', category: 'pedido',
+    subject: 'Recibimos tu pedido en Tintin — Pedido #{{pedidoNumero}}',
+    greeting: 'Gracias por tu pedido, {{clienteNombre}}.',
+    intro: 'Recibimos tu pedido en Tintin Accesorios. Estamos preparando todo con cuidado y te vamos a contactar para confirmar los detalles del envío.',
+    closing: 'Gracias por elegirnos.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_recibido_tintin: { name: 'Pedido recibido para Tintin', category: 'pedido',
+    subject: 'Nuevo pedido recibido en Tintin — Pedido #{{pedidoNumero}}',
+    greeting: 'Nuevo pedido de {{clienteNombre}}.',
+    intro: 'Se recibió un nuevo pedido en la tienda.',
+    closing: 'Revisalo en el panel de administración.', signature: 'Tintin Accesorios', promoText: '',
+    buttonText: 'Ver en el panel', buttonUrl: 'https://tintinaccs.github.io/tintin-web/admin.html',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_confirmado: { name: 'Pedido confirmado', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} fue confirmado',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Tu pedido #{{pedidoNumero}} fue confirmado y ya lo estamos preparando.',
+    closing: 'Te avisamos en cuanto esté listo.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_cancelado: { name: 'Pedido cancelado', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} fue cancelado',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Tu pedido #{{pedidoNumero}} fue cancelado.',
+    closing: 'Si tenés dudas, escribinos y te ayudamos.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_rechazado: { name: 'Pedido rechazado', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} no pudo procesarse',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'No pudimos procesar tu pedido #{{pedidoNumero}}.',
+    closing: 'Escribinos si querés que te ayudemos a resolverlo.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pago_recibido: { name: 'Pago recibido', category: 'pedido',
+    subject: 'Recibimos tu pago del pedido #{{pedidoNumero}}',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Confirmamos que recibimos el pago de tu pedido #{{pedidoNumero}}.',
+    closing: 'Gracias por tu compra.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_listo_retiro: { name: 'Pedido listo para retirar', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} está listo para retirar',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Tu pedido #{{pedidoNumero}} ya está listo para que lo retires.',
+    closing: 'Te esperamos.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_en_camino: { name: 'Pedido en camino', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} está en camino',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Tu pedido #{{pedidoNumero}} ya está en camino.',
+    closing: 'Pronto lo vas a tener en tus manos.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  pedido_entregado: { name: 'Pedido entregado', category: 'pedido',
+    subject: 'Tu pedido #{{pedidoNumero}} fue entregado',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Tu pedido #{{pedidoNumero}} fue entregado.',
+    closing: 'Gracias por elegirnos, esperamos que lo disfrutes.', signature: 'Tintin Accesorios', promoText: '', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+  promo_general: { name: 'Promoción general', category: 'promo',
+    subject: 'Tenemos novedades para vos, {{clienteNombre}}',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Queremos contarte sobre nuestras últimas novedades en Tintin Accesorios.',
+    promoText: 'Descubrí los nuevos productos en nuestra tienda.',
+    closing: 'Gracias por ser parte de Tintin.', signature: 'Tintin Accesorios',
+    buttonText: 'Ver tienda', buttonUrl: 'https://tintinaccs.github.io/tintin-web/',
+    brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
+  novedades: { name: 'Novedades', category: 'promo',
+    subject: 'Novedades en Tintin Accesorios',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Llegaron productos nuevos a la tienda.',
+    promoText: 'Vení a conocerlos.',
+    closing: 'Te esperamos.', signature: 'Tintin Accesorios',
+    buttonText: 'Ver novedades', buttonUrl: 'https://tintinaccs.github.io/tintin-web/',
+    brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
+  promo_dia_amistad: { name: 'Promo Día de la Amistad', category: 'promo',
+    subject: 'Feliz Día de la Amistad, {{clienteNombre}}',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'En el Día de la Amistad te dejamos una selección especial de regalos.',
+    promoText: 'Encontrá el regalo ideal para esa amiga especial.',
+    closing: 'Gracias por elegirnos.', signature: 'Tintin Accesorios',
+    buttonText: 'Ver regalos', buttonUrl: 'https://tintinaccs.github.io/tintin-web/',
+    brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
+  promo_relojes: { name: 'Promo de relojes', category: 'promo',
+    subject: 'Nuevos relojes en Tintin Accesorios',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Llegó una nueva colección de relojes.',
+    promoText: 'Conocé los modelos disponibles.',
+    closing: 'Te esperamos en la tienda.', signature: 'Tintin Accesorios',
+    buttonText: 'Ver relojes', buttonUrl: 'https://tintinaccs.github.io/tintin-web/',
+    brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
+  promo_bolsos: { name: 'Promo de bolsos', category: 'promo',
+    subject: 'Nuevos bolsos en Tintin Accesorios',
+    greeting: 'Hola {{clienteNombre}},',
+    intro: 'Llegó una nueva colección de bolsos.',
+    promoText: 'Conocé los modelos disponibles.',
+    closing: 'Te esperamos en la tienda.', signature: 'Tintin Accesorios',
+    buttonText: 'Ver bolsos', buttonUrl: 'https://tintinaccs.github.io/tintin-web/',
+    brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
+  mensaje_libre: { name: 'Mensaje libre', category: 'libre',
+    subject: 'Un mensaje de Tintin Accesorios',
+    greeting: 'Hola {{clienteNombre}},', intro: '',
+    promoText: 'Escribí acá el mensaje que quieras enviar.',
+    closing: 'Gracias.', signature: 'Tintin Accesorios', buttonText: '', buttonUrl: '',
+    brandPhrase: 'Tintin Accesorios', footer: '' },
+};
+
+let emailSettingsCache = null;
+let allEmailTemplates = [];
+let allEmailLogs = [];
+let allEmailCampaigns = [];
+let allClientUsers = [];
+let promoRecipients = [];   // [{email, name}] — destinatarias armadas para Promociones
+let cliSelected = new Set(); // emails seleccionados en Clientas registradas
+let promoPendingSend = null;
+let tplFilterCategory = '';
+let tplShowArchived = false;
+let tplSearchQuery = '';
+
+function defaultEmailSettings_() {
+  const orderTypesEnabled = {};
+  ORDER_TYPE_KEYS.forEach(k => { orderTypesEnabled[k] = (k === 'pedido_recibido_clienta' || k === 'pedido_recibido_tintin'); });
+  const orderTypeTemplateMap = {};
+  ORDER_TYPE_KEYS.forEach(k => { orderTypeTemplateMap[k] = k; });
+  return {
+    orderEmailsEnabled: true, internalEmailEnabled: true, customerEmailEnabled: true,
+    testEmailsEnabled: true, promoEnabled: true,
+    senderName: 'Tintin Accesorios', senderEmail: EMAIL_SENDER_ADDRESS, internalEmail: 'tintinaccs@gmail.com',
+    signature: 'Tintin Accesorios', footer: '', whatsappNumber: '',
+    testDailyLimit: 20, promoDailyLimit: 100,
+    orderTypesEnabled, orderTypeTemplateMap
+  };
+}
+
+function renderVarsClient_(str, vars) {
+  return String(str || '').replace(/\{\{(\w+)\}\}/g, (m, key) => {
+    const v = vars && vars[key];
+    return (v === undefined || v === null) ? '' : String(v);
+  });
+}
+
+function buildPreviewHtml_(t, vars) {
+  const v = vars || {};
+  const brandPhrase = renderVarsClient_(t.brandPhrase, v);
+  const greeting = renderVarsClient_(t.greeting, v);
+  const intro = renderVarsClient_(t.intro, v);
+  const promoText = renderVarsClient_(t.promoText, v);
+  const closing = renderVarsClient_(t.closing, v);
+  const signature = renderVarsClient_(t.signature, v) || 'Tintin Accesorios';
+  const footer = renderVarsClient_(t.footer, v);
+  const buttonText = renderVarsClient_(t.buttonText, v);
+  const buttonUrl = t.buttonUrl || '';
+  const buttonHtml = (buttonText && buttonUrl)
+    ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
+    : '';
+  return `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
+    `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
+    (brandPhrase ? `<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
+    (greeting ? `<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
+    (intro ? `<p style="color:#555;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${intro}</p>` : '') +
+    (promoText ? `<p style="color:#333;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${promoText}</p>` : '') +
+    buttonHtml +
+    (closing ? `<p style="color:#555;line-height:1.6;margin:16px 0 0;font-size:14px;white-space:pre-line">${closing}</p>` : '') +
+    `<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5">` +
+    `<p style="color:#999;font-size:12px;margin:0;white-space:pre-line">${signature}</p>` +
+    (footer ? `<p style="color:#bbb;font-size:11px;margin:10px 0 0;white-space:pre-line">${footer}</p>` : '') +
+    `</div></div></body></html>`;
+}
+
+function fakeTestVariables_() {
+  return {
+    clienteNombre: 'Cliente de prueba', pedidoNumero: 'TEST123', productos: '1x BAG RUBY',
+    total: formatPrice(190000), estadoPedido: 'Pendiente de confirmación', metodoEntrega: 'Delivery',
+    fechaPedido: new Date().toLocaleDateString('es-PY')
+  };
+}
+
+function orderToVariables_(order) {
+  return {
+    clienteNombre: order.userName || '',
+    pedidoNumero: order.shortId || (order.id ? String(order.id).slice(0,8).toUpperCase() : ''),
+    productos: (order.items||[]).map(i => `${i.qty}x ${i.name}`).join(', '),
+    total: formatPrice(order.total || 0),
+    estadoPedido: ORDER_STATUS_LABELS[order.status] || order.status || '',
+    metodoEntrega: ({delivery:'Delivery', encomienda:'Encomienda', retiro:'Retiro en tienda'})[order.shipping?.method] || '',
+    fechaPedido: formatDate(order.createdAt)
+  };
+}
+
+function templateContentPayload_(tpl) {
+  return {
+    subject: tpl.subject || '', greeting: tpl.greeting || '', intro: tpl.intro || '', closing: tpl.closing || '',
+    signature: tpl.signature || '', promoText: tpl.promoText || '', buttonText: tpl.buttonText || '',
+    buttonUrl: tpl.buttonUrl || '', brandPhrase: tpl.brandPhrase || '', footer: tpl.footer || ''
+  };
+}
+
+function logStatusBadge_(status) {
+  const map = { sent: 'badge-entregado', failed: 'badge-cancelado', partial: 'badge-preparando', pending: 'badge-pendiente' };
+  const labels = { sent: 'Enviado', failed: 'Fallido', partial: 'Parcial', pending: 'Pendiente' };
+  return `<span class="adm-badge ${map[status] || 'badge-pendiente'}">${labels[status] || status || '—'}</span>`;
+}
+
+function templateLabel_(key) {
+  if (ORDER_TYPE_NAMES[key]) return ORDER_TYPE_NAMES[key];
+  const t = allEmailTemplates.find(t => t.key === key || t.id === key);
+  if (t) return t.name;
+  if (key === 'promo') return 'Promoción';
+  return key || '—';
+}
+
+async function getEmailSettingsFresh_() {
+  try {
+    const snap = await getDoc(doc(db, 'emailSettings', 'main'));
+    return snap.exists() ? snap.data() : {};
+  } catch (e) { return {}; }
+}
+
+async function saveEmailSettingsMerge_(patch) {
+  try {
+    await setDoc(doc(db, 'emailSettings', 'main'), { ...patch, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }, { merge: true });
+  } catch (e) {
+    toast('Error al guardar: ' + e.message);
+  }
+}
+
+async function ensureTemplatesSeeded_(existing) {
+  const existingKeys = new Set(existing.map(t => t.key).filter(Boolean));
+  const toCreate = Object.keys(TEMPLATE_SEEDS).filter(k => !existingKeys.has(k));
+  for (const key of toCreate) {
+    const seed = TEMPLATE_SEEDS[key];
+    const content = { subject: seed.subject, greeting: seed.greeting, intro: seed.intro, closing: seed.closing,
+      signature: seed.signature, promoText: seed.promoText, buttonText: seed.buttonText, buttonUrl: seed.buttonUrl || '',
+      brandPhrase: seed.brandPhrase, footer: seed.footer };
+    try {
+      await setDoc(doc(db, 'emailTemplates', key), {
+        key, name: seed.name, category: seed.category, ...content,
+        active: true, archived: false, original: content,
+        createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
+      });
+      existing.push({ id: key, key, name: seed.name, category: seed.category, ...content, active: true, archived: false, original: content });
+    } catch (e) {
+      console.error('No se pudo crear la plantilla inicial ' + key + ':', e);
+    }
+  }
+  return existing;
+}
+
+async function logEmailSend_(entry) {
+  const local = {
+    id: 'local-' + Date.now() + Math.random(), sentAt: { toDate: () => new Date() },
+    isAutomatic: !!entry.isAutomatic, sentBy: currentUser?.email || '', error: entry.error || '',
+    orderId: entry.orderId || '', campaignId: entry.campaignId || '', templateKey: entry.templateKey || '',
+    type: entry.type || '', recipient: entry.recipient || '', status: entry.status || 'pending',
+    variables: entry.variables || null
+  };
+  allEmailLogs.unshift(local);
+  renderCorreosDashboard();
+  renderCorreosHistorialTab();
+  try {
+    await addDoc(collection(db, 'emailLogs'), {
+      type: local.type, recipient: local.recipient, status: local.status, templateKey: local.templateKey,
+      isAutomatic: local.isAutomatic, sentBy: local.sentBy, error: local.error, orderId: local.orderId,
+      campaignId: local.campaignId, variables: local.variables, sentAt: serverTimestamp()
+    });
+  } catch (e) {
+    console.error('No se pudo registrar en emailLogs:', e);
+  }
+}
+
+// ---- Carga principal del módulo ----
+async function loadCorreos() {
+  try {
+    const [settings, tplSnap, logsSnap, campSnap] = await Promise.all([
+      getEmailSettingsFresh_(),
+      getDocs(collection(db, 'emailTemplates')),
+      getDocs(query(collection(db, 'emailLogs'), orderBy('sentAt', 'desc'), limit(300))),
+      getDocs(query(collection(db, 'emailCampaigns'), orderBy('createdAt', 'desc'), limit(50)))
+    ]);
+    const defaults = defaultEmailSettings_();
+    emailSettingsCache = Object.assign({}, defaults, settings, {
+      orderTypesEnabled: Object.assign({}, defaults.orderTypesEnabled, settings.orderTypesEnabled || {}),
+      orderTypeTemplateMap: Object.assign({}, defaults.orderTypeTemplateMap, settings.orderTypeTemplateMap || {})
+    });
+    let templates = tplSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    templates = await ensureTemplatesSeeded_(templates);
+    allEmailTemplates = templates;
+    // Se reordena también acá (no solo confiar en orderBy de Firestore) por
+    // las dudas de que falte el índice compuesto la primera vez — mismo
+    // criterio defensivo que ya usa loadOrders() más abajo.
+    const byDateDesc_ = (a, b) => (b.sentAt?.toDate?.() || new Date(0)) - (a.sentAt?.toDate?.() || new Date(0));
+    allEmailLogs = logsSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byDateDesc_);
+    allEmailCampaigns = campSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)));
+
+    await loadCorreosClientas();
+    renderCorreosDashboard();
+    renderCorreosPedidosTab();
+    renderCorreosPruebaTab();
+    renderCorreosPlantillasTab();
+    renderCorreosHistorialTab();
+    renderCorreosConfigTab();
+  } catch (e) {
+    console.error('Error al cargar Correos:', e);
+    toast('Error al cargar el módulo Correos: ' + e.message);
+  }
+}
+
+async function loadCorreosClientas() {
+  const [usersSnap, ordersSnap] = await Promise.all([
+    getDocs(collection(db, 'users')),
+    getDocs(collection(db, 'orders'))
+  ]);
+  const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  allClientUsers = usersSnap.docs
+    .map(d => ({ uid: d.id, ...d.data() }))
+    .filter(u => (u.role || 'client') === 'client')
+    .map(u => {
+      const theirOrders = orders.filter(o => o.userId === u.uid || (o.userEmail && u.email && o.userEmail.toLowerCase() === u.email.toLowerCase()));
+      let lastPurchase = null;
+      theirOrders.forEach(o => {
+        const d = o.createdAt?.toDate ? o.createdAt.toDate() : (o.createdAt ? new Date(o.createdAt) : null);
+        if (d && (!lastPurchase || d > lastPurchase)) lastPurchase = d;
+      });
+      return { ...u, orderCount: theirOrders.length, lastPurchase };
+    });
+  renderCorreosClientasTab();
+  renderCorreosPromocionesTab();
+}
+
+// ---- Dashboard ----
+function renderCorreosDashboard() {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const logsToday = allEmailLogs.filter(l => { const d = l.sentAt?.toDate?.(); return d && d >= today; });
+  const sentToday = logsToday.filter(l => l.status === 'sent').length;
+  const failedToday = logsToday.filter(l => l.status === 'failed').length;
+  const pendingCampaigns = allEmailCampaigns.filter(c => c.status === 'sending').length;
+
+  const statsEl = document.getElementById('correos-stats');
+  if (statsEl) statsEl.innerHTML = [
+    { label: 'Enviados hoy', val: sentToday },
+    { label: 'Fallidos hoy', val: failedToday },
+    { label: 'Pendientes', val: pendingCampaigns },
+  ].map(s => `<div class="adm-stat"><div class="adm-stat-val">${s.val}</div><div class="adm-stat-label">${s.label}</div></div>`).join('');
+
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const webhookConfigured = typeof EMAIL_WEBHOOK_URL === 'string' && EMAIL_WEBHOOK_URL && !EMAIL_WEBHOOK_URL.includes('PEGAR_');
+  const chip = (label, on) => `<div><strong>${label}:</strong> <span class="adm-badge ${on ? 'badge-entregado' : 'badge-cancelado'}">${on ? 'Activado' : 'Desactivado'}</span></div>`;
+  const statusEl = document.getElementById('correos-system-status');
+  if (statusEl) statusEl.innerHTML =
+    `<div><strong>Remitente actual:</strong> ${s.senderEmail || EMAIL_SENDER_ADDRESS}</div>` +
+    `<div><strong>Webhook configurado:</strong> <span class="adm-badge ${webhookConfigured ? 'badge-entregado' : 'badge-cancelado'}">${webhookConfigured ? 'Sí' : 'No'}</span></div>` +
+    chip('Envío de pedidos', s.orderEmailsEnabled !== false) +
+    chip('Envío de pruebas', s.testEmailsEnabled !== false) +
+    chip('Envío promocional', s.promoEnabled !== false);
+
+  const tbody = document.getElementById('correos-dash-recent');
+  if (tbody) {
+    const recent = allEmailLogs.slice(0, 5);
+    tbody.innerHTML = recent.length ? recent.map(l => `
+      <tr>
+        <td style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
+        <td style="font-size:12px">${templateLabel_(l.type)}</td>
+        <td style="font-size:12px">${l.recipient || '—'}</td>
+        <td>${logStatusBadge_(l.status)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Sin envíos todavía</td></tr>';
+  }
+}
+
+// ---- Correos de pedidos ----
+function templatesForCategory_(cat) {
+  return allEmailTemplates.filter(t => t.category === cat && !t.archived);
+}
+
+function renderCorreosPedidosTab() {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const tbody = document.getElementById('correos-pedidos-tbody');
+  if (!tbody) return;
+  const options = templatesForCategory_('pedido').concat(templatesForCategory_('libre'));
+  tbody.innerHTML = ORDER_TYPE_KEYS.map(key => {
+    const enabled = !!(s.orderTypesEnabled && s.orderTypesEnabled[key]);
+    const tplKey = (s.orderTypeTemplateMap && s.orderTypeTemplateMap[key]) || key;
+    const lastLog = allEmailLogs.find(l => l.type === key);
+    const lastSent = lastLog ? `${formatDate(lastLog.sentAt)} · ${lastLog.recipient || ''}` : '—';
+    const tplOptionsHtml = options.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === tplKey) ? 'selected' : ''}>${t.name}</option>`).join('');
+    return `
+      <tr>
+        <td data-label="Tipo">${ORDER_TYPE_NAMES[key]}</td>
+        <td data-label="Activo"><label class="adm-toggle" style="width:40px;height:22px"><input type="checkbox" ${enabled ? 'checked' : ''} onchange="window.toggleOrderTypeEnabled('${key}', this.checked)"><span class="adm-toggle-slider"></span></label></td>
+        <td data-label="Plantilla"><select class="adm-select" style="width:auto;font-size:12px" onchange="window.setOrderTypeTemplate('${key}', this.value)">${tplOptionsHtml}</select></td>
+        <td data-label="Último envío" style="font-size:12px">${lastSent}</td>
+        <td data-label="Vista previa"><button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.previewOrderType('${key}')" type="button">Ver</button></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.toggleOrderTypeEnabled = async (key, checked) => {
+  emailSettingsCache.orderTypesEnabled[key] = checked;
+  await saveEmailSettingsMerge_({ orderTypesEnabled: emailSettingsCache.orderTypesEnabled });
+  toast(`${ORDER_TYPE_NAMES[key]}: ${checked ? 'activado' : 'desactivado'}`);
+  renderCorreosPedidosTab();
+  renderCorreosDashboard();
+};
+window.setOrderTypeTemplate = async (key, tplKey) => {
+  emailSettingsCache.orderTypeTemplateMap[key] = tplKey;
+  await saveEmailSettingsMerge_({ orderTypeTemplateMap: emailSettingsCache.orderTypeTemplateMap });
+  toast('Plantilla asociada actualizada');
+};
+window.previewOrderType = (key) => {
+  const tplKey = (emailSettingsCache.orderTypeTemplateMap && emailSettingsCache.orderTypeTemplateMap[key]) || key;
+  const tpl = allEmailTemplates.find(t => (t.key || t.id) === tplKey);
+  if (!tpl) { toast('Plantilla no encontrada'); return; }
+  openTplPreview_(tpl, fakeTestVariables_());
+};
+
+// ---- Correos de prueba ----
+function renderCorreosPruebaTab() {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const toggle = document.getElementById('prueba-enabled-toggle');
+  if (toggle) toggle.checked = s.testEmailsEnabled !== false;
+
+  const cliSelect = document.getElementById('prueba-cliente-select');
+  if (cliSelect) {
+    cliSelect.innerHTML = '<option value="">Elegí una clienta…</option>' +
+      allClientUsers.map(c => `<option value="${c.email}">${c.name || c.email} (${c.email})</option>`).join('');
+  }
+
+  const tplSelect = document.getElementById('prueba-template-select');
+  if (tplSelect) {
+    const activeTpls = allEmailTemplates.filter(t => !t.archived);
+    tplSelect.innerHTML = activeTpls.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === 'pedido_recibido_clienta') ? 'selected' : ''}>${t.name}</option>`).join('');
+  }
+}
+
+document.querySelectorAll('[data-prueba-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-prueba-mode]').forEach(b => b.classList.toggle('active', b === btn));
+    const mode = btn.dataset.pruebaMode;
+    document.getElementById('prueba-mode-manual').style.display = mode === 'manual' ? '' : 'none';
+    document.getElementById('prueba-mode-cliente').style.display = mode === 'cliente' ? '' : 'none';
+  });
+});
+
+function resolveTestEmailTarget_() {
+  const activeBtn = document.querySelector('[data-prueba-mode].active');
+  const mode = activeBtn ? activeBtn.dataset.pruebaMode : 'manual';
+  if (mode === 'cliente') return document.getElementById('prueba-cliente-select').value.trim();
+  return document.getElementById('test-email-input').value.trim();
+}
+
+document.getElementById('prueba-enabled-toggle').onchange = async (e) => {
+  emailSettingsCache = emailSettingsCache || defaultEmailSettings_();
+  emailSettingsCache.testEmailsEnabled = e.target.checked;
+  await saveEmailSettingsMerge_({ testEmailsEnabled: e.target.checked });
+  toast(`Correos de prueba: ${e.target.checked ? 'activados' : 'desactivados'}`);
+};
+
 document.getElementById('btn-test-email').onclick = async () => {
-  const input = document.getElementById('test-email-input');
   const resultEl = document.getElementById('test-email-result');
   const btn = document.getElementById('btn-test-email');
-  const email = input.value.trim();
+  const email = resolveTestEmailTarget_();
 
+  if (emailSettingsCache && emailSettingsCache.testEmailsEnabled === false) {
+    resultEl.style.color = '#c0392b';
+    resultEl.textContent = 'Los envíos de prueba están desactivados en Correos → Configuración.';
+    return;
+  }
   if (!TEST_EMAIL_RE.test(email)) {
     resultEl.style.color = '#c0392b';
-    resultEl.textContent = 'Escribí un email con formato válido (ej: cliente@email.com).';
+    resultEl.textContent = 'Escribí (o elegí) un email con formato válido.';
     return;
   }
 
-  // Deshabilitar mientras envía — evita mandar varias pruebas por clicks
-  // repetidos mientras la primera todavía está en camino.
   btn.disabled = true;
   btn.textContent = 'Enviando…';
   resultEl.style.color = 'var(--adm-muted)';
   resultEl.textContent = '';
 
+  const tplKey = document.getElementById('prueba-template-select').value;
+  const isDefaultDesign = tplKey === 'pedido_recibido_clienta';
   try {
-    const result = await sendTestCustomerEmail(email);
+    let result;
+    const vars = fakeTestVariables_();
+    if (isDefaultDesign) {
+      result = await sendTestCustomerEmail(email);
+    } else {
+      const tpl = allEmailTemplates.find(t => (t.key || t.id) === tplKey);
+      result = await sendTemplatedEmail({ to: email, ...templateContentPayload_(tpl || {}), variables: vars });
+    }
     if (result && result.success) {
       resultEl.style.color = '#065f46';
       resultEl.textContent = 'Correo de prueba enviado correctamente.';
@@ -2858,14 +3785,641 @@ document.getElementById('btn-test-email').onclick = async () => {
       resultEl.style.color = '#c0392b';
       resultEl.textContent = 'No se pudo enviar el correo de prueba' + (result?.error ? ': ' + result.error : '.');
     }
+    await logEmailSend_({ type: tplKey, recipient: email, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: false, error: result?.error || '', variables: vars });
   } catch (e) {
     resultEl.style.color = '#c0392b';
     resultEl.textContent = 'No se pudo enviar el correo de prueba: ' + e.message;
+    await logEmailSend_({ type: tplKey, recipient: email, status: 'failed', templateKey: tplKey, isAutomatic: false, error: e.message });
   } finally {
     btn.disabled = false;
     btn.textContent = 'Enviar prueba';
   }
 };
+
+document.getElementById('btn-test-preview').onclick = () => {
+  const tplKey = document.getElementById('prueba-template-select').value;
+  const tpl = allEmailTemplates.find(t => (t.key || t.id) === tplKey);
+  if (!tpl) { toast('Elegí una plantilla'); return; }
+  openTplPreview_(tpl, fakeTestVariables_());
+};
+
+// ---- Vista previa (modal compartido) ----
+function openTplPreview_(tpl, vars) {
+  const html = buildPreviewHtml_(tpl, vars);
+  document.getElementById('tpl-preview-subject').textContent = renderVarsClient_(tpl.subject, vars);
+  document.getElementById('tpl-preview-frame').srcdoc = html;
+  document.getElementById('tpl-preview-overlay').style.display = '';
+}
+window.closeTplPreview = () => { document.getElementById('tpl-preview-overlay').style.display = 'none'; };
+
+window.previewTemplateById = (id) => {
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  const overlayOpen = document.getElementById('tpl-edit-overlay').style.display !== 'none' && document.getElementById('tpl-edit-id').value === id;
+  const draft = overlayOpen ? {
+    ...t,
+    subject: document.getElementById('tpl-edit-subject').value,
+    greeting: document.getElementById('tpl-edit-greeting').value,
+    intro: document.getElementById('tpl-edit-intro').value,
+    promoText: document.getElementById('tpl-edit-promo').value,
+    closing: document.getElementById('tpl-edit-closing').value,
+    signature: document.getElementById('tpl-edit-signature').value,
+    buttonText: document.getElementById('tpl-edit-button-text').value,
+    buttonUrl: document.getElementById('tpl-edit-button-url').value,
+    brandPhrase: document.getElementById('tpl-edit-brand').value,
+    footer: document.getElementById('tpl-edit-footer').value,
+  } : t;
+  openTplPreview_(draft, fakeTestVariables_());
+};
+
+// ---- Plantillas (CRUD) ----
+function renderCorreosPlantillasTab() {
+  let list = allEmailTemplates.slice();
+  if (!tplShowArchived) list = list.filter(t => !t.archived);
+  if (tplFilterCategory) list = list.filter(t => t.category === tplFilterCategory);
+  if (tplSearchQuery) list = list.filter(t => (t.name || '').toLowerCase().includes(tplSearchQuery) || (t.subject || '').toLowerCase().includes(tplSearchQuery));
+  list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+  const tbody = document.getElementById('tpl-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin plantillas para mostrar</td></tr>';
+    return;
+  }
+  const CAT_LABELS = { pedido: 'Pedidos', promo: 'Promociones', libre: 'Mensaje libre' };
+  tbody.innerHTML = list.map(t => {
+    const id = t.id;
+    const isCustom = !t.key;
+    return `
+      <tr style="${t.archived ? 'opacity:.55' : ''}">
+        <td><strong>${t.name}</strong><br><small style="color:#aaa">${(t.subject || '').slice(0, 60)}</small></td>
+        <td><span class="adm-badge badge-confirmado">${CAT_LABELS[t.category] || t.category}</span></td>
+        <td>${t.active !== false ? '<span class="adm-badge badge-entregado">Activa</span>' : '<span class="adm-badge badge-cancelado">Inactiva</span>'}</td>
+        <td style="font-size:12px">${formatDate(t.updatedAt)}</td>
+        <td style="font-size:12px">${t.updatedBy || '—'}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.openTplEdit('${id}')" type="button">Editar</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.previewTemplateById('${id}')" type="button">Vista previa</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.duplicateTemplate('${id}')" type="button">Duplicar</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.toggleArchiveTemplate('${id}')" type="button">${t.archived ? 'Reactivar' : 'Archivar'}</button>
+            ${isCustom ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteTemplate('${id}')" type="button">Eliminar</button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+document.getElementById('tpl-search').oninput = (e) => { tplSearchQuery = e.target.value.toLowerCase(); renderCorreosPlantillasTab(); };
+document.getElementById('tpl-filter-category').onchange = (e) => { tplFilterCategory = e.target.value; renderCorreosPlantillasTab(); };
+document.getElementById('tpl-show-archived').onchange = (e) => { tplShowArchived = e.target.checked; renderCorreosPlantillasTab(); };
+
+window.openTplEdit = (id) => {
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  const isCustom = !t.key;
+  document.getElementById('tpl-edit-id').value = id;
+  document.getElementById('tpl-edit-name').textContent = t.name ? `— ${t.name}` : '';
+  document.getElementById('tpl-edit-name-field').style.display = isCustom ? '' : 'none';
+  document.getElementById('tpl-edit-name-input').value = t.name || '';
+  document.getElementById('tpl-edit-subject').value = t.subject || '';
+  document.getElementById('tpl-edit-greeting').value = t.greeting || '';
+  document.getElementById('tpl-edit-intro').value = t.intro || '';
+  document.getElementById('tpl-edit-promo').value = t.promoText || '';
+  document.getElementById('tpl-edit-closing').value = t.closing || '';
+  document.getElementById('tpl-edit-signature').value = t.signature || '';
+  document.getElementById('tpl-edit-button-text').value = t.buttonText || '';
+  document.getElementById('tpl-edit-button-url').value = t.buttonUrl || '';
+  document.getElementById('tpl-edit-brand').value = t.brandPhrase || '';
+  document.getElementById('tpl-edit-footer').value = t.footer || '';
+  document.getElementById('tpl-edit-active').checked = t.active !== false;
+  document.getElementById('tpl-edit-vars-list').innerHTML = PROTECTED_VARS.map(v => `<code style="background:#fff;border:1px solid var(--adm-border);border-radius:6px;padding:2px 6px">{{${v}}}</code>`).join('');
+  document.getElementById('tpl-edit-overlay').style.display = '';
+};
+window.closeTplEdit = () => { document.getElementById('tpl-edit-overlay').style.display = 'none'; };
+
+document.getElementById('tpl-edit-preview-btn').onclick = () => {
+  window.previewTemplateById(document.getElementById('tpl-edit-id').value);
+};
+
+document.getElementById('tpl-edit-save-btn').onclick = async () => {
+  const id = document.getElementById('tpl-edit-id').value;
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  const patch = {
+    subject: document.getElementById('tpl-edit-subject').value,
+    greeting: document.getElementById('tpl-edit-greeting').value,
+    intro: document.getElementById('tpl-edit-intro').value,
+    promoText: document.getElementById('tpl-edit-promo').value,
+    closing: document.getElementById('tpl-edit-closing').value,
+    signature: document.getElementById('tpl-edit-signature').value,
+    buttonText: document.getElementById('tpl-edit-button-text').value,
+    buttonUrl: document.getElementById('tpl-edit-button-url').value,
+    brandPhrase: document.getElementById('tpl-edit-brand').value,
+    footer: document.getElementById('tpl-edit-footer').value,
+    active: document.getElementById('tpl-edit-active').checked,
+    updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
+  };
+  if (!t.key) patch.name = document.getElementById('tpl-edit-name-input').value.trim() || t.name;
+  try {
+    await updateDoc(doc(db, 'emailTemplates', id), patch);
+    Object.assign(t, patch, { updatedAt: new Date() });
+    toast('Plantilla guardada');
+    document.getElementById('tpl-edit-overlay').style.display = 'none';
+    renderCorreosPlantillasTab();
+    renderCorreosPedidosTab();
+    renderCorreosPruebaTab();
+    renderCorreosPromocionesTab();
+  } catch (e) {
+    toast('Error al guardar la plantilla: ' + e.message);
+  }
+};
+
+document.getElementById('tpl-edit-restore-btn').onclick = async () => {
+  const id = document.getElementById('tpl-edit-id').value;
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t || !t.original) { toast('No hay versión original guardada'); return; }
+  if (!confirm('¿Restaurar esta plantilla a su versión original? Se pierden los cambios actuales.')) return;
+  try {
+    const patch = { ...t.original, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' };
+    await updateDoc(doc(db, 'emailTemplates', id), patch);
+    Object.assign(t, patch, { updatedAt: new Date() });
+    toast('Plantilla restaurada a su versión original');
+    window.openTplEdit(id);
+    renderCorreosPlantillasTab();
+  } catch (e) { toast('Error al restaurar: ' + e.message); }
+};
+
+document.getElementById('btn-tpl-nueva').onclick = async () => {
+  const seed = TEMPLATE_SEEDS.mensaje_libre;
+  const content = { subject: seed.subject, greeting: seed.greeting, intro: seed.intro, closing: seed.closing,
+    signature: seed.signature, promoText: seed.promoText, buttonText: seed.buttonText, buttonUrl: seed.buttonUrl || '',
+    brandPhrase: seed.brandPhrase, footer: seed.footer };
+  try {
+    const ref = await addDoc(collection(db, 'emailTemplates'), {
+      key: null, name: 'Mensaje libre (nuevo)', category: 'libre', ...content,
+      active: true, archived: false, original: content,
+      createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
+    });
+    allEmailTemplates.push({ id: ref.id, key: null, name: 'Mensaje libre (nuevo)', category: 'libre', ...content, active: true, archived: false, original: content, updatedAt: new Date() });
+    toast('Plantilla creada');
+    renderCorreosPlantillasTab();
+    window.openTplEdit(ref.id);
+  } catch (e) { toast('Error al crear la plantilla: ' + e.message); }
+};
+
+window.duplicateTemplate = async (id) => {
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  const content = templateContentPayload_(t);
+  try {
+    const ref = await addDoc(collection(db, 'emailTemplates'), {
+      key: null, name: t.name + ' (copia)', category: t.category, ...content,
+      active: true, archived: false, original: content,
+      createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
+    });
+    allEmailTemplates.push({ id: ref.id, key: null, name: t.name + ' (copia)', category: t.category, ...content, active: true, archived: false, original: content, updatedAt: new Date() });
+    toast('Plantilla duplicada');
+    renderCorreosPlantillasTab();
+  } catch (e) { toast('Error al duplicar: ' + e.message); }
+};
+
+window.toggleArchiveTemplate = async (id) => {
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  const archived = !t.archived;
+  try {
+    await updateDoc(doc(db, 'emailTemplates', id), { archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' });
+    t.archived = archived;
+    toast(archived ? 'Plantilla archivada' : 'Plantilla reactivada');
+    renderCorreosPlantillasTab();
+    renderCorreosPedidosTab();
+    renderCorreosPruebaTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.deleteTemplate = async (id) => {
+  const t = allEmailTemplates.find(x => x.id === id);
+  if (!t) return;
+  if (t.key) { toast('Esta plantilla no se puede eliminar — solo archivar.'); return; }
+  if (!confirm(`¿Eliminar definitivamente la plantilla "${t.name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'emailTemplates', id));
+    allEmailTemplates = allEmailTemplates.filter(x => x.id !== id);
+    toast('Plantilla eliminada');
+    renderCorreosPlantillasTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error al eliminar: ' + e.message); }
+};
+
+// ---- Clientas registradas ----
+function filteredClients_() {
+  const q = (document.getElementById('cli-search').value || '').toLowerCase();
+  const filterVal = document.getElementById('cli-filter').value;
+  let list = allClientUsers.filter(c => (c.name || '').toLowerCase().includes(q) || (c.email || '').toLowerCase().includes(q));
+  if (filterVal === 'active') list = list.filter(c => !c.blocked);
+  if (filterVal === 'blocked') list = list.filter(c => c.blocked);
+  if (filterVal === 'with_orders') list = list.filter(c => c.orderCount > 0);
+  if (filterVal === 'without_orders') list = list.filter(c => !c.orderCount);
+  return list;
+}
+
+function renderCorreosClientasTab() {
+  const list = filteredClients_();
+  const tbody = document.getElementById('cli-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">Sin clientas para mostrar</td></tr>';
+  } else {
+    tbody.innerHTML = list.map(c => {
+      const checked = cliSelected.has(c.email) ? 'checked' : '';
+      const disabledAttr = c.blocked ? 'disabled title="No se puede seleccionar una clienta bloqueada"' : '';
+      const optIn = c.marketingOptIn === false ? 'No' : (c.marketingOptIn === true ? 'Sí' : 'No especificado');
+      return `
+        <tr class="adm-cliente-row">
+          <td data-label="Sel."><input type="checkbox" ${checked} ${disabledAttr} onchange="window.toggleClientSelected('${c.email}', this.checked)" /></td>
+          <td data-label="Nombre"><strong>${c.name || '—'}</strong></td>
+          <td data-label="Email" style="font-size:12px">${c.email || '—'}</td>
+          <td data-label="Teléfono" style="font-size:12px">${c.phone || '—'}</td>
+          <td data-label="Registro" style="font-size:12px">${c.createdAt ? formatDate(c.createdAt) : '—'}</td>
+          <td data-label="Pedidos">${c.orderCount || 0}</td>
+          <td data-label="Últ. compra" style="font-size:12px">${c.lastPurchase ? c.lastPurchase.toLocaleDateString('es-PY') : '—'}</td>
+          <td data-label="Estado">${c.blocked ? '<span class="adm-badge badge-cancelado">Bloqueada</span>' : '<span class="adm-badge badge-entregado">Activa</span>'}</td>
+          <td data-label="Promos" style="font-size:12px">${optIn}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+  updateClientSelectionCount_();
+}
+
+window.toggleClientSelected = (email, checked) => {
+  if (checked) cliSelected.add(email); else cliSelected.delete(email);
+  updateClientSelectionCount_();
+};
+function updateClientSelectionCount_() {
+  const el = document.getElementById('cli-selected-count');
+  if (el) el.textContent = `${cliSelected.size} seleccionadas`;
+}
+
+document.getElementById('cli-search').oninput = () => renderCorreosClientasTab();
+document.getElementById('cli-filter').onchange = () => renderCorreosClientasTab();
+document.getElementById('cli-select-all').onchange = (e) => {
+  const list = filteredClients_().filter(c => !c.blocked);
+  if (e.target.checked) list.forEach(c => cliSelected.add(c.email));
+  else list.forEach(c => cliSelected.delete(c.email));
+  renderCorreosClientasTab();
+};
+document.getElementById('cli-clear-selection').onclick = () => { cliSelected.clear(); renderCorreosClientasTab(); };
+document.getElementById('cli-use-in-promo').onclick = () => {
+  promoRecipients = Array.from(cliSelected).map(email => {
+    const c = allClientUsers.find(x => x.email === email);
+    return { email, name: c?.name || '' };
+  });
+  renderCorreosPromocionesTab();
+  toast(`${promoRecipients.length} destinatarias cargadas en Promociones`);
+  document.querySelector('[data-correos-tab="promociones"]').click();
+};
+
+// ---- Promociones ----
+function promoTemplateIds_() { return allEmailTemplates.filter(t => t.category === 'promo').map(t => t.id); }
+
+function renderCorreosPromocionesTab() {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const toggle = document.getElementById('promo-enabled-toggle');
+  if (toggle) toggle.checked = s.promoEnabled !== false;
+
+  const tplSelect = document.getElementById('promo-template-select');
+  if (tplSelect) {
+    const promoTemplates = allEmailTemplates.filter(t => (t.category === 'promo' || t.category === 'libre') && !t.archived && t.active !== false);
+    tplSelect.innerHTML = promoTemplates.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  }
+  renderPromoChips_();
+}
+
+function renderPromoChips_() {
+  const wrap = document.getElementById('promo-recipients-chips');
+  if (!wrap) return;
+  wrap.innerHTML = promoRecipients.map((r, i) => {
+    const c = allClientUsers.find(x => x.email.toLowerCase() === r.email.toLowerCase());
+    const blockedClass = c && c.blocked ? ' blocked' : '';
+    return `<span class="correos-chip${blockedClass}"><span>${r.name ? r.name + ' — ' : ''}${r.email}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button">✕</button></span>`;
+  }).join('');
+  const countEl = document.getElementById('promo-recipients-count');
+  if (countEl) countEl.textContent = `${promoRecipients.length} destinatarias`;
+}
+window.removePromoRecipient = (i) => { promoRecipients.splice(i, 1); renderPromoChips_(); };
+
+document.getElementById('promo-enabled-toggle').onchange = async (e) => {
+  emailSettingsCache = emailSettingsCache || defaultEmailSettings_();
+  emailSettingsCache.promoEnabled = e.target.checked;
+  await saveEmailSettingsMerge_({ promoEnabled: e.target.checked });
+  toast(`Promociones: ${e.target.checked ? 'activadas' : 'desactivadas'}`);
+};
+
+document.getElementById('promo-add-email-btn').onclick = () => {
+  const input = document.getElementById('promo-add-email');
+  const email = input.value.trim();
+  if (!TEST_EMAIL_RE.test(email)) { toast('Email con formato inválido'); return; }
+  const client = allClientUsers.find(c => c.email.toLowerCase() === email.toLowerCase());
+  if (client && client.blocked) { toast('No se puede agregar: esa clienta está bloqueada'); return; }
+  if (promoRecipients.some(r => r.email.toLowerCase() === email.toLowerCase())) { toast('Ya está en la lista'); return; }
+  promoRecipients.push({ email, name: client?.name || '' });
+  input.value = '';
+  renderPromoChips_();
+};
+
+document.getElementById('promo-preview-btn').onclick = () => {
+  const tplId = document.getElementById('promo-template-select').value;
+  const t = allEmailTemplates.find(x => x.id === tplId);
+  if (!t) { toast('Elegí una plantilla'); return; }
+  const first = promoRecipients[0];
+  openTplPreview_(t, { ...fakeTestVariables_(), clienteNombre: first?.name || 'Cliente de prueba' });
+};
+
+document.getElementById('promo-open-confirm-btn').onclick = async () => {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  if (s.promoEnabled === false) { toast('Las promociones están desactivadas en Correos → Configuración'); return; }
+  const tplId = document.getElementById('promo-template-select').value;
+  const tpl = allEmailTemplates.find(x => x.id === tplId);
+  if (!tpl) { toast('Elegí una plantilla promocional'); return; }
+  if (!promoRecipients.length) { toast('Agregá al menos una destinataria'); return; }
+
+  const safeRecipients = promoRecipients.filter(r => {
+    const c = allClientUsers.find(x => x.email.toLowerCase() === r.email.toLowerCase());
+    if (c && c.blocked) return false;
+    if (c && c.marketingOptIn === false) return false;
+    return true;
+  });
+  const excludedCount = promoRecipients.length - safeRecipients.length;
+  if (!safeRecipients.length) { toast('No hay destinatarias válidas para enviar (revisá bloqueadas / sin consentimiento)'); return; }
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const sentToday = allEmailLogs.filter(l => {
+    const d = l.sentAt?.toDate?.();
+    return d && d >= today && l.status === 'sent' && l.type === 'promo';
+  }).length;
+  const dailyLimit = s.promoDailyLimit || 100;
+  const remaining = Math.max(0, dailyLimit - sentToday);
+  const warnEl = document.getElementById('promo-confirm-warning');
+  const sendBtn = document.getElementById('promo-confirm-send-btn');
+  if (safeRecipients.length > remaining) {
+    warnEl.style.display = '';
+    warnEl.textContent = `Ya se enviaron ${sentToday} promociones hoy — el límite diario es ${dailyLimit}. Con esta lista (${safeRecipients.length}) se superaría el límite. Reducí la lista a ${remaining} o menos, o subí el límite en Configuración.`;
+    sendBtn.dataset.blocked = '1';
+  } else {
+    if (safeRecipients.length > 20) {
+      warnEl.style.display = '';
+      warnEl.textContent = `Vas a enviar esta promoción a ${safeRecipients.length} destinatarias.`;
+    } else {
+      warnEl.style.display = 'none';
+    }
+    sendBtn.dataset.blocked = '';
+  }
+
+  document.getElementById('promo-confirm-summary').innerHTML =
+    `Plantilla: <strong>${tpl.name}</strong><br>Destinatarias: <strong>${safeRecipients.length}</strong>` +
+    (excludedCount ? `<br><span style="color:#c0392b">${excludedCount} excluida(s) automáticamente (bloqueada o sin consentimiento)</span>` : '');
+  document.getElementById('promo-confirm-input').value = '';
+  sendBtn.disabled = true;
+  promoPendingSend = { tpl, recipients: safeRecipients };
+  document.getElementById('promo-confirm-overlay').style.display = 'flex';
+};
+
+window.closePromoConfirm = () => { document.getElementById('promo-confirm-overlay').style.display = 'none'; promoPendingSend = null; };
+
+document.getElementById('promo-confirm-input').oninput = (e) => {
+  const btn = document.getElementById('promo-confirm-send-btn');
+  const blocked = btn.dataset.blocked === '1';
+  btn.disabled = blocked || e.target.value.trim() !== 'CONFIRMAR';
+};
+
+document.getElementById('promo-confirm-send-btn').onclick = async () => {
+  if (!promoPendingSend) return;
+  const { tpl, recipients } = promoPendingSend;
+  document.getElementById('promo-confirm-overlay').style.display = 'none';
+  promoPendingSend = null;
+  await runPromoCampaign_(tpl, recipients);
+};
+
+async function runPromoCampaign_(tpl, recipients) {
+  const sendBtn = document.getElementById('promo-open-confirm-btn');
+  const resultEl = document.getElementById('promo-result');
+  const progressWrap = document.getElementById('promo-progress-wrap');
+  const progressBar = document.getElementById('promo-progress-bar');
+  const progressText = document.getElementById('promo-progress-text');
+
+  sendBtn.disabled = true;
+  progressWrap.style.display = '';
+  progressBar.style.width = '0%';
+  resultEl.textContent = '';
+
+  let campaignId = null;
+  try {
+    const ref = await addDoc(collection(db, 'emailCampaigns'), {
+      templateKey: tpl.id, templateName: tpl.name,
+      recipients: recipients.map(r => r.email),
+      status: 'sending', createdBy: currentUser?.email || '', createdAt: serverTimestamp(),
+      sentCount: 0, failedCount: 0, results: []
+    });
+    campaignId = ref.id;
+  } catch (e) {
+    console.error('No se pudo crear el registro de campaña:', e);
+  }
+
+  let sent = 0, failed = 0;
+  const allResults = [];
+  for (let i = 0; i < recipients.length; i += PROMO_BATCH_SIZE) {
+    const batch = recipients.slice(i, i + PROMO_BATCH_SIZE);
+    progressText.textContent = `Enviando ${Math.min(i + batch.length, recipients.length)} de ${recipients.length}…`;
+    try {
+      const resp = await sendBulkTemplatedEmail({
+        ...templateContentPayload_(tpl),
+        recipients: batch.map(r => ({ to: r.email, variables: { clienteNombre: r.name || '' } }))
+      });
+      const results = resp.results || batch.map(() => ({ sent: false, error: resp.error || 'sin respuesta' }));
+      results.forEach((r, idx) => {
+        const recipient = batch[idx];
+        const ok = !!r.sent;
+        if (ok) sent++; else failed++;
+        allResults.push({ email: recipient.email, status: ok ? 'sent' : 'failed', error: r.error || '' });
+        logEmailSend_({ type: 'promo', recipient: recipient.email, status: ok ? 'sent' : 'failed', templateKey: tpl.id, isAutomatic: false, error: r.error || '', campaignId, variables: { clienteNombre: recipient.name || '' } });
+      });
+    } catch (e) {
+      batch.forEach(recipient => {
+        failed++;
+        allResults.push({ email: recipient.email, status: 'failed', error: e.message });
+        logEmailSend_({ type: 'promo', recipient: recipient.email, status: 'failed', templateKey: tpl.id, isAutomatic: false, error: e.message, campaignId });
+      });
+    }
+    progressBar.style.width = `${Math.round((Math.min(i + batch.length, recipients.length) / recipients.length) * 100)}%`;
+    if (campaignId) {
+      try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { sentCount: sent, failedCount: failed, results: allResults }); }
+      catch (e) { console.error('No se pudo actualizar la campaña:', e); }
+    }
+  }
+
+  if (campaignId) {
+    try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { status: 'completed' }); } catch (e) {}
+  }
+
+  progressText.textContent = `Listo: ${sent} enviados, ${failed} fallidos.`;
+  resultEl.style.color = failed === 0 ? '#065f46' : (sent === 0 ? '#c0392b' : '#856404');
+  resultEl.textContent = failed === 0
+    ? `Promoción enviada a ${sent} destinatarias.`
+    : `Se enviaron ${sent} de ${recipients.length} — ${failed} fallidas (ver Historial para el detalle).`;
+
+  sendBtn.disabled = false;
+  promoRecipients = [];
+  renderPromoChips_();
+  renderCorreosDashboard();
+  renderCorreosHistorialTab();
+}
+
+// ---- Historial ----
+function renderCorreosHistorialTab() {
+  const typeSelect = document.getElementById('hist-filter-type');
+  if (!typeSelect) return;
+  const types = Array.from(new Set(allEmailLogs.map(l => l.type).filter(Boolean)));
+  const currentVal = typeSelect.value;
+  typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${t}">${templateLabel_(t)}</option>`).join('');
+  typeSelect.value = types.includes(currentVal) ? currentVal : '';
+
+  const q = (document.getElementById('hist-search').value || '').toLowerCase();
+  const statusVal = document.getElementById('hist-filter-status').value;
+  const typeVal = document.getElementById('hist-filter-type').value;
+  const fromVal = document.getElementById('hist-filter-from').value;
+  const toVal = document.getElementById('hist-filter-to').value;
+
+  let list = allEmailLogs.slice();
+  if (q) list = list.filter(l => (l.recipient || '').toLowerCase().includes(q));
+  if (statusVal) list = list.filter(l => l.status === statusVal);
+  if (typeVal) list = list.filter(l => l.type === typeVal);
+  if (fromVal) { const from = new Date(fromVal); list = list.filter(l => { const d = l.sentAt?.toDate?.(); return d && d >= from; }); }
+  if (toVal) { const to = new Date(toVal); to.setHours(23, 59, 59, 999); list = list.filter(l => { const d = l.sentAt?.toDate?.(); return d && d <= to; }); }
+
+  const tbody = document.getElementById('hist-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.slice(0, 200).map(l => `
+    <tr class="adm-log-row">
+      <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
+      <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+      <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
+      <td data-label="Estado">${logStatusBadge_(l.status)}</td>
+      <td data-label="Enviado por" style="font-size:12px">${l.sentBy || '—'}</td>
+      <td data-label="Origen" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
+      <td data-label="Acciones">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail('${l.id}')" type="button">Ver</button>
+          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog('${l.id}')" type="button">Reintentar</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('hist-search').oninput = () => renderCorreosHistorialTab();
+document.getElementById('hist-filter-status').onchange = () => renderCorreosHistorialTab();
+document.getElementById('hist-filter-type').onchange = () => renderCorreosHistorialTab();
+document.getElementById('hist-filter-from').onchange = () => renderCorreosHistorialTab();
+document.getElementById('hist-filter-to').onchange = () => renderCorreosHistorialTab();
+
+window.viewLogDetail = (id) => {
+  const l = allEmailLogs.find(x => x.id === id);
+  if (!l) return;
+  alert(
+    `Tipo: ${templateLabel_(l.type)}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
+    `Enviado por: ${l.sentBy || '—'}\nOrigen: ${l.isAutomatic ? 'Automático' : 'Manual'}\n` +
+    `Pedido relacionado: ${l.orderId || '—'}\n` + (l.error ? `Error: ${l.error}` : 'Sin errores')
+  );
+};
+
+window.retryFailedLog = async (id) => {
+  const l = allEmailLogs.find(x => x.id === id);
+  if (!l || !l.templateKey) { toast('No se puede reintentar este envío'); return; }
+  const tpl = allEmailTemplates.find(t => (t.key || t.id) === l.templateKey);
+  if (!tpl) { toast('La plantilla original ya no existe'); return; }
+  try {
+    const result = await sendTemplatedEmail({ to: l.recipient, ...templateContentPayload_(tpl), variables: l.variables || {} });
+    await logEmailSend_({ type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
+    toast(result?.success ? 'Reenviado correctamente' : 'Falló el reintento');
+  } catch (e) {
+    toast('Error al reintentar: ' + e.message);
+  }
+};
+
+// ---- Configuración de correos ----
+function renderCorreosConfigTab() {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  document.getElementById('cec-order-enabled').checked = s.orderEmailsEnabled !== false;
+  document.getElementById('cec-internal-enabled').checked = s.internalEmailEnabled !== false;
+  document.getElementById('cec-customer-enabled').checked = s.customerEmailEnabled !== false;
+  document.getElementById('cec-test-enabled').checked = s.testEmailsEnabled !== false;
+  document.getElementById('cec-promo-enabled').checked = s.promoEnabled !== false;
+  document.getElementById('cec-sender-name').value = s.senderName || 'Tintin Accesorios';
+  document.getElementById('cec-sender-email').value = s.senderEmail || EMAIL_SENDER_ADDRESS;
+  document.getElementById('cec-internal-email').value = s.internalEmail || 'tintinaccs@gmail.com';
+  document.getElementById('cec-whatsapp').value = s.whatsappNumber || '';
+  document.getElementById('cec-signature').value = s.signature || '';
+  document.getElementById('cec-footer').value = s.footer || '';
+  document.getElementById('cec-test-limit').value = s.testDailyLimit || 20;
+  document.getElementById('cec-promo-limit').value = s.promoDailyLimit || 100;
+}
+
+document.getElementById('btn-save-correos-config').onclick = async () => {
+  const patch = {
+    orderEmailsEnabled: document.getElementById('cec-order-enabled').checked,
+    internalEmailEnabled: document.getElementById('cec-internal-enabled').checked,
+    customerEmailEnabled: document.getElementById('cec-customer-enabled').checked,
+    testEmailsEnabled: document.getElementById('cec-test-enabled').checked,
+    promoEnabled: document.getElementById('cec-promo-enabled').checked,
+    senderName: document.getElementById('cec-sender-name').value.trim() || 'Tintin Accesorios',
+    internalEmail: document.getElementById('cec-internal-email').value.trim() || 'tintinaccs@gmail.com',
+    whatsappNumber: document.getElementById('cec-whatsapp').value.trim(),
+    signature: document.getElementById('cec-signature').value,
+    footer: document.getElementById('cec-footer').value,
+    testDailyLimit: Number(document.getElementById('cec-test-limit').value) || 20,
+    promoDailyLimit: Number(document.getElementById('cec-promo-limit').value) || 100,
+  };
+  emailSettingsCache = Object.assign(emailSettingsCache || defaultEmailSettings_(), patch);
+  await saveEmailSettingsMerge_(patch);
+  toast('Configuración de correos guardada');
+  renderCorreosDashboard();
+};
+
+// ---- Tabs del módulo Correos ----
+document.querySelectorAll('#correos-tabs .correos-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#correos-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.correos-panel').forEach(p => p.classList.toggle('active', p.id === `correos-panel-${btn.dataset.correosTab}`));
+  });
+});
+
+// ---- Disparo automático desde Pedidos (updateOrderStatus/updatePayStatus) ----
+async function maybeSendOrderStatusEmail_(order, kind, value) {
+  try {
+    const key = kind === 'payment' ? PAY_STATUS_TO_TYPE[value] : ORDER_STATUS_TO_TYPE[value];
+    if (!key || !order || !order.userEmail) return;
+    const settings = emailSettingsCache || await getEmailSettingsFresh_();
+    if (settings.orderEmailsEnabled === false) return;
+    if (!(settings.orderTypesEnabled && settings.orderTypesEnabled[key])) return;
+    const tplKey = (settings.orderTypeTemplateMap && settings.orderTypeTemplateMap[key]) || key;
+    let tpl = allEmailTemplates.find(t => (t.key || t.id) === tplKey);
+    if (!tpl) {
+      const snap = await getDoc(doc(db, 'emailTemplates', tplKey));
+      if (snap.exists()) tpl = { id: snap.id, ...snap.data() };
+    }
+    if (!tpl || tpl.active === false) return;
+    const variables = orderToVariables_(order);
+    const result = await sendTemplatedEmail({ to: order.userEmail, ...templateContentPayload_(tpl), variables });
+    await logEmailSend_({ type: key, recipient: order.userEmail, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: true, error: result?.error || '', orderId: order.id, variables });
+  } catch (e) {
+    console.error('[correos] auto-send falló (no bloquea el cambio de estado):', e);
+  }
+}
 
 // ======== ENVÍOS: ciudades (CRUD real, con lista en tiempo real) ========
 let shipCities  = { delivery: [], encomienda: [] };
@@ -5184,6 +6738,82 @@ window.saveOrderEdit = async function() {
     <div style="padding:16px 24px;border-top:1px solid var(--adm-border);display:flex;gap:10px;justify-content:flex-end">
       <button class="adm-btn" onclick="closeOrderEdit()">Cancelar</button>
       <button class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CORREOS — MODALES (editar plantilla / vista previa / confirmar promoción)
+══════════════════════════════════════ -->
+<div id="tpl-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
+  <div style="background:#fff;border-radius:16px;max-width:640px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
+      <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Editar plantilla <span id="tpl-edit-name" style="color:var(--adm-muted);font-size:13px"></span></div>
+      <button onclick="closeTplEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:14px;max-height:60vh;overflow-y:auto">
+      <input type="hidden" id="tpl-edit-id">
+      <div class="adm-field" id="tpl-edit-name-field" style="display:none">
+        <label class="adm-label">Nombre de la plantilla</label>
+        <input type="text" class="adm-input" id="tpl-edit-name-input" />
+      </div>
+      <div class="adm-field"><label class="adm-label">Asunto</label><input type="text" class="adm-input" id="tpl-edit-subject" /></div>
+      <div class="adm-field"><label class="adm-label">Saludo general</label><input type="text" class="adm-input" id="tpl-edit-greeting" /></div>
+      <div class="adm-field"><label class="adm-label">Texto de introducción</label><textarea class="adm-textarea adm-input" id="tpl-edit-intro" rows="2"></textarea></div>
+      <div class="adm-field"><label class="adm-label">Mensaje promocional</label><textarea class="adm-textarea adm-input" id="tpl-edit-promo" rows="2"></textarea></div>
+      <div class="adm-field"><label class="adm-label">Texto de cierre</label><textarea class="adm-textarea adm-input" id="tpl-edit-closing" rows="2"></textarea></div>
+      <div class="adm-field"><label class="adm-label">Firma</label><input type="text" class="adm-input" id="tpl-edit-signature" /></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="adm-field"><label class="adm-label">Texto del botón</label><input type="text" class="adm-input" id="tpl-edit-button-text" /></div>
+        <div class="adm-field"><label class="adm-label">URL del botón</label><input type="url" class="adm-input" id="tpl-edit-button-url" /></div>
+      </div>
+      <div class="adm-field"><label class="adm-label">Frase de marca</label><input type="text" class="adm-input" id="tpl-edit-brand" /></div>
+      <div class="adm-field"><label class="adm-label">Pie de correo</label><textarea class="adm-textarea adm-input" id="tpl-edit-footer" rows="2"></textarea></div>
+      <div class="adm-toggle-wrap">
+        <label class="adm-toggle"><input type="checkbox" id="tpl-edit-active" /><span class="adm-toggle-slider"></span></label>
+        <div class="adm-toggle-label">Plantilla activa</div>
+      </div>
+      <div style="background:#f7f4f6;border-radius:10px;padding:12px 14px;font-size:12px;color:var(--adm-muted)">
+        <strong>Variables disponibles</strong> (se completan solas con datos reales — no se editan a mano):
+        <div id="tpl-edit-vars-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--adm-border);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;gap:8px">
+        <button class="adm-btn adm-btn-outline adm-btn-sm" id="tpl-edit-restore-btn" type="button">Restaurar original</button>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" type="button" id="tpl-edit-preview-btn">Vista previa</button>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="adm-btn" onclick="closeTplEdit()">Cancelar</button>
+        <button class="adm-btn adm-btn-primary" id="tpl-edit-save-btn">Guardar plantilla</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tpl-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3100;overflow-y:auto;padding:24px 16px">
+  <div style="background:#fff;border-radius:16px;max-width:680px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
+      <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Vista previa</div>
+      <button onclick="closeTplPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+    </div>
+    <div style="padding:20px 24px">
+      <div style="font-size:12px;color:var(--adm-muted);margin-bottom:10px">Asunto: <strong id="tpl-preview-subject" style="color:var(--adm-text)"></strong></div>
+      <iframe id="tpl-preview-frame" title="Vista previa del correo" style="width:100%;height:60vh;border:1px solid var(--adm-border);border-radius:10px"></iframe>
+    </div>
+  </div>
+</div>
+
+<div id="promo-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4100;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px;box-shadow:var(--shadow-lg)">
+    <div style="font-size:16px;font-weight:800;margin-bottom:10px">Confirmar envío de promoción</div>
+    <div id="promo-confirm-summary" style="font-size:13px;color:var(--adm-muted);margin-bottom:8px"></div>
+    <div id="promo-confirm-warning" style="display:none;background:#fff3cd;color:#856404;padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:14px"></div>
+    <label class="adm-label" style="display:block;margin-bottom:6px">Escribí CONFIRMAR para enviar</label>
+    <input type="text" class="adm-input" id="promo-confirm-input" placeholder="CONFIRMAR" style="margin-bottom:16px" autocomplete="off" />
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="adm-btn" onclick="closePromoConfirm()">Cancelar</button>
+      <button class="adm-btn adm-btn-primary" id="promo-confirm-send-btn" disabled>Enviar promoción</button>
     </div>
   </div>
 </div>
