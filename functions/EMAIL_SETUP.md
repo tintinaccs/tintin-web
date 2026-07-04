@@ -53,6 +53,21 @@ incluye `adminSent`/`customerSent` por separado, para que el sitio pueda
 guardar `notificationStatus: 'sent'` (los dos salieron), `'partial'` (salió
 uno solo) o `'failed'` (fallaron los dos) en vez de un simple sí/no.
 
+**Sobre entregabilidad (que no caiga en spam):** el contenido de ambos
+correos está pensado para que una cuenta de Gmail nueva como
+`tintinpedidos@gmail.com` — sin historial de envío — tenga menos chances de
+que Gmail lo marque como spam: sin emojis, sin signos de exclamación, con
+asuntos simples ("Nuevo pedido recibido en Tintin" / "Recibimos tu pedido en
+Tintin"), un solo enlace de WhatsApp por correo (sin botones extra ni link a
+Instagram en la confirmación a la clienta), y con `name: STORE_NAME` para
+que el remitente se vea como "Tintin Accesorios" en vez de una dirección
+pelada. `MailApp.sendEmail` arma automáticamente un correo multipart
+texto+HTML cuando se le pasan `body` y `htmlBody` juntos (como hace este
+código) — eso ya está bien. Aun así, una cuenta nueva puede seguir cayendo
+en spam los primeros días hasta que Gmail le genere reputación de envío —
+marcar los primeros correos como "No es spam" y agregar la cuenta a
+contactos ayuda a acelerar eso.
+
 ```javascript
 const SHARED_SECRET   = 'TU_SECRETO_AQUI';
 const ADMIN_EMAIL     = 'tintinaccs@gmail.com';  // a quién le llega el correo interno — NO es quien envía
@@ -78,10 +93,11 @@ function doPost(e) {
     // otro sí salió bien.
     let adminSent = false, adminError = '';
     try {
-      const adminSubject = (isResend ? '🔁 [Reenviado] ' : '') +
-        'Nuevo pedido #' + shortId + ' — ' + fmtPrice(order.total) + ' — ' + (order.userName || 'Cliente');
+      const adminSubject = (isResend ? 'Reenvío: ' : '') +
+        'Nuevo pedido recibido en Tintin — Pedido #' + shortId;
       MailApp.sendEmail({
         to: ADMIN_EMAIL,
+        name: STORE_NAME,
         subject: adminSubject,
         body: buildAdminText(shortId, order),
         htmlBody: buildAdminHtml(shortId, order)
@@ -100,7 +116,8 @@ function doPost(e) {
       try {
         MailApp.sendEmail({
           to: order.userEmail,
-          subject: 'Recibimos tu pedido en Tintin 💗 Pedido #' + shortId,
+          name: STORE_NAME,
+          subject: 'Recibimos tu pedido en Tintin — Pedido #' + shortId,
           body: buildCustomerText(shortId, order),
           htmlBody: buildCustomerHtml(shortId, order)
         });
@@ -169,8 +186,8 @@ function waLink(phone, text) {
 // Mensaje que la tienda le manda a la CLIENTA (editable antes de enviar en WhatsApp)
 function waGreetingToCustomer(shortId, order) {
   const first = String(order.userName || '').trim().split(' ')[0] || '';
-  return 'Hola' + (first ? ' ' + first : '') + '! 👋 Soy de ' + STORE_NAME +
-    ', te escribo por tu pedido #' + shortId + '. 💗';
+  return 'Hola' + (first ? ' ' + first : '') + ', soy de ' + STORE_NAME +
+    ', te escribo por tu pedido #' + shortId + '.';
 }
 
 // Mensaje que la CLIENTA le manda a la tienda (botón "Escribinos por WhatsApp" del correo de confirmación)
@@ -180,12 +197,12 @@ function waGreetingToStore(shortId) {
 
 function shipMethodLabel(order) {
   const m = (order.shipping && order.shipping.method) || '';
-  return { delivery: '🚚 Delivery (Zona Central)', encomienda: '📦 Encomienda (Interior)', retiro: '🏪 Retiro en tienda' }[m] || m || '—';
+  return { delivery: 'Delivery (Zona Central)', encomienda: 'Encomienda (Interior)', retiro: 'Retiro en tienda' }[m] || m || '—';
 }
 
 function payMethodLabel(order) {
   const m = (order.payment && order.payment.method) || '';
-  return { efectivo: '💵 Efectivo (contra entrega)', transferencia: '🏦 Transferencia bancaria', pagopark: '📱 PagoPark', tarjeta: '💳 Tarjeta' }[m] || m || '—';
+  return { efectivo: 'Efectivo (contra entrega)', transferencia: 'Transferencia bancaria', pagopark: 'PagoPark', tarjeta: 'Tarjeta' }[m] || m || '—';
 }
 
 // order.discount es opcional — hoy la tienda no tiene cupones, pero si algún
@@ -197,7 +214,7 @@ function discountAmount(order) {
 
 function itemLineText(i) {
   const variant = i.variant ? ' (' + i.variant + ')' : '';
-  return '  • ' + i.qty + 'x ' + i.name + variant + ' — ' + fmtPrice(i.price) + ' c/u = ' + fmtPrice(i.price * i.qty);
+  return '  ' + i.qty + 'x ' + i.name + variant + ' — ' + fmtPrice(i.price) + ' c/u = ' + fmtPrice(i.price * i.qty);
 }
 
 function itemRowHtml(i) {
@@ -207,9 +224,9 @@ function itemRowHtml(i) {
   const variant = i.variant ? '<div style="font-size:11px;color:#999">' + i.variant + '</div>' : '';
   return '<tr>' +
     '<td style="padding:8px;width:44px">' + img + '</td>' +
-    '<td style="padding:8px"><strong>' + i.qty + 'x</strong> ' + i.name + variant +
+    '<td style="padding:8px">' + i.qty + 'x ' + i.name + variant +
       '<div style="font-size:11px;color:#aaa">' + fmtPrice(i.price) + ' c/u</div></td>' +
-    '<td style="padding:8px;text-align:right;white-space:nowrap;font-weight:600">' + fmtPrice(i.price * i.qty) + '</td>' +
+    '<td style="padding:8px;text-align:right;white-space:nowrap">' + fmtPrice(i.price * i.qty) + '</td>' +
   '</tr>';
 }
 
@@ -222,33 +239,33 @@ function buildAdminText(shortId, order) {
   const wa = waLink(order.userPhone, waGreetingToCustomer(shortId, order));
   const shipping = order.shipping || {};
   const discount = discountAmount(order);
-  const line = '━'.repeat(40);
+  const line = '-'.repeat(40);
 
-  return '🛍️ PEDIDO — ' + STORE_NAME.toUpperCase() + '\n' + line + '\n' +
-    '📋 Pedido:   #' + shortId + '\n' +
-    '📅 Fecha:    ' + fmtDate(order.createdAt) + '\n' + line + '\n' +
-    '👤 Cliente:  ' + (order.userName || '—') + '\n' +
-    '📞 Teléfono: ' + (order.userPhone || '—') + '\n' +
-    (wa ? '💬 WhatsApp (mensaje ya redactado, editable): ' + wa + '\n' : '') +
-    (order.userEmail ? '📧 Email:    ' + order.userEmail + '\n' : '') +
-    '📍 Ciudad:   ' + (shipping.city || '—') + '\n' +
-    '🗺️ Zona:     ' + zoneLabel(order) + '\n' +
-    (shipping.address ? '🏠 Dirección: ' + shipping.address + '\n' : '') +
-    (shipping.mapLocation && shipping.mapLocation.name ? '📍 Lugar: ' + shipping.mapLocation.name + '\n' : '') +
-    (shipping.referencia ? '📌 Referencia: ' + shipping.referencia + '\n' : '') +
-    (shipping.mapLocation ? '📌 Ubicación GPS: https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '\n' : '') +
+  return 'Nuevo pedido en ' + STORE_NAME + '\n' + line + '\n' +
+    'Pedido:   #' + shortId + '\n' +
+    'Fecha:    ' + fmtDate(order.createdAt) + '\n' + line + '\n' +
+    'Cliente:  ' + (order.userName || '—') + '\n' +
+    'Teléfono: ' + (order.userPhone || '—') + '\n' +
+    (wa ? 'WhatsApp: ' + wa + '\n' : '') +
+    (order.userEmail ? 'Email:    ' + order.userEmail + '\n' : '') +
+    'Ciudad:   ' + (shipping.city || '—') + '\n' +
+    'Zona:     ' + zoneLabel(order) + '\n' +
+    (shipping.address ? 'Dirección: ' + shipping.address + '\n' : '') +
+    (shipping.mapLocation && shipping.mapLocation.name ? 'Lugar: ' + shipping.mapLocation.name + '\n' : '') +
+    (shipping.referencia ? 'Referencia: ' + shipping.referencia + '\n' : '') +
+    (shipping.mapLocation ? 'Ubicación: https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '\n' : '') +
     line + '\n' +
-    '🚚 Entrega:  ' + shipMethodLabel(order) + '\n' +
-    '💳 Pago:     ' + payMethodLabel(order) + '\n' + line + '\n' +
-    '🛒 PRODUCTOS:\n' + items + '\n' + line + '\n' +
-    '   Subtotal:  ' + fmtPrice(order.subtotal) + '\n' +
-    (discount > 0 ? '   Descuento: -' + fmtPrice(discount) + '\n' : '') +
-    '   Envío:     ' + fmtShipping(order) + '\n' +
-    '💰 TOTAL:    ' + fmtPrice(order.total) + (order.shippingPending ? ' (+ envío a coordinar)' : '') + '\n' + line + '\n' +
-    '📊 Estado pedido: ' + (order.status || 'pendiente') + '\n' +
-    '💳 Estado pago:   ' + ((order.payment && order.payment.status) || 'pendiente') + '\n' +
-    (order.notes ? '\n📝 Notas: ' + order.notes + '\n' : '') + line + '\n' +
-    '👉 Ver en admin: ' + ADMIN_PANEL + '\n';
+    'Entrega:  ' + shipMethodLabel(order) + '\n' +
+    'Pago:     ' + payMethodLabel(order) + '\n' + line + '\n' +
+    'Productos:\n' + items + '\n' + line + '\n' +
+    '  Subtotal:  ' + fmtPrice(order.subtotal) + '\n' +
+    (discount > 0 ? '  Descuento: -' + fmtPrice(discount) + '\n' : '') +
+    '  Envío:     ' + fmtShipping(order) + '\n' +
+    'Total:    ' + fmtPrice(order.total) + (order.shippingPending ? ' (+ envío a coordinar)' : '') + '\n' + line + '\n' +
+    'Estado pedido: ' + (order.status || 'pendiente') + '\n' +
+    'Estado pago:   ' + ((order.payment && order.payment.status) || 'pendiente') + '\n' +
+    (order.notes ? '\nNotas: ' + order.notes + '\n' : '') + line + '\n' +
+    'Ver en admin: ' + ADMIN_PANEL + '\n';
 }
 
 function buildAdminHtml(shortId, order) {
@@ -257,12 +274,12 @@ function buildAdminHtml(shortId, order) {
   const discount = discountAmount(order);
   const itemRows = (order.items || []).map(itemRowHtml).join('');
 
-  return '<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
-    '<div style="background:#fff;border-radius:12px;padding:24px;border:1px solid #f0d8e0">' +
-    '<h2 style="color:#b84c72;margin:0 0 16px">🛍️ Pedido — ' + STORE_NAME + '</h2>' +
-    '<p style="color:#888;margin:0 0 20px">Pedido <strong>#' + shortId + '</strong> recibido el ' + fmtDate(order.createdAt) + '</p>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px">' +
-    '<tr><td style="color:#888;padding:4px 0;width:140px">Cliente</td><td><strong>' + (order.userName || '—') + '</strong></td></tr>' +
+  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+    '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:24px">' +
+    '<h2 style="color:#b84c72;margin:0 0 16px;font-size:18px">Nuevo pedido en ' + STORE_NAME + '</h2>' +
+    '<p style="color:#666;margin:0 0 20px;font-size:13px">Pedido #' + shortId + ' recibido el ' + fmtDate(order.createdAt) + '</p>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">' +
+    '<tr><td style="color:#888;padding:4px 0;width:140px">Cliente</td><td>' + (order.userName || '—') + '</td></tr>' +
     '<tr><td style="color:#888;padding:4px 0">Teléfono</td><td>' + (order.userPhone || '—') + '</td></tr>' +
     (order.userEmail ? '<tr><td style="color:#888;padding:4px 0">Email</td><td>' + order.userEmail + '</td></tr>' : '') +
     '<tr><td style="color:#888;padding:4px 0">Ciudad</td><td>' + (shipping.city || '—') + '</td></tr>' +
@@ -270,27 +287,26 @@ function buildAdminHtml(shortId, order) {
     (shipping.address ? '<tr><td style="color:#888;padding:4px 0">Dirección</td><td>' + shipping.address + '</td></tr>' : '') +
     (shipping.mapLocation && shipping.mapLocation.name ? '<tr><td style="color:#888;padding:4px 0">Lugar</td><td>' + shipping.mapLocation.name + '</td></tr>' : '') +
     (shipping.referencia ? '<tr><td style="color:#888;padding:4px 0">Referencia</td><td>' + shipping.referencia + '</td></tr>' : '') +
-    (shipping.mapLocation ? '<tr><td style="color:#888;padding:4px 0">Ubicación</td><td><a href="https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '">Ver en el mapa</a></td></tr>' : '') +
+    (shipping.mapLocation ? '<tr><td style="color:#888;padding:4px 0">Ubicación</td><td><a href="https://maps.google.com/?q=' + shipping.mapLocation.lat + ',' + shipping.mapLocation.lng + '" style="color:#b84c72">Ver en el mapa</a></td></tr>' : '') +
     '<tr><td style="color:#888;padding:4px 0">Entrega</td><td>' + shipMethodLabel(order) + '</td></tr>' +
     '<tr><td style="color:#888;padding:4px 0">Pago</td><td>' + payMethodLabel(order) + '</td></tr>' +
     '<tr><td style="color:#888;padding:4px 0">Estado pedido</td><td>' + (order.status || 'pendiente') + '</td></tr>' +
     '<tr><td style="color:#888;padding:4px 0">Estado pago</td><td>' + ((order.payment && order.payment.status) || 'pendiente') + '</td></tr>' +
     '</table>' +
-    '<h3 style="color:#b84c72;margin:16px 0 8px">Productos</h3>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px">' + itemRows +
-    '<tr style="border-top:2px solid #f0d8e0"><td colspan="2" style="padding:8px;color:#888">Subtotal</td><td style="padding:8px;text-align:right">' + fmtPrice(order.subtotal) + '</td></tr>' +
+    '<h3 style="color:#b84c72;margin:16px 0 8px;font-size:14px">Productos</h3>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">' + itemRows +
+    '<tr style="border-top:1px solid #e5e5e5"><td colspan="2" style="padding:8px;color:#888">Subtotal</td><td style="padding:8px;text-align:right">' + fmtPrice(order.subtotal) + '</td></tr>' +
     (discount > 0 ? '<tr><td colspan="2" style="padding:4px 8px;color:#888">Descuento</td><td style="padding:4px 8px;text-align:right;color:#c0392b">-' + fmtPrice(discount) + '</td></tr>' : '') +
     '<tr><td colspan="2" style="padding:4px 8px;color:#888">Envío</td><td style="padding:4px 8px;text-align:right">' + fmtShipping(order) + '</td></tr>' +
-    '<tr style="background:#fef5f8"><td colspan="2" style="padding:10px 8px;font-weight:700;color:#b84c72;font-size:16px">TOTAL</td>' +
-    '<td style="padding:10px 8px;text-align:right;font-weight:700;color:#b84c72;font-size:16px">' + fmtPrice(order.total) +
-    (order.shippingPending ? ' <span style="font-size:11px;font-weight:400;color:#888">(+ envío a coordinar)</span>' : '') + '</td></tr>' +
+    '<tr><td colspan="2" style="padding:10px 8px;font-weight:bold;color:#b84c72">Total</td>' +
+    '<td style="padding:10px 8px;text-align:right;font-weight:bold;color:#b84c72">' + fmtPrice(order.total) +
+    (order.shippingPending ? ' <span style="font-size:11px;font-weight:normal;color:#888">(+ envío a coordinar)</span>' : '') + '</td></tr>' +
     '</table>' +
-    (order.notes ? '<p style="background:#fef5f8;border-radius:8px;padding:12px;color:#555"><strong>Notas:</strong> ' + order.notes + '</p>' : '') +
-    '<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">' +
-    '<a href="' + ADMIN_PANEL + '" style="display:inline-block;background:#b84c72;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">Ver pedido en admin →</a>' +
-    (wa ? '<a href="' + wa + '" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">💬 Escribirle por WhatsApp</a>' : '') +
-    '</div>' +
-    '<p style="font-size:11px;color:#bbb;margin-top:10px">El botón de WhatsApp abre la conversación con un mensaje ya escrito — lo podés editar antes de mandarlo.</p>' +
+    (order.notes ? '<p style="color:#555;font-size:13px"><strong>Notas:</strong> ' + order.notes + '</p>' : '') +
+    '<p style="font-size:13px;margin-top:20px">' +
+    '<a href="' + ADMIN_PANEL + '" style="color:#b84c72">Ver pedido en el panel de administración</a>' +
+    (wa ? '<br><a href="' + wa + '" style="color:#25D366">Escribirle por WhatsApp al cliente</a>' : '') +
+    '</p>' +
     '</div></body></html>';
 }
 
@@ -303,22 +319,22 @@ function buildCustomerText(shortId, order) {
   const shipping = order.shipping || {};
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   const storeWa = waLink(order.storeWhatsapp || DEFAULT_STORE_WHATSAPP, waGreetingToStore(shortId));
-  const line = '━'.repeat(40);
+  const line = '-'.repeat(40);
 
-  return '💗 ¡Gracias por tu compra' + (first ? ', ' + first : '') + '!\n' + line + '\n' +
+  return 'Gracias por tu pedido' + (first ? ', ' + first : '') + '.\n' + line + '\n' +
     'Recibimos tu pedido en ' + STORE_NAME + '. Estamos preparando todo con\n' +
-    'mucho cuidado y te vamos a contactar para confirmar los detalles del envío.\n' + line + '\n' +
-    '📋 Pedido:  #' + shortId + '\n' +
-    '📅 Fecha:   ' + fmtDate(order.createdAt) + '\n' +
-    '📊 Estado:  Pendiente de confirmación\n' + line + '\n' +
-    '🛒 TUS PRODUCTOS:\n' + items + '\n' + line + '\n' +
-    '   Subtotal: ' + fmtPrice(order.subtotal) + '\n' +
-    '   Envío:    ' + fmtShipping(order) + '\n' +
-    '💰 TOTAL:   ' + fmtPrice(order.total) + (order.shippingPending ? ' (+ envío a coordinar)' : '') + '\n' + line + '\n' +
-    (shipping.address ? '🏠 Dirección de entrega: ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '\n' : '') +
-    (shipping.city && !shipping.address ? '📍 Ciudad: ' + shipping.city + '\n' : '') + line + '\n' +
+    'cuidado y te vamos a contactar para confirmar los detalles del envío.\n' + line + '\n' +
+    'Pedido:  #' + shortId + '\n' +
+    'Fecha:   ' + fmtDate(order.createdAt) + '\n' +
+    'Estado:  Pendiente de confirmación\n' + line + '\n' +
+    'Tus productos:\n' + items + '\n' + line + '\n' +
+    '  Subtotal: ' + fmtPrice(order.subtotal) + '\n' +
+    '  Envío:    ' + fmtShipping(order) + '\n' +
+    'Total:   ' + fmtPrice(order.total) + (order.shippingPending ? ' (+ envío a coordinar)' : '') + '\n' + line + '\n' +
+    (shipping.address ? 'Dirección de entrega: ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '\n' : '') +
+    (shipping.city && !shipping.address ? 'Ciudad: ' + shipping.city + '\n' : '') + line + '\n' +
     '¿Tenés alguna duda? Escribinos por WhatsApp' + (storeWa ? ': ' + storeWa : '') + '\n' +
-    '\nCon cariño,\n' + STORE_NAME + ' 💗\n';
+    '\nGracias por elegirnos,\n' + STORE_NAME + '\n';
 }
 
 function buildCustomerHtml(shortId, order) {
@@ -327,30 +343,29 @@ function buildCustomerHtml(shortId, order) {
   const storeWa = waLink(order.storeWhatsapp || DEFAULT_STORE_WHATSAPP, waGreetingToStore(shortId));
   const itemRows = (order.items || []).map(itemRowHtml).join('');
 
-  return '<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
-    '<div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #f0d8e0">' +
-    '<h2 style="color:#b84c72;margin:0 0 12px">💗 ¡Gracias por tu compra' + (first ? ', ' + first : '') + '!</h2>' +
-    '<p style="color:#555;line-height:1.6;margin:0 0 20px">Recibimos tu pedido en <strong>' + STORE_NAME + '</strong>. ' +
-    'Estamos preparando todo con mucho cuidado y te vamos a contactar para confirmar los detalles del envío.</p>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px;background:#fef5f8;border-radius:8px">' +
-    '<tr><td style="padding:10px 14px;color:#888">Pedido</td><td style="padding:10px 14px;text-align:right"><strong>#' + shortId + '</strong></td></tr>' +
-    '<tr><td style="padding:0 14px 10px;color:#888">Fecha</td><td style="padding:0 14px 10px;text-align:right">' + fmtDate(order.createdAt) + '</td></tr>' +
-    '<tr><td style="padding:0 14px 10px;color:#888">Estado</td><td style="padding:0 14px 10px;text-align:right">Pendiente de confirmación</td></tr>' +
+  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+    '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
+    '<h2 style="color:#b84c72;margin:0 0 12px;font-size:18px">Gracias por tu pedido' + (first ? ', ' + first : '') + '.</h2>' +
+    '<p style="color:#555;line-height:1.6;margin:0 0 20px;font-size:14px">Recibimos tu pedido en ' + STORE_NAME + '. ' +
+    'Estamos preparando todo con cuidado y te vamos a contactar para confirmar los detalles del envío.</p>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">' +
+    '<tr><td style="padding:6px 0;color:#888">Pedido</td><td style="padding:6px 0;text-align:right">#' + shortId + '</td></tr>' +
+    '<tr><td style="padding:6px 0;color:#888">Fecha</td><td style="padding:6px 0;text-align:right">' + fmtDate(order.createdAt) + '</td></tr>' +
+    '<tr><td style="padding:6px 0;color:#888">Estado</td><td style="padding:6px 0;text-align:right">Pendiente de confirmación</td></tr>' +
     '</table>' +
-    '<h3 style="color:#b84c72;margin:16px 0 8px">Tus productos</h3>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px">' + itemRows +
-    '<tr style="border-top:2px solid #f0d8e0"><td colspan="2" style="padding:8px;color:#888">Subtotal</td><td style="padding:8px;text-align:right">' + fmtPrice(order.subtotal) + '</td></tr>' +
+    '<h3 style="color:#b84c72;margin:16px 0 8px;font-size:14px">Tus productos</h3>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">' + itemRows +
+    '<tr style="border-top:1px solid #e5e5e5"><td colspan="2" style="padding:8px;color:#888">Subtotal</td><td style="padding:8px;text-align:right">' + fmtPrice(order.subtotal) + '</td></tr>' +
     '<tr><td colspan="2" style="padding:4px 8px;color:#888">Envío</td><td style="padding:4px 8px;text-align:right">' + fmtShipping(order) + '</td></tr>' +
-    '<tr style="background:#fef5f8"><td colspan="2" style="padding:10px 8px;font-weight:700;color:#b84c72;font-size:16px">TOTAL</td>' +
-    '<td style="padding:10px 8px;text-align:right;font-weight:700;color:#b84c72;font-size:16px">' + fmtPrice(order.total) +
-    (order.shippingPending ? ' <span style="font-size:11px;font-weight:400;color:#888">(+ envío a coordinar)</span>' : '') + '</td></tr>' +
+    '<tr><td colspan="2" style="padding:10px 8px;font-weight:bold;color:#b84c72">Total</td>' +
+    '<td style="padding:10px 8px;text-align:right;font-weight:bold;color:#b84c72">' + fmtPrice(order.total) +
+    (order.shippingPending ? ' <span style="font-size:11px;font-weight:normal;color:#888">(+ envío a coordinar)</span>' : '') + '</td></tr>' +
     '</table>' +
-    (shipping.address ? '<p style="color:#555;margin:0 0 4px"><strong>Dirección de entrega:</strong> ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '</p>' : (shipping.city ? '<p style="color:#555;margin:0 0 4px"><strong>Ciudad:</strong> ' + shipping.city + '</p>' : '')) +
-    '<div style="margin-top:20px;padding-top:20px;border-top:1px solid #f0d8e0;text-align:center">' +
-    '<p style="color:#888;font-size:13px;margin:0 0 12px">¿Tenés alguna duda sobre tu pedido?</p>' +
-    (storeWa ? '<a href="' + storeWa + '" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">💬 Escribinos por WhatsApp</a>' : '') +
-    (order.storeInstagram ? '<p style="margin-top:14px"><a href="' + order.storeInstagram + '" style="color:#b84c72;text-decoration:none;font-size:13px">📷 Seguinos en Instagram</a></p>' : '') +
-    '<p style="color:#c98aa0;font-size:13px;margin-top:16px">Con cariño,<br><strong>' + STORE_NAME + '</strong> 💗</p>' +
+    (shipping.address ? '<p style="color:#555;font-size:13px;margin:0 0 4px"><strong>Dirección de entrega:</strong> ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '</p>' : (shipping.city ? '<p style="color:#555;font-size:13px;margin:0 0 4px"><strong>Ciudad:</strong> ' + shipping.city + '</p>' : '')) +
+    '<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5">' +
+    '<p style="color:#666;font-size:13px;margin:0 0 10px">¿Tenés alguna duda sobre tu pedido?</p>' +
+    (storeWa ? '<a href="' + storeWa + '" style="display:inline-block;background:#25D366;color:#ffffff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:13px">Escribinos por WhatsApp</a>' : '') +
+    '<p style="color:#999;font-size:12px;margin-top:16px">Gracias por elegirnos,<br>' + STORE_NAME + '</p>' +
     '</div></div></body></html>';
 }
 ```
@@ -397,6 +412,10 @@ ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actu
 5. Confirmá en Super Admin → Pedidos que la columna de notificación muestra
    "Notificado" cuando salieron los dos correos — para probar `partial`/`failed`
    hace falta forzar un error real (ej. un `order.userEmail` con formato inválido)
+6. Revisá también la carpeta de Spam de ambas bandejas — con una cuenta de
+   Gmail nueva es normal que los primeros correos caigan ahí. Marcá "No es
+   spam" y agregá `tintinpedidos@gmail.com` a los contactos para acelerar que
+   Gmail deje de filtrarlo
 
 ## Si algo falla
 - Si no llega nada: abrí la consola del navegador (F12) en el checkout y buscá mensajes que empiecen con `[email-notify]`
