@@ -34,6 +34,7 @@
     <div>
       <div class="adm-user-name" id="adm-user-name">—</div>
       <div id="adm-role-badge" class="adm-user-role-badge role-admin">—</div>
+      <div id="adm-live-clock" class="adm-live-clock"></div>
     </div>
   </div>
 
@@ -1351,6 +1352,24 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+
+// Reloj en vivo debajo del badge de rol — fecha y hora reales del
+// dispositivo, con segundos, actualizado solo cada segundo (no depende de
+// ninguna acción ni de que termine de resolver el login).
+(function startLiveClock() {
+  const el = document.getElementById('adm-live-clock');
+  if (!el) return;
+  const fmt = new Intl.DateTimeFormat('es-PY', {
+    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+  const tick = () => {
+    const s = fmt.format(new Date());
+    el.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+  };
+  tick();
+  setInterval(tick, 1000);
+})();
 
 // Fuente única de verdad de los estados de pedido/pago — la usan la tabla de
 // Pedidos, los <select> de cambio de estado, el modal de edición completa y

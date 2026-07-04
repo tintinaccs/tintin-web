@@ -97,6 +97,17 @@
     .role-superadmin { background: #8b2642; color: #fff; }
     .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
     .role-agent      { background: #7b68ee; color: #fff; }
+
+    /* Reloj en vivo debajo del badge de rol — hora real del dispositivo,
+       actualizado solo (un setInterval de 1s), no un valor fijo. */
+    .adm-live-clock {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,.75);
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
     .role-viewer     { background: #4a90d9; color: #fff; }
     .role-client     { background: #888; color: #fff; }
 
