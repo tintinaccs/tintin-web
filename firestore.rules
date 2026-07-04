@@ -38,6 +38,15 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
     }
 
+    // Viewer (rol de solo lectura del panel) — necesita leer rolePermissions
+    // para que su propio canDo() en el Admin refleje lo que Super Admin
+    // configuró, igual que admin/agent.
+    function isViewer() {
+      return isSignedIn() && !isBlockedUser() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "viewer";
+    }
+
     // Super Admin real — únicamente tintinaccs@gmail.com. "admin" (el gerente
     // operativo, Fase D) NO cuenta acá aunque isAdmin() sí lo incluya: esto es
     // a propósito, para que Usuarios/Configuración queden 100% exclusivos del
@@ -59,6 +68,27 @@ service cloud.firestore {
     // tocar su propio documento.
     function isSuperAdminAccount(data) {
       return data.email == "tintinaccs@gmail.com";
+    }
+
+    // ======== ROLES Y PERMISOS (Super Admin → Roles y Permisos) ========
+    // rolePermissions/main guarda, por rol y acción concreta, si Super Admin
+    // decidió ACOTAR (nunca ampliar) el techo fijo de arriba — nunca se llama
+    // sin haber chequeado antes isSuperAdmin()/isAdmin() del lado que
+    // corresponda, así que esto solo puede volver más chica una puerta que ya
+    // estaba abierta, nunca abrir una que las funciones de más arriba ya
+    // cerraron. Si el documento no existe todavía, o el rol/módulo/acción
+    // puntual no está guardado ahí, el default es "permitido" (true) — así
+    // publicar esta regla nueva no cambia NADA hasta que Super Admin apague
+    // un switch a propósito desde esa pantalla (fail-safe, cero regresión).
+    // Solo se usa para acotar "admin"/"agent" en las acciones más sensibles
+    // (eliminar pedidos/productos/colecciones, editar pedido completo, y los
+    // 3 sub-permisos del Modder sobre pedidos) — Super Admin real nunca pasa
+    // por acá, siempre tiene todo.
+    function rolePermAllows(role, moduleKey, actionKey) {
+      return !exists(/databases/$(database)/documents/rolePermissions/main) || (
+        get(/databases/$(database)/documents/rolePermissions/main).data
+          .get(role, {}).get(moduleKey, {}).get(actionKey, true) == true
+      );
     }
 
     // IMPORTANTE:
@@ -144,7 +174,11 @@ service cloud.firestore {
     match /products/{productId} {
       allow read: if true;
       allow create, update: if isAdmin() || isAgent();
-      allow delete: if isAdmin();
+      // Eliminar es la acción más irreversible de Productos — Super Admin
+      // real siempre puede; "admin" (gerente operativo) puede salvo que
+      // Super Admin haya apagado puntualmente este switch en Roles y
+      // Permisos (rolePermAllows, default permitido si no se tocó nada).
+      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
     }
 
     // Colecciones — panel Super Admin → Colecciones, y catálogo/home/menú públicos.
@@ -152,7 +186,7 @@ service cloud.firestore {
     match /collections/{collectionId} {
       allow read: if true;
       allow create, update: if isAdmin() || isAgent();
-      allow delete: if isAdmin();
+      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
     }
 
     // Textos editables del Hero/Home/Nosotros/Catálogo (Super Admin → Contenido).
@@ -198,18 +232,27 @@ service cloud.firestore {
       // salió bien o falló, en vez de quedar pegado en "pending" para
       // siempre (antes no tenía ningún permiso de update sobre su propio
       // pedido, así que ese resultado nunca se podía guardar).
-      allow update: if isAdmin() || (
+      // "admin" reescribe el pedido completo salvo que Super Admin haya
+      // apagado puntualmente "Editar pedido completo" en Roles y Permisos.
+      // El Modder queda acotado además por sub-permiso: cada grupo de campos
+      // (estado / pago / reenvío) solo se puede tocar si ese switch puntual
+      // sigue encendido — si Super Admin apaga uno, ese grupo de campos deja
+      // de poder escribirse aunque los otros dos sigan permitidos.
+      allow update: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) || (
         isAgent() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(
           ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
-        )
+        ) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
       ) || (
         isSignedIn() && !isBlockedUser() &&
         resource.data.userId == request.auth.uid &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
       );
 
-      allow delete: if isAdmin();
+      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
     }
 
     // Registro de auditoría (Fase 2): quién editó un pedido, cambió su estado,
@@ -222,6 +265,18 @@ service cloud.firestore {
       allow read: if isSuperAdmin();
       allow create: if isAdmin() || isAgent();
       allow update, delete: if false;
+    }
+
+    // Config de permisos dinámicos (Super Admin → Roles y Permisos). Lectura
+    // para los 3 roles operativos (para que su propio canDo() en el Admin
+    // refleje lo que Super Admin configuró) — escritura exclusiva de Super
+    // Admin real, igual que Usuarios/Configuración: ni "admin" ni el Modder
+    // pueden tocar este documento aunque tuvieran el switch prendido, porque
+    // "editar permisos" es justamente una de las acciones que este mismo
+    // sistema nunca vuelve configurable (ver PERMISSION_MODULES).
+    match /rolePermissions/{docId} {
+      allow read: if isAdmin() || isAgent() || isViewer();
+      allow write: if isSuperAdmin();
     }
 
     // ======== MÓDULO CORREOS (Super Admin → Correos) ========

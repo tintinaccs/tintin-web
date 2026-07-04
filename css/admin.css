@@ -293,6 +293,57 @@
     .adm-more-actions-panel.show { display: flex; }
     .adm-more-actions-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
+    /* ======== ROLES Y PERMISOS ======== */
+    .perm-module-block {
+      border: 1.5px solid var(--adm-border); border-radius: 12px; margin-bottom: 14px; overflow: hidden;
+    }
+    .perm-module-block > summary {
+      padding: 14px 18px; font-weight: 800; font-size: 14px; cursor: pointer;
+      background: var(--adm-bg); display: flex; align-items: center; justify-content: space-between;
+      list-style: none; user-select: none;
+    }
+    .perm-module-block > summary::-webkit-details-marker { display: none; }
+    .perm-module-block > summary::after {
+      content: '▾'; font-size: 11px; color: var(--adm-muted); transition: transform .2s;
+    }
+    .perm-module-block[open] > summary::after { transform: rotate(180deg); }
+    .perm-module-body { padding: 4px 18px 14px; }
+    .perm-mini-toggle { width: 40px; height: 22px; }
+    .perm-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
+    .perm-mini-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
+    .perm-row-not-implemented { color: var(--adm-muted); font-style: italic; font-size: 12px; }
+    .perm-row-fixed-note { font-size: 11px; color: var(--adm-muted); }
+    .perm-danger-badge {
+      display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+      background: #fde3e1; color: #c0392b; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+    }
+    .perm-uionly-badge {
+      display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      background: #fff3cd; color: #856404; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+    }
+    .perm-matrix-table th, .perm-matrix-table td { text-align: center; }
+    .perm-matrix-table th:first-child, .perm-matrix-table td:first-child { text-align: left; }
+    .perm-matrix-table td:first-child { max-width: 320px; }
+
+    @media (max-width: 720px) {
+      .perm-matrix-table thead { display: none; }
+      .perm-matrix-table, .perm-matrix-table tbody, .perm-matrix-table tr, .perm-matrix-table td { display: block; width: 100%; }
+      .perm-matrix-table tr {
+        margin-bottom: 10px; border: 1px solid var(--adm-border); border-radius: 10px; padding: 8px 10px; background: var(--adm-card);
+      }
+      .perm-matrix-table td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 6px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .perm-matrix-table tr td:last-child { border-bottom: none; }
+      .perm-matrix-table td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      .perm-matrix-table td:first-child { display: block; text-align: left; border-bottom: 1px dashed #f0d8e0; padding-bottom: 8px; margin-bottom: 4px; max-width: none; }
+      .perm-matrix-table td:first-child::before { display: none; }
+    }
+
     /* ======== TABLES ======== */
     .adm-table-wrap { overflow-x: auto; }
     .adm-table {
