@@ -35,12 +35,13 @@ dos, no solo "todo bien" o "todo mal"):
 
 1. **A la tienda** (`tintinaccs@gmail.com`) — el correo operativo completo: todos los
    datos del cliente, dirección/mapa, productos con imagen y variante, totales
-   y un botón de WhatsApp con un mensaje ya redactado (lo podés editar antes
-   de enviarlo, como cualquier link de `wa.me`).
+   y un link para escribirle al cliente por WhatsApp con un mensaje ya
+   redactado (lo podés editar antes de enviarlo, como cualquier link de
+   `wa.me`).
 2. **A la clienta** (solo si dejó su email en el checkout) — una confirmación
-   corta y prolija, con el número de pedido, sus productos, el total, la
-   dirección de entrega y un botón "Escribinos por WhatsApp" con un mensaje
-   de consulta ya redactado.
+   corta y prolija, con el número de pedido, sus productos, el total y la
+   dirección de entrega. No incluye ningún link de WhatsApp — se sacó a
+   pedido para reducir la cantidad de links del correo.
 
 Cuando usás el botón **"✉️ Reenviar"** de Super Admin → Pedidos, por defecto
 solo se reenvía la copia operativa de la tienda (no se le vuelve a mandar la
@@ -58,8 +59,9 @@ correos está pensado para que una cuenta de Gmail nueva como
 `tintinpedidos@gmail.com` — sin historial de envío — tenga menos chances de
 que Gmail lo marque como spam: sin emojis, sin signos de exclamación, con
 asuntos simples ("Nuevo pedido recibido en Tintin" / "Recibimos tu pedido en
-Tintin"), un solo enlace de WhatsApp por correo (sin botones extra ni link a
-Instagram en la confirmación a la clienta), y con `name: STORE_NAME` para
+Tintin"), sin ningún link de WhatsApp en la confirmación a la clienta (se
+sacó a pedido, incluso el que tenía antes) ni link a Instagram, y con
+`name: STORE_NAME` para
 que el remitente se vea como "Tintin Accesorios" en vez de una dirección
 pelada. `MailApp.sendEmail` arma automáticamente un correo multipart
 texto+HTML cuando se le pasan `body` y `htmlBody` juntos (como hace este
@@ -73,8 +75,6 @@ const SHARED_SECRET   = 'TU_SECRETO_AQUI';
 const ADMIN_EMAIL     = 'tintinaccs@gmail.com';  // a quién le llega el correo interno — NO es quien envía
 const STORE_NAME      = 'Tintin Accesorios';
 const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
-// Se usa solo si el pedido no trae su propio número (pedidos viejos, antes de este cambio).
-const DEFAULT_STORE_WHATSAPP = '595981299331';
 
 function doPost(e) {
   try {
@@ -188,11 +188,6 @@ function waGreetingToCustomer(shortId, order) {
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   return 'Hola' + (first ? ' ' + first : '') + ', soy de ' + STORE_NAME +
     ', te escribo por tu pedido #' + shortId + '.';
-}
-
-// Mensaje que la CLIENTA le manda a la tienda (botón "Escribinos por WhatsApp" del correo de confirmación)
-function waGreetingToStore(shortId) {
-  return 'Hola Tintin, acabo de realizar mi pedido N° ' + shortId + ' y quiero consultar el estado.';
 }
 
 function shipMethodLabel(order) {
@@ -318,7 +313,6 @@ function buildCustomerText(shortId, order) {
   const items = (order.items || []).map(itemLineText).join('\n');
   const shipping = order.shipping || {};
   const first = String(order.userName || '').trim().split(' ')[0] || '';
-  const storeWa = waLink(order.storeWhatsapp || DEFAULT_STORE_WHATSAPP, waGreetingToStore(shortId));
   const line = '-'.repeat(40);
 
   return 'Gracias por tu pedido' + (first ? ', ' + first : '') + '.\n' + line + '\n' +
@@ -333,14 +327,12 @@ function buildCustomerText(shortId, order) {
     'Total:   ' + fmtPrice(order.total) + (order.shippingPending ? ' (+ envío a coordinar)' : '') + '\n' + line + '\n' +
     (shipping.address ? 'Dirección de entrega: ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '\n' : '') +
     (shipping.city && !shipping.address ? 'Ciudad: ' + shipping.city + '\n' : '') + line + '\n' +
-    '¿Tenés alguna duda? Escribinos por WhatsApp' + (storeWa ? ': ' + storeWa : '') + '\n' +
-    '\nGracias por elegirnos,\n' + STORE_NAME + '\n';
+    'Gracias por elegirnos,\n' + STORE_NAME + '\n';
 }
 
 function buildCustomerHtml(shortId, order) {
   const shipping = order.shipping || {};
   const first = String(order.userName || '').trim().split(' ')[0] || '';
-  const storeWa = waLink(order.storeWhatsapp || DEFAULT_STORE_WHATSAPP, waGreetingToStore(shortId));
   const itemRows = (order.items || []).map(itemRowHtml).join('');
 
   return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
@@ -363,9 +355,7 @@ function buildCustomerHtml(shortId, order) {
     '</table>' +
     (shipping.address ? '<p style="color:#555;font-size:13px;margin:0 0 4px"><strong>Dirección de entrega:</strong> ' + shipping.address + (shipping.city ? ', ' + shipping.city : '') + '</p>' : (shipping.city ? '<p style="color:#555;font-size:13px;margin:0 0 4px"><strong>Ciudad:</strong> ' + shipping.city + '</p>' : '')) +
     '<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5">' +
-    '<p style="color:#666;font-size:13px;margin:0 0 10px">¿Tenés alguna duda sobre tu pedido?</p>' +
-    (storeWa ? '<a href="' + storeWa + '" style="display:inline-block;background:#25D366;color:#ffffff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:13px">Escribinos por WhatsApp</a>' : '') +
-    '<p style="color:#999;font-size:12px;margin-top:16px">Gracias por elegirnos,<br>' + STORE_NAME + '</p>' +
+    '<p style="color:#999;font-size:12px;margin:0">Gracias por elegirnos,<br>' + STORE_NAME + '</p>' +
     '</div></div></body></html>';
 }
 ```
