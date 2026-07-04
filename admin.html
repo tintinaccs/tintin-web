@@ -1624,6 +1624,30 @@
         </div>
       </div>
 
+      <!-- Prueba de correo — exclusivo Super Admin: vive dentro de
+           section-configuracion, que setupPermissions() ya oculta por
+           completo (sidebar + tabs de mobile) para cualquier rol sin
+           manageSettings (admin, agent, viewer, client) — no hace falta
+           ninguna comprobación de permiso extra acá. -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Prueba de correo</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:14px">
+            Enviá el correo de confirmación que recibe una clienta al hacer un pedido — mismo diseño, mismo remitente (<code>tintinpedidos@gmail.com</code>) — a cualquier dirección, con datos de pedido ficticios. No crea ningún pedido real, no toca stock, no manda el correo interno a Tintin.
+          </p>
+          <div class="adm-field">
+            <label class="adm-label">Enviar correo de prueba a clienta</label>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <input type="email" class="adm-input" id="test-email-input" placeholder="cliente@email.com" style="flex:1;min-width:220px" autocomplete="off" />
+              <button class="adm-btn adm-btn-primary" id="btn-test-email" style="white-space:nowrap">Enviar prueba</button>
+            </div>
+          </div>
+          <div id="test-email-result" style="font-size:13px;margin-top:10px"></div>
+        </div>
+      </div>
+
       <button class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
@@ -1785,7 +1809,7 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { sendOrderNotification } from "./js/email-notify.js";
+import { sendOrderNotification, sendTestCustomerEmail } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
 
 // ---- GLOBALS ----
@@ -2799,6 +2823,47 @@ document.getElementById('btn-save-config').onclick = async () => {
     toast('Configuración guardada correctamente');
   } catch(e) {
     toast('Error al guardar configuración: ' + e.message);
+  }
+};
+
+// ======== PRUEBA DE CORREO (Super Admin) ========
+// Simple regex de formato, no de validación exhaustiva de RFC — alcanza
+// para atajar errores de tipeo antes de gastar el envío.
+const TEST_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+document.getElementById('btn-test-email').onclick = async () => {
+  const input = document.getElementById('test-email-input');
+  const resultEl = document.getElementById('test-email-result');
+  const btn = document.getElementById('btn-test-email');
+  const email = input.value.trim();
+
+  if (!TEST_EMAIL_RE.test(email)) {
+    resultEl.style.color = '#c0392b';
+    resultEl.textContent = 'Escribí un email con formato válido (ej: cliente@email.com).';
+    return;
+  }
+
+  // Deshabilitar mientras envía — evita mandar varias pruebas por clicks
+  // repetidos mientras la primera todavía está en camino.
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+  resultEl.style.color = 'var(--adm-muted)';
+  resultEl.textContent = '';
+
+  try {
+    const result = await sendTestCustomerEmail(email);
+    if (result && result.success) {
+      resultEl.style.color = '#065f46';
+      resultEl.textContent = 'Correo de prueba enviado correctamente.';
+    } else {
+      resultEl.style.color = '#c0392b';
+      resultEl.textContent = 'No se pudo enviar el correo de prueba' + (result?.error ? ': ' + result.error : '.');
+    }
+  } catch (e) {
+    resultEl.style.color = '#c0392b';
+    resultEl.textContent = 'No se pudo enviar el correo de prueba: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Enviar prueba';
   }
 };
 
