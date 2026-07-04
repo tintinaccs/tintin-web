@@ -298,8 +298,15 @@
     .badge-cancelado  { background: #fee2e2; color: #991b1b; }
     .badge-preparando  { background: #fef9c3; color: #713f12; }
     .badge-pagado      { background: #d1fae5; color: #065f46; }
-    .badge-rechazado   { background: #fee2e2; color: #991b1b; }
+    /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
+       puedan distinguir de un vistazo en la misma columna — son estados
+       "terminales" distintos, no el mismo. */
+    .badge-rechazado   { background: #fde3e1; color: #c0392b; }
     .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
+    /* Listo para retirar: único estado de pedido con el rosa de marca en vez
+       de la paleta semántica genérica — es un hito positivo específico de
+       Tintin (retiro en tienda), no un estado de logística estándar. */
+    .badge-listo       { background: var(--pink-pale); color: var(--pink-dark); }
 
     /* ======== FORM ELEMENTS ======== */
     .adm-input, .adm-select, .adm-textarea {
@@ -725,6 +732,61 @@
       .adm-stats { grid-template-columns: 1fr 1fr; }
     }
 
+    /* ======== TABLA DE PEDIDOS → CARDS EN MOBILE ========
+       Solo afecta a .adm-table-pedidos (la tabla de Pedidos) — el resto de
+       las tablas del admin (Usuarios, Productos, Auditoría) siguen con
+       scroll horizontal como antes, no se tocan. */
+    @media (max-width: 640px) {
+      .adm-table-pedidos thead { display: none; }
+      .adm-table-pedidos, .adm-table-pedidos tbody,
+      .adm-table-pedidos tr, .adm-table-pedidos td {
+        display: block; width: 100%;
+      }
+      .adm-table-pedidos tr.adm-order-row {
+        margin-bottom: 12px;
+        border: 1px solid var(--adm-border);
+        border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px;
+        background: var(--adm-card);
+      }
+      .adm-table-pedidos tr.adm-order-row:hover td { background: none; }
+      .adm-table-pedidos tr.adm-order-detail-row { margin-top: -8px; margin-bottom: 12px; }
+      .adm-table-pedidos td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 7px 2px;
+        border-bottom: 1px dashed #f0d8e0;
+        text-align: right;
+      }
+      .adm-table-pedidos tr.adm-order-row td:last-child { border-bottom: none; }
+      .adm-table-pedidos td[data-label]::before {
+        content: attr(data-label);
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--adm-muted);
+        text-align: left;
+        flex-shrink: 0;
+      }
+      /* Estado/Pago traen su propio select — que se vea grande y fácil de
+         tocar con el dedo, en vez del tamaño chico pensado para desktop. */
+      .adm-table-pedidos td[data-label] select.adm-select {
+        width: auto; max-width: 60%; font-size: 13px !important; padding: 8px 10px !important;
+      }
+      /* El detalle expandido (dirección, productos, notas) es un panel
+         completo, no un campo de card — vuelve a su layout normal en vez
+         del flex/alineado-a-la-derecha de los <td> de arriba. */
+      .adm-table-pedidos tr.adm-order-detail-row td {
+        display: block;
+        text-align: left;
+        border-bottom: none;
+        padding: 0;
+      }
+    }
+
     /* Tab bar mobile — oculto por defecto */
     .adm-mobile-tabs {
       display: none;
@@ -979,23 +1041,26 @@
               <option value="">Todos los estados</option>
               <option value="pendiente">Pendiente</option>
               <option value="confirmado">Confirmado</option>
-              <option value="preparando">Preparando</option>
-              <option value="enviado">Enviado</option>
+              <option value="preparando">En preparación</option>
+              <option value="listo_retiro">Listo para retirar</option>
+              <option value="en_camino">En camino</option>
               <option value="entregado">Entregado</option>
               <option value="cancelado">Cancelado</option>
+              <option value="rechazado">Rechazado</option>
             </select>
             <select class="adm-select" id="filter-pay-status" style="flex:1">
               <option value="">Todos los pagos</option>
               <option value="pendiente">Pago pendiente</option>
               <option value="pagado">Pagado</option>
               <option value="rechazado">Rechazado</option>
+              <option value="cancelado">Cancelado</option>
               <option value="reembolsado">Reembolsado</option>
             </select>
           </div>
         </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
-            <table class="adm-table">
+            <table class="adm-table adm-table-pedidos">
               <thead>
                 <tr>
                   <th>#</th>
@@ -1008,12 +1073,11 @@
                   <th>Fecha</th>
                   <th>Notif.</th>
                   <th>Editar</th>
-                  <th>Estado pedido</th>
                   <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1729,6 +1793,75 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+
+// Fuente única de verdad de los estados de pedido/pago — la usan la tabla de
+// Pedidos, los <select> de cambio de estado, el modal de edición completa y
+// el export a CSV, así que no hay riesgo de que queden nombres distintos o
+// mal escritos entre esos lugares. "enviado"/"error" quedan como alias
+// legado: pedidos guardados antes de este cambio siguen mostrando algo con
+// sentido en vez de un badge vacío o roto, pero ya no son opciones
+// elegibles en ningún <select> nuevo.
+const ORDER_STATUS_LABELS = {
+  pendiente:    'Pendiente',
+  confirmado:   'Confirmado',
+  preparando:   'En preparación',
+  listo_retiro: 'Listo para retirar',
+  en_camino:    'En camino',
+  entregado:    'Entregado',
+  cancelado:    'Cancelado',
+  rechazado:    'Rechazado',
+  enviado:      'En camino', // legado
+};
+const ORDER_STATUS_BADGE = {
+  pendiente:    'badge-pendiente',
+  confirmado:   'badge-confirmado',
+  preparando:   'badge-preparando',
+  listo_retiro: 'badge-listo',
+  en_camino:    'badge-enviado',
+  entregado:    'badge-entregado',
+  cancelado:    'badge-cancelado',
+  rechazado:    'badge-rechazado',
+  enviado:      'badge-enviado', // legado
+};
+const PAY_STATUS_LABELS = {
+  pendiente:   'Pago pendiente',
+  pagado:      'Pagado',
+  rechazado:   'Rechazado',
+  cancelado:   'Cancelado',
+  reembolsado: 'Reembolsado',
+  error:       'Error', // legado
+};
+const PAY_STATUS_BADGE = {
+  pagado:      'badge-pagado',
+  pendiente:   'badge-pendiente',
+  rechazado:   'badge-rechazado',
+  cancelado:   'badge-cancelado',
+  reembolsado: 'badge-reembolsado',
+  error:       'badge-cancelado', // legado
+};
+// Genera las <option> de un <select> de estado directo desde el mapa de
+// labels de arriba — un solo lugar define el texto/orden, así el filtro,
+// la tabla de Pedidos y el modal de edición completa no pueden desalinearse.
+function orderStatusOptions(current) {
+  return Object.keys(ORDER_STATUS_LABELS)
+    .filter(k => k !== 'enviado') // legado: no elegible, solo se muestra si ya está guardado
+    .map(k => `<option value="${k}" ${current===k?'selected':''}>${ORDER_STATUS_LABELS[k]}</option>`)
+    .join('');
+}
+function payStatusOptions(current) {
+  return Object.keys(PAY_STATUS_LABELS)
+    .filter(k => k !== 'error') // legado: no elegible, solo se muestra si ya está guardado
+    .map(k => `<option value="${k}" ${current===k?'selected':''}>${PAY_STATUS_LABELS[k]}</option>`)
+    .join('');
+}
+function orderStatusBadgeHtml(status) {
+  const s = status || 'pendiente';
+  return `<span class="adm-badge ${ORDER_STATUS_BADGE[s] || 'badge-pendiente'}">${ORDER_STATUS_LABELS[s] || s}</span>`;
+}
+function payStatusBadgeHtml(status) {
+  const s = status || 'pendiente';
+  return `<span class="adm-badge ${PAY_STATUS_BADGE[s] || 'badge-pendiente'}" style="font-size:9px">${PAY_STATUS_LABELS[s] || s}</span>`;
+}
 let waConfirmMessageTemplate = 'Hola {nombre}! Te escribo por tu pedido realizado en nuestra página web. Ya recibimos todos tus datos para el envío y estamos preparando tu pedido. Te escribimos para confirmar los últimos detalles.';
 getDoc(doc(db, 'settings', 'general')).then(snap => {
   if (snap.exists() && snap.data().waConfirmMessage) waConfirmMessageTemplate = snap.data().waConfirmMessage;
@@ -2065,7 +2198,7 @@ async function loadDashboard() {
       <tr>
         <td><strong>${o.userName || o.userEmail || '—'}</strong><br><small style="color:#aaa">${o.userPhone || ''}</small></td>
         <td style="font-weight:700;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
-        <td>${statusBadge(o.status || 'pendiente')}</td>
+        <td>${orderStatusBadgeHtml(o.status)}</td>
         <td>${o.shipping?.city || '—'}</td>
         <td>${formatDate(o.createdAt)}</td>
       </tr>
@@ -2319,7 +2452,7 @@ window.deleteUser = async (uid, name) => {
 // ======== PEDIDOS ========
 async function loadOrders() {
   const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -2336,7 +2469,7 @@ async function loadOrders() {
         });
       renderOrdersTable(allOrders);
     } catch(e2) {
-      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
     }
   }
 }
@@ -2347,17 +2480,9 @@ function renderOrdersTable(orders) {
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
-
-  const PAY_BADGE = {
-    pagado:      'badge-entregado',
-    pendiente:   'badge-pendiente',
-    rechazado:   'badge-cancelado',
-    reembolsado: 'badge-enviado',
-    error:       'badge-cancelado',
-  };
 
   const NOTIF_BADGE = {
     sent:    { cls: 'badge-entregado',  icon: '', label: 'Notificado' },
@@ -2375,6 +2500,7 @@ function renderOrdersTable(orders) {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
       (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
     const payStatus = o.payment?.status || o.paymentStatus || 'pendiente';
+    const orderStatus = o.status || 'pendiente';
     // manageOrders: cambiar estado/estado de pago — esto es lo único que el
     // Modder puede tocar, y coincide exactamente con lo que firestore.rules
     // le permite escribir en el pedido (ver comentario en firestore.rules).
@@ -2385,56 +2511,45 @@ function renderOrdersTable(orders) {
     const canDelete = can(currentRole, 'manageOrdersFull');
 
     return `
-      <tr style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
-        <td style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
-        <td>
+      <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
+        <td data-label="Pedido" style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
+        <td data-label="Cliente">
           <strong>${o.userName || '—'}</strong><br>
           <small style="color:#aaa">${o.userPhone || ''}</small><br>
           <small style="color:#aaa;font-size:10px">${o.userEmail || ''}</small>
         </td>
-        <td style="font-size:12px;max-width:160px">${itemsText || '—'}</td>
-        <td style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
-        <td>${statusBadge(o.status || 'pendiente')}</td>
-        <td>${o.shipping?.city || o.city || '—'}</td>
-        <td onclick="event.stopPropagation()">
-          <div style="font-size:11px;color:#666">${o.payment?.method || o.paymentMethod || '—'}</div>
-          <span class="adm-badge ${PAY_BADGE[payStatus] || 'badge-pendiente'}" style="font-size:9px">${payStatus}</span>
-          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
-            <option value="pendiente"   ${payStatus==='pendiente'?'selected':''}>Pago pendiente</option>
-            <option value="pagado"      ${payStatus==='pagado'?'selected':''}>Pagado</option>
-            <option value="rechazado"   ${payStatus==='rechazado'?'selected':''}>Rechazado</option>
-            <option value="reembolsado" ${payStatus==='reembolsado'?'selected':''}>Reembolsado</option>
+        <td data-label="Productos" style="font-size:12px;max-width:160px">${itemsText || '—'}</td>
+        <td data-label="Total" style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
+        <td data-label="Estado" onclick="event.stopPropagation()">
+          ${orderStatusBadgeHtml(orderStatus)}
+          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updateOrderStatus('${o.id}', this.value)">
+            ${orderStatusOptions(orderStatus)}
           </select>` : ''}
         </td>
-        <td style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
-        <td onclick="event.stopPropagation()" style="text-align:center">
+        <td data-label="Ciudad">${o.shipping?.city || o.city || '—'}</td>
+        <td data-label="Pago" onclick="event.stopPropagation()">
+          <div style="font-size:11px;color:#666">${o.payment?.method || o.paymentMethod || '—'}</div>
+          ${payStatusBadgeHtml(payStatus)}
+          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
+            ${payStatusOptions(payStatus)}
+          </select>` : ''}
+        </td>
+        <td data-label="Fecha" style="font-size:12px;color:#aaa">${formatDate(o.createdAt)}</td>
+        <td data-label="Notif." onclick="event.stopPropagation()" style="text-align:center">
           ${notifBadge(o.notificationStatus || 'pending')}
           ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
           ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
           <button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>
         </td>
-        <td onclick="event.stopPropagation()">
+        <td data-label="Editar" onclick="event.stopPropagation()">
           ${canEditFull ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
-        <td onclick="event.stopPropagation()">
-          ${canUpdate ? `
-            <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
-              onchange="window.updateOrderStatus('${o.id}', this.value)">
-              <option value="pendiente"  ${o.status==='pendiente'?'selected':''}>Pendiente</option>
-              <option value="confirmado" ${o.status==='confirmado'?'selected':''}>Confirmado</option>
-              <option value="preparando" ${o.status==='preparando'?'selected':''}>Preparando</option>
-              <option value="enviado"    ${o.status==='enviado'?'selected':''}>Enviado</option>
-              <option value="entregado"  ${o.status==='entregado'?'selected':''}>Entregado</option>
-              <option value="cancelado"  ${o.status==='cancelado'?'selected':''}>Cancelado</option>
-            </select>` : statusBadge(o.status || 'pendiente')
-          }
-        </td>
-        <td onclick="event.stopPropagation()">
+        <td data-label="Eliminar" onclick="event.stopPropagation()">
           ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
-      <tr id="order-detail-${o.id}" style="display:none">
-        <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
+      <tr id="order-detail-${o.id}" class="adm-order-detail-row" style="display:none">
+        <td colspan="11" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
             <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
@@ -2486,18 +2601,29 @@ window.toggleOrderDetail = (id) => {
 };
 
 window.updateOrderStatus = async (orderId, status) => {
+  const o = allOrders.find(o => o.id === orderId);
+  const prevStatus = o?.status || 'pendiente';
   try {
-    const o = allOrders.find(o => o.id === orderId);
-    const prevStatus = o?.status || 'pendiente';
     await updateDoc(doc(db, 'orders', orderId), {
       status,
       updatedAt: serverTimestamp()
     });
     if (o) o.status = status;
-    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.shortId || orderId, `Estado: ${prevStatus} → ${status}`);
-    toast(`Estado actualizado: ${status}`);
+    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.shortId || orderId,
+      `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
+    toast(`Estado actualizado: ${ORDER_STATUS_LABELS[status] || status}`);
+    // El <select> ya se actualiza solo (comportamiento nativo del navegador),
+    // pero el badge de arriba es un <span> aparte que solo se actualiza si
+    // se vuelve a renderizar la fila — sin esto quedaba desactualizado hasta
+    // la próxima carga de la sección. applyOrderFilters() en vez de
+    // renderOrdersTable(allOrders) directo para no perder un filtro activo.
+    applyOrderFilters();
   } catch(e) {
-    toast('Error al actualizar estado');
+    // El <select> ya muestra el valor nuevo por su cuenta (comportamiento
+    // nativo del navegador) aunque el guardado haya fallado — como allOrders
+    // no se tocó, volver a renderizar la tabla lo repone al valor real.
+    toast('No se pudo guardar el estado. Probá de nuevo.');
+    applyOrderFilters();
   }
 };
 
@@ -2520,7 +2646,7 @@ window.resendOrderEmail = async (orderId) => {
     o.resendCount = (o.resendCount || 0) + 1;
     o.notificationStatus = 'sent';
     toast('Correo reenviado correctamente');
-    renderOrdersTable(allOrders);
+    applyOrderFilters();
   } catch (e) {
     toast('Error al reenviar el correo: ' + e.message);
     if (btn) { btn.disabled = false; btn.textContent = '✉️ Reenviar'; }
@@ -2528,19 +2654,22 @@ window.resendOrderEmail = async (orderId) => {
 };
 
 window.updatePayStatus = async (orderId, status) => {
+  const o = allOrders.find(o => o.id === orderId);
+  const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
   try {
-    const o = allOrders.find(o => o.id === orderId);
-    const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
     await updateDoc(doc(db, 'orders', orderId), {
       'payment.status': status,
       paymentStatus: status,
       updatedAt: serverTimestamp()
     });
     if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
-    logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId, `Estado de pago: ${prevStatus} → ${status}`);
-    toast(`Estado de pago: ${status}`);
+    logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
+      `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
+    toast(`Estado de pago: ${PAY_STATUS_LABELS[status] || status}`);
+    applyOrderFilters();
   } catch(e) {
-    toast('Error al actualizar estado de pago');
+    toast('No se pudo guardar el estado de pago. Probá de nuevo.');
+    applyOrderFilters();
   }
 };
 
@@ -2550,7 +2679,7 @@ window.deleteOrder = async (orderId) => {
     await deleteDoc(doc(db, 'orders', orderId));
     allOrders = allOrders.filter(o => o.id !== orderId);
     toast('Pedido eliminado');
-    renderOrdersTable(allOrders);
+    applyOrderFilters();
   } catch(e) {
     toast('Error al eliminar pedido');
   }
@@ -3792,8 +3921,8 @@ function loadImportar() {
         o.userName || '—',
         o.userEmail || '—',
         o.userPhone || '—',
-        o.status || 'pendiente',
-        o.paymentStatus || o.payment?.status || 'pendiente',
+        ORDER_STATUS_LABELS[o.status] || o.status || 'Pendiente',
+        PAY_STATUS_LABELS[o.paymentStatus || o.payment?.status] || o.paymentStatus || o.payment?.status || 'Pago pendiente',
         productos,
         o.total ?? 0,
         metodo,
@@ -4860,12 +4989,12 @@ window.saveOrderEdit = async function() {
       });
     }
     const changes = [];
-    if (_beforeStatus !== updateData.status) changes.push(`Estado: ${_beforeStatus || '—'} → ${updateData.status}`);
+    if (_beforeStatus !== updateData.status) changes.push(`Estado: ${ORDER_STATUS_LABELS[_beforeStatus] || _beforeStatus || '—'} → ${ORDER_STATUS_LABELS[updateData.status] || updateData.status}`);
     if (_beforeTotal !== total) changes.push(`Total: ${_beforeTotal ?? 0} → ${total}`);
     logAudit('editar_pedido', 'pedido', orderId, _before?.shortId || orderId, changes.join(' · ') || 'Datos del pedido actualizados');
     toast('Pedido actualizado');
     closeOrderEdit();
-    renderOrdersTable(allOrders);
+    applyOrderFilters();
   } catch(e) {
     toast('Error al guardar: ' + e.message);
   } finally {
@@ -4952,22 +5081,24 @@ window.saveOrderEdit = async function() {
       <div style="display:flex;flex-direction:column;gap:5px">
         <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Estado de pago</label>
         <select id="oe-pay-status" class="adm-input">
-          <option value="pendiente">⏳ Pendiente</option>
+          <option value="pendiente">Pago pendiente</option>
           <option value="pagado">Pagado</option>
           <option value="rechazado">Rechazado</option>
-          <option value="reembolsado">↩️ Reembolsado</option>
-          <option value="error">Error</option>
+          <option value="cancelado">Cancelado</option>
+          <option value="reembolsado">Reembolsado</option>
         </select>
       </div>
       <div style="display:flex;flex-direction:column;gap:5px">
         <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-muted)">Estado del pedido</label>
         <select id="oe-status" class="adm-input">
-          <option value="pendiente">⏳ Pendiente</option>
+          <option value="pendiente">Pendiente</option>
           <option value="confirmado">Confirmado</option>
-          <option value="preparando">Preparando</option>
-          <option value="enviado">Enviado</option>
+          <option value="preparando">En preparación</option>
+          <option value="listo_retiro">Listo para retirar</option>
+          <option value="en_camino">En camino</option>
           <option value="entregado">Entregado</option>
           <option value="cancelado">Cancelado</option>
+          <option value="rechazado">Rechazado</option>
         </select>
       </div>
       <div style="display:flex;flex-direction:column;gap:5px">
