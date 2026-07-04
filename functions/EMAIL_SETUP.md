@@ -54,6 +54,15 @@ incluye `adminSent`/`customerSent` por separado, para que el sitio pueda
 guardar `notificationStatus: 'sent'` (los dos salieron), `'partial'` (salió
 uno solo) o `'failed'` (fallaron los dos) en vez de un simple sí/no.
 
+**Acción extra: `testCustomerEmail`** — la usa el botón "Enviar prueba" de
+Super Admin → Configuración → Prueba de correo. Manda ÚNICAMENTE el correo
+de confirmación a la clienta (mismo diseño, con un aviso de "correo de
+prueba" agregado arriba), a la dirección que escriba el Super Admin, con
+datos de pedido ficticios fijos (`TEST_ORDER_`, definidos en el propio
+script, nunca vienen del navegador). No manda el correo interno a la
+tienda, no crea ningún pedido en Firestore, no toca stock — es una rama
+totalmente aparte de `doPost`, con su propio chequeo de `SHARED_SECRET`.
+
 **Sobre entregabilidad (que no caiga en spam):** el contenido de ambos
 correos está pensado para que una cuenta de Gmail nueva como
 `tintinpedidos@gmail.com` — sin historial de envío — tenga menos chances de
@@ -79,6 +88,17 @@ const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+
+    // Prueba de correo (Super Admin → Configuración → Prueba de correo):
+    // manda ÚNICAMENTE el correo de confirmación a la clienta, a una
+    // dirección de prueba, con datos de pedido ficticios. Nunca crea un
+    // pedido, nunca toca stock, nunca manda el correo interno a la tienda —
+    // es una acción totalmente aparte del flujo real, con su propio chequeo
+    // de secreto.
+    if (data.action === 'testCustomerEmail') {
+      return jsonOut(handleTestCustomerEmail_(data));
+    }
+
     if (data.secret !== SHARED_SECRET) {
       return jsonOut({ success: false, error: 'unauthorized' });
     }
@@ -140,6 +160,43 @@ function doPost(e) {
     });
   } catch (err) {
     return jsonOut({ success: false, adminSent: false, customerSent: null, error: String(err) });
+  }
+}
+
+// Datos de pedido ficticios fijos — siempre los mismos, nunca vienen del
+// navegador, así esta acción no puede usarse para mandar contenido
+// arbitrario a nombre de la tienda más allá del email de destino.
+const TEST_ORDER_ = {
+  shortId: 'TEST123',
+  userName: 'Cliente de prueba',
+  items: [{ qty: 1, name: 'BAG RUBY', price: 190000 }],
+  subtotal: 190000,
+  total: 190000,
+  shippingCost: 0,
+  shippingPending: false,
+  shipping: { method: 'delivery', city: 'San Lorenzo' },
+  createdAt: new Date().toISOString(),
+};
+
+function handleTestCustomerEmail_(data) {
+  if (data.secret !== SHARED_SECRET) {
+    return { success: false, error: 'unauthorized' };
+  }
+  const toEmail = String(data.toEmail || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail)) {
+    return { success: false, error: 'invalid_email' };
+  }
+  try {
+    MailApp.sendEmail({
+      to: toEmail,
+      name: STORE_NAME,
+      subject: '[PRUEBA] Recibimos tu pedido en Tintin — Pedido #' + TEST_ORDER_.shortId,
+      body: buildCustomerText(TEST_ORDER_.shortId, TEST_ORDER_, true),
+      htmlBody: buildCustomerHtml(TEST_ORDER_.shortId, TEST_ORDER_, true)
+    });
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: String(err) };
   }
 }
 
@@ -309,13 +366,16 @@ function buildAdminHtml(shortId, order) {
 // CORREO 2 — a la clienta (confirmación, solo si dejó su email)
 // ============================================================
 
-function buildCustomerText(shortId, order) {
+function buildCustomerText(shortId, order, isTest) {
   const items = (order.items || []).map(itemLineText).join('\n');
   const shipping = order.shipping || {};
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   const line = '-'.repeat(40);
+  const testNotice = isTest
+    ? 'Este es un correo de prueba de Tintin Accesorios. No corresponde a un pedido real.\n' + line + '\n'
+    : '';
 
-  return 'Gracias por tu pedido' + (first ? ', ' + first : '') + '.\n' + line + '\n' +
+  return testNotice + 'Gracias por tu pedido' + (first ? ', ' + first : '') + '.\n' + line + '\n' +
     'Recibimos tu pedido en ' + STORE_NAME + '. Estamos preparando todo con\n' +
     'cuidado y te vamos a contactar para confirmar los detalles del envío.\n' + line + '\n' +
     'Pedido:  #' + shortId + '\n' +
@@ -330,13 +390,17 @@ function buildCustomerText(shortId, order) {
     'Gracias por elegirnos,\n' + STORE_NAME + '\n';
 }
 
-function buildCustomerHtml(shortId, order) {
+function buildCustomerHtml(shortId, order, isTest) {
   const shipping = order.shipping || {};
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   const itemRows = (order.items || []).map(itemRowHtml).join('');
+  const testBanner = isTest
+    ? '<div style="background:#fff3cd;color:#856404;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:12px;text-align:center">Este es un correo de prueba de Tintin Accesorios. No corresponde a un pedido real.</div>'
+    : '';
 
   return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
+    testBanner +
     '<h2 style="color:#b84c72;margin:0 0 12px;font-size:18px">Gracias por tu pedido' + (first ? ', ' + first : '') + '.</h2>' +
     '<p style="color:#555;line-height:1.6;margin:0 0 20px;font-size:14px">Recibimos tu pedido en ' + STORE_NAME + '. ' +
     'Estamos preparando todo con cuidado y te vamos a contactar para confirmar los detalles del envío.</p>' +
@@ -406,6 +470,11 @@ ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actu
    Gmail nueva es normal que los primeros correos caigan ahí. Marcá "No es
    spam" y agregá `tintinpedidos@gmail.com` a los contactos para acelerar que
    Gmail deje de filtrarlo
+7. En Super Admin → Configuración → Prueba de correo, escribí cualquier
+   email tuyo y tocá "Enviar prueba" — debería llegar el correo de
+   confirmación (con el aviso de "correo de prueba" arriba) sin que se cree
+   ningún pedido nuevo en Super Admin → Pedidos ni llegue nada a
+   `tintinaccs@gmail.com`
 
 ## Si algo falla
 - Si no llega nada: abrí la consola del navegador (F12) en el checkout y buscá mensajes que empiecen con `[email-notify]`
