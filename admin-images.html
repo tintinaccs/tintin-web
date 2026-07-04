@@ -103,8 +103,29 @@
       background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
       padding: 20px; display: flex; flex-direction: column; gap: 14px;
       box-shadow: 0 1px 6px rgba(0,0,0,.04);
+      position: relative;
     }
-    .adm-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .adm-card-select {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      width: 18px; height: 18px; accent-color: var(--rose); cursor: pointer;
+    }
+    .adm-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding-left: 24px; }
+
+    /* ── BULK TOOLBAR (selección múltiple de imágenes) ── */
+    .adm-bulk-toolbar {
+      display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 16px; background: #fff3e0; border-radius: 10px; margin-bottom: 18px;
+    }
+    .adm-bulk-toolbar.show { display: flex; }
+    .adm-bulk-count { font-size: 0.82rem; font-weight: 700; color: #e65100; }
+    .adm-bulk-btn {
+      padding: 7px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff;
+      font-family: var(--font); font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text-sec);
+      transition: all .15s;
+    }
+    .adm-bulk-btn:hover { border-color: var(--rose); color: var(--rose); }
+    .adm-bulk-btn.danger { color: #c0392b; border-color: #f0c0c8; }
+    .adm-bulk-btn.danger:hover { background: #fff0f0; }
     .adm-card-label { font-weight: 600; font-size: 0.9rem; line-height: 1.3; }
     .adm-card-desc { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
     .adm-section-badge {
@@ -321,6 +342,12 @@
       <h1 id="section-title">Inicio / Hero</h1>
       <p id="section-desc">Configurá las imágenes de fondo del banner principal</p>
     </div>
+    <div class="adm-bulk-toolbar" id="img-bulk-toolbar">
+      <span class="adm-bulk-count" id="img-bulk-count">0 seleccionadas</span>
+      <button class="adm-bulk-btn danger" id="btn-img-bulk-clear" type="button">Quitar seleccionadas</button>
+      <button class="adm-bulk-btn" id="btn-img-bulk-export" type="button">⬇️ Exportar URLs</button>
+      <button class="adm-bulk-btn" id="btn-img-bulk-clear-sel" type="button">✕ Limpiar selección</button>
+    </div>
     <div class="adm-cards-grid" id="adm-cards-grid">
       <!-- Cards rendered by JS -->
     </div>
@@ -354,6 +381,7 @@ const BADGE_CLASS = {
 };
 
 let currentSection = 'hero';
+let _selectedImgSlots = new Set();
 
 // ── Toast ──
 function showToast(msg, isError = false) {
@@ -367,6 +395,7 @@ function showToast(msg, isError = false) {
 // ── Render cards for a section ──
 function renderSection(section) {
   currentSection = section;
+  _selectedImgSlots.clear(); // la selección no tiene sentido al cambiar de sección — son slots distintos
   const meta = SECTION_META[section] || {};
   document.getElementById('section-title').textContent = meta.label || section;
   document.getElementById('section-desc').textContent = meta.desc || '';
@@ -419,6 +448,7 @@ function renderSection(section) {
 
     return `
       <div class="adm-img-card" data-slot-id="${slot.id}">
+        <input type="checkbox" class="adm-card-select img-slot-check" data-slot-id="${slot.id}" title="Seleccionar">
         <div class="adm-card-top">
           <div>
             <div class="adm-card-label">${slot.label}</div>
@@ -444,7 +474,73 @@ function renderSection(section) {
       </div>
     `;
   }).join('');
+  updateImgBulkToolbar();
 }
+
+function updateImgBulkToolbar() {
+  const count = _selectedImgSlots.size;
+  const toolbar = document.getElementById('img-bulk-toolbar');
+  const countEl = document.getElementById('img-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+}
+
+document.getElementById('adm-cards-grid').addEventListener('change', e => {
+  const cb = e.target.closest('.img-slot-check');
+  if (!cb) return;
+  if (cb.checked) _selectedImgSlots.add(cb.dataset.slotId);
+  else _selectedImgSlots.delete(cb.dataset.slotId);
+  updateImgBulkToolbar();
+});
+
+document.getElementById('btn-img-bulk-clear-sel').addEventListener('click', () => {
+  _selectedImgSlots.clear();
+  document.querySelectorAll('.img-slot-check').forEach(cb => cb.checked = false);
+  updateImgBulkToolbar();
+});
+
+document.getElementById('btn-img-bulk-clear').addEventListener('click', async () => {
+  if (!_selectedImgSlots.size) return;
+  const n = _selectedImgSlots.size;
+  if (!confirm(`¿Quitar la imagen de ${n} slot(s) seleccionado(s)? Esta acción no se puede deshacer.`)) return;
+  const slotIds = [..._selectedImgSlots];
+  try {
+    const data = {};
+    slotIds.forEach(slotId => {
+      data[slotId] = null;
+      if (slotId.startsWith('hero_bg_')) { data[slotId + '_size'] = null; data[slotId + '_pos'] = null; }
+    });
+    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
+    slotIds.forEach(slotId => {
+      setImgCache(slotId, '');
+      if (slotId.startsWith('hero_bg_')) { setImgCache(slotId + '_size', ''); setImgCache(slotId + '_pos', ''); }
+      updateCardUI(slotId, '');
+      const input = document.getElementById(`input-${slotId}`);
+      if (input) input.value = '';
+    });
+    showToast(`✅ ${n} imagen(es) quitadas`);
+    _selectedImgSlots.clear();
+    renderSection(currentSection);
+  } catch (e) {
+    showToast('❌ Error al quitar las imágenes seleccionadas.', true);
+  }
+});
+
+document.getElementById('btn-img-bulk-export').addEventListener('click', () => {
+  if (!_selectedImgSlots.size) return;
+  const rows = [['Slot', 'Sección', 'URL']];
+  [..._selectedImgSlots].forEach(slotId => {
+    const slot = IMAGE_SLOTS.find(s => s.id === slotId);
+    rows.push([slot?.label || slotId, slot?.section || '', getImg(slotId) || '']);
+  });
+  const csv = rows.map(r => r.map(v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v)).join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `imagenes_${Date.now()}.csv`;
+  a.click();
+  showToast(`✅ Exportadas ${_selectedImgSlots.size} URL(s)`);
+});
 
 // ── Update a single card's preview & status without full re-render ──
 function updateCardUI(slotId, url) {

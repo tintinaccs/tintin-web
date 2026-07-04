@@ -363,6 +363,27 @@
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           <button class="adm-btn adm-btn-sm" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <div class="adm-more-actions" id="prod-more-actions">
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="toggleProdMoreActions()" type="button">⋯ Más acciones</button>
+            <div class="adm-more-actions-panel" id="prod-more-actions-panel">
+              <div class="adm-more-actions-row">
+                <input id="bulk-stock-input" type="number" min="0" placeholder="Nuevo stock" class="adm-input" style="font-size:12px;padding:5px 10px;width:130px">
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetStock()">Aplicar stock</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <input id="bulk-price-input" type="number" min="0" placeholder="Nuevo precio (Gs.)" class="adm-input" style="font-size:12px;padding:5px 10px;width:150px">
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetPrice()">Aplicar precio</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOferta(true)">Aplicar oferta</button>
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetOferta(false)">Quitar oferta</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetDestacado(true)">Marcar destacado</button>
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetDestacado(false)">Quitar destacado</button>
+              </div>
+            </div>
+          </div>
           <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -496,6 +517,14 @@
             <input id="coll-search" type="text" placeholder="Buscar colección…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nueva-coleccion" onclick="collNueva()">+ Nueva colección</button>
           </div>
+        </div>
+        <div id="coll-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="coll-bulk-count">0 seleccionadas</span>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCollVisible(true)">Activar (mostrar)</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkSetCollVisible(false)">Desactivar (ocultar)</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportCollections()">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-btn" onclick="bulkDeleteCollections()" style="display:none">Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearCollSelection()">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)"><span class="adm-spinner"></span> Cargando colecciones…</div>
@@ -653,10 +682,16 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
             Quién editó un pedido, cambió su estado, editó un producto o su stock, cambió un rol, o bloqueó/restauró una cuenta — las últimas 200 acciones, más recientes primero. Solo Super Admin puede ver esta sección; el Modder no tiene acceso, aunque sus propias acciones sí queden registradas acá.
           </p>
+          <div id="audit-bulk-toolbar" class="adm-bulk-toolbar">
+            <span class="adm-bulk-count" id="audit-bulk-count">0 seleccionados</span>
+            <button class="adm-btn adm-btn-sm" onclick="bulkExportAuditLog()">⬇️ Exportar CSV</button>
+            <button class="adm-btn adm-btn-sm" onclick="clearAuditSelection()">✕ Limpiar</button>
+          </div>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-audit" onclick="toggleSelectAllAudit(this)"></th>
                   <th>Fecha</th>
                   <th>Quién</th>
                   <th>Acción</th>
@@ -664,7 +699,7 @@
                 </tr>
               </thead>
               <tbody id="audit-tbody">
-                <tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
+                <tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -715,10 +750,16 @@
               "Pedido recibido para clienta/Tintin" es el correo real que ya manda el checkout — desactivarlo acá corta ese envío real. Los demás son correos automáticos nuevos: quedan desactivados por defecto y no cambian nada hasta que actives cada uno a propósito.
             </p>
           </div>
+          <div id="cop-bulk-toolbar" class="adm-bulk-toolbar">
+            <span class="adm-bulk-count" id="cop-bulk-count">0 seleccionados</span>
+            <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOrderTypeEnabled(true)">Activar seleccionados</button>
+            <button class="adm-btn adm-btn-sm" onclick="bulkSetOrderTypeEnabled(false)">Desactivar seleccionados</button>
+            <button class="adm-btn adm-btn-sm" onclick="clearOrderTypeSelection()">✕ Limpiar</button>
+          </div>
           <div class="adm-table-wrap">
             <table class="adm-table adm-table-correos-pedidos">
-              <thead><tr><th>Tipo de correo</th><th>Activo</th><th>Plantilla asociada</th><th>Último envío</th><th>Vista previa</th></tr></thead>
-              <tbody id="correos-pedidos-tbody"><tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+              <thead><tr><th class="col-select"><input type="checkbox" id="check-all-cop" onclick="toggleSelectAllOrderTypes(this)"></th><th>Tipo de correo</th><th>Activo</th><th>Plantilla asociada</th><th>Último envío</th><th>Vista previa</th></tr></thead>
+              <tbody id="correos-pedidos-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -896,10 +937,16 @@
               <input type="date" class="adm-input" id="hist-filter-from" style="width:auto" title="Desde" />
               <input type="date" class="adm-input" id="hist-filter-to" style="width:auto" title="Hasta" />
             </div>
+            <div id="hist-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="hist-bulk-count">0 seleccionados</span>
+              <button class="adm-btn adm-btn-sm" onclick="bulkRetryFailedLogs()" title="Reintentar los envíos fallidos de la selección">🔄 Reintentar fallidos</button>
+              <button class="adm-btn adm-btn-sm" onclick="bulkExportLogs()">⬇️ Exportar CSV</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearLogsSelection()">✕ Limpiar</button>
+            </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-historial">
-                <thead><tr><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
-                <tbody id="hist-tbody"><tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-hist" onclick="toggleSelectAllLogs(this)"></th><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
+                <tbody id="hist-tbody"><tr><td colspan="8" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -1087,6 +1134,11 @@
               <button class="adm-btn adm-btn-primary" id="ship-delivery-add" type="button" style="white-space:nowrap">Guardar</button>
             </div>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-delivery-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-delivery-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="ship-delivery-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('delivery')">Eliminar seleccionadas</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('delivery')">✕ Limpiar</button>
+            </div>
             <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
 
@@ -1103,6 +1155,11 @@
               <button class="adm-btn adm-btn-primary" id="ship-encomienda-add" type="button" style="white-space:nowrap">Guardar</button>
             </div>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-encomienda-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-encomienda-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="ship-encomienda-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('encomienda')">Eliminar seleccionadas</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('encomienda')">✕ Limpiar</button>
+            </div>
             <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
         </div>
@@ -1238,7 +1295,9 @@
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
               <div style="font-size:13px;font-weight:700;color:var(--adm-text)" id="csv-preview-title"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span class="adm-bulk-count" id="csv-bulk-count" style="align-self:center">0 seleccionados</span>
                 <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">Limpiar</button>
+                <button class="adm-btn adm-btn-outline" id="btn-csv-importar-seleccionados">⬆️ Importar seleccionados</button>
                 <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
               </div>
             </div>
@@ -1246,6 +1305,7 @@
               <table class="adm-table" id="csv-preview-table">
                 <thead>
                   <tr>
+                    <th class="col-select"><input type="checkbox" id="check-all-csv" onclick="toggleSelectAllCsvRows(this)"></th>
                     <th>#</th>
                     <th>Foto</th>
                     <th>Nombre</th>
@@ -1494,35 +1554,97 @@ const AUDIT_ACTION_LABELS = {
   eliminar_usuario:       '🗑️ Eliminó usuario',
   plantilla_creada:       '➕ Duplicó plantilla',
   plantilla_archivada:    '🗄️ Archivó/reactivó plantilla',
-  plantilla_eliminada:    '🗑️ Eliminó plantilla'
+  plantilla_eliminada:    '🗑️ Eliminó plantilla',
+  editar_coleccion:       '✏️ Editó colección',
+  eliminar_coleccion:     '🗑️ Eliminó colección',
+  config_correo_pedido:   '⚙️ Cambió correos automáticos de pedido',
+  editar_envio:           '🚚 Cambió ciudades de envío'
 };
+
+let _allAuditLogs = [];
+let _selectedAuditLogs = new Set();
 
 async function loadAuditLog() {
   const tbody = document.getElementById('audit-tbody');
-  tbody.innerHTML = '<tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)));
-    if (snap.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Todavía no hay acciones registradas</td></tr>';
-      return;
-    }
-    tbody.innerHTML = snap.docs.map(d => {
-      const l = d.data();
-      const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
-      const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
-      return `
-        <tr>
-          <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
-          <td style="font-size:12px">${l.actorEmail || '—'}</td>
-          <td style="font-size:12px">${actionLabel}${bulkTag}</td>
-          <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
-        </tr>
-      `;
-    }).join('');
+    _allAuditLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAuditLogTable();
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
   }
 }
+
+// La auditoría es de solo lectura (nunca se edita ni se borra un log) — la
+// única acción posible sobre la selección es exportarla, nunca modificarla.
+function renderAuditLogTable() {
+  const tbody = document.getElementById('audit-tbody');
+  if (!_allAuditLogs.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#aaa;padding:24px">Todavía no hay acciones registradas</td></tr>';
+    updateAuditBulkToolbar();
+    return;
+  }
+  const visibleIds = new Set(_allAuditLogs.map(l => l.id));
+  [..._selectedAuditLogs].forEach(id => { if (!visibleIds.has(id)) _selectedAuditLogs.delete(id); });
+  tbody.innerHTML = _allAuditLogs.map(l => {
+    const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
+    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
+    return `
+      <tr>
+        <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${l.id}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
+        <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
+        <td style="font-size:12px">${l.actorEmail || '—'}</td>
+        <td style="font-size:12px">${actionLabel}${bulkTag}</td>
+        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
+      </tr>
+    `;
+  }).join('');
+  updateAuditBulkToolbar();
+}
+
+window.toggleSelectAllAudit = function(masterCb) {
+  document.querySelectorAll('.audit-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedAuditLogs.add(cb.dataset.id);
+    else _selectedAuditLogs.delete(cb.dataset.id);
+  });
+  updateAuditBulkToolbar();
+};
+
+window.toggleAuditSelect = function(cb) {
+  if (cb.checked) _selectedAuditLogs.add(cb.dataset.id);
+  else _selectedAuditLogs.delete(cb.dataset.id);
+  updateAuditBulkToolbar();
+};
+
+function updateAuditBulkToolbar() {
+  const count = _selectedAuditLogs.size;
+  const toolbar = document.getElementById('audit-bulk-toolbar');
+  const countEl = document.getElementById('audit-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearAuditSelection = function() {
+  _selectedAuditLogs.clear();
+  document.querySelectorAll('.audit-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-audit');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateAuditBulkToolbar();
+};
+
+window.bulkExportAuditLog = function() {
+  if (!_selectedAuditLogs.size) { toast('No hay entradas seleccionadas'); return; }
+  const list = _allAuditLogs.filter(l => _selectedAuditLogs.has(l.id));
+  const header = ['Fecha', 'Quién', 'Acción', 'Masivo', 'Objetivo', 'Detalle'];
+  const rows = list.map(l => [
+    formatDate(l.createdAt), l.actorEmail || '', AUDIT_ACTION_LABELS[l.action] || l.action,
+    l.bulk ? `Sí (${l.bulkCount || 0})` : 'No', l.targetLabel || '', l.details || ''
+  ]);
+  downloadCsv(`auditoria_${Date.now()}.csv`, [header, ...rows]);
+  toast(`Exportadas ${list.length} entrada(s) a CSV`);
+};
 
 // ---- FORMAT ----
 function formatPrice(n) {
@@ -3188,6 +3310,7 @@ function renderCorreosPedidosTab() {
     const tplOptionsHtml = options.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === tplKey) ? 'selected' : ''}>${t.name}</option>`).join('');
     return `
       <tr>
+        <td class="col-select" data-label="Sel."><input type="checkbox" class="cop-row-check" data-key="${key}" onclick="toggleOrderTypeSelect(this)" ${_selectedOrderTypes.has(key) ? 'checked' : ''}></td>
         <td data-label="Tipo">${ORDER_TYPE_NAMES[key]}</td>
         <td data-label="Activo"><label class="adm-toggle" style="width:40px;height:22px"><input type="checkbox" ${enabled ? 'checked' : ''} onchange="window.toggleOrderTypeEnabled('${key}', this.checked)"><span class="adm-toggle-slider"></span></label></td>
         <td data-label="Plantilla"><select class="adm-select" style="width:auto;font-size:12px" onchange="window.setOrderTypeTemplate('${key}', this.value)">${tplOptionsHtml}</select></td>
@@ -3196,7 +3319,68 @@ function renderCorreosPedidosTab() {
       </tr>
     `;
   }).join('');
+  updateOrderTypeBulkToolbar();
 }
+
+// ══════════════════════════════════════════════
+// CORREOS DE PEDIDOS: SELECCIÓN MÚLTIPLE Y ACTIVAR/DESACTIVAR MASIVO
+// ══════════════════════════════════════════════
+let _selectedOrderTypes = new Set();
+
+window.toggleSelectAllOrderTypes = function(masterCb) {
+  document.querySelectorAll('.cop-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedOrderTypes.add(cb.dataset.key);
+    else _selectedOrderTypes.delete(cb.dataset.key);
+  });
+  updateOrderTypeBulkToolbar();
+};
+
+window.toggleOrderTypeSelect = function(cb) {
+  if (cb.checked) _selectedOrderTypes.add(cb.dataset.key);
+  else _selectedOrderTypes.delete(cb.dataset.key);
+  updateOrderTypeBulkToolbar();
+};
+
+function updateOrderTypeBulkToolbar() {
+  const count = _selectedOrderTypes.size;
+  const toolbar = document.getElementById('cop-bulk-toolbar');
+  const countEl = document.getElementById('cop-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearOrderTypeSelection = function() {
+  _selectedOrderTypes.clear();
+  document.querySelectorAll('.cop-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-cop');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateOrderTypeBulkToolbar();
+};
+
+// Los dos correos "recibido" son el envío REAL del checkout — si están en la
+// selección al desactivar en lote, se avisa explícitamente antes de aplicar
+// (mismo riesgo que ya existe al desactivarlos de a uno, pero acá puede pasar
+// sin querer si se seleccionaron todas las filas con "Seleccionar todos").
+window.bulkSetOrderTypeEnabled = async function(enabled) {
+  if (!_selectedOrderTypes.size) return;
+  const keys = [..._selectedOrderTypes];
+  const n = keys.length;
+  const includesReal = keys.includes('pedido_recibido_clienta') || keys.includes('pedido_recibido_tintin');
+  let msg = `¿${enabled ? 'Activar' : 'Desactivar'} ${n} tipo(s) de correo?`;
+  if (!enabled && includesReal) msg += '\n\n⚠️ La selección incluye "Pedido recibido" — desactivarlo corta el correo REAL que ya manda el checkout.';
+  if (!confirm(msg)) return;
+  try {
+    emailSettingsCache = emailSettingsCache || defaultEmailSettings_();
+    keys.forEach(key => { emailSettingsCache.orderTypesEnabled[key] = enabled; });
+    await saveEmailSettingsMerge_({ orderTypesEnabled: emailSettingsCache.orderTypesEnabled });
+    logAudit('config_correo_pedido', 'correo_pedido', '', '', `${n} tipo(s) → ${enabled ? 'activados' : 'desactivados'}`, { bulk: true, count: n });
+    toast(`${n} tipo(s) de correo ${enabled ? 'activados' : 'desactivados'}`);
+    clearOrderTypeSelection();
+    renderCorreosPedidosTab();
+    renderCorreosDashboard();
+  } catch (e) { toast('Error: ' + e.message); }
+};
 
 window.toggleOrderTypeEnabled = async (key, checked) => {
   emailSettingsCache.orderTypesEnabled[key] = checked;
@@ -3900,11 +4084,14 @@ function renderCorreosHistorialTab() {
 
   const tbody = document.getElementById('hist-tbody');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
     return;
   }
+  const visibleIds = new Set(list.slice(0, 200).map(l => l.id));
+  [..._selectedLogs].forEach(id => { if (!visibleIds.has(id)) _selectedLogs.delete(id); });
   tbody.innerHTML = list.slice(0, 200).map(l => `
     <tr class="adm-log-row">
+      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${l.id}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
       <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
       <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
@@ -3919,7 +4106,85 @@ function renderCorreosHistorialTab() {
       </td>
     </tr>
   `).join('');
+  updateLogsBulkToolbar();
 }
+
+// ══════════════════════════════════════════════
+// HISTORIAL: SELECCIÓN MÚLTIPLE — exportar / reintentar fallidos
+// ══════════════════════════════════════════════
+let _selectedLogs = new Set();
+
+window.toggleSelectAllLogs = function(masterCb) {
+  document.querySelectorAll('.hist-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedLogs.add(cb.dataset.id);
+    else _selectedLogs.delete(cb.dataset.id);
+  });
+  updateLogsBulkToolbar();
+};
+
+window.toggleLogSelect = function(cb) {
+  if (cb.checked) _selectedLogs.add(cb.dataset.id);
+  else _selectedLogs.delete(cb.dataset.id);
+  updateLogsBulkToolbar();
+};
+
+function updateLogsBulkToolbar() {
+  const count = _selectedLogs.size;
+  const toolbar = document.getElementById('hist-bulk-toolbar');
+  const countEl = document.getElementById('hist-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearLogsSelection = function() {
+  _selectedLogs.clear();
+  document.querySelectorAll('.hist-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-hist');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateLogsBulkToolbar();
+};
+
+// Los logs en sí NUNCA se editan/borran (registro inmutable) — "reintentar"
+// no toca el log fallido, crea una entrada NUEVA con el resultado del
+// reintento, igual que ya hace el reintento individual.
+window.bulkRetryFailedLogs = async function() {
+  if (!_selectedLogs.size) return;
+  const ids = [..._selectedLogs].filter(id => { const l = allEmailLogs.find(x => x.id === id); return l && l.status === 'failed' && l.templateKey; });
+  if (!ids.length) { toast('No hay envíos fallidos reintentables en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Reintentar ${n} envío(s) fallido(s)?`)) return;
+  let ok = 0, fail = 0;
+  for (const id of ids) {
+    const l = allEmailLogs.find(x => x.id === id);
+    try {
+      const tpl = allEmailTemplates.find(t => (t.key || t.id) === l.templateKey);
+      if (!tpl) throw new Error('plantilla no existe');
+      const result = await sendTemplatedEmail({ to: l.recipient, ...templateContentPayload_(tpl), variables: l.variables || {} });
+      await logEmailSend_({ type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
+      if (result?.success) ok++; else fail++;
+    } catch (e) { fail++; }
+  }
+  toast(fail ? `${ok} reenviados, ${fail} fallaron` : `${ok} reenviados correctamente`);
+  clearLogsSelection();
+  renderCorreosHistorialTab();
+};
+
+function logRowsToCsv_(logs) {
+  const header = ['Fecha', 'Tipo', 'Destinatario', 'Estado', 'Enviado por', 'Origen'];
+  const rows = logs.map(l => [
+    l.sentAt?.toDate ? l.sentAt.toDate().toLocaleString('es-PY') : '',
+    templateLabel_(l.type), l.recipient || '', l.status || '', l.sentBy || '', l.isAutomatic ? 'Automático' : 'Manual'
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportLogs = function() {
+  if (!_selectedLogs.size) { toast('No hay envíos seleccionados'); return; }
+  const list = allEmailLogs.filter(l => _selectedLogs.has(l.id));
+  downloadCsv(`historial_correos_${Date.now()}.csv`, logRowsToCsv_(list));
+  toast(`Exportados ${list.length} envío(s) a CSV`);
+};
 
 document.getElementById('hist-search').oninput = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-status').onchange = () => renderCorreosHistorialTab();
@@ -4024,23 +4289,72 @@ async function maybeSendOrderStatusEmail_(order, kind, value) {
 // ======== ENVÍOS: ciudades (CRUD real, con lista en tiempo real) ========
 let shipCities  = { delivery: [], encomienda: [] };
 let shipEditing = { delivery: null, encomienda: null }; // índice en edición, o null = alta nueva
+// Ciudades identificadas por nombre (no por índice, que cambia al borrar/reordenar).
+let _selectedShipCities = { delivery: new Set(), encomienda: new Set() };
 
 function renderShipList(type) {
   const container = document.getElementById(`ship-${type}-list`);
   const list = shipCities[type];
+  const names = new Set(list.map(c => c.name));
+  [..._selectedShipCities[type]].forEach(name => { if (!names.has(name)) _selectedShipCities[type].delete(name); });
   if (!list.length) {
     container.innerHTML = '<p style="font-size:12px;color:var(--adm-muted);padding:6px 0">Todavía no cargaste ninguna ciudad.</p>';
+    updateShipBulkToolbar(type);
     return;
   }
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
+      <input type="checkbox" class="ship-${type}-check" data-name="${c.name}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
       <span style="font-weight:600;flex:1">${c.name}</span>
       <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
     </div>
   `).join('');
+  updateShipBulkToolbar(type);
 }
+
+window.toggleShipCitySelect = function(type, cb) {
+  if (cb.checked) _selectedShipCities[type].add(cb.dataset.name);
+  else _selectedShipCities[type].delete(cb.dataset.name);
+  updateShipBulkToolbar(type);
+};
+
+function updateShipBulkToolbar(type) {
+  const count = _selectedShipCities[type].size;
+  const toolbar = document.getElementById(`ship-${type}-bulk-toolbar`);
+  const countEl = document.getElementById(`ship-${type}-bulk-count`);
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+}
+
+window.clearShipSelection = function(type) {
+  _selectedShipCities[type].clear();
+  document.querySelectorAll(`.ship-${type}-check`).forEach(cb => cb.checked = false);
+  updateShipBulkToolbar(type);
+};
+
+window.bulkDeleteShipCities = async function(type) {
+  const names = [..._selectedShipCities[type]];
+  if (!names.length) return;
+  const n = names.length;
+  if (!confirm(`¿Eliminar ${n} ciudad(es) de ${type === 'delivery' ? 'Delivery' : 'Encomienda'}?`)) return;
+  const prevList = shipCities[type].slice();
+  const nameSet = new Set(names);
+  shipCities[type] = shipCities[type].filter(c => !nameSet.has(c.name));
+  try {
+    await saveShipCities();
+    logAudit('editar_envio', 'envio', '', '', `${n} ciudad(es) de ${type} eliminadas`, { bulk: true, count: n });
+    toast(`${n} ciudad(es) eliminadas`);
+    clearShipSelection(type);
+    renderShipList(type);
+    if (shipEditing[type] != null) resetShipForm(type);
+  } catch (e) {
+    shipCities[type] = prevList;
+    toast('Error al eliminar: ' + e.message);
+    renderShipList(type);
+  }
+};
 
 async function saveShipCities() {
   await setDoc(doc(db, 'settings', 'general'), {
@@ -4629,6 +4943,105 @@ function applyCollFilter(list) {
 }
 document.getElementById('coll-search').addEventListener('input', () => renderColeccionesGrid(applyCollFilter(_allCollections)));
 
+// ══════════════════════════════════════════════
+// COLECCIONES: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedCollections = new Set();
+
+window.toggleCollectionSelect = function(cb) {
+  if (cb.checked) _selectedCollections.add(cb.dataset.slug);
+  else _selectedCollections.delete(cb.dataset.slug);
+  updateCollBulkToolbar();
+};
+
+function updateCollBulkToolbar() {
+  const count = _selectedCollections.size;
+  const toolbar = document.getElementById('coll-bulk-toolbar');
+  const countEl = document.getElementById('coll-bulk-count');
+  const delBtn = document.getElementById('coll-bulk-delete-btn');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+  if (delBtn) delBtn.style.display = can(currentRole, 'deleteCollections') ? '' : 'none';
+}
+
+window.clearCollSelection = function() {
+  _selectedCollections.clear();
+  document.querySelectorAll('.coll-row-check').forEach(cb => cb.checked = false);
+  updateCollBulkToolbar();
+};
+
+window.bulkSetCollVisible = async function(visible) {
+  if (!_selectedCollections.size) return;
+  if (!can(currentRole, 'manageContent')) { toast('No tenés permiso para editar colecciones'); return; }
+  const n = _selectedCollections.size;
+  if (!confirm(`¿${visible ? 'Activar (mostrar)' : 'Desactivar (ocultar)'} ${n} colección(es)?`)) return;
+  try {
+    const slugs = [..._selectedCollections];
+    await batchUpdateChunked(slugs, () => ({ visible, updatedAt: serverTimestamp() }), 'collections');
+    _allCollections.forEach(c => { if (_selectedCollections.has(c.slug)) c.visible = visible; });
+    logAudit('editar_coleccion', 'coleccion', '', '', `Colecciones ${visible ? 'activadas' : 'desactivadas'}`, { bulk: true, count: n });
+    toast(`${n} colección(es) ${visible ? 'activadas' : 'desactivadas'}`);
+    clearCollSelection();
+    renderColeccionesGrid(applyCollFilter(_allCollections));
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Por seguridad, el borrado masivo solo alcanza a colecciones SIN productos
+// asociados — reasignar los productos de una colección con contenido es una
+// decisión por-colección (a qué otra colección van), no algo que tenga
+// sentido resolver igual para varias a la vez. Las que tengan productos se
+// listan aparte para que se borren de a una desde "Eliminar" (ese flujo ya
+// pide a dónde mover los productos).
+window.bulkDeleteCollections = async function() {
+  if (!_selectedCollections.size) return;
+  if (!can(currentRole, 'deleteCollections')) { toast('No tenés permiso para eliminar colecciones'); return; }
+  const slugs = [..._selectedCollections];
+  const empty = [], withProducts = [];
+  slugs.forEach(slug => {
+    const count = _allProducts.filter(p => (p.category || '') === slug).length;
+    (count > 0 ? withProducts : empty).push(slug);
+  });
+  if (!empty.length) {
+    toast('Todas las colecciones seleccionadas tienen productos — eliminalas de a una con "Eliminar" para reasignarlos primero.');
+    return;
+  }
+  const n = empty.length;
+  let msg = `¿ELIMINAR DEFINITIVAMENTE ${n} colección(es) vacías? Esta acción no se puede deshacer.`;
+  if (withProducts.length) msg += `\n\n(${withProducts.length} de la selección tienen productos y NO se van a tocar — eliminalas de a una.)`;
+  if (!confirm(msg)) return;
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < empty.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      empty.slice(i, i + CHUNK).forEach(slug => batch.delete(doc(db, 'collections', slug)));
+      await batch.commit();
+    }
+    const emptySet = new Set(empty);
+    _allCollections = _allCollections.filter(c => !emptySet.has(c.slug));
+    logAudit('eliminar_coleccion', 'coleccion', '', '', `${n} colecciones vacías eliminadas`, { bulk: true, count: n });
+    toast(`${n} colección(es) eliminadas` + (withProducts.length ? ` — ${withProducts.length} con productos no se tocaron` : ''));
+    clearCollSelection();
+    renderColeccionesGrid(applyCollFilter(_allCollections));
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function collRowsToCsv_(cols) {
+  const header = ['Nombre', 'Slug', 'Descripción', 'Orden', 'Visible', 'Productos'];
+  const rows = cols.map(c => [
+    c.name || '', c.slug || '', c.description || '', c.order ?? 0,
+    c.visible === false ? 'No' : 'Sí',
+    _allProducts.filter(p => (p.category || '') === c.slug).length
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportCollections = function() {
+  if (!_selectedCollections.size) { toast('No hay colecciones seleccionadas'); return; }
+  const list = _allCollections.filter(c => _selectedCollections.has(c.slug));
+  downloadCsv(`colecciones_${Date.now()}.csv`, collRowsToCsv_(list));
+  toast(`Exportadas ${list.length} colección(es) a CSV`);
+};
+
 // Categories already in use by real products but with no matching doc in
 // `collections` yet — e.g. products imported/assigned before this module
 // existed. Surfaced so nothing "disappears" from the admin's view.
@@ -4658,10 +5071,15 @@ function renderColeccionesGrid(list) {
   document.getElementById('coll-grid-wrap').style.display = '';
   document.getElementById('coll-empty').style.display = 'none';
   const grid = document.getElementById('coll-grid');
+  const visibleSlugs = new Set(list.map(c => c.slug));
+  [..._selectedCollections].forEach(slug => { if (!visibleSlugs.has(slug)) _selectedCollections.delete(slug); });
   grid.innerHTML = list.map(c => {
     const count = _allProducts.filter(p => (p.category || '') === c.slug).length;
     return `
-    <div class="adm-card" style="margin:0;overflow:hidden">
+    <div class="adm-card" style="margin:0;overflow:hidden;position:relative">
+      <label style="position:absolute;top:8px;left:8px;z-index:3;background:rgba(255,255,255,.9);border-radius:6px;padding:3px;display:flex" title="Seleccionar">
+        <input type="checkbox" class="coll-row-check" data-slug="${c.slug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
+      </label>
       <div style="height:120px;background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
         ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#e65100;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
       </div>
@@ -4689,6 +5107,7 @@ function renderColeccionesGrid(list) {
         </div>
       </div>
     </div>`).join('');
+  updateCollBulkToolbar();
 }
 
 window.collVerProductos = function(slug) {
@@ -5369,9 +5788,11 @@ function loadImportar() {
     if (!lista.length) { toast('No se encontraron productos válidos en el CSV'); return; }
     document.getElementById('csv-preview').style.display = 'block';
     document.getElementById('csv-preview-title').textContent = `${lista.length} productos encontrados — revisá antes de importar`;
+    _selectedCsvRows.clear();
     const tbody = document.getElementById('csv-preview-body');
     tbody.innerHTML = lista.map((p, i) => `
       <tr>
+        <td class="col-select"><input type="checkbox" class="csv-row-check" data-idx="${i}" onclick="toggleCsvRowSelect(this)"></td>
         <td style="color:var(--adm-muted);font-size:12px">${i + 1}</td>
         <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
         <td style="font-weight:700;max-width:200px;word-break:break-word">${p.name}</td>
@@ -5388,29 +5809,32 @@ function loadImportar() {
         <td><span class="adm-badge ${p.active ? 'badge-entregado' : 'badge-cancelado'}">${p.active ? 'Activo' : 'Inactivo'}</span></td>
       </tr>
     `).join('');
+    updateCsvBulkCount();
   }
 
   document.getElementById('btn-csv-limpiar').addEventListener('click', () => {
     csvProductos = [];
+    _selectedCsvRows.clear();
     fileInput.value = '';
     document.getElementById('csv-preview').style.display = 'none';
     document.getElementById('csv-import-result').innerHTML = '';
   });
 
-  document.getElementById('btn-csv-importar').addEventListener('click', async () => {
-    if (!csvProductos.length) return;
+  async function importCsvProducts_(list) {
+    if (!list.length) return;
     const progress=document.getElementById('csv-import-progress');
     const progressBar=document.getElementById('csv-progress-bar');
     const progressLbl=document.getElementById('csv-progress-label');
     const result=document.getElementById('csv-import-result');
     const btn=document.getElementById('btn-csv-importar');
-    btn.disabled=true; progress.style.display='block'; result.innerHTML='';
+    const btnSel=document.getElementById('btn-csv-importar-seleccionados');
+    btn.disabled=true; btnSel.disabled=true; progress.style.display='block'; result.innerHTML='';
     let ok=0, errores=0;
-    for (let i=0; i<csvProductos.length; i++) {
-      const p = csvProductos[i];
-      const pct = Math.round(((i+1)/csvProductos.length)*100);
+    for (let i=0; i<list.length; i++) {
+      const p = list[i];
+      const pct = Math.round(((i+1)/list.length)*100);
       progressBar.style.width=pct+'%';
-      progressLbl.textContent=`Importando ${i+1} de ${csvProductos.length}: ${p.name}`;
+      progressLbl.textContent=`Importando ${i+1} de ${list.length}: ${p.name}`;
       try {
         await addDoc(collection(db,'products'), {
           name:        p.name,
@@ -5432,16 +5856,53 @@ function loadImportar() {
         ok++;
       } catch(e) { errores++; console.error('Error importando:', p.name, e); }
     }
-    btn.disabled=false; progress.style.display='none';
+    btn.disabled=false; btnSel.disabled=false; progress.style.display='none';
     if (ok>0) {
       result.innerHTML=`<span style="color:green">${ok} productos importados correctamente${errores>0?` (${errores} con error)`:''}</span>`;
       toast(`${ok} productos importados de Shopify`);
-      csvProductos=[]; fileInput.value='';
-      setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      const fullImport = list.length === csvProductos.length;
+      if (fullImport) {
+        csvProductos=[]; fileInput.value='';
+        setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      } else {
+        // Importación parcial (solo seleccionados): saca del preview solo lo
+        // ya importado, deja el resto para revisar/importar después.
+        const importedNames = new Set(list.map(p => p.name));
+        csvProductos = csvProductos.filter(p => !importedNames.has(p.name));
+        _selectedCsvRows.clear();
+        mostrarPreviewCSV(csvProductos);
+        if (!csvProductos.length) setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      }
     } else {
       result.innerHTML=`<span style="color:#e57">No se pudo importar ningún producto</span>`;
     }
+  }
+
+  document.getElementById('btn-csv-importar').addEventListener('click', () => importCsvProducts_(csvProductos));
+  document.getElementById('btn-csv-importar-seleccionados').addEventListener('click', () => {
+    const list = [..._selectedCsvRows].sort((a, b) => a - b).map(idx => csvProductos[idx]).filter(Boolean);
+    if (!list.length) { toast('No hay productos seleccionados'); return; }
+    importCsvProducts_(list);
   });
+}
+
+let _selectedCsvRows = new Set();
+window.toggleSelectAllCsvRows = function(masterCb) {
+  document.querySelectorAll('.csv-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    const idx = Number(cb.dataset.idx);
+    if (masterCb.checked) _selectedCsvRows.add(idx); else _selectedCsvRows.delete(idx);
+  });
+  updateCsvBulkCount();
+};
+window.toggleCsvRowSelect = function(cb) {
+  const idx = Number(cb.dataset.idx);
+  if (cb.checked) _selectedCsvRows.add(idx); else _selectedCsvRows.delete(idx);
+  updateCsvBulkCount();
+};
+function updateCsvBulkCount() {
+  const el = document.getElementById('csv-bulk-count');
+  if (el) el.textContent = `${_selectedCsvRows.size} seleccionado${_selectedCsvRows.size !== 1 ? 's' : ''}`;
 }
 
 // ======== CONTENIDO DEL SITIO ========
@@ -6064,6 +6525,86 @@ window.bulkExportProducts = function(scope) {
   if (!list.length) { toast('No hay productos para exportar'); return; }
   downloadCsv(`productos_${scope}_${Date.now()}.csv`, productRowsToCsv_(list));
   toast(`Exportados ${list.length} producto(s) a CSV`);
+};
+
+window.toggleProdMoreActions = function() {
+  document.getElementById('prod-more-actions-panel').classList.toggle('show');
+};
+// Cierra el menú "Más acciones" al tocar afuera — mismo criterio para
+// cualquier otro menú de este tipo que se agregue en otros módulos.
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.adm-more-actions').forEach(wrap => {
+    if (!wrap.contains(e.target)) wrap.querySelector('.adm-more-actions-panel')?.classList.remove('show');
+  });
+});
+
+window.bulkSetStock = async function() {
+  if (!_selectedProducts.size) return;
+  const val = document.getElementById('bulk-stock-input')?.value;
+  if (val === '' || val == null || Number(val) < 0) { toast('Escribí un stock válido (0 o más)'); return; }
+  const stock = Math.round(Number(val));
+  const n = _selectedProducts.size;
+  if (!confirm(`¿Cambiar el stock a ${stock} en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ stock, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.stock = stock; });
+    logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n });
+    toast(`Stock actualizado en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkSetPrice = async function() {
+  if (!_selectedProducts.size) return;
+  const val = document.getElementById('bulk-price-input')?.value;
+  if (val === '' || val == null || Number(val) < 0) { toast('Escribí un precio válido (0 o más)'); return; }
+  const price = Math.round(Number(val));
+  const n = _selectedProducts.size;
+  if (!confirm(`¿Cambiar el precio a ${formatPrice(price)} en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ price, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.price = price; });
+    logAudit('editar_producto', 'producto', '', '', `Precio → ${formatPrice(price)}`, { bulk: true, count: n });
+    toast(`Precio actualizado en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// "Aplicar/quitar descuento" en lote se mapea al campo real que ya existe
+// en la ficha de producto ("En oferta") — no existe un % de descuento
+// numérico en el esquema actual, así que no se inventa uno nuevo acá.
+window.bulkSetOferta = async function(oferta) {
+  if (!_selectedProducts.size) return;
+  const n = _selectedProducts.size;
+  if (!confirm(`¿${oferta ? 'Aplicar' : 'Quitar'} oferta en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ oferta, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.oferta = oferta; });
+    logAudit('editar_producto', 'producto', '', '', oferta ? 'Oferta aplicada' : 'Oferta quitada', { bulk: true, count: n });
+    toast(`Oferta ${oferta ? 'aplicada' : 'quitada'} en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkSetDestacado = async function(destacado) {
+  if (!_selectedProducts.size) return;
+  const n = _selectedProducts.size;
+  if (!confirm(`¿${destacado ? 'Marcar' : 'Quitar'} destacado en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ destacado, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.destacado = destacado; });
+    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado destacado' : 'Quitado destacado', { bulk: true, count: n });
+    toast(`Destacado ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
 };
 
 // ══════════════════════════════════════════════

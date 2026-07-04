@@ -278,6 +278,21 @@
     .adm-table tr:hover td.col-select,
     .adm-table tr:hover td.col-actions-sticky { background: #fef5f8; }
 
+    /* "Más acciones" — menú desplegable reutilizable para cuando la barra de
+       acciones masivas tiene demasiadas acciones para mostrar todas en fila
+       (pedido explícito: mobile/tablet no deben desbordar). */
+    .adm-more-actions { position: relative; }
+    .adm-more-actions-panel {
+      display: none;
+      position: absolute; top: calc(100% + 6px); left: 0; z-index: 20;
+      background: #fff; border: 1.5px solid var(--adm-border); border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      padding: 12px; min-width: 240px; max-width: calc(100vw - 32px);
+      flex-direction: column; gap: 8px;
+    }
+    .adm-more-actions-panel.show { display: flex; }
+    .adm-more-actions-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
     /* ======== TABLES ======== */
     .adm-table-wrap { overflow-x: auto; }
     .adm-table {
@@ -456,6 +471,7 @@
         content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
         letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
       }
+      .adm-table-historial td.col-select { position: static; }
     }
 
     /* ======== PEDIDOS DE CORREOS: tabla → cards en mobile ======== */
@@ -476,6 +492,7 @@
         content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
         letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
       }
+      .adm-table-correos-pedidos td.col-select { position: static; }
     }
 
     /* ======== PLANTILLAS: tabla → cards en mobile ========
