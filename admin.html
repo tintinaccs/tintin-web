@@ -13,994 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin-tokens.css">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
-       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
-       abajo, pero ahora apuntan al mismo valor real en todas las
-       superficies. --adm-bg queda con su propio valor a propósito: es un
-       gris-rosado más neutro, pensado para un panel de uso prolongado,
-       distinto del fondo más saturado del sitio público. */
-    :root {
-      --adm-sidebar:        var(--pink-dark);
-      --adm-sidebar-hover:  rgba(255,255,255,.12);
-      --adm-sidebar-active: rgba(255,255,255,.95);
-      --adm-sidebar-text:   rgba(255,255,255,.85);
-      --adm-bg:             #f7f4f6;
-      --adm-card:           #ffffff;
-      --adm-accent:         var(--pink-dark);
-      --adm-text:           var(--ink);
-      --adm-muted:          #888;
-      --adm-border:         var(--border);
-      --adm-font:           var(--font-body);
-      --adm-radius-sm:      var(--radius-sm);
-      --adm-radius-md:      var(--radius-md);
-      --sidebar-w:          260px;
-    }
-
-    body {
-      font-family: var(--adm-font);
-      background: var(--adm-bg);
-      color: var(--adm-text);
-      min-height: 100vh;
-    }
-
-    /* ======== SIDEBAR ======== */
-    .adm-sidebar {
-      position: fixed;
-      left: 0; top: 0;
-      width: var(--sidebar-w);
-      height: 100vh;
-      background: var(--adm-sidebar);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: 200;
-      transition: transform .3s ease;
-    }
-
-    .adm-sidebar-logo {
-      padding: 28px 24px 20px;
-      border-bottom: 1px solid rgba(255,255,255,.15);
-    }
-    .adm-sidebar-logo-text {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #fff;
-    }
-    .adm-sidebar-logo-sub {
-      font-size: 10px;
-      color: rgba(255,255,255,.6);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .adm-user-info {
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .adm-user-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 900; color: #fff;
-      overflow: hidden; flex-shrink: 0;
-    }
-    .adm-user-avatar img { width:100%;height:100%;object-fit:cover; }
-    .adm-user-name { font-size: 13px; font-weight: 700; color: #fff; }
-    .adm-user-role-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 50px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-top: 3px;
-    }
-    .role-superadmin { background: #8b2642; color: #fff; }
-    .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
-    .role-agent      { background: #7b68ee; color: #fff; }
-    .role-viewer     { background: #4a90d9; color: #fff; }
-    .role-client     { background: #888; color: #fff; }
-
-    .adm-nav {
-      flex: 1;
-      padding: 12px 0;
-    }
-    .adm-nav-divider {
-      height: 1px;
-      background: rgba(255,255,255,.12);
-      margin: 8px 16px;
-    }
-    .adm-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 24px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--adm-sidebar-text);
-      cursor: pointer;
-      transition: all .15s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      text-decoration: none;
-      font-family: var(--adm-font);
-    }
-    .adm-nav-item:hover { background: var(--adm-sidebar-hover); color: #fff; }
-    .adm-nav-item.active {
-      background: var(--adm-sidebar-active);
-      color: var(--adm-accent);
-      font-weight: 700;
-    }
-    .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
-
-    .adm-nav-bottom {
-      padding: 12px 0 20px;
-      border-top: 1px solid rgba(255,255,255,.12);
-    }
-
-    /* ======== MAIN ======== */
-    .adm-main {
-      margin-left: var(--sidebar-w);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ======== TOPBAR ======== */
-    .adm-topbar {
-      background: #fff;
-      border-bottom: 1.5px solid var(--adm-border);
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .adm-topbar-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--adm-text);
-      flex: 1;
-    }
-    .adm-hamburger { display: none; }
-    .adm-topbar-btn {
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: var(--adm-font);
-      background: var(--adm-accent);
-      color: #fff;
-      text-decoration: none;
-      transition: background .2s;
-    }
-    .adm-topbar-btn:hover { background: var(--rose); }
-
-    /* ======== CONTENT ======== */
-    .adm-content {
-      padding: 28px;
-      flex: 1;
-    }
-
-    /* ======== SECTIONS ======== */
-    .adm-section { display: none; }
-    .adm-section.active { display: block; }
-
-    /* ======== CARDS ======== */
-    .adm-card {
-      background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
-      overflow: hidden;
-    }
-    .adm-card-head {
-      padding: 18px 22px;
-      border-bottom: 1.5px solid var(--adm-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .adm-card-title {
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--adm-accent);
-    }
-    .adm-card-body { padding: 22px; }
-
-    /* ======== STAT CARDS ======== */
-    .adm-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .adm-stat {
-      background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
-      padding: 20px;
-    }
-    .adm-stat-icon { margin-bottom: 8px; display:flex; align-items:center; }
-    .adm-stat-val {
-      font-size: 28px;
-      font-weight: 900;
-      color: var(--adm-accent);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .adm-stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--adm-muted);
-    }
-
-    /* ======== TABLES ======== */
-    .adm-table-wrap { overflow-x: auto; }
-    .adm-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .adm-table th {
-      text-align: left;
-      padding: 10px 14px;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--adm-muted);
-      border-bottom: 2px solid var(--adm-border);
-      white-space: nowrap;
-    }
-    .adm-table td {
-      padding: 11px 14px;
-      border-bottom: 1px solid #fce4ec;
-      vertical-align: middle;
-    }
-    .adm-table tr:last-child td { border-bottom: none; }
-    .adm-table tr:hover td { background: #fef5f8; }
-
-    /* ======== BADGES ======== */
-    .adm-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 50px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .badge-pendiente  { background: #fef3c7; color: #92400e; }
-    .badge-confirmado { background: #dbeafe; color: #1e40af; }
-    .badge-enviado    { background: #ede9fe; color: #5b21b6; }
-    .badge-entregado  { background: #d1fae5; color: #065f46; }
-    .badge-cancelado  { background: #fee2e2; color: #991b1b; }
-    .badge-preparando  { background: #fef9c3; color: #713f12; }
-    .badge-pagado      { background: #d1fae5; color: #065f46; }
-    /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
-       puedan distinguir de un vistazo en la misma columna — son estados
-       "terminales" distintos, no el mismo. */
-    .badge-rechazado   { background: #fde3e1; color: #c0392b; }
-    .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
-    /* Listo para retirar: único estado de pedido con el rosa de marca en vez
-       de la paleta semántica genérica — es un hito positivo específico de
-       Tintin (retiro en tienda), no un estado de logística estándar. */
-    .badge-listo       { background: var(--pink-pale); color: var(--pink-dark); }
-
-    /* ======== FORM ELEMENTS ======== */
-    .adm-input, .adm-select, .adm-textarea {
-      padding: 9px 14px;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: var(--adm-font);
-      color: var(--adm-text);
-      background: #fff;
-      transition: border .2s;
-      width: 100%;
-    }
-    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
-      outline: none;
-      border-color: var(--adm-accent);
-    }
-    .adm-textarea { resize: vertical; min-height: 80px; }
-
-    /* Píldoras — usadas en Envíos (Ciudad / Costo) */
-    .adm-pill-input { border-radius: 999px; padding: 11px 22px; }
-    .ship-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
-    .ship-tab-btn {
-      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
-    }
-    .ship-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .ship-tab-panel { display: none; }
-    .ship-tab-panel.active { display: block; }
-
-    /* Usuarios / Bloqueados — mismas píldoras que ship-tabs, clases propias
-       para no compartir el querySelectorAll global de Envíos. */
-    .user-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-    .user-tab-btn {
-      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
-      display: inline-flex; align-items: center; gap: 6px;
-    }
-    .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
-
-    /* ======== MÓDULO CORREOS ======== */
-    .correos-tabs {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
-      padding-bottom: 14px; border-bottom: 1.5px solid var(--adm-border);
-    }
-    .correos-tab-btn {
-      padding: 9px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s; white-space: nowrap;
-    }
-    .correos-tab-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .correos-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .correos-panel { display: none; }
-    .correos-panel.active { display: block; }
-    @media (max-width: 640px) {
-      .correos-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 10px; }
-      .correos-tabs::-webkit-scrollbar { display: none; }
-      .correos-tab-btn { flex-shrink: 0; }
-    }
-
-    /* Switches on/off con etiqueta — variante compacta del adm-toggle para
-       usarlo dentro de una fila de tabla (Correos de pedidos) sin romper el
-       alto de línea. */
-    .correos-mini-toggle { display: inline-flex; align-items: center; gap: 8px; }
-    .correos-mini-toggle .adm-toggle { width: 40px; height: 22px; }
-    .correos-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
-    .correos-mini-toggle .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
-
-    /* Chips de destinatarias seleccionadas (Promociones) */
-    .correos-chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-    .correos-chip {
-      display: inline-flex; align-items: center; gap: 6px; background: #fef5f8; color: var(--adm-accent);
-      border: 1px solid #f0d8e0; border-radius: 999px; padding: 5px 8px 5px 14px; font-size: 12px; font-weight: 600;
-    }
-    .correos-chip button {
-      background: none; border: none; color: var(--adm-accent); cursor: pointer; font-size: 14px; line-height: 1;
-      padding: 2px 4px; border-radius: 50%;
-    }
-    .correos-chip button:hover { background: rgba(184,76,114,.15); }
-    .correos-chip.blocked { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
-
-    /* Barra de progreso de envío por tandas (Promociones) */
-    .correos-progress-wrap { background: #f1f1f1; border-radius: 999px; height: 10px; overflow: hidden; margin: 12px 0; }
-    .correos-progress-bar { background: var(--adm-accent); height: 100%; width: 0%; transition: width .3s; }
-
-    /* ======== CLIENTAS: tabla → cards en mobile (mismo patrón que Pedidos) ======== */
-    @media (max-width: 640px) {
-      .adm-table-clientas thead { display: none; }
-      .adm-table-clientas, .adm-table-clientas tbody,
-      .adm-table-clientas tr, .adm-table-clientas td { display: block; width: 100%; }
-      .adm-table-clientas tr.adm-cliente-row {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-clientas td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-clientas tr.adm-cliente-row td:last-child { border-bottom: none; }
-      .adm-table-clientas td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== HISTORIAL: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-historial thead { display: none; }
-      .adm-table-historial, .adm-table-historial tbody,
-      .adm-table-historial tr, .adm-table-historial td { display: block; width: 100%; }
-      .adm-table-historial tr.adm-log-row {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-historial td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-historial tr.adm-log-row td:last-child { border-bottom: none; }
-      .adm-table-historial td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== PEDIDOS DE CORREOS: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-correos-pedidos thead { display: none; }
-      .adm-table-correos-pedidos, .adm-table-correos-pedidos tbody,
-      .adm-table-correos-pedidos tr, .adm-table-correos-pedidos td { display: block; width: 100%; }
-      .adm-table-correos-pedidos tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-correos-pedidos td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-correos-pedidos tr td:last-child { border-bottom: none; }
-      .adm-table-correos-pedidos td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== PLANTILLAS: tabla → cards en mobile ========
-       Esta tabla tiene hasta 5 botones de acción por fila (Editar/Vista
-       previa/Duplicar/Archivar/Eliminar) — en mobile quedan apilados y
-       envueltos (flex-wrap), nunca cortados ni exigiendo scroll horizontal
-       para llegar a ellos. */
-    @media (max-width: 640px) {
-      .adm-table-plantillas thead { display: none; }
-      .adm-table-plantillas, .adm-table-plantillas tbody,
-      .adm-table-plantillas tr, .adm-table-plantillas td { display: block; width: 100%; }
-      .adm-table-plantillas tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-plantillas td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-plantillas tr td:last-child { border-bottom: none; }
-      .adm-table-plantillas td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-      /* La celda de Acciones tiene varios botones — se acomodan en su
-         propia fila envuelta en vez de forzarse contra el borde derecho. */
-      .adm-table-plantillas td[data-label="Acciones"] {
-        display: block; text-align: left;
-      }
-      .adm-table-plantillas td[data-label="Acciones"]::before {
-        display: block; margin-bottom: 6px;
-      }
-      .adm-table-plantillas td[data-label="Acciones"] > div {
-        justify-content: flex-start;
-      }
-      /* Nombre/asunto: el <small> con el asunto se ve muy apretado a la
-         derecha — se deja alinear a la izquierda debajo del nombre. */
-      .adm-table-plantillas td[data-label="Plantilla"] {
-        display: block; text-align: left;
-      }
-      .adm-table-plantillas td[data-label="Plantilla"]::before {
-        display: block; margin-bottom: 4px;
-      }
-    }
-
-    /* ======== DASHBOARD DE CORREOS — Últimos envíos: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-correos-dash thead { display: none; }
-      .adm-table-correos-dash, .adm-table-correos-dash tbody,
-      .adm-table-correos-dash tr, .adm-table-correos-dash td { display: block; width: 100%; }
-      .adm-table-correos-dash tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-correos-dash td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-correos-dash tr td:last-child { border-bottom: none; }
-      .adm-table-correos-dash td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    .adm-field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 14px;
-    }
-    .adm-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--adm-muted);
-    }
-
-    .adm-btn {
-      padding: 9px 20px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: var(--adm-font);
-      transition: all .2s;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-    }
-    .adm-btn-primary { background: var(--adm-accent); color: #fff; }
-    .adm-btn-primary:hover { background: var(--rose); }
-    .adm-btn-danger { background: #ef4444; color: #fff; }
-    .adm-btn-danger:hover { background: #dc2626; }
-    .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
-    .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
-
-    /* ======== SEARCH ======== */
-    .adm-search-wrap {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .adm-search-wrap input {
-      padding-left: 36px;
-    }
-    .adm-search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--adm-muted);
-      font-size: 14px;
-    }
-
-    /* ======== FILTER ROW ======== */
-    .adm-filter-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-    .adm-filter-row .adm-select { width: auto; flex: 1; min-width: 120px; }
-
-    /* ======== USER AVATAR (table) ======== */
-    .adm-tbl-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--adm-accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 900; color: #fff;
-      overflow: hidden; flex-shrink: 0;
-    }
-    .adm-tbl-avatar img { width:100%;height:100%;object-fit:cover; }
-
-    /* ======== ORDER DETAIL ======== */
-    .adm-order-detail {
-      background: var(--adm-bg);
-      border-radius: 10px;
-      padding: 16px;
-      margin-top: 8px;
-      display: none;
-      font-size: 13px;
-    }
-    .adm-order-detail.open { display: block; }
-    .adm-detail-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-    .adm-detail-label {
-      font-weight: 700;
-      color: var(--adm-muted);
-      min-width: 100px;
-    }
-
-    /* ======== TOGGLE SWITCH ======== */
-    .adm-toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .adm-toggle {
-      position: relative;
-      width: 52px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-    .adm-toggle input {
-      opacity: 0;
-      width: 0; height: 0;
-    }
-    .adm-toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #ccc;
-      border-radius: 28px;
-      transition: .3s;
-    }
-    .adm-toggle-slider::before {
-      content: '';
-      position: absolute;
-      width: 20px; height: 20px;
-      left: 4px; bottom: 4px;
-      background: #fff;
-      border-radius: 50%;
-      transition: .3s;
-    }
-    .adm-toggle input:checked + .adm-toggle-slider { background: var(--adm-accent); }
-    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(24px); }
-
-    .adm-toggle-label {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .adm-toggle-desc {
-      font-size: 12px;
-      color: var(--adm-muted);
-      margin-top: 4px;
-    }
-
-    /* ======== TOAST ======== */
-    .adm-toast {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: var(--adm-accent);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      z-index: 9999;
-      display: none;
-      box-shadow: 0 4px 20px rgba(184,76,114,.4);
-    }
-    .adm-toast.show { display: block; animation: toastIn .3s ease; }
-    @keyframes toastIn {
-      from { opacity:0; transform:translateY(10px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    /* ======== CONTENT EDITOR (contenido) ======== */
-    .cont-page-tab {
-      padding: 9px 18px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      cursor: pointer;
-      border: 2px solid #eee;
-      background: #fff;
-      color: var(--adm-muted);
-      font-family: var(--adm-font);
-      transition: all .2s;
-    }
-    .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .cont-page-tab.active { background: var(--adm-accent); border-color: var(--adm-accent); color: #fff; }
-
-    .cont-section {
-      background: #fff;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 14px;
-      margin-bottom: 16px;
-      overflow: hidden;
-      transition: border-color .2s;
-    }
-    .cont-section.dirty { border-color: #ffc107; }
-    .cont-section.saved { border-color: #4caf50; }
-
-    .cont-section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      cursor: pointer;
-      user-select: none;
-      background: #fafafa;
-      border-bottom: 1px solid #f0f0f0;
-      transition: background .15s;
-    }
-    .cont-section-head:hover { background: #f5f5f5; }
-    .cont-section-head.open { border-bottom: 1.5px solid var(--adm-border); background: #fef5f8; }
-
-    .cont-section-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--adm-text);
-    }
-    .cont-section-icon { font-size: 18px; }
-    .cont-section-chevron {
-      font-size: 14px;
-      color: var(--adm-muted);
-      transition: transform .2s ease;
-    }
-    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
-    .cont-section-body { display: none; padding: 20px 24px 24px; }
-    .cont-section-body.open { display: block; }
-    .cont-section-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #f5f5f5;
-    }
-
-    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .cont-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--adm-muted);
-    }
-    .cont-input, .cont-textarea {
-      padding: 10px 14px;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: var(--adm-font);
-      color: var(--adm-text);
-      transition: border .2s;
-      width: 100%;
-    }
-    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--adm-accent); }
-    .cont-textarea { resize: vertical; min-height: 80px; }
-
-    .cont-img-wrap {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: start;
-    }
-    .cont-img-preview {
-      width: 100%;
-      max-height: 160px;
-      object-fit: contain;
-      border: 1.5px dashed var(--adm-border);
-      border-radius: 8px;
-      padding: 8px;
-      background: #fef5f8;
-      display: none;
-      margin-top: 8px;
-    }
-    .cont-img-preview.show { display: block; }
-    .cont-upload-progress { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-    .cont-upload-bar-wrap { flex: 1; height: 6px; background: #f0d0de; border-radius: 999px; overflow: hidden; }
-    .cont-upload-bar { height: 100%; width: 0%; background: var(--adm-accent); border-radius: 999px; transition: width .15s; }
-    .cont-upload-pct { font-size: 11px; color: #888; min-width: 32px; text-align: right; }
-
-    .cont-array-item {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      background: #fafafa;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      margin-bottom: 10px;
-      position: relative;
-    }
-    .cont-array-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .cont-array-item-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--adm-accent); }
-    .cont-array-del {
-      background: #ffebee; border: none; border-radius: 50%; width: 24px; height: 24px;
-      cursor: pointer; color: #c62828; font-size: 14px; display: flex;
-      align-items: center; justify-content: center; font-weight: 900; transition: background .15s;
-    }
-    .cont-array-del:hover { background: #ffcdd2; }
-    .cont-dirty-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #ffc107;
-      display: none; margin-left: 6px;
-    }
-
-    /* ======== SPINNER ======== */
-    .adm-spinner {
-      display: inline-block;
-      width: 16px; height: 16px;
-      border: 2px solid rgba(184,76,114,.2);
-      border-top-color: var(--adm-accent);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .adm-loading {
-      text-align: center;
-      padding: 32px;
-      color: var(--adm-muted);
-      font-size: 13px;
-    }
-
-    /* ======== OVERLAY ======== */
-    .adm-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 150;
-    }
-    .adm-overlay.show { display: block; }
-
-    /* ======== RESPONSIVE ======== */
-    /* ── TABLET: sidebar compacta siempre visible ── */
-    @media (max-width: 900px) {
-      :root { --sidebar-w: 64px; }
-
-      .adm-sidebar {
-        width: 64px;
-        overflow: visible;
-      }
-      .adm-sidebar-logo,
-      .adm-user-info .adm-user-name,
-      .adm-user-info .adm-user-role-badge,
-      .adm-nav-divider { display: none; }
-
-      .adm-user-info {
-        justify-content: center;
-        padding: 12px 0;
-      }
-      .adm-nav-item {
-        flex-direction: column;
-        gap: 2px;
-        padding: 10px 0;
-        font-size: 9px;
-        letter-spacing: .04em;
-        text-transform: uppercase;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-      }
-      .adm-nav-icon { font-size: 20px; width: auto; }
-
-      .adm-nav-bottom { padding: 8px 0 16px; }
-      .adm-hamburger { display: none; }
-      .adm-content { padding: 16px; }
-      .adm-stats { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    /* ── MOBILE: bottom tab bar, sidebar oculta ── */
-    @media (max-width: 540px) {
-      :root { --sidebar-w: 0px; }
-
-      .adm-sidebar { display: none; }
-
-      .adm-main {
-        margin-left: 0;
-        padding-bottom: 70px;
-      }
-
-      .adm-mobile-tabs {
-        display: flex !important;
-      }
-
-      .adm-content { padding: 12px; }
-      .adm-topbar { padding: 12px 16px; }
-      .adm-stats { grid-template-columns: 1fr 1fr; }
-    }
-
-    /* ======== TABLA DE PEDIDOS → CARDS EN MOBILE ========
-       Solo afecta a .adm-table-pedidos (la tabla de Pedidos) — el resto de
-       las tablas del admin (Usuarios, Productos, Auditoría) siguen con
-       scroll horizontal como antes, no se tocan. */
-    @media (max-width: 640px) {
-      .adm-table-pedidos thead { display: none; }
-      .adm-table-pedidos, .adm-table-pedidos tbody,
-      .adm-table-pedidos tr, .adm-table-pedidos td {
-        display: block; width: 100%;
-      }
-      .adm-table-pedidos tr.adm-order-row {
-        margin-bottom: 12px;
-        border: 1px solid var(--adm-border);
-        border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px;
-        background: var(--adm-card);
-      }
-      .adm-table-pedidos tr.adm-order-row:hover td { background: none; }
-      .adm-table-pedidos tr.adm-order-detail-row { margin-top: -8px; margin-bottom: 12px; }
-      .adm-table-pedidos td {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 7px 2px;
-        border-bottom: 1px dashed #f0d8e0;
-        text-align: right;
-      }
-      .adm-table-pedidos tr.adm-order-row td:last-child { border-bottom: none; }
-      .adm-table-pedidos td[data-label]::before {
-        content: attr(data-label);
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        color: var(--adm-muted);
-        text-align: left;
-        flex-shrink: 0;
-      }
-      /* Estado/Pago traen su propio select — que se vea grande y fácil de
-         tocar con el dedo, en vez del tamaño chico pensado para desktop. */
-      .adm-table-pedidos td[data-label] select.adm-select {
-        width: auto; max-width: 60%; font-size: 13px !important; padding: 8px 10px !important;
-      }
-      /* El detalle expandido (dirección, productos, notas) es un panel
-         completo, no un campo de card — vuelve a su layout normal en vez
-         del flex/alineado-a-la-derecha de los <td> de arriba. */
-      .adm-table-pedidos tr.adm-order-detail-row td {
-        display: block;
-        text-align: left;
-        border-bottom: none;
-        padding: 0;
-      }
-    }
-
-    /* Tab bar mobile — oculto por defecto */
-    .adm-mobile-tabs {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--adm-sidebar);
-      z-index: 300;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      border-top: 1px solid rgba(255,255,255,.15);
-      height: 64px;
-      align-items: stretch;
-    }
-    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
-
-    .adm-mobile-tab {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      padding: 6px 14px;
-      flex-shrink: 0;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: rgba(255,255,255,.75);
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: var(--adm-font);
-      text-decoration: none;
-      transition: color .15s, background .15s;
-      white-space: nowrap;
-    }
-    .adm-mobile-tab:hover,
-    .adm-mobile-tab.active {
-      color: #fff;
-      background: rgba(255,255,255,.12);
-    }
-    .adm-mobile-tab svg,
-    .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
-  </style>
+  <link rel="stylesheet" href="css/admin.css">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
@@ -1174,11 +187,31 @@
             </div>
           </div>
         </div>
+        <!-- Barra de acciones masivas — solo Super Admin la ve (manageUsers) -->
+        <div id="users-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="users-bulk-count">0 seleccionados</span>
+          <select class="adm-select" id="users-bulk-role" style="width:auto;font-size:12px;padding:6px 8px">
+            <option value="">— Cambiar rol —</option>
+            <option value="admin">Admin</option>
+            <option value="agent">Agente (Modder)</option>
+            <option value="viewer">Viewer</option>
+            <option value="client">Cliente</option>
+          </select>
+          <button class="adm-btn adm-btn-sm" onclick="bulkChangeUserRole()">Aplicar rol</button>
+          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-block-btn" onclick="bulkBlockUsers()">Bloquear</button>
+          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-restore-btn" onclick="bulkRestoreUsers()" style="display:none">Restaurar</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportUsers('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearUsersSelection()" title="Limpiar selección">✕ Limpiar</button>
+        </div>
+        <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="bulkExportUsers('filtered')" title="Exportar los usuarios que ves ahora a CSV">⬇️ Exportar vista actual (CSV)</button>
+        </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-users" title="Seleccionar todos" onclick="toggleSelectAllUsers(this)"></th>
                   <th>Avatar</th>
                   <th>Nombre</th>
                   <th>Email</th>
@@ -1188,7 +221,7 @@
                 </tr>
               </thead>
               <tbody id="users-tbody">
-                <tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
+                <tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1230,11 +263,31 @@
             </select>
           </div>
         </div>
+        <!-- Barra de acciones masivas — aparece al seleccionar pedidos -->
+        <div id="orders-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="orders-bulk-count">0 seleccionados</span>
+          <select class="adm-select" id="orders-bulk-status" style="width:auto;font-size:12px;padding:6px 8px">
+            <option value="">— Cambiar estado —</option>
+          </select>
+          <button class="adm-btn adm-btn-sm" onclick="bulkChangeOrderStatus()">Aplicar estado</button>
+          <select class="adm-select" id="orders-bulk-pay-status" style="width:auto;font-size:12px;padding:6px 8px">
+            <option value="">— Cambiar pago —</option>
+          </select>
+          <button class="adm-btn adm-btn-sm" onclick="bulkChangePayStatus()">Aplicar pago</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkResendOrderEmails()" title="Reenviar el correo de confirmación a todos los seleccionados">✉️ Reenviar correos</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportOrders('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="orders-bulk-delete-btn" onclick="bulkDeleteOrders()" style="display:none" title="Eliminar definitivamente (Super Admin)">Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearOrdersSelection()" title="Limpiar selección">✕ Limpiar</button>
+        </div>
+        <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="bulkExportOrders('filtered')" title="Exportar los pedidos que ves ahora (con los filtros aplicados) a CSV">⬇️ Exportar vista actual (CSV)</button>
+        </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
             <table class="adm-table adm-table-pedidos">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-orders" title="Seleccionar todos" onclick="toggleSelectAllOrders(this)"></th>
                   <th>#</th>
                   <th>Cliente</th>
                   <th>Productos</th>
@@ -1245,11 +298,11 @@
                   <th>Fecha</th>
                   <th>Notif.</th>
                   <th>Editar</th>
-                  <th>Eliminar</th>
+                  <th class="col-actions-sticky">Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1280,6 +333,7 @@
               <option value="gafas">Gafas</option>
               <option value="joyeros">Joyeros</option>
             </select>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV">⬇️ Exportar CSV</button>
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
         </div>
@@ -1307,6 +361,7 @@
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
           <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -1731,10 +786,17 @@
                 <input type="checkbox" id="tpl-show-archived" /> Ver archivadas
               </label>
             </div>
+            <div id="tpl-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="tpl-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(true)">Archivar</button>
+              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(false)">Reactivar</button>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteTemplates()" title="Solo elimina las personalizadas — las de sistema solo se archivan">Eliminar</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearTemplatesSelection()">✕ Limpiar</button>
+            </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-plantillas">
-                <thead><tr><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
-                <tbody id="tpl-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-tpl" onclick="toggleSelectAllTemplates(this)"></th><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
+                <tbody id="tpl-tbody"><tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -2376,7 +1438,10 @@ function toast(msg, duration = 3000) {
 // logging completo, solo lo necesario para poder responder "quién hizo qué
 // y cuándo". Nunca bloquea la acción real: si el registro falla, la acción
 // ya hecha (bloquear, cambiar rol, etc.) queda igual, solo se avisa en consola.
-async function logAudit(action, targetType, targetId, targetLabel, details) {
+// meta.bulk/meta.count: distingue una acción individual de una masiva sobre
+// N registros a la vez — pedido explícito de poder ver en Auditoría cuáles
+// acciones fueron "de a una" y cuáles "en lote".
+async function logAudit(action, targetType, targetId, targetLabel, details, meta) {
   try {
     await addDoc(collection(db, 'auditLog'), {
       action,
@@ -2384,6 +1449,8 @@ async function logAudit(action, targetType, targetId, targetLabel, details) {
       targetId: targetId || '',
       targetLabel: targetLabel || '',
       details: details || '',
+      bulk: !!(meta && meta.bulk),
+      bulkCount: (meta && meta.count) || 0,
       actorEmail: currentUser?.email || '',
       actorRole: currentRole || '',
       createdAt: serverTimestamp()
@@ -2397,12 +1464,18 @@ const AUDIT_ACTION_LABELS = {
   editar_pedido:          '📋 Editó pedido',
   cambiar_estado_pedido:  '🔄 Cambió estado de pedido',
   cambiar_estado_pago:    '💳 Cambió estado de pago',
+  reenviar_correo_pedido: '✉️ Reenvió correo de pedido',
+  eliminar_pedido:        '🗑️ Eliminó pedido',
   crear_producto:         '➕ Creó producto',
   editar_producto:        '✏️ Editó producto',
   eliminar_producto:      '🗑️ Eliminó producto',
   cambiar_rol:            '👤 Cambió rol',
   bloquear_usuario:       '🚫 Bloqueó usuario',
-  restaurar_usuario:      '✅ Restauró usuario'
+  restaurar_usuario:      '✅ Restauró usuario',
+  eliminar_usuario:       '🗑️ Eliminó usuario',
+  plantilla_creada:       '➕ Duplicó plantilla',
+  plantilla_archivada:    '🗄️ Archivó/reactivó plantilla',
+  plantilla_eliminada:    '🗑️ Eliminó plantilla'
 };
 
 async function loadAuditLog() {
@@ -2417,11 +1490,12 @@ async function loadAuditLog() {
     tbody.innerHTML = snap.docs.map(d => {
       const l = d.data();
       const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
+      const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
       return `
         <tr>
           <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
           <td style="font-size:12px">${l.actorEmail || '—'}</td>
-          <td style="font-size:12px">${actionLabel}</td>
+          <td style="font-size:12px">${actionLabel}${bulkTag}</td>
           <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
         </tr>
       `;
@@ -2718,19 +1792,20 @@ let userStatusFilter = 'active';
 
 async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = '<tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(collection(db, 'users'));
     allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
     applyUserFilters();
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
   }
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
 // búsqueda con la pestaña activa (Usuarios = solo activos, Bloqueados = solo
 // bloqueados) — usada por ambos inputs.
+let _lastFilteredUsers = [];
 function applyUserFilters() {
   const q = document.getElementById('user-search').value.toLowerCase();
   let filtered = allUsers.filter(u =>
@@ -2740,8 +1815,12 @@ function applyUserFilters() {
   filtered = userStatusFilter === 'blocked'
     ? filtered.filter(u => u.blocked)
     : filtered.filter(u => !u.blocked);
+  _lastFilteredUsers = filtered;
+  const visibleIds = new Set(filtered.map(u => u.uid));
+  [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
   updateBlockedCount();
+  updateUsersBulkToolbar();
 }
 
 function updateBlockedCount() {
@@ -2761,7 +1840,7 @@ function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -2826,6 +1905,7 @@ function renderUsersTable(users) {
 
     return `
       <tr>
+        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${u.uid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${u.name || '—'}</strong></td>
         <td style="font-size:12px;color:#666">${u.email || '—'}</td>
@@ -2944,6 +2024,7 @@ window.deleteUser = async (uid, name) => {
   try {
     await deleteDoc(doc(db, 'users', uid));
     allUsers = allUsers.filter(u => u.uid !== uid);
+    logAudit('eliminar_usuario', 'usuario', uid, name);
     toast('Perfil eliminado de Firestore');
     applyUserFilters();
   } catch(e) {
@@ -2951,10 +2032,173 @@ window.deleteUser = async (uid, name) => {
   }
 };
 
+// ══════════════════════════════════════════════
+// USUARIOS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedUsers = new Set();
+
+window.toggleSelectAllUsers = function(masterCb) {
+  document.querySelectorAll('.user-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedUsers.add(cb.dataset.id);
+    else _selectedUsers.delete(cb.dataset.id);
+  });
+  updateUsersBulkToolbar();
+};
+
+window.toggleUserSelect = function(cb) {
+  if (cb.checked) _selectedUsers.add(cb.dataset.id);
+  else _selectedUsers.delete(cb.dataset.id);
+  const master = document.getElementById('check-all-users');
+  if (master) {
+    const total = document.querySelectorAll('.user-row-check').length;
+    master.indeterminate = _selectedUsers.size > 0 && _selectedUsers.size < total;
+    master.checked = _selectedUsers.size === total && total > 0;
+  }
+  updateUsersBulkToolbar();
+};
+
+function updateUsersBulkToolbar() {
+  const count = _selectedUsers.size;
+  const toolbar = document.getElementById('users-bulk-toolbar');
+  const countEl = document.getElementById('users-bulk-count');
+  const blockBtn = document.getElementById('users-bulk-block-btn');
+  const restoreBtn = document.getElementById('users-bulk-restore-btn');
+  // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
+  // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
+  const allowed = can(currentRole, 'manageUsers');
+  if (toolbar) toolbar.classList.toggle('show', allowed && count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+  if (blockBtn) blockBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
+  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
+}
+
+window.clearUsersSelection = function() {
+  _selectedUsers.clear();
+  document.querySelectorAll('.user-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-users');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateUsersBulkToolbar();
+};
+
+window.bulkChangeUserRole = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers') || !can(currentRole, 'assignRoles')) { toast('No tenés permiso para cambiar roles'); return; }
+  const role = document.getElementById('users-bulk-role')?.value;
+  if (!role) { toast('Elegí un rol'); return; }
+  // SUPER_ADMIN nunca se incluye en la selección (ver renderUsersTable), así
+  // que esto ya excluye auto-asignación y degradación de tintinaccs@gmail.com
+  // — doble resguardo además de lo que ya obliga firestore.rules.
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && !u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección (los bloqueados solo se restauran)'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Cambiar el rol a "${ROLE_LABELS[role]}" en ${n} usuario(s)?`)) return;
+  try {
+    await batchUpdateChunked(ids, () => ({ role, updatedAt: serverTimestamp() }), 'users');
+    ids.forEach(uid => { const u = allUsers.find(x => x.uid === uid); if (u) u.role = role; });
+    logAudit('cambiar_rol', 'usuario', '', '', `Rol → ${ROLE_LABELS[role]}`, { bulk: true, count: n });
+    toast(`Rol actualizado en ${n} usuario(s)`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkBlockUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para bloquear usuarios'); return; }
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && !u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Bloquear ${n} usuario(s)? No van a poder comprar ni entrar a Mi Cuenta hasta que los restaures.`)) return;
+  const reason = window.prompt('Motivo del bloqueo (opcional, aplica a todos los seleccionados):', '') ?? '';
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(uid => {
+        const u = allUsers.find(x => x.uid === uid);
+        batch.update(doc(db, 'users', uid), {
+          blocked: true, blockedAt: serverTimestamp(), blockedBy: currentUser?.email || '',
+          blockReason: reason, roleBeforeBlock: u?.role || 'client', role: 'client', updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    }
+    ids.forEach(uid => {
+      const u = allUsers.find(x => x.uid === uid);
+      if (u) Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: u.role || 'client', role: 'client' });
+    });
+    logAudit('bloquear_usuario', 'usuario', '', '', reason ? `Motivo: ${reason}` : 'Sin motivo especificado', { bulk: true, count: n });
+    toast(`${n} usuario(s) bloqueados`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Restaurar masivo siempre vuelve a "Cliente" (nunca intenta adivinar/preguntar
+// el rol anterior de cada uno por separado) — es la opción más segura para
+// una acción en lote; si hace falta un rol más alto, se reasigna a mano
+// después con el cambio de rol individual o masivo.
+window.bulkRestoreUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Restaurar ${n} usuario(s) como Cliente? (opción más segura para una restauración en lote)`)) return;
+  try {
+    await batchUpdateChunked(ids, () => ({
+      blocked: false, role: 'client', blockedAt: deleteField(), blockedBy: deleteField(),
+      blockReason: deleteField(), roleBeforeBlock: deleteField(), updatedAt: serverTimestamp()
+    }), 'users');
+    ids.forEach(uid => {
+      const u = allUsers.find(x => x.uid === uid);
+      if (u) { Object.assign(u, { blocked: false, role: 'client' }); delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock; }
+    });
+    logAudit('restaurar_usuario', 'usuario', '', '', 'Restaurados como Cliente', { bulk: true, count: n });
+    toast(`${n} usuario(s) restaurados como Cliente`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function userRowsToCsv_(users) {
+  const header = ['Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado'];
+  const rows = users.map(u => [
+    u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
+    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.totalSpent || 0
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportUsers = function(scope) {
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedUsers.size) { toast('No hay usuarios seleccionados'); return; }
+    list = allUsers.filter(u => _selectedUsers.has(u.uid));
+  } else if (scope === 'filtered') {
+    list = _lastFilteredUsers.length ? _lastFilteredUsers : allUsers;
+  } else {
+    list = allUsers;
+  }
+  if (!list.length) { toast('No hay usuarios para exportar'); return; }
+  downloadCsv(`usuarios_${scope}_${Date.now()}.csv`, userRowsToCsv_(list));
+  toast(`Exportados ${list.length} usuario(s) a CSV`);
+};
+
 // ======== PEDIDOS ========
 async function loadOrders() {
   const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '<tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -2971,7 +2215,7 @@ async function loadOrders() {
         });
       renderOrdersTable(allOrders);
     } catch(e2) {
-      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
     }
   }
 }
@@ -2982,7 +2226,7 @@ function renderOrdersTable(orders) {
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
 
@@ -3014,6 +2258,7 @@ function renderOrdersTable(orders) {
 
     return `
       <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
+        <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${o.id}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
         <td data-label="Pedido" style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
         <td data-label="Cliente">
           <strong>${o.userName || '—'}</strong><br>
@@ -3046,12 +2291,12 @@ function renderOrdersTable(orders) {
         <td data-label="Editar" onclick="event.stopPropagation()">
           ${canEditFull ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
-        <td data-label="Eliminar" onclick="event.stopPropagation()">
+        <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
           ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
       <tr id="order-detail-${o.id}" class="adm-order-detail-row" style="display:none">
-        <td colspan="11" style="padding:0 14px 12px;background:#fef5f8">
+        <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
             <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
@@ -3153,6 +2398,7 @@ window.resendOrderEmail = async (orderId) => {
     });
     o.resendCount = (o.resendCount || 0) + 1;
     o.notificationStatus = 'sent';
+    logAudit('reenviar_correo_pedido', 'pedido', orderId, o.shortId || orderId, `Reenvío #${o.resendCount}`);
     toast('Correo reenviado correctamente');
     applyOrderFilters();
   } catch (e) {
@@ -3185,8 +2431,10 @@ window.updatePayStatus = async (orderId, status) => {
 window.deleteOrder = async (orderId) => {
   if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return;
   try {
+    const o = allOrders.find(x => x.id === orderId);
     await deleteDoc(doc(db, 'orders', orderId));
     allOrders = allOrders.filter(o => o.id !== orderId);
+    logAudit('eliminar_pedido', 'pedido', orderId, o?.shortId || orderId, `Cliente: ${o?.userName || o?.userEmail || '—'}`);
     toast('Pedido eliminado');
     applyOrderFilters();
   } catch(e) {
@@ -3194,6 +2442,7 @@ window.deleteOrder = async (orderId) => {
   }
 };
 
+let _lastFilteredOrders = [];
 function applyOrderFilters() {
   const search = (document.getElementById('order-search')?.value || '').toLowerCase();
   const statusVal = document.getElementById('filter-status')?.value || '';
@@ -3207,13 +2456,195 @@ function applyOrderFilters() {
     (o.userPhone||'').toLowerCase().includes(search) ||
     (o.id||'').toLowerCase().includes(search)
   );
+  _lastFilteredOrders = filtered;
+  // Una selección deja de tener sentido si el pedido seleccionado ya no
+  // está en la vista filtrada (cambió de estado, se eliminó, etc.)
+  const visibleIds = new Set(filtered.map(o => o.id));
+  [..._selectedOrders].forEach(id => { if (!visibleIds.has(id)) _selectedOrders.delete(id); });
   renderOrdersTable(filtered);
+  updateOrdersBulkToolbar();
 }
 
 // Filter orders by status
 document.getElementById('filter-status').onchange = applyOrderFilters;
 document.getElementById('filter-pay-status').onchange = applyOrderFilters;
 document.getElementById('order-search').oninput = applyOrderFilters;
+
+// Opciones de los <select> de la barra de acciones masivas — mismas fuentes
+// de verdad (ORDER_STATUS_LABELS/PAY_STATUS_LABELS) que el resto de la UI.
+document.getElementById('orders-bulk-status').insertAdjacentHTML('beforeend', orderStatusOptions(null));
+document.getElementById('orders-bulk-pay-status').insertAdjacentHTML('beforeend', payStatusOptions(null));
+
+// ══════════════════════════════════════════════
+// PEDIDOS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedOrders = new Set();
+
+window.toggleSelectAllOrders = function(masterCb) {
+  document.querySelectorAll('.order-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedOrders.add(cb.dataset.id);
+    else _selectedOrders.delete(cb.dataset.id);
+  });
+  updateOrdersBulkToolbar();
+};
+
+window.toggleOrderSelect = function(cb) {
+  if (cb.checked) _selectedOrders.add(cb.dataset.id);
+  else _selectedOrders.delete(cb.dataset.id);
+  const master = document.getElementById('check-all-orders');
+  if (master) {
+    const total = document.querySelectorAll('.order-row-check').length;
+    master.indeterminate = _selectedOrders.size > 0 && _selectedOrders.size < total;
+    master.checked = _selectedOrders.size === total && total > 0;
+  }
+  updateOrdersBulkToolbar();
+};
+
+function updateOrdersBulkToolbar() {
+  const count = _selectedOrders.size;
+  const toolbar = document.getElementById('orders-bulk-toolbar');
+  const countEl = document.getElementById('orders-bulk-count');
+  const delBtn = document.getElementById('orders-bulk-delete-btn');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+  // Eliminar en lote queda reservado a Super Admin — más estricto que borrar
+  // de a uno (admin/superadmin), porque el riesgo de un error masivo es
+  // mucho mayor. Pedido explícito del usuario para esta acción puntual.
+  if (delBtn) delBtn.style.display = currentRole === 'superadmin' ? '' : 'none';
+}
+
+window.clearOrdersSelection = function() {
+  _selectedOrders.clear();
+  document.querySelectorAll('.order-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-orders');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateOrdersBulkToolbar();
+};
+
+window.bulkChangeOrderStatus = async function() {
+  if (!_selectedOrders.size) return;
+  if (!can(currentRole, 'manageOrders')) { toast('No tenés permiso para cambiar el estado de pedidos'); return; }
+  const status = document.getElementById('orders-bulk-status')?.value;
+  if (!status) { toast('Elegí un estado'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿Cambiar el estado a "${ORDER_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
+  try {
+    const ids = [..._selectedOrders];
+    await batchUpdateChunked(ids, () => ({ status, updatedAt: serverTimestamp() }), 'orders');
+    ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) o.status = status; });
+    logAudit('cambiar_estado_pedido', 'pedido', '', '', `Estado → ${ORDER_STATUS_LABELS[status]}`, { bulk: true, count: n });
+    toast(`Estado actualizado en ${n} pedido(s)`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkChangePayStatus = async function() {
+  if (!_selectedOrders.size) return;
+  if (!can(currentRole, 'manageOrders')) { toast('No tenés permiso para cambiar el estado de pago'); return; }
+  const status = document.getElementById('orders-bulk-pay-status')?.value;
+  if (!status) { toast('Elegí un estado de pago'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿Cambiar el pago a "${PAY_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
+  try {
+    const ids = [..._selectedOrders];
+    await batchUpdateChunked(ids, () => ({ 'payment.status': status, paymentStatus: status, updatedAt: serverTimestamp() }), 'orders');
+    ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; } });
+    logAudit('cambiar_estado_pago', 'pedido', '', '', `Pago → ${PAY_STATUS_LABELS[status]}`, { bulk: true, count: n });
+    toast(`Estado de pago actualizado en ${n} pedido(s)`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Reenvío masivo: son llamadas de red (no solo escrituras a Firestore), así
+// que puede fallar pedido por pedido — se procesan de a una y se informa un
+// resumen con éxitos/fallos en vez de asumir todo-o-nada.
+window.bulkResendOrderEmails = async function() {
+  if (!_selectedOrders.size) return;
+  const ids = [..._selectedOrders];
+  const n = ids.length;
+  if (!confirm(`¿Reenviar el correo de confirmación a ${n} pedido(s)?`)) return;
+  let ok = 0, fail = 0;
+  toast(`Reenviando 0 de ${n}…`, 60000);
+  for (let i = 0; i < ids.length; i++) {
+    const o = allOrders.find(x => x.id === ids[i]);
+    try {
+      if (!o) throw new Error('no encontrado');
+      const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
+      const result = await sendOrderNotification(ids[i], orderForEmail, true);
+      if (!result.success) throw new Error(result.error || 'error desconocido');
+      await updateDoc(doc(db, 'orders', ids[i]), {
+        resendCount: increment(1), lastResendAt: serverTimestamp(), notificationStatus: 'sent', updatedAt: serverTimestamp()
+      });
+      o.resendCount = (o.resendCount || 0) + 1;
+      o.notificationStatus = 'sent';
+      ok++;
+    } catch (e) { fail++; }
+    toast(`Reenviando ${i + 1} de ${n}…`, 60000);
+  }
+  logAudit('reenviar_correo_pedido', 'pedido', '', '', `${ok} enviados, ${fail} fallaron`, { bulk: true, count: n });
+  toast(fail ? `${ok} correo(s) reenviados, ${fail} fallaron` : `${ok} correo(s) reenviados correctamente`, 5000);
+  clearOrdersSelection();
+  applyOrderFilters();
+};
+
+window.bulkDeleteOrders = async function() {
+  if (!_selectedOrders.size) return;
+  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede eliminar pedidos en lote'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} pedido(s)? Esta acción NO se puede deshacer.`)) return;
+  const typed = prompt(`Para confirmar, escribí CONFIRMAR (${n} pedidos serán eliminados):`);
+  if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
+  try {
+    const ids = [..._selectedOrders];
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'orders', id)));
+      await batch.commit();
+    }
+    const idSet = new Set(ids);
+    allOrders = allOrders.filter(o => !idSet.has(o.id));
+    logAudit('eliminar_pedido', 'pedido', '', '', `${n} pedidos eliminados`, { bulk: true, count: n });
+    toast(`${n} pedido(s) eliminados definitivamente`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function orderRowsToCsv_(orders) {
+  const header = ['ID', 'Cliente', 'Email', 'Teléfono', 'Ciudad', 'Productos', 'Total', 'Estado', 'Estado de pago', 'Fecha'];
+  const rows = orders.map(o => [
+    o.id,
+    o.userName || '',
+    o.userEmail || '',
+    o.userPhone || '',
+    o.shipping?.city || o.city || '',
+    (o.items || []).map(it => `${it.qty}x ${it.name}`).join('; '),
+    o.total || 0,
+    ORDER_STATUS_LABELS[o.status] || o.status || '',
+    PAY_STATUS_LABELS[o.payment?.status || o.paymentStatus] || '',
+    o.createdAt?.toDate ? o.createdAt.toDate().toLocaleDateString('es-PY') : ''
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportOrders = function(scope) {
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedOrders.size) { toast('No hay pedidos seleccionados'); return; }
+    list = allOrders.filter(o => _selectedOrders.has(o.id));
+  } else if (scope === 'filtered') {
+    list = _lastFilteredOrders.length ? _lastFilteredOrders : allOrders;
+  } else {
+    list = allOrders;
+  }
+  if (!list.length) { toast('No hay pedidos para exportar'); return; }
+  downloadCsv(`pedidos_${scope}_${Date.now()}.csv`, orderRowsToCsv_(list));
+  toast(`Exportados ${list.length} pedido(s) a CSV`);
+};
 
 // ======== ONBOARDING ========
 async function loadOnboardingSettings() {
@@ -3905,15 +3336,18 @@ function renderCorreosPlantillasTab() {
 
   const tbody = document.getElementById('tpl-tbody');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin plantillas para mostrar</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">Sin plantillas para mostrar</td></tr>';
     return;
   }
+  const visibleIds = new Set(list.map(t => t.id));
+  [..._selectedTemplates].forEach(id => { if (!visibleIds.has(id)) _selectedTemplates.delete(id); });
   const CAT_LABELS = { pedido: 'Pedidos', promo: 'Promociones', libre: 'Mensaje libre' };
   tbody.innerHTML = list.map(t => {
     const id = t.id;
     const isCustom = !t.key;
     return `
       <tr style="${t.archived ? 'opacity:.55' : ''}">
+        <td class="col-select" data-label="Sel."><input type="checkbox" class="tpl-row-check" data-id="${id}" onclick="toggleTemplateSelect(this)" ${_selectedTemplates.has(id) ? 'checked' : ''}></td>
         <td data-label="Plantilla"><strong>${t.name}</strong><br><small style="color:#aaa">${(t.subject || '').slice(0, 60)}</small></td>
         <td data-label="Categoría"><span class="adm-badge badge-confirmado">${CAT_LABELS[t.category] || t.category}</span></td>
         <td data-label="Activa">${t.active !== false ? '<span class="adm-badge badge-entregado">Activa</span>' : '<span class="adm-badge badge-cancelado">Inactiva</span>'}</td>
@@ -3931,11 +3365,92 @@ function renderCorreosPlantillasTab() {
       </tr>
     `;
   }).join('');
+  updateTemplatesBulkToolbar();
 }
 
 document.getElementById('tpl-search').oninput = (e) => { tplSearchQuery = e.target.value.toLowerCase(); renderCorreosPlantillasTab(); };
 document.getElementById('tpl-filter-category').onchange = (e) => { tplFilterCategory = e.target.value; renderCorreosPlantillasTab(); };
 document.getElementById('tpl-show-archived').onchange = (e) => { tplShowArchived = e.target.checked; renderCorreosPlantillasTab(); };
+
+// ══════════════════════════════════════════════
+// PLANTILLAS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedTemplates = new Set();
+
+window.toggleSelectAllTemplates = function(masterCb) {
+  document.querySelectorAll('.tpl-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedTemplates.add(cb.dataset.id);
+    else _selectedTemplates.delete(cb.dataset.id);
+  });
+  updateTemplatesBulkToolbar();
+};
+
+window.toggleTemplateSelect = function(cb) {
+  if (cb.checked) _selectedTemplates.add(cb.dataset.id);
+  else _selectedTemplates.delete(cb.dataset.id);
+  updateTemplatesBulkToolbar();
+};
+
+function updateTemplatesBulkToolbar() {
+  const count = _selectedTemplates.size;
+  const toolbar = document.getElementById('tpl-bulk-toolbar');
+  const countEl = document.getElementById('tpl-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+}
+
+window.clearTemplatesSelection = function() {
+  _selectedTemplates.clear();
+  document.querySelectorAll('.tpl-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-tpl');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateTemplatesBulkToolbar();
+};
+
+window.bulkArchiveTemplates = async function(archived) {
+  if (!_selectedTemplates.size) return;
+  const n = _selectedTemplates.size;
+  const label = archived ? 'archivar' : 'reactivar';
+  if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${n} plantilla(s)?`)) return;
+  try {
+    const ids = [..._selectedTemplates];
+    await batchUpdateChunked(ids, () => ({ archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }), 'emailTemplates');
+    ids.forEach(id => { const t = allEmailTemplates.find(x => x.id === id); if (t) t.archived = archived; });
+    logAudit('plantilla_archivada', 'plantilla', '', '', archived ? 'Archivadas' : 'Reactivadas', { bulk: true, count: n });
+    toast(`${n} plantilla(s) ${archived ? 'archivadas' : 'reactivadas'}`);
+    clearTemplatesSelection();
+    renderCorreosPlantillasTab();
+    renderCorreosPedidosTab();
+    renderCorreosPruebaTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Solo elimina las plantillas personalizadas de la selección (las de sistema
+// —con `key`— nunca se eliminan, ni de a una ni en lote, solo se archivan).
+window.bulkDeleteTemplates = async function() {
+  if (!_selectedTemplates.size) return;
+  const ids = [..._selectedTemplates].filter(id => { const t = allEmailTemplates.find(x => x.id === id); return t && !t.key; });
+  if (!ids.length) { toast('La selección solo tiene plantillas de sistema — esas no se pueden eliminar, solo archivar.'); return; }
+  const n = ids.length;
+  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} plantilla(s) personalizada(s)? Esta acción no se puede deshacer.`)) return;
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'emailTemplates', id)));
+      await batch.commit();
+    }
+    const idSet = new Set(ids);
+    allEmailTemplates = allEmailTemplates.filter(t => !idSet.has(t.id));
+    logAudit('plantilla_eliminada', 'plantilla', '', '', `${n} plantillas eliminadas`, { bulk: true, count: n });
+    toast(`${n} plantilla(s) eliminadas definitivamente`);
+    clearTemplatesSelection();
+    renderCorreosPlantillasTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error: ' + e.message); }
+};
 
 window.openTplEdit = (id) => {
   const t = allEmailTemplates.find(x => x.id === id);
@@ -4042,6 +3557,7 @@ window.duplicateTemplate = async (id) => {
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
     });
     allEmailTemplates.push({ id: ref.id, key: null, name: t.name + ' (copia)', category: t.category, ...content, active: true, archived: false, original: content, updatedAt: new Date() });
+    logAudit('plantilla_creada', 'plantilla', ref.id, t.name + ' (copia)', `Duplicada de "${t.name}"`);
     toast('Plantilla duplicada');
     renderCorreosPlantillasTab();
   } catch (e) { toast('Error al duplicar: ' + e.message); }
@@ -4054,6 +3570,7 @@ window.toggleArchiveTemplate = async (id) => {
   try {
     await updateDoc(doc(db, 'emailTemplates', id), { archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' });
     t.archived = archived;
+    logAudit('plantilla_archivada', 'plantilla', id, t.name, archived ? 'Archivada' : 'Reactivada');
     toast(archived ? 'Plantilla archivada' : 'Plantilla reactivada');
     renderCorreosPlantillasTab();
     renderCorreosPedidosTab();
@@ -4070,6 +3587,7 @@ window.deleteTemplate = async (id) => {
   try {
     await deleteDoc(doc(db, 'emailTemplates', id));
     allEmailTemplates = allEmailTemplates.filter(x => x.id !== id);
+    logAudit('plantilla_eliminada', 'plantilla', id, t.name);
     toast('Plantilla eliminada');
     renderCorreosPlantillasTab();
     renderCorreosPromocionesTab();
@@ -5414,11 +4932,11 @@ window.collPickerToggleAll = function(checkbox) {
 
 // Firestore batches cap at 500 writes — chunk so bulk actions scale to
 // thousands of products without silently failing.
-async function batchUpdateChunked(ids, dataFn) {
+async function batchUpdateChunked(ids, dataFn, collectionName = 'products') {
   const CHUNK = 450;
   for (let i = 0; i < ids.length; i += CHUNK) {
     const batch = writeBatch(db);
-    ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, 'products', id), dataFn(id)));
+    ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, collectionName, id), dataFn(id)));
     await batch.commit();
   }
 }
@@ -6445,8 +5963,10 @@ window.bulkAssignCollection = async function() {
   if (!col) { toast('Escribí el nombre de la colección'); return; }
   if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ collection: col, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
+    logAudit('editar_producto', 'producto', '', '', `Colección → "${col}"`, { bulk: true, count: n });
     toast(`Colección "${col}" asignada a ${_selectedProducts.size} productos`);
     if (colInput) colInput.value = '';
     clearSelection();
@@ -6459,8 +5979,10 @@ window.bulkActivate = async function(activate) {
   const label = activate ? 'activar' : 'desactivar';
   if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ active: activate, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.active = activate; });
+    logAudit('editar_producto', 'producto', '', '', activate ? 'Activados' : 'Desactivados', { bulk: true, count: n });
     toast(`${_selectedProducts.size} productos ${activate ? 'activados' : 'desactivados'}`);
     clearSelection();
     applyProductFilters();
@@ -6473,8 +5995,10 @@ window.bulkSetCategory = async function() {
   if (!cat) { toast('Seleccioná una categoría'); return; }
   if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ category: cat, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
+    logAudit('editar_producto', 'producto', '', '', `Categoría → "${cat}"`, { bulk: true, count: n });
     toast(`Categoría actualizada en ${_selectedProducts.size} productos`);
     clearSelection();
     applyProductFilters();
@@ -6497,10 +6021,30 @@ window.bulkDelete = async function() {
     }
     const ids = new Set(_selectedProducts);
     _allProducts = _allProducts.filter(p => !ids.has(p._docId));
+    logAudit('eliminar_producto', 'producto', '', '', `${n} productos eliminados`, { bulk: true, count: n });
     toast(`${n} productos eliminados definitivamente`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }
+};
+
+function productRowsToCsv_(products) {
+  const header = ['Nombre', 'Categoría', 'Colección', 'Precio', 'Stock', 'Activo'];
+  const rows = products.map(p => [p.name || '', p.category || '', p.collection || '', p.price || 0, p.stock ?? '', p.active === false ? 'No' : 'Sí']);
+  return [header, ...rows];
+}
+
+window.bulkExportProducts = function(scope) {
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedProducts.size) { toast('No hay productos seleccionados'); return; }
+    list = _allProducts.filter(p => _selectedProducts.has(p._docId));
+  } else {
+    list = _allProducts;
+  }
+  if (!list.length) { toast('No hay productos para exportar'); return; }
+  downloadCsv(`productos_${scope}_${Date.now()}.csv`, productRowsToCsv_(list));
+  toast(`Exportados ${list.length} producto(s) a CSV`);
 };
 
 // ══════════════════════════════════════════════

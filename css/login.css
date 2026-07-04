@@ -1,0 +1,214 @@
+/* =============================================
+   TINTIN ACCESORIOS — Estilos de login.html
+   Extraído del <style> inline original (sin cambios de diseño) + los
+   estilos nuevos del bloque "Ingresar con correo" (login-divider,
+   login-email-*, login-code-*) al final del archivo.
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+   estos nombres cortos se mantienen porque los usa toda la hoja de acá
+   abajo, pero ahora apuntan al mismo valor real en todas las superficies. */
+:root {
+  --acc:       var(--pink-dark);
+  --acc-dark:  var(--rose);
+  --acc-light: var(--pink-lightest);
+  --acc-pale:  var(--pink-pale);
+  --text:      var(--ink);
+  --muted:     #9e7a89; /* tono propio de login, más neutro que --text-muted del sitio público — se mantiene a propósito para no perder legibilidad en los inputs */
+  --font:      var(--font-body);
+  --serif:     var(--font-heading);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--acc-pale);
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ── */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-brand { display: none; }
+}
+
+/* ── BRAND SIDE ── */
+.login-brand {
+  background: linear-gradient(145deg, #b84c72 0%, #8b2642 50%, #6a1535 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 48px;
+  position: relative; overflow: hidden;
+}
+.login-brand::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.login-brand-logo {
+  font-family: var(--font);
+  font-size: 42px; font-weight: 900;
+  letter-spacing: .18em;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  position: relative;
+}
+.login-brand-sub {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .25em; color: rgba(255,255,255,.6);
+  text-transform: uppercase; margin-bottom: 48px;
+  position: relative;
+}
+.login-brand-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px; color: rgba(255,255,255,.9);
+  text-align: center; line-height: 1.4;
+  position: relative; max-width: 320px;
+}
+.login-brand-dots {
+  display: flex; gap: 8px; margin-top: 48px;
+  position: relative;
+}
+.login-brand-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.3);
+}
+.login-brand-dots span:first-child { background: #fff; }
+
+/* ── FORM SIDE ── */
+.login-form-side {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 48px 40px;
+  background: #fff;
+  min-height: 100vh;
+}
+@media (max-width: 480px) {
+  .login-form-side { padding: 32px 24px; }
+}
+
+.login-mobile-logo {
+  display: none;
+  text-align: center; margin-bottom: 32px;
+}
+@media (max-width: 768px) {
+  .login-mobile-logo { display: block; }
+}
+.login-mobile-logo-text {
+  font-size: 28px; font-weight: 900;
+  letter-spacing: .15em; color: var(--acc);
+  text-transform: uppercase;
+}
+.login-mobile-logo-sub {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .2em; color: var(--muted);
+  text-transform: uppercase; margin-top: 2px;
+}
+
+.login-box { width: 100%; max-width: 380px; text-align: center; }
+
+.login-heading {
+  font-size: 22px; font-weight: 800;
+  color: var(--text); margin-bottom: 4px;
+}
+.login-heading-sub {
+  font-size: 13px; color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.login-hint { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+/* SUCCESS banner (green) — mirrors .login-error but for confirmations */
+.login-success {
+  background: #e8f5e9; color: #2e7d32;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 12px; font-weight: 600; display: none;
+  border-left: 3px solid #4caf50; text-align: left;
+  margin-bottom: 16px;
+}
+.login-success.show { display: block; }
+
+.login-google {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%;
+  padding: 15px; border: 1.5px solid var(--border); border-radius: 50px;
+  font-size: 14px; font-weight: 700; color: var(--text);
+  cursor: pointer; background: #fff; font-family: var(--font);
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(184,76,114,.12);
+}
+.login-google:hover { border-color: var(--acc); background: var(--acc-pale); }
+.login-google:active { transform: translateY(1px); }
+
+/* ERROR */
+.login-error {
+  background: #ffebee; color: #c62828;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 12px; font-weight: 600; display: none;
+  border-left: 3px solid #e53935; text-align: left;
+  margin-bottom: 16px;
+}
+.login-error.show { display: block; }
+
+/* BACK LINK */
+.login-back {
+  text-align: center; margin-top: 24px;
+  font-size: 12px; color: var(--muted);
+}
+.login-back a { color: var(--acc); font-weight: 700; text-decoration: none; }
+.login-back a:hover { text-decoration: underline; }
+
+/* ══════════════════════════════════════
+   INGRESAR CON CORREO (Firebase Email Link)
+══════════════════════════════════════ */
+.login-divider {
+  display: flex; align-items: center; gap: 14px;
+  margin: 24px 0; color: var(--muted); font-size: 12px; font-weight: 600;
+}
+.login-divider::before, .login-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.login-email-block { text-align: left; }
+.login-email-label {
+  display: block; font-size: 12px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.login-email-input {
+  width: 100%; padding: 14px 16px; border: 1.5px solid var(--border);
+  border-radius: 12px; font-size: 14px; font-family: var(--font);
+  color: var(--text); background: #fff; transition: border .2s;
+  margin-bottom: 12px;
+}
+.login-email-input:focus { outline: none; border-color: var(--acc); }
+
+.login-email-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 15px; border: none; border-radius: 50px;
+  font-size: 14px; font-weight: 700; color: #fff;
+  cursor: pointer; background: var(--acc); font-family: var(--font);
+  transition: all .2s;
+}
+.login-email-btn:hover:not(:disabled) { background: var(--acc-dark); }
+.login-email-btn:active:not(:disabled) { transform: translateY(1px); }
+.login-email-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.login-email-resend {
+  display: block; width: 100%; text-align: center; margin-top: 12px;
+  background: none; border: none; font-size: 12px; font-weight: 700;
+  color: var(--acc); cursor: pointer; font-family: var(--font);
+}
+.login-email-resend:disabled { color: var(--muted); cursor: not-allowed; }
+
+.login-email-note {
+  font-size: 11px; color: var(--muted); line-height: 1.6; text-align: center;
+  margin-top: 14px;
+}

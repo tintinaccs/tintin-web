@@ -17,169 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin-tokens.css">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
-       estos nombres cortos se mantienen porque los usa toda la hoja de acá
-       abajo, pero ahora apuntan al mismo valor real en todas las superficies. */
-    :root {
-      --acc:       var(--pink-dark);
-      --acc-dark:  var(--rose);
-      --acc-light: var(--pink-lightest);
-      --acc-pale:  var(--pink-pale);
-      --text:      var(--ink);
-      --muted:     #9e7a89; /* tono propio de login, más neutro que --text-muted del sitio público — se mantiene a propósito para no perder legibilidad en los inputs */
-      --font:      var(--font-body);
-      --serif:     var(--font-heading);
-    }
-
-    html, body {
-      height: 100%;
-      font-family: var(--font);
-      background: var(--acc-pale);
-      overflow-x: hidden;
-    }
-
-    /* ── LAYOUT ── */
-    .login-page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    @media (max-width: 768px) {
-      .login-page { grid-template-columns: 1fr; }
-      .login-brand { display: none; }
-    }
-
-    /* ── BRAND SIDE ── */
-    .login-brand {
-      background: linear-gradient(145deg, #b84c72 0%, #8b2642 50%, #6a1535 100%);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 60px 48px;
-      position: relative; overflow: hidden;
-    }
-    .login-brand::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .login-brand-logo {
-      font-family: var(--font);
-      font-size: 42px; font-weight: 900;
-      letter-spacing: .18em;
-      color: #fff;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      position: relative;
-    }
-    .login-brand-sub {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: .25em; color: rgba(255,255,255,.6);
-      text-transform: uppercase; margin-bottom: 48px;
-      position: relative;
-    }
-    .login-brand-tagline {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 26px; color: rgba(255,255,255,.9);
-      text-align: center; line-height: 1.4;
-      position: relative; max-width: 320px;
-    }
-    .login-brand-dots {
-      display: flex; gap: 8px; margin-top: 48px;
-      position: relative;
-    }
-    .login-brand-dots span {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,.3);
-    }
-    .login-brand-dots span:first-child { background: #fff; }
-
-    /* ── FORM SIDE ── */
-    .login-form-side {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 48px 40px;
-      background: #fff;
-      min-height: 100vh;
-    }
-    @media (max-width: 480px) {
-      .login-form-side { padding: 32px 24px; }
-    }
-
-    .login-mobile-logo {
-      display: none;
-      text-align: center; margin-bottom: 32px;
-    }
-    @media (max-width: 768px) {
-      .login-mobile-logo { display: block; }
-    }
-    .login-mobile-logo-text {
-      font-size: 28px; font-weight: 900;
-      letter-spacing: .15em; color: var(--acc);
-      text-transform: uppercase;
-    }
-    .login-mobile-logo-sub {
-      font-size: 10px; font-weight: 600;
-      letter-spacing: .2em; color: var(--muted);
-      text-transform: uppercase; margin-top: 2px;
-    }
-
-    .login-box { width: 100%; max-width: 380px; text-align: center; }
-
-    .login-heading {
-      font-size: 22px; font-weight: 800;
-      color: var(--text); margin-bottom: 4px;
-    }
-    .login-heading-sub {
-      font-size: 13px; color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    .login-hint { font-size: 11px; color: var(--muted); line-height: 1.6; }
-
-    /* SUCCESS banner (green) — mirrors .login-error but for confirmations */
-    .login-success {
-      background: #e8f5e9; color: #2e7d32;
-      padding: 10px 14px; border-radius: 10px;
-      font-size: 12px; font-weight: 600; display: none;
-      border-left: 3px solid #4caf50; text-align: left;
-      margin-bottom: 16px;
-    }
-    .login-success.show { display: block; }
-
-    .login-google {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      width: 100%;
-      padding: 15px; border: 1.5px solid var(--border); border-radius: 50px;
-      font-size: 14px; font-weight: 700; color: var(--text);
-      cursor: pointer; background: #fff; font-family: var(--font);
-      transition: all .2s;
-      box-shadow: 0 4px 16px rgba(184,76,114,.12);
-    }
-    .login-google:hover { border-color: var(--acc); background: var(--acc-pale); }
-    .login-google:active { transform: translateY(1px); }
-
-    /* ERROR */
-    .login-error {
-      background: #ffebee; color: #c62828;
-      padding: 10px 14px; border-radius: 10px;
-      font-size: 12px; font-weight: 600; display: none;
-      border-left: 3px solid #e53935; text-align: left;
-      margin-bottom: 16px;
-    }
-    .login-error.show { display: block; }
-
-    /* BACK LINK */
-    .login-back {
-      text-align: center; margin-top: 24px;
-      font-size: 12px; color: var(--muted);
-    }
-    .login-back a { color: var(--acc); font-weight: 700; text-decoration: none; }
-    .login-back a:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="css/login.css">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
@@ -214,17 +52,32 @@
       <div class="login-error" id="login-error"></div>
       <div class="login-success" id="login-success"></div>
 
-      <!-- ÚNICO MÉTODO DE INGRESO: Google. Sirve tanto para crear la cuenta
-           la primera vez como para iniciar sesión las siguientes. -->
+      <!-- OPCIÓN 1: Google. Sirve tanto para crear la cuenta la primera vez
+           como para iniciar sesión las siguientes — queda exactamente igual
+           que antes. -->
       <button type="button" class="login-google" id="btn-google">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" alt="Google" />
         Continuar con Google
       </button>
 
+      <div class="login-divider"><span>o ingresá con tu correo</span></div>
+
+      <!-- OPCIÓN 2: correo con enlace de acceso (Firebase Email Link) — sirve
+           para cualquier dirección válida (Gmail, Hotmail, Outlook, Yahoo,
+           corporativos, etc.), con verificación obligatoria: nadie entra sin
+           abrir el enlace desde SU propio correo. -->
+      <div class="login-email-block" id="login-email-block">
+        <label class="login-email-label" for="login-email-input">Correo electrónico</label>
+        <input type="email" class="login-email-input" id="login-email-input" placeholder="tu@email.com" autocomplete="email" inputmode="email" />
+        <button type="button" class="login-email-btn" id="btn-send-email-link">Enviar enlace de acceso</button>
+        <button type="button" class="login-email-resend" id="btn-resend-email-link" style="display:none">Reenviar enlace</button>
+      </div>
+
       <div class="login-hint" style="text-align:center;margin-top:18px">
-        Es gratis y toma unos segundos. Usamos tu cuenta de Google para guardar
-        tu pedido y enviarte la confirmación por correo — no creamos ni
-        guardamos ninguna contraseña de Tintin.
+        Es gratis y toma unos segundos. No creamos ni guardamos ninguna
+        contraseña de Tintin — con Google confiamos en tu cuenta de Google, y
+        con tu correo confirmamos que sos vos con un enlace de acceso que
+        solo llega a tu bandeja de entrada.
       </div>
 
       <div class="login-back" id="login-back-link">
@@ -246,6 +99,16 @@ import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, SUPER_ADMIN, BLOCKED_MESSAGE } from "./js/roles.js";
+import {
+  isValidEmailFormat, sendLoginEmailLink, isEmailLinkUrl, completeEmailLinkSignIn,
+  ensureUserDocForEmailLogin, checkBlockedEmailLogin, emailLinkErrorMessage
+} from "./js/email-auth.js";
+
+// Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
+// que llegó por correo, el onAuthStateChanged de más abajo (que corre en
+// paralelo) no debe apagar el overlay de carga ni mostrar el error de
+// "blocked=1" mientras se está completando el ingreso por enlace.
+const completingEmailLink = isEmailLinkUrl();
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
 // js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
@@ -347,11 +210,13 @@ async function guardarUsuario(user) {
 onAuthStateChanged(auth, async user => {
   window.ttPageReady && window.ttPageReady(); // ya sabemos si hay sesión o no — la página está lista
   if (!user) {
-    hideLoginOverlay();
-    // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
-    // detectar una cuenta bloqueada (Fase E).
-    if (new URLSearchParams(window.location.search).get('blocked') === '1') {
-      showError(BLOCKED_MESSAGE);
+    if (!completingEmailLink) {
+      hideLoginOverlay();
+      // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
+      // detectar una cuenta bloqueada (Fase E).
+      if (new URLSearchParams(window.location.search).get('blocked') === '1') {
+        showError(BLOCKED_MESSAGE);
+      }
     }
     return;
   }
@@ -365,7 +230,7 @@ onAuthStateChanged(auth, async user => {
   redirectByRole(role);
 });
 
-// GOOGLE — único método de ingreso del sitio. El mismo botón sirve tanto
+// GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
 // para crear la cuenta la primera vez como para iniciar sesión después.
 //
 // Sobre la demora al cerrar la ventana emergente: Firebase Auth detecta que
@@ -404,6 +269,126 @@ const loginConGoogle = async () => {
   }
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
+
+// ======== OPCIÓN 2: INGRESAR CON CORREO (Firebase Email Link) ========
+// La clienta escribe su correo, le mandamos un enlace de acceso de un solo
+// uso, y solo entra si lo abre desde su propia bandeja de entrada — Firebase
+// genera y valida el enlace del lado de Google, acá no se guarda ningún
+// código a mano ni se implementa nada de criptografía propia.
+const RESEND_COOLDOWN_SECONDS = 60;
+let resendTimer = null;
+
+function startResendCooldown() {
+  const resendBtn = document.getElementById('btn-resend-email-link');
+  const sendBtn = document.getElementById('btn-send-email-link');
+  sendBtn.style.display = 'none';
+  resendBtn.style.display = '';
+  let remaining = RESEND_COOLDOWN_SECONDS;
+  resendBtn.disabled = true;
+  resendBtn.textContent = `Podés reenviarlo en ${remaining}s`;
+  clearInterval(resendTimer);
+  resendTimer = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(resendTimer);
+      resendBtn.disabled = false;
+      resendBtn.textContent = 'Reenviar enlace';
+    } else {
+      resendBtn.textContent = `Podés reenviarlo en ${remaining}s`;
+    }
+  }, 1000);
+}
+
+// La URL de vuelta lleva el mismo `from` que ya usa Google, para que
+// redirectByRole() termine exactamente en el mismo lugar (checkout, perfil,
+// admin) sin importar qué método de ingreso se haya usado.
+function buildContinueUrl() {
+  const from = new URLSearchParams(window.location.search).get('from');
+  const base = window.location.origin + window.location.pathname;
+  return from ? `${base}?from=${encodeURIComponent(from)}` : base;
+}
+
+async function handleSendLink(isResend) {
+  const input = document.getElementById('login-email-input');
+  const email = input.value.trim();
+  if (!isValidEmailFormat(email)) {
+    showError('Escribí un correo con formato válido (ej: tu@email.com).');
+    return;
+  }
+  const btn = isResend ? document.getElementById('btn-resend-email-link') : document.getElementById('btn-send-email-link');
+  btn.disabled = true;
+  hideMessages();
+  try {
+    await sendLoginEmailLink(email, buildContinueUrl());
+    input.disabled = true;
+    showSuccess('Te enviamos un enlace de acceso a tu correo. Revisá tu bandeja de entrada o spam y abrilo desde este mismo dispositivo.');
+    startResendCooldown();
+  } catch (e) {
+    btn.disabled = false;
+    showError(emailLinkErrorMessage(e.code));
+  }
+}
+
+document.getElementById('btn-send-email-link').onclick = () => handleSendLink(false);
+document.getElementById('btn-resend-email-link').onclick = () => handleSendLink(true);
+
+async function finishEmailLinkLogin(user) {
+  if (await checkBlockedEmailLogin(user.uid, user.email)) {
+    await signOut(auth);
+    hideLoginOverlay();
+    showError(BLOCKED_MESSAGE);
+    return;
+  }
+  const { role } = await ensureUserDocForEmailLogin(user);
+  redirectByRole(role);
+}
+
+// Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos
+// parámetros que le agrega Firebase a nuestra continueUrl), se completa el
+// ingreso apenas carga la página — antes de que el usuario toque nada.
+async function tryCompleteEmailLink() {
+  if (!completingEmailLink) return;
+  showOverlay();
+  setOverlayText('Confirmando tu correo…');
+  let email = null;
+  try { email = window.localStorage.getItem('tt_email_link_pending'); } catch {}
+  if (!email) {
+    // Se abrió en otro dispositivo/navegador — no hay forma de saber con
+    // qué correo se pidió el enlace, así que se lo pedimos de nuevo en vez
+    // de fallar en silencio (mismo criterio que recomienda Firebase).
+    hideLoginOverlay();
+    const input = document.getElementById('login-email-input');
+    const sendBtn = document.getElementById('btn-send-email-link');
+    input.value = '';
+    input.placeholder = 'Confirmá el correo con el que pediste el enlace';
+    sendBtn.textContent = 'Confirmar e ingresar';
+    sendBtn.onclick = async () => {
+      const typed = input.value.trim();
+      if (!isValidEmailFormat(typed)) { showError('Escribí el correo con el que pediste el enlace.'); return; }
+      sendBtn.disabled = true;
+      showOverlay();
+      setOverlayText('Confirmando tu correo…');
+      try {
+        const user = await completeEmailLinkSignIn(typed);
+        await finishEmailLinkLogin(user);
+      } catch (e) {
+        hideLoginOverlay();
+        sendBtn.disabled = false;
+        showError(emailLinkErrorMessage(e.code));
+      }
+    };
+    showError('Confirmá tu correo para completar el ingreso — abriste el enlace en un navegador distinto al que usaste para pedirlo.');
+    return;
+  }
+  try {
+    const user = await completeEmailLinkSignIn(email);
+    await finishEmailLinkLogin(user);
+  } catch (e) {
+    hideLoginOverlay();
+    showError(emailLinkErrorMessage(e.code));
+  }
+}
+tryCompleteEmailLink();
 </script>
 </body>
 </html>
