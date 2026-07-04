@@ -29,9 +29,22 @@ destinatario del correo interno, pero ya no envía nada.
 
 ## 2. Código para pegar
 
-Este script manda **dos correos distintos** por cada pedido nuevo, cada uno
-en su propio `try/catch` (para poder distinguir si salió uno solo de los
-dos, no solo "todo bien" o "todo mal"):
+Este script maneja **todas las acciones** del módulo Super Admin → Correos, a
+través de un único campo `action` en el body del POST (si no viene ninguno,
+se asume `sendOrderEmail` — así el checkout de siempre, que nunca mandó este
+campo, sigue funcionando exactamente igual sin ningún cambio):
+
+| `action` | Quién la usa | Qué hace |
+|---|---|---|
+| `sendOrderEmail` (o sin `action`) | Checkout público al confirmar un pedido | Manda el correo operativo a la tienda y la confirmación a la clienta — el flujo de siempre. |
+| `resendOrderEmail` | Alias explícito del mismo flujo de arriba, forzando `isResend: true` | Hoy el botón "✉️ Reenviar" sigue llamando al flujo de siempre con `isResend:true` (sin `action`) — este nombre queda disponible para quien prefiera llamarlo así, es 100% equivalente. |
+| `sendTestCustomerEmail` (acepta también el nombre viejo `testCustomerEmail`) | Super Admin → Correos → Correos de prueba | Manda ÚNICAMENTE la confirmación a la clienta, a una dirección de prueba, con datos ficticios fijos. |
+| `sendPromoEmail` | Super Admin → Correos → Promociones (o correo de pedido con plantilla editable) | Manda UN correo armado desde una plantilla (asunto/saludo/cierre/firma/etc.), sustituyendo variables protegidas (`{{clienteNombre}}`, `{{pedidoNumero}}`, etc.) que siempre vienen calculadas por el sitio, nunca tipeadas a mano por el Super Admin. |
+| `sendBulkPromoEmail` | Super Admin → Correos → Promociones (envío a varias clientas) | Lo mismo que `sendPromoEmail`, pero a una lista de destinatarias en una sola llamada (máximo 25 por llamada — el sitio ya corta en tandas de ese tamaño). |
+
+Los primeros dos (`sendOrderEmail`/`resendOrderEmail`) mandan **dos correos
+distintos** por cada pedido, cada uno en su propio `try/catch` (para poder
+distinguir si salió uno solo de los dos, no solo "todo bien" o "todo mal"):
 
 1. **A la tienda** (`tintinaccs@gmail.com`) — el correo operativo completo: todos los
    datos del cliente, dirección/mapa, productos con imagen y variante, totales
@@ -49,19 +62,39 @@ confirmación a la clienta, para no ser repetitiva). Si alguna vez preferís
 que el reenvío también le llegue de nuevo a la clienta, buscá el comentario
 `!isResend` en `doPost` y quitalo.
 
-El resultado que devuelve `doPost` ya no es un único `success: true/false`:
-incluye `adminSent`/`customerSent` por separado, para que el sitio pueda
-guardar `notificationStatus: 'sent'` (los dos salieron), `'partial'` (salió
-uno solo) o `'failed'` (fallaron los dos) en vez de un simple sí/no.
+El resultado que devuelve `doPost` para estas dos acciones ya no es un único
+`success: true/false`: incluye `adminSent`/`customerSent` por separado, para
+que el sitio pueda guardar `notificationStatus: 'sent'` (los dos salieron),
+`'partial'` (salió uno solo) o `'failed'` (fallaron los dos) en vez de un
+simple sí/no. Además ahora acepta dos campos opcionales `sendAdmin`/
+`sendCustomer` (por defecto `true` los dos) para poder activar/desactivar
+por separado el correo interno a Tintin y la confirmación a la clienta desde
+Super Admin → Correos → Configuración, sin tocar el flujo real del checkout.
 
-**Acción extra: `testCustomerEmail`** — la usa el botón "Enviar prueba" de
-Super Admin → Configuración → Prueba de correo. Manda ÚNICAMENTE el correo
+**`sendTestCustomerEmail`** — la usa el botón "Enviar prueba" de
+Super Admin → Correos → Correos de prueba. Manda ÚNICAMENTE el correo
 de confirmación a la clienta (mismo diseño, con un aviso de "correo de
 prueba" agregado arriba), a la dirección que escriba el Super Admin, con
 datos de pedido ficticios fijos (`TEST_ORDER_`, definidos en el propio
-script, nunca vienen del navegador). No manda el correo interno a la
-tienda, no crea ningún pedido en Firestore, no toca stock — es una rama
-totalmente aparte de `doPost`, con su propio chequeo de `SHARED_SECRET`.
+script, nunca vienen del navegador) — salvo que el Super Admin haya elegido
+una clienta registrada real de la lista, en cuyo caso solo el email de
+destino cambia por el suyo, los datos del pedido siguen siendo los mismos
+ficticios. No manda el correo interno a la tienda, no crea ningún pedido en
+Firestore, no toca stock — es una rama totalmente aparte de `doPost`, con su
+propio chequeo de `SHARED_SECRET`.
+
+**`sendPromoEmail` / `sendBulkPromoEmail`** — arman un correo genérico con
+la marca de Tintin a partir de los campos editables de una plantilla
+(`subject`, `greeting`, `intro`, `closing`, `signature`, `promoText`,
+`buttonText`, `buttonUrl`, `brandPhrase`, `footer`), sustituyendo cualquier
+variable protegida (`{{clienteNombre}}`, `{{pedidoNumero}}`, `{{productos}}`,
+`{{total}}`, `{{estadoPedido}}`, `{{metodoEntrega}}`, `{{fechaPedido}}`) por
+el valor real que le manda el sitio — nunca un valor escrito a mano por el
+Super Admin en el lugar de esas variables. `sendBulkPromoEmail` además
+consulta `MailApp.getRemainingDailyQuota()` antes de empezar y corta el envío
+si se queda sin cuota diaria de Gmail (100 correos/día en una cuenta gratuita
+— ver la sección de riesgos más abajo), devolviendo el detalle de qué
+destinatarias sí y cuáles no recibieron el correo.
 
 **Sobre entregabilidad (que no caiga en spam):** el contenido de ambos
 correos está pensado para que una cuenta de Gmail nueva como
@@ -88,15 +121,29 @@ const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+    const action = data.action || 'sendOrderEmail';
 
-    // Prueba de correo (Super Admin → Configuración → Prueba de correo):
-    // manda ÚNICAMENTE el correo de confirmación a la clienta, a una
-    // dirección de prueba, con datos de pedido ficticios. Nunca crea un
-    // pedido, nunca toca stock, nunca manda el correo interno a la tienda —
-    // es una acción totalmente aparte del flujo real, con su propio chequeo
-    // de secreto.
-    if (data.action === 'testCustomerEmail') {
+    // Prueba de correo (Super Admin → Correos → Correos de prueba): manda
+    // ÚNICAMENTE el correo de confirmación a la clienta, a una dirección de
+    // prueba, con datos de pedido ficticios. Nunca crea un pedido, nunca
+    // toca stock, nunca manda el correo interno a la tienda — es una acción
+    // totalmente aparte del flujo real, con su propio chequeo de secreto.
+    // Acepta el nombre nuevo y el viejo por compatibilidad.
+    if (action === 'sendTestCustomerEmail' || action === 'testCustomerEmail') {
       return jsonOut(handleTestCustomerEmail_(data));
+    }
+
+    // Promociones / correos de pedido con plantilla editable (Super Admin →
+    // Correos → Promociones / Correos de pedidos): un solo correo o una
+    // tanda de varios, armados desde una plantilla — nunca desde datos
+    // escritos a mano por el Super Admin en lugar de las variables
+    // protegidas (esas las calcula siempre el sitio a partir del pedido
+    // real o de datos ficticios de prueba).
+    if (action === 'sendPromoEmail') {
+      return jsonOut(handleSendPromoEmail_(data));
+    }
+    if (action === 'sendBulkPromoEmail') {
+      return jsonOut(handleSendBulkPromoEmail_(data));
     }
 
     if (data.secret !== SHARED_SECRET) {
@@ -104,35 +151,51 @@ function doPost(e) {
     }
     const order    = data.order || {};
     const orderId  = data.orderId || '';
-    const isResend = !!data.isResend;
+    // 'resendOrderEmail' es un alias explícito del mismo flujo de abajo con
+    // isResend forzado a true — el sitio hoy sigue llamando sin `action`
+    // más el flag `isResend:true` (compatibilidad total), este nombre queda
+    // disponible para quien prefiera llamarlo así.
+    const isResend = action === 'resendOrderEmail' ? true : !!data.isResend;
     const shortId  = order.shortId || (orderId ? orderId.slice(0, 8).toUpperCase() : '—');
 
-    // 1) Correo operativo — siempre, a la tienda. Se prueba en su propio
-    // try/catch, separado del correo a la clienta, para poder reportar un
-    // resultado PARCIAL si uno de los dos falla sin que eso oculte que el
-    // otro sí salió bien.
-    let adminSent = false, adminError = '';
-    try {
-      const adminSubject = (isResend ? 'Reenvío: ' : '') +
-        'Nuevo pedido recibido en Tintin — Pedido #' + shortId;
-      MailApp.sendEmail({
-        to: ADMIN_EMAIL,
-        name: STORE_NAME,
-        subject: adminSubject,
-        body: buildAdminText(shortId, order),
-        htmlBody: buildAdminHtml(shortId, order)
-      });
-      adminSent = true;
-    } catch (err) {
-      adminError = String(err);
+    // Activar/desactivar por separado el correo interno a Tintin y la
+    // confirmación a la clienta (Super Admin → Correos → Configuración).
+    // Por defecto los dos true, así ningún llamado que no mande estos
+    // campos (el checkout de siempre) cambia de comportamiento.
+    const sendAdmin_    = data.sendAdmin    !== false;
+    const sendCustomer_ = data.sendCustomer !== false;
+
+    // 1) Correo operativo a la tienda. Se prueba en su propio try/catch,
+    // separado del correo a la clienta, para poder reportar un resultado
+    // PARCIAL si uno de los dos falla sin que eso oculte que el otro sí
+    // salió bien. Queda en `null` (no `false`) cuando directamente estaba
+    // desactivado en Configuración — no correspondía intentarlo, así que no
+    // cuenta como una falla real, igual que ya hace `customerSent`.
+    let adminSent = null, adminError = '';
+    if (sendAdmin_) {
+      try {
+        const adminSubject = (isResend ? 'Reenvío: ' : '') +
+          'Nuevo pedido recibido en Tintin — Pedido #' + shortId;
+        MailApp.sendEmail({
+          to: ADMIN_EMAIL,
+          name: STORE_NAME,
+          subject: adminSubject,
+          body: buildAdminText(shortId, order),
+          htmlBody: buildAdminHtml(shortId, order)
+        });
+        adminSent = true;
+      } catch (err) {
+        adminSent = false;
+        adminError = String(err);
+      }
     }
 
-    // 2) Confirmación a la clienta — solo si dejó su email, y solo en el
-    //    envío original (no en cada reenvío manual desde el admin).
-    //    `customerSent` queda en null (no false) cuando ni siquiera
-    //    correspondía intentarlo — así no cuenta como una falla real.
+    // 2) Confirmación a la clienta — solo si dejó su email, solo en el
+    //    envío original (no en cada reenvío manual desde el admin), y solo
+    //    si no está desactivada en Configuración. `customerSent` queda en
+    //    null (no false) cuando ni siquiera correspondía intentarlo.
     let customerSent = null, customerError = '';
-    if (order.userEmail && !isResend) {
+    if (sendCustomer_ && order.userEmail && !isResend) {
       try {
         MailApp.sendEmail({
           to: order.userEmail,
@@ -150,8 +213,9 @@ function doPost(e) {
 
     // `success` se mantiene por compatibilidad con lo que ya usa el sitio;
     // `adminSent`/`customerSent` son los que permiten calcular
-    // 'sent' / 'partial' / 'failed' del lado del frontend.
-    const success = adminSent && customerSent !== false;
+    // 'sent' / 'partial' / 'failed' del lado del frontend. Un correo
+    // desactivado a propósito (null) nunca cuenta como falla.
+    const success = adminSent !== false && customerSent !== false;
     return jsonOut({
       success,
       adminSent,
@@ -198,6 +262,159 @@ function handleTestCustomerEmail_(data) {
   } catch (err) {
     return { success: false, error: String(err) };
   }
+}
+
+// ============================================================
+// PLANTILLAS EDITABLES — Promociones y correos de pedido configurables
+// (Super Admin → Correos). Un solo renderer genérico para un correo con
+// marca: asunto/saludo/introducción/cierre/firma/mensaje promocional/botón/
+// frase de marca/pie, todos editables desde la plantilla, con variables
+// protegidas del tipo {{clienteNombre}} que solo el SITIO sustituye por un
+// valor real — el Super Admin nunca escribe el valor final a mano acá.
+// ============================================================
+
+function isValidEmail_(s) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s || '').trim());
+}
+
+// Sustituye {{clave}} por vars[clave] — si falta la variable, la deja vacía
+// en vez de tirar error o dejar el "{{...}}" crudo en el correo final.
+function renderVars_(str, vars) {
+  return String(str || '').replace(/\{\{(\w+)\}\}/g, function (m, key) {
+    const v = vars && vars[key];
+    return (v === undefined || v === null) ? '' : String(v);
+  });
+}
+
+function buildGenericEmailText_(t, vars) {
+  const line = '-'.repeat(40);
+  const brandPhrase = renderVars_(t.brandPhrase, vars);
+  const greeting    = renderVars_(t.greeting, vars);
+  const intro       = renderVars_(t.intro, vars);
+  const promoText   = renderVars_(t.promoText, vars);
+  const closing     = renderVars_(t.closing, vars);
+  const signature   = renderVars_(t.signature, vars) || STORE_NAME;
+  const footer      = renderVars_(t.footer, vars);
+  return [brandPhrase, greeting, '', intro, '', promoText, '', closing, '', signature, line, footer]
+    .filter(function (p) { return p !== ''; })
+    .join('\n') + '\n';
+}
+
+function buildGenericEmailHtml_(t, vars) {
+  const brandPhrase = renderVars_(t.brandPhrase, vars);
+  const greeting     = renderVars_(t.greeting, vars);
+  const intro        = renderVars_(t.intro, vars);
+  const promoText    = renderVars_(t.promoText, vars);
+  const closing      = renderVars_(t.closing, vars);
+  const signature    = renderVars_(t.signature, vars) || STORE_NAME;
+  const footer       = renderVars_(t.footer, vars);
+  const buttonText   = renderVars_(t.buttonText, vars);
+  const buttonUrl    = t.buttonUrl || '';
+  const buttonHtml = (buttonText && buttonUrl)
+    ? '<p style="text-align:center;margin:24px 0"><a href="' + buttonUrl + '" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">' + buttonText + '</a></p>'
+    : '';
+  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+    '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
+    (brandPhrase ? '<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">' + brandPhrase + '</p>' : '') +
+    (greeting ? '<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">' + greeting + '</h2>' : '') +
+    (intro ? '<p style="color:#555;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">' + intro + '</p>' : '') +
+    (promoText ? '<p style="color:#333;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">' + promoText + '</p>' : '') +
+    buttonHtml +
+    (closing ? '<p style="color:#555;line-height:1.6;margin:16px 0 0;font-size:14px;white-space:pre-line">' + closing + '</p>' : '') +
+    '<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5">' +
+    '<p style="color:#999;font-size:12px;margin:0;white-space:pre-line">' + signature + '</p>' +
+    (footer ? '<p style="color:#bbb;font-size:11px;margin:10px 0 0;white-space:pre-line">' + footer + '</p>' : '') +
+    '</div></div></body></html>';
+}
+
+// Un solo correo (Promociones a una clienta, o correo de pedido con
+// plantilla editable — confirmado/cancelado/rechazado/pago recibido/listo
+// para retirar/en camino/entregado).
+function handleSendPromoEmail_(data) {
+  if (data.secret !== SHARED_SECRET) {
+    return { success: false, error: 'unauthorized', recipientsProcessed: 0, recipientsFailed: 0 };
+  }
+  const to = String(data.to || '').trim();
+  if (!isValidEmail_(to)) {
+    return { success: false, error: 'invalid_email', recipientsProcessed: 0, recipientsFailed: 1 };
+  }
+  const vars = data.variables || {};
+  try {
+    MailApp.sendEmail({
+      to: to,
+      name: STORE_NAME,
+      subject: renderVars_(data.subject, vars) || STORE_NAME,
+      body: buildGenericEmailText_(data, vars),
+      htmlBody: buildGenericEmailHtml_(data, vars)
+    });
+    return { success: true, sent: 1, failed: 0, recipientsProcessed: 1, recipientsFailed: 0, partial: false };
+  } catch (err) {
+    return { success: false, sent: 0, failed: 1, recipientsProcessed: 1, recipientsFailed: 1, partial: false, error: String(err) };
+  }
+}
+
+// Varios destinatarios en una sola llamada (Promociones a varias/todas las
+// seleccionadas). Tope duro de 25 por llamada — el sitio ya corta la lista
+// completa en tandas de este tamaño o menos antes de llamar, esto es un
+// segundo blindaje del lado del script por si alguna vez se llama a mano
+// con una lista más grande. Corta el envío si se acaba la cuota diaria
+// gratuita de Gmail (MailApp.getRemainingDailyQuota(), ~100/día en una
+// cuenta normal) en vez de seguir fallando correo por correo.
+function handleSendBulkPromoEmail_(data) {
+  if (data.secret !== SHARED_SECRET) {
+    return { success: false, error: 'unauthorized', recipientsProcessed: 0, recipientsFailed: 0 };
+  }
+  const recipients = Array.isArray(data.recipients) ? data.recipients : [];
+  if (!recipients.length) {
+    return { success: false, error: 'no_recipients', recipientsProcessed: 0, recipientsFailed: 0 };
+  }
+  const MAX_BATCH = 25;
+  const batch = recipients.slice(0, MAX_BATCH);
+
+  let quota;
+  try { quota = MailApp.getRemainingDailyQuota(); } catch (e) { quota = -1; }
+
+  const results = [];
+  let sent = 0, failed = 0;
+  for (let i = 0; i < batch.length; i++) {
+    const r = batch[i] || {};
+    const to = String(r.to || '').trim();
+    if (quota === 0) {
+      results.push({ to: to, sent: false, error: 'daily_quota_exceeded' });
+      failed++;
+      continue;
+    }
+    if (!isValidEmail_(to)) {
+      results.push({ to: to, sent: false, error: 'invalid_email' });
+      failed++;
+      continue;
+    }
+    const vars = r.variables || {};
+    try {
+      MailApp.sendEmail({
+        to: to,
+        name: STORE_NAME,
+        subject: renderVars_(data.subject, vars) || STORE_NAME,
+        body: buildGenericEmailText_(data, vars),
+        htmlBody: buildGenericEmailHtml_(data, vars)
+      });
+      results.push({ to: to, sent: true });
+      sent++;
+      if (quota > 0) quota--;
+    } catch (err) {
+      results.push({ to: to, sent: false, error: String(err) });
+      failed++;
+    }
+  }
+  return {
+    success: failed === 0,
+    partial: sent > 0 && failed > 0,
+    sent: sent,
+    failed: failed,
+    recipientsProcessed: batch.length,
+    recipientsFailed: failed,
+    results: results
+  };
 }
 
 function jsonOut(obj) {
@@ -470,11 +687,18 @@ ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actu
    Gmail nueva es normal que los primeros correos caigan ahí. Marcá "No es
    spam" y agregá `tintinpedidos@gmail.com` a los contactos para acelerar que
    Gmail deje de filtrarlo
-7. En Super Admin → Configuración → Prueba de correo, escribí cualquier
-   email tuyo y tocá "Enviar prueba" — debería llegar el correo de
-   confirmación (con el aviso de "correo de prueba" arriba) sin que se cree
-   ningún pedido nuevo en Super Admin → Pedidos ni llegue nada a
-   `tintinaccs@gmail.com`
+7. En Super Admin → Correos → Correos de prueba, escribí cualquier
+   email tuyo (o elegí una clienta registrada) y tocá "Enviar prueba" —
+   debería llegar el correo de confirmación (con el aviso de "correo de
+   prueba" arriba) sin que se cree ningún pedido nuevo en Super Admin →
+   Pedidos ni llegue nada a `tintinaccs@gmail.com`
+8. En Super Admin → Correos → Plantillas, editá el asunto o el saludo de
+   "Promoción general", guardalo, y volvé a Correos de prueba con esa
+   plantilla elegida — el cambio tiene que verse en el correo que llega
+9. En Super Admin → Correos → Promociones, seleccioná una sola clienta de
+   prueba (tu propio email registrado como cliente) y confirmá el envío
+   escribiendo `CONFIRMAR` — revisá que quede una fila nueva en
+   Super Admin → Correos → Historial con el resultado
 
 ## Si algo falla
 - Si no llega nada: abrí la consola del navegador (F12) en el checkout y buscá mensajes que empiecen con `[email-notify]`
