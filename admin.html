@@ -455,6 +455,69 @@
       }
     }
 
+    /* ======== PLANTILLAS: tabla → cards en mobile ========
+       Esta tabla tiene hasta 5 botones de acción por fila (Editar/Vista
+       previa/Duplicar/Archivar/Eliminar) — en mobile quedan apilados y
+       envueltos (flex-wrap), nunca cortados ni exigiendo scroll horizontal
+       para llegar a ellos. */
+    @media (max-width: 640px) {
+      .adm-table-plantillas thead { display: none; }
+      .adm-table-plantillas, .adm-table-plantillas tbody,
+      .adm-table-plantillas tr, .adm-table-plantillas td { display: block; width: 100%; }
+      .adm-table-plantillas tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-plantillas td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-plantillas tr td:last-child { border-bottom: none; }
+      .adm-table-plantillas td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      /* La celda de Acciones tiene varios botones — se acomodan en su
+         propia fila envuelta en vez de forzarse contra el borde derecho. */
+      .adm-table-plantillas td[data-label="Acciones"] {
+        display: block; text-align: left;
+      }
+      .adm-table-plantillas td[data-label="Acciones"]::before {
+        display: block; margin-bottom: 6px;
+      }
+      .adm-table-plantillas td[data-label="Acciones"] > div {
+        justify-content: flex-start;
+      }
+      /* Nombre/asunto: el <small> con el asunto se ve muy apretado a la
+         derecha — se deja alinear a la izquierda debajo del nombre. */
+      .adm-table-plantillas td[data-label="Plantilla"] {
+        display: block; text-align: left;
+      }
+      .adm-table-plantillas td[data-label="Plantilla"]::before {
+        display: block; margin-bottom: 4px;
+      }
+    }
+
+    /* ======== DASHBOARD DE CORREOS — Últimos envíos: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-correos-dash thead { display: none; }
+      .adm-table-correos-dash, .adm-table-correos-dash tbody,
+      .adm-table-correos-dash tr, .adm-table-correos-dash td { display: block; width: 100%; }
+      .adm-table-correos-dash tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-correos-dash td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-correos-dash tr td:last-child { border-bottom: none; }
+      .adm-table-correos-dash td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
     .adm-field {
       display: flex;
       flex-direction: column;
@@ -1579,7 +1642,7 @@
         <div class="adm-card">
           <div class="adm-card-head"><div class="adm-card-title">Últimos envíos</div></div>
           <div class="adm-table-wrap">
-            <table class="adm-table">
+            <table class="adm-table adm-table-correos-dash">
               <thead><tr><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th></tr></thead>
               <tbody id="correos-dash-recent"><tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
             </table>
@@ -1669,7 +1732,7 @@
               </label>
             </div>
             <div class="adm-table-wrap">
-              <table class="adm-table">
+              <table class="adm-table adm-table-plantillas">
                 <thead><tr><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
                 <tbody id="tpl-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
@@ -3648,10 +3711,10 @@ function renderCorreosDashboard() {
     const recent = allEmailLogs.slice(0, 5);
     tbody.innerHTML = recent.length ? recent.map(l => `
       <tr>
-        <td style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
-        <td style="font-size:12px">${templateLabel_(l.type)}</td>
-        <td style="font-size:12px">${l.recipient || '—'}</td>
-        <td>${logStatusBadge_(l.status)}</td>
+        <td data-label="Fecha" style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
+        <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+        <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
+        <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       </tr>
     `).join('') : '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Sin envíos todavía</td></tr>';
   }
@@ -3851,12 +3914,12 @@ function renderCorreosPlantillasTab() {
     const isCustom = !t.key;
     return `
       <tr style="${t.archived ? 'opacity:.55' : ''}">
-        <td><strong>${t.name}</strong><br><small style="color:#aaa">${(t.subject || '').slice(0, 60)}</small></td>
-        <td><span class="adm-badge badge-confirmado">${CAT_LABELS[t.category] || t.category}</span></td>
-        <td>${t.active !== false ? '<span class="adm-badge badge-entregado">Activa</span>' : '<span class="adm-badge badge-cancelado">Inactiva</span>'}</td>
-        <td style="font-size:12px">${formatDate(t.updatedAt)}</td>
-        <td style="font-size:12px">${t.updatedBy || '—'}</td>
-        <td>
+        <td data-label="Plantilla"><strong>${t.name}</strong><br><small style="color:#aaa">${(t.subject || '').slice(0, 60)}</small></td>
+        <td data-label="Categoría"><span class="adm-badge badge-confirmado">${CAT_LABELS[t.category] || t.category}</span></td>
+        <td data-label="Activa">${t.active !== false ? '<span class="adm-badge badge-entregado">Activa</span>' : '<span class="adm-badge badge-cancelado">Inactiva</span>'}</td>
+        <td data-label="Últ. edición" style="font-size:12px">${formatDate(t.updatedAt)}</td>
+        <td data-label="Editado por" style="font-size:12px">${t.updatedBy || '—'}</td>
+        <td data-label="Acciones">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.openTplEdit('${id}')" type="button">Editar</button>
             <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.previewTemplateById('${id}')" type="button">Vista previa</button>

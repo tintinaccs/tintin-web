@@ -42,6 +42,34 @@ campo, sigue funcionando exactamente igual sin ningún cambio):
 | `sendPromoEmail` | Super Admin → Correos → Promociones (o correo de pedido con plantilla editable) | Manda UN correo armado desde una plantilla (asunto/saludo/cierre/firma/etc.), sustituyendo variables protegidas (`{{clienteNombre}}`, `{{pedidoNumero}}`, etc.) que siempre vienen calculadas por el sitio, nunca tipeadas a mano por el Super Admin. |
 | `sendBulkPromoEmail` | Super Admin → Correos → Promociones (envío a varias clientas) | Lo mismo que `sendPromoEmail`, pero a una lista de destinatarias en una sola llamada (máximo 25 por llamada — el sitio ya corta en tandas de ese tamaño). |
 
+**Sobre seguridad — el `SHARED_SECRET` ya no alcanza solo:** ese secreto viaja
+en el JS público del sitio (`js/email-config.js`), así que cualquiera que
+abra la consola del navegador puede leerlo y llamar al webhook directamente,
+sin pasar por ningún botón ni login. Eso era un riesgo aceptable cuando la
+única acción "extra" era mandar UN correo de prueba, pero no alcanza para
+promociones masivas. Por eso, además del secreto:
+
+- `sendTestCustomerEmail`, `sendPromoEmail` y `sendBulkPromoEmail` exigen
+  también un **idToken de Firebase Auth** válido de la cuenta exacta
+  `tintinaccs@gmail.com` (con el email verificado). El script se lo pregunta
+  directamente a Google (`identitytoolkit.googleapis.com`, sin librerías ni
+  JWT/RSA a mano) — nadie puede fabricar un idToken válido de esa cuenta sin
+  haber iniciado sesión de verdad con ella, y uno robado vence solo (~1 hora).
+- `resendOrderEmail` (y el flujo normal con `isResend:true`) exige un
+  idToken válido de **cualquier** cuenta con sesión iniciada — no
+  restringido a `tintinaccs@gmail.com`, porque hoy también lo usan Admin y
+  Modder desde "✉️ Reenviar" en Pedidos, y no quería romper eso. Sigue
+  siendo mucho más seguro que solo el secreto: ya no se puede disparar un
+  reenvío sin tener una sesión real de Firebase abierta.
+- `sendOrderEmail` original del checkout (`isResend:false`) no pide ningún
+  idToken — ahí no hay Super Admin ni panel de por medio, es la clienta
+  comprando, y exigirle un token de "administrador" no tendría sentido.
+
+Si alguna vez preferís que `resendOrderEmail` quede restringido solo a
+`tintinaccs@gmail.com` (y no a Admin/Modder), avisame — hoy decidí no
+tocar esa función porque ya la usan esos dos roles y no me pediste
+específicamente cambiar sus permisos.
+
 Los primeros dos (`sendOrderEmail`/`resendOrderEmail`) mandan **dos correos
 distintos** por cada pedido, cada uno en su propio `try/catch` (para poder
 distinguir si salió uno solo de los dos, no solo "todo bien" o "todo mal"):
@@ -118,6 +146,18 @@ const ADMIN_EMAIL     = 'tintinaccs@gmail.com';  // a quién le llega el correo 
 const STORE_NAME      = 'Tintin Accesorios';
 const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
 
+// Cuenta que puede usar las acciones de Super Admin (prueba, promociones,
+// campañas) — se compara contra el email verificado que devuelve Google al
+// validar el idToken, NUNCA contra algo que mande el propio navegador.
+const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
+
+// Clave pública del proyecto Firebase (tintin-accesorios) — es la misma que
+// ya viaja en js/firebase.js del sitio. NO es secreta (Google documenta que
+// las API key de apps Firebase web no protegen nada por sí solas); acá se
+// usa únicamente para pedirle a Google que valide un idToken, nunca para
+// escribir ni leer datos.
+const FIREBASE_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
@@ -157,6 +197,21 @@ function doPost(e) {
     // disponible para quien prefiera llamarlo así.
     const isResend = action === 'resendOrderEmail' ? true : !!data.isResend;
     const shortId  = order.shortId || (orderId ? orderId.slice(0, 8).toUpperCase() : '—');
+
+    // Reenviar (botón "✉️ Reenviar" de Pedidos, disponible para Admin y
+    // Modder además de Super Admin — no es una acción exclusiva de Super
+    // Admin) exige un idToken de Firebase válido: cualquier cuenta con
+    // sesión real, no una restringida a un email puntual. Esto cierra el
+    // hueco de que alguien dispare reenvíos solo con el SHARED_SECRET
+    // (público en el JS del sitio) sin tener sesión iniciada de verdad. El
+    // envío ORIGINAL del checkout (isResend=false) no pide esto — ahí no
+    // hay ningún Super Admin ni panel de por medio, es la clienta comprando.
+    if (isResend) {
+      const authCheck = verifyFirebaseIdToken_(data.idToken);
+      if (!authCheck.ok) {
+        return jsonOut({ success: false, adminSent: false, customerSent: null, error: authCheck.error });
+      }
+    }
 
     // Activar/desactivar por separado el correo interno a Tintin y la
     // confirmación a la clienta (Super Admin → Correos → Configuración).
@@ -242,9 +297,58 @@ const TEST_ORDER_ = {
   createdAt: new Date().toISOString(),
 };
 
+// ============================================================
+// AUTENTICACIÓN REAL (no solo el SHARED_SECRET) — el secreto viaja en el JS
+// público del sitio, así que cualquiera que abra la consola del navegador
+// puede leerlo. Para las acciones exclusivas de Super Admin (prueba,
+// promociones, campañas) eso NO alcanza: acá se le pide a Google que valide
+// el idToken de Firebase Auth que mandó el navegador — nadie puede fabricar
+// un idToken válido de una cuenta sin haber iniciado sesión de verdad con
+// ella, y un idToken robado vence solo (~1 hora). No hace falta ninguna
+// librería ni implementar JWT/RSA a mano: identitytoolkit.googleapis.com
+// hace la verificación completa (firma, vencimiento, proyecto) del lado de
+// Google y devuelve el email real de la cuenta si el token es válido.
+// ============================================================
+
+function verifyFirebaseIdToken_(idToken) {
+  if (!idToken) return { ok: false, error: 'missing_id_token' };
+  try {
+    const resp = UrlFetchApp.fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' + FIREBASE_API_KEY,
+      {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({ idToken: idToken }),
+        muteHttpExceptions: true
+      }
+    );
+    if (resp.getResponseCode() !== 200) return { ok: false, error: 'invalid_id_token' };
+    const body = JSON.parse(resp.getContentText());
+    const user = body.users && body.users[0];
+    if (!user) return { ok: false, error: 'invalid_id_token' };
+    return { ok: true, email: user.email || '', emailVerified: !!user.emailVerified, uid: user.localId || '' };
+  } catch (err) {
+    return { ok: false, error: 'token_verify_failed' };
+  }
+}
+
+// Exclusivo Super Admin: no alcanza con cualquier idToken válido, tiene que
+// ser exactamente la cuenta SUPER_ADMIN_EMAIL, con el email verificado.
+function requireSuperAdmin_(idToken) {
+  const v = verifyFirebaseIdToken_(idToken);
+  if (!v.ok) return v;
+  if (!v.emailVerified) return { ok: false, error: 'email_not_verified' };
+  if (v.email !== SUPER_ADMIN_EMAIL) return { ok: false, error: 'not_super_admin' };
+  return v;
+}
+
 function handleTestCustomerEmail_(data) {
   if (data.secret !== SHARED_SECRET) {
     return { success: false, error: 'unauthorized' };
+  }
+  const auth_ = requireSuperAdmin_(data.idToken);
+  if (!auth_.ok) {
+    return { success: false, error: auth_.error };
   }
   const toEmail = String(data.toEmail || '').trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail)) {
@@ -334,6 +438,10 @@ function handleSendPromoEmail_(data) {
   if (data.secret !== SHARED_SECRET) {
     return { success: false, error: 'unauthorized', recipientsProcessed: 0, recipientsFailed: 0 };
   }
+  const auth_ = requireSuperAdmin_(data.idToken);
+  if (!auth_.ok) {
+    return { success: false, error: auth_.error, recipientsProcessed: 0, recipientsFailed: 0 };
+  }
   const to = String(data.to || '').trim();
   if (!isValidEmail_(to)) {
     return { success: false, error: 'invalid_email', recipientsProcessed: 0, recipientsFailed: 1 };
@@ -363,6 +471,10 @@ function handleSendPromoEmail_(data) {
 function handleSendBulkPromoEmail_(data) {
   if (data.secret !== SHARED_SECRET) {
     return { success: false, error: 'unauthorized', recipientsProcessed: 0, recipientsFailed: 0 };
+  }
+  const auth_ = requireSuperAdmin_(data.idToken);
+  if (!auth_.ok) {
+    return { success: false, error: auth_.error, recipientsProcessed: 0, recipientsFailed: 0 };
   }
   const recipients = Array.isArray(data.recipients) ? data.recipients : [];
   if (!recipients.length) {
@@ -651,6 +763,13 @@ function buildCustomerHtml(shortId, order, isTest) {
    - **Quién tiene acceso**: **`Cualquier usuario`** (importante — sin esto, el checkout público no va a poder llamarlo)
 4. Click en **"Implementar"**
 5. Te va a pedir autorizar permisos — elegí la cuenta `tintinpedidos@gmail.com`, puede avisar "Google no verificó esta app": hacé clic en **"Configuración avanzada"** → **"Ir a Tintin - Emails de pedidos (no seguro)"** → **"Permitir"** (es tu propio script, es seguro)
+   - **Novedad de esta versión**: el script ahora también le pide a Google
+     que valide un idToken (`UrlFetchApp` llamando a
+     `identitytoolkit.googleapis.com`), un permiso nuevo que el script no
+     pedía antes. Al guardar/implementar es normal que la pantalla de
+     autorización pida un permiso adicional ("Conectarse a un servicio
+     externo" o similar) — aceptalo igual, es necesario para que la
+     verificación de Super Admin funcione.
 6. Copiá la **URL de la aplicación web** que te da al final (termina en `/exec`)
 
 ## 4. Conectar la URL al sitio
