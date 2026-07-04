@@ -5,7 +5,7 @@
  * Ver functions/EMAIL_SETUP.md.
  */
 import { EMAIL_WEBHOOK_URL, EMAIL_SECRET } from './email-config.js';
-import { db } from './firebase.js';
+import { db, auth } from './firebase.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // Lee los switches de Super Admin → Correos → Configuración. Falla "abierto"
@@ -19,6 +19,20 @@ async function getEmailSettings_() {
     return snap.exists() ? snap.data() : {};
   } catch (e) {
     return {};
+  }
+}
+
+// El SHARED_SECRET viaja en el JS público del sitio (cualquiera con F12 lo
+// puede leer), así que ya no alcanza solo para las acciones de Super Admin
+// (prueba, promociones, reenvíos). Acá se manda ADEMÁS el idToken real de
+// Firebase Auth de quien está logueado — el Apps Script se lo valida
+// directamente a Google (ver functions/EMAIL_SETUP.md). Nunca se imprime en
+// consola ni se guarda en ningún lado, solo viaja en el body del POST.
+async function getIdToken_() {
+  try {
+    return auth.currentUser ? await auth.currentUser.getIdToken() : '';
+  } catch (e) {
+    return '';
   }
 }
 
@@ -38,6 +52,10 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
   }
   const sendAdmin    = settings.internalEmailEnabled !== false;
   const sendCustomer = settings.customerEmailEnabled !== false;
+  // Solo hace falta pedir el idToken cuando es un reenvío (Apps Script lo
+  // exige ahí) — el envío original del checkout no lo necesita, así que no
+  // se retrasa ni se rompe si por lo que sea no hay sesión con token listo.
+  const idToken = isResend ? await getIdToken_() : '';
   try {
     // Content-Type text/plain evita que el navegador mande un preflight
     // OPTIONS (Apps Script no lo responde bien) — Apps Script igual puede
@@ -45,7 +63,7 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, orderId, order, isResend, sendAdmin, sendCustomer })
+      body: JSON.stringify({ secret: EMAIL_SECRET, orderId, order, isResend, sendAdmin, sendCustomer, idToken })
     });
     return await res.json();
   } catch (e) {
@@ -69,10 +87,11 @@ export async function sendTestCustomerEmail(toEmail) {
     return { success: false, error: 'not_configured' };
   }
   try {
+    const idToken = await getIdToken_();
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendTestCustomerEmail', toEmail })
+      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendTestCustomerEmail', toEmail, idToken })
     });
     return await res.json();
   } catch (e) {
@@ -96,10 +115,11 @@ export async function sendTemplatedEmail(payload) {
     return { success: false, error: 'not_configured' };
   }
   try {
+    const idToken = await getIdToken_();
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendPromoEmail', ...payload })
+      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendPromoEmail', idToken, ...payload })
     });
     return await res.json();
   } catch (e) {
@@ -121,10 +141,11 @@ export async function sendBulkTemplatedEmail(payload) {
     return { success: false, error: 'not_configured' };
   }
   try {
+    const idToken = await getIdToken_();
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendBulkPromoEmail', ...payload })
+      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendBulkPromoEmail', idToken, ...payload })
     });
     return await res.json();
   } catch (e) {
