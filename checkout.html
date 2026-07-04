@@ -1830,6 +1830,9 @@ async function buildConfirmation() {
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (e) {
+        if (e && e.message !== 'LOGIN_REQUIRED' && e.message !== 'BLOCKED_ACCOUNT') {
+          console.error('[checkout] Error al confirmar el pedido:', e);
+        }
         showError(4, 'Hubo un error al guardar el pedido. Intentá de nuevo.');
         confirmBtn.disabled = false;
         confirmBtn.textContent = '✓ Confirmar pedido';
@@ -1968,7 +1971,21 @@ async function saveOrder(items, subtotal, total) {
     updatedAt:          serverTimestamp()
   };
 
-  const orderRef = await addDoc(collection(db, 'orders'), orderDoc);
+  // Reintento único y transparente: en cuentas recién verificadas, el
+  // primer intento puede fallar porque el token forzado arriba todavía no
+  // llegó a reflejar email_verified:true del lado de Firestore (carrera
+  // entre el refresh de Auth y el canal ya abierto de Firestore) — antes
+  // esto obligaba a la clienta a tocar "Confirmar" una segunda vez. Ahora
+  // se reintenta solo, con un token recién forzado de nuevo, antes de
+  // mostrarle cualquier error.
+  let orderRef;
+  try {
+    orderRef = await addDoc(collection(db, 'orders'), orderDoc);
+  } catch (err) {
+    console.error('[checkout] Falló crear el pedido, reintentando una vez:', err);
+    try { await currentUser.getIdToken(true); } catch {}
+    orderRef = await addDoc(collection(db, 'orders'), orderDoc);
+  }
 
   // Fire-and-forget: la orden ya quedó guardada arriba pase lo que pase acá.
   // A diferencia de antes, ahora sí se registra el resultado real del envío
