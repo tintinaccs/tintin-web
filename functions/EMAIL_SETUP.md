@@ -15,6 +15,16 @@ siempre envía como la cuenta que autorizó/desplegó el script — no hay forma
 de pasarle un remitente distinto. `tintinaccs@gmail.com` sigue siendo el
 destinatario del correo interno, pero ya no envía nada.
 
+> **Ya tenés el script funcionando y solo agregaste la protección
+> anti-spam (cooldowns/topes diarios/bloqueo de campañas masivas)?** No hace
+> falta repetir el paso 1 — solo reemplazá TODO el contenido de tu proyecto
+> de Apps Script existente por el código actualizado de la sección "2.
+> Código" de más abajo, y volvé a implementar una **nueva versión** (paso 3:
+> Implementar → Administrar implementaciones → ✏️ editar la implementación
+> activa → Versión: **Nueva versión** → Implementar). Si en cambio publicás
+> una implementación *nueva* con una URL distinta, acordate de actualizar
+> `js/email-config.js` con la URL nueva.
+
 ## 1. Crear el proyecto de Apps Script
 
 1. Andá a **https://script.google.com** (con la cuenta `tintinpedidos@gmail.com`)
@@ -40,7 +50,41 @@ campo, sigue funcionando exactamente igual sin ningún cambio):
 | `resendOrderEmail` | Alias explícito del mismo flujo de arriba, forzando `isResend: true` | Hoy el botón "✉️ Reenviar" sigue llamando al flujo de siempre con `isResend:true` (sin `action`) — este nombre queda disponible para quien prefiera llamarlo así, es 100% equivalente. |
 | `sendTestCustomerEmail` (acepta también el nombre viejo `testCustomerEmail`) | Super Admin → Correos → Correos de prueba | Manda ÚNICAMENTE la confirmación a la clienta, a una dirección de prueba, con datos ficticios fijos. |
 | `sendPromoEmail` | Super Admin → Correos → Promociones (o correo de pedido con plantilla editable) | Manda UN correo armado desde una plantilla (asunto/saludo/cierre/firma/etc.), sustituyendo variables protegidas (`{{clienteNombre}}`, `{{pedidoNumero}}`, etc.) que siempre vienen calculadas por el sitio, nunca tipeadas a mano por el Super Admin. |
-| `sendBulkPromoEmail` | Super Admin → Correos → Promociones (envío a varias clientas) | Lo mismo que `sendPromoEmail`, pero a una lista de destinatarias en una sola llamada (máximo 25 por llamada — el sitio ya corta en tandas de ese tamaño). |
+| `sendBulkPromoEmail` | Super Admin → Correos → Promociones (envío a varias clientas) | **Deshabilitada a propósito** (ver "Protección anti-spam" abajo) — siempre devuelve `bulk_campaigns_disabled_gmail_sender`, nunca manda nada, sin importar cuántas destinatarias se le pasen. |
+
+## Protección anti-spam de la cuenta (`tintinpedidos@gmail.com`)
+
+Esta cuenta de Gmail común manda todos los correos del sitio — para que nunca
+se use (por error, por un bug, o por alguien que descubra el `SHARED_SECRET`
+público) como un "robot de envíos" que arriesgue que Google la marque como
+spam o la suspenda, el script aplica estos límites **del lado del servidor**
+(no solo en el panel — así no se pueden saltear llamando directo al webhook):
+
+- **Correo original de un pedido** (`sendOrderEmail`, `isResend:false`): no se
+  manda dos veces para el mismo `orderId` (`CacheService`, ventana de 6 horas).
+- **Reenvío manual** (`isResend:true`): cooldown fijo de **60 segundos** para
+  el mismo `orderId` (no se puede reenviar "varias veces seguidas") + un tope
+  diario **total** de reenvíos — el sitio sugiere el valor configurado en
+  Correos → Configuración, pero el techo real es `ABSOLUTE_MAX_RESEND_PER_DAY`
+  (80 por defecto), que nadie puede subir desde el navegador.
+- **Correos de prueba** (`sendTestCustomerEmail`, y `sendPromoEmail` cuando
+  viene con `isTest:true` desde la pestaña de pruebas): cooldown fijo de
+  **2 minutos** entre cada uno + un tope diario — el sitio sugiere el valor de
+  Configuración, techo real `ABSOLUTE_MAX_TEST_PER_DAY` (50 por defecto).
+- **Campañas/promos masivas** (`sendBulkPromoEmail`): **deshabilitadas por
+  completo**, siempre, sin excepción — un envío masivo desde una cuenta de
+  Gmail común es justamente el patrón que arriesga la cuenta. El correo
+  transaccional de UN pedido (`sendPromoEmail`, usado también por Correos de
+  pedidos) no se toca, sigue funcionando normal.
+
+Los contadores y cooldowns viven en `PropertiesService`/`CacheService` del
+propio proyecto de Apps Script (no en Firestore) — persisten aunque se cierre
+la pestaña o se recargue la página, y no dependen de que el sitio los respete.
+Si necesitás subir alguno de los techos absolutos, hay que editarlos acá
+arriba (`TEST_EMAIL_COOLDOWN_MS`, `RESEND_COOLDOWN_MS`,
+`ABSOLUTE_MAX_TEST_PER_DAY`, `ABSOLUTE_MAX_RESEND_PER_DAY`) y volver a
+implementar una nueva versión (ver paso 3 más abajo) — no alcanza con
+guardarlo en Correos → Configuración.
 
 **Sobre seguridad — el `SHARED_SECRET` ya no alcanza solo:** ese secreto viaja
 en el JS público del sitio (`js/email-config.js`), así que cualquiera que
@@ -158,6 +202,73 @@ const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 // escribir ni leer datos.
 const FIREBASE_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 
+// ============================================================
+// PROTECCIÓN ANTI-SPAM DE LA CUENTA — tintinpedidos@gmail.com es una
+// cuenta de Gmail común, no un servicio transaccional dedicado. Estos
+// límites viven ACÁ (no solo en el sitio) porque son el único lugar que no
+// se puede saltear: el SHARED_SECRET viaja en el JS público del sitio, así
+// que cualquiera que lo lea podría llamar al webhook directo sin pasar por
+// ningún botón del panel — con estos topes, ni siquiera así se puede
+// mandar más de la cuenta de la que este script decide, sin importar qué
+// límite diga el navegador que llama.
+// ============================================================
+const TEST_EMAIL_COOLDOWN_MS   = 2 * 60 * 1000;  // 2 minutos — fijo, no configurable
+const RESEND_COOLDOWN_MS       = 60 * 1000;      // 60 segundos por PEDIDO — no configurable
+const ABSOLUTE_MAX_TEST_PER_DAY   = 50;  // techo duro aunque el sitio pida más
+const ABSOLUTE_MAX_RESEND_PER_DAY = 80;  // techo duro aunque el sitio pida más
+const ORDER_EMAIL_DEDUPE_TTL_SECONDS = 21600; // 6 horas
+
+function todayKey_() {
+  return Utilities.formatDate(new Date(), 'America/Asuncion', 'yyyy-MM-dd');
+}
+
+// Tope diario con contador propio del script (PropertiesService, persiste
+// entre ejecuciones) — el sitio puede pedir un límite más bajo (lo
+// configurado en Correos → Configuración), pero nunca uno más alto que
+// absoluteMax: ese es el verdadero techo, decidido acá, no en el navegador.
+function checkAndBumpDailyCounter_(counterName, requestedLimit, absoluteMax) {
+  const props = PropertiesService.getScriptProperties();
+  const dateKey = counterName + '_' + todayKey_();
+  const current = Number(props.getProperty(dateKey) || '0');
+  const limit = Math.max(1, Math.min(Number(requestedLimit) || absoluteMax, absoluteMax));
+  if (current >= limit) {
+    return { ok: false, error: 'daily_limit_exceeded', current: current, limit: limit };
+  }
+  props.setProperty(dateKey, String(current + 1));
+  return { ok: true, current: current + 1, limit: limit };
+}
+
+// Cooldown entre dos llamadas de la MISMA categoría (ej. dos correos de
+// prueba, o dos reenvíos del mismo pedido si se le pasa un orderId en la
+// propKey) — guarda el último timestamp real en PropertiesService, no en
+// el navegador, así que no se resetea recargando la página ni abriendo
+// otra pestaña.
+function checkCooldown_(propKey, cooldownMs) {
+  const props = PropertiesService.getScriptProperties();
+  const lastTs = Number(props.getProperty(propKey) || '0');
+  const now = Date.now();
+  const elapsed = now - lastTs;
+  if (lastTs && elapsed < cooldownMs) {
+    return { ok: false, error: 'cooldown_active', retryAfterSeconds: Math.ceil((cooldownMs - elapsed) / 1000) };
+  }
+  props.setProperty(propKey, String(now));
+  return { ok: true };
+}
+
+// Evita mandar dos veces el correo ORIGINAL (isResend:false) de un mismo
+// pedido si doPost se llega a llamar más de una vez con el mismo orderId
+// (reintento de red, doble tap, un bug futuro) — CacheService alcanza acá
+// (no hace falta que dure más de unas horas) y es más liviano que
+// PropertiesService para algo de corta duración.
+function checkOrderEmailNotDuplicate_(orderId) {
+  if (!orderId) return { ok: true }; // sin orderId no hay con qué deduplicar, se deja pasar
+  const cache = CacheService.getScriptCache();
+  const key = 'order_sent_' + orderId;
+  if (cache.get(key)) return { ok: false, error: 'duplicate_order_email' };
+  cache.put(key, '1', ORDER_EMAIL_DEDUPE_TTL_SECONDS);
+  return { ok: true };
+}
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
@@ -210,6 +321,27 @@ function doPost(e) {
       const authCheck = verifyFirebaseIdToken_(data.idToken);
       if (!authCheck.ok) {
         return jsonOut({ success: false, adminSent: false, customerSent: null, error: authCheck.error });
+      }
+      // Protege a tintinpedidos@gmail.com de usarse como robot de reenvíos:
+      // cooldown fijo de 60s para el MISMO pedido (no se puede reenviar
+      // "varias veces seguidas") + tope diario total de reenvíos, con el
+      // valor configurado en Correos → Configuración como sugerencia y
+      // ABSOLUTE_MAX_RESEND_PER_DAY como techo real que nadie puede subir
+      // desde el navegador.
+      const resendCooldown = checkCooldown_('resend_ts_' + orderId, RESEND_COOLDOWN_MS);
+      if (!resendCooldown.ok) {
+        return jsonOut({ success: false, adminSent: null, customerSent: null, error: resendCooldown.error, retryAfterSeconds: resendCooldown.retryAfterSeconds });
+      }
+      const resendDaily = checkAndBumpDailyCounter_('resend_count', data.resendDailyLimit, ABSOLUTE_MAX_RESEND_PER_DAY);
+      if (!resendDaily.ok) {
+        return jsonOut({ success: false, adminSent: null, customerSent: null, error: resendDaily.error, limit: resendDaily.limit });
+      }
+    } else {
+      // Envío ORIGINAL de un pedido (checkout): evita mandarlo dos veces
+      // para el mismo orderId si doPost se llega a invocar más de una vez.
+      const dupCheck = checkOrderEmailNotDuplicate_(orderId);
+      if (!dupCheck.ok) {
+        return jsonOut({ success: false, adminSent: null, customerSent: null, error: dupCheck.error });
       }
     }
 
@@ -354,6 +486,14 @@ function handleTestCustomerEmail_(data) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail)) {
     return { success: false, error: 'invalid_email' };
   }
+  // Protección anti-spam: cooldown fijo de 2 minutos entre pruebas + tope
+  // diario (configurable desde el panel, con un techo real que no se puede
+  // subir llamando directo al webhook). Comparte contador con sendPromoEmail
+  // cuando esa función se usa en modo prueba (isTest:true) — ver más abajo.
+  const cooldown = checkCooldown_('test_email_ts', TEST_EMAIL_COOLDOWN_MS);
+  if (!cooldown.ok) return { success: false, error: cooldown.error, retryAfterSeconds: cooldown.retryAfterSeconds };
+  const daily = checkAndBumpDailyCounter_('test_email_count', data.testDailyLimit, ABSOLUTE_MAX_TEST_PER_DAY);
+  if (!daily.ok) return { success: false, error: daily.error, limit: daily.limit };
   try {
     MailApp.sendEmail({
       to: toEmail,
@@ -446,6 +586,18 @@ function handleSendPromoEmail_(data) {
   if (!isValidEmail_(to)) {
     return { success: false, error: 'invalid_email', recipientsProcessed: 0, recipientsFailed: 1 };
   }
+  // Correos de prueba → Configuración: cuando el sitio manda una plantilla
+  // distinta de "Pedido recibido (clienta)" desde la pestaña de pruebas,
+  // llama a esta misma función (no a handleTestCustomerEmail_) con
+  // isTest:true — sin este chequeo, elegir cualquier otra plantilla ahí
+  // saltearía por completo el cooldown/tope diario de pruebas. Comparte los
+  // mismos contadores que handleTestCustomerEmail_ (mismo abuso, mismo tope).
+  if (data.isTest) {
+    const cooldown = checkCooldown_('test_email_ts', TEST_EMAIL_COOLDOWN_MS);
+    if (!cooldown.ok) return { success: false, error: cooldown.error, retryAfterSeconds: cooldown.retryAfterSeconds, recipientsProcessed: 0, recipientsFailed: 0 };
+    const daily = checkAndBumpDailyCounter_('test_email_count', data.testDailyLimit, ABSOLUTE_MAX_TEST_PER_DAY);
+    if (!daily.ok) return { success: false, error: daily.error, limit: daily.limit, recipientsProcessed: 0, recipientsFailed: 0 };
+  }
   const vars = data.variables || {};
   try {
     MailApp.sendEmail({
@@ -462,12 +614,16 @@ function handleSendPromoEmail_(data) {
 }
 
 // Varios destinatarios en una sola llamada (Promociones a varias/todas las
-// seleccionadas). Tope duro de 25 por llamada — el sitio ya corta la lista
-// completa en tandas de este tamaño o menos antes de llamar, esto es un
-// segundo blindaje del lado del script por si alguna vez se llama a mano
-// con una lista más grande. Corta el envío si se acaba la cuota diaria
-// gratuita de Gmail (MailApp.getRemainingDailyQuota(), ~100/día en una
-// cuenta normal) en vez de seguir fallando correo por correo.
+// seleccionadas) — DESHABILITADO A PROPÓSITO. tintinpedidos@gmail.com es
+// siempre una cuenta de Gmail común (MailApp.sendEmail manda como la cuenta
+// que autorizó el script, nunca un remitente distinto — ver el inicio de
+// este documento), nunca un dominio propio: un envío masivo desde ahí
+// arriesga que Google marque la cuenta como spam o la suspenda. Por eso
+// esta acción queda bloqueada acá, en el servidor — no alcanza con apagar
+// el switch "Promociones" del panel, porque ese switch vive en Firestore y
+// alguien con el SHARED_SECRET podría llamar al webhook directo salteándolo.
+// El correo transaccional de UN pedido (handleSendPromoEmail_, usado por
+// Correos de pedidos) NO se toca — ese uso es legítimo y sigue funcionando.
 function handleSendBulkPromoEmail_(data) {
   if (data.secret !== SHARED_SECRET) {
     return { success: false, error: 'unauthorized', recipientsProcessed: 0, recipientsFailed: 0 };
@@ -476,56 +632,14 @@ function handleSendBulkPromoEmail_(data) {
   if (!auth_.ok) {
     return { success: false, error: auth_.error, recipientsProcessed: 0, recipientsFailed: 0 };
   }
-  const recipients = Array.isArray(data.recipients) ? data.recipients : [];
-  if (!recipients.length) {
-    return { success: false, error: 'no_recipients', recipientsProcessed: 0, recipientsFailed: 0 };
-  }
-  const MAX_BATCH = 25;
-  const batch = recipients.slice(0, MAX_BATCH);
-
-  let quota;
-  try { quota = MailApp.getRemainingDailyQuota(); } catch (e) { quota = -1; }
-
-  const results = [];
-  let sent = 0, failed = 0;
-  for (let i = 0; i < batch.length; i++) {
-    const r = batch[i] || {};
-    const to = String(r.to || '').trim();
-    if (quota === 0) {
-      results.push({ to: to, sent: false, error: 'daily_quota_exceeded' });
-      failed++;
-      continue;
-    }
-    if (!isValidEmail_(to)) {
-      results.push({ to: to, sent: false, error: 'invalid_email' });
-      failed++;
-      continue;
-    }
-    const vars = r.variables || {};
-    try {
-      MailApp.sendEmail({
-        to: to,
-        name: STORE_NAME,
-        subject: renderVars_(data.subject, vars) || STORE_NAME,
-        body: buildGenericEmailText_(data, vars),
-        htmlBody: buildGenericEmailHtml_(data, vars)
-      });
-      results.push({ to: to, sent: true });
-      sent++;
-      if (quota > 0) quota--;
-    } catch (err) {
-      results.push({ to: to, sent: false, error: String(err) });
-      failed++;
-    }
-  }
   return {
-    success: failed === 0,
-    partial: sent > 0 && failed > 0,
-    sent: sent,
-    failed: failed,
-    recipientsProcessed: batch.length,
-    recipientsFailed: failed,
-    results: results
+    success: false,
+    error: 'bulk_campaigns_disabled_gmail_sender',
+    sent: 0,
+    failed: 0,
+    recipientsProcessed: 0,
+    recipientsFailed: 0,
+    results: []
   };
 }
 
@@ -827,3 +941,11 @@ ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actu
 - Si el correo sigue llegando "De: tintinaccs@gmail.com", es porque `js/email-config.js`
   todavía apunta a la URL vieja, o la implementación activa en Apps Script sigue
   siendo la del proyecto bajo `tintinaccs@gmail.com`
+- Si un envío devuelve `cooldown_active` o `daily_limit_exceeded`: es la protección
+  anti-spam funcionando como corresponde, no un error real — el panel ya traduce
+  estos códigos a un mensaje en español ("esperá X segundos", "se alcanzó el
+  límite diario"). Para pruebas: cooldown fijo de 2 min entre envíos. Para
+  reenvíos: cooldown fijo de 60s para el mismo pedido. Los topes diarios se
+  configuran en Correos → Configuración (dentro de un techo absoluto fijo acá).
+- Si Promociones devuelve `bulk_campaigns_disabled_gmail_sender`: está bloqueado
+  a propósito mientras el remitente sea una cuenta de Gmail común — no es un bug.

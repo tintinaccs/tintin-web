@@ -6,7 +6,7 @@
  */
 import { EMAIL_WEBHOOK_URL, EMAIL_SECRET } from './email-config.js';
 import { db, auth } from './firebase.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // Lee los switches de Super Admin → Correos → Configuración. Falla "abierto"
 // (todo activado) si el documento no existe todavía o si la lectura falla —
@@ -19,6 +19,34 @@ async function getEmailSettings_() {
     return snap.exists() ? snap.data() : {};
   } catch (e) {
     return {};
+  }
+}
+
+// Registro central en emailLogs para el correo original de un pedido y para
+// los reenvíos manuales — antes NINGUNO de los dos quedaba en Historial
+// (solo pruebas/promos/correos automáticos de estado sí se registraban).
+// Vive acá (no en checkout.html/admin.html por separado) porque los dos
+// llaman a la misma sendOrderNotification: un solo lugar, sin duplicar la
+// lógica de registro en cada callsite. Nunca bloquea el envío si falla.
+async function logOrderEmailAttempt_(orderId, order, isResend, result) {
+  try {
+    const status = result && result.customerSent === null || result && result.customerSent === undefined
+      ? (result && result.adminSent ? 'sent' : 'failed')
+      : (result && result.adminSent && result.customerSent) ? 'sent'
+      : (result && (result.adminSent || result.customerSent)) ? 'partial' : 'failed';
+    await addDoc(collection(db, 'emailLogs'), {
+      category: 'pedido',
+      type: isResend ? 'reenvio_pedido' : 'pedido_nuevo',
+      recipient: order?.userEmail || '',
+      status,
+      orderId: orderId || '',
+      isAutomatic: !isResend,
+      sentBy: (auth.currentUser && auth.currentUser.email) || '',
+      error: (result && result.error) || '',
+      sentAt: serverTimestamp()
+    });
+  } catch (e) {
+    console.error('[email-notify] No se pudo registrar en emailLogs:', e);
   }
 }
 
@@ -56,6 +84,12 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
   // exige ahí) — el envío original del checkout no lo necesita, así que no
   // se retrasa ni se rompe si por lo que sea no hay sesión con token listo.
   const idToken = isResend ? await getIdToken_() : '';
+  // El tope diario de reenvíos es configurable desde Correos → Configuración,
+  // pero quien de verdad lo hace cumplir es Apps Script (PropertiesService),
+  // no el navegador — esto solo le informa al script cuál es el tope
+  // configurado hoy, con un techo absoluto propio si no llega ningún valor.
+  const resendDailyLimit = isResend ? Number(settings.resendDailyLimit) || 30 : undefined;
+  let result;
   try {
     // Content-Type text/plain evita que el navegador mande un preflight
     // OPTIONS (Apps Script no lo responde bien) — Apps Script igual puede
@@ -63,13 +97,15 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, orderId, order, isResend, sendAdmin, sendCustomer, idToken })
+      body: JSON.stringify({ secret: EMAIL_SECRET, orderId, order, isResend, sendAdmin, sendCustomer, idToken, resendDailyLimit })
     });
-    return await res.json();
+    result = await res.json();
   } catch (e) {
     console.error('[email-notify] Error enviando notificación:', e);
-    return { success: false, error: String(e && e.message || e) };
+    result = { success: false, error: String(e && e.message || e) };
   }
+  await logOrderEmailAttempt_(orderId, order, isResend, result);
+  return result;
 }
 
 /**
@@ -88,10 +124,14 @@ export async function sendTestCustomerEmail(toEmail) {
   }
   try {
     const idToken = await getIdToken_();
+    // Igual que resendDailyLimit: el tope real lo aplica Apps Script, esto
+    // solo le pasa el valor configurado hoy en Correos → Configuración.
+    const settings = await getEmailSettings_();
+    const testDailyLimit = Number(settings.testDailyLimit) || 20;
     const res = await fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendTestCustomerEmail', toEmail, idToken })
+      body: JSON.stringify({ secret: EMAIL_SECRET, action: 'sendTestCustomerEmail', toEmail, idToken, testDailyLimit })
     });
     return await res.json();
   } catch (e) {
