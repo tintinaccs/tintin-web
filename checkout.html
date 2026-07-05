@@ -327,7 +327,7 @@ import {
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
-import { BLOCKED_MESSAGE } from "./js/roles.js";
+import { showBlockedModal } from "./js/blocked-modal.js";
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -605,22 +605,11 @@ function showCkToast(message) {
   toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2600);
 }
 
-// Fase E: cuenta bloqueada — tapa todo el checkout con el mensaje exigido y
-// bloquea la interacción (no se saca hasta recargar/loguearse con otra cuenta).
+// Fase E: cuenta bloqueada — tapa todo el checkout con el mismo modal que
+// usa login.html (js/blocked-modal.js) y bloquea la interacción (no se saca
+// hasta recargar/loguearse con otra cuenta).
 function showBlockedOverlay() {
-  if (document.getElementById('ck-blocked-overlay')) return;
-  const ov = document.createElement('div');
-  ov.id = 'ck-blocked-overlay';
-  ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px';
-  ov.innerHTML = `
-    <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:32px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25)">
-      <div style="font-size:38px;margin-bottom:12px">🚫</div>
-      <div style="font-weight:800;font-size:17px;color:#8b2642;margin-bottom:10px">Cuenta bloqueada</div>
-      <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 22px">${BLOCKED_MESSAGE}</p>
-      <a href="index.html" style="display:inline-block;background:#b84c72;color:#fff;padding:11px 26px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Volver al inicio</a>
-    </div>`;
-  document.body.appendChild(ov);
-  document.body.style.overflow = 'hidden';
+  showBlockedModal();
 }
 
 // Fase F: sin cuenta real y verificada no se puede avanzar del carrito en

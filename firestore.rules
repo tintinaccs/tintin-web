@@ -162,9 +162,13 @@ service cloud.firestore {
       // tintinaccs@gmail.com no se puede eliminar bajo ninguna circunstancia.
       allow delete: if isSuperAdmin() && !isSuperAdminAccount(resource.data);
 
-      // Carrito sincronizado del usuario (js/cart-sync.js)
+      // Carrito sincronizado del usuario (js/cart-sync.js). Una cuenta
+      // bloqueada no puede sincronizar carrito — cart-sync.js corre en varias
+      // páginas públicas que no chequean "blocked" por sí mismas (a
+      // diferencia de perfil.html/checkout.html/admin.html), así que esta es
+      // la barrera real, no solo la de esas páginas.
       match /cart/{itemId} {
-        allow read, write: if isSignedIn() && request.auth.uid == userId;
+        allow read, write: if isSignedIn() && !isBlockedUser() && request.auth.uid == userId;
       }
     }
 
@@ -218,8 +222,10 @@ service cloud.firestore {
 
       // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
       // admin y Modder pueden leer cualquiera (el Modder necesita ver los datos
-      // del pedido para prepararlo: productos, dirección, teléfono).
-      allow read: if isAdmin() || isAgent() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      // del pedido para prepararlo: productos, dirección, teléfono). Una
+      // cuenta bloqueada no puede ver ni sus propios pedidos — perfil.html ya
+      // la saca antes de intentarlo, esto es la barrera real por si acaso.
+      allow read: if isAdmin() || isAgent() || (isSignedIn() && !isBlockedUser() && resource.data.userId == request.auth.uid);
 
       // El Modder solo puede tocar el seguimiento operativo del pedido (estado,
       // estado de pago, reenvío de correo) — nunca los datos del pedido en sí

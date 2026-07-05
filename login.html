@@ -98,11 +98,12 @@ import {
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getUserRole, SUPER_ADMIN, BLOCKED_MESSAGE } from "./js/roles.js";
+import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
 import {
   isValidEmailFormat, sendLoginEmailLink, isEmailLinkUrl, completeEmailLinkSignIn,
   ensureUserDocForEmailLogin, checkBlockedEmailLogin, emailLinkErrorMessage
 } from "./js/email-auth.js";
+import { showBlockedModal } from "./js/blocked-modal.js";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
 // que llegó por correo, el onAuthStateChanged de más abajo (que corre en
@@ -215,7 +216,7 @@ onAuthStateChanged(auth, async user => {
       // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
       // detectar una cuenta bloqueada (Fase E).
       if (new URLSearchParams(window.location.search).get('blocked') === '1') {
-        showError(BLOCKED_MESSAGE);
+        showBlockedModal();
       }
     }
     return;
@@ -223,7 +224,7 @@ onAuthStateChanged(auth, async user => {
   if (await checkBlocked(user.uid, user.email)) {
     await signOut(auth);
     hideLoginOverlay();
-    showError(BLOCKED_MESSAGE);
+    showBlockedModal();
     return;
   }
   const role = await getUserRole(user.uid, user.email);
@@ -257,7 +258,7 @@ const loginConGoogle = async () => {
     if (blocked) {
       await signOut(auth);
       hideLoginOverlay();
-      showError(BLOCKED_MESSAGE);
+      showBlockedModal();
       return;
     }
     redirectByRole(role);
@@ -336,7 +337,7 @@ async function finishEmailLinkLogin(user) {
   if (await checkBlockedEmailLogin(user.uid, user.email)) {
     await signOut(auth);
     hideLoginOverlay();
-    showError(BLOCKED_MESSAGE);
+    showBlockedModal();
     return;
   }
   const { role } = await ensureUserDocForEmailLogin(user);
