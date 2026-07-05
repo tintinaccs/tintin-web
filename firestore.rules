@@ -312,9 +312,24 @@ service cloud.firestore {
     // (Fase Correos), y esa entrada tiene que poder registrarse sin
     // importar quién cambió el estado. Nunca se edita ni se borra una
     // entrada ya creada.
+    // La clienta también puede crear UNA entrada muy acotada: el registro
+    // del correo original de SU PROPIO pedido recién creado (checkout.html
+    // llama a sendOrderNotification desde su propia sesión, sin ningún
+    // admin de por medio, así que antes esto no se podía registrar en
+    // Historial — quedaba fuera del "registrar todo en emailLogs"). La
+    // forma del documento queda fija (category/type literales) y orderId
+    // tiene que ser un pedido que de verdad le pertenece: no puede usarse
+    // para escribir nada más en esta colección.
     match /emailLogs/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isAdmin() || isAgent();
+      allow create: if isAdmin() || isAgent() || (
+        isSignedIn() && !isBlockedUser() &&
+        request.resource.data.category == 'pedido' &&
+        request.resource.data.type == 'pedido_nuevo' &&
+        request.resource.data.orderId is string &&
+        request.resource.data.sentBy == request.auth.token.email &&
+        get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
+      );
       allow update, delete: if false;
     }
 

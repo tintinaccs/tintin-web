@@ -811,6 +811,7 @@
               <button class="adm-btn adm-btn-primary" id="btn-test-email">Enviar prueba</button>
               <button class="adm-btn adm-btn-outline" id="btn-test-preview" type="button">Vista previa</button>
             </div>
+            <div id="test-email-limit-info" style="font-size:11px;color:var(--adm-muted);margin-top:8px"></div>
             <div id="test-email-result" style="font-size:13px;margin-top:10px"></div>
             <p style="font-size:12px;color:var(--adm-muted);margin-top:14px;border-top:1px solid var(--adm-border);padding-top:12px">
               Datos ficticios fijos: Pedido <strong>#TEST123</strong> · Cliente de prueba · 1x BAG RUBY · Total Gs. 190.000 · Delivery · San Lorenzo · Pendiente de confirmación.
@@ -904,6 +905,10 @@
             </div>
           </div>
           <div class="adm-card-body">
+            <div id="promo-gmail-lock-banner" style="display:none;background:#fff3cd;color:#856404;border:1.5px solid #ffe69c;border-radius:10px;padding:12px 16px;font-size:13px;line-height:1.5;margin-bottom:16px">
+              ⚠️ Gmail común debe usarse solo para correos transaccionales de pedidos. No usar para campañas masivas.
+              <div style="margin-top:4px;font-size:12px">Promociones está bloqueado mientras el remitente sea una cuenta de Gmail común (ver Configuración). Los correos de pedidos siguen funcionando normalmente.</div>
+            </div>
             <div class="adm-field">
               <label class="adm-label">Plantilla promocional</label>
               <select class="adm-select" id="promo-template-select"></select>
@@ -945,6 +950,12 @@
                 <option value="partial">Parcial</option>
                 <option value="pending">Pendiente</option>
               </select>
+              <select class="adm-select" id="hist-filter-category" style="width:auto">
+                <option value="">Pedidos y pruebas (todo)</option>
+                <option value="pedido">Solo pedidos reales</option>
+                <option value="prueba">Solo pruebas</option>
+                <option value="promo">Solo promociones</option>
+              </select>
               <select class="adm-select" id="hist-filter-type" style="width:auto"><option value="">Todos los tipos</option></select>
               <input type="date" class="adm-input" id="hist-filter-from" style="width:auto" title="Desde" />
               <input type="date" class="adm-input" id="hist-filter-to" style="width:auto" title="Hasta" />
@@ -957,8 +968,8 @@
             </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-historial">
-                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-hist" onclick="toggleSelectAllLogs(this)"></th><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
-                <tbody id="hist-tbody"><tr><td colspan="8" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-hist" onclick="toggleSelectAllLogs(this)"></th><th>Fecha</th><th>Origen real/prueba</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Automático/Manual</th><th>Acciones</th></tr></thead>
+                <tbody id="hist-tbody"><tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -989,6 +1000,10 @@
             <div class="adm-toggle-wrap">
               <label class="adm-toggle"><input type="checkbox" id="cec-promo-enabled" /><span class="adm-toggle-slider"></span></label>
               <div><div class="adm-toggle-label">Promociones</div><div class="adm-toggle-desc">Si está desactivado, no se puede enviar ninguna promoción.</div></div>
+            </div>
+            <div id="cec-gmail-sender-alert" style="display:none;background:#fff3cd;color:#856404;border:1.5px solid #ffe69c;border-radius:10px;padding:12px 16px;font-size:13px;line-height:1.5">
+              ⚠️ Gmail común debe usarse solo para correos transaccionales de pedidos. No usar para campañas masivas.
+              <div style="margin-top:4px;font-size:12px">El remitente actual (<strong id="cec-gmail-sender-name"></strong>) es una cuenta de Gmail común — por eso Promociones queda bloqueado. Los correos de pedidos (recibido/confirmado/enviado/etc.) siguen funcionando normalmente.</div>
             </div>
           </div>
         </div>
@@ -1034,12 +1049,17 @@
                 <input type="number" class="adm-input" id="cec-test-limit" min="1" />
               </div>
               <div class="adm-field">
+                <label class="adm-label">Límite diario de reenvíos manuales</label>
+                <input type="number" class="adm-input" id="cec-resend-limit" min="1" />
+              </div>
+              <div class="adm-field">
                 <label class="adm-label">Límite diario de promociones</label>
                 <input type="number" class="adm-input" id="cec-promo-limit" min="1" />
               </div>
             </div>
             <p style="font-size:11px;color:var(--adm-muted);margin-top:10px">
               Una cuenta de Gmail gratuita (no Workspace) tiene un tope real de aproximadamente 100 correos/día para todo lo que mande este Apps Script — dejá estos límites por debajo de eso, sobre todo si el mismo día también se mandan correos reales de pedidos.
+              Además, para proteger la cuenta, el envío de prueba tiene un cooldown fijo de 2 minutos entre cada uno, y el reenvío manual de un mismo pedido tiene un cooldown fijo de 60 segundos — esto no es configurable, se aplica siempre (incluso si alguien intentara llamar directo al webhook, sin pasar por este panel).
             </p>
           </div>
         </div>
@@ -2653,16 +2673,42 @@ window.updateOrderStatus = async (orderId, status) => {
   }
 };
 
+// Protección anti-spam para "✉️ Reenviar": cooldown fijo de 60s por pedido
+// para que no se pueda reenviar "varias veces seguidas" el mismo correo.
+// Se calcula con lastResendAt, un campo que YA viene en el pedido (admin y
+// Modder siempre pueden leer sus propios pedidos) — no depende de leer
+// emailLogs, que es exclusivo de Super Admin. El tope diario configurable
+// (Correos → Configuración) lo hace cumplir Apps Script del lado del
+// servidor sin importar qué rol llama, así que no hace falta releerlo acá.
+const RESEND_COOLDOWN_SECONDS = 60;
+function resendCooldownRemaining_(o) {
+  const last = toJsDate_(o?.lastResendAt);
+  if (!last) return 0;
+  const elapsedSec = (Date.now() - last.getTime()) / 1000;
+  return Math.max(0, Math.ceil(RESEND_COOLDOWN_SECONDS - elapsedSec));
+}
+function emailErrorMessage_(code) {
+  const map = {
+    cooldown_active: 'Esperá un momento antes de volver a intentarlo — es una protección anti-spam de la cuenta de correo.',
+    daily_limit_exceeded: 'Se alcanzó el límite diario configurado en Correos → Configuración. No se envió nada.',
+    duplicate_order_email: 'Este pedido ya tiene un correo original enviado — no se manda dos veces.',
+    bulk_campaigns_disabled_gmail_sender: 'Los envíos masivos están deshabilitados: el remitente actual es una cuenta de Gmail común, reservada para correos transaccionales.'
+  };
+  return map[code] || null;
+}
+
 window.resendOrderEmail = async (orderId) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'reenviarCorreo')) { toast('No tenés permiso para reenviar correos de pedido'); return; }
+  const o = allOrders.find(x => x.id === orderId);
+  if (!o) { toast('Pedido no encontrado'); return; }
+  const remaining = resendCooldownRemaining_(o);
+  if (remaining > 0) { toast(`Esperá ${remaining}s antes de reenviar de nuevo este pedido (protección anti-spam).`); return; }
   const btn = document.getElementById(`resend-btn-${orderId}`);
   if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
   try {
-    const o = allOrders.find(x => x.id === orderId);
-    if (!o) throw new Error('Pedido no encontrado');
     const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
     const result = await sendOrderNotification(orderId, orderForEmail, true);
-    if (!result.success) throw new Error(result.error || 'Error desconocido — revisá que js/email-config.js esté configurado');
+    if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email-config.js esté configurado');
 
     await updateDoc(doc(db, 'orders', orderId), {
       resendCount: increment(1),
@@ -2672,6 +2718,7 @@ window.resendOrderEmail = async (orderId) => {
     });
     o.resendCount = (o.resendCount || 0) + 1;
     o.notificationStatus = 'sent';
+    o.lastResendAt = { toDate: () => new Date() };
     logAudit('reenviar_correo_pedido', 'pedido', orderId, o.shortId || orderId, `Reenvío #${o.resendCount}`);
     toast('Correo reenviado correctamente');
     applyOrderFilters();
@@ -2856,12 +2903,16 @@ window.bulkResendOrderEmails = async function() {
   const ids = [..._selectedOrders];
   const n = ids.length;
   if (!confirm(`¿Reenviar el correo de confirmación a ${n} pedido(s)?`)) return;
-  let ok = 0, fail = 0;
+  let ok = 0, fail = 0, skipped = 0;
   toast(`Reenviando 0 de ${n}…`, 60000);
   for (let i = 0; i < ids.length; i++) {
     const o = allOrders.find(x => x.id === ids[i]);
     try {
       if (!o) throw new Error('no encontrado');
+      // Protección anti-spam: si este pedido puntual se reenvió hace menos
+      // de RESEND_COOLDOWN_SECONDS, se omite (no cuenta como fallo) en vez
+      // de forzar el reenvío — el tope diario global lo aplica Apps Script.
+      if (resendCooldownRemaining_(o) > 0) { skipped++; continue; }
       const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
       const result = await sendOrderNotification(ids[i], orderForEmail, true);
       if (!result.success) throw new Error(result.error || 'error desconocido');
@@ -2870,12 +2921,14 @@ window.bulkResendOrderEmails = async function() {
       });
       o.resendCount = (o.resendCount || 0) + 1;
       o.notificationStatus = 'sent';
+      o.lastResendAt = { toDate: () => new Date() };
       ok++;
     } catch (e) { fail++; }
     toast(`Reenviando ${i + 1} de ${n}…`, 60000);
   }
-  logAudit('reenviar_correo_pedido', 'pedido', '', '', `${ok} enviados, ${fail} fallaron`, { bulk: true, count: n });
-  toast(fail ? `${ok} correo(s) reenviados, ${fail} fallaron` : `${ok} correo(s) reenviados correctamente`, 5000);
+  logAudit('reenviar_correo_pedido', 'pedido', '', '', `${ok} enviados, ${fail} fallaron${skipped ? `, ${skipped} omitidos por cooldown` : ''}`, { bulk: true, count: n });
+  const summary = `${ok} correo(s) reenviados` + (fail ? `, ${fail} fallaron` : '') + (skipped ? `, ${skipped} omitidos (cooldown anti-spam)` : '');
+  toast(fail || skipped ? summary : `${ok} correo(s) reenviados correctamente`, 6000);
   clearOrdersSelection();
   applyOrderFilters();
 };
@@ -3201,9 +3254,20 @@ function defaultEmailSettings_() {
     testEmailsEnabled: true, promoEnabled: true,
     senderName: 'Tintin Accesorios', senderEmail: EMAIL_SENDER_ADDRESS, internalEmail: 'tintinaccs@gmail.com',
     signature: 'Tintin Accesorios', footer: '', whatsappNumber: '',
-    testDailyLimit: 20, promoDailyLimit: 100,
+    testDailyLimit: 20, promoDailyLimit: 100, resendDailyLimit: 30,
     orderTypesEnabled, orderTypeTemplateMap
   };
+}
+
+// tintinpedidos@gmail.com (o cualquier @gmail.com) es una cuenta de Gmail
+// común, no un dominio propio de la tienda — MailApp la usa para enviar
+// desde Apps Script (ver functions/EMAIL_SETUP.md). Con ese remitente,
+// mandar campañas/promos masivas arriesga que Google marque la cuenta como
+// spam o la suspenda; los correos transaccionales de pedidos (uno por vez,
+// generados por una acción real de la clienta) son un uso legítimo y no se
+// tocan.
+function isGmailSender_(senderEmail) {
+  return /@gmail\.com\s*$/i.test(String(senderEmail || '').trim());
 }
 
 function renderVarsClient_(str, vars) {
@@ -3321,10 +3385,20 @@ async function ensureTemplatesSeeded_(existing) {
 }
 
 async function logEmailSend_(entry) {
+  // OJO: el timestamp queda fijo en el momento de crear el objeto (una
+  // variable capturada), NO como `() => new Date()` — si el closure llamara
+  // a `new Date()` en cada lectura, cualquier chequeo que reevalúe
+  // `sentAt.toDate()` más tarde (como el cooldown de correos de prueba)
+  // vería SIEMPRE "recién enviado", sin importar cuánto tiempo real pasó.
+  const sentAtSnapshot = new Date();
   const local = {
-    id: 'local-' + Date.now() + Math.random(), sentAt: { toDate: () => new Date() },
+    id: 'local-' + Date.now() + Math.random(), sentAt: { toDate: () => sentAtSnapshot },
     isAutomatic: !!entry.isAutomatic, sentBy: currentUser?.email || '', error: entry.error || '',
     orderId: entry.orderId || '', campaignId: entry.campaignId || '', templateKey: entry.templateKey || '',
+    // 'pedido' (correo real de un pedido, ej. estado automático) / 'prueba'
+    // (Correos de prueba) / 'promo' (Promociones) — separa pedidos reales
+    // de pruebas en Historial, en vez de que todo se vea igual.
+    category: entry.category || 'pedido',
     type: entry.type || '', recipient: entry.recipient || '', status: entry.status || 'pending',
     variables: entry.variables || null
   };
@@ -3333,7 +3407,7 @@ async function logEmailSend_(entry) {
   renderCorreosHistorialTab();
   try {
     await addDoc(collection(db, 'emailLogs'), {
-      type: local.type, recipient: local.recipient, status: local.status, templateKey: local.templateKey,
+      category: local.category, type: local.type, recipient: local.recipient, status: local.status, templateKey: local.templateKey,
       isAutomatic: local.isAutomatic, sentBy: local.sentBy, error: local.error, orderId: local.orderId,
       campaignId: local.campaignId, variables: local.variables, sentAt: serverTimestamp()
     });
@@ -3552,6 +3626,42 @@ window.previewOrderType = (key) => {
 };
 
 // ---- Correos de prueba ----
+// Cooldown fijo de 2 minutos + límite diario configurable — la lectura de
+// emailLogs para calcularlo acá es segura porque Correos es 100% exclusivo
+// de Super Admin (nunca lo abre admin/agent), así que allEmailLogs siempre
+// está disponible. Apps Script vuelve a exigir lo mismo del lado del
+// servidor, así que esto es solo para avisar ANTES de intentar el envío.
+const TEST_EMAIL_COOLDOWN_SECONDS = 120;
+// Acepta un Timestamp real de Firestore (.toDate()) o un valor ya utilizable
+// directamente (Date/ISO string) — mismo criterio dual que ya usa el resto
+// del admin para createdAt/lastResendAt en todo el código.
+function toJsDate_(v) {
+  if (!v) return null;
+  if (typeof v.toDate === 'function') return v.toDate();
+  if (v instanceof Date) return v;
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? null : d;
+}
+function testEmailGuardStatus_() {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+  const testLogsSent = allEmailLogs.filter(l => (l.category || 'pedido') === 'prueba' && l.status === 'sent');
+  const sentToday = testLogsSent.filter(l => { const d = toJsDate_(l.sentAt); return d && d >= todayStart; }).length;
+  const lastSent = testLogsSent.reduce((max, l) => { const d = toJsDate_(l.sentAt); return d && (!max || d > max) ? d : max; }, null);
+  const cooldownRemaining = lastSent ? Math.max(0, Math.ceil((TEST_EMAIL_COOLDOWN_SECONDS * 1000 - (Date.now() - lastSent.getTime())) / 1000)) : 0;
+  const dailyLimit = s.testDailyLimit || 20;
+  return { cooldownRemaining, sentToday, dailyLimit, limitReached: sentToday >= dailyLimit };
+}
+function renderTestEmailLimitInfo_() {
+  const el = document.getElementById('test-email-limit-info');
+  if (!el) return;
+  const g = testEmailGuardStatus_();
+  const parts = [`${g.sentToday}/${g.dailyLimit} pruebas enviadas hoy`];
+  if (g.cooldownRemaining > 0) parts.push(`próximo envío disponible en ${g.cooldownRemaining}s`);
+  el.textContent = parts.join(' · ');
+  el.style.color = (g.limitReached || g.cooldownRemaining > 0) ? '#c0392b' : 'var(--adm-muted)';
+}
+
 function renderCorreosPruebaTab() {
   const s = emailSettingsCache || defaultEmailSettings_();
   const toggle = document.getElementById('prueba-enabled-toggle');
@@ -3568,6 +3678,7 @@ function renderCorreosPruebaTab() {
     const activeTpls = allEmailTemplates.filter(t => !t.archived);
     tplSelect.innerHTML = activeTpls.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === 'pedido_recibido_clienta') ? 'selected' : ''}>${t.name}</option>`).join('');
   }
+  renderTestEmailLimitInfo_();
 }
 
 document.querySelectorAll('[data-prueba-mode]').forEach(btn => {
@@ -3609,6 +3720,22 @@ document.getElementById('btn-test-email').onclick = async () => {
     return;
   }
 
+  // Protección anti-spam de la cuenta: cooldown de 2 minutos + límite diario
+  // configurable — se revisa ANTES de llamar al webhook, para no gastar el
+  // envío ni el intento. Apps Script vuelve a exigir lo mismo del lado del
+  // servidor (no se puede saltear llamando directo con el secreto).
+  const guard = testEmailGuardStatus_();
+  if (guard.cooldownRemaining > 0) {
+    resultEl.style.color = '#c0392b';
+    resultEl.textContent = `Esperá ${guard.cooldownRemaining}s antes de enviar otra prueba — cooldown anti-spam de 2 minutos.`;
+    return;
+  }
+  if (guard.limitReached) {
+    resultEl.style.color = '#c0392b';
+    resultEl.textContent = `Se alcanzó el límite diario de correos de prueba (${guard.sentToday}/${guard.dailyLimit}). No se envió nada. Podés subir el límite en Correos → Configuración.`;
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = 'Enviando…';
   resultEl.style.color = 'var(--adm-muted)';
@@ -3619,27 +3746,34 @@ document.getElementById('btn-test-email').onclick = async () => {
   try {
     let result;
     const vars = fakeTestVariables_();
+    const testDailyLimit = (emailSettingsCache || defaultEmailSettings_()).testDailyLimit || 20;
     if (isDefaultDesign) {
       result = await sendTestCustomerEmail(email);
     } else {
+      // isTest:true hace que Apps Script le aplique el MISMO cooldown/tope
+      // diario que sendTestCustomerEmail, aunque viaje por sendPromoEmail
+      // (la función genérica de un solo destinatario) — si no, elegir
+      // cualquier plantilla que no sea "Pedido recibido (clienta)" acá
+      // saltearía la protección por completo.
       const tpl = allEmailTemplates.find(t => (t.key || t.id) === tplKey);
-      result = await sendTemplatedEmail({ to: email, ...templateContentPayload_(tpl || {}), variables: vars });
+      result = await sendTemplatedEmail({ to: email, ...templateContentPayload_(tpl || {}), variables: vars, isTest: true, testDailyLimit });
     }
     if (result && result.success) {
       resultEl.style.color = '#065f46';
       resultEl.textContent = 'Correo de prueba enviado correctamente.';
     } else {
       resultEl.style.color = '#c0392b';
-      resultEl.textContent = 'No se pudo enviar el correo de prueba' + (result?.error ? ': ' + result.error : '.');
+      resultEl.textContent = 'No se pudo enviar el correo de prueba' + (result?.error ? ': ' + (emailErrorMessage_(result.error) || result.error) : '.');
     }
-    await logEmailSend_({ type: tplKey, recipient: email, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: false, error: result?.error || '', variables: vars });
+    await logEmailSend_({ category: 'prueba', type: tplKey, recipient: email, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: false, error: result?.error || '', variables: vars });
   } catch (e) {
     resultEl.style.color = '#c0392b';
     resultEl.textContent = 'No se pudo enviar el correo de prueba: ' + e.message;
-    await logEmailSend_({ type: tplKey, recipient: email, status: 'failed', templateKey: tplKey, isAutomatic: false, error: e.message });
+    await logEmailSend_({ category: 'prueba', type: tplKey, recipient: email, status: 'failed', templateKey: tplKey, isAutomatic: false, error: e.message });
   } finally {
     btn.disabled = false;
     btn.textContent = 'Enviar prueba';
+    renderTestEmailLimitInfo_();
   }
 };
 
@@ -4020,14 +4154,20 @@ function promoTemplateIds_() { return allEmailTemplates.filter(t => t.category =
 
 function renderCorreosPromocionesTab() {
   const s = emailSettingsCache || defaultEmailSettings_();
+  const gmailSender = isGmailSender_(s.senderEmail || EMAIL_SENDER_ADDRESS);
   const toggle = document.getElementById('promo-enabled-toggle');
-  if (toggle) toggle.checked = s.promoEnabled !== false;
+  if (toggle) { toggle.checked = gmailSender ? false : (s.promoEnabled !== false); toggle.disabled = gmailSender; }
 
   const tplSelect = document.getElementById('promo-template-select');
   if (tplSelect) {
     const promoTemplates = allEmailTemplates.filter(t => (t.category === 'promo' || t.category === 'libre') && !t.archived && t.active !== false);
     tplSelect.innerHTML = promoTemplates.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
   }
+  document.getElementById('promo-gmail-lock-banner').style.display = gmailSender ? '' : 'none';
+  ['promo-template-select', 'promo-add-email', 'promo-add-email-btn', 'promo-preview-btn', 'promo-open-confirm-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = gmailSender;
+  });
   renderPromoChips_();
 }
 
@@ -4045,6 +4185,12 @@ function renderPromoChips_() {
 window.removePromoRecipient = (i) => { promoRecipients.splice(i, 1); renderPromoChips_(); };
 
 document.getElementById('promo-enabled-toggle').onchange = async (e) => {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  if (isGmailSender_(s.senderEmail || EMAIL_SENDER_ADDRESS)) {
+    e.target.checked = false;
+    toast('No se puede activar: el remitente actual es una cuenta de Gmail común, reservada para correos transaccionales.');
+    return;
+  }
   emailSettingsCache = emailSettingsCache || defaultEmailSettings_();
   emailSettingsCache.promoEnabled = e.target.checked;
   await saveEmailSettingsMerge_({ promoEnabled: e.target.checked });
@@ -4073,6 +4219,7 @@ document.getElementById('promo-preview-btn').onclick = () => {
 
 document.getElementById('promo-open-confirm-btn').onclick = async () => {
   const s = emailSettingsCache || defaultEmailSettings_();
+  if (isGmailSender_(s.senderEmail || EMAIL_SENDER_ADDRESS)) { toast('Promociones bloqueado: el remitente actual es una cuenta de Gmail común, reservada para correos transaccionales de pedidos.'); return; }
   if (s.promoEnabled === false) { toast('Las promociones están desactivadas en Correos → Configuración'); return; }
   const tplId = document.getElementById('promo-template-select').value;
   const tpl = allEmailTemplates.find(x => x.id === tplId);
@@ -4177,13 +4324,13 @@ async function runPromoCampaign_(tpl, recipients) {
         const ok = !!r.sent;
         if (ok) sent++; else failed++;
         allResults.push({ email: recipient.email, status: ok ? 'sent' : 'failed', error: r.error || '' });
-        logEmailSend_({ type: 'promo', recipient: recipient.email, status: ok ? 'sent' : 'failed', templateKey: tpl.id, isAutomatic: false, error: r.error || '', campaignId, variables: { clienteNombre: recipient.name || '' } });
+        logEmailSend_({ category: 'promo', type: 'promo', recipient: recipient.email, status: ok ? 'sent' : 'failed', templateKey: tpl.id, isAutomatic: false, error: r.error || '', campaignId, variables: { clienteNombre: recipient.name || '' } });
       });
     } catch (e) {
       batch.forEach(recipient => {
         failed++;
         allResults.push({ email: recipient.email, status: 'failed', error: e.message });
-        logEmailSend_({ type: 'promo', recipient: recipient.email, status: 'failed', templateKey: tpl.id, isAutomatic: false, error: e.message, campaignId });
+        logEmailSend_({ category: 'promo', type: 'promo', recipient: recipient.email, status: 'failed', templateKey: tpl.id, isAutomatic: false, error: e.message, campaignId });
       });
     }
     progressBar.style.width = `${Math.round((Math.min(i + batch.length, recipients.length) / recipients.length) * 100)}%`;
@@ -4211,6 +4358,12 @@ async function runPromoCampaign_(tpl, recipients) {
 }
 
 // ---- Historial ----
+function categoryBadge_(category) {
+  const map = { pedido: ['#dbeafe', '#1e40af', 'Pedido real'], prueba: ['#fff3cd', '#856404', 'Prueba'], promo: ['#ede9fe', '#5b21b6', 'Promoción'] };
+  const [bg, color, label] = map[category] || map.pedido;
+  return `<span class="adm-badge" style="background:${bg};color:${color}">${label}</span>`;
+}
+
 function renderCorreosHistorialTab() {
   const typeSelect = document.getElementById('hist-filter-type');
   if (!typeSelect) return;
@@ -4221,6 +4374,7 @@ function renderCorreosHistorialTab() {
 
   const q = (document.getElementById('hist-search').value || '').toLowerCase();
   const statusVal = document.getElementById('hist-filter-status').value;
+  const categoryVal = document.getElementById('hist-filter-category').value;
   const typeVal = document.getElementById('hist-filter-type').value;
   const fromVal = document.getElementById('hist-filter-from').value;
   const toVal = document.getElementById('hist-filter-to').value;
@@ -4228,13 +4382,14 @@ function renderCorreosHistorialTab() {
   let list = allEmailLogs.slice();
   if (q) list = list.filter(l => (l.recipient || '').toLowerCase().includes(q));
   if (statusVal) list = list.filter(l => l.status === statusVal);
+  if (categoryVal) list = list.filter(l => (l.category || 'pedido') === categoryVal);
   if (typeVal) list = list.filter(l => l.type === typeVal);
   if (fromVal) { const from = new Date(fromVal); list = list.filter(l => { const d = l.sentAt?.toDate?.(); return d && d >= from; }); }
   if (toVal) { const to = new Date(toVal); to.setHours(23, 59, 59, 999); list = list.filter(l => { const d = l.sentAt?.toDate?.(); return d && d <= to; }); }
 
   const tbody = document.getElementById('hist-tbody');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
     return;
   }
   const visibleIds = new Set(list.slice(0, 200).map(l => l.id));
@@ -4243,11 +4398,12 @@ function renderCorreosHistorialTab() {
     <tr class="adm-log-row">
       <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${l.id}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
+      <td data-label="Origen real/prueba">${categoryBadge_(l.category || 'pedido')}</td>
       <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
       <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
       <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       <td data-label="Enviado por" style="font-size:12px">${l.sentBy || '—'}</td>
-      <td data-label="Origen" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
+      <td data-label="Automático/Manual" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
       <td data-label="Acciones">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail('${l.id}')" type="button">Ver</button>
@@ -4311,7 +4467,7 @@ window.bulkRetryFailedLogs = async function() {
       const tpl = allEmailTemplates.find(t => (t.key || t.id) === l.templateKey);
       if (!tpl) throw new Error('plantilla no existe');
       const result = await sendTemplatedEmail({ to: l.recipient, ...templateContentPayload_(tpl), variables: l.variables || {} });
-      await logEmailSend_({ type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
+      await logEmailSend_({ category: l.category || 'pedido', type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
       if (result?.success) ok++; else fail++;
     } catch (e) { fail++; }
   }
@@ -4320,10 +4476,13 @@ window.bulkRetryFailedLogs = async function() {
   renderCorreosHistorialTab();
 };
 
+const CATEGORY_LABELS_ = { pedido: 'Pedido real', prueba: 'Prueba', promo: 'Promoción' };
+
 function logRowsToCsv_(logs) {
-  const header = ['Fecha', 'Tipo', 'Destinatario', 'Estado', 'Enviado por', 'Origen'];
+  const header = ['Fecha', 'Origen real/prueba', 'Tipo', 'Destinatario', 'Estado', 'Enviado por', 'Automático/Manual'];
   const rows = logs.map(l => [
     l.sentAt?.toDate ? l.sentAt.toDate().toLocaleString('es-PY') : '',
+    CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real',
     templateLabel_(l.type), l.recipient || '', l.status || '', l.sentBy || '', l.isAutomatic ? 'Automático' : 'Manual'
   ]);
   return [header, ...rows];
@@ -4338,6 +4497,7 @@ window.bulkExportLogs = function() {
 
 document.getElementById('hist-search').oninput = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-status').onchange = () => renderCorreosHistorialTab();
+document.getElementById('hist-filter-category').onchange = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-type').onchange = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-from').onchange = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-to').onchange = () => renderCorreosHistorialTab();
@@ -4346,8 +4506,8 @@ window.viewLogDetail = (id) => {
   const l = allEmailLogs.find(x => x.id === id);
   if (!l) return;
   alert(
-    `Tipo: ${templateLabel_(l.type)}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
-    `Enviado por: ${l.sentBy || '—'}\nOrigen: ${l.isAutomatic ? 'Automático' : 'Manual'}\n` +
+    `Origen: ${CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real'}\nTipo: ${templateLabel_(l.type)}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
+    `Enviado por: ${l.sentBy || '—'}\nAutomático/Manual: ${l.isAutomatic ? 'Automático' : 'Manual'}\n` +
     `Pedido relacionado: ${l.orderId || '—'}\n` + (l.error ? `Error: ${l.error}` : 'Sin errores')
   );
 };
@@ -4359,7 +4519,7 @@ window.retryFailedLog = async (id) => {
   if (!tpl) { toast('La plantilla original ya no existe'); return; }
   try {
     const result = await sendTemplatedEmail({ to: l.recipient, ...templateContentPayload_(tpl), variables: l.variables || {} });
-    await logEmailSend_({ type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
+    await logEmailSend_({ category: l.category || 'pedido', type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
     toast(result?.success ? 'Reenviado correctamente' : 'Falló el reintento');
   } catch (e) {
     toast('Error al reintentar: ' + e.message);
@@ -4369,11 +4529,14 @@ window.retryFailedLog = async (id) => {
 // ---- Configuración de correos ----
 function renderCorreosConfigTab() {
   const s = emailSettingsCache || defaultEmailSettings_();
+  const gmailSender = isGmailSender_(s.senderEmail || EMAIL_SENDER_ADDRESS);
   document.getElementById('cec-order-enabled').checked = s.orderEmailsEnabled !== false;
   document.getElementById('cec-internal-enabled').checked = s.internalEmailEnabled !== false;
   document.getElementById('cec-customer-enabled').checked = s.customerEmailEnabled !== false;
   document.getElementById('cec-test-enabled').checked = s.testEmailsEnabled !== false;
-  document.getElementById('cec-promo-enabled').checked = s.promoEnabled !== false;
+  const promoToggle = document.getElementById('cec-promo-enabled');
+  promoToggle.checked = gmailSender ? false : (s.promoEnabled !== false);
+  promoToggle.disabled = gmailSender;
   document.getElementById('cec-sender-name').value = s.senderName || 'Tintin Accesorios';
   document.getElementById('cec-sender-email').value = s.senderEmail || EMAIL_SENDER_ADDRESS;
   document.getElementById('cec-internal-email').value = s.internalEmail || 'tintinaccs@gmail.com';
@@ -4381,28 +4544,39 @@ function renderCorreosConfigTab() {
   document.getElementById('cec-signature').value = s.signature || '';
   document.getElementById('cec-footer').value = s.footer || '';
   document.getElementById('cec-test-limit').value = s.testDailyLimit || 20;
+  document.getElementById('cec-resend-limit').value = s.resendDailyLimit || 30;
   document.getElementById('cec-promo-limit').value = s.promoDailyLimit || 100;
+  const alertEl = document.getElementById('cec-gmail-sender-alert');
+  alertEl.style.display = gmailSender ? '' : 'none';
+  if (gmailSender) document.getElementById('cec-gmail-sender-name').textContent = s.senderEmail || EMAIL_SENDER_ADDRESS;
 }
 
 document.getElementById('btn-save-correos-config').onclick = async () => {
+  const s = emailSettingsCache || defaultEmailSettings_();
+  const gmailSender = isGmailSender_(s.senderEmail || EMAIL_SENDER_ADDRESS);
   const patch = {
     orderEmailsEnabled: document.getElementById('cec-order-enabled').checked,
     internalEmailEnabled: document.getElementById('cec-internal-enabled').checked,
     customerEmailEnabled: document.getElementById('cec-customer-enabled').checked,
     testEmailsEnabled: document.getElementById('cec-test-enabled').checked,
-    promoEnabled: document.getElementById('cec-promo-enabled').checked,
+    // Con remitente Gmail común, Promociones queda forzado a apagado sin
+    // importar lo que diga el checkbox (que además está disabled en el DOM)
+    // — protege el dato guardado aunque alguien lo togglee desde la consola.
+    promoEnabled: gmailSender ? false : document.getElementById('cec-promo-enabled').checked,
     senderName: document.getElementById('cec-sender-name').value.trim() || 'Tintin Accesorios',
     internalEmail: document.getElementById('cec-internal-email').value.trim() || 'tintinaccs@gmail.com',
     whatsappNumber: document.getElementById('cec-whatsapp').value.trim(),
     signature: document.getElementById('cec-signature').value,
     footer: document.getElementById('cec-footer').value,
     testDailyLimit: Number(document.getElementById('cec-test-limit').value) || 20,
+    resendDailyLimit: Number(document.getElementById('cec-resend-limit').value) || 30,
     promoDailyLimit: Number(document.getElementById('cec-promo-limit').value) || 100,
   };
   emailSettingsCache = Object.assign(emailSettingsCache || defaultEmailSettings_(), patch);
   await saveEmailSettingsMerge_(patch);
   toast('Configuración de correos guardada');
   renderCorreosDashboard();
+  renderCorreosConfigTab();
 };
 
 // ---- Tabs del módulo Correos ----
@@ -4430,7 +4604,7 @@ async function maybeSendOrderStatusEmail_(order, kind, value) {
     if (!tpl || tpl.active === false) return;
     const variables = orderToVariables_(order);
     const result = await sendTemplatedEmail({ to: order.userEmail, ...templateContentPayload_(tpl), variables });
-    await logEmailSend_({ type: key, recipient: order.userEmail, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: true, error: result?.error || '', orderId: order.id, variables });
+    await logEmailSend_({ category: 'pedido', type: key, recipient: order.userEmail, status: result?.success ? 'sent' : 'failed', templateKey: tplKey, isAutomatic: true, error: result?.error || '', orderId: order.id, variables });
   } catch (e) {
     console.error('[correos] auto-send falló (no bloquea el cambio de estado):', e);
   }
