@@ -307,11 +307,52 @@
       content: '▾'; font-size: 11px; color: var(--adm-muted); transition: transform .2s;
     }
     .perm-module-block[open] > summary::after { transform: rotate(180deg); }
-    .perm-module-body { padding: 4px 18px 14px; }
-    .perm-mini-toggle { width: 40px; height: 22px; }
-    .perm-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
-    .perm-mini-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
+    .perm-module-body { padding: 4px 18px 14px; overflow-x: auto; }
     .perm-row-not-implemented { color: var(--adm-muted); font-style: italic; font-size: 12px; }
+
+    /* Pill/toggle estilo Apple — reemplaza el switch chico de antes. El
+       estado nunca depende solo del color: el texto ACTIVADO/DESACTIVADO/
+       NO DISPONIBLE siempre está visible, para que se entienda con un
+       vistazo (y sea accesible para quien no distingue bien los colores). */
+    .perm-pill-toggle {
+      position: relative; display: inline-flex; cursor: pointer; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .perm-pill-input {
+      position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; z-index: 1;
+    }
+    .perm-pill-track {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
+      font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+      background: #e9e3e6; color: #8a7d84; border: 1.5px solid transparent;
+      transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .perm-pill-text { display: none; white-space: nowrap; }
+    .perm-pill-input:checked + .perm-pill-track {
+      background: var(--adm-accent); color: #fff;
+      box-shadow: 0 2px 8px rgba(184,76,114,.28);
+    }
+    .perm-pill-input:checked + .perm-pill-track .perm-pill-text-on { display: inline; }
+    .perm-pill-input:not(:checked) + .perm-pill-track .perm-pill-text-off { display: inline; }
+    .perm-pill-input:focus-visible + .perm-pill-track {
+      outline: 2px solid var(--adm-accent); outline-offset: 2px;
+    }
+    .perm-pill-toggle:hover .perm-pill-track { filter: brightness(0.97); }
+
+    /* "No disponible" — ni switch ni clickeable, a propósito bien distinto
+       del pill sólido de arriba (borde punteado, sin relleno) para que
+       nunca se confunda con un permiso activado/desactivado de verdad. */
+    .perm-pill-disabled {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+      border: 1.5px dashed var(--adm-border); color: var(--adm-muted); background: transparent;
+    }
+
+    @media (max-width: 720px) {
+      .perm-pill-track, .perm-pill-disabled { min-width: 108px; height: 30px; font-size: 10px; }
+    }
     .perm-row-fixed-note { font-size: 11px; color: var(--adm-muted); }
     .perm-danger-badge {
       display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
@@ -321,7 +362,7 @@
       display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
       background: #fff3cd; color: #856404; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
     }
-    .perm-matrix-table th, .perm-matrix-table td { text-align: center; }
+    .perm-matrix-table th, .perm-matrix-table td { text-align: center; vertical-align: middle; padding-top: 10px; padding-bottom: 10px; }
     .perm-matrix-table th:first-child, .perm-matrix-table td:first-child { text-align: left; }
     .perm-matrix-table td:first-child { max-width: 320px; }
 

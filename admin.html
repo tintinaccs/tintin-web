@@ -6131,12 +6131,18 @@ function renderPermisosMatrix() {
     });
     if (!actionEntries.length) return '';
 
+    // Pill "No disponible": mismo bloque para las dos razones por las que
+    // una celda no tiene switch (acción no implementada todavía, o rol sin
+    // acceso a esa acción puntual) — así se ve igual de claro en los dos casos,
+    // bien diferenciado del pill sólido de Activado/Desactivado.
+    const notAvailablePill = () => `<span class="perm-pill-disabled">No disponible</span>`;
+
     const rows = actionEntries.map(([actKey, act]) => {
       if (act.implemented === false) {
         return `
           <tr>
             <td data-label="Acción">${act.label} <span class="perm-row-not-implemented">— no implementado</span><br><span class="perm-row-fixed-note">${act.note || ''}</span></td>
-            ${rolesToShow.map(() => `<td data-label="—">—</td>`).join('')}
+            ${rolesToShow.map(role => `<td data-label="${PERM_ROLE_LABELS[role]}">${notAvailablePill()}</td>`).join('')}
           </tr>`;
       }
       const dangerBadge = act.dangerous ? '<span class="perm-danger-badge">Sensible</span>' : '';
@@ -6146,12 +6152,15 @@ function renderPermisosMatrix() {
           <td data-label="Acción">${act.label}${dangerBadge}${uiOnlyBadge}</td>
           ${rolesToShow.map(role => {
             const editable = !act.rolesEditable || act.rolesEditable.includes(role);
-            if (!editable) return `<td data-label="${PERM_ROLE_LABELS[role]}"><span class="perm-row-fixed-note">No disponible</span></td>`;
+            if (!editable) return `<td data-label="${PERM_ROLE_LABELS[role]}">${notAvailablePill()}</td>`;
             const checked = !!(_permPending[role]?.[modKey]?.[actKey]);
             return `<td data-label="${PERM_ROLE_LABELS[role]}">
-              <label class="adm-toggle perm-mini-toggle">
-                <input type="checkbox" data-role="${role}" data-module="${modKey}" data-action="${actKey}" onchange="permToggleChanged(this)" ${checked ? 'checked' : ''}>
-                <span class="adm-toggle-slider"></span>
+              <label class="perm-pill-toggle">
+                <input type="checkbox" class="perm-pill-input" data-role="${role}" data-module="${modKey}" data-action="${actKey}" onchange="permToggleChanged(this)" ${checked ? 'checked' : ''}>
+                <span class="perm-pill-track">
+                  <span class="perm-pill-text perm-pill-text-on">Activado</span>
+                  <span class="perm-pill-text perm-pill-text-off">Desactivado</span>
+                </span>
               </label>
             </td>`;
           }).join('')}
