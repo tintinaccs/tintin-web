@@ -1093,11 +1093,14 @@
             </div>
             <div class="adm-field">
               <label class="adm-label">Moneda</label>
-              <select class="adm-select" id="cfg-currency">
+              <select class="adm-select" id="cfg-currency" disabled>
                 <option value="PYG">Guaraní (Gs.)</option>
-                <option value="USD">Dólar (USD)</option>
-                <option value="ARS">Peso Argentino (ARS)</option>
               </select>
+              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px">
+                Por ahora la tienda solo maneja Guaraníes — todos los precios, el carrito y el checkout
+                están calculados en Gs. Dólar/Peso Argentino no están implementados todavía (por eso
+                el selector está bloqueado), para no ofrecer una opción que no hace nada de verdad.
+              </div>
             </div>
           </div>
           <div class="adm-field" style="margin-top:14px">
