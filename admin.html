@@ -13,994 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tintin-tokens.css">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
-       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
-       abajo, pero ahora apuntan al mismo valor real en todas las
-       superficies. --adm-bg queda con su propio valor a propósito: es un
-       gris-rosado más neutro, pensado para un panel de uso prolongado,
-       distinto del fondo más saturado del sitio público. */
-    :root {
-      --adm-sidebar:        var(--pink-dark);
-      --adm-sidebar-hover:  rgba(255,255,255,.12);
-      --adm-sidebar-active: rgba(255,255,255,.95);
-      --adm-sidebar-text:   rgba(255,255,255,.85);
-      --adm-bg:             #f7f4f6;
-      --adm-card:           #ffffff;
-      --adm-accent:         var(--pink-dark);
-      --adm-text:           var(--ink);
-      --adm-muted:          #888;
-      --adm-border:         var(--border);
-      --adm-font:           var(--font-body);
-      --adm-radius-sm:      var(--radius-sm);
-      --adm-radius-md:      var(--radius-md);
-      --sidebar-w:          260px;
-    }
-
-    body {
-      font-family: var(--adm-font);
-      background: var(--adm-bg);
-      color: var(--adm-text);
-      min-height: 100vh;
-    }
-
-    /* ======== SIDEBAR ======== */
-    .adm-sidebar {
-      position: fixed;
-      left: 0; top: 0;
-      width: var(--sidebar-w);
-      height: 100vh;
-      background: var(--adm-sidebar);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: 200;
-      transition: transform .3s ease;
-    }
-
-    .adm-sidebar-logo {
-      padding: 28px 24px 20px;
-      border-bottom: 1px solid rgba(255,255,255,.15);
-    }
-    .adm-sidebar-logo-text {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #fff;
-    }
-    .adm-sidebar-logo-sub {
-      font-size: 10px;
-      color: rgba(255,255,255,.6);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .adm-user-info {
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .adm-user-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 900; color: #fff;
-      overflow: hidden; flex-shrink: 0;
-    }
-    .adm-user-avatar img { width:100%;height:100%;object-fit:cover; }
-    .adm-user-name { font-size: 13px; font-weight: 700; color: #fff; }
-    .adm-user-role-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 50px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-top: 3px;
-    }
-    .role-superadmin { background: #8b2642; color: #fff; }
-    .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
-    .role-agent      { background: #7b68ee; color: #fff; }
-    .role-viewer     { background: #4a90d9; color: #fff; }
-    .role-client     { background: #888; color: #fff; }
-
-    .adm-nav {
-      flex: 1;
-      padding: 12px 0;
-    }
-    .adm-nav-divider {
-      height: 1px;
-      background: rgba(255,255,255,.12);
-      margin: 8px 16px;
-    }
-    .adm-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 24px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--adm-sidebar-text);
-      cursor: pointer;
-      transition: all .15s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      text-decoration: none;
-      font-family: var(--adm-font);
-    }
-    .adm-nav-item:hover { background: var(--adm-sidebar-hover); color: #fff; }
-    .adm-nav-item.active {
-      background: var(--adm-sidebar-active);
-      color: var(--adm-accent);
-      font-weight: 700;
-    }
-    .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
-
-    .adm-nav-bottom {
-      padding: 12px 0 20px;
-      border-top: 1px solid rgba(255,255,255,.12);
-    }
-
-    /* ======== MAIN ======== */
-    .adm-main {
-      margin-left: var(--sidebar-w);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ======== TOPBAR ======== */
-    .adm-topbar {
-      background: #fff;
-      border-bottom: 1.5px solid var(--adm-border);
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .adm-topbar-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--adm-text);
-      flex: 1;
-    }
-    .adm-hamburger { display: none; }
-    .adm-topbar-btn {
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: var(--adm-font);
-      background: var(--adm-accent);
-      color: #fff;
-      text-decoration: none;
-      transition: background .2s;
-    }
-    .adm-topbar-btn:hover { background: var(--rose); }
-
-    /* ======== CONTENT ======== */
-    .adm-content {
-      padding: 28px;
-      flex: 1;
-    }
-
-    /* ======== SECTIONS ======== */
-    .adm-section { display: none; }
-    .adm-section.active { display: block; }
-
-    /* ======== CARDS ======== */
-    .adm-card {
-      background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
-      overflow: hidden;
-    }
-    .adm-card-head {
-      padding: 18px 22px;
-      border-bottom: 1.5px solid var(--adm-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .adm-card-title {
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--adm-accent);
-    }
-    .adm-card-body { padding: 22px; }
-
-    /* ======== STAT CARDS ======== */
-    .adm-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .adm-stat {
-      background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
-      padding: 20px;
-    }
-    .adm-stat-icon { margin-bottom: 8px; display:flex; align-items:center; }
-    .adm-stat-val {
-      font-size: 28px;
-      font-weight: 900;
-      color: var(--adm-accent);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .adm-stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--adm-muted);
-    }
-
-    /* ======== TABLES ======== */
-    .adm-table-wrap { overflow-x: auto; }
-    .adm-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .adm-table th {
-      text-align: left;
-      padding: 10px 14px;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--adm-muted);
-      border-bottom: 2px solid var(--adm-border);
-      white-space: nowrap;
-    }
-    .adm-table td {
-      padding: 11px 14px;
-      border-bottom: 1px solid #fce4ec;
-      vertical-align: middle;
-    }
-    .adm-table tr:last-child td { border-bottom: none; }
-    .adm-table tr:hover td { background: #fef5f8; }
-
-    /* ======== BADGES ======== */
-    .adm-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 50px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .badge-pendiente  { background: #fef3c7; color: #92400e; }
-    .badge-confirmado { background: #dbeafe; color: #1e40af; }
-    .badge-enviado    { background: #ede9fe; color: #5b21b6; }
-    .badge-entregado  { background: #d1fae5; color: #065f46; }
-    .badge-cancelado  { background: #fee2e2; color: #991b1b; }
-    .badge-preparando  { background: #fef9c3; color: #713f12; }
-    .badge-pagado      { background: #d1fae5; color: #065f46; }
-    /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
-       puedan distinguir de un vistazo en la misma columna — son estados
-       "terminales" distintos, no el mismo. */
-    .badge-rechazado   { background: #fde3e1; color: #c0392b; }
-    .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
-    /* Listo para retirar: único estado de pedido con el rosa de marca en vez
-       de la paleta semántica genérica — es un hito positivo específico de
-       Tintin (retiro en tienda), no un estado de logística estándar. */
-    .badge-listo       { background: var(--pink-pale); color: var(--pink-dark); }
-
-    /* ======== FORM ELEMENTS ======== */
-    .adm-input, .adm-select, .adm-textarea {
-      padding: 9px 14px;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: var(--adm-font);
-      color: var(--adm-text);
-      background: #fff;
-      transition: border .2s;
-      width: 100%;
-    }
-    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
-      outline: none;
-      border-color: var(--adm-accent);
-    }
-    .adm-textarea { resize: vertical; min-height: 80px; }
-
-    /* Píldoras — usadas en Envíos (Ciudad / Costo) */
-    .adm-pill-input { border-radius: 999px; padding: 11px 22px; }
-    .ship-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
-    .ship-tab-btn {
-      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
-    }
-    .ship-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .ship-tab-panel { display: none; }
-    .ship-tab-panel.active { display: block; }
-
-    /* Usuarios / Bloqueados — mismas píldoras que ship-tabs, clases propias
-       para no compartir el querySelectorAll global de Envíos. */
-    .user-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-    .user-tab-btn {
-      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
-      display: inline-flex; align-items: center; gap: 6px;
-    }
-    .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
-
-    /* ======== MÓDULO CORREOS ======== */
-    .correos-tabs {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
-      padding-bottom: 14px; border-bottom: 1.5px solid var(--adm-border);
-    }
-    .correos-tab-btn {
-      padding: 9px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s; white-space: nowrap;
-    }
-    .correos-tab-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .correos-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
-    .correos-panel { display: none; }
-    .correos-panel.active { display: block; }
-    @media (max-width: 640px) {
-      .correos-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 10px; }
-      .correos-tabs::-webkit-scrollbar { display: none; }
-      .correos-tab-btn { flex-shrink: 0; }
-    }
-
-    /* Switches on/off con etiqueta — variante compacta del adm-toggle para
-       usarlo dentro de una fila de tabla (Correos de pedidos) sin romper el
-       alto de línea. */
-    .correos-mini-toggle { display: inline-flex; align-items: center; gap: 8px; }
-    .correos-mini-toggle .adm-toggle { width: 40px; height: 22px; }
-    .correos-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
-    .correos-mini-toggle .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
-
-    /* Chips de destinatarias seleccionadas (Promociones) */
-    .correos-chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-    .correos-chip {
-      display: inline-flex; align-items: center; gap: 6px; background: #fef5f8; color: var(--adm-accent);
-      border: 1px solid #f0d8e0; border-radius: 999px; padding: 5px 8px 5px 14px; font-size: 12px; font-weight: 600;
-    }
-    .correos-chip button {
-      background: none; border: none; color: var(--adm-accent); cursor: pointer; font-size: 14px; line-height: 1;
-      padding: 2px 4px; border-radius: 50%;
-    }
-    .correos-chip button:hover { background: rgba(184,76,114,.15); }
-    .correos-chip.blocked { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
-
-    /* Barra de progreso de envío por tandas (Promociones) */
-    .correos-progress-wrap { background: #f1f1f1; border-radius: 999px; height: 10px; overflow: hidden; margin: 12px 0; }
-    .correos-progress-bar { background: var(--adm-accent); height: 100%; width: 0%; transition: width .3s; }
-
-    /* ======== CLIENTAS: tabla → cards en mobile (mismo patrón que Pedidos) ======== */
-    @media (max-width: 640px) {
-      .adm-table-clientas thead { display: none; }
-      .adm-table-clientas, .adm-table-clientas tbody,
-      .adm-table-clientas tr, .adm-table-clientas td { display: block; width: 100%; }
-      .adm-table-clientas tr.adm-cliente-row {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-clientas td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-clientas tr.adm-cliente-row td:last-child { border-bottom: none; }
-      .adm-table-clientas td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== HISTORIAL: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-historial thead { display: none; }
-      .adm-table-historial, .adm-table-historial tbody,
-      .adm-table-historial tr, .adm-table-historial td { display: block; width: 100%; }
-      .adm-table-historial tr.adm-log-row {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-historial td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-historial tr.adm-log-row td:last-child { border-bottom: none; }
-      .adm-table-historial td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== PEDIDOS DE CORREOS: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-correos-pedidos thead { display: none; }
-      .adm-table-correos-pedidos, .adm-table-correos-pedidos tbody,
-      .adm-table-correos-pedidos tr, .adm-table-correos-pedidos td { display: block; width: 100%; }
-      .adm-table-correos-pedidos tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-correos-pedidos td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-correos-pedidos tr td:last-child { border-bottom: none; }
-      .adm-table-correos-pedidos td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    /* ======== PLANTILLAS: tabla → cards en mobile ========
-       Esta tabla tiene hasta 5 botones de acción por fila (Editar/Vista
-       previa/Duplicar/Archivar/Eliminar) — en mobile quedan apilados y
-       envueltos (flex-wrap), nunca cortados ni exigiendo scroll horizontal
-       para llegar a ellos. */
-    @media (max-width: 640px) {
-      .adm-table-plantillas thead { display: none; }
-      .adm-table-plantillas, .adm-table-plantillas tbody,
-      .adm-table-plantillas tr, .adm-table-plantillas td { display: block; width: 100%; }
-      .adm-table-plantillas tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-plantillas td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-plantillas tr td:last-child { border-bottom: none; }
-      .adm-table-plantillas td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-      /* La celda de Acciones tiene varios botones — se acomodan en su
-         propia fila envuelta en vez de forzarse contra el borde derecho. */
-      .adm-table-plantillas td[data-label="Acciones"] {
-        display: block; text-align: left;
-      }
-      .adm-table-plantillas td[data-label="Acciones"]::before {
-        display: block; margin-bottom: 6px;
-      }
-      .adm-table-plantillas td[data-label="Acciones"] > div {
-        justify-content: flex-start;
-      }
-      /* Nombre/asunto: el <small> con el asunto se ve muy apretado a la
-         derecha — se deja alinear a la izquierda debajo del nombre. */
-      .adm-table-plantillas td[data-label="Plantilla"] {
-        display: block; text-align: left;
-      }
-      .adm-table-plantillas td[data-label="Plantilla"]::before {
-        display: block; margin-bottom: 4px;
-      }
-    }
-
-    /* ======== DASHBOARD DE CORREOS — Últimos envíos: tabla → cards en mobile ======== */
-    @media (max-width: 640px) {
-      .adm-table-correos-dash thead { display: none; }
-      .adm-table-correos-dash, .adm-table-correos-dash tbody,
-      .adm-table-correos-dash tr, .adm-table-correos-dash td { display: block; width: 100%; }
-      .adm-table-correos-dash tr {
-        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px; background: var(--adm-card);
-      }
-      .adm-table-correos-dash td {
-        display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
-      }
-      .adm-table-correos-dash tr td:last-child { border-bottom: none; }
-      .adm-table-correos-dash td[data-label]::before {
-        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
-      }
-    }
-
-    .adm-field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 14px;
-    }
-    .adm-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--adm-muted);
-    }
-
-    .adm-btn {
-      padding: 9px 20px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: var(--adm-font);
-      transition: all .2s;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-    }
-    .adm-btn-primary { background: var(--adm-accent); color: #fff; }
-    .adm-btn-primary:hover { background: var(--rose); }
-    .adm-btn-danger { background: #ef4444; color: #fff; }
-    .adm-btn-danger:hover { background: #dc2626; }
-    .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
-    .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
-
-    /* ======== SEARCH ======== */
-    .adm-search-wrap {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .adm-search-wrap input {
-      padding-left: 36px;
-    }
-    .adm-search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--adm-muted);
-      font-size: 14px;
-    }
-
-    /* ======== FILTER ROW ======== */
-    .adm-filter-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-    .adm-filter-row .adm-select { width: auto; flex: 1; min-width: 120px; }
-
-    /* ======== USER AVATAR (table) ======== */
-    .adm-tbl-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--adm-accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 900; color: #fff;
-      overflow: hidden; flex-shrink: 0;
-    }
-    .adm-tbl-avatar img { width:100%;height:100%;object-fit:cover; }
-
-    /* ======== ORDER DETAIL ======== */
-    .adm-order-detail {
-      background: var(--adm-bg);
-      border-radius: 10px;
-      padding: 16px;
-      margin-top: 8px;
-      display: none;
-      font-size: 13px;
-    }
-    .adm-order-detail.open { display: block; }
-    .adm-detail-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-    .adm-detail-label {
-      font-weight: 700;
-      color: var(--adm-muted);
-      min-width: 100px;
-    }
-
-    /* ======== TOGGLE SWITCH ======== */
-    .adm-toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .adm-toggle {
-      position: relative;
-      width: 52px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-    .adm-toggle input {
-      opacity: 0;
-      width: 0; height: 0;
-    }
-    .adm-toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #ccc;
-      border-radius: 28px;
-      transition: .3s;
-    }
-    .adm-toggle-slider::before {
-      content: '';
-      position: absolute;
-      width: 20px; height: 20px;
-      left: 4px; bottom: 4px;
-      background: #fff;
-      border-radius: 50%;
-      transition: .3s;
-    }
-    .adm-toggle input:checked + .adm-toggle-slider { background: var(--adm-accent); }
-    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(24px); }
-
-    .adm-toggle-label {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .adm-toggle-desc {
-      font-size: 12px;
-      color: var(--adm-muted);
-      margin-top: 4px;
-    }
-
-    /* ======== TOAST ======== */
-    .adm-toast {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: var(--adm-accent);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      z-index: 9999;
-      display: none;
-      box-shadow: 0 4px 20px rgba(184,76,114,.4);
-    }
-    .adm-toast.show { display: block; animation: toastIn .3s ease; }
-    @keyframes toastIn {
-      from { opacity:0; transform:translateY(10px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    /* ======== CONTENT EDITOR (contenido) ======== */
-    .cont-page-tab {
-      padding: 9px 18px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      cursor: pointer;
-      border: 2px solid #eee;
-      background: #fff;
-      color: var(--adm-muted);
-      font-family: var(--adm-font);
-      transition: all .2s;
-    }
-    .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
-    .cont-page-tab.active { background: var(--adm-accent); border-color: var(--adm-accent); color: #fff; }
-
-    .cont-section {
-      background: #fff;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 14px;
-      margin-bottom: 16px;
-      overflow: hidden;
-      transition: border-color .2s;
-    }
-    .cont-section.dirty { border-color: #ffc107; }
-    .cont-section.saved { border-color: #4caf50; }
-
-    .cont-section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      cursor: pointer;
-      user-select: none;
-      background: #fafafa;
-      border-bottom: 1px solid #f0f0f0;
-      transition: background .15s;
-    }
-    .cont-section-head:hover { background: #f5f5f5; }
-    .cont-section-head.open { border-bottom: 1.5px solid var(--adm-border); background: #fef5f8; }
-
-    .cont-section-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--adm-text);
-    }
-    .cont-section-icon { font-size: 18px; }
-    .cont-section-chevron {
-      font-size: 14px;
-      color: var(--adm-muted);
-      transition: transform .2s ease;
-    }
-    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
-    .cont-section-body { display: none; padding: 20px 24px 24px; }
-    .cont-section-body.open { display: block; }
-    .cont-section-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #f5f5f5;
-    }
-
-    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .cont-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--adm-muted);
-    }
-    .cont-input, .cont-textarea {
-      padding: 10px 14px;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: var(--adm-font);
-      color: var(--adm-text);
-      transition: border .2s;
-      width: 100%;
-    }
-    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--adm-accent); }
-    .cont-textarea { resize: vertical; min-height: 80px; }
-
-    .cont-img-wrap {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: start;
-    }
-    .cont-img-preview {
-      width: 100%;
-      max-height: 160px;
-      object-fit: contain;
-      border: 1.5px dashed var(--adm-border);
-      border-radius: 8px;
-      padding: 8px;
-      background: #fef5f8;
-      display: none;
-      margin-top: 8px;
-    }
-    .cont-img-preview.show { display: block; }
-    .cont-upload-progress { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-    .cont-upload-bar-wrap { flex: 1; height: 6px; background: #f0d0de; border-radius: 999px; overflow: hidden; }
-    .cont-upload-bar { height: 100%; width: 0%; background: var(--adm-accent); border-radius: 999px; transition: width .15s; }
-    .cont-upload-pct { font-size: 11px; color: #888; min-width: 32px; text-align: right; }
-
-    .cont-array-item {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      background: #fafafa;
-      border: 1.5px solid var(--adm-border);
-      border-radius: 8px;
-      margin-bottom: 10px;
-      position: relative;
-    }
-    .cont-array-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .cont-array-item-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--adm-accent); }
-    .cont-array-del {
-      background: #ffebee; border: none; border-radius: 50%; width: 24px; height: 24px;
-      cursor: pointer; color: #c62828; font-size: 14px; display: flex;
-      align-items: center; justify-content: center; font-weight: 900; transition: background .15s;
-    }
-    .cont-array-del:hover { background: #ffcdd2; }
-    .cont-dirty-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #ffc107;
-      display: none; margin-left: 6px;
-    }
-
-    /* ======== SPINNER ======== */
-    .adm-spinner {
-      display: inline-block;
-      width: 16px; height: 16px;
-      border: 2px solid rgba(184,76,114,.2);
-      border-top-color: var(--adm-accent);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .adm-loading {
-      text-align: center;
-      padding: 32px;
-      color: var(--adm-muted);
-      font-size: 13px;
-    }
-
-    /* ======== OVERLAY ======== */
-    .adm-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 150;
-    }
-    .adm-overlay.show { display: block; }
-
-    /* ======== RESPONSIVE ======== */
-    /* ── TABLET: sidebar compacta siempre visible ── */
-    @media (max-width: 900px) {
-      :root { --sidebar-w: 64px; }
-
-      .adm-sidebar {
-        width: 64px;
-        overflow: visible;
-      }
-      .adm-sidebar-logo,
-      .adm-user-info .adm-user-name,
-      .adm-user-info .adm-user-role-badge,
-      .adm-nav-divider { display: none; }
-
-      .adm-user-info {
-        justify-content: center;
-        padding: 12px 0;
-      }
-      .adm-nav-item {
-        flex-direction: column;
-        gap: 2px;
-        padding: 10px 0;
-        font-size: 9px;
-        letter-spacing: .04em;
-        text-transform: uppercase;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-      }
-      .adm-nav-icon { font-size: 20px; width: auto; }
-
-      .adm-nav-bottom { padding: 8px 0 16px; }
-      .adm-hamburger { display: none; }
-      .adm-content { padding: 16px; }
-      .adm-stats { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    /* ── MOBILE: bottom tab bar, sidebar oculta ── */
-    @media (max-width: 540px) {
-      :root { --sidebar-w: 0px; }
-
-      .adm-sidebar { display: none; }
-
-      .adm-main {
-        margin-left: 0;
-        padding-bottom: 70px;
-      }
-
-      .adm-mobile-tabs {
-        display: flex !important;
-      }
-
-      .adm-content { padding: 12px; }
-      .adm-topbar { padding: 12px 16px; }
-      .adm-stats { grid-template-columns: 1fr 1fr; }
-    }
-
-    /* ======== TABLA DE PEDIDOS → CARDS EN MOBILE ========
-       Solo afecta a .adm-table-pedidos (la tabla de Pedidos) — el resto de
-       las tablas del admin (Usuarios, Productos, Auditoría) siguen con
-       scroll horizontal como antes, no se tocan. */
-    @media (max-width: 640px) {
-      .adm-table-pedidos thead { display: none; }
-      .adm-table-pedidos, .adm-table-pedidos tbody,
-      .adm-table-pedidos tr, .adm-table-pedidos td {
-        display: block; width: 100%;
-      }
-      .adm-table-pedidos tr.adm-order-row {
-        margin-bottom: 12px;
-        border: 1px solid var(--adm-border);
-        border-radius: var(--adm-radius-md, 14px);
-        padding: 10px 12px;
-        background: var(--adm-card);
-      }
-      .adm-table-pedidos tr.adm-order-row:hover td { background: none; }
-      .adm-table-pedidos tr.adm-order-detail-row { margin-top: -8px; margin-bottom: 12px; }
-      .adm-table-pedidos td {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 7px 2px;
-        border-bottom: 1px dashed #f0d8e0;
-        text-align: right;
-      }
-      .adm-table-pedidos tr.adm-order-row td:last-child { border-bottom: none; }
-      .adm-table-pedidos td[data-label]::before {
-        content: attr(data-label);
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        color: var(--adm-muted);
-        text-align: left;
-        flex-shrink: 0;
-      }
-      /* Estado/Pago traen su propio select — que se vea grande y fácil de
-         tocar con el dedo, en vez del tamaño chico pensado para desktop. */
-      .adm-table-pedidos td[data-label] select.adm-select {
-        width: auto; max-width: 60%; font-size: 13px !important; padding: 8px 10px !important;
-      }
-      /* El detalle expandido (dirección, productos, notas) es un panel
-         completo, no un campo de card — vuelve a su layout normal en vez
-         del flex/alineado-a-la-derecha de los <td> de arriba. */
-      .adm-table-pedidos tr.adm-order-detail-row td {
-        display: block;
-        text-align: left;
-        border-bottom: none;
-        padding: 0;
-      }
-    }
-
-    /* Tab bar mobile — oculto por defecto */
-    .adm-mobile-tabs {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--adm-sidebar);
-      z-index: 300;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      border-top: 1px solid rgba(255,255,255,.15);
-      height: 64px;
-      align-items: stretch;
-    }
-    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
-
-    .adm-mobile-tab {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      padding: 6px 14px;
-      flex-shrink: 0;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: rgba(255,255,255,.75);
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: var(--adm-font);
-      text-decoration: none;
-      transition: color .15s, background .15s;
-      white-space: nowrap;
-    }
-    .adm-mobile-tab:hover,
-    .adm-mobile-tab.active {
-      color: #fff;
-      background: rgba(255,255,255,.12);
-    }
-    .adm-mobile-tab svg,
-    .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
-  </style>
+  <link rel="stylesheet" href="css/admin.css">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js"></script>
 </head>
@@ -1021,6 +34,7 @@
     <div>
       <div class="adm-user-name" id="adm-user-name">—</div>
       <div id="adm-role-badge" class="adm-user-role-badge role-admin">—</div>
+      <div id="adm-live-clock" class="adm-live-clock"></div>
     </div>
   </div>
 
@@ -1065,6 +79,9 @@
     <button class="adm-nav-item" data-section="configuracion" id="nav-config">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Configuración
     </button>
+    <button class="adm-nav-item" data-section="permisos" id="nav-permisos">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><path d="M12 15v2"/></svg></span> Roles y Permisos
+    </button>
   </nav>
 
   <div class="adm-nav-bottom">
@@ -1092,6 +109,7 @@
   <button class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
   <button class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
   <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
+  <button class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
   <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
 </nav>
@@ -1174,11 +192,31 @@
             </div>
           </div>
         </div>
+        <!-- Barra de acciones masivas — solo Super Admin la ve (manageUsers) -->
+        <div id="users-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="users-bulk-count">0 seleccionados</span>
+          <select class="adm-select" id="users-bulk-role" style="width:auto;font-size:12px;padding:6px 8px">
+            <option value="">— Cambiar rol —</option>
+            <option value="admin">Admin</option>
+            <option value="agent">Agente (Modder)</option>
+            <option value="viewer">Viewer</option>
+            <option value="client">Cliente</option>
+          </select>
+          <button class="adm-btn adm-btn-sm" onclick="bulkChangeUserRole()">Aplicar rol</button>
+          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-block-btn" onclick="bulkBlockUsers()">Bloquear</button>
+          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-restore-btn" onclick="bulkRestoreUsers()" style="display:none">Restaurar</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportUsers('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearUsersSelection()" title="Limpiar selección">✕ Limpiar</button>
+        </div>
+        <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="bulkExportUsers('filtered')" title="Exportar los usuarios que ves ahora a CSV">⬇️ Exportar vista actual (CSV)</button>
+        </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-users" title="Seleccionar todos" onclick="toggleSelectAllUsers(this)"></th>
                   <th>Avatar</th>
                   <th>Nombre</th>
                   <th>Email</th>
@@ -1188,7 +226,7 @@
                 </tr>
               </thead>
               <tbody id="users-tbody">
-                <tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
+                <tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1230,11 +268,35 @@
             </select>
           </div>
         </div>
+        <!-- Barra de acciones masivas — aparece al seleccionar pedidos -->
+        <div id="orders-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="orders-bulk-count">0 seleccionados</span>
+          <span id="orders-bulk-status-wrap">
+            <select class="adm-select" id="orders-bulk-status" style="width:auto;font-size:12px;padding:6px 8px">
+              <option value="">— Cambiar estado —</option>
+            </select>
+            <button class="adm-btn adm-btn-sm" onclick="bulkChangeOrderStatus()">Aplicar estado</button>
+          </span>
+          <span id="orders-bulk-pay-wrap">
+            <select class="adm-select" id="orders-bulk-pay-status" style="width:auto;font-size:12px;padding:6px 8px">
+              <option value="">— Cambiar pago —</option>
+            </select>
+            <button class="adm-btn adm-btn-sm" onclick="bulkChangePayStatus()">Aplicar pago</button>
+          </span>
+          <button class="adm-btn adm-btn-sm" id="orders-bulk-resend-btn" onclick="bulkResendOrderEmails()" title="Reenviar el correo de confirmación a todos los seleccionados">✉️ Reenviar correos</button>
+          <button class="adm-btn adm-btn-sm" id="orders-bulk-export-btn" onclick="bulkExportOrders('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="orders-bulk-delete-btn" onclick="bulkDeleteOrders()" style="display:none" title="Eliminar definitivamente (Super Admin)">Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearOrdersSelection()" title="Limpiar selección">✕ Limpiar</button>
+        </div>
+        <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
+          <button class="adm-btn adm-btn-sm adm-btn-outline" id="orders-export-view-btn" onclick="bulkExportOrders('filtered')" title="Exportar los pedidos que ves ahora (con los filtros aplicados) a CSV">⬇️ Exportar vista actual (CSV)</button>
+        </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
             <table class="adm-table adm-table-pedidos">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-orders" title="Seleccionar todos" onclick="toggleSelectAllOrders(this)"></th>
                   <th>#</th>
                   <th>Cliente</th>
                   <th>Productos</th>
@@ -1245,11 +307,11 @@
                   <th>Fecha</th>
                   <th>Notif.</th>
                   <th>Editar</th>
-                  <th>Eliminar</th>
+                  <th class="col-actions-sticky">Eliminar</th>
                 </tr>
               </thead>
               <tbody id="orders-tbody">
-                <tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
+                <tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando pedidos...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1280,12 +342,14 @@
               <option value="gafas">Gafas</option>
               <option value="joyeros">Joyeros</option>
             </select>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" id="prod-export-all-btn" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV">⬇️ Exportar CSV</button>
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
         </div>
         <!-- Bulk action toolbar (shown when products are selected) -->
         <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
           <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
+          <span id="prod-bulk-masivas-group" style="display:contents">
           <input id="bulk-collection-input" type="text" placeholder="Nombre de colección" class="adm-input" style="font-size:12px;padding:5px 10px;width:200px">
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
@@ -1306,7 +370,30 @@
           <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Cambiar cat.</button>
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
+          </span>
           <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
+          <button class="adm-btn adm-btn-sm" id="prod-bulk-export-btn" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <div class="adm-more-actions" id="prod-more-actions">
+            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="toggleProdMoreActions()" type="button">⋯ Más acciones</button>
+            <div class="adm-more-actions-panel" id="prod-more-actions-panel">
+              <div class="adm-more-actions-row">
+                <input id="bulk-stock-input" type="number" min="0" placeholder="Nuevo stock" class="adm-input" style="font-size:12px;padding:5px 10px;width:130px">
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetStock()">Aplicar stock</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <input id="bulk-price-input" type="number" min="0" placeholder="Nuevo precio (Gs.)" class="adm-input" style="font-size:12px;padding:5px 10px;width:150px">
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetPrice()">Aplicar precio</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOferta(true)">Aplicar oferta</button>
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetOferta(false)">Quitar oferta</button>
+              </div>
+              <div class="adm-more-actions-row">
+                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetDestacado(true)">Marcar destacado</button>
+                <button class="adm-btn adm-btn-sm" onclick="bulkSetDestacado(false)">Quitar destacado</button>
+              </div>
+            </div>
+          </div>
           <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
@@ -1440,6 +527,16 @@
             <input id="coll-search" type="text" placeholder="Buscar colección…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nueva-coleccion" onclick="collNueva()">+ Nueva colección</button>
           </div>
+        </div>
+        <div id="coll-bulk-toolbar" class="adm-bulk-toolbar">
+          <span class="adm-bulk-count" id="coll-bulk-count">0 seleccionadas</span>
+          <span id="coll-bulk-visible-group" style="display:contents">
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCollVisible(true)">Activar (mostrar)</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkSetCollVisible(false)">Desactivar (ocultar)</button>
+          </span>
+          <button class="adm-btn adm-btn-sm" onclick="bulkExportCollections()">⬇️ Exportar CSV</button>
+          <button class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-btn" onclick="bulkDeleteCollections()" style="display:none">Eliminar</button>
+          <button class="adm-btn adm-btn-sm" onclick="clearCollSelection()">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)"><span class="adm-spinner"></span> Cargando colecciones…</div>
@@ -1597,10 +694,16 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
             Quién editó un pedido, cambió su estado, editó un producto o su stock, cambió un rol, o bloqueó/restauró una cuenta — las últimas 200 acciones, más recientes primero. Solo Super Admin puede ver esta sección; el Modder no tiene acceso, aunque sus propias acciones sí queden registradas acá.
           </p>
+          <div id="audit-bulk-toolbar" class="adm-bulk-toolbar">
+            <span class="adm-bulk-count" id="audit-bulk-count">0 seleccionados</span>
+            <button class="adm-btn adm-btn-sm" onclick="bulkExportAuditLog()">⬇️ Exportar CSV</button>
+            <button class="adm-btn adm-btn-sm" onclick="clearAuditSelection()">✕ Limpiar</button>
+          </div>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
+                  <th class="col-select"><input type="checkbox" id="check-all-audit" onclick="toggleSelectAllAudit(this)"></th>
                   <th>Fecha</th>
                   <th>Quién</th>
                   <th>Acción</th>
@@ -1608,7 +711,7 @@
                 </tr>
               </thead>
               <tbody id="audit-tbody">
-                <tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
+                <tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1659,10 +762,16 @@
               "Pedido recibido para clienta/Tintin" es el correo real que ya manda el checkout — desactivarlo acá corta ese envío real. Los demás son correos automáticos nuevos: quedan desactivados por defecto y no cambian nada hasta que actives cada uno a propósito.
             </p>
           </div>
+          <div id="cop-bulk-toolbar" class="adm-bulk-toolbar">
+            <span class="adm-bulk-count" id="cop-bulk-count">0 seleccionados</span>
+            <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOrderTypeEnabled(true)">Activar seleccionados</button>
+            <button class="adm-btn adm-btn-sm" onclick="bulkSetOrderTypeEnabled(false)">Desactivar seleccionados</button>
+            <button class="adm-btn adm-btn-sm" onclick="clearOrderTypeSelection()">✕ Limpiar</button>
+          </div>
           <div class="adm-table-wrap">
             <table class="adm-table adm-table-correos-pedidos">
-              <thead><tr><th>Tipo de correo</th><th>Activo</th><th>Plantilla asociada</th><th>Último envío</th><th>Vista previa</th></tr></thead>
-              <tbody id="correos-pedidos-tbody"><tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+              <thead><tr><th class="col-select"><input type="checkbox" id="check-all-cop" onclick="toggleSelectAllOrderTypes(this)"></th><th>Tipo de correo</th><th>Activo</th><th>Plantilla asociada</th><th>Último envío</th><th>Vista previa</th></tr></thead>
+              <tbody id="correos-pedidos-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -1731,10 +840,17 @@
                 <input type="checkbox" id="tpl-show-archived" /> Ver archivadas
               </label>
             </div>
+            <div id="tpl-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="tpl-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(true)">Archivar</button>
+              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(false)">Reactivar</button>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteTemplates()" title="Solo elimina las personalizadas — las de sistema solo se archivan">Eliminar</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearTemplatesSelection()">✕ Limpiar</button>
+            </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-plantillas">
-                <thead><tr><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
-                <tbody id="tpl-tbody"><tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-tpl" onclick="toggleSelectAllTemplates(this)"></th><th>Plantilla</th><th>Categoría</th><th>Activa</th><th>Últ. edición</th><th>Editado por</th><th>Acciones</th></tr></thead>
+                <tbody id="tpl-tbody"><tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -1833,10 +949,16 @@
               <input type="date" class="adm-input" id="hist-filter-from" style="width:auto" title="Desde" />
               <input type="date" class="adm-input" id="hist-filter-to" style="width:auto" title="Hasta" />
             </div>
+            <div id="hist-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="hist-bulk-count">0 seleccionados</span>
+              <button class="adm-btn adm-btn-sm" onclick="bulkRetryFailedLogs()" title="Reintentar los envíos fallidos de la selección">🔄 Reintentar fallidos</button>
+              <button class="adm-btn adm-btn-sm" onclick="bulkExportLogs()">⬇️ Exportar CSV</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearLogsSelection()">✕ Limpiar</button>
+            </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-historial">
-                <thead><tr><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
-                <tbody id="hist-tbody"><tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
+                <thead><tr><th class="col-select"><input type="checkbox" id="check-all-hist" onclick="toggleSelectAllLogs(this)"></th><th>Fecha</th><th>Tipo</th><th>Destinatario</th><th>Estado</th><th>Enviado por</th><th>Origen</th><th>Acciones</th></tr></thead>
+                <tbody id="hist-tbody"><tr><td colspan="8" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -1971,11 +1093,14 @@
             </div>
             <div class="adm-field">
               <label class="adm-label">Moneda</label>
-              <select class="adm-select" id="cfg-currency">
+              <select class="adm-select" id="cfg-currency" disabled>
                 <option value="PYG">Guaraní (Gs.)</option>
-                <option value="USD">Dólar (USD)</option>
-                <option value="ARS">Peso Argentino (ARS)</option>
               </select>
+              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px">
+                Por ahora la tienda solo maneja Guaraníes — todos los precios, el carrito y el checkout
+                están calculados en Gs. Dólar/Peso Argentino no están implementados todavía (por eso
+                el selector está bloqueado), para no ofrecer una opción que no hace nada de verdad.
+              </div>
             </div>
           </div>
           <div class="adm-field" style="margin-top:14px">
@@ -2024,6 +1149,11 @@
               <button class="adm-btn adm-btn-primary" id="ship-delivery-add" type="button" style="white-space:nowrap">Guardar</button>
             </div>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-delivery-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-delivery-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="ship-delivery-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('delivery')">Eliminar seleccionadas</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('delivery')">✕ Limpiar</button>
+            </div>
             <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
 
@@ -2040,6 +1170,11 @@
               <button class="adm-btn adm-btn-primary" id="ship-encomienda-add" type="button" style="white-space:nowrap">Guardar</button>
             </div>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-encomienda-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
+            <div id="ship-encomienda-bulk-toolbar" class="adm-bulk-toolbar">
+              <span class="adm-bulk-count" id="ship-encomienda-bulk-count">0 seleccionadas</span>
+              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('encomienda')">Eliminar seleccionadas</button>
+              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('encomienda')">✕ Limpiar</button>
+            </div>
             <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
         </div>
@@ -2122,6 +1257,56 @@
       <button class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
+    <!-- ===================== ROLES Y PERMISOS ===================== -->
+    <div class="adm-section" id="section-permisos">
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Roles y Permisos</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <span id="perm-unsaved-badge" class="adm-badge" style="display:none;background:#fff3e0;color:#e65100">Cambios sin guardar</span>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-perm-restore" type="button">Restaurar valores por defecto</button>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-perm-save" type="button" disabled>Guardar cambios</button>
+          </div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
+            Elegí qué puede hacer cada rol dentro del panel. <strong style="color:var(--adm-text)">Super Admin</strong> (únicamente <code>tintinaccs@gmail.com</code>) siempre tiene control total y no aparece como columna — no es desactivable, ni siquiera por otra cuenta con rol "superadmin" en Firestore. Usuarios, Auditoría, Correos, Configuración, Onboarding e Import/Export siguen siendo exclusivos de Super Admin (no aparecen acá como módulos editables) — el reporte de esta entrega explica por qué cada uno.
+          </p>
+          <div class="adm-filter-row">
+            <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
+              <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input type="text" class="adm-input" id="perm-search" placeholder="Buscar permiso…" />
+            </div>
+            <select class="adm-select" id="perm-filter-module" style="flex:1">
+              <option value="">Todos los módulos</option>
+            </select>
+            <select class="adm-select" id="perm-filter-role" style="flex:1">
+              <option value="">Todos los roles</option>
+              <option value="admin">Admin</option>
+              <option value="agent">Agente / Modder</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+          <div id="perm-modules-wrap"></div>
+        </div>
+      </div>
+
+      <div class="adm-card" style="margin-top:20px">
+        <div class="adm-card-head"><div class="adm-card-title">Web pública / Cliente</div></div>
+        <div class="adm-card-body">
+          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:12px">
+            Las capacidades del rol <strong style="color:var(--adm-text)">Cliente</strong> (ver catálogo, agregar al carrito, comprar, ver/editar su perfil, ver sus pedidos, recibir correos) son funcionalidad base de la tienda — no un permiso de panel — así que no aparecen acá como switches. No tienen sentido como "desactivables" en general: son la razón de ser del sitio público. Para restringir a <strong>una cuenta puntual</strong>, usá <strong>Usuarios → Bloquear</strong> (ya existente), que corta todo acceso real, con Firestore Rules incluidas.
+          </p>
+          <ul style="font-size:13px;color:var(--adm-text);line-height:1.9;padding-left:20px;margin:0">
+            <li>Ver catálogo, agregar al carrito, comprar</li>
+            <li>Ver y editar su propio perfil</li>
+            <li>Ver sus propios pedidos</li>
+            <li>Recibir correos de pedido / promociones (si Super Admin las activa)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- ===================== IMPORT / EXPORT ===================== -->
     <div class="adm-section" id="section-importar">
       <div class="adm-card" style="margin-bottom:20px">
@@ -2175,7 +1360,9 @@
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
               <div style="font-size:13px;font-weight:700;color:var(--adm-text)" id="csv-preview-title"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span class="adm-bulk-count" id="csv-bulk-count" style="align-self:center">0 seleccionados</span>
                 <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">Limpiar</button>
+                <button class="adm-btn adm-btn-outline" id="btn-csv-importar-seleccionados">⬆️ Importar seleccionados</button>
                 <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
               </div>
             </div>
@@ -2183,6 +1370,7 @@
               <table class="adm-table" id="csv-preview-table">
                 <thead>
                   <tr>
+                    <th class="col-select"><input type="checkbox" id="check-all-csv" onclick="toggleSelectAllCsvRows(this)"></th>
                     <th>#</th>
                     <th>Foto</th>
                     <th>Nombre</th>
@@ -2282,6 +1470,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendOrderNotification, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
+import {
+  PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
+  canDo, saveRolePermissions, buildDefaultRolePermissions
+} from "./js/role-permissions.js";
 import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 
 // ---- GLOBALS ----
@@ -2289,6 +1481,33 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+
+// Super Admin real (currentRole === 'superadmin') SIEMPRE tiene todo — no es
+// una fila editable de la matriz de Roles y Permisos (EDITABLE_ROLES no lo
+// incluye a propósito), así que canDo() nunca debe llamarse directo con
+// currentRole sin antes chequear esto, o un Super Admin real quedaría
+// bloqueado de sus propias acciones apenas exista un doc rolePermissions/main.
+function roleCanDo(moduleKey, actionKey) {
+  return currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey);
+}
+
+// Reloj en vivo debajo del badge de rol — fecha y hora reales del
+// dispositivo, con segundos, actualizado solo cada segundo (no depende de
+// ninguna acción ni de que termine de resolver el login).
+(function startLiveClock() {
+  const el = document.getElementById('adm-live-clock');
+  if (!el) return;
+  const fmt = new Intl.DateTimeFormat('es-PY', {
+    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+  const tick = () => {
+    const s = fmt.format(new Date());
+    el.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+  };
+  tick();
+  setInterval(tick, 1000);
+})();
 
 // Fuente única de verdad de los estados de pedido/pago — la usan la tabla de
 // Pedidos, los <select> de cambio de estado, el modal de edición completa y
@@ -2376,7 +1595,10 @@ function toast(msg, duration = 3000) {
 // logging completo, solo lo necesario para poder responder "quién hizo qué
 // y cuándo". Nunca bloquea la acción real: si el registro falla, la acción
 // ya hecha (bloquear, cambiar rol, etc.) queda igual, solo se avisa en consola.
-async function logAudit(action, targetType, targetId, targetLabel, details) {
+// meta.bulk/meta.count: distingue una acción individual de una masiva sobre
+// N registros a la vez — pedido explícito de poder ver en Auditoría cuáles
+// acciones fueron "de a una" y cuáles "en lote".
+async function logAudit(action, targetType, targetId, targetLabel, details, meta) {
   try {
     await addDoc(collection(db, 'auditLog'), {
       action,
@@ -2384,6 +1606,8 @@ async function logAudit(action, targetType, targetId, targetLabel, details) {
       targetId: targetId || '',
       targetLabel: targetLabel || '',
       details: details || '',
+      bulk: !!(meta && meta.bulk),
+      bulkCount: (meta && meta.count) || 0,
       actorEmail: currentUser?.email || '',
       actorRole: currentRole || '',
       createdAt: serverTimestamp()
@@ -2397,39 +1621,109 @@ const AUDIT_ACTION_LABELS = {
   editar_pedido:          '📋 Editó pedido',
   cambiar_estado_pedido:  '🔄 Cambió estado de pedido',
   cambiar_estado_pago:    '💳 Cambió estado de pago',
+  reenviar_correo_pedido: '✉️ Reenvió correo de pedido',
+  eliminar_pedido:        '🗑️ Eliminó pedido',
   crear_producto:         '➕ Creó producto',
   editar_producto:        '✏️ Editó producto',
   eliminar_producto:      '🗑️ Eliminó producto',
   cambiar_rol:            '👤 Cambió rol',
   bloquear_usuario:       '🚫 Bloqueó usuario',
-  restaurar_usuario:      '✅ Restauró usuario'
+  restaurar_usuario:      '✅ Restauró usuario',
+  eliminar_usuario:       '🗑️ Eliminó usuario',
+  plantilla_creada:       '➕ Duplicó plantilla',
+  plantilla_archivada:    '🗄️ Archivó/reactivó plantilla',
+  plantilla_eliminada:    '🗑️ Eliminó plantilla',
+  editar_coleccion:       '✏️ Editó colección',
+  eliminar_coleccion:     '🗑️ Eliminó colección',
+  config_correo_pedido:   '⚙️ Cambió correos automáticos de pedido',
+  editar_envio:           '🚚 Cambió ciudades de envío',
+  editar_permiso:         '🔐 Cambió permiso de rol'
 };
+
+let _allAuditLogs = [];
+let _selectedAuditLogs = new Set();
 
 async function loadAuditLog() {
   const tbody = document.getElementById('audit-tbody');
-  tbody.innerHTML = '<tr><td colspan="4" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)));
-    if (snap.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Todavía no hay acciones registradas</td></tr>';
-      return;
-    }
-    tbody.innerHTML = snap.docs.map(d => {
-      const l = d.data();
-      const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
-      return `
-        <tr>
-          <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
-          <td style="font-size:12px">${l.actorEmail || '—'}</td>
-          <td style="font-size:12px">${actionLabel}</td>
-          <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
-        </tr>
-      `;
-    }).join('');
+    _allAuditLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAuditLogTable();
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
   }
 }
+
+// La auditoría es de solo lectura (nunca se edita ni se borra un log) — la
+// única acción posible sobre la selección es exportarla, nunca modificarla.
+function renderAuditLogTable() {
+  const tbody = document.getElementById('audit-tbody');
+  if (!_allAuditLogs.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#aaa;padding:24px">Todavía no hay acciones registradas</td></tr>';
+    updateAuditBulkToolbar();
+    return;
+  }
+  const visibleIds = new Set(_allAuditLogs.map(l => l.id));
+  [..._selectedAuditLogs].forEach(id => { if (!visibleIds.has(id)) _selectedAuditLogs.delete(id); });
+  tbody.innerHTML = _allAuditLogs.map(l => {
+    const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
+    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
+    return `
+      <tr>
+        <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${l.id}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
+        <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
+        <td style="font-size:12px">${l.actorEmail || '—'}</td>
+        <td style="font-size:12px">${actionLabel}${bulkTag}</td>
+        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
+      </tr>
+    `;
+  }).join('');
+  updateAuditBulkToolbar();
+}
+
+window.toggleSelectAllAudit = function(masterCb) {
+  document.querySelectorAll('.audit-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedAuditLogs.add(cb.dataset.id);
+    else _selectedAuditLogs.delete(cb.dataset.id);
+  });
+  updateAuditBulkToolbar();
+};
+
+window.toggleAuditSelect = function(cb) {
+  if (cb.checked) _selectedAuditLogs.add(cb.dataset.id);
+  else _selectedAuditLogs.delete(cb.dataset.id);
+  updateAuditBulkToolbar();
+};
+
+function updateAuditBulkToolbar() {
+  const count = _selectedAuditLogs.size;
+  const toolbar = document.getElementById('audit-bulk-toolbar');
+  const countEl = document.getElementById('audit-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearAuditSelection = function() {
+  _selectedAuditLogs.clear();
+  document.querySelectorAll('.audit-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-audit');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateAuditBulkToolbar();
+};
+
+window.bulkExportAuditLog = function() {
+  if (!_selectedAuditLogs.size) { toast('No hay entradas seleccionadas'); return; }
+  const list = _allAuditLogs.filter(l => _selectedAuditLogs.has(l.id));
+  const header = ['Fecha', 'Quién', 'Acción', 'Masivo', 'Objetivo', 'Detalle'];
+  const rows = list.map(l => [
+    formatDate(l.createdAt), l.actorEmail || '', AUDIT_ACTION_LABELS[l.action] || l.action,
+    l.bulk ? `Sí (${l.bulkCount || 0})` : 'No', l.targetLabel || '', l.details || ''
+  ]);
+  downloadCsv(`auditoria_${Date.now()}.csv`, [header, ...rows]);
+  toast(`Exportadas ${list.length} entrada(s) a CSV`);
+};
 
 // ---- FORMAT ----
 function formatPrice(n) {
@@ -2500,13 +1794,24 @@ const SECTION_PERMISSION = {
   // Correos: mismo criterio que Usuarios/Configuración/Auditoría — exclusivo
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
-  correos:       'manageSettings'
+  correos:       'manageSettings',
+  // Roles y Permisos: la sección MÁS sensible del panel — poder editarla
+  // equivale a poder otorgarse cualquier otro permiso. manageSettings ya la
+  // deja fuera del alcance de admin/agent/viewer (solo superadmin la tiene),
+  // pero además se blinda con un chequeo de EMAIL exacto más abajo — no
+  // alcanza con role==='superadmin' en Firestore, tiene que ser literalmente
+  // tintinaccs@gmail.com (pedido explícito de seguridad).
+  permisos:      'manageSettings'
 };
 
 function switchSection(target) {
   const requiredPerm = SECTION_PERMISSION[target];
   if (requiredPerm && !can(currentRole, requiredPerm)) {
     toast('No tenés permiso para ver esta sección');
+    target = 'dashboard';
+  }
+  if (target === 'permisos' && currentUser?.email !== SUPER_ADMIN) {
+    toast('Roles y Permisos es exclusivo de tintinaccs@gmail.com');
     target = 'dashboard';
   }
   navItems.forEach(b => b.classList.remove('active'));
@@ -2526,6 +1831,7 @@ function switchSection(target) {
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
   if (target === 'contenido') loadContenido();
+  if (target === 'permisos') loadPermisosSection();
 }
 
 navItems.forEach(btn => {
@@ -2581,6 +1887,11 @@ onAuthStateChanged(auth, async user => {
       return;
     }
 
+    // Permisos dinámicos (Roles y Permisos) — se cargan ANTES de armar la UI
+    // para que canDo() ya tenga datos reales desde el primer render, no solo
+    // el techo fijo de roles.js.
+    await loadRolePermissions();
+
     // Set up UI and reveal page
     setupUserInfo(user, role);
     setupPermissions(role);
@@ -2630,13 +1941,17 @@ function setupPermissions(role) {
 
   // Botones de "crear nuevo" que viven fuera de las filas de la tabla (no se
   // regeneran por producto/colección, así que se ocultan una sola vez acá).
+  // dynamic: [moduleKey, actionKey] en Roles y Permisos — además del techo
+  // fijo de roles.js, Super Admin puede apagar puntualmente "Crear".
   const ACTION_PERMISSION = {
-    'btn-nuevo-producto':   'addProducts',
-    'btn-nueva-coleccion':  'manageContent'
+    'btn-nuevo-producto':   { perm: 'addProducts',    dynamic: ['productos', 'crear'] },
+    'btn-nueva-coleccion':  { perm: 'manageContent',  dynamic: ['colecciones', 'crear'] }
   };
-  Object.entries(ACTION_PERMISSION).forEach(([id, perm]) => {
+  Object.entries(ACTION_PERMISSION).forEach(([id, cfg]) => {
     const el = document.getElementById(id);
-    if (el && !can(role, perm)) el.style.display = 'none';
+    if (!el) return;
+    const allowed = can(role, cfg.perm) && (role === 'superadmin' || canDo(role, cfg.dynamic[0], cfg.dynamic[1]));
+    el.style.display = allowed ? '' : 'none';
   });
 }
 
@@ -2659,28 +1974,54 @@ async function loadDashboard() {
     const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     allOrders = orders;
 
-    document.getElementById('stat-orders-total').textContent = orders.length;
+    // Roles y Permisos: cada widget del Dashboard se puede apagar puntualmente
+    // por rol (dashboard.verMetricas / verVentas / verPedidosRecientes) sin
+    // tocar el techo fijo de viewDashboard, que sigue gateando la sección entera.
+    const canMetricas = roleCanDo('dashboard', 'verMetricas');
+    const canVentas = roleCanDo('dashboard', 'verVentas');
+    const canRecientes = roleCanDo('dashboard', 'verPedidosRecientes');
 
-    // Orders today
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const todayOrders = orders.filter(o => {
-      if (!o.createdAt) return false;
-      const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
-      return d >= today;
-    });
-    document.getElementById('stat-orders-today').textContent = todayOrders.length;
+    const statOrdersTotalEl = document.getElementById('stat-orders-total');
+    const statOrdersTodayEl = document.getElementById('stat-orders-today');
+    const statSalesMonthEl = document.getElementById('stat-sales-month');
+    const recentWrap = document.getElementById('dash-recent-orders')?.closest('.adm-card');
 
-    // Sales this month
-    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-    const monthSales = orders
-      .filter(o => {
+    if (canMetricas) {
+      statOrdersTotalEl.textContent = orders.length;
+      // Orders today
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const todayOrders = orders.filter(o => {
         if (!o.createdAt) return false;
         const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
-        return d >= monthStart;
-      })
-      .reduce((s, o) => s + (o.total || 0), 0);
-    document.getElementById('stat-sales-month').textContent = formatPrice(monthSales);
+        return d >= today;
+      });
+      statOrdersTodayEl.textContent = todayOrders.length;
+    } else {
+      statOrdersTotalEl.textContent = '—';
+      statOrdersTodayEl.textContent = '—';
+    }
+
+    if (canVentas) {
+      const today2 = new Date();
+      const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
+      const monthSales = orders
+        .filter(o => {
+          if (!o.createdAt) return false;
+          const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+          return d >= monthStart;
+        })
+        .reduce((s, o) => s + (o.total || 0), 0);
+      statSalesMonthEl.textContent = formatPrice(monthSales);
+    } else {
+      statSalesMonthEl.textContent = '—';
+    }
+
+    if (!canRecientes) {
+      if (recentWrap) recentWrap.style.display = 'none';
+      return;
+    }
+    if (recentWrap) recentWrap.style.display = '';
 
     // Recent orders (last 5)
     const recent = [...orders]
@@ -2718,19 +2059,20 @@ let userStatusFilter = 'active';
 
 async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = '<tr><td colspan="6" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(collection(db, 'users'));
     allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
     applyUserFilters();
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
   }
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
 // búsqueda con la pestaña activa (Usuarios = solo activos, Bloqueados = solo
 // bloqueados) — usada por ambos inputs.
+let _lastFilteredUsers = [];
 function applyUserFilters() {
   const q = document.getElementById('user-search').value.toLowerCase();
   let filtered = allUsers.filter(u =>
@@ -2740,8 +2082,12 @@ function applyUserFilters() {
   filtered = userStatusFilter === 'blocked'
     ? filtered.filter(u => u.blocked)
     : filtered.filter(u => !u.blocked);
+  _lastFilteredUsers = filtered;
+  const visibleIds = new Set(filtered.map(u => u.uid));
+  [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
   updateBlockedCount();
+  updateUsersBulkToolbar();
 }
 
 function updateBlockedCount() {
@@ -2761,7 +2107,7 @@ function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -2826,6 +2172,7 @@ function renderUsersTable(users) {
 
     return `
       <tr>
+        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${u.uid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${u.name || '—'}</strong></td>
         <td style="font-size:12px;color:#666">${u.email || '—'}</td>
@@ -2944,6 +2291,7 @@ window.deleteUser = async (uid, name) => {
   try {
     await deleteDoc(doc(db, 'users', uid));
     allUsers = allUsers.filter(u => u.uid !== uid);
+    logAudit('eliminar_usuario', 'usuario', uid, name);
     toast('Perfil eliminado de Firestore');
     applyUserFilters();
   } catch(e) {
@@ -2951,10 +2299,173 @@ window.deleteUser = async (uid, name) => {
   }
 };
 
+// ══════════════════════════════════════════════
+// USUARIOS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedUsers = new Set();
+
+window.toggleSelectAllUsers = function(masterCb) {
+  document.querySelectorAll('.user-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedUsers.add(cb.dataset.id);
+    else _selectedUsers.delete(cb.dataset.id);
+  });
+  updateUsersBulkToolbar();
+};
+
+window.toggleUserSelect = function(cb) {
+  if (cb.checked) _selectedUsers.add(cb.dataset.id);
+  else _selectedUsers.delete(cb.dataset.id);
+  const master = document.getElementById('check-all-users');
+  if (master) {
+    const total = document.querySelectorAll('.user-row-check').length;
+    master.indeterminate = _selectedUsers.size > 0 && _selectedUsers.size < total;
+    master.checked = _selectedUsers.size === total && total > 0;
+  }
+  updateUsersBulkToolbar();
+};
+
+function updateUsersBulkToolbar() {
+  const count = _selectedUsers.size;
+  const toolbar = document.getElementById('users-bulk-toolbar');
+  const countEl = document.getElementById('users-bulk-count');
+  const blockBtn = document.getElementById('users-bulk-block-btn');
+  const restoreBtn = document.getElementById('users-bulk-restore-btn');
+  // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
+  // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
+  const allowed = can(currentRole, 'manageUsers');
+  if (toolbar) toolbar.classList.toggle('show', allowed && count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+  if (blockBtn) blockBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
+  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
+}
+
+window.clearUsersSelection = function() {
+  _selectedUsers.clear();
+  document.querySelectorAll('.user-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-users');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateUsersBulkToolbar();
+};
+
+window.bulkChangeUserRole = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers') || !can(currentRole, 'assignRoles')) { toast('No tenés permiso para cambiar roles'); return; }
+  const role = document.getElementById('users-bulk-role')?.value;
+  if (!role) { toast('Elegí un rol'); return; }
+  // SUPER_ADMIN nunca se incluye en la selección (ver renderUsersTable), así
+  // que esto ya excluye auto-asignación y degradación de tintinaccs@gmail.com
+  // — doble resguardo además de lo que ya obliga firestore.rules.
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && !u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección (los bloqueados solo se restauran)'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Cambiar el rol a "${ROLE_LABELS[role]}" en ${n} usuario(s)?`)) return;
+  try {
+    await batchUpdateChunked(ids, () => ({ role, updatedAt: serverTimestamp() }), 'users');
+    ids.forEach(uid => { const u = allUsers.find(x => x.uid === uid); if (u) u.role = role; });
+    logAudit('cambiar_rol', 'usuario', '', '', `Rol → ${ROLE_LABELS[role]}`, { bulk: true, count: n });
+    toast(`Rol actualizado en ${n} usuario(s)`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkBlockUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para bloquear usuarios'); return; }
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && !u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Bloquear ${n} usuario(s)? No van a poder comprar ni entrar a Mi Cuenta hasta que los restaures.`)) return;
+  const reason = window.prompt('Motivo del bloqueo (opcional, aplica a todos los seleccionados):', '') ?? '';
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(uid => {
+        const u = allUsers.find(x => x.uid === uid);
+        batch.update(doc(db, 'users', uid), {
+          blocked: true, blockedAt: serverTimestamp(), blockedBy: currentUser?.email || '',
+          blockReason: reason, roleBeforeBlock: u?.role || 'client', role: 'client', updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    }
+    ids.forEach(uid => {
+      const u = allUsers.find(x => x.uid === uid);
+      if (u) Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: u.role || 'client', role: 'client' });
+    });
+    logAudit('bloquear_usuario', 'usuario', '', '', reason ? `Motivo: ${reason}` : 'Sin motivo especificado', { bulk: true, count: n });
+    toast(`${n} usuario(s) bloqueados`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Restaurar masivo siempre vuelve a "Cliente" (nunca intenta adivinar/preguntar
+// el rol anterior de cada uno por separado) — es la opción más segura para
+// una acción en lote; si hace falta un rol más alto, se reasigna a mano
+// después con el cambio de rol individual o masivo.
+window.bulkRestoreUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
+  const ids = [..._selectedUsers].filter(uid => {
+    const u = allUsers.find(x => x.uid === uid);
+    return u && u.email !== SUPER_ADMIN && u.blocked;
+  });
+  if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Restaurar ${n} usuario(s) como Cliente? (opción más segura para una restauración en lote)`)) return;
+  try {
+    await batchUpdateChunked(ids, () => ({
+      blocked: false, role: 'client', blockedAt: deleteField(), blockedBy: deleteField(),
+      blockReason: deleteField(), roleBeforeBlock: deleteField(), updatedAt: serverTimestamp()
+    }), 'users');
+    ids.forEach(uid => {
+      const u = allUsers.find(x => x.uid === uid);
+      if (u) { Object.assign(u, { blocked: false, role: 'client' }); delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock; }
+    });
+    logAudit('restaurar_usuario', 'usuario', '', '', 'Restaurados como Cliente', { bulk: true, count: n });
+    toast(`${n} usuario(s) restaurados como Cliente`);
+    clearUsersSelection();
+    applyUserFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function userRowsToCsv_(users) {
+  const header = ['Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado'];
+  const rows = users.map(u => [
+    u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
+    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.totalSpent || 0
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportUsers = function(scope) {
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedUsers.size) { toast('No hay usuarios seleccionados'); return; }
+    list = allUsers.filter(u => _selectedUsers.has(u.uid));
+  } else if (scope === 'filtered') {
+    list = _lastFilteredUsers.length ? _lastFilteredUsers : allUsers;
+  } else {
+    list = allUsers;
+  }
+  if (!list.length) { toast('No hay usuarios para exportar'); return; }
+  downloadCsv(`usuarios_${scope}_${Date.now()}.csv`, userRowsToCsv_(list));
+  toast(`Exportados ${list.length} usuario(s) a CSV`);
+};
+
 // ======== PEDIDOS ========
 async function loadOrders() {
   const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '<tr><td colspan="11" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -2971,7 +2482,7 @@ async function loadOrders() {
         });
       renderOrdersTable(allOrders);
     } catch(e2) {
-      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
     }
   }
 }
@@ -2982,7 +2493,7 @@ function renderOrdersTable(orders) {
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
   if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
     return;
   }
 
@@ -3006,14 +2517,19 @@ function renderOrdersTable(orders) {
     // manageOrders: cambiar estado/estado de pago — esto es lo único que el
     // Modder puede tocar, y coincide exactamente con lo que firestore.rules
     // le permite escribir en el pedido (ver comentario en firestore.rules).
-    const canUpdate = can(currentRole, 'manageOrders');
+    // canDo() nunca puede superar can() — solo puede acotarlo si Super Admin
+    // apagó el switch específico en Roles y Permisos.
+    const canUpdate = can(currentRole, 'manageOrders') && roleCanDo('pedidos', 'cambiarEstado');
+    const canUpdatePay = can(currentRole, 'manageOrders') && roleCanDo('pedidos', 'cambiarPago');
+    const canResend = can(currentRole, 'manageOrders') && roleCanDo('pedidos', 'reenviarCorreo');
     // manageOrdersFull: reescribir el pedido completo (productos, montos,
     // dirección, datos del cliente) o eliminarlo — reservado a admin/superadmin.
-    const canEditFull = can(currentRole, 'manageOrdersFull');
-    const canDelete = can(currentRole, 'manageOrdersFull');
+    const canEditFull = can(currentRole, 'manageOrdersFull') && roleCanDo('pedidos', 'editarCompleto');
+    const canDelete = can(currentRole, 'manageOrdersFull') && roleCanDo('pedidos', 'eliminar');
 
     return `
       <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
+        <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${o.id}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
         <td data-label="Pedido" style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
         <td data-label="Cliente">
           <strong>${o.userName || '—'}</strong><br>
@@ -3032,7 +2548,7 @@ function renderOrdersTable(orders) {
         <td data-label="Pago" onclick="event.stopPropagation()">
           <div style="font-size:11px;color:#666">${o.payment?.method || o.paymentMethod || '—'}</div>
           ${payStatusBadgeHtml(payStatus)}
-          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
+          ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
             ${payStatusOptions(payStatus)}
           </select>` : ''}
         </td>
@@ -3041,17 +2557,17 @@ function renderOrdersTable(orders) {
           ${notifBadge(o.notificationStatus || 'pending')}
           ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
           ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
-          <button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>
+          ${canResend ? `<button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>` : ''}
         </td>
         <td data-label="Editar" onclick="event.stopPropagation()">
           ${canEditFull ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
-        <td data-label="Eliminar" onclick="event.stopPropagation()">
+        <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
           ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
       <tr id="order-detail-${o.id}" class="adm-order-detail-row" style="display:none">
-        <td colspan="11" style="padding:0 14px 12px;background:#fef5f8">
+        <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
             <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
@@ -3093,6 +2609,7 @@ function renderOrdersTable(orders) {
       </tr>
     `;
   }).join('');
+  updateOrdersBulkToolbar();
 }
 
 window.toggleOrderDetail = (id) => {
@@ -3103,6 +2620,7 @@ window.toggleOrderDetail = (id) => {
 };
 
 window.updateOrderStatus = async (orderId, status) => {
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
   try {
@@ -3136,6 +2654,7 @@ window.updateOrderStatus = async (orderId, status) => {
 };
 
 window.resendOrderEmail = async (orderId) => {
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'reenviarCorreo')) { toast('No tenés permiso para reenviar correos de pedido'); return; }
   const btn = document.getElementById(`resend-btn-${orderId}`);
   if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
   try {
@@ -3153,6 +2672,7 @@ window.resendOrderEmail = async (orderId) => {
     });
     o.resendCount = (o.resendCount || 0) + 1;
     o.notificationStatus = 'sent';
+    logAudit('reenviar_correo_pedido', 'pedido', orderId, o.shortId || orderId, `Reenvío #${o.resendCount}`);
     toast('Correo reenviado correctamente');
     applyOrderFilters();
   } catch (e) {
@@ -3162,6 +2682,7 @@ window.resendOrderEmail = async (orderId) => {
 };
 
 window.updatePayStatus = async (orderId, status) => {
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el estado de pago'); return; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
   try {
@@ -3183,10 +2704,13 @@ window.updatePayStatus = async (orderId, status) => {
 };
 
 window.deleteOrder = async (orderId) => {
+  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return; }
   if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return;
   try {
+    const o = allOrders.find(x => x.id === orderId);
     await deleteDoc(doc(db, 'orders', orderId));
     allOrders = allOrders.filter(o => o.id !== orderId);
+    logAudit('eliminar_pedido', 'pedido', orderId, o?.shortId || orderId, `Cliente: ${o?.userName || o?.userEmail || '—'}`);
     toast('Pedido eliminado');
     applyOrderFilters();
   } catch(e) {
@@ -3194,6 +2718,7 @@ window.deleteOrder = async (orderId) => {
   }
 };
 
+let _lastFilteredOrders = [];
 function applyOrderFilters() {
   const search = (document.getElementById('order-search')?.value || '').toLowerCase();
   const statusVal = document.getElementById('filter-status')?.value || '';
@@ -3207,13 +2732,210 @@ function applyOrderFilters() {
     (o.userPhone||'').toLowerCase().includes(search) ||
     (o.id||'').toLowerCase().includes(search)
   );
+  _lastFilteredOrders = filtered;
+  // Una selección deja de tener sentido si el pedido seleccionado ya no
+  // está en la vista filtrada (cambió de estado, se eliminó, etc.)
+  const visibleIds = new Set(filtered.map(o => o.id));
+  [..._selectedOrders].forEach(id => { if (!visibleIds.has(id)) _selectedOrders.delete(id); });
   renderOrdersTable(filtered);
+  updateOrdersBulkToolbar();
 }
 
 // Filter orders by status
 document.getElementById('filter-status').onchange = applyOrderFilters;
 document.getElementById('filter-pay-status').onchange = applyOrderFilters;
 document.getElementById('order-search').oninput = applyOrderFilters;
+
+// Opciones de los <select> de la barra de acciones masivas — mismas fuentes
+// de verdad (ORDER_STATUS_LABELS/PAY_STATUS_LABELS) que el resto de la UI.
+document.getElementById('orders-bulk-status').insertAdjacentHTML('beforeend', orderStatusOptions(null));
+document.getElementById('orders-bulk-pay-status').insertAdjacentHTML('beforeend', payStatusOptions(null));
+
+// ══════════════════════════════════════════════
+// PEDIDOS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedOrders = new Set();
+
+window.toggleSelectAllOrders = function(masterCb) {
+  document.querySelectorAll('.order-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedOrders.add(cb.dataset.id);
+    else _selectedOrders.delete(cb.dataset.id);
+  });
+  updateOrdersBulkToolbar();
+};
+
+window.toggleOrderSelect = function(cb) {
+  if (cb.checked) _selectedOrders.add(cb.dataset.id);
+  else _selectedOrders.delete(cb.dataset.id);
+  const master = document.getElementById('check-all-orders');
+  if (master) {
+    const total = document.querySelectorAll('.order-row-check').length;
+    master.indeterminate = _selectedOrders.size > 0 && _selectedOrders.size < total;
+    master.checked = _selectedOrders.size === total && total > 0;
+  }
+  updateOrdersBulkToolbar();
+};
+
+function updateOrdersBulkToolbar() {
+  const count = _selectedOrders.size;
+  const toolbar = document.getElementById('orders-bulk-toolbar');
+  const countEl = document.getElementById('orders-bulk-count');
+  const delBtn = document.getElementById('orders-bulk-delete-btn');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+  // Eliminar en lote queda reservado a Super Admin — más estricto que borrar
+  // de a uno (admin/superadmin), porque el riesgo de un error masivo es
+  // mucho mayor. Pedido explícito del usuario para esta acción puntual.
+  if (delBtn) delBtn.style.display = currentRole === 'superadmin' ? '' : 'none';
+  // Roles y Permisos: cada control masivo se oculta si el rol actual no
+  // tiene habilitada ni la acción puntual ni "Acciones masivas" en Pedidos.
+  const hasMasivas = can(currentRole, 'manageOrders') && roleCanDo('pedidos', 'accionesMasivas');
+  const statusWrap = document.getElementById('orders-bulk-status-wrap');
+  const payWrap = document.getElementById('orders-bulk-pay-wrap');
+  const resendBtn = document.getElementById('orders-bulk-resend-btn');
+  const exportBtn = document.getElementById('orders-bulk-export-btn');
+  const exportViewBtn = document.getElementById('orders-export-view-btn');
+  if (statusWrap) statusWrap.style.display = (hasMasivas && roleCanDo('pedidos', 'cambiarEstado')) ? '' : 'none';
+  if (payWrap) payWrap.style.display = (hasMasivas && roleCanDo('pedidos', 'cambiarPago')) ? '' : 'none';
+  if (resendBtn) resendBtn.style.display = (hasMasivas && roleCanDo('pedidos', 'reenviarCorreo')) ? '' : 'none';
+  if (exportBtn) exportBtn.style.display = roleCanDo('pedidos', 'exportar') ? '' : 'none';
+  if (exportViewBtn) exportViewBtn.style.display = roleCanDo('pedidos', 'exportar') ? '' : 'none';
+}
+
+window.clearOrdersSelection = function() {
+  _selectedOrders.clear();
+  document.querySelectorAll('.order-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-orders');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateOrdersBulkToolbar();
+};
+
+window.bulkChangeOrderStatus = async function() {
+  if (!_selectedOrders.size) return;
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'accionesMasivas') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return; }
+  const status = document.getElementById('orders-bulk-status')?.value;
+  if (!status) { toast('Elegí un estado'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿Cambiar el estado a "${ORDER_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
+  try {
+    const ids = [..._selectedOrders];
+    await batchUpdateChunked(ids, () => ({ status, updatedAt: serverTimestamp() }), 'orders');
+    ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) o.status = status; });
+    logAudit('cambiar_estado_pedido', 'pedido', '', '', `Estado → ${ORDER_STATUS_LABELS[status]}`, { bulk: true, count: n });
+    toast(`Estado actualizado en ${n} pedido(s)`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkChangePayStatus = async function() {
+  if (!_selectedOrders.size) return;
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'accionesMasivas') || !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el estado de pago'); return; }
+  const status = document.getElementById('orders-bulk-pay-status')?.value;
+  if (!status) { toast('Elegí un estado de pago'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿Cambiar el pago a "${PAY_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
+  try {
+    const ids = [..._selectedOrders];
+    await batchUpdateChunked(ids, () => ({ 'payment.status': status, paymentStatus: status, updatedAt: serverTimestamp() }), 'orders');
+    ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; } });
+    logAudit('cambiar_estado_pago', 'pedido', '', '', `Pago → ${PAY_STATUS_LABELS[status]}`, { bulk: true, count: n });
+    toast(`Estado de pago actualizado en ${n} pedido(s)`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Reenvío masivo: son llamadas de red (no solo escrituras a Firestore), así
+// que puede fallar pedido por pedido — se procesan de a una y se informa un
+// resumen con éxitos/fallos en vez de asumir todo-o-nada.
+window.bulkResendOrderEmails = async function() {
+  if (!_selectedOrders.size) return;
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'accionesMasivas') || !roleCanDo('pedidos', 'reenviarCorreo')) { toast('No tenés permiso para reenviar correos de pedido'); return; }
+  const ids = [..._selectedOrders];
+  const n = ids.length;
+  if (!confirm(`¿Reenviar el correo de confirmación a ${n} pedido(s)?`)) return;
+  let ok = 0, fail = 0;
+  toast(`Reenviando 0 de ${n}…`, 60000);
+  for (let i = 0; i < ids.length; i++) {
+    const o = allOrders.find(x => x.id === ids[i]);
+    try {
+      if (!o) throw new Error('no encontrado');
+      const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
+      const result = await sendOrderNotification(ids[i], orderForEmail, true);
+      if (!result.success) throw new Error(result.error || 'error desconocido');
+      await updateDoc(doc(db, 'orders', ids[i]), {
+        resendCount: increment(1), lastResendAt: serverTimestamp(), notificationStatus: 'sent', updatedAt: serverTimestamp()
+      });
+      o.resendCount = (o.resendCount || 0) + 1;
+      o.notificationStatus = 'sent';
+      ok++;
+    } catch (e) { fail++; }
+    toast(`Reenviando ${i + 1} de ${n}…`, 60000);
+  }
+  logAudit('reenviar_correo_pedido', 'pedido', '', '', `${ok} enviados, ${fail} fallaron`, { bulk: true, count: n });
+  toast(fail ? `${ok} correo(s) reenviados, ${fail} fallaron` : `${ok} correo(s) reenviados correctamente`, 5000);
+  clearOrdersSelection();
+  applyOrderFilters();
+};
+
+window.bulkDeleteOrders = async function() {
+  if (!_selectedOrders.size) return;
+  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede eliminar pedidos en lote'); return; }
+  const n = _selectedOrders.size;
+  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} pedido(s)? Esta acción NO se puede deshacer.`)) return;
+  const typed = prompt(`Para confirmar, escribí CONFIRMAR (${n} pedidos serán eliminados):`);
+  if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
+  try {
+    const ids = [..._selectedOrders];
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'orders', id)));
+      await batch.commit();
+    }
+    const idSet = new Set(ids);
+    allOrders = allOrders.filter(o => !idSet.has(o.id));
+    logAudit('eliminar_pedido', 'pedido', '', '', `${n} pedidos eliminados`, { bulk: true, count: n });
+    toast(`${n} pedido(s) eliminados definitivamente`);
+    clearOrdersSelection();
+    applyOrderFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function orderRowsToCsv_(orders) {
+  const header = ['ID', 'Cliente', 'Email', 'Teléfono', 'Ciudad', 'Productos', 'Total', 'Estado', 'Estado de pago', 'Fecha'];
+  const rows = orders.map(o => [
+    o.id,
+    o.userName || '',
+    o.userEmail || '',
+    o.userPhone || '',
+    o.shipping?.city || o.city || '',
+    (o.items || []).map(it => `${it.qty}x ${it.name}`).join('; '),
+    o.total || 0,
+    ORDER_STATUS_LABELS[o.status] || o.status || '',
+    PAY_STATUS_LABELS[o.payment?.status || o.paymentStatus] || '',
+    o.createdAt?.toDate ? o.createdAt.toDate().toLocaleDateString('es-PY') : ''
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportOrders = function(scope) {
+  if (!roleCanDo('pedidos', 'exportar')) { toast('No tenés permiso para exportar pedidos'); return; }
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedOrders.size) { toast('No hay pedidos seleccionados'); return; }
+    list = allOrders.filter(o => _selectedOrders.has(o.id));
+  } else if (scope === 'filtered') {
+    list = _lastFilteredOrders.length ? _lastFilteredOrders : allOrders;
+  } else {
+    list = allOrders;
+  }
+  if (!list.length) { toast('No hay pedidos para exportar'); return; }
+  downloadCsv(`pedidos_${scope}_${Date.now()}.csv`, orderRowsToCsv_(list));
+  toast(`Exportados ${list.length} pedido(s) a CSV`);
+};
 
 // ======== ONBOARDING ========
 async function loadOnboardingSettings() {
@@ -3738,6 +3460,7 @@ function renderCorreosPedidosTab() {
     const tplOptionsHtml = options.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === tplKey) ? 'selected' : ''}>${t.name}</option>`).join('');
     return `
       <tr>
+        <td class="col-select" data-label="Sel."><input type="checkbox" class="cop-row-check" data-key="${key}" onclick="toggleOrderTypeSelect(this)" ${_selectedOrderTypes.has(key) ? 'checked' : ''}></td>
         <td data-label="Tipo">${ORDER_TYPE_NAMES[key]}</td>
         <td data-label="Activo"><label class="adm-toggle" style="width:40px;height:22px"><input type="checkbox" ${enabled ? 'checked' : ''} onchange="window.toggleOrderTypeEnabled('${key}', this.checked)"><span class="adm-toggle-slider"></span></label></td>
         <td data-label="Plantilla"><select class="adm-select" style="width:auto;font-size:12px" onchange="window.setOrderTypeTemplate('${key}', this.value)">${tplOptionsHtml}</select></td>
@@ -3746,7 +3469,68 @@ function renderCorreosPedidosTab() {
       </tr>
     `;
   }).join('');
+  updateOrderTypeBulkToolbar();
 }
+
+// ══════════════════════════════════════════════
+// CORREOS DE PEDIDOS: SELECCIÓN MÚLTIPLE Y ACTIVAR/DESACTIVAR MASIVO
+// ══════════════════════════════════════════════
+let _selectedOrderTypes = new Set();
+
+window.toggleSelectAllOrderTypes = function(masterCb) {
+  document.querySelectorAll('.cop-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedOrderTypes.add(cb.dataset.key);
+    else _selectedOrderTypes.delete(cb.dataset.key);
+  });
+  updateOrderTypeBulkToolbar();
+};
+
+window.toggleOrderTypeSelect = function(cb) {
+  if (cb.checked) _selectedOrderTypes.add(cb.dataset.key);
+  else _selectedOrderTypes.delete(cb.dataset.key);
+  updateOrderTypeBulkToolbar();
+};
+
+function updateOrderTypeBulkToolbar() {
+  const count = _selectedOrderTypes.size;
+  const toolbar = document.getElementById('cop-bulk-toolbar');
+  const countEl = document.getElementById('cop-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearOrderTypeSelection = function() {
+  _selectedOrderTypes.clear();
+  document.querySelectorAll('.cop-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-cop');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateOrderTypeBulkToolbar();
+};
+
+// Los dos correos "recibido" son el envío REAL del checkout — si están en la
+// selección al desactivar en lote, se avisa explícitamente antes de aplicar
+// (mismo riesgo que ya existe al desactivarlos de a uno, pero acá puede pasar
+// sin querer si se seleccionaron todas las filas con "Seleccionar todos").
+window.bulkSetOrderTypeEnabled = async function(enabled) {
+  if (!_selectedOrderTypes.size) return;
+  const keys = [..._selectedOrderTypes];
+  const n = keys.length;
+  const includesReal = keys.includes('pedido_recibido_clienta') || keys.includes('pedido_recibido_tintin');
+  let msg = `¿${enabled ? 'Activar' : 'Desactivar'} ${n} tipo(s) de correo?`;
+  if (!enabled && includesReal) msg += '\n\n⚠️ La selección incluye "Pedido recibido" — desactivarlo corta el correo REAL que ya manda el checkout.';
+  if (!confirm(msg)) return;
+  try {
+    emailSettingsCache = emailSettingsCache || defaultEmailSettings_();
+    keys.forEach(key => { emailSettingsCache.orderTypesEnabled[key] = enabled; });
+    await saveEmailSettingsMerge_({ orderTypesEnabled: emailSettingsCache.orderTypesEnabled });
+    logAudit('config_correo_pedido', 'correo_pedido', '', '', `${n} tipo(s) → ${enabled ? 'activados' : 'desactivados'}`, { bulk: true, count: n });
+    toast(`${n} tipo(s) de correo ${enabled ? 'activados' : 'desactivados'}`);
+    clearOrderTypeSelection();
+    renderCorreosPedidosTab();
+    renderCorreosDashboard();
+  } catch (e) { toast('Error: ' + e.message); }
+};
 
 window.toggleOrderTypeEnabled = async (key, checked) => {
   emailSettingsCache.orderTypesEnabled[key] = checked;
@@ -3905,15 +3689,18 @@ function renderCorreosPlantillasTab() {
 
   const tbody = document.getElementById('tpl-tbody');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:24px">Sin plantillas para mostrar</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">Sin plantillas para mostrar</td></tr>';
     return;
   }
+  const visibleIds = new Set(list.map(t => t.id));
+  [..._selectedTemplates].forEach(id => { if (!visibleIds.has(id)) _selectedTemplates.delete(id); });
   const CAT_LABELS = { pedido: 'Pedidos', promo: 'Promociones', libre: 'Mensaje libre' };
   tbody.innerHTML = list.map(t => {
     const id = t.id;
     const isCustom = !t.key;
     return `
       <tr style="${t.archived ? 'opacity:.55' : ''}">
+        <td class="col-select" data-label="Sel."><input type="checkbox" class="tpl-row-check" data-id="${id}" onclick="toggleTemplateSelect(this)" ${_selectedTemplates.has(id) ? 'checked' : ''}></td>
         <td data-label="Plantilla"><strong>${t.name}</strong><br><small style="color:#aaa">${(t.subject || '').slice(0, 60)}</small></td>
         <td data-label="Categoría"><span class="adm-badge badge-confirmado">${CAT_LABELS[t.category] || t.category}</span></td>
         <td data-label="Activa">${t.active !== false ? '<span class="adm-badge badge-entregado">Activa</span>' : '<span class="adm-badge badge-cancelado">Inactiva</span>'}</td>
@@ -3931,11 +3718,92 @@ function renderCorreosPlantillasTab() {
       </tr>
     `;
   }).join('');
+  updateTemplatesBulkToolbar();
 }
 
 document.getElementById('tpl-search').oninput = (e) => { tplSearchQuery = e.target.value.toLowerCase(); renderCorreosPlantillasTab(); };
 document.getElementById('tpl-filter-category').onchange = (e) => { tplFilterCategory = e.target.value; renderCorreosPlantillasTab(); };
 document.getElementById('tpl-show-archived').onchange = (e) => { tplShowArchived = e.target.checked; renderCorreosPlantillasTab(); };
+
+// ══════════════════════════════════════════════
+// PLANTILLAS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedTemplates = new Set();
+
+window.toggleSelectAllTemplates = function(masterCb) {
+  document.querySelectorAll('.tpl-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedTemplates.add(cb.dataset.id);
+    else _selectedTemplates.delete(cb.dataset.id);
+  });
+  updateTemplatesBulkToolbar();
+};
+
+window.toggleTemplateSelect = function(cb) {
+  if (cb.checked) _selectedTemplates.add(cb.dataset.id);
+  else _selectedTemplates.delete(cb.dataset.id);
+  updateTemplatesBulkToolbar();
+};
+
+function updateTemplatesBulkToolbar() {
+  const count = _selectedTemplates.size;
+  const toolbar = document.getElementById('tpl-bulk-toolbar');
+  const countEl = document.getElementById('tpl-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+}
+
+window.clearTemplatesSelection = function() {
+  _selectedTemplates.clear();
+  document.querySelectorAll('.tpl-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-tpl');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateTemplatesBulkToolbar();
+};
+
+window.bulkArchiveTemplates = async function(archived) {
+  if (!_selectedTemplates.size) return;
+  const n = _selectedTemplates.size;
+  const label = archived ? 'archivar' : 'reactivar';
+  if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${n} plantilla(s)?`)) return;
+  try {
+    const ids = [..._selectedTemplates];
+    await batchUpdateChunked(ids, () => ({ archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }), 'emailTemplates');
+    ids.forEach(id => { const t = allEmailTemplates.find(x => x.id === id); if (t) t.archived = archived; });
+    logAudit('plantilla_archivada', 'plantilla', '', '', archived ? 'Archivadas' : 'Reactivadas', { bulk: true, count: n });
+    toast(`${n} plantilla(s) ${archived ? 'archivadas' : 'reactivadas'}`);
+    clearTemplatesSelection();
+    renderCorreosPlantillasTab();
+    renderCorreosPedidosTab();
+    renderCorreosPruebaTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Solo elimina las plantillas personalizadas de la selección (las de sistema
+// —con `key`— nunca se eliminan, ni de a una ni en lote, solo se archivan).
+window.bulkDeleteTemplates = async function() {
+  if (!_selectedTemplates.size) return;
+  const ids = [..._selectedTemplates].filter(id => { const t = allEmailTemplates.find(x => x.id === id); return t && !t.key; });
+  if (!ids.length) { toast('La selección solo tiene plantillas de sistema — esas no se pueden eliminar, solo archivar.'); return; }
+  const n = ids.length;
+  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} plantilla(s) personalizada(s)? Esta acción no se puede deshacer.`)) return;
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'emailTemplates', id)));
+      await batch.commit();
+    }
+    const idSet = new Set(ids);
+    allEmailTemplates = allEmailTemplates.filter(t => !idSet.has(t.id));
+    logAudit('plantilla_eliminada', 'plantilla', '', '', `${n} plantillas eliminadas`, { bulk: true, count: n });
+    toast(`${n} plantilla(s) eliminadas definitivamente`);
+    clearTemplatesSelection();
+    renderCorreosPlantillasTab();
+    renderCorreosPromocionesTab();
+  } catch (e) { toast('Error: ' + e.message); }
+};
 
 window.openTplEdit = (id) => {
   const t = allEmailTemplates.find(x => x.id === id);
@@ -4042,6 +3910,7 @@ window.duplicateTemplate = async (id) => {
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
     });
     allEmailTemplates.push({ id: ref.id, key: null, name: t.name + ' (copia)', category: t.category, ...content, active: true, archived: false, original: content, updatedAt: new Date() });
+    logAudit('plantilla_creada', 'plantilla', ref.id, t.name + ' (copia)', `Duplicada de "${t.name}"`);
     toast('Plantilla duplicada');
     renderCorreosPlantillasTab();
   } catch (e) { toast('Error al duplicar: ' + e.message); }
@@ -4054,6 +3923,7 @@ window.toggleArchiveTemplate = async (id) => {
   try {
     await updateDoc(doc(db, 'emailTemplates', id), { archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' });
     t.archived = archived;
+    logAudit('plantilla_archivada', 'plantilla', id, t.name, archived ? 'Archivada' : 'Reactivada');
     toast(archived ? 'Plantilla archivada' : 'Plantilla reactivada');
     renderCorreosPlantillasTab();
     renderCorreosPedidosTab();
@@ -4070,6 +3940,7 @@ window.deleteTemplate = async (id) => {
   try {
     await deleteDoc(doc(db, 'emailTemplates', id));
     allEmailTemplates = allEmailTemplates.filter(x => x.id !== id);
+    logAudit('plantilla_eliminada', 'plantilla', id, t.name);
     toast('Plantilla eliminada');
     renderCorreosPlantillasTab();
     renderCorreosPromocionesTab();
@@ -4363,11 +4234,14 @@ function renderCorreosHistorialTab() {
 
   const tbody = document.getElementById('hist-tbody');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:24px">Sin resultados</td></tr>';
     return;
   }
+  const visibleIds = new Set(list.slice(0, 200).map(l => l.id));
+  [..._selectedLogs].forEach(id => { if (!visibleIds.has(id)) _selectedLogs.delete(id); });
   tbody.innerHTML = list.slice(0, 200).map(l => `
     <tr class="adm-log-row">
+      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${l.id}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
       <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
       <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
@@ -4382,7 +4256,85 @@ function renderCorreosHistorialTab() {
       </td>
     </tr>
   `).join('');
+  updateLogsBulkToolbar();
 }
+
+// ══════════════════════════════════════════════
+// HISTORIAL: SELECCIÓN MÚLTIPLE — exportar / reintentar fallidos
+// ══════════════════════════════════════════════
+let _selectedLogs = new Set();
+
+window.toggleSelectAllLogs = function(masterCb) {
+  document.querySelectorAll('.hist-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    if (masterCb.checked) _selectedLogs.add(cb.dataset.id);
+    else _selectedLogs.delete(cb.dataset.id);
+  });
+  updateLogsBulkToolbar();
+};
+
+window.toggleLogSelect = function(cb) {
+  if (cb.checked) _selectedLogs.add(cb.dataset.id);
+  else _selectedLogs.delete(cb.dataset.id);
+  updateLogsBulkToolbar();
+};
+
+function updateLogsBulkToolbar() {
+  const count = _selectedLogs.size;
+  const toolbar = document.getElementById('hist-bulk-toolbar');
+  const countEl = document.getElementById('hist-bulk-count');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+}
+
+window.clearLogsSelection = function() {
+  _selectedLogs.clear();
+  document.querySelectorAll('.hist-row-check').forEach(cb => cb.checked = false);
+  const master = document.getElementById('check-all-hist');
+  if (master) { master.checked = false; master.indeterminate = false; }
+  updateLogsBulkToolbar();
+};
+
+// Los logs en sí NUNCA se editan/borran (registro inmutable) — "reintentar"
+// no toca el log fallido, crea una entrada NUEVA con el resultado del
+// reintento, igual que ya hace el reintento individual.
+window.bulkRetryFailedLogs = async function() {
+  if (!_selectedLogs.size) return;
+  const ids = [..._selectedLogs].filter(id => { const l = allEmailLogs.find(x => x.id === id); return l && l.status === 'failed' && l.templateKey; });
+  if (!ids.length) { toast('No hay envíos fallidos reintentables en la selección'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Reintentar ${n} envío(s) fallido(s)?`)) return;
+  let ok = 0, fail = 0;
+  for (const id of ids) {
+    const l = allEmailLogs.find(x => x.id === id);
+    try {
+      const tpl = allEmailTemplates.find(t => (t.key || t.id) === l.templateKey);
+      if (!tpl) throw new Error('plantilla no existe');
+      const result = await sendTemplatedEmail({ to: l.recipient, ...templateContentPayload_(tpl), variables: l.variables || {} });
+      await logEmailSend_({ type: l.type, recipient: l.recipient, status: result?.success ? 'sent' : 'failed', templateKey: l.templateKey, isAutomatic: false, error: result?.error || '', orderId: l.orderId, variables: l.variables });
+      if (result?.success) ok++; else fail++;
+    } catch (e) { fail++; }
+  }
+  toast(fail ? `${ok} reenviados, ${fail} fallaron` : `${ok} reenviados correctamente`);
+  clearLogsSelection();
+  renderCorreosHistorialTab();
+};
+
+function logRowsToCsv_(logs) {
+  const header = ['Fecha', 'Tipo', 'Destinatario', 'Estado', 'Enviado por', 'Origen'];
+  const rows = logs.map(l => [
+    l.sentAt?.toDate ? l.sentAt.toDate().toLocaleString('es-PY') : '',
+    templateLabel_(l.type), l.recipient || '', l.status || '', l.sentBy || '', l.isAutomatic ? 'Automático' : 'Manual'
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportLogs = function() {
+  if (!_selectedLogs.size) { toast('No hay envíos seleccionados'); return; }
+  const list = allEmailLogs.filter(l => _selectedLogs.has(l.id));
+  downloadCsv(`historial_correos_${Date.now()}.csv`, logRowsToCsv_(list));
+  toast(`Exportados ${list.length} envío(s) a CSV`);
+};
 
 document.getElementById('hist-search').oninput = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-status').onchange = () => renderCorreosHistorialTab();
@@ -4487,23 +4439,72 @@ async function maybeSendOrderStatusEmail_(order, kind, value) {
 // ======== ENVÍOS: ciudades (CRUD real, con lista en tiempo real) ========
 let shipCities  = { delivery: [], encomienda: [] };
 let shipEditing = { delivery: null, encomienda: null }; // índice en edición, o null = alta nueva
+// Ciudades identificadas por nombre (no por índice, que cambia al borrar/reordenar).
+let _selectedShipCities = { delivery: new Set(), encomienda: new Set() };
 
 function renderShipList(type) {
   const container = document.getElementById(`ship-${type}-list`);
   const list = shipCities[type];
+  const names = new Set(list.map(c => c.name));
+  [..._selectedShipCities[type]].forEach(name => { if (!names.has(name)) _selectedShipCities[type].delete(name); });
   if (!list.length) {
     container.innerHTML = '<p style="font-size:12px;color:var(--adm-muted);padding:6px 0">Todavía no cargaste ninguna ciudad.</p>';
+    updateShipBulkToolbar(type);
     return;
   }
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
+      <input type="checkbox" class="ship-${type}-check" data-name="${c.name}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
       <span style="font-weight:600;flex:1">${c.name}</span>
       <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
     </div>
   `).join('');
+  updateShipBulkToolbar(type);
 }
+
+window.toggleShipCitySelect = function(type, cb) {
+  if (cb.checked) _selectedShipCities[type].add(cb.dataset.name);
+  else _selectedShipCities[type].delete(cb.dataset.name);
+  updateShipBulkToolbar(type);
+};
+
+function updateShipBulkToolbar(type) {
+  const count = _selectedShipCities[type].size;
+  const toolbar = document.getElementById(`ship-${type}-bulk-toolbar`);
+  const countEl = document.getElementById(`ship-${type}-bulk-count`);
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+}
+
+window.clearShipSelection = function(type) {
+  _selectedShipCities[type].clear();
+  document.querySelectorAll(`.ship-${type}-check`).forEach(cb => cb.checked = false);
+  updateShipBulkToolbar(type);
+};
+
+window.bulkDeleteShipCities = async function(type) {
+  const names = [..._selectedShipCities[type]];
+  if (!names.length) return;
+  const n = names.length;
+  if (!confirm(`¿Eliminar ${n} ciudad(es) de ${type === 'delivery' ? 'Delivery' : 'Encomienda'}?`)) return;
+  const prevList = shipCities[type].slice();
+  const nameSet = new Set(names);
+  shipCities[type] = shipCities[type].filter(c => !nameSet.has(c.name));
+  try {
+    await saveShipCities();
+    logAudit('editar_envio', 'envio', '', '', `${n} ciudad(es) de ${type} eliminadas`, { bulk: true, count: n });
+    toast(`${n} ciudad(es) eliminadas`);
+    clearShipSelection(type);
+    renderShipList(type);
+    if (shipEditing[type] != null) resetShipForm(type);
+  } catch (e) {
+    shipCities[type] = prevList;
+    toast('Error al eliminar: ' + e.message);
+    renderShipList(type);
+  }
+};
 
 async function saveShipCities() {
   await setDoc(doc(db, 'settings', 'general'), {
@@ -4681,8 +4682,9 @@ function productRowHtml(p) {
   const isSelected = _selectedProducts.has(p._docId);
   const nameSafe = (p.name||'').replace(/'/g,"\\'");
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
-  const canEditProd = can(currentRole, 'editProducts');
-  const canDeleteProd = can(currentRole, 'deleteProducts');
+  const canEditProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'editar');
+  const canToggleProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar');
+  const canDeleteProd = can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar');
   return `
     <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
       <td style="padding:10px 16px;text-align:center">
@@ -4706,9 +4708,9 @@ function productRowHtml(p) {
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
           ${canEditProd ? `<button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
-          ${canEditProd ? `<button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+          ${canToggleProd ? `<button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
           ${canDeleteProd ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
-          ${!canEditProd && !canDeleteProd ? '—' : ''}
+          ${!canEditProd && !canToggleProd && !canDeleteProd ? '—' : ''}
         </div>
       </td>
     </tr>
@@ -4786,6 +4788,7 @@ function applyProductFilters() {
   // Keep the collection products workspace live if it's currently open
   if (_collProductsSlug && document.getElementById('coll-products-card').style.display !== 'none') renderCollCurrentList();
   if (document.getElementById('coll-picker-card').style.display !== 'none') renderCollPicker();
+  updateBulkToolbar();
 }
 document.getElementById('prod-search').addEventListener('input', applyProductFilters);
 document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
@@ -4895,10 +4898,19 @@ window.prodCancelForm = function() {
 };
 
 async function prodGuardar() {
+  const errEl = document.getElementById('prod-form-error');
+  const _isEdit = !!document.getElementById('prod-id').value;
+  const _permOk = _isEdit
+    ? (can(currentRole, 'editProducts') && roleCanDo('productos', 'editar'))
+    : (can(currentRole, 'addProducts') && roleCanDo('productos', 'crear'));
+  if (!_permOk) {
+    errEl.textContent = _isEdit ? 'No tenés permiso para editar productos.' : 'No tenés permiso para crear productos.';
+    errEl.style.display = '';
+    return false;
+  }
   const name = document.getElementById('prod-name').value.trim();
   const category = document.getElementById('prod-category').value;
   const price = parseInt(document.getElementById('prod-price').value);
-  const errEl = document.getElementById('prod-form-error');
 
   if (!name || !category || !price) {
     errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
@@ -4991,6 +5003,7 @@ async function prodGuardar() {
 }
 
 window.prodToggleActive = async (docId, currentlyActive) => {
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
   try {
     await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
     const p = _allProducts.find(x => x._docId === docId);
@@ -5003,6 +5016,7 @@ window.prodToggleActive = async (docId, currentlyActive) => {
 };
 
 async function prodEliminar(docId, name) {
+  if (!can(currentRole, 'deleteProducts') || !roleCanDo('productos', 'eliminar')) { toast('No tenés permiso para eliminar productos'); return; }
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'products', docId));
@@ -5092,6 +5106,107 @@ function applyCollFilter(list) {
 }
 document.getElementById('coll-search').addEventListener('input', () => renderColeccionesGrid(applyCollFilter(_allCollections)));
 
+// ══════════════════════════════════════════════
+// COLECCIONES: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
+// ══════════════════════════════════════════════
+let _selectedCollections = new Set();
+
+window.toggleCollectionSelect = function(cb) {
+  if (cb.checked) _selectedCollections.add(cb.dataset.slug);
+  else _selectedCollections.delete(cb.dataset.slug);
+  updateCollBulkToolbar();
+};
+
+function updateCollBulkToolbar() {
+  const count = _selectedCollections.size;
+  const toolbar = document.getElementById('coll-bulk-toolbar');
+  const countEl = document.getElementById('coll-bulk-count');
+  const delBtn = document.getElementById('coll-bulk-delete-btn');
+  if (toolbar) toolbar.classList.toggle('show', count > 0);
+  if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
+  if (delBtn) delBtn.style.display = (can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
+  const visBtns = document.getElementById('coll-bulk-visible-group');
+  if (visBtns) visBtns.style.display = (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'activarDesactivar')) ? 'contents' : 'none';
+}
+
+window.clearCollSelection = function() {
+  _selectedCollections.clear();
+  document.querySelectorAll('.coll-row-check').forEach(cb => cb.checked = false);
+  updateCollBulkToolbar();
+};
+
+window.bulkSetCollVisible = async function(visible) {
+  if (!_selectedCollections.size) return;
+  if (!can(currentRole, 'manageContent') || !roleCanDo('colecciones', 'activarDesactivar')) { toast('No tenés permiso para editar colecciones'); return; }
+  const n = _selectedCollections.size;
+  if (!confirm(`¿${visible ? 'Activar (mostrar)' : 'Desactivar (ocultar)'} ${n} colección(es)?`)) return;
+  try {
+    const slugs = [..._selectedCollections];
+    await batchUpdateChunked(slugs, () => ({ visible, updatedAt: serverTimestamp() }), 'collections');
+    _allCollections.forEach(c => { if (_selectedCollections.has(c.slug)) c.visible = visible; });
+    logAudit('editar_coleccion', 'coleccion', '', '', `Colecciones ${visible ? 'activadas' : 'desactivadas'}`, { bulk: true, count: n });
+    toast(`${n} colección(es) ${visible ? 'activadas' : 'desactivadas'}`);
+    clearCollSelection();
+    renderColeccionesGrid(applyCollFilter(_allCollections));
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// Por seguridad, el borrado masivo solo alcanza a colecciones SIN productos
+// asociados — reasignar los productos de una colección con contenido es una
+// decisión por-colección (a qué otra colección van), no algo que tenga
+// sentido resolver igual para varias a la vez. Las que tengan productos se
+// listan aparte para que se borren de a una desde "Eliminar" (ese flujo ya
+// pide a dónde mover los productos).
+window.bulkDeleteCollections = async function() {
+  if (!_selectedCollections.size) return;
+  if (!can(currentRole, 'deleteCollections') || !roleCanDo('colecciones', 'eliminar')) { toast('No tenés permiso para eliminar colecciones'); return; }
+  const slugs = [..._selectedCollections];
+  const empty = [], withProducts = [];
+  slugs.forEach(slug => {
+    const count = _allProducts.filter(p => (p.category || '') === slug).length;
+    (count > 0 ? withProducts : empty).push(slug);
+  });
+  if (!empty.length) {
+    toast('Todas las colecciones seleccionadas tienen productos — eliminalas de a una con "Eliminar" para reasignarlos primero.');
+    return;
+  }
+  const n = empty.length;
+  let msg = `¿ELIMINAR DEFINITIVAMENTE ${n} colección(es) vacías? Esta acción no se puede deshacer.`;
+  if (withProducts.length) msg += `\n\n(${withProducts.length} de la selección tienen productos y NO se van a tocar — eliminalas de a una.)`;
+  if (!confirm(msg)) return;
+  try {
+    const CHUNK = 450;
+    for (let i = 0; i < empty.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      empty.slice(i, i + CHUNK).forEach(slug => batch.delete(doc(db, 'collections', slug)));
+      await batch.commit();
+    }
+    const emptySet = new Set(empty);
+    _allCollections = _allCollections.filter(c => !emptySet.has(c.slug));
+    logAudit('eliminar_coleccion', 'coleccion', '', '', `${n} colecciones vacías eliminadas`, { bulk: true, count: n });
+    toast(`${n} colección(es) eliminadas` + (withProducts.length ? ` — ${withProducts.length} con productos no se tocaron` : ''));
+    clearCollSelection();
+    renderColeccionesGrid(applyCollFilter(_allCollections));
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+function collRowsToCsv_(cols) {
+  const header = ['Nombre', 'Slug', 'Descripción', 'Orden', 'Visible', 'Productos'];
+  const rows = cols.map(c => [
+    c.name || '', c.slug || '', c.description || '', c.order ?? 0,
+    c.visible === false ? 'No' : 'Sí',
+    _allProducts.filter(p => (p.category || '') === c.slug).length
+  ]);
+  return [header, ...rows];
+}
+
+window.bulkExportCollections = function() {
+  if (!_selectedCollections.size) { toast('No hay colecciones seleccionadas'); return; }
+  const list = _allCollections.filter(c => _selectedCollections.has(c.slug));
+  downloadCsv(`colecciones_${Date.now()}.csv`, collRowsToCsv_(list));
+  toast(`Exportadas ${list.length} colección(es) a CSV`);
+};
+
 // Categories already in use by real products but with no matching doc in
 // `collections` yet — e.g. products imported/assigned before this module
 // existed. Surfaced so nothing "disappears" from the admin's view.
@@ -5121,10 +5236,15 @@ function renderColeccionesGrid(list) {
   document.getElementById('coll-grid-wrap').style.display = '';
   document.getElementById('coll-empty').style.display = 'none';
   const grid = document.getElementById('coll-grid');
+  const visibleSlugs = new Set(list.map(c => c.slug));
+  [..._selectedCollections].forEach(slug => { if (!visibleSlugs.has(slug)) _selectedCollections.delete(slug); });
   grid.innerHTML = list.map(c => {
     const count = _allProducts.filter(p => (p.category || '') === c.slug).length;
     return `
-    <div class="adm-card" style="margin:0;overflow:hidden">
+    <div class="adm-card" style="margin:0;overflow:hidden;position:relative">
+      <label style="position:absolute;top:8px;left:8px;z-index:3;background:rgba(255,255,255,.9);border-radius:6px;padding:3px;display:flex" title="Seleccionar">
+        <input type="checkbox" class="coll-row-check" data-slug="${c.slug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
+      </label>
       <div style="height:120px;background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
         ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#e65100;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
       </div>
@@ -5134,8 +5254,8 @@ function renderColeccionesGrid(list) {
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${count} producto${count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${c.slug}')">Ver productos</button>
-          ${can(currentRole, 'manageContent') ? `<button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>` : ''}
-          ${can(currentRole, 'deleteCollections') ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>` : ''}
+          ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>` : ''}
+          ${(can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>` : ''}
         </div>
       </div>
     </div>`;
@@ -5152,6 +5272,7 @@ function renderColeccionesGrid(list) {
         </div>
       </div>
     </div>`).join('');
+  updateCollBulkToolbar();
 }
 
 window.collVerProductos = function(slug) {
@@ -5301,13 +5422,14 @@ function renderCollCurrentList() {
       <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
-      <button class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>
-      <button class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>
+      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>` : ''}
     </div>`;
   }).join('');
 }
 
 window.collMoveProduct = async function(docId, direction) {
+  if (!can(currentRole, 'manageContent') || !roleCanDo('colecciones', 'editar')) { toast('No tenés permiso para editar el orden de la colección'); return; }
   const items = _allProducts.filter(p => (p.category || '') === _collProductsSlug && _collInStock(p));
   const sorted = items.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999) || (a.name||'').localeCompare(b.name||'', 'es'));
   const idx = sorted.findIndex(p => p._docId === docId);
@@ -5327,6 +5449,7 @@ window.collMoveProduct = async function(docId, direction) {
 };
 
 window.collRemoveFromCollection = async function(docId) {
+  if (!can(currentRole, 'manageContent') || !roleCanDo('colecciones', 'editar')) { toast('No tenés permiso para editar colecciones'); return; }
   const p = _allProducts.find(x => x._docId === docId);
   if (!confirm(`¿Quitar "${p?.name || 'este producto'}" de la colección?`)) return;
   try {
@@ -5338,6 +5461,7 @@ window.collRemoveFromCollection = async function(docId) {
 };
 
 window.collToggleActive = async function(docId, currentlyActive) {
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
   try {
     await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
     const p = _allProducts.find(x => x._docId === docId);
@@ -5414,11 +5538,11 @@ window.collPickerToggleAll = function(checkbox) {
 
 // Firestore batches cap at 500 writes — chunk so bulk actions scale to
 // thousands of products without silently failing.
-async function batchUpdateChunked(ids, dataFn) {
+async function batchUpdateChunked(ids, dataFn, collectionName = 'products') {
   const CHUNK = 450;
   for (let i = 0; i < ids.length; i += CHUNK) {
     const batch = writeBatch(db);
-    ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, 'products', id), dataFn(id)));
+    ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, collectionName, id), dataFn(id)));
     await batch.commit();
   }
 }
@@ -5439,6 +5563,15 @@ window.collGuardar = async function() {
   const errEl = document.getElementById('coll-form-error');
   errEl.style.display = 'none';
   const originalSlug = document.getElementById('coll-original-slug').value;
+  const _isEdit = !!originalSlug;
+  const _permOk = _isEdit
+    ? (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar'))
+    : (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'crear'));
+  if (!_permOk) {
+    errEl.textContent = _isEdit ? 'No tenés permiso para editar colecciones.' : 'No tenés permiso para crear colecciones.';
+    errEl.style.display = '';
+    return false;
+  }
   const name = document.getElementById('coll-name').value.trim();
   const slug = collSlugify(document.getElementById('coll-slug').value);
   const description = document.getElementById('coll-description').value.trim();
@@ -5495,6 +5628,7 @@ window.collGuardar = async function() {
 };
 
 window.collEliminar = async function(slug, count) {
+  if (!can(currentRole, 'deleteCollections') || !roleCanDo('colecciones', 'eliminar')) { toast('No tenés permiso para eliminar colecciones'); return; }
   const c = _allCollections.find(x => x.slug === slug);
   const label = c?.name || slug;
 
@@ -5832,9 +5966,11 @@ function loadImportar() {
     if (!lista.length) { toast('No se encontraron productos válidos en el CSV'); return; }
     document.getElementById('csv-preview').style.display = 'block';
     document.getElementById('csv-preview-title').textContent = `${lista.length} productos encontrados — revisá antes de importar`;
+    _selectedCsvRows.clear();
     const tbody = document.getElementById('csv-preview-body');
     tbody.innerHTML = lista.map((p, i) => `
       <tr>
+        <td class="col-select"><input type="checkbox" class="csv-row-check" data-idx="${i}" onclick="toggleCsvRowSelect(this)"></td>
         <td style="color:var(--adm-muted);font-size:12px">${i + 1}</td>
         <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
         <td style="font-weight:700;max-width:200px;word-break:break-word">${p.name}</td>
@@ -5851,29 +5987,32 @@ function loadImportar() {
         <td><span class="adm-badge ${p.active ? 'badge-entregado' : 'badge-cancelado'}">${p.active ? 'Activo' : 'Inactivo'}</span></td>
       </tr>
     `).join('');
+    updateCsvBulkCount();
   }
 
   document.getElementById('btn-csv-limpiar').addEventListener('click', () => {
     csvProductos = [];
+    _selectedCsvRows.clear();
     fileInput.value = '';
     document.getElementById('csv-preview').style.display = 'none';
     document.getElementById('csv-import-result').innerHTML = '';
   });
 
-  document.getElementById('btn-csv-importar').addEventListener('click', async () => {
-    if (!csvProductos.length) return;
+  async function importCsvProducts_(list) {
+    if (!list.length) return;
     const progress=document.getElementById('csv-import-progress');
     const progressBar=document.getElementById('csv-progress-bar');
     const progressLbl=document.getElementById('csv-progress-label');
     const result=document.getElementById('csv-import-result');
     const btn=document.getElementById('btn-csv-importar');
-    btn.disabled=true; progress.style.display='block'; result.innerHTML='';
+    const btnSel=document.getElementById('btn-csv-importar-seleccionados');
+    btn.disabled=true; btnSel.disabled=true; progress.style.display='block'; result.innerHTML='';
     let ok=0, errores=0;
-    for (let i=0; i<csvProductos.length; i++) {
-      const p = csvProductos[i];
-      const pct = Math.round(((i+1)/csvProductos.length)*100);
+    for (let i=0; i<list.length; i++) {
+      const p = list[i];
+      const pct = Math.round(((i+1)/list.length)*100);
       progressBar.style.width=pct+'%';
-      progressLbl.textContent=`Importando ${i+1} de ${csvProductos.length}: ${p.name}`;
+      progressLbl.textContent=`Importando ${i+1} de ${list.length}: ${p.name}`;
       try {
         await addDoc(collection(db,'products'), {
           name:        p.name,
@@ -5895,16 +6034,218 @@ function loadImportar() {
         ok++;
       } catch(e) { errores++; console.error('Error importando:', p.name, e); }
     }
-    btn.disabled=false; progress.style.display='none';
+    btn.disabled=false; btnSel.disabled=false; progress.style.display='none';
     if (ok>0) {
       result.innerHTML=`<span style="color:green">${ok} productos importados correctamente${errores>0?` (${errores} con error)`:''}</span>`;
       toast(`${ok} productos importados de Shopify`);
-      csvProductos=[]; fileInput.value='';
-      setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      const fullImport = list.length === csvProductos.length;
+      if (fullImport) {
+        csvProductos=[]; fileInput.value='';
+        setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      } else {
+        // Importación parcial (solo seleccionados): saca del preview solo lo
+        // ya importado, deja el resto para revisar/importar después.
+        const importedNames = new Set(list.map(p => p.name));
+        csvProductos = csvProductos.filter(p => !importedNames.has(p.name));
+        _selectedCsvRows.clear();
+        mostrarPreviewCSV(csvProductos);
+        if (!csvProductos.length) setTimeout(()=>{ document.getElementById('csv-preview').style.display='none'; }, 2000);
+      }
     } else {
       result.innerHTML=`<span style="color:#e57">No se pudo importar ningún producto</span>`;
     }
+  }
+
+  document.getElementById('btn-csv-importar').addEventListener('click', () => importCsvProducts_(csvProductos));
+  document.getElementById('btn-csv-importar-seleccionados').addEventListener('click', () => {
+    const list = [..._selectedCsvRows].sort((a, b) => a - b).map(idx => csvProductos[idx]).filter(Boolean);
+    if (!list.length) { toast('No hay productos seleccionados'); return; }
+    importCsvProducts_(list);
   });
+}
+
+let _selectedCsvRows = new Set();
+window.toggleSelectAllCsvRows = function(masterCb) {
+  document.querySelectorAll('.csv-row-check').forEach(cb => {
+    cb.checked = masterCb.checked;
+    const idx = Number(cb.dataset.idx);
+    if (masterCb.checked) _selectedCsvRows.add(idx); else _selectedCsvRows.delete(idx);
+  });
+  updateCsvBulkCount();
+};
+window.toggleCsvRowSelect = function(cb) {
+  const idx = Number(cb.dataset.idx);
+  if (cb.checked) _selectedCsvRows.add(idx); else _selectedCsvRows.delete(idx);
+  updateCsvBulkCount();
+};
+function updateCsvBulkCount() {
+  const el = document.getElementById('csv-bulk-count');
+  if (el) el.textContent = `${_selectedCsvRows.size} seleccionado${_selectedCsvRows.size !== 1 ? 's' : ''}`;
+}
+
+// ══════════════════════════════════════════════
+// ROLES Y PERMISOS
+// ══════════════════════════════════════════════
+const PERM_ROLE_LABELS = { admin: 'Admin', agent: 'Agente / Modder', viewer: 'Viewer' };
+let _permPending = null;   // copia editable en memoria — no se guarda hasta "Guardar cambios"
+let _permOriginal = null;  // último estado guardado/cargado — para calcular el diff al guardar
+let _permInited = false;
+
+async function loadPermisosSection() {
+  if (_permInited) return;
+  _permInited = true;
+  const cache = getRolePermissionsCache() || await loadRolePermissions();
+  _permOriginal = JSON.parse(JSON.stringify(cache));
+  _permPending = JSON.parse(JSON.stringify(cache));
+
+  const modSel = document.getElementById('perm-filter-module');
+  Object.entries(PERMISSION_MODULES).forEach(([key, mod]) => {
+    const opt = document.createElement('option');
+    opt.value = key; opt.textContent = mod.label;
+    modSel.appendChild(opt);
+  });
+
+  renderPermisosMatrix();
+
+  document.getElementById('perm-search').oninput = renderPermisosMatrix;
+  document.getElementById('perm-filter-module').onchange = renderPermisosMatrix;
+  document.getElementById('perm-filter-role').onchange = renderPermisosMatrix;
+  document.getElementById('btn-perm-save').onclick = savePermisosChanges;
+  document.getElementById('btn-perm-restore').onclick = restorePermisosDefaults;
+}
+
+function renderPermisosMatrix() {
+  const q = (document.getElementById('perm-search').value || '').toLowerCase();
+  const modFilter = document.getElementById('perm-filter-module').value;
+  const roleFilter = document.getElementById('perm-filter-role').value;
+  const wrap = document.getElementById('perm-modules-wrap');
+
+  const modKeys = Object.keys(PERMISSION_MODULES).filter(k => !modFilter || k === modFilter);
+  const rolesToShow = EDITABLE_ROLES.filter(r => !roleFilter || r === roleFilter);
+
+  wrap.innerHTML = modKeys.map(modKey => {
+    const mod = PERMISSION_MODULES[modKey];
+    const actionEntries = Object.entries(mod.actions).filter(([actKey, act]) => {
+      if (!q) return true;
+      return act.label.toLowerCase().includes(q) || mod.label.toLowerCase().includes(q);
+    });
+    if (!actionEntries.length) return '';
+
+    const rows = actionEntries.map(([actKey, act]) => {
+      if (act.implemented === false) {
+        return `
+          <tr>
+            <td data-label="Acción">${act.label} <span class="perm-row-not-implemented">— no implementado</span><br><span class="perm-row-fixed-note">${act.note || ''}</span></td>
+            ${rolesToShow.map(() => `<td data-label="—">—</td>`).join('')}
+          </tr>`;
+      }
+      const dangerBadge = act.dangerous ? '<span class="perm-danger-badge">Sensible</span>' : '';
+      const uiOnlyBadge = act.uiOnly ? '<span class="perm-uionly-badge" title="Solo oculta el dato en pantalla — Firestore no permite redactar campos dentro de un documento ya permitido">Solo visual</span>' : '';
+      return `
+        <tr>
+          <td data-label="Acción">${act.label}${dangerBadge}${uiOnlyBadge}</td>
+          ${rolesToShow.map(role => {
+            const editable = !act.rolesEditable || act.rolesEditable.includes(role);
+            if (!editable) return `<td data-label="${PERM_ROLE_LABELS[role]}"><span class="perm-row-fixed-note">No disponible</span></td>`;
+            const checked = !!(_permPending[role]?.[modKey]?.[actKey]);
+            return `<td data-label="${PERM_ROLE_LABELS[role]}">
+              <label class="adm-toggle perm-mini-toggle">
+                <input type="checkbox" data-role="${role}" data-module="${modKey}" data-action="${actKey}" onchange="permToggleChanged(this)" ${checked ? 'checked' : ''}>
+                <span class="adm-toggle-slider"></span>
+              </label>
+            </td>`;
+          }).join('')}
+        </tr>`;
+    }).join('');
+
+    return `
+      <details class="perm-module-block" open>
+        <summary>${mod.label}</summary>
+        <div class="perm-module-body">
+          <table class="adm-table perm-matrix-table">
+            <thead><tr><th>Acción</th>${rolesToShow.map(r => `<th>${PERM_ROLE_LABELS[r]}</th>`).join('')}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </details>`;
+  }).join('') || '<p style="color:var(--adm-muted);text-align:center;padding:24px">Sin resultados para ese filtro.</p>';
+}
+
+window.permToggleChanged = function(cb) {
+  const { role, module: modKey, action: actKey } = cb.dataset;
+  _permPending[role] = _permPending[role] || {};
+  _permPending[role][modKey] = _permPending[role][modKey] || {};
+  _permPending[role][modKey][actKey] = cb.checked;
+  updatePermDirtyState();
+};
+
+function computePermDiff() {
+  const diff = [];
+  EDITABLE_ROLES.forEach(role => {
+    Object.entries(PERMISSION_MODULES).forEach(([modKey, mod]) => {
+      Object.entries(mod.actions).forEach(([actKey, act]) => {
+        if (act.implemented === false) return;
+        const before = !!(_permOriginal[role]?.[modKey]?.[actKey]);
+        const after = !!(_permPending[role]?.[modKey]?.[actKey]);
+        if (before !== after) diff.push({ role, modKey, actKey, act, before, after });
+      });
+    });
+  });
+  return diff;
+}
+
+function updatePermDirtyState() {
+  const diff = computePermDiff();
+  const badge = document.getElementById('perm-unsaved-badge');
+  const saveBtn = document.getElementById('btn-perm-save');
+  const dirty = diff.length > 0;
+  badge.style.display = dirty ? '' : 'none';
+  saveBtn.disabled = !dirty;
+}
+
+window.restorePermisosDefaults = function restorePermisosDefaults() {
+  if (!confirm('¿Restaurar los permisos por defecto para Admin, Agente/Modder y Viewer? Esto NO se guarda todavía — vas a poder revisar los cambios antes de confirmar con "Guardar cambios".')) return;
+  _permPending = buildDefaultRolePermissions();
+  renderPermisosMatrix();
+  updatePermDirtyState();
+  toast('Valores por defecto cargados — revisá y guardá para aplicarlos');
+};
+
+async function savePermisosChanges() {
+  const diff = computePermDiff();
+  if (!diff.length) return;
+
+  const dangerousEnabling = diff.filter(d => d.act.dangerous && d.after === true);
+  const deleteEnabling = dangerousEnabling.filter(d => d.actKey === 'eliminar');
+
+  if (dangerousEnabling.length) {
+    const summary = dangerousEnabling.map(d => `${PERM_ROLE_LABELS[d.role]}: ${PERMISSION_MODULES[d.modKey].label} → ${d.act.label}`).join('\n');
+    if (!confirm(`⚠️ Este cambio puede afectar datos importantes de la tienda:\n\n${summary}\n\n¿Confirmás que querés habilitar esto?`)) return;
+  }
+  if (deleteEnabling.length) {
+    const typed = prompt(`Para confirmar la habilitación de acciones de ELIMINAR, escribí CONFIRMAR:\n\n${deleteEnabling.map(d => `${PERM_ROLE_LABELS[d.role]}: ${d.act.label}`).join('\n')}`);
+    if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
+  }
+
+  const saveBtn = document.getElementById('btn-perm-save');
+  saveBtn.disabled = true; saveBtn.textContent = 'Guardando…';
+  try {
+    await saveRolePermissions(_permPending, currentUser?.email);
+    for (const d of diff) {
+      await logAudit(
+        'editar_permiso', 'permiso', '', `${PERM_ROLE_LABELS[d.role]}`,
+        `${PERMISSION_MODULES[d.modKey].label} → ${d.act.label}: ${d.before ? 'ON' : 'OFF'} → ${d.after ? 'ON' : 'OFF'}`
+      );
+    }
+    _permOriginal = JSON.parse(JSON.stringify(_permPending));
+    updatePermDirtyState();
+    toast(`${diff.length} permiso(s) actualizados — algunos cambios se aplican al cambiar de sección o recargar la página`);
+  } catch (e) {
+    toast('Error al guardar permisos: ' + e.message);
+  } finally {
+    saveBtn.textContent = 'Guardar cambios';
+    saveBtn.disabled = !computePermDiff().length;
+  }
 }
 
 // ======== CONTENIDO DEL SITIO ========
@@ -6175,10 +6516,11 @@ function contRenderSection(pageId, sectionId, schema, savedValues) {
     <div class="cont-section-body">`;
   flist.forEach(field => { html += contRenderField(field, sv[field.key]); });
   const pageUrl = CONT_SCHEMA[pageId]?.url || contExtraPages.find(p=>p.id===pageId)?.url || '#';
+  const canEditCont = can(currentRole, 'manageContent') && (roleCanDo('contenido', 'editarTextos') || roleCanDo('contenido', 'activarDesactivarSecciones'));
   html += `
       <div class="cont-section-actions">
-        <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
-        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>
+        ${canEditCont ? `<button class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
+        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>` : ''}
         <a href="${pageUrl}" target="_blank" class="adm-btn adm-btn-outline adm-btn-sm">Ver en sitio</a>
       </div>
     </div>
@@ -6271,6 +6613,14 @@ window.contToggleSection = function(head) {
 };
 
 window.contSaveSectionBtn = async function(btn, pageId, sectionId) {
+  // Contenido guarda texto y checkboxes de sección (ej. "mostrar banner") con
+  // la MISMA función — el código no separa "editar textos" de "activar/
+  // desactivar secciones" en dos acciones distintas, así que el gate cubre
+  // ambos permisos del catálogo (con cualquiera de los dos habilitado alcanza).
+  if (!can(currentRole, 'manageContent') || !(roleCanDo('contenido', 'editarTextos') || roleCanDo('contenido', 'activarDesactivarSecciones'))) {
+    toast('No tenés permiso para editar contenido');
+    return;
+  }
   const sectionEl = btn.closest('.cont-section');
   const schema = CONT_SCHEMA[pageId]?.sections?.[sectionId] || contExtraPages.find(p=>p.id===pageId)?.sections?.[sectionId];
   if (!schema) return;
@@ -6427,7 +6777,19 @@ function updateBulkToolbar() {
   // Antes esto era exclusivo de "superadmin" a mano; ahora sigue el mismo
   // permiso que ya gatea el botón de eliminar de a un producto (deleteProducts)
   // — si podés borrar uno, tiene sentido que también puedas borrar varios.
-  if (delBtn) delBtn.style.display = can(currentRole, 'deleteProducts') ? '' : 'none';
+  if (delBtn) delBtn.style.display = (can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar')) ? '' : 'none';
+  // Roles y Permisos: el grupo de acciones masivas (colección/categoría/
+  // activar/desactivar/stock/precio/oferta/destacado) se oculta entero si el
+  // rol no tiene habilitada "Acciones masivas" en Productos.
+  const hasMasivas = can(currentRole, 'editProducts') && roleCanDo('productos', 'accionesMasivas');
+  const masivasGroup = document.getElementById('prod-bulk-masivas-group');
+  const moreActions = document.getElementById('prod-more-actions');
+  const exportBtn = document.getElementById('prod-bulk-export-btn');
+  const exportAllBtn = document.getElementById('prod-export-all-btn');
+  if (masivasGroup) masivasGroup.style.display = hasMasivas ? 'contents' : 'none';
+  if (moreActions) moreActions.style.display = hasMasivas ? '' : 'none';
+  if (exportBtn) exportBtn.style.display = roleCanDo('productos', 'exportar') ? '' : 'none';
+  if (exportAllBtn) exportAllBtn.style.display = roleCanDo('productos', 'exportar') ? '' : 'none';
 }
 
 window.clearSelection = function() {
@@ -6440,13 +6802,16 @@ window.clearSelection = function() {
 
 window.bulkAssignCollection = async function() {
   if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const colInput = document.getElementById('bulk-collection-input');
   const col = colInput?.value.trim();
   if (!col) { toast('Escribí el nombre de la colección'); return; }
   if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ collection: col, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
+    logAudit('editar_producto', 'producto', '', '', `Colección → "${col}"`, { bulk: true, count: n });
     toast(`Colección "${col}" asignada a ${_selectedProducts.size} productos`);
     if (colInput) colInput.value = '';
     clearSelection();
@@ -6456,11 +6821,14 @@ window.bulkAssignCollection = async function() {
 
 window.bulkActivate = async function(activate) {
   if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const label = activate ? 'activar' : 'desactivar';
   if (!confirm(`¿${label.charAt(0).toUpperCase() + label.slice(1)} ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ active: activate, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.active = activate; });
+    logAudit('editar_producto', 'producto', '', '', activate ? 'Activados' : 'Desactivados', { bulk: true, count: n });
     toast(`${_selectedProducts.size} productos ${activate ? 'activados' : 'desactivados'}`);
     clearSelection();
     applyProductFilters();
@@ -6469,12 +6837,15 @@ window.bulkActivate = async function(activate) {
 
 window.bulkSetCategory = async function() {
   if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const cat = document.getElementById('bulk-category-input')?.value;
   if (!cat) { toast('Seleccioná una categoría'); return; }
   if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
   try {
+    const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ category: cat, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
+    logAudit('editar_producto', 'producto', '', '', `Categoría → "${cat}"`, { bulk: true, count: n });
     toast(`Categoría actualizada en ${_selectedProducts.size} productos`);
     clearSelection();
     applyProductFilters();
@@ -6483,7 +6854,7 @@ window.bulkSetCategory = async function() {
 
 window.bulkDelete = async function() {
   if (!_selectedProducts.size) return;
-  if (!can(currentRole, 'deleteProducts')) { toast('No tenés permiso para eliminar productos'); return; }
+  if (!can(currentRole, 'deleteProducts') || !roleCanDo('productos', 'eliminar')) { toast('No tenés permiso para eliminar productos'); return; }
   const n = _selectedProducts.size;
   if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;
   if (!confirm(`Segunda confirmación: ¿confirmar la eliminación de ${n} productos?`)) return;
@@ -6497,10 +6868,115 @@ window.bulkDelete = async function() {
     }
     const ids = new Set(_selectedProducts);
     _allProducts = _allProducts.filter(p => !ids.has(p._docId));
+    logAudit('eliminar_producto', 'producto', '', '', `${n} productos eliminados`, { bulk: true, count: n });
     toast(`${n} productos eliminados definitivamente`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }
+};
+
+function productRowsToCsv_(products) {
+  const header = ['Nombre', 'Categoría', 'Colección', 'Precio', 'Stock', 'Activo'];
+  const rows = products.map(p => [p.name || '', p.category || '', p.collection || '', p.price || 0, p.stock ?? '', p.active === false ? 'No' : 'Sí']);
+  return [header, ...rows];
+}
+
+window.bulkExportProducts = function(scope) {
+  if (!roleCanDo('productos', 'exportar')) { toast('No tenés permiso para exportar productos'); return; }
+  let list;
+  if (scope === 'selected') {
+    if (!_selectedProducts.size) { toast('No hay productos seleccionados'); return; }
+    list = _allProducts.filter(p => _selectedProducts.has(p._docId));
+  } else {
+    list = _allProducts;
+  }
+  if (!list.length) { toast('No hay productos para exportar'); return; }
+  downloadCsv(`productos_${scope}_${Date.now()}.csv`, productRowsToCsv_(list));
+  toast(`Exportados ${list.length} producto(s) a CSV`);
+};
+
+window.toggleProdMoreActions = function() {
+  document.getElementById('prod-more-actions-panel').classList.toggle('show');
+};
+// Cierra el menú "Más acciones" al tocar afuera — mismo criterio para
+// cualquier otro menú de este tipo que se agregue en otros módulos.
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.adm-more-actions').forEach(wrap => {
+    if (!wrap.contains(e.target)) wrap.querySelector('.adm-more-actions-panel')?.classList.remove('show');
+  });
+});
+
+window.bulkSetStock = async function() {
+  if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
+  const val = document.getElementById('bulk-stock-input')?.value;
+  if (val === '' || val == null || Number(val) < 0) { toast('Escribí un stock válido (0 o más)'); return; }
+  const stock = Math.round(Number(val));
+  const n = _selectedProducts.size;
+  if (!confirm(`¿Cambiar el stock a ${stock} en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ stock, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.stock = stock; });
+    logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n });
+    toast(`Stock actualizado en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkSetPrice = async function() {
+  if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
+  const val = document.getElementById('bulk-price-input')?.value;
+  if (val === '' || val == null || Number(val) < 0) { toast('Escribí un precio válido (0 o más)'); return; }
+  const price = Math.round(Number(val));
+  const n = _selectedProducts.size;
+  if (!confirm(`¿Cambiar el precio a ${formatPrice(price)} en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ price, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.price = price; });
+    logAudit('editar_producto', 'producto', '', '', `Precio → ${formatPrice(price)}`, { bulk: true, count: n });
+    toast(`Precio actualizado en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+// "Aplicar/quitar descuento" en lote se mapea al campo real que ya existe
+// en la ficha de producto ("En oferta") — no existe un % de descuento
+// numérico en el esquema actual, así que no se inventa uno nuevo acá.
+window.bulkSetOferta = async function(oferta) {
+  if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
+  const n = _selectedProducts.size;
+  if (!confirm(`¿${oferta ? 'Aplicar' : 'Quitar'} oferta en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ oferta, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.oferta = oferta; });
+    logAudit('editar_producto', 'producto', '', '', oferta ? 'Oferta aplicada' : 'Oferta quitada', { bulk: true, count: n });
+    toast(`Oferta ${oferta ? 'aplicada' : 'quitada'} en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkSetDestacado = async function(destacado) {
+  if (!_selectedProducts.size) return;
+  if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
+  const n = _selectedProducts.size;
+  if (!confirm(`¿${destacado ? 'Marcar' : 'Quitar'} destacado en ${n} producto(s)?`)) return;
+  try {
+    const ids = [..._selectedProducts];
+    await batchUpdateChunked(ids, () => ({ destacado, updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.destacado = destacado; });
+    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado destacado' : 'Quitado destacado', { bulk: true, count: n });
+    toast(`Destacado ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
+    clearSelection();
+    applyProductFilters();
+  } catch (e) { toast('Error: ' + e.message); }
 };
 
 // ══════════════════════════════════════════════
@@ -6605,6 +7081,7 @@ function recalcOeTotals() {
 }
 
 window.saveOrderEdit = async function() {
+  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'editarCompleto')) { toast('No tenés permiso para editar el pedido completo'); return; }
   const orderId = document.getElementById('oe-id').value;
   if (!orderId || !_editingOrder) return;
   // Snapshot ANTES de tocar allOrders (más abajo se sobreescribe con

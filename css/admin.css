@@ -1,0 +1,1101 @@
+/* =============================================
+   TINTIN ACCESORIOS — Estilos de admin.html (Super Admin / Admin / Modder)
+   Extraído del <style> inline original (sin cambios de diseño).
+   ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
+       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
+       abajo, pero ahora apuntan al mismo valor real en todas las
+       superficies. --adm-bg queda con su propio valor a propósito: es un
+       gris-rosado más neutro, pensado para un panel de uso prolongado,
+       distinto del fondo más saturado del sitio público. */
+    :root {
+      --adm-sidebar:        var(--pink-dark);
+      --adm-sidebar-hover:  rgba(255,255,255,.12);
+      --adm-sidebar-active: rgba(255,255,255,.95);
+      --adm-sidebar-text:   rgba(255,255,255,.85);
+      --adm-bg:             #f7f4f6;
+      --adm-card:           #ffffff;
+      --adm-accent:         var(--pink-dark);
+      --adm-text:           var(--ink);
+      --adm-muted:          #888;
+      --adm-border:         var(--border);
+      --adm-font:           var(--font-body);
+      --adm-radius-sm:      var(--radius-sm);
+      --adm-radius-md:      var(--radius-md);
+      --sidebar-w:          260px;
+    }
+
+    body {
+      font-family: var(--adm-font);
+      background: var(--adm-bg);
+      color: var(--adm-text);
+      min-height: 100vh;
+    }
+
+    /* ======== SIDEBAR ======== */
+    .adm-sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--adm-sidebar);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 200;
+      transition: transform .3s ease;
+    }
+
+    .adm-sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+    .adm-sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .adm-sidebar-logo-sub {
+      font-size: 10px;
+      color: rgba(255,255,255,.6);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .adm-user-info {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .adm-user-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .adm-user-avatar img { width:100%;height:100%;object-fit:cover; }
+    .adm-user-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .adm-user-role-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-top: 3px;
+    }
+    .role-superadmin { background: #8b2642; color: #fff; }
+    .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
+    .role-agent      { background: #7b68ee; color: #fff; }
+
+    /* Reloj en vivo debajo del badge de rol — hora real del dispositivo,
+       actualizado solo (un setInterval de 1s), no un valor fijo. */
+    .adm-live-clock {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,.75);
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
+    .role-viewer     { background: #4a90d9; color: #fff; }
+    .role-client     { background: #888; color: #fff; }
+
+    .adm-nav {
+      flex: 1;
+      padding: 12px 0;
+    }
+    .adm-nav-divider {
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin: 8px 16px;
+    }
+    .adm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--adm-sidebar-text);
+      cursor: pointer;
+      transition: all .15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+      font-family: var(--adm-font);
+    }
+    .adm-nav-item:hover { background: var(--adm-sidebar-hover); color: #fff; }
+    .adm-nav-item.active {
+      background: var(--adm-sidebar-active);
+      color: var(--adm-accent);
+      font-weight: 700;
+    }
+    .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
+
+    .adm-nav-bottom {
+      padding: 12px 0 20px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    /* ======== MAIN ======== */
+    .adm-main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ======== TOPBAR ======== */
+    .adm-topbar {
+      background: #fff;
+      border-bottom: 1.5px solid var(--adm-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .adm-topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--adm-text);
+      flex: 1;
+    }
+    .adm-hamburger { display: none; }
+    .adm-topbar-btn {
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: var(--adm-font);
+      background: var(--adm-accent);
+      color: #fff;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .adm-topbar-btn:hover { background: var(--rose); }
+
+    /* ======== CONTENT ======== */
+    .adm-content {
+      padding: 28px;
+      flex: 1;
+    }
+
+    /* ======== SECTIONS ======== */
+    .adm-section { display: none; }
+    .adm-section.active { display: block; }
+
+    /* ======== CARDS ======== */
+    .adm-card {
+      background: var(--adm-card);
+      border-radius: 14px;
+      border: 1.5px solid var(--adm-border);
+      overflow: hidden;
+    }
+    .adm-card-head {
+      padding: 18px 22px;
+      border-bottom: 1.5px solid var(--adm-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .adm-card-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--adm-accent);
+    }
+    .adm-card-body { padding: 22px; }
+
+    /* ======== STAT CARDS ======== */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .adm-stat {
+      background: var(--adm-card);
+      border-radius: 14px;
+      border: 1.5px solid var(--adm-border);
+      padding: 20px;
+    }
+    .adm-stat-icon { margin-bottom: 8px; display:flex; align-items:center; }
+    .adm-stat-val {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--adm-accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .adm-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--adm-muted);
+    }
+
+    /* ======== SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS ========
+       Reutilizado en Pedidos/Usuarios (mismo criterio visual que el
+       bulk-toolbar que ya existía en Productos). La columna de checkbox y la
+       de "Eliminar"/"Acciones" quedan `position: sticky` a los costados de
+       la tabla para que nunca dependan de scroll horizontal — pedido
+       explícito: en Pedidos las acciones quedaban "al final de la tabla,
+       hay que mover la barra horizontal". */
+    .adm-bulk-toolbar {
+      display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 16px; background: #fff3e0; border-bottom: 1px solid var(--adm-border);
+    }
+    .adm-bulk-toolbar.show { display: flex; }
+    .adm-bulk-count { font-size: 13px; font-weight: 700; color: #e65100; }
+    .adm-table th.col-select, .adm-table td.col-select {
+      position: sticky; left: 0; z-index: 2; text-align: center; width: 38px;
+      background: var(--adm-card, #fff);
+    }
+    .adm-table th.col-actions-sticky, .adm-table td.col-actions-sticky {
+      position: sticky; right: 0; z-index: 2;
+      background: var(--adm-card, #fff);
+    }
+    .adm-table tr:hover td.col-select,
+    .adm-table tr:hover td.col-actions-sticky { background: #fef5f8; }
+
+    /* "Más acciones" — menú desplegable reutilizable para cuando la barra de
+       acciones masivas tiene demasiadas acciones para mostrar todas en fila
+       (pedido explícito: mobile/tablet no deben desbordar). */
+    .adm-more-actions { position: relative; }
+    .adm-more-actions-panel {
+      display: none;
+      position: absolute; top: calc(100% + 6px); left: 0; z-index: 20;
+      background: #fff; border: 1.5px solid var(--adm-border); border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      padding: 12px; min-width: 240px; max-width: calc(100vw - 32px);
+      flex-direction: column; gap: 8px;
+    }
+    .adm-more-actions-panel.show { display: flex; }
+    .adm-more-actions-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* ======== ROLES Y PERMISOS ======== */
+    .perm-module-block {
+      border: 1.5px solid var(--adm-border); border-radius: 12px; margin-bottom: 14px; overflow: hidden;
+    }
+    .perm-module-block > summary {
+      padding: 14px 18px; font-weight: 800; font-size: 14px; cursor: pointer;
+      background: var(--adm-bg); display: flex; align-items: center; justify-content: space-between;
+      list-style: none; user-select: none;
+    }
+    .perm-module-block > summary::-webkit-details-marker { display: none; }
+    .perm-module-block > summary::after {
+      content: '▾'; font-size: 11px; color: var(--adm-muted); transition: transform .2s;
+    }
+    .perm-module-block[open] > summary::after { transform: rotate(180deg); }
+    .perm-module-body { padding: 4px 18px 14px; }
+    .perm-mini-toggle { width: 40px; height: 22px; }
+    .perm-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
+    .perm-mini-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
+    .perm-row-not-implemented { color: var(--adm-muted); font-style: italic; font-size: 12px; }
+    .perm-row-fixed-note { font-size: 11px; color: var(--adm-muted); }
+    .perm-danger-badge {
+      display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+      background: #fde3e1; color: #c0392b; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+    }
+    .perm-uionly-badge {
+      display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      background: #fff3cd; color: #856404; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+    }
+    .perm-matrix-table th, .perm-matrix-table td { text-align: center; }
+    .perm-matrix-table th:first-child, .perm-matrix-table td:first-child { text-align: left; }
+    .perm-matrix-table td:first-child { max-width: 320px; }
+
+    @media (max-width: 720px) {
+      .perm-matrix-table thead { display: none; }
+      .perm-matrix-table, .perm-matrix-table tbody, .perm-matrix-table tr, .perm-matrix-table td { display: block; width: 100%; }
+      .perm-matrix-table tr {
+        margin-bottom: 10px; border: 1px solid var(--adm-border); border-radius: 10px; padding: 8px 10px; background: var(--adm-card);
+      }
+      .perm-matrix-table td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 6px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .perm-matrix-table tr td:last-child { border-bottom: none; }
+      .perm-matrix-table td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      .perm-matrix-table td:first-child { display: block; text-align: left; border-bottom: 1px dashed #f0d8e0; padding-bottom: 8px; margin-bottom: 4px; max-width: none; }
+      .perm-matrix-table td:first-child::before { display: none; }
+    }
+
+    /* ======== TABLES ======== */
+    .adm-table-wrap { overflow-x: auto; }
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .adm-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--adm-muted);
+      border-bottom: 2px solid var(--adm-border);
+      white-space: nowrap;
+    }
+    .adm-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #fce4ec;
+      vertical-align: middle;
+    }
+    .adm-table tr:last-child td { border-bottom: none; }
+    .adm-table tr:hover td { background: #fef5f8; }
+
+    /* ======== BADGES ======== */
+    .adm-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .badge-pendiente  { background: #fef3c7; color: #92400e; }
+    .badge-confirmado { background: #dbeafe; color: #1e40af; }
+    .badge-enviado    { background: #ede9fe; color: #5b21b6; }
+    .badge-entregado  { background: #d1fae5; color: #065f46; }
+    .badge-cancelado  { background: #fee2e2; color: #991b1b; }
+    .badge-preparando  { background: #fef9c3; color: #713f12; }
+    .badge-pagado      { background: #d1fae5; color: #065f46; }
+    /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
+       puedan distinguir de un vistazo en la misma columna — son estados
+       "terminales" distintos, no el mismo. */
+    .badge-rechazado   { background: #fde3e1; color: #c0392b; }
+    .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
+    /* Listo para retirar: único estado de pedido con el rosa de marca en vez
+       de la paleta semántica genérica — es un hito positivo específico de
+       Tintin (retiro en tienda), no un estado de logística estándar. */
+    .badge-listo       { background: var(--pink-pale); color: var(--pink-dark); }
+
+    /* ======== FORM ELEMENTS ======== */
+    .adm-input, .adm-select, .adm-textarea {
+      padding: 9px 14px;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--adm-font);
+      color: var(--adm-text);
+      background: #fff;
+      transition: border .2s;
+      width: 100%;
+    }
+    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
+      outline: none;
+      border-color: var(--adm-accent);
+    }
+    .adm-textarea { resize: vertical; min-height: 80px; }
+
+    /* Píldoras — usadas en Envíos (Ciudad / Costo) */
+    .adm-pill-input { border-radius: 999px; padding: 11px 22px; }
+    .ship-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .ship-tab-btn {
+      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+    }
+    .ship-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .ship-tab-panel { display: none; }
+    .ship-tab-panel.active { display: block; }
+
+    /* Usuarios / Bloqueados — mismas píldoras que ship-tabs, clases propias
+       para no compartir el querySelectorAll global de Envíos. */
+    .user-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+    .user-tab-btn {
+      padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .user-tab-count { font-size: 11px; font-weight: 800; opacity: .85; }
+
+    /* ======== MÓDULO CORREOS ======== */
+    .correos-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+      padding-bottom: 14px; border-bottom: 1.5px solid var(--adm-border);
+    }
+    .correos-tab-btn {
+      padding: 9px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
+      cursor: pointer; font-family: var(--adm-font); transition: all .2s; white-space: nowrap;
+    }
+    .correos-tab-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .correos-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
+    .correos-panel { display: none; }
+    .correos-panel.active { display: block; }
+    @media (max-width: 640px) {
+      .correos-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 10px; }
+      .correos-tabs::-webkit-scrollbar { display: none; }
+      .correos-tab-btn { flex-shrink: 0; }
+    }
+
+    /* Switches on/off con etiqueta — variante compacta del adm-toggle para
+       usarlo dentro de una fila de tabla (Correos de pedidos) sin romper el
+       alto de línea. */
+    .correos-mini-toggle { display: inline-flex; align-items: center; gap: 8px; }
+    .correos-mini-toggle .adm-toggle { width: 40px; height: 22px; }
+    .correos-mini-toggle .adm-toggle-slider::before { width: 16px; height: 16px; left: 3px; bottom: 3px; }
+    .correos-mini-toggle .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(18px); }
+
+    /* Chips de destinatarias seleccionadas (Promociones) */
+    .correos-chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+    .correos-chip {
+      display: inline-flex; align-items: center; gap: 6px; background: #fef5f8; color: var(--adm-accent);
+      border: 1px solid #f0d8e0; border-radius: 999px; padding: 5px 8px 5px 14px; font-size: 12px; font-weight: 600;
+    }
+    .correos-chip button {
+      background: none; border: none; color: var(--adm-accent); cursor: pointer; font-size: 14px; line-height: 1;
+      padding: 2px 4px; border-radius: 50%;
+    }
+    .correos-chip button:hover { background: rgba(184,76,114,.15); }
+    .correos-chip.blocked { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+
+    /* Barra de progreso de envío por tandas (Promociones) */
+    .correos-progress-wrap { background: #f1f1f1; border-radius: 999px; height: 10px; overflow: hidden; margin: 12px 0; }
+    .correos-progress-bar { background: var(--adm-accent); height: 100%; width: 0%; transition: width .3s; }
+
+    /* ======== CLIENTAS: tabla → cards en mobile (mismo patrón que Pedidos) ======== */
+    @media (max-width: 640px) {
+      .adm-table-clientas thead { display: none; }
+      .adm-table-clientas, .adm-table-clientas tbody,
+      .adm-table-clientas tr, .adm-table-clientas td { display: block; width: 100%; }
+      .adm-table-clientas tr.adm-cliente-row {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-clientas td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-clientas tr.adm-cliente-row td:last-child { border-bottom: none; }
+      .adm-table-clientas td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
+    /* ======== HISTORIAL: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-historial thead { display: none; }
+      .adm-table-historial, .adm-table-historial tbody,
+      .adm-table-historial tr, .adm-table-historial td { display: block; width: 100%; }
+      .adm-table-historial tr.adm-log-row {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-historial td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-historial tr.adm-log-row td:last-child { border-bottom: none; }
+      .adm-table-historial td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      .adm-table-historial td.col-select { position: static; }
+    }
+
+    /* ======== PEDIDOS DE CORREOS: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-correos-pedidos thead { display: none; }
+      .adm-table-correos-pedidos, .adm-table-correos-pedidos tbody,
+      .adm-table-correos-pedidos tr, .adm-table-correos-pedidos td { display: block; width: 100%; }
+      .adm-table-correos-pedidos tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-correos-pedidos td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-correos-pedidos tr td:last-child { border-bottom: none; }
+      .adm-table-correos-pedidos td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      .adm-table-correos-pedidos td.col-select { position: static; }
+    }
+
+    /* ======== PLANTILLAS: tabla → cards en mobile ========
+       Esta tabla tiene hasta 5 botones de acción por fila (Editar/Vista
+       previa/Duplicar/Archivar/Eliminar) — en mobile quedan apilados y
+       envueltos (flex-wrap), nunca cortados ni exigiendo scroll horizontal
+       para llegar a ellos. */
+    @media (max-width: 640px) {
+      .adm-table-plantillas thead { display: none; }
+      .adm-table-plantillas, .adm-table-plantillas tbody,
+      .adm-table-plantillas tr, .adm-table-plantillas td { display: block; width: 100%; }
+      .adm-table-plantillas tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-plantillas td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-plantillas tr td:last-child { border-bottom: none; }
+      .adm-table-plantillas td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+      /* La celda de Acciones tiene varios botones — se acomodan en su
+         propia fila envuelta en vez de forzarse contra el borde derecho. */
+      .adm-table-plantillas td[data-label="Acciones"] {
+        display: block; text-align: left;
+      }
+      .adm-table-plantillas td[data-label="Acciones"]::before {
+        display: block; margin-bottom: 6px;
+      }
+      .adm-table-plantillas td[data-label="Acciones"] > div {
+        justify-content: flex-start;
+      }
+      /* Nombre/asunto: el <small> con el asunto se ve muy apretado a la
+         derecha — se deja alinear a la izquierda debajo del nombre. */
+      .adm-table-plantillas td.col-select { position: static; }
+      .adm-table-plantillas td[data-label="Plantilla"] {
+        display: block; text-align: left;
+      }
+      .adm-table-plantillas td[data-label="Plantilla"]::before {
+        display: block; margin-bottom: 4px;
+      }
+    }
+
+    /* ======== DASHBOARD DE CORREOS — Últimos envíos: tabla → cards en mobile ======== */
+    @media (max-width: 640px) {
+      .adm-table-correos-dash thead { display: none; }
+      .adm-table-correos-dash, .adm-table-correos-dash tbody,
+      .adm-table-correos-dash tr, .adm-table-correos-dash td { display: block; width: 100%; }
+      .adm-table-correos-dash tr {
+        margin-bottom: 12px; border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px; background: var(--adm-card);
+      }
+      .adm-table-correos-dash td {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 7px 2px; border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-correos-dash tr td:last-child { border-bottom: none; }
+      .adm-table-correos-dash td[data-label]::before {
+        content: attr(data-label); font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; color: var(--adm-muted); text-align: left; flex-shrink: 0;
+      }
+    }
+
+    .adm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .adm-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--adm-muted);
+    }
+
+    .adm-btn {
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: var(--adm-font);
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .adm-btn-primary { background: var(--adm-accent); color: #fff; }
+    .adm-btn-primary:hover { background: var(--rose); }
+    .adm-btn-danger { background: #ef4444; color: #fff; }
+    .adm-btn-danger:hover { background: #dc2626; }
+    .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
+    .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
+
+    /* ======== SEARCH ======== */
+    .adm-search-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .adm-search-wrap input {
+      padding-left: 36px;
+    }
+    .adm-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--adm-muted);
+      font-size: 14px;
+    }
+
+    /* ======== FILTER ROW ======== */
+    .adm-filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .adm-filter-row .adm-select { width: auto; flex: 1; min-width: 120px; }
+
+    /* ======== USER AVATAR (table) ======== */
+    .adm-tbl-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--adm-accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 900; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .adm-tbl-avatar img { width:100%;height:100%;object-fit:cover; }
+
+    /* ======== ORDER DETAIL ======== */
+    .adm-order-detail {
+      background: var(--adm-bg);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 8px;
+      display: none;
+      font-size: 13px;
+    }
+    .adm-order-detail.open { display: block; }
+    .adm-detail-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .adm-detail-label {
+      font-weight: 700;
+      color: var(--adm-muted);
+      min-width: 100px;
+    }
+
+    /* ======== TOGGLE SWITCH ======== */
+    .adm-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .adm-toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .adm-toggle input {
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .adm-toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      border-radius: 28px;
+      transition: .3s;
+    }
+    .adm-toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      left: 4px; bottom: 4px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    .adm-toggle input:checked + .adm-toggle-slider { background: var(--adm-accent); }
+    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(24px); }
+
+    .adm-toggle-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .adm-toggle-desc {
+      font-size: 12px;
+      color: var(--adm-muted);
+      margin-top: 4px;
+    }
+
+    /* ======== TOAST ======== */
+    .adm-toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--adm-accent);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      display: none;
+      box-shadow: 0 4px 20px rgba(184,76,114,.4);
+    }
+    .adm-toast.show { display: block; animation: toastIn .3s ease; }
+    @keyframes toastIn {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ======== CONTENT EDITOR (contenido) ======== */
+    .cont-page-tab {
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      border: 2px solid #eee;
+      background: #fff;
+      color: var(--adm-muted);
+      font-family: var(--adm-font);
+      transition: all .2s;
+    }
+    .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
+    .cont-page-tab.active { background: var(--adm-accent); border-color: var(--adm-accent); color: #fff; }
+
+    .cont-section {
+      background: #fff;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .cont-section.dirty { border-color: #ffc107; }
+    .cont-section.saved { border-color: #4caf50; }
+
+    .cont-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .15s;
+    }
+    .cont-section-head:hover { background: #f5f5f5; }
+    .cont-section-head.open { border-bottom: 1.5px solid var(--adm-border); background: #fef5f8; }
+
+    .cont-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--adm-text);
+    }
+    .cont-section-icon { font-size: 18px; }
+    .cont-section-chevron {
+      font-size: 14px;
+      color: var(--adm-muted);
+      transition: transform .2s ease;
+    }
+    .cont-section-head.open .cont-section-chevron { transform: rotate(180deg); }
+    .cont-section-body { display: none; padding: 20px 24px 24px; }
+    .cont-section-body.open { display: block; }
+    .cont-section-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .cont-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .cont-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--adm-muted);
+    }
+    .cont-input, .cont-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: var(--adm-font);
+      color: var(--adm-text);
+      transition: border .2s;
+      width: 100%;
+    }
+    .cont-input:focus, .cont-textarea:focus { outline: none; border-color: var(--adm-accent); }
+    .cont-textarea { resize: vertical; min-height: 80px; }
+
+    .cont-img-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .cont-img-preview {
+      width: 100%;
+      max-height: 160px;
+      object-fit: contain;
+      border: 1.5px dashed var(--adm-border);
+      border-radius: 8px;
+      padding: 8px;
+      background: #fef5f8;
+      display: none;
+      margin-top: 8px;
+    }
+    .cont-img-preview.show { display: block; }
+    .cont-upload-progress { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .cont-upload-bar-wrap { flex: 1; height: 6px; background: #f0d0de; border-radius: 999px; overflow: hidden; }
+    .cont-upload-bar { height: 100%; width: 0%; background: var(--adm-accent); border-radius: 999px; transition: width .15s; }
+    .cont-upload-pct { font-size: 11px; color: #888; min-width: 32px; text-align: right; }
+
+    .cont-array-item {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: #fafafa;
+      border: 1.5px solid var(--adm-border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cont-array-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .cont-array-item-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--adm-accent); }
+    .cont-array-del {
+      background: #ffebee; border: none; border-radius: 50%; width: 24px; height: 24px;
+      cursor: pointer; color: #c62828; font-size: 14px; display: flex;
+      align-items: center; justify-content: center; font-weight: 900; transition: background .15s;
+    }
+    .cont-array-del:hover { background: #ffcdd2; }
+    .cont-dirty-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #ffc107;
+      display: none; margin-left: 6px;
+    }
+
+    /* ======== SPINNER ======== */
+    .adm-spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(184,76,114,.2);
+      border-top-color: var(--adm-accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .adm-loading {
+      text-align: center;
+      padding: 32px;
+      color: var(--adm-muted);
+      font-size: 13px;
+    }
+
+    /* ======== OVERLAY ======== */
+    .adm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 150;
+    }
+    .adm-overlay.show { display: block; }
+
+    /* ======== RESPONSIVE ======== */
+    /* ── TABLET: sidebar compacta siempre visible ── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 64px; }
+
+      .adm-sidebar {
+        width: 64px;
+        overflow: visible;
+      }
+      .adm-sidebar-logo,
+      .adm-user-info .adm-user-name,
+      .adm-user-info .adm-user-role-badge,
+      .adm-nav-divider { display: none; }
+
+      .adm-user-info {
+        justify-content: center;
+        padding: 12px 0;
+      }
+      .adm-nav-item {
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 0;
+        font-size: 9px;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .adm-nav-icon { font-size: 20px; width: auto; }
+
+      .adm-nav-bottom { padding: 8px 0 16px; }
+      .adm-hamburger { display: none; }
+      .adm-content { padding: 16px; }
+      .adm-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── MOBILE: bottom tab bar, sidebar oculta ── */
+    @media (max-width: 540px) {
+      :root { --sidebar-w: 0px; }
+
+      .adm-sidebar { display: none; }
+
+      .adm-main {
+        margin-left: 0;
+        padding-bottom: 70px;
+      }
+
+      .adm-mobile-tabs {
+        display: flex !important;
+      }
+
+      .adm-content { padding: 12px; }
+      .adm-topbar { padding: 12px 16px; }
+      .adm-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ======== TABLA DE PEDIDOS → CARDS EN MOBILE ========
+       Solo afecta a .adm-table-pedidos (la tabla de Pedidos) — el resto de
+       las tablas del admin (Usuarios, Productos, Auditoría) siguen con
+       scroll horizontal como antes, no se tocan. */
+    @media (max-width: 640px) {
+      .adm-table-pedidos thead { display: none; }
+      .adm-table-pedidos, .adm-table-pedidos tbody,
+      .adm-table-pedidos tr, .adm-table-pedidos td {
+        display: block; width: 100%;
+      }
+      .adm-table-pedidos tr.adm-order-row {
+        margin-bottom: 12px;
+        border: 1px solid var(--adm-border);
+        border-radius: var(--adm-radius-md, 14px);
+        padding: 10px 12px;
+        background: var(--adm-card);
+      }
+      .adm-table-pedidos tr.adm-order-row:hover td { background: none; }
+      .adm-table-pedidos tr.adm-order-detail-row { margin-top: -8px; margin-bottom: 12px; }
+      .adm-table-pedidos td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 7px 2px;
+        border-bottom: 1px dashed #f0d8e0;
+        text-align: right;
+      }
+      .adm-table-pedidos tr.adm-order-row td:last-child { border-bottom: none; }
+      .adm-table-pedidos td[data-label]::before {
+        content: attr(data-label);
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--adm-muted);
+        text-align: left;
+        flex-shrink: 0;
+      }
+      /* Estado/Pago traen su propio select — que se vea grande y fácil de
+         tocar con el dedo, en vez del tamaño chico pensado para desktop. */
+      .adm-table-pedidos td[data-label] select.adm-select {
+        width: auto; max-width: 60%; font-size: 13px !important; padding: 8px 10px !important;
+      }
+      /* El detalle expandido (dirección, productos, notas) es un panel
+         completo, no un campo de card — vuelve a su layout normal en vez
+         del flex/alineado-a-la-derecha de los <td> de arriba. */
+      .adm-table-pedidos tr.adm-order-detail-row td {
+        display: block;
+        text-align: left;
+        border-bottom: none;
+        padding: 0;
+      }
+      /* La card ya apila todo verticalmente — la columna de selección y la
+         de Eliminar no necesitan (ni deben) quedar sticky acá, eso es solo
+         para el scroll horizontal del modo tabla de escritorio/tablet. */
+      .adm-table-pedidos td.col-select,
+      .adm-table-pedidos td.col-actions-sticky {
+        position: static;
+      }
+    }
+
+    /* Tab bar mobile — oculto por defecto */
+    .adm-mobile-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--adm-sidebar);
+      z-index: 300;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      border-top: 1px solid rgba(255,255,255,.15);
+      height: 64px;
+      align-items: stretch;
+    }
+    .adm-mobile-tabs::-webkit-scrollbar { display: none; }
+
+    .adm-mobile-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 14px;
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.75);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--adm-font);
+      text-decoration: none;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .adm-mobile-tab:hover,
+    .adm-mobile-tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.12);
+    }
+    .adm-mobile-tab svg,
+    .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
