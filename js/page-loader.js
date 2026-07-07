@@ -214,9 +214,15 @@
     }
   }
 
+  function bootScrollReveal() {
+    if (window.TintinGlobalScrollRevealBooted) return;
+    importSibling('scroll-reveal-global.js', 'Global Scroll Reveal');
+  }
+
   bootStoreGate();
   bootHeaderDropdownFix();
   bootOrderStatsFixes();
+  bootScrollReveal();
 
   document.addEventListener('tintin:page-ready', ready);
 
