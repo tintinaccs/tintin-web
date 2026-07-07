@@ -59,6 +59,26 @@ service cloud.firestore {
       );
     }
 
+    function isOwnOrderByUidOrEmail() {
+      return isSignedIn() && !isBlockedUser() && (
+        resource.data.userId == request.auth.uid ||
+        (
+          resource.data.userEmail is string &&
+          request.auth.token.email is string &&
+          resource.data.userEmail.lower() == request.auth.token.email.lower()
+        )
+      );
+    }
+
+    function orderStatsOnlyUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'purchaseCount', 'orderCount', 'totalOrders', 'totalSpent',
+        'completedOrders', 'pendingOrders', 'cancelledOrders',
+        'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
+        'profileStatsUpdatedAt', 'orderStats', 'updatedAt'
+      ]);
+    }
+
     match /settings/images {
       allow read: if isStoreOpen();
       allow write: if isStoreOpen() && isAdmin();
@@ -93,6 +113,9 @@ service cloud.firestore {
       allow update: if isSignedIn() && (
         (request.auth.uid == userId && !isBlockedUser() && isStoreOpen() &&
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
+        (
+          isStoreOpen() && isAdmin() && orderStatsOnlyUpdate()
+        ) ||
         (
           isSuperAdmin() &&
           (request.auth.token.email == "tintinaccs@gmail.com" || !isSuperAdminAccount(resource.data)) &&
@@ -138,8 +161,7 @@ service cloud.firestore {
         request.resource.data.userEmail.lower() == request.auth.token.email.lower();
 
       allow read: if isSuperAdmin() || (isStoreOpen() && (
-        isAdmin() || isAgent() ||
-        (isSignedIn() && !isBlockedUser() && resource.data.userId == request.auth.uid)
+        isAdmin() || isAgent() || isOwnOrderByUidOrEmail()
       ));
 
       allow update: if isSuperAdmin() || (isStoreOpen() && (
@@ -154,8 +176,7 @@ service cloud.firestore {
           (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
         ) ||
         (
-          isSignedIn() && !isBlockedUser() &&
-          resource.data.userId == request.auth.uid &&
+          isOwnOrderByUidOrEmail() &&
           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
         )
       ));
