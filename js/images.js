@@ -6,6 +6,17 @@
 import { db } from "./firebase.js";
 import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+function injectTintinPalette() {
+  if (document.getElementById('tt-tintin-palette-css')) return;
+  const link = document.createElement('link');
+  link.id = 'tt-tintin-palette-css';
+  link.rel = 'stylesheet';
+  link.href = new URL('../css/tintin-palette.css', import.meta.url).href;
+  document.head.appendChild(link);
+}
+
+injectTintinPalette();
+
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
 
@@ -75,7 +86,7 @@ export async function loadImages() {
     return _cache;
   }
   try {
-    const snap = await getDoc(doc(db, 'settings', 'images'));
+    const snap = await getDoc(doc(db, FIRESTORE_DOC));
     const data = snap.exists() ? snap.data() : {};
     _cache = data;
     _toLocalStorage(data);
@@ -90,7 +101,7 @@ export async function loadImages() {
  * Save all image data to Firestore and update localStorage.
  */
 export async function saveImages(data) {
-  await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
+  await setDoc(doc(db, FIRESTORE_DOC), data, { merge: true });
   _cache = { ...(_cache || {}), ...data };
   _toLocalStorage(_cache);
 }
@@ -131,7 +142,7 @@ export function onImagesUpdate(cb) {
   if (_cache) cb(_cache);
   if (_listenerStarted) return;
   _listenerStarted = true;
-  onSnapshot(doc(db, 'settings', 'images'), snap => {
+  onSnapshot(doc(db, FIRESTORE_DOC), snap => {
     _cache = snap.exists() ? snap.data() : {};
     _toLocalStorage(_cache);
     _subscribers.forEach(fn => { try { fn(_cache); } catch (e) { console.warn('[images] subscriber error:', e); } });
