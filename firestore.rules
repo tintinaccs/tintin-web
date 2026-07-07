@@ -28,6 +28,10 @@ service cloud.firestore {
         : "visitor";
     }
 
+    function hasRole(role) {
+      return isSignedIn() && !isBlockedUser() && userDocExists() && currentRole() == role;
+    }
+
     function isBlockedUser() {
       return isSignedIn() &&
         request.auth.token.email != "tintinaccs@gmail.com" &&
@@ -37,29 +41,24 @@ service cloud.firestore {
 
     function isAdmin() {
       return isSignedIn() && !isBlockedUser() && (
-        isSuperAdmin() ||
-        (userDocExists() && currentRole() == "admin")
+        isSuperAdmin() || hasRole("admin")
       );
     }
 
     function isAgent() {
-      return isSignedIn() && !isBlockedUser() &&
-        userDocExists() && currentRole() == "agent";
+      return hasRole("agent");
     }
 
     function isViewer() {
-      return isSignedIn() && !isBlockedUser() &&
-        userDocExists() && currentRole() == "viewer";
+      return hasRole("viewer");
     }
 
     function isModerator() {
-      return isSignedIn() && !isBlockedUser() &&
-        userDocExists() && currentRole() == "moderator";
+      return hasRole("moderator");
     }
 
     function isSupport() {
-      return isSignedIn() && !isBlockedUser() &&
-        userDocExists() && currentRole() == "support";
+      return hasRole("support");
     }
 
     function isSuperAdminAccount(data) {
@@ -86,11 +85,17 @@ service cloud.firestore {
        TINTIN — ROLES Y PERMISOS DINÁMICOS
        ============================================================ */
 
+    // Cerrado por defecto: si Super Admin no habilita un permiso de manera
+    // explícita en rolePermissions/main, el rol NO lo tiene.
     function rolePermAllows(role, moduleKey, actionKey) {
-      return !exists(/databases/$(database)/documents/rolePermissions/main) || (
+      return exists(/databases/$(database)/documents/rolePermissions/main) &&
         get(/databases/$(database)/documents/rolePermissions/main).data
-          .get(role, {}).get(moduleKey, {}).get(actionKey, true) == true
-      );
+          .get(role, {}).get(moduleKey, {}).get(actionKey, false) == true;
+    }
+
+    function currentRolePermAllows(moduleKey, actionKey) {
+      return isSignedIn() && !isBlockedUser() && userDocExists() &&
+        rolePermAllows(currentRole(), moduleKey, actionKey);
     }
 
     /* ============================================================
@@ -135,7 +140,7 @@ service cloud.firestore {
     }
 
     /* ============================================================
-       SETTINGS
+       SETTINGS — SOLO SUPER ADMIN EDITA
        ============================================================ */
 
     match /settings/general {
@@ -145,12 +150,9 @@ service cloud.firestore {
 
     match /settings/images {
       allow read: if isStoreOpenOrAllowed();
-      allow write: if isSuperAdmin() || (isStoreOpenOrAllowed() && isAdmin());
+      allow write: if isSuperAdmin();
     }
 
-    // Mensajes editables del tutorial de bienvenida.
-    // Usuarios logueados pueden leerlos cuando la tienda está abierta;
-    // solo Super Admin puede crearlos, editarlos o eliminarlos.
     match /settings/welcomeTutorial {
       allow read: if isSignedIn() && isStoreOpenOrAllowed();
       allow write: if isSuperAdmin();
@@ -161,7 +163,7 @@ service cloud.firestore {
     }
 
     /* ============================================================
-       USERS
+       USERS — ROLES/BLOQUEOS SOLO SUPER ADMIN
        ============================================================ */
 
     match /users/{userId} {
@@ -197,11 +199,12 @@ service cloud.firestore {
           request.auth.uid == userId &&
           !isBlockedUser() &&
           isStoreOpenOrAllowed() &&
-          !protectedUserFieldsChanged()
+          !protectedUserFieldsChanged() &&
+          !orderStatsOnlyUpdate()
         ) ||
         (
           isStoreOpenOrAllowed() &&
-          isAdmin() &&
+          hasRole("admin") &&
           orderStatsOnlyUpdate() &&
           orderStatsNonNegative()
         ) ||
@@ -235,22 +238,29 @@ service cloud.firestore {
 
     match /products/{productId} {
       allow read: if isStoreOpenOrAllowed();
-      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
+      allow create: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('productos', 'crear'));
+      allow update: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('productos', 'editar'));
+      allow delete: if isSuperAdmin();
     }
 
     match /collections/{collectionId} {
       allow read: if isStoreOpenOrAllowed();
-      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
+      allow create: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('colecciones', 'crear'));
+      allow update: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('colecciones', 'editar'));
+      allow delete: if isSuperAdmin();
     }
 
     match /site_content/{pageId} {
       allow read: if isStoreOpenOrAllowed();
-      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() || (isStoreOpenOrAllowed() && isAdmin());
+      allow create: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('contenido', 'crear'));
+      allow update: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && currentRolePermAllows('contenido', 'editar'));
+      allow delete: if isSuperAdmin();
     }
 
     /* ============================================================
@@ -270,23 +280,27 @@ service cloud.firestore {
       allow read: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
-          (isAdmin() || isAgent() || isOwnOrderByUidOrEmail())
+          (
+            currentRolePermAllows('pedidos', 'ver') ||
+            isOwnOrderByUidOrEmail()
+          )
         );
 
+      // Edición completa y eliminación quedan SOLO para Super Admin.
+      // Otros roles pueden tener acciones puntuales si Super Admin las habilita.
       allow update: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (
-            (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) ||
             (
-              isAgent() &&
+              (hasRole("admin") || hasRole("agent")) &&
               request.resource.data.diff(resource.data).affectedKeys().hasOnly([
                 'status', 'payment', 'paymentStatus', 'resendCount',
                 'lastResendAt', 'notificationStatus', 'updatedAt'
               ]) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || currentRolePermAllows('pedidos', 'cambiarEstado')) &&
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || currentRolePermAllows('pedidos', 'cambiarPago')) &&
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || currentRolePermAllows('pedidos', 'reenviarCorreo'))
             ) ||
             (
               isOwnOrderByUidOrEmail() &&
@@ -295,8 +309,7 @@ service cloud.firestore {
           )
         );
 
-      allow delete: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
+      allow delete: if isSuperAdmin();
     }
 
     /* ============================================================
@@ -305,7 +318,8 @@ service cloud.firestore {
 
     match /auditLog/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isSuperAdmin() || (isStoreOpenOrAllowed() && (isAdmin() || isAgent()));
+      allow create: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && (hasRole("admin") || hasRole("agent")));
       allow update, delete: if false;
     }
 
@@ -313,13 +327,13 @@ service cloud.firestore {
       allow read: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
-          (isAdmin() || isAgent() || isViewer() || isModerator() || isSupport())
+          (hasRole("admin") || hasRole("agent") || hasRole("viewer") || hasRole("moderator") || hasRole("support"))
         );
       allow write: if isSuperAdmin();
     }
 
     /* ============================================================
-       EMAIL MODULE
+       EMAIL MODULE — CONFIGURACIÓN SOLO SUPER ADMIN
        ============================================================ */
 
     match /emailSettings/{docId} {
@@ -336,7 +350,7 @@ service cloud.firestore {
         (
           isStoreOpenOrAllowed() &&
           (
-            isAdmin() || isAgent() ||
+            ((hasRole("admin") || hasRole("agent")) && currentRolePermAllows('pedidos', 'reenviarCorreo')) ||
             (
               isSignedIn() &&
               !isBlockedUser() &&
