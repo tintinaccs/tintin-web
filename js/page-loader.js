@@ -220,6 +220,11 @@
     importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
   }
 
+  function bootHeaderScrollHide() {
+    if (window.TintinHeaderScrollHideBooted) return;
+    importSibling('header-scroll-hide.js', 'Header Scroll Hide');
+  }
+
   function bootAdminAndProfileFixes() {
     var path = (location.pathname || '').toLowerCase();
     if (path.endsWith('/admin.html') || path.endsWith('/admin')) {
@@ -238,6 +243,7 @@
 
   bootStoreGate();
   bootHeaderDropdownFix();
+  bootHeaderScrollHide();
   bootAdminAndProfileFixes();
   bootScrollReveal();
 
