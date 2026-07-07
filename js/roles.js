@@ -30,97 +30,111 @@ export const ROLE_LABELS = {
 };
 
 export const PERMISSIONS = {
+  // Único rol con permisos totales. Ningún otro rol debe copiar esta matriz.
   superadmin: {
-    manageUsers:      true,
-    assignRoles:      true,
-    deleteUsers:      true,
-    viewOrders:       true,
-    manageOrders:     true,
-    manageOrdersFull: true,
-    addProducts:      true,
-    editProducts:     true,
-    deleteProducts:   true,
-    manageContent:    true,
+    manageUsers:       true,
+    assignRoles:       true,
+    deleteUsers:       true,
+    viewOrders:        true,
+    manageOrders:      true,
+    manageOrdersFull:  true,
+    deleteOrders:      true,
+    addProducts:       true,
+    editProducts:      true,
+    deleteProducts:    true,
+    manageContent:     true,
     deleteCollections: true,
-    deleteContent:    true,
-    manageSettings:   true,
-    viewDashboard:    true
+    deleteContent:     true,
+    manageSettings:    true,
+    manageImages:      true,
+    manageEmail:       true,
+    viewDashboard:     true
   },
-  // Admin: gerente operativo de la tienda con control total sobre pedidos,
-  // productos, colecciones y contenido (incluido eliminar) — pero CERO acceso
-  // a Usuarios, Configuración e Importar. No es un segundo Super Admin: no
-  // puede tocar cuentas, roles, ni nada de configuración/seguridad interna.
-  // (Antes esta matriz era idéntica a superadmin — ver Fase D.)
+
+  // Admin operativo: puede ayudar en el día a día, pero NO tiene permisos
+  // máximos de Super Admin. No usuarios, no roles, no configuración, no borrados
+  // sensibles y no edición completa de pedidos.
   admin: {
-    manageUsers:      false,
-    assignRoles:      false,
-    deleteUsers:      false,
-    viewOrders:       true,
-    manageOrders:     true,
-    manageOrdersFull: true,
-    addProducts:      true,
-    editProducts:     true,
-    deleteProducts:   true,
-    manageContent:    true,
-    deleteCollections: true,
-    deleteContent:    true,
-    manageSettings:   false,
-    viewDashboard:    true
+    manageUsers:       false,
+    assignRoles:       false,
+    deleteUsers:       false,
+    viewOrders:        true,
+    manageOrders:      true,
+    manageOrdersFull:  false,
+    deleteOrders:      false,
+    addProducts:       true,
+    editProducts:      true,
+    deleteProducts:    false,
+    manageContent:     true,
+    deleteCollections: false,
+    deleteContent:     false,
+    manageSettings:    false,
+    manageImages:      false,
+    manageEmail:       false,
+    viewDashboard:     true
   },
-  // Modder: permisos operativos del día a día (pedidos, stock, productos,
-  // colecciones, contenido) pero SIN nada que sea irreversible o sensible
-  // (borrar, usuarios, configuración). Esta matriz es solo la mitad del
-  // control — la otra mitad, la que de verdad importa, son las reglas de
-  // Firestore (firestore.rules), que están escritas para permitir EXACTAMENTE
-  // esto mismo y nada más, sin importar lo que diga esta matriz del lado
-  // del cliente.
+
+  // Agente: tareas puntuales, sin permisos irreversibles.
   agent: {
-    manageUsers:      false,
-    assignRoles:      false,
-    deleteUsers:      false,
-    viewOrders:       true,
-    manageOrders:     true,   // cambiar estado/pago, reenviar correo
-    manageOrdersFull: false,  // NO editar productos/montos/dirección del pedido, NO eliminar pedido
-    addProducts:      true,
-    editProducts:     true,
-    deleteProducts:   false,
-    manageContent:    true,   // crear/editar colecciones y contenido
+    manageUsers:       false,
+    assignRoles:       false,
+    deleteUsers:       false,
+    viewOrders:        true,
+    manageOrders:      true,
+    manageOrdersFull:  false,
+    deleteOrders:      false,
+    addProducts:       false,
+    editProducts:      false,
+    deleteProducts:    false,
+    manageContent:     false,
     deleteCollections: false,
-    deleteContent:    false,
-    manageSettings:   false,
-    viewDashboard:    true
+    deleteContent:     false,
+    manageSettings:    false,
+    manageImages:      false,
+    manageEmail:       false,
+    viewDashboard:     true
   },
+
+  // Viewer: solo lectura operativa, sin cambios.
   viewer: {
-    manageUsers:      false,
-    assignRoles:      false,
-    deleteUsers:      false,
-    viewOrders:       true,
-    manageOrders:     false,
-    manageOrdersFull: false,
-    addProducts:      true,
-    editProducts:     false,
-    deleteProducts:   false,
-    manageContent:    false,
+    manageUsers:       false,
+    assignRoles:       false,
+    deleteUsers:       false,
+    viewOrders:        true,
+    manageOrders:      false,
+    manageOrdersFull:  false,
+    deleteOrders:      false,
+    addProducts:       false,
+    editProducts:      false,
+    deleteProducts:    false,
+    manageContent:     false,
     deleteCollections: false,
-    deleteContent:    false,
-    manageSettings:   false,
-    viewDashboard:    true
+    deleteContent:     false,
+    manageSettings:    false,
+    manageImages:      false,
+    manageEmail:       false,
+    viewDashboard:     true
   },
+
+  // Cliente: nunca entra al panel ni a funciones internas.
   client: {
-    manageUsers:      false,
-    assignRoles:      false,
-    deleteUsers:      false,
-    viewOrders:       false,
-    manageOrders:     false,
-    manageOrdersFull: false,
-    addProducts:      false,
-    editProducts:     false,
-    deleteProducts:   false,
-    manageContent:    false,
+    manageUsers:       false,
+    assignRoles:       false,
+    deleteUsers:       false,
+    viewOrders:        false,
+    manageOrders:      false,
+    manageOrdersFull:  false,
+    deleteOrders:      false,
+    addProducts:       false,
+    editProducts:      false,
+    deleteProducts:    false,
+    manageContent:     false,
     deleteCollections: false,
-    deleteContent:    false,
-    manageSettings:   false,
-    viewDashboard:    false
+    deleteContent:     false,
+    manageSettings:    false,
+    manageImages:      false,
+    manageEmail:       false,
+    viewDashboard:     false
   }
 };
 
@@ -140,15 +154,15 @@ export function can(role, permission) {
  * @returns {Promise<string>} role string
  */
 export async function getUserRole(uid, email) {
-  // Superadmin always gets top role without a Firestore round-trip
+  // Super Admin real: solo por email oficial, no por documento manipulable.
   if (email && email === SUPER_ADMIN) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (snap.exists()) {
       const data = snap.data();
-      // Also check email in the stored doc
       if (data.email === SUPER_ADMIN) return 'superadmin';
-      return data.role || 'client';
+      const role = data.role || 'client';
+      return role === 'superadmin' ? 'client' : role;
     }
     return 'client';
   } catch (e) {
