@@ -1,0 +1,427 @@
+/* =============================================================
+   TINTIN — PALETA GLOBAL OFICIAL
+   Aplica la paleta enviada por Tintin a la tienda, login, checkout,
+   perfil, admin, modales, tablas, botones, badges y mobile.
+   ============================================================= */
+
+:root {
+  --tt-page-bg: #FFF6FA;
+  --tt-title: #2B2B2B;
+  --tt-text: #7B6F72;
+  --tt-card: #FFFFFF;
+  --tt-primary: #F6B7C8;
+  --tt-soft: #FAD6DF;
+  --tt-light: #FDECF2;
+  --tt-baby: #F9C3D3;
+  --tt-medium: #F398B2;
+  --tt-strong: #E88CA8;
+  --tt-dark: #D46A8A;
+  --tt-vintage: #E6A6B7;
+  --tt-champagne: #FFFFF3;
+  --tt-border: #F1E4E7;
+  --tt-line: #F7E9ED;
+  --tt-icon: #A6959C;
+  --tt-gradient: linear-gradient(135deg, #F6B7C8 0%, #F398B2 100%);
+
+  --bg: #FFF6FA !important;
+  --bg-soft: #FDECF2 !important;
+  --card-bg: #FFFFFF !important;
+  --pink-pale: #FDECF2 !important;
+  --pink: #F6B7C8 !important;
+  --pink-mid: #F398B2 !important;
+  --pink-dark: #D46A8A !important;
+  --pink-lightest: #FAD6DF !important;
+  --rose: #D46A8A !important;
+  --gold: #FFFFF3 !important;
+  --gold-hover: #F6B7C8 !important;
+  --gold-light: #FFFFF3 !important;
+  --ink: #2B2B2B !important;
+  --text: #7B6F72 !important;
+  --text-sec: #7B6F72 !important;
+  --text-muted: #A6959C !important;
+  --text-title: #2B2B2B !important;
+  --border: #F1E4E7 !important;
+  --white: #FFFFFF !important;
+  --whatsapp: #F6B7C8 !important;
+  --whatsapp-h: #F398B2 !important;
+  --error: #D46A8A !important;
+  --success: #E88CA8 !important;
+
+  --adm-bg: #FFF6FA !important;
+  --adm-card: #FFFFFF !important;
+  --adm-text: #2B2B2B !important;
+  --adm-muted: #7B6F72 !important;
+  --adm-accent: #F6B7C8 !important;
+  --adm-accent-dark: #D46A8A !important;
+  --adm-border: #F1E4E7 !important;
+  --adm-danger: #D46A8A !important;
+  --adm-success: #E88CA8 !important;
+  --adm-warning: #F398B2 !important;
+  --adm-info: #A6959C !important;
+}
+
+html,
+body {
+  background: var(--tt-page-bg) !important;
+  color: var(--tt-text) !important;
+}
+
+body,
+p,
+li,
+small,
+label,
+input,
+textarea,
+select,
+button,
+.tt-section-desc,
+.cat-count,
+.perfil-email,
+.login-heading-sub,
+.adm-user-email,
+.adm-section-header p {
+  color: var(--tt-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.tt-section-title,
+.tt-page-hero-title,
+.tt-hero-title,
+.tt-watch-title,
+.tt-editorial-title,
+.tt-cart-title,
+.perfil-name,
+.login-heading,
+.adm-card-title,
+.adm-section-header h1,
+.ck-panel-title {
+  color: var(--tt-title) !important;
+}
+
+.tt-header,
+.tt-mobile-menu,
+.tt-search-panel,
+.tt-cart-drawer,
+.tt-collections-sheet,
+.tt-account-panel,
+.tt-dropdown,
+.tt-card,
+.tt-review-card,
+.tt-info-block,
+.perfil-card,
+.login-box,
+.ck-panel,
+.ck-header,
+.adm-card,
+.adm-sidebar,
+.adm-header,
+.adm-topbar,
+.adm-modal,
+.adm-img-card,
+.tt-welcome-step-card {
+  background: var(--tt-card) !important;
+  border-color: var(--tt-border) !important;
+  color: var(--tt-text) !important;
+}
+
+section,
+.section,
+.section-sm,
+.tt-page-hero,
+.tt-trust-bar,
+.tt-products-section,
+.tt-reviews-section,
+.cat-wrap,
+.cat-hero,
+.cat-sidebar,
+.perfil-wrap,
+.login-page,
+.ck-body,
+.adm-main,
+.adm-content {
+  background-color: var(--tt-page-bg) !important;
+}
+
+.tt-trust-item,
+.tt-sheet-item,
+.tt-mobile-cat-card,
+.tt-dropdown-card,
+.tt-quick-cat,
+.cat-filter-option,
+.cat-sort,
+.cat-search,
+.cat-range-input,
+.perfil-input,
+.ck-input,
+.ck-select,
+.ck-textarea,
+.login-email-input,
+.adm-input,
+.adm-select,
+.adm-table-wrap,
+.adm-table td,
+.adm-table th {
+  background-color: var(--tt-card) !important;
+  border-color: var(--tt-border) !important;
+  color: var(--tt-text) !important;
+}
+
+.tt-btn,
+.tt-btn-primary-full,
+.tt-cart-checkout-btn,
+.tt-wa-float,
+.tt-footer-wa,
+.tt-contact-wa-link,
+.ck-btn,
+.login-google,
+.login-email-btn,
+.adm-btn-primary,
+.adm-btn-save,
+.adm-nav-item.active,
+.adm-mobile-tab.active,
+.tt-welcome-primary,
+.tt-welcome-test-btn {
+  background: var(--tt-gradient) !important;
+  border-color: var(--tt-primary) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 24px rgba(212,106,138,.16) !important;
+}
+
+.tt-btn:hover,
+.tt-cart-checkout-btn:hover,
+.tt-wa-float:hover,
+.tt-footer-wa:hover,
+.tt-contact-wa-link:hover,
+.ck-btn:hover,
+.login-google:hover,
+.login-email-btn:hover,
+.adm-btn-primary:hover,
+.adm-btn-save:hover {
+  background: linear-gradient(135deg, #F398B2 0%, #E88CA8 100%) !important;
+  color: #FFFFFF !important;
+}
+
+.tt-btn-outline,
+.tt-btn-outline-full,
+.ck-btn-back,
+.perfil-btn-outline,
+.adm-btn-outline,
+.adm-btn,
+.login-email-resend,
+.tt-added-toast-continue {
+  background: #FFFFFF !important;
+  border-color: var(--tt-primary) !important;
+  color: var(--tt-dark) !important;
+}
+
+.tt-btn-outline:hover,
+.tt-btn-outline-full:hover,
+.ck-btn-back:hover,
+.perfil-btn-outline:hover,
+.adm-btn-outline:hover,
+.adm-btn:hover,
+.login-email-resend:hover,
+.tt-added-toast-continue:hover {
+  background: var(--tt-light) !important;
+  color: var(--tt-dark) !important;
+  border-color: var(--tt-dark) !important;
+}
+
+.tt-cart-badge,
+.tt-card-badge,
+.tt-product-status,
+.tt-product-badge,
+.adm-user-role-badge,
+.adm-nav-badge,
+.adm-section-badge,
+.cat-filter-dot,
+.ck-step-num,
+.perfil-role-badge,
+[class*="badge"],
+[class*="status"] {
+  background: var(--tt-light) !important;
+  color: var(--tt-dark) !important;
+  border-color: var(--tt-primary) !important;
+}
+
+.ck-step.active .ck-step-num,
+.ck-step.active,
+.cat-filter-option.active,
+.tt-nav a.active,
+.tt-mobile-nav a.active,
+.tt-tabbar-btn.active,
+.adm-nav-item:hover,
+.adm-mobile-tab:hover {
+  color: var(--tt-dark) !important;
+  border-color: var(--tt-primary) !important;
+}
+
+.adm-table thead,
+.adm-table th,
+thead,
+.cat-top,
+.adm-bulk-toolbar,
+#bulk-toolbar,
+#orders-bulk-toolbar {
+  background: var(--tt-light) !important;
+  color: var(--tt-title) !important;
+  border-color: var(--tt-border) !important;
+}
+
+.adm-table tr:hover,
+.cat-filter-option:hover,
+.tt-dropdown-card:hover,
+.tt-sheet-item:hover,
+.tt-quick-cat:hover {
+  background: var(--tt-champagne) !important;
+  color: var(--tt-dark) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.perfil-input:focus,
+.ck-input:focus,
+.ck-select:focus,
+.login-email-input:focus,
+.adm-input:focus,
+.adm-select:focus {
+  border-color: var(--tt-primary) !important;
+  box-shadow: 0 0 0 3px rgba(246,183,200,.28) !important;
+  outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--tt-icon) !important;
+}
+
+svg,
+.tt-trust-icon,
+.tt-dropdown-icon,
+.tt-contact-info-icon,
+.perfil-wa-icon,
+.adm-nav-icon,
+.nav-icon,
+.tt-404-icon {
+  color: var(--tt-icon) !important;
+}
+
+svg [stroke]:not([stroke="none"]) {
+  stroke: currentColor !important;
+}
+
+svg [fill]:not([fill="none"]):not([fill="currentColor"]) {
+  fill: currentColor !important;
+}
+
+.tt-btn svg,
+.ck-btn svg,
+.login-google svg,
+.adm-btn-primary svg,
+.tt-wa-float svg,
+.tt-footer-wa svg,
+.tt-contact-wa-link svg {
+  color: #FFFFFF !important;
+}
+
+.login-brand,
+.tt-404-wrap,
+.tt-img-placeholder,
+[style*="linear-gradient"] {
+  background-image: var(--tt-gradient) !important;
+}
+
+.login-error,
+.ck-error,
+.adm-error,
+.perfil-toast,
+.tt-added-toast,
+.tt-store-closed-box {
+  background: var(--tt-light) !important;
+  color: var(--tt-dark) !important;
+  border-color: var(--tt-primary) !important;
+}
+
+.login-success,
+.ck-ship-reminder,
+.ck-pay-note,
+.perfil-wa-box,
+.tt-empty,
+.cat-empty,
+.adm-loading {
+  background: var(--tt-champagne) !important;
+  color: var(--tt-text) !important;
+  border-color: var(--tt-border) !important;
+}
+
+#tt-loader,
+#tt-intro {
+  background: var(--tt-page-bg) !important;
+}
+
+#tt-loader-line,
+.tt-splash-line {
+  background: rgba(246,183,200,.34) !important;
+}
+
+#tt-loader-line::after,
+.tt-splash-line::after {
+  background: linear-gradient(90deg, transparent, #F6B7C8, transparent) !important;
+}
+
+#tt-loader-text,
+#tt-intro-fallback {
+  color: var(--tt-dark) !important;
+}
+
+#tt-loader-dots span {
+  background: var(--tt-dark) !important;
+}
+
+hr,
+.tt-footer,
+.tt-footer-bottom,
+.tt-cart-header,
+.tt-cart-footer,
+.tt-sheet-header,
+.tt-sheet-footer,
+.adm-nav-divider,
+.perfil-section-title,
+.tt-info-title,
+.ck-panel-head,
+.adm-card-head {
+  border-color: var(--tt-border) !important;
+}
+
+.tt-footer,
+.tt-footer-bottom,
+.tt-tabbar,
+.adm-mobile-tabs {
+  background: rgba(255,255,255,.96) !important;
+  color: var(--tt-text) !important;
+  border-color: var(--tt-border) !important;
+}
+
+.tt-footer-col-title,
+.tt-footer a:hover,
+.tt-contact-email,
+a {
+  color: var(--tt-dark);
+}
+
+.tt-tabbar-btn,
+.adm-mobile-tab {
+  color: var(--tt-text) !important;
+}
+
+::selection {
+  background: var(--tt-primary) !important;
+  color: #FFFFFF !important;
+}
