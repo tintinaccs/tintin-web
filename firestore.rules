@@ -70,11 +70,6 @@ service cloud.firestore {
        TINTIN — TIENDA ACTIVA / CERRADA
        ============================================================ */
 
-    // settings/general.storeOpen:
-    // - si no existe todavía, la tienda queda abierta para no romper el sitio;
-    // - si storeOpen == false, solo Super Admin entra por defecto;
-    // - preparado para futuro con storeClosedAllowedRoles, pero si la lista no
-    //   existe o está vacía, nadie más entra.
     function isStoreOpenOrAllowed() {
       return isSuperAdmin() ||
         !exists(/databases/$(database)/documents/settings/general) ||
@@ -143,7 +138,6 @@ service cloud.firestore {
        SETTINGS
        ============================================================ */
 
-    // La web necesita leer esto incluso cerrada para saber si debe mostrar bloqueo.
     match /settings/general {
       allow read: if true;
       allow write: if isSuperAdmin();
@@ -152,6 +146,14 @@ service cloud.firestore {
     match /settings/images {
       allow read: if isStoreOpenOrAllowed();
       allow write: if isSuperAdmin() || (isStoreOpenOrAllowed() && isAdmin());
+    }
+
+    // Mensajes editables del tutorial de bienvenida.
+    // Usuarios logueados pueden leerlos cuando la tienda está abierta;
+    // solo Super Admin puede crearlos, editarlos o eliminarlos.
+    match /settings/welcomeTutorial {
+      allow read: if isSignedIn() && isStoreOpenOrAllowed();
+      allow write: if isSuperAdmin();
     }
 
     match /settings/{doc} {
