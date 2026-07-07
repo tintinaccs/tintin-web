@@ -7,10 +7,10 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Fase E: una cuenta bloqueada pierde todo poder de admin/agent/superadmin
-    // en las reglas mismas (no solo en la UI) apenas Super Admin la bloquea.
-    // tintinaccs@gmail.com queda excluida a propósito, aunque en la práctica
-    // nunca puede llegar a tener blocked==true (ver más abajo).
+    function isSuperAdmin() {
+      return isSignedIn() && request.auth.token.email == "tintinaccs@gmail.com";
+    }
+
     function isBlockedUser() {
       return isSignedIn() &&
         request.auth.token.email != "tintinaccs@gmail.com" &&
@@ -23,67 +23,35 @@ service cloud.firestore {
         request.auth.token.email == "tintinaccs@gmail.com" ||
         (
           exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ["admin", "superadmin"]
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
         )
       );
     }
 
-    // Modder (rol "agent" en el código, "Modder" de cara a la tienda): permisos
-    // operativos acotados — NUNCA se combina con isAdmin() en un solo helper
-    // a propósito, para que cada match deje explícito qué le toca a cada uno
-    // y nunca herede por accidente algo pensado solo para admin/superadmin.
     function isAgent() {
       return isSignedIn() && !isBlockedUser() &&
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
     }
 
-    // Viewer (rol de solo lectura del panel) — necesita leer rolePermissions
-    // para que su propio canDo() en el Admin refleje lo que Super Admin
-    // configuró, igual que admin/agent.
     function isViewer() {
       return isSignedIn() && !isBlockedUser() &&
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "viewer";
     }
 
-    // Super Admin real — únicamente tintinaccs@gmail.com. "admin" (el gerente
-    // operativo, Fase D) NO cuenta acá aunque isAdmin() sí lo incluya: esto es
-    // a propósito, para que Usuarios/Configuración queden 100% exclusivos del
-    // Super Admin y nunca un "admin" tenga el mismo poder por error.
-    function isSuperAdmin() {
-      return isSignedIn() && (
-        request.auth.token.email == "tintinaccs@gmail.com" ||
-        (
-          !isBlockedUser() &&
-          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "superadmin"
-        )
-      );
+    // Estado global de tienda. Si el documento todavía no existe, abre por
+    // compatibilidad. Si storeOpen=false, solo Super Admin conserva acceso.
+    function isStoreOpen() {
+      return isSuperAdmin() ||
+        !exists(/databases/$(database)/documents/settings/general) ||
+        get(/databases/$(database)/documents/settings/general).data.storeOpen != false;
     }
 
-    // ¿El documento de usuario que se está tocando es el del Super Admin?
-    // Se usa para blindarlo: nadie, ni siquiera otro superadmin/admin, puede
-    // bloquearlo, eliminarlo, ni cambiarle el rol — solo su propio token puede
-    // tocar su propio documento.
     function isSuperAdminAccount(data) {
       return data.email == "tintinaccs@gmail.com";
     }
 
-    // ======== ROLES Y PERMISOS (Super Admin → Roles y Permisos) ========
-    // rolePermissions/main guarda, por rol y acción concreta, si Super Admin
-    // decidió ACOTAR (nunca ampliar) el techo fijo de arriba — nunca se llama
-    // sin haber chequeado antes isSuperAdmin()/isAdmin() del lado que
-    // corresponda, así que esto solo puede volver más chica una puerta que ya
-    // estaba abierta, nunca abrir una que las funciones de más arriba ya
-    // cerraron. Si el documento no existe todavía, o el rol/módulo/acción
-    // puntual no está guardado ahí, el default es "permitido" (true) — así
-    // publicar esta regla nueva no cambia NADA hasta que Super Admin apague
-    // un switch a propósito desde esa pantalla (fail-safe, cero regresión).
-    // Solo se usa para acotar "admin"/"agent" en las acciones más sensibles
-    // (eliminar pedidos/productos/colecciones, editar pedido completo, y los
-    // 3 sub-permisos del Modder sobre pedidos) — Super Admin real nunca pasa
-    // por acá, siempre tiene todo.
     function rolePermAllows(role, moduleKey, actionKey) {
       return !exists(/databases/$(database)/documents/rolePermissions/main) || (
         get(/databases/$(database)/documents/rolePermissions/main).data
@@ -91,39 +59,25 @@ service cloud.firestore {
       );
     }
 
-    // IMPORTANTE:
-    // La web pública necesita leer estas imágenes para mostrar hero, categorías, editoriales, etc.
     match /settings/images {
-      allow read: if true;
+      allow read: if isStoreOpen();
       allow write: if isAdmin();
     }
 
-    // Config general de la tienda (nombre, WhatsApp, envíos/ciudades, redes, pagos).
-    // El checkout público necesita leerla sin estar logueado para calcular el costo de envío.
-    // No contiene datos sensibles (ninguna credencial/secreto vive acá).
-    // Escritura: solo Super Admin — es la sección "Configuración", fuera del
-    // alcance de "admin" (gerente operativo) y del Modder (Fase D).
+    // Se lee incluso con tienda cerrada porque el Store Gate necesita saber si
+    // debe bloquear y qué mensaje mostrar. No guarda secretos.
     match /settings/general {
       allow read: if true;
       allow write: if isSuperAdmin();
     }
 
-    // Otros documentos de settings quedan protegidos — exclusivo Super Admin.
     match /settings/{doc} {
       allow read, write: if isSuperAdmin();
     }
 
     match /users/{userId} {
-      // El dueño del doc puede leer el suyo; ver cualquier otra cuenta (panel
-      // Usuarios) es exclusivo del Super Admin — ni "admin" ni el Modder
-      // tienen acceso a la lista de usuarios (Fase D).
       allow read: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
 
-      // Alta de cuenta: solo el propio usuario. No puede autoasignarse un rol
-      // distinto de 'client', y el rol "superadmin" NUNCA se puede asignar
-      // salvo que quien escribe sea literalmente tintinaccs@gmail.com — así
-      // se cumple "solo tintinaccs@gmail.com puede ser Super Admin" incluso
-      // si alguien lo intenta a mano desde la consola del navegador.
       allow create: if isSignedIn() && request.auth.uid == userId &&
         (
           !('role' in request.resource.data) ||
@@ -136,16 +90,8 @@ service cloud.firestore {
           request.auth.token.email == "tintinaccs@gmail.com"
         );
 
-      // El dueño puede editar su propio perfil pero NO su rol ni su estado de
-      // bloqueo (evita auto-escalación de privilegios). Tocar el documento de
-      // OTRO usuario (incluido cambiar rol/bloqueo) es exclusivo del Super
-      // Admin. Blindaje extra, sin excepciones:
-      //   - nadie puede tocar el rol/bloqueo del documento de tintinaccs@gmail.com,
-      //     salvo ella misma (ni siquiera otro superadmin/admin puede degradarla);
-      //   - nadie puede asignarle el rol "superadmin" a NINGUNA cuenta salvo
-      //     que quien escribe sea tintinaccs@gmail.com.
       allow update: if isSignedIn() && (
-        (request.auth.uid == userId && !isBlockedUser() &&
+        (request.auth.uid == userId && !isBlockedUser() && isStoreOpen() &&
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
         (
           isSuperAdmin() &&
@@ -158,185 +104,100 @@ service cloud.firestore {
         )
       );
 
-      // Eliminar una cuenta es exclusivo del Super Admin, y el documento de
-      // tintinaccs@gmail.com no se puede eliminar bajo ninguna circunstancia.
       allow delete: if isSuperAdmin() && !isSuperAdminAccount(resource.data);
 
-      // Carrito sincronizado del usuario (js/cart-sync.js). Una cuenta
-      // bloqueada no puede sincronizar carrito — cart-sync.js corre en varias
-      // páginas públicas que no chequean "blocked" por sí mismas (a
-      // diferencia de perfil.html/checkout.html/admin.html), así que esta es
-      // la barrera real, no solo la de esas páginas.
       match /cart/{itemId} {
-        allow read, write: if isSignedIn() && !isBlockedUser() && request.auth.uid == userId;
+        allow read, write: if isSignedIn() && !isBlockedUser() && request.auth.uid == userId && isStoreOpen();
       }
     }
 
-    // Productos: Modder puede cargar/editar (agregar, cambiar stock, precio,
-    // datos del producto) — pero eliminar un producto de la tienda queda
-    // reservado a admin/superadmin, es una acción más irreversible.
     match /products/{productId} {
-      allow read: if true;
-      allow create, update: if isAdmin() || isAgent();
-      // Eliminar es la acción más irreversible de Productos — Super Admin
-      // real siempre puede; "admin" (gerente operativo) puede salvo que
-      // Super Admin haya apagado puntualmente este switch en Roles y
-      // Permisos (rolePermAllows, default permitido si no se tocó nada).
-      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
+      allow read: if isStoreOpen();
+      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
     }
 
-    // Colecciones — panel Super Admin → Colecciones, y catálogo/home/menú públicos.
-    // Mismo criterio que Productos: Modder edita, no elimina.
     match /collections/{collectionId} {
-      allow read: if true;
-      allow create, update: if isAdmin() || isAgent();
-      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
+      allow read: if isStoreOpen();
+      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
     }
 
-    // Textos editables del Hero/Home/Nosotros/Catálogo (Super Admin → Contenido).
-    // Mismo criterio: Modder edita, no elimina una sección entera.
     match /site_content/{pageId} {
-      allow read: if true;
-      allow create, update: if isAdmin() || isAgent();
-      allow delete: if isAdmin();
+      allow read: if isStoreOpen();
+      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin());
     }
 
     match /orders/{orderId} {
-      // Fase F: no hay más compra como invitada. El pedido debe quedar
-      // asignado a quien realmente lo crea (nunca a nombre de otro uid), con
-      // un correo real y verificado — no alcanza con que la UI oculte el
-      // botón de invitada, esto lo hace imposible aunque alguien llame a
-      // Firestore directamente desde la consola:
-      //   - la cuenta no puede estar bloqueada (Fase E);
-      //   - el token tiene que traer un email (los usuarios anónimos NO
-      //     tienen email en el token, así que esto ya los excluye solo);
-      //   - ese email tiene que estar verificado;
-      //   - el pedido tiene que guardar el UID y el email de esa MISMA
-      //     cuenta (nunca el uid/email de otra persona, ni un campo vacío).
-      allow create: if isSignedIn() && !isBlockedUser() &&
+      allow create: if isStoreOpen() && isSignedIn() && !isBlockedUser() &&
         request.auth.token.email != null &&
         request.auth.token.email_verified == true &&
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.userEmail is string &&
         request.resource.data.userEmail.lower() == request.auth.token.email.lower();
 
-      // El dueño puede leer sus propios pedidos (para "Mis pedidos" en perfil.html);
-      // admin y Modder pueden leer cualquiera (el Modder necesita ver los datos
-      // del pedido para prepararlo: productos, dirección, teléfono). Una
-      // cuenta bloqueada no puede ver ni sus propios pedidos — perfil.html ya
-      // la saca antes de intentarlo, esto es la barrera real por si acaso.
-      allow read: if isAdmin() || isAgent() || (isSignedIn() && !isBlockedUser() && resource.data.userId == request.auth.uid);
+      allow read: if isSuperAdmin() || (isStoreOpen() && (
+        isAdmin() || isAgent() ||
+        (isSignedIn() && !isBlockedUser() && resource.data.userId == request.auth.uid)
+      ));
 
-      // El Modder solo puede tocar el seguimiento operativo del pedido (estado,
-      // estado de pago, reenvío de correo) — nunca los datos del pedido en sí
-      // (productos, montos, dirección, datos del cliente). Esos campos completos
-      // solo los puede reescribir un admin/superadmin desde "Editar pedido".
-      //
-      // La dueña del pedido puede tocar ÚNICAMENTE `notificationStatus` del
-      // suyo — nada más (ni total, ni productos, ni datos personales). Existe
-      // para que checkout.html pueda registrar si el correo de confirmación
-      // salió bien o falló, en vez de quedar pegado en "pending" para
-      // siempre (antes no tenía ningún permiso de update sobre su propio
-      // pedido, así que ese resultado nunca se podía guardar).
-      // "admin" reescribe el pedido completo salvo que Super Admin haya
-      // apagado puntualmente "Editar pedido completo" en Roles y Permisos.
-      // El Modder queda acotado además por sub-permiso: cada grupo de campos
-      // (estado / pago / reenvío) solo se puede tocar si ese switch puntual
-      // sigue encendido — si Super Admin apaga uno, ese grupo de campos deja
-      // de poder escribirse aunque los otros dos sigan permitidos.
-      allow update: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) || (
-        isAgent() &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(
-          ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
-        ) &&
-        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
-        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
-        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
-      ) || (
-        isSignedIn() && !isBlockedUser() &&
-        resource.data.userId == request.auth.uid &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
-      );
+      allow update: if isSuperAdmin() || (isStoreOpen() && (
+        (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) ||
+        (
+          isAgent() &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+            ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
+          ) &&
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
+        ) ||
+        (
+          isSignedIn() && !isBlockedUser() &&
+          resource.data.userId == request.auth.uid &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
+        )
+      ));
 
-      allow delete: if isSuperAdmin() || (isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
+      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
     }
 
-    // Registro de auditoría (Fase 2): quién editó un pedido, cambió su estado,
-    // editó un producto/stock, cambió un rol, o bloqueó/restauró una cuenta.
-    // Cualquier admin/agente puede CREAR una entrada (así queda registrada su
-    // propia acción), pero solo Super Admin puede LEER el historial — el
-    // Modder no ve la auditoría, aunque sus propias acciones sí queden
-    // anotadas ahí. Es un registro inmutable: nadie edita ni borra entradas.
     match /auditLog/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isAdmin() || isAgent();
+      allow create: if isSuperAdmin() || (isStoreOpen() && (isAdmin() || isAgent()));
       allow update, delete: if false;
     }
 
-    // Config de permisos dinámicos (Super Admin → Roles y Permisos). Lectura
-    // para los 3 roles operativos (para que su propio canDo() en el Admin
-    // refleje lo que Super Admin configuró) — escritura exclusiva de Super
-    // Admin real, igual que Usuarios/Configuración: ni "admin" ni el Modder
-    // pueden tocar este documento aunque tuvieran el switch prendido, porque
-    // "editar permisos" es justamente una de las acciones que este mismo
-    // sistema nunca vuelve configurable (ver PERMISSION_MODULES).
     match /rolePermissions/{docId} {
-      allow read: if isAdmin() || isAgent() || isViewer();
+      allow read: if isSuperAdmin() || (isStoreOpen() && (isAdmin() || isAgent() || isViewer()));
       allow write: if isSuperAdmin();
     }
 
-    // ======== MÓDULO CORREOS (Super Admin → Correos) ========
-    // Todo el módulo (configuración, plantillas, historial, campañas de
-    // promociones) es 100% exclusivo de Super Admin — ni "admin" ni el
-    // Modder tienen ningún acceso de lectura ni escritura acá, igual que
-    // Usuarios/Configuración/Auditoría (Fase D).
-
-    // Configuración de correos (switches, remitente, límites diarios, etc.)
     match /emailSettings/{docId} {
       allow read, write: if isSuperAdmin();
     }
 
-    // Plantillas editables (asunto, saludo, cierre, firma, etc.) — CRUD
-    // completo, incluido eliminar una plantilla propia (nunca las variables
-    // protegidas, esas viven hardcodeadas en el propio Apps Script/frontend).
     match /emailTemplates/{templateId} {
       allow read, write: if isSuperAdmin();
     }
 
-    // Historial de envíos: registro inmutable, mismo criterio que auditLog.
-    // La lectura del historial es exclusiva de Super Admin (vive dentro del
-    // módulo Correos, que la UI ya oculta por completo a cualquier otro
-    // rol) — pero la ESCRITURA de una entrada la puede hacer cualquier rol
-    // operativo (admin/agent), porque cambiar el estado de un pedido desde
-    // Pedidos puede disparar un correo automático configurado en Correos
-    // (Fase Correos), y esa entrada tiene que poder registrarse sin
-    // importar quién cambió el estado. Nunca se edita ni se borra una
-    // entrada ya creada.
-    // La clienta también puede crear UNA entrada muy acotada: el registro
-    // del correo original de SU PROPIO pedido recién creado (checkout.html
-    // llama a sendOrderNotification desde su propia sesión, sin ningún
-    // admin de por medio, así que antes esto no se podía registrar en
-    // Historial — quedaba fuera del "registrar todo en emailLogs"). La
-    // forma del documento queda fija (category/type literales) y orderId
-    // tiene que ser un pedido que de verdad le pertenece: no puede usarse
-    // para escribir nada más en esta colección.
     match /emailLogs/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isAdmin() || isAgent() || (
-        isSignedIn() && !isBlockedUser() &&
-        request.resource.data.category == 'pedido' &&
-        request.resource.data.type == 'pedido_nuevo' &&
-        request.resource.data.orderId is string &&
-        request.resource.data.sentBy == request.auth.token.email &&
-        get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
-      );
+      allow create: if isSuperAdmin() || (isStoreOpen() && (
+        isAdmin() || isAgent() ||
+        (
+          isSignedIn() && !isBlockedUser() &&
+          request.resource.data.category == 'pedido' &&
+          request.resource.data.type == 'pedido_nuevo' &&
+          request.resource.data.orderId is string &&
+          request.resource.data.sentBy == request.auth.token.email &&
+          get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
+        )
+      ));
       allow update, delete: if false;
     }
 
-    // Campañas de promociones (destinatarios, progreso, resultados por
-    // destinatario) — Super Admin puede crearlas y actualizarlas mientras
-    // se van enviando las tandas, pero no eliminar el registro de una
-    // campaña ya iniciada.
     match /emailCampaigns/{campaignId} {
       allow read, create, update: if isSuperAdmin();
       allow delete: if false;
