@@ -8,6 +8,7 @@
 import './splash-scroll-lock.js';
 import './header-dropdown-fix.js';
 import './store-gate.js';
+import './welcome-tutorial-init.js';
 import { loadImages } from './images.js';
 
 loadImages().then(() => {
