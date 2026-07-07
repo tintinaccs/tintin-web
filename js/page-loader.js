@@ -35,6 +35,7 @@
                            // empezar a desvanecerse; evita el parpadeo de un loader de 20ms
   var SAFETY_MS   = 6000;  // tope máximo — nunca queda cargando infinito
   var START = Date.now();
+  var SCRIPT_SRC = document.currentScript && document.currentScript.src;
 
   var CSS = [
     '#tt-loader{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;',
@@ -117,8 +118,6 @@
   var hidden = false;
   var contentReady = false;
 
-  // Salida inmediata (sin esperar el mínimo elegante) — para usos
-  // interactivos como cerrar el loader tras un error/cancelación.
   function hideNow() {
     if (hidden) return;
     hidden = true;
@@ -126,8 +125,6 @@
     el.classList.add('tt-out');
   }
 
-  // Salida "de página lista" — respeta la duración mínima elegante para
-  // que un loader de 20ms no parpadee, pero nunca la alarga de más.
   function tryHideElegant() {
     if (hidden) return;
     el.dataset.state = 'ready';
@@ -141,8 +138,6 @@
     tryHideElegant();
   }
 
-  // Reaparecer (login.html reusa el mismo loader durante el popup de
-  // Google) — vuelve a mostrarlo sin duplicar ni recrear nada.
   function show(text) {
     hidden = false;
     contentReady = false;
@@ -155,21 +150,27 @@
     if (textEl) textEl.textContent = text;
   }
 
+  function bootStoreGate() {
+    if (window.TT_DISABLE_STORE_GATE || window.TintinStoreGateBooted) return;
+    window.TintinStoreGateBooted = true;
+    var gateUrl = 'js/store-gate.js';
+    try {
+      if (SCRIPT_SRC) gateUrl = new URL('store-gate.js', SCRIPT_SRC).href;
+    } catch (e) {}
+    import(gateUrl).catch(function (e) {
+      console.warn('[PageLoader] No se pudo cargar Store Gate:', e);
+    });
+  }
+  bootStoreGate();
+
   document.addEventListener('tintin:page-ready', ready);
 
-  // Páginas simples (sin datos de Firestore que esperar) se ocultan solas
-  // en window.load. Páginas con datos reales ponen
-  // `window.TT_PAGE_LOADER_WAIT = true` antes de este script y llaman a
-  // ready()/dispatch del evento cuando su contenido real está listo.
   if (!window.TT_PAGE_LOADER_WAIT) {
     window.addEventListener('load', ready);
   }
 
-  // Tope de seguridad absoluto: pase lo que pase, nunca queda infinito.
   setTimeout(function () { ready(); hideNow(); }, SAFETY_MS);
 
   window.TintinLoader = { ready: ready, hide: hideNow, show: show, setText: setText };
-  // Atajo global, tal como lo puede usar cualquier script de página:
-  // window.ttPageReady()
   window.ttPageReady = ready;
 })();
