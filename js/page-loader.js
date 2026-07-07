@@ -29,7 +29,6 @@
   injectPaletteCss();
 
   var LOGO_SRC = resolveAsset('assets-tintin/images/general/logo.png');
-  var LOGO_FALLBACK_SRC = resolveAsset('assets-tintin/images/general/logo-tintin.webp');
 
   var CSS = [
     'html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
@@ -123,10 +122,8 @@
 
   var logo = el.querySelector('#tt-loader-logo');
   logo.addEventListener('error', function () {
-    if (logo.dataset.fallbackDone) { logo.style.display = 'none'; return; }
-    logo.dataset.fallbackDone = '1';
-    logo.src = LOGO_FALLBACK_SRC;
-  });
+    logo.style.display = 'none';
+  }, { once: true });
 
   function insert() {
     if (!document.getElementById('tt-loader') && document.body) {
