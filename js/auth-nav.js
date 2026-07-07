@@ -1,8 +1,7 @@
 // =============================================
 // TINTIN — Auth-aware navigation
-// Updates the account dropdown (desktop), mobile tabbar link and mobile
-// slide-out user panel on every page based on Firebase auth state.
-// Also boots public global guards/fixes for pages that do not use page-loader.js.
+// Updates desktop account dropdown, mobile tabbar link and mobile user panel
+// based on Firebase auth state and internal role.
 // =============================================
 
 import './ui-quality.js';
@@ -12,8 +11,10 @@ import './header-scroll-hide.js';
 import './scroll-reveal-global.js';
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getUserRole, can, SUPER_ADMIN } from "./roles.js";
 
 const PERSON_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+const ADMIN_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`;
 
 function doLogout() {
   signOut(auth).then(() => { window.location.href = "index.html"; });
@@ -21,15 +22,36 @@ function doLogout() {
 
 const accountBtnDefaults = new Map();
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   document.querySelectorAll("#tabbar-cuenta, [data-auth-link='cuenta']").forEach(el => {
     el.href = user ? "perfil.html" : "login.html";
   });
 
+  let role = 'client';
+  try {
+    if (user) role = await getUserRole(user.uid, user.email);
+  } catch (e) {
+    console.warn('[auth-nav] No se pudo leer rol:', e);
+  }
+
   renderAccountButtonPhoto(user);
-  renderAccountPanel(user);
-  renderMobileUserPanel(user);
+  renderAccountPanel(user, role);
+  renderMobileUserPanel(user, role);
 });
+
+function hasAdminAccess(user, role) {
+  if (!user) return false;
+  if (user.email === SUPER_ADMIN) return true;
+  return can(role, 'viewDashboard') === true;
+}
+
+function roleLabel(role) {
+  if (role === 'superadmin') return 'Panel Super Admin';
+  if (role === 'admin') return 'Panel Admin';
+  if (role === 'agent') return 'Panel Agente';
+  if (role === 'viewer') return 'Panel Viewer';
+  return 'Panel interno';
+}
 
 function renderAccountButtonPhoto(user) {
   const btn = document.getElementById("btn-cuenta");
@@ -54,24 +76,27 @@ function renderAccountButtonPhoto(user) {
   }
 }
 
-function renderAccountPanel(user) {
+function renderAccountPanel(user, role = 'client') {
   const panel = document.getElementById("account-panel");
   if (!panel) return;
 
   if (!user) {
-    panel.innerHTML = `
-      <a class="tt-account-item" href="login.html">Ingresar con Google</a>
-    `;
+    panel.innerHTML = `<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;
     return;
   }
 
   const name = user.displayName || user.email || "Mi cuenta";
   const photo = user.photoURL || "";
+  const adminLink = hasAdminAccess(user, role)
+    ? `<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`
+    : '';
+
   panel.innerHTML = `
     <div class="tt-account-header" style="display:flex;align-items:center;gap:10px">
       ${photo ? `<img src="${photo}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer" width="32" height="32" style="width:32px;height:32px;max-width:none;max-height:none;border-radius:50%;object-fit:cover;flex-shrink:0;display:block" onerror="this.style.display='none'">` : ''}
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtmlNav(name)}</span>
     </div>
+    ${adminLink}
     <a class="tt-account-item" href="perfil.html">Mi cuenta</a>
     <a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a>
     <div class="tt-account-divider"></div>
@@ -96,7 +121,7 @@ function escapeHtmlNav(s) {
   return div.innerHTML;
 }
 
-function renderMobileUserPanel(user) {
+function renderMobileUserPanel(user, role = 'client') {
   const panel = document.getElementById("tt-mobile-user");
   if (!panel) return;
 
@@ -104,11 +129,21 @@ function renderMobileUserPanel(user) {
     const name = user.displayName || "Mi perfil";
     const firstName = name.split(" ")[0];
     const photo = user.photoURL || "";
+    const adminMobile = hasAdminAccess(user, role)
+      ? `<a href="admin.html" class="tt-mobile-user-profile tt-mobile-user-admin" data-internal-admin-link="true" style="margin-top:10px;background:linear-gradient(135deg,#2B2B2B,#7B6F72);color:#fff;border-color:rgba(43,43,43,.18)">
+          <div class="tt-mobile-user-avatar" style="background:rgba(255,255,255,.18);color:#fff">${ADMIN_ICON}</div>
+          <div>
+            <div class="tt-mobile-user-name" style="color:#fff">${escapeHtmlNav(roleLabel(role))}</div>
+            <div class="tt-mobile-user-sub" style="color:rgba(255,255,255,.82)">Entrar al panel →</div>
+          </div>
+        </a>`
+      : '';
+
     panel.innerHTML = `
       <a href="perfil.html" class="tt-mobile-user-profile">
         <div class="tt-mobile-user-avatar">
           ${photo
-            ? `<img src="${photo}" alt="${firstName}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.style.display='none'">`
+            ? `<img src="${photo}" alt="${escapeHtmlNav(firstName)}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.style.display='none'">`
             : PERSON_ICON
           }
         </div>
@@ -117,6 +152,7 @@ function renderMobileUserPanel(user) {
           <div class="tt-mobile-user-sub">Ver mi perfil →</div>
         </div>
       </a>
+      ${adminMobile}
       <button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button>`;
     wireMobileLogout(panel);
   } else {
