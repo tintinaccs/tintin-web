@@ -5,6 +5,7 @@
  * Import this as a <script type="module"> AFTER script.js on any page
  * that shows product cards or the look combinator.
  */
+import './store-gate.js';
 import { loadImages } from './images.js';
 
 loadImages().then(() => {
