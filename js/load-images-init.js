@@ -6,6 +6,7 @@
  * that shows product cards or the look combinator.
  */
 import './splash-scroll-lock.js';
+import './header-dropdown-fix.js';
 import './store-gate.js';
 import { loadImages } from './images.js';
 
