@@ -135,7 +135,11 @@ service cloud.firestore {
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
-        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason', 'roleBeforeBlock'
+        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason', 'roleBeforeBlock',
+        'purchaseCount', 'orderCount', 'totalOrders', 'totalSpent',
+        'completedOrders', 'pendingOrders', 'cancelledOrders',
+        'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
+        'profileStatsUpdatedAt', 'orderStats'
       ]);
     }
 
@@ -199,8 +203,7 @@ service cloud.firestore {
           request.auth.uid == userId &&
           !isBlockedUser() &&
           isStoreOpenOrAllowed() &&
-          !protectedUserFieldsChanged() &&
-          !orderStatsOnlyUpdate()
+          !protectedUserFieldsChanged()
         ) ||
         (
           isStoreOpenOrAllowed() &&
