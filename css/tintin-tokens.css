@@ -51,3 +51,42 @@
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: 'Poppins', sans-serif;
 }
+
+#tt-loader-line,
+#tt-loader-text,
+#tt-loader-dots,
+.tt-splash-line,
+#tt-intro-fallback {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+#tt-loader,
+#tt-intro {
+  background: #FFF6FA !important;
+  gap: 0 !important;
+}
+
+#tt-loader img[src*="logo-splash"],
+#tt-loader img[src*="logo-tintin"],
+#tt-intro img[src*="logo-splash"],
+#tt-intro img[src*="logo-tintin"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+#tt-loader::before,
+#tt-intro::before {
+  content: "";
+  display: block;
+  width: clamp(112px, 24vw, 210px);
+  aspect-ratio: 1 / 1;
+  background: url('../assets-tintin/images/general/logo.png') center / contain no-repeat;
+}
+
+#tt-loader:has(img[src*="logo.png"])::before,
+#tt-intro:has(img[src*="logo.png"])::before {
+  display: none !important;
+}
