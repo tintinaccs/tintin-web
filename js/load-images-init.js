@@ -9,7 +9,7 @@ import './splash-scroll-lock.js';
 import './header-dropdown-fix.js';
 import './store-gate.js';
 import './scroll-reveal-global.js';
-import './welcome-tutorial-init.js';
+import './welcome-tutorial-runtime.js';
 import { loadImages } from './images.js';
 
 loadImages().then(() => {
