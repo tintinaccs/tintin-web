@@ -36,7 +36,6 @@
 
   injectPaletteCss();
 
-  // Logo real existente en el repo. No usamos images/logo.png porque no existe.
   var LOGO_SRC = resolveAsset('assets-tintin/images/general/logo-splash.webp');
 
   var CSS = [
@@ -143,12 +142,7 @@
   el.setAttribute('aria-hidden', 'true');
   el.setAttribute('role', 'presentation');
   el.dataset.state = 'show';
-  el.innerHTML =
-    '<div id="tt-loader-logo-wrap">' +
-      '<img id="tt-loader-logo" src="' + LOGO_SRC + '" alt="Tintin" draggable="false" fetchpriority="high" width="220" height="220">' +
-    '</div>' +
-    '<div id="tt-loader-line" aria-hidden="true"></div>' +
-    '<div id="tt-loader-text">Cargando<span id="tt-loader-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>';
+  el.innerHTML = '<div id="tt-loader-logo-wrap"><img id="tt-loader-logo" src="' + LOGO_SRC + '" alt="Tintin" draggable="false" fetchpriority="high" width="220" height="220"></div><div id="tt-loader-line" aria-hidden="true"></div><div id="tt-loader-text">Cargando<span id="tt-loader-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>';
 
   var logo = el.querySelector('#tt-loader-logo');
   var textEl = el.querySelector('#tt-loader-text');
@@ -221,6 +215,11 @@
     });
   }
 
+  function bootGlobalQuality() {
+    if (window.TintinUIQualityBooted) return;
+    importSibling('ui-quality.js', 'UI Quality');
+  }
+
   function bootStoreGate() {
     if (window.TT_DISABLE_STORE_GATE || window.TintinStoreGateBooted) return;
     window.TintinStoreGateBooted = true;
@@ -253,6 +252,7 @@
     importSibling('scroll-reveal-global.js', 'Global Scroll Reveal');
   }
 
+  bootGlobalQuality();
   bootStoreGate();
   bootHeaderDropdownFix();
   bootHeaderScrollHide();
