@@ -1,10 +1,14 @@
-/**
- * Loads product/site images from Firestore into localStorage (tt_images),
- * then re-renders any product grids on the page so real photos appear.
- *
- * Import this as a <script type="module"> AFTER script.js on any page
- * that shows product cards or the look combinator.
- */
+function injectTintinPalette() {
+  if (document.getElementById('tt-tintin-palette-css')) return;
+  const link = document.createElement('link');
+  link.id = 'tt-tintin-palette-css';
+  link.rel = 'stylesheet';
+  link.href = new URL('../css/tintin-palette.css', import.meta.url).href;
+  document.head.appendChild(link);
+}
+
+injectTintinPalette();
+
 import './splash-scroll-lock.js';
 import './header-dropdown-fix.js';
 import './store-gate.js';
@@ -13,26 +17,18 @@ import './welcome-tutorial-runtime.js';
 import { loadImages } from './images.js';
 
 loadImages().then(() => {
-  // Re-render product grids now that tt_images is populated
   if (typeof window.renderProductsGrid === 'function' && Array.isArray(window.PRODUCTS)) {
     ['colls-products-grid', 'related-grid'].forEach(id => {
-      if (document.getElementById(id)) {
-        window.renderProductsGrid(id, window.PRODUCTS);
-      }
+      if (document.getElementById(id)) window.renderProductsGrid(id, window.PRODUCTS);
     });
     if (document.getElementById('products-grid')) {
       window.renderProductsGrid('products-grid', window.PRODUCTS.slice(0, 6));
     }
   }
-  // Re-render look combinator
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
     window.initLookCombinator();
   }
-  // Re-render cart (cart items may have product images)
-  if (typeof window.renderCart === 'function') {
-    window.renderCart();
-  }
-  // Re-init product page gallery if on product page
+  if (typeof window.renderCart === 'function') window.renderCart();
   if (typeof window.initProductPage === 'function' && document.getElementById('product-detail')) {
     window.initProductPage();
   }
