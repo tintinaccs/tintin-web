@@ -5,6 +5,7 @@
 // Also boots public global guards/fixes for pages that do not use page-loader.js.
 // =============================================
 
+import './ui-quality.js';
 import './store-gate.js';
 import './header-dropdown-fix.js';
 import './header-scroll-hide.js';
@@ -18,14 +19,9 @@ function doLogout() {
   signOut(auth).then(() => { window.location.href = "index.html"; });
 }
 
-// El ícono genérico del botón de cuenta (#btn-cuenta) se guarda tal cual
-// está en el HTML de cada página, para poder volver a él al cerrar sesión —
-// mientras hay sesión iniciada, ese botón muestra la foto de Google en su
-// lugar, en todas las páginas del sitio.
 const accountBtnDefaults = new Map();
 
 onAuthStateChanged(auth, user => {
-  // Mobile tabbar account icon — simple link, no dropdown at that breakpoint
   document.querySelectorAll("#tabbar-cuenta, [data-auth-link='cuenta']").forEach(el => {
     el.href = user ? "perfil.html" : "login.html";
   });
@@ -35,12 +31,6 @@ onAuthStateChanged(auth, user => {
   renderMobileUserPanel(user);
 });
 
-// ---- Ícono de cuenta en el header (#btn-cuenta) — foto de Google en vez
-// del ícono genérico apenas hay sesión, en cualquier página. El tamaño se
-// fija en línea (no solo por clase CSS) y el botón tiene overflow:hidden en
-// styles.css, para que la foto NUNCA se vea estirada/rota sin importar el
-// orden o la caché con que cargue el resto del CSS. Si la foto no carga
-// (red, bloqueo, etc.), vuelve sola al ícono genérico.
 function renderAccountButtonPhoto(user) {
   const btn = document.getElementById("btn-cuenta");
   if (!btn) return;
@@ -64,7 +54,6 @@ function renderAccountButtonPhoto(user) {
   }
 }
 
-// ---- Desktop header dropdown (#account-panel, inside #account-dropdown) ----
 function renderAccountPanel(user) {
   const panel = document.getElementById("account-panel");
   if (!panel) return;
@@ -107,7 +96,6 @@ function escapeHtmlNav(s) {
   return div.innerHTML;
 }
 
-// ---- Mobile slide-out menu user panel (#tt-mobile-user) ----
 function renderMobileUserPanel(user) {
   const panel = document.getElementById("tt-mobile-user");
   if (!panel) return;
