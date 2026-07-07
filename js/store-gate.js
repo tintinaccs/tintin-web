@@ -5,10 +5,11 @@
    sea una barrera real para la web pública completa, no solo checkout.
 
    - Si settings/general.storeOpen === false:
-     • tintinaccs@gmail.com puede seguir entrando y revisando la web.
+     • tintinaccs@gmail.com puede seguir entrando y revisando la web/panel.
      • cualquier visitante sin sesión o cuenta no Super Admin ve pantalla cerrada.
-   - Admin/login quedan fuera del bloqueo para que Super Admin pueda entrar y
-     volver a abrir la tienda.
+   - Login queda fuera del bloqueo para que Super Admin pueda entrar y volver
+     a abrir la tienda. El panel admin NO queda exento: si una cuenta no Super
+     Admin intenta entrar con la tienda cerrada, también se tapa y se cierra sesión.
    - Si Firestore falla, abre por seguridad operativa: nunca rompe la web por
      un error de lectura temporal.
    ============================================================= */
@@ -20,8 +21,8 @@ import { SUPER_ADMIN } from './roles.js';
 
 const VERSION = '2026-07-07-global-store-gate';
 const pageName = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
-const EXEMPT_PAGES = new Set(['login.html', 'admin.html', 'admin-images.html']);
-const isExemptPage = EXEMPT_PAGES.has(pageName) || pageName.startsWith('admin-');
+const EXEMPT_PAGES = new Set(['login.html']);
+const isExemptPage = EXEMPT_PAGES.has(pageName);
 
 if (!window.TintinStoreGate) {
   window.TintinStoreGate = { version: VERSION, state: 'booting', refresh: runStoreGate };
