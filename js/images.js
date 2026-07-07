@@ -16,7 +16,19 @@ function injectTintinPalette() {
   document.head.appendChild(link);
 }
 
+function injectHomeFit() {
+  const path = (location.pathname || '').toLowerCase();
+  const isHome = path.endsWith('/') || path.endsWith('/index.html') || path === '';
+  if (!isHome || document.getElementById('tt-home-fit-css')) return;
+  const link = document.createElement('link');
+  link.id = 'tt-home-fit-css';
+  link.rel = 'stylesheet';
+  link.href = new URL('../css/home-fit.css', import.meta.url).href;
+  document.head.appendChild(link);
+}
+
 injectTintinPalette();
+injectHomeFit();
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
