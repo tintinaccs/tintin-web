@@ -177,7 +177,6 @@ async function saveStoreState(targetOpen) {
     await setDoc(settingsRef, {
       storeOpen: !!targetOpen,
       tiendaActiva: !!targetOpen,
-      storeClosedAllowedRoles: [],
       storeStatusUpdatedAt: serverTimestamp(),
       storeStatusUpdatedBy: currentUser?.email || SUPER_ADMIN
     }, { merge: true });
