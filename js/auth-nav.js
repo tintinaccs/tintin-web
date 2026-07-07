@@ -1,12 +1,12 @@
 // =============================================
 // TINTIN — Auth-aware navigation
-// Updates desktop account dropdown, mobile tabbar link and mobile user panel
-// based on Firebase auth state and internal role.
+// Desktop/tablet account dropdown + mobile account menu by real role.
 // =============================================
 
 import './ui-quality.js';
 import './store-gate.js';
 import './header-dropdown-fix.js';
+import './header-account-mobile-fix.js';
 import './header-scroll-hide.js';
 import './scroll-reveal-global.js';
 import { auth } from "./firebase.js";
@@ -15,6 +15,7 @@ import { getUserRole, can, SUPER_ADMIN } from "./roles.js";
 
 const PERSON_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 const ADMIN_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`;
+const ORDER_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l2 4v16H4V6l2-4z"/><path d="M4 6h16"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>`;
 
 function doLogout() {
   signOut(auth).then(() => { window.location.href = "index.html"; });
@@ -35,6 +36,7 @@ onAuthStateChanged(auth, async user => {
   }
 
   renderAccountButtonPhoto(user);
+  renderMobileTabbarPhoto(user);
   renderAccountPanel(user, role);
   renderMobileUserPanel(user, role);
 });
@@ -73,6 +75,19 @@ function renderAccountButtonPhoto(user) {
     btn.appendChild(img);
   } else {
     btn.innerHTML = accountBtnDefaults.get(btn);
+  }
+}
+
+function renderMobileTabbarPhoto(user) {
+  const tab = document.getElementById('tabbar-cuenta');
+  if (!tab) return;
+  if (!tab.dataset.ttDefaultHtml) tab.dataset.ttDefaultHtml = tab.innerHTML;
+  tab.href = user ? 'perfil.html' : 'login.html';
+  if (user && user.photoURL) {
+    const name = user.displayName || user.email || 'Mi cuenta';
+    tab.innerHTML = `<img class="tt-tabbar-avatar" src="${user.photoURL}" alt="${escapeHtmlNav(name)}" referrerpolicy="no-referrer" width="24" height="24" onerror="this.outerHTML='${PERSON_ICON.replace(/'/g, '&apos;')}'"><span>Cuenta</span>`;
+  } else {
+    tab.innerHTML = tab.dataset.ttDefaultHtml;
   }
 }
 
@@ -126,34 +141,30 @@ function renderMobileUserPanel(user, role = 'client') {
   if (!panel) return;
 
   if (user) {
-    const name = user.displayName || "Mi perfil";
+    const name = user.displayName || user.email || "Mi perfil";
     const firstName = name.split(" ")[0];
     const photo = user.photoURL || "";
+    const avatar = photo
+      ? `<img src="${photo}" alt="${escapeHtmlNav(firstName)}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.style.display='none'">`
+      : PERSON_ICON;
     const adminMobile = hasAdminAccess(user, role)
-      ? `<a href="admin.html" class="tt-mobile-user-profile tt-mobile-user-admin" data-internal-admin-link="true" style="margin-top:10px;background:linear-gradient(135deg,#2B2B2B,#7B6F72);color:#fff;border-color:rgba(43,43,43,.18)">
-          <div class="tt-mobile-user-avatar" style="background:rgba(255,255,255,.18);color:#fff">${ADMIN_ICON}</div>
-          <div>
-            <div class="tt-mobile-user-name" style="color:#fff">${escapeHtmlNav(roleLabel(role))}</div>
-            <div class="tt-mobile-user-sub" style="color:rgba(255,255,255,.82)">Entrar al panel →</div>
-          </div>
-        </a>`
+      ? `<a href="admin.html" class="tt-mobile-user-action tt-mobile-user-admin" data-internal-admin-link="true" style="background:linear-gradient(135deg,#2B2B2B,#7B6F72);color:#fff;border-color:rgba(43,43,43,.18)"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.16)">${ADMIN_ICON}</span><span>${escapeHtmlNav(roleLabel(role))}</span></a>`
       : '';
 
     panel.innerHTML = `
-      <a href="perfil.html" class="tt-mobile-user-profile">
-        <div class="tt-mobile-user-avatar">
-          ${photo
-            ? `<img src="${photo}" alt="${escapeHtmlNav(firstName)}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.style.display='none'">`
-            : PERSON_ICON
-          }
-        </div>
+      <div class="tt-mobile-user-profile" style="pointer-events:none">
+        <div class="tt-mobile-user-avatar">${avatar}</div>
         <div>
           <div class="tt-mobile-user-name">${escapeHtmlNav(firstName)}</div>
-          <div class="tt-mobile-user-sub">Ver mi perfil →</div>
+          <div class="tt-mobile-user-sub">Cuenta activa</div>
         </div>
-      </a>
-      ${adminMobile}
-      <button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button>`;
+      </div>
+      <div class="tt-mobile-user-actions">
+        ${adminMobile}
+        <a href="perfil.html" class="tt-mobile-user-action">${PERSON_ICON}<span>Mi cuenta</span></a>
+        <a href="perfil.html#mis-pedidos" class="tt-mobile-user-action">${ORDER_ICON}<span>Mis pedidos</span></a>
+        <button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button>
+      </div>`;
     wireMobileLogout(panel);
   } else {
     panel.innerHTML = `
