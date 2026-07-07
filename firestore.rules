@@ -3,54 +3,93 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    /* ============================================================
+       TINTIN — HELPERS BASE
+       ============================================================ */
+
     function isSignedIn() {
       return request.auth != null;
     }
 
+    // Super Admin real: solo la cuenta oficial de Tintin.
+    // No se confía en role:"superadmin" guardado en Firestore.
     function isSuperAdmin() {
       return isSignedIn() && request.auth.token.email == "tintinaccs@gmail.com";
+    }
+
+    function userDocExists() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function currentRole() {
+      return userDocExists()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : "visitor";
     }
 
     function isBlockedUser() {
       return isSignedIn() &&
         request.auth.token.email != "tintinaccs@gmail.com" &&
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        userDocExists() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.blocked == true;
     }
 
     function isAdmin() {
       return isSignedIn() && !isBlockedUser() && (
-        request.auth.token.email == "tintinaccs@gmail.com" ||
-        (
-          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
-        )
+        isSuperAdmin() ||
+        (userDocExists() && currentRole() == "admin")
       );
     }
 
     function isAgent() {
       return isSignedIn() && !isBlockedUser() &&
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "agent";
+        userDocExists() && currentRole() == "agent";
     }
 
     function isViewer() {
       return isSignedIn() && !isBlockedUser() &&
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "viewer";
+        userDocExists() && currentRole() == "viewer";
     }
 
-    // Estado global de tienda. Si el documento todavía no existe, abre por
-    // compatibilidad. Si storeOpen=false, solo Super Admin conserva acceso.
-    function isStoreOpen() {
-      return isSuperAdmin() ||
-        !exists(/databases/$(database)/documents/settings/general) ||
-        get(/databases/$(database)/documents/settings/general).data.storeOpen != false;
+    function isModerator() {
+      return isSignedIn() && !isBlockedUser() &&
+        userDocExists() && currentRole() == "moderator";
+    }
+
+    function isSupport() {
+      return isSignedIn() && !isBlockedUser() &&
+        userDocExists() && currentRole() == "support";
     }
 
     function isSuperAdminAccount(data) {
       return data.email == "tintinaccs@gmail.com";
     }
+
+    /* ============================================================
+       TINTIN — TIENDA ACTIVA / CERRADA
+       ============================================================ */
+
+    // settings/general.storeOpen:
+    // - si no existe todavía, la tienda queda abierta para no romper el sitio;
+    // - si storeOpen == false, solo Super Admin entra por defecto;
+    // - preparado para futuro con storeClosedAllowedRoles, pero si la lista no
+    //   existe o está vacía, nadie más entra.
+    function isStoreOpenOrAllowed() {
+      return isSuperAdmin() ||
+        !exists(/databases/$(database)/documents/settings/general) ||
+        get(/databases/$(database)/documents/settings/general).data.storeOpen != false ||
+        (
+          isSignedIn() &&
+          !isBlockedUser() &&
+          get(/databases/$(database)/documents/settings/general).data.storeClosedAllowedRoles is list &&
+          currentRole() in get(/databases/$(database)/documents/settings/general).data.storeClosedAllowedRoles
+        );
+    }
+
+    /* ============================================================
+       TINTIN — ROLES Y PERMISOS DINÁMICOS
+       ============================================================ */
 
     function rolePermAllows(role, moduleKey, actionKey) {
       return !exists(/databases/$(database)/documents/rolePermissions/main) || (
@@ -59,12 +98,16 @@ service cloud.firestore {
       );
     }
 
+    /* ============================================================
+       TINTIN — PEDIDOS / PERFIL
+       ============================================================ */
+
     function isOwnOrderByUidOrEmail() {
       return isSignedIn() && !isBlockedUser() && (
         resource.data.userId == request.auth.uid ||
         (
           resource.data.userEmail is string &&
-          request.auth.token.email is string &&
+          request.auth.token.email != null &&
           resource.data.userEmail.lower() == request.auth.token.email.lower()
         )
       );
@@ -79,46 +122,93 @@ service cloud.firestore {
       ]);
     }
 
-    match /settings/images {
-      allow read: if isStoreOpen();
-      allow write: if isStoreOpen() && isAdmin();
+    function orderStatsNonNegative() {
+      return
+        (!('purchaseCount' in request.resource.data) || request.resource.data.purchaseCount >= 0) &&
+        (!('orderCount' in request.resource.data) || request.resource.data.orderCount >= 0) &&
+        (!('totalOrders' in request.resource.data) || request.resource.data.totalOrders >= 0) &&
+        (!('totalSpent' in request.resource.data) || request.resource.data.totalSpent >= 0) &&
+        (!('completedOrders' in request.resource.data) || request.resource.data.completedOrders >= 0) &&
+        (!('pendingOrders' in request.resource.data) || request.resource.data.pendingOrders >= 0) &&
+        (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
     }
 
-    // Se lee incluso con tienda cerrada porque el Store Gate necesita saber si
-    // debe bloquear y qué mensaje mostrar. No guarda secretos.
+    function protectedUserFieldsChanged() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasAny([
+        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason', 'roleBeforeBlock'
+      ]);
+    }
+
+    /* ============================================================
+       SETTINGS
+       ============================================================ */
+
+    // La web necesita leer esto incluso cerrada para saber si debe mostrar bloqueo.
     match /settings/general {
       allow read: if true;
       allow write: if isSuperAdmin();
+    }
+
+    match /settings/images {
+      allow read: if isStoreOpenOrAllowed();
+      allow write: if isSuperAdmin() || (isStoreOpenOrAllowed() && isAdmin());
     }
 
     match /settings/{doc} {
       allow read, write: if isSuperAdmin();
     }
 
+    /* ============================================================
+       USERS
+       ============================================================ */
+
     match /users/{userId} {
       allow read: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
 
-      allow create: if isSignedIn() && request.auth.uid == userId &&
+      allow create: if isSignedIn() &&
+        request.auth.uid == userId &&
+        isStoreOpenOrAllowed() &&
         (
-          !('role' in request.resource.data) ||
-          request.resource.data.role == 'client' ||
+          !('email' in request.resource.data) ||
+          (
+            request.resource.data.email is string &&
+            request.auth.token.email != null &&
+            request.resource.data.email.lower() == request.auth.token.email.lower()
+          )
+        ) &&
+        (
+          !('blocked' in request.resource.data) ||
+          request.resource.data.blocked == false ||
           isSuperAdmin()
         ) &&
         (
           !('role' in request.resource.data) ||
-          request.resource.data.role != 'superadmin' ||
-          request.auth.token.email == "tintinaccs@gmail.com"
+          request.resource.data.role == 'client' ||
+          (
+            request.resource.data.role == 'superadmin' &&
+            request.auth.token.email == "tintinaccs@gmail.com"
+          )
         );
 
       allow update: if isSignedIn() && (
-        (request.auth.uid == userId && !isBlockedUser() && isStoreOpen() &&
-          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'blocked'])) ||
         (
-          isStoreOpen() && isAdmin() && orderStatsOnlyUpdate()
+          request.auth.uid == userId &&
+          !isBlockedUser() &&
+          isStoreOpenOrAllowed() &&
+          !protectedUserFieldsChanged()
+        ) ||
+        (
+          isStoreOpenOrAllowed() &&
+          isAdmin() &&
+          orderStatsOnlyUpdate() &&
+          orderStatsNonNegative()
         ) ||
         (
           isSuperAdmin() &&
-          (request.auth.token.email == "tintinaccs@gmail.com" || !isSuperAdminAccount(resource.data)) &&
+          (
+            request.auth.token.email == "tintinaccs@gmail.com" ||
+            !isSuperAdminAccount(resource.data)
+          ) &&
           (
             !('role' in request.resource.data) ||
             request.resource.data.role != 'superadmin' ||
@@ -130,70 +220,105 @@ service cloud.firestore {
       allow delete: if isSuperAdmin() && !isSuperAdminAccount(resource.data);
 
       match /cart/{itemId} {
-        allow read, write: if isSignedIn() && !isBlockedUser() && request.auth.uid == userId && isStoreOpen();
+        allow read, write: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
       }
     }
 
+    /* ============================================================
+       PRODUCTS / COLLECTIONS / CONTENT
+       ============================================================ */
+
     match /products/{productId} {
-      allow read: if isStoreOpen();
-      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
+      allow read: if isStoreOpenOrAllowed();
+      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'productos', 'eliminar'));
     }
 
     match /collections/{collectionId} {
-      allow read: if isStoreOpen();
-      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
+      allow read: if isStoreOpenOrAllowed();
+      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'colecciones', 'eliminar'));
     }
 
     match /site_content/{pageId} {
-      allow read: if isStoreOpen();
-      allow create, update: if isStoreOpen() && (isAdmin() || isAgent());
-      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin());
+      allow read: if isStoreOpenOrAllowed();
+      allow create, update: if isStoreOpenOrAllowed() && (isAdmin() || isAgent());
+      allow delete: if isSuperAdmin() || (isStoreOpenOrAllowed() && isAdmin());
     }
 
+    /* ============================================================
+       ORDERS
+       ============================================================ */
+
     match /orders/{orderId} {
-      allow create: if isStoreOpen() && isSignedIn() && !isBlockedUser() &&
+      allow create: if isStoreOpenOrAllowed() &&
+        isSignedIn() &&
+        !isBlockedUser() &&
         request.auth.token.email != null &&
         request.auth.token.email_verified == true &&
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.userEmail is string &&
         request.resource.data.userEmail.lower() == request.auth.token.email.lower();
 
-      allow read: if isSuperAdmin() || (isStoreOpen() && (
-        isAdmin() || isAgent() || isOwnOrderByUidOrEmail()
-      ));
-
-      allow update: if isSuperAdmin() || (isStoreOpen() && (
-        (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) ||
+      allow read: if isSuperAdmin() ||
         (
-          isAgent() &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(
-            ['status', 'payment', 'paymentStatus', 'resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt']
-          ) &&
-          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
-          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
-          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
-        ) ||
-        (
-          isOwnOrderByUidOrEmail() &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
-        )
-      ));
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent() || isOwnOrderByUidOrEmail())
+        );
 
-      allow delete: if isSuperAdmin() || (isStoreOpen() && isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
+      allow update: if isSuperAdmin() ||
+        (
+          isStoreOpenOrAllowed() &&
+          (
+            (isAdmin() && rolePermAllows('admin', 'pedidos', 'editarCompleto')) ||
+            (
+              isAgent() &&
+              request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                'status', 'payment', 'paymentStatus', 'resendCount',
+                'lastResendAt', 'notificationStatus', 'updatedAt'
+              ]) &&
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || rolePermAllows('agent', 'pedidos', 'cambiarEstado')) &&
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || rolePermAllows('agent', 'pedidos', 'cambiarPago')) &&
+              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || rolePermAllows('agent', 'pedidos', 'reenviarCorreo'))
+            ) ||
+            (
+              isOwnOrderByUidOrEmail() &&
+              request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
+            )
+          )
+        );
+
+      allow delete: if isSuperAdmin() ||
+        (isStoreOpenOrAllowed() && isAdmin() && rolePermAllows('admin', 'pedidos', 'eliminar'));
     }
+
+    /* ============================================================
+       AUDIT / PERMISSIONS
+       ============================================================ */
 
     match /auditLog/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isSuperAdmin() || (isStoreOpen() && (isAdmin() || isAgent()));
+      allow create: if isSuperAdmin() || (isStoreOpenOrAllowed() && (isAdmin() || isAgent()));
       allow update, delete: if false;
     }
 
     match /rolePermissions/{docId} {
-      allow read: if isSuperAdmin() || (isStoreOpen() && (isAdmin() || isAgent() || isViewer()));
+      allow read: if isSuperAdmin() ||
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent() || isViewer() || isModerator() || isSupport())
+        );
       allow write: if isSuperAdmin();
     }
+
+    /* ============================================================
+       EMAIL MODULE
+       ============================================================ */
 
     match /emailSettings/{docId} {
       allow read, write: if isSuperAdmin();
@@ -205,17 +330,22 @@ service cloud.firestore {
 
     match /emailLogs/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isSuperAdmin() || (isStoreOpen() && (
-        isAdmin() || isAgent() ||
+      allow create: if isSuperAdmin() ||
         (
-          isSignedIn() && !isBlockedUser() &&
-          request.resource.data.category == 'pedido' &&
-          request.resource.data.type == 'pedido_nuevo' &&
-          request.resource.data.orderId is string &&
-          request.resource.data.sentBy == request.auth.token.email &&
-          get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
-        )
-      ));
+          isStoreOpenOrAllowed() &&
+          (
+            isAdmin() || isAgent() ||
+            (
+              isSignedIn() &&
+              !isBlockedUser() &&
+              request.resource.data.category == 'pedido' &&
+              request.resource.data.type == 'pedido_nuevo' &&
+              request.resource.data.orderId is string &&
+              request.resource.data.sentBy == request.auth.token.email &&
+              get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
+            )
+          )
+        );
       allow update, delete: if false;
     }
 
@@ -223,6 +353,10 @@ service cloud.firestore {
       allow read, create, update: if isSuperAdmin();
       allow delete: if false;
     }
+
+    /* ============================================================
+       DEFAULT DENY
+       ============================================================ */
 
     match /{document=**} {
       allow read, write: if false;
