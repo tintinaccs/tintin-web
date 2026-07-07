@@ -7,6 +7,7 @@
 
 import './store-gate.js';
 import './header-dropdown-fix.js';
+import './header-scroll-hide.js';
 import './scroll-reveal-global.js';
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
