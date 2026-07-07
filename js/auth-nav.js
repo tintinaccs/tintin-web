@@ -2,8 +2,11 @@
 // TINTIN — Auth-aware navigation
 // Updates the account dropdown (desktop), mobile tabbar link and mobile
 // slide-out user panel on every page based on Firebase auth state.
+// Also boots public global guards/fixes for pages that do not use page-loader.js.
 // =============================================
 
+import './store-gate.js';
+import './header-dropdown-fix.js';
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
