@@ -143,8 +143,6 @@
 
   logo.addEventListener('error', function () {
     console.warn('[PageLoader] No se pudo cargar el logo del loader:', LOGO_SRC);
-    // No volver a mostrar el texto feo "TINTIN". Si el logo falla, queda el
-    // loader limpio con barra y texto Cargando.
     logo.style.display = 'none';
   }, { once: true });
 
@@ -222,10 +220,11 @@
     importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
   }
 
-  function bootOrderStatsFixes() {
+  function bootAdminAndProfileFixes() {
     var path = (location.pathname || '').toLowerCase();
     if (path.endsWith('/admin.html') || path.endsWith('/admin')) {
       importSibling('admin-order-delete-fix.js', 'Admin Order Delete Fix');
+      importSibling('admin-welcome-control.js', 'Admin Welcome Control');
     }
     if (path.endsWith('/perfil.html') || path.endsWith('/perfil')) {
       importSibling('profile-order-stats-fix.js', 'Profile Order Stats Fix');
@@ -239,7 +238,7 @@
 
   bootStoreGate();
   bootHeaderDropdownFix();
-  bootOrderStatsFixes();
+  bootAdminAndProfileFixes();
   bootScrollReveal();
 
   document.addEventListener('tintin:page-ready', ready);
