@@ -35,6 +35,7 @@
                            // empezar a desvanecerse; evita el parpadeo de un loader de 20ms
   var SAFETY_MS   = 6000;  // tope máximo — nunca queda cargando infinito
   var START = Date.now();
+  var SCRIPT_SRC = document.currentScript && document.currentScript.src;
 
   var CSS = [
     '#tt-loader{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;',
@@ -154,6 +155,22 @@
   function setText(text) {
     if (textEl) textEl.textContent = text;
   }
+
+  // Gate global de tienda cerrada. Corre aparte del loader: si falla por red o
+  // Firebase, no bloquea la navegación; si settings/general.storeOpen === false,
+  // js/store-gate.js tapa la web pública completa para visitantes/no Super Admin.
+  function bootStoreGate() {
+    if (window.TT_DISABLE_STORE_GATE || window.TintinStoreGateBooted) return;
+    window.TintinStoreGateBooted = true;
+    var gateUrl = 'js/store-gate.js';
+    try {
+      if (SCRIPT_SRC) gateUrl = new URL('store-gate.js', SCRIPT_SRC).href;
+    } catch (e) {}
+    import(gateUrl).catch(function (e) {
+      console.warn('[PageLoader] No se pudo cargar Store Gate:', e);
+    });
+  }
+  bootStoreGate();
 
   document.addEventListener('tintin:page-ready', ready);
 
