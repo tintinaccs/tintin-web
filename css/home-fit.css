@@ -1,1 +1,6 @@
-.tt-home-premium{overflow-x:hidden}
+.tt-home-premium{overflow-x:hidden;background:#FFF6FA!important}
+.tt-home-premium .container{width:min(100%,1280px)}
+.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid,.tt-home-premium #products-grid,.tt-home-premium .tt-reviews-grid{gap:clamp(14px,2.2vw,28px)}
+.tt-home-premium [data-img-slot] img,.tt-home-premium .tt-coll-card-img img,.tt-home-premium .tt-card-img img{width:100%;height:100%;object-fit:contain}
+.tt-home-premium .tt-editorial-img img,.tt-home-premium .tt-watch-feature-img img{object-fit:cover}
+@media(max-width:767px){.tt-home-premium .section{padding:56px 0}.tt-home-premium .section-sm{padding:42px 0}.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
