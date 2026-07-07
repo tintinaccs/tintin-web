@@ -8,6 +8,7 @@ function css(){
  l.id='tt-ui-quality-css';l.rel='stylesheet';l.href=new URL('../css/ui-quality.css',import.meta.url).href;
  document.head.appendChild(l);
 }
+function parity(){document.documentElement.classList.add('tt-parity-guard')}
 function topOnReload(){
  try{history.scrollRestoration='manual'}catch(e){}
  var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
@@ -63,13 +64,13 @@ function singleLogoLoader(){
 function observeDom(){
  if(!('MutationObserver'in window))return;
  var timer=0;
- var obs=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(function(){singleLogoLoader();media();links()},80)});
+ var obs=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(function(){parity();singleLogoLoader();media();links()},80)});
  obs.observe(document.documentElement,{childList:true,subtree:true});
 }
 function boot(){
- css();document.documentElement.classList.add('tt-ui-ready');
+ css();parity();document.documentElement.classList.add('tt-ui-ready');
  singleLogoLoader();media();links();forms();topOnReload();observeDom();
- setTimeout(function(){singleLogoLoader();media();links()},420);
+ setTimeout(function(){parity();singleLogoLoader();media();links()},420);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
