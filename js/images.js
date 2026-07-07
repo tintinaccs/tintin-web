@@ -7,6 +7,7 @@ import { db } from "./firebase.js";
 import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import './ui-quality.js';
 import './home-premium.js';
+import './welcome-tutorial-runtime.js';
 
 function injectTintinPalette() {
   if (document.getElementById('tt-tintin-palette-css')) return;
