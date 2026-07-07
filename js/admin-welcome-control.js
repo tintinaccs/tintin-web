@@ -14,7 +14,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
 const DEFAULT_STEPS = [
   { id: 'welcome-1', icon: '🌸', title: 'Bienvenida a Tintin', text: 'Te cuento rapidito cómo comprar y encontrar tus accesorios favoritos sin perderte.', cta: 'Empezar', active: true },
   { id: 'welcome-2', icon: '🛍️', title: 'Explorá la tienda', text: 'Desde “Tienda” podés ver relojes, aros, collares, bags, pulseras y más.', cta: 'Siguiente', active: true },
-  { id: 'welcome-3', icon: '🛒', title: 'Agregá al carrito', text: 'Cuando veas algo que te guste, agregalo al carrito. Tu carrito se mantiene sincronizado al iniciar sesión.', cta: 'Siguiente', active: true },
+  { id: 'welcome-3', icon: '🛒', title: 'Agregá al carrito', text: 'Cuando veas algo que te guste, agregalo al carrito. Tu carrito queda separado por cuenta.', cta: 'Siguiente', active: true },
   { id: 'welcome-4', icon: '✨', title: 'Finalizá tu pedido', text: 'Completá tus datos de entrega y pago. Si necesitás ayuda, también podés escribirnos por WhatsApp.', cta: 'Entendido', active: true }
 ];
 
@@ -31,7 +31,7 @@ const DEFAULT_STEPS = [
     previewEnabled: true,
     title: 'Mensaje de bienvenida',
     subtitle: 'Tu primera guía Tintin',
-    steps: structuredClone(DEFAULT_STEPS)
+    steps: JSON.parse(JSON.stringify(DEFAULT_STEPS))
   };
 
   function escapeHtml(value) {
@@ -58,7 +58,7 @@ const DEFAULT_STEPS = [
   function normalizeConfig(data = {}) {
     const steps = Array.isArray(data.steps) && data.steps.length
       ? data.steps.map(cleanStep)
-      : structuredClone(DEFAULT_STEPS);
+      : JSON.parse(JSON.stringify(DEFAULT_STEPS));
     return {
       enabled: data.enabled !== false,
       previewEnabled: data.previewEnabled !== false,
@@ -81,9 +81,7 @@ const DEFAULT_STEPS = [
     if (document.getElementById('tt-admin-welcome-style')) return;
     const st = document.createElement('style');
     st.id = 'tt-admin-welcome-style';
-    st.textContent = `
-      #section-welcome{display:none}.adm-section.active#section-welcome{display:block}
-      .tt-welcome-admin-grid{display:grid;grid-template-columns:1fr;gap:18px}.tt-welcome-admin-card{background:#fff;border:1px solid rgba(184,76,114,.12);border-radius:22px;box-shadow:0 14px 38px rgba(139,38,66,.08);padding:20px}.tt-welcome-admin-title{font-size:20px;font-weight:900;color:#8b2642;margin:0}.tt-welcome-admin-sub{font-size:13px;color:#8a707b;margin:6px 0 0;line-height:1.55}.tt-welcome-admin-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tt-welcome-admin-field{display:flex;flex-direction:column;gap:7px}.tt-welcome-admin-field label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#9b4967}.tt-welcome-admin-field input,.tt-welcome-admin-field textarea{width:100%;border:1.5px solid rgba(184,76,114,.18);border-radius:14px;padding:11px 12px;font-family:inherit;font-size:13px;outline:none;background:#fffdfd;color:#2b1720;box-sizing:border-box}.tt-welcome-admin-field textarea{min-height:86px;resize:vertical}.tt-welcome-admin-field input:focus,.tt-welcome-admin-field textarea:focus{border-color:#b84c72;box-shadow:0 0 0 3px rgba(184,76,114,.10)}.tt-welcome-admin-switches{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.tt-welcome-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#fff3f7;border:1px solid rgba(184,76,114,.15);font-size:12px;font-weight:800;color:#8b2642}.tt-welcome-pill input{accent-color:#b84c72}.tt-welcome-step-card{border:1px solid rgba(184,76,114,.13);border-radius:18px;padding:14px;background:linear-gradient(180deg,#fff,#fff8fb);display:grid;gap:12px}.tt-welcome-step-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.tt-welcome-step-badge{font-size:11px;font-weight:900;color:#b84c72;text-transform:uppercase;letter-spacing:.08em}.tt-welcome-step-actions{display:flex;gap:8px;flex-wrap:wrap}.tt-welcome-btn{border:0;border-radius:999px;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;background:#f8e8ef;color:#8b2642}.tt-welcome-btn.primary{background:#b84c72;color:#fff;box-shadow:0 10px 24px rgba(184,76,114,.20)}.tt-welcome-btn.danger{background:#fff0f0;color:#c0394b}.tt-welcome-btn.dark{background:#2b1720;color:#fff}.tt-welcome-btn:disabled{opacity:.55;cursor:not-allowed}.tt-welcome-admin-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tt-welcome-empty{text-align:center;color:#8a707b;padding:22px;border:1px dashed rgba(184,76,114,.25);border-radius:18px;background:#fff8fb}.tt-welcome-preview-note{font-size:12px;line-height:1.6;color:#7b6670;background:#fff6f9;border-left:4px solid #b84c72;padding:12px 14px;border-radius:14px;margin-top:12px}@media(max-width:820px){.tt-welcome-admin-row{grid-template-columns:1fr}.tt-welcome-admin-card{padding:16px;border-radius:18px}.tt-welcome-step-head{align-items:flex-start;flex-direction:column}.tt-welcome-admin-actions{flex-direction:column}.tt-welcome-btn{width:100%}}`;
+    st.textContent = `#section-welcome{display:none}.adm-section.active#section-welcome{display:block}.tt-welcome-admin-grid{display:grid;grid-template-columns:1fr;gap:18px}.tt-welcome-admin-card{background:#fff;border:1px solid rgba(184,76,114,.12);border-radius:22px;box-shadow:0 14px 38px rgba(139,38,66,.08);padding:20px}.tt-welcome-admin-title{font-size:20px;font-weight:900;color:#2B2B2B;margin:0}.tt-welcome-admin-sub{font-size:13px;color:#2B2B2B;margin:6px 0 0;line-height:1.55}.tt-welcome-admin-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tt-welcome-admin-field{display:flex;flex-direction:column;gap:7px}.tt-welcome-admin-field label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#2B2B2B}.tt-welcome-admin-field input,.tt-welcome-admin-field textarea{width:100%;border:1.5px solid rgba(184,76,114,.18);border-radius:14px;padding:11px 12px;font-family:inherit;font-size:13px;outline:none;background:#fffdfd;color:#2B2B2B;box-sizing:border-box}.tt-welcome-admin-field textarea{min-height:86px;resize:vertical}.tt-welcome-admin-field input:focus,.tt-welcome-admin-field textarea:focus{border-color:#D46A8A;box-shadow:0 0 0 3px rgba(212,106,138,.10)}.tt-welcome-admin-switches{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.tt-welcome-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#fff3f7;border:1px solid rgba(184,76,114,.15);font-size:12px;font-weight:800;color:#2B2B2B}.tt-welcome-pill input{accent-color:#D46A8A}.tt-welcome-step-card{border:1px solid rgba(184,76,114,.13);border-radius:18px;padding:14px;background:linear-gradient(180deg,#fff,#fff8fb);display:grid;gap:12px}.tt-welcome-step-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.tt-welcome-step-badge{font-size:11px;font-weight:900;color:#2B2B2B;text-transform:uppercase;letter-spacing:.08em}.tt-welcome-step-actions{display:flex;gap:8px;flex-wrap:wrap}.tt-welcome-btn{border:0;border-radius:999px;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;background:#f8e8ef;color:#2B2B2B}.tt-welcome-btn.primary{background:#D46A8A;color:#fff;box-shadow:0 10px 24px rgba(212,106,138,.20)}.tt-welcome-btn.danger{background:#fff0f0;color:#2B2B2B}.tt-welcome-btn.dark{background:#2B2B2B;color:#fff}.tt-welcome-btn:disabled{opacity:.55;cursor:not-allowed}.tt-welcome-admin-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tt-welcome-empty{text-align:center;color:#2B2B2B;padding:22px;border:1px dashed rgba(184,76,114,.25);border-radius:18px;background:#fff8fb}.tt-welcome-preview-note{font-size:12px;line-height:1.6;color:#2B2B2B;background:#fff6f9;border-left:4px solid #D46A8A;padding:12px 14px;border-radius:14px;margin-top:12px}@media(max-width:820px){.tt-welcome-admin-row{grid-template-columns:1fr}.tt-welcome-admin-card{padding:16px;border-radius:18px}.tt-welcome-step-head{align-items:flex-start;flex-direction:column}.tt-welcome-admin-actions{flex-direction:column}.tt-welcome-btn{width:100%}}`;
     document.head.appendChild(st);
   }
 
@@ -138,10 +136,7 @@ const DEFAULT_STEPS = [
       const el = document.getElementById(id);
       if (el && !el._ttWelcomeWired) {
         el._ttWelcomeWired = true;
-        el.addEventListener('click', e => {
-          e.preventDefault();
-          openSection();
-        });
+        el.addEventListener('click', e => { e.preventDefault(); openSection(); });
       }
     });
   }
@@ -164,71 +159,18 @@ const DEFAULT_STEPS = [
       cta: card.querySelector('[data-field="cta"]')?.value,
       active: card.querySelector('[data-field="active"]')?.checked
     }, index));
-    await setDoc(REF, {
-      ...state,
-      updatedAt: serverTimestamp(),
-      updatedBy: auth.currentUser?.email || 'superadmin'
-    }, { merge: true });
+    await setDoc(REF, { ...state, updatedAt: serverTimestamp(), updatedBy: auth.currentUser?.email || 'superadmin' }, { merge: true });
     toast('Mensaje de bienvenida guardado');
   }
 
   function renderStep(step, index) {
-    return `
-      <div class="tt-welcome-step-card" data-id="${escapeHtml(step.id)}">
-        <div class="tt-welcome-step-head">
-          <div class="tt-welcome-step-badge">Mensaje ${index + 1}</div>
-          <div class="tt-welcome-step-actions">
-            <button class="tt-welcome-btn" data-action="up" ${index === 0 ? 'disabled' : ''}>Subir</button>
-            <button class="tt-welcome-btn" data-action="down" ${index === state.steps.length - 1 ? 'disabled' : ''}>Bajar</button>
-            <button class="tt-welcome-btn danger" data-action="delete">Eliminar</button>
-          </div>
-        </div>
-        <div class="tt-welcome-admin-row">
-          <div class="tt-welcome-admin-field"><label>Icono</label><input data-field="icon" value="${escapeHtml(step.icon)}" maxlength="8"></div>
-          <div class="tt-welcome-admin-field"><label>Botón</label><input data-field="cta" value="${escapeHtml(step.cta)}" maxlength="40"></div>
-        </div>
-        <div class="tt-welcome-admin-field"><label>Título</label><input data-field="title" value="${escapeHtml(step.title)}" maxlength="90"></div>
-        <div class="tt-welcome-admin-field"><label>Texto</label><textarea data-field="text" maxlength="420">${escapeHtml(step.text)}</textarea></div>
-        <label class="tt-welcome-pill"><input type="checkbox" data-field="active" ${step.active !== false ? 'checked' : ''}> Mostrar este mensaje</label>
-      </div>`;
+    return `<div class="tt-welcome-step-card" data-id="${escapeHtml(step.id)}"><div class="tt-welcome-step-head"><div class="tt-welcome-step-badge">Mensaje ${index + 1}</div><div class="tt-welcome-step-actions"><button class="tt-welcome-btn" data-action="up" ${index === 0 ? 'disabled' : ''}>Subir</button><button class="tt-welcome-btn" data-action="down" ${index === state.steps.length - 1 ? 'disabled' : ''}>Bajar</button><button class="tt-welcome-btn danger" data-action="delete">Eliminar</button></div></div><div class="tt-welcome-admin-row"><div class="tt-welcome-admin-field"><label>Icono</label><input data-field="icon" value="${escapeHtml(step.icon)}" maxlength="8"></div><div class="tt-welcome-admin-field"><label>Botón</label><input data-field="cta" value="${escapeHtml(step.cta)}" maxlength="40"></div></div><div class="tt-welcome-admin-field"><label>Título</label><input data-field="title" value="${escapeHtml(step.title)}" maxlength="90"></div><div class="tt-welcome-admin-field"><label>Texto</label><textarea data-field="text" maxlength="420">${escapeHtml(step.text)}</textarea></div><label class="tt-welcome-pill"><input type="checkbox" data-field="active" ${step.active !== false ? 'checked' : ''}> Mostrar este mensaje</label></div>`;
   }
 
   function render() {
     const section = document.getElementById('section-welcome');
     if (!section) return;
-    section.innerHTML = `
-      <div class="tt-welcome-admin-grid">
-        <div class="tt-welcome-admin-card">
-          <h2 class="tt-welcome-admin-title">Mensaje de bienvenida</h2>
-          <p class="tt-welcome-admin-sub">Configurá los mensajes que ve una clienta nueva cuando inicia sesión por primera vez y llega a la página principal.</p>
-          <div class="tt-welcome-preview-note">La prueba se abre como Super Admin, pero muestra exactamente la experiencia de bienvenida como si fueras una usuaria nueva.</div>
-          <div class="tt-welcome-admin-row" style="margin-top:16px">
-            <div class="tt-welcome-admin-field"><label>Título general</label><input id="welcome-title" value="${escapeHtml(state.title)}"></div>
-            <div class="tt-welcome-admin-field"><label>Subtítulo</label><input id="welcome-subtitle" value="${escapeHtml(state.subtitle)}"></div>
-          </div>
-          <div class="tt-welcome-admin-switches">
-            <label class="tt-welcome-pill"><input type="checkbox" id="welcome-enabled" ${state.enabled ? 'checked' : ''}> Activar bienvenida para usuarios nuevos</label>
-            <label class="tt-welcome-pill"><input type="checkbox" id="welcome-preview-enabled" ${state.previewEnabled ? 'checked' : ''}> Permitir prueba Super Admin</label>
-          </div>
-        </div>
-        <div class="tt-welcome-admin-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-            <div>
-              <h3 class="tt-welcome-admin-title" style="font-size:17px">Mensajes</h3>
-              <p class="tt-welcome-admin-sub">Podés agregar, editar, ordenar o eliminar mensajes.</p>
-            </div>
-            <button class="tt-welcome-btn primary" id="welcome-add">+ Agregar mensaje</button>
-          </div>
-          <div id="welcome-steps">${state.steps.length ? state.steps.map(renderStep).join('') : '<div class="tt-welcome-empty">Todavía no hay mensajes. Agregá el primero.</div>'}</div>
-          <div class="tt-welcome-admin-actions">
-            <button class="tt-welcome-btn" id="welcome-reset">Restaurar base</button>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="tt-welcome-btn dark" id="welcome-test">Probar como nuevo usuario</button>
-              <button class="tt-welcome-btn primary" id="welcome-save">Guardar cambios</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    section.innerHTML = `<div class="tt-welcome-admin-grid"><div class="tt-welcome-admin-card"><h2 class="tt-welcome-admin-title">Mensaje de bienvenida</h2><p class="tt-welcome-admin-sub">Configurá los mensajes que ve una clienta nueva cuando inicia sesión por primera vez y llega a la página principal.</p><div class="tt-welcome-preview-note">La prueba se abre como Super Admin, pero muestra exactamente la experiencia de bienvenida como si fueras una usuaria nueva.</div><div class="tt-welcome-admin-row" style="margin-top:16px"><div class="tt-welcome-admin-field"><label>Título general</label><input id="welcome-title" value="${escapeHtml(state.title)}"></div><div class="tt-welcome-admin-field"><label>Subtítulo</label><input id="welcome-subtitle" value="${escapeHtml(state.subtitle)}"></div></div><div class="tt-welcome-admin-switches"><label class="tt-welcome-pill"><input type="checkbox" id="welcome-enabled" ${state.enabled ? 'checked' : ''}> Activar bienvenida para usuarios nuevos</label><label class="tt-welcome-pill"><input type="checkbox" id="welcome-preview-enabled" ${state.previewEnabled ? 'checked' : ''}> Permitir prueba Super Admin</label></div></div><div class="tt-welcome-admin-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><div><h3 class="tt-welcome-admin-title" style="font-size:17px">Mensajes</h3><p class="tt-welcome-admin-sub">Podés agregar, editar, ordenar o eliminar mensajes.</p></div><button class="tt-welcome-btn primary" id="welcome-add">+ Agregar mensaje</button></div><div id="welcome-steps">${state.steps.length ? state.steps.map(renderStep).join('') : '<div class="tt-welcome-empty">Todavía no hay mensajes. Agregá el primero.</div>'}</div><div class="tt-welcome-admin-actions"><button class="tt-welcome-btn" id="welcome-reset">Restaurar base</button><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="tt-welcome-btn dark" id="welcome-test">Probar como nuevo usuario</button><button class="tt-welcome-btn primary" id="welcome-save">Guardar cambios</button></div></div></div></div>`;
     wireCrud();
   }
 
@@ -248,26 +190,16 @@ const DEFAULT_STEPS = [
   }
 
   function wireCrud() {
-    document.getElementById('welcome-add')?.addEventListener('click', () => {
-      syncStateFromDom();
-      state.steps.push(cleanStep({ id: uid(), icon: '💗', title: 'Nuevo mensaje', text: 'Escribí acá el texto de bienvenida.', cta: 'Siguiente', active: true }, state.steps.length));
-      render();
-    });
-    document.getElementById('welcome-reset')?.addEventListener('click', () => {
-      if (!confirm('¿Restaurar los mensajes base?')) return;
-      state.steps = structuredClone(DEFAULT_STEPS);
-      render();
-    });
-    document.getElementById('welcome-save')?.addEventListener('click', async () => {
-      try { await saveConfig(); }
-      catch (e) { console.error(e); toast('No se pudo guardar. Revisá permisos o reglas.', 5200); }
-    });
+    document.getElementById('welcome-add')?.addEventListener('click', () => { syncStateFromDom(); state.steps.push(cleanStep({ id: uid(), icon: '💗', title: 'Nuevo mensaje', text: 'Escribí acá el texto de bienvenida.', cta: 'Siguiente', active: true }, state.steps.length)); render(); });
+    document.getElementById('welcome-reset')?.addEventListener('click', () => { if (!confirm('¿Restaurar los mensajes base?')) return; state.steps = JSON.parse(JSON.stringify(DEFAULT_STEPS)); render(); });
+    document.getElementById('welcome-save')?.addEventListener('click', async () => { try { await saveConfig(); } catch (e) { console.error(e); toast('No se pudo guardar. Revisá permisos o reglas.', 5200); } });
     document.getElementById('welcome-test')?.addEventListener('click', async () => {
       try {
         syncStateFromDom();
         await saveConfig();
         sessionStorage.setItem('tt_welcome_preview_superadmin', '1');
-        window.location.href = 'index.html?welcomePreview=1';
+        localStorage.setItem('tt_welcome_preview_superadmin', '1');
+        window.location.href = 'index.html?welcomePreview=1&t=' + Date.now();
       } catch (e) {
         console.error(e);
         toast('No se pudo preparar la prueba.', 4200);
@@ -279,10 +211,7 @@ const DEFAULT_STEPS = [
         const card = btn.closest('.tt-welcome-step-card');
         const idx = state.steps.findIndex(s => s.id === card?.dataset.id);
         const action = btn.dataset.action;
-        if (action === 'delete') {
-          if (!confirm('¿Eliminar este mensaje?')) return;
-          state.steps.splice(idx, 1);
-        }
+        if (action === 'delete') { if (!confirm('¿Eliminar este mensaje?')) return; state.steps.splice(idx, 1); }
         if (action === 'up' && idx > 0) [state.steps[idx - 1], state.steps[idx]] = [state.steps[idx], state.steps[idx - 1]];
         if (action === 'down' && idx < state.steps.length - 1) [state.steps[idx + 1], state.steps[idx]] = [state.steps[idx], state.steps[idx + 1]];
         render();
@@ -292,18 +221,9 @@ const DEFAULT_STEPS = [
 
   async function boot(user) {
     if (!user || user.email !== SUPER_ADMIN) return;
-    injectStyles();
-    ensureNav();
-    ensureSection();
-    wireNavigation();
-    try {
-      await loadConfig();
-      render();
-    } catch (e) {
-      console.error('[admin-welcome-control] No se pudo cargar configuración:', e);
-      const section = document.getElementById('section-welcome');
-      if (section) section.innerHTML = '<div class="adm-empty">No se pudo cargar el módulo de bienvenida.</div>';
-    }
+    injectStyles(); ensureNav(); ensureSection(); wireNavigation();
+    try { await loadConfig(); render(); }
+    catch (e) { console.error('[admin-welcome-control] No se pudo cargar configuración:', e); const section = document.getElementById('section-welcome'); if (section) section.innerHTML = '<div class="adm-empty">No se pudo cargar el módulo de bienvenida.</div>'; }
   }
 
   onAuthStateChanged(auth, user => boot(user));
