@@ -8,7 +8,6 @@
   'use strict';
   if (window.TintinLoader) return;
 
-  var LOGO_SRC = 'assets-tintin/images/general/logo-splash.webp';
   var MIN_SHOW_MS = 700;
   var SAFETY_MS = 6000;
   var START = Date.now();
@@ -18,28 +17,43 @@
   var previousBodyStyle = null;
   var previousHtmlStyle = null;
 
+  function resolveAsset(path) {
+    try {
+      if (SCRIPT_SRC) return new URL('../' + path, SCRIPT_SRC).href;
+    } catch (e) {}
+    return path;
+  }
+
+  // Logo real existente en el repo. No usamos images/logo.png porque no existe.
+  var LOGO_SRC = resolveAsset('assets-tintin/images/general/logo-splash.webp');
+
   var CSS = [
     'html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
     'body.tt-scroll-locked{position:fixed!important;left:0!important;right:0!important;width:100%!important;overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;',
-      'align-items:center;justify-content:center;gap:16px;background:#ffb6c8;',
+      'align-items:center;justify-content:center;gap:18px;background:#ffb6c8;',
       'transition:opacity .45s ease,visibility .45s ease;overflow:hidden;overscroll-behavior:none;touch-action:none}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
-    '#tt-loader-logo{width:clamp(96px,18vw,180px);max-width:80vw;height:auto;object-fit:contain;',
-      'display:block;opacity:0;transform:scale(.8) translateY(10px);',
-      'filter:drop-shadow(0 4px 14px rgba(139,38,66,.28));user-select:none;pointer-events:none}',
-    '#tt-loader-logo.tt-ready{animation:tt-pl-enter .5s cubic-bezier(.34,1.56,.64,1) both,tt-pl-breathe 1.9s ease-in-out .5s infinite}',
-    '#tt-loader-fallback{font-family:inherit;font-size:clamp(22px,5vw,32px);font-weight:900;letter-spacing:.2em;color:#8b2642;opacity:0;transform:scale(.9);text-align:center}',
-    '#tt-loader-fallback.tt-ready{animation:tt-pl-enter .5s cubic-bezier(.34,1.56,.64,1) both}',
-    '@keyframes tt-pl-enter{from{opacity:0;transform:scale(.8) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}',
-    '@keyframes tt-pl-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}',
-    '#tt-loader-line{width:clamp(90px,20vw,160px);height:2px;border-radius:999px;background:rgba(139,38,66,.16);position:relative;overflow:hidden}',
-    '#tt-loader-line::after{content:"";position:absolute;top:0;left:-65%;width:65%;height:100%;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(139,38,66,.65),transparent);animation:tt-pl-sweep 1.3s ease-in-out infinite}',
-    '@keyframes tt-pl-sweep{0%{left:-65%}100%{left:110%}}',
-    '#tt-loader-text{font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8b2642;opacity:0;transition:opacity .4s ease .15s}',
-    '#tt-loader-text.tt-ready{opacity:.85}',
-    '@media (max-width:600px){#tt-loader-logo{width:clamp(84px,32vw,140px)}#tt-loader-line{width:clamp(80px,34vw,130px)}}',
-    '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-logo.tt-ready,#tt-loader-fallback.tt-ready{animation:none;opacity:1;transform:none}#tt-loader-line::after{animation:none;left:0;width:100%}}'
+    '#tt-loader-logo-wrap{display:flex;align-items:center;justify-content:center;min-height:112px;width:min(76vw,240px)}',
+    '#tt-loader-logo{width:clamp(112px,18vw,192px);max-width:76vw;height:auto;object-fit:contain;',
+      'display:block;opacity:0;transform:translateY(10px) scale(.96);',
+      'filter:drop-shadow(0 8px 22px rgba(139,38,66,.20));user-select:none;pointer-events:none}',
+    '#tt-loader-logo.tt-ready{animation:tt-pl-logo-in .55s cubic-bezier(.34,1.56,.64,1) both,tt-pl-logo-float 2.25s ease-in-out .55s infinite}',
+    '#tt-loader-line{width:clamp(90px,18vw,150px);height:3px;border-radius:999px;background:rgba(139,38,66,.14);position:relative;overflow:hidden}',
+    '#tt-loader-line::after{content:"";position:absolute;top:0;left:-55%;width:55%;height:100%;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(139,38,66,.58),transparent);animation:tt-pl-sweep 1.25s ease-in-out infinite}',
+    '#tt-loader-text{font-family:inherit;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8b2642;opacity:0;transform:translateY(6px);transition:opacity .35s ease .15s,transform .35s ease .15s}',
+    '#tt-loader-text.tt-ready{opacity:.9;transform:none}',
+    '#tt-loader-dots{display:inline-flex;gap:5px;align-items:center;justify-content:center;margin-left:6px;vertical-align:middle}',
+    '#tt-loader-dots span{width:6px;height:6px;border-radius:50%;background:#8b2642;opacity:.28;animation:tt-pl-dots 1s infinite ease-in-out}',
+    '#tt-loader-dots span:nth-child(2){animation-delay:.15s}',
+    '#tt-loader-dots span:nth-child(3){animation-delay:.3s}',
+    '@keyframes tt-pl-logo-in{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}',
+    '@keyframes tt-pl-logo-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.015)}}',
+    '@keyframes tt-pl-sweep{0%{left:-55%}100%{left:110%}}',
+    '@keyframes tt-pl-dots{0%,80%,100%{transform:translateY(0);opacity:.28}40%{transform:translateY(-4px);opacity:1}}',
+    '@media (max-width:600px){#tt-loader{gap:15px}#tt-loader-logo-wrap{min-height:96px;width:min(82vw,190px)}#tt-loader-logo{width:clamp(102px,34vw,152px)}#tt-loader-line{width:clamp(78px,28vw,120px)}#tt-loader-text{font-size:11px}}',
+    '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(118px,22vw,176px)}}',
+    '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-logo.tt-ready{animation:none;opacity:1;transform:none}#tt-loader-line::after{animation:none;left:0;width:100%}#tt-loader-dots span{animation:none;opacity:.8}}'
   ].join('');
 
   if (!document.getElementById('tt-loader-style')) {
@@ -117,17 +131,21 @@
   el.setAttribute('aria-hidden', 'true');
   el.setAttribute('role', 'presentation');
   el.dataset.state = 'show';
-  el.innerHTML = '<img id="tt-loader-logo" src="' + LOGO_SRC + '" alt="" draggable="false" fetchpriority="high" width="200" height="200"><div id="tt-loader-line" aria-hidden="true"></div><span id="tt-loader-text">Cargando…</span>';
+  el.innerHTML =
+    '<div id="tt-loader-logo-wrap">' +
+      '<img id="tt-loader-logo" src="' + LOGO_SRC + '" alt="Tintin" draggable="false" fetchpriority="high" width="220" height="220">' +
+    '</div>' +
+    '<div id="tt-loader-line" aria-hidden="true"></div>' +
+    '<div id="tt-loader-text">Cargando<span id="tt-loader-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>';
 
   var logo = el.querySelector('#tt-loader-logo');
   var textEl = el.querySelector('#tt-loader-text');
 
   logo.addEventListener('error', function () {
-    var span = document.createElement('span');
-    span.id = 'tt-loader-fallback';
-    span.textContent = 'TINTIN';
-    logo.replaceWith(span);
-    requestAnimationFrame(function () { requestAnimationFrame(function () { span.classList.add('tt-ready'); }); });
+    console.warn('[PageLoader] No se pudo cargar el logo del loader:', LOGO_SRC);
+    // No volver a mostrar el texto feo "TINTIN". Si el logo falla, queda el
+    // loader limpio con barra y texto Cargando.
+    logo.style.display = 'none';
   }, { once: true });
 
   function insert() {
@@ -137,7 +155,7 @@
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           var img = document.getElementById('tt-loader-logo');
-          if (img) img.classList.add('tt-ready');
+          if (img && img.style.display !== 'none') img.classList.add('tt-ready');
           if (textEl) textEl.classList.add('tt-ready');
         });
       });
