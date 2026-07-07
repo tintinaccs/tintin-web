@@ -88,6 +88,8 @@
     const menuOpenBtn = document.getElementById('btn-menu');
     const mobileBtn = document.getElementById('btn-mobile-tienda');
     const mobileCats = document.getElementById('mobile-cats');
+    let desktopOpenScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    let desktopOpenedAt = 0;
 
     if (desktopPanel && !desktopPanel.id) desktopPanel.id = 'tt-tienda-dropdown-panel';
     if (desktopBtn && desktopPanel) {
@@ -100,6 +102,14 @@
       mobileBtn.setAttribute('aria-expanded', mobileCats.classList.contains('open') ? 'true' : 'false');
     }
 
+    function isDesktopTablet() {
+      return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
+    }
+
+    function currentScrollY() {
+      return window.scrollY || document.documentElement.scrollTop || document.body?.scrollTop || 0;
+    }
+
     function isDesktopOpen() {
       return !!desktopWrap?.classList.contains('open');
     }
@@ -108,6 +118,10 @@
       if (!desktopWrap || !desktopBtn) return;
       desktopWrap.classList.toggle('open', !!open);
       desktopBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        desktopOpenScrollY = currentScrollY();
+        desktopOpenedAt = Date.now();
+      }
       if (!open && opts.blur !== false) desktopBtn.blur();
       if (open) {
         accountWrap?.classList.remove('open');
@@ -163,10 +177,19 @@
       if (!clickedMobile) setMobile(false);
     }, true);
 
+    window.addEventListener('scroll', function () {
+      if (!isDesktopTablet() || !isDesktopOpen()) return;
+      // No se cierra por pequeños ajustes automáticos del navegador al abrir.
+      // Se cierra cuando la persona hizo un mini scroll real después de abrir.
+      if (Date.now() - desktopOpenedAt < 120) return;
+      if (Math.abs(currentScrollY() - desktopOpenScrollY) > 3) setDesktop(false, { blur: false });
+    }, { passive: true });
+
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
+      const wasOpen = isDesktopOpen();
       closeAll();
-      if (desktopBtn && isDesktopOpen()) desktopBtn.focus();
+      if (desktopBtn && wasOpen) desktopBtn.focus();
     });
 
     ['pagehide', 'beforeunload', 'hashchange', 'popstate'].forEach(evt => {
