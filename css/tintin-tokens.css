@@ -1,46 +1,53 @@
-/* =============================================================
-   TINTIN — Design tokens compartidos (Fase 3)
-   =============================================================
-   Única fuente de verdad de la paleta de marca — la misma que ya usa
-   styles.css (sitio público). checkout.html, login.html y admin.html
-   cargan este archivo y hacen que sus propias variables locales
-   (--acc, --adm-accent, etc.) apunten para acá con var(...), en vez de
-   repetir valores hex sueltos que con el tiempo se empiezan a desviar
-   entre superficies. No define ningún estilo de componente — solo
-   tokens (colores, radios, sombras, tipografía).
-   ============================================================= */
 :root {
-  --bg:          #fcf0f6;
-  --bg-soft:     #fcf0f6;
-  --card-bg:     #fef5f8;
-  --pink-pale:   #fce4ec;
-  --pink:        #e8a0b4;
-  --pink-mid:    #d4748e;
-  --pink-dark:   #b84c72;
-  --pink-lightest: #f5d0de;
-  --rose:        #8b2642;
-  --gold:        #c9a96e;
-  --gold-hover:  #b8934e;
-  --gold-light:  #f5ead0;
-  --ink:         #1a1a1a;
-  --text:        #C86B86;
-  --text-sec:    #C86B86;
-  --text-muted:  #d48fa6;
-  --text-title:  #EA7EA3;
-  --border:      #f0d8e0;
-  --white:       #ffffff;
-  --whatsapp:    #25d366;
-  --whatsapp-h:  #1fba58;
-  --error:       #e53935;
-  --success:     #4caf50;
-  --shadow-sm:   0 2px 8px rgba(180,76,114,0.08);
-  --shadow-md:   0 4px 20px rgba(180,76,114,0.12);
-  --shadow-lg:   0 8px 40px rgba(180,76,114,0.18);
-  --radius-sm:   8px;
-  --radius-md:   16px;
-  --radius-lg:   24px;
+  --tt-page-bg: #FFF6FA;
+  --tt-title: #2B2B2B;
+  --tt-text: #7B6F72;
+  --tt-card: #FFFFFF;
+  --tt-primary: #F6B7C8;
+  --tt-soft: #FAD6DF;
+  --tt-light: #FDECF2;
+  --tt-baby: #F9C3D3;
+  --tt-medium: #F398B2;
+  --tt-strong: #E88CA8;
+  --tt-dark: #D46A8A;
+  --tt-vintage: #E6A6B7;
+  --tt-champagne: #FFFFF3;
+  --tt-border: #F1E4E7;
+  --tt-line: #F7E9ED;
+  --tt-icon: #A6959C;
+  --tt-gradient: linear-gradient(135deg, #F6B7C8 0%, #F398B2 100%);
+
+  --bg: #FFF6FA;
+  --bg-soft: #FDECF2;
+  --card-bg: #FFFFFF;
+  --pink-pale: #FDECF2;
+  --pink: #F6B7C8;
+  --pink-mid: #F398B2;
+  --pink-dark: #D46A8A;
+  --pink-lightest: #FAD6DF;
+  --rose: #D46A8A;
+  --gold: #FFFFF3;
+  --gold-hover: #F6B7C8;
+  --gold-light: #FFFFF3;
+  --ink: #2B2B2B;
+  --text: #7B6F72;
+  --text-sec: #7B6F72;
+  --text-muted: #A6959C;
+  --text-title: #2B2B2B;
+  --border: #F1E4E7;
+  --white: #FFFFFF;
+  --whatsapp: #F6B7C8;
+  --whatsapp-h: #F398B2;
+  --error: #D46A8A;
+  --success: #E88CA8;
+  --shadow-sm: 0 2px 8px rgba(212,106,138,0.08);
+  --shadow-md: 0 6px 22px rgba(212,106,138,0.13);
+  --shadow-lg: 0 10px 42px rgba(212,106,138,0.18);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-pill: 999px;
-  --transition:  0.3s cubic-bezier(0.4,0,0.2,1);
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
   --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body:    'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
 }
