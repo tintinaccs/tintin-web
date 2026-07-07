@@ -26,6 +26,9 @@ import { initOnboarding } from './onboarding.js';
     if (!user) return;
     try {
       const role = await getUserRole(user.uid, user.email);
+      // Tutorial de bienvenida pensado para clientas/usuarios normales. Roles
+      // operativos no lo reciben aunque visiten la home.
+      if (role && role !== 'client') return;
       await initOnboarding(user, role);
     } catch (e) {
       console.warn('[welcome-tutorial-init] No se pudo iniciar tutorial:', e);
