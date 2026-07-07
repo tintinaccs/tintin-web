@@ -15,18 +15,43 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 const PUBLIC_CART_KEY = 'tt_cart';
 const GUEST_CART_KEY = 'tt_cart_guest';
 const USER_CART_PREFIX = 'tt_cart_user_';
+const nativeGetItem = Storage.prototype.getItem;
+const nativeSetItem = Storage.prototype.setItem;
+const nativeRemoveItem = Storage.prototype.removeItem;
 let activeCartKey = GUEST_CART_KEY;
 
 function cartKeyForUser(user) {
   return user?.uid ? `${USER_CART_PREFIX}${user.uid}` : GUEST_CART_KEY;
 }
 
+function storageKey(key) {
+  return key === PUBLIC_CART_KEY ? activeCartKey : key;
+}
+
+function patchClassicCartStorage() {
+  if (window.TintinScopedCartStoragePatched) return;
+  window.TintinScopedCartStoragePatched = true;
+  Storage.prototype.getItem = function(key) {
+    return nativeGetItem.call(this, storageKey(key));
+  };
+  Storage.prototype.setItem = function(key, value) {
+    return nativeSetItem.call(this, storageKey(key), value);
+  };
+  Storage.prototype.removeItem = function(key) {
+    return nativeRemoveItem.call(this, storageKey(key));
+  };
+}
+
 function rawGet(key) {
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+  try { return JSON.parse(nativeGetItem.call(localStorage, key) || '[]'); } catch { return []; }
 }
 
 function rawSet(key, items) {
-  localStorage.setItem(key, JSON.stringify(Array.isArray(items) ? items : []));
+  nativeSetItem.call(localStorage, key, JSON.stringify(Array.isArray(items) ? items : []));
+}
+
+function rawRemove(key) {
+  try { nativeRemoveItem.call(localStorage, key); } catch {}
 }
 
 function dispatchCartUpdated() {
@@ -37,20 +62,17 @@ function migrateLegacyGuestCart() {
   const legacy = rawGet(PUBLIC_CART_KEY);
   const guest = rawGet(GUEST_CART_KEY);
   if (legacy.length && !guest.length) rawSet(GUEST_CART_KEY, legacy);
-  try { localStorage.removeItem(PUBLIC_CART_KEY); } catch {}
+  rawRemove(PUBLIC_CART_KEY);
 }
 
 function setActiveCartUser(user) {
   const nextKey = cartKeyForUser(user);
   if (!user) migrateLegacyGuestCart();
-  if (activeCartKey !== nextKey) {
-    activeCartKey = nextKey;
-    dispatchCartUpdated();
-  } else {
-    activeCartKey = nextKey;
-  }
+  activeCartKey = nextKey;
+  dispatchCartUpdated();
 }
 
+patchClassicCartStorage();
 setActiveCartUser(auth.currentUser);
 
 // ---- Local helpers ----
@@ -243,5 +265,4 @@ window.CartFirestoreSync = {
 onAuthStateChanged(auth, user => {
   setActiveCartUser(user);
   if (user) getCart().then(() => dispatchCartUpdated());
-  else dispatchCartUpdated();
 });
