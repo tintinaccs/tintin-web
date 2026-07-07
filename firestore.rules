@@ -61,7 +61,7 @@ service cloud.firestore {
 
     match /settings/images {
       allow read: if isStoreOpen();
-      allow write: if isAdmin();
+      allow write: if isStoreOpen() && isAdmin();
     }
 
     // Se lee incluso con tienda cerrada porque el Store Gate necesita saber si
