@@ -1,8 +1,9 @@
 // =============================================
 // TINTIN ACCESORIOS — Cart Sync
-// localStorage for guests, Firestore for logged-in users
-// localStorage key: 'tt_cart' → [{id, name, cat, price, qty, imgUrl?}]
-// Firestore: users/{uid}/cart (collection, one doc per product id)
+// Carrito independiente por identidad:
+// - visitante sin login: tt_cart_guest
+// - cuenta logueada: tt_cart_user_{uid}
+// - Firestore: users/{uid}/cart
 // =============================================
 
 import { auth, db } from "./firebase.js";
@@ -11,20 +12,56 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// ---- Local helpers ----
+const PUBLIC_CART_KEY = 'tt_cart';
+const GUEST_CART_KEY = 'tt_cart_guest';
+const USER_CART_PREFIX = 'tt_cart_user_';
+let activeCartKey = GUEST_CART_KEY;
 
-export function getCartLocal() {
-  try {
-    return JSON.parse(localStorage.getItem('tt_cart') || '[]');
-  } catch {
-    return [];
+function cartKeyForUser(user) {
+  return user?.uid ? `${USER_CART_PREFIX}${user.uid}` : GUEST_CART_KEY;
+}
+
+function rawGet(key) {
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+}
+
+function rawSet(key, items) {
+  localStorage.setItem(key, JSON.stringify(Array.isArray(items) ? items : []));
+}
+
+function dispatchCartUpdated() {
+  window.dispatchEvent(new Event('tt_cart_updated'));
+}
+
+function migrateLegacyGuestCart() {
+  const legacy = rawGet(PUBLIC_CART_KEY);
+  const guest = rawGet(GUEST_CART_KEY);
+  if (legacy.length && !guest.length) rawSet(GUEST_CART_KEY, legacy);
+  try { localStorage.removeItem(PUBLIC_CART_KEY); } catch {}
+}
+
+function setActiveCartUser(user) {
+  const nextKey = cartKeyForUser(user);
+  if (!user) migrateLegacyGuestCart();
+  if (activeCartKey !== nextKey) {
+    activeCartKey = nextKey;
+    dispatchCartUpdated();
+  } else {
+    activeCartKey = nextKey;
   }
 }
 
+setActiveCartUser(auth.currentUser);
+
+// ---- Local helpers ----
+
+export function getCartLocal() {
+  return rawGet(activeCartKey);
+}
+
 export function setCartLocal(items) {
-  localStorage.setItem('tt_cart', JSON.stringify(items));
-  // Dispatch storage event so other tabs/scripts update
-  window.dispatchEvent(new Event('tt_cart_updated'));
+  rawSet(activeCartKey, items);
+  dispatchCartUpdated();
 }
 
 export function formatPrice(n) {
@@ -82,24 +119,13 @@ async function clearCartFromFirestore(uid) {
 
 // ---- Public API ----
 
-/**
- * Get cart — merges localStorage + Firestore if logged in.
- *
- * IMPORTANT: this does a Firestore round-trip, so the user can add/remove
- * items locally (via addToCart/removeFromCart, both synchronous on
- * localStorage) *while this is in flight*. To never lose that work, this
- * re-reads localStorage right before writing and only ever ADDS remote-only
- * items on top of whatever is currently local — it must never treat the
- * remote copy as the source of truth and overwrite local with it.
- * @returns {Promise<Array>}
- */
 export async function getCart() {
   const uid = currentUid();
   if (!uid) return getCartLocal();
 
   try {
     const remote = await getCartFromFirestore(uid);
-    const localNow = getCartLocal(); // fresh read, not the snapshot from before the await
+    const localNow = getCartLocal();
     const merged = [...localNow];
     let addedFromRemote = false;
 
@@ -109,7 +135,7 @@ export async function getCart() {
         addedFromRemote = true;
       }
     }
-    // Push anything local-only up to Firestore too, so both sides end up in sync
+
     for (const localItem of localNow) {
       if (!remote.find(r => String(r.id) === String(localItem.id))) {
         saveItemToFirestore(uid, localItem);
@@ -123,9 +149,6 @@ export async function getCart() {
   }
 }
 
-// null/undefined stock (not tracked by Super Admin) means unlimited.
-// window.PRODUCTS is populated by products-store.js and kept live via
-// onSnapshot, so this always reflects the latest stock count.
 function getStockLimit(id) {
   const pool = window.PRODUCTS;
   if (!Array.isArray(pool)) return Infinity;
@@ -134,11 +157,6 @@ function getStockLimit(id) {
   return Math.max(Number(p.stock), 0);
 }
 
-/**
- * Add item to cart. Clamps to available stock when Super Admin tracks it —
- * returns { item, capped } so callers can show a "limit reached" message.
- * @param {{id, name, cat, price, qty, imgUrl?}} item
- */
 export async function addToCart(item) {
   const items = getCartLocal();
   const idx = items.findIndex(i => String(i.id) === String(item.id));
@@ -160,32 +178,18 @@ export async function addToCart(item) {
 
   const uid = currentUid();
   const updatedItem = idx >= 0 ? items[idx] : items[items.length - 1];
-  if (uid) {
-    await saveItemToFirestore(uid, updatedItem);
-  }
+  if (uid) await saveItemToFirestore(uid, updatedItem);
   return { item: updatedItem, capped };
 }
 
-/**
- * Remove item from cart by id
- * @param {string|number} id
- */
 export async function removeFromCart(id) {
   const items = getCartLocal().filter(i => String(i.id) !== String(id));
   setCartLocal(items);
 
   const uid = currentUid();
-  if (uid) {
-    await deleteItemFromFirestore(uid, id);
-  }
+  if (uid) await deleteItemFromFirestore(uid, id);
 }
 
-/**
- * Update item quantity by delta. Clamps to available stock on increments —
- * returns { capped } so callers can show a "limit reached" message.
- * @param {string|number} id
- * @param {number} delta - positive or negative
- */
 export async function updateQty(id, delta) {
   const items = getCartLocal();
   const idx = items.findIndex(i => String(i.id) === String(id));
@@ -198,28 +202,17 @@ export async function updateQty(id, delta) {
   setCartLocal(items);
 
   const uid = currentUid();
-  if (uid) {
-    await saveItemToFirestore(uid, items[idx]);
-  }
+  if (uid) await saveItemToFirestore(uid, items[idx]);
   return { capped };
 }
 
-/**
- * Clear entire cart
- */
 export async function clearCart() {
   setCartLocal([]);
 
   const uid = currentUid();
-  if (uid) {
-    await clearCartFromFirestore(uid);
-  }
+  if (uid) await clearCartFromFirestore(uid);
 }
 
-/**
- * On login: push localStorage cart to Firestore, then clear local
- * @param {string} uid
- */
 export async function syncCartToFirestore(uid) {
   const local = getCartLocal();
   if (!local.length) return;
@@ -228,19 +221,13 @@ export async function syncCartToFirestore(uid) {
     const remote = await getCartFromFirestore(uid);
     for (const localItem of local) {
       const exists = remote.find(r => String(r.id) === String(localItem.id));
-      if (!exists) {
-        await saveItemToFirestore(uid, localItem);
-      }
+      if (!exists) await saveItemToFirestore(uid, localItem);
     }
   } catch (e) {
     console.error('Error syncing cart to Firestore:', e);
   }
 }
 
-// ---- Bridge for classic (non-module) scripts ----
-// script.js is loaded as a plain <script>, so it can't `import` this module.
-// It writes to the same localStorage key directly, and calls this bridge
-// (if present on the page) to also push the change to Firestore when logged in.
 window.CartFirestoreSync = {
   saveItem: (item) => {
     const uid = currentUid();
@@ -250,11 +237,11 @@ window.CartFirestoreSync = {
     const uid = currentUid();
     if (uid) deleteItemFromFirestore(uid, id);
   },
+  getActiveKey: () => activeCartKey,
 };
 
-// When a user logs in on a page that only knows the synchronous, localStorage-only
-// cart (product/catalog listings via script.js), pull in whatever they already had
-// saved in Firestore from another device/session, so it's not silently missing.
 onAuthStateChanged(auth, user => {
-  if (user) getCart();
+  setActiveCartUser(user);
+  if (user) getCart().then(() => dispatchCartUpdated());
+  else dispatchCartUpdated();
 });
