@@ -183,18 +183,29 @@
     if (textEl) textEl.textContent = text;
   }
 
+  function importSibling(fileName, label) {
+    var url = 'js/' + fileName;
+    try {
+      if (SCRIPT_SRC) url = new URL(fileName, SCRIPT_SRC).href;
+    } catch (e) {}
+    return import(url).catch(function (e) {
+      console.warn('[PageLoader] No se pudo cargar ' + label + ':', e);
+    });
+  }
+
   function bootStoreGate() {
     if (window.TT_DISABLE_STORE_GATE || window.TintinStoreGateBooted) return;
     window.TintinStoreGateBooted = true;
-    var gateUrl = 'js/store-gate.js';
-    try {
-      if (SCRIPT_SRC) gateUrl = new URL('store-gate.js', SCRIPT_SRC).href;
-    } catch (e) {}
-    import(gateUrl).catch(function (e) {
-      console.warn('[PageLoader] No se pudo cargar Store Gate:', e);
-    });
+    importSibling('store-gate.js', 'Store Gate');
   }
+
+  function bootHeaderDropdownFix() {
+    if (window.TintinHeaderDropdownFixBooted) return;
+    importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
+  }
+
   bootStoreGate();
+  bootHeaderDropdownFix();
 
   document.addEventListener('tintin:page-ready', ready);
 
