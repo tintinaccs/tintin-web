@@ -204,8 +204,19 @@
     importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
   }
 
+  function bootOrderStatsFixes() {
+    var path = (location.pathname || '').toLowerCase();
+    if (path.endsWith('/admin.html') || path.endsWith('/admin')) {
+      importSibling('admin-order-delete-fix.js', 'Admin Order Delete Fix');
+    }
+    if (path.endsWith('/perfil.html') || path.endsWith('/perfil')) {
+      importSibling('profile-order-stats-fix.js', 'Profile Order Stats Fix');
+    }
+  }
+
   bootStoreGate();
   bootHeaderDropdownFix();
+  bootOrderStatsFixes();
 
   document.addEventListener('tintin:page-ready', ready);
 
