@@ -6,7 +6,6 @@ const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
 const VERSION = 'tintin-20260708-1';
 
-const checks = [];
 const issues = [];
 
 function walk(dir) {
@@ -32,8 +31,17 @@ function addIssue(level, file, message) {
 }
 
 function assertFile(rel, message) {
-  checks.push(`file:${rel}`);
   if (!fs.existsSync(path.join(ROOT, rel))) addIssue('CRITICAL', rel, message || 'Archivo requerido no existe');
+}
+
+function isAllowedLegacyLogoReference(file) {
+  return [
+    'js/page-audit-fix.js',
+    'js/ui-quality.js',
+    'js/page-loader.js',
+    'scripts/audit-tintin.js',
+    'scripts/fix-tintin-source.js'
+  ].includes(file);
 }
 
 const files = walk(ROOT);
@@ -50,15 +58,18 @@ assertFile('js/ui-quality.js', 'Debe existir el runtime global de calidad');
 assertFile('js/page-loader.js', 'Debe existir el loader global');
 assertFile('js/header-account-mobile-fix.js', 'Debe existir el header mobile global');
 assertFile('js/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
+assertFile('js/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
+assertFile('scripts/fix-tintin-source.js', 'Debe existir el auto-fixer de fuente');
 assertFile('firestore.rules', 'Debe existir el archivo de reglas Firestore');
 assertFile('firebase.json', 'Debe existir firebase.json apuntando a firestore.rules');
+assertFile('package.json', 'Debe existir package.json con scripts operativos');
 
-for (const file of files.filter(f => /\.(html|css|js)$/.test(f))) {
+for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   const content = read(file);
-  if (/logo-splash|logo-tintin/i.test(content) && file !== 'js/page-audit-fix.js' && file !== 'js/ui-quality.js' && file !== 'js/page-loader.js') {
+  if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-palette.css','css/tintin-theme-cleanup.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-palette.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }
@@ -71,13 +82,13 @@ for (const file of htmlFiles) {
     addIssue('WARN', file, 'HTML sin page-loader.js; puede no recibir tema/header/fixes globales');
   }
   if (/js\/page-loader\.js["']/.test(content)) {
-    addIssue('INFO', file, `page-loader.js está sin query ?v=${VERSION}; cache-busting interno ayuda, pero conviene versionarlo directo`);
+    addIssue('INFO', file, `page-loader.js está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
   }
   if (/styles\.css["']/.test(content)) {
-    addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; conviene versionarlo directo`);
+    addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
   }
   if (isCheckout && /id=["']tt-header["']|class=["'][^"']*tt-header/.test(content)) {
-    addIssue('WARN', file, 'Checkout contiene header en HTML; runtime lo oculta, pero lo ideal es no renderizarlo');
+    addIssue('WARN', file, 'Checkout contiene header en HTML; ejecutar npm run fix:tintin para quitarlo de fuente');
   }
 }
 
@@ -85,6 +96,11 @@ const firebaseJson = fs.existsSync(path.join(ROOT, 'firebase.json')) ? read('fir
 if (!/"firestore"\s*:\s*\{[\s\S]*"rules"\s*:\s*"firestore\.rules"/.test(firebaseJson)) {
   addIssue('CRITICAL', 'firebase.json', 'No apunta claramente a firestore.rules');
 }
+
+const packageJson = fs.existsSync(path.join(ROOT, 'package.json')) ? read('package.json') : '';
+['audit:tintin', 'fix:tintin', 'deploy:rules'].forEach(scriptName => {
+  if (!packageJson.includes(`"${scriptName}"`)) addIssue('CRITICAL', 'package.json', `Falta script ${scriptName}`);
+});
 
 const ui = fs.existsSync(path.join(ROOT, 'js/ui-quality.js')) ? read('js/ui-quality.js') : '';
 [
