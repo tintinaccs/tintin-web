@@ -7,7 +7,8 @@
     "deploy:firebase": "firebase deploy --project tintin-accesorios",
     "prepare:hosting": "node scripts/prepare-hosting.js",
     "deploy:hosting": "npm run prepare:hosting && firebase deploy --only hosting --project tintin-accesorios",
-    "deploy:all": "npm run prepare:hosting && firebase deploy --only hosting,firestore:rules --project tintin-accesorios"
+    "deploy:all": "npm run prepare:hosting && firebase deploy --only hosting,firestore:rules --project tintin-accesorios",
+    "audit:deep": "node scripts/audit-deep.js"
   },
   "devDependencies": {
     "firebase-tools": "latest"
