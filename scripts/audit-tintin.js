@@ -51,7 +51,6 @@ const jsFiles = files.filter(f => f.endsWith('.js') && !f.startsWith('functions/
 
 assertFile('assets-tintin/images/general/logo.png', 'Debe existir el logo real PNG usado por loader/header');
 assertFile('css/tintin-unified-theme.css', 'Debe existir la fuente única de tokens Tintin');
-assertFile('css/tintin-palette.css', 'Debe existir la paleta temprana del loader');
 assertFile('css/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores hardcodeados');
 assertFile('css/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
 assertFile('js/ui-quality.js', 'Debe existir el runtime global de calidad');
@@ -69,7 +68,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-palette.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }

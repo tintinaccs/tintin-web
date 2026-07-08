@@ -6,11 +6,20 @@ var TT_CACHE_VERSION='tintin-20260708-1';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return 'assets-tintin/images/general/logo.png?v='+TT_CACHE_VERSION}
+// css(): ui-quality.css / tintin-unified-theme.css / tintin-theme-cleanup.css /
+// tintin-parity-safe.css ya se cargan de forma síncrona en el <head> de cada
+// página (mismo orden de cascada que tenían acá) — inyectarlos de nuevo acá
+// los duplicaba y causaba un repintado visible del esquema de colores un
+// instante después del primer paint. Si algún archivo HTML nuevo todavía no
+// tiene esos <link>, esta función los agrega como respaldo, sin duplicar.
 function css(){
- if(!document.getElementById('tt-ui-quality-css')){var l=document.createElement('link');l.id='tt-ui-quality-css';l.rel='stylesheet';l.href=versioned('../css/ui-quality.css');document.head.appendChild(l)}
- if(!document.getElementById('tt-unified-theme-css')){var t=document.createElement('link');t.id='tt-unified-theme-css';t.rel='stylesheet';t.href=versioned('../css/tintin-unified-theme.css');document.head.appendChild(t)}
- if(!document.getElementById('tt-theme-cleanup-css')){var c=document.createElement('link');c.id='tt-theme-cleanup-css';c.rel='stylesheet';c.href=versioned('../css/tintin-theme-cleanup.css');document.head.appendChild(c)}
- if(!document.getElementById('tt-parity-safe-css')){var p=document.createElement('link');p.id='tt-parity-safe-css';p.rel='stylesheet';p.href=versioned('../css/tintin-parity-safe.css');document.head.appendChild(p)}
+ var files=[['tt-ui-quality-css','ui-quality.css'],['tt-unified-theme-css','tintin-unified-theme.css'],['tt-theme-cleanup-css','tintin-theme-cleanup.css'],['tt-parity-safe-css','tintin-parity-safe.css']];
+ files.forEach(function(f){
+  var id=f[0],file=f[1];
+  if(document.getElementById(id))return;
+  if(document.querySelector('link[href*="'+file+'"]'))return;
+  var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=versioned('../css/'+file);document.head.appendChild(l);
+ });
 }
 function bootThemeSanitizer(){import(versioned('./theme-color-sanitizer.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
 function bootMobileHeader(){import(versioned('./header-account-mobile-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}

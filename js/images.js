@@ -5,7 +5,9 @@
 
 import { db } from "./firebase.js?v=tintin-20260708-1";
 import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import './ui-quality.js?v=tintin-20260708-1';
+// ui-quality.js NO se importa acá a propósito: js/page-loader.js ya lo carga
+// (con versión) en todas las páginas que usan este módulo — importarlo de
+// nuevo era trabajo duplicado.
 import './home-premium.js?v=tintin-20260708-1';
 import './welcome-tutorial-runtime.js?v=tintin-20260708-1';
 
@@ -14,15 +16,6 @@ function versionUrl(url) {
   const u = new URL(url, import.meta.url);
   u.searchParams.set('v', TT_CACHE_VERSION);
   return u.href;
-}
-
-function injectTintinPalette() {
-  if (document.getElementById('tt-tintin-palette-css')) return;
-  const link = document.createElement('link');
-  link.id = 'tt-tintin-palette-css';
-  link.rel = 'stylesheet';
-  link.href = versionUrl('../css/tintin-palette.css');
-  document.head.appendChild(link);
 }
 
 function injectHomeFit() {
@@ -36,7 +29,6 @@ function injectHomeFit() {
   document.head.appendChild(link);
 }
 
-injectTintinPalette();
 injectHomeFit();
 
 const CACHE_KEY = 'tt_images';
