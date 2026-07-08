@@ -241,30 +241,47 @@ service cloud.firestore {
        PRODUCTS / COLLECTIONS / CONTENT
        ============================================================ */
 
+    // currentRolePermAllows() por sí sola NO alcanza como gate: si
+    // rolePermissions/main no existe, o si el rol/acción todavía no se tocó
+    // ahí, rolePermAllows() permite por defecto (a propósito — ver esa
+    // función) para cualquier ROL, incluido "client". Por eso cada uso de
+    // currentRolePermAllows() de acá abajo va SIEMPRE atrás de un
+    // isAdmin()/isAgent()/isViewer() explícito que ya limita a cuentas de
+    // staff reales — sin ese filtro, cualquier clienta logueada podía crear/
+    // editar productos, colecciones y contenido, y leer TODOS los pedidos
+    // ajenos con solo tener sesión iniciada.
     match /products/{productId} {
       allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('productos', 'crear'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('productos', 'crear'));
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('productos', 'editar'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('productos', 'editar'));
       allow delete: if isSuperAdmin();
     }
 
     match /collections/{collectionId} {
       allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('colecciones', 'crear'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'crear'));
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('colecciones', 'editar'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'editar'));
       allow delete: if isSuperAdmin();
     }
 
+    // El panel (admin.html) nunca llama a currentRolePermAllows('contenido',
+    // 'crear'/'editar') — esas claves no existen en el catálogo de
+    // js/role-permissions.js. Las claves reales son 'editarTextos' y
+    // 'activarDesactivarSecciones'; con las claves viejas, rolePermAllows()
+    // nunca encontraba nada configurado y quedaba abierto para cualquier
+    // cuenta logueada, sin forma de cerrarlo desde Roles y Permisos.
     match /site_content/{pageId} {
       allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('contenido', 'crear'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) &&
+          (currentRolePermAllows('contenido', 'editarTextos') || currentRolePermAllows('contenido', 'activarDesactivarSecciones')));
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && currentRolePermAllows('contenido', 'editar'));
+        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) &&
+          (currentRolePermAllows('contenido', 'editarTextos') || currentRolePermAllows('contenido', 'activarDesactivarSecciones')));
       allow delete: if isSuperAdmin();
     }
 
@@ -286,7 +303,7 @@ service cloud.firestore {
         (
           isStoreOpenOrAllowed() &&
           (
-            currentRolePermAllows('pedidos', 'ver') ||
+            ((isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('pedidos', 'ver')) ||
             isOwnOrderByUidOrEmail()
           )
         );

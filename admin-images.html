@@ -363,7 +363,11 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { IMAGE_SLOTS, loadImages, getImg, setImgCache } from "./js/images.js";
 
-const ALLOWED_ROLES = ['superadmin', 'admin'];
+// firestore.rules solo deja escribir settings/images a Super Admin
+// (js/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
+// solo lo confundía: veía el panel entero pero cada guardado le fallaba por
+// permisos. Se alinea el acceso con el permiso real.
+const ALLOWED_ROLES = ['superadmin'];
 const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
 
 const SECTION_META = {
