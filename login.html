@@ -104,6 +104,7 @@ import {
   ensureUserDocForEmailLogin, checkBlockedEmailLogin, emailLinkErrorMessage
 } from "./js/email-auth.js";
 import { showBlockedModal } from "./js/blocked-modal.js";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
 // que llegó por correo, el onAuthStateChanged de más abajo (que corre en
@@ -151,7 +152,14 @@ function errMsg(code) {
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
-function redirectByRole(role) {
+async function redirectByRole(role, email) {
+  const cfg = await getStoreAccessConfig();
+  if (!isAccessAllowed(cfg, role, email)) {
+    await signOut(auth);
+    hideLoginOverlay();
+    renderStoreClosedOverlay();
+    return;
+  }
   const from = new URLSearchParams(window.location.search).get('from');
   if (role === 'client' || !role) {
     window.location.href = from || "perfil.html";
@@ -228,7 +236,7 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   const role = await getUserRole(user.uid, user.email);
-  redirectByRole(role);
+  redirectByRole(role, user.email);
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
@@ -261,7 +269,7 @@ const loginConGoogle = async () => {
       showBlockedModal();
       return;
     }
-    redirectByRole(role);
+    redirectByRole(role, cred.user.email);
   } catch(e) {
     clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return;
@@ -341,7 +349,7 @@ async function finishEmailLinkLogin(user) {
     return;
   }
   const { role } = await ensureUserDocForEmailLogin(user);
-  redirectByRole(role);
+  redirectByRole(role, user.email);
 }
 
 // Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos

@@ -1071,8 +1071,9 @@
     <div class="adm-section" id="section-configuracion">
       <!-- Estado de la tienda -->
       <div class="adm-card" style="margin-bottom:20px">
-        <div class="adm-card-head">
+        <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Estado de la tienda</div>
+          <span id="cfg-store-state-pill" class="tt-store-state-pill">TIENDA ABIERTA</span>
         </div>
         <div class="adm-card-body">
           <div class="adm-toggle-wrap" style="margin-bottom:16px">
@@ -1082,7 +1083,50 @@
             </label>
             <div>
               <div class="adm-toggle-label">Tienda activa / abierta</div>
-              <div class="adm-toggle-desc">Si está desactivada, los clientes verán un mensaje de "Próximamente".</div>
+              <div class="adm-toggle-desc">Si está desactivada, se bloquea el sitio completo para visitas y clientes (no solo el checkout) — solo entran Super Admin y los roles con excepción activada abajo.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permitir acceso con tienda cerrada -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Permitir acceso con tienda cerrada</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Elegí qué roles pueden seguir usando el sitio y el panel mientras la tienda está cerrada. Super Admin siempre tiene acceso, sin excepción.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <span style="font-size:13px;font-weight:600">Super Admin</span>
+              <span class="tt-access-pill-locked">Activado</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <span style="font-size:13px;font-weight:600">Admin</span>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-admin" data-maintenance-role="admin"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <span style="font-size:13px;font-weight:600">Agente / Modder</span>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-agent" data-maintenance-role="agent"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <span style="font-size:13px;font-weight:600">Viewer</span>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-viewer" data-maintenance-role="viewer"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <div>
+                <span style="font-size:13px;font-weight:600">Support</span>
+                <div style="font-size:11px;color:var(--adm-muted)">Rol aún no asignable a ninguna cuenta — queda preparado para cuando exista.</div>
+              </div>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-support" data-maintenance-role="support"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
+              <span style="font-size:13px;font-weight:600">Cliente</span>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-client" data-maintenance-role="client"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0">
+              <span style="font-size:13px;font-weight:600">Visitante sin login</span>
+              <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-guest" data-maintenance-role="guest"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
             </div>
           </div>
         </div>
@@ -1495,6 +1539,7 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "./js/role-permissions.js";
 import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -1657,7 +1702,9 @@ const AUDIT_ACTION_LABELS = {
   eliminar_coleccion:     '🗑️ Eliminó colección',
   config_correo_pedido:   '⚙️ Cambió correos automáticos de pedido',
   editar_envio:           '🚚 Cambió ciudades de envío',
-  editar_permiso:         '🔐 Cambió permiso de rol'
+  editar_permiso:         '🔐 Cambió permiso de rol',
+  cambiar_estado_tienda:  '🏬 Cambió estado de la tienda',
+  cambiar_acceso_tienda_cerrada: '🔑 Cambió accesos con tienda cerrada'
 };
 
 let _allAuditLogs = [];
@@ -1904,6 +1951,16 @@ onAuthStateChanged(auth, async user => {
 
     if (role === 'client' || !role) {
       window.location.href = 'perfil.html';
+      return;
+    }
+
+    // Tienda cerrada: un rol sin excepción configurada en Configuración →
+    // "Permitir acceso con tienda cerrada" se queda afuera del panel — no se
+    // le cierra la sesión (Super Admin puede reabrir la tienda y su sesión
+    // sigue intacta), solo se tapa la pantalla con el mismo aviso público.
+    const storeCfg = await getStoreAccessConfig();
+    if (!isAccessAllowed(storeCfg, role, user.email)) {
+      renderStoreClosedOverlay();
       return;
     }
 
@@ -3030,6 +3087,18 @@ document.getElementById('btn-reset-ob').onclick = async () => {
 // ======== CONFIGURACIÓN ========
 const DEFAULT_WA_CONFIRM_MSG = 'Hola {nombre}! Te escribo por tu pedido realizado en nuestra página web. Ya recibimos todos tus datos para el envío y estamos preparando tu pedido. Te escribimos para confirmar los últimos detalles.';
 
+const MAINTENANCE_ROLE_KEYS = ['admin', 'agent', 'viewer', 'support', 'client', 'guest'];
+let _lastKnownStoreOpen = true;
+let _lastKnownMaintenanceAccess = {};
+
+function updateStoreStatePill_(isOpen) {
+  const pill = document.getElementById('cfg-store-state-pill');
+  if (!pill) return;
+  pill.textContent = isOpen ? 'TIENDA ABIERTA' : 'TIENDA CERRADA';
+  pill.classList.toggle('tt-store-state-pill-open', isOpen);
+  pill.classList.toggle('tt-store-state-pill-closed', !isOpen);
+}
+
 async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
@@ -3046,19 +3115,49 @@ async function loadConfig() {
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
     document.getElementById('cfg-ga4-id').value = d.ga4MeasurementId || '';
-    document.getElementById('cfg-store-open').checked = d.storeOpen !== false;
+    const storeOpen = d.storeOpen !== false;
+    document.getElementById('cfg-store-open').checked = storeOpen;
+    _lastKnownStoreOpen = storeOpen;
+    updateStoreStatePill_(storeOpen);
     // Payment methods
     const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
     document.getElementById('cfg-pay-efectivo').checked = pays.efectivo !== false;
     document.getElementById('cfg-pay-transferencia').checked = pays.transferencia !== false;
     document.getElementById('cfg-pay-pagopark').checked = !!pays.pagopark;
+    // Accesos con tienda cerrada
+    const maintenanceAccess = d.maintenanceAccess || {};
+    _lastKnownMaintenanceAccess = {};
+    MAINTENANCE_ROLE_KEYS.forEach(role => {
+      const allowed = maintenanceAccess[role] === true;
+      _lastKnownMaintenanceAccess[role] = allowed;
+      const input = document.getElementById('ma-' + role);
+      if (input) input.checked = allowed;
+    });
   } catch(e) {
     console.error('loadConfig error:', e);
   }
 }
 
+document.getElementById('cfg-store-open').addEventListener('change', (e) => {
+  updateStoreStatePill_(e.target.checked);
+});
+
 document.getElementById('btn-save-config').onclick = async () => {
   try {
+    const willBeOpen = document.getElementById('cfg-store-open').checked;
+    if (_lastKnownStoreOpen && !willBeOpen) {
+      const confirmed = confirm('Vas a cerrar la tienda para visitantes y clientes. Solo los roles permitidos podrán acceder.');
+      if (!confirmed) {
+        document.getElementById('cfg-store-open').checked = true;
+        updateStoreStatePill_(true);
+        return;
+      }
+    }
+    const maintenanceAccess = {};
+    MAINTENANCE_ROLE_KEYS.forEach(role => {
+      const input = document.getElementById('ma-' + role);
+      maintenanceAccess[role] = !!(input && input.checked);
+    });
     await setDoc(doc(db, 'settings', 'general'), {
       storeName:       document.getElementById('cfg-store-name').value.trim(),
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
@@ -3072,7 +3171,8 @@ document.getElementById('btn-save-config').onclick = async () => {
       facebook:        document.getElementById('cfg-facebook').value.trim(),
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
       ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
-      storeOpen:       document.getElementById('cfg-store-open').checked,
+      storeOpen:       willBeOpen,
+      maintenanceAccess,
       paymentMethods: {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
         transferencia:  document.getElementById('cfg-pay-transferencia').checked,
@@ -3080,6 +3180,17 @@ document.getElementById('btn-save-config').onclick = async () => {
       },
       updatedAt: serverTimestamp()
     }, { merge: true });
+    if (_lastKnownStoreOpen !== willBeOpen) {
+      const antes = _lastKnownStoreOpen ? 'Abierta' : 'Cerrada';
+      const despues = willBeOpen ? 'Abierta' : 'Cerrada';
+      await logAudit('cambiar_estado_tienda', 'settings', 'general', 'Estado de la tienda', `${antes} → ${despues}`);
+    }
+    if (JSON.stringify(_lastKnownMaintenanceAccess) !== JSON.stringify(maintenanceAccess)) {
+      await logAudit('cambiar_acceso_tienda_cerrada', 'settings', 'general', 'Accesos con tienda cerrada', JSON.stringify(maintenanceAccess));
+    }
+    _lastKnownStoreOpen = willBeOpen;
+    _lastKnownMaintenanceAccess = maintenanceAccess;
+    updateStoreStatePill_(willBeOpen);
     toast('Configuración guardada correctamente');
   } catch(e) {
     toast('Error al guardar configuración: ' + e.message);

@@ -74,10 +74,10 @@ service cloud.firestore {
         !exists(/databases/$(database)/documents/settings/general) ||
         get(/databases/$(database)/documents/settings/general).data.storeOpen != false ||
         (
-          isSignedIn() &&
           !isBlockedUser() &&
-          get(/databases/$(database)/documents/settings/general).data.storeClosedAllowedRoles is list &&
-          currentRole() in get(/databases/$(database)/documents/settings/general).data.storeClosedAllowedRoles
+          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess is map &&
+          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess
+            .get(isSignedIn() ? currentRole() : 'guest', false) == true
         );
     }
 
@@ -85,12 +85,14 @@ service cloud.firestore {
        TINTIN — ROLES Y PERMISOS DINÁMICOS
        ============================================================ */
 
-    // Cerrado por defecto: si Super Admin no habilita un permiso de manera
-    // explícita en rolePermissions/main, el rol NO lo tiene.
+    // Permitido por defecto: si Super Admin no tocó nada en
+    // rolePermissions/main, el rol conserva el comportamiento original
+    // (sin restricción extra) hasta que se configure explícitamente.
     function rolePermAllows(role, moduleKey, actionKey) {
-      return exists(/databases/$(database)/documents/rolePermissions/main) &&
+      return !exists(/databases/$(database)/documents/rolePermissions/main) || (
         get(/databases/$(database)/documents/rolePermissions/main).data
-          .get(role, {}).get(moduleKey, {}).get(actionKey, false) == true;
+          .get(role, {}).get(moduleKey, {}).get(actionKey, true) == true
+      );
     }
 
     function currentRolePermAllows(moduleKey, actionKey) {
