@@ -61,9 +61,9 @@ function renderAccountPanel(user,role='client'){
  if(!panel)return;
  if(!user){panel.innerHTML=`<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;return;}
  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
- const photo=user.photoURL?`<img src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32" style="width:32px;height:32px;max-width:none;max-height:none;border-radius:50%;object-fit:cover;flex-shrink:0;display:block">`:'';
+ const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
- panel.innerHTML=`<div class="tt-account-header" style="display:flex;align-items:center;gap:10px">${photo}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span></div>${adminLink}<a class="tt-account-item" href="perfil.html">Mi cuenta</a><a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
+ panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="perfil.html">Mi cuenta</a><a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
  wireLogout(panel);
 }
 
@@ -76,8 +76,8 @@ function renderMobileUserPanel(user,role='client'){
  if(!user){panel.innerHTML=`<a href="login.html" class="tt-mobile-user-login"><div class="tt-mobile-user-avatar">${PERSON_ICON}</div><div><div class="tt-mobile-user-name">Iniciar sesión</div><div class="tt-mobile-user-sub">Ingresá con Google, es gratis!</div></div></a>`;return;}
  const name=user.displayName||user.email||'Mi perfil';
  const firstName=escapeHtmlNav(name.split(' ')[0]);
- const avatar=user.photoURL?`<img src="${user.photoURL}" alt="${firstName}" referrerpolicy="no-referrer" width="40" height="40" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0">`:PERSON_ICON;
- const adminMobile=hasAdminAccess(user,role)?`<a href="admin.html" class="tt-mobile-user-action tt-mobile-user-admin" data-internal-admin-link="true" style="background:linear-gradient(135deg,#2B2B2B,#7B6F72);color:#fff;border-color:rgba(43,43,43,.18)"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.16)">${ADMIN_ICON}</span><span>${escapeHtmlNav(roleLabel(role))}</span></a>`:'';
- panel.innerHTML=`<div class="tt-mobile-user-profile" style="pointer-events:none"><div class="tt-mobile-user-avatar">${avatar}</div><div><div class="tt-mobile-user-name">${firstName}</div><div class="tt-mobile-user-sub">Cuenta activa</div></div></div><div class="tt-mobile-user-actions">${adminMobile}<a href="perfil.html" class="tt-mobile-user-action">${PERSON_ICON}<span>Mi cuenta</span></a><a href="perfil.html#mis-pedidos" class="tt-mobile-user-action">${ORDER_ICON}<span>Mis pedidos</span></a><button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button></div>`;
+ const avatar=user.photoURL?`<img class="tt-mobile-user-photo" src="${user.photoURL}" alt="${firstName}" referrerpolicy="no-referrer" width="40" height="40">`:PERSON_ICON;
+ const adminMobile=hasAdminAccess(user,role)?`<a href="admin.html" class="tt-mobile-user-action tt-mobile-user-admin" data-internal-admin-link="true"><span class="tt-mobile-user-admin-icon">${ADMIN_ICON}</span><span>${escapeHtmlNav(roleLabel(role))}</span></a>`:'';
+ panel.innerHTML=`<div class="tt-mobile-user-profile tt-mobile-user-profile-static"><div class="tt-mobile-user-avatar">${avatar}</div><div><div class="tt-mobile-user-name">${firstName}</div><div class="tt-mobile-user-sub">Cuenta activa</div></div></div><div class="tt-mobile-user-actions">${adminMobile}<a href="perfil.html" class="tt-mobile-user-action">${PERSON_ICON}<span>Mi cuenta</span></a><a href="perfil.html#mis-pedidos" class="tt-mobile-user-action">${ORDER_ICON}<span>Mis pedidos</span></a><button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button></div>`;
  wireMobileLogout(panel);
 }
