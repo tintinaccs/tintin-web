@@ -68,17 +68,3 @@
   visibility: hidden !important;
   opacity: 0 !important;
 }
-
-#tt-loader::before,
-#tt-intro::before {
-  content: "";
-  display: block;
-  width: clamp(112px, 24vw, 210px);
-  aspect-ratio: 1 / 1;
-  background: url('../assets-tintin/images/general/logo.png') center / contain no-repeat;
-}
-
-#tt-loader:has(img[src*="logo.png"])::before,
-#tt-intro:has(img[src*="logo.png"])::before {
-  display: none !important;
-}

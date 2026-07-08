@@ -5,7 +5,7 @@ window.TintinPageAuditFixBooted=true;
 var VERSION='tintin-20260708-1';
 function isHome(){var p=(location.pathname||'').toLowerCase();return p.endsWith('/')||p.endsWith('/index.html')||p==='';}
 function isCheckout(){var p=(location.pathname||'').toLowerCase();return p.indexOf('checkout')>-1||document.body?.classList.contains('checkout-page')||document.querySelector('.ck-body,.ck-panel,.ck-header');}
-function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
+function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;if(u.searchParams.get('v')===VERSION)return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
 function versionLocalCssLinks(){document.querySelectorAll('link[href$=".css"],link[href*=".css?"]').forEach(function(link){var href=link.getAttribute('href')||'';var next=versionUrl(href);if(next!==href){link.setAttribute('href',next);link.setAttribute('data-tt-css-versioned','true');}})}
 function addStyle(){
  if(document.getElementById('tt-page-audit-fix-style'))return;

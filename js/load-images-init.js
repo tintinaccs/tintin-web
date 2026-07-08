@@ -1,19 +1,12 @@
-function injectTintinPalette() {
-  if (document.getElementById('tt-tintin-palette-css')) return;
-  const link = document.createElement('link');
-  link.id = 'tt-tintin-palette-css';
-  link.rel = 'stylesheet';
-  link.href = new URL('../css/tintin-palette.css', import.meta.url).href;
-  document.head.appendChild(link);
-}
-
-injectTintinPalette();
-
-import './splash-scroll-lock.js';
-import './header-dropdown-fix.js';
-import './store-gate.js';
-import './scroll-reveal-global.js';
-import './welcome-tutorial-runtime.js';
+// header-dropdown-fix.js, store-gate.js y scroll-reveal-global.js NO se
+// importan acá a propósito: js/page-loader.js ya los carga (con versión) en
+// TODAS las páginas, incluida esta — importarlos de nuevo acá, sin versión,
+// resolvía a una URL distinta y el navegador los ejecutaba dos veces (dos
+// listeners de Firestore duplicados en store-gate, dos observers de scroll
+// duplicados, etc.). splash-scroll-lock.js tampoco: era solo para el viejo
+// splash bespoke de index.html (#tt-intro), que ahora usa el mismo
+// js/page-loader.js que el resto del sitio (con su propio scroll-lock ya
+// incluido).
 import { loadImages } from './images.js';
 
 loadImages().then(() => {
