@@ -3,18 +3,25 @@
    Manages configurable image slots stored in Firestore
    ============================================================ */
 
-import { db } from "./firebase.js";
+import { db } from "./firebase.js?v=tintin-20260708-1";
 import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import './ui-quality.js';
-import './home-premium.js';
-import './welcome-tutorial-runtime.js';
+import './ui-quality.js?v=tintin-20260708-1';
+import './home-premium.js?v=tintin-20260708-1';
+import './welcome-tutorial-runtime.js?v=tintin-20260708-1';
+
+const TT_CACHE_VERSION = 'tintin-20260708-1';
+function versionUrl(url) {
+  const u = new URL(url, import.meta.url);
+  u.searchParams.set('v', TT_CACHE_VERSION);
+  return u.href;
+}
 
 function injectTintinPalette() {
   if (document.getElementById('tt-tintin-palette-css')) return;
   const link = document.createElement('link');
   link.id = 'tt-tintin-palette-css';
   link.rel = 'stylesheet';
-  link.href = new URL('../css/tintin-palette.css', import.meta.url).href;
+  link.href = versionUrl('../css/tintin-palette.css');
   document.head.appendChild(link);
 }
 
@@ -25,7 +32,7 @@ function injectHomeFit() {
   const link = document.createElement('link');
   link.id = 'tt-home-fit-css';
   link.rel = 'stylesheet';
-  link.href = new URL('../css/home-fit.css', import.meta.url).href;
+  link.href = versionUrl('../css/home-fit.css');
   document.head.appendChild(link);
 }
 
