@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
+    "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
+    "deploy:firebase": "firebase deploy --project tintin-accesorios"
+  },
+  "devDependencies": {
+    "firebase-tools": "latest"
+  },
+  "private": true
+}
