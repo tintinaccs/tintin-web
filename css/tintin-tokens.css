@@ -1,45 +1,39 @@
 :root {
   --tt-page-bg: #FFF6FA;
   --tt-title: #2B2B2B;
-  --tt-text: #7B6F72;
+  --tt-text: #2B2B2B;
+  --tt-muted: #7B6F72;
   --tt-card: #FFFFFF;
-  --tt-primary: #F6B7C8;
-  --tt-soft: #FAD6DF;
+  --tt-primary: #D46A8A;
+  --tt-soft: #FFF9FC;
   --tt-light: #FDECF2;
-  --tt-baby: #F9C3D3;
-  --tt-medium: #F398B2;
-  --tt-strong: #E88CA8;
-  --tt-dark: #D46A8A;
-  --tt-vintage: #E6A6B7;
-  --tt-champagne: #FFFFF3;
   --tt-border: #F1E4E7;
   --tt-line: #F7E9ED;
-  --tt-icon: #A6959C;
-  --tt-gradient: linear-gradient(135deg, #F6B7C8 0%, #F398B2 100%);
+  --tt-focus: rgba(212,106,138,0.18);
+  --tt-shadow: 0 14px 38px rgba(212,106,138,0.10);
 
-  --bg: #FFF6FA;
-  --bg-soft: #FDECF2;
-  --card-bg: #FFFFFF;
-  --pink-pale: #FDECF2;
+  --bg: var(--tt-page-bg);
+  --bg-soft: var(--tt-soft);
+  --card-bg: var(--tt-card);
+  --pink-pale: var(--tt-light);
   --pink: #F6B7C8;
-  --pink-mid: #F398B2;
-  --pink-dark: #D46A8A;
-  --pink-lightest: #FAD6DF;
-  --rose: #D46A8A;
-  --gold: #FFFFF3;
-  --gold-hover: #F6B7C8;
-  --gold-light: #FFFFF3;
-  --ink: #2B2B2B;
-  --text: #7B6F72;
-  --text-sec: #7B6F72;
-  --text-muted: #A6959C;
-  --text-title: #2B2B2B;
-  --border: #F1E4E7;
-  --white: #FFFFFF;
-  --whatsapp: #F6B7C8;
-  --whatsapp-h: #F398B2;
-  --error: #D46A8A;
-  --success: #E88CA8;
+  --pink-mid: #F6B7C8;
+  --pink-dark: var(--tt-primary);
+  --rose: var(--tt-primary);
+  --gold: var(--tt-card);
+  --gold-hover: var(--tt-light);
+  --gold-light: var(--tt-soft);
+  --ink: var(--tt-title);
+  --text: var(--tt-text);
+  --text-sec: var(--tt-muted);
+  --text-muted: var(--tt-muted);
+  --text-title: var(--tt-title);
+  --border: var(--tt-border);
+  --white: var(--tt-card);
+  --whatsapp: var(--tt-primary);
+  --whatsapp-h: #B84C72;
+  --error: var(--tt-primary);
+  --success: var(--tt-primary);
   --shadow-sm: 0 2px 8px rgba(212,106,138,0.08);
   --shadow-md: 0 6px 22px rgba(212,106,138,0.13);
   --shadow-lg: 0 10px 42px rgba(212,106,138,0.18);
@@ -64,14 +58,12 @@
 
 #tt-loader,
 #tt-intro {
-  background: #FFF6FA !important;
+  background: var(--tt-page-bg) !important;
   gap: 0 !important;
 }
 
-#tt-loader img[src*="logo-splash"],
-#tt-loader img[src*="logo-tintin"],
-#tt-intro img[src*="logo-splash"],
-#tt-intro img[src*="logo-tintin"] {
+#tt-loader img:not([src*="logo.png"]),
+#tt-intro img:not([src*="logo.png"]) {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
