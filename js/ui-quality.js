@@ -10,9 +10,10 @@ function css(){
  if(!document.getElementById('tt-ui-quality-css')){var l=document.createElement('link');l.id='tt-ui-quality-css';l.rel='stylesheet';l.href=versioned('../css/ui-quality.css');document.head.appendChild(l)}
  if(!document.getElementById('tt-unified-theme-css')){var t=document.createElement('link');t.id='tt-unified-theme-css';t.rel='stylesheet';t.href=versioned('../css/tintin-unified-theme.css');document.head.appendChild(t)}
  if(!document.getElementById('tt-theme-cleanup-css')){var c=document.createElement('link');c.id='tt-theme-cleanup-css';c.rel='stylesheet';c.href=versioned('../css/tintin-theme-cleanup.css');document.head.appendChild(c)}
+ if(!document.getElementById('tt-parity-safe-css')){var p=document.createElement('link');p.id='tt-parity-safe-css';p.rel='stylesheet';p.href=versioned('../css/tintin-parity-safe.css');document.head.appendChild(p)}
 }
 function bootThemeSanitizer(){import(versioned('./theme-color-sanitizer.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
-function parity(){document.documentElement.classList.add('tt-parity-guard')}
+function parity(){document.documentElement.classList.remove('tt-parity-guard');document.documentElement.classList.add('tt-parity-safe')}
 function adminMobileSidebar(){
  var path=(location.pathname||'').toLowerCase();
  if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;
