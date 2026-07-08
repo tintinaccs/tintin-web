@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "fix:tintin": "node scripts/fix-tintin-source.js",
     "audit:tintin": "node scripts/audit-tintin.js",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
