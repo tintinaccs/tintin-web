@@ -328,6 +328,7 @@ import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
 import { showBlockedModal } from "./js/blocked-modal.js";
+import { isAccessAllowed, renderStoreClosedOverlay, removeStoreClosedOverlay } from "./js/store-gate-core.js";
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -380,8 +381,8 @@ function subscribeStoreConfig() {
       if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
       applyPaymentMethods(cfg.paymentMethods);
       populateCities();
-      STORE_CLOSED = cfg.storeOpen === false;
-      if (STORE_CLOSED) showStoreClosedOverlay();
+      storeCfg = cfg;
+      reevaluateStoreGate_();
       if (first) { first = false; resolveFirst(); }
     }, e => {
       console.error('No se pudo escuchar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
@@ -615,26 +616,22 @@ function showBlockedOverlay() {
 }
 
 // Super Admin → Configuración → "Tienda abierta" — si lo apaga, el checkout
-// se tapa igual que con una cuenta bloqueada, así el switch tiene efecto
-// real y no es solo decorativo. STORE_CLOSED se lee en vivo (subscribeStoreConfig)
-// y se vuelve a chequear justo antes de guardar el pedido, por si alguien ya
-// estaba en medio del checkout cuando Super Admin cerró la tienda.
-let STORE_CLOSED = false;
-function showStoreClosedOverlay() {
-  if (document.getElementById('ck-store-closed-overlay')) return;
-  const ov = document.createElement('div');
-  ov.id = 'ck-store-closed-overlay';
-  ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
-  ov.innerHTML = `
-    <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:32px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">
-      <div style="font-size:38px;margin-bottom:12px">🌙</div>
-      <div style="font-weight:800;font-size:17px;color:#8b2642;margin-bottom:10px">Estamos cerrados por el momento</div>
-      <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 22px">Ahora mismo no estamos recibiendo pedidos nuevos. Volvé a intentarlo un poco más tarde, o escribinos por WhatsApp si es urgente.</p>
-      <a href="https://wa.me/595981299331" target="_blank" rel="noopener" style="display:inline-block;background:#25D366;color:#fff;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none;margin:0 6px 10px">Escribir por WhatsApp</a>
-      <a href="index.html" style="display:inline-block;background:#b84c72;color:#fff;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none;margin:0 6px 10px">Volver al inicio</a>
-    </div>`;
-  document.body.appendChild(ov);
-  document.body.style.overflow = 'hidden';
+// se tapa entero (no solo el paso de confirmar), salvo que el rol de la
+// cuenta tenga la excepción "Permitir acceso con tienda cerrada" activada.
+// storeCfg se lee en vivo (subscribeStoreConfig) y se vuelve a chequear justo
+// antes de guardar el pedido, por si alguien ya estaba en medio del checkout
+// cuando Super Admin cerró la tienda.
+let storeCfg = null;
+function currentRoleForGate_() {
+  return (currentUser && !currentUser.isAnonymous) ? (currentUserProfile?.role || 'client') : 'guest';
+}
+function storeClosedForCurrentUser_() {
+  return !isAccessAllowed(storeCfg, currentRoleForGate_(), currentUser?.email || '');
+}
+function reevaluateStoreGate_() {
+  if (!storeCfg) return;
+  if (storeClosedForCurrentUser_()) renderStoreClosedOverlay();
+  else removeStoreClosedOverlay();
 }
 
 // Fase F: sin cuenta real y verificada no se puede avanzar del carrito en
@@ -1227,8 +1224,8 @@ async function saveOrder(items, subtotal, total) {
     showBlockedOverlay();
     throw new Error('BLOCKED_ACCOUNT');
   }
-  if (STORE_CLOSED) {
-    showStoreClosedOverlay();
+  if (storeClosedForCurrentUser_()) {
+    renderStoreClosedOverlay();
     throw new Error('STORE_CLOSED');
   }
 
@@ -1665,6 +1662,7 @@ onAuthStateChanged(auth, user => {
   // otra colección/producto/paso 1 del checkout sigue funcionando sin login,
   // porque esos son de lectura pública (products/collections/settings).
   if (!user || user.isAnonymous) {
+    reevaluateStoreGate_();
     enforceCheckoutGuard();
     tryResumeCheckoutStep();
     return;
@@ -1680,6 +1678,7 @@ onAuthStateChanged(auth, user => {
       // Fase F: recién acá se sabe con certeza si la cuenta cumple todo
       // (real + verificada + no bloqueada) — se corrige el paso si hace
       // falta, y se retoma el paso pendiente si venía de loguearse.
+      reevaluateStoreGate_();
       enforceCheckoutGuard();
       tryResumeCheckoutStep();
       maybeApplySavedLocation();

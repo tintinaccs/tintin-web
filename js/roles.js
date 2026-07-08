@@ -51,23 +51,27 @@ export const PERMISSIONS = {
     viewDashboard:     true
   },
 
-  // Admin operativo: puede ayudar en el día a día, pero NO tiene permisos
-  // máximos de Super Admin. No usuarios, no roles, no configuración, no borrados
-  // sensibles y no edición completa de pedidos.
+  // Admin: gerente operativo de la tienda con control total sobre pedidos,
+  // productos, colecciones y contenido (incluido eliminar) — pero CERO acceso
+  // a Usuarios, Configuración e Importar. No es un segundo Super Admin: no
+  // puede tocar cuentas, roles, ni nada de configuración/seguridad interna.
+  // Super Admin puede ajustar cualquiera de estos permisos por rol en
+  // cualquier momento desde Roles y Permisos (rolePermissions/main), sin
+  // tocar este archivo — esta matriz es solo el punto de partida.
   admin: {
     manageUsers:       false,
     assignRoles:       false,
     deleteUsers:       false,
     viewOrders:        true,
     manageOrders:      true,
-    manageOrdersFull:  false,
-    deleteOrders:      false,
+    manageOrdersFull:  true,
+    deleteOrders:      true,
     addProducts:       true,
     editProducts:      true,
-    deleteProducts:    false,
+    deleteProducts:    true,
     manageContent:     true,
-    deleteCollections: false,
-    deleteContent:     false,
+    deleteCollections: true,
+    deleteContent:     true,
     manageSettings:    false,
     manageImages:      false,
     manageEmail:       false,
