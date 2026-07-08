@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = process.cwd();
+const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
+const VERSION = 'tintin-20260708-1';
+
+const checks = [];
+const issues = [];
+
+function walk(dir) {
+  const out = [];
+  for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, item.name);
+    const rel = path.relative(ROOT, full).replace(/\\/g, '/');
+    if (item.isDirectory()) {
+      if (!IGNORED_DIRS.has(rel) && !IGNORED_DIRS.has(item.name)) out.push(...walk(full));
+    } else {
+      out.push(rel);
+    }
+  }
+  return out;
+}
+
+function read(rel) {
+  return fs.readFileSync(path.join(ROOT, rel), 'utf8');
+}
+
+function addIssue(level, file, message) {
+  issues.push({ level, file, message });
+}
+
+function assertFile(rel, message) {
+  checks.push(`file:${rel}`);
+  if (!fs.existsSync(path.join(ROOT, rel))) addIssue('CRITICAL', rel, message || 'Archivo requerido no existe');
+}
+
+const files = walk(ROOT);
+const htmlFiles = files.filter(f => f.endsWith('.html'));
+const cssFiles = files.filter(f => f.endsWith('.css'));
+const jsFiles = files.filter(f => f.endsWith('.js') && !f.startsWith('functions/'));
+
+assertFile('assets-tintin/images/general/logo.png', 'Debe existir el logo real PNG usado por loader/header');
+assertFile('css/tintin-unified-theme.css', 'Debe existir la fuente única de tokens Tintin');
+assertFile('css/tintin-palette.css', 'Debe existir la paleta temprana del loader');
+assertFile('css/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores hardcodeados');
+assertFile('css/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
+assertFile('js/ui-quality.js', 'Debe existir el runtime global de calidad');
+assertFile('js/page-loader.js', 'Debe existir el loader global');
+assertFile('js/header-account-mobile-fix.js', 'Debe existir el header mobile global');
+assertFile('js/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
+assertFile('firestore.rules', 'Debe existir el archivo de reglas Firestore');
+assertFile('firebase.json', 'Debe existir firebase.json apuntando a firestore.rules');
+
+for (const file of files.filter(f => /\.(html|css|js)$/.test(f))) {
+  const content = read(file);
+  if (/logo-splash|logo-tintin/i.test(content) && file !== 'js/page-audit-fix.js' && file !== 'js/ui-quality.js' && file !== 'js/page-loader.js') {
+    addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
+  }
+  if (/#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-palette.css','css/tintin-theme-cleanup.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
+    addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
+  }
+}
+
+for (const file of htmlFiles) {
+  const content = read(file);
+  const isCheckout = file.toLowerCase().includes('checkout');
+  const hasLoader = /js\/page-loader\.js/.test(content);
+  if (!hasLoader && !isCheckout && file !== 'index.html') {
+    addIssue('WARN', file, 'HTML sin page-loader.js; puede no recibir tema/header/fixes globales');
+  }
+  if (/js\/page-loader\.js["']/.test(content)) {
+    addIssue('INFO', file, `page-loader.js está sin query ?v=${VERSION}; cache-busting interno ayuda, pero conviene versionarlo directo`);
+  }
+  if (/styles\.css["']/.test(content)) {
+    addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; conviene versionarlo directo`);
+  }
+  if (isCheckout && /id=["']tt-header["']|class=["'][^"']*tt-header/.test(content)) {
+    addIssue('WARN', file, 'Checkout contiene header en HTML; runtime lo oculta, pero lo ideal es no renderizarlo');
+  }
+}
+
+const firebaseJson = fs.existsSync(path.join(ROOT, 'firebase.json')) ? read('firebase.json') : '';
+if (!/"firestore"\s*:\s*\{[\s\S]*"rules"\s*:\s*"firestore\.rules"/.test(firebaseJson)) {
+  addIssue('CRITICAL', 'firebase.json', 'No apunta claramente a firestore.rules');
+}
+
+const ui = fs.existsSync(path.join(ROOT, 'js/ui-quality.js')) ? read('js/ui-quality.js') : '';
+[
+  'theme-color-sanitizer.js',
+  'header-account-mobile-fix.js',
+  'page-audit-fix.js',
+  'tintin-unified-theme.css',
+  'tintin-theme-cleanup.css',
+  'tintin-parity-safe.css'
+].forEach(token => {
+  if (!ui.includes(token)) addIssue('CRITICAL', 'js/ui-quality.js', `No carga ${token}`);
+});
+
+const counts = issues.reduce((acc, issue) => {
+  acc[issue.level] = (acc[issue.level] || 0) + 1;
+  return acc;
+}, {});
+
+console.log('Tintin audit');
+console.log('============');
+console.log(`HTML: ${htmlFiles.length}`);
+console.log(`CSS: ${cssFiles.length}`);
+console.log(`JS: ${jsFiles.length}`);
+console.log(`Issues: ${issues.length}`);
+console.log(`CRITICAL: ${counts.CRITICAL || 0}`);
+console.log(`WARN: ${counts.WARN || 0}`);
+console.log(`INFO: ${counts.INFO || 0}`);
+console.log('');
+
+for (const issue of issues) {
+  console.log(`[${issue.level}] ${issue.file} — ${issue.message}`);
+}
+
+if ((counts.CRITICAL || 0) > 0) process.exit(1);
