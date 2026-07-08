@@ -1301,10 +1301,17 @@
               <input type="checkbox" id="cfg-pay-transferencia" checked style="accent-color:var(--adm-accent);width:16px;height:16px"> Transferencia bancaria
             </label>
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
-              <input type="checkbox" id="cfg-pay-pagopark" style="accent-color:var(--adm-accent);width:16px;height:16px"> PagoPark (requiere integración backend — pendiente)
+              <input type="checkbox" id="cfg-pay-pagopark" style="accent-color:var(--adm-accent);width:16px;height:16px"> Pasarela de pago con tarjeta (requiere integración backend — pendiente)
             </label>
           </div>
-          <p style="font-size:12px;color:var(--adm-muted);margin-top:12px">ℹ️ La integración de pagos online (PagoPark, tarjeta) requiere un backend seguro con credenciales privadas. Está pendiente de implementación.</p>
+          <p style="font-size:12px;color:var(--adm-muted);margin-top:12px">ℹ️ La integración de pagos online (tarjeta) requiere un backend seguro con credenciales privadas. Está pendiente de implementación.</p>
+          <div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--adm-border)">
+            <label class="adm-label">Datos para transferencia — Ueno (Banco GNB)</label>
+            <textarea class="adm-input" id="cfg-bank-ueno" rows="2" placeholder="Ej: CI 1.234.567 — Nombre Apellido" style="resize:vertical;margin-bottom:12px"></textarea>
+            <label class="adm-label">Datos para transferencia — Atlas (Banco Nacional)</label>
+            <textarea class="adm-input" id="cfg-bank-atlas" rows="2" placeholder="Ej: CI 1.234.567 — Nombre Apellido" style="resize:vertical"></textarea>
+            <p style="font-size:12px;color:var(--adm-muted);margin-top:10px">Se muestran en el checkout cuando la clienta elige "Transferencia bancaria". Si dejás alguno vacío, el checkout pide consultar los datos por WhatsApp en su lugar.</p>
+          </div>
         </div>
       </div>
 
@@ -3128,6 +3135,9 @@ async function loadConfig() {
     document.getElementById('cfg-pay-efectivo').checked = pays.efectivo !== false;
     document.getElementById('cfg-pay-transferencia').checked = pays.transferencia !== false;
     document.getElementById('cfg-pay-pagopark').checked = !!pays.pagopark;
+    const bankAccounts = d.bankAccounts || {};
+    document.getElementById('cfg-bank-ueno').value = bankAccounts.ueno || '';
+    document.getElementById('cfg-bank-atlas').value = bankAccounts.atlas || '';
     // Accesos con tienda cerrada
     const maintenanceAccess = d.maintenanceAccess || {};
     _lastKnownMaintenanceAccess = {};
@@ -3181,6 +3191,10 @@ document.getElementById('btn-save-config').onclick = async () => {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
         transferencia:  document.getElementById('cfg-pay-transferencia').checked,
         pagopark:       document.getElementById('cfg-pay-pagopark').checked,
+      },
+      bankAccounts: {
+        ueno:  document.getElementById('cfg-bank-ueno').value.trim(),
+        atlas: document.getElementById('cfg-bank-atlas').value.trim(),
       },
       updatedAt: serverTimestamp()
     }, { merge: true });
@@ -5242,7 +5256,15 @@ async function prodGuardar() {
     collection: collection_,
     price,
     priceBefore,
-    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+    // Vacío = stock no controlado/ilimitado (el storefront ya lo trata así,
+    // ver script.js) — no lo confundimos con "0" (agotado de verdad), que
+    // solo se guarda si la vendedora lo escribe a propósito.
+    stock: (() => {
+      const raw = document.getElementById('prod-stock').value.trim();
+      if (raw === '') return null;
+      const n = parseInt(raw);
+      return Number.isNaN(n) ? null : n;
+    })(),
     imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
     description: document.getElementById('prod-description').value.trim() || '',
     tags,

@@ -237,16 +237,16 @@
           </div>
         </label>
         <div class="ck-bank-details" id="bank-details">
-          <div class="ck-bank-line">🏦 <strong>Ueno (Banco GNB):</strong> CI 4.123.456 — Alberto Giménez</div>
-          <div class="ck-bank-line">🏦 <strong>Atlas (Banco Nacional):</strong> CI 4.123.456 — Alberto Giménez</div>
+          <div id="bank-details-lines"></div>
           <div style="margin-top:8px;font-size:12px;color:#C86B86">Envianos el comprobante por WhatsApp al confirmar el pedido 📲</div>
         </div>
       </div>
 
-      <!-- PagoPark no está integrado todavía — se muestra siempre como nota
-           informativa "próximamente", nunca como opción seleccionable real. -->
+      <!-- El pago con tarjeta/pasarela no está integrado todavía — se muestra
+           siempre como nota informativa "próximamente", nunca como opción
+           seleccionable real. -->
       <div class="ck-pay-note" style="margin-top:4px">
-        🔒 Próximamente habilitamos <strong>PagoPark</strong> y pago con tarjeta mediante pasarela segura. Por ahora usá efectivo o transferencia.
+        🔒 Próximamente habilitamos el pago con tarjeta mediante una pasarela segura. Por ahora usá efectivo o transferencia.
       </div>
 
       <div class="ck-error" id="error-3"></div>
@@ -384,6 +384,7 @@ function subscribeStoreConfig() {
       if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
       if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
       applyPaymentMethods(cfg.paymentMethods);
+      applyBankAccounts(cfg.bankAccounts);
       populateCities();
       storeCfg = cfg;
       reevaluateStoreGate_();
@@ -404,11 +405,12 @@ function applyPaymentMethods(paymentMethods) {
   const efectivoOn = pm.efectivo !== false;
   const transferenciaOn = pm.transferencia !== false;
 
-  // Red de seguridad: si quedaran los dos desactivados a la vez, se muestran
-  // igual — nunca se deja el checkout sin ninguna forma de pagar.
-  const anyOn = efectivoOn || transferenciaOn;
-  const showEfectivo = anyOn ? efectivoOn : true;
-  const showTransferencia = anyOn ? transferenciaOn : true;
+  // Si Super Admin apaga los dos métodos a propósito (por ejemplo, para
+  // pausar cobros temporalmente), el checkout debe respetar eso de verdad:
+  // se muestra el aviso "No hay métodos de pago disponibles" (con el link
+  // de WhatsApp como alternativa) en vez de forzar ambos a mostrarse igual.
+  const showEfectivo = efectivoOn;
+  const showTransferencia = transferenciaOn;
 
   const efectivoEl = document.getElementById('pay-option-efectivo');
   const transferenciaEl = document.getElementById('pay-option-transferencia');
@@ -426,6 +428,21 @@ function applyPaymentMethods(paymentMethods) {
     const stillVisible = checked.id === 'pay-efectivo' ? showEfectivo : showTransferencia;
     if (!stillVisible) checked.checked = false;
   }
+}
+
+// Datos bancarios reales desde Super Admin → Configuración → Métodos de
+// pago (nunca hardcodeados acá) — si todavía no los cargó, se pide
+// consultarlos por WhatsApp en vez de mostrar algo inventado o vacío.
+function applyBankAccounts(bankAccounts) {
+  const ba = bankAccounts || {};
+  const lines = [];
+  if (ba.ueno)  lines.push(`<div class="ck-bank-line">🏦 <strong>Ueno (Banco GNB):</strong> ${escapeSearchHtml(ba.ueno)}</div>`);
+  if (ba.atlas) lines.push(`<div class="ck-bank-line">🏦 <strong>Atlas (Banco Nacional):</strong> ${escapeSearchHtml(ba.atlas)}</div>`);
+  const el = document.getElementById('bank-details-lines');
+  if (!el) return;
+  el.innerHTML = lines.length
+    ? lines.join('')
+    : `<div class="ck-bank-line">Escribinos por WhatsApp para coordinar los datos de la transferencia 📲</div>`;
 }
 
 // ---- STATE ----
@@ -478,12 +495,15 @@ function populateCities() {
 }
 
 // ---- FIND CITY PRICE ----
+// null (no 0) cuando la ciudad no está en ninguna lista — el UI ya sabe
+// tratar null como "consultar con un vendedor" en vez de mostrar envío
+// gratis por error.
 function getCityPrice(cityName) {
   const d = DELIVERY_CITIES.find(c => c.name === cityName);
   if (d) return d.price;
   const e = ENCOMIENDA_CITIES.find(c => c.name === cityName);
   if (e) return e.price;
-  return 0;
+  return null;
 }
 
 // ---- CART RENDERING ----
