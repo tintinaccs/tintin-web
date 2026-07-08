@@ -2,7 +2,7 @@
 // TINTIN ACCESORIOS — Firebase Config
 // =============================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -19,7 +19,7 @@ const firebaseConfig = {
   measurementId: "G-9RH4FCNCZ9"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 // Persistent local cache (IndexedDB): onSnapshot listeners resolve instantly
 // from disk on every load after the first — no more staring at "Cargando…"
@@ -32,14 +32,12 @@ try {
     localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
   });
 } catch (e) {
-  console.warn('[firebase] Persistent cache unavailable, falling back to in-memory:', e);
+  console.warn('[firebase] Persistent cache unavailable or already initialized, using existing Firestore:', e);
   db = getFirestore(app);
 }
 
 const auth = getAuth(app);
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
-// en el punto central de inicialización para que aplique en todas las
-// páginas que importan `auth` de este archivo.
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
