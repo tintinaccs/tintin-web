@@ -2,10 +2,17 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260709-1';
+var TT_CACHE_VERSION='tintin-20260709-2';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
-var DEFAULT_LOGO='assets-tintin/images/general/logo.png?v='+TT_CACHE_VERSION;
+// Mismo criterio home/interior que js/page-loader.js (que ya resolvió
+// LOGO_SRC antes de que este módulo cargue) — así esta pasada de
+// corrección nunca reemplaza el logo correcto por el de la página
+// equivocada.
+var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
+var INNER_LOADER_IMAGE='assets-tintin/images/general/logo.png';
+function isHomePage(){var path=(location.pathname||'').toLowerCase();return path.endsWith('/index.html')||/\/$/.test(path)}
+var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CACHE_VERSION;
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
 // css(): ui-quality.css / tintin-unified-theme.css / tintin-theme-cleanup.css /
 // tintin-parity-safe.css ya se cargan de forma síncrona en el <head> de cada
