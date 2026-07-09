@@ -292,7 +292,7 @@
 <div class="cat-wrap">
 
   <!-- HERO -->
-  <div class="cat-hero">
+  <div class="cat-hero" data-tt-editable="catalogo" data-tt-section="header">
     <h1 class="cat-hero-title" id="cat-titulo">Todo el catálogo</h1>
     <div class="cat-hero-sub" id="cat-subtitulo">Descubrí todos nuestros accesorios</div>
   </div>
@@ -446,6 +446,7 @@
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('catalogo');
 </script>
+<script type="module" src="js/edit-badge.js"></script>
 <script type="module">
 import { onCollectionsUpdate } from './js/collections-store.js';
 
@@ -681,6 +682,17 @@ function handleProductsUpdate(products) {
 
 window.addEventListener('tintin:products-loaded', e => handleProductsUpdate(e.detail.products));
 
+function _showCatalogLoadError() {
+  if (_catalogInitialized) return;
+  const grid = document.getElementById('cat-grid');
+  if (!grid) return;
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text-muted)">
+      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
+      <button class="tt-btn" onclick="location.reload()">Reintentar</button>
+    </div>`;
+}
+
 if (window.PRODUCTS && window.PRODUCTS.length) {
   handleProductsUpdate(window.PRODUCTS);
 } else {
@@ -690,7 +702,9 @@ if (window.PRODUCTS && window.PRODUCTS.length) {
     if (_catalogInitialized) return;
     if (window.PRODUCTS && window.PRODUCTS.length) { handleProductsUpdate(window.PRODUCTS); return; }
     if (Date.now() - _pollStart < 8000) setTimeout(poll, 200);
+    else _showCatalogLoadError();
   })();
+  window.addEventListener('tintin:products-error', _showCatalogLoadError);
 }
 
 // Filter events

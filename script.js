@@ -1576,12 +1576,22 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryThumbs();
   }
 
-  // Collections page — show skeleton while Firebase loads (same already-loaded guard as above)
+  // Collections page — same already-loaded guard as above, plus a
+  // skeleton→fallback (timeout + products-error event) so a failed/slow
+  // Firestore listener never leaves it spinning forever.
   if (document.getElementById('colls-products-grid')) {
     if (window.PRODUCTS && window.PRODUCTS.length) {
       renderProductsGrid('colls-products-grid', window.PRODUCTS.filter(isFeaturable));
     } else {
       _showProductsSkeleton('colls-products-grid');
+      const _fallbackColls = () => {
+        const grid = document.getElementById('colls-products-grid');
+        if (grid && grid.querySelector('.tt-skeleton-card')) {
+          renderProductsGrid('colls-products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable));
+        }
+      };
+      setTimeout(_fallbackColls, 4000);
+      window.addEventListener('tintin:products-error', _fallbackColls);
     }
   }
 

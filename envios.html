@@ -113,7 +113,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero">
+<section class="tt-page-hero" data-tt-editable="envios" data-tt-section="header">
   <div class="container">
     <p class="tt-section-sub">Información</p>
     <h1 class="tt-page-hero-title">Política de Envíos 🚚</h1>
@@ -129,20 +129,26 @@
       <h2 class="tt-info-title">Delivery — Zona Central</h2>
       <p>Realizamos delivery a domicilio en Asunción, Gran Asunción y zonas aledañas.</p>
       <ul>
+        <li><strong>Costo:</strong> según tu ciudad — mirá la lista de precios abajo.</li>
         <li><strong>Tiempo:</strong> generalmente el mismo día o al día siguiente hábil.</li>
         <li><strong>Coordinación:</strong> por WhatsApp antes del despacho.</li>
       </ul>
-      <div id="envios-delivery-cities"><p class="tt-ship-loading">Cargando ciudades y costos…</p></div>
+      <ul class="tt-city-price-list" id="envios-delivery-cities">
+        <li class="tt-city-price-loading">Cargando ciudades…</li>
+      </ul>
     </div>
 
     <div class="tt-info-block">
       <h2 class="tt-info-title">Encomienda — Interior del País</h2>
       <p>Enviamos al interior de Paraguay mediante encomienda (Saeta, Rysa u otras empresas de transporte).</p>
       <ul>
+        <li><strong>Costo:</strong> según el destino — mirá la lista de precios abajo.</li>
         <li><strong>Tiempo:</strong> 1 a 3 días hábiles según la ciudad.</li>
         <li><strong>Retiro:</strong> en la terminal de la empresa de transporte más cercana a vos.</li>
       </ul>
-      <div id="envios-encomienda-cities"><p class="tt-ship-loading">Cargando ciudades y costos…</p></div>
+      <ul class="tt-city-price-list" id="envios-encomienda-cities">
+        <li class="tt-city-price-loading">Cargando ciudades…</li>
+      </ul>
     </div>
 
     <div class="tt-info-block">
@@ -291,33 +297,42 @@
 <script type="module" src="js/whatsapp.js?v=tintin-20260709-4"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260709-4"></script>
 <script type="module">
-import { db } from "./js/firebase.js";
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-function formatGs(n) {
-  return 'Gs. ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
-
-function renderCityRows(containerId, cities) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  if (!Array.isArray(cities) || !cities.length) { el.innerHTML = ''; return; }
-  el.innerHTML = '<ul class="tt-ship-city-list">' + cities.map(c =>
-    `<li><span>${c.name}</span><span class="tt-ship-price">${c.price == null ? 'Consultar precio' : formatGs(c.price)}</span></li>`
-  ).join('') + '</ul>';
-}
-
-// Mismos datos que carga Super Admin → Configuración → Envíos, en vivo.
-onSnapshot(doc(db, 'settings', 'general'), snap => {
-  if (!snap.exists()) return;
-  const d = snap.data();
-  renderCityRows('envios-delivery-cities', d.deliveryCities);
-  renderCityRows('envios-encomienda-cities', d.encomiendaCities);
-}, err => console.error('No se pudo cargar la configuración de envíos:', err));
-</script>
-<script type="module">
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('envios');
+</script>
+<script type="module" src="js/edit-badge.js?v=tintin-20260709-4"></script>
+<script type="module">
+  import { db } from "./js/firebase.js";
+  import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  function fmtGs(n) { return `Gs. ${Number(n).toLocaleString('es-PY')}`; }
+  function costLabel(price) { return price == null ? 'Consultar precio con un vendedor' : fmtGs(price); }
+  function normalize(arr, defaultCost) {
+    return (arr || []).map(c => {
+      if (typeof c === 'string') return { name: c, price: defaultCost };
+      const price = c.price === null ? null : (c.price ?? defaultCost);
+      return { name: c.name, price };
+    });
+  }
+  function renderList(elId, cities) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (!cities.length) { el.innerHTML = '<li class="tt-city-price-empty">Todavía no cargamos ciudades acá. Consultanos por WhatsApp.</li>'; return; }
+    el.innerHTML = cities
+      .slice().sort((a, b) => a.name.localeCompare(b.name, 'es'))
+      .map(c => `<li><span>${c.name}</span><span class="tt-city-price-val">${costLabel(c.price)}</span></li>`)
+      .join('');
+  }
+
+  onSnapshot(doc(db, 'settings', 'general'), (snap) => {
+    const cfg = snap.exists() ? snap.data() : {};
+    renderList('envios-delivery-cities', normalize(cfg.deliveryCities, cfg.deliveryCost || 15000));
+    renderList('envios-encomienda-cities', normalize(cfg.encomiendaCities, cfg.encomiendaCost || 25000));
+  }, (err) => {
+    console.error('No se pudieron cargar las ciudades de envío:', err);
+    renderList('envios-delivery-cities', []);
+    renderList('envios-encomienda-cities', []);
+  });
 </script>
 </body>
 </html>

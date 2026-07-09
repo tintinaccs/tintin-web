@@ -29,7 +29,10 @@ function applyIndex(data) {
     if (hero.btnHref) heroLinks[1].setAttribute('href', hero.btnHref);
   }
 
-  const trustItems = data.trust && Array.isArray(data.trust.items) ? data.trust.items : null;
+  const trust = data.trust || {};
+  const trustBar = document.querySelector('.tt-trust-bar');
+  if (trustBar) trustBar.style.display = trust.visible === false ? 'none' : '';
+  const trustItems = Array.isArray(trust.items) ? trust.items : null;
   if (trustItems) {
     document.querySelectorAll('.tt-trust-item').forEach((el, i) => {
       const item = trustItems[i];
@@ -42,6 +45,8 @@ function applyIndex(data) {
   const bag = data.editorial_bag || {};
   const bagSection = document.querySelector('.tt-editorial-content');
   if (bagSection) {
+    const bagWrap = bagSection.closest('.tt-editorial');
+    if (bagWrap) bagWrap.closest('section').style.display = bag.visible === false ? 'none' : '';
     setHtml(bagSection.querySelector('.tt-editorial-title'), bag.title);
     setText(bagSection.querySelector('.tt-editorial-eyebrow'), bag.eyebrow);
     setText(bagSection.querySelector('.tt-editorial-desc'), bag.body);
@@ -55,6 +60,8 @@ function applyIndex(data) {
   const watches = data.editorial_relojes || {};
   const watchSection = document.querySelector('.tt-watch-feature-content');
   if (watchSection) {
+    const watchWrap = watchSection.closest('.tt-watch-feature');
+    if (watchWrap) watchWrap.closest('section').style.display = watches.visible === false ? 'none' : '';
     setHtml(watchSection.querySelector('.tt-watch-title'), watches.title);
     setText(watchSection.querySelector('.tt-watch-eyebrow'), watches.eyebrow);
     setText(watchSection.querySelector('.tt-watch-desc'), watches.body);
@@ -91,19 +98,22 @@ function applyCatalogo(data) {
   setText(document.getElementById('cat-subtitulo'), header.desc || header.eyebrow);
 }
 
-/** Generic page-hero applier for simple info pages (Contacto, Envíos) */
-function applyPageHero(data) {
-  const hero = data.hero || {};
-  setHtml(document.querySelector('.tt-page-hero-title'), hero.title);
-  setText(document.querySelector('.tt-page-hero-sub'), hero.desc);
+/** Shared by pages whose only editable content is the .tt-page-hero title/subtitle */
+function applyGenericPageHero(data) {
+  const header = data.header || {};
+  setHtml(document.querySelector('.tt-page-hero-title'), header.title);
+  setText(document.querySelector('.tt-page-hero-sub'), header.desc);
 }
 
 const PAGE_APPLIERS = {
   index: applyIndex,
   nosotros: applyNosotros,
   catalogo: applyCatalogo,
-  contact: applyPageHero,
-  envios: applyPageHero,
+  contact: applyGenericPageHero,
+  faq: applyGenericPageHero,
+  cambios: applyGenericPageHero,
+  envios: applyGenericPageHero,
+  collections: applyGenericPageHero,
 };
 
 export function initSiteContent(pageId) {

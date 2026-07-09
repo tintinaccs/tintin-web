@@ -134,6 +134,9 @@ service cloud.firestore {
         (!('pendingOrders' in request.resource.data) || request.resource.data.pendingOrders >= 0) &&
         (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
     }
+    // NOTA: settings/general público para lectura (checkout/envios necesitan
+    // costos/ciudades de envío) ya está resuelto más abajo, con la distinción
+    // admin/superadmin más reciente — ver "SETTINGS — SOLO SUPER ADMIN EDITA".
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([

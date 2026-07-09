@@ -355,10 +355,8 @@
         <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
           <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
           <span id="prod-bulk-masivas-group" style="display:contents">
-          <input id="bulk-collection-input" type="text" placeholder="Nombre de colección" class="adm-input" style="font-size:12px;padding:5px 10px;width:200px">
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkAssignCollection()" title="Asignar colección a productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
-            <option value="">— Cambiar categoría —</option>
+            <option value="">— Asignar a colección —</option>
             <option value="relojes">Relojes</option>
             <option value="bolsos">Bolsos / Bags</option>
             <option value="collares">Collares</option>
@@ -372,7 +370,8 @@
             <option value="gafas">Gafas</option>
             <option value="joyeros">Joyeros</option>
           </select>
-          <button class="adm-btn adm-btn-sm" onclick="bulkSetCategory()" title="Cambiar categoría a seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Cambiar cat.</button>
+          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
+          <button class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
           <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           </span>
@@ -1187,8 +1186,10 @@
         </div>
         <div class="adm-card-body">
           <div style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#b84c72;line-height:1.6">
-            Cargá cada ciudad por separado. Si dejás el costo vacío, en el checkout se va a mostrar
-            <strong>“Consultar por el precio con algún vendedor”</strong> en vez de un precio incorrecto.
+            Cargá cada ciudad con su costo de envío. Si dejás el costo vacío, en el checkout va a
+            aparecer <strong>"Consultar precio con un vendedor"</strong> en vez de un número — el
+            envío se coordina después por WhatsApp. Los cambios se guardan al instante y se reflejan
+            en el checkout y en la página de Envíos automáticamente.
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
             <div class="adm-field">
@@ -1989,6 +1990,7 @@ onAuthStateChanged(auth, async user => {
     // Productos stay correct even if the admin never opens Colecciones first.
     loadProductos();
     loadColecciones();
+    handleContentDeepLink();
   } catch(e) {
     console.error('[Admin] Auth init error:', e);
   } finally {
@@ -6593,6 +6595,7 @@ const CONT_SCHEMA = {
       trust: {
         label: 'Barra de Confianza', icon: 'trust',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'items', label:'Ítems (4 bloques)', type:'array',
             itemFields: [
               { key:'label', label:'Título', type:'text' },
@@ -6610,6 +6613,7 @@ const CONT_SCHEMA = {
       editorial_bag: {
         label: 'Editorial — Bags', icon: 'bags',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Colección BAG' },
           { key:'title', label:'Título', type:'text', def:'El complemento\nque lo cambia todo' },
           { key:'body', label:'Texto', type:'textarea', def:'' },
@@ -6621,6 +6625,7 @@ const CONT_SCHEMA = {
       editorial_relojes: {
         label: 'Editorial — Relojes', icon: '⌚',
         fields: [
+          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Nueva colección' },
           { key:'title', label:'Título', type:'text', def:'El reloj del que\ntodas se enamoran' },
           { key:'body', label:'Texto', type:'textarea', def:'' },
@@ -6685,11 +6690,23 @@ const CONT_SCHEMA = {
       }
     }
   },
+  collections: {
+    label: 'Colecciones', url: 'collections.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Colecciones', icon: 'catalog',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'NUESTRAS COLECCIONES' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
   contact: {
     label: 'Contacto', url: 'contact.html',
     sections: {
-      hero: {
-        label: 'Encabezado', icon: 'contact',
+      header: {
+        label: 'Encabezado de Contacto', icon: 'page',
         fields: [
           { key:'title', label:'Título', type:'text', def:'¿Dudas o consultas?' },
           { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
@@ -6697,11 +6714,35 @@ const CONT_SCHEMA = {
       }
     }
   },
-  envios: {
-    label: 'Envíos (encabezado)', url: 'envios.html',
+  faq: {
+    label: 'Preguntas Frecuentes', url: 'preguntas-frecuentes.html',
     sections: {
-      hero: {
-        label: 'Encabezado', icon: 'shipping',
+      header: {
+        label: 'Encabezado de FAQ', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Preguntas Frecuentes 💬' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  cambios: {
+    label: 'Cambios y Devoluciones', url: 'cambios-devoluciones.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Cambios y Devoluciones', icon: 'page',
+        fields: [
+          { key:'title', label:'Título', type:'text', def:'Cambios y Devoluciones 🔄' },
+          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
+        ]
+      }
+    }
+  },
+  envios: {
+    label: 'Política de Envíos', url: 'envios.html',
+    sections: {
+      header: {
+        label: 'Encabezado de Envíos', icon: 'page',
         fields: [
           { key:'title', label:'Título', type:'text', def:'Política de Envíos 🚚' },
           { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
@@ -6765,6 +6806,15 @@ function contRenderField(field, value) {
     `;
   } else if (field.type === 'array') {
     html += contRenderArrayField(field, value ?? field.def ?? [], id);
+  } else if (field.type === 'checkbox') {
+    const checked = (value ?? field.def) !== false;
+    html = `<div class="cont-field" data-fkey="${field.key}">
+      <label class="cont-label" style="display:flex;align-items:center;gap:8px;cursor:pointer" for="${id}">
+        <input id="${id}" type="checkbox" data-fkey="${field.key}" data-fcheckbox="1" ${checked ? 'checked' : ''} style="width:16px;height:16px;accent-color:var(--adm-accent)" />
+        ${field.label}
+      </label>
+    </div>`;
+    return html;
   }
   html += `</div>`;
   return html;
@@ -6817,6 +6867,10 @@ function contExtractFieldValue(fieldEl, field) {
       items.push(obj);
     });
     return items;
+  }
+  if (field.type === 'checkbox') {
+    const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
+    return inp ? inp.checked : (field.def !== false);
   }
   const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
   return inp ? inp.value : (field.def ?? '');
@@ -6873,6 +6927,15 @@ async function contRenderPage(pageId) {
       }
       const prevImg = document.querySelector(`[data-preview-for="${inp.id}"]`);
       if (prevImg) { prevImg.src = inp.value; prevImg.classList.toggle('show', !!inp.value); }
+    });
+  });
+  sectionsEl.querySelectorAll('[data-fcheckbox]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const section = inp.closest('.cont-section');
+      if (section) {
+        section.classList.add('dirty');
+        section.querySelector('.cont-dirty-dot').style.display = 'inline-block';
+      }
     });
   });
   loadingEl.style.display = 'none';
@@ -7061,6 +7124,29 @@ async function loadContenido() {
   await contRenderPage(contCurrentPage);
 }
 
+// Deep link from the public site's "✏️ editar" badge (js/edit-badge.js):
+// admin.html?tab=contenido&page=<id>&section=<id> — jumps straight to that
+// page/section in Contenido and highlights it.
+async function handleContentDeepLink() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('tab') !== 'contenido') return;
+  const targetPage = params.get('page');
+  const targetSection = params.get('section');
+  switchSection('contenido');
+  if (!targetPage) return;
+  await loadContenido();
+  if (targetPage !== contCurrentPage) await contSwitchPage(targetPage);
+  if (!targetSection) return;
+  const el = document.querySelector(`.cont-section[data-section="${targetSection}"]`);
+  if (!el) return;
+  const head = el.querySelector('.cont-section-head');
+  const body = el.querySelector('.cont-section-body');
+  if (head && body && !body.classList.contains('open')) { head.classList.add('open'); body.classList.add('open'); }
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.classList.add('cont-section-highlight');
+  setTimeout(() => el.classList.remove('cont-section-highlight'), 2200);
+}
+
 
 // ══════════════════════════════════════════════
 // PRODUCTS: SELECTION & BULK ACTIONS
@@ -7121,20 +7207,16 @@ window.clearSelection = function() {
   updateBulkToolbar();
 };
 
-window.bulkAssignCollection = async function() {
+window.bulkRemoveFromCollection = async function() {
   if (!_selectedProducts.size) return;
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
-  const colInput = document.getElementById('bulk-collection-input');
-  const col = colInput?.value.trim();
-  if (!col) { toast('Escribí el nombre de la colección'); return; }
-  if (!confirm(`¿Asignar la colección "${col}" a ${_selectedProducts.size} producto(s)?`)) return;
+  if (!confirm(`¿Quitar de su colección a ${_selectedProducts.size} producto(s)?`)) return;
   try {
     const n = _selectedProducts.size;
-    await batchUpdateChunked([..._selectedProducts], () => ({ collection: col, updatedAt: serverTimestamp() }));
-    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.collection = col; });
-    logAudit('editar_producto', 'producto', '', '', `Colección → "${col}"`, { bulk: true, count: n });
-    toast(`Colección "${col}" asignada a ${_selectedProducts.size} productos`);
-    if (colInput) colInput.value = '';
+    await batchUpdateChunked([..._selectedProducts], () => ({ category: '', updatedAt: serverTimestamp() }));
+    _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = ''; });
+    logAudit('editar_producto', 'producto', '', '', 'Quitado de colección', { bulk: true, count: n });
+    toast(`${_selectedProducts.size} productos quitados de su colección`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }
@@ -7160,14 +7242,15 @@ window.bulkSetCategory = async function() {
   if (!_selectedProducts.size) return;
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const cat = document.getElementById('bulk-category-input')?.value;
-  if (!cat) { toast('Seleccioná una categoría'); return; }
-  if (!confirm(`¿Cambiar categoría a "${cat}" en ${_selectedProducts.size} producto(s)?`)) return;
+  if (!cat) { toast('Elegí una colección'); return; }
+  const label = document.getElementById('bulk-category-input')?.selectedOptions?.[0]?.textContent || cat;
+  if (!confirm(`¿Asignar la colección "${label}" a ${_selectedProducts.size} producto(s)?`)) return;
   try {
     const n = _selectedProducts.size;
     await batchUpdateChunked([..._selectedProducts], () => ({ category: cat, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.category = cat; });
-    logAudit('editar_producto', 'producto', '', '', `Categoría → "${cat}"`, { bulk: true, count: n });
-    toast(`Categoría actualizada en ${_selectedProducts.size} productos`);
+    logAudit('editar_producto', 'producto', '', '', `Colección → "${label}"`, { bulk: true, count: n });
+    toast(`Colección "${label}" asignada a ${_selectedProducts.size} productos`);
     clearSelection();
     applyProductFilters();
   } catch(e) { toast('Error: ' + e.message); }

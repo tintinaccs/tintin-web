@@ -109,7 +109,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero">
+<section class="tt-page-hero" data-tt-editable="collections" data-tt-section="header">
   <div class="container">
     <p class="tt-section-sub">Toda nuestra selección</p>
     <h1 class="tt-page-hero-title">NUESTRAS COLECCIONES</h1>
@@ -509,5 +509,10 @@ onCollectionsUpdate(cols => {
 <script type="module" src="js/nav-collections.js?v=tintin-20260709-4"></script>
 <script type="module" src="js/whatsapp.js?v=tintin-20260709-4"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260709-4"></script>
+<script type="module">
+import { initSiteContent } from './js/site-content.js';
+initSiteContent('collections');
+</script>
+<script type="module" src="js/edit-badge.js?v=tintin-20260709-4"></script>
 </body>
 </html>
