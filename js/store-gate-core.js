@@ -31,7 +31,7 @@ export function renderStoreClosedOverlay() {
       <div style="font-size:40px;margin-bottom:14px">🌙</div>
       <div style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">Tienda temporalmente cerrada</div>
       <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">Estamos realizando ajustes para mejorar tu experiencia. Volvé a intentarlo más tarde.</p>
-      <a href="${STORE_CLOSED_WA_URL}" target="_blank" rel="noopener" style="display:inline-block;background:#25D366;color:#fff;padding:12px 30px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Contactar soporte</a>
+      <a href="${STORE_CLOSED_WA_URL}" target="_blank" rel="noopener" style="display:inline-block;background:#25D366;color:#fff!important;padding:12px 30px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Contactar soporte</a>
     </div>`;
   document.body.appendChild(ov);
   document.body.style.overflow = 'hidden';

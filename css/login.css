@@ -35,7 +35,7 @@ html, body {
 }
 @media (max-width: 768px) {
   .login-page { grid-template-columns: 1fr; }
-  .login-brand { display: none; }
+  .login-brand { display: none !important; }
 }
 
 /* ── BRAND SIDE ── */
@@ -55,21 +55,21 @@ html, body {
   font-family: var(--font);
   font-size: 42px; font-weight: 900;
   letter-spacing: .18em;
-  color: #fff;
+  color: #fff !important;
   text-transform: uppercase;
   margin-bottom: 4px;
   position: relative;
 }
 .login-brand-sub {
   font-size: 11px; font-weight: 600;
-  letter-spacing: .25em; color: rgba(255,255,255,.6);
+  letter-spacing: .25em; color: rgba(255,255,255,.6) !important;
   text-transform: uppercase; margin-bottom: 48px;
   position: relative;
 }
 .login-brand-tagline {
   font-family: var(--serif);
   font-style: italic;
-  font-size: 26px; color: rgba(255,255,255,.9);
+  font-size: 26px; color: rgba(255,255,255,.9) !important;
   text-align: center; line-height: 1.4;
   position: relative; max-width: 320px;
 }

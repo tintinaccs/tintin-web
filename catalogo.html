@@ -63,13 +63,14 @@
     .tt-card-price { font-size: 14px; font-weight: 800; color: #C86B86; margin-bottom: 10px; }
     .tt-card-btns { display: flex; gap: 8px; }
     .tt-card-btn {
-      flex: 1; padding: 8px 6px; border-radius: 50px; font-size: 11px; font-weight: 700;
+      flex: 1; min-width: 0; padding: 8px 6px; border-radius: 50px; font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: center;
       border: 1.5px solid var(--acc, #c9597a); transition: background .2s, color .2s;
       font-family: 'Poppins', sans-serif; text-decoration: none;
       display: flex; align-items: center; justify-content: center;
+      white-space: normal; line-height: 1.25;
     }
-    .tt-card-btn-cart { background: var(--acc, #c9597a); color: #fff; }
+    .tt-card-btn-cart { background: var(--acc, #c9597a); color: #fff !important; }
     .tt-card-btn-cart:hover { background: #a03060; border-color: #a03060; }
     .tt-card-btn-view { background: transparent; color: var(--acc, #c9597a); }
     .tt-card-btn-view:hover { background: #fce4ec; }
@@ -105,7 +106,7 @@
       white-space: nowrap; font-family: 'Poppins', sans-serif;
       text-transform: uppercase; letter-spacing: .06em; transition: .2s;
     }
-    .tt-filtro-btn:hover, .tt-filtro-btn.activo { background: var(--acc, #c9597a); color: #fff; }
+    .tt-filtro-btn:hover, .tt-filtro-btn.activo { background: var(--acc, #c9597a); color: #fff !important; }
 
     /* ── Catalog Layout ── */
     .cat-wrap { max-width: 1300px; margin: 0 auto; padding: 32px 24px 80px; }
@@ -151,7 +152,7 @@
 
     .cat-range { display: flex; gap: 8px; align-items: center; }
     .cat-range-input {
-      flex: 1; padding: 8px 10px; border: 1.5px solid #eee; border-radius: 8px;
+      flex: 1; min-width: 0; padding: 8px 10px; border: 1.5px solid #eee; border-radius: 8px;
       font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
     }
     .cat-range-input:focus { border-color: var(--acc); }
@@ -161,6 +162,7 @@
     .cat-top {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+      padding: 14px 16px; border-radius: 16px;
     }
     .cat-count { font-size: 13px; font-weight: 700; color: var(--text-muted); }
     .cat-sort {
@@ -178,7 +180,7 @@
     .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
     .cat-filter-toggle {
-      display: none; width: 100%; padding: 12px; background: var(--acc); color: #fff;
+      display: none; width: 100%; padding: 12px; background: var(--acc); color: #fff !important;
       border: none; border-radius: 50px; font-size: 13px; font-weight: 800;
       text-transform: uppercase; letter-spacing: .08em; cursor: pointer;
       font-family: 'Poppins', sans-serif; margin-bottom: 16px;

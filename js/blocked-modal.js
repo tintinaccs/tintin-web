@@ -33,7 +33,7 @@ export function showBlockedModal() {
         Lo siento, ahora no puedes ingresar. Puedes comunicarte con nuestro soporte
         <a href="${WHATSAPP_SUPPORT_URL}" target="_blank" rel="noopener" style="color:#b84c72;font-weight:700;text-decoration:underline">aquí</a>.
       </p>
-      <a href="index.html" style="display:inline-block;background:#b84c72;color:#fff;padding:11px 26px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Volver al inicio</a>
+      <a href="index.html" style="display:inline-block;background:#b84c72;color:#fff!important;padding:11px 26px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Volver al inicio</a>
     </div>`;
   document.body.appendChild(ov);
   document.body.style.overflow = 'hidden';
