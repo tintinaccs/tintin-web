@@ -1740,6 +1740,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 
+.tt-footer-brand .tt-logo-link { flex-direction: column; align-items: flex-start; gap: 2px; }
 .tt-footer-brand .tt-logo-text { color: var(--white); font-size: 1.6rem; }
 .tt-footer-brand .tt-logo-sub { color: rgba(255,255,255,0.6); }
 
@@ -2850,7 +2851,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-added-toast-continue:hover { background: var(--border); }
 .tt-added-toast-checkout {
   background: var(--pink-dark);
-  color: var(--white);
+  color: var(--white) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3111,6 +3112,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Product card: stack buttons vertically on small phones */
   .tt-product-actions { flex-direction: column; gap: 6px; }
   .tt-product-actions .tt-btn { width: 100%; }
+
+  /* Look combinator actions: long button labels overflow the viewport with
+     nowrap text — stack and let them wrap instead of clipping edge-to-edge */
+  .tt-look-actions { flex-direction: column; align-items: stretch; }
+  .tt-look-actions .tt-btn { width: 100%; white-space: normal; text-align: center; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3312,12 +3318,12 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-share-btn-wa {
   background: var(--whatsapp);
   border-color: var(--whatsapp);
-  color: var(--white);
+  color: var(--white) !important;
 }
 .tt-share-btn-wa:hover {
   background: var(--whatsapp-h);
   border-color: var(--whatsapp-h);
-  color: var(--white);
+  color: var(--white) !important;
 }
 
 /* ══════════════════════════════════════════════════════════════

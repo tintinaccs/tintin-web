@@ -56,21 +56,23 @@
       background: var(--pink-pale); padding: 28px 24px;
       display: flex; align-items: center; gap: 20px;
     }
+    .perfil-header > div:last-child { min-width: 0; }
 
     .perfil-avatar {
       width: 72px; height: 72px; border-radius: 50%;
       background: var(--acc); display: flex; align-items: center;
       justify-content: center; font-size: 28px; font-weight: 900;
-      color: #fff; flex-shrink: 0; overflow: hidden;
+      color: #fff !important; flex-shrink: 0; overflow: hidden;
     }
     .perfil-avatar img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; flex-shrink: 0; }
 
     .perfil-name {
       font-size: 20px; font-weight: 900; text-transform: uppercase;
-      letter-spacing: .04em; color: var(--text);
+      letter-spacing: .04em; color: var(--text); overflow-wrap: break-word;
     }
     .perfil-email {
       font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 2px;
+      overflow-wrap: break-word;
     }
 
     .perfil-body { padding: 24px; }
@@ -103,12 +105,12 @@
       cursor: pointer; font-family: var(--font-body); border: none; transition: all .2s;
       text-decoration: none; display: inline-flex; align-items: center;
     }
-    .perfil-btn-primary { background: var(--acc); color: #fff; }
+    .perfil-btn-primary { background: var(--acc); color: #fff !important; }
     .perfil-btn-primary:hover { background: var(--acc-dark); transform: translateY(-1px); }
     .perfil-btn-outline { background: transparent; border: 1.5px solid var(--acc); color: var(--acc); }
-    .perfil-btn-outline:hover { background: var(--acc); color: #fff; }
+    .perfil-btn-outline:hover { background: var(--acc); color: #fff !important; }
     .perfil-btn-danger { background: transparent; border: 1.5px solid #ef4444; color: #ef4444; }
-    .perfil-btn-danger:hover { background: #ef4444; color: #fff; }
+    .perfil-btn-danger:hover { background: #ef4444; color: #fff !important; }
 
     .perfil-wa-box {
       background: #e8f5e9; border-radius: var(--radius-sm); padding: 20px;
@@ -127,7 +129,7 @@
 
     .perfil-toast {
       position: fixed; bottom: 90px; right: 20px;
-      background: var(--acc); color: #fff; padding: 12px 24px;
+      background: var(--acc); color: #fff !important; padding: 12px 24px;
       border-radius: 50px; font-size: 13px; font-weight: 700;
       display: none; z-index: 999; box-shadow: 0 4px 16px rgba(0,0,0,.18);
       font-family: var(--font-body);

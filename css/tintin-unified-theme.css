@@ -37,8 +37,8 @@
   --pink-mid:var(--tt-accent-mid)!important;
   --pink-dark:var(--tt-accent)!important;
   --rose:var(--tt-accent)!important;
-  --gold:var(--tt-surface)!important;
-  --gold-hover:var(--tt-accent-soft)!important;
+  --gold:var(--tt-accent)!important;
+  --gold-hover:var(--tt-accent-hover)!important;
   --gold-light:var(--tt-surface-soft)!important;
   --whatsapp:var(--tt-accent)!important;
   --whatsapp-h:var(--tt-accent-hover)!important;
@@ -78,7 +78,7 @@ main,section,.section,.section-sm,.tt-section,.tt-page,.tt-page-hero,.tt-product
 
 h1,h2,h3,h4,h5,h6,.tt-section-title,.tt-page-hero-title,.tt-hero-title,.tt-watch-title,.tt-editorial-title,.tt-cart-title,.perfil-name,.login-heading,.ck-panel-title,.adm-card-title,.adm-section-header h1,.adm-topbar-title,.adm-sidebar-logo-text,.tt-footer-col-title{color:var(--tt-title)!important}
 body,p,li,span,small,label,th,td,div,a,input,textarea,select,option,button,.tt-card-text,.tt-card-title,.tt-product-name,.tt-product-price,.tt-dropdown-label,.cat-count,.perfil-email,.login-heading-sub,.adm-user-email,.adm-section-header p,.adm-label,.adm-table td,.adm-table th{color:var(--tt-text)!important}
-.tt-muted,.text-muted,.tt-section-desc,.tt-section-sub,.tt-card-sub,.tt-product-meta,.tt-footer p,.tt-footer a,.perfil-muted,.ck-muted,.ck-help,.adm-muted,.adm-loading,.adm-sidebar-logo-sub,.adm-live-clock{color:var(--tt-muted)!important}
+.tt-muted,.text-muted,.tt-section-desc,.tt-section-sub,.tt-card-sub,.tt-product-meta,.tt-footer p,.tt-footer a:not(.tt-footer-wa),.perfil-muted,.ck-muted,.ck-help,.adm-muted,.adm-loading,.adm-sidebar-logo-sub,.adm-live-clock{color:var(--tt-muted)!important}
 
 input,textarea,select,.cat-search,.cat-sort,.cat-range-input,.perfil-input,.ck-input,.ck-select,.ck-textarea,.login-email-input,.adm-input,.adm-select{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
 input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity:.78!important}

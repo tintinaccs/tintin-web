@@ -2690,7 +2690,7 @@ function renderOrdersTable(orders) {
             </div>
             ${o.userPhone ? `
             <div style="margin-top:12px">
-              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}?text=${encodeURIComponent(waConfirmMessageTemplate.replace(/\{nombre\}/g, o.userName || ''))}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
+              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}?text=${encodeURIComponent(waConfirmMessageTemplate.replace(/\{nombre\}/g, o.userName || ''))}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
             </div>` : ''}
           </div>
         </td>
@@ -6598,7 +6598,7 @@ const CONT_SCHEMA = {
               { key:'desc', label:'Descripción', type:'text' },
             ],
             def: [
-              { label:'Envío mismo día', desc:'Pedís hoy, recibís hoy' },
+              { label:'Envío mismo día', desc:'Pedidos antes de las 11 hs, Zona Central' },
               { label:'Acero inoxidable', desc:'No se oxida ni decolora' },
               { label:'Pago seguro', desc:'Transferencia o efectivo' },
               { label:'Atención personalizada', desc:'Te ayudamos por WhatsApp' },

@@ -1536,15 +1536,25 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCart();
 
-  // Homepage specific — show skeleton while Firebase loads, fallback to hardcoded after 4s
+  // Homepage specific — show skeleton while Firebase loads, fallback to hardcoded after 4s.
+  // window.PRODUCTS may already be populated here: the products-store.js module's
+  // onSnapshot can resolve (e.g. from a warm IndexedDB cache) and dispatch
+  // tintin:products-loaded before this DOMContentLoaded handler runs, since both
+  // script.js and the module scripts are deferred and execute in document order
+  // before DOMContentLoaded fires. Don't clobber already-rendered real data with
+  // a skeleton in that case.
   if (document.getElementById('products-grid')) {
-    _showProductsSkeleton('products-grid');
-    setTimeout(() => {
-      const grid = document.getElementById('products-grid');
-      if (grid && grid.querySelector('.tt-skeleton-card')) {
-        renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
-      }
-    }, 4000);
+    if (window.PRODUCTS && window.PRODUCTS.length) {
+      renderProductsGrid('products-grid', window.PRODUCTS.filter(isFeaturable).slice(0, 6));
+    } else {
+      _showProductsSkeleton('products-grid');
+      setTimeout(() => {
+        const grid = document.getElementById('products-grid');
+        if (grid && grid.querySelector('.tt-skeleton-card')) {
+          renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
+        }
+      }, 4000);
+    }
   }
 
   if (document.getElementById('look-grid')) {
@@ -1566,9 +1576,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryThumbs();
   }
 
-  // Collections page — show skeleton while Firebase loads
+  // Collections page — show skeleton while Firebase loads (same already-loaded guard as above)
   if (document.getElementById('colls-products-grid')) {
-    _showProductsSkeleton('colls-products-grid');
+    if (window.PRODUCTS && window.PRODUCTS.length) {
+      renderProductsGrid('colls-products-grid', window.PRODUCTS.filter(isFeaturable));
+    } else {
+      _showProductsSkeleton('colls-products-grid');
+    }
   }
 
   // Back to top
