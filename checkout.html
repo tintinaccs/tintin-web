@@ -108,10 +108,10 @@
         <label class="ck-label">Ciudad *</label>
         <select class="ck-select" id="ck-city">
           <option value="">— Seleccioná tu ciudad —</option>
-          <optgroup label="🏙️ Zona Central (Delivery a domicilio)">
+          <optgroup label="🏙️ Zona Central (Delivery a domicilio)" id="ck-city-delivery-group">
             <!-- filled by JS -->
           </optgroup>
-          <optgroup label="🌎 Interior del país (Encomienda)">
+          <optgroup label="🌎 Interior del país (Encomienda)" id="ck-city-encomienda-group">
             <!-- filled by JS -->
           </optgroup>
           <optgroup label="🏪 Retiro en tienda">
@@ -340,13 +340,15 @@ let DEFAULT_DELIVERY_COST   = 15000;
 let DEFAULT_ENCOMIENDA_COST = 25000;
 
 // Normalize Firestore data: supports old string[] and new {name,price}[].
-// A city can have no price on purpose (price: null) — that means "consultar con un vendedor",
-// it must NOT silently fall back to the default cost.
+// price === null means "sin precio cargado" → se muestra "Consultar por el
+// precio con algún vendedor" en vez de un número (o del costo por defecto).
+// Mismo criterio que admin.html's makeCityManager().setItems() para que
+// checkout y el panel de administración de ciudades queden consistentes.
 function normalizeCities(arr, defaultCost) {
   return (arr || []).map(c => {
     if (typeof c === 'string') return { name: c, price: defaultCost };
-    const hasPrice = c.price !== null && c.price !== undefined && c.price !== '' && !isNaN(c.price);
-    return { name: c.name, price: hasPrice ? c.price : null };
+    const price = c.price === null ? null : (c.price ?? defaultCost);
+    return { name: c.name, price };
   });
 }
 
@@ -466,38 +468,43 @@ let orderData = {
   paymentMethod: ''
 };
 
+// ---- LABEL FOR A CITY'S SHIPPING COST (null = sin precio cargado) ----
+function cityCostLabel(price) {
+  return price == null ? 'Consultar precio con un vendedor' : formatPrice(price);
+}
+
 // ---- POPULATE CITY SELECT ----
 // Se puede llamar más de una vez (settings/general se escucha en tiempo real),
 // así que primero limpia los optgroups y, si la ciudad ya elegida sigue
 // existiendo, la mantiene seleccionada.
 function populateCities() {
-  const select = document.getElementById('ck-city');
-  const previousValue = select.value;
-  const groups = select.querySelectorAll('optgroup');
-  const deliveryGroup = groups[0];
-  const encomiendaGroup = groups[1];
+  const currentVal = document.getElementById('ck-city').value;
+  const deliveryGroup = document.getElementById('ck-city-delivery-group');
+  const encomiendaGroup = document.getElementById('ck-city-encomienda-group');
   deliveryGroup.innerHTML = '';
   encomiendaGroup.innerHTML = '';
   DELIVERY_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
-    opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
+    opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
     deliveryGroup.appendChild(opt);
   });
   ENCOMIENDA_CITIES.forEach(city => {
     const opt = document.createElement('option');
     opt.value = city.name;
-    opt.textContent = `${city.name} — ${formatShipping(city.price)}`;
+    opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
     encomiendaGroup.appendChild(opt);
   });
-  const stillExists = Array.from(select.options).some(o => o.value === previousValue);
-  if (previousValue && stillExists) select.value = previousValue;
+  // Config changed live while a city was already selected — keep the
+  // selection if it still exists and refresh its price/label.
+  if (currentVal) {
+    const select = document.getElementById('ck-city');
+    select.value = currentVal;
+    if (select.value === currentVal) select.onchange();
+  }
 }
 
-// ---- FIND CITY PRICE ----
-// null (no 0) cuando la ciudad no está en ninguna lista — el UI ya sabe
-// tratar null como "consultar con un vendedor" en vez de mostrar envío
-// gratis por error.
+// ---- FIND CITY PRICE (null = ciudad sin precio cargado → "consultar") ----
 function getCityPrice(cityName) {
   const d = DELIVERY_CITIES.find(c => c.name === cityName);
   if (d) return d.price;
@@ -897,7 +904,9 @@ document.getElementById('ck-city').onchange = function() {
   } else if (isDelivery) {
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
-    costEl.textContent = price == null ? 'Consultar por el precio con algún vendedor' : `Costo de envío: ${formatPrice(price)}`;
+    costEl.textContent = price == null
+      ? '📞 Consultar por el precio con algún vendedor'
+      : `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'delivery';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
@@ -911,7 +920,9 @@ document.getElementById('ck-city').onchange = function() {
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
-    costEl.textContent = price == null ? 'Consultar por el precio con algún vendedor' : `Costo de envío: ${formatPrice(price)}`;
+    costEl.textContent = price == null
+      ? '📞 Consultar por el precio con algún vendedor'
+      : `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'encomienda';
     orderData.shippingCost = price;
     addressField.style.display = 'block';
@@ -1126,12 +1137,17 @@ async function buildConfirmation() {
     </div>
     <div class="ck-summary-total">
       <span>Costo de envío</span>
-      <span class="ck-summary-total-val">${formatShipping(orderData.shippingCost)}</span>
+      <span class="ck-summary-total-val">${shippingPending ? '📞 A confirmar' : formatPrice(orderData.shippingCost)}</span>
     </div>
     <div class="ck-summary-total" style="font-size:18px">
-      <span>TOTAL${shippingPending ? ' (+ envío a coordinar)' : ''}</span>
+      <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
       <span class="ck-summary-total-val">${formatPrice(total)}</span>
     </div>
+    ${shippingPending ? `
+    <div style="margin-top:10px;padding:10px 12px;background:#fef5f8;border-radius:10px;font-size:13px;color:#b84c72">
+      📞 Para tu ciudad todavía no cargamos un costo de envío fijo — un vendedor te va a
+      confirmar el precio por WhatsApp antes de coordinar el pago.
+    </div>` : ''}
   `;
 
   // Confirm button: save order then show success state
@@ -1173,6 +1189,8 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
   const itemLines = items.map(i => `• ${i.qty}x ${i.name} — ${formatPrice(i.price * i.qty)}`).join('\n');
   const payText = { efectivo:'Efectivo (contra entrega)', transferencia:'Transferencia bancaria', tarjeta:'Tarjeta (simulación)' }[orderData.paymentMethod] || orderData.paymentMethod;
   const shipText = shipLabels[orderData.shippingMethod] || orderData.shippingMethod;
+  const shippingPending = orderData.shippingCost == null;
+  const shipCostText = shippingPending ? 'A confirmar con un vendedor' : formatPrice(orderData.shippingCost);
 
   const mapLine = orderData.mapLocation
     ? `\n🗺️ *Ubicación:* ${orderData.mapLocation.name ? orderData.mapLocation.name + ' — ' : ''}https://maps.google.com/?q=${orderData.mapLocation.lat},${orderData.mapLocation.lng}`
@@ -1182,14 +1200,14 @@ function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
 👤 *Cliente:* ${orderData.name}
 📞 *Tel:* ${orderData.phone}${orderData.email ? `\n📧 *Email:* ${orderData.email}` : ''}
 📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}${mapLine}
-🚚 *Envío:* ${shipText} — ${formatShipping(orderData.shippingCost)}
+🚚 *Envío:* ${shipText} — ${shipCostText}
 ━━━━━━━━━━━━━━━━━━━━━━
 🛒 *Productos:*
 ${itemLines}
 ━━━━━━━━━━━━━━━━━━━━━━
 💰 *Subtotal:* ${formatPrice(subtotal)}
-🚚 *Costo de envío:* ${formatShipping(orderData.shippingCost)}
-💰 *TOTAL:* ${formatPrice(total)}
+🚚 *Costo de envío:* ${shipCostText}
+💰 *TOTAL:* ${formatPrice(total)}${shippingPending ? ' + envío a confirmar' : ''}
 💳 *Método de pago:* ${payText}
 ━━━━━━━━━━━━━━━━━━━━━━
 📝 *Notas:* ${orderData.notes || 'Sin notas'}`;

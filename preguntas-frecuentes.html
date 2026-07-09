@@ -107,7 +107,7 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero">
+<section class="tt-page-hero" data-tt-editable="faq" data-tt-section="header">
   <div class="container">
     <p class="tt-section-sub">Ayuda</p>
     <h1 class="tt-page-hero-title">Preguntas Frecuentes 💬</h1>
@@ -318,5 +318,10 @@
 <script type="module" src="js/nav-collections.js?v=tintin-20260709-4"></script>
 <script type="module" src="js/whatsapp.js?v=tintin-20260709-4"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260709-4"></script>
+<script type="module">
+import { initSiteContent } from './js/site-content.js';
+initSiteContent('faq');
+</script>
+<script type="module" src="js/edit-badge.js?v=tintin-20260709-4"></script>
 </body>
 </html>

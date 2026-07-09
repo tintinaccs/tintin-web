@@ -2248,6 +2248,37 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-info-block ul { color: var(--text-sec); padding-left: 20px; line-height: 1.8; margin: 0; }
 .tt-info-block li { margin-bottom: 4px; }
 
+/* Lista de ciudades/precio de envío (envios.html) — conectada a Super Admin */
+.tt-city-price-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 20px;
+  border-top: 1px dashed #f0d8e0;
+  padding-top: 16px;
+}
+.tt-city-price-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: var(--text-sec);
+  margin-bottom: 0;
+  padding: 4px 0;
+}
+.tt-city-price-val { color: var(--pink-dark); font-weight: 600; white-space: nowrap; }
+.tt-city-price-loading, .tt-city-price-empty {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+  font-style: italic;
+}
+@media (max-width: 480px) {
+  .tt-city-price-list { grid-template-columns: 1fr; }
+}
+
 .tt-faq-item {
   border-bottom: 1px solid #f0d8e0;
   padding: 20px 0;
@@ -3028,6 +3059,33 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-colls-page-grid { grid-template-columns: repeat(2, 1fr); }
 
   .tt-related-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — TABLET HERO ONLY (769px–1024px)
+   Rango exclusivo: no se solapa con el bloque mobile (≤768px) de abajo,
+   así que no hace falta resetear nada ahí. El contenido del hero arranca
+   desde la mitad del banner hacia abajo, centrado.
+═══════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tt-hero {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    min-height: 640px;
+  }
+  .tt-hero-content {
+    grid-row: 2;
+    align-self: start;
+    justify-self: center;
+    max-width: 620px;
+    width: 100%;
+    padding: 40px 32px 56px;
+    text-align: center;
+  }
+  .tt-hero-eyebrow { justify-content: center; }
+  .tt-hero-pills { justify-content: center; }
+  .tt-hero-actions { justify-content: center; }
+  .tt-hero-img { object-position: center; }
 }
 
 /* ═══════════════════════════════════════════════
