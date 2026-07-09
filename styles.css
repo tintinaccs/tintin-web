@@ -1843,6 +1843,13 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
+  /* left:50% + transform centering only gives shrink-to-fit half the
+     viewport as its layout budget (transform doesn't affect layout), so on
+     narrow phones the 5 icon buttons got silently compressed — width:
+     max-content forces the box to size to its real preferred content width
+     instead of shrinking into that half-viewport budget. */
+  width: max-content;
+  max-width: calc(100vw - 32px);
   background: var(--white);
   border-radius: var(--radius-pill);
   box-shadow: 0 4px 32px rgba(0,0,0,0.15), 0 0 0 1px var(--border);
@@ -3034,6 +3041,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Hide desktop header on mobile — only tabbar is shown */
   .tt-header { display: none !important; }
 
+  /* Touch target: 8px padding + 1.4rem icon glyph landed at ~38px, just
+     under the 40px minimum — bump padding only on mobile (tablet keeps its
+     own value from the shared <=1024px block above, untouched). */
+  .tt-menu-toggle { padding: 9px; }
+
   .tt-tabbar { display: flex; }
   .tt-wa-float { bottom: 88px; right: 16px; width: 48px; height: 48px; }
 
@@ -3097,7 +3109,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
   .tt-footer-grid { grid-template-columns: 1fr; }
 
-  .tt-tabbar-btn { padding: 8px 10px; }
+  /* Sin label (span oculto abajo) el botón sólo tenía el ícono + padding
+     vertical, quedando en ~36px de alto — 10px sube el touch target a 40px
+     real, dentro del mínimo 40-44px pedido. */
+  .tt-tabbar-btn { padding: 10px; }
   .tt-tabbar-btn span { display: none; }
 
   .tt-editorial-content { padding: 32px 20px; }
