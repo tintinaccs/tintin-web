@@ -3054,7 +3054,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .tt-reviews-grid { grid-template-columns: 1fr; }
 
-  .tt-footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .tt-footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .tt-footer { padding: 40px 0 0; }
 
   .tt-about-grid { grid-template-columns: 1fr; }
