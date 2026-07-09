@@ -4,7 +4,7 @@ if(window.TintinLoader)return;
 var TT_CACHE_VERSION='tintin-20260709-2';
 var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
 var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
-var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false;
+var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false;
 function versionUrl(url){try{var u=new URL(url,location.href);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function resolveAsset(path,withVersion){var url=path;try{if(SCRIPT_SRC)url=new URL('../'+path,SCRIPT_SRC).href}catch(e){}return withVersion===false?url:versionUrl(url)}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
@@ -26,13 +26,21 @@ function lockScroll(){scrollLockCount+=1;if(scrollLockCount>1)return;savedScroll
 function unlockScroll(){if(scrollLockCount>0)scrollLockCount-=1;if(scrollLockCount>0)return;document.documentElement.classList.remove('tt-scroll-locked');document.documentElement.style.overflow=previousHtmlStyle?previousHtmlStyle.overflow:'';document.documentElement.style.overscrollBehavior=previousHtmlStyle?previousHtmlStyle.overscrollBehavior:'';if(document.body){document.body.classList.remove('tt-scroll-locked');if(previousBodyStyle){document.body.style.position=previousBodyStyle.position;document.body.style.top=previousBodyStyle.top;document.body.style.left=previousBodyStyle.left;document.body.style.right=previousBodyStyle.right;document.body.style.width=previousBodyStyle.width;document.body.style.overflow=previousBodyStyle.overflow;document.body.style.touchAction=previousBodyStyle.touchAction}else{document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';document.body.style.overflow='';document.body.style.touchAction=''}}window.scrollTo(0,savedScrollY||0)}
 window.TintinScrollLock={lock:lockScroll,unlock:unlockScroll};
 var el=document.createElement('div');el.id='tt-loader';el.setAttribute('aria-hidden','true');el.setAttribute('role','presentation');el.dataset.state='show';el.innerHTML='<div id="tt-loader-spin-wrap"><span id="tt-loader-ring"></span><img id="tt-loader-logo" src="'+LOGO_SRC+'" alt="" draggable="false" fetchpriority="high" width="220" height="220"></div>';
-var logo=el.querySelector('#tt-loader-logo');logo.addEventListener('error',function onLogoError(){if(logo.src!==DEFAULT_LOGO_SRC){logo.src=DEFAULT_LOGO_SRC}else{logo.removeEventListener('error',onLogoError);logo.style.display='none'}});
-function insert(){if(!document.getElementById('tt-loader')&&document.body){document.body.insertBefore(el,document.body.firstChild);requestAnimationFrame(function(){requestAnimationFrame(function(){var img=document.getElementById('tt-loader-logo');var wrap=document.getElementById('tt-loader-spin-wrap');if(img&&img.style.display!=='none'&&wrap)wrap.classList.add('tt-ready')})})}}
-if(document.body)insert();else document.addEventListener('DOMContentLoaded',insert);
+var logo=el.querySelector('#tt-loader-logo');
+// Se espera a que la imagen termine de cargar (load/error) antes de dejar
+// que el loader se oculte — así en una conexión lenta nunca desaparece
+// mostrando el logo a medio decodificar o directamente en blanco.
+function markLogoReady(){logoReady=true;var wrap=document.getElementById('tt-loader-spin-wrap');if(wrap)wrap.classList.add('tt-ready');if(contentReady)tryHideElegant()}
+logo.addEventListener('load',markLogoReady,{once:true});
+logo.addEventListener('error',function onLogoError(){if(logo.src!==DEFAULT_LOGO_SRC){logo.src=DEFAULT_LOGO_SRC}else{logo.removeEventListener('error',onLogoError);logoReady=true;logo.style.display='none';var wrap=document.getElementById('tt-loader-spin-wrap');if(wrap)wrap.classList.add('tt-ready');if(contentReady)tryHideElegant()}});
+if(logo.complete&&logo.naturalWidth>0)markLogoReady();
+function insert(){if(inserted)return;if(!document.getElementById('tt-loader')&&document.body){inserted=true;document.body.insertBefore(el,document.body.firstChild);requestAnimationFrame(function(){requestAnimationFrame(function(){var img=document.getElementById('tt-loader-logo');var wrap=document.getElementById('tt-loader-spin-wrap');if(img&&img.complete)markLogoReady();else if(wrap)wrap.classList.add('tt-ready')})})}}
+function waitForBody(){if(document.body){insert();return}requestAnimationFrame(waitForBody)}
+waitForBody();
 function hideNow(){if(hidden)return;hidden=true;el.dataset.state='out';el.classList.add('tt-out')}
-function tryHideElegant(){if(hidden)return;el.dataset.state='ready';var wait=Math.max(0,MIN_SHOW_MS-(Date.now()-START));setTimeout(hideNow,wait)}
+function tryHideElegant(){if(hidden)return;var enough=Date.now()-START>=MIN_SHOW_MS;if(!enough||!logoReady){var wait=Math.max(0,MIN_SHOW_MS-(Date.now()-START));setTimeout(tryHideElegant,Math.max(wait,140));return}el.dataset.state='ready';hideNow()}
 function ready(){if(contentReady)return;contentReady=true;tryHideElegant()}
-function show(){hidden=false;contentReady=false;el.dataset.state='show';el.classList.remove('tt-out')}
+function show(){hidden=false;contentReady=false;logoReady=!!(logo&&logo.complete);el.dataset.state='show';el.classList.remove('tt-out')}
 function setText(){}
 function importSibling(fileName,label){var url='js/'+fileName;try{if(SCRIPT_SRC)url=new URL(fileName,SCRIPT_SRC).href}catch(e){}url=versionUrl(url);return import(url).catch(function(e){console.warn('[PageLoader] No se pudo cargar '+label+':',e)})}
 function bootGlobalQuality(){if(!window.TintinUIQualityBooted)importSibling('ui-quality.js','UI Quality')}
@@ -42,6 +50,6 @@ function bootHeaderScrollHide(){if(!window.TintinHeaderScrollHideBooted)importSi
 function bootAdminAndProfileFixes(){var path=(location.pathname||'').toLowerCase();if(path.endsWith('/admin.html')||path.endsWith('/admin')){importSibling('admin-order-delete-fix.js','Admin Order Delete Fix');importSibling('admin-welcome-control.js','Admin Welcome Control');importSibling('admin-mobile-sidebar-fix.js','Admin Mobile Sidebar Fix')}if(path.endsWith('/perfil.html')||path.endsWith('/perfil'))importSibling('profile-order-stats-fix.js','Profile Order Stats Fix')}
 function bootScrollReveal(){if(!window.TintinGlobalScrollRevealBooted)importSibling('scroll-reveal-global.js','Global Scroll Reveal')}
 bootGlobalQuality();bootStoreGate();bootHeaderDropdownFix();bootHeaderScrollHide();bootAdminAndProfileFixes();bootScrollReveal();
-document.addEventListener('tintin:page-ready',ready);if(!window.TT_PAGE_LOADER_WAIT)window.addEventListener('load',ready);setTimeout(function(){ready();hideNow()},SAFETY_MS);
+document.addEventListener('tintin:page-ready',ready);if(!window.TT_PAGE_LOADER_WAIT)window.addEventListener('load',ready);setTimeout(function(){logoReady=true;ready();hideNow()},SAFETY_MS);
 window.TintinLoader={ready:ready,hide:hideNow,show:show,setText:setText,lockScroll:lockScroll,unlockScroll:unlockScroll};window.ttPageReady=ready;
 })();
