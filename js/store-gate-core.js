@@ -9,8 +9,14 @@
 import { db } from './firebase.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { SUPER_ADMIN } from './roles.js';
+import { waitForLoaderHidden } from './loader-wait.js';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
+// Refleja el último estado deseado mientras se espera a que el loader se
+// oculte — si la tienda se reabre (removeStoreClosedOverlay) antes de que
+// la inserción diferida corra, esta bandera evita insertar un overlay
+// "cerrado" ya obsoleto.
+let wantOverlay = false;
 
 // Texto y link exactos pedidos: WhatsApp con el mensaje precargado.
 const WA_TEXT = 'Hola Tintin, quiero consultar sobre la tienda.';
@@ -21,7 +27,7 @@ export const STORE_CLOSED_WA_URL = 'https://wa.me/595981299331?text=' + encodeUR
  * js/blocked-modal.js (overlay opaco, z-index alto, sin botón de cerrar más
  * que las acciones ofrecidas) para que toda la web sea consistente.
  */
-export function renderStoreClosedOverlay() {
+function insertStoreClosedOverlay() {
   if (document.getElementById(OVERLAY_ID)) return;
   const ov = document.createElement('div');
   ov.id = OVERLAY_ID;
@@ -37,7 +43,16 @@ export function renderStoreClosedOverlay() {
   document.body.style.overflow = 'hidden';
 }
 
+export function renderStoreClosedOverlay() {
+  wantOverlay = true;
+  if (document.getElementById(OVERLAY_ID)) return;
+  waitForLoaderHidden().then(() => {
+    if (wantOverlay) insertStoreClosedOverlay();
+  });
+}
+
 export function removeStoreClosedOverlay() {
+  wantOverlay = false;
   const el = document.getElementById(OVERLAY_ID);
   if (el) { el.remove(); document.body.style.overflow = ''; }
 }

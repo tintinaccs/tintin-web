@@ -503,13 +503,13 @@
             </div>
             <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
-                <input id="prod-active" type="checkbox" checked style="accent-color:var(--adm-primary)"> Activo (visible en tienda)
+                <input id="prod-active" type="checkbox" class="tt-mini-switch" role="switch" checked> Activo (visible en tienda)
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
-                <input id="prod-oferta" type="checkbox" style="accent-color:var(--adm-primary)"> En oferta
+                <input id="prod-oferta" type="checkbox" class="tt-mini-switch" role="switch"> En oferta
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
-                <input id="prod-destacado" type="checkbox" style="accent-color:var(--adm-primary)"> Destacado (aparece en home)
+                <input id="prod-destacado" type="checkbox" class="tt-mini-switch" role="switch"> Destacado (aparece en home)
               </label>
             </div>
           </div>
@@ -586,7 +586,7 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;padding-top:24px">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
-                <input id="coll-visible" type="checkbox" checked style="accent-color:var(--adm-primary)"> Visible en el sitio público
+                <input id="coll-visible" type="checkbox" class="tt-mini-switch" role="switch" checked> Visible en el sitio público
               </label>
             </div>
           </div>
@@ -787,8 +787,8 @@
           <div class="adm-card-head">
             <div class="adm-card-title">Enviar correo de prueba a clienta</div>
             <div style="display:flex;align-items:center;gap:8px">
-              <label class="adm-toggle" style="width:40px;height:22px">
-                <input type="checkbox" id="prueba-enabled-toggle" />
+              <label class="adm-toggle" style="--adm-toggle-w:40px;--adm-toggle-h:22px">
+                <input type="checkbox" id="prueba-enabled-toggle" role="switch" />
                 <span class="adm-toggle-slider"></span>
               </label>
               <span style="font-size:11px;color:var(--adm-muted)">Envíos de prueba</span>
@@ -901,8 +901,8 @@
           <div class="adm-card-head">
             <div class="adm-card-title">Enviar promoción</div>
             <div style="display:flex;align-items:center;gap:8px">
-              <label class="adm-toggle" style="width:40px;height:22px">
-                <input type="checkbox" id="promo-enabled-toggle" />
+              <label class="adm-toggle" style="--adm-toggle-w:40px;--adm-toggle-h:22px">
+                <input type="checkbox" id="promo-enabled-toggle" role="switch" />
                 <span class="adm-toggle-slider"></span>
               </label>
               <span style="font-size:11px;color:var(--adm-muted)">Promociones</span>
@@ -1136,6 +1136,37 @@
         </div>
       </div>
 
+      <!-- Header en mobile -->
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">Header en mobile</div>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Elegí qué barra superior se muestra en celulares (pantallas de hasta 768px) en todas las páginas públicas. La tabbar de abajo (los 5 íconos) no depende de esta configuración y siempre se mantiene.</p>
+          <div id="cfg-header-mobile-warning" style="display:none;background:#FFF4E5;border:1px solid #F0B84D;border-radius:10px;padding:10px 14px;font-size:12px;color:#8a5a00;margin-bottom:14px"></div>
+          <div class="adm-toggle-wrap" style="margin-bottom:16px">
+            <label class="adm-toggle">
+              <input type="checkbox" id="cfg-mobile-desktop-header" />
+              <span class="adm-toggle-slider"></span>
+            </label>
+            <div>
+              <div class="adm-toggle-label">Mostrar header de desktop/tablet en mobile</div>
+              <div class="adm-toggle-desc">Fuerza la barra superior normal (la de escritorio/tablet) también en celulares, en vez del header propio de mobile. Desactivado por defecto.</div>
+            </div>
+          </div>
+          <div class="adm-toggle-wrap">
+            <label class="adm-toggle">
+              <input type="checkbox" id="cfg-mobile-mobile-header" checked />
+              <span class="adm-toggle-slider"></span>
+            </label>
+            <div>
+              <div class="adm-toggle-label">Mostrar header mobile en mobile</div>
+              <div class="adm-toggle-desc">Permite el header compacto propio de mobile (el que se achica al scrollear, hoy visible en la portada). Activado por defecto.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Datos generales -->
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
@@ -1297,13 +1328,13 @@
         <div class="adm-card-body">
           <div style="display:flex;flex-direction:column;gap:12px">
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
-              <input type="checkbox" id="cfg-pay-efectivo" checked style="accent-color:var(--adm-accent);width:16px;height:16px"> Efectivo (contra entrega)
+              <input type="checkbox" id="cfg-pay-efectivo" class="tt-mini-switch" role="switch" checked> Efectivo (contra entrega)
             </label>
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
-              <input type="checkbox" id="cfg-pay-transferencia" checked style="accent-color:var(--adm-accent);width:16px;height:16px"> Transferencia bancaria
+              <input type="checkbox" id="cfg-pay-transferencia" class="tt-mini-switch" role="switch" checked> Transferencia bancaria
             </label>
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
-              <input type="checkbox" id="cfg-pay-pagopark" style="accent-color:var(--adm-accent);width:16px;height:16px"> Pasarela de pago con tarjeta (requiere integración backend — pendiente)
+              <input type="checkbox" id="cfg-pay-pagopark" class="tt-mini-switch" role="switch"> Pasarela de pago con tarjeta (requiere integración backend — pendiente)
             </label>
           </div>
           <p style="font-size:12px;color:var(--adm-muted);margin-top:12px">ℹ️ La integración de pagos online (tarjeta) requiere un backend seguro con credenciales privadas. Está pendiente de implementación.</p>
@@ -3104,6 +3135,25 @@ const DEFAULT_WA_CONFIRM_MSG = 'Hola {nombre}! Te escribo por tu pedido realizad
 const MAINTENANCE_ROLE_KEYS = ['admin', 'agent', 'viewer', 'support', 'client', 'guest'];
 let _lastKnownStoreOpen = true;
 let _lastKnownMaintenanceAccess = {};
+let _lastKnownHeaderMode = { desktop: false, mobile: true };
+
+function updateHeaderModeWarning_() {
+  const warn = document.getElementById('cfg-header-mobile-warning');
+  if (!warn) return;
+  const desktop = document.getElementById('cfg-mobile-desktop-header').checked;
+  const mobile = document.getElementById('cfg-mobile-mobile-header').checked;
+  if (desktop && mobile) {
+    warn.textContent = '⚠️ Hay dos headers habilitados en mobile — se va a mostrar el de desktop/tablet (tiene prioridad) para evitar que se vean los dos superpuestos.';
+    warn.style.display = 'block';
+  } else if (!desktop && !mobile) {
+    warn.textContent = '⚠️ No hay ningún header habilitado para mobile — en celulares solo va a quedar la tabbar de abajo, sin barra superior.';
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
+document.getElementById('cfg-mobile-desktop-header').addEventListener('change', updateHeaderModeWarning_);
+document.getElementById('cfg-mobile-mobile-header').addEventListener('change', updateHeaderModeWarning_);
 
 function updateStoreStatePill_(isOpen) {
   const pill = document.getElementById('cfg-store-state-pill');
@@ -3133,6 +3183,12 @@ async function loadConfig() {
     document.getElementById('cfg-store-open').checked = storeOpen;
     _lastKnownStoreOpen = storeOpen;
     updateStoreStatePill_(storeOpen);
+    const headerDesktop = d.mobileShowDesktopHeader === true;
+    const headerMobile = d.mobileShowMobileHeader !== false;
+    document.getElementById('cfg-mobile-desktop-header').checked = headerDesktop;
+    document.getElementById('cfg-mobile-mobile-header').checked = headerMobile;
+    _lastKnownHeaderMode = { desktop: headerDesktop, mobile: headerMobile };
+    updateHeaderModeWarning_();
     // Payment methods
     const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
     document.getElementById('cfg-pay-efectivo').checked = pays.efectivo !== false;
@@ -3190,6 +3246,8 @@ document.getElementById('btn-save-config').onclick = async () => {
       ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
       storeOpen:       willBeOpen,
       maintenanceAccess,
+      mobileShowDesktopHeader: document.getElementById('cfg-mobile-desktop-header').checked,
+      mobileShowMobileHeader:  document.getElementById('cfg-mobile-mobile-header').checked,
       paymentMethods: {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
         transferencia:  document.getElementById('cfg-pay-transferencia').checked,
@@ -3209,8 +3267,16 @@ document.getElementById('btn-save-config').onclick = async () => {
     if (JSON.stringify(_lastKnownMaintenanceAccess) !== JSON.stringify(maintenanceAccess)) {
       await logAudit('cambiar_acceso_tienda_cerrada', 'settings', 'general', 'Accesos con tienda cerrada', JSON.stringify(maintenanceAccess));
     }
+    const newHeaderMode = {
+      desktop: document.getElementById('cfg-mobile-desktop-header').checked,
+      mobile:  document.getElementById('cfg-mobile-mobile-header').checked,
+    };
+    if (JSON.stringify(_lastKnownHeaderMode) !== JSON.stringify(newHeaderMode)) {
+      await logAudit('cambiar_header_mobile', 'settings', 'general', 'Header en mobile', JSON.stringify(newHeaderMode));
+    }
     _lastKnownStoreOpen = willBeOpen;
     _lastKnownMaintenanceAccess = maintenanceAccess;
+    _lastKnownHeaderMode = newHeaderMode;
     updateStoreStatePill_(willBeOpen);
     toast('Configuración guardada correctamente');
   } catch(e) {
@@ -6810,7 +6876,7 @@ function contRenderField(field, value) {
     const checked = (value ?? field.def) !== false;
     html = `<div class="cont-field" data-fkey="${field.key}">
       <label class="cont-label" style="display:flex;align-items:center;gap:8px;cursor:pointer" for="${id}">
-        <input id="${id}" type="checkbox" data-fkey="${field.key}" data-fcheckbox="1" ${checked ? 'checked' : ''} style="width:16px;height:16px;accent-color:var(--adm-accent)" />
+        <input id="${id}" type="checkbox" class="tt-mini-switch" role="switch" data-fkey="${field.key}" data-fcheckbox="1" ${checked ? 'checked' : ''} />
         ${field.label}
       </label>
     </div>`;
@@ -7564,6 +7630,30 @@ window.saveOrderEdit = async function() {
     btn.disabled = false; btn.textContent = 'Guardar cambios';
   }
 };
+
+// ======== ACCESIBILIDAD DE SWITCHES (iOS-style) ========
+// .adm-toggle / .perm-pill-input / .tt-access-pill-input / .tt-mini-switch
+// son todos <input type=checkbox> nativos con apariencia de switch — un
+// checkbox nativo no expone aria-checked por sí solo, así que se agrega acá
+// role="switch" + aria-checked, sincronizado con el estado real. Se corre
+// en un intervalo (en vez de sólo en 'change') porque buena parte de estos
+// switches se re-renderizan dinámicamente (matriz de Roles y Permisos,
+// campos de Contenido, tablas) y muchas pantallas los marcan `.checked =`
+// directo desde JS (loadConfig, etc.) sin disparar 'change'.
+function ttSyncSwitchAria() {
+  document.querySelectorAll('.adm-toggle input, .perm-pill-input, .tt-access-pill-input, input.tt-mini-switch').forEach(el => {
+    if (el.getAttribute('role') !== 'switch') el.setAttribute('role', 'switch');
+    const checked = el.checked ? 'true' : 'false';
+    if (el.getAttribute('aria-checked') !== checked) el.setAttribute('aria-checked', checked);
+  });
+}
+document.addEventListener('change', e => {
+  if (e.target && e.target.matches && e.target.matches('.adm-toggle input, .perm-pill-input, .tt-access-pill-input, input.tt-mini-switch')) {
+    ttSyncSwitchAria();
+  }
+});
+ttSyncSwitchAria();
+setInterval(ttSyncSwitchAria, 1200);
 
 </script>
 

@@ -4,6 +4,25 @@
    ============================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Scrollbar rosa global (mismo criterio que styles.css en el sitio
+       público) — selectores puntuales como .correos-tabs/.adm-mobile-tabs
+       ya ocultan su propia scrollbar con más especificidad y siguen
+       ganando sobre esta regla general. */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #EA7EA3 #FDF0F5;
+    }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #FDF0F5; }
+    ::-webkit-scrollbar-thumb {
+      background: #EA7EA3;
+      border-radius: 999px;
+      border: 2px solid #FDF0F5;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
+    ::-webkit-scrollbar-corner { background: #FDF0F5; }
+
     /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
        los nombres --adm-* se mantienen porque los usa toda la hoja de acá
        abajo, pero ahora apuntan al mismo valor real en todas las
@@ -315,7 +334,8 @@
        NO DISPONIBLE siempre está visible, para que se entienda con un
        vistazo (y sea accesible para quien no distingue bien los colores). */
     .perm-pill-toggle {
-      position: relative; display: inline-flex; cursor: pointer; user-select: none;
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; cursor: pointer; user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
     .perm-pill-input {
@@ -326,7 +346,7 @@
       min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
       background: #e9e3e6; color: #8a7d84; border: 1.5px solid transparent;
-      transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+      transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
     .perm-pill-text { display: none; white-space: nowrap; }
     .perm-pill-input:checked + .perm-pill-track {
@@ -339,6 +359,9 @@
       outline: 2px solid var(--adm-accent); outline-offset: 2px;
     }
     .perm-pill-toggle:hover .perm-pill-track { filter: brightness(0.97); }
+    @media (prefers-reduced-motion: reduce) {
+      .perm-pill-track { transition: none; }
+    }
 
     /* "No disponible" — ni switch ni clickeable, a propósito bien distinto
        del pill sólido de arriba (borde punteado, sin relleno) para que
@@ -360,7 +383,8 @@
        matriz de Roles y Permisos, que las consulta con querySelectorAll sin
        acotar y se rompería si hubiera colisión de nombres. */
     .tt-access-pill-toggle {
-      position: relative; display: inline-flex; cursor: pointer; user-select: none;
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; cursor: pointer; user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
     .tt-access-pill-input {
@@ -371,7 +395,7 @@
       min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
       background: #e9e3e6; color: #8a7d84; border: 1.5px solid transparent;
-      transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+      transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
     .tt-access-pill-text { display: none; white-space: nowrap; }
     .tt-access-pill-input:checked + .tt-access-pill-track {
@@ -384,6 +408,9 @@
       outline: 2px solid var(--adm-accent); outline-offset: 2px;
     }
     .tt-access-pill-toggle:hover .tt-access-pill-track { filter: brightness(0.97); }
+    @media (prefers-reduced-motion: reduce) {
+      .tt-access-pill-track { transition: none; }
+    }
     .tt-access-pill-locked {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
@@ -792,41 +819,72 @@
       min-width: 100px;
     }
 
-    /* ======== TOGGLE SWITCH ======== */
+    /* ======== TOGGLE SWITCH (estilo cápsula iOS) ========
+       .adm-toggle es ahora el área clickeable completa (min 44x44, el
+       requisito de touch target táctil) con el slider visual centrado
+       adentro — así el hit-area crece sin cambiar el tamaño visual. El
+       tamaño visual del slider sale de --adm-toggle-w/--adm-toggle-h (52x28
+       por default) para que las instancias "compactas" (ej. Correos →
+       envíos de prueba/promociones) lo sigan pudiendo achicar con un
+       inline-style de esas dos variables, igual que antes. role="switch" +
+       aria-checked se agregan/sincronizan por JS (ver admin.html,
+       ttSyncSwitchAria) porque un <input type=checkbox> nativo no expone
+       aria-checked solo. */
     .adm-toggle-wrap {
       display: flex;
       align-items: center;
       gap: 14px;
     }
     .adm-toggle {
+      --adm-toggle-w: 52px;
+      --adm-toggle-h: 28px;
       position: relative;
-      width: 52px;
-      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--adm-toggle-w);
+      min-height: 44px;
       flex-shrink: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .adm-toggle input {
+      position: absolute;
+      inset: 0;
       opacity: 0;
-      width: 0; height: 0;
+      margin: 0;
+      cursor: pointer;
+      z-index: 1;
     }
     .adm-toggle-slider {
-      position: absolute;
+      position: relative;
+      display: block;
+      width: var(--adm-toggle-w);
+      height: var(--adm-toggle-h);
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
       background: #ccc;
-      border-radius: 28px;
-      transition: .3s;
+      border-radius: 999px;
+      transition: background .22s ease;
     }
     .adm-toggle-slider::before {
       content: '';
       position: absolute;
-      width: 20px; height: 20px;
-      left: 4px; bottom: 4px;
+      width: calc(var(--adm-toggle-h) - 8px); height: calc(var(--adm-toggle-h) - 8px);
+      left: 4px; top: 4px;
       background: #fff;
       border-radius: 50%;
-      transition: .3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.25);
+      transition: transform .22s ease;
     }
     .adm-toggle input:checked + .adm-toggle-slider { background: var(--adm-accent); }
-    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(24px); }
+    .adm-toggle input:checked + .adm-toggle-slider::before { transform: translateX(calc(var(--adm-toggle-w) - var(--adm-toggle-h))); }
+    .adm-toggle input:focus-visible + .adm-toggle-slider {
+      outline: 2px solid var(--adm-accent);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .adm-toggle-slider, .adm-toggle-slider::before { transition: none; }
+    }
 
     .adm-toggle-label {
       font-size: 14px;
@@ -836,6 +894,47 @@
       font-size: 12px;
       color: var(--adm-muted);
       margin-top: 4px;
+    }
+
+    /* ======== MINI SWITCH (checkboxes sueltos de settings) ========
+       Convierte un <input type=checkbox> normal en una cápsula pink sin
+       tocar el markup/label alrededor — se aplica agregando la clase
+       directo al input existente. */
+    input[type=checkbox].tt-mini-switch {
+      -webkit-appearance: none;
+      appearance: none;
+      position: relative;
+      width: 40px;
+      height: 24px;
+      min-width: 40px;
+      border-radius: 999px;
+      background: #ccc;
+      cursor: pointer;
+      outline: none;
+      margin: 0 8px 0 0;
+      vertical-align: middle;
+      flex-shrink: 0;
+      transition: background .22s ease;
+    }
+    input[type=checkbox].tt-mini-switch::before {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.25);
+      transition: transform .22s ease;
+    }
+    input[type=checkbox].tt-mini-switch:checked { background: var(--adm-accent); }
+    input[type=checkbox].tt-mini-switch:checked::before { transform: translateX(16px); }
+    input[type=checkbox].tt-mini-switch:focus-visible {
+      outline: 2px solid var(--adm-accent);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      input[type=checkbox].tt-mini-switch,
+      input[type=checkbox].tt-mini-switch::before { transition: none; }
     }
 
     /* ======== TOAST ======== */

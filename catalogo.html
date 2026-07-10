@@ -13,7 +13,14 @@
   <meta name="description" content="Catálogo completo de Tintin Accesorios. Relojes, aros, collares, bolsos, pulseras y más. Envíos a todo Paraguay.">
   <meta property="og:title" content="Catálogo | TINTIN Accesorios &amp; Relojes">
   <meta property="og:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar.">
+  <meta property="og:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
+  <meta property="og:url" content="https://tintinaccs.github.io/tintin-web/catalogo.html">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_PY">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Catálogo | TINTIN Accesorios &amp; Relojes">
+  <meta name="twitter:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar.">
+  <meta name="twitter:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/catalogo.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -639,18 +646,15 @@ function init(products) {
   todos = products;
   actualizarContadores();
   if (catParam) {
-    // Highlight category visually in sidebar
+    // catActual is already catParam (set at parse time above). Keep the
+    // title/highlight in sync with it instead of silently falling back to
+    // "todos" on 0 matches — that used to show every product in the grid
+    // under a category title that didn't actually apply to any of them.
+    // With 0 matches this now correctly renders the "Sin resultados" state.
     document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catParam));
     document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catParam));
     const titulo = document.getElementById('cat-titulo');
     if (titulo) titulo.textContent = catLabel(catParam);
-    // Check if the category has matching products; if not, show all
-    const matching = todos.filter(p => catMatches(p, catParam));
-    if (matching.length > 0) {
-      catActual = catParam;
-    } else {
-      catActual = 'todos';
-    }
   }
   aplicarFiltros();
 }

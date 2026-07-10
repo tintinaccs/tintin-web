@@ -56,6 +56,29 @@
 
 html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 100%; }
 
+/* ═══════════════════════════════════════════════
+   SCROLLBAR ROSA GLOBAL
+   scrollbar-color cubre Firefox; ::-webkit-scrollbar cubre Chrome/Safari/
+   Edge — se degrada sola a la barra nativa del sistema en donde ninguna de
+   las dos se soporte, así que no hace falta (ni conviene) simular una barra
+   con JS/divs. Selectores puntuales como .tt-quick-cats-inner ya ocultan su
+   propia scrollbar con más especificidad — siguen ganando sobre esta regla
+   general sin tocarlos. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #EA7EA3 #FDF0F5;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #FDF0F5; }
+::-webkit-scrollbar-thumb {
+  background: #EA7EA3;
+  border-radius: 999px;
+  border: 2px solid #FDF0F5;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: #D9648C; }
+::-webkit-scrollbar-corner { background: #FDF0F5; }
+
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -3017,27 +3040,36 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 @media (max-width: 1024px) {
   :root { --header-h: 64px; }
 
-  /* 3-zone header: hamburger LEFT | logo CENTER | actions RIGHT */
+  /* 3-zone header: hamburger LEFT | logo CENTER | actions RIGHT.
+     El logo se centra con position:absolute + translate(-50%,-50%) sobre
+     .tt-header-inner (ya con su propio ancho bien definido — no es el mismo
+     escenario que el bug de .tt-tabbar, donde el elemento centrado medía su
+     propio layout budget contra el viewport). Con grid 1fr/auto/1fr, el
+     lado de acciones (3 íconos) tiene más ancho mínimo de contenido que el
+     de hamburguesa (1 ícono) — a 320px ese mínimo fuerza esa columna a
+     crecer más que su "1fr" y el auto central deja de caer en el centro
+     real. Con esta técnica el logo queda centrado sí o sí, sin importar
+     cuánto pesen los lados. */
   .tt-header-inner {
     padding: 0 16px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    position: relative;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0;
   }
   .tt-menu-toggle {
     display: flex;
-    justify-self: start;
     order: 1;
   }
   .tt-logo-link {
-    justify-self: center;
-    order: 2;
-    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   .tt-logo-img { height: 44px; }  /* tablet/mobile — slightly smaller */
   .tt-header-actions {
-    justify-self: end;
     order: 3;
     gap: 4px;
   }
@@ -3261,7 +3293,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border-color: var(--pink-dark);
   transform: translateY(-2px);
 }
-@media (max-width: 767px) { .tt-back-to-top { bottom: 80px; right: 14px; } }
+/* Stacked above .tt-wa-float (bottom:88px, 48px tall, z-index:900 → top
+   edge at 136px) with the same ~12px gap desktop uses between the two
+   floats, so they no longer sit on the same spot and fight over z-index. */
+@media (max-width: 767px) { .tt-back-to-top { bottom: 148px; right: 16px; } }
 
 /* ══════════════════════════════════════════════════════════════
    LIGHTBOX
