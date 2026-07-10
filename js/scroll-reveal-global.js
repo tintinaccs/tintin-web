@@ -3,7 +3,7 @@
 if(window.TintinGlobalScrollRevealBooted)return;
 window.TintinGlobalScrollRevealBooted=true;
 const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const fixedExclusions='#tt-loader,#tt-intro,#tt-welcome-tutorial,.tt-header,.tt-header-mobile,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
+const fixedExclusions='#tt-loader,#tt-intro,#tt-welcome-tutorial,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
 const selectors=[
  'main>section','.section','.section-sm','.tt-section','.tt-page-hero','.tt-hero','.tt-trust-bar','.tt-editorial','.tt-products-section','.tt-reviews-section','.tt-footer',
  '.tt-card','.tt-product-card','.tt-coll-card','.tt-category-card','.tt-review-card','.tt-trust-item','.tt-info-block','.tt-dropdown-card','.tt-sheet-item',

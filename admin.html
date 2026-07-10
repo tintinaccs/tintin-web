@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260710-4"></script>
+  <script src="js/page-loader.js?v=tintin-20260710-5"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#D46A8A">
@@ -16,12 +16,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260710-4">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260710-4">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260710-4">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260710-4">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260710-4">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260710-4">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260710-5">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260710-5">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260710-5">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260710-5">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260710-5">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260710-5">
 </head>
 <body>
 
@@ -1143,7 +1143,7 @@
           <div class="adm-card-title">Header por dispositivo</div>
         </div>
         <div class="adm-card-body">
-          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Cada opción controla el header únicamente en su propio rango de pantalla — no se pisan entre sí. La tabbar de abajo en mobile (los 5 íconos) no depende de esta configuración y siempre se mantiene.</p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Cada opción controla la navegación únicamente en su propio rango de pantalla — no se pisan entre sí. No existe ningún header superior en Mobile: ahí la navegación persistente es siempre la barra inferior (tabbar).</p>
           <div id="cfg-header-mobile-warning" style="display:none;background:#FFF4E5;border:1px solid #F0B84D;border-radius:10px;padding:10px 14px;font-size:12px;color:#8a5a00;margin-bottom:14px"></div>
           <div class="adm-toggle-wrap" style="margin-bottom:16px">
             <label class="adm-toggle">
@@ -1161,8 +1161,8 @@
               <span class="adm-toggle-slider"></span>
             </label>
             <div>
-              <div class="adm-toggle-label">Mostrar header en Mobile</div>
-              <div class="adm-toggle-desc">Header compacto propio de mobile (el que se achica al scrollear), hasta 768px de ancho. Si se desactiva, solo queda la tabbar de abajo. Activado por defecto.</div>
+              <div class="adm-toggle-label">Mostrar navegación Mobile</div>
+              <div class="adm-toggle-desc">Barra de navegación inferior (tabbar) de mobile, hasta 768px de ancho. Si se desactiva, no queda ninguna navegación persistente ahí. Activado por defecto.</div>
             </div>
           </div>
         </div>
@@ -3140,13 +3140,13 @@ function updateHeaderModeWarning_() {
   const desktopTablet = document.getElementById('cfg-header-desktop-tablet').checked;
   const mobile = document.getElementById('cfg-header-mobile').checked;
   if (!desktopTablet && !mobile) {
-    warn.textContent = '⚠️ No va a haber ningún header (barra superior) en ningún tamaño de pantalla — ni en Desktop/Tablet ni en Mobile.';
+    warn.textContent = '⚠️ No va a haber ninguna navegación persistente en ningún tamaño de pantalla — ni header en Desktop/Tablet ni tabbar en Mobile.';
     warn.style.display = 'block';
   } else if (!desktopTablet) {
     warn.textContent = 'ℹ️ Desktop y Tablet quedarán sin header. Mobile no se ve afectado por esto.';
     warn.style.display = 'block';
   } else if (!mobile) {
-    warn.textContent = 'ℹ️ Mobile quedará sin header (solo tabbar). Desktop y Tablet no se ven afectados por esto.';
+    warn.textContent = 'ℹ️ Mobile quedará sin ninguna navegación persistente (tabbar oculta). Desktop y Tablet no se ven afectados por esto.';
     warn.style.display = 'block';
   } else {
     warn.style.display = 'none';

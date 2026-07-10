@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260710-4';
+const VERSION = 'tintin-20260710-5';
 
 const issues = [];
 
@@ -55,7 +55,7 @@ assertFile('css/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores 
 assertFile('css/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
 assertFile('js/ui-quality.js', 'Debe existir el runtime global de calidad');
 assertFile('js/page-loader.js', 'Debe existir el loader global');
-assertFile('js/header-account-mobile-fix.js', 'Debe existir el header mobile global');
+assertFile('js/header-account-mobile-fix.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
 assertFile('js/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
 assertFile('js/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
 assertFile('scripts/fix-tintin-source.js', 'Debe existir el auto-fixer de fuente');
@@ -90,6 +90,29 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
     }
     if (/\btt-logo-sub\b/.test(content)) {
       addIssue('CRITICAL', file, 'Contiene tt-logo-sub (wordmark textual del footer, eliminado) — no debe reaparecer');
+    }
+  }
+}
+
+// Antirregresión: no debe existir ningún header superior de mobile. En
+// <=768px la única navegación persistente es .tt-tabbar — ninguna página
+// pública puede volver a contener id="tt-header-mobile", y ningún CSS/JS
+// productivo puede forzar su visibilidad (display:block/flex; la única
+// declaración permitida sobre este selector es display:none).
+{
+  const selfFile = 'scripts/audit-tintin.js';
+  for (const file of htmlFiles) {
+    const content = read(file);
+    if (/id=["']tt-header-mobile["']/.test(content)) {
+      addIssue('CRITICAL', file, 'Contiene id="tt-header-mobile" — el header superior de mobile fue eliminado, no debe reaparecer');
+    }
+  }
+  const forceVisibleRe = /#tt-header-mobile[^{;]*\{[^}]*display\s*:\s*(block|flex|inline)/i;
+  for (const file of [...cssFiles, ...jsFiles]) {
+    if (file === selfFile) continue;
+    const content = read(file);
+    if (forceVisibleRe.test(content)) {
+      addIssue('CRITICAL', file, 'Fuerza display:block/flex sobre #tt-header-mobile — no debe volver a mostrarse en ningún ancho');
     }
   }
 }
