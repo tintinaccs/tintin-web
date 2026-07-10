@@ -2,18 +2,19 @@
    TINTIN — Header por dispositivo (Super Admin → Configuración)
    =============================================================
    Fuente única: settings/general, dos campos booleanos independientes,
-   cada uno acotado a SU PROPIO rango de ancho — no hay superposición ni
-   "gana el otro" porque los rangos nunca se cruzan:
+   cada uno acotado a SU PROPIO elemento de header y SU PROPIO rango de
+   ancho — no hay superposición ni "gana el otro" porque son headers
+   físicamente distintos en el HTML y sus rangos nunca se cruzan:
 
-     headerDesktopTabletEnabled (default true) — controla el header normal
-       (.tt-header, el mismo de siempre) en su rango nativo, >=769px. Si
-       está en false, ese header no se muestra en desktop/tablet — nada lo
-       reemplaza ahí.
-     headerMobileEnabled (default true) — controla el header compacto
-       propio de mobile (el que se achica al scrollear — ver
-       header-account-mobile-fix.js) en <=768px. Si está en false, no hay
-       header arriba en mobile — solo la tabbar de abajo, que no depende de
-       esta config.
+     headerDesktopTabletEnabled (default true) — controla #tt-header-desktop-tablet
+       en su rango nativo, >=769px.
+     headerMobileEnabled (default true) — controla #tt-header-mobile,
+       el header propio de mobile (el que se achica al scrollear — ver
+       header-account-mobile-fix.js), en <=768px.
+
+   Ningún JS "reactiva" ni transforma un header en el otro — son dos
+   elementos <header> separados en el DOM, cada uno con su propio id.
+   Esto sólo prende/apaga cada uno dentro de su rango.
 
    onSnapshot (no getDoc de una sola vez) para que un cambio guardado desde
    el panel se refleje en cualquier pestaña de la tienda ya abierta, sin
@@ -45,19 +46,20 @@
     if (document.getElementById('tt-header-mode-style')) return;
     var st = document.createElement('style');
     st.id = 'tt-header-mode-style';
-    // #id + clase en <html> le gana en especificidad a ".tt-header{...}"
-    // (styles.css, solo clase) sin importar el orden de inyección de cada
-    // hoja de estilos.
+    // #id + clase en <html> le gana en especificidad a las reglas base de
+    // styles.css sin importar el orden de inyección de cada hoja.
+    // visibility/pointer-events además de display: un header apagado no
+    // puede ni ocupar espacio ni recibir clics.
     st.textContent =
-      '@media (min-width:769px){html.tt-desktop-header-off #tt-header{display:none!important}}' +
-      '@media (max-width:768px){html.tt-mobile-header-off #tt-header{display:none!important}}';
+      '@media (min-width:769px){html.tt-desktop-tablet-header-off #tt-header-desktop-tablet{display:none!important;visibility:hidden!important;pointer-events:none!important}}' +
+      '@media (max-width:768px){html.tt-mobile-header-off #tt-header-mobile{display:none!important;visibility:hidden!important;pointer-events:none!important}}';
     document.head.appendChild(st);
   }
   injectStyle();
 
   function apply(mode) {
     window.__ttHeaderMode = mode;
-    document.documentElement.classList.toggle('tt-desktop-header-off', !mode.desktopTablet);
+    document.documentElement.classList.toggle('tt-desktop-tablet-header-off', !mode.desktopTablet);
     document.documentElement.classList.toggle('tt-mobile-header-off', !mode.mobile);
     listeners.forEach(function (fn) { try { fn(mode); } catch (e) {} });
   }

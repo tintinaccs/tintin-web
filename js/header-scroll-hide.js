@@ -21,23 +21,17 @@
     st.id = 'tt-header-scroll-hide-style';
     st.textContent = `
       @media (min-width: 769px) {
-        #tt-header {
+        #tt-header-desktop-tablet {
           transition: transform .34s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, background .28s ease, border-color .28s ease !important;
           will-change: transform;
         }
-        #tt-header.tt-header-hidden-desktop {
+        #tt-header-desktop-tablet.tt-header-hidden-desktop {
           transform: translateY(calc(-100% - 12px)) !important;
           pointer-events: none;
         }
       }
-      @media (max-width: 768px) {
-        #tt-header.tt-header-hidden-desktop {
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-      }
       @media (prefers-reduced-motion: reduce) {
-        #tt-header {
+        #tt-header-desktop-tablet {
           transition: none !important;
         }
       }
@@ -46,7 +40,7 @@
   }
 
   ready(function () {
-    const header = document.getElementById('tt-header');
+    const header = document.getElementById('tt-header-desktop-tablet');
     if (!header) return;
     injectStyles();
 

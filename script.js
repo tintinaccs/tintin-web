@@ -298,7 +298,7 @@ function getCartCount() {
 function updateCartBadge() {
   const count = getCartCount();
   const text = count > 99 ? '99+' : String(count);
-  ['cart-badge', 'cart-badge-mobile'].forEach(id => {
+  ['cart-badge', 'cart-badge-mobile', 'cart-badge-header-mobile'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = text;
@@ -464,7 +464,7 @@ function directWAProduct(product) {
    HEADER SCROLL EFFECT
 ────────────────────────────────────── */
 function initHeaderScroll() {
-  const header = document.getElementById('tt-header');
+  const header = document.getElementById('tt-header-desktop-tablet');
   if (!header) return;
 
   function onScroll() {
@@ -534,7 +534,6 @@ function initAccountDropdown() {
 ────────────────────────────────────── */
 function initMobileMenu() {
   const menu = document.getElementById('mobile-menu');
-  const btnOpen = document.getElementById('btn-menu');
   const btnClose = document.getElementById('btn-mobile-close');
   const btnTienda = document.getElementById('btn-mobile-tienda');
   const mobileCats = document.getElementById('mobile-cats');
@@ -551,7 +550,13 @@ function initMobileMenu() {
     unlockScroll('mobile-menu');
   }
 
-  if (btnOpen) btnOpen.addEventListener('click', openMenu);
+  // btn-menu vive en el header Desktop/Tablet (hace de hamburguesa en su
+  // rango tablet, 769-1024px) y btn-menu-mobile en el header Mobile — ambos
+  // abren el mismo menú lateral global.
+  ['btn-menu', 'btn-menu-mobile'].forEach(id => {
+    const btnOpen = document.getElementById(id);
+    if (btnOpen) btnOpen.addEventListener('click', openMenu);
+  });
   if (btnClose) btnClose.addEventListener('click', closeMenu);
 
   if (btnTienda && mobileCats) {
@@ -574,7 +579,6 @@ function initMobileMenu() {
 function initSearch() {
   const panel = document.getElementById('search-panel');
   const input = document.getElementById('search-input');
-  const btnOpen = document.getElementById('btn-search');
   const btnClose = document.getElementById('btn-search-close');
   const results = document.getElementById('search-results');
   const tabbarSearch = document.getElementById('tabbar-search');
@@ -595,7 +599,12 @@ function initSearch() {
     }
   }
 
-  if (btnOpen) btnOpen.addEventListener('click', openSearch);
+  // btn-search vive en el header Desktop/Tablet, btn-search-mobile en el
+  // header Mobile — ambos abren el mismo panel de búsqueda global.
+  ['btn-search', 'btn-search-mobile'].forEach(id => {
+    const btnOpen = document.getElementById(id);
+    if (btnOpen) btnOpen.addEventListener('click', openSearch);
+  });
   if (tabbarSearch) tabbarSearch.addEventListener('click', openSearch);
   if (btnClose) btnClose.addEventListener('click', closeSearch);
 
@@ -665,13 +674,17 @@ function initSearch() {
    CART EVENTS
 ────────────────────────────────────── */
 function initCartEvents() {
-  const btnCart = document.getElementById('btn-cart');
   const tabbarCart = document.getElementById('tabbar-cart');
   const btnClose = document.getElementById('btn-cart-close');
   const overlay = document.getElementById('cart-overlay');
   const btnWA = document.getElementById('btn-cart-wa');
 
-  if (btnCart) btnCart.addEventListener('click', openCart);
+  // btn-cart vive en el header Desktop/Tablet, btn-cart-mobile en el
+  // header Mobile — ambos abren el mismo drawer de carrito global.
+  ['btn-cart', 'btn-cart-mobile'].forEach(id => {
+    const btnCart = document.getElementById(id);
+    if (btnCart) btnCart.addEventListener('click', openCart);
+  });
   if (tabbarCart) tabbarCart.addEventListener('click', openCart);
   if (btnClose) btnClose.addEventListener('click', closeCart);
   if (overlay) overlay.addEventListener('click', closeCart);

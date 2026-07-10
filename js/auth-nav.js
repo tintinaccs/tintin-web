@@ -1,12 +1,12 @@
-import './ui-quality.js?v=tintin-20260710-1';
-import './store-gate.js?v=tintin-20260710-1';
-import './header-dropdown-fix.js?v=tintin-20260710-1';
-import './header-account-mobile-fix.js?v=tintin-20260710-1';
-import './header-scroll-hide.js?v=tintin-20260710-1';
-import './scroll-reveal-global.js?v=tintin-20260710-1';
-import { auth } from './firebase.js?v=tintin-20260710-1';
+import './ui-quality.js?v=tintin-20260710-2';
+import './store-gate.js?v=tintin-20260710-2';
+import './header-dropdown-fix.js?v=tintin-20260710-2';
+import './header-account-mobile-fix.js?v=tintin-20260710-2';
+import './header-scroll-hide.js?v=tintin-20260710-2';
+import './scroll-reveal-global.js?v=tintin-20260710-2';
+import { auth } from './firebase.js?v=tintin-20260710-2';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260710-1';
+import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260710-2';
 
 const PERSON_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 const ADMIN_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`;
@@ -30,17 +30,22 @@ onAuthStateChanged(auth,async user=>{
 });
 
 function renderAccountButtonPhoto(user){
- const btn=document.getElementById('btn-cuenta');
- if(!btn)return;
- if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
- if(user&&user.photoURL){
-  const name=user.displayName||user.email||'Mi cuenta';
-  const img=document.createElement('img');
-  img.className='tt-account-avatar-btn';img.src=user.photoURL;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
-  img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
-  img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
-  btn.innerHTML='';btn.appendChild(img);
- }else btn.innerHTML=accountBtnDefaults.get(btn);
+ // btn-cuenta vive en el header Desktop/Tablet, btn-cuenta-mobile en el
+ // header Mobile — son dos botones físicamente distintos, ambos se
+ // actualizan con el mismo estado de auth.
+ ['btn-cuenta','btn-cuenta-mobile'].forEach(id=>{
+  const btn=document.getElementById(id);
+  if(!btn)return;
+  if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
+  if(user&&user.photoURL){
+   const name=user.displayName||user.email||'Mi cuenta';
+   const img=document.createElement('img');
+   img.className='tt-account-avatar-btn';img.src=user.photoURL;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
+   img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
+   img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
+   btn.innerHTML='';btn.appendChild(img);
+  }else btn.innerHTML=accountBtnDefaults.get(btn);
+ });
 }
 
 function renderMobileTabbarPhoto(user){
@@ -57,17 +62,22 @@ function renderMobileTabbarPhoto(user){
 }
 
 function renderAccountPanel(user,role='client'){
- const panel=document.getElementById('account-panel');
- if(!panel)return;
- if(!user){panel.innerHTML=`<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;return;}
- const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
- const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
- const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
- panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="perfil.html">Mi cuenta</a><a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
- wireLogout(panel);
+ // account-panel vive en el header Desktop/Tablet, account-panel-mobile en
+ // el header Mobile — ambos se llenan con el mismo contenido.
+ ['account-panel','account-panel-mobile'].forEach((id,i)=>{
+  const panel=document.getElementById(id);
+  if(!panel)return;
+  if(!user){panel.innerHTML=`<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;return;}
+  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
+  const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
+  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
+  const logoutId=i===0?'account-logout-btn':'account-logout-btn-mobile';
+  panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="perfil.html">Mi cuenta</a><a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button class="tt-account-item tt-account-logout" id="${logoutId}">Cerrar sesión</button>`;
+  wireLogout(panel,logoutId);
+ });
 }
 
-function wireLogout(panel){const btn=panel.querySelector('#account-logout-btn');if(btn)btn.onclick=doLogout;}
+function wireLogout(panel,id){const btn=panel.querySelector('#'+id);if(btn)btn.onclick=doLogout;}
 function wireMobileLogout(panel){const btn=panel.querySelector('#mobile-user-logout-btn');if(btn)btn.onclick=doLogout;}
 
 function renderMobileUserPanel(user,role='client'){
