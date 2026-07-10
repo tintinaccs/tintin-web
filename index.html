@@ -3,6 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
+  <script src="js/page-loader.js?v=tintin-20260709-4"></script>
+  <script>
+    // Sin esto, page-loader.js caía al fallback window.load — que espera a
+    // TODAS las imágenes de la página completa (hero, colecciones,
+    // editorial, reviews…), no solo al hero visible arriba. El resultado
+    // real era el loader (y su bloqueo de scroll) tapando la pantalla
+    // varios segundos después de que el hero ya estaba armado y listo para
+    // scrollear. NO se usa DOMContentLoaded/load como disparador: si algún
+    // recurso externo del <head> (ej. la hoja de Google Fonts) tarda o
+    // falla en cargar, Chrome demora esos dos eventos varios segundos
+    // aunque no tengan nada que ver con el contenido real de la página —
+    // confirmado empíricamente, no es solo teoría. requestAnimationFrame no
+    // depende de ningún recurso de red: dos frames alcanzan para salir del
+    // tick síncrono actual. El propio loader ya tiene su piso real (logo
+    // cargado + MIN_SHOW_MS) antes de esconderse, así que esto no lo
+    // esconde antes de tiempo.
+    (function () {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { window.ttPageReady && window.ttPageReady(); });
+      });
+    })();
+  </script>
   <title>TINTIN Accesorios & Relojes | Accesorios Femeninos — Paraguay</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -40,8 +63,8 @@
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260709-4">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260709-4">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260709-4">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="js/page-loader.js?v=tintin-20260709-4"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
 </head>
 <body>
 
