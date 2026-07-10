@@ -305,6 +305,34 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   box-shadow: 0 2px 20px rgba(180,76,114,0.08);
 }
 
+/* Header mobile — elemento físicamente separado de .tt-header (desktop/
+   tablet), no una versión reactivada del mismo. Oculto por default; sólo
+   se muestra dentro de su propio rango (<=768px) vía la media query de
+   abajo, y ahí también puede taparlo el toggle "off" del Super Admin (ver
+   js/mobile-header-mode.js). El layout interno (hamburguesa | logo
+   centrado | acciones) reutiliza las mismas clases que ya trae
+   .tt-header-inner/.tt-menu-toggle/.tt-header-actions para <=1024px, así
+   que no hace falta duplicar esas reglas acá. */
+.tt-header-mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: var(--z-header);
+  display: none;
+}
+@media (max-width: 768px) {
+  .tt-header-mobile { display: block; }
+}
+@media (min-width: 769px) {
+  .tt-header-mobile {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 .tt-header-inner {
   display: flex;
   align-items: center;
@@ -3140,16 +3168,21 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   * { box-sizing: border-box; }
   .section { padding: 56px 0; }
 
-  /* Hide desktop header on mobile — only tabbar is shown */
-  .tt-header { display: none !important; }
+  /* Hide desktop/tablet header on mobile — only the dedicated
+     #tt-header-mobile (or the tabbar) is shown. Belt-and-suspenders: also
+     strips pointer-events/visibility so a hidden header can never receive
+     clicks even if some future rule only touched display. */
+  .tt-header {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 
   /* Refuerzo explícito: el nav de escritorio (TIENDA/NOSOTROS/CONTACTO y su
-     dropdown) no puede aparecer en este rango bajo ninguna circunstancia,
-     ni siquiera cuando js/mobile-header-mode.js + header-account-mobile-fix.js
-     reactivan #tt-header en su versión compacta de mobile (body.tt-mobile-home-header).
+     dropdown) no puede aparecer en este rango bajo ninguna circunstancia.
      No depende de la regla .tt-nav{display:none} del bloque de 1024px de
      arriba — queda garantizado acá mismo, en el rango exacto que importa. */
-  #tt-nav.tt-nav { display: none !important; }
+  #tt-nav-desktop-tablet.tt-nav { display: none !important; }
 
   /* Touch target: 8px padding + 1.4rem icon glyph landed at ~38px, just
      under the 40px minimum — bump padding only on mobile (tablet keeps its
