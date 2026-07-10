@@ -61,12 +61,13 @@ function mobileHeader(){
  var header=document.getElementById('tt-header');
  if(!header)return;
  document.body?.classList.remove('tt-checkout-header-excluded');
- // Gateado por js/mobile-header-mode.js (Super Admin → Configuración): el
- // header compacto de mobile solo se arma si mobileShowMobileHeader está
- // activo y mobileShowDesktopHeader no lo está (si ambos están activos,
- // gana el de desktop/tablet — ver ese archivo). "engaged" arranca en true
- // (mismo comportamiento de siempre, sin esperar la config) y se corrige
- // sin flash apenas resuelve, si es que difiere del default.
+ // Gateado por js/mobile-header-mode.js (Super Admin → Configuración,
+ // headerMobileEnabled): el header compacto de mobile solo se arma si ese
+ // flag está activo — ya no depende del flag de desktop/tablet, cada uno
+ // controla su propio rango de ancho sin superponerse. "engaged" arranca en
+ // true (mismo comportamiento de siempre, sin esperar la config) y se
+ // corrige sin flash apenas resuelve la config real, y de nuevo cada vez
+ // que cambia en vivo (onSnapshot) mientras la página sigue abierta.
  var engaged=true;
  var listenersBound=false;
  var lastY=scrollY||document.documentElement.scrollTop||0;
@@ -118,11 +119,13 @@ function mobileHeader(){
   if(engaged){bindListeners();setState();setTimeout(setState,120);setTimeout(setState,520);}
   else clearState();
  }
- var mode=window.__ttHeaderMode||{mobile:true,desktop:false};
- applyEngaged(mode.mobile&&!mode.desktop);
- (window.__ttHeaderModeReady||Promise.resolve(mode)).then(function(resolved){
-  applyEngaged(resolved.mobile&&!resolved.desktop);
- });
+ var mode=window.__ttHeaderMode||{desktopTablet:true,mobile:true};
+ applyEngaged(mode.mobile);
+ if(window.__ttOnHeaderModeChange){
+  window.__ttOnHeaderModeChange(function(m){applyEngaged(m.mobile)});
+ }else if(window.__ttHeaderModeReady){
+  window.__ttHeaderModeReady.then(function(resolved){applyEngaged(resolved.mobile)});
+ }
 }
 ready(function(){
  injectStyles();
