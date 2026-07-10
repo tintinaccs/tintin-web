@@ -1137,32 +1137,32 @@
         </div>
       </div>
 
-      <!-- Header en mobile -->
+      <!-- Header por dispositivo -->
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
-          <div class="adm-card-title">Header en mobile</div>
+          <div class="adm-card-title">Header por dispositivo</div>
         </div>
         <div class="adm-card-body">
-          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Elegí qué barra superior se muestra en celulares (pantallas de hasta 768px) en todas las páginas públicas. La tabbar de abajo (los 5 íconos) no depende de esta configuración y siempre se mantiene.</p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Cada opción controla el header únicamente en su propio rango de pantalla — no se pisan entre sí. La tabbar de abajo en mobile (los 5 íconos) no depende de esta configuración y siempre se mantiene.</p>
           <div id="cfg-header-mobile-warning" style="display:none;background:#FFF4E5;border:1px solid #F0B84D;border-radius:10px;padding:10px 14px;font-size:12px;color:#8a5a00;margin-bottom:14px"></div>
           <div class="adm-toggle-wrap" style="margin-bottom:16px">
             <label class="adm-toggle">
-              <input type="checkbox" id="cfg-mobile-desktop-header" />
+              <input type="checkbox" id="cfg-header-desktop-tablet" checked />
               <span class="adm-toggle-slider"></span>
             </label>
             <div>
-              <div class="adm-toggle-label">Mostrar header de desktop/tablet en mobile</div>
-              <div class="adm-toggle-desc">Fuerza la barra superior normal (la de escritorio/tablet) también en celulares, en vez del header propio de mobile. Desactivado por defecto.</div>
+              <div class="adm-toggle-label">Mostrar header en Desktop y Tablet</div>
+              <div class="adm-toggle-desc">Barra superior normal, a partir de 769px de ancho. Si se desactiva, no se muestra ningún header ahí (ni queda espacio vacío). Activado por defecto.</div>
             </div>
           </div>
           <div class="adm-toggle-wrap">
             <label class="adm-toggle">
-              <input type="checkbox" id="cfg-mobile-mobile-header" checked />
+              <input type="checkbox" id="cfg-header-mobile" checked />
               <span class="adm-toggle-slider"></span>
             </label>
             <div>
-              <div class="adm-toggle-label">Mostrar header mobile en mobile</div>
-              <div class="adm-toggle-desc">Permite el header compacto propio de mobile (el que se achica al scrollear, hoy visible en la portada). Activado por defecto.</div>
+              <div class="adm-toggle-label">Mostrar header en Mobile</div>
+              <div class="adm-toggle-desc">Header compacto propio de mobile (el que se achica al scrollear), hasta 768px de ancho. Si se desactiva, solo queda la tabbar de abajo. Activado por defecto.</div>
             </div>
           </div>
         </div>
@@ -3136,25 +3136,28 @@ const DEFAULT_WA_CONFIRM_MSG = 'Hola {nombre}! Te escribo por tu pedido realizad
 const MAINTENANCE_ROLE_KEYS = ['admin', 'agent', 'viewer', 'support', 'client', 'guest'];
 let _lastKnownStoreOpen = true;
 let _lastKnownMaintenanceAccess = {};
-let _lastKnownHeaderMode = { desktop: false, mobile: true };
+let _lastKnownHeaderMode = { desktopTablet: true, mobile: true };
 
 function updateHeaderModeWarning_() {
   const warn = document.getElementById('cfg-header-mobile-warning');
   if (!warn) return;
-  const desktop = document.getElementById('cfg-mobile-desktop-header').checked;
-  const mobile = document.getElementById('cfg-mobile-mobile-header').checked;
-  if (desktop && mobile) {
-    warn.textContent = '⚠️ Hay dos headers habilitados en mobile — se va a mostrar el de desktop/tablet (tiene prioridad) para evitar que se vean los dos superpuestos.';
+  const desktopTablet = document.getElementById('cfg-header-desktop-tablet').checked;
+  const mobile = document.getElementById('cfg-header-mobile').checked;
+  if (!desktopTablet && !mobile) {
+    warn.textContent = '⚠️ No va a haber ningún header (barra superior) en ningún tamaño de pantalla — ni en Desktop/Tablet ni en Mobile.';
     warn.style.display = 'block';
-  } else if (!desktop && !mobile) {
-    warn.textContent = '⚠️ No hay ningún header habilitado para mobile — en celulares solo va a quedar la tabbar de abajo, sin barra superior.';
+  } else if (!desktopTablet) {
+    warn.textContent = 'ℹ️ Desktop y Tablet quedarán sin header. Mobile no se ve afectado por esto.';
+    warn.style.display = 'block';
+  } else if (!mobile) {
+    warn.textContent = 'ℹ️ Mobile quedará sin header (solo tabbar). Desktop y Tablet no se ven afectados por esto.';
     warn.style.display = 'block';
   } else {
     warn.style.display = 'none';
   }
 }
-document.getElementById('cfg-mobile-desktop-header').addEventListener('change', updateHeaderModeWarning_);
-document.getElementById('cfg-mobile-mobile-header').addEventListener('change', updateHeaderModeWarning_);
+document.getElementById('cfg-header-desktop-tablet').addEventListener('change', updateHeaderModeWarning_);
+document.getElementById('cfg-header-mobile').addEventListener('change', updateHeaderModeWarning_);
 
 function updateStoreStatePill_(isOpen) {
   const pill = document.getElementById('cfg-store-state-pill');
@@ -3184,11 +3187,11 @@ async function loadConfig() {
     document.getElementById('cfg-store-open').checked = storeOpen;
     _lastKnownStoreOpen = storeOpen;
     updateStoreStatePill_(storeOpen);
-    const headerDesktop = d.mobileShowDesktopHeader === true;
-    const headerMobile = d.mobileShowMobileHeader !== false;
-    document.getElementById('cfg-mobile-desktop-header').checked = headerDesktop;
-    document.getElementById('cfg-mobile-mobile-header').checked = headerMobile;
-    _lastKnownHeaderMode = { desktop: headerDesktop, mobile: headerMobile };
+    const headerDesktopTablet = typeof d.headerDesktopTabletEnabled === 'boolean' ? d.headerDesktopTabletEnabled : true;
+    const headerMobile = typeof d.headerMobileEnabled === 'boolean' ? d.headerMobileEnabled : true;
+    document.getElementById('cfg-header-desktop-tablet').checked = headerDesktopTablet;
+    document.getElementById('cfg-header-mobile').checked = headerMobile;
+    _lastKnownHeaderMode = { desktopTablet: headerDesktopTablet, mobile: headerMobile };
     updateHeaderModeWarning_();
     // Payment methods
     const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
@@ -3247,8 +3250,8 @@ document.getElementById('btn-save-config').onclick = async () => {
       ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
       storeOpen:       willBeOpen,
       maintenanceAccess,
-      mobileShowDesktopHeader: document.getElementById('cfg-mobile-desktop-header').checked,
-      mobileShowMobileHeader:  document.getElementById('cfg-mobile-mobile-header').checked,
+      headerDesktopTabletEnabled: document.getElementById('cfg-header-desktop-tablet').checked,
+      headerMobileEnabled:        document.getElementById('cfg-header-mobile').checked,
       paymentMethods: {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
         transferencia:  document.getElementById('cfg-pay-transferencia').checked,
@@ -3269,11 +3272,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       await logAudit('cambiar_acceso_tienda_cerrada', 'settings', 'general', 'Accesos con tienda cerrada', JSON.stringify(maintenanceAccess));
     }
     const newHeaderMode = {
-      desktop: document.getElementById('cfg-mobile-desktop-header').checked,
-      mobile:  document.getElementById('cfg-mobile-mobile-header').checked,
+      desktopTablet: document.getElementById('cfg-header-desktop-tablet').checked,
+      mobile:        document.getElementById('cfg-header-mobile').checked,
     };
     if (JSON.stringify(_lastKnownHeaderMode) !== JSON.stringify(newHeaderMode)) {
-      await logAudit('cambiar_header_mobile', 'settings', 'general', 'Header en mobile', JSON.stringify(newHeaderMode));
+      await logAudit('cambiar_header_dispositivo', 'settings', 'general', 'Header por dispositivo', JSON.stringify(newHeaderMode));
     }
     _lastKnownStoreOpen = willBeOpen;
     _lastKnownMaintenanceAccess = maintenanceAccess;
