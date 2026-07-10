@@ -952,6 +952,36 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
   tag.textContent = JSON.stringify(data);
 }
 
+// Canonical/OG/Twitter tags default to the generic product.html?id= URL and
+// the sitewide cover image — without this, every product self-canonicalizes
+// to the same bare URL and shares with the same generic preview, so Google
+// treats every product as a duplicate and WhatsApp/social previews never
+// show the actual item. Rebuilt on every render for the same live-price/
+// stock reason as the JSON-LD above.
+function _updateProductMeta(product, mainImgUrl) {
+  const setMeta = (id, attr, value) => {
+    const el = document.getElementById(id);
+    if (el && value) el.setAttribute(attr, value);
+  };
+  const title = `${product.name} | TINTIN Accesorios & Relojes`;
+  const description = product.desc
+    ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
+    : `${product.name} — Tintin Accesorios & Relojes, tu boutique femenina en Paraguay.`;
+  const url = `https://tintinaccs.github.io/tintin-web/product.html?id=${encodeURIComponent(product.id)}`;
+  const image = mainImgUrl || 'https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg';
+
+  document.title = title;
+  setMeta('meta-description', 'content', description);
+  setMeta('meta-og-title', 'content', title);
+  setMeta('meta-og-description', 'content', description);
+  setMeta('meta-og-image', 'content', image);
+  setMeta('meta-og-url', 'content', url);
+  setMeta('meta-twitter-title', 'content', title);
+  setMeta('meta-twitter-description', 'content', description);
+  setMeta('meta-twitter-image', 'content', image);
+  setMeta('link-canonical', 'href', url);
+}
+
 function _renderProductDetail(product) {
   const isSameProduct = _pdProduct && String(_pdProduct.id) === String(product.id);
   _pdProduct = product;
@@ -964,8 +994,6 @@ function _renderProductDetail(product) {
   window.ttPageReady && window.ttPageReady();
   if (notFound) notFound.style.display = 'none';
   if (grid) grid.style.display = '';
-
-  document.title = `${product.name} | TINTIN Accesorios & Relojes`;
 
   const bc = document.getElementById('breadcrumb-product');
   if (bc) bc.textContent = product.name;
@@ -1044,6 +1072,7 @@ function _renderProductDetail(product) {
   }
 
   _injectProductJsonLd(product, mainImgUrl, extraImages, stock);
+  _updateProductMeta(product, mainImgUrl);
 
   // Variants
   const variantsContainer = document.getElementById('product-variants');

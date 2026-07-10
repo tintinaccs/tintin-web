@@ -58,7 +58,7 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
       }
-      @media (min-width: 768px) and (max-width: 1120px) {
+      @media (min-width: 769px) and (max-width: 1120px) {
         html.tt-click-dropdown-ready .tt-dropdown {
           width: min(92vw, 680px);
           max-height: min(70vh, 620px);
@@ -103,7 +103,11 @@
     }
 
     function isDesktopTablet() {
-      return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
+      // Mismo corte que styles.css (.tt-header{display:none!important} a
+      // <=768px) y que header-account-mobile-fix.js (innerWidth>768) — a
+      // exactamente 768px el header de home ya es el mobile reutilizado, no
+      // el desktop.
+      return window.matchMedia ? window.matchMedia('(min-width: 769px)').matches : window.innerWidth >= 769;
     }
 
     function currentScrollY() {

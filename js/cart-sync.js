@@ -75,6 +75,15 @@ function setActiveCartUser(user) {
 patchClassicCartStorage();
 setActiveCartUser(auth.currentUser);
 
+// Cross-tab sync: the native `storage` event fires in every OTHER same-origin
+// tab (never the tab that made the change) whenever rawSet()'s real
+// localStorage.setItem() call touches a key — so a second open tab picks up
+// an add/remove/qty-change without needing a page refresh. Only react when
+// it's the cart key this tab currently cares about (or a full clear).
+window.addEventListener('storage', e => {
+  if (e.key === activeCartKey || e.key === null) dispatchCartUpdated();
+});
+
 // ---- Local helpers ----
 
 export function getCartLocal() {

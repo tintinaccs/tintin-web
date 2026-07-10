@@ -56,7 +56,14 @@ function mobileHeader(){
  var header=document.getElementById('tt-header');
  if(!header)return;
  document.body?.classList.remove('tt-checkout-header-excluded');
- document.body?.classList.add('tt-mobile-home-header');
+ // Gateado por js/mobile-header-mode.js (Super Admin → Configuración): el
+ // header compacto de mobile solo se arma si mobileShowMobileHeader está
+ // activo y mobileShowDesktopHeader no lo está (si ambos están activos,
+ // gana el de desktop/tablet — ver ese archivo). "engaged" arranca en true
+ // (mismo comportamiento de siempre, sin esperar la config) y se corrige
+ // sin flash apenas resuelve, si es que difiere del default.
+ var engaged=true;
+ var listenersBound=false;
  var lastY=scrollY||document.documentElement.scrollTop||0;
  var ticking=false;
  var openUntil=0;
@@ -73,9 +80,14 @@ function mobileHeader(){
   var h=header.getBoundingClientRect().height;
   document.body.style.paddingTop=h?h+'px':'';
  }
+ function clearState(){
+  header.classList.remove('tt-mobile-expanded','tt-mobile-compact','tt-mobile-hidden','tt-mobile-open','tt-mobile-scrolled');
+  lastY=scrollY||document.documentElement.scrollTop||0;
+  if(document.body)document.body.style.paddingTop='';
+ }
  function setState(){
   ticking=false;
-  if(innerWidth>768){header.classList.remove('tt-mobile-expanded','tt-mobile-compact','tt-mobile-hidden','tt-mobile-open','tt-mobile-scrolled');lastY=scrollY||document.documentElement.scrollTop||0;if(document.body)document.body.style.paddingTop='';return;}
+  if(!engaged||innerWidth>768){clearState();return;}
   var y=scrollY||document.documentElement.scrollTop||0;
   var diff=y-lastY;
   var top=y<=20;
@@ -89,12 +101,23 @@ function mobileHeader(){
   syncBodyOffset();
  }
  function tick(){if(ticking)return;ticking=true;requestAnimationFrame(setState);}
- addEventListener('scroll',tick,{passive:true});
- addEventListener('resize',tick,{passive:true});
- ['touchstart','pointermove','focusin','keydown'].forEach(function(evt){document.addEventListener(evt,function(){openUntil=Date.now()+900;tick();},{passive:true});});
- setState();
- setTimeout(setState,120);
- setTimeout(setState,520);
+ function bindListeners(){
+  if(listenersBound)return;listenersBound=true;
+  addEventListener('scroll',tick,{passive:true});
+  addEventListener('resize',tick,{passive:true});
+  ['touchstart','pointermove','focusin','keydown'].forEach(function(evt){document.addEventListener(evt,function(){openUntil=Date.now()+900;tick();},{passive:true});});
+ }
+ function applyEngaged(next){
+  engaged=!!next;
+  document.body?.classList.toggle('tt-mobile-home-header',engaged);
+  if(engaged){bindListeners();setState();setTimeout(setState,120);setTimeout(setState,520);}
+  else clearState();
+ }
+ var mode=window.__ttHeaderMode||{mobile:true,desktop:false};
+ applyEngaged(mode.mobile&&!mode.desktop);
+ (window.__ttHeaderModeReady||Promise.resolve(mode)).then(function(resolved){
+  applyEngaged(resolved.mobile&&!resolved.desktop);
+ });
 }
 ready(function(){
  injectStyles();

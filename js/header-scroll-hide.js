@@ -20,7 +20,7 @@
     const st = document.createElement('style');
     st.id = 'tt-header-scroll-hide-style';
     st.textContent = `
-      @media (min-width: 768px) {
+      @media (min-width: 769px) {
         #tt-header {
           transition: transform .34s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, background .28s ease, border-color .28s ease !important;
           will-change: transform;
@@ -30,7 +30,7 @@
           pointer-events: none;
         }
       }
-      @media (max-width: 767px) {
+      @media (max-width: 768px) {
         #tt-header.tt-header-hidden-desktop {
           transform: none !important;
           pointer-events: auto !important;
@@ -56,7 +56,11 @@
     const DELTA = 6;
 
     function isDesktopTablet() {
-      return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
+      // Debe calzar exacto con el corte de styles.css (.tt-header{display:
+      // none!important} a <=768px) — si no, a exactamente 768px este script
+      // trata el header mobile de home (reutiliza el mismo #tt-header) como
+      // "desktop" y le agrega pointer-events:none al hacer scroll.
+      return window.matchMedia ? window.matchMedia('(min-width: 769px)').matches : window.innerWidth >= 769;
     }
 
     function shouldKeepVisible() {
