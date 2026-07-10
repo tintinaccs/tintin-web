@@ -9,10 +9,12 @@ function injectStyles(){
  if(document.getElementById('tt-account-mobile-fix-style'))return;
  var st=document.createElement('style');st.id='tt-account-mobile-fix-style';
  // El header mobile "grande que achica al scrollear" está scopeado a
- // body.tt-mobile-home-header (sólo home, sólo <=768px, el mismo corte que
- // usa ".tt-header{display:none!important}" en styles.css) a propósito: en el
- // resto de las páginas el header mobile sigue oculto (sólo tabbar), como
- // antes — ver styles.css ".tt-header{display:none!important}" @768px.
+ // body.tt-mobile-home-header (todas las páginas públicas salvo checkout,
+ // sólo <=768px, el mismo corte que usa ".tt-header{display:none!important}"
+ // en styles.css) — el nombre de la clase quedó de cuando era solo-home,
+ // ahora la gatea js/mobile-header-mode.js (Super Admin → Configuración →
+ // "Mostrar header mobile en mobile") en vez de mobileHeader()'s propio
+ // isHome().
  // position:fixed (no sticky): "html,body{overflow-x:hidden}" (styles.css,
  // global, no se toca acá) convierte a <body> en un contenedor de scroll
  // involuntario y eso rompe position:sticky en la mayoría de los motores —
@@ -52,7 +54,10 @@ function accountDropdown(){
 }
 function mobileHeader(){
  if(isCheckout()){document.body?.classList.add('tt-checkout-header-excluded');return;}
- if(!isHome()){document.body?.classList.remove('tt-mobile-home-header');return;}
+ // Antes scopeado solo a home (isHome()) — ahora corre en toda página
+ // pública para que el toggle "Mostrar header mobile en mobile" del Super
+ // Admin tenga efecto real en cualquier pantalla, no solo en la portada.
+ // Checkout sigue excluido: tiene su propio header dedicado (.ck-header).
  var header=document.getElementById('tt-header');
  if(!header)return;
  document.body?.classList.remove('tt-checkout-header-excluded');
