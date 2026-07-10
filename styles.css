@@ -1069,6 +1069,18 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   margin-bottom: 16px;
 }
 
+/* Vacío por defecto (Super Admin → Contenido → Hero → Subtítulo) — :empty
+   lo saca del flujo por completo así no deja un hueco cuando nadie lo usa. */
+.tt-hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-weight: 400;
+  color: var(--text-sec);
+  margin: -6px 0 16px;
+  max-width: 480px;
+}
+.tt-hero-subtitle:empty { display: none; margin: 0; }
+
 .tt-hero-tagline {
   font-family: var(--font-body);
   font-size: clamp(0.78rem, 1.4vw, 0.92rem);

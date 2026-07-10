@@ -1176,10 +1176,6 @@
         <div class="adm-card-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div class="adm-field">
-              <label class="adm-label">Nombre de la tienda</label>
-              <input type="text" class="adm-input" id="cfg-store-name" placeholder="Tintin Accesorios" />
-            </div>
-            <div class="adm-field">
               <label class="adm-label">Número de WhatsApp (soporte)</label>
               <input type="text" class="adm-input" id="cfg-wa-number" placeholder="595981299331" />
             </div>
@@ -3171,7 +3167,6 @@ async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
     const d = snap.exists() ? snap.data() : {};
-    document.getElementById('cfg-store-name').value = d.storeName || 'Tintin Accesorios';
     document.getElementById('cfg-wa-number').value = d.whatsappNumber || '595981299331';
     document.getElementById('cfg-wa-confirm-msg').value = d.waConfirmMessage || DEFAULT_WA_CONFIRM_MSG;
     document.getElementById('cfg-contact-email').value = d.contactEmail || '';
@@ -3236,7 +3231,6 @@ document.getElementById('btn-save-config').onclick = async () => {
       maintenanceAccess[role] = !!(input && input.checked);
     });
     await setDoc(doc(db, 'settings', 'general'), {
-      storeName:       document.getElementById('cfg-store-name').value.trim(),
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
       waConfirmMessage: document.getElementById('cfg-wa-confirm-msg').value.trim() || DEFAULT_WA_CONFIRM_MSG,
       contactEmail:    document.getElementById('cfg-contact-email').value.trim(),
@@ -6689,7 +6683,7 @@ const CONT_SCHEMA = {
           { key:'body', label:'Texto', type:'textarea', def:'' },
           { key:'btnText', label:'Texto botón', type:'text', def:'¡Lo quiero ya!' },
           { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=bolsos' },
-          { key:'image', label:'Imagen', type:'image', def:'' },
+          { key:'_note', label:'La imagen de esta sección se administra en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
         ]
       },
       editorial_relojes: {
@@ -6701,28 +6695,18 @@ const CONT_SCHEMA = {
           { key:'body', label:'Texto', type:'textarea', def:'' },
           { key:'btnText', label:'Texto botón', type:'text', def:'Ver relojes' },
           { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=relojes' },
-          { key:'image', label:'Imagen', type:'image', def:'' },
-        ]
-      },
-      cta: {
-        label: 'CTA Final', icon: 'cta',
-        fields: [
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'¿Lista para brillar?' },
-          { key:'title', label:'Título', type:'text', def:'Encontrá tu accesorio favorito' },
-          { key:'sub', label:'Subtítulo', type:'text', def:'Envíos a todo Paraguay · Delivery en Zona Central · Retiro en San Lorenzo' },
-          { key:'btn1Text', label:'Botón 1 — texto', type:'text', def:'Ver catálogo completo' },
-          { key:'btn1Href', label:'Botón 1 — URL', type:'url', def:'catalogo.html' },
-          { key:'btn2Text', label:'Botón WA — texto', type:'text', def:'Consultar por WhatsApp' },
+          { key:'_note', label:'La imagen de esta sección se administra en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
         ]
       },
       footer: {
         label: 'Footer', icon: 'footer',
         fields: [
-          { key:'logo', label:'Logo (imagen)', type:'image', def:'assets-tintin/images/general/logo.png' },
           { key:'copy', label:'Texto copyright', type:'text', def:'© 2024–2026 TINTIN ACCESORIOS' },
           { key:'waText', label:'Botón WhatsApp texto', type:'text', def:'Contactanos por WhatsApp' },
           // El número de WhatsApp se configura en Configuración → WhatsApp,
-          // única fuente para todo el sitio — ya no se edita por página.
+          // única fuente para todo el sitio — ya no se edita por página. El
+          // logo del footer es texto (wordmark "TINTIN"), no imagen — es
+          // así a propósito, distinto del logo del header.
         ]
       }
     }
@@ -6755,7 +6739,6 @@ const CONT_SCHEMA = {
           { key:'title', label:'Título', type:'text', def:'Nuestro Catálogo' },
           { key:'eyebrow', label:'Eyebrow', type:'text', def:'Toda la colección' },
           { key:'desc', label:'Descripción', type:'textarea', def:'' },
-          { key:'image', label:'Imagen banner (opcional)', type:'image', def:'' },
         ]
       }
     }

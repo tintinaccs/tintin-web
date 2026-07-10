@@ -23,6 +23,7 @@ function applyIndex(data) {
   const hero = data.hero || {};
   setText(document.querySelector('.tt-hero-eyebrow'), hero.eyebrow);
   setHtml(document.querySelector('.tt-hero-title'), hero.title);
+  setText(document.querySelector('.tt-hero-subtitle'), hero.subtitle);
   const heroLinks = document.querySelectorAll('.tt-hero-actions a');
   if (heroLinks[1]) {
     setText(heroLinks[1], hero.btnText);
@@ -74,9 +75,11 @@ function applyIndex(data) {
 
   const footer = data.footer || {};
   setText(document.querySelector('.tt-footer-bottom'), footer.copy);
+  setText(document.querySelector('.tt-footer-wa-text'), footer.waText);
   // El número de WhatsApp ya NO se maneja acá — única fuente:
   // settings/general.whatsappNumber (ver js/whatsapp.js), no más
-  // site_content/index.footer.waHref.
+  // site_content/index.footer.waHref. El logo del footer tampoco: es texto
+  // (wordmark), no imagen — a propósito, distinto del logo del header.
 }
 
 function applyNosotros(data) {
