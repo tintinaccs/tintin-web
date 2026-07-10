@@ -1804,8 +1804,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-footer-brand .tt-logo-link { flex-direction: column; align-items: flex-start; gap: 2px; }
-.tt-footer-brand .tt-logo-text { color: var(--white); font-size: 1.6rem; }
-.tt-footer-brand .tt-logo-sub { color: rgba(255,255,255,0.6); }
 
 .tt-footer-tagline {
   font-size: 0.85rem;
@@ -3102,7 +3100,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     display: flex;
     order: 1;
   }
-  .tt-logo-link {
+  /* Escopado a los dos headers (#tt-header-desktop-tablet en su rango
+     tablet, #tt-header-mobile en el suyo — ambos reusan .tt-header-inner/
+     .tt-logo-link para este layout de 3 zonas) — nunca genérico sobre
+     .tt-logo-link, porque esa clase también la usan el logo del footer y
+     el del drawer mobile, que deben seguir en flujo normal, no
+     position:absolute centrado en el viewport. */
+  #tt-header-desktop-tablet .tt-logo-link,
+  #tt-header-mobile .tt-logo-link {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -3223,9 +3228,30 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-product-trust-badges { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* Tablet hero — content lower, image anchored to top */
-  .tt-hero { min-height: 620px; align-items: flex-end; justify-content: flex-start; }
-  .tt-hero-content { padding: 0 28px 60px; }
+  /* Mobile hero — todo el bloque de contenido centrado horizontal y
+     verticalmente dentro del área visible del banner (no pegado abajo/
+     izquierda). min-height se mantiene igual que antes; sólo cambia el
+     alineado. */
+  .tt-hero {
+    min-height: 620px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .tt-hero-content {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 clamp(18px, 5vw, 32px) 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .tt-hero-eyebrow { justify-content: center; }
+  .tt-hero-title,
+  .tt-hero-subtitle { width: 100%; text-align: center; }
+  .tt-hero-actions { justify-content: center; }
   .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(3rem, 10vw, 5rem); }
 }
@@ -3237,12 +3263,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .container { padding: 0 16px; }
   .section { padding: 40px 0; }
 
-  /* Mobile hero — content lower, image anchored to top */
-  .tt-hero { min-height: 560px; align-items: flex-end; justify-content: flex-start; }
+  /* Mobile hero pequeño — mismo centrado que el bloque de 768px de arriba,
+     sólo ajusta min-height/padding/tamaño de título para pantallas chicas
+     y apila los botones (siguen centrados, nunca align-items:flex-start). */
+  .tt-hero { min-height: 560px; align-items: center; justify-content: center; }
   .tt-hero-content { padding: 0 20px 80px; /* clear tabbar */ }
   .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
-  .tt-hero-actions { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
   .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }

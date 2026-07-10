@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260710-2';
+const VERSION = 'tintin-20260710-3';
 
 const issues = [];
 
@@ -70,6 +70,27 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   }
   if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
+  }
+}
+
+// Antirregresión: el wordmark textual "TINTIN / ACCESORIOS & RELOJES" del
+// footer (div.tt-logo-text / div.tt-logo-sub) quedaba fuera de flujo por un
+// selector .tt-logo-link{position:absolute} demasiado genérico y terminaba
+// flotando encima del Hero. Se eliminó del footer a favor del mismo logo en
+// imagen que ya usan el resto de las páginas — estas clases quedaron
+// completamente retiradas del sitio, no deben volver a aparecer en HTML
+// productivo ni ser insertadas por JS (innerHTML, classList, etc).
+{
+  const selfFile = 'scripts/audit-tintin.js';
+  for (const file of [...htmlFiles, ...jsFiles]) {
+    if (file === selfFile) continue;
+    const content = read(file);
+    if (/\btt-logo-text\b/.test(content)) {
+      addIssue('CRITICAL', file, 'Contiene tt-logo-text (wordmark textual del footer, eliminado) — no debe reaparecer');
+    }
+    if (/\btt-logo-sub\b/.test(content)) {
+      addIssue('CRITICAL', file, 'Contiene tt-logo-sub (wordmark textual del footer, eliminado) — no debe reaparecer');
+    }
   }
 }
 
