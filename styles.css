@@ -3078,49 +3078,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 @media (max-width: 1024px) {
   :root { --header-h: 64px; }
 
-  /* 3-zone header: hamburger LEFT | logo CENTER | actions RIGHT.
-     El logo se centra con position:absolute + translate(-50%,-50%) sobre
-     .tt-header-inner (ya con su propio ancho bien definido — no es el mismo
-     escenario que el bug de .tt-tabbar, donde el elemento centrado medía su
-     propio layout budget contra el viewport). Con grid 1fr/auto/1fr, el
-     lado de acciones (3 íconos) tiene más ancho mínimo de contenido que el
-     de hamburguesa (1 ícono) — a 320px ese mínimo fuerza esa columna a
-     crecer más que su "1fr" y el auto central deja de caer en el centro
-     real. Con esta técnica el logo queda centrado sí o sí, sin importar
-     cuánto pesen los lados. */
-  .tt-header-inner {
-    padding: 0 16px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0;
-  }
-  .tt-menu-toggle {
-    display: flex;
-    order: 1;
-  }
-  /* Escopado a los dos headers (#tt-header-desktop-tablet en su rango
-     tablet, #tt-header-mobile en el suyo — ambos reusan .tt-header-inner/
-     .tt-logo-link para este layout de 3 zonas) — nunca genérico sobre
-     .tt-logo-link, porque esa clase también la usan el logo del footer y
-     el del drawer mobile, que deben seguir en flujo normal, no
-     position:absolute centrado en el viewport. */
-  #tt-header-desktop-tablet .tt-logo-link,
-  #tt-header-mobile .tt-logo-link {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .tt-logo-img { height: 44px; }  /* tablet/mobile — slightly smaller */
-  .tt-header-actions {
-    order: 3;
-    gap: 4px;
-  }
-  /* Hide desktop nav */
-  .tt-nav { display: none; }
-
   /* Quick cats hidden on all screen sizes */
 
   .tt-collections-grid { grid-template-columns: repeat(4, 1fr); }
@@ -3139,12 +3096,45 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 /* ═══════════════════════════════════════════════
-   RESPONSIVE — TABLET HERO ONLY (769px–1024px)
-   Rango exclusivo: no se solapa con el bloque mobile (≤768px) de abajo,
-   así que no hace falta resetear nada ahí. El contenido del hero arranca
-   desde la mitad del banner hacia abajo, centrado.
+   RESPONSIVE — TABLET ONLY (769px–1024px)
+   Rango exclusivo: no se solapa con el bloque mobile (≤768px) de abajo. El
+   header de esta franja vive acá, escopado siempre a
+   #tt-header-desktop-tablet — nunca comparte selector sin escopar con
+   #tt-header-mobile (ver bloque ≤768px de abajo, que define su propia
+   versión de estas mismas reglas de forma totalmente independiente).
 ═══════════════════════════════════════════════ */
 @media (min-width: 769px) and (max-width: 1024px) {
+  /* 3-zone header: hamburguesa IZQ | logo CENTRO | acciones DER. El logo se
+     centra con position:absolute + translate(-50%,-50%) sobre
+     .tt-header-inner (ya con su propio ancho bien definido). Con grid
+     1fr/auto/1fr, el lado de acciones (3 íconos) tiene más ancho mínimo de
+     contenido que el de hamburguesa (1 ícono) — con esta técnica el logo
+     queda centrado sí o sí, sin importar cuánto pesen los lados. */
+  #tt-header-desktop-tablet .tt-header-inner {
+    padding: 0 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+  }
+  #tt-header-desktop-tablet .tt-menu-toggle {
+    display: flex;
+    order: 1;
+  }
+  #tt-header-desktop-tablet .tt-logo-link {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #tt-header-desktop-tablet .tt-logo-img { height: 44px; }
+  #tt-header-desktop-tablet .tt-header-actions {
+    order: 3;
+    gap: 4px;
+  }
+  #tt-header-desktop-tablet .tt-nav { display: none; }
+
   .tt-hero {
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -3189,10 +3179,37 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
      arriba — queda garantizado acá mismo, en el rango exacto que importa. */
   #tt-nav-desktop-tablet.tt-nav { display: none !important; }
 
-  /* Touch target: 8px padding + 1.4rem icon glyph landed at ~38px, just
-     under the 40px minimum — bump padding only on mobile (tablet keeps its
-     own value from the shared <=1024px block above, untouched). */
-  .tt-menu-toggle { padding: 9px; }
+  /* 3-zone header propio de mobile: hamburguesa IZQ | logo CENTRO |
+     acciones DER — versión de #tt-header-mobile, definida acá de forma
+     totalmente independiente del bloque tablet (769–1024px) de arriba. No
+     comparte ningún selector sin escopar con #tt-header-desktop-tablet.
+     Touch target: 8px de padding + 1.4rem del glifo daban ~38px, apenas
+     debajo del mínimo de 40px — 9px es propio de mobile (tablet usa su
+     propio valor, sin padding extra, en su bloque). */
+  #tt-header-mobile .tt-header-inner {
+    padding: 0 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+  }
+  #tt-header-mobile .tt-menu-toggle {
+    display: flex;
+    order: 1;
+    padding: 9px;
+  }
+  #tt-header-mobile .tt-logo-link {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #tt-header-mobile .tt-logo-img { height: 44px; }
+  #tt-header-mobile .tt-header-actions {
+    order: 3;
+    gap: 4px;
+  }
 
   .tt-tabbar { display: flex; }
   .tt-wa-float { bottom: 88px; right: 16px; width: 48px; height: 48px; }
