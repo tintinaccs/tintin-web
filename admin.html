@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260710-6"></script>
+  <script src="js/page-loader.js?v=tintin-20260710-7"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#D46A8A">
@@ -16,12 +16,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260710-6">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260710-6">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260710-6">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260710-6">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260710-6">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260710-6">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260710-7">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260710-7">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260710-7">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260710-7">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260710-7">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260710-7">
 </head>
 <body>
 
@@ -6648,7 +6648,7 @@ const CONT_SCHEMA = {
       hero: {
         label: 'Hero Principal', icon: 'hero',
         fields: [
-          { key:'eyebrow', label:'Texto eyebrow', type:'text', def:'Bienvenidas a' },
+          { key:'eyebrow', label:'Texto eyebrow', type:'text', def:'Bienvenidas a TINTIN' },
           { key:'title', label:'Título grande (H1)', type:'text', def:'TINTIN' },
           { key:'subtitle', label:'Subtítulo', type:'text', def:'Brillo, estilo y mucha personalidad' },
           { key:'btnText', label:'Texto del botón', type:'text', def:'¿Quiénes somos? →' },
@@ -6812,6 +6812,14 @@ async function contLoadPage(pageId) {
     contSavedData[pageId] = snap.exists() ? snap.data() : {};
   } catch(e) {
     contSavedData[pageId] = {};
+  }
+  // Migración puntual: el eyebrow del Hero de home dejó de incluir "· Paraguay".
+  // Si el valor guardado es exactamente el texto viejo, se corrige acá (una
+  // sola vez, valor exacto → valor exacto) sin tocar ningún otro campo.
+  if (pageId === 'index' && contSavedData[pageId]?.hero?.eyebrow === 'Bienvenidas a TINTIN · Paraguay') {
+    const migratedHero = { ...contSavedData[pageId].hero, eyebrow: 'Bienvenidas a TINTIN' };
+    contSavedData[pageId].hero = migratedHero;
+    contSaveSection(pageId, 'hero', migratedHero).catch(() => {});
   }
 }
 

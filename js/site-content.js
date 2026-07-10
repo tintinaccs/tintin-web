@@ -21,7 +21,7 @@ function setHtml(el, value) {
 
 function applyIndex(data) {
   const hero = data.hero || {};
-  setText(document.querySelector('.tt-hero-eyebrow'), hero.eyebrow);
+  setText(document.querySelector('.tt-hero-eyebrow'), hero.eyebrow || 'Bienvenidas a TINTIN');
   setHtml(document.querySelector('.tt-hero-title'), hero.title);
   setText(document.querySelector('.tt-hero-subtitle'), hero.subtitle);
   const heroLinks = document.querySelectorAll('.tt-hero-actions a');
