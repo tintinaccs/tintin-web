@@ -3143,6 +3143,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Hide desktop header on mobile — only tabbar is shown */
   .tt-header { display: none !important; }
 
+  /* Refuerzo explícito: el nav de escritorio (TIENDA/NOSOTROS/CONTACTO y su
+     dropdown) no puede aparecer en este rango bajo ninguna circunstancia,
+     ni siquiera cuando js/mobile-header-mode.js + header-account-mobile-fix.js
+     reactivan #tt-header en su versión compacta de mobile (body.tt-mobile-home-header).
+     No depende de la regla .tt-nav{display:none} del bloque de 1024px de
+     arriba — queda garantizado acá mismo, en el rango exacto que importa. */
+  #tt-nav.tt-nav { display: none !important; }
+
   /* Touch target: 8px padding + 1.4rem icon glyph landed at ~38px, just
      under the 40px minimum — bump padding only on mobile (tablet keeps its
      own value from the shared <=1024px block above, untouched). */
