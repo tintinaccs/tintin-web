@@ -305,28 +305,20 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   box-shadow: 0 2px 20px rgba(180,76,114,0.08);
 }
 
-/* Header mobile — elemento físicamente separado de .tt-header (desktop/
-   tablet), no una versión reactivada del mismo. Oculto por default; sólo
-   se muestra dentro de su propio rango (<=768px) vía la media query de
-   abajo, y ahí también puede taparlo el toggle "off" del Super Admin (ver
-   js/mobile-header-mode.js). El layout interno (hamburguesa | logo
-   centrado | acciones) reutiliza las mismas clases que ya trae
-   .tt-header-inner/.tt-menu-toggle/.tt-header-actions para <=1024px, así
-   que no hace falta duplicar esas reglas acá. */
-.tt-header-mobile {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: var(--z-header);
-  display: none;
+/* Antirregresión: no existe ningún header superior de mobile — #tt-header-
+   mobile fue retirado por completo del HTML de las páginas públicas. Si
+   alguna página lo reintrodujera por error, esta regla lo saca del layout
+   en cualquier ancho (no sólo lo oculta visualmente): la navegación
+   persistente de mobile es exclusivamente .tt-tabbar. */
+#tt-header-mobile {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
-@media (max-width: 768px) {
-  .tt-header-mobile { display: block; }
-}
+/* Misma protección en sentido contrario: la tabbar es exclusiva de mobile,
+   nunca debe poder aparecer en desktop/tablet. */
 @media (min-width: 769px) {
-  .tt-header-mobile {
+  .tt-tabbar {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -3099,9 +3091,9 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
    RESPONSIVE — TABLET ONLY (769px–1024px)
    Rango exclusivo: no se solapa con el bloque mobile (≤768px) de abajo. El
    header de esta franja vive acá, escopado siempre a
-   #tt-header-desktop-tablet — nunca comparte selector sin escopar con
-   #tt-header-mobile (ver bloque ≤768px de abajo, que define su propia
-   versión de estas mismas reglas de forma totalmente independiente).
+   #tt-header-desktop-tablet — no existe ningún header superior de mobile
+   (ver bloque ≤768px de abajo, cuya única navegación persistente es
+   .tt-tabbar).
 ═══════════════════════════════════════════════ */
 @media (min-width: 769px) and (max-width: 1024px) {
   /* 3-zone header: hamburguesa IZQ | logo CENTRO | acciones DER. El logo se
@@ -3163,10 +3155,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   * { box-sizing: border-box; }
   .section { padding: 56px 0; }
 
-  /* Hide desktop/tablet header on mobile — only the dedicated
-     #tt-header-mobile (or the tabbar) is shown. Belt-and-suspenders: also
-     strips pointer-events/visibility so a hidden header can never receive
-     clicks even if some future rule only touched display. */
+  /* Hide desktop/tablet header on mobile — .tt-tabbar is the only
+     persistent navigation in this range. Belt-and-suspenders: also strips
+     pointer-events/visibility so a hidden header can never receive clicks
+     even if some future rule only touched display. */
   .tt-header {
     display: none !important;
     visibility: hidden !important;
@@ -3178,38 +3170,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
      No depende de la regla .tt-nav{display:none} del bloque de 1024px de
      arriba — queda garantizado acá mismo, en el rango exacto que importa. */
   #tt-nav-desktop-tablet.tt-nav { display: none !important; }
-
-  /* 3-zone header propio de mobile: hamburguesa IZQ | logo CENTRO |
-     acciones DER — versión de #tt-header-mobile, definida acá de forma
-     totalmente independiente del bloque tablet (769–1024px) de arriba. No
-     comparte ningún selector sin escopar con #tt-header-desktop-tablet.
-     Touch target: 8px de padding + 1.4rem del glifo daban ~38px, apenas
-     debajo del mínimo de 40px — 9px es propio de mobile (tablet usa su
-     propio valor, sin padding extra, en su bloque). */
-  #tt-header-mobile .tt-header-inner {
-    padding: 0 16px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0;
-  }
-  #tt-header-mobile .tt-menu-toggle {
-    display: flex;
-    order: 1;
-    padding: 9px;
-  }
-  #tt-header-mobile .tt-logo-link {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  #tt-header-mobile .tt-logo-img { height: 44px; }
-  #tt-header-mobile .tt-header-actions {
-    order: 3;
-    gap: 4px;
-  }
 
   .tt-tabbar { display: flex; }
   .tt-wa-float { bottom: 88px; right: 16px; width: 48px; height: 48px; }

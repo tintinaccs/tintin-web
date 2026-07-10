@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinPageAuditFixBooted)return;
 window.TintinPageAuditFixBooted=true;
-var VERSION='tintin-20260710-4';
+var VERSION='tintin-20260710-5';
 function isHome(){var p=(location.pathname||'').toLowerCase();return p.endsWith('/')||p.endsWith('/index.html')||p==='';}
 function isCheckout(){var p=(location.pathname||'').toLowerCase();return p.indexOf('checkout')>-1||document.body?.classList.contains('checkout-page')||document.querySelector('.ck-body,.ck-panel,.ck-header');}
 function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;if(u.searchParams.get('v')===VERSION)return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
@@ -10,7 +10,7 @@ function versionLocalCssLinks(){document.querySelectorAll('link[href$=".css"],li
 function addStyle(){
  if(document.getElementById('tt-page-audit-fix-style'))return;
  var st=document.createElement('style');st.id='tt-page-audit-fix-style';
- st.textContent='html.tt-home-splash-clean,html.tt-home-splash-clean body{background:var(--tt-page-bg,#FFF6FA)!important}html.tt-home-splash-clean #tt-intro{background:var(--tt-page-bg,#FFF6FA)!important;gap:0!important}html.tt-home-splash-clean #tt-intro-fallback,html.tt-home-splash-clean .tt-splash-line{display:none!important;visibility:hidden!important;opacity:0!important}html.tt-home-splash-clean #tt-intro-logo{width:clamp(112px,24vw,210px)!important;max-width:72vw!important;height:auto!important;object-fit:contain!important;filter:drop-shadow(0 8px 22px rgba(212,106,138,.18))!important}body.tt-checkout-header-excluded #tt-header-desktop-tablet,body.tt-checkout-header-excluded .tt-header-desktop-tablet,body.tt-checkout-header-excluded #tt-header-mobile,body.tt-checkout-header-excluded .tt-header-mobile{display:none!important}.tt-page-audit-ready{--tt-page-audit:ready}';
+ st.textContent='html.tt-home-splash-clean,html.tt-home-splash-clean body{background:var(--tt-page-bg,#FFF6FA)!important}html.tt-home-splash-clean #tt-intro{background:var(--tt-page-bg,#FFF6FA)!important;gap:0!important}html.tt-home-splash-clean #tt-intro-fallback,html.tt-home-splash-clean .tt-splash-line{display:none!important;visibility:hidden!important;opacity:0!important}html.tt-home-splash-clean #tt-intro-logo{width:clamp(112px,24vw,210px)!important;max-width:72vw!important;height:auto!important;object-fit:contain!important;filter:drop-shadow(0 8px 22px rgba(212,106,138,.18))!important}body.tt-checkout-header-excluded #tt-header-desktop-tablet,body.tt-checkout-header-excluded .tt-header-desktop-tablet{display:none!important}.tt-page-audit-ready{--tt-page-audit:ready}';
  document.head.appendChild(st);
 }
 function replaceOldPreloads(){
