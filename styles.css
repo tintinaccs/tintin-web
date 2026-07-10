@@ -3205,13 +3205,13 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .tt-product-trust-badges { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* Mobile hero — todo el bloque de contenido centrado horizontal y
-     verticalmente dentro del área visible del banner (no pegado abajo/
-     izquierda). min-height se mantiene igual que antes; sólo cambia el
-     alineado. */
+  /* Mobile hero — bloque de contenido centrado horizontalmente y apoyado
+     hacia abajo (no en el medio vertical del banner), con un margen
+     inferior chico y parejo. min-height se mantiene igual que antes; sólo
+     cambia el alineado. */
   .tt-hero {
     min-height: 620px;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     text-align: center;
   }
@@ -3219,7 +3219,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     width: 100%;
     max-width: 620px;
     margin: 0 auto;
-    padding: 0 clamp(18px, 5vw, 32px) 60px;
+    /* 92px: la tabbar en esta franja (481-768px) muestra las etiquetas de
+       texto bajo cada ícono y mide ~68.8px + 16px de separación del borde
+       = ~84.8px de altura real desde el borde inferior — medido en vivo,
+       no es un valor a ojo. 92px deja ~7px de aire visible sin superponerse. */
+    padding: 0 clamp(18px, 5vw, 32px) 92px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3240,11 +3244,15 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   .container { padding: 0 16px; }
   .section { padding: 40px 0; }
 
-  /* Mobile hero pequeño — mismo centrado que el bloque de 768px de arriba,
-     sólo ajusta min-height/padding/tamaño de título para pantallas chicas
-     y apila los botones (siguen centrados, nunca align-items:flex-start). */
-  .tt-hero { min-height: 560px; align-items: center; justify-content: center; }
-  .tt-hero-content { padding: 0 20px 80px; /* clear tabbar */ }
+  /* Mobile hero pequeño — mismo centrado horizontal y apoyo hacia abajo
+     que el bloque de 768px de arriba, sólo ajusta min-height/padding/
+     tamaño de título para pantallas chicas y apila los botones (siguen
+     centrados, nunca align-items:flex-start). */
+  .tt-hero { min-height: 560px; align-items: flex-end; justify-content: center; }
+  /* 80px: acá la tabbar esconde las etiquetas de texto (span{display:none}
+     más abajo) y mide ~56px + 16px de separación = ~72px reales desde el
+     borde inferior — medido en vivo. 80px deja ~8px de aire visible. */
+  .tt-hero-content { padding: 0 20px 80px; }
   .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
   .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
