@@ -38,6 +38,6 @@ ready(function(){
  injectStyles();
  accountDropdown();
  cleanTabbarAvatar();
- if('MutationObserver'in window){new MutationObserver(function(){cleanTabbarAvatar();}).observe(document.documentElement,{childList:true,subtree:true});}
+ if('MutationObserver'in window){var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(cleanTabbarAvatar,80);}).observe(document.documentElement,{childList:true,subtree:true});}
 });
 })();
