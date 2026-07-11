@@ -164,7 +164,7 @@ const DEFAULT_STEPS = [
 
   function show(user, config, preview){
     document.getElementById('tt-welcome-tutorial')?.remove();
-    cleanUrl(); styles(); lock();
+    cleanUrl(); styles();
     let i = 0;
     const steps = (config.steps || DEFAULT_STEPS).filter(s => s && s.active !== false);
     const ov = document.createElement('div');
@@ -195,6 +195,7 @@ const DEFAULT_STEPS = [
     document.addEventListener('keydown', function onKey(e){ if (!document.getElementById('tt-welcome-tutorial')) return document.removeEventListener('keydown', onKey); if (e.key === 'Escape') finish('closed_escape'); });
     render();
     document.body.appendChild(ov);
+    lock();
   }
 
   onAuthStateChanged(auth, async user => {
