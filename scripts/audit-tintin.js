@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260710-6';
+const VERSION = 'tintin-20260710-7';
 
 const issues = [];
 
@@ -114,6 +114,61 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
     if (forceVisibleRe.test(content)) {
       addIssue('CRITICAL', file, 'Fuerza display:block/flex sobre #tt-header-mobile — no debe volver a mostrarse en ningún ancho');
     }
+  }
+}
+
+// Antirregresión: topOnReload() (js/ui-quality.js) solamente puede reposicionar
+// el scroll una vez, de forma síncrona, durante una recarga real — no debe
+// reaparecer ningún setTimeout ni listener de 'load' que vuelva a forzar
+// scrollTo() después de que el sitio ya sea interactivo, y el
+// requestAnimationFrame final solamente puede restaurar scrollBehavior.
+{
+  const uiQuality = read('js/ui-quality.js');
+  const fnMatch = uiQuality.match(/function topOnReload\(\)\{[\s\S]*?\n\}/);
+  if (!fnMatch) {
+    addIssue('CRITICAL', 'js/ui-quality.js', 'No se encontró topOnReload() — no se pudo verificar el antirregresión de scroll');
+  } else {
+    const fnBody = fnMatch[0];
+    if (/setTimeout\(/.test(fnBody)) {
+      addIssue('CRITICAL', 'js/ui-quality.js', 'topOnReload() contiene setTimeout() — puede reposicionar el scroll tarde, después de que el usuario ya empezó a scrollear');
+    }
+    if (/addEventListener\(\s*['"]load['"]/.test(fnBody)) {
+      addIssue('CRITICAL', 'js/ui-quality.js', "topOnReload() contiene un listener de 'load' — no debe volver a reposicionar el scroll una vez que el sitio es interactivo");
+    }
+    const rafMatches = fnBody.match(/requestAnimationFrame\(/g) || [];
+    if (rafMatches.length > 1) {
+      addIssue('CRITICAL', 'js/ui-quality.js', 'topOnReload() contiene más de un requestAnimationFrame() — solamente puede haber uno, y solo para restaurar scrollBehavior');
+    }
+    const rafBodyMatch = fnBody.match(/requestAnimationFrame\(function\(\)\{([\s\S]*?)\}\)/);
+    if (rafBodyMatch && /scrollTo/.test(rafBodyMatch[1])) {
+      addIssue('CRITICAL', 'js/ui-quality.js', 'El requestAnimationFrame() final de topOnReload() vuelve a ejecutar scrollTo() — solamente puede restaurar scrollBehavior');
+    }
+  }
+}
+
+// Antirregresión: el eyebrow del Hero de home ("Bienvenidas a TINTIN") ya no
+// incluye "· Paraguay" — no debe reaparecer ni en el HTML fuente ni como
+// fallback hardcodeado en js/site-content.js.
+{
+  const oldEyebrowRe = /Bienvenidas a TINTIN\s*(&middot;|·)\s*Paraguay/;
+  // admin.html conserva el string viejo únicamente como valor exacto de
+  // comparación para la migración puntual en Firestore (contLoadPage) — no
+  // se muestra ni se usa como fallback. audit-tintin.js lo referencia acá
+  // mismo para poder detectarlo en el resto del sitio.
+  const eyebrowRegressionExclusions = new Set(['admin.html', 'scripts/audit-tintin.js']);
+  for (const file of [...htmlFiles, ...jsFiles]) {
+    if (eyebrowRegressionExclusions.has(file)) continue;
+    const content = read(file);
+    if (oldEyebrowRe.test(content)) {
+      addIssue('CRITICAL', file, 'Contiene el texto viejo del eyebrow "Bienvenidas a TINTIN · Paraguay" — debe ser "Bienvenidas a TINTIN"');
+    }
+  }
+  const indexHtml = read('index.html');
+  const eyebrowMatch = indexHtml.match(/class="tt-hero-eyebrow">([^<]*)</);
+  if (!eyebrowMatch) {
+    addIssue('CRITICAL', 'index.html', 'No se encontró .tt-hero-eyebrow');
+  } else if (eyebrowMatch[1].trim() !== 'Bienvenidas a TINTIN') {
+    addIssue('CRITICAL', 'index.html', `.tt-hero-eyebrow debe ser exactamente "Bienvenidas a TINTIN" (encontrado: "${eyebrowMatch[1].trim()}")`);
   }
 }
 

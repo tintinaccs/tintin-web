@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260710-6';
+var TT_CACHE_VERSION='tintin-20260710-7';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 // Mismo criterio home/interior que js/page-loader.js (que ya resolvió
@@ -46,8 +46,13 @@ function topOnReload(){
  var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
  var r=n?n.type==='reload':(performance.navigation&&performance.navigation.type===1);
  if(!r)return;
- var t=function(){try{scrollTo({top:0,left:0,behavior:'instant'})}catch(e){scrollTo(0,0)}document.documentElement.scrollTop=0;if(document.body)document.body.scrollTop=0};
- t();requestAnimationFrame(t);addEventListener('load',function(){t();setTimeout(t,120);setTimeout(t,320)},{once:true});
+ var root=document.documentElement;
+ var prevScrollBehavior=root.style.scrollBehavior;
+ root.style.scrollBehavior='auto';
+ window.scrollTo(0,0);
+ root.scrollTop=0;
+ if(document.body)document.body.scrollTop=0;
+ requestAnimationFrame(function(){root.style.scrollBehavior=prevScrollBehavior});
 }
 function media(){document.querySelectorAll('img').forEach(function(img,i){if(!img.hasAttribute('loading')&&i>1)img.loading='lazy';if(!img.hasAttribute('decoding'))img.decoding='async';if(!img.hasAttribute('referrerpolicy'))img.referrerPolicy='no-referrer';img.addEventListener('error',function(){img.classList.add('tt-img-error')},{once:true})})}
 function links(){document.querySelectorAll('a[href]').forEach(function(a){var href=a.getAttribute('href')||'';if(/^javascript:/i.test(href)){a.removeAttribute('href');a.setAttribute('role','button');return}try{var u=new URL(href,location.href);if(u.origin!==location.origin){a.rel='noopener noreferrer';if(!a.target)a.target='_blank'}}catch(e){}})}
