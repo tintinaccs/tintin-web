@@ -91,6 +91,13 @@ const PRODUCTS = [
   }
 ];
 
+// Exposed on window so module scripts (which can't see this classic
+// script's top-level const) have a last-resort dataset to render when
+// Firestore never responds — e.g. catalogo.html's product grid, which
+// otherwise has nothing to fall back to if products-store.js's listener
+// never fires.
+window.PRODUCTS_FALLBACK = PRODUCTS;
+
 /* ──────────────────────────────────────
    UTILITIES
 ────────────────────────────────────── */
