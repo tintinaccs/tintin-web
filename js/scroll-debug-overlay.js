@@ -23,7 +23,11 @@
 
   var t0 = performance.now();
   var lines = [];
-  var MAX_LINES = 120;
+  // Antes en 120 — con la cantidad de eventos de visualViewport
+  // resize/scroll durante la animación de la barra de Safari, el log se
+  // llenaba y perdía las líneas del principio (ttPageReady/.tt-out/primer
+  // touch) mucho antes de que alguien llegara a sacar una captura.
+  var MAX_LINES = 4000;
 
   function fmt(n) { return Math.round(n); }
 
@@ -33,7 +37,10 @@
     render();
   }
 
-  var panel, body, hidden = false;
+  var panel, body, hidden = false, copyBtn;
+  function fullText() {
+    return 'UA: ' + navigator.userAgent + '\n——————————————\n' + lines.join('\n');
+  }
   function buildPanel() {
     if (panel) return;
     panel = document.createElement('div');
@@ -42,15 +49,35 @@
       'background:rgba(10,4,8,.94);color:#9fe870;font:10px/1.4 ui-monospace,Menlo,monospace;' +
       'z-index:2147483647;padding:8px 10px;white-space:pre-wrap;word-break:break-word;' +
       'border-top:2px solid #D46A8A;-webkit-user-select:text;user-select:text';
+    var headRow = document.createElement('div');
+    headRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px';
     var head = document.createElement('div');
     head.textContent = 'TT SCROLL DEBUG — tocá para ocultar/mostrar';
-    head.style.cssText = 'color:#F6B7C8;font-weight:700;margin-bottom:4px;font-size:10px';
+    head.style.cssText = 'color:#F6B7C8;font-weight:700;font-size:10px;flex:1';
     head.addEventListener('click', function () {
       hidden = !hidden;
       body.style.display = hidden ? 'none' : 'block';
     });
+    copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.textContent = 'copiar todo';
+    copyBtn.style.cssText = 'flex:0 0 auto;background:#D46A8A;color:#fff;border:0;border-radius:6px;' +
+      'padding:4px 8px;font:9px ui-monospace,Menlo,monospace;font-weight:700';
+    copyBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var text = fullText();
+      var done = function () { copyBtn.textContent = '¡copiado!'; setTimeout(function () { copyBtn.textContent = 'copiar todo'; }, 1600); };
+      var fail = function () { copyBtn.textContent = 'no se pudo — mantené tocado el texto'; setTimeout(function () { copyBtn.textContent = 'copiar todo'; }, 2400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fail);
+      } else {
+        fail();
+      }
+    });
+    headRow.appendChild(head);
+    headRow.appendChild(copyBtn);
     body = document.createElement('div');
-    panel.appendChild(head);
+    panel.appendChild(headRow);
     panel.appendChild(body);
     (document.body || document.documentElement).appendChild(panel);
     render();
@@ -126,11 +153,39 @@
 
   function render() {
     if (!body) return;
-    var head = 'UA: ' + navigator.userAgent + '\n——————————————\n';
-    body.textContent = head + lines.join('\n');
+    body.textContent = fullText();
   }
 
   log('=== SCRIPT PARSEADO === readyState=' + document.readyState);
+
+  // ── 0) Interceptar cualquier scrollTo/scroll/scrollIntoView programático
+  // — si algo del sitio (o del propio navegador vía un handler) fuerza el
+  // scroll de vuelta, esto lo va a mostrar con origen (primeras líneas del
+  // stack), en vez de tener que inferirlo de la forma de la curva de
+  // scrollY. html tiene scroll-behavior:smooth, así que cualquier llamada acá
+  // se ve como un desplazamiento suave, no instantáneo.
+  function callerInfo() {
+    try { return String(new Error().stack || '').split('\n').slice(2, 5).join(' | ').replace(/\s+/g, ' '); }
+    catch (e) { return 'n/a'; }
+  }
+  var origScrollTo = window.scrollTo.bind(window);
+  window.scrollTo = function () {
+    log('=== window.scrollTo(' + Array.prototype.slice.call(arguments).join(',') + ') === scrollY antes=' + fmt(window.scrollY) + ' | origen: ' + callerInfo());
+    return origScrollTo.apply(window, arguments);
+  };
+  var origScroll = window.scroll.bind(window);
+  window.scroll = function () {
+    log('=== window.scroll(' + Array.prototype.slice.call(arguments).join(',') + ') === scrollY antes=' + fmt(window.scrollY) + ' | origen: ' + callerInfo());
+    return origScroll.apply(window, arguments);
+  };
+  if (window.Element && Element.prototype.scrollIntoView) {
+    var origScrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function () {
+      log('=== scrollIntoView() en ' + (this.id ? '#' + this.id : (this.className ? '.' + String(this.className).split(' ')[0] : this.tagName)) +
+        ' === scrollY antes=' + fmt(window.scrollY) + ' | origen: ' + callerInfo());
+      return origScrollIntoView.apply(this, arguments);
+    };
+  }
 
   // ── 1) Envolver window.ttPageReady EN EL NIVEL SUPERIOR, sin esperar a
   // DOMContentLoaded — page-loader.js (que corre justo antes, script clásico
@@ -222,12 +277,28 @@
     }
   }, { passive: true });
 
+  // Throttlado (no gatea la primera/última muestra de una ráfaga, solo
+  // reduce cuántas líneas intermedias casi-idénticas se escriben durante
+  // la animación de la barra de Safari) — conserva la forma de la curva sin
+  // llenar el log de líneas redundantes.
+  function throttledVvLogger(minGapMs, minDelta) {
+    var lastT = -Infinity, lastVal = null;
+    return function (label, val) {
+      var now = performance.now();
+      var big = lastVal !== null && Math.abs(val - lastVal) >= minDelta;
+      if (now - lastT < minGapMs && !big) return;
+      lastT = now; lastVal = val;
+      log(label);
+    };
+  }
   if (window.visualViewport) {
+    var logResize = throttledVvLogger(30, 20);
+    var logVvScroll = throttledVvLogger(30, 20);
     window.visualViewport.addEventListener('resize', function () {
-      log('visualViewport resize → height=' + fmt(window.visualViewport.height) + ' scrollY=' + fmt(window.scrollY));
+      logResize('visualViewport resize → height=' + fmt(window.visualViewport.height) + ' scrollY=' + fmt(window.scrollY), window.scrollY);
     });
     window.visualViewport.addEventListener('scroll', function () {
-      log('visualViewport scroll → offsetTop=' + fmt(window.visualViewport.offsetTop) + ' scrollY=' + fmt(window.scrollY));
+      logVvScroll('visualViewport scroll → offsetTop=' + fmt(window.visualViewport.offsetTop) + ' scrollY=' + fmt(window.scrollY), window.scrollY);
     });
   }
 
