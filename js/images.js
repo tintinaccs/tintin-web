@@ -3,15 +3,15 @@
    Manages configurable image slots stored in Firestore
    ============================================================ */
 
-import { db } from "./firebase.js?v=tintin-20260710-8";
+import { db } from "./firebase.js?v=tintin-20260710-9";
 import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 // ui-quality.js NO se importa acá a propósito: js/page-loader.js ya lo carga
 // (con versión) en todas las páginas que usan este módulo — importarlo de
 // nuevo era trabajo duplicado.
-import './home-premium.js?v=tintin-20260710-8';
-import './welcome-tutorial-runtime.js?v=tintin-20260710-8';
+import './home-premium.js?v=tintin-20260710-9';
+import './welcome-tutorial-runtime.js?v=tintin-20260710-9';
 
-const TT_CACHE_VERSION = 'tintin-20260710-8';
+const TT_CACHE_VERSION = 'tintin-20260710-9';
 function versionUrl(url) {
   const u = new URL(url, import.meta.url);
   u.searchParams.set('v', TT_CACHE_VERSION);

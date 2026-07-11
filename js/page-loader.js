@@ -1,10 +1,10 @@
 (function(){
 'use strict';
 if(window.TintinLoader)return;
-var TT_CACHE_VERSION='tintin-20260710-8';
+var TT_CACHE_VERSION='tintin-20260710-9';
 var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
 var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
-var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false;
+var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false,hideGen=0;
 function versionUrl(url){try{var u=new URL(url,location.href);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function resolveAsset(path,withVersion){var url=path;try{if(SCRIPT_SRC)url=new URL('../'+path,SCRIPT_SRC).href}catch(e){}return withVersion===false?url:versionUrl(url)}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
@@ -42,10 +42,27 @@ if(logo.complete&&logo.naturalWidth>0)markLogoReady();
 function insert(){if(inserted)return;if(!document.getElementById('tt-loader')&&document.body){inserted=true;document.body.insertBefore(el,document.body.firstChild);requestAnimationFrame(function(){requestAnimationFrame(function(){var img=document.getElementById('tt-loader-logo');var wrap=document.getElementById('tt-loader-spin-wrap');if(img&&img.complete)markLogoReady();else if(wrap)wrap.classList.add('tt-ready')})})}}
 function waitForBody(){if(document.body){insert();return}requestAnimationFrame(waitForBody)}
 waitForBody();
-function hideNow(){if(hidden)return;hidden=true;el.dataset.state='out';el.classList.add('tt-out')}
+function hideNow(){
+ if(hidden)return;
+ hidden=true;
+ el.dataset.state='out';
+ // El .tt-out del CSS ya pone pointer-events:none, pero se fija acá también
+ // como estilo inline (gana cualquier ambigüedad de cascada/timing) para que
+ // el primer gesto táctil real nunca quede compitiendo por el hit-test del
+ // loader mientras todavía está en el DOM haciendo su fade — esto es lo que
+ // en algunos navegadores mobile puede sentirse como que el primer scroll
+ // "no responde" aunque visualmente el loader ya esté desapareciendo.
+ el.style.touchAction='auto';
+ el.style.pointerEvents='none';
+ el.classList.add('tt-out');
+ var gen=++hideGen;
+ function detach(){if(gen!==hideGen)return;if(hidden)el.style.display='none'}
+ el.addEventListener('transitionend',detach,{once:true});
+ setTimeout(detach,450);
+}
 function tryHideElegant(){if(hidden)return;var enough=Date.now()-START>=MIN_SHOW_MS;if(!enough||!logoReady){var wait=Math.max(0,MIN_SHOW_MS-(Date.now()-START));setTimeout(tryHideElegant,Math.max(wait,140));return}el.dataset.state='ready';hideNow()}
 function ready(){if(contentReady)return;contentReady=true;tryHideElegant()}
-function show(){hidden=false;contentReady=false;logoReady=!!(logo&&logo.complete);el.dataset.state='show';el.classList.remove('tt-out')}
+function show(){hideGen++;hidden=false;contentReady=false;logoReady=!!(logo&&logo.complete);el.dataset.state='show';el.style.display='';el.style.touchAction='';el.style.pointerEvents='';el.classList.remove('tt-out')}
 function setText(){}
 function importSibling(fileName,label){var url='js/'+fileName;try{if(SCRIPT_SRC)url=new URL(fileName,SCRIPT_SRC).href}catch(e){}url=versionUrl(url);return import(url).catch(function(e){console.warn('[PageLoader] No se pudo cargar '+label+':',e)})}
 function bootGlobalQuality(){if(!window.TintinUIQualityBooted)importSibling('ui-quality.js','UI Quality')}
