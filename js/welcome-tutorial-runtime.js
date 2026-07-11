@@ -113,8 +113,10 @@ const DEFAULT_STEPS = [
   function waitReady(){
     return new Promise(resolve => {
       let done = false;
+      let t = null;
+      let obs = null;
       const finish = () => { if (done) return; done = true; cleanup(); setTimeout(resolve, 120); };
-      const cleanup = () => { document.removeEventListener('tintin:splash:done', finish); document.removeEventListener('tintin:page-ready', finish); clearTimeout(t); try { obs.disconnect(); } catch {} };
+      const cleanup = () => { document.removeEventListener('tintin:splash:done', finish); document.removeEventListener('tintin:page-ready', finish); if (t) clearTimeout(t); if (obs) { try { obs.disconnect(); } catch {} } };
       const readyNow = () => {
         const s = document.getElementById('tt-intro');
         const l = document.getElementById('tt-loader');
@@ -123,9 +125,9 @@ const DEFAULT_STEPS = [
       if (readyNow()) return finish();
       document.addEventListener('tintin:splash:done', finish, { once:true });
       document.addEventListener('tintin:page-ready', finish, { once:true });
-      const obs = new MutationObserver(() => { if (readyNow()) finish(); });
+      obs = new MutationObserver(() => { if (readyNow()) finish(); });
       obs.observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['class'] });
-      const t = setTimeout(finish, 2600);
+      t = setTimeout(finish, 2600);
     });
   }
 
