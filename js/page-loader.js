@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 if(window.TintinLoader)return;
-var TT_CACHE_VERSION='tintin-20260710-11';
+var TT_CACHE_VERSION='tintin-20260711-1';
 var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
 var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
 var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false,hideGen=0;
