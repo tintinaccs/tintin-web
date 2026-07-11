@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260710-7';
+const VERSION = 'tintin-20260710-8';
 
 const issues = [];
 
@@ -169,6 +169,29 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
     addIssue('CRITICAL', 'index.html', 'No se encontró .tt-hero-eyebrow');
   } else if (eyebrowMatch[1].trim() !== 'Bienvenidas a TINTIN') {
     addIssue('CRITICAL', 'index.html', `.tt-hero-eyebrow debe ser exactamente "Bienvenidas a TINTIN" (encontrado: "${eyebrowMatch[1].trim()}")`);
+  }
+}
+
+// Antirregresión: waitReady() (js/welcome-tutorial-runtime.js) resuelve
+// "finish()" sincrónicamente cuando el loader/splash ya tienen .tt-out en el
+// momento en que se llama — eso ocurre ANTES de que "t" y "obs" reciban su
+// setTimeout()/MutationObserver, así que cleanup() no puede referenciarlas
+// como const sin pasar por una ReferenceError de temporal dead zone. Deben
+// declararse con let (inicializadas antes del early-return) y el clearTimeout
+// / obs.disconnect() deben quedar guardados con un chequeo de truthiness.
+{
+  const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
+  const fnMatch = welcomeRuntime.match(/function waitReady\(\)\{[\s\S]*?\n  \}/);
+  if (!fnMatch) {
+    addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', 'No se encontró waitReady() — no se pudo verificar el antirregresión de TDZ');
+  } else {
+    const fnBody = fnMatch[0];
+    if (!/let\s+t\s*=\s*null/.test(fnBody) || !/let\s+obs\s*=\s*null/.test(fnBody)) {
+      addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', "waitReady() debe declarar 't' y 'obs' con let=null antes del early-return de readyNow(), o vuelve el ReferenceError de TDZ en cleanup()");
+    }
+    if (/[^.]\bclearTimeout\(t\)/.test(fnBody) && !/if\s*\(\s*t\s*\)\s*clearTimeout\(t\)/.test(fnBody)) {
+      addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', 'clearTimeout(t) en waitReady() no está protegido por if(t) — puede volver a lanzar ReferenceError si finish() corre antes de asignar t');
+    }
   }
 }
 
