@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const VERSION = 'tintin-20260710-11';
+const VERSION = 'tintin-20260711-1';
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
 
 function walk(dir) {
