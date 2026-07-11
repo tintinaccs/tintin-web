@@ -84,7 +84,10 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  overflow-x: hidden;
+  /* clip, no hidden: overflow-x:hidden fuerza overflow-y a auto por spec,
+     convirtiendo <body> en un segundo contenedor de scroll independiente
+     de <html> — eso le robaba el scroll de teclado/rueda al documento real. */
+  overflow-x: clip;
 }
 
 img { max-width: 100%; height: auto; display: block; object-position: center; }
@@ -990,9 +993,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   justify-content: flex-start;
   text-align: left;
   background: #1a0610;
+  /* El primer gesto real puede empezar sobre el fondo del hero — nunca debe
+     competir con el scroll vertical nativo. */
+  touch-action: pan-y;
 }
 
 /* ── Media container: fills hero, sits behind everything ── */
+/* Decorativo, nunca interactivo: pointer-events:none saca esta capa por
+   completo del hit-testing, así el primer toque siempre llega directo al
+   scroll nativo del documento en vez de competir con el gesto nativo de
+   "arrastrar imagen" / callout de iOS. */
 .tt-hero-media {
   position: absolute;
   inset: 0;
@@ -1000,12 +1010,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   width: 100%;
   height: 100%;
   background: #1a0610;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .tt-hero-media picture {
   display: block;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .tt-hero-img {
@@ -1015,6 +1029,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   object-fit: cover;
   object-position: center;
   /* No transition on first paint — avoids flash */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
 }
 
 
@@ -3151,7 +3170,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
    RESPONSIVE — 768px (Large Mobile)
 ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  html, body { overflow-x: hidden; max-width: 100%; }
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
   * { box-sizing: border-box; }
   .section { padding: 56px 0; }
 

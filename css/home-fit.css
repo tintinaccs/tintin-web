@@ -1,4 +1,4 @@
-.tt-home-premium{overflow-x:hidden;background:#FFF6FA!important;min-height:100svh}
+.tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
 .tt-home-premium .tt-trust-bar{min-height:clamp(190px,22svh,260px)}

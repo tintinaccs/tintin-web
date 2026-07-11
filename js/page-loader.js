@@ -1,7 +1,15 @@
 (function(){
 'use strict';
 if(window.TintinLoader)return;
-var TT_CACHE_VERSION='tintin-20260711-3';
+// scroll-behavior:smooth es global (css/ui-quality.css) para que los links
+// "volver arriba" y anclas del usuario animen — pero durante la carga
+// inicial eso puede convertir un reposicionamiento síncrono (topOnReload)
+// en un desplazamiento animado y visible. Esta clase, agregada lo antes
+// posible (primer script clásico del <head>), fuerza scroll-behavior:auto
+// hasta que ui-quality.js confirme que la inicialización estructural
+// terminó — ver css/ui-quality.css y js/ui-quality.js:boot().
+document.documentElement.classList.add('tt-initializing');
+var TT_CACHE_VERSION='tintin-20260711-4';
 var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
 var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
 var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false,hideGen=0;
