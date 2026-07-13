@@ -30,20 +30,36 @@ function normalizeImageUrl(d) {
   return String(img || '').trim();
 }
 
-/** Map Firestore doc to the shape script.js expects */
+/**
+ * Map Firestore doc to the shape script.js expects.
+ *
+ * `category` is the canonical collection slug (matches a `collections/{slug}`
+ * doc ID). Legacy import fields (Type/Product Category/Category) are read
+ * only as compatibility fallbacks for older records — `Tags` is deliberately
+ * NOT part of that chain: a Tags field can hold several comma-separated
+ * values and isn't a valid single slug, so using it here would silently
+ * misfile products under a category that doesn't exist. A real Tags→category
+ * migration should set `category` explicitly instead.
+ */
 function mapProduct(id, d) {
+  const category = d.category || d.collectionSlug || d.collection || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || '';
   return {
     id,
-    name:     d.name || d.title || d.Title || d['Title'] || d.handle || d.Handle || '',
-    cat:      d.category || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || d['Tags'] || '',
-    category: d.category || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || d['Tags'] || '',
-    price:    Number(String(d.price || d.Price || d['Variant Price'] || 0).replace(/\./g, '').replace(',', '.')),
-    badge:    d.badge || (d.oferta ? 'Oferta' : null),
-    desc:     d.description || d.desc || d['Body (HTML)'] || '',
-    imageUrl: normalizeImageUrl(d),
-    stock:    d.stock ?? d['Variant Inventory Qty'] ?? null,
-    active:   d.active !== false,
-    variants: d.variants || null,
+    name:           d.name || d.title || d.Title || d['Title'] || d.handle || d.Handle || '',
+    cat:            category,
+    category,
+    price:          Number(String(d.price || d.Price || d['Variant Price'] || 0).replace(/\./g, '').replace(',', '.')),
+    priceBefore:    d.priceBefore != null ? Number(d.priceBefore) : null,
+    badge:          d.badge || (d.oferta ? 'Oferta' : null),
+    desc:           d.description || d.desc || d['Body (HTML)'] || '',
+    description:    d.description || d.desc || d['Body (HTML)'] || '',
+    imageUrl:       normalizeImageUrl(d),
+    stock:          d.stock ?? d['Variant Inventory Qty'] ?? null,
+    active:         d.active !== false,
+    oferta:         !!d.oferta,
+    destacado:      !!d.destacado,
+    variants:       d.variants || null,
+    collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
   };
 }
 

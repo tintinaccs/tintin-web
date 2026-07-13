@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260713-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260713-2"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#D46A8A">
@@ -16,12 +16,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260713-1">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260713-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260713-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260713-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260713-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260713-1">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260713-2">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260713-2">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260713-2">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260713-2">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260713-2">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260713-2">
 </head>
 <body>
 
@@ -335,18 +335,7 @@
             <input id="prod-search" type="text" placeholder="Buscar por nombre o categoría… (o 'sin nombre' para ver productos rotos)" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
             <select id="prod-filter-cat" class="adm-select" style="font-size:13px;padding:6px 10px">
               <option value="">Todas las categorías</option>
-              <option value="relojes">Relojes</option>
-              <option value="bolsos">Bolsos / Bags</option>
-              <option value="collares">Collares</option>
-              <option value="aros">Aros</option>
-              <option value="pulseras">Pulseras</option>
-              <option value="anillos">Anillos</option>
-              <option value="tobilleras">Tobilleras</option>
-              <option value="brazaletes">Brazaletes</option>
-              <option value="earcuff">Earcuff</option>
-              <option value="armcuff">Armcuff</option>
-              <option value="gafas">Gafas</option>
-              <option value="joyeros">Joyeros</option>
+              <!-- Rest rebuilt live from Super Admin → Colecciones (see syncCategorySelects) -->
             </select>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="prod-export-all-btn" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV">⬇️ Exportar CSV</button>
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
@@ -358,18 +347,7 @@
           <span id="prod-bulk-masivas-group" style="display:contents">
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
             <option value="">— Asignar a colección —</option>
-            <option value="relojes">Relojes</option>
-            <option value="bolsos">Bolsos / Bags</option>
-            <option value="collares">Collares</option>
-            <option value="aros">Aros</option>
-            <option value="pulseras">Pulseras</option>
-            <option value="anillos">Anillos</option>
-            <option value="tobilleras">Tobilleras</option>
-            <option value="brazaletes">Brazaletes</option>
-            <option value="earcuff">Earcuff</option>
-            <option value="armcuff">Armcuff</option>
-            <option value="gafas">Gafas</option>
-            <option value="joyeros">Joyeros</option>
+            <!-- Rest rebuilt live from Super Admin → Colecciones (see syncCategorySelects) -->
           </select>
           <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <button class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
@@ -411,7 +389,7 @@
                   <th style="padding:10px 16px;text-align:left">Imagen</th>
                   <th style="padding:10px 16px;text-align:left">Nombre</th>
                   <th style="padding:10px 16px;text-align:left">Categoría</th>
-                  <th style="padding:10px 16px;text-align:left">Colección</th>
+                  <th style="padding:10px 16px;text-align:left">Etiqueta</th>
                   <th style="padding:10px 16px;text-align:right">Precio</th>
                   <th style="padding:10px 16px;text-align:center">Stock</th>
                   <th style="padding:10px 16px;text-align:center">Estado</th>
@@ -444,24 +422,13 @@
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Categoría *</label>
               <select id="prod-category" class="adm-input">
                 <option value="">— Seleccionar —</option>
-                <option value="relojes">Relojes</option>
-                <option value="bolsos">Bolsos / Bags</option>
-                <option value="collares">Collares</option>
-                <option value="aros">Aros</option>
-                <option value="pulseras">Pulseras</option>
-                <option value="anillos">Anillos</option>
-                <option value="tobilleras">Tobilleras</option>
-                <option value="brazaletes">Brazaletes</option>
-                <option value="earcuff">Earcuff</option>
-                <option value="armcuff">Armcuff</option>
-                <option value="gafas">Gafas</option>
-                <option value="joyeros">Joyeros</option>
+                <!-- Rest rebuilt live from Super Admin → Colecciones (see syncCategorySelects) -->
               </select>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
-              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Colección</label>
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Etiqueta interna (opcional)</label>
               <input id="prod-collection" type="text" class="adm-input" placeholder="Ej: anillos dorados, collares acero…">
-              <small style="color:var(--adm-muted);font-size:11px">Permite agrupar productos. Ej: <code>anillos-dorados</code></small>
+              <small style="color:var(--adm-muted);font-size:11px">Solo para búsqueda/organización interna del panel — no es una Colección pública, esa se elige arriba en "Categoría".</small>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Precio (Gs.) *</label>
@@ -1581,6 +1548,7 @@ import {
 } from "./js/role-permissions.js";
 import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
+import { normalizeCollectionDoc } from "./js/collections-store.js";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -5434,15 +5402,21 @@ function collSlugify(s) {
     .replace(/^-+|-+$/g, '');
 }
 
+// No orderBy() in the query itself: a doc missing the `order` field would
+// silently drop out of an orderBy('order') query in Firestore — every
+// collection doc is fetched unconditionally, then sorted client-side
+// (normalizeCollectionDoc gives every doc a safe default order).
 function loadColecciones() {
   document.getElementById('coll-loading').style.display = '';
   document.getElementById('coll-grid-wrap').style.display = 'none';
   document.getElementById('coll-empty').style.display = 'none';
-  if (_collectionsUnsub) { renderColeccionesGrid(_allCollections); return; }
+  if (_collectionsUnsub) { renderColeccionesGrid(applyCollFilter(_allCollections)); return; }
   _collectionsUnsub = onSnapshot(
-    query(collection(db, 'collections'), orderBy('order')),
+    collection(db, 'collections'),
     snap => {
-      _allCollections = snap.docs.map(d => ({ slug: d.id, ...d.data() }));
+      _allCollections = snap.docs
+        .map(d => normalizeCollectionDoc(d.id, d.data()))
+        .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
       renderColeccionesGrid(applyCollFilter(_allCollections));
       syncCategorySelects();
     },
@@ -5456,21 +5430,25 @@ function loadColecciones() {
 
 // Any collection created in Super Admin → Colecciones automatically becomes
 // an assignable option in Productos (new/edit form, filter, bulk-assign).
+// Full rebuild every time (not just "add what's missing"): a renamed
+// collection must update its label here too, and a deleted one must
+// disappear — not linger as a stale static <option>. Hidden collections
+// stay selectable here on purpose: visibility only gates the PUBLIC site,
+// not what Super Admin/staff can manage from this panel.
 function syncCategorySelects() {
   ['prod-category', 'prod-filter-cat', 'bulk-category-input'].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
     const current = sel.value;
-    sel.querySelectorAll('option[data-dynamic]').forEach(o => o.remove());
-    const known = new Set([...sel.options].map(o => o.value));
+    // Keep only the placeholder option (always the first, never dynamic)
+    [...sel.options].slice(1).forEach(o => o.remove());
     _allCollections
-      .filter(c => c.visible !== false && !known.has(c.slug))
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .slice()
+      .sort((a, b) => a.order - b.order)
       .forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.slug;
-        opt.textContent = c.name || c.slug;
-        opt.dataset.dynamic = '1';
+        opt.textContent = c.name + (c.visible === false ? ' (oculta)' : '');
         sel.appendChild(opt);
       });
     if ([...sel.options].some(o => o.value === current)) sel.value = current;
@@ -5606,7 +5584,7 @@ function renderColeccionesGrid(list) {
     document.getElementById('coll-empty').style.display = '';
     document.getElementById('coll-grid-wrap').style.display = 'none';
     document.getElementById('coll-empty').innerHTML = `
-      No hay colecciones configuradas todavía — el sitio público está usando las 12 categorías por defecto.
+      No hay colecciones configuradas todavía — el sitio público no muestra ninguna colección hasta que crees al menos una.
       <div style="margin-top:14px"><button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collImportarDefaults()">Importar las 12 colecciones actuales</button></div>
     `;
     return;
@@ -5979,9 +5957,9 @@ window.collGuardar = async function() {
       await setDoc(doc(db, 'collections', slug), data);
       const affected = _allProducts.filter(p => (p.category || '') === originalSlug);
       if (affected.length) {
-        const batch = writeBatch(db);
-        affected.forEach(p => batch.update(doc(db, 'products', p._docId), { category: slug, updatedAt: serverTimestamp() }));
-        await batch.commit();
+        // Chunked (max 450/batch, Firestore hard-caps a batch at 500 writes)
+        // so a slug rename never silently fails on a collection with 500+ products.
+        await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: slug, updatedAt: serverTimestamp() }));
       }
       await deleteDoc(doc(db, 'collections', originalSlug));
       toast(`Colección renombrada — ${affected.length} producto(s) actualizados`);
@@ -6027,9 +6005,9 @@ window.collEliminar = async function(slug, count) {
     if (!confirm(`¿Mover ${count} producto(s) de "${label}" a "${targetSlug || '(sin colección)'}" y luego eliminar "${label}"?`)) return;
     try {
       const affected = _allProducts.filter(p => (p.category || '') === slug);
-      const batch = writeBatch(db);
-      affected.forEach(p => batch.update(doc(db, 'products', p._docId), { category: targetSlug, updatedAt: serverTimestamp() }));
-      await batch.commit();
+      // Chunked (max 450/batch) so reassigning 500+ products never silently
+      // fails on Firestore's 500-write batch cap.
+      await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
       await deleteDoc(doc(db, 'collections', slug));
       toast(`${affected.length} producto(s) movidos y "${label}" eliminada`);
     } catch (e) {
@@ -7341,7 +7319,7 @@ window.bulkDelete = async function() {
 };
 
 function productRowsToCsv_(products) {
-  const header = ['Nombre', 'Categoría', 'Colección', 'Precio', 'Stock', 'Activo'];
+  const header = ['Nombre', 'Categoría', 'Etiqueta', 'Precio', 'Stock', 'Activo'];
   const rows = products.map(p => [p.name || '', p.category || '', p.collection || '', p.price || 0, p.stock ?? '', p.active === false ? 'No' : 'Sí']);
   return [header, ...rows];
 }
