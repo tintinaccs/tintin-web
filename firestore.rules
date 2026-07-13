@@ -67,6 +67,13 @@ service cloud.firestore {
 
     /* ============================================================
        TINTIN — TIENDA ACTIVA / CERRADA
+
+       maintenanceAccess (mapa en settings/general) es el campo real que
+       escribe admin.html y lee js/store-gate-core.js — soporta 'guest'
+       para visitantes anónimos. (Un campo distinto, storeClosedAllowedRoles
+       como lista, había quedado en esta regla sin que ninguna pantalla lo
+       escribiera nunca: el toggle de accesos con tienda cerrada no tenía
+       ningún efecto real hasta este fix.)
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
@@ -83,16 +90,18 @@ service cloud.firestore {
 
     /* ============================================================
        TINTIN — ROLES Y PERMISOS DINÁMICOS
+
+       Cerrado por defecto: si Super Admin no habilitó un permiso de manera
+       explícita en rolePermissions/main, el rol NO lo tiene. Solo
+       'admin'/'agent'/'viewer' pueden llegar a tener una clave acá (ver
+       EDITABLE_ROLES en js/role-permissions.js) — cualquier otro rol
+       (incluido 'client') siempre cae en el default false.
        ============================================================ */
 
-    // Permitido por defecto: si Super Admin no tocó nada en
-    // rolePermissions/main, el rol conserva el comportamiento original
-    // (sin restricción extra) hasta que se configure explícitamente.
     function rolePermAllows(role, moduleKey, actionKey) {
-      return !exists(/databases/$(database)/documents/rolePermissions/main) || (
+      return exists(/databases/$(database)/documents/rolePermissions/main) &&
         get(/databases/$(database)/documents/rolePermissions/main).data
-          .get(role, {}).get(moduleKey, {}).get(actionKey, true) == true
-      );
+          .get(role, {}).get(moduleKey, {}).get(actionKey, false) == true;
     }
 
     function currentRolePermAllows(moduleKey, actionKey) {
@@ -134,9 +143,6 @@ service cloud.firestore {
         (!('pendingOrders' in request.resource.data) || request.resource.data.pendingOrders >= 0) &&
         (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
     }
-    // NOTA: settings/general público para lectura (checkout/envios necesitan
-    // costos/ciudades de envío) ya está resuelto más abajo, con la distinción
-    // admin/superadmin más reciente — ver "SETTINGS — SOLO SUPER ADMIN EDITA".
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
@@ -242,23 +248,21 @@ service cloud.firestore {
 
     /* ============================================================
        PRODUCTS / COLLECTIONS / CONTENT
-       ============================================================ */
 
-    // currentRolePermAllows() por sí sola NO alcanza como gate: si
-    // rolePermissions/main no existe, o si el rol/acción todavía no se tocó
-    // ahí, rolePermAllows() permite por defecto (a propósito — ver esa
-    // función) para cualquier ROL, incluido "client". Por eso cada uso de
-    // currentRolePermAllows() de acá abajo va SIEMPRE atrás de un
-    // isAdmin()/isAgent()/isViewer() explícito que ya limita a cuentas de
-    // staff reales — sin ese filtro, cualquier clienta logueada podía crear/
-    // editar productos, colecciones y contenido, y leer TODOS los pedidos
-    // ajenos con solo tener sesión iniciada.
-    // Catálogo público: cualquiera puede LEER productos y colecciones —
-    // visitante anónimo, cliente logueado o incluso una cuenta bloqueada —
-    // sin importar storeOpen/maintenanceAccess (eso solo debe frenar
-    // checkout/pedidos, nunca la posibilidad de ver la vidriera). Escribir
-    // sigue exigiendo Super Admin o un rol de staff con el permiso puntual
-    // habilitado, exactamente como antes.
+       currentRolePermAllows() por sí sola ya cae en false por defecto para
+       cualquier rol no configurado (ver rolePermAllows arriba) — el chequeo
+       explícito isAdmin()/isAgent()/isViewer() de acá abajo es una capa
+       extra de defensa (no cambia ningún comportamiento actual), para que
+       esto siga siendo seguro aunque el día de mañana se toque
+       rolePermAllows() o EDITABLE_ROLES.
+
+       Catálogo público: cualquiera puede LEER productos y colecciones —
+       visitante anónimo, cliente logueado o incluso una cuenta bloqueada —
+       sin importar storeOpen/maintenanceAccess (eso solo debe frenar
+       checkout/pedidos, nunca la posibilidad de ver la vidriera). Escribir
+       sigue exigiendo Super Admin o un rol de staff con el permiso puntual
+       habilitado.
+       ============================================================ */
     match /products/{productId} {
       allow read: if true;
       allow create: if isSuperAdmin() ||
@@ -281,8 +285,8 @@ service cloud.firestore {
     // 'crear'/'editar') — esas claves no existen en el catálogo de
     // js/role-permissions.js. Las claves reales son 'editarTextos' y
     // 'activarDesactivarSecciones'; con las claves viejas, rolePermAllows()
-    // nunca encontraba nada configurado y quedaba abierto para cualquier
-    // cuenta logueada, sin forma de cerrarlo desde Roles y Permisos.
+    // nunca encontraba nada configurado y Admin/Agente jamás podían editar
+    // contenido pase lo que pase con Roles y Permisos.
     match /site_content/{pageId} {
       allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
