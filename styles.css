@@ -1926,7 +1926,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border-radius: var(--radius-pill);
   box-shadow: 0 4px 32px rgba(0,0,0,0.15), 0 0 0 1px var(--border);
   padding: 8px 20px;
-  z-index: 950;
+  /* Por encima de .tt-collections-sheet (960) y su backdrop (959): el
+     dropup de colecciones cubre esta zona de la pantalla, y sin esto
+     tabbar-tienda queda tapado y no se puede volver a tocar para cerrarlo. */
+  z-index: 970;
   gap: 4px;
   align-items: center;
 }
@@ -1967,7 +1970,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   right: 0;
   background: var(--white);
   border-radius: 24px 24px 0 0;
-  padding: 0 0 env(safe-area-inset-bottom, 16px);
+  /* La tabbar flota fija a bottom:16px con ~56px de alto y queda por encima
+     (z-index 970) para seguir tocable con el sheet abierto — este padding
+     extra evita que su contenido (el botón "Ver todas las colecciones")
+     quede tapado detrás de ella. */
+  padding: 0 0 calc(env(safe-area-inset-bottom, 0px) + 88px);
   z-index: 960;
   transform: translateY(100%);
   transition: transform .35s cubic-bezier(0.4,0,0.2,1);

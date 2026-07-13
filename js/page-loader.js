@@ -9,7 +9,7 @@ if(window.TintinLoader)return;
 // hasta que ui-quality.js confirme que la inicialización estructural
 // terminó — ver css/ui-quality.css y js/ui-quality.js:boot().
 document.documentElement.classList.add('tt-initializing');
-var TT_CACHE_VERSION='tintin-20260711-4';
+var TT_CACHE_VERSION='tintin-20260711-5';
 var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
 var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
 var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false,hideGen=0;
