@@ -61,8 +61,8 @@ html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 
    scrollbar-color cubre Firefox; ::-webkit-scrollbar cubre Chrome/Safari/
    Edge — se degrada sola a la barra nativa del sistema en donde ninguna de
    las dos se soporte, así que no hace falta (ni conviene) simular una barra
-   con JS/divs. Selectores puntuales como .tt-quick-cats-inner ya ocultan su
-   propia scrollbar con más especificidad — siguen ganando sobre esta regla
+   con JS/divs. Selectores puntuales con su propia regla de scrollbar ya
+   ocultan la suya con más especificidad — siguen ganando sobre esta regla
    general sin tocarlos. */
 html {
   scrollbar-width: thin;
@@ -1195,49 +1195,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 .tt-hero-actions .tt-btn-outline:hover {
   background: rgba(0,0,0,0.06);
-}
-
-/* ═══════════════════════════════════════════════
-   QUICK CATEGORIES STRIP
-   Desktop (>1024px): hidden — TIENDA dropdown covers all categories
-   Tablet/Mobile (≤1024px): visible block after the hero section
-═══════════════════════════════════════════════ */
-.tt-quick-cats {
-  display: none; /* hidden on desktop */
-  background: var(--bg);
-  overflow: hidden;
-}
-
-.tt-quick-cats-inner {
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 8px;
-}
-.tt-quick-cats-inner::-webkit-scrollbar { display: none; }
-
-.tt-quick-cat {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  padding: 11px 14px;
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  flex-shrink: 0;
-}
-.tt-quick-cat:hover,
-.tt-quick-cat:focus-visible {
-  color: var(--pink-dark);
-  border-bottom-color: var(--pink-dark);
 }
 
 /* ═══════════════════════════════════════════════

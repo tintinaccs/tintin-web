@@ -46,7 +46,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260713-4';
+  const TT_CACHE_VERSION = 'tintin-20260713-5';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
