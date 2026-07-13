@@ -12,7 +12,9 @@ if (!window.TintinAdminEmailGateSyncBooted) {
 
   const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
   const PRIVATE_REF = doc(db, 'emailSettings', 'main');
-  const PUBLIC_REF = doc(db, 'settings', 'emailGate');
+  // Se reutiliza el documento público mínimo que ya existe y ya tiene reglas.
+  // Solo se agrega emailAccess; no se exponen destinatarios ni credenciales.
+  const PUBLIC_REF = doc(db, 'settings', 'storeGate');
 
   let privateState = { exists: false, data: {} };
   let publicState = { exists: false, data: {} };
@@ -35,7 +37,8 @@ if (!window.TintinAdminEmailGateSyncBooted) {
 
   function matches() {
     return publicState.exists &&
-      JSON.stringify(normalized(publicState.data)) === JSON.stringify(desired());
+      JSON.stringify(normalized(publicState.data?.emailAccess)) ===
+        JSON.stringify(desired());
   }
 
   async function sync() {
@@ -48,12 +51,12 @@ if (!window.TintinAdminEmailGateSyncBooted) {
     queued = false;
     try {
       await setDoc(PUBLIC_REF, {
-        ...desired(),
-        updatedAt: serverTimestamp()
-      });
+        emailAccess: desired(),
+        emailUpdatedAt: serverTimestamp()
+      }, { merge: true });
       window.dispatchEvent(new CustomEvent('tintin:email-gate-synced'));
     } catch (error) {
-      console.error('[admin-email-gate-sync] No se pudo sincronizar emailGate:', error);
+      console.error('[admin-email-gate-sync] No se pudo sincronizar storeGate.emailAccess:', error);
     } finally {
       syncing = false;
       if (queued) sync();
@@ -91,7 +94,7 @@ if (!window.TintinAdminEmailGateSyncBooted) {
         };
         sync();
       },
-      error => console.error('[admin-email-gate-sync] No se pudo leer settings/emailGate:', error)
+      error => console.error('[admin-email-gate-sync] No se pudo leer settings/storeGate:', error)
     );
   }
 
