@@ -360,15 +360,10 @@ service cloud.firestore {
        ============================================================ */
 
     match /orders/{orderId} {
-      allow create: if isStoreOpenOrAllowed() &&
-        isSignedIn() &&
-        !isBlockedUser() &&
-        request.auth.token.email != null &&
-        request.auth.token.email_verified == true &&
-        request.resource.data.userId == request.auth.uid &&
-        request.resource.data.userEmail is string &&
-        request.resource.data.userEmail.lower() ==
-          request.auth.token.email.lower();
+      // Los pedidos solo se crean mediante la Cloud Function createOrder.
+      // Firebase Admin no pasa por estas reglas; el navegador queda bloqueado
+      // para que no pueda inventar precios, totales ni stock.
+      allow create: if false;
 
       allow read: if isSuperAdmin() ||
         (

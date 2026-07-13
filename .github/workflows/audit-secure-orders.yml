@@ -1,0 +1,34 @@
+name: Auditoría de pedidos seguros
+
+on:
+  pull_request:
+    paths:
+      - 'functions/**'
+      - 'js/secure-checkout-order.js'
+      - 'js/cart-sync.js'
+      - 'firestore.rules'
+      - 'scripts/audit-secure-orders.js'
+      - 'package.json'
+      - '.github/workflows/audit-secure-orders.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis del servidor
+        run: |
+          node --check functions/index.js
+          node --check functions/create-order.js
+          node --check functions/main.js
+      - name: Revisar conexión y reglas
+        run: npm run audit:secure-orders
