@@ -1,0 +1,5 @@
+node --check functions/index.js
+node --check functions/create-order.js
+node --check functions/main.js
+node functions/create-order-smoke-test.js
+npm run audit:secure-orders
