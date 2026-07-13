@@ -191,8 +191,6 @@ function renderState() {
   }
 
   const open = latestGeneral.data.storeOpen === true;
-  // Corrige el criterio viejo "distinto de false": el switch refleja solamente
-  // true explícito, igual que el sitio y las reglas.
   dom.checkbox.checked = open;
   setPill(open);
 
@@ -269,3 +267,9 @@ async function boot() {
 }
 
 boot();
+
+// El mismo panel ya está protegido para Super Admin. Desde acá se carga el
+// sincronizador del documento público mínimo de correos.
+import('./admin-email-gate-sync.js?v=tintin-20260713-9').catch(error => {
+  console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
+});
