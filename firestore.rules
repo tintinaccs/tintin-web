@@ -25,7 +25,7 @@ service cloud.firestore {
     function currentRole() {
       return userDocExists()
         ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
-        : "visitor";
+        : "client";
     }
 
     function hasRole(role) {
@@ -68,23 +68,25 @@ service cloud.firestore {
     /* ============================================================
        TINTIN — TIENDA ACTIVA / CERRADA
 
-       maintenanceAccess (mapa en settings/general) es el campo real que
-       escribe admin.html y lee js/store-gate-core.js — soporta 'guest'
-       para visitantes anónimos. (Un campo distinto, storeClosedAllowedRoles
-       como lista, había quedado en esta regla sin que ninguna pantalla lo
-       escribiera nunca: el toggle de accesos con tienda cerrada no tenía
-       ningún efecto real hasta este fix.)
+       Fuente única: settings/general.storeOpen + maintenanceAccess.
+       Seguro por defecto: si settings/general no existe o storeOpen falta,
+       la tienda se considera cerrada. Solo Super Admin puede entrar y crear/
+       corregir la configuración en ese caso.
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
       return isSuperAdmin() ||
-        !exists(/databases/$(database)/documents/settings/general) ||
-        get(/databases/$(database)/documents/settings/general).data.storeOpen != false ||
         (
-          !isBlockedUser() &&
-          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess is map &&
-          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess
-            .get(isSignedIn() ? currentRole() : 'guest', false) == true
+          exists(/databases/$(database)/documents/settings/general) &&
+          (
+            get(/databases/$(database)/documents/settings/general).data.storeOpen == true ||
+            (
+              !isBlockedUser() &&
+              get(/databases/$(database)/documents/settings/general).data.maintenanceAccess is map &&
+              get(/databases/$(database)/documents/settings/general).data.maintenanceAccess
+                .get(isSignedIn() ? currentRole() : 'guest', false) == true
+            )
+          )
         );
     }
 
@@ -144,6 +146,12 @@ service cloud.firestore {
         (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
     }
 
+    function loginMetadataOnlyUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'lastLogin', 'updatedAt'
+      ]);
+    }
+
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
         'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason', 'roleBeforeBlock',
@@ -159,6 +167,8 @@ service cloud.firestore {
        ============================================================ */
 
     match /settings/general {
+      // Debe seguir siendo legible para que cualquier página pueda saber si
+      // corresponde abrirse, cerrarse o mostrar un error de comprobación.
       allow read: if true;
       allow write: if isSuperAdmin();
     }
@@ -182,11 +192,15 @@ service cloud.firestore {
        ============================================================ */
 
     match /users/{userId} {
+      // El login necesita leer su propia ficha para resolver el rol antes de
+      // decidir si tiene excepción de mantenimiento. Esto no abre catálogo,
+      // pedidos ni carrito: esos recursos siguen cerrados por separado.
       allow read: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
 
+      // Se permite crear la ficha mínima de la propia cuenta aun con la tienda
+      // cerrada para completar el login; después el gate decide si puede entrar.
       allow create: if isSignedIn() &&
         request.auth.uid == userId &&
-        isStoreOpenOrAllowed() &&
         (
           !('email' in request.resource.data) ||
           (
@@ -213,8 +227,10 @@ service cloud.firestore {
         (
           request.auth.uid == userId &&
           !isBlockedUser() &&
-          isStoreOpenOrAllowed() &&
-          !protectedUserFieldsChanged()
+          (
+            (isStoreOpenOrAllowed() && !protectedUserFieldsChanged()) ||
+            loginMetadataOnlyUpdate()
+          )
         ) ||
         (
           isStoreOpenOrAllowed() &&
@@ -249,22 +265,13 @@ service cloud.firestore {
     /* ============================================================
        PRODUCTS / COLLECTIONS / CONTENT
 
-       currentRolePermAllows() por sí sola ya cae en false por defecto para
-       cualquier rol no configurado (ver rolePermAllows arriba) — el chequeo
-       explícito isAdmin()/isAgent()/isViewer() de acá abajo es una capa
-       extra de defensa (no cambia ningún comportamiento actual), para que
-       esto siga siendo seguro aunque el día de mañana se toque
-       rolePermAllows() o EDITABLE_ROLES.
-
-       Catálogo público: cualquiera puede LEER productos y colecciones —
-       visitante anónimo, cliente logueado o incluso una cuenta bloqueada —
-       sin importar storeOpen/maintenanceAccess (eso solo debe frenar
-       checkout/pedidos, nunca la posibilidad de ver la vidriera). Escribir
-       sigue exigiendo Super Admin o un rol de staff con el permiso puntual
-       habilitado.
+       Cuando la tienda está cerrada, los datos comerciales también quedan
+       cerrados. La pantalla visual y Firebase aplican la misma decisión:
+       solo Super Admin o un rol incluido en maintenanceAccess puede leerlos.
+       Escribir sigue exigiendo además el permiso puntual del rol.
        ============================================================ */
     match /products/{productId} {
-      allow read: if true;
+      allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
         (isStoreOpenOrAllowed() && (isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('productos', 'crear'));
       allow update: if isSuperAdmin() ||
@@ -273,7 +280,7 @@ service cloud.firestore {
     }
 
     match /collections/{collectionId} {
-      allow read: if true;
+      allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
         (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'crear'));
       allow update: if isSuperAdmin() ||
@@ -284,9 +291,7 @@ service cloud.firestore {
     // El panel (admin.html) nunca llama a currentRolePermAllows('contenido',
     // 'crear'/'editar') — esas claves no existen en el catálogo de
     // js/role-permissions.js. Las claves reales son 'editarTextos' y
-    // 'activarDesactivarSecciones'; con las claves viejas, rolePermAllows()
-    // nunca encontraba nada configurado y Admin/Agente jamás podían editar
-    // contenido pase lo que pase con Roles y Permisos.
+    // 'activarDesactivarSecciones'.
     match /site_content/{pageId} {
       allow read: if isStoreOpenOrAllowed();
       allow create: if isSuperAdmin() ||
