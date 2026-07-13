@@ -1,87 +1,492 @@
-(function(){
-'use strict';
-if(window.TintinLoader)return;
-// scroll-behavior:smooth es global (css/ui-quality.css) para que los links
-// "volver arriba" y anclas del usuario animen — pero durante la carga
-// inicial eso puede convertir un reposicionamiento síncrono (topOnReload)
-// en un desplazamiento animado y visible. Esta clase, agregada lo antes
-// posible (primer script clásico del <head>), fuerza scroll-behavior:auto
-// hasta que ui-quality.js confirme que la inicialización estructural
-// terminó — ver css/ui-quality.css y js/ui-quality.js:boot().
-document.documentElement.classList.add('tt-initializing');
-var TT_CACHE_VERSION='tintin-20260713-3';
-var MIN_SHOW_MS=520,SAFETY_MS=4200,START=Date.now();
-var SCRIPT_SRC=document.currentScript&&document.currentScript.src;
-var scrollLockCount=0,savedScrollY=0,previousBodyStyle=null,previousHtmlStyle=null,hidden=false,contentReady=false,logoReady=false,inserted=false,hideGen=0;
-function versionUrl(url){try{var u=new URL(url,location.href);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
-function resolveAsset(path,withVersion){var url=path;try{if(SCRIPT_SRC)url=new URL('../'+path,SCRIPT_SRC).href}catch(e){}return withVersion===false?url:versionUrl(url)}
-function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
-function savedLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return ''}
-// Imagen del loader según la página: la home usa el logo principal; el
-// resto de las páginas usa una imagen "secundaria" configurable acá sin
-// tocar el resto del sistema. Hoy no existe un asset distinto para las
-// páginas internas (los únicos candidatos son logo-splash/logo-tintin,
-// que son los logos viejos retirados — ver isOldLogo()), así que las dos
-// constantes apuntan al mismo logo.png por ahora.
-var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
-var INNER_LOADER_IMAGE='assets-tintin/images/general/logo.png';
-function isHomePage(){var path=(location.pathname||'').toLowerCase();return path.endsWith('/index.html')||/\/$/.test(path)}
-var DEFAULT_LOGO_SRC=resolveAsset(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE);
-var LOGO_SRC=savedLogo()||DEFAULT_LOGO_SRC;
-// Home: únicamente el logo, con animación de entrada + "respiración" (sin
-// ring/spinner/aro). Resto de páginas: mismo logo + 3 puntitos debajo (ver
-// isHomePage() más abajo, decide qué markup se inserta) — pedido explícito
-// para diferenciar el loader de home del de las páginas internas.
-var CSS=['html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}','body.tt-scroll-locked{position:fixed!important;left:0!important;right:0!important;width:100%!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}','#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFF6FA;transition:opacity .38s ease,visibility .38s ease;overflow:hidden;overscroll-behavior:none;touch-action:none}','#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}','#tt-loader-spin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}','#tt-loader-logo{position:relative;z-index:1;width:clamp(180px,15vw,230px);max-width:72vw;height:auto;object-fit:contain;display:block;opacity:0;transform:scale(.96);filter:drop-shadow(0 8px 22px rgba(212,106,138,.18));user-select:none;pointer-events:none}','#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-breathe 2.6s ease-in-out .5s infinite}','@keyframes tt-logo-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}','@keyframes tt-logo-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}','@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}','@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}','@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}','.tt-loader-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;opacity:0}','#tt-loader-spin-wrap.tt-ready .tt-loader-dots{opacity:1;transition:opacity .3s ease .15s}','.tt-loader-dots span{width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#D46A8A);opacity:.35;animation:tt-loader-dot-bounce 1.1s ease-in-out infinite}','.tt-loader-dots span:nth-child(2){animation-delay:.15s}','.tt-loader-dots span:nth-child(3){animation-delay:.3s}','@keyframes tt-loader-dot-bounce{0%,80%,100%{transform:scale(.72);opacity:.35}40%{transform:scale(1.15);opacity:1}}','@media (prefers-reduced-motion:reduce){.tt-loader-dots span{animation:none;opacity:.75}}'].join('');
-if(!document.getElementById('tt-loader-style')){var st=document.createElement('style');st.id='tt-loader-style';st.textContent=CSS;document.head.appendChild(st)}
-function lockScroll(){scrollLockCount+=1;if(scrollLockCount>1)return;savedScrollY=window.scrollY||document.documentElement.scrollTop||0;previousBodyStyle=document.body?{position:document.body.style.position,top:document.body.style.top,left:document.body.style.left,right:document.body.style.right,width:document.body.style.width,overflow:document.body.style.overflow,touchAction:document.body.style.touchAction}:null;previousHtmlStyle={overflow:document.documentElement.style.overflow,overscrollBehavior:document.documentElement.style.overscrollBehavior};document.documentElement.classList.add('tt-scroll-locked');document.documentElement.style.overflow='hidden';document.documentElement.style.overscrollBehavior='none';if(document.body){document.body.classList.add('tt-scroll-locked');document.body.style.position='fixed';document.body.style.top='-'+savedScrollY+'px';document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';document.body.style.overflow='hidden';document.body.style.touchAction='none'}}
-function unlockScroll(){if(scrollLockCount>0)scrollLockCount-=1;if(scrollLockCount>0)return;document.documentElement.classList.remove('tt-scroll-locked');document.documentElement.style.overflow=previousHtmlStyle?previousHtmlStyle.overflow:'';document.documentElement.style.overscrollBehavior=previousHtmlStyle?previousHtmlStyle.overscrollBehavior:'';if(document.body){document.body.classList.remove('tt-scroll-locked');if(previousBodyStyle){document.body.style.position=previousBodyStyle.position;document.body.style.top=previousBodyStyle.top;document.body.style.left=previousBodyStyle.left;document.body.style.right=previousBodyStyle.right;document.body.style.width=previousBodyStyle.width;document.body.style.overflow=previousBodyStyle.overflow;document.body.style.touchAction=previousBodyStyle.touchAction}else{document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';document.body.style.overflow='';document.body.style.touchAction=''}}window.scrollTo(0,savedScrollY||0)}
-window.TintinScrollLock={lock:lockScroll,unlock:unlockScroll};
-var DOTS_HTML='<div class="tt-loader-dots"><span></span><span></span><span></span></div>';
-var el=document.createElement('div');el.id='tt-loader';el.setAttribute('aria-hidden','true');el.setAttribute('role','presentation');el.dataset.state='show';el.innerHTML='<div id="tt-loader-spin-wrap"><img id="tt-loader-logo" src="'+LOGO_SRC+'" alt="" draggable="false" fetchpriority="high" width="220" height="220">'+(isHomePage()?'':DOTS_HTML)+'</div>';
-var logo=el.querySelector('#tt-loader-logo');
-// Se espera a que la imagen termine de cargar (load/error) antes de dejar
-// que el loader se oculte — así en una conexión lenta nunca desaparece
-// mostrando el logo a medio decodificar o directamente en blanco.
-function markLogoReady(){logoReady=true;var wrap=document.getElementById('tt-loader-spin-wrap');if(wrap)wrap.classList.add('tt-ready');if(contentReady)tryHideElegant()}
-logo.addEventListener('load',markLogoReady,{once:true});
-logo.addEventListener('error',function onLogoError(){if(logo.src!==DEFAULT_LOGO_SRC){logo.src=DEFAULT_LOGO_SRC}else{logo.removeEventListener('error',onLogoError);logoReady=true;logo.style.display='none';var wrap=document.getElementById('tt-loader-spin-wrap');if(wrap)wrap.classList.add('tt-ready');if(contentReady)tryHideElegant()}});
-if(logo.complete&&logo.naturalWidth>0)markLogoReady();
-function insert(){if(inserted)return;if(!document.getElementById('tt-loader')&&document.body){inserted=true;document.body.insertBefore(el,document.body.firstChild);requestAnimationFrame(function(){requestAnimationFrame(function(){var img=document.getElementById('tt-loader-logo');var wrap=document.getElementById('tt-loader-spin-wrap');if(img&&img.complete)markLogoReady();else if(wrap)wrap.classList.add('tt-ready')})})}}
-function waitForBody(){if(document.body){insert();return}requestAnimationFrame(waitForBody)}
-waitForBody();
-function hideNow(){
- if(hidden)return;
- hidden=true;
- el.dataset.state='out';
- // El .tt-out del CSS ya pone pointer-events:none, pero se fija acá también
- // como estilo inline (gana cualquier ambigüedad de cascada/timing) para que
- // el primer gesto táctil real nunca quede compitiendo por el hit-test del
- // loader mientras todavía está en el DOM haciendo su fade — esto es lo que
- // en algunos navegadores mobile puede sentirse como que el primer scroll
- // "no responde" aunque visualmente el loader ya esté desapareciendo.
- el.style.touchAction='auto';
- el.style.pointerEvents='none';
- el.classList.add('tt-out');
- var gen=++hideGen;
- function detach(){if(gen!==hideGen)return;if(hidden)el.style.display='none'}
- el.addEventListener('transitionend',detach,{once:true});
- setTimeout(detach,450);
-}
-function tryHideElegant(){if(hidden)return;var enough=Date.now()-START>=MIN_SHOW_MS;if(!enough||!logoReady){var wait=Math.max(0,MIN_SHOW_MS-(Date.now()-START));setTimeout(tryHideElegant,Math.max(wait,140));return}el.dataset.state='ready';hideNow()}
-function ready(){if(contentReady)return;contentReady=true;tryHideElegant()}
-function show(){hideGen++;hidden=false;contentReady=false;logoReady=!!(logo&&logo.complete);el.dataset.state='show';el.style.display='';el.style.touchAction='';el.style.pointerEvents='';el.classList.remove('tt-out')}
-function setText(){}
-function importSibling(fileName,label){var url='js/'+fileName;try{if(SCRIPT_SRC)url=new URL(fileName,SCRIPT_SRC).href}catch(e){}url=versionUrl(url);return import(url).catch(function(e){console.warn('[PageLoader] No se pudo cargar '+label+':',e)})}
-function currentPath(){return(location.pathname||'').toLowerCase()}
-function bootGlobalQuality(){if(!window.TintinUIQualityBooted)importSibling('ui-quality.js','UI Quality')}
-function bootStoreGate(){var path=currentPath();var handledByOwnGuard=path.endsWith('/admin.html')||path.endsWith('/admin')||path.endsWith('/login.html')||path.endsWith('/login');if(handledByOwnGuard)return;if(!window.TT_DISABLE_STORE_GATE&&!window.TintinStoreGateBooted){window.TintinStoreGateBooted=true;importSibling('store-gate.js','Store Gate')}}
-function bootHeaderMode(){if(!window.TintinHeaderModeBooted)importSibling('mobile-header-mode.js','Header Mode')}
-function bootHeaderDropdownFix(){if(!window.TintinHeaderDropdownFixBooted)importSibling('header-dropdown-fix.js','Header Dropdown Fix')}
-function bootHeaderScrollHide(){if(!window.TintinHeaderScrollHideBooted)importSibling('header-scroll-hide.js','Header Scroll Hide')}
-function bootAdminAndProfileFixes(){var path=currentPath();if(path.endsWith('/admin.html')||path.endsWith('/admin')){importSibling('admin-order-delete-fix.js','Admin Order Delete Fix');importSibling('admin-welcome-control.js','Admin Welcome Control');importSibling('admin-mobile-sidebar-fix.js','Admin Mobile Sidebar Fix');importSibling('admin-store-control.js','Admin Store State Sync')}if(path.endsWith('/perfil.html')||path.endsWith('/perfil'))importSibling('profile-order-stats-fix.js','Profile Order Stats Fix')}
-function bootScrollReveal(){if(!window.TintinGlobalScrollRevealBooted)importSibling('scroll-reveal-global.js','Global Scroll Reveal')}
-bootGlobalQuality();bootStoreGate();bootHeaderMode();bootHeaderDropdownFix();bootHeaderScrollHide();bootAdminAndProfileFixes();bootScrollReveal();
-document.addEventListener('tintin:page-ready',ready);if(!window.TT_PAGE_LOADER_WAIT)window.addEventListener('load',ready);setTimeout(function(){logoReady=true;ready();hideNow()},SAFETY_MS);
-window.TintinLoader={ready:ready,hide:hideNow,show:show,setText:setText,lockScroll:lockScroll,unlockScroll:unlockScroll};window.ttPageReady=ready;
+(function () {
+  'use strict';
+
+  if (window.TintinLoader) return;
+
+  const documentElement = document.documentElement;
+  const path = (window.location.pathname || '').toLowerCase();
+  const isOwnGuardPage =
+    path.endsWith('/admin.html') ||
+    path.endsWith('/admin') ||
+    path.endsWith('/login.html') ||
+    path.endsWith('/login');
+  const isLoginPage =
+    path.endsWith('/login.html') ||
+    path.endsWith('/login');
+
+  // Evita que ?from= pueda mandar a una cuenta autorizada fuera de Tintin.
+  // Los regresos normales del sitio son rutas relativas como checkout.html.
+  if (isLoginPage) {
+    try {
+      const url = new URL(window.location.href);
+      const from = url.searchParams.get('from') || '';
+      const unsafeFrom =
+        /^(?:[a-z][a-z0-9+.-]*:|\/\/|\\)/i.test(from) ||
+        from.includes('..');
+      if (from && unsafeFrom) {
+        url.searchParams.delete('from');
+        window.history.replaceState(null, '', url.href);
+      }
+    } catch {}
+  }
+  const isLocalDevelopment =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '[::1]';
+  // El bypass existe solo para desarrollo local. En producción no se puede
+  // apagar el control global escribiendo TT_DISABLE_STORE_GATE en la consola.
+  const storeGateRequired =
+    !isOwnGuardPage &&
+    !(isLocalDevelopment && window.TT_DISABLE_STORE_GATE === true);
+
+  documentElement.classList.add('tt-initializing');
+  if (storeGateRequired) {
+    // Se agrega antes de que exista <body>. Así ninguna página pública puede
+    // pintar su contenido antes de comprobar Firebase.
+    documentElement.classList.add('tt-store-gate-pending');
+  }
+
+  const TT_CACHE_VERSION = 'tintin-20260713-4';
+  const MIN_SHOW_MS = 520;
+  const STORE_GATE_TIMEOUT_MS = 4500;
+  const SAFETY_MS = 5200;
+  const START = Date.now();
+  const SCRIPT_SRC = document.currentScript && document.currentScript.src;
+
+  let scrollLockCount = 0;
+  let savedScrollY = 0;
+  let previousBodyStyle = null;
+  let previousHtmlStyle = null;
+  let hidden = false;
+  let contentReady = false;
+  let logoReady = false;
+  let inserted = false;
+  let hideGen = 0;
+  let gateResolved = !storeGateRequired;
+  let gateEmergencyShown = false;
+
+  function versionUrl(url) {
+    try {
+      const parsed = new URL(url, window.location.href);
+      parsed.searchParams.set('v', TT_CACHE_VERSION);
+      return parsed.href;
+    } catch {
+      return url + (url.includes('?') ? '&' : '?') + 'v=' + TT_CACHE_VERSION;
+    }
+  }
+
+  function resolveAsset(assetPath, withVersion = true) {
+    let url = assetPath;
+    try {
+      if (SCRIPT_SRC) url = new URL('../' + assetPath, SCRIPT_SRC).href;
+    } catch {}
+    return withVersion ? versionUrl(url) : url;
+  }
+
+  function currentPath() {
+    return (window.location.pathname || '').toLowerCase();
+  }
+
+  function isHomePage() {
+    const current = currentPath();
+    return current.endsWith('/index.html') || /\/$/.test(current);
+  }
+
+  function isOldLogo(url) {
+    return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url || ''));
+  }
+
+  function savedLogo() {
+    try {
+      const data = JSON.parse(window.localStorage.getItem('tt_images') || '{}');
+      const url = data && data.logo_main;
+      if (url && !isOldLogo(url)) return url;
+    } catch {}
+    return '';
+  }
+
+  const HOME_LOADER_IMAGE = 'assets-tintin/images/general/logo.png';
+  const INNER_LOADER_IMAGE = 'assets-tintin/images/general/logo.png';
+  const DEFAULT_LOGO_SRC = resolveAsset(isHomePage() ? HOME_LOADER_IMAGE : INNER_LOADER_IMAGE);
+  const LOGO_SRC = savedLogo() || DEFAULT_LOGO_SRC;
+
+  const CSS = [
+    'html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
+    'body.tt-scroll-locked{position:fixed!important;left:0!important;right:0!important;width:100%!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
+    'html.tt-store-gate-pending,html.tt-store-gate-blocked{background:#FFF6FA!important}',
+    'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
+    'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
+    '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
+    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFF6FA;transition:opacity .38s ease,visibility .38s ease;overflow:hidden;overscroll-behavior:none;touch-action:none}',
+    '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
+    '#tt-loader-spin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}',
+    '#tt-loader-logo{position:relative;z-index:1;width:clamp(180px,15vw,230px);max-width:72vw;height:auto;object-fit:contain;display:block;opacity:0;transform:scale(.96);filter:drop-shadow(0 8px 22px rgba(212,106,138,.18));user-select:none;pointer-events:none}',
+    '#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-breathe 2.6s ease-in-out .5s infinite}',
+    '@keyframes tt-logo-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}',
+    '@keyframes tt-logo-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}',
+    '@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}',
+    '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}',
+    '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
+    '.tt-loader-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;opacity:0}',
+    '#tt-loader-spin-wrap.tt-ready .tt-loader-dots{opacity:1;transition:opacity .3s ease .15s}',
+    '.tt-loader-dots span{width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#D46A8A);opacity:.35;animation:tt-loader-dot-bounce 1.1s ease-in-out infinite}',
+    '.tt-loader-dots span:nth-child(2){animation-delay:.15s}',
+    '.tt-loader-dots span:nth-child(3){animation-delay:.3s}',
+    '@keyframes tt-loader-dot-bounce{0%,80%,100%{transform:scale(.72);opacity:.35}40%{transform:scale(1.15);opacity:1}}',
+    '@media (prefers-reduced-motion:reduce){.tt-loader-dots span{animation:none;opacity:.75}}'
+  ].join('');
+
+  if (!document.getElementById('tt-loader-style')) {
+    const style = document.createElement('style');
+    style.id = 'tt-loader-style';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  function lockScroll() {
+    scrollLockCount += 1;
+    if (scrollLockCount > 1) return;
+
+    savedScrollY = window.scrollY || documentElement.scrollTop || 0;
+    previousBodyStyle = document.body
+      ? {
+          position: document.body.style.position,
+          top: document.body.style.top,
+          left: document.body.style.left,
+          right: document.body.style.right,
+          width: document.body.style.width,
+          overflow: document.body.style.overflow,
+          touchAction: document.body.style.touchAction
+        }
+      : null;
+    previousHtmlStyle = {
+      overflow: documentElement.style.overflow,
+      overscrollBehavior: documentElement.style.overscrollBehavior
+    };
+
+    documentElement.classList.add('tt-scroll-locked');
+    documentElement.style.overflow = 'hidden';
+    documentElement.style.overscrollBehavior = 'none';
+
+    if (document.body) {
+      document.body.classList.add('tt-scroll-locked');
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + savedScrollY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    }
+  }
+
+  function unlockScroll() {
+    if (scrollLockCount > 0) scrollLockCount -= 1;
+    if (scrollLockCount > 0) return;
+
+    documentElement.classList.remove('tt-scroll-locked');
+    documentElement.style.overflow = previousHtmlStyle ? previousHtmlStyle.overflow : '';
+    documentElement.style.overscrollBehavior = previousHtmlStyle
+      ? previousHtmlStyle.overscrollBehavior
+      : '';
+
+    if (document.body) {
+      document.body.classList.remove('tt-scroll-locked');
+      if (previousBodyStyle) {
+        document.body.style.position = previousBodyStyle.position;
+        document.body.style.top = previousBodyStyle.top;
+        document.body.style.left = previousBodyStyle.left;
+        document.body.style.right = previousBodyStyle.right;
+        document.body.style.width = previousBodyStyle.width;
+        document.body.style.overflow = previousBodyStyle.overflow;
+        document.body.style.touchAction = previousBodyStyle.touchAction;
+      } else {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+      }
+    }
+    window.scrollTo(0, savedScrollY || 0);
+  }
+
+  window.TintinScrollLock = { lock: lockScroll, unlock: unlockScroll };
+
+  const DOTS_HTML =
+    '<div class="tt-loader-dots"><span></span><span></span><span></span></div>';
+  const loader = document.createElement('div');
+  loader.id = 'tt-loader';
+  loader.setAttribute('aria-hidden', 'true');
+  loader.setAttribute('role', 'presentation');
+  loader.dataset.state = 'show';
+  loader.innerHTML =
+    '<div id="tt-loader-spin-wrap"><img id="tt-loader-logo" src="' +
+    LOGO_SRC +
+    '" alt="" draggable="false" fetchpriority="high" width="220" height="220">' +
+    (isHomePage() ? '' : DOTS_HTML) +
+    '</div>';
+
+  const logo = loader.querySelector('#tt-loader-logo');
+
+  function markLogoReady() {
+    logoReady = true;
+    const wrap = document.getElementById('tt-loader-spin-wrap');
+    if (wrap) wrap.classList.add('tt-ready');
+    if (contentReady) tryHideElegant();
+  }
+
+  logo.addEventListener('load', markLogoReady, { once: true });
+  logo.addEventListener('error', function onLogoError() {
+    if (logo.src !== DEFAULT_LOGO_SRC) {
+      logo.src = DEFAULT_LOGO_SRC;
+    } else {
+      logo.removeEventListener('error', onLogoError);
+      logoReady = true;
+      logo.style.display = 'none';
+      const wrap = document.getElementById('tt-loader-spin-wrap');
+      if (wrap) wrap.classList.add('tt-ready');
+      if (contentReady) tryHideElegant();
+    }
+  });
+  if (logo.complete && logo.naturalWidth > 0) markLogoReady();
+
+  function insertLoader() {
+    if (inserted || !document.body) return;
+    if (!document.getElementById('tt-loader')) {
+      inserted = true;
+      document.body.insertBefore(loader, document.body.firstChild);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const img = document.getElementById('tt-loader-logo');
+          const wrap = document.getElementById('tt-loader-spin-wrap');
+          if (img && img.complete) markLogoReady();
+          else if (wrap) wrap.classList.add('tt-ready');
+        });
+      });
+    }
+  }
+
+  function waitForBody(callback) {
+    if (document.body) {
+      callback();
+      return;
+    }
+    requestAnimationFrame(() => waitForBody(callback));
+  }
+
+  waitForBody(insertLoader);
+
+  function hideNow() {
+    if (hidden) return;
+    hidden = true;
+    loader.dataset.state = 'out';
+    loader.style.touchAction = 'auto';
+    loader.style.pointerEvents = 'none';
+    loader.classList.add('tt-out');
+
+    const generation = ++hideGen;
+    function detach() {
+      if (generation !== hideGen) return;
+      if (hidden) loader.style.display = 'none';
+    }
+    loader.addEventListener('transitionend', detach, { once: true });
+    window.setTimeout(detach, 450);
+  }
+
+  function tryHideElegant() {
+    if (hidden) return;
+    const enough = Date.now() - START >= MIN_SHOW_MS;
+    if (!enough || !logoReady) {
+      const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - START));
+      window.setTimeout(tryHideElegant, Math.max(wait, 140));
+      return;
+    }
+    loader.dataset.state = 'ready';
+    hideNow();
+  }
+
+  function ready() {
+    if (contentReady) return;
+    contentReady = true;
+    tryHideElegant();
+  }
+
+  function show() {
+    hideGen += 1;
+    hidden = false;
+    contentReady = false;
+    logoReady = !!(logo && logo.complete);
+    loader.dataset.state = 'show';
+    loader.style.display = '';
+    loader.style.touchAction = '';
+    loader.style.pointerEvents = '';
+    loader.classList.remove('tt-out');
+  }
+
+  function setText() {}
+
+  function buildEmergencyLoginUrl() {
+    const current =
+      (window.location.pathname.split('/').pop() || 'index.html') +
+      window.location.search +
+      window.location.hash;
+    return 'login.html?from=' + encodeURIComponent(current);
+  }
+
+  function lockEmergencySiblings() {
+    if (!document.body) return;
+    Array.from(document.body.children).forEach(node => {
+      if (node.id === 'tt-loader' || node.id === 'tt-store-closed-overlay') return;
+      if (node.dataset.ttEmergencyInert !== '1') {
+        node.dataset.ttEmergencyInert = '1';
+        node.dataset.ttEmergencyPrevInert = node.inert ? '1' : '0';
+        node.dataset.ttEmergencyHadAria = node.hasAttribute('aria-hidden') ? '1' : '0';
+        node.dataset.ttEmergencyPrevAria = node.getAttribute('aria-hidden') || '';
+      }
+      node.inert = true;
+      node.setAttribute('aria-hidden', 'true');
+    });
+  }
+
+  function showEmergencyStoreGate() {
+    if (!storeGateRequired || gateResolved) return;
+
+    gateEmergencyShown = true;
+    waitForBody(() => {
+      if (gateResolved) return;
+      documentElement.classList.remove('tt-store-gate-pending');
+      documentElement.classList.add('tt-store-gate-blocked');
+      lockEmergencySiblings();
+
+      let overlay = document.getElementById('tt-store-closed-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'tt-store-closed-overlay';
+        overlay.style.cssText =
+          'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+        document.body.appendChild(overlay);
+      }
+      overlay.innerHTML =
+        '<div role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title" style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:36px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">' +
+        '<div style="font-size:40px;margin-bottom:14px">⚠️</div>' +
+        '<div id="tt-store-gate-title" style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">No pudimos comprobar el estado de la tienda</div>' +
+        '<p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">Por seguridad, el sitio permanece bloqueado. Podés reintentar o iniciar sesión como parte del equipo.</p>' +
+        '<div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">' +
+        '<button type="button" id="tt-store-gate-emergency-retry" style="border:0;background:#8b2642;color:#fff;padding:12px 26px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer">Reintentar</button>' +
+        '<a href="' +
+        buildEmergencyLoginUrl() +
+        '" style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Iniciar sesión</a>' +
+        '</div></div>';
+      overlay
+        .querySelector('#tt-store-gate-emergency-retry')
+        ?.addEventListener('click', () => window.location.reload());
+    });
+  }
+
+  function importSibling(fileName, label, onError) {
+    let url = 'js/' + fileName;
+    try {
+      if (SCRIPT_SRC) url = new URL(fileName, SCRIPT_SRC).href;
+    } catch {}
+    url = versionUrl(url);
+    return import(url).catch(error => {
+      console.warn('[PageLoader] No se pudo cargar ' + label + ':', error);
+      if (typeof onError === 'function') onError(error);
+      return null;
+    });
+  }
+
+  function bootGlobalQuality() {
+    if (!window.TintinUIQualityBooted) {
+      importSibling('ui-quality.js', 'UI Quality');
+    }
+  }
+
+  function bootStoreGate() {
+    if (!storeGateRequired) return;
+    importSibling('store-gate.js', 'Store Gate', showEmergencyStoreGate);
+  }
+
+  function bootHeaderMode() {
+    if (!window.TintinHeaderModeBooted) {
+      importSibling('mobile-header-mode.js', 'Header Mode');
+    }
+  }
+
+  function bootHeaderDropdownFix() {
+    if (!window.TintinHeaderDropdownFixBooted) {
+      importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
+    }
+  }
+
+  function bootHeaderScrollHide() {
+    if (!window.TintinHeaderScrollHideBooted) {
+      importSibling('header-scroll-hide.js', 'Header Scroll Hide');
+    }
+  }
+
+  function bootAdminAndProfileFixes() {
+    const current = currentPath();
+    if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
+      importSibling('admin-order-delete-fix.js', 'Admin Order Delete Fix');
+      importSibling('admin-welcome-control.js', 'Admin Welcome Control');
+      importSibling('admin-mobile-sidebar-fix.js', 'Admin Mobile Sidebar Fix');
+      importSibling('admin-store-control.js', 'Admin Store State Sync');
+    }
+    if (current.endsWith('/perfil.html') || current.endsWith('/perfil')) {
+      importSibling('profile-order-stats-fix.js', 'Profile Order Stats Fix');
+    }
+  }
+
+  function bootScrollReveal() {
+    if (!window.TintinGlobalScrollRevealBooted) {
+      importSibling('scroll-reveal-global.js', 'Scroll Reveal');
+    }
+  }
+
+  if (storeGateRequired) {
+    window.addEventListener(
+      'tintin:store-gate-state',
+      () => {
+        gateResolved = true;
+      },
+      { passive: true }
+    );
+    window.setTimeout(() => {
+      if (!gateResolved) showEmergencyStoreGate();
+    }, STORE_GATE_TIMEOUT_MS);
+  }
+
+  bootGlobalQuality();
+  bootStoreGate();
+  bootHeaderMode();
+  bootHeaderDropdownFix();
+  bootHeaderScrollHide();
+  bootAdminAndProfileFixes();
+  bootScrollReveal();
+
+  document.addEventListener('tintin:page-ready', ready);
+  if (!window.TT_PAGE_LOADER_WAIT) window.addEventListener('load', ready);
+
+  window.setTimeout(() => {
+    logoReady = true;
+    ready();
+    if (storeGateRequired && !gateResolved && !gateEmergencyShown) {
+      showEmergencyStoreGate();
+    }
+    hideNow();
+  }, SAFETY_MS);
+
+  window.TintinLoader = {
+    ready,
+    hide: hideNow,
+    show,
+    setText,
+    lockScroll,
+    unlockScroll
+  };
+  window.ttPageReady = ready;
 })();
