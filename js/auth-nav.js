@@ -1,5 +1,6 @@
 import './ui-quality.js?v=tintin-20260713-2';
-import './store-gate.js?v=tintin-20260713-2';
+// El gate de tienda se carga una sola vez desde js/page-loader.js. Importarlo
+// también acá creaba dos listeners con versiones de caché distintas.
 import './header-dropdown-fix.js?v=tintin-20260713-2';
 import './header-account-mobile-fix.js?v=tintin-20260713-2';
 import './header-scroll-hide.js?v=tintin-20260713-2';
