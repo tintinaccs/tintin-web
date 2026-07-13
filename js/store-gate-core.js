@@ -15,6 +15,7 @@ import { SUPER_ADMIN } from './roles.js';
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const STYLE_ID = 'tt-store-gate-style';
 const LOGIN_CONTROL_ID = 'tt-store-gate-login';
+const DIALOG_CLASS = 'tt-store-gate-dialog';
 const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
 const LEGACY_GENERAL_REF = doc(db, 'settings', 'general');
 
@@ -56,11 +57,157 @@ function injectGateStyle() {
       overscroll-behavior: none !important;
     }
 
-    #${OVERLAY_ID},
-    #${OVERLAY_ID} * {
+    #${OVERLAY_ID} {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 2147482990 !important;
+      display: grid !important;
+      place-items: center !important;
+      width: 100% !important;
+      min-height: 100vh !important;
+      min-height: 100dvh !important;
+      padding: clamp(16px, 3vw, 32px) !important;
+      box-sizing: border-box !important;
+      overflow: auto !important;
+      overscroll-behavior: contain !important;
+      background: rgba(30, 10, 18, .62) !important;
+      backdrop-filter: blur(7px) !important;
+      -webkit-backdrop-filter: blur(7px) !important;
       visibility: visible !important;
       pointer-events: auto !important;
       user-select: auto !important;
+      touch-action: manipulation !important;
+    }
+
+    #${OVERLAY_ID},
+    #${OVERLAY_ID} * {
+      visibility: visible !important;
+      box-sizing: border-box !important;
+    }
+
+    #${OVERLAY_ID} .${DIALOG_CLASS} {
+      width: min(100%, 460px) !important;
+      max-height: calc(100dvh - clamp(32px, 6vw, 64px)) !important;
+      margin: auto !important;
+      padding: clamp(28px, 5vw, 40px) clamp(22px, 5vw, 34px) !important;
+      overflow: auto !important;
+      border: 1px solid rgba(212, 106, 138, .14) !important;
+      border-radius: 20px !important;
+      background: #fff !important;
+      color: #2f2529 !important;
+      text-align: center !important;
+      box-shadow: 0 18px 60px rgba(35, 12, 22, .28) !important;
+      pointer-events: auto !important;
+    }
+
+    #${OVERLAY_ID} .tt-store-gate-icon {
+      display: block !important;
+      margin: 0 0 16px !important;
+      font-size: clamp(34px, 7vw, 42px) !important;
+      line-height: 1 !important;
+    }
+
+    #${OVERLAY_ID} .tt-store-gate-title {
+      margin: 0 0 12px !important;
+      color: #8b2642 !important;
+      font: 800 clamp(19px, 3.2vw, 22px)/1.25 Poppins, Arial, sans-serif !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    #${OVERLAY_ID} .tt-store-gate-message {
+      max-width: 360px !important;
+      margin: 0 auto 26px !important;
+      color: #555 !important;
+      font: 400 clamp(13px, 2.4vw, 14px)/1.65 Poppins, Arial, sans-serif !important;
+    }
+
+    #${OVERLAY_ID} .tt-store-gate-actions {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 10px !important;
+      width: 100% !important;
+    }
+
+    #${OVERLAY_ID} .tt-store-gate-action {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-width: 146px !important;
+      min-height: 46px !important;
+      padding: 11px 24px !important;
+      border-radius: 999px !important;
+      font: 700 13px/1.2 Poppins, Arial, sans-serif !important;
+      text-align: center !important;
+      text-decoration: none !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    #${LOGIN_CONTROL_ID} {
+      border: 1.5px solid #d9a9b8 !important;
+      background: #fff !important;
+      color: #8b2642 !important;
+    }
+
+    #${LOGIN_CONTROL_ID}:hover,
+    #${LOGIN_CONTROL_ID}:focus-visible {
+      border-color: #8b2642 !important;
+      background: #fff6fa !important;
+      outline: 3px solid rgba(212, 106, 138, .22) !important;
+      outline-offset: 2px !important;
+    }
+
+    #tt-store-gate-retry {
+      border: 0 !important;
+      background: #8b2642 !important;
+      color: #fff !important;
+    }
+
+    @media (max-width: 600px) {
+      #${OVERLAY_ID} {
+        align-items: center !important;
+        padding-top: max(16px, env(safe-area-inset-top)) !important;
+        padding-right: max(14px, env(safe-area-inset-right)) !important;
+        padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+        padding-left: max(14px, env(safe-area-inset-left)) !important;
+      }
+
+      #${OVERLAY_ID} .${DIALOG_CLASS} {
+        width: 100% !important;
+        max-width: 390px !important;
+        max-height: calc(100dvh - 32px) !important;
+        padding: 28px 20px 24px !important;
+        border-radius: 18px !important;
+      }
+
+      #${OVERLAY_ID} .tt-store-gate-actions {
+        flex-direction: column !important;
+      }
+
+      #${OVERLAY_ID} .tt-store-gate-action {
+        width: min(100%, 260px) !important;
+        min-width: 0 !important;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1024px) {
+      #${OVERLAY_ID} .${DIALOG_CLASS} {
+        width: min(86vw, 500px) !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #${OVERLAY_ID} *,
+      #${OVERLAY_ID} *::before,
+      #${OVERLAY_ID} *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -94,13 +241,27 @@ function rememberAndLockNode(node) {
     });
   }
 
-  node.inert = true;
-  node.setAttribute('aria-hidden', 'true');
+  // Importante: solo escribe cuando hace falta. La versión anterior volvía a
+  // escribir los mismos atributos dentro del MutationObserver y podía formar
+  // un ciclo continuo que dejaba visible el botón, pero sin procesar el clic.
+  if (!node.inert) node.inert = true;
+  if (node.getAttribute('aria-hidden') !== 'true') {
+    node.setAttribute('aria-hidden', 'true');
+  }
 }
 
 function lockPageContent() {
   if (!document.body) return;
   Array.from(document.body.children).forEach(rememberAndLockNode);
+}
+
+function isPageContentLocked() {
+  if (!document.body) return false;
+
+  return Array.from(document.body.children).every(node => {
+    if (!(node instanceof HTMLElement) || isGateNode(node)) return true;
+    return node.inert === true && node.getAttribute('aria-hidden') === 'true';
+  });
 }
 
 function restoreEmergencyLock(node) {
@@ -177,14 +338,33 @@ function buildLoginUrl() {
   return loginUrl.href;
 }
 
-function goToLogin(event) {
+function goToLogin(event, explicitUrl = '') {
   event?.preventDefault();
-  event?.stopPropagation();
+  event?.stopImmediatePropagation?.();
+  event?.stopPropagation?.();
 
-  // No dependemos únicamente del comportamiento normal de un <a>. Algunas
-  // páginas públicas tienen manejadores globales de clic y, durante el cierre,
-  // además existe una capa de bloqueo. La navegación se ordena directamente.
-  window.location.assign(buildLoginUrl());
+  const destination = explicitUrl || buildLoginUrl();
+  document.documentElement.dataset.ttStoreGateNavigating = 'login';
+  window.location.assign(destination);
+}
+
+// Se registra en window y en fase de captura: corre antes que los manejadores
+// generales de la página. Sirve con mouse, toque y activación por teclado.
+if (!window.__TintinStoreGateLoginCaptureBound) {
+  window.__TintinStoreGateLoginCaptureBound = true;
+  window.addEventListener(
+    'click',
+    event => {
+      const path = typeof event.composedPath === 'function'
+        ? event.composedPath()
+        : [];
+      const control = path.find(node => node?.id === LOGIN_CONTROL_ID) ||
+        event.target?.closest?.(`#${LOGIN_CONTROL_ID}`);
+      if (!control) return;
+      goToLogin(event, control.href || buildLoginUrl());
+    },
+    true
+  );
 }
 
 function isLoginPage() {
@@ -214,22 +394,100 @@ function buildOverlayHtml(kind) {
     ? 'Por seguridad, el sitio permanece bloqueado hasta que podamos confirmar su estado.'
     : 'En este momento la tienda no está disponible. Solo puede ingresar el equipo autorizado.';
   const retryButton = unavailable
-    ? '<button type="button" id="tt-store-gate-retry" style="border:0;background:#8b2642;color:#fff;padding:12px 26px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer">Reintentar</button>'
+    ? '<button type="button" id="tt-store-gate-retry" class="tt-store-gate-action">Reintentar</button>'
     : '';
 
   return `
-    <div role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title"
-      style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:36px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">
-      <div style="font-size:40px;margin-bottom:14px">${unavailable ? '⚠️' : '🌙'}</div>
-      <div id="tt-store-gate-title"
-        style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">${title}</div>
-      <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">${message}</p>
-      <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
+    <section class="${DIALOG_CLASS}" role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title" aria-describedby="tt-store-gate-message">
+      <span class="tt-store-gate-icon" aria-hidden="true">${unavailable ? '⚠️' : '🌙'}</span>
+      <h1 id="tt-store-gate-title" class="tt-store-gate-title">${title}</h1>
+      <p id="tt-store-gate-message" class="tt-store-gate-message">${message}</p>
+      <div class="tt-store-gate-actions">
         ${retryButton}
-        <a id="${LOGIN_CONTROL_ID}" href="${buildLoginUrl()}" target="_self"
-          style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none;cursor:pointer">Iniciar sesión</a>
+        <a id="${LOGIN_CONTROL_ID}" class="tt-store-gate-action" href="${buildLoginUrl()}" target="_self">Iniciar sesión</a>
       </div>
-    </div>`;
+    </section>`;
+}
+
+function overlayNeedsRepair() {
+  if (!desiredOverlay) return false;
+  if (!document.getElementById(STYLE_ID)) return true;
+  if (!document.documentElement.classList.contains('tt-store-gate-blocked')) return true;
+
+  const overlay = document.getElementById(OVERLAY_ID);
+  if (!overlay) return true;
+  if (!overlay.querySelector(`.${DIALOG_CLASS}`)) return true;
+  if (!overlay.querySelector(`#${LOGIN_CONTROL_ID}`)) return true;
+  if (overlay.inert === true) return true;
+  if (overlay.getAttribute('aria-hidden') === 'true') return true;
+  if (overlay.style.pointerEvents === 'none') return true;
+  if (!isPageContentLocked()) return true;
+
+  return false;
+}
+
+function bindOverlayActions(overlay) {
+  overlay.inert = false;
+  overlay.removeAttribute('inert');
+  overlay.removeAttribute('aria-hidden');
+  overlay.style.pointerEvents = 'auto';
+  overlay.style.touchAction = 'manipulation';
+
+  const loginControl = overlay.querySelector(`#${LOGIN_CONTROL_ID}`);
+  if (loginControl) {
+    loginControl.inert = false;
+    loginControl.removeAttribute('inert');
+    loginControl.removeAttribute('aria-hidden');
+    loginControl.setAttribute('role', 'button');
+    loginControl.setAttribute('aria-label', 'Iniciar sesión para acceder como equipo autorizado');
+  }
+
+  if (overlay.dataset.ttGateActionsBound === '1') return;
+  overlay.dataset.ttGateActionsBound = '1';
+
+  overlay.addEventListener(
+    'click',
+    event => {
+      const retry = event.target?.closest?.('#tt-store-gate-retry');
+      if (retry) {
+        event.preventDefault();
+        event.stopPropagation();
+        window.location.reload();
+      }
+    },
+    true
+  );
+}
+
+function repairOverlay() {
+  if (!desiredOverlay || !document.body) return;
+
+  injectGateStyle();
+  if (document.documentElement.classList.contains('tt-store-gate-pending')) {
+    document.documentElement.classList.remove('tt-store-gate-pending');
+  }
+  if (!document.documentElement.classList.contains('tt-store-gate-blocked')) {
+    document.documentElement.classList.add('tt-store-gate-blocked');
+  }
+
+  let overlay = document.getElementById(OVERLAY_ID);
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = OVERLAY_ID;
+    document.body.appendChild(overlay);
+  }
+
+  if (
+    overlay.dataset.kind !== desiredOverlay ||
+    !overlay.querySelector(`.${DIALOG_CLASS}`) ||
+    !overlay.querySelector(`#${LOGIN_CONTROL_ID}`)
+  ) {
+    overlay.dataset.kind = desiredOverlay;
+    overlay.innerHTML = buildOverlayHtml(desiredOverlay);
+  }
+
+  lockPageContent();
+  bindOverlayActions(overlay);
 }
 
 function scheduleRepair() {
@@ -238,23 +496,19 @@ function scheduleRepair() {
 
   queueMicrotask(() => {
     repairScheduled = false;
-    if (!desiredOverlay) return;
-
-    injectGateStyle();
-    document.documentElement.classList.remove('tt-store-gate-pending');
-    document.documentElement.classList.add('tt-store-gate-blocked');
-    lockPageContent();
-
-    if (!document.getElementById(OVERLAY_ID)) {
-      insertOverlay(desiredOverlay, lastConfig);
-    }
+    if (!desiredOverlay || !overlayNeedsRepair()) return;
+    repairOverlay();
   });
 }
 
 function startGuardObserver() {
   if (guardObserver) return;
 
-  guardObserver = new MutationObserver(scheduleRepair);
+  guardObserver = new MutationObserver(() => {
+    // Solo repara cuando una condición real se rompió. Así evita el ciclo de
+    // mutaciones que bloqueaba el hilo principal y hacía que el botón no actuara.
+    if (overlayNeedsRepair()) scheduleRepair();
+  });
 
   guardObserver.observe(document.documentElement, {
     attributes: true,
@@ -270,7 +524,7 @@ function startGuardObserver() {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['inert', 'aria-hidden']
+      attributeFilter: ['inert', 'aria-hidden', 'style', 'class']
     });
   }
 }
@@ -281,27 +535,6 @@ function stopGuardObserver() {
   repairScheduled = false;
 }
 
-function bindOverlayActions(overlay) {
-  // El propio overlay siempre debe ser interactivo, aunque haya sido reutilizado
-  // desde la pantalla de emergencia del cargador.
-  overlay.inert = false;
-  overlay.removeAttribute('inert');
-  overlay.removeAttribute('aria-hidden');
-  overlay.style.pointerEvents = 'auto';
-
-  overlay
-    .querySelector('#tt-store-gate-retry')
-    ?.addEventListener('click', () => window.location.reload());
-
-  const loginControl = overlay.querySelector(`#${LOGIN_CONTROL_ID}`);
-  if (loginControl) {
-    loginControl.inert = false;
-    loginControl.removeAttribute('inert');
-    loginControl.removeAttribute('aria-hidden');
-    loginControl.addEventListener('click', goToLogin, { capture: true });
-  }
-}
-
 function insertOverlay(kind, cfg = lastConfig) {
   desiredOverlay = kind;
   rememberConfig(cfg);
@@ -309,24 +542,8 @@ function insertOverlay(kind, cfg = lastConfig) {
 
   bodyReady(() => {
     if (!desiredOverlay) return;
-
-    let overlay = document.getElementById(OVERLAY_ID);
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = OVERLAY_ID;
-      overlay.style.cssText =
-        'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;pointer-events:auto';
-      document.body.appendChild(overlay);
-    }
-
-    overlay.dataset.kind = kind;
-    overlay.innerHTML = buildOverlayHtml(kind);
-
-    document.documentElement.classList.remove('tt-store-gate-pending');
-    document.documentElement.classList.add('tt-store-gate-blocked');
-    lockPageContent();
+    repairOverlay();
     startGuardObserver();
-    bindOverlayActions(overlay);
   });
 }
 
@@ -363,6 +580,7 @@ export function removeStoreClosedOverlay() {
     'tt-store-gate-pending',
     'tt-store-gate-blocked'
   );
+  delete document.documentElement.dataset.ttStoreGateNavigating;
 }
 
 export function getDesiredStoreOverlay() {
