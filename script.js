@@ -399,20 +399,84 @@ function renderCart() {
 /* ──────────────────────────────────────
    SCROLL LOCK — tracks which panels are open
    so closing one panel doesn't unlock scroll
-   while another is still open
+   while another is still open.
+   document.scrollingElement is <html>, not <body> — locking only
+   body.style.overflow left the real page scrollable behind an open
+   panel. html.style.overflow=hidden plus pinning body with position:
+   fixed (the standard cross-browser technique, already used by the
+   page loader and the welcome tutorial) actually stops it.
 ────────────────────────────────────── */
 const _scrollLockPanels = new Set();
+let _scrollLockY = 0;
+let _scrollLockPrevBodyStyle = null;
 
 function lockScroll(panelId) {
+  const wasEmpty = _scrollLockPanels.size === 0;
   _scrollLockPanels.add(panelId);
-  document.body.style.overflow = 'hidden';
+  if (!wasEmpty) return;
+  _scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+  document.documentElement.style.overflow = 'hidden';
+  if (document.body) {
+    _scrollLockPrevBodyStyle = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+      touchAction: document.body.style.touchAction,
+    };
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${_scrollLockY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+  }
 }
 
 function unlockScroll(panelId) {
   _scrollLockPanels.delete(panelId);
-  if (_scrollLockPanels.size === 0) {
-    document.body.style.overflow = '';
+  if (_scrollLockPanels.size > 0) return;
+  document.documentElement.style.overflow = '';
+  if (document.body) {
+    if (_scrollLockPrevBodyStyle) {
+      document.body.style.position = _scrollLockPrevBodyStyle.position;
+      document.body.style.top = _scrollLockPrevBodyStyle.top;
+      document.body.style.left = _scrollLockPrevBodyStyle.left;
+      document.body.style.right = _scrollLockPrevBodyStyle.right;
+      document.body.style.width = _scrollLockPrevBodyStyle.width;
+      document.body.style.overflow = _scrollLockPrevBodyStyle.overflow;
+      document.body.style.touchAction = _scrollLockPrevBodyStyle.touchAction;
+    } else {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
   }
+  window.scrollTo(0, _scrollLockY || 0);
+}
+
+/* ──────────────────────────────────────
+   TABBAR ACTIVE STATE — highlights whichever tab corresponds to what's
+   currently open (Tienda dropup, Carrito, Búsqueda), reverting to
+   whatever this page itself marks active by default once everything
+   closes again.
+────────────────────────────────────── */
+const _tabbarDefaultBtn = document.querySelector('.tt-tabbar .tt-tabbar-btn.active');
+
+function setActiveTab(btn) {
+  document.querySelectorAll('.tt-tabbar .tt-tabbar-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function restoreDefaultActiveTab() {
+  setActiveTab(_tabbarDefaultBtn);
 }
 
 /* ──────────────────────────────────────
@@ -424,6 +488,7 @@ function openCart() {
   if (drawer) drawer.classList.add('open');
   if (overlay) overlay.classList.add('open');
   lockScroll('cart');
+  setActiveTab(document.getElementById('tabbar-cart'));
 }
 
 function closeCart() {
@@ -432,6 +497,7 @@ function closeCart() {
   if (drawer) drawer.classList.remove('open');
   if (overlay) overlay.classList.remove('open');
   unlockScroll('cart');
+  restoreDefaultActiveTab();
 }
 
 /* ──────────────────────────────────────
@@ -595,6 +661,7 @@ function initSearch() {
   function openSearch() {
     panel.classList.add('open');
     if (input) input.focus();
+    setActiveTab(tabbarSearch);
   }
 
   function closeSearch() {
@@ -604,6 +671,7 @@ function initSearch() {
       results.style.display = 'none';
       results.innerHTML = '';
     }
+    restoreDefaultActiveTab();
   }
 
   // btn-search vive en el header Desktop/Tablet, tabbar-search es el
@@ -1550,11 +1618,13 @@ function initCollectionsSheet() {
     sheet.classList.add('open');
     if (backdrop) backdrop.classList.add('open');
     lockScroll('collections-sheet');
+    setActiveTab(tabbarTienda);
   }
   function closeSheet() {
     sheet.classList.remove('open');
     if (backdrop) backdrop.classList.remove('open');
     unlockScroll('collections-sheet');
+    restoreDefaultActiveTab();
   }
   // tabbar-tienda abre/cierra este sheet (dropup con todas las colecciones,
   // sincronizado en vivo por js/nav-collections.js) — tocarlo de nuevo con
