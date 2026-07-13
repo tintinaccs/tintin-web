@@ -1,4 +1,5 @@
-import { auth, db, app } from './firebase.js';
+import { auth, db } from './firebase.js';
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js';
 import { getCartLocal, setCartLocal, clearCart, cartTotal, formatPrice } from './cart-sync.js';
@@ -8,7 +9,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
 
   const REQUEST_KEY = 'tt_secure_checkout_request_id';
-  const callable = httpsCallable(getFunctions(app, 'us-central1'), 'createOrder', { timeout: 45000 });
+  const callable = httpsCallable(getFunctions(getApp(), 'us-central1'), 'createOrder', { timeout: 45000 });
   let submitting = false;
 
   const text = value => String(value == null ? '' : value).trim();
