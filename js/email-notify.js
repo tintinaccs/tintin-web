@@ -29,17 +29,11 @@ function webhookConfigured() {
   );
 }
 
-/**
- * Documento público mínimo, sin direcciones ni credenciales. Super Admin lo
- * sincroniza desde emailSettings/main mediante admin-email-gate-sync.js.
- */
 async function getEmailSettings_() {
   try {
     const snap = await getDoc(EMAIL_GATE_REF);
     return snap.exists() ? snap.data() || {} : {};
   } catch {
-    // Compatibilidad: mientras el documento se crea, los correos de pedido
-    // continúan habilitados. El Apps Script también aplica su propia lectura.
     return {};
   }
 }
@@ -72,7 +66,6 @@ async function logOrderEmailAttempt_(orderId, order, isResend, result) {
       sentAt: serverTimestamp()
     });
   } catch (error) {
-    // El correo no debe considerarse fallido porque no se pudo guardar un log.
     console.error('[email-notify] No se pudo registrar el intento:', error);
   }
 }
@@ -92,8 +85,6 @@ async function postWebhook_(payload) {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload),
-    // Permite que el envío iniciado después de guardar el pedido continúe si
-    // la clienta cambia de página inmediatamente.
     keepalive: true
   });
 
@@ -112,11 +103,8 @@ async function postWebhook_(payload) {
 }
 
 /**
- * Envía el correo original o un reenvío administrativo.
- *
- * `order` se mantiene temporalmente en el body para que la implementación
- * anterior del Apps Script siga funcionando durante la actualización. La
- * versión nueva lo ignora y carga el documento real usando orderId + idToken.
+ * `order` se mantiene durante la migración para que la implementación anterior
+ * siga funcionando. El Apps Script seguro lo ignora y carga el pedido real.
  */
 export async function sendOrderNotification(orderId, order, isResend = false) {
   if (!webhookConfigured()) {
@@ -164,8 +152,6 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
       secret: EMAIL_SECRET,
       action: isResend ? 'resendOrderEmail' : 'sendOrderEmail',
       orderId: normalizedOrderId,
-      // Compatibilidad con la implementación anterior. El webhook seguro no
-      // usa este objeto para construir el correo.
       order: order || {},
       isResend,
       sendAdmin,
@@ -238,3 +224,16 @@ export async function sendBulkTemplatedEmail(payload) {
 }
 
 export { notificationStatusFromResult_ as notificationStatusFromResult };
+
+// checkout.html ya importa este módulo. Desde acá se inicia el puente una sola
+// vez, sin tocar el HTML grande ni cargarlo en las demás páginas.
+const currentPath = (window.location.pathname || '').toLowerCase();
+if (
+  (currentPath.endsWith('/checkout.html') || currentPath.endsWith('/checkout')) &&
+  !window.TintinCheckoutEmailBridgeLoading
+) {
+  window.TintinCheckoutEmailBridgeLoading = true;
+  import('./checkout-email-bridge.js?v=tintin-20260713-9').catch(error => {
+    console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
+  });
+}
