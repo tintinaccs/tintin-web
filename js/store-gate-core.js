@@ -14,6 +14,7 @@ import { SUPER_ADMIN } from './roles.js';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const STYLE_ID = 'tt-store-gate-style';
+const LOGIN_CONTROL_ID = 'tt-store-gate-login';
 const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
 const LEGACY_GENERAL_REF = doc(db, 'settings', 'general');
 
@@ -55,7 +56,8 @@ function injectGateStyle() {
       overscroll-behavior: none !important;
     }
 
-    #${OVERLAY_ID} {
+    #${OVERLAY_ID},
+    #${OVERLAY_ID} * {
       visibility: visible !important;
       pointer-events: auto !important;
       user-select: auto !important;
@@ -160,8 +162,29 @@ function currentRelativeLocation() {
   return file + window.location.search + window.location.hash;
 }
 
+/**
+ * Construye una URL absoluta dentro de la misma carpeta de la aplicación.
+ * Así funciona tanto en GitHub Pages (/tintin-web/) como en dominio propio.
+ */
 function buildLoginUrl() {
-  return 'login.html?from=' + encodeURIComponent(currentRelativeLocation());
+  const pathname = window.location.pathname || '/';
+  const lastSlash = pathname.lastIndexOf('/');
+  const appDirectory = pathname.endsWith('/')
+    ? pathname
+    : pathname.slice(0, lastSlash + 1);
+  const loginUrl = new URL(`${appDirectory}login.html`, window.location.origin);
+  loginUrl.searchParams.set('from', currentRelativeLocation());
+  return loginUrl.href;
+}
+
+function goToLogin(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+
+  // No dependemos únicamente del comportamiento normal de un <a>. Algunas
+  // páginas públicas tienen manejadores globales de clic y, durante el cierre,
+  // además existe una capa de bloqueo. La navegación se ordena directamente.
+  window.location.assign(buildLoginUrl());
 }
 
 function isLoginPage() {
@@ -203,8 +226,8 @@ function buildOverlayHtml(kind) {
       <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">${message}</p>
       <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
         ${retryButton}
-        <a href="${buildLoginUrl()}"
-          style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Iniciar sesión</a>
+        <a id="${LOGIN_CONTROL_ID}" href="${buildLoginUrl()}" target="_self"
+          style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none;cursor:pointer">Iniciar sesión</a>
       </div>
     </div>`;
 }
@@ -258,6 +281,27 @@ function stopGuardObserver() {
   repairScheduled = false;
 }
 
+function bindOverlayActions(overlay) {
+  // El propio overlay siempre debe ser interactivo, aunque haya sido reutilizado
+  // desde la pantalla de emergencia del cargador.
+  overlay.inert = false;
+  overlay.removeAttribute('inert');
+  overlay.removeAttribute('aria-hidden');
+  overlay.style.pointerEvents = 'auto';
+
+  overlay
+    .querySelector('#tt-store-gate-retry')
+    ?.addEventListener('click', () => window.location.reload());
+
+  const loginControl = overlay.querySelector(`#${LOGIN_CONTROL_ID}`);
+  if (loginControl) {
+    loginControl.inert = false;
+    loginControl.removeAttribute('inert');
+    loginControl.removeAttribute('aria-hidden');
+    loginControl.addEventListener('click', goToLogin, { capture: true });
+  }
+}
+
 function insertOverlay(kind, cfg = lastConfig) {
   desiredOverlay = kind;
   rememberConfig(cfg);
@@ -271,7 +315,7 @@ function insertOverlay(kind, cfg = lastConfig) {
       overlay = document.createElement('div');
       overlay.id = OVERLAY_ID;
       overlay.style.cssText =
-        'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+        'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;pointer-events:auto';
       document.body.appendChild(overlay);
     }
 
@@ -282,10 +326,7 @@ function insertOverlay(kind, cfg = lastConfig) {
     document.documentElement.classList.add('tt-store-gate-blocked');
     lockPageContent();
     startGuardObserver();
-
-    overlay
-      .querySelector('#tt-store-gate-retry')
-      ?.addEventListener('click', () => window.location.reload());
+    bindOverlayActions(overlay);
   });
 }
 
