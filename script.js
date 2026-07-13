@@ -558,19 +558,14 @@ function initMobileMenu() {
   }
 
   // btn-menu vive en el header Desktop/Tablet (hace de hamburguesa en su
-  // rango tablet, 769-1024px) — es el único botón superior que abre este
-  // menú lateral global. En mobile (<=768px) no hay header superior: la
-  // tabbar es la única navegación persistente, así que tabbar-tienda abre
-  // este mismo menú (ver más abajo).
+  // rango tablet, 769-1024px) — es el único disparador de este menú lateral
+  // global (INICIO/TIENDA/NOSOTROS/CONTACTO + cuenta). En mobile real
+  // (<=768px) no hay header superior, así que este menú queda accesible
+  // solo desde tablet — en mobile, Tienda abre el bottom sheet de
+  // colecciones en su lugar (ver initCollectionsSheet).
   const btnMenu = document.getElementById('btn-menu');
   if (btnMenu) btnMenu.addEventListener('click', openMenu);
   if (btnClose) btnClose.addEventListener('click', closeMenu);
-
-  function openMobileCats() {
-    if (!btnTienda || !mobileCats) return;
-    mobileCats.classList.add('open');
-    btnTienda.setAttribute('aria-expanded', 'true');
-  }
 
   if (btnTienda && mobileCats) {
     btnTienda.addEventListener('click', () => {
@@ -579,21 +574,6 @@ function initMobileMenu() {
       btnTienda.setAttribute('aria-expanded', String(!isOpen));
     });
   }
-
-  // tabbar-tienda era el único acceso mobile a las categorías del bottom
-  // sheet — ahora que no hay header superior en mobile, es también el
-  // único acceso a este menú lateral (INICIO/TIENDA/NOSOTROS/CONTACTO +
-  // cuenta), así que abre el mismo controlador global directamente en la
-  // sección TIENDA para no agregar un toque extra.
-  const tabbarTienda = document.getElementById('tabbar-tienda');
-  if (tabbarTienda) {
-    tabbarTienda.addEventListener('click', (e) => {
-      e.preventDefault();
-      openMenu();
-      openMobileCats();
-    });
-  }
-
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
@@ -1576,9 +1556,18 @@ function initCollectionsSheet() {
     if (backdrop) backdrop.classList.remove('open');
     unlockScroll('collections-sheet');
   }
-  // tabbar-tienda ahora abre #mobile-menu (ver initMobileMenu) — este sheet
-  // ya no tiene un disparador propio en la tabbar, para no competir por el
-  // mismo botón. Se deja el cierre funcional por si algo más lo abre.
+  // tabbar-tienda abre/cierra este sheet (dropup con todas las colecciones,
+  // sincronizado en vivo por js/nav-collections.js) — tocarlo de nuevo con
+  // el sheet ya abierto lo cierra.
+  const tabbarTienda = document.getElementById('tabbar-tienda');
+  if (tabbarTienda) {
+    tabbarTienda.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (sheet.classList.contains('open')) closeSheet();
+      else openSheet();
+    });
+  }
+
   const closeBtn = document.getElementById('btn-close-sheet');
   if (closeBtn) closeBtn.addEventListener('click', closeSheet);
   if (backdrop) backdrop.addEventListener('click', closeSheet);
