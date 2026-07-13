@@ -275,3 +275,16 @@ onAuthStateChanged(auth, user => {
   setActiveCartUser(user);
   if (user) getCart().then(() => dispatchCartUpdated());
 });
+
+// checkout.html ya carga este módulo. Desde acá se inicia el guardado seguro
+// únicamente en la pantalla de compra, sin afectar catálogo, producto o carrito.
+const checkoutPath = (window.location.pathname || '').toLowerCase();
+if (
+  (checkoutPath.endsWith('/checkout.html') || checkoutPath.endsWith('/checkout')) &&
+  !window.TintinSecureCheckoutOrderLoading
+) {
+  window.TintinSecureCheckoutOrderLoading = true;
+  import('./secure-checkout-order.js?v=tintin-20260713-7').catch(error => {
+    console.error('[cart-sync] No se pudo cargar el guardado seguro del pedido:', error);
+  });
+}
