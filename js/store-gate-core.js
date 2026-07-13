@@ -1,140 +1,303 @@
 /**
  * TINTIN — Núcleo único de "Tienda abierta/cerrada".
  *
- * Fuente de verdad: settings/general.storeOpen + maintenanceAccess.
- * - Nunca convierte un error de lectura en "tienda abierta".
- * - Super Admin real (correo oficial) siempre puede entrar.
- * - El aviso usa el WhatsApp guardado en settings/general.
+ * Documento público mínimo: settings/storeGate.
+ * La configuración completa permanece en settings/general y no se entrega
+ * cuando la tienda está cerrada.
  */
 import { db } from './firebase.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  doc,
+  getDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const STYLE_ID = 'tt-store-gate-style';
-const WA_TEXT = 'Hola Tintin, quiero consultar sobre la tienda.';
+const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
+const LEGACY_GENERAL_REF = doc(db, 'settings', 'general');
 
 let lastConfig = {
   storeOpen: false,
   maintenanceAccess: {},
-  whatsappNumber: '',
-  __storeConfigStatus: 'pending',
+  __storeConfigStatus: 'pending'
 };
 let desiredOverlay = null;
+let guardObserver = null;
+let repairScheduled = false;
+const lockedNodes = new Map();
+
+function isGateNode(node) {
+  return node?.id === OVERLAY_ID || node?.id === 'tt-loader';
+}
 
 function injectGateStyle() {
   if (document.getElementById(STYLE_ID)) return;
+
   const style = document.createElement('style');
   style.id = STYLE_ID;
   style.textContent = `
+    html.tt-store-gate-pending,
+    html.tt-store-gate-blocked {
+      background: #FFF6FA !important;
+    }
+
     html.tt-store-gate-pending body > *:not(#tt-loader):not(#${OVERLAY_ID}),
     html.tt-store-gate-blocked body > *:not(#tt-loader):not(#${OVERLAY_ID}) {
       visibility: hidden !important;
       pointer-events: none !important;
+      user-select: none !important;
     }
-    html.tt-store-gate-blocked,
-    html.tt-store-gate-blocked body { overflow: hidden !important; }
-    #${OVERLAY_ID} { visibility: visible !important; pointer-events: auto !important; }
+
+    html.tt-store-gate-pending body,
+    html.tt-store-gate-blocked body {
+      overflow: hidden !important;
+      overscroll-behavior: none !important;
+    }
+
+    #${OVERLAY_ID} {
+      visibility: visible !important;
+      pointer-events: auto !important;
+      user-select: auto !important;
+    }
   `;
   document.head.appendChild(style);
 }
 
 injectGateStyle();
 
-export function normalizeStoreAccessConfig(data, status = 'ok') {
-  const raw = data && typeof data === 'object' ? data : {};
-  const maintenanceAccess = raw.maintenanceAccess && typeof raw.maintenanceAccess === 'object'
-    ? raw.maintenanceAccess
-    : {};
-  return {
-    ...raw,
-    // Cerrado por defecto si el campo falta. El panel Super Admin puede abrirlo.
-    storeOpen: raw.storeOpen === true,
-    maintenanceAccess,
-    whatsappNumber: String(raw.whatsappNumber || '').trim(),
-    __storeConfigStatus: status,
-  };
-}
-
 function rememberConfig(cfg) {
   lastConfig = cfg || lastConfig;
   return lastConfig;
+}
+
+function bodyReady(callback) {
+  if (document.body) {
+    callback();
+    return;
+  }
+  document.addEventListener('DOMContentLoaded', callback, { once: true });
+}
+
+function rememberAndLockNode(node) {
+  if (!(node instanceof HTMLElement) || isGateNode(node)) return;
+
+  if (!lockedNodes.has(node)) {
+    lockedNodes.set(node, {
+      inert: node.inert === true,
+      ariaHidden: node.hasAttribute('aria-hidden')
+        ? node.getAttribute('aria-hidden')
+        : null,
+      hadAriaHidden: node.hasAttribute('aria-hidden')
+    });
+  }
+
+  node.inert = true;
+  node.setAttribute('aria-hidden', 'true');
+}
+
+function lockPageContent() {
+  if (!document.body) return;
+  Array.from(document.body.children).forEach(rememberAndLockNode);
+}
+
+function restoreEmergencyLock(node) {
+  if (!(node instanceof HTMLElement) || node.dataset.ttEmergencyInert !== '1') return;
+
+  node.inert = node.dataset.ttEmergencyPrevInert === '1';
+  if (node.dataset.ttEmergencyHadAria === '1') {
+    node.setAttribute('aria-hidden', node.dataset.ttEmergencyPrevAria || '');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+
+  delete node.dataset.ttEmergencyInert;
+  delete node.dataset.ttEmergencyPrevInert;
+  delete node.dataset.ttEmergencyHadAria;
+  delete node.dataset.ttEmergencyPrevAria;
+}
+
+function restorePageContent() {
+  lockedNodes.forEach((previous, node) => {
+    if (!(node instanceof HTMLElement)) return;
+
+    node.inert = previous.inert;
+    if (previous.hadAriaHidden) {
+      node.setAttribute('aria-hidden', previous.ariaHidden ?? '');
+    } else {
+      node.removeAttribute('aria-hidden');
+    }
+  });
+  lockedNodes.clear();
+
+  if (document.body) {
+    Array.from(document.body.children).forEach(restoreEmergencyLock);
+  }
+}
+
+export function normalizeStoreAccessConfig(data, status = 'ok') {
+  const raw = data && typeof data === 'object' ? data : {};
+  const maintenanceAccess =
+    raw.maintenanceAccess &&
+    typeof raw.maintenanceAccess === 'object' &&
+    !Array.isArray(raw.maintenanceAccess)
+      ? raw.maintenanceAccess
+      : {};
+
+  return {
+    storeOpen: raw.storeOpen === true,
+    maintenanceAccess,
+    __storeConfigStatus: status
+  };
 }
 
 export function getLastStoreAccessConfig() {
   return lastConfig;
 }
 
-export function getStoreClosedWhatsappUrl(cfg = lastConfig) {
-  const digits = String(cfg?.whatsappNumber || '').replace(/\D/g, '');
-  return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(WA_TEXT)}` : '';
+function currentRelativeLocation() {
+  const file = window.location.pathname.split('/').pop() || 'index.html';
+  return file + window.location.search + window.location.hash;
 }
 
-function currentPathIsLogin() {
-  const path = (location.pathname || '').toLowerCase();
+function buildLoginUrl() {
+  return 'login.html?from=' + encodeURIComponent(currentRelativeLocation());
+}
+
+function isLoginPage() {
+  const path = (window.location.pathname || '').toLowerCase();
   return path.endsWith('/login.html') || path.endsWith('/login');
 }
 
-function buildOverlayHtml(kind, cfg) {
+function showLoginClosedNotice(kind) {
+  removeStoreClosedOverlay();
+
+  const error = document.getElementById('login-error');
+  if (!error) return;
+
+  error.textContent =
+    kind === 'unavailable'
+      ? 'No pudimos comprobar el estado de la tienda. Por seguridad no se habilitó el acceso. Probá nuevamente en unos minutos.'
+      : 'La tienda está cerrada. Esta cuenta no tiene permiso de mantenimiento. Podés intentar con otra cuenta autorizada.';
+  error.classList.add('show');
+}
+
+function buildOverlayHtml(kind) {
   const unavailable = kind === 'unavailable';
   const title = unavailable
     ? 'No pudimos comprobar el estado de la tienda'
     : 'Tienda temporalmente cerrada';
   const message = unavailable
-    ? 'Por seguridad, la tienda permanece bloqueada hasta que podamos confirmar su estado. Revisá tu conexión y volvé a intentar.'
-    : 'Estamos realizando ajustes para mejorar tu experiencia. Volvé a intentarlo más tarde.';
-  const waUrl = getStoreClosedWhatsappUrl(cfg);
+    ? 'Por seguridad, el sitio permanece bloqueado hasta que podamos confirmar su estado.'
+    : 'En este momento la tienda no está disponible. Solo puede ingresar el equipo autorizado.';
   const retryButton = unavailable
     ? '<button type="button" id="tt-store-gate-retry" style="border:0;background:#8b2642;color:#fff;padding:12px 26px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer">Reintentar</button>'
     : '';
-  const supportButton = waUrl
-    ? `<a href="${waUrl}" target="_blank" rel="noopener" style="display:inline-block;background:#25D366;color:#fff!important;padding:12px 26px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Contactar soporte</a>`
-    : '';
-  const loginButton = !currentPathIsLogin()
-    ? '<a href="login.html?from=admin.html" style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Acceso del equipo</a>'
-    : '';
 
   return `
-    <div role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title" style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:36px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">
+    <div role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title"
+      style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:36px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">
       <div style="font-size:40px;margin-bottom:14px">${unavailable ? '⚠️' : '🌙'}</div>
-      <div id="tt-store-gate-title" style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">${title}</div>
+      <div id="tt-store-gate-title"
+        style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">${title}</div>
       <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">${message}</p>
-      <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">${retryButton}${supportButton}${loginButton}</div>
+      <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
+        ${retryButton}
+        <a href="${buildLoginUrl()}"
+          style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Iniciar sesión</a>
+      </div>
     </div>`;
 }
 
-function insertOverlay(kind, cfg) {
+function scheduleRepair() {
+  if (!desiredOverlay || repairScheduled) return;
+  repairScheduled = true;
+
+  queueMicrotask(() => {
+    repairScheduled = false;
+    if (!desiredOverlay) return;
+
+    injectGateStyle();
+    document.documentElement.classList.remove('tt-store-gate-pending');
+    document.documentElement.classList.add('tt-store-gate-blocked');
+    lockPageContent();
+
+    if (!document.getElementById(OVERLAY_ID)) {
+      insertOverlay(desiredOverlay, lastConfig);
+    }
+  });
+}
+
+function startGuardObserver() {
+  if (guardObserver) return;
+
+  guardObserver = new MutationObserver(scheduleRepair);
+
+  guardObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  if (document.head) {
+    guardObserver.observe(document.head, { childList: true });
+  }
+
+  if (document.body) {
+    guardObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['inert', 'aria-hidden']
+    });
+  }
+}
+
+function stopGuardObserver() {
+  guardObserver?.disconnect();
+  guardObserver = null;
+  repairScheduled = false;
+}
+
+function insertOverlay(kind, cfg = lastConfig) {
   desiredOverlay = kind;
-  rememberConfig(cfg || lastConfig);
+  rememberConfig(cfg);
   injectGateStyle();
 
-  // El módulo puede resolver Firebase mientras el <head> todavía se está
-  // procesando. Esperar al body evita que una conexión rápida rompa el gate.
-  if (!document.body) {
-    requestAnimationFrame(() => {
-      if (desiredOverlay === kind) insertOverlay(kind, lastConfig);
-    });
-    return;
-  }
+  bodyReady(() => {
+    if (!desiredOverlay) return;
 
-  let overlay = document.getElementById(OVERLAY_ID);
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = OVERLAY_ID;
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
-    document.body.appendChild(overlay);
-  }
-  overlay.dataset.kind = kind;
-  overlay.innerHTML = buildOverlayHtml(kind, lastConfig);
-  document.documentElement.classList.remove('tt-store-gate-pending');
-  document.documentElement.classList.add('tt-store-gate-blocked');
+    let overlay = document.getElementById(OVERLAY_ID);
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = OVERLAY_ID;
+      overlay.style.cssText =
+        'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+      document.body.appendChild(overlay);
+    }
 
-  overlay.querySelector('#tt-store-gate-retry')?.addEventListener('click', () => location.reload());
+    overlay.dataset.kind = kind;
+    overlay.innerHTML = buildOverlayHtml(kind);
+
+    document.documentElement.classList.remove('tt-store-gate-pending');
+    document.documentElement.classList.add('tt-store-gate-blocked');
+    lockPageContent();
+    startGuardObserver();
+
+    overlay
+      .querySelector('#tt-store-gate-retry')
+      ?.addEventListener('click', () => window.location.reload());
+  });
 }
 
 export function renderStoreClosedOverlay(cfg = lastConfig) {
   const resolved = rememberConfig(cfg || lastConfig);
-  if (resolved.__storeConfigStatus && resolved.__storeConfigStatus !== 'ok') {
+  if (isLoginPage()) {
+    showLoginClosedNotice(
+      resolved.__storeConfigStatus === 'ok' ? 'closed' : 'unavailable'
+    );
+    return;
+  }
+  if (resolved.__storeConfigStatus !== 'ok') {
     insertOverlay('unavailable', resolved);
     return;
   }
@@ -142,13 +305,23 @@ export function renderStoreClosedOverlay(cfg = lastConfig) {
 }
 
 export function renderStoreConfigUnavailableOverlay(cfg = lastConfig) {
-  insertOverlay('unavailable', rememberConfig(cfg || lastConfig));
+  const resolved = rememberConfig(cfg || lastConfig);
+  if (isLoginPage()) {
+    showLoginClosedNotice('unavailable');
+    return;
+  }
+  insertOverlay('unavailable', resolved);
 }
 
 export function removeStoreClosedOverlay() {
   desiredOverlay = null;
+  stopGuardObserver();
   document.getElementById(OVERLAY_ID)?.remove();
-  document.documentElement.classList.remove('tt-store-gate-pending', 'tt-store-gate-blocked');
+  restorePageContent();
+  document.documentElement.classList.remove(
+    'tt-store-gate-pending',
+    'tt-store-gate-blocked'
+  );
 }
 
 export function getDesiredStoreOverlay() {
@@ -156,28 +329,56 @@ export function getDesiredStoreOverlay() {
 }
 
 /**
- * Lectura puntual usada por login.html y admin.html.
- * Ante documento ausente o error, devuelve estado NO verificado y cerrado.
+ * Lectura puntual usada por login.html, admin.html y revalidaciones.
+ * Si el documento falta o la lectura falla, nunca se asume "abierta".
  */
 export async function getStoreAccessConfig() {
+  let primaryStatus = 'missing';
+
   try {
-    const snap = await getDoc(doc(db, 'settings', 'general'));
-    if (!snap.exists()) return rememberConfig(normalizeStoreAccessConfig({}, 'missing'));
-    return rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'));
-  } catch (e) {
-    console.error('[store-gate] No se pudo leer settings/general:', e);
-    return rememberConfig(normalizeStoreAccessConfig({}, 'error'));
+    const snap = await getDoc(STORE_GATE_REF);
+    if (snap.exists()) {
+      return rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'));
+    }
+  } catch (error) {
+    primaryStatus = 'error';
+    console.warn(
+      '[store-gate] settings/storeGate aún no está disponible; se prueba la configuración anterior durante la migración:',
+      error
+    );
   }
+
+  // Compatibilidad de despliegue: permite publicar primero el JavaScript y
+  // después las reglas sin abrir ni romper la tienda. Con las reglas finales,
+  // settings/general deja de ser público durante el cierre.
+  try {
+    const legacySnap = await getDoc(LEGACY_GENERAL_REF);
+    if (legacySnap.exists()) {
+      return rememberConfig({
+        ...normalizeStoreAccessConfig(legacySnap.data(), 'ok'),
+        __storeConfigSource: 'legacy-general'
+      });
+    }
+  } catch (legacyError) {
+    console.error(
+      '[store-gate] Tampoco se pudo leer la configuración anterior:',
+      legacyError
+    );
+  }
+
+  return rememberConfig(normalizeStoreAccessConfig({}, primaryStatus));
 }
 
 /**
- * Decide acceso usando exactamente la misma fuente que las reglas de Firebase.
+ * Super Admin se reconoce únicamente por el correo oficial.
+ * Los demás dependen del estado y de maintenanceAccess.
  */
 export function isAccessAllowed(cfg, role, email) {
   const normalizedEmail = String(email || '').trim().toLowerCase();
   if (normalizedEmail === SUPER_ADMIN.toLowerCase()) return true;
   if (!cfg || cfg.__storeConfigStatus !== 'ok') return false;
   if (cfg.storeOpen === true) return true;
+
   const access = cfg.maintenanceAccess || {};
   return access[role || 'guest'] === true;
 }

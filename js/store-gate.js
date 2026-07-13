@@ -1,13 +1,20 @@
 /**
- * TINTIN — Gate automático de tienda para páginas públicas.
+ * TINTIN — Control automático para todas las páginas públicas.
  *
- * Espera dos datos antes de mostrar el sitio: estado de autenticación y
- * settings/general. Si la configuración no se puede comprobar, bloquea por
- * seguridad en vez de asumir que la tienda está abierta.
+ * Antes de habilitar la página espera:
+ * 1) la sesión real de Firebase;
+ * 2) settings/storeGate, el documento público mínimo.
+ *
+ * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
 import { auth, db } from './firebase.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  doc,
+  onSnapshot
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getUserRole } from './roles.js';
 import {
   isAccessAllowed,
@@ -15,7 +22,7 @@ import {
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay,
   getStoreAccessConfig,
-  normalizeStoreAccessConfig,
+  normalizeStoreAccessConfig
 } from './store-gate-core.js';
 
 export {
@@ -23,45 +30,51 @@ export {
   renderStoreClosedOverlay,
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay,
-  getStoreAccessConfig,
+  getStoreAccessConfig
 };
 
 if (!window.TintinStoreGateRuntimeBooted) {
   window.TintinStoreGateRuntimeBooted = true;
   document.documentElement.classList.add('tt-store-gate-pending');
 
+  const storeGateRef = doc(db, 'settings', 'storeGate');
+  const legacyGeneralRef = doc(db, 'settings', 'general');
   let role = null;
   let email = '';
-  let cfg = null;
+  let config = null;
+  let lastPublishedState = '';
+  let legacyUnsubscribe = null;
 
   function publishState(state) {
-    window.dispatchEvent(new CustomEvent('tintin:store-gate-state', {
-      detail: { state, role, email, config: cfg },
-    }));
+    if (state === lastPublishedState) return;
+    lastPublishedState = state;
+
+    window.dispatchEvent(
+      new CustomEvent('tintin:store-gate-state', {
+        detail: { state, role, email, config }
+      })
+    );
   }
 
   function evaluate() {
-    if (role === null || cfg === null) return;
+    if (role === null || config === null) return;
 
-    if (String(email || '').toLowerCase() === 'tintinaccs@gmail.com') {
+    // isAccessAllowed reconoce primero el correo oficial. Por eso Super Admin
+    // sigue entrando incluso si el documento de control falta temporalmente.
+    if (isAccessAllowed(config, role, email)) {
       removeStoreClosedOverlay();
       publishState('allowed');
       return;
     }
 
-    if (cfg.__storeConfigStatus !== 'ok') {
-      renderStoreConfigUnavailableOverlay(cfg);
+    if (config.__storeConfigStatus !== 'ok') {
+      renderStoreConfigUnavailableOverlay(config);
       publishState('unavailable');
       return;
     }
 
-    if (isAccessAllowed(cfg, role, email)) {
-      removeStoreClosedOverlay();
-      publishState('allowed');
-    } else {
-      renderStoreClosedOverlay(cfg);
-      publishState('closed');
-    }
+    renderStoreClosedOverlay(config);
+    publishState('closed');
   }
 
   onAuthStateChanged(auth, async user => {
@@ -75,26 +88,86 @@ if (!window.TintinStoreGateRuntimeBooted) {
     email = user.email || '';
     try {
       role = await getUserRole(user.uid, user.email);
-    } catch (e) {
-      console.error('[store-gate] No se pudo resolver el rol:', e);
-      role = 'client';
+    } catch (error) {
+      // No se reemplaza por client: con la tienda cerrada eso podría conceder
+      // una excepción que no fue comprobada.
+      console.error('[store-gate] No se pudo comprobar el rol:', error);
+      role = '__unresolved__';
     }
     evaluate();
   });
 
-  onSnapshot(doc(db, 'settings', 'general'), snap => {
-    cfg = snap.exists()
-      ? normalizeStoreAccessConfig(snap.data(), 'ok')
-      : normalizeStoreAccessConfig({}, 'missing');
+  function stopLegacyFallback() {
+    legacyUnsubscribe?.();
+    legacyUnsubscribe = null;
+  }
+
+  function startLegacyFallback(reason) {
+    if (legacyUnsubscribe) return;
+
+    console.warn(
+      `[store-gate] Se usa settings/general temporalmente durante la migración (${reason}).`
+    );
+
+    legacyUnsubscribe = onSnapshot(
+      legacyGeneralRef,
+      snapshot => {
+        config = snapshot.exists()
+          ? {
+              ...normalizeStoreAccessConfig(snapshot.data(), 'ok'),
+              __storeConfigSource: 'legacy-general'
+            }
+          : normalizeStoreAccessConfig({}, 'missing');
+        evaluate();
+      },
+      error => {
+        console.error(
+          '[store-gate] No se pudo leer ni storeGate ni la configuración anterior:',
+          error
+        );
+        config = normalizeStoreAccessConfig({}, 'error');
+        evaluate();
+      }
+    );
+  }
+
+  onSnapshot(
+    storeGateRef,
+    snapshot => {
+      if (!snapshot.exists()) {
+        startLegacyFallback('documento todavía no creado');
+        return;
+      }
+
+      stopLegacyFallback();
+      config = normalizeStoreAccessConfig(snapshot.data(), 'ok');
+      evaluate();
+    },
+    error => {
+      console.warn(
+        '[store-gate] settings/storeGate todavía no se puede leer:',
+        error
+      );
+      startLegacyFallback('reglas anteriores');
+    }
+  );
+
+  async function refresh() {
+    document.documentElement.classList.add('tt-store-gate-pending');
+    config = await getStoreAccessConfig();
+    lastPublishedState = '';
     evaluate();
-  }, error => {
-    console.error('[store-gate] No se pudo sincronizar settings/general:', error);
-    cfg = normalizeStoreAccessConfig({}, 'error');
-    evaluate();
+    return config;
+  }
+
+  // Al volver mediante el botón Atrás, algunos navegadores restauran una copia
+  // congelada de la página. Se vuelve a comprobar antes de mostrarla.
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) refresh();
   });
 
   window.TintinStoreGate = {
-    refresh: evaluate,
-    getState: () => ({ role, email, config: cfg }),
+    refresh,
+    getState: () => ({ role, email, config })
   };
 }
