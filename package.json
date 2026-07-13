@@ -2,6 +2,7 @@
   "scripts": {
     "fix:tintin": "node scripts/fix-tintin-source.js",
     "audit:tintin": "node scripts/audit-tintin.js",
+    "audit:store-gate": "node scripts/audit-store-gate.js",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
     "deploy:firebase": "firebase deploy --only firestore:rules,functions --project tintin-accesorios",
