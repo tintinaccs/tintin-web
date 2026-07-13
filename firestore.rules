@@ -11,8 +11,6 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Super Admin real: solo la cuenta oficial de Tintin.
-    // No se confía en role:"superadmin" guardado en Firestore.
     function isSuperAdmin() {
       return isSignedIn() &&
         request.auth.token.email == "tintinaccs@gmail.com";
@@ -71,16 +69,6 @@ service cloud.firestore {
 
     /* ============================================================
        TINTIN — TIENDA ACTIVA / CERRADA
-
-       settings/storeGate es el documento público mínimo.
-       settings/general conserva la configuración completa y no se entrega
-       cuando la tienda está cerrada.
-
-       Seguro por defecto:
-       - si storeGate no existe, queda cerrada;
-       - si storeOpen falta o no es true, queda cerrada;
-       - Super Admin siempre entra;
-       - los demás solo entran por maintenanceAccess.
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
@@ -168,18 +156,272 @@ service cloud.firestore {
     }
 
     /* ============================================================
+       TINTIN — PEDIDOS SIN BLAZE (SPARK)
+
+       Máximo 4 productos diferentes por pedido para permanecer dentro de los
+       límites de lecturas de reglas. Precio y stock se validan contra products.
+       ============================================================ */
+
+    function sparkProductPath(productId) {
+      return /databases/$(database)/documents/products/$(productId);
+    }
+
+    function sparkOrderPath(orderId) {
+      return /databases/$(database)/documents/orders/$(orderId);
+    }
+
+    function sparkItemValid(item, orderId) {
+      let productId = item.id;
+      let product = get(sparkProductPath(productId)).data;
+      return item is map &&
+        item.keys().hasOnly([
+          'id', 'name', 'cat', 'price', 'qty', 'variant', 'imageUrl'
+        ]) &&
+        item.id is string && item.id.size() > 0 && item.id.size() <= 180 &&
+        item.name is string && item.name.size() > 0 && item.name.size() <= 180 &&
+        item.cat is string && item.cat.size() <= 120 &&
+        item.price is number && item.price >= 0 &&
+        item.qty is int && item.qty >= 1 && item.qty <= 99 &&
+        item.variant is string && item.variant.size() <= 120 &&
+        item.imageUrl is string && item.imageUrl.size() <= 900 &&
+        product.get('active', true) != false &&
+        product.price == item.price &&
+        item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&
+        (
+          !('stock' in product) ||
+          product.stock == null ||
+          (
+            product.stock is number &&
+            product.stock >= item.qty &&
+            getAfter(sparkProductPath(productId)).data.stock == product.stock - item.qty &&
+            getAfter(sparkProductPath(productId)).data.lastStockOrderId == orderId
+          )
+        );
+    }
+
+    function sparkItemAtValid(items, index, orderId) {
+      return items.size() <= index || sparkItemValid(items[index], orderId);
+    }
+
+    function sparkLineTotal(items, index) {
+      return items.size() > index
+        ? items[index].price * items[index].qty
+        : 0;
+    }
+
+    function sparkItemsUnique(items) {
+      return
+        (items.size() < 2 || items[0].id != items[1].id) &&
+        (items.size() < 3 || (items[0].id != items[2].id && items[1].id != items[2].id)) &&
+        (items.size() < 4 || (
+          items[0].id != items[3].id &&
+          items[1].id != items[3].id &&
+          items[2].id != items[3].id
+        ));
+    }
+
+    function sparkRateValueValid(entry, fallback, city, cost, pending) {
+      return
+        (
+          entry is string &&
+          city == entry &&
+          fallback is number &&
+          cost == fallback &&
+          pending == false
+        ) ||
+        (
+          entry is map &&
+          city == entry.get('name', '') &&
+          (
+            (
+              entry.get('price', fallback) == null &&
+              cost == 0 &&
+              pending == true
+            ) ||
+            (
+              entry.get('price', fallback) is number &&
+              cost == entry.get('price', fallback) &&
+              pending == false
+            )
+          )
+        );
+    }
+
+    function sparkDeliveryValid(data, settings) {
+      let shipping = data.shipping;
+      let index = shipping.rateIndex;
+      return settings.get('deliveryCities', []) is list &&
+        index is int && index >= 0 && index < settings.get('deliveryCities', []).size() &&
+        sparkRateValueValid(
+          settings.get('deliveryCities', [])[index],
+          settings.get('deliveryCost', 0),
+          shipping.city,
+          data.shippingCost,
+          data.shippingPending
+        ) &&
+        shipping.mapLocation is map &&
+        shipping.mapLocation.keys().hasOnly(['lat', 'lng', 'name', 'address']) &&
+        shipping.mapLocation.lat is number &&
+        shipping.mapLocation.lat >= -90 && shipping.mapLocation.lat <= 90 &&
+        shipping.mapLocation.lng is number &&
+        shipping.mapLocation.lng >= -180 && shipping.mapLocation.lng <= 180 &&
+        shipping.mapLocation.name is string && shipping.mapLocation.name.size() > 0;
+    }
+
+    function sparkEncomiendaValid(data, settings) {
+      let shipping = data.shipping;
+      let index = shipping.rateIndex;
+      return settings.get('encomiendaCities', []) is list &&
+        index is int && index >= 0 && index < settings.get('encomiendaCities', []).size() &&
+        sparkRateValueValid(
+          settings.get('encomiendaCities', [])[index],
+          settings.get('encomiendaCost', 0),
+          shipping.city,
+          data.shippingCost,
+          data.shippingPending
+        ) &&
+        shipping.address is string && shipping.address.size() >= 5 &&
+        shipping.mapLocation == null;
+    }
+
+    function sparkShippingValid(data, settings) {
+      let shipping = data.shipping;
+      return shipping is map &&
+        shipping.keys().hasOnly([
+          'method', 'city', 'rateIndex', 'address', 'referencia',
+          'zone', 'mapLocation'
+        ]) &&
+        shipping.method is string &&
+        shipping.city is string && shipping.city.size() > 0 && shipping.city.size() <= 120 &&
+        shipping.address is string && shipping.address.size() <= 300 &&
+        shipping.referencia is string && shipping.referencia.size() <= 300 &&
+        shipping.zone is string &&
+        (
+          (
+            shipping.method == 'retiro' &&
+            shipping.city == 'San Lorenzo (retiro)' &&
+            shipping.rateIndex == -1 &&
+            shipping.zone == 'central' &&
+            shipping.mapLocation == null &&
+            data.shippingCost == 0 &&
+            data.shippingPending == false
+          ) ||
+          (
+            shipping.method == 'delivery' &&
+            shipping.zone == 'central' &&
+            sparkDeliveryValid(data, settings)
+          ) ||
+          (
+            shipping.method == 'encomienda' &&
+            shipping.zone == 'interior' &&
+            sparkEncomiendaValid(data, settings)
+          )
+        );
+    }
+
+    function sparkOrderCreateValid(orderId) {
+      let data = request.resource.data;
+      let settings = get(/databases/$(database)/documents/settings/general).data;
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      let items = data.items;
+      return isSignedIn() &&
+        request.auth.token.email != null &&
+        request.auth.token.email_verified == true &&
+        (
+          isSuperAdmin() ||
+          (
+            settings.get('storeOpen', false) == true &&
+            userData.get('blocked', false) != true
+          )
+        ) &&
+        orderId == request.auth.uid + '_' + data.requestId &&
+        data.keys().hasOnly([
+          'requestId', 'source', 'shortId', 'userId', 'userEmail',
+          'contactEmail', 'userName', 'userPhone', 'items', 'subtotal',
+          'shippingCost', 'shippingPending', 'total', 'storeWhatsapp',
+          'storeInstagram', 'shipping', 'payment', 'paymentStatus',
+          'status', 'notes', 'notificationStatus', 'createdAt', 'updatedAt'
+        ]) &&
+        data.requestId is string && data.requestId.size() >= 12 && data.requestId.size() <= 100 &&
+        data.source == 'spark-checkout-v1' &&
+        data.shortId is string && data.shortId.size() > 0 && data.shortId.size() <= 20 &&
+        data.userId == request.auth.uid &&
+        data.userEmail is string &&
+        data.userEmail.lower() == request.auth.token.email.lower() &&
+        data.contactEmail is string && data.contactEmail.size() <= 254 &&
+        data.userName is string && data.userName.size() >= 2 && data.userName.size() <= 120 &&
+        data.userPhone is string && data.userPhone.size() >= 7 && data.userPhone.size() <= 40 &&
+        items is list && items.size() >= 1 && items.size() <= 4 &&
+        sparkItemsUnique(items) &&
+        sparkItemAtValid(items, 0, orderId) &&
+        sparkItemAtValid(items, 1, orderId) &&
+        sparkItemAtValid(items, 2, orderId) &&
+        sparkItemAtValid(items, 3, orderId) &&
+        data.subtotal is number && data.subtotal >= 0 &&
+        data.subtotal ==
+          sparkLineTotal(items, 0) +
+          sparkLineTotal(items, 1) +
+          sparkLineTotal(items, 2) +
+          sparkLineTotal(items, 3) &&
+        data.shippingCost is number && data.shippingCost >= 0 &&
+        data.shippingPending is bool &&
+        data.total is number && data.total == data.subtotal + data.shippingCost &&
+        data.storeWhatsapp is string && data.storeWhatsapp.size() <= 40 &&
+        data.storeInstagram is string && data.storeInstagram.size() <= 120 &&
+        sparkShippingValid(data, settings) &&
+        data.payment is map &&
+        data.payment.keys().hasOnly(['method', 'status']) &&
+        data.payment.method is string &&
+        (data.payment.method == 'efectivo' || data.payment.method == 'transferencia') &&
+        settings.get('paymentMethods', {}).get(data.payment.method, true) != false &&
+        data.payment.status == 'pendiente' &&
+        data.paymentStatus == 'pendiente' &&
+        data.status == 'pendiente' &&
+        data.notes is string && data.notes.size() <= 1000 &&
+        data.notificationStatus == 'pending' &&
+        data.createdAt == request.time &&
+        data.updatedAt == request.time;
+    }
+
+    function sparkOrderItemQty(items, productId) {
+      return
+        (items.size() > 0 && items[0].id == productId ? items[0].qty : 0) +
+        (items.size() > 1 && items[1].id == productId ? items[1].qty : 0) +
+        (items.size() > 2 && items[2].id == productId ? items[2].qty : 0) +
+        (items.size() > 3 && items[3].id == productId ? items[3].qty : 0);
+    }
+
+    function sparkStockUpdateValid(productId) {
+      let orderId = request.resource.data.lastStockOrderId;
+      let orderPath = sparkOrderPath(orderId);
+      let order = getAfter(orderPath).data;
+      let qty = sparkOrderItemQty(order.items, productId);
+      return isSignedIn() &&
+        orderId is string &&
+        !exists(orderPath) &&
+        existsAfter(orderPath) &&
+        order.source == 'spark-checkout-v1' &&
+        order.userId == request.auth.uid &&
+        qty > 0 &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'stock', 'lastStockOrderId', 'updatedAt'
+        ]) &&
+        resource.data.stock is number &&
+        request.resource.data.stock is number &&
+        request.resource.data.stock == resource.data.stock - qty &&
+        request.resource.data.stock >= 0 &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+    /* ============================================================
        SETTINGS
        ============================================================ */
 
-    // Único documento público durante el cierre. Solo contiene el estado y
-    // las excepciones; no contiene bancos, costos, redes ni datos comerciales.
     match /settings/storeGate {
       allow read: if true;
       allow write: if isSuperAdmin();
     }
 
-    // Configuración completa: solo se lee si la tienda está abierta o la
-    // cuenta tiene una excepción de mantenimiento.
     match /settings/general {
       allow read: if isStoreOpenOrAllowed();
       allow write: if isSuperAdmin();
@@ -200,17 +442,13 @@ service cloud.firestore {
     }
 
     /* ============================================================
-       USERS — ROLES/BLOQUEOS SOLO SUPER ADMIN
+       USERS
        ============================================================ */
 
     match /users/{userId} {
-      // El login puede leer su propia ficha para resolver el rol. No obtiene
-      // acceso a ningún otro dato de la tienda por esta regla.
       allow read: if isSignedIn() &&
         (request.auth.uid == userId || isSuperAdmin());
 
-      // Permite crear únicamente la ficha de la propia cuenta para terminar
-      // el login. Luego el gate decide si esa persona puede entrar.
       allow create: if isSignedIn() &&
         request.auth.uid == userId &&
         (
@@ -218,8 +456,7 @@ service cloud.firestore {
           (
             request.resource.data.email is string &&
             request.auth.token.email != null &&
-            request.resource.data.email.lower() ==
-              request.auth.token.email.lower()
+            request.resource.data.email.lower() == request.auth.token.email.lower()
           )
         ) &&
         (
@@ -294,6 +531,7 @@ service cloud.firestore {
         );
 
       allow update: if isSuperAdmin() ||
+        sparkStockUpdateValid(productId) ||
         (
           isStoreOpenOrAllowed() &&
           (isAdmin() || isAgent()) &&
@@ -332,10 +570,7 @@ service cloud.firestore {
           (isAdmin() || isAgent()) &&
           (
             currentRolePermAllows('contenido', 'editarTextos') ||
-            currentRolePermAllows(
-              'contenido',
-              'activarDesactivarSecciones'
-            )
+            currentRolePermAllows('contenido', 'activarDesactivarSecciones')
           )
         );
 
@@ -345,10 +580,7 @@ service cloud.firestore {
           (isAdmin() || isAgent()) &&
           (
             currentRolePermAllows('contenido', 'editarTextos') ||
-            currentRolePermAllows(
-              'contenido',
-              'activarDesactivarSecciones'
-            )
+            currentRolePermAllows('contenido', 'activarDesactivarSecciones')
           )
         );
 
@@ -360,10 +592,7 @@ service cloud.firestore {
        ============================================================ */
 
     match /orders/{orderId} {
-      // Los pedidos solo se crean mediante la Cloud Function createOrder.
-      // Firebase Admin no pasa por estas reglas; el navegador queda bloqueado
-      // para que no pueda inventar precios, totales ni stock.
-      allow create: if false;
+      allow create: if sparkOrderCreateValid(orderId);
 
       allow read: if isSuperAdmin() ||
         (
@@ -401,9 +630,7 @@ service cloud.firestore {
               (
                 !request.resource.data.diff(resource.data)
                   .affectedKeys().hasAny([
-                    'resendCount',
-                    'lastResendAt',
-                    'notificationStatus'
+                    'resendCount', 'lastResendAt', 'notificationStatus'
                   ]) ||
                 currentRolePermAllows('pedidos', 'reenviarCorreo')
               )
@@ -411,10 +638,7 @@ service cloud.firestore {
             (
               isOwnOrderByUidOrEmail() &&
               request.resource.data.diff(resource.data)
-                .affectedKeys().hasOnly([
-                  'notificationStatus',
-                  'updatedAt'
-                ])
+                .affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
             )
           )
         );
@@ -452,7 +676,7 @@ service cloud.firestore {
     }
 
     /* ============================================================
-       EMAIL MODULE — CONFIGURACIÓN SOLO SUPER ADMIN
+       EMAIL MODULE
        ============================================================ */
 
     match /emailSettings/{docId} {
@@ -495,10 +719,6 @@ service cloud.firestore {
       allow read, create, update: if isSuperAdmin();
       allow delete: if false;
     }
-
-    /* ============================================================
-       DEFAULT DENY
-       ============================================================ */
 
     match /{document=**} {
       allow read, write: if false;
