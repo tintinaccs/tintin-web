@@ -15,7 +15,7 @@ import {
   serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const EMAIL_GATE_REF = doc(db, 'settings', 'emailGate');
+const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
 
 function clean(value, maxLength = 1000) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
@@ -31,8 +31,11 @@ function webhookConfigured() {
 
 async function getEmailSettings_() {
   try {
-    const snap = await getDoc(EMAIL_GATE_REF);
-    return snap.exists() ? snap.data() || {} : {};
+    const snap = await getDoc(STORE_GATE_REF);
+    const data = snap.exists() ? snap.data() || {} : {};
+    return data.emailAccess && typeof data.emailAccess === 'object'
+      ? data.emailAccess
+      : {};
   } catch {
     return {};
   }
@@ -225,8 +228,6 @@ export async function sendBulkTemplatedEmail(payload) {
 
 export { notificationStatusFromResult_ as notificationStatusFromResult };
 
-// checkout.html ya importa este módulo. Desde acá se inicia el puente una sola
-// vez, sin tocar el HTML grande ni cargarlo en las demás páginas.
 const currentPath = (window.location.pathname || '').toLowerCase();
 if (
   (currentPath.endsWith('/checkout.html') || currentPath.endsWith('/checkout')) &&
