@@ -6,99 +6,6 @@
 'use strict';
 
 /* ──────────────────────────────────────
-   PRODUCTS DATA
-────────────────────────────────────── */
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "RELOJ ALISSIA",
-    cat: "RELOJES",
-    price: 210000,
-    badge: "Destacado",
-    desc: "Reloj de la marca SKMEI de lujo con elegante esfera cuadrada. Correa de acero inoxidable plateado con detalles dorados. Resistente al agua, mecanismo japonés de precisión. El accesorio que todas desean.",
-    variants: { color: ["Plateado", "Dorado", "Rosado"], material: ["Acero inoxidable"] },
-    emoji: "⌚"
-  },
-  {
-    id: 2,
-    name: "RELOJ ALLEGRA",
-    cat: "RELOJES",
-    price: 70000,
-    badge: "Nuevo",
-    desc: "Reloj femenino minimalista con esfera redonda y correa de malla. Perfecto para el uso diario. Diseño limpio y versátil que combina con cualquier outfit. Mecanismo de cuarzo.",
-    variants: { color: ["Plateado", "Dorado"], material: ["Acero inoxidable"] },
-    emoji: "⌚"
-  },
-  {
-    id: 3,
-    name: "RELOJ AMARA",
-    cat: "RELOJES",
-    price: 160000,
-    badge: "Destacado",
-    desc: "Elegante reloj con esfera ovalada y brillantes incrustados. La combinación perfecta de sofisticación y feminidad. Correa de cuero sintético premium en varios colores.",
-    variants: { color: ["Negro", "Marrón", "Nude"], material: ["Acero + cuero"] },
-    emoji: "⌚"
-  },
-  {
-    id: 4,
-    name: "RELOJ ÁMBAR",
-    cat: "RELOJES",
-    price: 70000,
-    badge: null,
-    desc: "Reloj casual chic con detalles color ámbar. Esfera redonda con números romanos. Correa de pulsera ajustable. Ideal para looks diarios llenos de estilo.",
-    variants: { color: ["Dorado ámbar", "Plateado"] },
-    emoji: "⌚"
-  },
-  {
-    id: 5,
-    name: "RELOJ AMELIA",
-    cat: "RELOJES",
-    price: 70000,
-    badge: "Nuevo",
-    desc: "Reloj delicado y romántico con esfera floral. Diseño ultra femenino pensado para las amantes de los detalles. Correa de malla fina. Perfecto para regalo.",
-    variants: { color: ["Rosa", "Dorado", "Blanco"] },
-    emoji: "⌚"
-  },
-  {
-    id: 6,
-    name: "RELOJ AMELINE",
-    cat: "RELOJES",
-    price: 210000,
-    badge: "Destacado",
-    desc: "Reloj premium con dial de nácar y correa de acero dorado. Mecanismo suizo de alta precisión. El complemento ideal para ocasiones especiales y reuniones importantes.",
-    variants: { color: ["Dorado rosa", "Plateado", "Dorado"] },
-    emoji: "⌚"
-  },
-  {
-    id: 7,
-    name: "RELOJ AMETHYS",
-    cat: "RELOJES",
-    price: 180000,
-    badge: null,
-    desc: "Inspirado en las piedras preciosas, este reloj combina tonos violeta y detalles plateados. Esfera rectangular con cristales decorativos. Un statement piece para tu look.",
-    variants: { color: ["Violeta", "Lila"] },
-    emoji: "⌚"
-  },
-  {
-    id: 8,
-    name: "RELOJ ANABELLA",
-    cat: "RELOJES",
-    price: 180000,
-    badge: "Destacado",
-    desc: "Reloj clásico y atemporal con diseño elegante. Esfera blanca con índices dorados. Correa de acero inoxidable de malla milanesa. Waterproof hasta 3 ATM.",
-    variants: { color: ["Blanco/Dorado", "Blanco/Plateado"] },
-    emoji: "⌚"
-  }
-];
-
-// Exposed on window so module scripts (which can't see this classic
-// script's top-level const) have a last-resort dataset to render when
-// Firestore never responds — e.g. catalogo.html's product grid, which
-// otherwise has nothing to fall back to if products-store.js's listener
-// never fires.
-window.PRODUCTS_FALLBACK = PRODUCTS;
-
-/* ──────────────────────────────────────
    UTILITIES
 ────────────────────────────────────── */
 
@@ -127,12 +34,13 @@ function isFeaturable(p) {
 }
 
 /**
- * Get a product by ID
+ * Get a product by ID from the real, live Firestore catalog. Returns null
+ * until products-store.js's listener has resolved at least once — callers
+ * must handle that (loading state), not assume a product always exists.
  */
 function getProductById(id) {
-  // Search dynamic Firestore products first (string id), then hardcoded (numeric id)
-  const pool = window.PRODUCTS || PRODUCTS;
-  return pool.find(p => String(p.id) === String(id)) || PRODUCTS.find(p => p.id === Number(id)) || null;
+  const pool = window.PRODUCTS || [];
+  return pool.find(p => String(p.id) === String(id)) || null;
 }
 
 /* ──────────────────────────────────────
@@ -710,7 +618,7 @@ function initSearch() {
         return;
       }
 
-      const productPool = window.PRODUCTS || PRODUCTS;
+      const productPool = window.PRODUCTS || [];
 
       const matches = productPool.filter(p =>
         String(p.name || '').toLowerCase().includes(q) ||
@@ -794,6 +702,19 @@ function _showProductsSkeleton(containerId, count = 4) {
   `).join('');
 }
 
+/** Real error state (never fake/demo products) for a product grid that never
+ *  got a Firestore response — either the listener errored, or 4s passed
+ *  with no response at all yet. */
+function _showProductsLoadError(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
+      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
+      <button class="tt-btn" onclick="location.reload()">Reintentar</button>
+    </div>`;
+}
+
 /* ──────────────────────────────────────
    RENDER PRODUCTS GRID
 ────────────────────────────────────── */
@@ -806,6 +727,11 @@ window._onProductImgError = _onProductImgError;
 function renderProductsGrid(containerId, products) {
   const container = document.getElementById(containerId);
   if (!container) return;
+
+  if (!products.length) {
+    container.innerHTML = `<div class="tt-products-empty" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">No hay productos disponibles todavía.</div>`;
+    return;
+  }
 
   container.innerHTML = products.map(p => {
     const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
@@ -843,7 +769,7 @@ function renderLookCombo() {
   const grid = document.getElementById('look-grid');
   if (!grid) return;
 
- const productPool = (window.PRODUCTS || PRODUCTS).filter(isFeaturable);
+ const productPool = (window.PRODUCTS || []).filter(isFeaturable);
   currentCombo = pickRandom(productPool, 3);
 
   grid.innerHTML = currentCombo.map(p => {
@@ -873,7 +799,7 @@ function initLookCombinator() {
   const lookActions = document.getElementById('look-actions');
   const lookSection = document.getElementById('look-section');
 
-  const productPool = window.PRODUCTS || PRODUCTS;
+  const productPool = window.PRODUCTS || [];
   if (!productPool || productPool.length === 0) {
     if (lookSection) lookSection.style.display = 'none';
     return;
@@ -1376,7 +1302,7 @@ function _renderProductDetail(product) {
   }
 
   // Related products — same category first
-  const pool = (window.PRODUCTS || PRODUCTS).filter(p => String(p.id) !== String(product.id) && isFeaturable(p));
+  const pool = (window.PRODUCTS || []).filter(p => String(p.id) !== String(product.id) && isFeaturable(p));
   const sameCat = pool.filter(p => (p.category || p.cat) === (product.category || product.cat));
   const others  = pool.filter(p => (p.category || p.cat) !== (product.category || product.cat));
   const related = [...pickRandom(sameCat, 4), ...pickRandom(others, 4 - Math.min(sameCat.length, 4))].slice(0, 4);
@@ -1661,24 +1587,27 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCart();
 
-  // Homepage specific — show skeleton while Firebase loads, fallback to hardcoded after 4s.
-  // window.PRODUCTS may already be populated here: the products-store.js module's
-  // onSnapshot can resolve (e.g. from a warm IndexedDB cache) and dispatch
-  // tintin:products-loaded before this DOMContentLoaded handler runs, since both
-  // script.js and the module scripts are deferred and execute in document order
-  // before DOMContentLoaded fires. Don't clobber already-rendered real data with
-  // a skeleton in that case.
+  // Homepage specific — show skeleton while Firebase loads, real error+retry
+  // if it never responds. window.PRODUCTS may already be populated here: the
+  // products-store.js module's onSnapshot can resolve (e.g. from a warm
+  // IndexedDB cache) and dispatch tintin:products-loaded before this
+  // DOMContentLoaded handler runs, since both script.js and the module
+  // scripts are deferred and execute in document order before
+  // DOMContentLoaded fires. Don't clobber already-rendered real data with a
+  // skeleton in that case. Array.isArray (not truthiness) is what tells
+  // "Firestore already answered, zero products" apart from "hasn't answered
+  // yet" — both are otherwise falsy-length.
   if (document.getElementById('products-grid')) {
-    if (window.PRODUCTS && window.PRODUCTS.length) {
+    if (Array.isArray(window.PRODUCTS)) {
       renderProductsGrid('products-grid', window.PRODUCTS.filter(isFeaturable).slice(0, 6));
     } else {
       _showProductsSkeleton('products-grid');
-      setTimeout(() => {
+      const _fallbackHome = () => {
         const grid = document.getElementById('products-grid');
-        if (grid && grid.querySelector('.tt-skeleton-card')) {
-          renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
-        }
-      }, 4000);
+        if (grid && grid.querySelector('.tt-skeleton-card')) _showProductsLoadError('products-grid');
+      };
+      setTimeout(_fallbackHome, 4000);
+      window.addEventListener('tintin:products-error', _fallbackHome);
     }
   }
 
@@ -1702,18 +1631,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Collections page — same already-loaded guard as above, plus a
-  // skeleton→fallback (timeout + products-error event) so a failed/slow
-  // Firestore listener never leaves it spinning forever.
+  // skeleton→real-error (timeout + products-error event) so a failed/slow
+  // Firestore listener never leaves it spinning forever, and never gets
+  // replaced by fake demo products.
   if (document.getElementById('colls-products-grid')) {
-    if (window.PRODUCTS && window.PRODUCTS.length) {
+    if (Array.isArray(window.PRODUCTS)) {
       renderProductsGrid('colls-products-grid', window.PRODUCTS.filter(isFeaturable));
     } else {
       _showProductsSkeleton('colls-products-grid');
       const _fallbackColls = () => {
         const grid = document.getElementById('colls-products-grid');
-        if (grid && grid.querySelector('.tt-skeleton-card')) {
-          renderProductsGrid('colls-products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable));
-        }
+        if (grid && grid.querySelector('.tt-skeleton-card')) _showProductsLoadError('colls-products-grid');
       };
       setTimeout(_fallbackColls, 4000);
       window.addEventListener('tintin:products-error', _fallbackColls);
@@ -1731,11 +1659,11 @@ window.addEventListener('tintin:products-loaded', () => {
   renderCart();
   updateCartBadge();
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable).slice(0, 6));
+    renderProductsGrid('products-grid', (window.PRODUCTS || []).filter(isFeaturable).slice(0, 6));
   }
 
   if (document.getElementById('colls-products-grid')) {
-    renderProductsGrid('colls-products-grid', (window.PRODUCTS || PRODUCTS).filter(isFeaturable));
+    renderProductsGrid('colls-products-grid', (window.PRODUCTS || []).filter(isFeaturable));
   }
 
   if (document.getElementById('look-grid')) {

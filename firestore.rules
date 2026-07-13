@@ -253,8 +253,14 @@ service cloud.firestore {
     // staff reales — sin ese filtro, cualquier clienta logueada podía crear/
     // editar productos, colecciones y contenido, y leer TODOS los pedidos
     // ajenos con solo tener sesión iniciada.
+    // Catálogo público: cualquiera puede LEER productos y colecciones —
+    // visitante anónimo, cliente logueado o incluso una cuenta bloqueada —
+    // sin importar storeOpen/maintenanceAccess (eso solo debe frenar
+    // checkout/pedidos, nunca la posibilidad de ver la vidriera). Escribir
+    // sigue exigiendo Super Admin o un rol de staff con el permiso puntual
+    // habilitado, exactamente como antes.
     match /products/{productId} {
-      allow read: if isStoreOpenOrAllowed();
+      allow read: if true;
       allow create: if isSuperAdmin() ||
         (isStoreOpenOrAllowed() && (isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('productos', 'crear'));
       allow update: if isSuperAdmin() ||
@@ -263,7 +269,7 @@ service cloud.firestore {
     }
 
     match /collections/{collectionId} {
-      allow read: if isStoreOpenOrAllowed();
+      allow read: if true;
       allow create: if isSuperAdmin() ||
         (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'crear'));
       allow update: if isSuperAdmin() ||
