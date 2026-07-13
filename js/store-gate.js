@@ -1,48 +1,173 @@
 /**
- * TINTIN — Gate automático de "Tienda abierta/cerrada" para páginas
- * públicas. Importar este script (un solo <script type="module"> más) alcanza
- * para que la página muestre la pantalla de "Tienda temporalmente cerrada"
- * cuando corresponda: escucha en vivo settings/general (storeOpen +
- * maintenanceAccess) y el estado de auth, y decide con la misma lógica pura
- * de js/store-gate-core.js.
+ * TINTIN — Control automático para todas las páginas públicas.
  *
- * admin.html NO importa este archivo — tiene su propio auth guard con su
- * propia lógica de redirect/bloqueo, y usa store-gate-core.js directamente
- * para no duplicar el listener automático de acá.
+ * Antes de habilitar la página espera:
+ * 1) la sesión real de Firebase;
+ * 2) settings/storeGate, el documento público mínimo.
+ *
+ * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
 import { auth, db } from './firebase.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  doc,
+  onSnapshot
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getUserRole } from './roles.js';
-import { isAccessAllowed, renderStoreClosedOverlay, removeStoreClosedOverlay, getStoreAccessConfig, STORE_CLOSED_WA_URL } from './store-gate-core.js';
+import {
+  isAccessAllowed,
+  renderStoreClosedOverlay,
+  renderStoreConfigUnavailableOverlay,
+  removeStoreClosedOverlay,
+  getStoreAccessConfig,
+  normalizeStoreAccessConfig
+} from './store-gate-core.js';
 
-export { isAccessAllowed, renderStoreClosedOverlay, removeStoreClosedOverlay, getStoreAccessConfig, STORE_CLOSED_WA_URL };
+export {
+  isAccessAllowed,
+  renderStoreClosedOverlay,
+  renderStoreConfigUnavailableOverlay,
+  removeStoreClosedOverlay,
+  getStoreAccessConfig
+};
 
-let _role = null;   // null = todavía no se resolvió el estado de auth
-let _email = '';
-let _cfg = null;    // null = todavía no llegó el primer snapshot de settings/general
+if (!window.TintinStoreGateRuntimeBooted) {
+  window.TintinStoreGateRuntimeBooted = true;
+  document.documentElement.classList.add('tt-store-gate-pending');
 
-function evaluate_() {
-  if (_role === null || _cfg === null) return; // esperar a tener los dos datos
-  if (isAccessAllowed(_cfg, _role, _email)) removeStoreClosedOverlay();
-  else renderStoreClosedOverlay();
-}
+  const storeGateRef = doc(db, 'settings', 'storeGate');
+  const legacyGeneralRef = doc(db, 'settings', 'general');
+  let role = null;
+  let email = '';
+  let config = null;
+  let lastPublishedState = '';
+  let legacyUnsubscribe = null;
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) { _role = 'guest'; _email = ''; evaluate_(); return; }
-  _email = user.email || '';
-  try {
-    _role = await getUserRole(user.uid, user.email);
-  } catch (e) {
-    _role = 'client';
+  function publishState(state) {
+    if (state === lastPublishedState) return;
+    lastPublishedState = state;
+
+    window.dispatchEvent(
+      new CustomEvent('tintin:store-gate-state', {
+        detail: { state, role, email, config }
+      })
+    );
   }
-  evaluate_();
-});
 
-onSnapshot(doc(db, 'settings', 'general'), snap => {
-  _cfg = snap.exists() ? snap.data() : { storeOpen: true };
-  evaluate_();
-}, () => {
-  _cfg = { storeOpen: true };
-  evaluate_();
-});
+  function evaluate() {
+    if (role === null || config === null) return;
+
+    // isAccessAllowed reconoce primero el correo oficial. Por eso Super Admin
+    // sigue entrando incluso si el documento de control falta temporalmente.
+    if (isAccessAllowed(config, role, email)) {
+      removeStoreClosedOverlay();
+      publishState('allowed');
+      return;
+    }
+
+    if (config.__storeConfigStatus !== 'ok') {
+      renderStoreConfigUnavailableOverlay(config);
+      publishState('unavailable');
+      return;
+    }
+
+    renderStoreClosedOverlay(config);
+    publishState('closed');
+  }
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      role = 'guest';
+      email = '';
+      evaluate();
+      return;
+    }
+
+    email = user.email || '';
+    try {
+      role = await getUserRole(user.uid, user.email);
+    } catch (error) {
+      // No se reemplaza por client: con la tienda cerrada eso podría conceder
+      // una excepción que no fue comprobada.
+      console.error('[store-gate] No se pudo comprobar el rol:', error);
+      role = '__unresolved__';
+    }
+    evaluate();
+  });
+
+  function stopLegacyFallback() {
+    legacyUnsubscribe?.();
+    legacyUnsubscribe = null;
+  }
+
+  function startLegacyFallback(reason) {
+    if (legacyUnsubscribe) return;
+
+    console.warn(
+      `[store-gate] Se usa settings/general temporalmente durante la migración (${reason}).`
+    );
+
+    legacyUnsubscribe = onSnapshot(
+      legacyGeneralRef,
+      snapshot => {
+        config = snapshot.exists()
+          ? {
+              ...normalizeStoreAccessConfig(snapshot.data(), 'ok'),
+              __storeConfigSource: 'legacy-general'
+            }
+          : normalizeStoreAccessConfig({}, 'missing');
+        evaluate();
+      },
+      error => {
+        console.error(
+          '[store-gate] No se pudo leer ni storeGate ni la configuración anterior:',
+          error
+        );
+        config = normalizeStoreAccessConfig({}, 'error');
+        evaluate();
+      }
+    );
+  }
+
+  onSnapshot(
+    storeGateRef,
+    snapshot => {
+      if (!snapshot.exists()) {
+        startLegacyFallback('documento todavía no creado');
+        return;
+      }
+
+      stopLegacyFallback();
+      config = normalizeStoreAccessConfig(snapshot.data(), 'ok');
+      evaluate();
+    },
+    error => {
+      console.warn(
+        '[store-gate] settings/storeGate todavía no se puede leer:',
+        error
+      );
+      startLegacyFallback('reglas anteriores');
+    }
+  );
+
+  async function refresh() {
+    document.documentElement.classList.add('tt-store-gate-pending');
+    config = await getStoreAccessConfig();
+    lastPublishedState = '';
+    evaluate();
+    return config;
+  }
+
+  // Al volver mediante el botón Atrás, algunos navegadores restauran una copia
+  // congelada de la página. Se vuelve a comprobar antes de mostrarla.
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) refresh();
+  });
+
+  window.TintinStoreGate = {
+    refresh,
+    getState: () => ({ role, email, config })
+  };
+}

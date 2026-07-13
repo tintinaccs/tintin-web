@@ -1,212 +1,271 @@
 /* =============================================================
-   TINTIN — Control Super Admin: Activar / Desactivar tienda
+   TINTIN — Sincronización segura del estado global de la tienda
    =============================================================
-   Se carga desde js/store-gate.js solamente en páginas admin.
-   No reemplaza el panel: lo refuerza con un botón explícito, estado real,
-   feedback y sincronización en vivo desde Firestore.
+   Fuente editable: settings/general (panel Super Admin).
+   Documento público mínimo: settings/storeGate.
+
+   No crea un segundo switch ni borra configuración. Copia únicamente:
+   - storeOpen
+   - maintenanceAccess
+
+   De esta forma, cuando la tienda está cerrada, settings/general y sus datos
+   completos dejan de ser públicos.
    ============================================================= */
 
 import { auth, db } from './firebase.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
-  doc, setDoc, onSnapshot, serverTimestamp, addDoc, collection
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  doc,
+  onSnapshot,
+  setDoc,
+  serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { SUPER_ADMIN } from './roles.js';
 
-const settingsRef = doc(db, 'settings', 'general');
-let currentUser = auth.currentUser || null;
-let currentStoreOpen = true;
-let saving = false;
-let uiReady = false;
-let els = {};
+const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
+const GENERAL_REF = doc(db, 'settings', 'general');
+const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
+const MAINTENANCE_ROLES = [
+  'admin',
+  'agent',
+  'viewer',
+  'support',
+  'client',
+  'guest'
+];
 
-function toast(message, duration = 3000) {
-  const el = document.getElementById('adm-toast');
-  if (!el) { console.log('[Tintin Admin]', message); return; }
-  el.textContent = message;
-  el.classList.add('show');
-  clearTimeout(el._ttTimer);
-  el._ttTimer = setTimeout(() => el.classList.remove('show'), duration);
-}
-
-function isSuperAdmin() {
-  return currentUser?.email === SUPER_ADMIN;
-}
+let currentEmail = '';
+let latestGeneral = { exists: false, data: {} };
+let latestGate = { exists: false, data: {} };
+let syncInFlight = false;
+let syncQueued = false;
+let dom = null;
 
 function waitForConfigDom() {
   return new Promise(resolve => {
-    const tryFind = () => {
+    const find = () => {
       const checkbox = document.getElementById('cfg-store-open');
       const saveBtn = document.getElementById('btn-save-config');
-      if (checkbox && saveBtn) { resolve({ checkbox, saveBtn }); return true; }
+      const pill = document.getElementById('cfg-store-state-pill');
+      if (checkbox && saveBtn && pill) {
+        resolve({ checkbox, saveBtn, pill });
+        return true;
+      }
       return false;
     };
-    if (tryFind()) return;
-    let attempts = 0;
-    const timer = setInterval(() => {
-      attempts++;
-      if (tryFind() || attempts > 120) clearInterval(timer);
+
+    if (find()) return;
+
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      tries += 1;
+      if (find() || tries >= 150) window.clearInterval(timer);
     }, 100);
   });
 }
 
-function ensureUiShell(checkbox, saveBtn) {
-  if (uiReady) return;
-  const wrap = checkbox.closest('.adm-toggle-wrap') || checkbox.parentElement;
-  const host = document.createElement('div');
-  host.id = 'cfg-store-superadmin-control';
-  host.style.cssText = 'margin-top:14px;padding:14px 16px;border:1.5px solid var(--adm-border);border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap';
-  host.innerHTML = `
-    <div style="min-width:220px;flex:1">
-      <div id="cfg-store-status-badge" class="adm-badge" style="margin-bottom:6px">—</div>
-      <div id="cfg-store-status-text" style="font-size:13px;color:var(--adm-muted);line-height:1.55">Leyendo estado real de la tienda…</div>
-    </div>
-    <button type="button" id="cfg-store-action" class="adm-btn adm-btn-primary" style="min-width:190px">Cargando…</button>
-  `;
-  wrap.insertAdjacentElement('afterend', host);
+function ensureStatusPanel(checkbox) {
+  let panel = document.getElementById('cfg-store-sync-status');
+  if (panel) return panel;
 
-  els = {
-    checkbox,
-    saveBtn,
-    actionBtn: host.querySelector('#cfg-store-action'),
-    badge: host.querySelector('#cfg-store-status-badge'),
-    text: host.querySelector('#cfg-store-status-text')
+  panel = document.createElement('div');
+  panel.id = 'cfg-store-sync-status';
+  panel.setAttribute('role', 'status');
+  panel.style.cssText =
+    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#666;border:1px solid var(--adm-border)';
+  panel.textContent = 'Comprobando el estado real de la tienda…';
+
+  const wrap = checkbox.closest('.adm-toggle-wrap');
+  (wrap?.parentElement || checkbox.parentElement)?.appendChild(panel);
+  return panel;
+}
+
+function setPanel(kind, text) {
+  if (!dom?.panel) return;
+
+  const styles = {
+    ok: ['#ecfdf5', '#065f46', '#a7f3d0'],
+    closed: ['#fff1f2', '#9f1239', '#fecdd3'],
+    warning: ['#fff7ed', '#9a3412', '#fed7aa'],
+    error: ['#fef2f2', '#991b1b', '#fecaca']
   };
+  const [background, color, border] = styles[kind] || styles.warning;
 
-  els.actionBtn.addEventListener('click', () => {
-    const dirty = els.checkbox.checked !== currentStoreOpen;
-    const targetOpen = dirty ? els.checkbox.checked : !currentStoreOpen;
-    saveStoreState(targetOpen);
+  dom.panel.style.background = background;
+  dom.panel.style.color = color;
+  dom.panel.style.borderColor = border;
+  dom.panel.textContent = text;
+}
+
+function setPill(open, label) {
+  if (!dom?.pill) return;
+
+  dom.pill.textContent = label || (open ? 'TIENDA ABIERTA' : 'TIENDA CERRADA');
+  dom.pill.classList.toggle('tt-store-state-pill-open', open);
+  dom.pill.classList.toggle('tt-store-state-pill-closed', !open);
+}
+
+function normalizeMaintenanceAccess(value) {
+  const source =
+    value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const result = {};
+
+  MAINTENANCE_ROLES.forEach(role => {
+    result[role] = source[role] === true;
   });
 
-  els.checkbox.addEventListener('change', () => renderState(currentStoreOpen, { dirty: true }));
-
-  // Refuerzo: si usa el botón general "Guardar toda la configuración", este
-  // módulo guarda también el estado real del switch. Así no hay dos verdades.
-  els.saveBtn.addEventListener('click', () => {
-    if (!isSuperAdmin()) return;
-    if (els.checkbox.checked !== currentStoreOpen) saveStoreState(els.checkbox.checked);
-  }, true);
-
-  uiReady = true;
+  return result;
 }
 
-function renderState(open, opts = {}) {
-  if (!uiReady) return;
-  const allowed = isSuperAdmin();
-  const dirty = opts.dirty && els.checkbox.checked !== open;
-
-  if (!dirty) els.checkbox.checked = open;
-  els.checkbox.disabled = !allowed || saving;
-  els.actionBtn.disabled = !allowed || saving;
-
-  if (saving) {
-    els.actionBtn.textContent = 'Guardando…';
-    els.text.textContent = 'Actualizando el estado global de la tienda en Firestore…';
-    return;
-  }
-
-  if (!allowed) {
-    els.badge.textContent = 'Solo Super Admin';
-    els.badge.style.background = '#fef3c7';
-    els.badge.style.color = '#92400e';
-    els.text.textContent = 'Solo tintinaccs@gmail.com puede activar o desactivar la tienda.';
-    els.actionBtn.textContent = 'Sin permiso';
-    return;
-  }
-
-  if (dirty) {
-    const desired = els.checkbox.checked;
-    els.badge.textContent = 'Cambio pendiente';
-    els.badge.style.background = '#fff3e0';
-    els.badge.style.color = '#e65100';
-    els.text.textContent = desired
-      ? 'El switch está en Activar, pero todavía falta guardar el cambio global.'
-      : 'El switch está en Desactivar, pero todavía falta guardar el cambio global.';
-    els.actionBtn.textContent = desired ? 'Guardar activación' : 'Guardar desactivación';
-    els.actionBtn.className = desired ? 'adm-btn adm-btn-primary' : 'adm-btn adm-btn-danger';
-    return;
-  }
-
-  if (open) {
-    els.badge.textContent = 'Tienda activa';
-    els.badge.style.background = '#d1fae5';
-    els.badge.style.color = '#065f46';
-    els.text.textContent = 'La tienda está visible para visitantes, clientas y navegación pública en desktop, tablet y mobile.';
-    els.actionBtn.textContent = 'Desactivar tienda';
-    els.actionBtn.className = 'adm-btn adm-btn-danger';
-  } else {
-    els.badge.textContent = 'Tienda desactivada';
-    els.badge.style.background = '#fee2e2';
-    els.badge.style.color = '#991b1b';
-    els.text.textContent = 'La web pública está bloqueada. Solo Super Admin puede entrar para administrar y reactivar.';
-    els.actionBtn.textContent = 'Activar tienda';
-    els.actionBtn.className = 'adm-btn adm-btn-primary';
-  }
+function desiredGateData() {
+  const data = latestGeneral.exists ? latestGeneral.data : {};
+  return {
+    storeOpen: latestGeneral.exists && data.storeOpen === true,
+    maintenanceAccess: normalizeMaintenanceAccess(data.maintenanceAccess)
+  };
 }
 
-async function logStoreAudit(targetOpen) {
+function comparableGate(data) {
+  return {
+    storeOpen: data?.storeOpen === true,
+    maintenanceAccess: normalizeMaintenanceAccess(data?.maintenanceAccess)
+  };
+}
+
+function gateMatchesGeneral() {
+  if (!latestGate.exists) return false;
+  return (
+    JSON.stringify(comparableGate(latestGate.data)) ===
+    JSON.stringify(desiredGateData())
+  );
+}
+
+async function syncStoreGate() {
+  if (currentEmail.toLowerCase() !== SUPER_ADMIN_EMAIL) return;
+  if (syncInFlight) {
+    syncQueued = true;
+    return;
+  }
+
+  syncInFlight = true;
+  syncQueued = false;
+
   try {
-    await addDoc(collection(db, 'auditLog'), {
-      action: 'cambiar_estado_tienda',
-      targetType: 'settings',
-      targetId: 'settings/general',
-      targetLabel: 'Estado de la tienda',
-      details: targetOpen ? 'Tienda activada' : 'Tienda desactivada',
-      bulk: false,
-      bulkCount: 0,
-      actorEmail: currentUser?.email || '',
-      actorRole: 'superadmin',
-      createdAt: serverTimestamp()
+    const desired = desiredGateData();
+    setPanel(
+      'warning',
+      'Sincronizando el cierre global con Firebase…'
+    );
+
+    await setDoc(STORE_GATE_REF, {
+      ...desired,
+      updatedAt: serverTimestamp()
     });
-  } catch (e) {
-    console.warn('[admin-store-control] No se pudo registrar auditoría:', e);
+  } catch (error) {
+    console.error('[admin-store-control] No se pudo sincronizar storeGate:', error);
+    setPanel(
+      'error',
+      'No se pudo publicar el estado global de la tienda. Tus datos no se borraron. Revisá la conexión y volvé a guardar.'
+    );
+  } finally {
+    syncInFlight = false;
+    if (syncQueued) syncStoreGate();
   }
 }
 
-async function saveStoreState(targetOpen) {
-  if (!isSuperAdmin()) { toast('Solo Super Admin puede cambiar el estado de la tienda'); return; }
-  if (saving) return;
-  if (!targetOpen) {
-    const ok = confirm('¿Desactivar la tienda ahora?\n\nVisitantes, clientas y roles no autorizados dejarán de ver la web pública en desktop, tablet y mobile. Solo Super Admin podrá entrar para reactivarla.');
-    if (!ok) { renderState(currentStoreOpen); return; }
+function renderState() {
+  if (!dom) return;
+
+  if (!latestGeneral.exists) {
+    dom.checkbox.checked = false;
+    setPill(false, 'CONFIGURACIÓN FALTANTE');
+    setPanel(
+      'error',
+      'No existe settings/general. Por seguridad la tienda se considera CERRADA hasta que guardes la configuración.'
+    );
+    if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL && !gateMatchesGeneral()) {
+      syncStoreGate();
+    }
+    return;
   }
-  saving = true;
-  renderState(currentStoreOpen);
-  try {
-    await setDoc(settingsRef, {
-      storeOpen: !!targetOpen,
-      tiendaActiva: !!targetOpen,
-      storeStatusUpdatedAt: serverTimestamp(),
-      storeStatusUpdatedBy: currentUser?.email || SUPER_ADMIN
-    }, { merge: true });
-    currentStoreOpen = !!targetOpen;
-    await logStoreAudit(targetOpen);
-    toast(targetOpen ? 'Tienda activada correctamente' : 'Tienda desactivada correctamente');
-    window.TintinStoreGate?.refresh?.();
-  } catch (e) {
-    toast('No se pudo guardar el estado de la tienda: ' + e.message, 5000);
-  } finally {
-    saving = false;
-    renderState(currentStoreOpen);
+
+  const open = latestGeneral.data.storeOpen === true;
+  // Corrige el criterio viejo "distinto de false": el switch refleja solamente
+  // true explícito, igual que el sitio y las reglas.
+  dom.checkbox.checked = open;
+  setPill(open);
+
+  if (!gateMatchesGeneral()) {
+    setPanel(
+      'warning',
+      'El panel cambió, pero el cierre global todavía se está sincronizando…'
+    );
+    if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL) syncStoreGate();
+    return;
   }
+
+  setPanel(
+    open ? 'ok' : 'closed',
+    open
+      ? 'Sincronizado con Firebase: la tienda está ABIERTA en todo el sitio.'
+      : 'Sincronizado con Firebase: la tienda está CERRADA en todas las páginas. Solo entran Super Admin y las excepciones activadas.'
+  );
 }
 
 async function boot() {
-  const { checkbox, saveBtn } = await waitForConfigDom();
-  if (!checkbox || !saveBtn) return;
-  ensureUiShell(checkbox, saveBtn);
+  const found = await waitForConfigDom();
+  if (!found) return;
+
+  dom = {
+    ...found,
+    panel: ensureStatusPanel(found.checkbox)
+  };
+
   onAuthStateChanged(auth, user => {
-    currentUser = user || null;
-    renderState(currentStoreOpen);
+    currentEmail = user?.email || '';
+    renderState();
   });
-  onSnapshot(settingsRef, snap => {
-    const data = snap.exists() ? snap.data() : {};
-    currentStoreOpen = data.storeOpen !== false;
-    renderState(currentStoreOpen);
-  }, e => {
-    toast('Error al sincronizar estado de tienda: ' + e.message, 5000);
-  });
+
+  onSnapshot(
+    GENERAL_REF,
+    snapshot => {
+      latestGeneral = {
+        exists: snapshot.exists(),
+        data: snapshot.exists() ? snapshot.data() || {} : {}
+      };
+      dom.saveBtn.disabled = false;
+      renderState();
+    },
+    error => {
+      console.error('[admin-store-control] No se pudo leer settings/general:', error);
+      dom.saveBtn.disabled = true;
+      setPill(false, 'SIN CONEXIÓN');
+      setPanel(
+        'error',
+        'No se pudo leer la configuración completa. El botón Guardar queda bloqueado para evitar cambios a ciegas.'
+      );
+    }
+  );
+
+  onSnapshot(
+    STORE_GATE_REF,
+    snapshot => {
+      latestGate = {
+        exists: snapshot.exists(),
+        data: snapshot.exists() ? snapshot.data() || {} : {}
+      };
+      renderState();
+    },
+    error => {
+      console.error('[admin-store-control] No se pudo leer settings/storeGate:', error);
+      latestGate = { exists: false, data: {} };
+      setPanel(
+        'error',
+        'No se pudo comprobar el cierre global. La tienda debe permanecer bloqueada hasta recuperar la conexión.'
+      );
+    }
+  );
 }
 
 boot();

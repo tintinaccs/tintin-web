@@ -14,7 +14,8 @@ service cloud.firestore {
     // Super Admin real: solo la cuenta oficial de Tintin.
     // No se confía en role:"superadmin" guardado en Firestore.
     function isSuperAdmin() {
-      return isSignedIn() && request.auth.token.email == "tintinaccs@gmail.com";
+      return isSignedIn() &&
+        request.auth.token.email == "tintinaccs@gmail.com";
     }
 
     function userDocExists() {
@@ -25,11 +26,14 @@ service cloud.firestore {
     function currentRole() {
       return userDocExists()
         ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
-        : "visitor";
+        : "client";
     }
 
     function hasRole(role) {
-      return isSignedIn() && !isBlockedUser() && userDocExists() && currentRole() == role;
+      return isSignedIn() &&
+        !isBlockedUser() &&
+        userDocExists() &&
+        currentRole() == role;
     }
 
     function isBlockedUser() {
@@ -68,34 +72,35 @@ service cloud.firestore {
     /* ============================================================
        TINTIN — TIENDA ACTIVA / CERRADA
 
-       maintenanceAccess (mapa en settings/general) es el campo real que
-       escribe admin.html y lee js/store-gate-core.js — soporta 'guest'
-       para visitantes anónimos. (Un campo distinto, storeClosedAllowedRoles
-       como lista, había quedado en esta regla sin que ninguna pantalla lo
-       escribiera nunca: el toggle de accesos con tienda cerrada no tenía
-       ningún efecto real hasta este fix.)
+       settings/storeGate es el documento público mínimo.
+       settings/general conserva la configuración completa y no se entrega
+       cuando la tienda está cerrada.
+
+       Seguro por defecto:
+       - si storeGate no existe, queda cerrada;
+       - si storeOpen falta o no es true, queda cerrada;
+       - Super Admin siempre entra;
+       - los demás solo entran por maintenanceAccess.
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
       return isSuperAdmin() ||
-        !exists(/databases/$(database)/documents/settings/general) ||
-        get(/databases/$(database)/documents/settings/general).data.storeOpen != false ||
         (
-          !isBlockedUser() &&
-          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess is map &&
-          get(/databases/$(database)/documents/settings/general).data.maintenanceAccess
-            .get(isSignedIn() ? currentRole() : 'guest', false) == true
+          exists(/databases/$(database)/documents/settings/storeGate) &&
+          (
+            get(/databases/$(database)/documents/settings/storeGate).data.storeOpen == true ||
+            (
+              !isBlockedUser() &&
+              get(/databases/$(database)/documents/settings/storeGate).data.maintenanceAccess is map &&
+              get(/databases/$(database)/documents/settings/storeGate).data.maintenanceAccess
+                .get(isSignedIn() ? currentRole() : 'guest', false) == true
+            )
+          )
         );
     }
 
     /* ============================================================
        TINTIN — ROLES Y PERMISOS DINÁMICOS
-
-       Cerrado por defecto: si Super Admin no habilitó un permiso de manera
-       explícita en rolePermissions/main, el rol NO lo tiene. Solo
-       'admin'/'agent'/'viewer' pueden llegar a tener una clave acá (ver
-       EDITABLE_ROLES en js/role-permissions.js) — cualquier otro rol
-       (incluido 'client') siempre cae en el default false.
        ============================================================ */
 
     function rolePermAllows(role, moduleKey, actionKey) {
@@ -105,7 +110,9 @@ service cloud.firestore {
     }
 
     function currentRolePermAllows(moduleKey, actionKey) {
-      return isSignedIn() && !isBlockedUser() && userDocExists() &&
+      return isSignedIn() &&
+        !isBlockedUser() &&
+        userDocExists() &&
         rolePermAllows(currentRole(), moduleKey, actionKey);
     }
 
@@ -144,22 +151,37 @@ service cloud.firestore {
         (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
     }
 
+    function loginMetadataOnlyUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'lastLogin', 'updatedAt'
+      ]);
+    }
+
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
-        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason', 'roleBeforeBlock',
-        'purchaseCount', 'orderCount', 'totalOrders', 'totalSpent',
-        'completedOrders', 'pendingOrders', 'cancelledOrders',
+        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
+        'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
+        'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
         'profileStatsUpdatedAt', 'orderStats'
       ]);
     }
 
     /* ============================================================
-       SETTINGS — SOLO SUPER ADMIN EDITA
+       SETTINGS
        ============================================================ */
 
-    match /settings/general {
+    // Único documento público durante el cierre. Solo contiene el estado y
+    // las excepciones; no contiene bancos, costos, redes ni datos comerciales.
+    match /settings/storeGate {
       allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Configuración completa: solo se lee si la tienda está abierta o la
+    // cuenta tiene una excepción de mantenimiento.
+    match /settings/general {
+      allow read: if isStoreOpenOrAllowed();
       allow write: if isSuperAdmin();
     }
 
@@ -173,7 +195,7 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
-    match /settings/{doc} {
+    match /settings/{docId} {
       allow read, write: if isSuperAdmin();
     }
 
@@ -182,17 +204,22 @@ service cloud.firestore {
        ============================================================ */
 
     match /users/{userId} {
-      allow read: if isSignedIn() && (request.auth.uid == userId || isSuperAdmin());
+      // El login puede leer su propia ficha para resolver el rol. No obtiene
+      // acceso a ningún otro dato de la tienda por esta regla.
+      allow read: if isSignedIn() &&
+        (request.auth.uid == userId || isSuperAdmin());
 
+      // Permite crear únicamente la ficha de la propia cuenta para terminar
+      // el login. Luego el gate decide si esa persona puede entrar.
       allow create: if isSignedIn() &&
         request.auth.uid == userId &&
-        isStoreOpenOrAllowed() &&
         (
           !('email' in request.resource.data) ||
           (
             request.resource.data.email is string &&
             request.auth.token.email != null &&
-            request.resource.data.email.lower() == request.auth.token.email.lower()
+            request.resource.data.email.lower() ==
+              request.auth.token.email.lower()
           )
         ) &&
         (
@@ -213,8 +240,13 @@ service cloud.firestore {
         (
           request.auth.uid == userId &&
           !isBlockedUser() &&
-          isStoreOpenOrAllowed() &&
-          !protectedUserFieldsChanged()
+          (
+            (
+              isStoreOpenOrAllowed() &&
+              !protectedUserFieldsChanged()
+            ) ||
+            loginMetadataOnlyUpdate()
+          )
         ) ||
         (
           isStoreOpenOrAllowed() &&
@@ -236,7 +268,8 @@ service cloud.firestore {
         )
       );
 
-      allow delete: if isSuperAdmin() && !isSuperAdminAccount(resource.data);
+      allow delete: if isSuperAdmin() &&
+        !isSuperAdminAccount(resource.data);
 
       match /cart/{itemId} {
         allow read, write: if isSignedIn() &&
@@ -248,53 +281,77 @@ service cloud.firestore {
 
     /* ============================================================
        PRODUCTS / COLLECTIONS / CONTENT
-
-       currentRolePermAllows() por sí sola ya cae en false por defecto para
-       cualquier rol no configurado (ver rolePermAllows arriba) — el chequeo
-       explícito isAdmin()/isAgent()/isViewer() de acá abajo es una capa
-       extra de defensa (no cambia ningún comportamiento actual), para que
-       esto siga siendo seguro aunque el día de mañana se toque
-       rolePermAllows() o EDITABLE_ROLES.
-
-       Catálogo público: cualquiera puede LEER productos y colecciones —
-       visitante anónimo, cliente logueado o incluso una cuenta bloqueada —
-       sin importar storeOpen/maintenanceAccess (eso solo debe frenar
-       checkout/pedidos, nunca la posibilidad de ver la vidriera). Escribir
-       sigue exigiendo Super Admin o un rol de staff con el permiso puntual
-       habilitado.
        ============================================================ */
+
     match /products/{productId} {
-      allow read: if true;
+      allow read: if isStoreOpenOrAllowed();
+
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('productos', 'crear'));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent() || isViewer()) &&
+          currentRolePermAllows('productos', 'crear')
+        );
+
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('productos', 'editar'));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent()) &&
+          currentRolePermAllows('productos', 'editar')
+        );
+
       allow delete: if isSuperAdmin();
     }
 
     match /collections/{collectionId} {
-      allow read: if true;
+      allow read: if isStoreOpenOrAllowed();
+
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'crear'));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent()) &&
+          currentRolePermAllows('colecciones', 'crear')
+        );
+
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) && currentRolePermAllows('colecciones', 'editar'));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent()) &&
+          currentRolePermAllows('colecciones', 'editar')
+        );
+
       allow delete: if isSuperAdmin();
     }
 
-    // El panel (admin.html) nunca llama a currentRolePermAllows('contenido',
-    // 'crear'/'editar') — esas claves no existen en el catálogo de
-    // js/role-permissions.js. Las claves reales son 'editarTextos' y
-    // 'activarDesactivarSecciones'; con las claves viejas, rolePermAllows()
-    // nunca encontraba nada configurado y Admin/Agente jamás podían editar
-    // contenido pase lo que pase con Roles y Permisos.
     match /site_content/{pageId} {
       allow read: if isStoreOpenOrAllowed();
+
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) &&
-          (currentRolePermAllows('contenido', 'editarTextos') || currentRolePermAllows('contenido', 'activarDesactivarSecciones')));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent()) &&
+          (
+            currentRolePermAllows('contenido', 'editarTextos') ||
+            currentRolePermAllows(
+              'contenido',
+              'activarDesactivarSecciones'
+            )
+          )
+        );
+
       allow update: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (isAdmin() || isAgent()) &&
-          (currentRolePermAllows('contenido', 'editarTextos') || currentRolePermAllows('contenido', 'activarDesactivarSecciones')));
+        (
+          isStoreOpenOrAllowed() &&
+          (isAdmin() || isAgent()) &&
+          (
+            currentRolePermAllows('contenido', 'editarTextos') ||
+            currentRolePermAllows(
+              'contenido',
+              'activarDesactivarSecciones'
+            )
+          )
+        );
+
       allow delete: if isSuperAdmin();
     }
 
@@ -310,36 +367,59 @@ service cloud.firestore {
         request.auth.token.email_verified == true &&
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.userEmail is string &&
-        request.resource.data.userEmail.lower() == request.auth.token.email.lower();
+        request.resource.data.userEmail.lower() ==
+          request.auth.token.email.lower();
 
       allow read: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (
-            ((isAdmin() || isAgent() || isViewer()) && currentRolePermAllows('pedidos', 'ver')) ||
+            (
+              (isAdmin() || isAgent() || isViewer()) &&
+              currentRolePermAllows('pedidos', 'ver')
+            ) ||
             isOwnOrderByUidOrEmail()
           )
         );
 
-      // Edición completa y eliminación quedan SOLO para Super Admin.
-      // Otros roles pueden tener acciones puntuales si Super Admin las habilita.
       allow update: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (
             (
               (hasRole("admin") || hasRole("agent")) &&
-              request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                'status', 'payment', 'paymentStatus', 'resendCount',
-                'lastResendAt', 'notificationStatus', 'updatedAt'
-              ]) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || currentRolePermAllows('pedidos', 'cambiarEstado')) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['payment', 'paymentStatus']) || currentRolePermAllows('pedidos', 'cambiarPago')) &&
-              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['resendCount', 'lastResendAt', 'notificationStatus']) || currentRolePermAllows('pedidos', 'reenviarCorreo'))
+              request.resource.data.diff(resource.data)
+                .affectedKeys().hasOnly([
+                  'status', 'payment', 'paymentStatus', 'resendCount',
+                  'lastResendAt', 'notificationStatus', 'updatedAt'
+                ]) &&
+              (
+                !request.resource.data.diff(resource.data)
+                  .affectedKeys().hasAny(['status']) ||
+                currentRolePermAllows('pedidos', 'cambiarEstado')
+              ) &&
+              (
+                !request.resource.data.diff(resource.data)
+                  .affectedKeys().hasAny(['payment', 'paymentStatus']) ||
+                currentRolePermAllows('pedidos', 'cambiarPago')
+              ) &&
+              (
+                !request.resource.data.diff(resource.data)
+                  .affectedKeys().hasAny([
+                    'resendCount',
+                    'lastResendAt',
+                    'notificationStatus'
+                  ]) ||
+                currentRolePermAllows('pedidos', 'reenviarCorreo')
+              )
             ) ||
             (
               isOwnOrderByUidOrEmail() &&
-              request.resource.data.diff(resource.data).affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
+              request.resource.data.diff(resource.data)
+                .affectedKeys().hasOnly([
+                  'notificationStatus',
+                  'updatedAt'
+                ])
             )
           )
         );
@@ -354,7 +434,10 @@ service cloud.firestore {
     match /auditLog/{logId} {
       allow read: if isSuperAdmin();
       allow create: if isSuperAdmin() ||
-        (isStoreOpenOrAllowed() && (hasRole("admin") || hasRole("agent")));
+        (
+          isStoreOpenOrAllowed() &&
+          (hasRole("admin") || hasRole("agent"))
+        );
       allow update, delete: if false;
     }
 
@@ -362,7 +445,13 @@ service cloud.firestore {
       allow read: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
-          (hasRole("admin") || hasRole("agent") || hasRole("viewer") || hasRole("moderator") || hasRole("support"))
+          (
+            hasRole("admin") ||
+            hasRole("agent") ||
+            hasRole("viewer") ||
+            hasRole("moderator") ||
+            hasRole("support")
+          )
         );
       allow write: if isSuperAdmin();
     }
@@ -381,11 +470,15 @@ service cloud.firestore {
 
     match /emailLogs/{logId} {
       allow read: if isSuperAdmin();
+
       allow create: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (
-            ((hasRole("admin") || hasRole("agent")) && currentRolePermAllows('pedidos', 'reenviarCorreo')) ||
+            (
+              (hasRole("admin") || hasRole("agent")) &&
+              currentRolePermAllows('pedidos', 'reenviarCorreo')
+            ) ||
             (
               isSignedIn() &&
               !isBlockedUser() &&
@@ -393,10 +486,13 @@ service cloud.firestore {
               request.resource.data.type == 'pedido_nuevo' &&
               request.resource.data.orderId is string &&
               request.resource.data.sentBy == request.auth.token.email &&
-              get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.userId == request.auth.uid
+              get(
+                /databases/$(database)/documents/orders/$(request.resource.data.orderId)
+              ).data.userId == request.auth.uid
             )
           )
         );
+
       allow update, delete: if false;
     }
 
