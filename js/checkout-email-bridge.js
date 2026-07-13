@@ -5,6 +5,7 @@ import {
   where,
   limit,
   getDocs,
+  getDoc,
   doc,
   updateDoc,
   serverTimestamp
@@ -48,31 +49,25 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
   async function findCreatedOrder(user, shortId) {
     if (capturedRequestId) {
       const exactId = `${user.uid}_${capturedRequestId}`;
-      const exactQuery = query(
-        collection(db, 'orders'),
-        where('userId', '==', user.uid),
-        where('requestId', '==', capturedRequestId),
-        limit(1)
-      );
-      const exactSnap = await getDocs(exactQuery);
-      if (!exactSnap.empty) {
-        const found = exactSnap.docs[0];
-        return { id: found.id || exactId, data: found.data() || {} };
+      const exactSnap = await getDoc(doc(db, 'orders', exactId));
+      if (exactSnap.exists()) {
+        const data = exactSnap.data() || {};
+        if (data.userId === user.uid && data.requestId === capturedRequestId) {
+          return { id: exactSnap.id, data };
+        }
       }
     }
 
-    // Respaldo para una recarga o para un navegador que haya limpiado
-    // sessionStorage antes de que el puente alcanzara a copiar el requestId.
+    // Respaldo sin índice compuesto: obtiene pocos pedidos propios y compara el
+    // número corto en memoria. Las reglas siguen impidiendo leer pedidos ajenos.
     const fallbackQuery = query(
       collection(db, 'orders'),
       where('userId', '==', user.uid),
-      where('shortId', '==', shortId),
-      limit(2)
+      limit(20)
     );
     const fallbackSnap = await getDocs(fallbackQuery);
-    if (fallbackSnap.empty) return null;
-    const found = fallbackSnap.docs[0];
-    return { id: found.id, data: found.data() || {} };
+    const found = fallbackSnap.docs.find(item => clean(item.data()?.shortId) === shortId);
+    return found ? { id: found.id, data: found.data() || {} } : null;
   }
 
   async function notifyAfterSuccess() {
@@ -125,8 +120,6 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       }));
     } catch (error) {
       console.error('[checkout-email] No se pudo completar la notificación:', error);
-      // No se marca como intentado en sessionStorage cuando el pedido ni
-      // siquiera pudo localizarse o actualizarse; una recarga permite reintentar.
     } finally {
       processingKey = '';
     }
