@@ -46,7 +46,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260713-5';
+  const TT_CACHE_VERSION = 'tintin-20260713-6';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
@@ -133,7 +133,11 @@
     '.tt-loader-dots span:nth-child(2){animation-delay:.15s}',
     '.tt-loader-dots span:nth-child(3){animation-delay:.3s}',
     '@keyframes tt-loader-dot-bounce{0%,80%,100%{transform:scale(.72);opacity:.35}40%{transform:scale(1.15);opacity:1}}',
-    '@media (prefers-reduced-motion:reduce){.tt-loader-dots span{animation:none;opacity:.75}}'
+    '@media (prefers-reduced-motion:reduce){.tt-loader-dots span{animation:none;opacity:.75}}',
+    '#tt-store-gate-emergency-dialog{width:min(100%,460px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:20px;padding:clamp(28px,5vw,40px) clamp(20px,5vw,32px);text-align:center;box-shadow:0 18px 60px rgba(35,12,22,.28);box-sizing:border-box}',
+    '#tt-store-gate-emergency-actions{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}',
+    '.tt-store-gate-emergency-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;min-width:146px;padding:11px 24px;border-radius:999px;font:700 13px/1.2 Poppins,Arial,sans-serif;text-decoration:none;cursor:pointer;touch-action:manipulation;box-sizing:border-box}',
+    '@media(max-width:600px){#tt-store-closed-overlay{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))!important}#tt-store-gate-emergency-dialog{width:100%;max-width:390px;padding:28px 20px 24px;border-radius:18px}#tt-store-gate-emergency-actions{flex-direction:column}.tt-store-gate-emergency-action{width:min(100%,260px);min-width:0}}'
   ].join('');
 
   if (!document.getElementById('tt-loader-style')) {
@@ -333,7 +337,20 @@
       (window.location.pathname.split('/').pop() || 'index.html') +
       window.location.search +
       window.location.hash;
-    return 'login.html?from=' + encodeURIComponent(current);
+    const pathname = window.location.pathname || '/';
+    const appDirectory = pathname.endsWith('/')
+      ? pathname
+      : pathname.slice(0, pathname.lastIndexOf('/') + 1);
+    const loginUrl = new URL(`${appDirectory}login.html`, window.location.origin);
+    loginUrl.searchParams.set('from', current);
+    return loginUrl.href;
+  }
+
+  function goToEmergencyLogin(event) {
+    event?.preventDefault();
+    event?.stopImmediatePropagation?.();
+    event?.stopPropagation?.();
+    window.location.assign(buildEmergencyLoginUrl());
   }
 
   function lockEmergencySiblings() {
@@ -346,8 +363,10 @@
         node.dataset.ttEmergencyHadAria = node.hasAttribute('aria-hidden') ? '1' : '0';
         node.dataset.ttEmergencyPrevAria = node.getAttribute('aria-hidden') || '';
       }
-      node.inert = true;
-      node.setAttribute('aria-hidden', 'true');
+      if (!node.inert) node.inert = true;
+      if (node.getAttribute('aria-hidden') !== 'true') {
+        node.setAttribute('aria-hidden', 'true');
+      }
     });
   }
 
@@ -366,23 +385,29 @@
         overlay = document.createElement('div');
         overlay.id = 'tt-store-closed-overlay';
         overlay.style.cssText =
-          'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+          'position:fixed;inset:0;z-index:2147482990;background:rgba(30,10,18,.62);backdrop-filter:blur(7px);display:grid;place-items:center;padding:clamp(16px,3vw,32px);box-sizing:border-box;overflow:auto;pointer-events:auto;touch-action:manipulation';
         document.body.appendChild(overlay);
       }
+      overlay.inert = false;
+      overlay.removeAttribute('inert');
+      overlay.removeAttribute('aria-hidden');
       overlay.innerHTML =
-        '<div role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title" style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:36px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">' +
-        '<div style="font-size:40px;margin-bottom:14px">⚠️</div>' +
-        '<div id="tt-store-gate-title" style="font-weight:800;font-size:19px;color:#8b2642;margin-bottom:12px">No pudimos comprobar el estado de la tienda</div>' +
-        '<p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 26px">Por seguridad, el sitio permanece bloqueado. Podés reintentar o iniciar sesión como parte del equipo.</p>' +
-        '<div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">' +
-        '<button type="button" id="tt-store-gate-emergency-retry" style="border:0;background:#8b2642;color:#fff;padding:12px 26px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer">Reintentar</button>' +
-        '<a href="' +
+        '<div id="tt-store-gate-emergency-dialog" role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title">' +
+        '<div style="font-size:40px;margin-bottom:14px" aria-hidden="true">⚠️</div>' +
+        '<div id="tt-store-gate-title" style="font-weight:800;font-size:clamp(19px,3.2vw,22px);color:#8b2642;margin-bottom:12px">No pudimos comprobar el estado de la tienda</div>' +
+        '<p style="font-size:14px;color:#555;line-height:1.65;margin:0 auto 26px;max-width:360px">Por seguridad, el sitio permanece bloqueado. Podés reintentar o iniciar sesión como parte del equipo.</p>' +
+        '<div id="tt-store-gate-emergency-actions">' +
+        '<button type="button" id="tt-store-gate-emergency-retry" class="tt-store-gate-emergency-action" style="border:0;background:#8b2642;color:#fff">Reintentar</button>' +
+        '<a id="tt-store-gate-emergency-login" class="tt-store-gate-emergency-action" href="' +
         buildEmergencyLoginUrl() +
-        '" style="display:inline-block;background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8;padding:11px 24px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Iniciar sesión</a>' +
+        '" target="_self" style="background:#fff;color:#8b2642!important;border:1.5px solid #d9a9b8">Iniciar sesión</a>' +
         '</div></div>';
       overlay
         .querySelector('#tt-store-gate-emergency-retry')
         ?.addEventListener('click', () => window.location.reload());
+      overlay
+        .querySelector('#tt-store-gate-emergency-login')
+        ?.addEventListener('click', goToEmergencyLogin, { capture: true });
     });
   }
 
