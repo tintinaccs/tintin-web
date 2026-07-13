@@ -11,78 +11,83 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const backend = read('functions/create-order.js');
 const frontend = read('js/secure-checkout-order.js');
 const cart = read('js/cart-sync.js');
 const rules = read('firestore.rules');
-const functionsPackage = JSON.parse(read('functions/package.json'));
-const functionsMain = read('functions/main.js');
 
 check(
-  'El servidor busca precios reales',
-  backend.includes("db.collection('products').doc(id)") &&
-    backend.includes('const price = parseMoney(product.price)'),
-  'El pedido no debe confiar en precios enviados por el navegador.'
+  'No depende de Cloud Functions',
+  !frontend.includes('httpsCallable') &&
+    !frontend.includes('firebase-functions.js') &&
+    frontend.includes('runTransaction'),
+  'El checkout gratuito debe usar una transacción de Firestore.'
 );
 check(
-  'El servidor comprueba tienda y bloqueo',
-  backend.includes("gate.storeOpen === true") &&
-    backend.includes("userData.blocked === true"),
-  'Una cuenta bloqueada o una tienda cerrada no debe generar pedidos.'
+  'La transacción vuelve a leer los productos',
+  frontend.includes("doc(db, 'products', line.id)") &&
+    frontend.includes('const price = parseMoney(product.price)'),
+  'No debe confiar únicamente en precios guardados en el carrito.'
 );
 check(
-  'Pedido y stock cambian juntos',
-  backend.includes('db.runTransaction') &&
-    backend.includes('transaction.update(productRef') &&
-    backend.includes('transaction.create(orderRef'),
-  'No debe crearse el pedido sin descontar el stock correspondiente.'
+  'Pedido y stock se escriben juntos',
+  frontend.includes('transaction.update(productRefs[index]') &&
+    frontend.includes('transaction.set(orderRef, orderData)'),
+  'El descuento de stock debe estar en la misma transacción que el pedido.'
 );
 check(
   'Reintentos no duplican pedidos',
-  backend.includes('buildOrderId(uid, requestId)') &&
-    backend.includes('if (existing.exists)'),
-  'Un doble clic o reintento no debe crear dos pedidos.'
+  frontend.includes('const existing = await transaction.get(orderRef)') &&
+    frontend.includes('if (existing.exists())'),
+  'La misma solicitud debe devolver el pedido existente.'
 );
 check(
-  'Las estadísticas se actualizan en servidor',
-  backend.includes('purchaseCount: FieldValue.increment(1)') &&
-    backend.includes('totalSpent: FieldValue.increment(total)'),
-  'El navegador no debe decidir las estadísticas de compra.'
-);
-check(
-  'El navegador usa la función segura',
-  frontend.includes("httpsCallable(getFunctions(getApp(), 'us-central1'), 'createOrder'") &&
-    frontend.includes("event.target?.closest?.('#ck-confirm-btn')"),
-  'Confirmar debe llamar al servidor antes de mostrar éxito.'
+  'El plan gratuito limita productos diferentes',
+  frontend.includes('MAX_DISTINCT_PRODUCTS = 4') &&
+    rules.includes('items.size() <= 4'),
+  'El límite mantiene las reglas dentro del máximo de lecturas permitido.'
 );
 check(
   'Cambios de precio requieren nueva confirmación',
-  backend.includes("fail('quote_changed'") &&
+  frontend.includes("'quote_changed'") &&
     frontend.includes("code === 'quote_changed'"),
-  'No se debe cobrar silenciosamente un total distinto al mostrado.'
+  'No debe guardar silenciosamente un total distinto al mostrado.'
 );
 check(
   'Cambios de stock se explican al cliente',
-  backend.includes("fail('insufficient_stock'") &&
+  frontend.includes("'insufficient_stock'") &&
     frontend.includes("code === 'insufficient_stock'"),
-  'El checkout debe informar y ajustar el carrito cuando cambia el stock.'
+  'El checkout debe ajustar el carrito cuando cambia el stock.'
+);
+check(
+  'Las reglas validan precio real',
+  rules.includes('product.price == item.price') &&
+    rules.includes("item.name == product.get('name'"),
+  'El pedido no debe aceptar un precio o nombre inventado.'
+);
+check(
+  'Las reglas exigen el descuento de stock',
+  rules.includes('getAfter(sparkProductPath(productId)).data.stock == product.stock - item.qty') &&
+    rules.includes('sparkStockUpdateValid(productId)'),
+  'Un pedido con stock no debe guardarse sin descontar la cantidad.'
+);
+check(
+  'Las reglas validan subtotal y total',
+  rules.includes('data.subtotal ==') &&
+    rules.includes('data.total == data.subtotal + data.shippingCost'),
+  'Los totales deben derivarse de las líneas validadas.'
+);
+check(
+  'Las reglas validan tienda, cuenta y correo',
+  rules.includes("settings.get('storeOpen', false) == true") &&
+    rules.includes("userData.get('blocked', false) != true") &&
+    rules.includes('request.auth.token.email_verified == true'),
+  'Una tienda cerrada, cuenta bloqueada o correo no verificado debe fallar.'
 );
 check(
   'El checkout seguro se carga solo donde corresponde',
   cart.includes("checkoutPath.endsWith('/checkout.html')") &&
-    cart.includes("import('./secure-checkout-order.js?v=tintin-20260713-7')"),
-  'El módulo seguro debe arrancar en checkout sin afectar las demás páginas.'
-);
-check(
-  'Firestore bloquea pedidos directos',
-  /match \/orders\/\{orderId\}[\s\S]*?allow create: if false;/.test(rules),
-  'Solo Firebase Admin debe poder crear documentos de pedidos.'
-);
-check(
-  'Firebase registra la nueva función',
-  functionsPackage.main === 'main.js' &&
-    functionsMain.includes("require('./create-order')"),
-  'La función createOrder debe formar parte del despliegue.'
+    cart.includes("import('./secure-checkout-order.js?v="),
+  'El módulo debe arrancar únicamente en checkout.'
 );
 
 const failed = checks.filter(item => !item.ok);
@@ -96,4 +101,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log('\nAuditoría de pedidos seguros completada correctamente.');
+console.log('\nAuditoría de pedidos gratuitos completada correctamente.');

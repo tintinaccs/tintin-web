@@ -1,73 +1,84 @@
-# Paso 2 — Pedidos, precios reales y stock
+# Paso 2 — Pedidos, precios reales y stock en plan gratuito
 
-## Qué cambia
+## Cómo funciona
 
-El botón **Confirmar pedido** ya no guarda directamente lo que dice el navegador.
-Ahora llama a la función privada `createOrder`, que vuelve a comprobar en Firebase:
+Esta versión no usa Cloud Functions ni exige el plan Blaze.
 
-- que la cuenta esté iniciada, verificada y no bloqueada;
-- que la tienda esté abierta o que el rol tenga acceso de mantenimiento;
-- que cada producto exista y esté activo;
-- el precio real de cada producto;
-- el stock real disponible;
-- la ciudad, el costo de envío y el método de pago habilitado;
-- el subtotal y el total final.
+Al confirmar un pedido, el navegador inicia una transacción de Firestore que:
 
-El pedido, el descuento de stock y las estadísticas de la clienta se guardan juntos.
-Si una parte falla, no se guarda ninguna de las otras.
+- vuelve a leer los productos desde Firebase;
+- toma el precio y el nombre actuales;
+- comprueba que el producto siga activo;
+- verifica el stock disponible;
+- vuelve a comprobar la ciudad, el costo de envío y el método de pago;
+- crea el pedido y descuenta el stock en la misma operación.
 
-Cada intento lleva un identificador estable. Un doble clic, una recarga o un reintento por conexión lenta devuelve el mismo pedido y no descuenta stock dos veces.
+Las reglas de Firestore repiten las validaciones importantes. Por eso cambiar el precio solamente en el navegador no alcanza para crear un pedido falso.
 
-## Publicación obligatoria
+## Límite del plan gratuito
 
-Estos cambios incluyen una Cloud Function y reglas de Firestore. No alcanza con publicar GitHub Pages.
-Desde la carpeta principal del repositorio:
+Cada pedido puede contener hasta **4 productos diferentes**. Se pueden comprar varias unidades de cada uno.
+
+El límite permite validar precio y stock dentro del máximo de lecturas aceptado por las reglas de Firestore. Cuando una compra tenga más de cuatro productos diferentes, debe dividirse en dos pedidos.
+
+Esta protección es la mejor alternativa disponible sin un servidor privado. Sigue siendo menos fuerte que una Cloud Function, porque la transacción se inicia desde el navegador, pero las reglas comprueban nuevamente los datos antes de aceptar el pedido.
+
+## Publicación
+
+Solo se publican las reglas. No hace falta instalar las dependencias de `functions` ni activar Blaze.
+
+Desde Cloud Shell:
 
 ```bash
+cd ~/tintin-web
+git pull origin main
+nvm use 20
 npm install
-npm --prefix functions install
 npm run audit:secure-orders
-npm run deploy:firebase
+npm run deploy:rules
 ```
 
-`deploy:firebase` publica **funciones y reglas juntas**. No publiques primero las reglas solas: las reglas nuevas bloquean el guardado directo antiguo y esperan que `createOrder` ya esté disponible.
+El resultado correcto debe incluir:
+
+```text
+Auditoría de pedidos gratuitos completada correctamente.
+firestore: released rules firestore.rules to cloud.firestore
+Deploy complete!
+```
 
 ## Pruebas
 
-1. Confirmación normal
+1. **Pedido normal**
    - Abrí la tienda con una cuenta verificada.
-   - Agregá un producto con stock.
-   - Completá el checkout.
-   - Confirmá una vez.
+   - Agregá uno o varios productos con stock.
+   - Confirmá el pedido.
    - Debe aparecer un solo número de pedido.
    - El stock debe bajar exactamente la cantidad comprada.
 
-2. Doble clic o reintento
-   - Tocá Confirmar rápidamente más de una vez o reintentá después de una demora.
+2. **Doble clic o reintento**
+   - Tocá Confirmar varias veces rápidamente.
    - Debe existir un solo pedido y un solo descuento de stock.
 
-3. Cambio de precio
-   - Dejá el resumen del checkout abierto.
+3. **Cambio de precio**
+   - Dejá abierto el resumen.
    - Cambiá el precio desde Super Admin.
-   - Volvé a confirmar.
-   - No debe crear el pedido todavía: debe mostrar el resumen actualizado y pedir una nueva confirmación.
+   - Confirmá.
+   - Debe actualizar el resumen y pedir una segunda confirmación.
 
-4. Cambio de stock
-   - Dejá una cantidad en el checkout.
+4. **Cambio de stock**
    - Bajá el stock desde Super Admin antes de confirmar.
-   - El checkout debe informar el cambio y ajustar o quitar el producto.
+   - El checkout debe ajustar la cantidad disponible o retirar el producto agotado.
 
-5. Producto desactivado
+5. **Producto desactivado**
    - Desactivá el producto antes de confirmar.
    - No debe crearse ningún pedido.
 
-6. Tienda cerrada o cuenta bloqueada
-   - Cerrá la tienda o bloqueá la cuenta antes de confirmar.
-   - No debe crearse ningún pedido ni modificarse el stock.
+6. **Tienda cerrada o cuenta bloqueada**
+   - No debe crearse el pedido ni modificarse el stock.
 
-7. Manipulación del navegador
-   - Aunque se cambien precios o totales guardados localmente, el servidor debe usar únicamente los valores actuales de Firebase.
+7. **Más de cuatro productos diferentes**
+   - El checkout debe pedir dividir la compra en dos pedidos.
 
-## Recuperación
+## Importante
 
-Si la función todavía no fue publicada, el checkout muestra que el sistema seguro no está disponible. No usa el camino directo antiguo una vez publicadas las reglas nuevas.
+Las estadísticas acumuladas del perfil no se modifican desde el navegador en esta modalidad. Los pedidos reales siguen guardándose y pueden calcularse directamente desde la colección `orders` en una reparación posterior del perfil.

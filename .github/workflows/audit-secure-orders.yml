@@ -3,12 +3,12 @@ name: Auditoría de pedidos seguros
 on:
   pull_request:
     paths:
-      - 'functions/**'
       - 'js/secure-checkout-order.js'
       - 'js/cart-sync.js'
       - 'firestore.rules'
       - 'scripts/audit-secure-orders.js'
       - 'package.json'
+      - 'firebase.json'
       - '.github/workflows/audit-secure-orders.yml'
   workflow_dispatch:
 
@@ -25,10 +25,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Revisar sintaxis del servidor
+      - name: Configurar Java para el emulador
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Instalar herramientas
+        run: npm install
+      - name: Revisar sintaxis del checkout
         run: |
-          node --check functions/index.js
-          node --check functions/create-order.js
-          node --check functions/main.js
-      - name: Revisar conexión y reglas
+          node --check js/secure-checkout-order.js
+          node --check scripts/audit-secure-orders.js
+      - name: Revisar transacción y reglas
         run: npm run audit:secure-orders
+      - name: Compilar reglas de Firestore
+        run: npx firebase emulators:exec --only firestore --project demo-tintin "echo Reglas compiladas"
