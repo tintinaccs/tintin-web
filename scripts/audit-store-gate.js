@@ -52,6 +52,30 @@ check(
   'quitar el aviso no debe habilitar el contenido de abajo'
 );
 check(
+  'Botón de iniciar sesión identificable',
+  gateCore.includes("const LOGIN_CONTROL_ID = 'tt-store-gate-login'") &&
+    gateCore.includes('id="${LOGIN_CONTROL_ID}"'),
+  'el aviso cerrado debe incluir un control exclusivo para iniciar sesión'
+);
+check(
+  'Botón de iniciar sesión fuerza navegación',
+  gateCore.includes('window.location.assign(buildLoginUrl())') &&
+    gateCore.includes("addEventListener('click', goToLogin, { capture: true })"),
+  'el acceso no debe depender únicamente del comportamiento normal de un enlace'
+);
+check(
+  'URL de login conserva la carpeta del sitio',
+  gateCore.includes("new URL(`${appDirectory}login.html`, window.location.origin)") &&
+    gateCore.includes("loginUrl.searchParams.set('from', currentRelativeLocation())"),
+  'debe funcionar dentro de /tintin-web/ y en dominio propio'
+);
+check(
+  'Overlay conserva interacción',
+  gateCore.includes('overlay.inert = false') &&
+    gateCore.includes("overlay.style.pointerEvents = 'auto'"),
+  'el bloqueo del fondo no debe bloquear los botones del aviso'
+);
+check(
   'Documento público mínimo',
   gateCore.includes("doc(db, 'settings', 'storeGate')") &&
     gateRuntime.includes("doc(db, 'settings', 'storeGate')"),
