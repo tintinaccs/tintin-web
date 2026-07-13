@@ -1,16 +1,46 @@
 /* =============================================================
-   TINTIN — Estado real de tienda dentro de Super Admin
+   TINTIN — Sincronización segura del estado global de la tienda
    =============================================================
-   Este módulo NO guarda configuración y NO crea un segundo control.
-   La única acción de guardado sigue siendo admin.html → btn-save-config.
-   Su trabajo es mostrar si settings/general está realmente sincronizado
-   con Firebase y evitar que se guarde a ciegas cuando no se puede leer.
+   Fuente editable: settings/general (panel Super Admin).
+   Documento público mínimo: settings/storeGate.
+
+   No crea un segundo switch ni borra configuración. Copia únicamente:
+   - storeOpen
+   - maintenanceAccess
+
+   De esta forma, cuando la tienda está cerrada, settings/general y sus datos
+   completos dejan de ser públicos.
    ============================================================= */
 
-import { db } from './firebase.js';
-import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { auth, db } from './firebase.js';
+import {
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  doc,
+  onSnapshot,
+  setDoc,
+  serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const settingsRef = doc(db, 'settings', 'general');
+const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
+const GENERAL_REF = doc(db, 'settings', 'general');
+const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
+const MAINTENANCE_ROLES = [
+  'admin',
+  'agent',
+  'viewer',
+  'support',
+  'client',
+  'guest'
+];
+
+let currentEmail = '';
+let latestGeneral = { exists: false, data: {} };
+let latestGate = { exists: false, data: {} };
+let syncInFlight = false;
+let syncQueued = false;
+let dom = null;
 
 function waitForConfigDom() {
   return new Promise(resolve => {
@@ -24,11 +54,13 @@ function waitForConfigDom() {
       }
       return false;
     };
+
     if (find()) return;
+
     let tries = 0;
-    const timer = setInterval(() => {
-      tries++;
-      if (find() || tries >= 150) clearInterval(timer);
+    const timer = window.setInterval(() => {
+      tries += 1;
+      if (find() || tries >= 150) window.clearInterval(timer);
     }, 100);
   });
 }
@@ -40,63 +72,200 @@ function ensureStatusPanel(checkbox) {
   panel = document.createElement('div');
   panel.id = 'cfg-store-sync-status';
   panel.setAttribute('role', 'status');
-  panel.style.cssText = 'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#666;border:1px solid var(--adm-border)';
-  panel.textContent = 'Comprobando el estado real de la tienda en Firebase…';
+  panel.style.cssText =
+    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#666;border:1px solid var(--adm-border)';
+  panel.textContent = 'Comprobando el estado real de la tienda…';
 
   const wrap = checkbox.closest('.adm-toggle-wrap');
   (wrap?.parentElement || checkbox.parentElement)?.appendChild(panel);
   return panel;
 }
 
-function setPanel(panel, kind, text) {
+function setPanel(kind, text) {
+  if (!dom?.panel) return;
+
   const styles = {
-    ok:      ['#ecfdf5', '#065f46', '#a7f3d0'],
-    closed:  ['#fff1f2', '#9f1239', '#fecdd3'],
+    ok: ['#ecfdf5', '#065f46', '#a7f3d0'],
+    closed: ['#fff1f2', '#9f1239', '#fecdd3'],
     warning: ['#fff7ed', '#9a3412', '#fed7aa'],
-    error:   ['#fef2f2', '#991b1b', '#fecaca'],
+    error: ['#fef2f2', '#991b1b', '#fecaca']
   };
-  const [bg, color, border] = styles[kind] || styles.warning;
-  panel.style.background = bg;
-  panel.style.color = color;
-  panel.style.borderColor = border;
-  panel.textContent = text;
+  const [background, color, border] = styles[kind] || styles.warning;
+
+  dom.panel.style.background = background;
+  dom.panel.style.color = color;
+  dom.panel.style.borderColor = border;
+  dom.panel.textContent = text;
+}
+
+function setPill(open, label) {
+  if (!dom?.pill) return;
+
+  dom.pill.textContent = label || (open ? 'TIENDA ABIERTA' : 'TIENDA CERRADA');
+  dom.pill.classList.toggle('tt-store-state-pill-open', open);
+  dom.pill.classList.toggle('tt-store-state-pill-closed', !open);
+}
+
+function normalizeMaintenanceAccess(value) {
+  const source =
+    value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const result = {};
+
+  MAINTENANCE_ROLES.forEach(role => {
+    result[role] = source[role] === true;
+  });
+
+  return result;
+}
+
+function desiredGateData() {
+  const data = latestGeneral.exists ? latestGeneral.data : {};
+  return {
+    storeOpen: latestGeneral.exists && data.storeOpen === true,
+    maintenanceAccess: normalizeMaintenanceAccess(data.maintenanceAccess)
+  };
+}
+
+function comparableGate(data) {
+  return {
+    storeOpen: data?.storeOpen === true,
+    maintenanceAccess: normalizeMaintenanceAccess(data?.maintenanceAccess)
+  };
+}
+
+function gateMatchesGeneral() {
+  if (!latestGate.exists) return false;
+  return (
+    JSON.stringify(comparableGate(latestGate.data)) ===
+    JSON.stringify(desiredGateData())
+  );
+}
+
+async function syncStoreGate() {
+  if (currentEmail.toLowerCase() !== SUPER_ADMIN_EMAIL) return;
+  if (syncInFlight) {
+    syncQueued = true;
+    return;
+  }
+
+  syncInFlight = true;
+  syncQueued = false;
+
+  try {
+    const desired = desiredGateData();
+    setPanel(
+      'warning',
+      'Sincronizando el cierre global con Firebase…'
+    );
+
+    await setDoc(STORE_GATE_REF, {
+      ...desired,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('[admin-store-control] No se pudo sincronizar storeGate:', error);
+    setPanel(
+      'error',
+      'No se pudo publicar el estado global de la tienda. Tus datos no se borraron. Revisá la conexión y volvé a guardar.'
+    );
+  } finally {
+    syncInFlight = false;
+    if (syncQueued) syncStoreGate();
+  }
+}
+
+function renderState() {
+  if (!dom) return;
+
+  if (!latestGeneral.exists) {
+    dom.checkbox.checked = false;
+    setPill(false, 'CONFIGURACIÓN FALTANTE');
+    setPanel(
+      'error',
+      'No existe settings/general. Por seguridad la tienda se considera CERRADA hasta que guardes la configuración.'
+    );
+    if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL && !gateMatchesGeneral()) {
+      syncStoreGate();
+    }
+    return;
+  }
+
+  const open = latestGeneral.data.storeOpen === true;
+  // Corrige el criterio viejo "distinto de false": el switch refleja solamente
+  // true explícito, igual que el sitio y las reglas.
+  dom.checkbox.checked = open;
+  setPill(open);
+
+  if (!gateMatchesGeneral()) {
+    setPanel(
+      'warning',
+      'El panel cambió, pero el cierre global todavía se está sincronizando…'
+    );
+    if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL) syncStoreGate();
+    return;
+  }
+
+  setPanel(
+    open ? 'ok' : 'closed',
+    open
+      ? 'Sincronizado con Firebase: la tienda está ABIERTA en todo el sitio.'
+      : 'Sincronizado con Firebase: la tienda está CERRADA en todas las páginas. Solo entran Super Admin y las excepciones activadas.'
+  );
 }
 
 async function boot() {
-  const dom = await waitForConfigDom();
-  if (!dom) return;
+  const found = await waitForConfigDom();
+  if (!found) return;
 
-  const { checkbox, saveBtn, pill } = dom;
-  const panel = ensureStatusPanel(checkbox);
+  dom = {
+    ...found,
+    panel: ensureStatusPanel(found.checkbox)
+  };
 
-  onSnapshot(settingsRef, snap => {
-    if (!snap.exists()) {
-      setPanel(panel, 'error', 'No existe settings/general. Por seguridad la tienda se considera cerrada hasta guardar la configuración desde este panel.');
-      saveBtn.disabled = false;
-      pill.textContent = 'CONFIGURACIÓN FALTANTE';
-      pill.classList.remove('tt-store-state-pill-open');
-      pill.classList.add('tt-store-state-pill-closed');
-      return;
-    }
-
-    const data = snap.data() || {};
-    const open = data.storeOpen === true;
-    setPanel(
-      panel,
-      open ? 'ok' : 'closed',
-      open
-        ? 'Sincronizado con Firebase: la tienda está ABIERTA.'
-        : 'Sincronizado con Firebase: la tienda está CERRADA. Solo entran Super Admin y las excepciones activadas.'
-    );
-    saveBtn.disabled = false;
-  }, error => {
-    console.error('[admin-store-control] No se pudo leer settings/general:', error);
-    setPanel(panel, 'error', 'No se pudo comprobar el estado real de la tienda. El botón Guardar queda bloqueado para evitar cambios a ciegas. Recargá la página o revisá la conexión.');
-    saveBtn.disabled = true;
-    pill.textContent = 'SIN CONEXIÓN';
-    pill.classList.remove('tt-store-state-pill-open');
-    pill.classList.add('tt-store-state-pill-closed');
+  onAuthStateChanged(auth, user => {
+    currentEmail = user?.email || '';
+    renderState();
   });
+
+  onSnapshot(
+    GENERAL_REF,
+    snapshot => {
+      latestGeneral = {
+        exists: snapshot.exists(),
+        data: snapshot.exists() ? snapshot.data() || {} : {}
+      };
+      dom.saveBtn.disabled = false;
+      renderState();
+    },
+    error => {
+      console.error('[admin-store-control] No se pudo leer settings/general:', error);
+      dom.saveBtn.disabled = true;
+      setPill(false, 'SIN CONEXIÓN');
+      setPanel(
+        'error',
+        'No se pudo leer la configuración completa. El botón Guardar queda bloqueado para evitar cambios a ciegas.'
+      );
+    }
+  );
+
+  onSnapshot(
+    STORE_GATE_REF,
+    snapshot => {
+      latestGate = {
+        exists: snapshot.exists(),
+        data: snapshot.exists() ? snapshot.data() || {} : {}
+      };
+      renderState();
+    },
+    error => {
+      console.error('[admin-store-control] No se pudo leer settings/storeGate:', error);
+      latestGate = { exists: false, data: {} };
+      setPanel(
+        'error',
+        'No se pudo comprobar el cierre global. La tienda debe permanecer bloqueada hasta recuperar la conexión.'
+      );
+    }
+  );
 }
 
 boot();
