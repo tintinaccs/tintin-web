@@ -108,6 +108,15 @@ function insertOverlay(kind, cfg) {
   rememberConfig(cfg || lastConfig);
   injectGateStyle();
 
+  // El módulo puede resolver Firebase mientras el <head> todavía se está
+  // procesando. Esperar al body evita que una conexión rápida rompa el gate.
+  if (!document.body) {
+    requestAnimationFrame(() => {
+      if (desiredOverlay === kind) insertOverlay(kind, lastConfig);
+    });
+    return;
+  }
+
   let overlay = document.getElementById(OVERLAY_ID);
   if (!overlay) {
     overlay = document.createElement('div');
