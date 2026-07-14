@@ -1,0 +1,57 @@
+name: Aplicar endurecimiento post-fases
+
+on:
+  push:
+    branches:
+      - fix/postphase-security-hardening
+    paths:
+      - 'scripts/apply-postphase-security-hardening.js'
+      - '.github/workflows/apply-postphase-security.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar rama
+        uses: actions/checkout@v4
+        with:
+          ref: fix/postphase-security-hardening
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Aplicar parche
+        run: node scripts/apply-postphase-security-hardening.js
+
+      - name: Revisar sintaxis
+        run: |
+          node --check js/security-utils.js
+          node --check js/products-store.js
+          node --check js/cart-sync.js
+          node --check js/roles.js
+          node --check js/email-notify.js
+          node --check js/checkout-email-bridge.js
+          node --check script.js
+          node --check scripts/audit-postphase-security.js
+
+      - name: Ejecutar auditoría post-fases
+        run: node scripts/audit-postphase-security.js
+
+      - name: Guardar cambios generados
+        run: |
+          if git diff --quiet; then
+            echo "No hay cambios nuevos para guardar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/security-utils.js js/products-store.js js/cart-sync.js js/roles.js js/email-config.js js/email-notify.js js/checkout-email-bridge.js script.js checkout.html perfil.html firestore.rules apps-script/Phase3Security.gs functions/EMAIL_PHASE3_DEPLOY.md scripts/audit-postphase-security.js package.json
+          git commit -m "Seguridad post-fases: datos, roles, perfiles y correos"
+          git push origin HEAD:fix/postphase-security-hardening
