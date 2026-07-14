@@ -58,10 +58,12 @@ check(
   'el aviso cerrado debe incluir un control exclusivo para iniciar sesión'
 );
 check(
-  'Botón de iniciar sesión fuerza navegación',
-  gateCore.includes('window.location.assign(buildLoginUrl())') &&
-    gateCore.includes("addEventListener('click', goToLogin, { capture: true })"),
-  'el acceso no debe depender únicamente del comportamiento normal de un enlace'
+  'Botón de iniciar sesión fuerza navegación en captura',
+  gateCore.includes('window.location.assign(destination)') &&
+    gateCore.includes('node?.id === LOGIN_CONTROL_ID') &&
+    gateCore.includes('goToLogin(event, control.href || buildLoginUrl())') &&
+    gateCore.includes("window.addEventListener(\n    'click'"),
+  'el acceso debe interceptarse antes de los manejadores generales de la página'
 );
 check(
   'URL de login conserva la carpeta del sitio',
@@ -131,9 +133,11 @@ check(
   'el carrito remoto debe quedar bloqueado'
 );
 check(
-  'Pedidos cerrados',
-  /match\s+\/orders\/\{orderId\}\s*\{\s*allow create:\s*if isStoreOpenOrAllowed\(\)/.test(rules),
-  'no se deben crear pedidos durante el cierre'
+  'Pedidos cerrados mediante el validador Spark',
+  rules.includes('allow create: if sparkOrderCreateValid(orderId);') &&
+    rules.includes("settings.get('storeOpen', false) == true") &&
+    rules.includes("userData.get('blocked', false) != true"),
+  'el validador seguro debe rechazar tienda cerrada y cuentas bloqueadas'
 );
 check(
   'Sin lectura pública vieja',
