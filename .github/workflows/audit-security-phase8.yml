@@ -1,0 +1,34 @@
+name: Auditoría de seguridad Fase 8
+
+on:
+  pull_request:
+    paths:
+      - 'js/admin-users-phase8.js'
+      - 'js/ui-quality.js'
+      - 'js/roles.js'
+      - 'firestore.rules'
+      - 'scripts/audit-security-phase8.js'
+      - 'package.json'
+      - '.github/workflows/audit-security-phase8.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis
+        run: |
+          node --check js/admin-users-phase8.js
+          node --check js/ui-quality.js
+          node --check scripts/audit-security-phase8.js
+      - name: Revisar integración
+        run: npm run audit:security
