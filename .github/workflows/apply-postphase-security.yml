@@ -38,6 +38,10 @@ jobs:
           path = Path('scripts/apply-postphase-security-hardening.js')
           text = path.read_text()
           text = text.replace("replace(/['\\\"<>\\\\\\\\`]/g, '')", "replace(/[\\x22\\x27<>\\\\\\\\]/g, '')")
+          text = text.replace(
+              "check('Checkout ya no actualiza estado desde cliente', !bridge.includes('await updateDoc(doc(db, \\\'orders\\\''));",
+              "check('Checkout ya no actualiza estado desde cliente', !bridge.includes(\"await updateDoc(doc(db, 'orders'\"));"
+          )
           path.write_text(text)
           PY
           node --check scripts/apply-postphase-security-hardening.js
