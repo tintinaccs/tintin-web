@@ -9,6 +9,7 @@
     "audit:images": "node scripts/audit-images-phase5.js",
     "audit:content": "node scripts/audit-content-phase6.js",
     "audit:cart": "node scripts/audit-cart-phase7.js",
+    "audit:security": "node scripts/audit-security-phase8.js",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
     "deploy:firebase": "firebase deploy --only firestore:rules,functions --project tintin-accesorios",

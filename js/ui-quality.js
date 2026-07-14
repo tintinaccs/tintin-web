@@ -2,24 +2,14 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260714-4';
+var TT_CACHE_VERSION='tintin-20260714-5';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
-// Mismo criterio home/interior que js/page-loader.js (que ya resolvió
-// LOGO_SRC antes de que este módulo cargue) — así esta pasada de
-// corrección nunca reemplaza el logo correcto por el de la página
-// equivocada.
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
 var INNER_LOADER_IMAGE='assets-tintin/images/general/logo.png';
 function isHomePage(){var path=(location.pathname||'').toLowerCase();return path.endsWith('/index.html')||/\/$/.test(path)}
 var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CACHE_VERSION;
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
-// css(): ui-quality.css / tintin-unified-theme.css / tintin-theme-cleanup.css /
-// tintin-parity-safe.css ya se cargan de forma síncrona en el <head> de cada
-// página (mismo orden de cascada que tenían acá) — inyectarlos de nuevo acá
-// los duplicaba y causaba un repintado visible del esquema de colores un
-// instante después del primer paint. Si algún archivo HTML nuevo todavía no
-// tiene esos <link>, esta función los agrega como respaldo, sin duplicar.
 function css(){
  var files=[['tt-ui-quality-css','ui-quality.css'],['tt-unified-theme-css','tintin-unified-theme.css'],['tt-theme-cleanup-css','tintin-theme-cleanup.css'],['tt-parity-safe-css','tintin-parity-safe.css']];
  files.forEach(function(f){
@@ -38,6 +28,7 @@ function bootImagesPhase5(){import(versioned('./images-phase5.js')).catch(functi
 function bootAdminImagesPhase5(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin-images.html')||path.endsWith('/admin-images')))return;import(versioned('./admin-images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Images Phase 5:',e)})}
 function bootAdminContentPhase6(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin-content-phase6.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Content Phase 6:',e)})}
 function bootCartPhase7(){var path=(location.pathname||'').toLowerCase();if(path.endsWith('/admin.html')||path.endsWith('/admin')||path.endsWith('/admin-images.html')||path.endsWith('/admin-images'))return;import(versioned('./cart-sync.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Cart Sync Phase 7:',e)})}
+function bootAdminUsersPhase8(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin-users-phase8.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Users Phase 8:',e)})}
 function parity(){document.documentElement.classList.remove('tt-parity-guard');document.documentElement.classList.add('tt-parity-safe')}
 function adminMobileSidebar(){
  var path=(location.pathname||'').toLowerCase();
@@ -65,6 +56,6 @@ function links(){document.querySelectorAll('a[href]').forEach(function(a){var hr
 function forms(){document.addEventListener('submit',function(e){var f=e.target;if(!f||!f.matches||!f.matches('form'))return;if(f.dataset.ttSubmitting==='1'){e.preventDefault();return}f.dataset.ttSubmitting='1';setTimeout(function(){delete f.dataset.ttSubmitting},4500)},true);document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('button,[role="button"],a.tt-btn,.tt-btn'):null;if(!b)return;var now=Date.now();var last=Number(b.dataset.ttLastClick||0);if(now-last<320){e.preventDefault();e.stopPropagation();return}b.dataset.ttLastClick=String(now)},true)}
 function singleLogoLoader(){var logo=realLogo();document.querySelectorAll('#tt-loader-line,#tt-loader-text,#tt-loader-dots,.tt-splash-line,#tt-intro-fallback').forEach(function(el){el.remove()});document.querySelectorAll('#tt-loader-logo,#tt-intro-logo').forEach(function(img){if(!img||img.dataset.ttSingleLogo)return;img.dataset.ttSingleLogo='1';img.alt='';img.removeAttribute('aria-label');if(isOldLogo(img.src)||img.src.indexOf('logo.png')===-1&&img.src!==logo)img.src=logo;img.addEventListener('error',function onImgError(){if(img.src.indexOf('logo.png')===-1){img.src=DEFAULT_LOGO}else{img.removeEventListener('error',onImgError);img.style.display='none'}})})}
 function observeDom(){if(!('MutationObserver'in window))return;var timer=0;var obs=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},80)});obs.observe(document.documentElement,{childList:true,subtree:true})}
-function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();parity();adminMobileSidebar();document.documentElement.classList.add('tt-ui-ready');singleLogoLoader();media();links();forms();topOnReload();document.documentElement.classList.remove('tt-initializing');observeDom();setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},420)}
+function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();bootAdminUsersPhase8();parity();adminMobileSidebar();document.documentElement.classList.add('tt-ui-ready');singleLogoLoader();media();links();forms();topOnReload();document.documentElement.classList.remove('tt-initializing');observeDom();setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},420)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
