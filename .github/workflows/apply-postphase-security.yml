@@ -64,15 +64,56 @@ jobs:
           if-no-files-found: warn
 
       - name: Revisar sintaxis
+        shell: bash
         run: |
-          node --check js/security-utils.js
-          node --check js/products-store.js
-          node --check js/cart-sync.js
-          node --check js/roles.js
-          node --check js/email-notify.js
-          node --check js/checkout-email-bridge.js
-          node --check script.js
-          node --check scripts/audit-postphase-security.js
+          set +e
+          {
+            node --check js/security-utils.js
+            node --check js/products-store.js
+            node --check js/cart-sync.js
+            node --check js/roles.js
+            node --check js/email-notify.js
+            node --check js/checkout-email-bridge.js
+            node --check script.js
+            node --check scripts/audit-postphase-security.js
+          } > syntax.log 2>&1
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            cat syntax.log
+            exit "$status"
+          fi
+          cat syntax.log
+
+      - name: Guardar registro de sintaxis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: syntax-log-${{ github.run_id }}
+          path: syntax.log
+          if-no-files-found: warn
+
+      - name: Guardar archivos generados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-security-files-${{ github.run_id }}
+          path: |
+            js/security-utils.js
+            js/products-store.js
+            js/cart-sync.js
+            js/roles.js
+            js/email-config.js
+            js/email-notify.js
+            js/checkout-email-bridge.js
+            script.js
+            checkout.html
+            perfil.html
+            firestore.rules
+            apps-script/Phase3Security.gs
+            functions/EMAIL_PHASE3_DEPLOY.md
+            scripts/audit-postphase-security.js
+            package.json
+          if-no-files-found: warn
 
       - name: Ejecutar auditoría post-fases
         run: node scripts/audit-postphase-security.js
