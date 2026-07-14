@@ -1,8 +1,15 @@
 # Imágenes de Tintin Accesorios — Guía para cambiar fotos sin tocar código
 
-Esta carpeta (`assets-tintin/images/`) es el lugar donde se guardan las imágenes base del sitio.
+Esta carpeta (`assets-tintin/images/`) contiene las imágenes base y de respaldo del sitio. Desde la Fase 5 también existe un panel para reemplazar determinadas imágenes mediante URL, sin modificar estos archivos.
 
-Regla de oro: **el nombre del archivo nunca cambia, solo el contenido de la imagen.** El sitio ya sabe buscar esos nombres; si subís un archivo con el nombre correcto, la foto nueva aparece sola después de actualizar la página.
+## Regla principal: una sola fuente por tipo de imagen
+
+- **Fotos de productos:** Super Admin → Productos. Se guardan en `products/{id}.imageUrl`.
+- **Portadas de colecciones:** Super Admin → Colecciones. Se guardan en `collections/{slug}.image`.
+- **Hero, editoriales, Nosotros y logo:** Super Admin → Imágenes. Se guardan en `settings/images`.
+- **Archivos de esta carpeta:** funcionan como respaldo cuando un espacio del panel no tiene una URL configurada o esa URL falla.
+
+No vuelvas a crear fotos de productos o colecciones dentro de `settings/images`: esas opciones antiguas ya no aparecen en el panel y se ignoran para evitar duplicaciones.
 
 ---
 
@@ -10,7 +17,7 @@ Regla de oro: **el nombre del archivo nunca cambia, solo el contenido de la imag
 
 Para fotos grandes del sitio, usá **WEBP** porque pesa menos y carga más rápido.
 
-Para el logo principal del loader/header, usá:
+Para el logo principal de respaldo, usá:
 
 ```text
 assets-tintin/images/general/logo.png
@@ -20,19 +27,31 @@ Ese archivo debe ser PNG, idealmente con fondo transparente.
 
 ---
 
-## 2. Cómo reemplazar una imagen
+## 2. Cambiar una imagen desde Super Admin
+
+1. Entrá en **Super Admin → Imágenes**.
+2. Elegí Hero, Editorial, Nosotros o Branding.
+3. Pegá una URL `https://` válida.
+4. En Hero también podés elegir tamaño y posición.
+5. Guardá. El cambio se sincroniza en tiempo real en las páginas abiertas.
+
+Cuando quitás una URL, el sitio vuelve automáticamente a los archivos de respaldo indicados abajo.
+
+---
+
+## 3. Reemplazar un archivo de respaldo en GitHub
 
 1. Entrá al repositorio en GitHub.
 2. Andá a la carpeta correspondiente dentro de `assets-tintin/images/...`.
 3. Subí el archivo nuevo con el mismo nombre exacto.
 4. Confirmá el cambio.
-5. Esperá 1–2 minutos y refrescá con Ctrl+Shift+R.
+5. Esperá unos minutos y refrescá con `Ctrl + Shift + R`.
 
 ---
 
-## 3. Mapa de imágenes principales
+## 4. Mapa de imágenes principales
 
-### Inicio (`index.html`)
+### Inicio — Hero
 
 Carpeta: `assets-tintin/images/home/hero-banner/`
 
@@ -46,8 +65,6 @@ Carpeta: `assets-tintin/images/home/hero-banner/`
 
 Carpeta: `assets-tintin/images/home/editorial-bolsos/`
 
-Archivos:
-
 ```text
 editorial-bolsos-desktop.webp
 editorial-bolsos-tablet.webp
@@ -58,8 +75,6 @@ editorial-bolsos-mobile.webp
 
 Carpeta: `assets-tintin/images/home/editorial-relojes/`
 
-Archivos:
-
 ```text
 editorial-relojes-desktop.webp
 editorial-relojes-tablet.webp
@@ -67,6 +82,8 @@ editorial-relojes-mobile.webp
 ```
 
 ### Colecciones
+
+Las portadas personalizadas se administran desde **Colecciones**. Estos archivos quedan como respaldo automático:
 
 Carpeta: `assets-tintin/images/collections/`
 
@@ -84,13 +101,11 @@ Carpeta: `assets-tintin/images/collections/`
 | Pulseras | `col-pulseras.webp` |
 | Relojes | `col-relojes.webp` |
 | Tobilleras | `col-tobilleras.webp` |
-| Respaldo | `col-placeholder.webp` |
+| Respaldo general | `col-placeholder.webp` |
 
 ### Nosotros
 
 Carpeta: `assets-tintin/images/nosotros/foto-principal/`
-
-Archivos:
 
 ```text
 foto-principal-desktop.webp
@@ -104,26 +119,23 @@ Carpeta: `assets-tintin/images/general/`
 
 | Archivo | Dónde se usa |
 |---|---|
-| `logo.png` | Logo real del loader y respaldo global |
-| `placeholder-section.webp` | Imagen de respaldo si falta una foto |
+| `logo.png` | Logo de respaldo para loader, encabezados y pie |
+| `placeholder-section.webp` | Respaldo si una foto no puede cargarse |
 
 ---
 
-## 4. Qué pasa si una imagen no aparece
+## 5. Seguridad y fallos
 
-El sitio está armado para evitar imágenes rotas. Primero intenta cargar la imagen exacta; si no existe, cae a una imagen de respaldo. Si después de subir una imagen nueva seguís viendo la anterior, hacé Ctrl+Shift+R.
-
----
-
-## 5. Slots del Super Admin sin efecto visual actual
-
-En el panel Super Admin → Imágenes pueden aparecer opciones antiguas que hoy no están conectadas a una sección visible. No rompen nada, simplemente no se muestran hasta que se conecten en el diseño.
-
----
+- Solo se aceptan direcciones `http://` o `https://` sin comillas ni código.
+- Si una URL guardada deja de funcionar, aparece la imagen base correspondiente.
+- Al quitar una personalización, el sitio restaura la versión responsive de escritorio, tablet y celular.
+- El caché local acelera la primera vista, pero Firestore vuelve a comprobar el valor y actualiza todas las pestañas.
 
 ## 6. Resumen rápido
 
-- Fotos grandes: WEBP.
-- Logo real: `assets-tintin/images/general/logo.png`.
-- No cambies nombres de archivos existentes.
-- Para colecciones nuevas: usá Super Admin o `col-<slug>.webp`.
+- Producto → Productos.
+- Colección → Colecciones.
+- Hero/editoriales/Nosotros/logo → Imágenes.
+- Fotos grandes → WEBP.
+- Logo de respaldo → PNG transparente.
+- Después de modificar archivos en GitHub → `Ctrl + Shift + R`.

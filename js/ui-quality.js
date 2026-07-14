@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260714-1';
+var TT_CACHE_VERSION='tintin-20260714-2';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 // Mismo criterio home/interior que js/page-loader.js (que ya resolvió
@@ -34,6 +34,8 @@ function bootMobileHeader(){import(versioned('./header-account-mobile-fix.js')).
 function bootPageAudit(){import(versioned('./page-audit-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('./collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin-collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}
+function bootImagesPhase5(){import(versioned('./images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Images Phase 5:',e)})}
+function bootAdminImagesPhase5(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin-images.html')||path.endsWith('/admin-images')))return;import(versioned('./admin-images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Images Phase 5:',e)})}
 function parity(){document.documentElement.classList.remove('tt-parity-guard');document.documentElement.classList.add('tt-parity-safe')}
 function adminMobileSidebar(){
  var path=(location.pathname||'').toLowerCase();
@@ -61,6 +63,6 @@ function links(){document.querySelectorAll('a[href]').forEach(function(a){var hr
 function forms(){document.addEventListener('submit',function(e){var f=e.target;if(!f||!f.matches||!f.matches('form'))return;if(f.dataset.ttSubmitting==='1'){e.preventDefault();return}f.dataset.ttSubmitting='1';setTimeout(function(){delete f.dataset.ttSubmitting},4500)},true);document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('button,[role="button"],a.tt-btn,.tt-btn'):null;if(!b)return;var now=Date.now();var last=Number(b.dataset.ttLastClick||0);if(now-last<320){e.preventDefault();e.stopPropagation();return}b.dataset.ttLastClick=String(now)},true)}
 function singleLogoLoader(){var logo=realLogo();document.querySelectorAll('#tt-loader-line,#tt-loader-text,#tt-loader-dots,.tt-splash-line,#tt-intro-fallback').forEach(function(el){el.remove()});document.querySelectorAll('#tt-loader-logo,#tt-intro-logo').forEach(function(img){if(!img||img.dataset.ttSingleLogo)return;img.dataset.ttSingleLogo='1';img.alt='';img.removeAttribute('aria-label');if(isOldLogo(img.src)||img.src.indexOf('logo.png')===-1&&img.src!==logo)img.src=logo;img.addEventListener('error',function onImgError(){if(img.src.indexOf('logo.png')===-1){img.src=DEFAULT_LOGO}else{img.removeEventListener('error',onImgError);img.style.display='none'}})})}
 function observeDom(){if(!('MutationObserver'in window))return;var timer=0;var obs=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},80)});obs.observe(document.documentElement,{childList:true,subtree:true})}
-function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();parity();adminMobileSidebar();document.documentElement.classList.add('tt-ui-ready');singleLogoLoader();media();links();forms();topOnReload();document.documentElement.classList.remove('tt-initializing');observeDom();setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},420)}
+function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();parity();adminMobileSidebar();document.documentElement.classList.add('tt-ui-ready');singleLogoLoader();media();links();forms();topOnReload();document.documentElement.classList.remove('tt-initializing');observeDom();setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},420)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

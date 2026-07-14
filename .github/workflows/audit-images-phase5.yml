@@ -1,0 +1,41 @@
+name: Auditoría de imágenes Fase 5
+
+on:
+  pull_request:
+    paths:
+      - 'js/image-utils.js'
+      - 'js/images.js'
+      - 'js/images-phase5.js'
+      - 'js/admin-images-phase5.js'
+      - 'js/products-store.js'
+      - 'js/ui-quality.js'
+      - 'assets-tintin/images/README-IMAGENES.md'
+      - 'scripts/audit-images-phase5.js'
+      - 'package.json'
+      - '.github/workflows/audit-images-phase5.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis
+        run: |
+          node --check js/image-utils.js
+          node --check js/images.js
+          node --check js/images-phase5.js
+          node --check js/admin-images-phase5.js
+          node --check js/products-store.js
+          node --check js/ui-quality.js
+          node --check scripts/audit-images-phase5.js
+      - name: Revisar integración
+        run: npm run audit:images

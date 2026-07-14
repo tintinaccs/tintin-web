@@ -1,122 +1,241 @@
 /* ============================================================
-   TINTIN ACCESORIOS — Image Management Module
-   Manages configurable image slots stored in Firestore
+   TINTIN ACCESORIOS — Image Management Module (Fase 5)
+
+   Única fuente para imágenes globales/editoriales: settings/images.
+   Productos usan products/{id}.imageUrl y colecciones usan
+   collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db } from "./firebase.js?v=tintin-20260713-5";
-import { doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-// ui-quality.js NO se importa acá a propósito: js/page-loader.js ya lo carga
-// (con versión) en todas las páginas que usan este módulo — importarlo de
-// nuevo era trabajo duplicado.
-import './home-premium.js?v=tintin-20260713-5';
-import './welcome-tutorial-runtime.js?v=tintin-20260713-5';
+import { db } from './firebase.js';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  onSnapshot,
+  serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { sanitizeImageUrl } from './image-utils.js';
 
-const TT_CACHE_VERSION = 'tintin-20260713-5';
-function versionUrl(url) {
-  const u = new URL(url, import.meta.url);
-  u.searchParams.set('v', TT_CACHE_VERSION);
-  return u.href;
-}
-
-function injectHomeFit() {
-  const path = (location.pathname || '').toLowerCase();
-  const isHome = path.endsWith('/') || path.endsWith('/index.html') || path === '';
-  if (!isHome || document.getElementById('tt-home-fit-css')) return;
-  const link = document.createElement('link');
-  link.id = 'tt-home-fit-css';
-  link.rel = 'stylesheet';
-  link.href = versionUrl('../css/home-fit.css');
-  document.head.appendChild(link);
-}
-
-injectHomeFit();
+// Se mantienen estas inicializaciones porque históricamente dependían de la
+// primera importación de images.js. Ambas son idempotentes.
+import './home-premium.js';
+import './welcome-tutorial-runtime.js';
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
 
-export const IMAGE_SLOTS = [
-  { id: 'hero_bg_desktop', label: 'Hero — Desktop (≥1024px)',  section: 'hero', emoji: null, desc: 'Fondo del banner en pantallas grandes (PC / laptop)' },
+export const HERO_SIZE_VALUES = Object.freeze([
+  'cover', 'contain', 'auto', '80%', '60%', '50%', '40%'
+]);
+export const HERO_POSITION_VALUES = Object.freeze([
+  'center center', 'center top', 'center bottom',
+  'left center', 'right center', 'left top', 'right top',
+  'left bottom', 'right bottom'
+]);
+
+// Solo aparecen slots que tienen un destino visual real. Las fotos de producto
+// se editan en Productos y las portadas de colección en Colecciones.
+export const IMAGE_SLOTS = Object.freeze([
+  { id: 'hero_bg_desktop', label: 'Hero — Desktop (≥1024px)', section: 'hero', emoji: null, desc: 'Fondo del banner en pantallas grandes (PC / laptop)' },
   { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1023px)', section: 'hero', emoji: null, desc: 'Fondo del banner en tablets' },
-  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)',     section: 'hero', emoji: null, desc: 'Fondo del banner en celulares' },
-  { id: 'prod_1',               label: 'Reloj Alissia',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Alissia' },
-  { id: 'prod_2',               label: 'Reloj Allegra',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Allegra' },
-  { id: 'prod_3',               label: 'Reloj Amara',                section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Amara' },
-  { id: 'prod_4',               label: 'Reloj Ámbar',                section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Ámbar' },
-  { id: 'prod_5',               label: 'Reloj Amelia',               section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Amelia' },
-  { id: 'prod_6',               label: 'Reloj Ameline',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Ameline' },
-  { id: 'prod_7',               label: 'Reloj Amethys',              section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Amethys' },
-  { id: 'prod_8',               label: 'Reloj Anabella',             section: 'productos',  emoji: '⌚',  desc: 'Foto del producto Reloj Anabella' },
-  { id: 'edit_relojes',         label: 'Editorial — Relojes',        section: 'editorial',  emoji: '⌚',  desc: 'Imagen sección editorial Relojes' },
-  { id: 'edit_bolsos',          label: 'Editorial — Bolsos/Bags',    section: 'editorial',  emoji: '👜',  desc: 'Imagen sección editorial Bags' },
-  { id: 'edit_collares',        label: 'Editorial — Collares',       section: 'editorial',  emoji: '📿',  desc: 'Imagen sección editorial Collares' },
-  { id: 'coll_bags',            label: 'Colección — Bags',           section: 'editorial',  emoji: '👜',  desc: 'Imagen tarjeta colección Bags' },
-  { id: 'coll_collares',        label: 'Colección — Collares',       section: 'editorial',  emoji: '📿',  desc: 'Imagen tarjeta colección Collares' },
-  { id: 'coll_earcuff',         label: 'Colección — Earcuff',        section: 'editorial',  emoji: '✨',  desc: 'Imagen tarjeta colección Earcuff' },
-  { id: 'coll_gafas',           label: 'Colección — Gafas',          section: 'editorial',  emoji: '🕶️', desc: 'Imagen tarjeta colección Gafas' },
-  { id: 'coll_brazaletes',      label: 'Colección — Brazaletes',     section: 'editorial',  emoji: '💎',  desc: 'Imagen tarjeta colección Brazaletes' },
-  { id: 'coll_aros',            label: 'Colección — Aros',           section: 'editorial',  emoji: '💫',  desc: 'Imagen tarjeta colección Aros' },
-  { id: 'coll_armcuff',         label: 'Colección — Armcuff',        section: 'editorial',  emoji: '🌸',  desc: 'Imagen tarjeta colección Armcuff' },
-  { id: 'coll_anillos',         label: 'Colección — Anillos',        section: 'editorial',  emoji: '💍',  desc: 'Imagen tarjeta colección Anillos' },
-  { id: 'coll_joyeros',         label: 'Colección — Joyeros',        section: 'editorial',  emoji: '🪞',  desc: 'Imagen tarjeta colección Joyeros' },
-  { id: 'coll_pulseras',        label: 'Colección — Pulseras',       section: 'editorial',  emoji: '🎀',  desc: 'Imagen tarjeta colección Pulseras' },
-  { id: 'coll_relojes',         label: 'Colección — Relojes',        section: 'editorial',  emoji: '⌚',  desc: 'Imagen tarjeta colección Relojes' },
-  { id: 'coll_tobilleras',      label: 'Colección — Tobilleras',     section: 'editorial',  emoji: '🦋',  desc: 'Imagen tarjeta colección Tobilleras' },
-  { id: 'trust_envio',          label: 'Ícono — Envío',              section: 'iconos',     emoji: '🚀',  desc: 'Ícono de envío/delivery' },
-  { id: 'trust_calidad',        label: 'Ícono — Calidad',            section: 'iconos',     emoji: '✨',  desc: 'Ícono de calidad garantizada' },
-  { id: 'trust_pago',           label: 'Ícono — Pago seguro',        section: 'iconos',     emoji: '🔒',  desc: 'Ícono de pago seguro' },
-  { id: 'trust_soporte',        label: 'Ícono — Soporte',            section: 'iconos',     emoji: '💬',  desc: 'Ícono de atención al cliente' },
-  { id: 'about_foto',           label: 'Nosotros — Foto principal',  section: 'nosotros',   emoji: '🌸',  desc: 'Foto principal de la página Nosotros' },
-  { id: 'logo_main',            label: 'Logo principal',             section: 'branding',   emoji: null,  desc: 'Logo principal del sitio' },
-];
+  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)', section: 'hero', emoji: null, desc: 'Fondo del banner en celulares' },
+  { id: 'edit_bolsos',     label: 'Editorial — Bolsos/Bags', section: 'editorial', emoji: '👜', desc: 'Imagen de la sección editorial Bags en la portada' },
+  { id: 'edit_relojes',    label: 'Editorial — Relojes', section: 'editorial', emoji: '⌚', desc: 'Imagen de la sección editorial Relojes en la portada' },
+  { id: 'about_foto',      label: 'Nosotros — Foto principal', section: 'nosotros', emoji: '🌸', desc: 'Foto principal de la página Nosotros' },
+  { id: 'logo_main',       label: 'Logo principal', section: 'branding', emoji: null, desc: 'Logo utilizado en encabezados, pie y pantalla de carga' },
+]);
+
+export const IMAGE_SLOT_IDS = Object.freeze(IMAGE_SLOTS.map(slot => slot.id));
+const IMAGE_SLOT_SET = new Set(IMAGE_SLOT_IDS);
+const HERO_SLOT_SET = new Set(IMAGE_SLOT_IDS.filter(id => id.startsWith('hero_bg_')));
+
+function isHeroMetaKey(key) {
+  return /^(hero_bg_(?:desktop|tablet|mobile))_(?:size|pos)$/.test(key);
+}
+
+function allowedSettingKey(key) {
+  return IMAGE_SLOT_SET.has(key) || isHeroMetaKey(key);
+}
+
+function normalizeMetaValue(key, value) {
+  if (key.endsWith('_size')) {
+    return HERO_SIZE_VALUES.includes(value) ? value : 'cover';
+  }
+  if (key.endsWith('_pos')) {
+    return HERO_POSITION_VALUES.includes(value) ? value : 'center center';
+  }
+  return '';
+}
+
+export function normalizeImagesData(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const normalized = {};
+
+  IMAGE_SLOT_IDS.forEach(id => {
+    const safe = sanitizeImageUrl(source[id]);
+    if (safe) normalized[id] = safe;
+  });
+
+  HERO_SLOT_SET.forEach(id => {
+    const sizeKey = `${id}_size`;
+    const posKey = `${id}_pos`;
+    normalized[sizeKey] = normalizeMetaValue(sizeKey, source[sizeKey]);
+    normalized[posKey] = normalizeMetaValue(posKey, source[posKey]);
+  });
+
+  return normalized;
+}
+
+export function normalizeImagePatch(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    throw new Error('Los datos de imagen no son válidos.');
+  }
+
+  const patch = {};
+  Object.entries(data).forEach(([key, value]) => {
+    if (!allowedSettingKey(key)) return;
+
+    if (value == null || value === '') {
+      patch[key] = null;
+      return;
+    }
+
+    if (IMAGE_SLOT_SET.has(key)) {
+      const safe = sanitizeImageUrl(value);
+      if (!safe) throw new Error(`La URL de “${key}” no es válida o no es segura.`);
+      patch[key] = safe;
+      return;
+    }
+
+    patch[key] = normalizeMetaValue(key, String(value));
+  });
+
+  return patch;
+}
 
 let _cache = null;
-function _fromLocalStorage() { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch { return null; } }
-function _toLocalStorage(data) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} }
+let _listenerStarted = false;
+const _subscribers = new Set();
+const _errorSubscribers = new Set();
 
-export async function loadImages() {
-  const cached = _fromLocalStorage();
-  if (cached) { _cache = cached; return _cache; }
+function fromLocalStorage() {
+  try {
+    return normalizeImagesData(JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'));
+  } catch {
+    return {};
+  }
+}
+
+function toLocalStorage(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(normalizeImagesData(data)));
+  } catch {}
+}
+
+function publish(data) {
+  const snapshot = normalizeImagesData(data);
+  _cache = snapshot;
+  toLocalStorage(snapshot);
+  _subscribers.forEach(fn => {
+    try { fn({ ...snapshot }); }
+    catch (error) { console.warn('[images] subscriber error:', error); }
+  });
+  return snapshot;
+}
+
+function publishError(error) {
+  _errorSubscribers.forEach(fn => {
+    try { fn(error); }
+    catch (callbackError) { console.warn('[images] error subscriber failed:', callbackError); }
+  });
+}
+
+export async function loadImages(options = {}) {
+  const { force = false } = options;
+
+  if (!_cache) {
+    _cache = fromLocalStorage();
+  }
+  if (!force && _cache && Object.keys(_cache).length && _listenerStarted) {
+    return { ..._cache };
+  }
+
   try {
     const snap = await getDoc(doc(db, FIRESTORE_DOC));
-    const data = snap.exists() ? snap.data() : {};
-    _cache = data;
-    _toLocalStorage(data);
-  } catch (e) {
-    console.warn('[images] Firestore load failed:', e);
-    _cache = {};
+    return publish(snap.exists() ? snap.data() : {});
+  } catch (error) {
+    console.warn('[images] Firestore load failed:', error);
+    publishError(error);
+    return { ...(_cache || {}) };
   }
-  return _cache;
 }
 
 export async function saveImages(data) {
-  await setDoc(doc(db, FIRESTORE_DOC), data, { merge: true });
-  _cache = { ...(_cache || {}), ...data };
-  _toLocalStorage(_cache);
+  const patch = normalizeImagePatch(data);
+  if (!Object.keys(patch).length) return { ...(_cache || {}) };
+
+  await setDoc(
+    doc(db, FIRESTORE_DOC),
+    { ...patch, updatedAt: serverTimestamp() },
+    { merge: true }
+  );
+
+  const next = { ...(_cache || fromLocalStorage()) };
+  Object.entries(patch).forEach(([key, value]) => {
+    if (value == null || value === '') delete next[key];
+    else next[key] = value;
+  });
+  return publish(next);
 }
 
 export function getImg(id) {
-  if (!_cache) _cache = _fromLocalStorage() || {};
-  return (_cache && _cache[id]) ? _cache[id] : null;
+  if (!_cache) _cache = fromLocalStorage();
+  return _cache[id] || null;
 }
 
-export function setImgCache(id, url) {
-  if (!_cache) _cache = _fromLocalStorage() || {};
-  if (url) _cache[id] = url;
-  else delete _cache[id];
-  _toLocalStorage(_cache);
+export function getAllImages() {
+  if (!_cache) _cache = fromLocalStorage();
+  return { ..._cache };
 }
 
-let _listenerStarted = false;
-const _subscribers = new Set();
+export function setImgCache(id, value) {
+  if (!allowedSettingKey(id)) return;
+  if (!_cache) _cache = fromLocalStorage();
 
-export function onImagesUpdate(cb) {
-  _subscribers.add(cb);
-  if (_cache) cb(_cache);
-  if (_listenerStarted) return;
-  _listenerStarted = true;
-  onSnapshot(doc(db, FIRESTORE_DOC), snap => {
-    _cache = snap.exists() ? snap.data() : {};
-    _toLocalStorage(_cache);
-    _subscribers.forEach(fn => { try { fn(_cache); } catch (e) { console.warn('[images] subscriber error:', e); } });
-  }, e => console.warn('[images] realtime listener failed:', e));
+  if (value == null || value === '') {
+    delete _cache[id];
+  } else if (IMAGE_SLOT_SET.has(id)) {
+    const safe = sanitizeImageUrl(value);
+    if (!safe) return;
+    _cache[id] = safe;
+  } else {
+    _cache[id] = normalizeMetaValue(id, String(value));
+  }
+  toLocalStorage(_cache);
+}
+
+export function onImagesUpdate(callback, onError) {
+  if (typeof callback === 'function') {
+    _subscribers.add(callback);
+    if (!_cache) _cache = fromLocalStorage();
+    callback({ ..._cache });
+  }
+  if (typeof onError === 'function') _errorSubscribers.add(onError);
+
+  if (!_listenerStarted) {
+    _listenerStarted = true;
+    onSnapshot(
+      doc(db, FIRESTORE_DOC),
+      snap => publish(snap.exists() ? snap.data() : {}),
+      error => {
+        console.warn('[images] realtime listener failed:', error);
+        publishError(error);
+      }
+    );
+  }
+
+  return () => {
+    if (typeof callback === 'function') _subscribers.delete(callback);
+    if (typeof onError === 'function') _errorSubscribers.delete(onError);
+  };
 }
