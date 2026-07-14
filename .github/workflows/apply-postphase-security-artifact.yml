@@ -1,11 +1,9 @@
 name: Aplicar paquete de seguridad verificado
 
 on:
-  push:
+  pull_request:
     branches:
-      - fix/postphase-security-hardening
-    paths:
-      - '.github/workflows/apply-postphase-security-artifact.yml'
+      - main
   workflow_dispatch:
 
 permissions:
