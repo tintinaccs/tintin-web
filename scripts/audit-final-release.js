@@ -44,6 +44,12 @@ check(
 );
 
 check(
+  'Firebase no intenta desplegar Functions por accidente',
+  !Object.prototype.hasOwnProperty.call(firebaseJson, 'functions'),
+  'Un firebase deploy genérico no debe pedir Blaze ni habilitar Artifact Registry'
+);
+
+check(
   'La importación vieja queda oculta',
   phase9.includes("title.includes('importar csv de shopify')") &&
     phase9.includes("title.includes('importar json manual')") &&
