@@ -100,7 +100,7 @@ export const PERMISSION_MODULES = {
       ver:                       { label: 'Ver contenido',                  defaultFrom: 'manageContent', rolesEditable: ['admin','agent','viewer'] },
       editarTextos:              { label: 'Editar textos',                  defaultFrom: 'manageContent', rolesEditable: ['admin','agent'] },
       activarDesactivarSecciones:{ label: 'Activar/desactivar secciones',   defaultFrom: 'manageContent', rolesEditable: ['admin','agent'] },
-      restaurar:                 { label: 'Restaurar contenido original',   implemented: false, note: 'No existe hoy un "restaurar original" para Contenido (sí para Plantillas de correo) — no se agrega un switch falso.' },
+      restaurar:                 { label: 'Restaurar contenido original',   defaultFrom: 'manageContent', rolesEditable: ['admin','agent'], dangerous: true },
       eliminar:                  { label: 'Eliminar contenido',             implemented: false, note: 'Contenido no tiene una acción de "eliminar una sección" — solo se edita, no se borra.' },
     }
   },
