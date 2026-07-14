@@ -111,8 +111,8 @@ check(
 check(
   'Las reglas siguen protegiendo productos e importaciones',
   rules.includes('match /products/{productId}') &&
-    rules.includes('allow create') &&
-    rules.includes('isAdminOrSuper()'),
+    rules.includes('allow create: if isSuperAdmin() ||') &&
+    rules.includes("currentRolePermAllows('productos', 'crear')"),
   'La interfaz no reemplaza las reglas de Firestore'
 );
 
