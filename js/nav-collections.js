@@ -1,143 +1,260 @@
-/**
- * TINTIN — Nav Collections Sync
- * Real-time, full-render sync of every site-wide navigation surface that
- * lists collections (desktop "TIENDA" dropdown, mobile category grid, and
- * the mobile bottom sheet) with Super Admin → Colecciones. Firestore is the
- * only source of truth: every onCollectionsUpdate snapshot clears each
- * dynamic container and rebuilds it from scratch, in Firestore order — a
- * renamed/reordered/hidden/deleted collection is never left as a stale,
- * merely-hidden DOM node from a previous render.
- *
- * Targets are found via data-collections-nav="desktop|mobile|sheet"
- * containers instead of page-specific classes, so this works identically
- * regardless of which page's markup happens to wrap it (this is what fixed
- * catalogo.html's mobile category links never syncing — its container used
- * a different class than index.html's).
- */
-function slugFromHref(href) {
-  const m = (href || '').match(/[?&]cat=([^&]+)/);
-  return m ? decodeURIComponent(m[1]) : null;
-}
+/* =============================================================
+   TINTIN — Colecciones en menús públicos (Fase 4)
 
-const GENERIC_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>';
+   Firestore es la única fuente de verdad. Los enlaces estáticos que todavía
+   existen en algunos HTML se eliminan antes de suscribirse: si Firebase falla,
+   se muestra un error explícito y nunca quedan categorías viejas visibles.
+   ============================================================= */
+
+const COLL_IMG_BASE = 'assets-tintin/images/collections/';
+const COLL_PLACEHOLDER = `${COLL_IMG_BASE}col-placeholder.webp`;
+const SLUG_FILE_MAP = { bolsos: 'bags' };
 const MOBILE_GRADIENT = 'linear-gradient(135deg,#e8c5d0,#c48a9e)';
 
-// Same static-cover convention as the home "Nuestras Colecciones" grid.
-const COLL_IMG_BASE = 'assets-tintin/images/collections/';
-const COLL_PLACEHOLDER = COLL_IMG_BASE + 'col-placeholder.webp';
-const SLUG_FILE_MAP = { bolsos: 'bags' }; // only irregular slug->filename case; rest match 1:1
-function collImgFile(slug) { return SLUG_FILE_MAP[slug] || slug; }
-
-// Always-on image for the mobile sheet: custom Firestore image wins, else the
-// static cover matching the slug, else the generic placeholder. Mirrors
-// index.html's setCollCardImage() so mobile stays visually linked to whatever
-// desktop/tablet/home end up showing for the same collection.
-function sheetImg(c) {
-  const bySlugFallback = `${COLL_IMG_BASE}col-${collImgFile(c.slug)}.webp`;
-  const src = c.image || bySlugFallback;
-  return `<img src="${src}" alt="${c.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${COLL_PLACEHOLDER}';">`;
+function text(value) {
+  return String(value == null ? '' : value).trim();
 }
 
-function buildDesktopCard(c) {
-  const a = document.createElement('a');
-  a.href = `catalogo.html?cat=${c.slug}`;
-  a.className = 'tt-dropdown-card';
-  const iconHtml = c.image
-    ? `<img src="${c.image}" alt="${c.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;">`
-    : GENERIC_ICON;
-  a.innerHTML = `<div class="tt-dropdown-icon">${iconHtml}</div><div class="tt-dropdown-label">${c.name.toUpperCase()}</div>`;
-  return a;
+function collImgFile(slug) {
+  const normalized = text(slug);
+  return SLUG_FILE_MAP[normalized] || normalized;
 }
 
-// Detects which of the two pre-existing mobile-menu visual styles this
-// page uses (rich icon cards on index.html vs plain text links on every
-// other page) purely from the container's own class — never redesigns
-// either style, just rebuilds it correctly on every snapshot.
-function buildMobileNode(container, c) {
-  const rich = container.classList.contains('tt-mobile-cats-grid');
-  const a = document.createElement('a');
-  a.href = `catalogo.html?cat=${c.slug}`;
-  if (rich) {
-    a.className = 'tt-mobile-cat-card';
-    const inner = c.image
-      ? `<img src="${c.image}" alt="${c.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;">`
-      : GENERIC_ICON.replace('currentColor', '#fff');
-    a.innerHTML = `<div class="tt-mobile-cat-img" style="background:${MOBILE_GRADIENT}">${inner}</div><span>${c.name}</span>`;
-  } else {
-    a.textContent = c.name.toUpperCase();
+function safeUrl(value, fallback = '') {
+  const candidate = text(value);
+  if (!candidate) return fallback;
+  try {
+    const parsed = new URL(candidate, window.location.href);
+    if (!['https:', 'http:'].includes(parsed.protocol)) return fallback;
+    if (
+      window.location.protocol === 'https:' &&
+      parsed.protocol === 'http:' &&
+      parsed.origin !== window.location.origin
+    ) {
+      return fallback;
+    }
+    return parsed.href;
+  } catch {
+    return fallback;
   }
-  return a;
 }
 
-function buildSheetItem(c) {
-  const a = document.createElement('a');
-  a.href = `catalogo.html?cat=${c.slug}`;
-  a.className = 'tt-sheet-item';
-  a.innerHTML = `<span class="tt-sheet-item-img">${sheetImg(c)}</span><span>${c.name.toUpperCase()}</span>`;
-  return a;
+function catalogHref(slug) {
+  return `catalogo.html?cat=${encodeURIComponent(text(slug))}`;
 }
 
-/** Exact full render: container ends up with precisely one node per
- *  collection, in Firestore order — no leftover/hidden nodes, no
- *  duplicates, ever. An explicit empty-state message replaces the
- *  container's content when there are truly zero public collections,
- *  instead of a silently blank dropdown/sheet. */
-function renderInto(container, cols, buildNode) {
+function imageCandidates(collection) {
+  const slug = text(collection?.slug);
+  const staticCover = safeUrl(`${COLL_IMG_BASE}col-${collImgFile(slug)}.webp`);
+  const custom = safeUrl(collection?.image);
+  const placeholder = safeUrl(COLL_PLACEHOLDER);
+  return [...new Set([custom, staticCover, placeholder].filter(Boolean))];
+}
+
+function createCollectionImage(collection, className = '') {
+  const image = document.createElement('img');
+  const candidates = imageCandidates(collection);
+  let candidateIndex = 0;
+
+  image.className = className;
+  image.alt = `Colección ${text(collection?.name) || text(collection?.slug)}`;
+  image.loading = 'lazy';
+  image.decoding = 'async';
+  image.style.width = '100%';
+  image.style.height = '100%';
+  image.style.objectFit = 'contain';
+  image.style.display = 'block';
+  image.style.background = 'transparent';
+
+  const applyCandidate = () => {
+    const next = candidates[candidateIndex++];
+    if (next) image.src = next;
+    else image.remove();
+  };
+
+  image.addEventListener('error', applyCandidate);
+  applyCandidate();
+  return image;
+}
+
+function createGenericIcon() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  svg.setAttribute('width', '20');
+  svg.setAttribute('height', '20');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.5');
+  circle.setAttribute('cx', '12');
+  circle.setAttribute('cy', '12');
+  circle.setAttribute('r', '9');
+  svg.appendChild(circle);
+  return svg;
+}
+
+function buildDesktopCard(collection) {
+  const link = document.createElement('a');
+  const icon = document.createElement('div');
+  const label = document.createElement('div');
+
+  link.href = catalogHref(collection.slug);
+  link.className = 'tt-dropdown-card';
+  link.dataset.phase4CollectionNode = '1';
+  icon.className = 'tt-dropdown-icon';
+  label.className = 'tt-dropdown-label';
+  label.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+
+  if (safeUrl(collection.image)) icon.appendChild(createCollectionImage(collection));
+  else icon.appendChild(createGenericIcon());
+
+  link.append(icon, label);
+  return link;
+}
+
+function buildMobileNode(container, collection) {
+  const rich = container.classList.contains('tt-mobile-cats-grid');
+  const link = document.createElement('a');
+  link.href = catalogHref(collection.slug);
+  link.dataset.phase4CollectionNode = '1';
+
+  if (rich) {
+    const imageWrap = document.createElement('div');
+    const label = document.createElement('span');
+    link.className = 'tt-mobile-cat-card';
+    imageWrap.className = 'tt-mobile-cat-img';
+    imageWrap.style.background = MOBILE_GRADIENT;
+    imageWrap.appendChild(createCollectionImage(collection));
+    label.textContent = text(collection.name) || text(collection.slug);
+    link.append(imageWrap, label);
+  } else {
+    link.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+  }
+
+  return link;
+}
+
+function buildSheetItem(collection) {
+  const link = document.createElement('a');
+  const imageWrap = document.createElement('span');
+  const label = document.createElement('span');
+
+  link.href = catalogHref(collection.slug);
+  link.className = 'tt-sheet-item';
+  link.dataset.phase4CollectionNode = '1';
+  imageWrap.className = 'tt-sheet-item-img';
+  imageWrap.appendChild(createCollectionImage(collection));
+  label.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+  link.append(imageWrap, label);
+  return link;
+}
+
+function createStateNode(message, kind = 'info') {
+  const wrap = document.createElement('div');
+  wrap.className = `tt-collections-nav-state tt-collections-nav-state--${kind}`;
+  wrap.dataset.phase4CollectionNode = '1';
+  wrap.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+  wrap.style.cssText =
+    'padding:12px 16px;font-size:12px;color:var(--text-muted,#777);text-align:center;width:100%;box-sizing:border-box;';
+
+  const messageNode = document.createElement('div');
+  messageNode.textContent = message;
+  wrap.appendChild(messageNode);
+
+  if (kind === 'error') {
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = 'Reintentar';
+    retry.style.cssText =
+      'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#b84c72;color:#fff;font:700 11px Poppins,Arial,sans-serif;cursor:pointer;';
+    retry.addEventListener('click', () => window.location.reload());
+    wrap.appendChild(retry);
+  }
+  return wrap;
+}
+
+function renderInto(container, collections, buildNode) {
   if (!container) return;
-  container.innerHTML = '';
-  if (!cols.length) {
-    const empty = document.createElement('div');
-    empty.className = 'tt-collections-nav-empty';
-    empty.style.cssText = 'padding:12px 16px;font-size:12px;color:var(--text-muted,#888);text-align:center;width:100%;';
-    empty.textContent = 'No hay colecciones disponibles';
-    container.appendChild(empty);
+  container.replaceChildren();
+  container.dataset.phase4CollectionsState = 'ready';
+
+  if (!collections.length) {
+    container.appendChild(createStateNode('No hay colecciones disponibles'));
     return;
   }
-  cols.forEach(c => container.appendChild(buildNode(c)));
+  collections.forEach(collection => container.appendChild(buildNode(collection)));
 }
 
-// Seeds real per-slug photos onto whatever .tt-sheet-item anchors are
-// already in the static markup (using the slug from each href) — runs
-// immediately, with zero dependency on Firestore/collections-store.js
-// (which statically imports the Firebase SDK). This is what keeps the
-// sheet from ever looking like bare text if Firebase is slow/unreachable;
-// the full Firestore-driven render below replaces this the moment real
-// data is available.
-function seedStaticSheetImages() {
-  document.querySelectorAll('[data-collections-nav="sheet"] > .tt-sheet-item').forEach(a => {
-    const slug = slugFromHref(a.getAttribute('href'));
-    if (!slug) return;
-    const spans = a.querySelectorAll('span');
-    const wrap = spans[0];
-    if (!wrap) return;
-    wrap.classList.add('tt-sheet-item-img');
-    const name = spans[1] ? spans[1].textContent : slug;
-    wrap.innerHTML = sheetImg({ slug, name, image: '' });
+function renderLoading() {
+  document.querySelectorAll('[data-collections-nav]').forEach(container => {
+    container.replaceChildren(createStateNode('Cargando colecciones…'));
+    container.dataset.phase4CollectionsState = 'loading';
   });
 }
-seedStaticSheetImages();
+
+function renderError() {
+  document.querySelectorAll('[data-collections-nav]').forEach(container => {
+    container.replaceChildren(
+      createStateNode('No pudimos cargar las colecciones.', 'error')
+    );
+    container.dataset.phase4CollectionsState = 'error';
+  });
+}
 
 export function initNavCollections() {
-  // Dynamic import: a Firebase/network hiccup here must not prevent the
-  // static default sheet images above from having already applied, and
-  // must leave the rest of the nav showing its last-known-good state
-  // (initial static markup on first load) instead of going blank.
-  import('./collections-store.js').then(({ onCollectionsUpdate }) => {
-    onCollectionsUpdate(cols => {
-      document.querySelectorAll('[data-collections-nav="desktop"]').forEach(el => renderInto(el, cols, buildDesktopCard));
-      document.querySelectorAll('[data-collections-nav="mobile"]').forEach(el => renderInto(el, cols, c => buildMobileNode(el, c)));
-      document.querySelectorAll('[data-collections-nav="sheet"]').forEach(el => renderInto(el, cols, buildSheetItem));
-    }, e => {
-      console.error('[nav-collections] no se pudieron sincronizar las colecciones:', e.code, e.message);
+  renderLoading();
+  import('./collections-store.js')
+    .then(({ onCollectionsUpdate }) => {
+      onCollectionsUpdate(
+        collections => {
+          document
+            .querySelectorAll('[data-collections-nav="desktop"]')
+            .forEach(container => renderInto(container, collections, buildDesktopCard));
+          document
+            .querySelectorAll('[data-collections-nav="mobile"]')
+            .forEach(container =>
+              renderInto(container, collections, collection =>
+                buildMobileNode(container, collection)
+              )
+            );
+          document
+            .querySelectorAll('[data-collections-nav="sheet"]')
+            .forEach(container => renderInto(container, collections, buildSheetItem));
+        },
+        error => {
+          console.error('[nav-collections] No se pudieron cargar las colecciones:', error);
+          renderError();
+        }
+      );
+    })
+    .catch(error => {
+      console.error('[nav-collections] No se pudo iniciar la sincronización:', error);
+      renderError();
     });
-  }).catch(e => {
-    console.warn('[nav-collections] Firestore sync no disponible, quedan los valores estáticos:', e);
-  });
 }
 
 initNavCollections();
 
-// Exported for catalogo.html/collections.html/index.html's own page-specific
-// renderers, which need the same slug-from-href convention and image
-// helpers without re-implementing them.
-export { slugFromHref, sheetImg, COLL_IMG_BASE, COLL_PLACEHOLDER, collImgFile };
+// Se conservan estos exports para los módulos antiguos que puedan importarlos.
+// Ahora devuelven nodos/valores seguros en vez de fragmentos HTML.
+function slugFromHref(href) {
+  try {
+    return new URL(href || '', window.location.href).searchParams.get('cat');
+  } catch {
+    return null;
+  }
+}
+function sheetImg(collection) {
+  return createCollectionImage(collection);
+}
+
+export {
+  slugFromHref,
+  sheetImg,
+  COLL_IMG_BASE,
+  COLL_PLACEHOLDER,
+  collImgFile,
+  catalogHref,
+  safeUrl,
+  createCollectionImage
+};
