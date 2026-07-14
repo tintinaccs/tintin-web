@@ -1,0 +1,33 @@
+name: Auditoría de carrito Fase 7
+
+on:
+  pull_request:
+    paths:
+      - 'js/cart-sync.js'
+      - 'js/ui-quality.js'
+      - 'js/secure-checkout-order.js'
+      - 'scripts/audit-cart-phase7.js'
+      - 'package.json'
+      - '.github/workflows/audit-cart-phase7.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis
+        run: |
+          node --check js/cart-sync.js
+          node --check js/ui-quality.js
+          node --check scripts/audit-cart-phase7.js
+      - name: Revisar integración
+        run: npm run audit:cart
