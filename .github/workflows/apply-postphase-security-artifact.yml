@@ -1,0 +1,81 @@
+name: Aplicar paquete de seguridad verificado
+
+on:
+  push:
+    branches:
+      - fix/postphase-security-hardening
+    paths:
+      - '.github/workflows/apply-postphase-security-artifact.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar rama
+        uses: actions/checkout@v4
+        with:
+          ref: fix/postphase-security-hardening
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Descargar paquete generado
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/security-artifact
+          mkdir -p /tmp/security-artifact
+          gh run download 29352546991 \
+            --repo tintinaccs/tintin-web \
+            --name generated-security-files-29352546991 \
+            --dir /tmp/security-artifact
+          cp -R /tmp/security-artifact/. .
+
+      - name: Cerrar escritura falsa del estado de correo
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('firestore.rules')
+          text = path.read_text()
+          old = (
+              "            ) ||\n"
+              "            (\n"
+              "              isOwnOrderByUidOrEmail() &&\n"
+              "              request.resource.data.diff(resource.data)\n"
+              "                .affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])\n"
+              "            )"
+          )
+          if old in text:
+              text = text.replace(old, "            )", 1)
+          if "hasOnly(['notificationStatus', 'updatedAt'])" in text:
+              raise SystemExit('La escritura del cliente sigue presente')
+          path.write_text(text)
+          PY
+
+      - name: Revisar sintaxis y seguridad
+        run: |
+          node --check js/security-utils.js
+          node --check js/products-store.js
+          node --check js/cart-sync.js
+          node --check js/roles.js
+          node --check js/email-notify.js
+          node --check js/checkout-email-bridge.js
+          node --check script.js
+          node --check scripts/audit-postphase-security.js
+          node scripts/audit-postphase-security.js
+
+      - name: Guardar parche en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/security-utils.js js/products-store.js js/cart-sync.js js/roles.js js/email-config.js js/email-notify.js js/checkout-email-bridge.js script.js checkout.html perfil.html firestore.rules apps-script/Phase3Security.gs functions/EMAIL_PHASE3_DEPLOY.md scripts/audit-postphase-security.js package.json
+          git commit -m "Seguridad post-fases: datos, roles, perfiles y correos"
+          git push origin HEAD:fix/postphase-security-hardening
