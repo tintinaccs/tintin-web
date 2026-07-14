@@ -7,6 +7,9 @@ on:
     paths:
       - 'scripts/apply-postphase-security-hardening.js'
       - '.github/workflows/apply-postphase-security.yml'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -55,5 +58,3 @@ jobs:
           git add js/security-utils.js js/products-store.js js/cart-sync.js js/roles.js js/email-config.js js/email-notify.js js/checkout-email-bridge.js script.js checkout.html perfil.html firestore.rules apps-script/Phase3Security.gs functions/EMAIL_PHASE3_DEPLOY.md scripts/audit-postphase-security.js package.json
           git commit -m "Seguridad post-fases: datos, roles, perfiles y correos"
           git push origin HEAD:fix/postphase-security-hardening
-
-# Segunda confirmación: este cambio dispara el workflow después de crearlo.
