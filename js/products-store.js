@@ -1,9 +1,7 @@
-/**
- * TINTIN — Products Store
- * Loads products from Firestore and feeds the homepage/product grids.
- * This is a module script; import it after script.js.
- */
+// TINTIN — Products Store
+// Loads products from Firestore and feeds the homepage/product grids.
 import { db } from './firebase.js';
+import { sanitizeImageUrl } from './image-utils.js';
 import {
   collection, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -27,7 +25,9 @@ function normalizeImageUrl(d) {
     d['Foto'] ||
     '';
 
-  return String(img || '').trim();
+  // Todos los renderers públicos interpolan esta propiedad. Centralizar la
+  // validación acá impide que una URL con comillas/código llegue al DOM.
+  return sanitizeImageUrl(img);
 }
 
 /**
