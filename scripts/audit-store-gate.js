@@ -131,9 +131,11 @@ check(
   'el carrito remoto debe quedar bloqueado'
 );
 check(
-  'Pedidos cerrados',
-  /match\s+\/orders\/\{orderId\}\s*\{\s*allow create:\s*if isStoreOpenOrAllowed\(\)/.test(rules),
-  'no se deben crear pedidos durante el cierre'
+  'Pedidos cerrados mediante el validador Spark',
+  /match\s+\/orders\/\{orderId\}\s*\{\s*allow create:\s*if sparkOrderCreateValid\(orderId\);/.test(rules) &&
+    /function\s+sparkOrderCreateValid\(orderId\)\s*\{[\s\S]*?settings\.get\('storeOpen', false\) == true/.test(rules) &&
+    /function\s+sparkOrderCreateValid\(orderId\)\s*\{[\s\S]*?userData\.get\('blocked', false\) != true/.test(rules),
+  'el validador seguro debe rechazar tienda cerrada y cuentas bloqueadas'
 );
 check(
   'Sin lectura pública vieja',
