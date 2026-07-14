@@ -31,7 +31,17 @@ jobs:
           node-version: '22'
 
       - name: Aplicar parche
-        run: node scripts/apply-postphase-security-hardening.js
+        shell: bash
+        run: |
+          set +e
+          node scripts/apply-postphase-security-hardening.js > hardening.log 2>&1
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "El parche falló. Últimas líneas:"
+            tail -n 80 hardening.log
+            exit "$status"
+          fi
+          cat hardening.log
 
       - name: Revisar sintaxis
         run: |
