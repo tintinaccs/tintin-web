@@ -70,10 +70,90 @@ jobs:
           node --check scripts/audit-postphase-security.js
           node scripts/audit-postphase-security.js
 
-      - name: Guardar parche en la rama
+      - name: Guardar parche con la API de Git
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add js/security-utils.js js/products-store.js js/cart-sync.js js/roles.js js/email-config.js js/email-notify.js js/checkout-email-bridge.js script.js checkout.html perfil.html firestore.rules apps-script/Phase3Security.gs functions/EMAIL_PHASE3_DEPLOY.md scripts/audit-postphase-security.js package.json
-          git commit -m "Seguridad post-fases: datos, roles, perfiles y correos"
-          git push origin HEAD:fix/postphase-security-hardening
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.request
+
+          owner = 'tintinaccs'
+          repo = 'tintin-web'
+          branch = 'fix/postphase-security-hardening'
+          token = os.environ['GITHUB_TOKEN']
+          files = [
+              'js/security-utils.js',
+              'js/products-store.js',
+              'js/cart-sync.js',
+              'js/roles.js',
+              'js/email-config.js',
+              'js/email-notify.js',
+              'js/checkout-email-bridge.js',
+              'script.js',
+              'checkout.html',
+              'perfil.html',
+              'firestore.rules',
+              'apps-script/Phase3Security.gs',
+              'functions/EMAIL_PHASE3_DEPLOY.md',
+              'scripts/audit-postphase-security.js',
+              'package.json',
+          ]
+
+          def api(method, endpoint, payload=None):
+              data = None if payload is None else json.dumps(payload).encode()
+              request = urllib.request.Request(
+                  f'https://api.github.com/repos/{owner}/{repo}/{endpoint}',
+                  data=data,
+                  method=method,
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                      'Content-Type': 'application/json',
+                      'User-Agent': 'tintin-security-workflow',
+                  },
+              )
+              with urllib.request.urlopen(request) as response:
+                  return json.load(response)
+
+          ref = api('GET', f'git/ref/heads/{branch}')
+          parent_sha = ref['object']['sha']
+          parent = api('GET', f'git/commits/{parent_sha}')
+          base_tree = parent['tree']['sha']
+
+          entries = []
+          for file_path in files:
+              raw = open(file_path, 'rb').read()
+              blob = api('POST', 'git/blobs', {
+                  'content': base64.b64encode(raw).decode(),
+                  'encoding': 'base64',
+              })
+              entries.append({
+                  'path': file_path,
+                  'mode': '100644',
+                  'type': 'blob',
+                  'sha': blob['sha'],
+              })
+
+          tree = api('POST', 'git/trees', {
+              'base_tree': base_tree,
+              'tree': entries,
+          })
+          if tree['sha'] == base_tree:
+              print('El parche ya estaba guardado; no se crea otro commit.')
+              raise SystemExit(0)
+
+          commit = api('POST', 'git/commits', {
+              'message': 'Seguridad post-fases: datos, roles, perfiles y correos',
+              'tree': tree['sha'],
+              'parents': [parent_sha],
+          })
+          api('PATCH', f'git/refs/heads/{branch}', {
+              'sha': commit['sha'],
+              'force': False,
+          })
+          print('Commit creado:', commit['sha'])
+          PY
