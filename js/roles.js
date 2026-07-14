@@ -2,7 +2,7 @@
 // TINTIN ACCESORIOS — Roles & Permissions
 // =============================================
 
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -158,17 +158,15 @@ export function can(role, permission) {
  * @returns {Promise<string>} role string
  */
 export async function getUserRole(uid, email) {
-  // Super Admin real: solo por email oficial, no por documento manipulable.
-  if (email && email === SUPER_ADMIN) return 'superadmin';
+  // La identidad elevada proviene exclusivamente de Firebase Authentication.
+  // El campo email de users/{uid} es informativo y nunca concede permisos.
+  const authenticatedEmail = String(email || auth.currentUser?.email || '').trim().toLowerCase();
+  if (authenticatedEmail === SUPER_ADMIN) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
-    if (snap.exists()) {
-      const data = snap.data();
-      if (data.email === SUPER_ADMIN) return 'superadmin';
-      const role = data.role || 'client';
-      return role === 'superadmin' ? 'client' : role;
-    }
-    return 'client';
+    if (!snap.exists()) return 'client';
+    const role = snap.data().role || 'client';
+    return ['admin', 'agent', 'viewer', 'client'].includes(role) ? role : 'client';
   } catch (e) {
     console.error('Error getting user role:', e);
     return 'client';
@@ -181,6 +179,8 @@ export async function getUserRole(uid, email) {
  * @param {string} role
  */
 export async function setUserRole(uid, role) {
+  const allowed = ['admin', 'agent', 'viewer', 'client'];
+  if (!allowed.includes(role)) throw new Error('Rol no permitido');
   try {
     await setDoc(doc(db, 'users', uid), {
       role,

@@ -147,12 +147,44 @@ service cloud.firestore {
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
-        'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
+        'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
         'profileStatsUpdatedAt', 'orderStats'
       ]);
+    }
+
+    function userCreateValid(userId) {
+      let data = request.resource.data;
+      return isSignedIn() &&
+        request.auth.uid == userId &&
+        request.auth.token.email != null &&
+        data.keys().hasOnly([
+          'name', 'email', 'phone', 'photoURL', 'role', 'provider',
+          'onboardingCompleted', 'welcomeTutorialSeen',
+          'welcomeTutorialPending', 'welcomeTutorialVersion', 'blocked',
+          'purchaseCount', 'totalSpent', 'orderCount', 'totalOrders',
+          'completedOrders', 'pendingOrders', 'cancelledOrders',
+          'createdAt', 'updatedAt', 'lastLogin'
+        ]) &&
+        data.email is string &&
+        data.email.lower() == request.auth.token.email.lower() &&
+        data.get('blocked', false) == false &&
+        (
+          (request.auth.token.email == "tintinaccs@gmail.com" && data.get('role', 'superadmin') == 'superadmin') ||
+          (request.auth.token.email != "tintinaccs@gmail.com" && data.get('role', 'client') == 'client')
+        ) &&
+        data.get('purchaseCount', 0) == 0 &&
+        data.get('totalSpent', 0) == 0 &&
+        data.get('orderCount', 0) == 0 &&
+        data.get('totalOrders', 0) == 0 &&
+        data.get('completedOrders', 0) == 0 &&
+        data.get('pendingOrders', 0) == 0 &&
+        data.get('cancelledOrders', 0) == 0 &&
+        (!('createdAt' in data) || data.createdAt == request.time) &&
+        (!('updatedAt' in data) || data.updatedAt == request.time) &&
+        (!('lastLogin' in data) || data.lastLogin == request.time);
     }
 
     /* ============================================================
@@ -449,29 +481,7 @@ service cloud.firestore {
       allow read: if isSignedIn() &&
         (request.auth.uid == userId || isSuperAdmin());
 
-      allow create: if isSignedIn() &&
-        request.auth.uid == userId &&
-        (
-          !('email' in request.resource.data) ||
-          (
-            request.resource.data.email is string &&
-            request.auth.token.email != null &&
-            request.resource.data.email.lower() == request.auth.token.email.lower()
-          )
-        ) &&
-        (
-          !('blocked' in request.resource.data) ||
-          request.resource.data.blocked == false ||
-          isSuperAdmin()
-        ) &&
-        (
-          !('role' in request.resource.data) ||
-          request.resource.data.role == 'client' ||
-          (
-            request.resource.data.role == 'superadmin' &&
-            request.auth.token.email == "tintinaccs@gmail.com"
-          )
-        );
+      allow create: if userCreateValid(userId);
 
       allow update: if isSignedIn() && (
         (
@@ -634,11 +644,6 @@ service cloud.firestore {
                   ]) ||
                 currentRolePermAllows('pedidos', 'reenviarCorreo')
               )
-            ) ||
-            (
-              isOwnOrderByUidOrEmail() &&
-              request.resource.data.diff(resource.data)
-                .affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
             )
           )
         );

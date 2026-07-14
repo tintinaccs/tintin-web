@@ -257,3 +257,41 @@ function phase3LoadEmailAccess_(idToken) {
     customerEmailEnabled: access.customerEmailEnabled !== false
   };
 }
+
+
+/**
+ * Actualiza el estado real del correo con la identidad propietaria del Apps
+ * Script. El navegador ya no puede marcar un pedido como enviado.
+ */
+function phase3UpdateOrderNotificationStatus_(orderId, status) {
+  var allowed = ['sent', 'partial', 'failed'];
+  if (allowed.indexOf(String(status || '')) === -1) {
+    return { ok: false, error: 'invalid_notification_status' };
+  }
+  var normalizedId = String(orderId || '').trim();
+  if (!normalizedId || normalizedId.length > 220 || normalizedId.indexOf('/') !== -1) {
+    return { ok: false, error: 'invalid_order_id' };
+  }
+  try {
+    var url = FIRESTORE_DOCUMENTS_URL_ + 'orders/' + encodeURIComponent(normalizedId) +
+      '?updateMask.fieldPaths=notificationStatus&updateMask.fieldPaths=updatedAt';
+    var response = UrlFetchApp.fetch(url, {
+      method: 'patch',
+      contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+      payload: JSON.stringify({
+        fields: {
+          notificationStatus: { stringValue: String(status) },
+          updatedAt: { timestampValue: new Date().toISOString() }
+        }
+      }),
+      muteHttpExceptions: true
+    });
+    var code = response.getResponseCode();
+    return code >= 200 && code < 300
+      ? { ok: true }
+      : { ok: false, error: 'notification_status_write_failed', status: code };
+  } catch (error) {
+    return { ok: false, error: 'notification_status_write_failed', detail: String(error) };
+  }
+}

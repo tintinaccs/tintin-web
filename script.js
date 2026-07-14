@@ -16,6 +16,48 @@ function formatPrice(num) {
   return 'Gs. ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+function sanitizePlainText(value, maxLength = 4000) {
+  return String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/[<>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function sanitizeClassicImageUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw || /['"<>\u0000-\u001f\u007f]/.test(raw) || raw.length > 2048) return '';
+  try {
+    const url = new URL(raw, window.location.href);
+    if (!['https:', 'http:'].includes(url.protocol)) return '';
+    if (location.protocol === 'https:' && url.protocol === 'http:' && url.origin !== location.origin) return '';
+    return url.href;
+  } catch { return ''; }
+}
+
+function normalizeClassicCart(items) {
+  if (!Array.isArray(items)) return [];
+  return items.slice(0, 100).map(raw => {
+    if (!raw || typeof raw !== 'object') return null;
+    const id = String(raw.id == null ? '' : raw.id).replace(/["'<>\\]/g, '').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 180);
+    if (!id) return null;
+    const qtyNumber = Number(raw.qty == null ? 1 : raw.qty);
+    const priceNumber = Number(raw.price);
+    return {
+      ...raw,
+      id,
+      name: sanitizePlainText(raw.name || raw.title || 'Producto', 180),
+      cat: sanitizePlainText(raw.cat || raw.category || '', 120),
+      variant: sanitizePlainText(raw.variant || '', 120),
+      qty: Number.isFinite(qtyNumber) ? Math.max(1, Math.min(99, Math.floor(qtyNumber))) : 1,
+      price: Number.isFinite(priceNumber) && priceNumber >= 0 ? priceNumber : 0,
+      imageUrl: sanitizeClassicImageUrl(raw.imageUrl || raw.imgUrl || raw.image || ''),
+      imgUrl: sanitizeClassicImageUrl(raw.imgUrl || raw.imageUrl || raw.image || ''),
+    };
+  }).filter(Boolean);
+}
+
 /** Out-of-stock (stock explicitly 0 or negative) products never show in
  *  featured/recommended/look-combinator spots — only in category browsing
  *  and search results (catalogo.html handles that separately). */
@@ -101,14 +143,16 @@ const CART_KEY = 'tt_cart';
 
 function getCart() {
   try {
-    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    const normalized = normalizeClassicCart(JSON.parse(localStorage.getItem(CART_KEY)) || []);
+    localStorage.setItem(CART_KEY, JSON.stringify(normalized));
+    return normalized;
   } catch (e) {
     return [];
   }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(CART_KEY, JSON.stringify(normalizeClassicCart(cart)));
 }
 
 function showCartToast(message) {
@@ -1023,9 +1067,9 @@ function _renderProductDetail(product) {
   if (descEl) {
     const hasDesc = product.desc && String(product.desc).trim();
     if (hasDesc) {
-      // desc may be HTML from Shopify
-      if (/<[a-z][\s\S]*>/i.test(product.desc)) descEl.innerHTML = product.desc;
-      else descEl.textContent = product.desc;
+      // Las descripciones importadas se muestran como texto plano. Nunca se
+      // ejecuta HTML almacenado en Firestore o proveniente de un CSV.
+      descEl.textContent = sanitizePlainText(product.desc, 4000);
       descEl.style.display = '';
     } else {
       descEl.textContent = '';
