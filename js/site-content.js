@@ -1,129 +1,204 @@
-/**
- * TINTIN — Site Content Sync
- * Reads text saved from Super Admin → Contenido (site_content/{pageId} in Firestore)
- * and applies it live to the public page. Real-time via onSnapshot: edits in
- * Super Admin show up on the public site immediately, no reload needed.
- */
+/* =============================================================
+   TINTIN — Fase 6: contenido público seguro y sincronizado
+
+   Firestore guarda solamente valores. Los selectores, tipos de campo y
+   límites están definidos en content-schema.js. Este renderer nunca inserta
+   HTML recibido desde la base.
+   ============================================================= */
+
 import { db } from './firebase.js';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  getPageSchema,
+  getNested,
+  sanitizeContentText,
+  sanitizeContentHref,
+  detectContentPageId,
+} from './content-schema.js';
 
-function withBreaks(text) {
-  return String(text || '').split('\n').map(s => s.trim()).filter(Boolean).join('<br>');
+const subscriptions = new Map();
+const latestData = new Map();
+
+function fieldRenderKey(item) {
+  return `${item.selector}::${item.index == null ? 'first' : item.index}::${item.type === 'href' ? 'href' : 'text'}`;
 }
 
-function setText(el, value) {
-  if (el && value) el.textContent = value;
+function effectiveFields(sectionSchema) {
+  const byTarget = new Map();
+  sectionSchema.fields.forEach(item => byTarget.set(fieldRenderKey(item), item));
+  return [...byTarget.values()];
 }
 
-function setHtml(el, value) {
-  if (el && value) el.innerHTML = withBreaks(value);
+function findRoots(sectionSchema) {
+  try {
+    return [...document.querySelectorAll(sectionSchema.root)];
+  } catch (error) {
+    console.warn('[site-content] selector de sección inválido:', sectionSchema.root, error);
+    return [];
+  }
 }
 
-function applyIndex(data) {
-  const hero = data.hero || {};
-  setText(document.querySelector('.tt-hero-eyebrow'), hero.eyebrow || 'Bienvenidas a TINTIN');
-  setHtml(document.querySelector('.tt-hero-title'), hero.title);
-  setText(document.querySelector('.tt-hero-subtitle'), hero.subtitle);
-  const heroLinks = document.querySelectorAll('.tt-hero-actions a');
-  if (heroLinks[1]) {
-    setText(heroLinks[1], hero.btnText);
-    if (hero.btnHref) heroLinks[1].setAttribute('href', hero.btnHref);
+function findTarget(root, item) {
+  let matches = [];
+  try {
+    if (root.matches?.(item.selector)) matches.push(root);
+    matches.push(...root.querySelectorAll(item.selector));
+  } catch (error) {
+    console.warn('[site-content] selector de campo inválido:', item.selector, error);
+    return null;
+  }
+  const index = item.index == null ? 0 : item.index;
+  return matches[index] || null;
+}
+
+function appendPlainLines(element, value) {
+  const lines = String(value).split('\n');
+  const nodes = [];
+  lines.forEach((line, index) => {
+    if (index) nodes.push(document.createElement('br'));
+    nodes.push(document.createTextNode(line));
+  });
+  element.replaceChildren(...nodes);
+}
+
+function replaceLabelPreservingChildren(element, value) {
+  const label = document.createElement('span');
+  label.dataset.ttContentLabel = '1';
+  label.textContent = value;
+
+  [...element.childNodes].forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE || node.dataset?.ttContentLabel === '1') node.remove();
+  });
+  element.insertBefore(label, element.firstChild);
+}
+
+function applyText(element, value, item) {
+  const safe = sanitizeContentText(value, item.maxLength);
+  const preserveChildren =
+    element.id === 'form-success' ||
+    element.classList.contains('tt-contact-wa-link');
+
+  if (preserveChildren) {
+    replaceLabelPreservingChildren(element, safe);
+    return;
+  }
+  appendPlainLines(element, safe);
+}
+
+function applyHref(element, value, item) {
+  if (!(element instanceof HTMLAnchorElement)) return;
+  const safe = sanitizeContentHref(value, item.default || '');
+  if (!safe) {
+    element.removeAttribute('href');
+    return;
+  }
+  element.setAttribute('href', safe);
+  try {
+    const parsed = new URL(safe, window.location.href);
+    if (parsed.origin !== window.location.origin) {
+      element.target = '_blank';
+      element.rel = 'noopener noreferrer';
+    }
+  } catch {}
+}
+
+function markEditableRoot(root, pageId, sectionId) {
+  if (!root.dataset.ttEditable) root.dataset.ttEditable = pageId;
+  if (!root.dataset.ttSection) root.dataset.ttSection = sectionId;
+}
+
+function applyVisibility(roots, visible) {
+  if (visible === undefined) return;
+  roots.forEach(root => {
+    root.hidden = visible === false;
+    root.dataset.ttContentVisibility = visible === false ? 'hidden' : 'visible';
+  });
+}
+
+function applySection(pageId, sectionId, sectionSchema, sectionData) {
+  if (!sectionData || typeof sectionData !== 'object') return;
+  const roots = findRoots(sectionSchema);
+  roots.forEach(root => markEditableRoot(root, pageId, sectionId));
+  if (sectionSchema.allowVisibility && Object.prototype.hasOwnProperty.call(sectionData, 'visible')) {
+    applyVisibility(roots, sectionData.visible !== false);
   }
 
-  const trust = data.trust || {};
-  const trustBar = document.querySelector('.tt-trust-bar');
-  if (trustBar) trustBar.style.display = trust.visible === false ? 'none' : '';
-  const trustItems = Array.isArray(trust.items) ? trust.items : null;
-  if (trustItems) {
-    document.querySelectorAll('.tt-trust-item').forEach((el, i) => {
-      const item = trustItems[i];
-      if (!item) return;
-      setText(el.querySelector('.tt-trust-title'), item.label);
-      setText(el.querySelector('.tt-trust-desc'), item.desc);
+  effectiveFields(sectionSchema).forEach(item => {
+    const raw = getNested(sectionData, item.key);
+    if (raw === undefined || raw === null) return;
+    roots.forEach(root => {
+      const target = findTarget(root, item);
+      if (!target) return;
+      if (item.type === 'href') applyHref(target, raw, item);
+      else applyText(target, raw, item);
     });
-  }
+  });
+}
 
-  const bag = data.editorial_bag || {};
-  const bagSection = document.querySelector('.tt-editorial-content');
-  if (bagSection) {
-    const bagWrap = bagSection.closest('.tt-editorial');
-    if (bagWrap) bagWrap.closest('section').style.display = bag.visible === false ? 'none' : '';
-    setHtml(bagSection.querySelector('.tt-editorial-title'), bag.title);
-    setText(bagSection.querySelector('.tt-editorial-eyebrow'), bag.eyebrow);
-    setText(bagSection.querySelector('.tt-editorial-desc'), bag.body);
-    const btn = bagSection.querySelector('a.tt-btn');
-    if (btn) {
-      setText(btn, bag.btnText);
-      if (bag.btnHref) btn.setAttribute('href', bag.btnHref);
+function applyPage(pageId, data, onlySectionId = null) {
+  const page = getPageSchema(pageId);
+  if (!page) return;
+  Object.entries(page.sections).forEach(([sectionId, sectionSchema]) => {
+    if (onlySectionId && sectionId !== onlySectionId) return;
+    applySection(pageId, sectionId, sectionSchema, data?.[sectionId]);
+  });
+  document.documentElement.dataset.ttContentState = 'ready';
+  window.dispatchEvent(new CustomEvent('tintin:content-phase6-ready', {
+    detail: { pageId, sectionId: onlySectionId || null }
+  }));
+}
+
+function startSubscription(key, pageId, callback) {
+  if (subscriptions.has(key)) return subscriptions.get(key);
+  const unsubscribe = onSnapshot(
+    doc(db, 'site_content', pageId),
+    snapshot => {
+      const data = snapshot.exists() ? snapshot.data() || {} : {};
+      latestData.set(pageId, data);
+      callback(data, snapshot.exists());
+    },
+    error => {
+      console.warn(`[site-content] no se pudo leer ${pageId}:`, error);
+      document.documentElement.dataset.ttContentState = 'error';
+      window.dispatchEvent(new CustomEvent('tintin:content-phase6-error', {
+        detail: { pageId, error }
+      }));
+      // El HTML publicado queda visible como respaldo. Nunca se reemplaza por
+      // texto viejo de otra página ni por contenido local no confirmado.
     }
-  }
-
-  const watches = data.editorial_relojes || {};
-  const watchSection = document.querySelector('.tt-watch-feature-content');
-  if (watchSection) {
-    const watchWrap = watchSection.closest('.tt-watch-feature');
-    if (watchWrap) watchWrap.closest('section').style.display = watches.visible === false ? 'none' : '';
-    setHtml(watchSection.querySelector('.tt-watch-title'), watches.title);
-    setText(watchSection.querySelector('.tt-watch-eyebrow'), watches.eyebrow);
-    setText(watchSection.querySelector('.tt-watch-desc'), watches.body);
-    const btn = watchSection.querySelector('a.tt-btn');
-    if (btn) {
-      setText(btn, watches.btnText);
-      if (watches.btnHref) btn.setAttribute('href', watches.btnHref);
-    }
-  }
-
-  const footer = data.footer || {};
-  setText(document.querySelector('.tt-footer-bottom'), footer.copy);
-  setText(document.querySelector('.tt-footer-wa-text'), footer.waText);
-  // El número de WhatsApp ya NO se maneja acá — única fuente:
-  // settings/general.whatsappNumber (ver js/whatsapp.js), no más
-  // site_content/index.footer.waHref. El logo del footer tampoco: es texto
-  // (wordmark), no imagen — a propósito, distinto del logo del header.
+  );
+  subscriptions.set(key, unsubscribe);
+  return unsubscribe;
 }
 
-function applyNosotros(data) {
-  // Real content lives on about.html — nosotros.html is a redirect stub
-  const hero = data.hero || {};
-  setHtml(document.querySelector('.tt-page-hero-title'), hero.title);
-  setText(document.querySelector('.tt-page-hero-sub'), hero.desc);
-
-  const historia = data.historia || {};
-  setText(document.querySelector('.tt-about-subtitle'), historia.eyebrow);
-  setText(document.querySelector('.tt-about-greeting'), historia.title);
+function initGlobalFooter(currentPageId) {
+  if (currentPageId === 'index') return;
+  startSubscription('global:index:footer', 'index', data => {
+    applyPage('index', data, 'footer');
+  });
 }
-
-function applyCatalogo(data) {
-  // Only override the generic header — a selected ?cat= filter sets its own title/label
-  if (new URLSearchParams(location.search).get('cat')) return;
-  const header = data.header || {};
-  setText(document.getElementById('cat-titulo'), header.title);
-  setText(document.getElementById('cat-subtitulo'), header.desc || header.eyebrow);
-}
-
-/** Shared by pages whose only editable content is the .tt-page-hero title/subtitle */
-function applyGenericPageHero(data) {
-  const header = data.header || {};
-  setHtml(document.querySelector('.tt-page-hero-title'), header.title);
-  setText(document.querySelector('.tt-page-hero-sub'), header.desc);
-}
-
-const PAGE_APPLIERS = {
-  index: applyIndex,
-  nosotros: applyNosotros,
-  catalogo: applyCatalogo,
-  contact: applyGenericPageHero,
-  faq: applyGenericPageHero,
-  cambios: applyGenericPageHero,
-  envios: applyGenericPageHero,
-  collections: applyGenericPageHero,
-};
 
 export function initSiteContent(pageId) {
-  const applier = PAGE_APPLIERS[pageId];
-  if (!applier) return;
-  onSnapshot(doc(db, 'site_content', pageId), snap => {
-    if (!snap.exists()) return;
-    try { applier(snap.data() || {}); } catch (e) { console.warn('[site-content] apply failed:', e); }
-  }, e => console.warn('[site-content] listener failed:', e));
+  const page = getPageSchema(pageId);
+  if (!page) return () => {};
+
+  // Marca todas las secciones aunque todavía no exista un documento en
+  // Firestore, para que el lápiz de edición pueda abrir el formulario correcto.
+  Object.entries(page.sections).forEach(([sectionId, sectionSchema]) => {
+    findRoots(sectionSchema).forEach(root => markEditableRoot(root, pageId, sectionId));
+  });
+
+  initGlobalFooter(pageId);
+  return startSubscription(`page:${pageId}`, pageId, data => applyPage(pageId, data));
+}
+
+export function autoInitSiteContent() {
+  const pageId = detectContentPageId();
+  if (!pageId) return null;
+  initSiteContent(pageId);
+  return pageId;
+}
+
+export function getLatestSiteContent(pageId) {
+  return latestData.get(pageId) || null;
 }
