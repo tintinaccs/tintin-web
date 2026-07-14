@@ -10,9 +10,10 @@
     "audit:content": "node scripts/audit-content-phase6.js",
     "audit:cart": "node scripts/audit-cart-phase7.js",
     "audit:security": "node scripts/audit-security-phase8.js",
+    "audit:release": "node scripts/audit-final-release.js",
+    "audit:final": "npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
-    "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
-    "deploy:firebase": "firebase deploy --only firestore:rules,functions --project tintin-accesorios",
+    "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js"
   },
   "devDependencies": {
