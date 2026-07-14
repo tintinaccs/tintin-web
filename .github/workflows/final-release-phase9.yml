@@ -1,0 +1,47 @@
+name: Revisión final Fase 9
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'js/admin-import-phase9.js'
+      - 'js/ui-quality.js'
+      - 'scripts/audit-final-release.js'
+      - 'package.json'
+      - '.firebaserc'
+      - 'firebase.json'
+      - 'firestore.rules'
+      - 'docs/PHASE9_FINAL_RELEASE.md'
+      - '.github/workflows/final-release-phase9.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  final-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Configurar Java para Firestore
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Instalar herramientas
+        run: npm install
+      - name: Revisar sintaxis de Fase 9
+        run: |
+          node --check js/admin-import-phase9.js
+          node --check js/ui-quality.js
+          node --check scripts/audit-final-release.js
+      - name: Ejecutar las nueve auditorías
+        run: npm run audit:final
+      - name: Compilar reglas de Firestore
+        run: npx firebase emulators:exec --only firestore --project demo-tintin "echo Reglas compiladas"
