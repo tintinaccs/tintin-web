@@ -7,6 +7,7 @@ on:
     paths:
       - 'js/admin-import-phase9.js'
       - 'js/ui-quality.js'
+      - 'scripts/audit-store-gate.js'
       - 'scripts/audit-final-release.js'
       - 'package.json'
       - '.firebaserc'
@@ -40,8 +41,27 @@ jobs:
         run: |
           node --check js/admin-import-phase9.js
           node --check js/ui-quality.js
+          node --check scripts/audit-store-gate.js
           node --check scripts/audit-final-release.js
-      - name: Ejecutar las nueve auditorías
-        run: npm run audit:final
+      - name: Auditar base del sitio
+        run: npm run audit:tintin
+      - name: Auditar cierre global
+        run: npm run audit:store-gate
+      - name: Auditar pedidos
+        run: npm run audit:secure-orders
+      - name: Auditar correos
+        run: npm run audit:emails
+      - name: Auditar colecciones
+        run: npm run audit:collections
+      - name: Auditar imágenes
+        run: npm run audit:images
+      - name: Auditar contenido
+        run: npm run audit:content
+      - name: Auditar carrito
+        run: npm run audit:cart
+      - name: Auditar usuarios y permisos
+        run: npm run audit:security
+      - name: Auditar cierre de despliegue
+        run: npm run audit:release
       - name: Compilar reglas de Firestore
         run: npx firebase emulators:exec --only firestore --project demo-tintin "echo Reglas compiladas"
