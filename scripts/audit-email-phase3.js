@@ -35,7 +35,7 @@ check(
 );
 
 check(
-  'El puente se activa después del pedido Spark',
+  'El puente se activa después del pedido Spark sin escribir el estado protegido',
   bridge.includes("document.getElementById('ck-success-head')") &&
     bridge.includes('sendOrderNotification(found.id, compatibilityOrder, false)') &&
     bridge.includes("new CustomEvent('tintin:order-email-result'") &&
