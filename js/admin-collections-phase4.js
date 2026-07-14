@@ -7,6 +7,8 @@
      reales de Firestore, incluidas las ocultas para gestión interna.
    ============================================================= */
 
+import { auth } from './firebase.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { onAllCollectionsUpdate } from './collections-store.js';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
@@ -14,9 +16,9 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
 
   let collections = [];
   let originalSave = null;
-  let originalDefaults = null;
   let saveWrapped = false;
   let defaultsWrapped = false;
+  let collectionSubscriptionStarted = false;
 
   const clean = value => String(value == null ? '' : value).trim();
 
@@ -99,13 +101,16 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
 
   function ensureCsvHint(container) {
     if (!container || document.getElementById('csv-phase4-category-hint')) return;
+    const tableWrap = container.closest('.adm-table-wrap') || container.parentElement;
+    if (!tableWrap?.parentElement) return;
+
     const hint = document.createElement('div');
     hint.id = 'csv-phase4-category-hint';
     hint.style.cssText =
       'padding:10px 12px;margin:0 0 10px;background:#fef5f8;border:1px solid var(--adm-border);border-radius:10px;color:var(--adm-muted);font-size:11px;line-height:1.5;';
     hint.textContent =
       'Las categorías disponibles se toman de Super Admin → Colecciones. Si el CSV trae otra categoría, elegí una colección real antes de importar.';
-    container.parentElement?.insertBefore(hint, container);
+    tableWrap.parentElement.insertBefore(hint, tableWrap);
   }
 
   function syncCsvCategorySelects() {
@@ -157,7 +162,6 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
     }
 
     if (!defaultsWrapped && typeof window.collImportarDefaults === 'function') {
-      originalDefaults = window.collImportarDefaults;
       window.collImportarDefaults = function() {
         toastMessage(
           'El importador fijo fue desactivado. Creá las colecciones reales desde “+ Nueva colección”.'
@@ -166,6 +170,19 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
       };
       defaultsWrapped = true;
     }
+  }
+
+  function startCollectionSubscription() {
+    if (collectionSubscriptionStarted) return;
+    collectionSubscriptionStarted = true;
+    onAllCollectionsUpdate((nextCollections, error) => {
+      if (error) {
+        console.error('[admin-collections-phase4] No se pudieron leer las colecciones:', error);
+        return;
+      }
+      collections = nextCollections;
+      syncCsvCategorySelects();
+    });
   }
 
   function bootDom() {
@@ -207,12 +224,7 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
     bootDom();
   }
 
-  onAllCollectionsUpdate((nextCollections, error) => {
-    if (error) {
-      console.error('[admin-collections-phase4] No se pudieron leer las colecciones:', error);
-      return;
-    }
-    collections = nextCollections;
-    syncCsvCategorySelects();
+  onAuthStateChanged(auth, user => {
+    if (user && !user.isAnonymous) startCollectionSubscription();
   });
 }
