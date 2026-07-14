@@ -38,8 +38,10 @@ check(
   'El puente se activa después del pedido Spark',
   bridge.includes("document.getElementById('ck-success-head')") &&
     bridge.includes('sendOrderNotification(found.id, compatibilityOrder, false)') &&
-    bridge.includes('notificationStatus: status'),
-  'El correo debe iniciarse después de crear el pedido y registrar el resultado.'
+    bridge.includes("new CustomEvent('tintin:order-email-result'") &&
+    !bridge.includes("updateDoc(doc(db, 'orders'") &&
+    !bridge.includes('notificationStatus: status'),
+  'Apps Script debe guardar el estado real; el navegador solo informa el resultado.'
 );
 
 check(

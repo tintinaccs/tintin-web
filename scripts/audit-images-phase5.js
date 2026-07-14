@@ -121,7 +121,8 @@ check(
 
 check(
   'Las imágenes de productos se saneen al leer Firestore',
-  files.products.includes("import { sanitizeImageUrl } from './image-utils.js'") &&
+  files.products.includes("from './image-utils.js'") &&
+    files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda del producto'
 );
