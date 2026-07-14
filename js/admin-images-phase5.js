@@ -7,6 +7,7 @@ import {
   HERO_SIZE_VALUES,
   HERO_POSITION_VALUES,
   saveImages,
+  onImagesUpdate,
 } from './images.js';
 import { sanitizeImageUrl } from './image-utils.js';
 
@@ -18,6 +19,7 @@ if (!window.TintinAdminImagesPhase5Booted) {
 
   if (isImageAdmin) {
     const supportedSections = new Set(IMAGE_SLOTS.map(slot => slot.section));
+    let latestImages = {};
 
     function toast(message, isError = false) {
       const node = document.getElementById('adm-toast');
@@ -73,11 +75,14 @@ if (!window.TintinAdminImagesPhase5Booted) {
 
     function updateCard(slotId, url) {
       const slot = slotById(slotId);
+      const card = document.querySelector(`.adm-img-card[data-slot-id="${CSS.escape(slotId)}"]`);
       const preview = document.getElementById(`preview-${slotId}`);
       const status = document.getElementById(`status-${slotId}`);
       const input = document.getElementById(`input-${slotId}`);
-      if (input) input.value = url || '';
+      const signature = url || 'empty';
+      if (card?.dataset.ttImagePhase5Signature === signature) return;
 
+      if (input) input.value = url || '';
       if (preview) {
         preview.replaceChildren(...(url ? configuredPreview(slot, url) : [emptyPreview(slot)]));
       }
@@ -88,6 +93,25 @@ if (!window.TintinAdminImagesPhase5Booted) {
         text.textContent = url ? 'Configurada' : 'Sin configurar';
         status.replaceChildren(dot, text);
       }
+      if (card) card.dataset.ttImagePhase5Signature = signature;
+    }
+
+    function syncCardsFromSnapshot() {
+      IMAGE_SLOTS.forEach(slot => {
+        if (!document.getElementById(`input-${slot.id}`)) return;
+        updateCard(slot.id, sanitizeImageUrl(latestImages[slot.id]));
+        if (!slot.id.startsWith('hero_bg_')) return;
+        const size = document.getElementById(`size-${slot.id}`);
+        const pos = document.getElementById(`pos-${slot.id}`);
+        const nextSize = HERO_SIZE_VALUES.includes(latestImages[`${slot.id}_size`])
+          ? latestImages[`${slot.id}_size`]
+          : 'cover';
+        const nextPos = HERO_POSITION_VALUES.includes(latestImages[`${slot.id}_pos`])
+          ? latestImages[`${slot.id}_pos`]
+          : 'center center';
+        if (size && size.value !== nextSize) size.value = nextSize;
+        if (pos && pos.value !== nextPos) pos.value = nextPos;
+      });
     }
 
     function heroPatch(slotId) {
@@ -123,6 +147,9 @@ if (!window.TintinAdminImagesPhase5Booted) {
       }
       try {
         await saveImages({ [slotId]: safe || null, ...heroPatch(slotId) });
+        latestImages = { ...latestImages, [slotId]: safe || null, ...heroPatch(slotId) };
+        const card = document.querySelector(`.adm-img-card[data-slot-id="${CSS.escape(slotId)}"]`);
+        if (card) delete card.dataset.ttImagePhase5Signature;
         updateCard(slotId, safe);
         toast(safe ? '✅ Imagen guardada' : '✅ Imagen quitada');
       } catch (error) {
@@ -150,6 +177,9 @@ if (!window.TintinAdminImagesPhase5Booted) {
           patch[`${slotId}_pos`] = null;
         }
         await saveImages(patch);
+        latestImages = { ...latestImages, ...patch };
+        const card = document.querySelector(`.adm-img-card[data-slot-id="${CSS.escape(slotId)}"]`);
+        if (card) delete card.dataset.ttImagePhase5Signature;
         updateCard(slotId, '');
         toast('✅ Imagen quitada');
       } catch (error) {
@@ -184,7 +214,12 @@ if (!window.TintinAdminImagesPhase5Booted) {
       button.textContent = 'Quitando…';
       try {
         await saveImages(patch);
-        selected.forEach(slotId => updateCard(slotId, ''));
+        latestImages = { ...latestImages, ...patch };
+        selected.forEach(slotId => {
+          const card = document.querySelector(`.adm-img-card[data-slot-id="${CSS.escape(slotId)}"]`);
+          if (card) delete card.dataset.ttImagePhase5Signature;
+          updateCard(slotId, '');
+        });
         document.querySelectorAll('.img-slot-check:checked').forEach(input => {
           input.checked = false;
         });
@@ -205,16 +240,19 @@ if (!window.TintinAdminImagesPhase5Booted) {
         if (!supportedSections.has(section)) button.style.display = 'none';
       });
 
-      if (document.getElementById('tt-image-source-note')) return;
-      const header = document.querySelector('.adm-section-header');
-      if (!header) return;
-      const note = document.createElement('div');
-      note.id = 'tt-image-source-note';
-      note.style.cssText =
-        'margin-top:12px;padding:12px 14px;border:1px solid #f0c8d6;background:#fff3f7;border-radius:10px;font-size:12px;line-height:1.55;color:#666;';
-      note.textContent =
-        'Fotos de productos: se cambian desde Productos. Portadas de colecciones: desde Colecciones. Este panel administra solamente Hero, editoriales, Nosotros y el logo.';
-      header.appendChild(note);
+      if (!document.getElementById('tt-image-source-note')) {
+        const header = document.querySelector('.adm-section-header');
+        if (header) {
+          const note = document.createElement('div');
+          note.id = 'tt-image-source-note';
+          note.style.cssText =
+            'margin-top:12px;padding:12px 14px;border:1px solid #f0c8d6;background:#fff3f7;border-radius:10px;font-size:12px;line-height:1.55;color:#666;';
+          note.textContent =
+            'Fotos de productos: se cambian desde Productos. Portadas de colecciones: desde Colecciones. Este panel administra solamente Hero, editoriales, Nosotros y el logo.';
+          header.appendChild(note);
+        }
+      }
+      syncCardsFromSnapshot();
     }
 
     function ensureStyles() {
@@ -256,6 +294,14 @@ if (!window.TintinAdminImagesPhase5Booted) {
 
       const observer = new MutationObserver(simplifyNavigation);
       observer.observe(document.body, { childList: true, subtree: true });
+
+      onImagesUpdate(
+        nextImages => {
+          latestImages = nextImages || {};
+          syncCardsFromSnapshot();
+        },
+        error => console.warn('[admin-images-phase5] realtime sync failed:', error)
+      );
     }
 
     if (document.readyState === 'loading') {
