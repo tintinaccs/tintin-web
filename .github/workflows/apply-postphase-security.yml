@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Corregir escape del generador
+      - name: Corregir generador temporal
         shell: bash
         run: |
           python - <<'PY'
@@ -42,6 +42,37 @@ jobs:
               "check('Checkout ya no actualiza estado desde cliente', !bridge.includes('await updateDoc(doc(db, \\\'orders\\\''));",
               "check('Checkout ya no actualiza estado desde cliente', !bridge.includes(\"await updateDoc(doc(db, 'orders'\"));"
           )
+          old_once = """function replaceOnce(content, search, replacement, label) {
+  if (content.includes(replacement)) return content;
+  const index = content.indexOf(search);
+  if (index < 0) throw new Error(`No se encontró el bloque: ${label}`);
+  return content.slice(0, index) + replacement + content.slice(index + search.length);
+}"""
+          new_once = """function replaceOnce(content, search, replacement, label) {
+  const index = content.indexOf(search);
+  if (index < 0) {
+    if (content.includes(replacement)) return content;
+    throw new Error(`No se encontró el bloque: ${label}`);
+  }
+  return content.slice(0, index) + replacement + content.slice(index + search.length);
+}"""
+          old_regex = """function replaceRegex(content, regex, replacement, label) {
+  if (typeof replacement === 'string' && content.includes(replacement)) return content;
+  if (!regex.test(content)) throw new Error(`No se encontró el patrón: ${label}`);
+  regex.lastIndex = 0;
+  return content.replace(regex, replacement);
+}"""
+          new_regex = """function replaceRegex(content, regex, replacement, label) {
+  if (!regex.test(content)) {
+    if (typeof replacement === 'string' && content.includes(replacement)) return content;
+    throw new Error(`No se encontró el patrón: ${label}`);
+  }
+  regex.lastIndex = 0;
+  return content.replace(regex, replacement);
+}"""
+          if old_once not in text or old_regex not in text:
+              raise SystemExit('No se encontraron los helpers del generador')
+          text = text.replace(old_once, new_once, 1).replace(old_regex, new_regex, 1)
           path.write_text(text)
           PY
           node --check scripts/apply-postphase-security-hardening.js
@@ -68,11 +99,12 @@ jobs:
                 .affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
             )
           )"""
-          new = """            )
-          )"""
-          if old not in text:
-              raise SystemExit('No se encontró la escritura de notificationStatus del cliente')
-          path.write_text(text.replace(old, new, 1))
+          if old in text:
+              text = text.replace(old, """            )
+          )""", 1)
+          if "hasOnly(['notificationStatus', 'updatedAt'])" in text:
+              raise SystemExit('La escritura de notificationStatus del cliente sigue presente')
+          path.write_text(text)
           PY
           cat hardening.log
 
