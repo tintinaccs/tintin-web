@@ -5,6 +5,7 @@
     "audit:store-gate": "node scripts/audit-store-gate.js",
     "audit:secure-orders": "node scripts/audit-secure-orders.js",
     "audit:emails": "node scripts/audit-email-phase3.js",
+    "audit:collections": "node scripts/audit-collections-phase4.js",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:functions": "firebase deploy --only functions --project tintin-accesorios",
     "deploy:firebase": "firebase deploy --only firestore:rules,functions --project tintin-accesorios",
