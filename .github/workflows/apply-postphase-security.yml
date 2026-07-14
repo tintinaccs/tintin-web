@@ -43,6 +43,14 @@ jobs:
           fi
           cat hardening.log
 
+      - name: Guardar registro del parche
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hardening-log-${{ github.run_id }}
+          path: hardening.log
+          if-no-files-found: warn
+
       - name: Revisar sintaxis
         run: |
           node --check js/security-utils.js
