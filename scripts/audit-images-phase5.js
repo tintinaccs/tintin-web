@@ -120,7 +120,7 @@ check(
 );
 
 check(
-  'Las imágenes de productos se saneen al leer Firestore',
+  'Las imágenes de productos se sanean al leer Firestore',
   files.products.includes("from './image-utils.js'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
