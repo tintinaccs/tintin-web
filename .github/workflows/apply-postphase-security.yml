@@ -57,6 +57,23 @@ jobs:
             tail -n 80 hardening.log
             exit "$status"
           fi
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('firestore.rules')
+          text = path.read_text()
+          old = """            ) ||
+            (
+              isOwnOrderByUidOrEmail() &&
+              request.resource.data.diff(resource.data)
+                .affectedKeys().hasOnly(['notificationStatus', 'updatedAt'])
+            )
+          )"""
+          new = """            )
+          )"""
+          if old not in text:
+              raise SystemExit('No se encontró la escritura de notificationStatus del cliente')
+          path.write_text(text.replace(old, new, 1))
+          PY
           cat hardening.log
 
       - name: Guardar registro del parche
