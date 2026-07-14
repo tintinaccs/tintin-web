@@ -334,6 +334,20 @@ import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidP
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
 import { showBlockedModal } from "./js/blocked-modal.js";
 import { isAccessAllowed, renderStoreClosedOverlay, removeStoreClosedOverlay } from "./js/store-gate-core.js";
+import { cleanText } from "./js/security-utils.js";
+import { sanitizeImageUrl } from "./js/image-utils.js";
+
+function sanitizeCheckoutProduct(id, raw = {}) {
+  return {
+    id: String(id || '').replace(/["'<>\\]/g, '').slice(0, 180),
+    name: cleanText(raw.name || raw.title || raw.Title || 'Producto', 180),
+    cat: cleanText(raw.cat || raw.category || '', 120),
+    category: cleanText(raw.category || raw.cat || '', 120),
+    price: Number(raw.price || 0),
+    imageUrl: sanitizeImageUrl(raw.imageUrl || raw.image || raw.img || ''),
+    active: raw.active !== false,
+  };
+}
 
 // ---- CITY DATA — {name, price}[] — overridden by Firestore ----
 // Default costs used when city has no individual price
@@ -550,9 +564,10 @@ async function renderCart() {
       }
       if (!featured.length) {
         const snap = await getDocs(query(collection(db, 'products'), limit(6)));
-        featured = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        featured = snap.docs.map(d => sanitizeCheckoutProduct(d.id, d.data()));
       }
     } catch(e) { console.warn('Suggested products error:', e); }
+    featured = featured.map(p => sanitizeCheckoutProduct(p.id, p)).filter(p => p.id && p.name && p.active !== false);
 
     container.innerHTML = `
       <div class="ck-empty">

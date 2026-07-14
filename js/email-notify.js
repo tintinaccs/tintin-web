@@ -5,7 +5,7 @@
  * segura del Apps Script vuelve a leer el pedido desde Firestore y no confía
  * en nombres, precios, destinatarios ni totales enviados por el navegador.
  */
-import { EMAIL_WEBHOOK_URL, EMAIL_SECRET } from './email-config.js';
+import { EMAIL_WEBHOOK_URL } from './email-config.js';
 import { db, auth } from './firebase.js';
 import {
   doc,
@@ -152,7 +152,6 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
   let result;
   try {
     result = await postWebhook_({
-      secret: EMAIL_SECRET,
       action: isResend ? 'resendOrderEmail' : 'sendOrderEmail',
       orderId: normalizedOrderId,
       order: order || {},
@@ -180,9 +179,9 @@ export async function sendTestCustomerEmail(toEmail) {
   if (!webhookConfigured()) return { success: false, error: 'not_configured' };
   try {
     const idToken = await getIdToken_(true);
+    if (!idToken) return { success: false, error: 'missing_id_token' };
     const settings = await getEmailSettings_();
     return await postWebhook_({
-      secret: EMAIL_SECRET,
       action: 'sendTestCustomerEmail',
       toEmail: clean(toEmail, 254),
       idToken,
@@ -198,8 +197,8 @@ export async function sendTemplatedEmail(payload) {
   if (!webhookConfigured()) return { success: false, error: 'not_configured' };
   try {
     const idToken = await getIdToken_(true);
+    if (!idToken) return { success: false, error: 'missing_id_token' };
     return await postWebhook_({
-      secret: EMAIL_SECRET,
       action: 'sendPromoEmail',
       idToken,
       ...payload
@@ -215,7 +214,6 @@ export async function sendBulkTemplatedEmail(payload) {
   try {
     const idToken = await getIdToken_(true);
     return await postWebhook_({
-      secret: EMAIL_SECRET,
       action: 'sendBulkPromoEmail',
       idToken,
       ...payload

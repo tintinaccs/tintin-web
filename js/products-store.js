@@ -1,7 +1,8 @@
 // TINTIN — Products Store
 // Loads products from Firestore and feeds the homepage/product grids.
 import { db } from './firebase.js';
-import { sanitizeImageUrl } from './image-utils.js';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js';
+import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js';
 import {
   collection, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -42,23 +43,31 @@ function normalizeImageUrl(d) {
  * migration should set `category` explicitly instead.
  */
 function mapProduct(id, d) {
-  const category = d.category || d.collectionSlug || d.collection || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || '';
+  const rawCategory = d.category || d.collectionSlug || d.collection || d.cat || d.Type || d.type || d['Product Category'] || d['Category'] || '';
+  const category = cleanText(rawCategory, 120);
+  const description = cleanMultilineText(d.description || d.desc || d['Body (HTML)'] || '', 4000);
+  const rawExtraImages = Array.isArray(d.imagesExtra)
+    ? d.imagesExtra
+    : Array.isArray(d.images)
+      ? d.images
+      : [];
   return {
-    id,
-    name:           d.name || d.title || d.Title || d['Title'] || d.handle || d.Handle || '',
+    id: String(id),
+    name:           cleanText(d.name || d.title || d.Title || d['Title'] || d.handle || d.Handle || '', 180),
     cat:            category,
     category,
     price:          Number(String(d.price || d.Price || d['Variant Price'] || 0).replace(/\./g, '').replace(',', '.')),
     priceBefore:    d.priceBefore != null ? Number(d.priceBefore) : null,
-    badge:          d.badge || (d.oferta ? 'Oferta' : null),
-    desc:           d.description || d.desc || d['Body (HTML)'] || '',
-    description:    d.description || d.desc || d['Body (HTML)'] || '',
+    badge:          cleanText(d.badge || (d.oferta ? 'Oferta' : ''), 60) || null,
+    desc:           description,
+    description,
     imageUrl:       normalizeImageUrl(d),
+    imagesExtra:    uniqueSafeImageUrls(rawExtraImages).slice(0, 12),
     stock:          d.stock ?? d['Variant Inventory Qty'] ?? null,
     active:         d.active !== false,
     oferta:         !!d.oferta,
     destacado:      !!d.destacado,
-    variants:       d.variants || null,
+    variants:       sanitizeVariantData(d.variants || null),
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
   };
 }

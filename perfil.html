@@ -476,7 +476,7 @@ function statusBadge(status) {
     cancelado:  '#ef4444'
   };
   const c = map[status] || '#888';
-  return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${status}</span>`;
+  return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
 }
 
 onAuthStateChanged(auth, async user => {
@@ -513,7 +513,7 @@ onAuthStateChanged(auth, async user => {
   await syncCartToFirestore(user.uid);
 
   // Role
-  const role = await getUserRole(user.uid);
+  const role = await getUserRole(user.uid, user.email);
 
   if (role !== 'client') {
     const roleCard = document.getElementById('perfil-role-card');
@@ -614,7 +614,7 @@ async function loadUserOrders(user) {
     listEl.innerHTML = orders.map(o => {
       const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
       const dateStr = d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
-      const itemsText = (o.items || []).slice(0, 2).map(i => `${i.qty}x ${i.name}`).join(', ')
+      const itemsText = (o.items || []).slice(0, 2).map(i => `${Number(i.qty) || 0}x ${escapeHtmlPerfil(i.name || "Producto")}`).join(', ')
         + ((o.items?.length || 0) > 2 ? ` +${o.items.length - 2} más` : '');
       return `
         <div class="perfil-order-row">

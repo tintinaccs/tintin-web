@@ -6,9 +6,7 @@ import {
   limit,
   getDocs,
   getDoc,
-  doc,
-  updateDoc,
-  serverTimestamp
+  doc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   sendOrderNotification,
@@ -109,10 +107,8 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       const result = await sendOrderNotification(found.id, compatibilityOrder, false);
       const status = notificationStatusFromResult(result);
 
-      await updateDoc(doc(db, 'orders', found.id), {
-        notificationStatus: status,
-        updatedAt: serverTimestamp()
-      });
+      // Apps Script actualiza notificationStatus usando su identidad de
+      // servidor. El navegador solo informa el resultado visualmente.
 
       try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {}
       window.dispatchEvent(new CustomEvent('tintin:order-email-result', {

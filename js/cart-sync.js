@@ -15,6 +15,7 @@
 // =============================================================
 
 import { auth, db } from './firebase.js';
+import { sanitizeImageUrl } from './image-utils.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,
@@ -103,7 +104,9 @@ function createRuntime() {
 
   function cleanText(value, maxLength) {
     return String(value == null ? '' : value)
-      .replace(/\u0000/g, '')
+      .replace(/[\u0000-\u001f\u007f]/g, ' ')
+      .replace(/[<>]/g, '')
+      .replace(/\s+/g, ' ')
       .trim()
       .slice(0, maxLength);
   }
@@ -142,7 +145,7 @@ function createRuntime() {
     const qty = Math.max(1, Math.min(MAX_QTY, Math.floor(parsedQty)));
     const parsedPrice = Number(input.price);
     const price = Number.isFinite(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
-    const imageUrl = cleanText(input.imageUrl || input.imgUrl || input.image || '', 1200);
+    const imageUrl = sanitizeImageUrl(input.imageUrl || input.imgUrl || input.image || '');
     return {
       lineId: lineIdFor({ id, variant }),
       id,
