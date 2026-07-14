@@ -21,6 +21,13 @@ export const ROLES = {
   CLIENT:     'client'
 };
 
+export const ASSIGNABLE_ROLES = Object.freeze([
+  ROLES.ADMIN,
+  ROLES.AGENT,
+  ROLES.VIEWER,
+  ROLES.CLIENT,
+]);
+
 export const ROLE_LABELS = {
   superadmin: 'Super Admin',
   admin:      'Admin',
@@ -34,7 +41,7 @@ export const PERMISSIONS = {
   superadmin: {
     manageUsers:       true,
     assignRoles:       true,
-    deleteUsers:       true,
+    deleteUsers:       false, // Spark no puede eliminar la cuenta de Firebase Auth de otra persona.
     viewOrders:        true,
     manageOrders:      true,
     manageOrdersFull:  true,
@@ -143,47 +150,59 @@ export const PERMISSIONS = {
 };
 
 /**
+ * Convierte cualquier valor guardado en Firestore a un rol conocido.
+ * `superadmin` solo se acepta cuando el correo autenticado oficial ya fue
+ * verificado por el llamador; nunca se confía en un campo editable del perfil.
+ */
+export function normalizeRole(role, { allowSuperAdmin = false } = {}) {
+  const value = String(role || '').trim().toLowerCase();
+  if (allowSuperAdmin && value === ROLES.SUPERADMIN) return ROLES.SUPERADMIN;
+  return ASSIGNABLE_ROLES.includes(value) ? value : ROLES.CLIENT;
+}
+
+/**
  * Check if a role has a specific permission
  * @param {string} role
  * @param {string} permission
  * @returns {boolean}
  */
 export function can(role, permission) {
-  return !!(PERMISSIONS[role]?.[permission]);
+  return !!(PERMISSIONS[normalizeRole(role, { allowSuperAdmin: role === ROLES.SUPERADMIN })]?.[permission]);
 }
 
 /**
  * Get user role from Firestore
  * @param {string} uid
+ * @param {string} email correo procedente de Firebase Authentication
  * @returns {Promise<string>} role string
  */
 export async function getUserRole(uid, email) {
-  // Super Admin real: solo por email oficial, no por documento manipulable.
-  if (email && email === SUPER_ADMIN) return 'superadmin';
+  // La única prueba válida de Super Admin es el correo autenticado. El email o
+  // el rol guardado dentro de users/{uid} nunca elevan privilegios.
+  if (String(email || '').toLowerCase() === SUPER_ADMIN) return ROLES.SUPERADMIN;
   try {
     const snap = await getDoc(doc(db, 'users', uid));
-    if (snap.exists()) {
-      const data = snap.data();
-      if (data.email === SUPER_ADMIN) return 'superadmin';
-      const role = data.role || 'client';
-      return role === 'superadmin' ? 'client' : role;
-    }
-    return 'client';
+    if (!snap.exists()) return ROLES.CLIENT;
+    return normalizeRole(snap.data()?.role);
   } catch (e) {
     console.error('Error getting user role:', e);
-    return 'client';
+    return ROLES.CLIENT;
   }
 }
 
 /**
- * Set user role in Firestore
+ * Set user role in Firestore. Super Admin no es un rol asignable.
  * @param {string} uid
  * @param {string} role
  */
 export async function setUserRole(uid, role) {
+  const normalized = normalizeRole(role);
+  if (!ASSIGNABLE_ROLES.includes(String(role || '').trim().toLowerCase()) || normalized === ROLES.SUPERADMIN) {
+    throw new Error('Rol no permitido');
+  }
   try {
     await setDoc(doc(db, 'users', uid), {
-      role,
+      role: normalized,
       updatedAt: serverTimestamp()
     }, { merge: true });
   } catch (e) {
