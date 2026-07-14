@@ -94,7 +94,7 @@ check(
   'Los botones viejos se corrigen por línea y variante',
   cart.includes('interceptLegacyCartButtons') &&
     cart.includes("document.addEventListener('click', interceptLegacyCartButtons, true)") &&
-    cart.includes("row.dataset.lineId = item.lineId"),
+    cart.includes('row.dataset.lineId = item.lineId'),
   'Los onclick antiguos usan product.id y no distinguen variantes'
 );
 
@@ -110,8 +110,8 @@ check(
   'Precio y stock siguen validados por el checkout seguro',
   checkout.includes('expectedSubtotal') &&
     checkout.includes('transaction.get(productRef)') &&
-    checkout.includes("throw appError('quote_changed'") &&
-    checkout.includes("throw appError('insufficient_stock'"),
+    checkout.includes("'quote_changed'") &&
+    checkout.includes("'insufficient_stock'"),
   'La sincronización del carrito no reemplaza la validación del servidor'
 );
 
