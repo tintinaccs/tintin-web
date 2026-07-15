@@ -328,7 +328,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js";
+} from "./js/cart-sync.js?v=tintin-20260715-4";
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
@@ -603,7 +603,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js');
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-4');
         const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);

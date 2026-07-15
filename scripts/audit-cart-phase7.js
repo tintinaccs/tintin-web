@@ -5,6 +5,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cart = read('js/cart-sync.js');
+const classic = read('script.js');
 const quality = read('js/ui-quality.js');
 const checkout = read('js/secure-checkout-order.js');
 const rules = read('firestore.rules');
@@ -88,6 +89,20 @@ check(
   cart.includes('this === window.localStorage && key === PUBLIC_CART_KEY') &&
     !cart.includes('this === window.sessionStorage && key === PUBLIC_CART_KEY'),
   'El parche global de Storage debe estar limitado'
+);
+
+check(
+  'Leer el carrito clásico no vuelve a escribir datos idénticos',
+  classic.includes("const stored = localStorage.getItem(CART_KEY) || '[]'") &&
+    classic.includes('if (stored !== serialized) localStorage.setItem(CART_KEY, serialized)'),
+  'Una lectura no debe emitir tt_cart_updated y volver a renderizarse en ciclo'
+);
+
+check(
+  'El puente de Storage ignora escrituras idénticas y borrados vacíos',
+  cart.includes('if (JSON.stringify(current) === JSON.stringify(normalized)) return;') &&
+    cart.includes('if (!currentLocalCart().length) return;'),
+  'Sin el no-op, renderCart y tt_cart_updated forman una cola infinita de microtareas'
 );
 
 check(

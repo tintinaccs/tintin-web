@@ -143,8 +143,15 @@ const CART_KEY = 'tt_cart';
 
 function getCart() {
   try {
-    const normalized = normalizeClassicCart(JSON.parse(localStorage.getItem(CART_KEY)) || []);
-    localStorage.setItem(CART_KEY, JSON.stringify(normalized));
+    const stored = localStorage.getItem(CART_KEY) || '[]';
+    const normalized = normalizeClassicCart(JSON.parse(stored));
+    const serialized = JSON.stringify(normalized);
+
+    // Leer el carrito no debe emitir una escritura si los datos ya están
+    // normalizados. cart-sync.js intercepta los setItem('tt_cart') y publica
+    // tt_cart_updated; escribir en cada lectura hacía que renderCart() se
+    // llamara a sí mismo mediante una cadena infinita de microtareas.
+    if (stored !== serialized) localStorage.setItem(CART_KEY, serialized);
     return normalized;
   } catch (e) {
     return [];

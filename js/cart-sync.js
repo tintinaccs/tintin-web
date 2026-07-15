@@ -602,7 +602,16 @@ function createRuntime() {
       if (this === window.localStorage && key === PUBLIC_CART_KEY) {
         let parsed = [];
         try { parsed = JSON.parse(String(value)); } catch {}
-        const normalized = writeLocal(parsed, { notify: true });
+        const normalized = normalizeCart(parsed);
+        const current = currentLocalCart();
+
+        // Un setItem con el mismo carrito es un no-op real. El código clásico
+        // puede normalizar al leer; sin esta comparación cada lectura publicaba
+        // tt_cart_updated, el render volvía a leer y se creaba una cola infinita
+        // de microtareas que impedía incluso ejecutar el timeout del loader.
+        if (JSON.stringify(current) === JSON.stringify(normalized)) return;
+
+        writeLocal(normalized, { notify: true });
         scheduleRemoteSync(normalized);
         return;
       }
@@ -611,6 +620,7 @@ function createRuntime() {
 
     Storage.prototype.removeItem = function removeItem(key) {
       if (this === window.localStorage && key === PUBLIC_CART_KEY) {
+        if (!currentLocalCart().length) return;
         const normalized = writeLocal([], { notify: true });
         scheduleRemoteSync(normalized);
         return;
@@ -855,7 +865,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('./secure-checkout-order.js?v=tintin-20260715-2').catch(error => {
+  import('./secure-checkout-order.js?v=tintin-20260715-4').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

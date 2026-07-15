@@ -402,7 +402,7 @@
 <div class="tt-sheet-backdrop" id="sheet-backdrop"></div>
 
 <!-- Scripts -->
-<script src="script.js?v=tintin-20260715-2"></script>
+<script src="script.js?v=tintin-20260715-4"></script>
 
 <script type="module">
 import { auth, db } from "./js/firebase.js";
@@ -414,7 +414,7 @@ import {
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js";
-import { syncCartToFirestore } from "./js/cart-sync.js";
+import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260715-4";
 import { initOnboarding } from "./js/onboarding.js";
 
 const ROLE_COLORS = {
