@@ -76,8 +76,13 @@ function handleSnapshot(snap) {
   const all = snap.docs.map(d => mapProduct(d.id, d.data()));
 
   const products = all
-    .filter(p => p.active !== false)
+    .filter(p => p.active !== false && Boolean(p.name))
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  const featuredProducts = products.filter(product =>
+    typeof window.isFeaturable === 'function'
+      ? window.isFeaturable(product)
+      : !(product.stock != null && Number(product.stock) <= 0)
+  );
 
   // Expose on window so script.js helpers can find them by id
   window.PRODUCTS = products;
@@ -89,10 +94,10 @@ function handleSnapshot(snap) {
   // Re-render homepage product grids
   if (typeof window.renderProductsGrid === 'function') {
     ['colls-products-grid', 'related-grid'].forEach(id => {
-      if (document.getElementById(id)) window.renderProductsGrid(id, products);
+      if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
     });
     if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', products.slice(0, 6));
+      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 6));
     }
   }
 

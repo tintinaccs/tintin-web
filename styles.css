@@ -3251,6 +3251,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   #tt-header-desktop-tablet .tt-menu-toggle {
     display: flex;
     order: 1;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
   }
   #tt-header-desktop-tablet .tt-logo-link {
     position: absolute;
@@ -3263,7 +3268,23 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     order: 3;
     gap: 4px;
   }
+  #tt-header-desktop-tablet .tt-header-actions button,
+  #tt-header-desktop-tablet .tt-header-actions a {
+    width: 44px;
+    height: 44px;
+  }
   #tt-header-desktop-tablet .tt-nav { display: none; }
+
+  /* Tres columnas dejan cada tarjeta demasiado angosta para dos CTAs en
+     línea. En tablet se apilan, conservan 44px táctiles y nunca desbordan. */
+  .tt-products-grid .tt-product-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tt-products-grid .tt-product-actions .tt-btn {
+    width: 100%;
+    min-height: 44px;
+  }
 
   .tt-hero {
     display: grid;
@@ -3358,11 +3379,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
     width: 100%;
     max-width: 620px;
     margin: 0 auto;
-    /* 92px: la tabbar en esta franja (481-768px) muestra las etiquetas de
+    /* 100px: la tabbar en esta franja (481-768px) muestra las etiquetas de
        texto bajo cada ícono y mide ~68.8px + 16px de separación del borde
-       = ~84.8px de altura real desde el borde inferior — medido en vivo,
-       no es un valor a ojo. 92px deja ~7px de aire visible sin superponerse. */
-    padding: 0 clamp(18px, 5vw, 32px) 92px;
+       = ~84.8px de altura real desde el borde inferior. 100px conserva un
+       margen táctil visible de unos 15px sin superponer los botones. */
+    padding: 0 clamp(18px, 5vw, 32px) 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3388,10 +3409,10 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
      tamaño de título para pantallas chicas y apila los botones (siguen
      centrados, nunca align-items:flex-start). */
   .tt-hero { min-height: 560px; align-items: flex-end; justify-content: center; }
-  /* 80px: acá la tabbar esconde las etiquetas de texto (span{display:none}
+  /* 92px: acá la tabbar esconde las etiquetas de texto (span{display:none}
      más abajo) y mide ~56px + 16px de separación = ~72px reales desde el
-     borde inferior — medido en vivo. 80px deja ~8px de aire visible. */
-  .tt-hero-content { padding: 0 20px 80px; }
+     borde inferior. 92px deja cerca de 16px entre la navegación y el CTA. */
+  .tt-hero-content { padding: 0 20px 92px; }
   .tt-hero-img { object-position: center top; }
   .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
   .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }

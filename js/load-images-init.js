@@ -11,11 +11,16 @@ import { loadImages } from './images.js';
 
 loadImages().then(() => {
   if (typeof window.renderProductsGrid === 'function' && Array.isArray(window.PRODUCTS)) {
+    const featuredProducts = window.PRODUCTS.filter(product =>
+      typeof window.isFeaturable === 'function'
+        ? window.isFeaturable(product)
+        : Boolean(product?.name) && !(product.stock != null && Number(product.stock) <= 0)
+    );
     ['colls-products-grid', 'related-grid'].forEach(id => {
-      if (document.getElementById(id)) window.renderProductsGrid(id, window.PRODUCTS);
+      if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
     });
     if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', window.PRODUCTS.slice(0, 6));
+      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 6));
     }
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
