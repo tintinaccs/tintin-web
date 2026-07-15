@@ -1,6 +1,8 @@
 {
   "scripts": {
     "fix:tintin": "node scripts/fix-tintin-source.js",
+    "sync:public-shell": "node scripts/sync-public-shell.js",
+    "audit:public-shell": "node scripts/audit-public-shell.js",
     "audit:tintin": "node scripts/audit-tintin.js",
     "audit:store-gate": "node scripts/audit-store-gate.js",
     "audit:secure-orders": "node scripts/audit-secure-orders.js",
@@ -11,7 +13,7 @@
     "audit:cart": "node scripts/audit-cart-phase7.js",
     "audit:security": "node scripts/audit-security-phase8.js",
     "audit:release": "node scripts/audit-final-release.js",
-    "audit:final": "npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:postphase && npm run audit:reliability",
+    "audit:final": "npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:postphase && npm run audit:reliability",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js",

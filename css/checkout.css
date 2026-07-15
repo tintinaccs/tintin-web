@@ -29,27 +29,11 @@
       min-height: 100vh;
     }
 
-    /* ---- HEADER ---- */
-    .ck-header {
-      background: #fff;
-      border-bottom: 1.5px solid var(--border);
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .ck-header-logo {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
-    .ck-header-logo img {
-      height: 40px;
-      width: auto;
-      display: block;
+    /* ---- ACCION CONTEXTUAL DE CHECKOUT ---- */
+    .ck-back-row {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+      padding: calc(var(--header-h) + 16px) 24px 0;
     }
     .ck-header-back {
       font-size: 12px;
@@ -63,40 +47,7 @@
       letter-spacing: .06em;
     }
     .ck-header-back:hover { color: var(--acc); }
-
-    /* ---- HEADER ACCOUNT BADGE (visible en todos los pasos: Carrito a
-       Confirmación) — así siempre es fácil saber con qué cuenta estás
-       comprando, sin tener que ir a Mi cuenta. ---- */
-    .ck-header-right { display: flex; align-items: center; gap: 14px; }
-    .ck-account-badge {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      background: var(--acc-pale);
-      border: 1.5px solid var(--border);
-      border-radius: 50px;
-      padding: 4px 12px 4px 4px;
-      max-width: 180px;
-    }
-    .ck-account-badge.show { display: flex; }
-    .ck-account-badge:hover { border-color: var(--acc); }
-    .ck-account-badge-avatar {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--acc); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 800; flex-shrink: 0; overflow: hidden;
-    }
-    .ck-account-badge-avatar img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; flex-shrink: 0; }
-    .ck-account-badge-name {
-      font-size: 11.5px; font-weight: 700; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    @media (max-width: 480px) {
-      .ck-header-back-text { display: none; }
-      .ck-account-badge { max-width: 40px; padding: 3px; }
-      .ck-account-badge-name { display: none; }
-    }
+    @media (max-width: 768px) { .ck-back-row { padding-top: 16px; } }
 
     /* ---- STEP INDICATOR ---- */
     .ck-steps {

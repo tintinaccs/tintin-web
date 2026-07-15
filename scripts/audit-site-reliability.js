@@ -33,6 +33,7 @@ const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
 const imagePerformance = read('js/image-performance.js');
 const home = read('index.html');
+const publicShell = read('js/public-shell.js');
 const contentSchema = read('js/content-schema.js');
 const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
@@ -161,9 +162,9 @@ check('La colección Bolsos conserva su portada real después de sincronizar',
   home.includes('col-${collImageFile(c.slug)}.webp') &&
   home.includes("label.textContent = c.name.toUpperCase()"));
 check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
-  home.includes('id="search-panel" role="search"') &&
-  home.includes('id="cart-drawer" role="dialog"') &&
-  home.includes('id="collections-sheet" role="dialog"') &&
+  publicShell.includes('id="search-panel" role="search"') &&
+  publicShell.includes('id="cart-drawer" role="dialog"') &&
+  publicShell.includes('id="collections-sheet" role="dialog"') &&
   main.includes("drawer.setAttribute('aria-hidden', 'false')") &&
   main.includes("panel.setAttribute('aria-hidden', 'false')") &&
   main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
@@ -193,7 +194,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-12'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-13'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

@@ -385,7 +385,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-nav > a:hover,
 .tt-nav-dropdown > button:hover,
-.tt-nav > a.active {
+.tt-nav > a.active,
+.tt-nav-dropdown > button.active {
   color: var(--text-title);
   background: rgba(255,255,255,0.28);
   border-color: rgba(255,255,255,0.36);
@@ -400,7 +401,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-header.scrolled .tt-nav > a:hover,
 .tt-header.scrolled .tt-nav-dropdown > button:hover,
-.tt-header.scrolled .tt-nav > a.active {
+.tt-header.scrolled .tt-nav > a.active,
+.tt-header.scrolled .tt-nav-dropdown > button.active {
   color: var(--pink-dark);
   background: var(--pink-pale);
   border-color: rgba(212,120,154,0.28);
@@ -2016,6 +2018,24 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 @media (prefers-reduced-motion: reduce) {
   .tt-privacy-consent { animation: none; }
+}
+
+/* Login y 404 antes no tenian la navegacion publica. Al compartir ahora el
+   mismo header fijo que la portada, su contenido conserva una zona superior
+   segura en desktop/tablet y una zona inferior segura para la tabbar mobile. */
+@media (min-width: 769px) {
+  body.tt-public-shell-mounted .login-page,
+  body.tt-public-shell-mounted .tt-404-wrap {
+    padding-top: var(--header-h);
+  }
+}
+
+@media (max-width: 768px) {
+  body.tt-public-shell-mounted .login-page,
+  body.tt-public-shell-mounted .tt-404-wrap,
+  body.tt-public-shell-mounted .ck-body {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* Respuesta táctil estable, similar a la barra móvil de Instagram: la

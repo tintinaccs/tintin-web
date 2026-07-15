@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const VERSION = 'tintin-20260715-12';
+const VERSION = 'tintin-20260715-13';
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
 
 function walk(dir) {
@@ -39,11 +39,6 @@ function fixHtml(content, rel) {
     out = out.replace(/<div\s+class=["']tt-splash-line["'][\s\S]*?<\/div>\s*/gi, '');
     out = out.replace(/#ffb6c8/gi, '#FFF6FA');
     out = out.replace(/#fff/gi, '#FFFFFF');
-  }
-
-  if (/checkout/i.test(rel)) {
-    out = out.replace(/<header[\s\S]*?id=["']tt-header["'][\s\S]*?<\/header>\s*/gi, '');
-    out = out.replace(/<div[\s\S]*?class=["'][^"']*tt-header[^"']*["'][\s\S]*?<\/div>\s*/gi, '');
   }
 
   return out;

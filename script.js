@@ -522,9 +522,10 @@ function directWAProduct(product) {
 function initHeaderScroll() {
   const header = document.getElementById('tt-header-desktop-tablet');
   if (!header) return;
+  const hasFullBleedHomeHero = document.body?.classList.contains('tt-public-shell-home');
 
   function onScroll() {
-    if (window.scrollY > 80) {
+    if (!hasFullBleedHomeHero || window.scrollY > 80) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
