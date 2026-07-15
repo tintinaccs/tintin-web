@@ -13,6 +13,9 @@
   const isLoginPage =
     path.endsWith('/login.html') ||
     path.endsWith('/login');
+  const isAdminImagesPage =
+    path.endsWith('/admin-images.html') ||
+    path.endsWith('/admin-images');
 
   // Evita que ?from= pueda mandar a una cuenta autorizada fuera de Tintin.
   // Los regresos normales del sitio son rutas relativas como checkout.html.
@@ -46,7 +49,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260715-2';
+  const TT_CACHE_VERSION = 'tintin-20260715-3';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
@@ -502,6 +505,25 @@
     bootScrollReveal();
   }
 
+  function bootPublicRuntime() {
+    if (runtimeBooted) return;
+    runtimeBooted = true;
+
+    // Las páginas públicas ya cargan sus módulos funcionales desde el HTML
+    // (productos, colecciones, imágenes, carrito y contenido). Volver a
+    // iniciar acá el paquete global de "quality" duplicaba esos renderers y
+    // agregaba varios MutationObserver sobre todo el documento. En cuentas
+    // autorizadas —incluido Super Admin— esa cascada podía monopolizar el
+    // hilo principal y dejar el navegador detenido sobre el loader.
+    bootHeaderMode();
+    bootHeaderDropdownFix();
+    bootHeaderScrollHide();
+    bootAdminAndProfileFixes();
+
+    documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+    documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
+  }
+
   if (storeGateRequired) {
     window.addEventListener(
       'tintin:store-gate-state',
@@ -510,12 +532,13 @@
         gateResolved = true;
 
         if (state === 'allowed') {
-          // Los módulos visuales y de contenido solo arrancan después de que
-          // Firebase permite usar la página. Una tienda cerrada no necesita
-          // ejecutar observadores, carrito, imágenes ni animaciones detrás
-          // del aviso de mantenimiento.
-          bootPageRuntime();
+          // Destapar primero la página. El runtime público liviano arranca en
+          // una tarea posterior y no puede retener el loader mientras carga.
           if (contentReady) tryHideElegant();
+          // admin-images sí necesita los módulos de administración de Fase 5;
+          // el resto de las páginas protegidas usa el runtime público liviano.
+          if (isAdminImagesPage) window.setTimeout(bootPageRuntime, 0);
+          else window.setTimeout(bootPublicRuntime, 0);
           return;
         }
 
