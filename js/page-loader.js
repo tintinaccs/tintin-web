@@ -302,6 +302,16 @@
 
   function tryHideElegant() {
     if (hidden) return;
+    // Cada página decide sola cuándo su propio contenido está listo
+    // (estructura pintada, carrito cargado, etc.) sin saber nada del
+    // resultado de store-gate.js — esa señal puede llegar bastante antes
+    // de que la consulta real a Firestore termine. Si se dejara ocultar el
+    // loader en ese momento, quedaría una pantalla en blanco (todo el body
+    // sigue tapado por tt-store-gate-pending) hasta que el aviso de tienda
+    // cerrada recién apareciera un rato después — o nunca, si algo fallaba
+    // antes. El listener de 'tintin:store-gate-state' más abajo vuelve a
+    // llamar a esta función en cuanto el gate resuelve.
+    if (storeGateRequired && !gateResolved) return;
     const enough = Date.now() - START >= MIN_SHOW_MS;
     if (!enough || !logoReady) {
       const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - START));
@@ -408,6 +418,13 @@
       overlay
         .querySelector('#tt-store-gate-emergency-login')
         ?.addEventListener('click', goToEmergencyLogin, { capture: true });
+
+      // Este aviso de emergencia ya es la respuesta final para esta carga
+      // (store-gate.js nunca llegó a resolver nada). tryHideElegant() lo
+      // trataba igual que "todavía sin resolver" y podía dejar el loader
+      // tapando este mismo aviso hasta el corte de SAFETY_MS.
+      gateResolved = true;
+      if (contentReady) tryHideElegant();
     });
   }
 
@@ -477,6 +494,10 @@
       'tintin:store-gate-state',
       () => {
         gateResolved = true;
+        // Si la página ya se había declarado lista mientras se esperaba el
+        // gate, tryHideElegant() se había frenado en seco — reintentarla
+        // ahora es lo único que termina de destapar el loader.
+        if (contentReady) tryHideElegant();
       },
       { passive: true }
     );
