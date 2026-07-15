@@ -19,6 +19,9 @@ const pageLoader = read('js/page-loader.js');
 const gateCore = read('js/store-gate-core.js');
 const gateRuntime = read('js/store-gate.js');
 const adminSync = read('js/admin-store-control.js');
+const authNav = read('js/auth-nav.js');
+const uiQuality = read('js/ui-quality.js');
+const pageAudit = read('js/page-audit-fix.js');
 const rules = read('firestore.rules');
 
 check(
@@ -31,6 +34,35 @@ check(
   pageLoader.includes('showEmergencyStoreGate') &&
     pageLoader.includes('STORE_GATE_TIMEOUT_MS'),
   'debe quedar bloqueado incluso si el módulo o Firebase no responden'
+);
+check(
+  'Runtime diferido hasta permitir acceso',
+  pageLoader.includes("if (state === 'allowed')") &&
+    pageLoader.includes('function bootPageRuntime()') &&
+    pageLoader.includes('if (!storeGateRequired) bootPageRuntime();'),
+  'las páginas públicas no deben iniciar módulos visuales antes de resolver el gate'
+);
+check(
+  'Loader se retira ante cierre o indisponibilidad',
+  pageLoader.includes("const state = event?.detail?.state || 'unavailable'") &&
+    pageLoader.includes('contentReady = true;\n        logoReady = true;\n        hideNow();'),
+  'el aviso final no puede quedar tapado esperando page-ready'
+);
+check(
+  'Auth nav no duplica módulos globales',
+  !/import\s+['"].*(?:ui-quality|header-dropdown-fix|header-account-mobile-fix|header-scroll-hide|scroll-reveal-global)/.test(authNav),
+  'page-loader.js debe ser el único dueño del arranque global'
+);
+check(
+  'Sin observadores globales de interfaz',
+  !uiQuality.includes('MutationObserver') && !pageAudit.includes('MutationObserver'),
+  'la interfaz debe refrescarse por eventos finitos, no vigilar todo el documento'
+);
+check(
+  'Guard del overlay observa solo hijos directos',
+  gateCore.includes("guardObserver.observe(document.body, { childList: true });") &&
+    !gateCore.includes('subtree: true'),
+  'el guard no debe observar los atributos que él mismo modifica'
 );
 check(
   'Bypass limitado a localhost',

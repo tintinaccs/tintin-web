@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260715-1';
+var TT_CACHE_VERSION='tintin-20260715-2';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
@@ -52,11 +52,14 @@ function topOnReload(){
  if(document.body)document.body.scrollTop=0;
  requestAnimationFrame(function(){root.style.scrollBehavior=prevScrollBehavior});
 }
-function media(){document.querySelectorAll('img').forEach(function(img,i){if(!img.hasAttribute('loading')&&i>1)img.loading='lazy';if(!img.hasAttribute('decoding'))img.decoding='async';if(!img.hasAttribute('referrerpolicy'))img.referrerPolicy='no-referrer';img.addEventListener('error',function(){img.classList.add('tt-img-error')},{once:true})})}
+function media(){document.querySelectorAll('img').forEach(function(img,i){if(!img.hasAttribute('loading')&&i>1)img.loading='lazy';if(!img.hasAttribute('decoding'))img.decoding='async';if(!img.hasAttribute('referrerpolicy'))img.referrerPolicy='no-referrer';if(img.dataset.ttQualityMedia==='1')return;img.dataset.ttQualityMedia='1';img.addEventListener('error',function(){img.classList.add('tt-img-error')},{once:true})})}
 function links(){document.querySelectorAll('a[href]').forEach(function(a){var href=a.getAttribute('href')||'';if(/^javascript:/i.test(href)){a.removeAttribute('href');a.setAttribute('role','button');return}try{var u=new URL(href,location.href);if(u.origin!==location.origin){a.rel='noopener noreferrer';if(!a.target)a.target='_blank'}}catch(e){}})}
 function forms(){document.addEventListener('submit',function(e){var f=e.target;if(!f||!f.matches||!f.matches('form'))return;if(f.dataset.ttSubmitting==='1'){e.preventDefault();return}f.dataset.ttSubmitting='1';setTimeout(function(){delete f.dataset.ttSubmitting},4500)},true);document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('button,[role="button"],a.tt-btn,.tt-btn'):null;if(!b)return;var now=Date.now();var last=Number(b.dataset.ttLastClick||0);if(now-last<320){e.preventDefault();e.stopPropagation();return}b.dataset.ttLastClick=String(now)},true)}
 function singleLogoLoader(){var logo=realLogo();document.querySelectorAll('#tt-loader-line,#tt-loader-text,#tt-loader-dots,.tt-splash-line,#tt-intro-fallback').forEach(function(el){el.remove()});document.querySelectorAll('#tt-loader-logo,#tt-intro-logo').forEach(function(img){if(!img||img.dataset.ttSingleLogo)return;img.dataset.ttSingleLogo='1';img.alt='';img.removeAttribute('aria-label');if(isOldLogo(img.src)||img.src.indexOf('logo.png')===-1&&img.src!==logo)img.src=logo;img.addEventListener('error',function onImgError(){if(img.src.indexOf('logo.png')===-1){img.src=DEFAULT_LOGO}else{img.removeEventListener('error',onImgError);img.style.display='none'}})})}
-function observeDom(){if(!('MutationObserver'in window))return;var timer=0;var obs=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},80)});obs.observe(document.documentElement,{childList:true,subtree:true})}
-function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();bootAdminUsersPhase8();bootAdminImportPhase9();parity();adminMobileSidebar();document.documentElement.classList.add('tt-ui-ready');singleLogoLoader();media();links();forms();topOnReload();document.documentElement.classList.remove('tt-initializing');observeDom();setTimeout(function(){parity();adminMobileSidebar();singleLogoLoader();media();links()},420)}
+var refreshTimer=0;
+function refresh(){parity();adminMobileSidebar();singleLogoLoader();media();links()}
+function scheduleRefresh(){clearTimeout(refreshTimer);refreshTimer=setTimeout(refresh,80)}
+function bindRefreshEvents(){document.addEventListener('tintin:page-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:products-loaded',scheduleRefresh,{passive:true});window.addEventListener('tintin:collections-phase4-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:images-phase5-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:content-phase6-ready',scheduleRefresh,{passive:true})}
+function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();bootAdminUsersPhase8();bootAdminImportPhase9();refresh();document.documentElement.classList.add('tt-ui-ready');forms();topOnReload();document.documentElement.classList.remove('tt-initializing');bindRefreshEvents();setTimeout(refresh,420)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

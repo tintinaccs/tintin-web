@@ -46,7 +46,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260715-1';
+  const TT_CACHE_VERSION = 'tintin-20260715-2';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
@@ -64,6 +64,7 @@
   let hideGen = 0;
   let gateResolved = !storeGateRequired;
   let gateEmergencyShown = false;
+  let runtimeBooted = false;
 
   function versionUrl(url) {
     try {
@@ -419,12 +420,13 @@
         .querySelector('#tt-store-gate-emergency-login')
         ?.addEventListener('click', goToEmergencyLogin, { capture: true });
 
-      // Este aviso de emergencia ya es la respuesta final para esta carga
-      // (store-gate.js nunca llegó a resolver nada). tryHideElegant() lo
-      // trataba igual que "todavía sin resolver" y podía dejar el loader
-      // tapando este mismo aviso hasta el corte de SAFETY_MS.
+      // Este aviso de emergencia ya es la respuesta final para esta carga.
+      // Se retira el loader inmediatamente: no debe quedar tapando el aviso
+      // mientras se espera que una página bloqueada anuncie contenido listo.
       gateResolved = true;
-      if (contentReady) tryHideElegant();
+      contentReady = true;
+      logoReady = true;
+      hideNow();
     });
   }
 
@@ -489,15 +491,39 @@
     }
   }
 
+  function bootPageRuntime() {
+    if (runtimeBooted) return;
+    runtimeBooted = true;
+    bootGlobalQuality();
+    bootHeaderMode();
+    bootHeaderDropdownFix();
+    bootHeaderScrollHide();
+    bootAdminAndProfileFixes();
+    bootScrollReveal();
+  }
+
   if (storeGateRequired) {
     window.addEventListener(
       'tintin:store-gate-state',
-      () => {
+      event => {
+        const state = event?.detail?.state || 'unavailable';
         gateResolved = true;
-        // Si la página ya se había declarado lista mientras se esperaba el
-        // gate, tryHideElegant() se había frenado en seco — reintentarla
-        // ahora es lo único que termina de destapar el loader.
-        if (contentReady) tryHideElegant();
+
+        if (state === 'allowed') {
+          // Los módulos visuales y de contenido solo arrancan después de que
+          // Firebase permite usar la página. Una tienda cerrada no necesita
+          // ejecutar observadores, carrito, imágenes ni animaciones detrás
+          // del aviso de mantenimiento.
+          bootPageRuntime();
+          if (contentReady) tryHideElegant();
+          return;
+        }
+
+        // "closed" y "unavailable" ya tienen un overlay final creado por
+        // store-gate.js. El loader se quita sin esperar page-ready/load.
+        contentReady = true;
+        logoReady = true;
+        hideNow();
       },
       { passive: true }
     );
@@ -506,13 +532,8 @@
     }, STORE_GATE_TIMEOUT_MS);
   }
 
-  bootGlobalQuality();
   bootStoreGate();
-  bootHeaderMode();
-  bootHeaderDropdownFix();
-  bootHeaderScrollHide();
-  bootAdminAndProfileFixes();
-  bootScrollReveal();
+  if (!storeGateRequired) bootPageRuntime();
 
   document.addEventListener('tintin:page-ready', ready);
   if (!window.TT_PAGE_LOADER_WAIT) window.addEventListener('load', ready);
