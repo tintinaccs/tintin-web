@@ -427,19 +427,27 @@ function overlayNeedsRepair() {
 }
 
 function bindOverlayActions(overlay) {
-  overlay.inert = false;
-  overlay.removeAttribute('inert');
-  overlay.removeAttribute('aria-hidden');
-  overlay.style.pointerEvents = 'auto';
-  overlay.style.touchAction = 'manipulation';
+  // Mismo cuidado que rememberAndLockNode(): escribir estos atributos/estilos
+  // sin condición, en cada llamada, los pone dentro de lo que el propio
+  // guardObserver vigila (attributeFilter incluye 'inert','aria-hidden' y
+  // 'style') — eso disparaba una mutación en cada repair, que el observer
+  // volvía a captar, que volvía a llamar a repair... un ciclo que consumía
+  // CPU sin parar en vez de asentarse una sola vez.
+  if (overlay.inert) overlay.inert = false;
+  if (overlay.hasAttribute('inert')) overlay.removeAttribute('inert');
+  if (overlay.hasAttribute('aria-hidden')) overlay.removeAttribute('aria-hidden');
+  if (overlay.style.pointerEvents !== 'auto') overlay.style.pointerEvents = 'auto';
+  if (overlay.style.touchAction !== 'manipulation') overlay.style.touchAction = 'manipulation';
 
   const loginControl = overlay.querySelector(`#${LOGIN_CONTROL_ID}`);
   if (loginControl) {
-    loginControl.inert = false;
-    loginControl.removeAttribute('inert');
-    loginControl.removeAttribute('aria-hidden');
-    loginControl.setAttribute('role', 'button');
-    loginControl.setAttribute('aria-label', 'Iniciar sesión para acceder como equipo autorizado');
+    if (loginControl.inert) loginControl.inert = false;
+    if (loginControl.hasAttribute('inert')) loginControl.removeAttribute('inert');
+    if (loginControl.hasAttribute('aria-hidden')) loginControl.removeAttribute('aria-hidden');
+    if (loginControl.getAttribute('role') !== 'button') loginControl.setAttribute('role', 'button');
+    if (loginControl.getAttribute('aria-label') !== 'Iniciar sesión para acceder como equipo autorizado') {
+      loginControl.setAttribute('aria-label', 'Iniciar sesión para acceder como equipo autorizado');
+    }
   }
 
   if (overlay.dataset.ttGateActionsBound === '1') return;
