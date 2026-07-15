@@ -47,8 +47,8 @@ check(
   'Runtime público sin observadores globales duplicados',
   /function bootPublicRuntime\(\) \{[\s\S]*?window\.setTimeout\(bootPublicRuntime, 0\)/.test(pageLoader) &&
     !/function bootPublicRuntime\(\) \{[\s\S]*?bootGlobalQuality\(\)[\s\S]*?\n  \}/.test(pageLoader) &&
-    !/function bootPublicRuntime\(\) \{[\s\S]*?bootScrollReveal\(\)[\s\S]*?\n  \}/.test(pageLoader),
-  'las páginas públicas ya cargan sus datos desde HTML y no deben duplicar el paquete quality/reveal'
+    /function bootPublicRuntime\(\) \{[\s\S]*?bootScrollReveal\(\)[\s\S]*?bootImagePerformance\(\)[\s\S]*?\n  \}/.test(pageLoader),
+  'page-loader debe ser el único dueño del reveal y la optimización de imágenes'
 );
 check(
   'Loader se retira ante cierre o indisponibilidad',

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-7"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-8"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -17,12 +17,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-7">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-7">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-7">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-7">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-7">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-7">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-8">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -58,6 +58,9 @@
   <nav class="adm-nav" id="adm-nav">
     <button type="button" class="adm-nav-item active" data-section="dashboard">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard
+    </button>
+    <button type="button" class="adm-nav-item" data-section="estadisticas" id="nav-estadisticas">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span> Estadísticas
     </button>
     <button type="button" class="adm-nav-item" data-section="usuarios" id="nav-usuarios">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> Usuarios
@@ -114,6 +117,7 @@
 <!-- MOBILE BOTTOM TABS -->
 <nav class="adm-mobile-tabs" id="adm-mobile-tabs">
   <button type="button" class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
+  <button type="button" class="adm-mobile-tab" data-section="estadisticas" id="mtab-estadisticas"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>Estadísticas</button>
   <button type="button" class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
   <button type="button" class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
   <button type="button" class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
@@ -233,6 +237,78 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ===================== ESTADÍSTICAS ===================== -->
+    <div class="adm-section" id="section-estadisticas">
+      <div class="adm-statistics-hero">
+        <div>
+          <div class="adm-statistics-eyebrow">Super Admin</div>
+          <h1>Centro estadístico general</h1>
+          <p>Pedidos, facturación, usuarios, productos, visitas y ubicaciones conectados directamente a los datos en vivo.</p>
+        </div>
+        <div class="adm-statistics-toolbar">
+          <label for="statistics-range">Período</label>
+          <select id="statistics-range" class="adm-select">
+            <option value="1">Hoy</option>
+            <option value="7" selected>Últimos 7 días</option>
+            <option value="30">Últimos 30 días</option>
+          </select>
+          <div class="adm-live-status" aria-live="polite">
+            <span class="adm-live-dot" aria-hidden="true"></span>
+            <span id="statistics-live-status">Conectando…</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="adm-statistics-kpis" aria-label="Indicadores principales">
+        <article class="adm-stat-kpi"><span>Facturación</span><strong id="statistics-revenue">—</strong><small>Pedidos no cancelados</small></article>
+        <article class="adm-stat-kpi"><span>Importe pagado</span><strong id="statistics-paid">—</strong><small>Pagos confirmados</small></article>
+        <article class="adm-stat-kpi"><span>Pedidos</span><strong id="statistics-orders">—</strong><small>En el período</small></article>
+        <article class="adm-stat-kpi"><span>Ticket promedio</span><strong id="statistics-average-ticket">—</strong><small>Por pedido válido</small></article>
+        <article class="adm-stat-kpi"><span>Usuarios nuevos</span><strong id="statistics-new-users">—</strong><small>Registros del período</small></article>
+        <article class="adm-stat-kpi"><span>Usuarios activos</span><strong id="statistics-active-users">—</strong><small id="statistics-blocked-users">0 bloqueados</small></article>
+        <article class="adm-stat-kpi"><span>Visitantes</span><strong id="statistics-visitors">—</strong><small id="statistics-sessions">0 sesiones</small></article>
+        <article class="adm-stat-kpi"><span>Conversión</span><strong id="statistics-conversion">—</strong><small>Pedidos por visitante</small></article>
+        <article class="adm-stat-kpi"><span>En línea ahora</span><strong id="statistics-online">—</strong><small>Actividad en últimos 2 min</small></article>
+        <article class="adm-stat-kpi"><span>Catálogo activo</span><strong id="statistics-active-products">—</strong><small id="statistics-low-stock">0 con stock bajo</small></article>
+      </div>
+
+      <div class="adm-analytics-grid">
+        <section class="adm-analytics-card adm-analytics-card-wide">
+          <div class="adm-analytics-head"><div><h2>Rendimiento diario</h2><p>Pedidos, facturación y sesiones de los últimos siete días.</p></div></div>
+          <div id="statistics-revenue-trend" class="adm-trend-chart"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Estados de pedidos</h2><p>Distribución del período seleccionado.</p></div></div>
+          <div id="statistics-order-status" class="adm-bar-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Estados de pago</h2><p>Confirmados, pendientes y rechazados.</p></div></div>
+          <div id="statistics-payment-status" class="adm-bar-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Productos más pedidos</h2><p>Unidades y facturación estimada.</p></div></div>
+          <div id="statistics-top-products" class="adm-rank-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Destinos de pedidos</h2><p>Ciudades y zonas de entrega principales.</p></div></div>
+          <div id="statistics-order-locations" class="adm-rank-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Origen de visitantes</h2><p>Ciudad y país aproximados de las sesiones permitidas.</p></div></div>
+          <div id="statistics-visit-locations" class="adm-rank-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card">
+          <div class="adm-analytics-head"><div><h2>Páginas de entrada</h2><p>Primeras páginas vistas durante el período.</p></div></div>
+          <div id="statistics-entry-pages" class="adm-rank-list"><div class="adm-analytics-empty">Esperando datos…</div></div>
+        </section>
+        <section class="adm-analytics-card adm-analytics-card-wide">
+          <div class="adm-analytics-head"><div><h2>Actividad actual por página</h2><p>Qué están viendo ahora los visitantes conectados.</p></div></div>
+          <div id="statistics-live-pages" class="adm-bar-list"><div class="adm-analytics-empty">No hay actividad visible.</div></div>
+        </section>
+      </div>
+      <div class="adm-statistics-foot" id="statistics-data-status">Los indicadores se actualizarán automáticamente.</div>
     </div>
 
     <!-- ===================== USUARIOS ===================== -->
@@ -1611,6 +1687,13 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+let adminOrdersUnsubscribe = null;
+let adminUsersUnsubscribe = null;
+let adminRealtimeReady = { orders: false, users: false };
+let statisticsTrafficSessions = [];
+let statisticsTrafficHistorySessions = [];
+let statisticsRangeDays = 7;
+let statisticsTrafficLoadToken = 0;
 let dashboardSessionUnsubscribe = null;
 let dashboardPresenceUnsubscribe = null;
 let dashboardActivityClock = 0;
@@ -1799,17 +1882,25 @@ const AUDIT_ACTION_LABELS = {
 
 let _allAuditLogs = [];
 let _selectedAuditLogs = new Set();
+let _auditUnsubscribe = null;
 
-async function loadAuditLog() {
+function loadAuditLog() {
   const tbody = document.getElementById('audit-tbody');
-  tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
-  try {
-    const snap = await getDocs(query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)));
-    _allAuditLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (_auditUnsubscribe) {
     renderAuditLogTable();
-  } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(e.message)}</td></tr>`;
+    return;
   }
+  tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  _auditUnsubscribe = onSnapshot(
+    query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)),
+    snapshot => {
+      _allAuditLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderAuditLogTable();
+    },
+    error => {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(error.message)}</td></tr>`;
+    }
+  );
 }
 
 // La auditoría es de solo lectura (nunca se edita ni se borra un log) — la
@@ -1918,6 +2009,7 @@ const topbarTitle = document.getElementById('adm-topbar-title');
 
 const SECTION_LABELS = {
   dashboard: 'Dashboard',
+  estadisticas: 'Estadísticas',
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
   productos: 'Productos',
@@ -1936,6 +2028,7 @@ const SECTION_LABELS = {
 // que comparten el mismo data-section) como para bloquear el acceso directo
 // (consola, hash, o cualquier otro camino que no pase por el botón).
 const SECTION_PERMISSION = {
+  estadisticas:  'manageSettings',
   usuarios:      'manageUsers',
   onboarding:    'manageSettings',
   configuracion: 'manageSettings',
@@ -1971,6 +2064,10 @@ function switchSection(target) {
     toast('Roles y Permisos es exclusivo de tintinaccs@gmail.com');
     target = 'dashboard';
   }
+  if (target === 'estadisticas' && currentRole !== 'superadmin') {
+    toast('Estadísticas generales es exclusivo de Super Admin');
+    target = 'dashboard';
+  }
   navItems.forEach(b => b.classList.remove('active'));
   // activate all items matching this section (sidebar + mobile tabs)
   document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
@@ -1979,6 +2076,7 @@ function switchSection(target) {
   if (targetSection) targetSection.classList.add('active');
   topbarTitle.textContent = SECTION_LABELS[target] || target;
   if (target === 'usuarios') loadUsers();
+  if (target === 'estadisticas') renderGeneralStatistics();
   if (target === 'pedidos') loadOrders();
   if (target === 'productos') loadProductos();
   if (target === 'colecciones') loadColecciones();
@@ -2071,6 +2169,7 @@ onAuthStateChanged(auth, async user => {
     // Set up UI and reveal page
     setupUserInfo(user, role);
     setupPermissions(role);
+    startAdminRealtimeData();
     loadDashboard();
     // Load eagerly (not just on nav click) so category/collection selects in
     // Productos stay correct even if the admin never opens Colecciones first.
@@ -2169,6 +2268,318 @@ function activityRelativeTime(timestamp, now = Date.now()) {
   return `hace ${Math.max(1, Math.floor(seconds / 60))} min`;
 }
 
+function statisticsStartDate(days = statisticsRangeDays) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  start.setDate(start.getDate() - Math.max(0, Number(days || 1) - 1));
+  return start;
+}
+
+function statisticsDayKey(value) {
+  const milliseconds = activityTimestampMillis(value);
+  if (!milliseconds) return '';
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date(milliseconds));
+  const fields = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return `${fields.year}-${fields.month}-${fields.day}`;
+}
+
+function statisticsSetText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
+}
+
+function statisticsCompactNumber(value) {
+  return new Intl.NumberFormat('es-PY', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(value || 0));
+}
+
+function statisticsPaymentStatus(order) {
+  return order?.payment?.status || order?.paymentStatus || 'pendiente';
+}
+
+function statisticsOrderIsValid(order) {
+  return !['cancelado', 'rechazado'].includes(order?.status || 'pendiente');
+}
+
+function statisticsActivePresence(now = Date.now()) {
+  return dashboardActivityState.presence.filter(item => {
+    const lastSeen = activityTimestampMillis(item.lastSeen);
+    return lastSeen >= now - DASHBOARD_ONLINE_WINDOW_MS && lastSeen <= now + 60000;
+  });
+}
+
+function renderStatisticsBars(containerId, entries, labels = {}) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const sorted = [...entries]
+    .filter(([, count]) => count > 0)
+    .sort((a, b) => b[1] - a[1]);
+  if (!sorted.length) {
+    container.innerHTML = '<div class="adm-analytics-empty">Todavía no hay datos en este período.</div>';
+    return;
+  }
+  const maximum = Math.max(...sorted.map(([, count]) => count), 1);
+  container.innerHTML = sorted.slice(0, 8).map(([key, count]) => `
+    <div class="adm-bar-row">
+      <div class="adm-bar-label" title="${escapeHtmlAdmin(labels[key] || key)}">${escapeHtmlAdmin(labels[key] || key)}</div>
+      <div class="adm-bar-track"><div class="adm-bar-fill" style="--adm-bar-width:${Math.max(4, Math.round(count / maximum * 100))}%"></div></div>
+      <div class="adm-bar-value">${count}</div>
+    </div>
+  `).join('');
+}
+
+function renderStatisticsRanking(containerId, entries, emptyText = 'Todavía no hay datos.') {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const list = entries.filter(item => item && item.value > 0).slice(0, 8);
+  if (!list.length) {
+    container.innerHTML = `<div class="adm-analytics-empty">${escapeHtmlAdmin(emptyText)}</div>`;
+    return;
+  }
+  container.innerHTML = list.map((item, index) => `
+    <div class="adm-rank-row">
+      <div class="adm-rank-index">${index + 1}</div>
+      <div class="adm-rank-main">
+        <div class="adm-rank-name" title="${escapeHtmlAdmin(item.name)}">${escapeHtmlAdmin(item.name)}</div>
+        <div class="adm-rank-meta">${escapeHtmlAdmin(item.meta || '')}</div>
+      </div>
+      <div class="adm-rank-value">${escapeHtmlAdmin(item.displayValue ?? item.value)}</div>
+    </div>
+  `).join('');
+}
+
+function renderStatisticsTrend() {
+  const container = document.getElementById('statistics-revenue-trend');
+  if (!container) return;
+  const days = [];
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - offset);
+    const key = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(date);
+    const dayOrders = allOrders.filter(order => statisticsDayKey(order.createdAt) === key && statisticsOrderIsValid(order));
+    const revenue = dayOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const visits = statisticsTrafficSessions.filter(session => statisticsDayKey(session.startedAt) === key).length;
+    days.push({ date, key, orders: dayOrders.length, revenue, visits });
+  }
+  const maxRevenue = Math.max(...days.map(day => day.revenue), 1);
+  const maxOrders = Math.max(...days.map(day => day.orders), 1);
+  const maxVisits = Math.max(...days.map(day => day.visits), 1);
+  container.innerHTML = days.map(day => {
+    const label = new Intl.DateTimeFormat('es-PY', { weekday: 'short', day: '2-digit' }).format(day.date).replace('.', '');
+    const revenueHeight = Math.max(3, Math.round(day.revenue / maxRevenue * 142));
+    const ordersHeight = Math.max(3, Math.round(day.orders / maxOrders * 142));
+    const visitsHeight = Math.max(3, Math.round(day.visits / maxVisits * 142));
+    return `
+      <div class="adm-trend-day">
+        <div class="adm-trend-bars" title="${day.orders} pedidos · ${formatPrice(day.revenue)} · ${day.visits} sesiones">
+          <div class="adm-trend-bar" style="--adm-trend-height:${revenueHeight}px" aria-label="Facturación ${formatPrice(day.revenue)}"></div>
+          <div class="adm-trend-bar adm-trend-bar-orders" style="--adm-trend-height:${ordersHeight}px" aria-label="${day.orders} pedidos"></div>
+          <div class="adm-trend-bar adm-trend-bar-visits" style="--adm-trend-height:${visitsHeight}px" aria-label="${day.visits} sesiones"></div>
+        </div>
+        <strong>${escapeHtmlAdmin(label)}</strong>
+        <span>${statisticsCompactNumber(day.revenue)} · ${day.orders} · ${day.visits}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderGeneralStatistics() {
+  if (currentRole !== 'superadmin') return;
+  const now = Date.now();
+  const rangeStart = statisticsStartDate().getTime();
+  const rangeOrders = allOrders.filter(order => activityTimestampMillis(order.createdAt) >= rangeStart);
+  const validOrders = rangeOrders.filter(statisticsOrderIsValid);
+  const revenue = validOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const paid = rangeOrders
+    .filter(order => statisticsPaymentStatus(order) === 'pagado')
+    .reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const rangeUsers = allUsers.filter(user => activityTimestampMillis(user.createdAt) >= rangeStart);
+  const activeUsers = allUsers.filter(user => !user.blocked).length;
+  const blockedUsers = allUsers.filter(user => user.blocked).length;
+  const uniqueVisitors = new Set(statisticsTrafficSessions.map(session => session.visitorId).filter(Boolean)).size;
+  const activePresence = statisticsActivePresence(now);
+  const activeProducts = _allProducts.filter(product => product.active !== false);
+  const lowStockProducts = activeProducts.filter(product => Number(product.stock || 0) <= 5).length;
+
+  statisticsSetText('statistics-revenue', adminRealtimeReady.orders ? formatPrice(revenue) : '—');
+  statisticsSetText('statistics-paid', adminRealtimeReady.orders ? formatPrice(paid) : '—');
+  statisticsSetText('statistics-orders', adminRealtimeReady.orders ? String(rangeOrders.length) : '—');
+  statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders && validOrders.length ? formatPrice(revenue / validOrders.length) : '—');
+  statisticsSetText('statistics-new-users', adminRealtimeReady.users ? String(rangeUsers.length) : '—');
+  statisticsSetText('statistics-active-users', adminRealtimeReady.users ? String(activeUsers) : '—');
+  statisticsSetText('statistics-blocked-users', `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}`);
+  statisticsSetText('statistics-visitors', String(uniqueVisitors));
+  statisticsSetText('statistics-sessions', `${statisticsTrafficSessions.length} sesión${statisticsTrafficSessions.length === 1 ? '' : 'es'}`);
+  statisticsSetText('statistics-conversion', uniqueVisitors ? `${(validOrders.length / uniqueVisitors * 100).toFixed(1)}%` : '—');
+  statisticsSetText('statistics-online', String(activePresence.length));
+  statisticsSetText('statistics-active-products', String(activeProducts.length));
+  statisticsSetText('statistics-low-stock', `${lowStockProducts} con stock bajo`);
+
+  const orderStatuses = new Map();
+  const paymentStatuses = new Map();
+  const products = new Map();
+  const orderLocations = new Map();
+  rangeOrders.forEach(order => {
+    const orderStatus = order.status || 'pendiente';
+    orderStatuses.set(orderStatus, (orderStatuses.get(orderStatus) || 0) + 1);
+    const paymentStatus = statisticsPaymentStatus(order);
+    paymentStatuses.set(paymentStatus, (paymentStatuses.get(paymentStatus) || 0) + 1);
+    const location = String(order.shipping?.city || order.city || order.shipping?.zone || order.shipping?.department || 'Sin ubicación').trim();
+    orderLocations.set(location, (orderLocations.get(location) || 0) + 1);
+    (order.items || []).forEach(item => {
+      const name = String(item.name || 'Producto sin nombre').trim();
+      const quantity = Math.max(1, Number(item.qty || item.quantity || 1));
+      const previous = products.get(name) || { quantity: 0, revenue: 0 };
+      previous.quantity += quantity;
+      previous.revenue += quantity * Number(item.price || 0);
+      products.set(name, previous);
+    });
+  });
+
+  const visitLocations = new Map();
+  const entryPages = new Map();
+  statisticsTrafficSessions.forEach(session => {
+    const location = activityLocationLabel(session);
+    visitLocations.set(location, (visitLocations.get(location) || 0) + 1);
+    const page = activityPageLabel(session.landingPage);
+    entryPages.set(page, (entryPages.get(page) || 0) + 1);
+  });
+  const livePages = new Map();
+  activePresence.forEach(visitor => {
+    const page = activityPageLabel(visitor.page);
+    livePages.set(page, (livePages.get(page) || 0) + 1);
+  });
+
+  renderStatisticsBars('statistics-order-status', orderStatuses, ORDER_STATUS_LABELS);
+  renderStatisticsBars('statistics-payment-status', paymentStatuses, PAY_STATUS_LABELS);
+  renderStatisticsBars('statistics-live-pages', livePages);
+  renderStatisticsRanking('statistics-top-products', [...products.entries()]
+    .map(([name, data]) => ({ name, value: data.quantity, displayValue: data.quantity, meta: `${data.quantity} unidades · ${formatPrice(data.revenue)}` }))
+    .sort((a, b) => b.value - a.value));
+  renderStatisticsRanking('statistics-order-locations', [...orderLocations.entries()]
+    .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} pedido${value === 1 ? '' : 's'}` }))
+    .sort((a, b) => b.value - a.value));
+  renderStatisticsRanking('statistics-visit-locations', [...visitLocations.entries()]
+    .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} sesión${value === 1 ? '' : 'es'}` }))
+    .sort((a, b) => b.value - a.value));
+  renderStatisticsRanking('statistics-entry-pages', [...entryPages.entries()]
+    .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} entrada${value === 1 ? '' : 's'}` }))
+    .sort((a, b) => b.value - a.value));
+  renderStatisticsTrend();
+
+  const updated = new Intl.DateTimeFormat('es-PY', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(now));
+  statisticsSetText('statistics-live-status', `En vivo · ${updated}`);
+  statisticsSetText('statistics-data-status', `Última actualización ${updated}. No hace falta recargar la página.`);
+}
+
+async function listenStatisticsTraffic() {
+  statisticsTrafficSessions = [];
+  statisticsTrafficHistorySessions = [];
+  if (currentRole !== 'superadmin') return;
+  const loadToken = ++statisticsTrafficLoadToken;
+  const dayKeys = [];
+  for (let offset = statisticsRangeDays - 1; offset >= 0; offset -= 1) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - offset);
+    dayKeys.push(new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(date));
+  }
+  try {
+    const historySnapshots = await Promise.all(dayKeys.slice(0, -1).map(dayKey =>
+      getDocs(collection(db, 'siteTraffic', dayKey, 'sessions'))
+    ));
+    if (loadToken !== statisticsTrafficLoadToken) return;
+    const historical = historySnapshots.flatMap(snapshot =>
+      snapshot.docs.map(item => ({ id: item.id, ...item.data() }))
+    );
+    statisticsTrafficHistorySessions = historical;
+    statisticsTrafficSessions = historical.concat(dashboardActivityState.sessions);
+    renderGeneralStatistics();
+  } catch (error) {
+    if (loadToken !== statisticsTrafficLoadToken) return;
+    statisticsSetText('statistics-live-status', 'Actividad no disponible');
+    statisticsSetText('statistics-data-status', `No se pudo actualizar la actividad: ${error.code || error.message}`);
+    console.warn('Historial de actividad no disponible:', error);
+  }
+}
+
+function sectionIsActive(name) {
+  return document.getElementById(`section-${name}`)?.classList.contains('active') === true;
+}
+
+function refreshRealtimeConsumers() {
+  renderDashboardData();
+  renderGeneralStatistics();
+  if (sectionIsActive('pedidos')) applyOrderFilters();
+  if (sectionIsActive('usuarios')) applyUserFilters();
+  if (typeof refreshCorreosClientasFromRealtime === 'function' && sectionIsActive('correos')) {
+    refreshCorreosClientasFromRealtime();
+  }
+}
+
+function stopAdminRealtimeData() {
+  if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
+  if (adminUsersUnsubscribe) adminUsersUnsubscribe();
+  if (_auditUnsubscribe) _auditUnsubscribe();
+  emailRealtimeUnsubscribers.forEach(unsubscribe => unsubscribe());
+  emailRealtimeUnsubscribers = [];
+  emailModuleStarted = false;
+  statisticsTrafficLoadToken += 1;
+  adminOrdersUnsubscribe = null;
+  adminUsersUnsubscribe = null;
+  _auditUnsubscribe = null;
+}
+
+function startAdminRealtimeData() {
+  stopAdminRealtimeData();
+  adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
+  if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
+    adminOrdersUnsubscribe = onSnapshot(collection(db, 'orders'), snapshot => {
+      allOrders = snapshot.docs
+        .map(item => ({ id: item.id, ...item.data() }))
+        .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+      adminRealtimeReady.orders = true;
+      refreshRealtimeConsumers();
+    }, error => {
+      adminRealtimeReady.orders = false;
+      console.error('Pedidos en tiempo real no disponibles:', error);
+      statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
+    });
+  } else {
+    adminRealtimeReady.orders = true;
+  }
+  if (currentRole === 'superadmin') {
+    adminUsersUnsubscribe = onSnapshot(collection(db, 'users'), snapshot => {
+      allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
+      adminRealtimeReady.users = true;
+      refreshRealtimeConsumers();
+    }, error => {
+      adminRealtimeReady.users = false;
+      console.error('Usuarios en tiempo real no disponibles:', error);
+      statisticsSetText('statistics-live-status', 'Usuarios no disponibles');
+    });
+    listenStatisticsTraffic();
+  }
+}
+
+const statisticsRangeSelect = document.getElementById('statistics-range');
+if (statisticsRangeSelect) {
+  statisticsRangeSelect.addEventListener('change', () => {
+    statisticsRangeDays = Math.max(1, Math.min(30, Number(statisticsRangeSelect.value || 7)));
+    statisticsSetText('statistics-live-status', 'Actualizando…');
+    listenStatisticsTraffic();
+    renderGeneralStatistics();
+  });
+}
+
+window.addEventListener('pagehide', stopAdminRealtimeData);
+
 function renderOnlineLocations(active, now) {
   const container = document.getElementById('dashboard-online-locations');
   const detail = document.getElementById('dashboard-online-detail');
@@ -2245,6 +2656,7 @@ function renderDashboardActivityMetrics() {
   }
   renderOnlineLocations(active, now);
   renderTodayLocations(dashboardActivityState.sessions, now);
+  renderGeneralStatistics();
 }
 
 function stopDashboardActivityMetrics() {
@@ -2268,6 +2680,7 @@ function listenDashboardSessions() {
     collection(db, 'siteTraffic', dayKey, 'sessions'),
     snapshot => {
       dashboardActivityState.sessions = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      statisticsTrafficSessions = statisticsTrafficHistorySessions.concat(dashboardActivityState.sessions);
       renderDashboardActivityMetrics();
     },
     error => {
@@ -2313,7 +2726,10 @@ function startDashboardActivityMetrics() {
   renderDashboardActivityMetrics();
 
   dashboardActivityClock = window.setInterval(() => {
-    if (paraguayDayKeyAdmin() !== dashboardActivityDay) listenDashboardSessions();
+    if (paraguayDayKeyAdmin() !== dashboardActivityDay) {
+      listenDashboardSessions();
+      listenStatisticsTraffic();
+    }
     renderDashboardActivityMetrics();
   }, 15000);
   dashboardPresenceRestart = window.setInterval(listenDashboardPresence, 5 * 60 * 1000);
@@ -2321,24 +2737,19 @@ function startDashboardActivityMetrics() {
 
 window.addEventListener('pagehide', stopDashboardActivityMetrics);
 
-async function loadDashboard() {
-  startDashboardActivityMetrics();
-  try {
+function renderDashboardData() {
     // Users count — el Modder no tiene permiso para leer la colección users
     // (ni debería: expondría emails/teléfonos de todas las clientas), así que
     // ni se intenta la lectura para no generar un error de permisos silencioso.
     const statUsersEl = document.getElementById('stat-users');
-    if (can(currentRole, 'manageUsers')) {
-      const usersSnap = await getDocs(collection(db, 'users'));
-      statUsersEl.textContent = usersSnap.size;
+    if (can(currentRole, 'manageUsers') && adminRealtimeReady.users) {
+      statUsersEl.textContent = allUsers.length;
     } else {
       statUsersEl.textContent = '—';
     }
 
     // Orders
-    const ordersSnap = await getDocs(collection(db, 'orders'));
-    const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    allOrders = orders;
+    const orders = allOrders;
 
     // Roles y Permisos: cada widget del Dashboard se puede apagar puntualmente
     // por rol (dashboard.verMetricas / verVentas / verPedidosRecientes) sin
@@ -2412,9 +2823,12 @@ async function loadDashboard() {
         <td>${formatDate(o.createdAt)}</td>
       </tr>
     `).join('');
-  } catch(e) {
-    console.error('Dashboard error:', e);
-  }
+}
+
+function loadDashboard() {
+  startDashboardActivityMetrics();
+  renderDashboardData();
+  renderGeneralStatistics();
 }
 
 // ======== USUARIOS ========
@@ -2423,16 +2837,13 @@ async function loadDashboard() {
 // en "Bloqueados", nunca en las dos a la vez.
 let userStatusFilter = 'active';
 
-async function loadUsers() {
+function loadUsers() {
   const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
-  try {
-    const snap = await getDocs(collection(db, 'users'));
-    allUsers = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
-    applyUserFilters();
-  } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#ef4444;padding:24px">Error al cargar usuarios</td></tr>`;
+  if (!adminRealtimeReady.users) {
+    tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
+    return;
   }
+  applyUserFilters();
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
@@ -2835,28 +3246,13 @@ window.bulkExportUsers = function(scope) {
 };
 
 // ======== PEDIDOS ========
-async function loadOrders() {
+function loadOrders() {
   const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
-  try {
-    const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
-    allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderOrdersTable(allOrders);
-  } catch(e) {
-    // Try without orderBy if index missing
-    try {
-      const snap2 = await getDocs(collection(db, 'orders'));
-      allOrders = snap2.docs.map(d => ({ id: d.id, ...d.data() }))
-        .sort((a,b) => {
-          const da = a.createdAt?.toDate?.() || new Date(0);
-          const db_ = b.createdAt?.toDate?.() || new Date(0);
-          return db_ - da;
-        });
-      renderOrdersTable(allOrders);
-    } catch(e2) {
-      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#ef4444;padding:24px">Error al cargar pedidos</td></tr>`;
-    }
+  if (!adminRealtimeReady.orders) {
+    tbody.innerHTML = '<tr><td colspan="12" class="adm-loading"><span class="adm-spinner"></span> Sincronizando pedidos...</td></tr>';
+    return;
   }
+  applyOrderFilters();
 }
 
 function renderOrdersTable(orders) {
@@ -3693,6 +4089,8 @@ let allEmailTemplates = [];
 let allEmailLogs = [];
 let allEmailCampaigns = [];
 let allClientUsers = [];
+let emailRealtimeUnsubscribers = [];
+let emailModuleStarted = false;
 let promoRecipients = [];   // [{email, name}] — destinatarias armadas para Promociones
 let cliSelected = new Set(); // emails seleccionados en Clientas registradas
 let promoPendingSend = null;
@@ -3873,6 +4271,65 @@ async function logEmailSend_(entry) {
 }
 
 // ---- Carga principal del módulo ----
+function refreshCorreosClientasFromRealtime() {
+  allClientUsers = allUsers
+    .filter(user => (user.role || 'client') === 'client')
+    .map(user => {
+      const theirOrders = allOrders.filter(order =>
+        order.userId === user.uid ||
+        (order.userEmail && user.email && order.userEmail.toLowerCase() === user.email.toLowerCase())
+      );
+      let lastPurchase = null;
+      theirOrders.forEach(order => {
+        const date = order.createdAt?.toDate ? order.createdAt.toDate() : (order.createdAt ? new Date(order.createdAt) : null);
+        if (date && (!lastPurchase || date > lastPurchase)) lastPurchase = date;
+      });
+      return { ...user, orderCount: theirOrders.length, lastPurchase };
+    });
+  if (!emailModuleStarted) return;
+  renderCorreosClientasTab();
+  renderCorreosPromocionesTab();
+}
+
+function renderCorreosRealtimeViews() {
+  if (!emailModuleStarted) return;
+  renderCorreosDashboard();
+  renderCorreosPedidosTab();
+  renderCorreosPruebaTab();
+  renderCorreosPlantillasTab();
+  renderCorreosHistorialTab();
+  renderCorreosConfigTab();
+}
+
+function startCorreosRealtimeListeners() {
+  if (emailRealtimeUnsubscribers.length) return;
+  emailModuleStarted = true;
+  emailRealtimeUnsubscribers.push(
+    onSnapshot(collection(db, 'emailTemplates'), snapshot => {
+      allEmailTemplates = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderCorreosRealtimeViews();
+    }, error => console.warn('Plantillas de correo no disponibles:', error)),
+    onSnapshot(query(collection(db, 'emailLogs'), orderBy('sentAt', 'desc'), limit(300)), snapshot => {
+      allEmailLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderCorreosRealtimeViews();
+    }, error => console.warn('Historial de correos no disponible:', error)),
+    onSnapshot(query(collection(db, 'emailCampaigns'), orderBy('createdAt', 'desc'), limit(50)), snapshot => {
+      allEmailCampaigns = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderCorreosRealtimeViews();
+    }, error => console.warn('Campañas de correo no disponibles:', error)),
+    onSnapshot(doc(db, 'emailSettings', 'main'), snapshot => {
+      const defaults = defaultEmailSettings_();
+      const settings = snapshot.exists() ? snapshot.data() : {};
+      emailSettingsCache = Object.assign({}, defaults, settings, {
+        orderTypesEnabled: Object.assign({}, defaults.orderTypesEnabled, settings.orderTypesEnabled || {}),
+        orderTypeTemplateMap: Object.assign({}, defaults.orderTypeTemplateMap, settings.orderTypeTemplateMap || {})
+      });
+      renderCorreosRealtimeViews();
+    }, error => console.warn('Configuración de correos no disponible:', error))
+  );
+  refreshCorreosClientasFromRealtime();
+}
+
 async function loadCorreos() {
   try {
     const [settings, tplSnap, logsSnap, campSnap] = await Promise.all([
@@ -3904,6 +4361,7 @@ async function loadCorreos() {
     renderCorreosPlantillasTab();
     renderCorreosHistorialTab();
     renderCorreosConfigTab();
+    startCorreosRealtimeListeners();
   } catch (e) {
     console.error('Error al cargar Correos:', e);
     toast('Error al cargar el módulo Correos: ' + e.message);
@@ -3911,25 +4369,7 @@ async function loadCorreos() {
 }
 
 async function loadCorreosClientas() {
-  const [usersSnap, ordersSnap] = await Promise.all([
-    getDocs(collection(db, 'users')),
-    getDocs(collection(db, 'orders'))
-  ]);
-  const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  allClientUsers = usersSnap.docs
-    .map(d => ({ uid: d.id, ...d.data() }))
-    .filter(u => (u.role || 'client') === 'client')
-    .map(u => {
-      const theirOrders = orders.filter(o => o.userId === u.uid || (o.userEmail && u.email && o.userEmail.toLowerCase() === u.email.toLowerCase()));
-      let lastPurchase = null;
-      theirOrders.forEach(o => {
-        const d = o.createdAt?.toDate ? o.createdAt.toDate() : (o.createdAt ? new Date(o.createdAt) : null);
-        if (d && (!lastPurchase || d > lastPurchase)) lastPurchase = d;
-      });
-      return { ...u, orderCount: theirOrders.length, lastPurchase };
-    });
-  renderCorreosClientasTab();
-  renderCorreosPromocionesTab();
+  refreshCorreosClientasFromRealtime();
 }
 
 // ---- Dashboard ----
@@ -5225,6 +5665,12 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   const waLink = document.getElementById('mensajes-wa-link');
   const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
   if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
+
+  const onboardingToggle = document.getElementById('ob-toggle');
+  if (onboardingToggle && document.activeElement !== onboardingToggle) {
+    onboardingToggle.checked = d.onboardingEnabled !== false;
+  }
+  if (d.waConfirmMessage) waConfirmMessageTemplate = d.waConfirmMessage;
 });
 
 // Pestañas Delivery / Encomienda dentro de Envíos
@@ -5300,6 +5746,7 @@ function loadProductos() {
     snap => {
       _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
       applyProductFilters();
+      renderGeneralStatistics();
     },
     e => {
       document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
@@ -5714,6 +6161,7 @@ function loadColecciones() {
         .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
       renderColeccionesGrid(applyCollFilter(_allCollections));
       syncCategorySelects();
+      renderGeneralStatistics();
     },
     e => {
       document.getElementById('coll-loading').textContent = 'Error al cargar colecciones: ' + e.message;
