@@ -22,6 +22,16 @@
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260713-5">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260713-5">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260713-5">
+  <style>
+    /* Oculto por defecto hasta que el guard de autenticación confirme que
+       hay algo seguro para mostrar. No depende solo del timing del loader
+       de marca (js/page-loader.js) — si esa capa desaparece antes de tiempo
+       en una conexión lenta, el panel real sigue sin poder verse. */
+    #adm-sidebar, #adm-mobile-tabs, .adm-main { visibility: hidden; }
+    html.adm-auth-ready #adm-sidebar,
+    html.adm-auth-ready #adm-mobile-tabs,
+    html.adm-auth-ready .adm-main { visibility: visible; }
+  </style>
 </head>
 <body>
 
@@ -1934,12 +1944,20 @@ document.getElementById('adm-logout').onclick = async () => {
 };
 
 // ======== AUTH GUARD ========
-// El loader de marca (js/page-loader.js) ya tiene su propio tope de
-// seguridad — no hace falta uno propio acá.
+// El loader de marca (js/page-loader.js) cubre la pantalla mientras se
+// resuelve esta función, pero además el CSS de <head> mantiene el sidebar,
+// la tabbar mobile y .adm-main en visibility:hidden hasta que se agregue
+// html.adm-auth-ready — eso solo pasa al final del único camino que
+// realmente muestra el panel real (ver más abajo).
 function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
 
 onAuthStateChanged(auth, async user => {
   try {
+    // El loader de marca se mantiene arriba (no se llama a hideOverlay) en
+    // todo camino que termine navegando a otra página. Antes se ocultaba
+    // siempre en un finally, así que en conexiones lentas el loader podía
+    // desaparecer y dejar ver el panel real (sidebar, secciones) durante el
+    // rato en que la navegación todavía no terminaba de cargar el destino.
     if (!user) { window.location.href = 'login.html'; return; }
     currentUser = user;
 
@@ -1970,6 +1988,7 @@ onAuthStateChanged(auth, async user => {
     const storeCfg = await getStoreAccessConfig();
     if (!isAccessAllowed(storeCfg, role, user.email)) {
       renderStoreClosedOverlay();
+      hideOverlay();
       return;
     }
 
@@ -1987,10 +2006,13 @@ onAuthStateChanged(auth, async user => {
     loadProductos();
     loadColecciones();
     handleContentDeepLink();
+    document.documentElement.classList.add('adm-auth-ready');
+    hideOverlay();
   } catch(e) {
     console.error('[Admin] Auth init error:', e);
-  } finally {
-    hideOverlay();
+    // No se sabe si el usuario es válido: mismo destino seguro que "sin
+    // sesión", en vez de dejar el panel real armado detrás del loader.
+    window.location.href = 'login.html';
   }
 });
 
