@@ -22,6 +22,7 @@ if (!window.TintinSiteActivityBooted) {
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
+  const GEO_SERVICE_URL = 'https://6a57b4b29630770008053f55--tintinaccesorios.netlify.app/.netlify/functions/visitor-geo';
   const HEARTBEAT_MS = 60000;
   const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
   let heartbeatTimer = 0;
@@ -126,7 +127,7 @@ if (!window.TintinSiteActivityBooted) {
     if (/\.netlify\.app$/i.test(window.location.hostname)) {
       return '/.netlify/functions/visitor-geo';
     }
-    return 'https://tintinaccesorios.netlify.app/.netlify/functions/visitor-geo';
+    return GEO_SERVICE_URL;
   }
 
   async function fetchApproximateGeo() {

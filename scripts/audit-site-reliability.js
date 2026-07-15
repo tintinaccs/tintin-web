@@ -45,6 +45,10 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   geoFunction.includes('context?.geo') &&
   !/\bcontext\.ip\s*[;,)]/.test(geoFunction.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
+check('GitHub Pages usa el servicio geografico inmutable ya publicado',
+  activity.includes("const GEO_SERVICE_URL = 'https://6a57b4b29630770008053f55--tintinaccesorios.netlify.app/.netlify/functions/visitor-geo'") &&
+  activity.includes('return GEO_SERVICE_URL;') &&
+  !activity.includes('https://tintinaccesorios.netlify.app/.netlify/functions/visitor-geo'));
 check('Las reglas limitan la escritura de sesiones y presencia',
   rules.includes('presenceIsValid(visitorId)') &&
   rules.includes('trafficSessionIsValid(dateKey, sessionId)') &&
@@ -82,10 +86,10 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
 
 const staleVersions = [];
 for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
-  if (/tintin-20260715-[2345]/.test(read(file))) staleVersions.push(file);
+  if (/tintin-20260715-[23456]/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-6'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-7'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);
