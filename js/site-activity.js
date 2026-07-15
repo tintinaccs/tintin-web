@@ -13,11 +13,14 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  hasStatisticsConsent,
+  onPrivacyConsentChange
+} from './privacy-consent.js';
 
 if (!window.TintinSiteActivityBooted) {
   window.TintinSiteActivityBooted = true;
 
-  const CONSENT_KEY = 'tt_activity_consent_v1';
   const VISITOR_KEY = 'tt_activity_visitor_v2';
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
@@ -165,12 +168,8 @@ if (!window.TintinSiteActivityBooted) {
     return geoPromise;
   }
 
-  function consentChoice() {
-    return storageGet(window.localStorage, CONSENT_KEY);
-  }
-
   function hasConsent() {
-    return consentChoice() === 'granted';
+    return hasStatisticsConsent();
   }
 
   async function recordSessionOnce() {
@@ -248,10 +247,6 @@ if (!window.TintinSiteActivityBooted) {
     scheduleHeartbeat();
   }
 
-  function removeConsentBanner() {
-    document.getElementById('tt-analytics-consent')?.remove();
-  }
-
   function clearLocalAnalyticsIds() {
     const dayKey = paraguayDayKey();
     storageRemove(window.localStorage, VISITOR_KEY);
@@ -264,63 +259,6 @@ if (!window.TintinSiteActivityBooted) {
     geoPromise = null;
   }
 
-  function showConsentBanner() {
-    if (document.getElementById('tt-analytics-consent')) return;
-    const banner = document.createElement('section');
-    banner.id = 'tt-analytics-consent';
-    banner.className = 'tt-analytics-consent';
-    banner.setAttribute('role', 'region');
-    banner.setAttribute('aria-label', 'Preferencias de estadísticas');
-
-    const text = document.createElement('p');
-    text.textContent = '¿Nos permitís contar esta visita y conocer tu ciudad y país aproximados? No guardamos tu IP, GPS ni ubicación exacta.';
-
-    const actions = document.createElement('div');
-    actions.className = 'tt-analytics-consent-actions';
-
-    const allow = document.createElement('button');
-    allow.type = 'button';
-    allow.className = 'tt-btn tt-btn-sm';
-    allow.textContent = 'Permitir estadísticas';
-
-    const deny = document.createElement('button');
-    deny.type = 'button';
-    deny.className = 'tt-btn tt-btn-sm tt-btn-outline';
-    deny.textContent = 'No permitir';
-
-    const details = document.createElement('a');
-    details.href = new URL('privacidad.html', window.location.href).href;
-    details.textContent = 'Ver privacidad';
-
-    allow.addEventListener('click', () => {
-      storageSet(window.localStorage, CONSENT_KEY, 'granted');
-      removeConsentBanner();
-      startActivity();
-    });
-
-    deny.addEventListener('click', () => {
-      storageSet(window.localStorage, CONSENT_KEY, 'denied');
-      stopActivity();
-      clearLocalAnalyticsIds();
-      removeConsentBanner();
-    });
-
-    actions.append(allow, deny, details);
-    banner.append(text, actions);
-    document.body.appendChild(banner);
-  }
-
-  function openPrivacySettings() {
-    stopActivity();
-    storageRemove(window.localStorage, CONSENT_KEY);
-    showConsentBanner();
-  }
-
-  window.TintinActivityPrivacy = {
-    open: openPrivacySettings,
-    get choice() { return consentChoice() || 'unset'; }
-  };
-
   const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(window.location.hostname);
   const deployPreview = /^deploy-preview-/i.test(window.location.hostname);
   const trackablePage = !ADMIN_PAGES.test(window.location.pathname);
@@ -328,9 +266,12 @@ if (!window.TintinSiteActivityBooted) {
 
   if (trackablePage) {
     if (hasConsent() && analyticsWritable) startActivity();
-    else if (consentChoice() !== 'denied') {
-      if (document.body) showConsentBanner();
-      else document.addEventListener('DOMContentLoaded', showConsentBanner, { once: true });
-    }
+    onPrivacyConsentChange(preferences => {
+      if (preferences.statistics && analyticsWritable) startActivity();
+      else {
+        stopActivity();
+        clearLocalAnalyticsIds();
+      }
+    });
   }
 }

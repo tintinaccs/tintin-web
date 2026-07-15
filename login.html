@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-8"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-9"></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -19,12 +19,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/login.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/login.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-9">
 </head>
 <body>
 
@@ -116,6 +116,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 // paralelo) no debe apagar el overlay de carga ni mostrar el error de
 // "blocked=1" mientras se está completando el ingreso por enlace.
 const completingEmailLink = isEmailLinkUrl();
+let explicitLoginInProgress = completingEmailLink;
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
 // js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
@@ -157,7 +158,7 @@ function errMsg(code) {
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
-async function redirectByRole(role, email) {
+async function redirectByRole(role, email, options = {}) {
   const cfg = await getStoreAccessConfig();
   if (!isAccessAllowed(cfg, role, email)) {
     await signOut(auth);
@@ -167,7 +168,7 @@ async function redirectByRole(role, email) {
   }
   const from = new URLSearchParams(window.location.search).get('from');
   if (role === 'client' || !role) {
-    window.location.href = from || "perfil.html";
+    window.location.href = options.welcomePending ? 'index.html?welcome=1' : (from || 'perfil.html');
   } else {
     window.location.href = "admin.html";
   }
@@ -193,29 +194,46 @@ async function guardarUsuario(user) {
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
+    const welcomePending = role === 'client';
     await setDoc(ref, {
       name: user.displayName || "",
       email: user.email,
       phone: "",
       photoURL: user.photoURL || "",
       role,
-      onboardingCompleted: false,
+      onboardingCompleted: !welcomePending,
+      welcomeTutorialSeen: !welcomePending,
+      welcomeTutorialPending: welcomePending,
+      welcomeTutorialVersion: 'home-welcome-v4-unified',
       blocked: false,
       purchaseCount: 0,
       totalSpent: 0,
       createdAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
-    return { role, blocked: false };
+    return { role, blocked: false, isNew: true, welcomePending };
   } else {
     const data = snap.data();
     // Ensure superadmin email always has correct role
     if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
       await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
-      return { role: 'superadmin', blocked: false };
+      return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false };
     }
     await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
-    return { role: data.role || 'client', blocked: !!data.blocked };
+    const role = data.role || 'client';
+    const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
+    return { role, blocked: !!data.blocked, isNew: false, welcomePending };
+  }
+}
+
+async function pendingWelcomeFor(uid, role) {
+  if (role !== 'client') return false;
+  try {
+    const snapshot = await getDoc(doc(db, 'users', uid));
+    const data = snapshot.exists() ? snapshot.data() : {};
+    return !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
+  } catch {
+    return false;
   }
 }
 
@@ -234,6 +252,7 @@ onAuthStateChanged(auth, async user => {
     }
     return;
   }
+  if (explicitLoginInProgress) return;
   if (await checkBlocked(user.uid, user.email)) {
     await signOut(auth);
     hideLoginOverlay();
@@ -241,7 +260,8 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   const role = await getUserRole(user.uid, user.email);
-  redirectByRole(role, user.email);
+  const welcomePending = await pendingWelcomeFor(user.uid, role);
+  redirectByRole(role, user.email, { welcomePending });
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
@@ -258,6 +278,7 @@ onAuthStateChanged(auth, async user => {
 let _googleLoginToken = 0;
 const loginConGoogle = async () => {
   hideMessages();
+  explicitLoginInProgress = true;
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
   showOverlay();
   const slowHintTimer = setTimeout(() => {
@@ -267,17 +288,18 @@ const loginConGoogle = async () => {
     const cred = await signInWithPopup(auth, provider);
     clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
-    const { role, blocked } = await guardarUsuario(cred.user);
+    const { role, blocked, welcomePending } = await guardarUsuario(cred.user);
     if (blocked) {
       await signOut(auth);
       hideLoginOverlay();
       showBlockedModal();
       return;
     }
-    redirectByRole(role, cred.user.email);
+    redirectByRole(role, cred.user.email, { welcomePending });
   } catch(e) {
     clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return;
+    explicitLoginInProgress = false;
     hideLoginOverlay();
     showError(errMsg(e.code));
   }
@@ -313,9 +335,9 @@ function startResendCooldown() {
   }, 1000);
 }
 
-// La URL de vuelta lleva el mismo `from` que ya usa Google, para que
-// redirectByRole() termine exactamente en el mismo lugar (checkout, perfil,
-// admin) sin importar qué método de ingreso se haya usado.
+// La URL de vuelta conserva el mismo `from` que ya usa Google. Las cuentas
+// existentes regresan a ese destino; una cuenta nueva pasa primero por la
+// página principal para recibir la bienvenida y luego puede seguir navegando.
 function buildContinueUrl() {
   const from = new URLSearchParams(window.location.search).get('from');
   const base = window.location.origin + window.location.pathname;
@@ -353,8 +375,9 @@ async function finishEmailLinkLogin(user) {
     showBlockedModal();
     return;
   }
-  const { role } = await ensureUserDocForEmailLogin(user);
-  redirectByRole(role, user.email);
+  const { role, welcomePending: savedWelcomePending } = await ensureUserDocForEmailLogin(user);
+  const welcomePending = savedWelcomePending || await pendingWelcomeFor(user.uid, role);
+  redirectByRole(role, user.email, { welcomePending });
 }
 
 // Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos
@@ -404,6 +427,6 @@ async function tryCompleteEmailLink() {
 }
 tryCompleteEmailLink();
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-8"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-9"></script>
 </body>
 </html>
