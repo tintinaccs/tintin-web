@@ -72,13 +72,19 @@ service cloud.firestore {
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
+      // Si settings/storeGate todavía no existe (recién desplegado el
+      // cierre y el Super Admin todavía no guardó Configuración una vez
+      // para crear el documento), no hay nada que evaluar todavía: se
+      // permite el acceso normal en vez de bloquear el sitio entero por un
+      // documento que nunca llegó a crearse. Apenas el documento existe,
+      // manda por completo su storeOpen/maintenanceAccess como antes.
       return isSuperAdmin() ||
         (
-          exists(/databases/$(database)/documents/settings/storeGate) &&
+          !isBlockedUser() &&
           (
+            !exists(/databases/$(database)/documents/settings/storeGate) ||
             get(/databases/$(database)/documents/settings/storeGate).data.storeOpen == true ||
             (
-              !isBlockedUser() &&
               get(/databases/$(database)/documents/settings/storeGate).data.maintenanceAccess is map &&
               get(/databases/$(database)/documents/settings/storeGate).data.maintenanceAccess
                 .get(isSignedIn() ? currentRole() : 'guest', false) == true
