@@ -16,7 +16,7 @@ function text(value) {
 }
 
 function collImgFile(slug) {
-  const normalized = text(slug);
+  const normalized = text(slug).replace(/[^a-z0-9_-]/gi, '');
   return SLUG_FILE_MAP[normalized] || normalized;
 }
 

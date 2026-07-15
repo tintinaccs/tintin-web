@@ -4,12 +4,14 @@
   --tt-text: #2B2B2B;
   --tt-muted: #7B6F72;
   --tt-card: #FFFFFF;
-  --tt-primary: #D46A8A;
+  /* Rosa de marca oscurecido lo justo para que texto, iconos y botones
+     alcancen contraste AA sobre blanco y sobre el fondo rosa claro. */
+  --tt-primary: #AD3F67;
   --tt-soft: #FFF9FC;
   --tt-light: #FDECF2;
   --tt-border: #F1E4E7;
   --tt-line: #F7E9ED;
-  --tt-focus: rgba(212,106,138,0.18);
+  --tt-focus: rgba(173,63,103,0.24);
   --tt-shadow: 0 14px 38px rgba(212,106,138,0.10);
 
   --bg: var(--tt-page-bg);

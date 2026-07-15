@@ -28,7 +28,7 @@ function accountDropdown(){
   wrap.classList.toggle('tt-account-open',!!open);wrap.classList.toggle('open',!!open);btn.setAttribute('aria-expanded',open?'true':'false');
   if(open){document.getElementById('tienda-dropdown')?.classList.remove('open');document.getElementById('btn-tienda')?.setAttribute('aria-expanded','false');document.getElementById('search-panel')?.classList.remove('open');}
  }
- btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setAccount(!wrap.classList.contains('tt-account-open'));},true);
+ btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();setAccount(!wrap.classList.contains('tt-account-open'));},true);
  panel.addEventListener('click',function(e){e.stopPropagation();});
  document.addEventListener('click',function(e){if(!wrap.contains(e.target))setAccount(false);},false);
  document.addEventListener('keydown',function(e){if(e.key==='Escape'){setAccount(false);btn.focus();}});

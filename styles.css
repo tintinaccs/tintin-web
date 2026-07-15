@@ -1869,7 +1869,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-tabbar {
   display: none;
   position: fixed;
-  bottom: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   /* left:50% + transform centering only gives shrink-to-fit half the
@@ -1904,7 +1904,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-sec);
-  transition: var(--transition);
+  transition: color .2s ease, background-color .2s ease, transform .16s cubic-bezier(.2,.8,.2,1);
   cursor: pointer;
   background: none;
   border: none;
@@ -1918,6 +1918,45 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-tabbar-btn svg { width: 20px; height: 20px; }
+
+/* Respuesta táctil estable, similar a la barra móvil de Instagram: la
+   barra no salta al desplazarse y solo el icono pulsado responde. */
+.tt-tabbar-btn:active { transform: scale(.9); }
+.tt-tabbar-btn.active svg,
+.tt-tabbar-btn.active .tt-tabbar-avatar { transform: scale(1.1); }
+.tt-tabbar-btn svg,
+.tt-tabbar-btn .tt-tabbar-avatar { transition: transform .2s cubic-bezier(.2,.8,.2,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-tabbar-btn,
+  .tt-tabbar-btn svg,
+  .tt-tabbar-btn .tt-tabbar-avatar { transition: none; }
+  .tt-tabbar-btn:active,
+  .tt-tabbar-btn.active svg,
+  .tt-tabbar-btn.active .tt-tabbar-avatar { transform: none; }
+}
+
+@media (max-width: 768px) {
+  .tt-btn-sm,
+  .tt-card-btn { min-height: 44px; }
+  .tt-footer li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .tt-contact-info-item a,
+  .tt-inline-support-link,
+  #btn-product-wa {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  #btn-close-sheet {
+    width: 44px;
+    height: 44px;
+  }
+}
 
 /* ── Mobile Collections Bottom Sheet ── */
 .tt-collections-sheet {
@@ -2648,6 +2687,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
+  padding: 0;
+  background: transparent;
   transition: border-color var(--transition);
 }
 
@@ -2807,8 +2848,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-qty-btn {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   font-size: 1.2rem;
   font-weight: 300;
   color: var(--pink-dark);
@@ -3267,7 +3308,11 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   /* Sin label (span oculto abajo) el botón sólo tenía el ícono + padding
      vertical, quedando en ~36px de alto — 10px sube el touch target a 40px
      real, dentro del mínimo 40-44px pedido. */
-  .tt-tabbar-btn { padding: 10px; }
+  .tt-tabbar-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+  }
   .tt-tabbar-btn span { display: none; }
 
   .tt-editorial-content { padding: 32px 20px; }
@@ -3481,6 +3526,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
+  min-height: 44px;
 }
 .tt-share-btn:hover {
   border-color: var(--pink-dark);

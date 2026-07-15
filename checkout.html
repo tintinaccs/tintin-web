@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-3"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-5"></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -12,25 +12,27 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#D46A8A">
+  <meta name="theme-color" content="#AD3F67">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
+  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/checkout.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-2">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-5">
 </head>
 <body>
+<h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
 
 <!-- HEADER -->
 <header class="ck-header">
-  <a href="index.html" class="ck-header-logo"><img src="assets-tintin/images/general/logo.png?v=tintin-20260715-2" alt="Tintin Accesorios"></a>
+  <a href="index.html" class="ck-header-logo"><img src="assets-tintin/images/general/logo.png?v=tintin-20260715-5" alt="Tintin Accesorios"></a>
   <div class="ck-header-right">
     <a href="perfil.html" class="ck-account-badge" id="ck-account-badge" title="Ver mi cuenta">
       <span class="ck-account-badge-avatar" id="ck-account-badge-avatar">?</span>
@@ -80,7 +82,7 @@
         <span class="ck-subtotal-val" id="ck-subtotal-val">Gs. 0</span>
       </div>
       <div class="ck-error" id="error-0"></div>
-      <button class="ck-btn" id="btn-step1-next">Continuar con el envío →</button>
+      <button type="button" class="ck-btn" id="btn-step1-next">Continuar con el envío →</button>
       <div class="ck-trust-bar">
         <div class="ck-trust-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -169,8 +171,8 @@
       </div>
 
       <div class="ck-error" id="error-1"></div>
-      <button class="ck-btn" id="btn-step2-next">Continuar →</button>
-      <button class="ck-btn-back" id="btn-step2-back">← Volver al carrito</button>
+      <button type="button" class="ck-btn" id="btn-step2-next">Continuar →</button>
+      <button type="button" class="ck-btn-back" id="btn-step2-back">← Volver al carrito</button>
     </div>
   </div>
 
@@ -202,8 +204,8 @@
       </div>
 
       <div class="ck-error" id="error-2"></div>
-      <button class="ck-btn" id="btn-step3-next">Continuar al pago →</button>
-      <button class="ck-btn-back" id="btn-step3-back">← Volver al envío</button>
+      <button type="button" class="ck-btn" id="btn-step3-next">Continuar al pago →</button>
+      <button type="button" class="ck-btn-back" id="btn-step3-back">← Volver al envío</button>
     </div>
   </div>
 
@@ -252,8 +254,8 @@
 
       <div class="ck-error" id="error-3"></div>
       <div class="ck-error" id="error-3-none" style="display:none">No hay métodos de pago disponibles en este momento — escribinos por WhatsApp para coordinar tu compra.</div>
-      <button class="ck-btn" id="btn-step4-next">Ver resumen del pedido →</button>
-      <button class="ck-btn-back" id="btn-step4-back">← Volver a tus datos</button>
+      <button type="button" class="ck-btn" id="btn-step4-next">Ver resumen del pedido →</button>
+      <button type="button" class="ck-btn-back" id="btn-step4-back">← Volver a tus datos</button>
     </div>
   </div>
 
@@ -275,7 +277,7 @@
       <div id="ck-order-num" style="text-align:center;font-size:13px;color:var(--acc);margin:8px 0 12px;font-weight:700;letter-spacing:.06em;display:none;"></div>
 
       <!-- BOTÓN PRINCIPAL: Confirmar pedido -->
-      <button id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
+      <button type="button" id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
         ✓ Confirmar pedido
       </button>
       <div class="ck-error" id="error-4"></div>
@@ -301,7 +303,7 @@
       <div id="ck-post-confirm" style="display:none;margin-top:16px">
         <div style="text-align:center;padding:12px;background:#f9f9f9;border-radius:12px;">
           <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">¿Tenés alguna duda sobre tu pedido?</p>
-          <a id="ck-wa-support" href="#" target="_blank" rel="noopener" style="font-size:12px;color:#25D366;font-weight:700;text-decoration:none;">
+          <a id="ck-wa-support" href="https://wa.me/595981299331" target="_blank" rel="noopener" style="font-size:12px;color:#267a41;font-weight:700;text-decoration:none;">
             💬 Consultanos por WhatsApp
           </a>
         </div>
@@ -328,7 +330,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260715-4";
+} from "./js/cart-sync.js?v=tintin-20260715-5";
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
@@ -582,17 +584,20 @@ async function renderCart() {
         <div class="ck-suggested-title">Productos destacados</div>
         <div class="ck-suggested-grid">
           ${featured.map(p => {
-            const img = p.imageUrl || p.image || '';
+            const img = sanitizeImageUrl(p.imageUrl || p.image || '');
+            const safeId = escapeSearchHtml(p.id);
+            const safeName = escapeSearchHtml(p.name);
+            const safeCat = escapeSearchHtml(p.cat || p.category || '');
             const imgHtml = img
-              ? `<img src="${img}" alt="${p.name}" style="width:56px;height:56px;object-fit:contain;background:transparent;border-radius:10px;margin-bottom:6px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-sug-img" style="display:none"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`
+              ? `<img src="${escapeSearchHtml(img)}" alt="${safeName}" style="width:56px;height:56px;object-fit:contain;background:transparent;border-radius:10px;margin-bottom:6px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-sug-img" style="display:none"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ad3f67" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`
               : `<div class="ck-sug-img"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>`;
             return `
             <div class="ck-sug-card">
               ${imgHtml}
-              <div class="ck-sug-name">${p.name}</div>
-              <div class="ck-sug-cat">${p.cat || p.category || ''}</div>
+              <div class="ck-sug-name">${safeName}</div>
+              <div class="ck-sug-cat">${safeCat}</div>
               <div class="ck-sug-price">${formatPrice(p.price)}</div>
-              <button class="ck-sug-add" data-id="${p.id}" data-name="${p.name}" data-cat="${p.cat || p.category || ''}" data-price="${p.price}" data-img="${img}">+ Agregar</button>
+              <button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>
             </div>`;
           }).join('')}
         </div>
@@ -603,7 +608,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-4');
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-5');
         const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -618,25 +623,31 @@ async function renderCart() {
     return;
   }
 
-  container.innerHTML = cartItems.map(item => `
-    <div class="ck-item" data-id="${item.id}">
-      ${(item.imgUrl || item.imageUrl)
-        ? `<img class="ck-item-img" src="${item.imgUrl || item.imageUrl}" alt="${item.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="ck-item-img-placeholder" style="display:none">🛍️</div>`
+  container.innerHTML = cartItems.map(item => {
+    const safeId = escapeSearchHtml(item.id);
+    const safeName = escapeSearchHtml(item.name);
+    const safeCat = escapeSearchHtml(item.cat || '');
+    const safeImage = sanitizeImageUrl(item.imgUrl || item.imageUrl || '');
+    return `
+    <div class="ck-item" data-id="${safeId}">
+      ${safeImage
+        ? `<img class="ck-item-img" src="${escapeSearchHtml(safeImage)}" alt="${safeName}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="ck-item-img-placeholder" style="display:none">🛍️</div>`
         : `<div class="ck-item-img-placeholder">🛍️</div>`
       }
       <div class="ck-item-info">
-        <div class="ck-item-name">${item.name}</div>
-        <div class="ck-item-cat">${item.cat || ''}</div>
+        <div class="ck-item-name">${safeName}</div>
+        <div class="ck-item-cat">${safeCat}</div>
         <div class="ck-item-price">${formatPrice(item.price)}</div>
       </div>
       <div class="ck-item-controls">
-        <button class="ck-qty-btn" data-action="minus" data-id="${item.id}">−</button>
+        <button type="button" class="ck-qty-btn" data-action="minus" data-id="${safeId}">−</button>
         <span class="ck-qty-num">${item.qty}</span>
-        <button class="ck-qty-btn" data-action="plus" data-id="${item.id}">+</button>
-        <button class="ck-remove-btn" data-action="remove" data-id="${item.id}" title="Eliminar">×</button>
+        <button type="button" class="ck-qty-btn" data-action="plus" data-id="${safeId}">+</button>
+        <button type="button" class="ck-remove-btn" data-action="remove" data-id="${safeId}" title="Eliminar">×</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   subtotalEl.textContent = formatPrice(cartTotal(cartItems));
 }
@@ -1744,6 +1755,6 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-2"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-5"></script>
 </body>
 </html>

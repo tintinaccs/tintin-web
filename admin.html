@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-2"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-5"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#D46A8A">
+  <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
+  <meta name="theme-color" content="#AD3F67">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -16,12 +17,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-2">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-2">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-5">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -55,47 +56,47 @@
   </div>
 
   <nav class="adm-nav" id="adm-nav">
-    <button class="adm-nav-item active" data-section="dashboard">
+    <button type="button" class="adm-nav-item active" data-section="dashboard">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard
     </button>
-    <button class="adm-nav-item" data-section="usuarios" id="nav-usuarios">
+    <button type="button" class="adm-nav-item" data-section="usuarios" id="nav-usuarios">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> Usuarios
     </button>
-    <button class="adm-nav-item" data-section="pedidos">
+    <button type="button" class="adm-nav-item" data-section="pedidos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span> Pedidos
     </button>
-    <button class="adm-nav-item" data-section="productos">
+    <button type="button" class="adm-nav-item" data-section="productos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span> Productos
     </button>
-    <button class="adm-nav-item" data-section="colecciones">
+    <button type="button" class="adm-nav-item" data-section="colecciones">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span> Colecciones
     </button>
     <div class="adm-nav-divider"></div>
-    <button class="adm-nav-item" data-section="contenido">
+    <button type="button" class="adm-nav-item" data-section="contenido">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> Contenido
     </button>
-    <button class="adm-nav-item" data-section="importar">
+    <button type="button" class="adm-nav-item" data-section="importar">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Import/Export
     </button>
     <a href="admin-images.html" class="adm-nav-item">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span> Imágenes
     </a>
-    <button class="adm-nav-item" data-section="mensajes">
+    <button type="button" class="adm-nav-item" data-section="mensajes">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> Mensajes
     </button>
-    <button class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
+    <button type="button" class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Onboarding
     </button>
-    <button class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
+    <button type="button" class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
-    <button class="adm-nav-item" data-section="correos" id="nav-correos">
+    <button type="button" class="adm-nav-item" data-section="correos" id="nav-correos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> Correos
     </button>
-    <button class="adm-nav-item" data-section="configuracion" id="nav-config">
+    <button type="button" class="adm-nav-item" data-section="configuracion" id="nav-config">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Configuración
     </button>
-    <button class="adm-nav-item" data-section="permisos" id="nav-permisos">
+    <button type="button" class="adm-nav-item" data-section="permisos" id="nav-permisos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><path d="M12 15v2"/></svg></span> Roles y Permisos
     </button>
   </nav>
@@ -104,7 +105,7 @@
     <a href="index.html" class="adm-nav-item">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Ver tienda →
     </a>
-    <button class="adm-nav-item" id="adm-logout">
+    <button type="button" class="adm-nav-item" id="adm-logout">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Cerrar sesión
     </button>
   </div>
@@ -112,28 +113,28 @@
 
 <!-- MOBILE BOTTOM TABS -->
 <nav class="adm-mobile-tabs" id="adm-mobile-tabs">
-  <button class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
-  <button class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
-  <button class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
-  <button class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
-  <button class="adm-mobile-tab" data-section="colecciones"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Colecciones</button>
-  <button class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Contenido</button>
-  <button class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
+  <button type="button" class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
+  <button type="button" class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
+  <button type="button" class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
+  <button type="button" class="adm-mobile-tab" data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
+  <button type="button" class="adm-mobile-tab" data-section="colecciones"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Colecciones</button>
+  <button type="button" class="adm-mobile-tab" data-section="contenido"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Contenido</button>
+  <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
-  <button class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
-  <button class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
-  <button class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
-  <button class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
-  <button class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
-  <button class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
+  <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
+  <button type="button" class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
+  <button type="button" class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
+  <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
+  <button type="button" class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
+  <button type="button" class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
-  <button class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
+  <button type="button" class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
 </nav>
 
 <!-- MAIN -->
 <main class="adm-main">
   <header class="adm-topbar">
-    <button class="adm-hamburger" id="adm-hamburger">☰</button>
+    <button type="button" class="adm-hamburger" id="adm-hamburger">☰</button>
     <div class="adm-topbar-title" id="adm-topbar-title">Dashboard</div>
     <a href="checkout.html" class="adm-topbar-btn">+ Nuevo pedido</a>
   </header>
@@ -162,6 +163,16 @@
           <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
           <div class="adm-stat-val" id="stat-orders-total">—</div>
           <div class="adm-stat-label">Total pedidos</div>
+        </div>
+        <div class="adm-stat" title="Cada pestaña del sitio cuenta una sola sesión durante el día de Paraguay.">
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ad3f67" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div class="adm-stat-val" id="stat-visits-today">—</div>
+          <div class="adm-stat-label">Sesiones hoy</div>
+        </div>
+        <div class="adm-stat" title="Personas con actividad visible durante los últimos tres minutos.">
+          <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ad3f67" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/><circle cx="19" cy="5" r="2" fill="#ad3f67" stroke="none"/></svg></div>
+          <div class="adm-stat-val" id="stat-online-now">—</div>
+          <div class="adm-stat-label">En línea ahora</div>
         </div>
       </div>
 
@@ -218,14 +229,14 @@
             <option value="viewer">Viewer</option>
             <option value="client">Cliente</option>
           </select>
-          <button class="adm-btn adm-btn-sm" onclick="bulkChangeUserRole()">Aplicar rol</button>
-          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-block-btn" onclick="bulkBlockUsers()">Bloquear</button>
-          <button class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-restore-btn" onclick="bulkRestoreUsers()" style="display:none">Restaurar</button>
-          <button class="adm-btn adm-btn-sm" onclick="bulkExportUsers('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
-          <button class="adm-btn adm-btn-sm" onclick="clearUsersSelection()" title="Limpiar selección">✕ Limpiar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkChangeUserRole()">Aplicar rol</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-block-btn" onclick="bulkBlockUsers()">Bloquear</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-restore-btn" onclick="bulkRestoreUsers()" style="display:none">Restaurar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkExportUsers('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="clearUsersSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
-          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="bulkExportUsers('filtered')" title="Exportar los usuarios que ves ahora a CSV">⬇️ Exportar vista actual (CSV)</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="bulkExportUsers('filtered')" title="Exportar los usuarios que ves ahora a CSV">⬇️ Exportar vista actual (CSV)</button>
         </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
@@ -291,21 +302,21 @@
             <select class="adm-select" id="orders-bulk-status" style="width:auto;font-size:12px;padding:6px 8px">
               <option value="">— Cambiar estado —</option>
             </select>
-            <button class="adm-btn adm-btn-sm" onclick="bulkChangeOrderStatus()">Aplicar estado</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="bulkChangeOrderStatus()">Aplicar estado</button>
           </span>
           <span id="orders-bulk-pay-wrap">
             <select class="adm-select" id="orders-bulk-pay-status" style="width:auto;font-size:12px;padding:6px 8px">
               <option value="">— Cambiar pago —</option>
             </select>
-            <button class="adm-btn adm-btn-sm" onclick="bulkChangePayStatus()">Aplicar pago</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="bulkChangePayStatus()">Aplicar pago</button>
           </span>
-          <button class="adm-btn adm-btn-sm" id="orders-bulk-resend-btn" onclick="bulkResendOrderEmails()" title="Reenviar el correo de confirmación a todos los seleccionados">✉️ Reenviar correos</button>
-          <button class="adm-btn adm-btn-sm" id="orders-bulk-export-btn" onclick="bulkExportOrders('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" id="orders-bulk-delete-btn" onclick="bulkDeleteOrders()" style="display:none" title="Eliminar definitivamente (Super Admin)">Eliminar</button>
-          <button class="adm-btn adm-btn-sm" onclick="clearOrdersSelection()" title="Limpiar selección">✕ Limpiar</button>
+          <button type="button" class="adm-btn adm-btn-sm" id="orders-bulk-resend-btn" onclick="bulkResendOrderEmails()" title="Reenviar el correo de confirmación a todos los seleccionados">✉️ Reenviar correos</button>
+          <button type="button" class="adm-btn adm-btn-sm" id="orders-bulk-export-btn" onclick="bulkExportOrders('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="orders-bulk-delete-btn" onclick="bulkDeleteOrders()" style="display:none" title="Eliminar definitivamente (Super Admin)">Eliminar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="clearOrdersSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div style="padding:12px 22px 0;display:flex;justify-content:flex-end">
-          <button class="adm-btn adm-btn-sm adm-btn-outline" id="orders-export-view-btn" onclick="bulkExportOrders('filtered')" title="Exportar los pedidos que ves ahora (con los filtros aplicados) a CSV">⬇️ Exportar vista actual (CSV)</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" id="orders-export-view-btn" onclick="bulkExportOrders('filtered')" title="Exportar los pedidos que ves ahora (con los filtros aplicados) a CSV">⬇️ Exportar vista actual (CSV)</button>
         </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
@@ -347,8 +358,8 @@
               <option value="">Todas las categorías</option>
               <!-- Rest rebuilt live from Super Admin → Colecciones (see syncCategorySelects) -->
             </select>
-            <button class="adm-btn adm-btn-outline adm-btn-sm" id="prod-export-all-btn" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV">⬇️ Exportar CSV</button>
-            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="prod-export-all-btn" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV">⬇️ Exportar CSV</button>
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
         </div>
         <!-- Bulk action toolbar (shown when products are selected) -->
@@ -359,35 +370,35 @@
             <option value="">— Asignar a colección —</option>
             <!-- Rest rebuilt live from Super Admin → Colecciones (see syncCategorySelects) -->
           </select>
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
-          <button class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
-          <button class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
+          <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
+          <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
+          <button type="button" class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           </span>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
-          <button class="adm-btn adm-btn-sm" id="prod-bulk-export-btn" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
+          <button type="button" class="adm-btn adm-btn-sm" id="prod-bulk-export-btn" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
           <div class="adm-more-actions" id="prod-more-actions">
             <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="toggleProdMoreActions()" type="button">⋯ Más acciones</button>
             <div class="adm-more-actions-panel" id="prod-more-actions-panel">
               <div class="adm-more-actions-row">
                 <input id="bulk-stock-input" type="number" min="0" placeholder="Nuevo stock" class="adm-input" style="font-size:12px;padding:5px 10px;width:130px">
-                <button class="adm-btn adm-btn-sm" onclick="bulkSetStock()">Aplicar stock</button>
+                <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetStock()">Aplicar stock</button>
               </div>
               <div class="adm-more-actions-row">
                 <input id="bulk-price-input" type="number" min="0" placeholder="Nuevo precio (Gs.)" class="adm-input" style="font-size:12px;padding:5px 10px;width:150px">
-                <button class="adm-btn adm-btn-sm" onclick="bulkSetPrice()">Aplicar precio</button>
+                <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetPrice()">Aplicar precio</button>
               </div>
               <div class="adm-more-actions-row">
-                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOferta(true)">Aplicar oferta</button>
-                <button class="adm-btn adm-btn-sm" onclick="bulkSetOferta(false)">Quitar oferta</button>
+                <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOferta(true)">Aplicar oferta</button>
+                <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetOferta(false)">Quitar oferta</button>
               </div>
               <div class="adm-more-actions-row">
-                <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetDestacado(true)">Marcar destacado</button>
-                <button class="adm-btn adm-btn-sm" onclick="bulkSetDestacado(false)">Quitar destacado</button>
+                <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetDestacado(true)">Marcar destacado</button>
+                <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetDestacado(false)">Quitar destacado</button>
               </div>
             </div>
           </div>
-          <button class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="clearSelection()" title="Limpiar selección">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="prod-loading" style="padding:32px;text-align:center;color:var(--adm-muted)">Cargando productos…</div>
@@ -419,7 +430,7 @@
       <div class="adm-card" id="prod-form-card" style="display:none">
         <div class="adm-card-head">
           <div class="adm-card-title" id="prod-form-title">Nuevo producto</div>
-          <button class="adm-btn adm-btn-sm" onclick="prodCancelForm()">← Volver</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="prodCancelForm()">← Volver</button>
         </div>
         <div class="adm-card-body">
           <input type="hidden" id="prod-id">
@@ -465,7 +476,7 @@
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen principal</label>
               <input id="prod-imageUrl" type="url" class="adm-input" placeholder="https://...">
-              <img id="prod-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+              <img id="prod-img-preview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
@@ -493,8 +504,8 @@
           </div>
           <div id="prod-form-error" style="display:none;color:#e53935;font-size:13px;margin-top:12px;padding:10px;background:#fff5f5;border-radius:8px"></div>
           <div style="display:flex;gap:10px;margin-top:20px">
-            <button class="adm-btn adm-btn-primary" onclick="prodGuardar()" id="prod-save-btn">Guardar producto</button>
-            <button class="adm-btn" onclick="prodCancelForm()">Cancelar</button>
+            <button type="button" class="adm-btn adm-btn-primary" onclick="prodGuardar()" id="prod-save-btn">Guardar producto</button>
+            <button type="button" class="adm-btn" onclick="prodCancelForm()">Cancelar</button>
           </div>
         </div>
       </div>
@@ -507,18 +518,18 @@
           <div class="adm-card-title">Colecciones</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <input id="coll-search" type="text" placeholder="Buscar colección…" style="padding:6px 12px;border:1px solid var(--adm-border);border-radius:8px;font-size:13px;min-width:180px;">
-            <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nueva-coleccion" onclick="collNueva()">+ Nueva colección</button>
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nueva-coleccion" onclick="collNueva()">+ Nueva colección</button>
           </div>
         </div>
         <div id="coll-bulk-toolbar" class="adm-bulk-toolbar">
           <span class="adm-bulk-count" id="coll-bulk-count">0 seleccionadas</span>
           <span id="coll-bulk-visible-group" style="display:contents">
-          <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCollVisible(true)">Activar (mostrar)</button>
-          <button class="adm-btn adm-btn-sm" onclick="bulkSetCollVisible(false)">Desactivar (ocultar)</button>
+          <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCollVisible(true)">Activar (mostrar)</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetCollVisible(false)">Desactivar (ocultar)</button>
           </span>
-          <button class="adm-btn adm-btn-sm" onclick="bulkExportCollections()">⬇️ Exportar CSV</button>
-          <button class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-btn" onclick="bulkDeleteCollections()" style="display:none">Eliminar</button>
-          <button class="adm-btn adm-btn-sm" onclick="clearCollSelection()">✕ Limpiar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkExportCollections()">⬇️ Exportar CSV</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-btn" onclick="bulkDeleteCollections()" style="display:none">Eliminar</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="clearCollSelection()">✕ Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="coll-loading" style="padding:32px;text-align:center;color:var(--adm-muted)"><span class="adm-spinner"></span> Cargando colecciones…</div>
@@ -535,7 +546,7 @@
       <div class="adm-card" id="coll-form-card" style="display:none">
         <div class="adm-card-head">
           <div class="adm-card-title" id="coll-form-title">Nueva colección</div>
-          <button class="adm-btn adm-btn-sm" onclick="collCancelForm()">← Volver</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="collCancelForm()">← Volver</button>
         </div>
         <div class="adm-card-body">
           <input type="hidden" id="coll-original-slug">
@@ -556,7 +567,7 @@
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Imagen de portada</label>
               <input id="coll-image" type="url" class="adm-input" placeholder="https://...">
-              <img id="coll-img-preview" src="" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+              <img id="coll-img-preview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Orden</label>
@@ -570,8 +581,8 @@
           </div>
           <div id="coll-form-error" style="display:none;color:#e53935;font-size:13px;margin-top:12px;padding:10px;background:#fff5f5;border-radius:8px"></div>
           <div style="display:flex;gap:10px;margin-top:20px">
-            <button class="adm-btn adm-btn-primary" onclick="collGuardar()" id="coll-save-btn">Guardar colección</button>
-            <button class="adm-btn" onclick="collCancelForm()">Cancelar</button>
+            <button type="button" class="adm-btn adm-btn-primary" onclick="collGuardar()" id="coll-save-btn">Guardar colección</button>
+            <button type="button" class="adm-btn" onclick="collCancelForm()">Cancelar</button>
           </div>
         </div>
       </div>
@@ -580,7 +591,7 @@
       <div class="adm-card" id="coll-products-card" style="display:none">
         <div class="adm-card-head">
           <div class="adm-card-title">Productos de esta colección — <span id="coll-products-count">0</span></div>
-          <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collOpenPicker()">+ Agregar productos</button>
+          <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="collOpenPicker()">+ Agregar productos</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div id="coll-current-empty" style="display:none;padding:24px;text-align:center;color:var(--adm-muted)">
@@ -597,7 +608,7 @@
       <div class="adm-card" id="coll-picker-card" style="display:none">
         <div class="adm-card-head">
           <div class="adm-card-title">Agregar productos</div>
-          <button class="adm-btn adm-btn-sm" onclick="collClosePicker()">← Volver a la colección</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="collClosePicker()">← Volver a la colección</button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--adm-border)">
@@ -606,7 +617,7 @@
               <input type="checkbox" id="coll-picker-select-all" onclick="collPickerToggleAll(this)"> Seleccionar todo (filtrados)
             </label>
             <span id="coll-picker-sel-count" style="font-size:12px;font-weight:700;color:var(--adm-primary)">0 seleccionados</span>
-            <button class="adm-btn adm-btn-primary adm-btn-sm" style="margin-left:auto" onclick="collPickerAddSelected()">Agregar a la colección</button>
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" style="margin-left:auto" onclick="collPickerAddSelected()">Agregar a la colección</button>
           </div>
           <div id="coll-picker-list" style="max-height:520px;overflow-y:auto"></div>
         </div>
@@ -649,7 +660,7 @@
               </div>
             </div>
           </div>
-          <button class="adm-btn adm-btn-primary" id="btn-save-ob">Guardar configuración</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-save-ob">Guardar configuración</button>
         </div>
       </div>
 
@@ -661,7 +672,7 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
             Esto marca el onboarding como no completado para todos los usuarios. La próxima vez que inicien sesión, verán el tutorial de bienvenida.
           </p>
-          <button class="adm-btn adm-btn-danger" id="btn-reset-ob">Resetear onboarding para todos los usuarios</button>
+          <button type="button" class="adm-btn adm-btn-danger" id="btn-reset-ob">Resetear onboarding para todos los usuarios</button>
         </div>
       </div>
     </div>
@@ -678,8 +689,8 @@
           </p>
           <div id="audit-bulk-toolbar" class="adm-bulk-toolbar">
             <span class="adm-bulk-count" id="audit-bulk-count">0 seleccionados</span>
-            <button class="adm-btn adm-btn-sm" onclick="bulkExportAuditLog()">⬇️ Exportar CSV</button>
-            <button class="adm-btn adm-btn-sm" onclick="clearAuditSelection()">✕ Limpiar</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="bulkExportAuditLog()">⬇️ Exportar CSV</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="clearAuditSelection()">✕ Limpiar</button>
           </div>
           <div class="adm-table-wrap">
             <table class="adm-table">
@@ -746,9 +757,9 @@
           </div>
           <div id="cop-bulk-toolbar" class="adm-bulk-toolbar">
             <span class="adm-bulk-count" id="cop-bulk-count">0 seleccionados</span>
-            <button class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOrderTypeEnabled(true)">Activar seleccionados</button>
-            <button class="adm-btn adm-btn-sm" onclick="bulkSetOrderTypeEnabled(false)">Desactivar seleccionados</button>
-            <button class="adm-btn adm-btn-sm" onclick="clearOrderTypeSelection()">✕ Limpiar</button>
+            <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetOrderTypeEnabled(true)">Activar seleccionados</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="bulkSetOrderTypeEnabled(false)">Desactivar seleccionados</button>
+            <button type="button" class="adm-btn adm-btn-sm" onclick="clearOrderTypeSelection()">✕ Limpiar</button>
           </div>
           <div class="adm-table-wrap">
             <table class="adm-table adm-table-correos-pedidos">
@@ -790,7 +801,7 @@
               <select class="adm-select" id="prueba-template-select"></select>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-              <button class="adm-btn adm-btn-primary" id="btn-test-email">Enviar prueba</button>
+              <button type="button" class="adm-btn adm-btn-primary" id="btn-test-email">Enviar prueba</button>
               <button class="adm-btn adm-btn-outline" id="btn-test-preview" type="button">Vista previa</button>
             </div>
             <div id="test-email-limit-info" style="font-size:11px;color:var(--adm-muted);margin-top:8px"></div>
@@ -825,10 +836,10 @@
             </div>
             <div id="tpl-bulk-toolbar" class="adm-bulk-toolbar">
               <span class="adm-bulk-count" id="tpl-bulk-count">0 seleccionadas</span>
-              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(true)">Archivar</button>
-              <button class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(false)">Reactivar</button>
-              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteTemplates()" title="Solo elimina las personalizadas — las de sistema solo se archivan">Eliminar</button>
-              <button class="adm-btn adm-btn-sm" onclick="clearTemplatesSelection()">✕ Limpiar</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(true)">Archivar</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="bulkArchiveTemplates(false)">Reactivar</button>
+              <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteTemplates()" title="Solo elimina las personalizadas — las de sistema solo se archivan">Eliminar</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="clearTemplatesSelection()">✕ Limpiar</button>
             </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-plantillas">
@@ -944,9 +955,9 @@
             </div>
             <div id="hist-bulk-toolbar" class="adm-bulk-toolbar">
               <span class="adm-bulk-count" id="hist-bulk-count">0 seleccionados</span>
-              <button class="adm-btn adm-btn-sm" onclick="bulkRetryFailedLogs()" title="Reintentar los envíos fallidos de la selección">🔄 Reintentar fallidos</button>
-              <button class="adm-btn adm-btn-sm" onclick="bulkExportLogs()">⬇️ Exportar CSV</button>
-              <button class="adm-btn adm-btn-sm" onclick="clearLogsSelection()">✕ Limpiar</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="bulkRetryFailedLogs()" title="Reintentar los envíos fallidos de la selección">🔄 Reintentar fallidos</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="bulkExportLogs()">⬇️ Exportar CSV</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="clearLogsSelection()">✕ Limpiar</button>
             </div>
             <div class="adm-table-wrap">
               <table class="adm-table adm-table-historial">
@@ -1046,7 +1057,7 @@
           </div>
         </div>
 
-        <button class="adm-btn adm-btn-primary" id="btn-save-correos-config" style="font-size:14px;padding:12px 28px">Guardar configuración de correos</button>
+        <button type="button" class="adm-btn adm-btn-primary" id="btn-save-correos-config" style="font-size:14px;padding:12px 28px">Guardar configuración de correos</button>
       </div>
     </div>
 
@@ -1226,8 +1237,8 @@
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-delivery-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
             <div id="ship-delivery-bulk-toolbar" class="adm-bulk-toolbar">
               <span class="adm-bulk-count" id="ship-delivery-bulk-count">0 seleccionadas</span>
-              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('delivery')">Eliminar seleccionadas</button>
-              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('delivery')">✕ Limpiar</button>
+              <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('delivery')">Eliminar seleccionadas</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="clearShipSelection('delivery')">✕ Limpiar</button>
             </div>
             <div id="ship-delivery-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
@@ -1247,8 +1258,8 @@
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-encomienda-cancel" type="button" style="display:none;margin-bottom:10px">Cancelar edición</button>
             <div id="ship-encomienda-bulk-toolbar" class="adm-bulk-toolbar">
               <span class="adm-bulk-count" id="ship-encomienda-bulk-count">0 seleccionadas</span>
-              <button class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('encomienda')">Eliminar seleccionadas</button>
-              <button class="adm-btn adm-btn-sm" onclick="clearShipSelection('encomienda')">✕ Limpiar</button>
+              <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="bulkDeleteShipCities('encomienda')">Eliminar seleccionadas</button>
+              <button type="button" class="adm-btn adm-btn-sm" onclick="clearShipSelection('encomienda')">✕ Limpiar</button>
             </div>
             <div id="ship-encomienda-list" style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto"></div>
           </div>
@@ -1336,7 +1347,7 @@
         </div>
       </div>
 
-      <button class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
+      <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
     <!-- ===================== ROLES Y PERMISOS ===================== -->
@@ -1397,7 +1408,7 @@
         </div>
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los productos de Firestore como archivo JSON.</p>
-          <button class="adm-btn adm-btn-primary" id="btn-exportar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar JSON</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-exportar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar JSON</button>
         </div>
       </div>
 
@@ -1408,7 +1419,7 @@
         </div>
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todos los pedidos como CSV (se abre bien en Excel/Google Sheets) — número, fecha, cliente, contacto, estados, productos, total, entrega y ciudad/zona.</p>
-          <button class="adm-btn adm-btn-primary" id="btn-exportar-pedidos"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-exportar-pedidos"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
         </div>
       </div>
 
@@ -1419,7 +1430,7 @@
         </div>
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">Descargá todas las cuentas como CSV — nombre, email, teléfono, rol, si está bloqueado y fecha de creación.</p>
-          <button class="adm-btn adm-btn-primary" id="btn-exportar-usuarios"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-exportar-usuarios"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button>
         </div>
       </div>
 
@@ -1443,9 +1454,9 @@
               <div style="font-size:13px;font-weight:700;color:var(--adm-text)" id="csv-preview-title"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <span class="adm-bulk-count" id="csv-bulk-count" style="align-self:center">0 seleccionados</span>
-                <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">Limpiar</button>
-                <button class="adm-btn adm-btn-outline" id="btn-csv-importar-seleccionados">⬆️ Importar seleccionados</button>
-                <button class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
+                <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-csv-limpiar">Limpiar</button>
+                <button type="button" class="adm-btn adm-btn-outline" id="btn-csv-importar-seleccionados">⬆️ Importar seleccionados</button>
+                <button type="button" class="adm-btn adm-btn-primary" id="btn-csv-importar">⬆️ Importar todos a Firebase</button>
               </div>
             </div>
             <div style="overflow-x:auto;max-height:360px;overflow-y:auto;border-radius:8px;border:1.5px solid var(--adm-border)">
@@ -1487,8 +1498,8 @@
           </p>
           <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
           <div style="margin-top:12px;display:flex;gap:12px">
-            <button class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
-            <button class="adm-btn adm-btn-outline" id="btn-importar-sample">Cargar ejemplo</button>
+            <button type="button" class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
+            <button type="button" class="adm-btn adm-btn-outline" id="btn-importar-sample">Cargar ejemplo</button>
           </div>
           <div id="import-result" style="margin-top:16px;font-size:13px;font-weight:600"></div>
         </div>
@@ -1503,7 +1514,7 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-top:4px">Editá imágenes, textos y contenido de cada sección — los cambios se aplican automáticamente al sitio.</p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <button class="adm-btn adm-btn-outline adm-btn-sm" id="cont-save-all"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar todo</button>
+          <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="cont-save-all"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar todo</button>
           <a href="index.html" target="_blank" class="adm-btn adm-btn-primary adm-btn-sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>Ver sitio</a>
         </div>
       </div>
@@ -1511,19 +1522,19 @@
       <!-- Page tabs -->
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--adm-border)">
         <div id="cont-page-tabs" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
-        <button id="cont-add-page" class="adm-btn adm-btn-outline adm-btn-sm" style="white-space:nowrap">+ Agregar página</button>
+        <button type="button" id="cont-add-page" class="adm-btn adm-btn-outline adm-btn-sm" style="white-space:nowrap">+ Agregar página</button>
       </div>
 
       <!-- ImgBB key banner -->
       <div id="imgbb-banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap">
         <span style="font-size:13px;font-weight:600;flex:1;min-width:200px">Pegá tu API key de <a href="https://api.imgbb.com" target="_blank" style="color:var(--adm-accent)">imgbb.com</a> para subir imágenes desde tu dispositivo:</span>
         <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
-        <button onclick="
+        <button type="button" onclick="
           const k=document.getElementById('imgbb-key-input').value.trim();
           if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('API key guardada');}
           else toast('Pegá tu key primero');
         " class="adm-btn adm-btn-primary adm-btn-sm">Guardar key</button>
-        <button onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
+        <button type="button" onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
       </div>
 
       <!-- Loading -->
@@ -1548,7 +1559,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot
+  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp,
+  getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendOrderNotification, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
@@ -1559,12 +1571,33 @@ import {
 import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 import { normalizeCollectionDoc } from "./js/collections-store.js";
+import { sanitizeImageUrl } from "./js/image-utils.js";
 
 // ---- GLOBALS ----
 let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
+let dashboardOnlineTimer = 0;
+
+function escapeHtmlAdmin(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+}
+
+function inlineArgumentAdmin(value) {
+  return escapeHtmlAdmin(JSON.stringify(String(value ?? '')));
+}
+
+function paraguayDayKeyAdmin() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Asuncion',
+    year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
 
 // Super Admin real (currentRole === 'superadmin') SIEMPRE tiene todo — no es
 // una fila editable de la matriz de Roles y Permisos (EDITABLE_ROLES no lo
@@ -1737,7 +1770,7 @@ async function loadAuditLog() {
     _allAuditLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAuditLogTable();
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#ef4444;padding:24px">Error al cargar la auditoría: ${e.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(e.message)}</td></tr>`;
   }
 }
 
@@ -1757,11 +1790,11 @@ function renderAuditLogTable() {
     const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
     return `
       <tr>
-        <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${l.id}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
+        <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${escapeHtmlAdmin(l.id)}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
         <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
-        <td style="font-size:12px">${l.actorEmail || '—'}</td>
-        <td style="font-size:12px">${actionLabel}${bulkTag}</td>
-        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${l.targetLabel}</strong> — ` : ''}${l.details || ''}</td>
+        <td style="font-size:12px">${escapeHtmlAdmin(l.actorEmail || '—')}</td>
+        <td style="font-size:12px">${escapeHtmlAdmin(actionLabel)}${bulkTag}</td>
+        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${escapeHtmlAdmin(l.targetLabel)}</strong> — ` : ''}${escapeHtmlAdmin(l.details || '')}</td>
       </tr>
     `;
   }).join('');
@@ -2065,7 +2098,53 @@ function setupPermissions(role) {
 }
 
 // ======== DASHBOARD ========
+async function refreshDashboardActivityMetrics() {
+  const sessionsEl = document.getElementById('stat-visits-today');
+  const onlineEl = document.getElementById('stat-online-now');
+  if (!(sessionsEl && onlineEl)) return;
+
+  if (currentRole !== 'superadmin') {
+    sessionsEl.textContent = '—';
+    onlineEl.textContent = '—';
+    return;
+  }
+
+  const dayKey = paraguayDayKeyAdmin();
+  const activeSince = Timestamp.fromMillis(Date.now() - (3 * 60 * 1000));
+  const results = await Promise.allSettled([
+    getCountFromServer(collection(db, 'siteTraffic', dayKey, 'sessions')),
+    getDocs(query(collection(db, 'sitePresence'), where('lastSeen', '>=', activeSince)))
+  ]);
+
+  if (results[0].status === 'fulfilled') {
+    sessionsEl.textContent = results[0].value.data().count;
+    sessionsEl.removeAttribute('title');
+  } else {
+    sessionsEl.textContent = '—';
+    sessionsEl.title = 'No se pudo consultar el contador de sesiones.';
+    console.warn('Métrica de sesiones no disponible:', results[0].reason);
+  }
+
+  if (results[1].status === 'fulfilled') {
+    onlineEl.textContent = results[1].value.size;
+    onlineEl.removeAttribute('title');
+  } else {
+    onlineEl.textContent = '—';
+    onlineEl.title = 'No se pudo consultar la presencia actual.';
+    console.warn('Métrica de presencia no disponible:', results[1].reason);
+  }
+}
+
+function startDashboardActivityMetrics() {
+  window.clearInterval(dashboardOnlineTimer);
+  refreshDashboardActivityMetrics();
+  if (currentRole === 'superadmin') {
+    dashboardOnlineTimer = window.setInterval(refreshDashboardActivityMetrics, 60000);
+  }
+}
+
 async function loadDashboard() {
+  startDashboardActivityMetrics();
   try {
     // Users count — el Modder no tiene permiso para leer la colección users
     // (ni debería: expondría emails/teléfonos de todas las clientas), así que
@@ -2148,10 +2227,10 @@ async function loadDashboard() {
     }
     tbody.innerHTML = recent.map(o => `
       <tr>
-        <td><strong>${o.userName || o.userEmail || '—'}</strong><br><small style="color:#aaa">${o.userPhone || ''}</small></td>
+        <td><strong>${escapeHtmlAdmin(o.userName || o.userEmail || '—')}</strong><br><small style="color:#777">${escapeHtmlAdmin(o.userPhone || '')}</small></td>
         <td style="font-weight:700;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
         <td>${orderStatusBadgeHtml(o.status)}</td>
-        <td>${o.shipping?.city || '—'}</td>
+        <td>${escapeHtmlAdmin(o.shipping?.city || '—')}</td>
         <td>${formatDate(o.createdAt)}</td>
       </tr>
     `).join('');
@@ -2221,11 +2300,16 @@ function renderUsersTable(users) {
   }
   tbody.innerHTML = users.map(u => {
     const isSuperAdmin = u.email === SUPER_ADMIN;
+    const safeUid = escapeHtmlAdmin(u.uid);
+    const uidArg = inlineArgumentAdmin(u.uid);
+    const emailArg = inlineArgumentAdmin(u.email || '');
+    const nameArg = inlineArgumentAdmin(u.name || u.email || '');
+    const safeRole = Object.prototype.hasOwnProperty.call(ROLE_LABELS, u.role) ? u.role : 'client';
     // Se usa can(role,'manageUsers') en vez de comparar el nombre del rol a mano
     // — hoy solo superadmin tiene ese permiso, pero si el día de mañana cambia
     // la matriz de permisos, esta línea sigue siendo correcta sin tocarla.
     const canEdit = can(currentRole, 'manageUsers') && !isSuperAdmin;
-    const roleBadge = `<span class="adm-badge role-${u.role || 'client'}">${ROLE_LABELS[u.role] || 'Cliente'}</span>`;
+    const roleBadge = `<span class="adm-badge role-${safeRole}">${escapeHtmlAdmin(ROLE_LABELS[safeRole] || 'Cliente')}</span>`;
     const blockedBadge = u.blocked
       ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
       : '<span class="adm-badge badge-entregado">Activo</span>';
@@ -2236,11 +2320,11 @@ function renderUsersTable(users) {
     // se explicita acá en vez de omitirlo en silencio.
     const blockedDetail = u.blocked ? `
       <div style="margin-top:6px;font-size:11px;color:#888;line-height:1.6;max-width:230px">
-        ${u.phone ? `<div>📞 ${u.phone}</div>` : ''}
-        ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock}</strong></div>` : ''}
+        ${u.phone ? `<div>📞 ${escapeHtmlAdmin(u.phone)}</div>` : ''}
+        ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${escapeHtmlAdmin(ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock)}</strong></div>` : ''}
         ${u.blockedAt ? `<div>Bloqueado: ${formatDate(u.blockedAt)}</div>` : ''}
-        ${u.blockedBy ? `<div>Por: ${u.blockedBy}</div>` : ''}
-        <div>Motivo: ${u.blockReason ? u.blockReason : '<span style="color:#bbb">sin especificar</span>'}</div>
+        ${u.blockedBy ? `<div>Por: ${escapeHtmlAdmin(u.blockedBy)}</div>` : ''}
+        <div>Motivo: ${u.blockReason ? escapeHtmlAdmin(u.blockReason) : '<span style="color:#777">sin especificar</span>'}</div>
         ${u.lastLogin ? `<div>Última actividad: ${formatDate(u.lastLogin)}</div>` : ''}
         <div style="color:#ccc">IP de registro: no disponible (requiere backend seguro)</div>
       </div>
@@ -2251,7 +2335,7 @@ function renderUsersTable(users) {
     // nunca quede el estado inconsistente blocked:true + role:'agent'/'admin'.
     const roleSelect = canEdit && can(currentRole, 'assignRoles') && !u.blocked ? `
       <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
-        onchange="window.updateUserRole('${u.uid}', this.value, '${u.email}')"
+        onchange="window.updateUserRole(${uidArg}, this.value, ${emailArg})"
         ${isSuperAdmin ? 'disabled' : ''}>
         <option value="superadmin" ${u.role==='superadmin'?'selected':''} ${!isSuperAdmin?'style="display:none"':''}>Super Admin</option>
         <option value="admin"      ${u.role==='admin'?'selected':''}>Admin</option>
@@ -2264,27 +2348,28 @@ function renderUsersTable(users) {
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${!isSuperAdmin ? (u.blocked
-          ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser('${u.uid}')">Restaurar</button>`
-          : `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser('${u.uid}', '${u.email}')">Bloquear</button>`
+          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Restaurar</button>`
+          : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
         ) : ''}
         ${can(currentRole,'deleteUsers') && !isSuperAdmin ? `
-          <button class="adm-btn adm-btn-sm adm-btn-danger"
-            onclick="window.deleteUser('${u.uid}', '${(u.name||u.email||'').replace(/'/g,"\\'")}')">
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger"
+            onclick="window.deleteUser(${uidArg}, ${nameArg})">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Eliminar
           </button>` : ''}
       </div>
     ` : '<span style="color:#ccc;font-size:12px">—</span>';
 
-    const avatar = u.photoURL
-      ? `<div class="adm-tbl-avatar"><img src="${u.photoURL}" alt="" /></div>`
-      : `<div class="adm-tbl-avatar">${(u.name || u.email || '?')[0].toUpperCase()}</div>`;
+    const avatarUrl = sanitizeImageUrl(u.photoURL || '');
+    const avatar = avatarUrl
+      ? `<div class="adm-tbl-avatar"><img src="${escapeHtmlAdmin(avatarUrl)}" alt="" /></div>`
+      : `<div class="adm-tbl-avatar">${escapeHtmlAdmin((u.name || u.email || '?')[0].toUpperCase())}</div>`;
 
     return `
       <tr>
-        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${u.uid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
+        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
-        <td><strong>${u.name || '—'}</strong></td>
-        <td style="font-size:12px;color:#666">${u.email || '—'}</td>
+        <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
+        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
         <td>${actions}</td>
@@ -2621,6 +2706,10 @@ function renderOrdersTable(orders) {
   tbody.innerHTML = orders.map(o => {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
       (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
+    const safeOrderId = escapeHtmlAdmin(o.id);
+    const orderArg = inlineArgumentAdmin(o.id);
+    const detailId = `order-detail-${o.id}`;
+    const detailArg = inlineArgumentAdmin(detailId);
     const payStatus = o.payment?.status || o.paymentStatus || 'pendiente';
     const orderStatus = o.status || 'pendiente';
     // manageOrders: cambiar estado/estado de pago — esto es lo único que el
@@ -2637,27 +2726,27 @@ function renderOrdersTable(orders) {
     const canDelete = can(currentRole, 'manageOrdersFull') && roleCanDo('pedidos', 'eliminar');
 
     return `
-      <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail('order-detail-${o.id}')">
-        <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${o.id}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
-        <td data-label="Pedido" style="font-size:11px;color:#aaa;font-weight:700">#${o.id.slice(-6).toUpperCase()}</td>
+      <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail(${detailArg})">
+        <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${safeOrderId}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
+        <td data-label="Pedido" style="font-size:11px;color:#777;font-weight:700">#${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</td>
         <td data-label="Cliente">
-          <strong>${o.userName || '—'}</strong><br>
-          <small style="color:#aaa">${o.userPhone || ''}</small><br>
-          <small style="color:#aaa;font-size:10px">${o.userEmail || ''}</small>
+          <strong>${escapeHtmlAdmin(o.userName || '—')}</strong><br>
+          <small style="color:#777">${escapeHtmlAdmin(o.userPhone || '')}</small><br>
+          <small style="color:#777;font-size:10px">${escapeHtmlAdmin(o.userEmail || '')}</small>
         </td>
-        <td data-label="Productos" style="font-size:12px;max-width:160px">${itemsText || '—'}</td>
+        <td data-label="Productos" style="font-size:12px;max-width:160px">${escapeHtmlAdmin(itemsText || '—')}</td>
         <td data-label="Total" style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
         <td data-label="Estado" onclick="event.stopPropagation()">
           ${orderStatusBadgeHtml(orderStatus)}
-          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updateOrderStatus('${o.id}', this.value)">
+          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updateOrderStatus(${orderArg}, this.value)">
             ${orderStatusOptions(orderStatus)}
           </select>` : ''}
         </td>
-        <td data-label="Ciudad">${o.shipping?.city || o.city || '—'}</td>
+        <td data-label="Ciudad">${escapeHtmlAdmin(o.shipping?.city || o.city || '—')}</td>
         <td data-label="Pago" onclick="event.stopPropagation()">
-          <div style="font-size:11px;color:#666">${o.payment?.method || o.paymentMethod || '—'}</div>
+          <div style="font-size:11px;color:#666">${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
           ${payStatusBadgeHtml(payStatus)}
-          ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus('${o.id}', this.value)">
+          ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus(${orderArg}, this.value)">
             ${payStatusOptions(payStatus)}
           </select>` : ''}
         </td>
@@ -2665,43 +2754,46 @@ function renderOrdersTable(orders) {
         <td data-label="Notif." onclick="event.stopPropagation()" style="text-align:center">
           ${notifBadge(o.notificationStatus || 'pending')}
           ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
-          ${o.notificationError ? `<div style="font-size:9px;color:#e53935;margin-top:2px" title="${o.notificationError}">ver error</div>` : ''}
-          ${canResend ? `<button class="adm-btn adm-btn-sm" id="resend-btn-${o.id}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail('${o.id}')" title="Reenviar el correo de este pedido">✉️ Reenviar</button>` : ''}
+          ${o.notificationError ? `<div style="font-size:9px;color:#c62828;margin-top:2px" title="${escapeHtmlAdmin(o.notificationError)}">ver error</div>` : ''}
+          ${canResend ? `<button type="button" class="adm-btn adm-btn-sm" id="resend-btn-${safeOrderId}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail(${orderArg})" title="Reenviar el correo de este pedido">✉️ Reenviar</button>` : ''}
         </td>
         <td data-label="Editar" onclick="event.stopPropagation()">
-          ${canEditFull ? `<button class="adm-btn adm-btn-sm" onclick="openOrderEdit('${o.id}')" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
+          ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
-          ${canDelete ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder('${o.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
+          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
-      <tr id="order-detail-${o.id}" class="adm-order-detail-row" style="display:none">
+      <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
         <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
-            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${o.id.slice(-6).toUpperCase()}</div>
+            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-              <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${o.userName || '—'}</div>
-              <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${o.userEmail || '—'}</div>
-              <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${o.userPhone || '—'}</div>
-              <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${o.shipping?.method || o.shippingMethod || '—'} — ${o.shipping?.city || o.city || ''}</div>
-              ${o.shipping?.address || o.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${o.shipping?.address || o.address}</div>` : ''}
-              ${o.shipping?.referencia || o.referencia ? `<div class="adm-detail-row"><span class="adm-detail-label">Referencia:</span> ${o.shipping?.referencia || o.referencia}</div>` : ''}
-              <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${o.payment?.method || o.paymentMethod || '—'}</div>
-              <div class="adm-detail-row"><span class="adm-detail-label">Estado pago:</span> ${payStatus}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${escapeHtmlAdmin(o.userName || '—')}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${escapeHtmlAdmin(o.userEmail || '—')}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${escapeHtmlAdmin(o.userPhone || '—')}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${escapeHtmlAdmin(o.shipping?.method || o.shippingMethod || '—')} — ${escapeHtmlAdmin(o.shipping?.city || o.city || '')}</div>
+              ${o.shipping?.address || o.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${escapeHtmlAdmin(o.shipping?.address || o.address)}</div>` : ''}
+              ${o.shipping?.referencia || o.referencia ? `<div class="adm-detail-row"><span class="adm-detail-label">Referencia:</span> ${escapeHtmlAdmin(o.shipping?.referencia || o.referencia)}</div>` : ''}
+              <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Estado pago:</span> ${escapeHtmlAdmin(payStatus)}</div>
             </div>
-            ${o.notes || o.customerNotes ? `<div class="adm-detail-row" style="grid-column:1/-1"><span class="adm-detail-label">Notas:</span> <em>${o.notes || o.customerNotes}</em></div>` : ''}
+            ${o.notes || o.customerNotes ? `<div class="adm-detail-row" style="grid-column:1/-1"><span class="adm-detail-label">Notas:</span> <em>${escapeHtmlAdmin(o.notes || o.customerNotes)}</em></div>` : ''}
             <div style="margin-top:8px">
               <strong>Productos:</strong>
               <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px">
-                ${(o.items||[]).map(it => `
+                ${(o.items||[]).map(it => {
+                  const itemImage = sanitizeImageUrl(it.imgUrl || it.imageUrl || '');
+                  return `
                   <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #f0d8e0;border-radius:8px;padding:8px 12px;font-size:12px">
-                    ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'">` : ''}
+                    ${itemImage ? `<img src="${escapeHtmlAdmin(itemImage)}" alt="" style="width:40px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'">` : ''}
                     <div>
-                      <div style="font-weight:700">${it.qty}x ${it.name}</div>
+                      <div style="font-weight:700">${escapeHtmlAdmin(it.qty)}x ${escapeHtmlAdmin(it.name)}</div>
                       <div style="color:var(--adm-accent)">${formatPrice(it.price * it.qty)}</div>
                     </div>
                   </div>
-                `).join('')}
+                `;
+                }).join('')}
               </div>
             </div>
             <div style="margin-top:12px;padding-top:10px;border-top:1px solid #f0d8e0;font-size:13px">
@@ -5040,7 +5132,10 @@ function loadProductos() {
 
 function productRowHtml(p) {
   const isSelected = _selectedProducts.has(p._docId);
-  const nameSafe = (p.name||'').replace(/'/g,"\\'");
+  const safeDocId = escapeHtmlAdmin(p._docId);
+  const docIdArg = inlineArgumentAdmin(p._docId);
+  const nameArg = inlineArgumentAdmin(p.name || '');
+  const imageUrl = sanitizeImageUrl(p.imageUrl || '');
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
   const canEditProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'editar');
   const canToggleProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar');
@@ -5048,18 +5143,18 @@ function productRowHtml(p) {
   return `
     <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
       <td style="padding:10px 16px;text-align:center">
-        <input type="checkbox" class="prod-row-check" data-id="${p._docId}" ${isSelected ? 'checked' : ''} onclick="toggleProductSelect(this)" style="cursor:pointer;width:15px;height:15px">
+        <input type="checkbox" class="prod-row-check" data-id="${safeDocId}" ${isSelected ? 'checked' : ''} onclick="toggleProductSelect(this)" style="cursor:pointer;width:15px;height:15px">
       </td>
       <td style="padding:10px 16px">
-        ${p.imageUrl
-          ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
+        ${imageUrl
+          ? `<img src="${escapeHtmlAdmin(imageUrl)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
           : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
-      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? p.name : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}</td>
-      <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${p.category||'—'}</td>
-      <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${p.collection||'—'}</td>
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${escapeHtmlAdmin(p.category||'—')}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${escapeHtmlAdmin(p.collection||'—')}</td>
       <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
-      <td style="padding:10px 16px;text-align:center">${p.stock != null ? p.stock : '—'}</td>
+      <td style="padding:10px 16px;text-align:center">${escapeHtmlAdmin(p.stock != null ? p.stock : '—')}</td>
       <td style="padding:10px 16px;text-align:center">
         <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
           ${p.active !== false ? 'Activo' : 'Inactivo'}
@@ -5067,9 +5162,9 @@ function productRowHtml(p) {
       </td>
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-          ${canEditProd ? `<button class="adm-btn adm-btn-sm" onclick="prodEditar('${p._docId}')" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
-          ${canToggleProd ? `<button class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-          ${canDeleteProd ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar('${p._docId}','${nameSafe}')" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
+          ${canEditProd ? `<button type="button" class="adm-btn adm-btn-sm" onclick="prodEditar(${docIdArg})" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
+          ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive(${docIdArg}, ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+          ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar(${docIdArg},${nameArg})" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
           ${!canEditProd && !canToggleProd && !canDeleteProd ? '—' : ''}
         </div>
       </td>
@@ -5120,7 +5215,7 @@ function renderProductosGrouped(list) {
 
   document.getElementById('prod-tbody').innerHTML = orderedKeys.map(key => `
     <tr><td colspan="9" style="padding:14px 16px 8px;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);background:var(--adm-bg)">
-      ${labelFor(key)} <span style="color:var(--adm-muted);font-weight:600">(${groups.get(key).length})</span>
+      ${escapeHtmlAdmin(labelFor(key))} <span style="color:var(--adm-muted);font-weight:600">(${groups.get(key).length})</span>
     </td></tr>
     ${groups.get(key).map(productRowHtml).join('')}
   `).join('');
@@ -5607,7 +5702,7 @@ function renderColeccionesGrid(list) {
     document.getElementById('coll-grid-wrap').style.display = 'none';
     document.getElementById('coll-empty').innerHTML = `
       No hay colecciones configuradas todavía — el sitio público no muestra ninguna colección hasta que crees al menos una.
-      <div style="margin-top:14px"><button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collImportarDefaults()">Importar las 12 colecciones actuales</button></div>
+      <div style="margin-top:14px"><button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="collImportarDefaults()">Importar las 12 colecciones actuales</button></div>
     `;
     return;
   }
@@ -5618,38 +5713,45 @@ function renderColeccionesGrid(list) {
   [..._selectedCollections].forEach(slug => { if (!visibleSlugs.has(slug)) _selectedCollections.delete(slug); });
   grid.innerHTML = list.map(c => {
     const count = _allProducts.filter(p => (p.category || '') === c.slug).length;
+    const safeSlug = escapeHtmlAdmin(c.slug);
+    const slugArg = inlineArgumentAdmin(c.slug);
+    const imageUrl = sanitizeImageUrl(c.image || '');
     return `
     <div class="adm-card" style="margin:0;overflow:hidden;position:relative">
       <label style="position:absolute;top:8px;left:8px;z-index:3;background:rgba(255,255,255,.9);border-radius:6px;padding:3px;display:flex" title="Seleccionar">
-        <input type="checkbox" class="coll-row-check" data-slug="${c.slug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
+        <input type="checkbox" class="coll-row-check" data-slug="${safeSlug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
       </label>
-      <div style="height:120px;background:${c.image ? `url('${c.image}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
+      <div style="height:120px;background:${imageUrl ? `url('${escapeHtmlAdmin(imageUrl)}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
         ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#e65100;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
       </div>
       <div style="padding:14px">
-        <div style="font-weight:800;font-size:14px">${c.name || c.slug}</div>
-        <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">/${c.slug} · orden ${c.order ?? 0}</div>
+        <div style="font-weight:800;font-size:14px">${escapeHtmlAdmin(c.name || c.slug)}</div>
+        <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">/${safeSlug} · orden ${escapeHtmlAdmin(c.order ?? 0)}</div>
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${count} producto${count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${c.slug}')">Ver productos</button>
-          ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button class="adm-btn adm-btn-sm" onclick="collEditar('${c.slug}')">Editar</button>` : ''}
-          ${(can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar('${c.slug}', ${count})">Eliminar</button>` : ''}
+          <button type="button" class="adm-btn adm-btn-sm" onclick="collVerProductos(${slugArg})">Ver productos</button>
+          ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm" onclick="collEditar(${slugArg})">Editar</button>` : ''}
+          ${(can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar(${slugArg}, ${count})">Eliminar</button>` : ''}
         </div>
       </div>
     </div>`;
-  }).join('') + unmanaged.map(u => `
+  }).join('') + unmanaged.map(u => {
+    const safeSlug = escapeHtmlAdmin(u.slug);
+    const slugArg = inlineArgumentAdmin(u.slug);
+    return `
     <div class="adm-card" style="margin:0;overflow:hidden;border:1.5px dashed #e8a0b4">
       <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#e65100">SIN GESTIONAR</div>
       <div style="padding:14px">
-        <div style="font-weight:800;font-size:14px">${u.slug}</div>
+        <div style="font-weight:800;font-size:14px">${safeSlug}</div>
         <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">Categoría usada en productos, sin colección creada</div>
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${u.count} producto${u.count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm" onclick="collVerProductos('${u.slug}')">Ver productos</button>
-          <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="collCrearDesdeCategoria('${u.slug}')">Crear colección</button>
+          <button type="button" class="adm-btn adm-btn-sm" onclick="collVerProductos(${slugArg})">Ver productos</button>
+          <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="collCrearDesdeCategoria(${slugArg})">Crear colección</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   updateCollBulkToolbar();
 }
 
@@ -5786,8 +5888,8 @@ function renderCollCurrentList() {
     return `
     <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--adm-border)">
       <div style="display:flex;flex-direction:column;gap:2px">
-        <button class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === 0) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', -1)" title="Mover arriba">↑</button>
-        <button class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === inStock.length - 1) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', 1)" title="Mover abajo">↓</button>
+        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === 0) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', -1)" title="Mover arriba">↑</button>
+        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === inStock.length - 1) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', 1)" title="Mover abajo">↓</button>
       </div>
       ${p.imageUrl
         ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border);flex-shrink:0">`
@@ -5800,8 +5902,8 @@ function renderCollCurrentList() {
       <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
-      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>` : ''}
+      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>` : ''}
     </div>`;
   }).join('');
 }
@@ -6857,7 +6959,7 @@ function contRenderField(field, value) {
           Subir
           <input type="file" accept="image/*" style="position:absolute;opacity:0;width:0;height:0;overflow:hidden" onchange="contUploadImage(this, '${id}')" />
         </label>
-        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
+        <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
       </div>
       <div class="cont-upload-progress" id="${uid}-progress" style="display:none">
         <div class="cont-upload-bar-wrap"><div class="cont-upload-bar" id="${uid}-bar"></div></div>
@@ -6884,7 +6986,7 @@ function contRenderField(field, value) {
 function contRenderArrayField(field, items, baseId) {
   let html = `<div class="cont-array-container" data-fkey="${field.key}" data-array-field>`;
   items.forEach((item, i) => { html += contRenderArrayItem(field, item, i); });
-  html += `<button class="adm-btn adm-btn-outline adm-btn-sm" style="margin-top:8px" onclick="contAddArrayItem(this, '${JSON.stringify(field.itemFields).replace(/'/g,'&#39;').replace(/"/g,'&quot;')}')">+ Agregar ítem</button>`;
+  html += `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm" style="margin-top:8px" onclick="contAddArrayItem(this, '${JSON.stringify(field.itemFields).replace(/'/g,'&#39;').replace(/"/g,'&quot;')}')">+ Agregar ítem</button>`;
   html += `</div>`;
   return html;
 }
@@ -6893,7 +6995,7 @@ function contRenderArrayItem(field, item, index) {
   let html = `<div class="cont-array-item">
     <div class="cont-array-item-head">
       <span class="cont-array-item-label">Ítem ${index + 1}</span>
-      <button class="cont-array-del" onclick="this.closest('.cont-array-item').remove();this.closest('.cont-section').classList.add('dirty')" title="Eliminar">×</button>
+      <button type="button" class="cont-array-del" onclick="this.closest('.cont-array-item').remove();this.closest('.cont-section').classList.add('dirty')" title="Eliminar">×</button>
     </div>`;
   field.itemFields.forEach(subf => {
     html += `<div class="cont-field" data-fkey="${subf.key}">
@@ -6955,8 +7057,8 @@ function contRenderSection(pageId, sectionId, schema, savedValues) {
   const canEditCont = can(currentRole, 'manageContent') && (roleCanDo('contenido', 'editarTextos') || roleCanDo('contenido', 'activarDesactivarSecciones'));
   html += `
       <div class="cont-section-actions">
-        ${canEditCont ? `<button class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
-        <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>` : ''}
+        ${canEditCont ? `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
+        <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>` : ''}
         <a href="${pageUrl}" target="_blank" class="adm-btn adm-btn-outline adm-btn-sm">Ver en sitio</a>
       </div>
     </div>
@@ -7132,7 +7234,7 @@ async function contRenderTabs() {
     ...contExtraPages.map(p=>({ id:p.id, label:p.label })),
   ];
   tabsEl.innerHTML = allPages.map(p => `
-    <button class="cont-page-tab ${p.id===contCurrentPage?'active':''}" data-pageid="${p.id}" onclick="contSwitchPage('${p.id}')">${p.label}</button>
+    <button type="button" class="cont-page-tab ${p.id===contCurrentPage?'active':''}" data-pageid="${p.id}" onclick="contSwitchPage('${p.id}')">${p.label}</button>
   `).join('');
 }
 
@@ -7502,7 +7604,7 @@ function renderOeItems() {
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
         onchange="updateOeItemQty(${idx}, this.value)" oninput="updateOeItemQty(${idx}, this.value)">
       <div style="font-size:13px;font-weight:700;color:var(--adm-primary);min-width:90px;text-align:right">${fmt((it.price||0)*(it.qty||1))}</div>
-      <button onclick="removeOeItem(${idx})" style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
+      <button type="button" onclick="removeOeItem(${idx})" style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
     </div>
   `).join('');
   recalcOeTotals();
@@ -7662,8 +7764,8 @@ setInterval(ttSyncSwitchAria, 1200);
     <div style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
     <div style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <button class="adm-btn adm-btn-primary" id="unsaved-modal-save">Guardar cambios</button>
-      <button class="adm-btn adm-btn-danger" id="unsaved-modal-discard">Descartar cambios</button>
+      <button type="button" class="adm-btn adm-btn-primary" id="unsaved-modal-save">Guardar cambios</button>
+      <button type="button" class="adm-btn adm-btn-danger" id="unsaved-modal-discard">Descartar cambios</button>
     </div>
   </div>
 </div>
@@ -7675,7 +7777,7 @@ setInterval(ttSyncSwitchAria, 1200);
   <div style="background:#fff;border-radius:16px;max-width:780px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)"> Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
-      <button onclick="closeOrderEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" onclick="closeOrderEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
     </div>
     <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px" id="oe-body">
       <input type="hidden" id="oe-id">
@@ -7765,8 +7867,8 @@ setInterval(ttSyncSwitchAria, 1200);
       </div>
     </div>
     <div style="padding:16px 24px;border-top:1px solid var(--adm-border);display:flex;gap:10px;justify-content:flex-end">
-      <button class="adm-btn" onclick="closeOrderEdit()">Cancelar</button>
-      <button class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios</button>
+      <button type="button" class="adm-btn" onclick="closeOrderEdit()">Cancelar</button>
+      <button type="button" class="adm-btn adm-btn-primary" onclick="saveOrderEdit()" id="oe-save-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -7778,7 +7880,7 @@ setInterval(ttSyncSwitchAria, 1200);
   <div style="background:#fff;border-radius:16px;max-width:640px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Editar plantilla <span id="tpl-edit-name" style="color:var(--adm-muted);font-size:13px"></span></div>
-      <button onclick="closeTplEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" onclick="closeTplEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
     </div>
     <div style="padding:24px;display:flex;flex-direction:column;gap:14px;max-height:60vh;overflow-y:auto">
       <input type="hidden" id="tpl-edit-id">
@@ -7813,8 +7915,8 @@ setInterval(ttSyncSwitchAria, 1200);
         <button class="adm-btn adm-btn-outline adm-btn-sm" type="button" id="tpl-edit-preview-btn">Vista previa</button>
       </div>
       <div style="display:flex;gap:10px">
-        <button class="adm-btn" onclick="closeTplEdit()">Cancelar</button>
-        <button class="adm-btn adm-btn-primary" id="tpl-edit-save-btn">Guardar plantilla</button>
+        <button type="button" class="adm-btn" onclick="closeTplEdit()">Cancelar</button>
+        <button type="button" class="adm-btn adm-btn-primary" id="tpl-edit-save-btn">Guardar plantilla</button>
       </div>
     </div>
   </div>
@@ -7824,7 +7926,7 @@ setInterval(ttSyncSwitchAria, 1200);
   <div style="background:#fff;border-radius:16px;max-width:680px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Vista previa</div>
-      <button onclick="closeTplPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" onclick="closeTplPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
     </div>
     <div style="padding:20px 24px">
       <div style="font-size:12px;color:var(--adm-muted);margin-bottom:10px">Asunto: <strong id="tpl-preview-subject" style="color:var(--adm-text)"></strong></div>
@@ -7841,8 +7943,8 @@ setInterval(ttSyncSwitchAria, 1200);
     <label class="adm-label" style="display:block;margin-bottom:6px">Escribí CONFIRMAR para enviar</label>
     <input type="text" class="adm-input" id="promo-confirm-input" placeholder="CONFIRMAR" style="margin-bottom:16px" autocomplete="off" />
     <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="adm-btn" onclick="closePromoConfirm()">Cancelar</button>
-      <button class="adm-btn adm-btn-primary" id="promo-confirm-send-btn" disabled>Enviar promoción</button>
+      <button type="button" class="adm-btn" onclick="closePromoConfirm()">Cancelar</button>
+      <button type="button" class="adm-btn adm-btn-primary" id="promo-confirm-send-btn" disabled>Enviar promoción</button>
     </div>
   </div>
 </div>

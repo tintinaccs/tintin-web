@@ -13,6 +13,8 @@
  */
 import { db } from './firebase.js';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { cleanText, cleanMultilineText } from './security-utils.js';
+import { sanitizeImageUrl } from './image-utils.js';
 
 /**
  * Normalize a raw Firestore `collections/{slug}` doc into the canonical
@@ -26,9 +28,9 @@ export function normalizeCollectionDoc(id, data) {
   const orderNum = Number(d.order);
   return {
     slug: id,
-    name: d.name || d.title || id,
-    description: d.description || '',
-    image: d.image || d.imageUrl || '',
+    name: cleanText(d.name || d.title || id, 120),
+    description: cleanMultilineText(d.description || '', 1000),
+    image: sanitizeImageUrl(d.image || d.imageUrl || ''),
     order: Number.isFinite(orderNum) ? orderNum : 9999,
     visible: d.visible !== false,
   };

@@ -49,7 +49,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260715-3';
+  const TT_CACHE_VERSION = 'tintin-20260715-5';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
@@ -133,7 +133,7 @@
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
     '.tt-loader-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;opacity:0}',
     '#tt-loader-spin-wrap.tt-ready .tt-loader-dots{opacity:1;transition:opacity .3s ease .15s}',
-    '.tt-loader-dots span{width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#D46A8A);opacity:.35;animation:tt-loader-dot-bounce 1.1s ease-in-out infinite}',
+    '.tt-loader-dots span{width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#AD3F67);opacity:.35;animation:tt-loader-dot-bounce 1.1s ease-in-out infinite}',
     '.tt-loader-dots span:nth-child(2){animation-delay:.15s}',
     '.tt-loader-dots span:nth-child(3){animation-delay:.3s}',
     '@keyframes tt-loader-dot-bounce{0%,80%,100%{transform:scale(.72);opacity:.35}40%{transform:scale(1.15);opacity:1}}',
@@ -469,6 +469,18 @@
     }
   }
 
+  function bootHeaderAccountFix() {
+    if (!window.TintinAccountMobileFixBooted) {
+      importSibling('header-account-mobile-fix.js', 'Header Account Fix');
+    }
+  }
+
+  function bootSiteActivity() {
+    if (!window.TintinSiteActivityBooted) {
+      importSibling('site-activity.js', 'Site Activity');
+    }
+  }
+
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
       importSibling('header-scroll-hide.js', 'Header Scroll Hide');
@@ -500,9 +512,11 @@
     bootGlobalQuality();
     bootHeaderMode();
     bootHeaderDropdownFix();
+    bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootScrollReveal();
+    bootSiteActivity();
   }
 
   function bootPublicRuntime() {
@@ -517,8 +531,10 @@
     // hilo principal y dejar el navegador detenido sobre el loader.
     bootHeaderMode();
     bootHeaderDropdownFix();
+    bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootSiteActivity();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
     documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
