@@ -23,6 +23,7 @@ const authNav = read('js/auth-nav.js');
 const uiQuality = read('js/ui-quality.js');
 const pageAudit = read('js/page-audit-fix.js');
 const rules = read('firestore.rules');
+const checkout = read('checkout.html');
 
 check(
   'Bloqueo síncrono antes del body',
@@ -128,6 +129,13 @@ check(
   gateCore.includes('raw.storeOpen === true') &&
     gateCore.includes("__storeConfigStatus !== 'ok'"),
   'solo true explícito y una lectura válida pueden abrir la tienda'
+);
+check(
+  'Checkout comparte el formato validado del control global',
+  checkout.includes('normalizeStoreAccessConfig') &&
+    checkout.includes("storeCfg = normalizeStoreAccessConfig(cfg, 'ok')") &&
+    checkout.includes('renderStoreClosedOverlay(storeCfg)'),
+  'settings/general no debe confundirse con una lectura fallida ni crear un aviso falso'
 );
 check(
   'Super Admin por correo real',
