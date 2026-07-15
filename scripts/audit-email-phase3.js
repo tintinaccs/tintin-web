@@ -22,7 +22,7 @@ const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');
 check(
   'El checkout ya carga el sistema de correos',
   checkout.includes('import { sendOrderNotification } from "./js/email-notify.js"') &&
-    notify.includes("import('./checkout-email-bridge.js?v=tintin-20260715-12')"),
+    notify.includes("import('./checkout-email-bridge.js?v=tintin-20260715-13')"),
   'El puente debe arrancar desde el módulo que checkout ya importa.'
 );
 
@@ -71,7 +71,7 @@ check(
 
 check(
   'Super Admin inicia la sincronización de correos',
-  adminStore.includes("import('./admin-email-gate-sync.js?v=tintin-20260715-12')"),
+  adminStore.includes("import('./admin-email-gate-sync.js?v=tintin-20260715-13')"),
   'El documento mínimo debe crearse al entrar al panel autorizado.'
 );
 

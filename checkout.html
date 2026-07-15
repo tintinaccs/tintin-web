@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-12"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-13"></script>
+  <script src="js/public-shell.js?v=tintin-20260715-13" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,27 +21,21 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-12">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-12">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-12">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-12">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-12">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-12">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-13">
 </head>
 <body>
 <h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
 
-<!-- HEADER -->
-<header class="ck-header">
-  <a href="index.html" class="ck-header-logo"><img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-12" alt="Tintin Accesorios"></a>
-  <div class="ck-header-right">
-    <a href="perfil.html" class="ck-account-badge" id="ck-account-badge" title="Ver mi cuenta">
-      <span class="ck-account-badge-avatar" id="ck-account-badge-avatar">?</span>
-      <span class="ck-account-badge-name" id="ck-account-badge-name"></span>
-    </a>
-    <a href="index.html" class="ck-header-back">← <span class="ck-header-back-text">Seguir comprando</span></a>
-  </div>
-</header>
+
+<div class="ck-back-row">
+  <a href="index.html" class="ck-header-back">← Seguir comprando</a>
+</div>
 
 <!-- STEP INDICATOR -->
 <div class="ck-steps" id="ck-steps">
@@ -330,7 +325,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260715-12";
+} from "./js/cart-sync.js?v=tintin-20260715-13";
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
@@ -617,7 +612,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-12');
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-13');
         const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1715,24 +1710,6 @@ async function searchMapPlace(query) {
   });
 }
 
-// Insignia de cuenta en el header — visible en TODOS los pasos (el header
-// queda fuera de los ck-panel), para que nunca haya dudas de con qué cuenta
-// se está comprando. Usa la foto de Google apenas está disponible.
-function renderAccountBadge(user) {
-  const badge  = document.getElementById('ck-account-badge');
-  const avatar = document.getElementById('ck-account-badge-avatar');
-  const nameEl = document.getElementById('ck-account-badge-name');
-  if (!user) { badge.classList.remove('show'); return; }
-  const label = user.displayName || user.email || 'Mi cuenta';
-  const initial = label[0].toUpperCase();
-  avatar.innerHTML = user.photoURL
-    ? `<img src="${user.photoURL}" alt="${label}" referrerpolicy="no-referrer" width="26" height="26" style="width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0" onerror="this.parentNode.textContent='${initial}'">`
-    : initial;
-  nameEl.textContent = label.split(' ')[0];
-  badge.title = `Sesión iniciada como ${user.email || label}`;
-  badge.classList.add('show');
-}
-
 // ---- INIT ----
 subscribeStoreConfig().then(() => {
   populateCities();
@@ -1746,7 +1723,6 @@ onAuthStateChanged(auth, user => {
   currentUserProfile = null;
   authReady = true;
   window.ttPageReady && window.ttPageReady(); // carrito ya renderizado + estado de sesión ya conocido
-  renderAccountBadge(user);
   // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
   // anónima acá — solo se sigue el estado de auth tal cual está. Ver una y
   // otra colección/producto/paso 1 del checkout sigue funcionando sin login,
@@ -1776,6 +1752,7 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-13"></script>
+<script src="script.js?v=tintin-20260715-13" defer></script>
 </body>
 </html>

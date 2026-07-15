@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260715-12';
+const VERSION = 'tintin-20260715-13';
 
 const issues = [];
 
@@ -208,8 +208,8 @@ for (const file of htmlFiles) {
   if (/styles\.css["']/.test(content)) {
     addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
   }
-  if (isCheckout && /id=["']tt-header["']|class=["'][^"']*tt-header/.test(content)) {
-    addIssue('WARN', file, 'Checkout contiene header en HTML; ejecutar npm run fix:tintin para quitarlo de fuente');
+  if (isCheckout && !/js\/public-shell\.js/.test(content)) {
+    addIssue('CRITICAL', file, 'Checkout no carga el mismo header publico que la portada');
   }
 }
 
