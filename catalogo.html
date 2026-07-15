@@ -50,9 +50,14 @@
       border-radius: 14px;
       overflow: hidden;
       border: 1.5px solid #f0e0e8;
-      transition: box-shadow .2s, transform .2s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      content-visibility: auto;
+      contain-intrinsic-size: 340px 500px;
+      transition: box-shadow .24s ease, transform .24s ease, border-color .24s ease;
     }
-    .tt-card:hover { box-shadow: 0 8px 32px rgba(200,80,120,.12); transform: translateY(-2px); }
+    .tt-card:hover { box-shadow: 0 12px 36px rgba(173,63,103,.14); border-color: #e8bfd0; }
 
     .tt-card-img-wrap {
       display: block;
@@ -65,16 +70,18 @@
     .tt-card-img-wrap img { width: 100%; height: 100%; object-fit: contain; background: transparent; display: block; transition: transform .3s; }
     .tt-card:hover .tt-card-img-wrap img { transform: scale(1.04); }
 
-    .tt-card-info { padding: 12px; }
+    .tt-card-info { display: flex; flex: 1; flex-direction: column; padding: 14px; }
     .tt-card-cat {
       font-size: 10px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .1em; color: var(--acc); margin-bottom: 4px;
     }
-    .tt-card-name { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; color: #C86B86; }
-    .tt-card-price { font-size: 14px; font-weight: 800; color: #C86B86; margin-bottom: 10px; }
-    .tt-card-btns { display: flex; gap: 8px; }
+    .tt-card-name { font-size: 13px; font-weight: 700; line-height: 1.45; margin: 0 0 5px; color: #2b2b2b; }
+    .tt-card-name a { color: inherit; text-decoration: none; }
+    .tt-card-name a:hover { color: var(--acc); }
+    .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 12px; }
+    .tt-card-btns { display: flex; gap: 8px; margin-top: auto; }
     .tt-card-btn {
-      flex: 1; min-width: 0; padding: 8px 6px; border-radius: 50px; font-size: 11px; font-weight: 700;
+      flex: 1; min-width: 0; min-height: 44px; padding: 9px 7px; border-radius: 50px; font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: center;
       border: 1.5px solid var(--acc, #c9597a); transition: background .2s, color .2s;
       font-family: 'Poppins', sans-serif; text-decoration: none;
@@ -83,6 +90,7 @@
     }
     .tt-card-btn-cart { background: var(--acc, #c9597a); color: #fff !important; }
     .tt-card-btn-cart:hover { background: #a03060; border-color: #a03060; }
+    .tt-card-btn-cart:disabled { background: #8a7d82; border-color: #8a7d82; cursor: not-allowed; opacity: 1; }
     .tt-card-btn-view { background: transparent; color: var(--acc, #c9597a); }
     .tt-card-btn-view:hover { background: #fce4ec; }
     .tt-card-badge {
@@ -93,8 +101,10 @@
     .tt-card-badge--out { background: #e53935; }
     .cat-card-placeholder {
       display: flex; align-items: center; justify-content: center;
-      width: 100%; height: 100%; font-size: 48px;
+      position: absolute; inset: 0; width: 100%; height: 100%; font-size: 48px;
+      color: #963653; background: linear-gradient(145deg, #fff8fb, #f8dce7);
     }
+    .cat-card-placeholder[hidden] { display: none; }
 
     /* ── Loading Skeleton ── */
     .tt-skeleton {
@@ -121,11 +131,11 @@
     .tt-filtro-btn:hover, .tt-filtro-btn.activo { background: var(--acc, #c9597a); color: #fff !important; }
 
     /* ── Catalog Layout ── */
-    .cat-wrap { max-width: 1300px; margin: 0 auto; padding: 32px 24px 80px; }
+    .cat-wrap { max-width: 1300px; margin: 0 auto; padding: 24px 24px 80px; }
 
     .cat-hero {
       background: #fce4ec; border-radius: 20px;
-      padding: 40px 32px; margin-bottom: 32px; text-align: center;
+      padding: 34px 32px; margin-bottom: 28px; text-align: center;
       margin-top: var(--header-h);
     }
     .cat-hero-title {
@@ -141,7 +151,7 @@
 
     .cat-sidebar {
       background: #fce4ec; border-radius: 14px; border: 1.5px solid #f5d0de;
-      padding: 24px; position: sticky; top: 80px;
+      padding: 24px; position: sticky; top: calc(var(--header-h) + 12px);
     }
     .cat-filter-title {
       font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em;
@@ -151,7 +161,7 @@
     .cat-filter-group { margin-bottom: 24px; }
     .cat-filter-option {
       display: flex; align-items: center; gap: 8px; padding: 7px 0; cursor: pointer;
-      font-size: 13px; font-weight: 600; color: #C86B86; transition: color .2s;
+      min-height: 38px; font-size: 13px; font-weight: 600; color: #493c41; transition: color .2s, background .2s;
       border: none; background: none; width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
     }
     .cat-filter-option:hover { color: var(--acc); }
@@ -162,13 +172,17 @@
     .cat-filter-option.active .cat-filter-dot { background: var(--acc); }
     .cat-filter-count { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--text-muted); }
 
-    .cat-range { display: flex; gap: 8px; align-items: center; }
+    .cat-range { display: flex; gap: 8px; align-items: end; }
+    .cat-range-field { min-width: 0; flex: 1; }
+    .cat-range-label { display: block; margin-bottom: 5px; color: #5e5257; font-size: 11px; font-weight: 700; }
     .cat-range-input {
-      flex: 1; min-width: 0; padding: 8px 10px; border: 1.5px solid #eee; border-radius: 8px;
-      font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
+      width: 100%; min-height: 42px; padding: 8px 10px; border: 1.5px solid #dfced5; border-radius: 8px;
+      color: #2b2b2b; background: #fff; font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
     }
     .cat-range-input:focus { border-color: var(--acc); }
     .cat-range-sep { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .cat-range-error { margin: 8px 0 0; color: #9f1f3f; font-size: 11px; font-weight: 700; line-height: 1.45; }
+    .cat-range-error[hidden] { display: none; }
 
     .cat-main { width: 100%; }
     .cat-top {
@@ -180,47 +194,87 @@
     .cat-sort {
       padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
       font-size: 12px; font-family: 'Poppins', sans-serif; background: #fce4ec;
-      color: #C86B86; font-weight: 600; cursor: pointer; outline: none;
+      min-height: 44px; color: #493c41; font-weight: 600; cursor: pointer; outline: none;
     }
     .cat-sort:focus { border-color: var(--acc); }
     .cat-search {
       padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
-      font-size: 13px; font-family: 'Poppins', sans-serif; outline: none; width: 200px;
+      min-height: 44px; font-size: 13px; font-family: 'Poppins', sans-serif; outline: none; width: min(250px, 100%);
     }
     .cat-search:focus { border-color: var(--acc); }
 
     .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .cat-controls { display: flex; flex: 1 1 460px; min-width: 0; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
     .cat-filter-toggle {
       display: none; width: 100%; padding: 12px; background: var(--acc); color: #fff !important;
       border: none; border-radius: 50px; font-size: 13px; font-weight: 800;
       text-transform: uppercase; letter-spacing: .08em; cursor: pointer;
       font-family: 'Poppins', sans-serif; margin-bottom: 16px;
+      min-height: 48px; transition: background .2s ease, transform .2s ease;
     }
 
     .cat-tabs-mobile {
       display: none; overflow-x: auto; gap: 8px; padding-bottom: 4px;
-      margin-bottom: 16px; scrollbar-width: none;
+      margin-bottom: 16px; scrollbar-width: none; scroll-snap-type: x proximity;
+      overscroll-behavior-inline: contain;
     }
+    .cat-tabs-mobile .tt-filtro-btn { scroll-snap-align: start; }
     .cat-tabs-mobile::-webkit-scrollbar { display: none; }
 
     .cat-empty {
       grid-column: 1/-1; text-align: center; padding: 60px 24px; color: var(--text-muted);
     }
     .cat-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .cat-load-more { grid-column: 1/-1; display: flex; justify-content: center; padding: 18px 0 8px; }
+    .cat-load-more .tt-filtro-btn { min-width: min(280px, 100%); }
+
+    .tt-sr-only {
+      position: absolute !important; width: 1px !important; height: 1px !important;
+      padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important;
+    }
 
     @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) {
-      .cat-layout { grid-template-columns: 1fr; }
-      .cat-sidebar { display: none; position: static; }
-      .cat-sidebar.open { display: block; }
+      .cat-layout { grid-template-columns: 1fr; gap: 0; }
+      .cat-hero { margin-top: 0; }
+      .cat-sidebar {
+        display: block; position: static; max-height: 0; opacity: 0; overflow: hidden;
+        padding-top: 0; padding-bottom: 0; border-width: 0; transform: translateY(-8px);
+        pointer-events: none; transition: max-height .45s cubic-bezier(.16,1,.3,1), opacity .25s ease,
+          transform .35s cubic-bezier(.16,1,.3,1), padding .35s ease, border-width .1s linear;
+      }
+      .cat-sidebar.open {
+        max-height: 1200px; opacity: 1; padding-top: 24px; padding-bottom: 24px;
+        border-width: 1.5px; transform: translateY(0); pointer-events: auto; margin-bottom: 16px;
+      }
       .cat-filter-toggle { display: block; }
       .cat-tabs-mobile { display: flex; }
+      .cat-top { align-items: stretch; }
+      .cat-count { width: 100%; }
+      .cat-controls { width: 100%; justify-content: stretch; }
+      .cat-search, .cat-sort { flex: 1 1 190px; width: auto; }
     }
     @media (max-width: 480px) {
       .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .cat-wrap { padding: 20px 12px 80px; }
-      .cat-hero { padding: 24px 16px; }
+      .cat-hero { padding: 20px 12px 24px; margin-bottom: 18px; }
+      .cat-hero-title { font-size: clamp(25px, 8vw, 34px); }
+      .cat-hero-sub { font-size: 10px; letter-spacing: .07em; }
+      .cat-top { padding: 14px; }
+      .cat-controls { display: grid; grid-template-columns: 1fr; }
+      .cat-search, .cat-sort { width: 100%; }
+      .tt-card-info { padding: 10px; }
+      .tt-card-name { font-size: 12px; }
+      .tt-card-price { font-size: 13px; }
+      .tt-card-btns { flex-direction: column; gap: 6px; }
+      .tt-card-btn { min-height: 40px; font-size: 10px; padding: 7px 5px; }
+      .tt-card-badge { top: 7px; right: 7px; font-size: 8px; padding: 3px 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tt-card, .tt-card-img-wrap img, .cat-sidebar, .cat-filter-toggle { transition: none !important; }
+      .tt-skeleton { animation: none; }
     }
   </style>
 </head>
@@ -230,26 +284,26 @@
 <div class="cat-wrap">
 
   <!-- HERO -->
-  <div class="cat-hero" data-tt-editable="catalogo" data-tt-section="header">
+  <section class="cat-hero" data-tt-editable="catalogo" data-tt-section="header" aria-labelledby="cat-titulo">
     <h1 class="cat-hero-title" id="cat-titulo">Todo el catálogo</h1>
     <div class="cat-hero-sub" id="cat-subtitulo">Descubrí todos nuestros accesorios</div>
-  </div>
+  </section>
 
   <!-- TABS MOBILE -->
-  <div class="cat-tabs-mobile" id="cat-tabs-mobile">
-    <button type="button" class="tt-filtro-btn activo" data-cat="todos">Todos</button>
+  <nav class="cat-tabs-mobile" id="cat-tabs-mobile" aria-label="Categorías del catálogo">
+    <button type="button" class="tt-filtro-btn activo" data-cat="todos" aria-pressed="true">Todos</button>
     <!-- Rest rendered live from Super Admin → Colecciones -->
-  </div>
+  </nav>
 
   <!-- LAYOUT -->
   <div class="cat-layout">
 
     <!-- SIDEBAR -->
-    <button type="button" class="cat-filter-toggle" id="filter-toggle">🔽 Filtrar por categoría</button>
-    <aside class="cat-sidebar" id="cat-sidebar">
+    <button type="button" class="cat-filter-toggle" id="filter-toggle" aria-controls="cat-sidebar" aria-expanded="false">Filtrar por categoría</button>
+    <aside class="cat-sidebar" id="cat-sidebar" aria-label="Filtros del catálogo">
       <div class="cat-filter-group">
         <div class="cat-filter-title">Categoría</div>
-        <button type="button" class="cat-filter-option active" data-cat="todos">
+        <button type="button" class="cat-filter-option active" data-cat="todos" aria-pressed="true">
           <span class="cat-filter-dot"></span> Todas
           <span class="cat-filter-count" id="count-todos"></span>
         </button>
@@ -259,10 +313,15 @@
       <div class="cat-filter-group">
         <div class="cat-filter-title">Precio (Gs.)</div>
         <div class="cat-range">
-          <input type="number" class="cat-range-input" id="precio-min" placeholder="Min" min="0">
+          <label class="cat-range-field" for="precio-min"><span class="cat-range-label">Desde</span>
+            <input type="number" class="cat-range-input" id="precio-min" placeholder="0" min="0" inputmode="numeric">
+          </label>
           <span class="cat-range-sep">—</span>
-          <input type="number" class="cat-range-input" id="precio-max" placeholder="Max" min="0">
+          <label class="cat-range-field" for="precio-max"><span class="cat-range-label">Hasta</span>
+            <input type="number" class="cat-range-input" id="precio-max" placeholder="Sin límite" min="0" inputmode="numeric">
+          </label>
         </div>
+        <p class="cat-range-error" id="cat-range-error" role="alert" hidden>El precio máximo debe ser igual o mayor al mínimo.</p>
         <button type="button" class="tt-filtro-btn" id="btn-aplicar-precio" style="margin-top:10px;width:100%">Aplicar</button>
       </div>
 
@@ -282,9 +341,11 @@
     <!-- MAIN -->
     <div class="cat-main">
       <div class="cat-top">
-        <div class="cat-count" id="cat-count">Cargando...</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input type="text" class="cat-search" id="cat-search" placeholder="🔍 Buscar...">
+        <div class="cat-count" id="cat-count" role="status" aria-live="polite">Cargando...</div>
+        <div class="cat-controls">
+          <label class="tt-sr-only" for="cat-search">Buscar productos</label>
+          <input type="search" class="cat-search" id="cat-search" placeholder="Buscar productos..." autocomplete="off">
+          <label class="tt-sr-only" for="cat-sort">Ordenar productos</label>
           <select class="cat-sort" id="cat-sort">
             <option value="default">Ordenar por</option>
             <option value="precio-asc">Precio: menor a mayor</option>
@@ -295,14 +356,14 @@
         </div>
       </div>
 
-      <div class="cat-grid" id="cat-grid">
+      <div class="cat-grid" id="cat-grid" aria-busy="true">
         <!-- Skeleton loading state -->
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
-        <div class="tt-card" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
+        <div class="tt-card" aria-hidden="true" style="pointer-events:none"><div class="tt-skeleton" style="aspect-ratio:1/1"></div><div class="tt-card-info"><div class="tt-skeleton" style="height:10px;width:50%;margin-bottom:8px"></div><div class="tt-skeleton" style="height:14px;width:80%;margin-bottom:6px"></div><div class="tt-skeleton" style="height:16px;width:40%"></div></div></div>
       </div>
     </div>
 
@@ -373,14 +434,37 @@ initSiteContent('catalogo');
 let onCollectionsUpdate = () => {};
 import('./js/collections-store.js')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
-  .catch(e => console.warn('[catalogo] collections-store no cargó, quedan las categorías estáticas:', e));
+  .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
+
+const cartSyncPromise = import('./js/cart-sync.js?v=tintin-20260715-13');
 
 const TODOS_LABEL = 'Todo el catálogo';
+const PRODUCT_BATCH_SIZE = 48;
+const priceFormatter = new Intl.NumberFormat('es-PY');
+const nameSorter = new Intl.Collator('es', { sensitivity: 'base', numeric: true });
 
 function escapeCatalogHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[char]);
+}
+
+function safeCatalogImageUrl(value) {
+  if (!value) return '';
+  try {
+    const url = new URL(String(value), location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch (_) {
+    return '';
+  }
+}
+
+function normalizeSearch(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
 }
 
 // Live collections from Super Admin → Colecciones — the only source of
@@ -402,6 +486,7 @@ function renderCollectionButtons(cols) {
       btn.type = 'button';
       btn.className = 'cat-filter-option' + (catActual === c.slug ? ' active' : '');
       btn.dataset.cat = c.slug;
+      btn.setAttribute('aria-pressed', String(catActual === c.slug));
       const dot = document.createElement('span');
       dot.className = 'cat-filter-dot';
       const count = document.createElement('span');
@@ -419,6 +504,7 @@ function renderCollectionButtons(cols) {
       btn.type = 'button';
       btn.className = 'tt-filtro-btn' + (catActual === c.slug ? ' activo' : '');
       btn.dataset.cat = c.slug;
+      btn.setAttribute('aria-pressed', String(catActual === c.slug));
       btn.textContent = c.name || c.slug;
       btn.onclick = () => seleccionarCat(c.slug);
       mobileTabs.appendChild(btn);
@@ -429,6 +515,8 @@ function renderCollectionButtons(cols) {
 
 let todos = [];
 let catActual = 'todos';
+let filteredProducts = [];
+let visibleProductLimit = PRODUCT_BATCH_SIZE;
 
 // Normalize any category spelling/alias → canonical internal slug
 const CAT_ALIASES = {
@@ -455,7 +543,8 @@ const catParam = normalizeCategory(params.get('cat') || '');
 if (catParam) catActual = catParam;
 
 function fmt(n) {
-  return 'Gs. ' + new Intl.NumberFormat('es-PY').format(n);
+  const value = Number(n);
+  return 'Gs. ' + priceFormatter.format(Number.isFinite(value) ? value : 0);
 }
 
 function catMatches(product, cat) {
@@ -477,33 +566,44 @@ function isInStockCat(p) {
   return !(p.stock != null && Number(p.stock) <= 0);
 }
 
-function aplicarFiltros() {
-  // Broken/incomplete product records (no real name — e.g. a malformed import
-  // row) never show on the public storefront, in any view.
+function readPriceRange(showError = false) {
+  const minInput = document.getElementById('precio-min');
+  const maxInput = document.getElementById('precio-max');
+  const error = document.getElementById('cat-range-error');
+  const min = minInput.value === '' ? 0 : Math.max(0, Number(minInput.value));
+  const max = maxInput.value === '' ? Infinity : Math.max(0, Number(maxInput.value));
+  const invalid = !Number.isFinite(min) || Number.isNaN(max) || max < min;
+  minInput.setAttribute('aria-invalid', String(invalid));
+  maxInput.setAttribute('aria-invalid', String(invalid));
+  error.hidden = !(showError && invalid);
+  return invalid ? null : { min, max };
+}
+
+function aplicarFiltros({ resetLimit = true, validatePrice = false } = {}) {
   let lista = todos.filter(p => p.name && String(p.name).trim());
 
   if (catActual !== 'todos') lista = lista.filter(p => catMatches(p, catActual));
 
-  const q = (document.getElementById('cat-search').value || '').toLowerCase().trim();
+  const q = normalizeSearch(document.getElementById('cat-search').value);
   if (q) lista = lista.filter(p =>
-    (p.name || '').toLowerCase().includes(q) ||
-    (p.category || p.cat || '').toLowerCase().includes(q) ||
-    (p.desc || p.description || '').toLowerCase().includes(q)
+    normalizeSearch(p.name).includes(q) ||
+    normalizeSearch(p.category || p.cat).includes(q) ||
+    normalizeSearch(p.desc || p.description).includes(q)
   );
 
-  const min = parseInt(document.getElementById('precio-min').value) || 0;
-  const max = parseInt(document.getElementById('precio-max').value) || Infinity;
-  lista = lista.filter(p => p.price >= min && p.price <= max);
+  const range = readPriceRange(validatePrice);
+  if (validatePrice && !range) return;
+  if (range) lista = lista.filter(p => Number(p.price) >= range.min && Number(p.price) <= range.max);
 
   if (document.getElementById('filtro-stock').checked) {
-    lista = lista.filter(p => (p.stock ?? 1) > 0);
+    lista = lista.filter(isInStockCat);
   }
 
   const sort = document.getElementById('cat-sort').value;
-  if (sort === 'precio-asc')  lista.sort((a, b) => a.price - b.price);
-  if (sort === 'precio-desc') lista.sort((a, b) => b.price - a.price);
-  if (sort === 'nombre')      lista.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
-  if (sort === 'stock')       lista.sort((a, b) => (b.stock ?? 0) - (a.stock ?? 0));
+  if (sort === 'precio-asc')  lista.sort((a, b) => Number(a.price) - Number(b.price));
+  if (sort === 'precio-desc') lista.sort((a, b) => Number(b.price) - Number(a.price));
+  if (sort === 'nombre')      lista.sort((a, b) => nameSorter.compare(a.name || '', b.name || ''));
+  if (sort === 'stock')       lista.sort((a, b) => Number(b.stock ?? 0) - Number(a.stock ?? 0));
   if (sort === 'default' && catActual !== 'todos') {
     // Manual order set from Super Admin → Colecciones → Gestionar productos
     lista.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999));
@@ -513,11 +613,14 @@ function aplicarFiltros() {
   // but always sink to the end regardless of the chosen sort order.
   lista = [...lista.filter(isInStockCat), ...lista.filter(p => !isInStockCat(p))];
 
+  if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
   renderGrid(lista);
 }
 
 function renderGrid(lista) {
   const grid = document.getElementById('cat-grid');
+  filteredProducts = lista;
+  grid.setAttribute('aria-busy', 'false');
   document.getElementById('cat-count').textContent = lista.length + ' producto' + (lista.length !== 1 ? 's' : '');
 
   if (!lista.length) {
@@ -531,42 +634,74 @@ function renderGrid(lista) {
     return;
   }
 
-  grid.innerHTML = lista.map(p => {
+  const visibleProducts = lista.slice(0, visibleProductLimit);
+  grid.innerHTML = visibleProducts.map(p => {
     const safeAlt = escapeCatalogHtml(p.name || '');
     const safeId = escapeCatalogHtml(p.id);
     const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
-    const imgHtml = p.imageUrl
-      ? `<img src="${escapeCatalogHtml(p.imageUrl)}" alt="${safeAlt}" loading="lazy" onerror="this.style.display='none'">`
-      : `<div class="cat-card-placeholder">✨</div>`;
-    const badgeHtml = p.badge
-      ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>`
-      : p.stock === 0 ? `<span class="tt-card-badge tt-card-badge--out">AGOTADO</span>` : '';
+    const imageUrl = safeCatalogImageUrl(p.imageUrl);
+    const imgHtml = imageUrl
+      ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true">✨</div>`
+      : `<div class="cat-card-placeholder" aria-hidden="true">✨</div>`;
+    const inStock = isInStockCat(p);
+    const badgeHtml = !inStock
+      ? `<span class="tt-card-badge tt-card-badge--out">AGOTADO</span>`
+      : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
     const catLabel = p.category || p.cat || '';
     return `
-      <div class="tt-card">
-        <a href="${productHref}" class="tt-card-img-wrap">
+      <article class="tt-card">
+        <a href="${productHref}" class="tt-card-img-wrap" aria-label="Ver ${safeAlt}">
           ${imgHtml}
           ${badgeHtml}
         </a>
         <div class="tt-card-info">
           ${catLabel ? `<div class="tt-card-cat">${escapeCatalogHtml(catLabel)}</div>` : ''}
-          <div class="tt-card-name">${escapeCatalogHtml(p.name || '')}</div>
+          <h2 class="tt-card-name"><a href="${productHref}">${safeAlt}</a></h2>
           <div class="tt-card-price">${fmt(p.price)}</div>
           <div class="tt-card-btns">
             <a class="tt-card-btn tt-card-btn-view" href="${productHref}">Ver producto</a>
-            <button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}">+ Carrito</button>
+            <button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}"${inStock ? '' : ' disabled aria-disabled="true"'}>${inStock ? '+ Carrito' : 'Agotado'}</button>
           </div>
         </div>
-      </div>`;
-  }).join('');
+      </article>`;
+  }).join('') + (visibleProducts.length < lista.length ? `
+    <div class="cat-load-more">
+      <button type="button" class="tt-filtro-btn" id="cat-load-more">Mostrar más productos (${lista.length - visibleProducts.length})</button>
+    </div>` : '');
+
+  grid.querySelectorAll('.tt-card-img-wrap img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.hidden = true;
+      const placeholder = img.nextElementSibling;
+      if (placeholder) placeholder.hidden = false;
+    }, { once: true });
+  });
+
+  document.getElementById('cat-load-more')?.addEventListener('click', () => {
+    visibleProductLimit += PRODUCT_BATCH_SIZE;
+    renderGrid(filteredProducts);
+  });
 }
 
 function seleccionarCat(cat) {
   catActual = cat;
-  document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
-  document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === cat));
+  document.querySelectorAll('.cat-filter-option').forEach(b => {
+    const selected = b.dataset.cat === cat;
+    b.classList.toggle('active', selected);
+    b.setAttribute('aria-pressed', String(selected));
+  });
+  document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => {
+    const selected = b.dataset.cat === cat;
+    b.classList.toggle('activo', selected);
+    b.setAttribute('aria-pressed', String(selected));
+    if (selected) b.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+  });
   const titulo = document.getElementById('cat-titulo');
   if (titulo) titulo.textContent = cat === 'todos' ? TODOS_LABEL : catLabel(cat);
+  const url = new URL(location.href);
+  if (cat === 'todos') url.searchParams.delete('cat');
+  else url.searchParams.set('cat', cat);
+  history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
   aplicarFiltros();
 }
 
@@ -626,7 +761,7 @@ function handleProductsUpdate(products) {
   } else {
     todos = products;
     actualizarContadores();
-    aplicarFiltros();
+    aplicarFiltros({ resetLimit: false });
   }
 }
 
@@ -636,11 +771,15 @@ function _showCatalogLoadError() {
   if (_catalogInitialized) return;
   const grid = document.getElementById('cat-grid');
   if (!grid) return;
+  grid.setAttribute('aria-busy', 'false');
+  document.getElementById('cat-count').textContent = 'Catálogo no disponible';
   grid.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text-muted)">
+    <div class="cat-empty">
       <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
-      <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
+      <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
     </div>`;
+  document.getElementById('cat-retry')?.addEventListener('click', () => location.reload());
+  window.ttPageReady && window.ttPageReady();
 }
 
 // Array.isArray (not truthiness) tells "Firestore already answered, zero
@@ -666,10 +805,19 @@ document.querySelectorAll('.cat-filter-option').forEach(btn => {
 document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(btn => {
   btn.onclick = () => seleccionarCat(btn.dataset.cat);
 });
-document.getElementById('cat-search').addEventListener('input', aplicarFiltros);
+let searchTimer = 0;
+document.getElementById('cat-search').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = window.setTimeout(aplicarFiltros, 120);
+});
 document.getElementById('cat-sort').addEventListener('change', aplicarFiltros);
 document.getElementById('filtro-stock').addEventListener('change', aplicarFiltros);
-document.getElementById('btn-aplicar-precio').onclick = aplicarFiltros;
+document.getElementById('btn-aplicar-precio').onclick = () => aplicarFiltros({ validatePrice: true });
+['precio-min', 'precio-max'].forEach(id => document.getElementById(id).addEventListener('input', () => {
+  document.getElementById('cat-range-error').hidden = true;
+  document.getElementById('precio-min').setAttribute('aria-invalid', 'false');
+  document.getElementById('precio-max').setAttribute('aria-invalid', 'false');
+}));
 document.getElementById('btn-limpiar-filtros').onclick = () => {
   catActual = 'todos';
   document.getElementById('cat-search').value = '';
@@ -683,25 +831,28 @@ document.getElementById('btn-limpiar-filtros').onclick = () => {
 document.getElementById('filter-toggle').onclick = () => {
   const sidebar = document.getElementById('cat-sidebar');
   sidebar.classList.toggle('open');
-  document.getElementById('filter-toggle').textContent =
-    sidebar.classList.contains('open') ? '🔼 Ocultar filtros' : '🔽 Filtrar por categoría';
+  const open = sidebar.classList.contains('open');
+  const toggle = document.getElementById('filter-toggle');
+  toggle.textContent = open ? 'Ocultar filtros' : 'Filtrar por categoría';
+  toggle.setAttribute('aria-expanded', String(open));
 };
 
-// Add-to-cart via event delegation — uses tt_cart (same key as the rest of the site)
-document.getElementById('cat-grid').addEventListener('click', e => {
+// Use the same stock-aware, real-time cart service as product and checkout pages.
+document.getElementById('cat-grid').addEventListener('click', async e => {
   const btn = e.target.closest('.tt-card-btn-cart');
-  if (!btn) return;
+  if (!btn || btn.disabled) return;
   e.stopPropagation();
   const pid = btn.dataset.pid;
-  const p = todos.find(x => x.id === pid);
-  if (!p) return;
+  const p = todos.find(x => String(x.id) === String(pid));
+  if (!p || !isInStockCat(p)) return;
 
-  const cart = JSON.parse(localStorage.getItem('tt_cart') || '[]');
-  const existing = cart.find(x => x.id === pid && !x.variant);
-  if (existing) {
-    existing.qty = Math.min((existing.qty || 1) + 1, 99);
-  } else {
-    cart.push({
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.setAttribute('aria-busy', 'true');
+  btn.textContent = 'Agregando...';
+  try {
+    const cartSync = await cartSyncPromise;
+    const result = await cartSync.addToCart({
       id: p.id,
       name: p.name,
       cat: p.category || p.cat || '',
@@ -709,16 +860,19 @@ document.getElementById('cat-grid').addEventListener('click', e => {
       qty: 1,
       imageUrl: p.imageUrl || ''
     });
+    btn.textContent = result.item ? (result.capped ? 'Stock máximo' : '✓ Agregado') : 'Sin stock';
+  } catch (error) {
+    console.error('[catalogo] No se pudo agregar al carrito:', error);
+    btn.textContent = 'Reintentar';
+  } finally {
+    btn.removeAttribute('aria-busy');
+    window.setTimeout(() => {
+      const stillInStock = isInStockCat(p);
+      btn.textContent = stillInStock ? originalText : 'Agotado';
+      btn.disabled = !stillInStock;
+      btn.setAttribute('aria-disabled', String(!stillInStock));
+    }, 1500);
   }
-  localStorage.setItem('tt_cart', JSON.stringify(cart));
-
-  if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
-  if (typeof window.renderCart === 'function') window.renderCart();
-
-  const orig = btn.textContent;
-  btn.textContent = '✓ Agregado';
-  btn.disabled = true;
-  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1500);
 });
 </script>
 <script type="module" src="js/whatsapp.js?v=tintin-20260715-13"></script>
