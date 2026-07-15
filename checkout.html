@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-9"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-10"></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,19 +20,19 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-9">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-9">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-9">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-9">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-9">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-10">
 </head>
 <body>
 <h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
 
 <!-- HEADER -->
 <header class="ck-header">
-  <a href="index.html" class="ck-header-logo"><img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-9" alt="Tintin Accesorios"></a>
+  <a href="index.html" class="ck-header-logo"><img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-10" alt="Tintin Accesorios"></a>
   <div class="ck-header-right">
     <a href="perfil.html" class="ck-account-badge" id="ck-account-badge" title="Ver mi cuenta">
       <span class="ck-account-badge-avatar" id="ck-account-badge-avatar">?</span>
@@ -330,12 +330,17 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260715-9";
+} from "./js/cart-sync.js?v=tintin-20260715-10";
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
 import { showBlockedModal } from "./js/blocked-modal.js";
-import { isAccessAllowed, renderStoreClosedOverlay, removeStoreClosedOverlay } from "./js/store-gate-core.js";
+import {
+  isAccessAllowed,
+  normalizeStoreAccessConfig,
+  renderStoreClosedOverlay,
+  removeStoreClosedOverlay
+} from "./js/store-gate-core.js";
 import { cleanText } from "./js/security-utils.js";
 import { sanitizeImageUrl } from "./js/image-utils.js";
 
@@ -405,7 +410,11 @@ function subscribeStoreConfig() {
       applyPaymentMethods(cfg.paymentMethods);
       applyBankAccounts(cfg.bankAccounts);
       populateCities();
-      storeCfg = cfg;
+      // settings/general contiene muchos datos del checkout. Para usar solo
+      // su estado de apertura hay que convertirlo al mismo formato validado
+      // que consume el control global; el objeto crudo no trae la marca
+      // __storeConfigStatus y antes se interpretaba erróneamente como fallo.
+      storeCfg = normalizeStoreAccessConfig(cfg, 'ok');
       reevaluateStoreGate_();
       if (first) { first = false; resolveFirst(); }
     }, e => {
@@ -608,7 +617,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-9');
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-10');
         const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -688,7 +697,7 @@ function storeClosedForCurrentUser_() {
 }
 function reevaluateStoreGate_() {
   if (!storeCfg) return;
-  if (storeClosedForCurrentUser_()) renderStoreClosedOverlay();
+  if (storeClosedForCurrentUser_()) renderStoreClosedOverlay(storeCfg);
   else removeStoreClosedOverlay();
 }
 
@@ -710,19 +719,27 @@ function isCheckoutAuthorized() {
 // `targetStep` es el paso al que la clienta quería avanzar (1 = Envío/Ciudad
 // casi siempre) — se guarda para volver directo ahí después de loguearse,
 // en vez de dejarla de nuevo en el Carrito.
+let loginRequiredOpener = null;
 function showLoginRequiredModal(targetStep) {
   if (document.getElementById('ck-login-required-overlay')) return;
+  loginRequiredOpener = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
   try { sessionStorage.setItem(CHECKOUT_RESUME_KEY, String(targetStep ?? 1)); } catch {}
   const from = encodeURIComponent('checkout.html');
   const ov = document.createElement('div');
   ov.id = 'ck-login-required-overlay';
+  ov.setAttribute('role', 'dialog');
+  ov.setAttribute('aria-modal', 'true');
+  ov.setAttribute('aria-labelledby', 'ck-login-required-title');
+  ov.setAttribute('aria-describedby', 'ck-login-required-message');
   ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px';
   ov.innerHTML = `
     <div style="position:relative;background:#fff;border-radius:20px;max-width:420px;width:100%;padding:38px 26px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.28)">
-      <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:none;background:#f5eef1;color:#888;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:none;background:#f5eef1;color:#555;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
       <div style="font-size:36px;margin-bottom:14px">🔐</div>
-      <div style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Necesitás una cuenta para continuar</div>
-      <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
+      <div id="ck-login-required-title" style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Iniciá sesión para continuar</div>
+      <p id="ck-login-required-message" style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
       <a id="ck-login-required-login" class="ck-btn" style="text-decoration:none;margin-top:0" href="login.html?from=${from}">Continuar con Google</a>
       <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#999;font-size:11px;font-weight:600">
         <div style="flex:1;height:1px;background:var(--border)"></div>o ingresá con tu correo<div style="flex:1;height:1px;background:var(--border)"></div>
@@ -735,6 +752,8 @@ function showLoginRequiredModal(targetStep) {
   document.body.style.overflow = 'hidden';
   document.getElementById('ck-login-required-close').onclick = closeLoginRequiredModal;
   ov.addEventListener('click', (e) => { if (e.target === ov) closeLoginRequiredModal(); });
+  ov.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLoginRequiredModal(); });
+  requestAnimationFrame(() => document.getElementById('ck-login-required-close')?.focus());
 
   // Mismo mecanismo que "Continuar con Google": vuelve a login.html con el
   // mismo `from`, que a su vez redirige de vuelta acá (CHECKOUT_RESUME_KEY
@@ -772,6 +791,8 @@ function closeLoginRequiredModal() {
   const ov = document.getElementById('ck-login-required-overlay');
   if (ov) ov.remove();
   document.body.style.overflow = '';
+  loginRequiredOpener?.focus?.();
+  loginRequiredOpener = null;
 }
 
 // Espera a que el SDK de Firebase resuelva el estado de auth por primera vez
@@ -1294,7 +1315,7 @@ async function saveOrder(items, subtotal, total) {
     throw new Error('BLOCKED_ACCOUNT');
   }
   if (storeClosedForCurrentUser_()) {
-    renderStoreClosedOverlay();
+    renderStoreClosedOverlay(storeCfg);
     throw new Error('STORE_CLOSED');
   }
 
@@ -1755,6 +1776,6 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-9"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-10"></script>
 </body>
 </html>
