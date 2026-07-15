@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const IGNORED_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
-const VERSION = 'tintin-20260715-5';
+const VERSION = 'tintin-20260715-6';
 
 const issues = [];
 

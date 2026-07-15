@@ -16,8 +16,10 @@ const loader = read('js/page-loader.js');
 const parity = read('css/tintin-parity-safe.css');
 const accountFix = read('js/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
+const geoFunction = read('netlify/functions/visitor-geo.mjs');
 const rules = read('firestore.rules');
 const admin = read('admin.html');
+const privacy = read('privacidad.html');
 const theme = read('css/tintin-unified-theme.css');
 const main = read('script.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
@@ -31,9 +33,18 @@ check('El click de cuenta no se duplica con el manejador antiguo',
   accountFix.includes('stopImmediatePropagation()'));
 
 check('La actividad cuenta una sola sesión por pestaña y día',
-  activity.includes('SESSION_RECORDED_PREFIX') && activity.includes('window.sessionStorage.setItem'));
+  activity.includes('SESSION_RECORDED_PREFIX') &&
+  activity.includes('storageSet(window.sessionStorage, recordedKey, sessionId)'));
 check('La presencia usa latidos espaciados y solo mientras la página es visible',
-  activity.includes('const HEARTBEAT_MS = 120000') && activity.includes("document.visibilityState === 'hidden'"));
+  activity.includes('const HEARTBEAT_MS = 60000') && activity.includes("document.visibilityState === 'hidden'"));
+check('Las estadísticas requieren elección afirmativa y permiten revocarla',
+  activity.includes("CONSENT_KEY = 'tt_activity_consent_v1'") &&
+  activity.includes("consentChoice() === 'granted'") &&
+  privacy.includes('id="tt-open-privacy-settings"'));
+check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
+  geoFunction.includes('context?.geo') &&
+  !/\bcontext\.ip\s*[;,)]/.test(geoFunction.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')) &&
+  !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('Las reglas limitan la escritura de sesiones y presencia',
   rules.includes('presenceIsValid(visitorId)') &&
   rules.includes('trafficSessionIsValid(dateKey, sessionId)') &&
@@ -44,7 +55,14 @@ check('Solamente Super Admin puede leer las métricas',
 check('El dashboard muestra sesiones de hoy y personas en línea',
   admin.includes('id="stat-visits-today"') &&
   admin.includes('id="stat-online-now"') &&
-  admin.includes('getCountFromServer'));
+  admin.includes('id="dashboard-online-locations"') &&
+  admin.includes('id="dashboard-today-locations"'));
+check('El dashboard recibe sesiones y presencia en tiempo real',
+  admin.includes('dashboardSessionUnsubscribe = onSnapshot') &&
+  admin.includes('dashboardPresenceUnsubscribe = onSnapshot'));
+check('Las reglas aceptan solo geografía aproximada y campos conocidos',
+  rules.includes('activityGeoIsValid(data)') &&
+  rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
 
 check('El rosa principal cumple contraste AA sobre blanco',
   theme.includes('--tt-accent:#AD3F67') && theme.includes('--tt-accent-hover:#8B2642'));
@@ -64,9 +82,10 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
 
 const staleVersions = [];
 for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
-  if (/tintin-20260715-[234]/.test(read(file))) staleVersions.push(file);
+  if (/tintin-20260715-[2345]/.test(read(file))) staleVersions.push(file);
 }
-check('Los recursos críticos usan una sola versión de caché', staleVersions.length === 0);
+check('Los recursos críticos usan una sola versión de caché',
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-6'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

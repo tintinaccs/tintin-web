@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-5"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-6"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -17,12 +17,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-5">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-5">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-5">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-5">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-5">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-5">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-6">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-6">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-6">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-6">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-6">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-6">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -169,11 +169,45 @@
           <div class="adm-stat-val" id="stat-visits-today">—</div>
           <div class="adm-stat-label">Sesiones hoy</div>
         </div>
-        <div class="adm-stat" title="Personas con actividad visible durante los últimos tres minutos.">
+        <div class="adm-stat" title="Personas con actividad visible durante los últimos dos minutos.">
           <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ad3f67" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/><circle cx="19" cy="5" r="2" fill="#ad3f67" stroke="none"/></svg></div>
           <div class="adm-stat-val" id="stat-online-now">—</div>
           <div class="adm-stat-label">En línea ahora</div>
         </div>
+      </div>
+
+      <div class="adm-card adm-visitor-card" id="dashboard-visitor-geo" hidden>
+        <div class="adm-card-head adm-visitor-card-head">
+          <div>
+            <div class="adm-card-title">Visitantes en tiempo real</div>
+            <div class="adm-card-subtitle">Ciudad y país aproximados, sin guardar IP ni ubicación exacta.</div>
+          </div>
+          <div class="adm-live-status" aria-live="polite">
+            <span class="adm-live-dot" aria-hidden="true"></span>
+            <span id="dashboard-live-status">Conectando…</span>
+          </div>
+        </div>
+        <div class="adm-card-body adm-visitor-grid">
+          <section class="adm-visitor-panel" aria-labelledby="dashboard-online-title">
+            <div class="adm-visitor-panel-head">
+              <h3 id="dashboard-online-title">En línea ahora</h3>
+              <span id="dashboard-online-detail">0 activos</span>
+            </div>
+            <div id="dashboard-online-locations" class="adm-visitor-list">
+              <div class="adm-visitor-empty">Esperando actividad…</div>
+            </div>
+          </section>
+          <section class="adm-visitor-panel" aria-labelledby="dashboard-today-title">
+            <div class="adm-visitor-panel-head">
+              <h3 id="dashboard-today-title">Ubicaciones de hoy</h3>
+              <span id="dashboard-today-detail">0 sesiones</span>
+            </div>
+            <div id="dashboard-today-locations" class="adm-visitor-list">
+              <div class="adm-visitor-empty">Todavía no hay sesiones registradas.</div>
+            </div>
+          </section>
+        </div>
+        <div class="adm-visitor-note">La ubicación se estima por la red de conexión. Una VPN, red móvil o bloqueo de privacidad puede cambiarla o dejarla como no disponible.</div>
       </div>
 
       <div class="adm-card">
@@ -1559,8 +1593,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp,
-  getCountFromServer
+  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendOrderNotification, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./js/email-notify.js";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./js/roles.js";
@@ -1578,7 +1611,12 @@ let currentUser = null;
 let currentRole = null;
 let allUsers = [];
 let allOrders = [];
-let dashboardOnlineTimer = 0;
+let dashboardSessionUnsubscribe = null;
+let dashboardPresenceUnsubscribe = null;
+let dashboardActivityClock = 0;
+let dashboardPresenceRestart = 0;
+let dashboardActivityDay = '';
+let dashboardActivityState = { sessions: [], presence: [] };
 
 function escapeHtmlAdmin(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -2098,50 +2136,190 @@ function setupPermissions(role) {
 }
 
 // ======== DASHBOARD ========
-async function refreshDashboardActivityMetrics() {
-  const sessionsEl = document.getElementById('stat-visits-today');
-  const onlineEl = document.getElementById('stat-online-now');
-  if (!(sessionsEl && onlineEl)) return;
+const DASHBOARD_ONLINE_WINDOW_MS = 2 * 60 * 1000;
+const DASHBOARD_PRESENCE_QUERY_MS = 10 * 60 * 1000;
 
-  if (currentRole !== 'superadmin') {
-    sessionsEl.textContent = '—';
-    onlineEl.textContent = '—';
+function activityTimestampMillis(value) {
+  if (!value) return 0;
+  if (typeof value.toMillis === 'function') return value.toMillis();
+  if (typeof value.toDate === 'function') return value.toDate().getTime();
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function activityLocationLabel(item) {
+  const parts = [item?.city, item?.region, item?.country]
+    .map(value => String(value || '').trim())
+    .filter((value, index, values) => value && values.indexOf(value) === index);
+  return parts.join(', ') || 'Ubicación no disponible';
+}
+
+function activityPageLabel(path) {
+  const value = String(path || '/').replace(/^\/+/, '').replace(/\.html$/i, '');
+  if (!value || value === 'index') return 'Inicio';
+  return value.replace(/[-_]+/g, ' ').replace(/^./, char => char.toUpperCase()).slice(0, 80);
+}
+
+function activityRelativeTime(timestamp, now = Date.now()) {
+  const milliseconds = activityTimestampMillis(timestamp);
+  if (!milliseconds) return 'recién';
+  const seconds = Math.max(0, Math.floor((now - milliseconds) / 1000));
+  if (seconds < 10) return 'ahora';
+  if (seconds < 60) return `hace ${seconds} s`;
+  return `hace ${Math.max(1, Math.floor(seconds / 60))} min`;
+}
+
+function renderOnlineLocations(active, now) {
+  const container = document.getElementById('dashboard-online-locations');
+  const detail = document.getElementById('dashboard-online-detail');
+  if (detail) detail.textContent = `${active.length} activo${active.length === 1 ? '' : 's'}`;
+  if (!container) return;
+  if (!active.length) {
+    container.innerHTML = '<div class="adm-visitor-empty">No hay visitantes activos en este momento.</div>';
+    return;
+  }
+  container.innerHTML = active.slice(0, 20).map(item => `
+    <div class="adm-visitor-row">
+      <div>
+        <div class="adm-visitor-location" title="${escapeHtmlAdmin(activityLocationLabel(item))}">${escapeHtmlAdmin(activityLocationLabel(item))}</div>
+        <div class="adm-visitor-meta">${escapeHtmlAdmin(activityPageLabel(item.page))}</div>
+      </div>
+      <div class="adm-visitor-count">${escapeHtmlAdmin(activityRelativeTime(item.lastSeen, now))}</div>
+    </div>
+  `).join('');
+}
+
+function renderTodayLocations(sessions, now) {
+  const container = document.getElementById('dashboard-today-locations');
+  const detail = document.getElementById('dashboard-today-detail');
+  if (detail) detail.textContent = `${sessions.length} sesión${sessions.length === 1 ? '' : 'es'}`;
+  if (!container) return;
+  if (!sessions.length) {
+    container.innerHTML = '<div class="adm-visitor-empty">Todavía no hay sesiones registradas hoy.</div>';
     return;
   }
 
+  const locations = new Map();
+  sessions.forEach(item => {
+    const label = activityLocationLabel(item);
+    const key = [item.countryCode || '', label].join('|');
+    const previous = locations.get(key) || { label, count: 0, lastSeen: 0 };
+    previous.count += 1;
+    previous.lastSeen = Math.max(previous.lastSeen, activityTimestampMillis(item.startedAt));
+    locations.set(key, previous);
+  });
+
+  const sorted = [...locations.values()]
+    .sort((a, b) => b.count - a.count || b.lastSeen - a.lastSeen)
+    .slice(0, 20);
+
+  container.innerHTML = sorted.map(item => `
+    <div class="adm-visitor-row">
+      <div>
+        <div class="adm-visitor-location" title="${escapeHtmlAdmin(item.label)}">${escapeHtmlAdmin(item.label)}</div>
+        <div class="adm-visitor-meta">Última sesión ${escapeHtmlAdmin(activityRelativeTime(item.lastSeen, now))}</div>
+      </div>
+      <div class="adm-visitor-count">${item.count}</div>
+    </div>
+  `).join('');
+}
+
+function renderDashboardActivityMetrics() {
+  const sessionsEl = document.getElementById('stat-visits-today');
+  const onlineEl = document.getElementById('stat-online-now');
+  const statusEl = document.getElementById('dashboard-live-status');
+  const now = Date.now();
+  const active = dashboardActivityState.presence
+    .filter(item => {
+      const lastSeen = activityTimestampMillis(item.lastSeen);
+      return lastSeen >= now - DASHBOARD_ONLINE_WINDOW_MS && lastSeen <= now + 60000;
+    })
+    .sort((a, b) => activityTimestampMillis(b.lastSeen) - activityTimestampMillis(a.lastSeen));
+
+  if (sessionsEl) sessionsEl.textContent = dashboardActivityState.sessions.length;
+  if (onlineEl) onlineEl.textContent = active.length;
+  if (statusEl) {
+    statusEl.textContent = `En vivo · ${new Intl.DateTimeFormat('es-PY', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    }).format(new Date(now))}`;
+  }
+  renderOnlineLocations(active, now);
+  renderTodayLocations(dashboardActivityState.sessions, now);
+}
+
+function stopDashboardActivityMetrics() {
+  if (dashboardSessionUnsubscribe) dashboardSessionUnsubscribe();
+  if (dashboardPresenceUnsubscribe) dashboardPresenceUnsubscribe();
+  dashboardSessionUnsubscribe = null;
+  dashboardPresenceUnsubscribe = null;
+  window.clearInterval(dashboardActivityClock);
+  window.clearInterval(dashboardPresenceRestart);
+  dashboardActivityClock = 0;
+  dashboardPresenceRestart = 0;
+  dashboardActivityDay = '';
+  dashboardActivityState = { sessions: [], presence: [] };
+}
+
+function listenDashboardSessions() {
   const dayKey = paraguayDayKeyAdmin();
-  const activeSince = Timestamp.fromMillis(Date.now() - (3 * 60 * 1000));
-  const results = await Promise.allSettled([
-    getCountFromServer(collection(db, 'siteTraffic', dayKey, 'sessions')),
-    getDocs(query(collection(db, 'sitePresence'), where('lastSeen', '>=', activeSince)))
-  ]);
+  if (dashboardSessionUnsubscribe) dashboardSessionUnsubscribe();
+  dashboardActivityDay = dayKey;
+  dashboardSessionUnsubscribe = onSnapshot(
+    collection(db, 'siteTraffic', dayKey, 'sessions'),
+    snapshot => {
+      dashboardActivityState.sessions = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderDashboardActivityMetrics();
+    },
+    error => {
+      document.getElementById('stat-visits-today').textContent = '—';
+      document.getElementById('dashboard-live-status').textContent = 'Sesiones no disponibles';
+      console.warn('Métrica de sesiones no disponible:', error);
+    }
+  );
+}
 
-  if (results[0].status === 'fulfilled') {
-    sessionsEl.textContent = results[0].value.data().count;
-    sessionsEl.removeAttribute('title');
-  } else {
-    sessionsEl.textContent = '—';
-    sessionsEl.title = 'No se pudo consultar el contador de sesiones.';
-    console.warn('Métrica de sesiones no disponible:', results[0].reason);
-  }
-
-  if (results[1].status === 'fulfilled') {
-    onlineEl.textContent = results[1].value.size;
-    onlineEl.removeAttribute('title');
-  } else {
-    onlineEl.textContent = '—';
-    onlineEl.title = 'No se pudo consultar la presencia actual.';
-    console.warn('Métrica de presencia no disponible:', results[1].reason);
-  }
+function listenDashboardPresence() {
+  if (dashboardPresenceUnsubscribe) dashboardPresenceUnsubscribe();
+  const recentSince = Timestamp.fromMillis(Date.now() - DASHBOARD_PRESENCE_QUERY_MS);
+  dashboardPresenceUnsubscribe = onSnapshot(
+    query(collection(db, 'sitePresence'), where('lastSeen', '>=', recentSince)),
+    snapshot => {
+      dashboardActivityState.presence = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderDashboardActivityMetrics();
+    },
+    error => {
+      document.getElementById('stat-online-now').textContent = '—';
+      document.getElementById('dashboard-live-status').textContent = 'Presencia no disponible';
+      console.warn('Métrica de presencia no disponible:', error);
+    }
+  );
 }
 
 function startDashboardActivityMetrics() {
-  window.clearInterval(dashboardOnlineTimer);
-  refreshDashboardActivityMetrics();
-  if (currentRole === 'superadmin') {
-    dashboardOnlineTimer = window.setInterval(refreshDashboardActivityMetrics, 60000);
+  stopDashboardActivityMetrics();
+  const card = document.getElementById('dashboard-visitor-geo');
+  const sessionsEl = document.getElementById('stat-visits-today');
+  const onlineEl = document.getElementById('stat-online-now');
+  if (currentRole !== 'superadmin') {
+    if (card) card.hidden = true;
+    if (sessionsEl) sessionsEl.textContent = '—';
+    if (onlineEl) onlineEl.textContent = '—';
+    return;
   }
+
+  if (card) card.hidden = false;
+  listenDashboardSessions();
+  listenDashboardPresence();
+  renderDashboardActivityMetrics();
+
+  dashboardActivityClock = window.setInterval(() => {
+    if (paraguayDayKeyAdmin() !== dashboardActivityDay) listenDashboardSessions();
+    renderDashboardActivityMetrics();
+  }, 15000);
+  dashboardPresenceRestart = window.setInterval(listenDashboardPresence, 5 * 60 * 1000);
 }
+
+window.addEventListener('pagehide', stopDashboardActivityMetrics);
 
 async function loadDashboard() {
   startDashboardActivityMetrics();
