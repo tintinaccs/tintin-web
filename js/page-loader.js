@@ -49,7 +49,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260715-7';
+  const TT_CACHE_VERSION = 'tintin-20260715-8';
   const MIN_SHOW_MS = 520;
   const STORE_GATE_TIMEOUT_MS = 4500;
   const SAFETY_MS = 5200;
@@ -506,6 +506,12 @@
     }
   }
 
+  function bootImagePerformance() {
+    if (!window.TintinImagePerformanceBooted) {
+      importSibling('image-performance.js', 'Image Performance');
+    }
+  }
+
   function bootPageRuntime() {
     if (runtimeBooted) return;
     runtimeBooted = true;
@@ -516,6 +522,7 @@
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootScrollReveal();
+    bootImagePerformance();
     bootSiteActivity();
   }
 
@@ -534,6 +541,8 @@
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootScrollReveal();
+    bootImagePerformance();
     bootSiteActivity();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');

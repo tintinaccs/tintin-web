@@ -22,6 +22,8 @@ const admin = read('admin.html');
 const privacy = read('privacidad.html');
 const theme = read('css/tintin-unified-theme.css');
 const main = read('script.js');
+const scrollReveal = read('js/scroll-reveal-global.js');
+const imagePerformance = read('js/image-performance.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('El menú de cuenta arranca también en el runtime público',
@@ -64,6 +66,22 @@ check('El dashboard muestra sesiones de hoy y personas en línea',
 check('El dashboard recibe sesiones y presencia en tiempo real',
   admin.includes('dashboardSessionUnsubscribe = onSnapshot') &&
   admin.includes('dashboardPresenceUnsubscribe = onSnapshot'));
+check('El centro estadistico general esta reservado a Super Admin',
+  admin.includes('id="section-estadisticas"') &&
+  admin.includes("target === 'estadisticas' && currentRole !== 'superadmin'") &&
+  admin.includes('id="statistics-revenue-trend"') &&
+  admin.includes('id="statistics-visit-locations"'));
+check('Pedidos, usuarios, auditoria y correos se actualizan sin F5',
+  admin.includes("adminOrdersUnsubscribe = onSnapshot(collection(db, 'orders')") &&
+  admin.includes("adminUsersUnsubscribe = onSnapshot(collection(db, 'users')") &&
+  admin.includes('_auditUnsubscribe = onSnapshot(') &&
+  admin.includes('function startCorreosRealtimeListeners()'));
+check('Las estadisticas combinan pedidos, usuarios, catalogo, visitas y paginas',
+  admin.includes('function renderGeneralStatistics()') &&
+  admin.includes('statistics-top-products') &&
+  admin.includes('statistics-order-locations') &&
+  admin.includes('statistics-entry-pages') &&
+  admin.includes('statistics-live-pages'));
 check('Las reglas aceptan solo geografía aproximada y campos conocidos',
   rules.includes('activityGeoIsValid(data)') &&
   rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
@@ -73,6 +91,15 @@ check('El rosa principal cumple contraste AA sobre blanco',
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
+check('El reveal es irreversible, liviano y procesa solo nodos agregados',
+  scrollReveal.includes('observer?.unobserve(element)') &&
+  scrollReveal.includes("element.classList.add('tt-visible')") &&
+  scrollReveal.includes('scheduleScan(node)') &&
+  !scrollReveal.includes('filter:blur'));
+check('Las imagenes dinamicas reciben carga diferida y prioridad automatica',
+  imagePerformance.includes("image.loading = priority ? 'eager' : 'lazy'") &&
+  imagePerformance.includes("image.decoding = 'async'") &&
+  loader.includes('bootImagePerformance();'));
 check('Todas las páginas declaran el tipo de sus botones estáticos',
   htmlFiles.every(file => !/<button\b(?![^>]*\btype\s*=)[^>]*>/i.test(
     read(file).replace(/<script\b[\s\S]*?<\/script>/gi, '')
@@ -84,12 +111,26 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
       .every(id => !html.includes(`id="${id}"`) || new RegExp(`id="${id}"[^>]*aria-label=`).test(html));
   }));
 
+const forbiddenAuthorship = /\b(?:chatgpt|openai|codex|gemini|claude|copilot)\b|inteligencia\s+artificial|(?:generad[oa]|cread[oa]|asistid[oa])\s+(?:por|con)\s+(?:una\s+)?ia\b/i;
+function sourceFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    if (entry.name === '.git' || entry.name === 'node_modules') return [];
+    const absolute = path.join(dir, entry.name);
+    if (entry.isDirectory()) return sourceFiles(absolute);
+    if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
+    if (absolute === __filename) return [];
+    return [absolute];
+  });
+}
+check('El repositorio no contiene marcas explicitas de autoria por IA',
+  sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
+
 const staleVersions = [];
 for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
-  if (/tintin-20260715-[23456]/.test(read(file))) staleVersions.push(file);
+  if (/tintin-20260715-[234567]/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-7'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-8'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);
