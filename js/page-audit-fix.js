@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinPageAuditFixBooted)return;
 window.TintinPageAuditFixBooted=true;
-var VERSION='tintin-20260715-1';
+var VERSION='tintin-20260715-2';
 function isHome(){var p=(location.pathname||'').toLowerCase();return p.endsWith('/')||p.endsWith('/index.html')||p==='';}
 function isCheckout(){var p=(location.pathname||'').toLowerCase();return p.indexOf('checkout')>-1||document.body?.classList.contains('checkout-page')||document.querySelector('.ck-body,.ck-panel,.ck-header');}
 function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;if(u.searchParams.get('v')===VERSION)return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
@@ -18,12 +18,6 @@ function replaceOldPreloads(){
 }
 function cleanHomeSplash(){
  if(!isHome())return;
- // classList.add() de una clase ya presente igual dispara un registro de
- // MutationObserver en esta clase de elemento con muchas clases — y este
- // mismo módulo observa cambios de "class" en <html> para volver a llamar
- // a run(). Sin este chequeo, cada llamada a run() generaba una mutación
- // que disparaba la siguiente llamada a run(), en un ciclo que nunca
- // terminaba y consumía CPU sin parar.
  if(!document.documentElement.classList.contains('tt-home-splash-clean')){
   document.documentElement.classList.add('tt-home-splash-clean');
  }
@@ -46,6 +40,6 @@ function mark(){
  document.documentElement.classList.add('tt-page-audit-ready');
 }
 function run(){versionLocalCssLinks();ensureCheckoutExclusion();cleanHomeSplash();mark();}
-function boot(){addStyle();run();if('MutationObserver'in window){var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(run,80);}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['href','class','id']});}}
+function boot(){addStyle();run();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

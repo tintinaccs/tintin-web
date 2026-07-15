@@ -518,22 +518,11 @@ function startGuardObserver() {
     if (overlayNeedsRepair()) scheduleRepair();
   });
 
-  guardObserver.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-
-  if (document.head) {
-    guardObserver.observe(document.head, { childList: true });
-  }
-
   if (document.body) {
-    guardObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['inert', 'aria-hidden', 'style', 'class']
-    });
+    // Solo interesa detectar nuevos hijos directos que una página agregue al
+    // body. Observar todo el subárbol y sus atributos hacía que las propias
+    // reparaciones del overlay volvieran a despertar al observador.
+    guardObserver.observe(document.body, { childList: true });
   }
 }
 
