@@ -452,11 +452,18 @@ function restoreDefaultActiveTab() {
 /* ──────────────────────────────────────
    CART DRAWER OPEN/CLOSE
 ────────────────────────────────────── */
-function openCart() {
+let _lastCartTrigger = null;
+
+function openCart(trigger = document.activeElement) {
   const drawer = document.getElementById('cart-drawer');
   const overlay = document.getElementById('cart-overlay');
-  if (drawer) drawer.classList.add('open');
+  if (trigger instanceof HTMLElement) _lastCartTrigger = trigger;
+  if (drawer) {
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
   if (overlay) overlay.classList.add('open');
+  ['btn-cart', 'tabbar-cart'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'true'));
   lockScroll('cart');
   setActiveTab(document.getElementById('tabbar-cart'));
 }
@@ -464,10 +471,16 @@ function openCart() {
 function closeCart() {
   const drawer = document.getElementById('cart-drawer');
   const overlay = document.getElementById('cart-overlay');
-  if (drawer) drawer.classList.remove('open');
+  const wasOpen = drawer?.classList.contains('open') === true;
+  if (drawer) {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
   if (overlay) overlay.classList.remove('open');
+  ['btn-cart', 'tabbar-cart'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'false'));
   unlockScroll('cart');
   restoreDefaultActiveTab();
+  if (wasOpen && _lastCartTrigger?.isConnected) _lastCartTrigger.focus({ preventScroll: true });
 }
 
 /* ──────────────────────────────────────
@@ -585,12 +598,19 @@ function initMobileMenu() {
 
   function openMenu() {
     menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    btnMenu?.setAttribute('aria-expanded', 'true');
     lockScroll('mobile-menu');
+    btnClose?.focus({ preventScroll: true });
   }
 
   function closeMenu() {
+    const hadFocusInside = menu.contains(document.activeElement);
     menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    btnMenu?.setAttribute('aria-expanded', 'false');
     unlockScroll('mobile-menu');
+    if (hadFocusInside) btnMenu?.focus({ preventScroll: true });
   }
 
   // btn-menu vive en el header Desktop/Tablet (hace de hamburguesa en su
@@ -625,30 +645,38 @@ function initSearch() {
   const btnClose = document.getElementById('btn-search-close');
   const results = document.getElementById('search-results');
   const tabbarSearch = document.getElementById('tabbar-search');
+  let lastSearchTrigger = null;
 
   if (!panel) return;
 
-  function openSearch() {
+  function openSearch(trigger = document.activeElement) {
+    if (trigger instanceof HTMLElement) lastSearchTrigger = trigger;
     panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    ['btn-search', 'tabbar-search'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'true'));
     if (input) input.focus();
     setActiveTab(tabbarSearch);
   }
 
   function closeSearch() {
+    const wasOpen = panel.classList.contains('open');
     panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    ['btn-search', 'tabbar-search'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'false'));
     if (input) input.value = '';
     if (results) {
       results.style.display = 'none';
       results.innerHTML = '';
     }
     restoreDefaultActiveTab();
+    if (wasOpen && lastSearchTrigger?.isConnected) lastSearchTrigger.focus({ preventScroll: true });
   }
 
   // btn-search vive en el header Desktop/Tablet, tabbar-search es el
   // acceso mobile — ambos abren el mismo panel de búsqueda global.
   const btnSearch = document.getElementById('btn-search');
-  if (btnSearch) btnSearch.addEventListener('click', openSearch);
-  if (tabbarSearch) tabbarSearch.addEventListener('click', openSearch);
+  if (btnSearch) btnSearch.addEventListener('click', e => openSearch(e.currentTarget));
+  if (tabbarSearch) tabbarSearch.addEventListener('click', e => openSearch(e.currentTarget));
   if (btnClose) btnClose.addEventListener('click', closeSearch);
 
   document.addEventListener('keydown', (e) => {
@@ -726,8 +754,8 @@ function initCartEvents() {
   // btn-cart vive en el header Desktop/Tablet, tabbar-cart es el acceso
   // mobile — ambos abren el mismo drawer de carrito global.
   const btnCart = document.getElementById('btn-cart');
-  if (btnCart) btnCart.addEventListener('click', openCart);
-  if (tabbarCart) tabbarCart.addEventListener('click', openCart);
+  if (btnCart) btnCart.addEventListener('click', e => openCart(e.currentTarget));
+  if (tabbarCart) tabbarCart.addEventListener('click', e => openCart(e.currentTarget));
   if (btnClose) btnClose.addEventListener('click', closeCart);
   if (overlay) overlay.addEventListener('click', closeCart);
   // btnWA (btn-cart-wa) is now rendered dynamically as a link in renderCart()
@@ -1625,15 +1653,21 @@ function initCollectionsSheet() {
   if (!sheet) return;
   function openSheet() {
     sheet.classList.add('open');
+    sheet.setAttribute('aria-hidden', 'false');
+    tabbarTienda?.setAttribute('aria-expanded', 'true');
     if (backdrop) backdrop.classList.add('open');
     lockScroll('collections-sheet');
     setActiveTab(tabbarTienda);
   }
   function closeSheet() {
+    const wasOpen = sheet.classList.contains('open');
     sheet.classList.remove('open');
+    sheet.setAttribute('aria-hidden', 'true');
+    tabbarTienda?.setAttribute('aria-expanded', 'false');
     if (backdrop) backdrop.classList.remove('open');
     unlockScroll('collections-sheet');
     restoreDefaultActiveTab();
+    if (wasOpen) tabbarTienda?.focus({ preventScroll: true });
   }
   // tabbar-tienda abre/cierra este sheet (dropup con todas las colecciones,
   // sincronizado en vivo por js/nav-collections.js) — tocarlo de nuevo con
@@ -1773,6 +1807,7 @@ window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
 window.renderProductsGrid = renderProductsGrid;
+window.isFeaturable = isFeaturable;
 window.renderCart = renderCart;
 window.updateCartBadge = updateCartBadge;
 window.initLookCombinator = initLookCombinator;

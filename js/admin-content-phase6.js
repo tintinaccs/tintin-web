@@ -28,6 +28,7 @@ import {
   mergeContent,
   sanitizeSection,
   sanitizeContentHref,
+  normalizeContentValue,
 } from './content-schema.js';
 
 if (!window.TintinAdminContentPhase6Booted) {
@@ -205,7 +206,10 @@ if (!window.TintinAdminContentPhase6Booted) {
     }
 
     effectiveFields(sectionSchema).forEach(item => {
-      ui.fields.appendChild(createField(item, getNested(values, item.key)));
+      ui.fields.appendChild(createField(
+        item,
+        normalizeContentValue(currentPageId, currentSectionId, item.key, getNested(values, item.key))
+      ));
     });
 
     ui.save.hidden = !permissions.edit;

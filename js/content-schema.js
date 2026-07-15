@@ -63,7 +63,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         allowVisibility: true,
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-hero-eyebrow', 'Bienvenidas a TINTIN', { maxLength: 120 }),
-          field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN\nTÚ ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN\nTU ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('subtitle', 'Subtítulo', '.tt-hero-subtitle', '', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', 'catalogo.html', { index: 0, type: 'href', maxLength: 500 }),
@@ -415,6 +415,17 @@ export function sanitizeContentText(value, maxLength = CONTENT_MAX_LENGTH) {
     .slice(0, Math.max(0, Number(maxLength) || CONTENT_MAX_LENGTH));
 }
 
+// Corrige el valor histórico que ya pudo quedar guardado en Firestore. La
+// corrección está limitada a este único campo y frase para no modificar
+// textos personalizados legítimos de otras secciones.
+export function normalizeContentValue(pageId, sectionId, key, value) {
+  const text = String(value == null ? '' : value);
+  if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
+    return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
+  }
+  return value;
+}
+
 export function sanitizeContentHref(value, fallback = '') {
   const candidate = sanitizeContentText(value, 500).trim();
   if (!candidate) return '';
@@ -440,9 +451,10 @@ export function sanitizeSection(pageId, sectionId, sectionValue = {}) {
   schema.fields.forEach(item => {
     const raw = getNested(sectionValue, item.key);
     const fallback = item.default ?? '';
+    const normalizedRaw = normalizeContentValue(pageId, sectionId, item.key, raw == null ? fallback : raw);
     const value = item.type === 'href'
       ? sanitizeContentHref(raw == null ? fallback : raw, fallback)
-      : sanitizeContentText(raw == null ? fallback : raw, item.maxLength);
+      : sanitizeContentText(normalizedRaw, item.maxLength);
     setNested(clean, item.key, value);
   });
   return clean;

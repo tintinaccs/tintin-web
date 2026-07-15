@@ -32,6 +32,11 @@ const theme = read('css/tintin-unified-theme.css');
 const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
 const imagePerformance = read('js/image-performance.js');
+const home = read('index.html');
+const contentSchema = read('js/content-schema.js');
+const siteContent = read('js/site-content.js');
+const productsStore = read('js/products-store.js');
+const loadImagesInit = read('js/load-images-init.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('El menú de cuenta arranca también en el runtime público',
@@ -146,6 +151,28 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
     return ['tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta']
       .every(id => !html.includes(`id="${id}"`) || new RegExp(`id="${id}"[^>]*aria-label=`).test(html));
   }));
+check('La portada usa la forma correcta TU ESTILO incluso con contenido histórico',
+  home.includes('TU ESTILO</h1>') &&
+  !home.includes('TÚ ESTILO</h1>') &&
+  contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
+  siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
+check('La colección Bolsos conserva su portada real después de sincronizar',
+  home.includes("const COLL_SLUG_FILE_MAP = Object.freeze({ bolsos: 'bags' })") &&
+  home.includes('col-${collImageFile(c.slug)}.webp') &&
+  home.includes("label.textContent = c.name.toUpperCase()"));
+check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
+  home.includes('id="search-panel" role="search"') &&
+  home.includes('id="cart-drawer" role="dialog"') &&
+  home.includes('id="collections-sheet" role="dialog"') &&
+  main.includes("drawer.setAttribute('aria-hidden', 'false')") &&
+  main.includes("panel.setAttribute('aria-hidden', 'false')") &&
+  main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
+  main.includes("menu.setAttribute('aria-hidden', 'false')"));
+check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
+  productsStore.includes(".filter(p => p.active !== false && Boolean(p.name))") &&
+  productsStore.includes('featuredProducts.slice(0, 6)') &&
+  loadImagesInit.includes('featuredProducts.slice(0, 6)') &&
+  main.includes('window.isFeaturable = isFeaturable'));
 
 const forbiddenAuthorship = /\b(?:chatgpt|openai|codex|gemini|claude|copilot)\b|inteligencia\s+artificial|(?:generad[oa]|cread[oa]|asistid[oa])\s+(?:por|con)\s+(?:una\s+)?ia\b/i;
 function sourceFiles(dir) {
@@ -163,10 +190,10 @@ check('El repositorio no contiene marcas explicitas de autoria por IA',
 
 const staleVersions = [];
 for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
-  if (/tintin-20260715-(?:[23456789])(?!\d)/.test(read(file))) staleVersions.push(file);
+  if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-10'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-12'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

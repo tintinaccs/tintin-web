@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-10"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-12"></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. page-loader.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -43,16 +43,16 @@
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/index.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="styles.css?v=tintin-20260715-10" as="style">
+  <link rel="preload" href="styles.css?v=tintin-20260715-12" as="style">
   <!-- Hero image preloads — browser picks the matching one per breakpoint -->
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-10">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-10">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-10">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-10">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-10">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260715-12">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-12">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-12">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-12">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-12">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/images.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
@@ -62,7 +62,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/images.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260715-10">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260715-12">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
 </head>
@@ -75,13 +75,13 @@
   <div class="tt-header-inner">
 
     <!-- Mobile: hamburger LEFT (hidden on desktop) -->
-    <button type="button" class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú">
+    <button type="button" class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
 
     <!-- Logo (center on mobile/tablet, left on desktop) -->
     <a href="index.html" class="tt-logo-link">
-      <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-10" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
+      <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-12" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
     </a>
 
     <!-- Desktop Nav -->
@@ -89,8 +89,8 @@
       <a href="index.html" class="active">INICIO</a>
 
       <div class="tt-nav-dropdown" id="tienda-dropdown">
-        <button type="button" id="btn-tienda">TIENDA ▾</button>
-        <div class="tt-dropdown">
+        <button type="button" id="btn-tienda" aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">TIENDA ▾</button>
+        <div class="tt-dropdown" id="tt-tienda-dropdown-panel">
           <div class="tt-dropdown-grid" data-collections-nav="desktop">
             <a href="catalogo.html?cat=bolsos" class="tt-dropdown-card">
               <div class="tt-dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
@@ -150,20 +150,20 @@
 
     <!-- Header Actions (search, account, cart) — RIGHT -->
     <div class="tt-header-actions">
-      <button type="button" id="btn-search" title="Buscar">
+      <button type="button" id="btn-search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
       <div class="tt-nav-dropdown" id="account-dropdown">
-      <button type="button" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta">
+      <button type="button" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-haspopup="true" aria-controls="account-panel">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
       </button>
       <div class="tt-account-panel" id="account-panel"></div>
     </div>
-      <button type="button" id="btn-cart" title="Carrito" style="position:relative">
+      <button type="button" id="btn-cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer" style="position:relative">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
@@ -176,20 +176,20 @@
   <!-- Search Panel -->
 </header>
 
-<div class="tt-search-panel" id="search-panel">
+<div class="tt-search-panel" id="search-panel" role="search" aria-label="Buscar productos" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
     </svg>
-    <input type="text" class="tt-search-input" id="search-input" placeholder="¿Qué estás buscando? Ej: reloj, collar, bag…">
+    <input type="search" class="tt-search-input" id="search-input" aria-label="Buscar productos" autocomplete="off" placeholder="¿Qué estás buscando? Ej: reloj, collar, bag…">
     <button type="button" class="tt-search-close" id="btn-search-close" aria-label="Cerrar búsqueda">✕</button>
     <div class="tt-search-results" id="search-results" style="display:none;"></div>
   </div>
 
 <!-- Mobile Menu Overlay -->
-<div class="tt-mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+<div class="tt-mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación" aria-hidden="true">
   <div class="tt-mobile-menu-header">
     <a href="index.html" class="tt-logo-link">
-      <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-10" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+      <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-12" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
     </a>
     <button type="button" class="tt-mobile-close" id="btn-mobile-close" aria-label="Cerrar menú">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -331,7 +331,7 @@
   <!-- Content -->
   <div class="tt-hero-content">
     <p class="tt-hero-eyebrow">Bienvenidas a TINTIN</p>
-    <h1 class="tt-hero-title">DETALLES QUE ELEVAN<br>TÚ ESTILO</h1>
+    <h1 class="tt-hero-title">DETALLES QUE ELEVAN<br>TU ESTILO</h1>
     <p class="tt-hero-subtitle"></p>
     <div class="tt-hero-actions">
       <a href="catalogo.html" class="tt-btn tt-btn-lg">Comprar ahora</a>
@@ -616,7 +616,7 @@
   <div class="container">
     <div class="tt-footer-grid">
       <div class="tt-footer-brand">
-        <a href="index.html" class="tt-logo-link"><img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-10" alt="TINTIN" class="tt-logo-img tt-logo-img--menu"></a>
+        <a href="index.html" class="tt-logo-link"><img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=tintin-20260715-12" alt="TINTIN" class="tt-logo-img tt-logo-img--menu"></a>
         <p class="tt-footer-tagline">Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay.</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -661,11 +661,11 @@
         <div style="margin-top:20px;">
           <div class="tt-footer-col-title">Seguinos</div>
           <div style="display:flex;gap:10px;margin-top:12px;">
-            <a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener"
+            <a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener" aria-label="Seguinos en Instagram"
                style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
             </a>
-            <a href="https://wa.me/595981299331" target="_blank" rel="noopener"
+            <a href="https://wa.me/595981299331" target="_blank" rel="noopener" aria-label="Escribirnos por WhatsApp"
                style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
@@ -692,19 +692,19 @@
      MOBILE TABBAR
 ══════════════════════════════════════ -->
 <div class="tt-tabbar" id="tt-tabbar">
-  <a href="index.html" class="tt-tabbar-btn active" aria-label="Inicio">
+  <a href="index.html" class="tt-tabbar-btn active" aria-label="Inicio" aria-current="page">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span>Inicio</span>
   </a>
-  <button type="button" class="tt-tabbar-btn" id="tabbar-tienda" aria-label="Tienda">
+  <button type="button" class="tt-tabbar-btn" id="tabbar-tienda" aria-label="Tienda" aria-expanded="false" aria-controls="collections-sheet">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h12M10 20a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
     <span>Tienda</span>
   </button>
-  <button type="button" class="tt-tabbar-btn" id="tabbar-search" aria-label="Buscar">
+  <button type="button" class="tt-tabbar-btn" id="tabbar-search" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <span>Buscar</span>
   </button>
-  <button type="button" class="tt-tabbar-btn" id="tabbar-cart" style="position:relative" aria-label="Carrito">
+  <button type="button" class="tt-tabbar-btn" id="tabbar-cart" style="position:relative" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     <span class="tt-cart-badge hidden" id="cart-badge-mobile">0</span>
     <span>Carrito</span>
@@ -719,7 +719,7 @@
      CART DRAWER
 ══════════════════════════════════════ -->
 <div class="tt-cart-overlay" id="cart-overlay"></div>
-<div class="tt-cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+<div class="tt-cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras" aria-hidden="true">
   <div class="tt-cart-header">
     <h2 class="tt-cart-title">MI CARRITO</h2>
     <button type="button" class="tt-cart-close" id="btn-cart-close" aria-label="Cerrar carrito">✕</button>
@@ -736,7 +736,7 @@
 </div>
 
 <!-- MOBILE COLLECTIONS BOTTOM SHEET -->
-<div class="tt-collections-sheet" id="collections-sheet">
+<div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Colecciones" aria-hidden="true">
   <div class="tt-sheet-handle"></div>
   <div class="tt-sheet-header">
     <span>Colecciones</span>
@@ -804,13 +804,13 @@
 })();
 </script>
 
-<script src="script.js?v=tintin-20260715-10" defer></script><script type="module" src="js/auth-nav.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/nav-collections.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/load-images-init.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/products-store.js?v=tintin-20260715-10"></script>
-<script type="module" src="js/cart-sync.js?v=tintin-20260715-10"></script>
+<script src="script.js?v=tintin-20260715-12" defer></script><script type="module" src="js/auth-nav.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/nav-collections.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/whatsapp.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/load-images-init.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/products-store.js?v=tintin-20260715-12"></script>
+<script type="module" src="js/cart-sync.js?v=tintin-20260715-12"></script>
 <script type="module">
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('index');
@@ -821,24 +821,46 @@ import { onCollectionsUpdate } from './js/collections-store.js';
 
 const COLL_IMG_BASE = 'assets-tintin/images/collections/';
 const COLL_PLACEHOLDER = COLL_IMG_BASE + 'col-placeholder.webp';
+const COLL_SLUG_FILE_MAP = Object.freeze({ bolsos: 'bags' });
+
+function collImageFile(slug) {
+  const normalized = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
+  return COLL_SLUG_FILE_MAP[normalized] || normalized;
+}
 
 // Custom image from Super Admin wins; otherwise try the static cover that
 // matches the slug; if that file doesn't exist either, fall back to the
 // generic placeholder. Never leaves a broken/empty image.
 function collCardImg(c) {
-  const bySlugFallback = `${COLL_IMG_BASE}col-${c.slug}.webp`;
-  const src = c.image || bySlugFallback;
-  return `<img src="${src}" alt="${c.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;" onerror="this.onerror=null;this.src='${COLL_PLACEHOLDER}';">`;
+  const image = document.createElement('img');
+  const bySlugFallback = `${COLL_IMG_BASE}col-${collImageFile(c.slug)}.webp`;
+  image.src = c.image || bySlugFallback;
+  image.alt = `Colección ${c.name}`;
+  image.loading = 'lazy';
+  image.decoding = 'async';
+  image.style.cssText = 'width:100%;height:100%;object-fit:contain;background:transparent;display:block;';
+  image.addEventListener('error', () => {
+    if (image.src.endsWith(COLL_PLACEHOLDER)) return;
+    image.src = COLL_PLACEHOLDER;
+  });
+  return image;
 }
 
 function buildCollCard(c) {
   const a = document.createElement('a');
-  a.href = `catalogo.html?cat=${c.slug}`;
+  const imageWrap = document.createElement('div');
+  const overlay = document.createElement('div');
+  const label = document.createElement('span');
+  a.href = `catalogo.html?cat=${encodeURIComponent(c.slug)}`;
   a.className = 'tt-coll-card';
   a.dataset.slug = c.slug;
-  a.innerHTML = `
-    <div class="tt-coll-card-img">${collCardImg(c)}</div>
-    <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">${c.name.toUpperCase()}</span></div>`;
+  imageWrap.className = 'tt-coll-card-img';
+  imageWrap.appendChild(collCardImg(c));
+  overlay.className = 'tt-coll-card-overlay';
+  label.className = 'tt-coll-card-label';
+  label.textContent = c.name.toUpperCase();
+  overlay.appendChild(label);
+  a.append(imageWrap, overlay);
   return a;
 }
 

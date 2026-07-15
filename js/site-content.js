@@ -13,6 +13,7 @@ import {
   getNested,
   sanitizeContentText,
   sanitizeContentHref,
+  normalizeContentValue,
   detectContentPageId,
 } from './content-schema.js';
 
@@ -130,7 +131,7 @@ function applySection(pageId, sectionId, sectionSchema, sectionData) {
       const target = findTarget(root, item);
       if (!target) return;
       if (item.type === 'href') applyHref(target, raw, item);
-      else applyText(target, raw, item);
+      else applyText(target, normalizeContentValue(pageId, sectionId, item.key, raw), item);
     });
   });
 }
