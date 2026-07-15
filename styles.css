@@ -1919,62 +1919,103 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-tabbar-btn svg { width: 20px; height: 20px; }
 
-/* Preferencia de estadísticas: visible, breve y sin bloquear la navegación. */
-.tt-analytics-consent {
+/* Cookies y privacidad: tarjeta discreta, sin overlay ni bloqueo de navegación. */
+.tt-privacy-consent {
   position: fixed;
   z-index: 2200;
-  left: 50%;
+  right: max(18px, env(safe-area-inset-right, 0px));
   bottom: max(18px, env(safe-area-inset-bottom, 0px));
-  display: flex;
-  width: min(720px, calc(100vw - 32px));
-  padding: 16px 18px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  transform: translateX(-50%);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--white);
-  box-shadow: 0 12px 40px rgba(38,24,30,.2);
+  width: min(430px, calc(100vw - 36px));
+  padding: 18px;
+  border: 1px solid rgba(173,63,103,.16);
+  border-radius: 22px;
+  background: rgba(255,255,255,.98);
+  box-shadow: 0 18px 54px rgba(38,24,30,.16);
   color: var(--text);
+  font-family: var(--font-body);
+  box-sizing: border-box;
+  animation: ttPrivacyIn .28s cubic-bezier(.2,.8,.2,1) both;
 }
-.tt-analytics-consent p {
-  margin: 0;
-  font-size: .82rem;
-  line-height: 1.55;
+.tt-privacy-consent[hidden] { display: none !important; }
+.tt-privacy-heading { display: flex; align-items: center; gap: 11px; padding-right: 24px; }
+.tt-privacy-icon {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--pink-pale);
+  font-size: 19px;
 }
-.tt-analytics-consent-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.tt-analytics-consent-actions .tt-btn {
-  min-height: 44px;
-  white-space: nowrap;
-}
-.tt-analytics-consent-actions a {
-  display: inline-flex;
-  min-height: 44px;
-  padding: 0 6px;
-  align-items: center;
+.tt-privacy-eyebrow {
   color: var(--pink-dark);
-  font-size: .75rem;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
+.tt-privacy-heading h2 { margin: 2px 0 0; color: var(--text); font: 700 1.03rem/1.25 var(--font-display); }
+.tt-privacy-summary { margin: 13px 0 15px; color: var(--text-sec); font-size: .77rem; line-height: 1.58; }
+.tt-privacy-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tt-privacy-btn,
+.tt-privacy-link-btn {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 9px 14px;
+  border: 0;
+  font: 800 .68rem/1.2 var(--font-body);
+  letter-spacing: .035em;
+  cursor: pointer;
+}
+.tt-privacy-btn-primary { background: var(--pink-dark); color: #fff; box-shadow: 0 8px 20px rgba(173,63,103,.18); }
+.tt-privacy-btn-secondary { border: 1px solid rgba(173,63,103,.28); background: #fff; color: var(--text); }
+.tt-privacy-link-btn { padding-inline: 6px; background: transparent; color: var(--pink-dark); text-decoration: underline; text-underline-offset: 3px; }
+.tt-privacy-close {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-sec);
+  font-size: 20px;
+  cursor: pointer;
+}
+.tt-privacy-details { margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--border); }
+.tt-privacy-option { display: flex; min-height: 52px; align-items: center; justify-content: space-between; gap: 15px; }
+.tt-privacy-option + .tt-privacy-option { border-top: 1px solid rgba(38,24,30,.06); }
+.tt-privacy-option div { display: grid; gap: 2px; }
+.tt-privacy-option strong { color: var(--text); font-size: .76rem; }
+.tt-privacy-option span { color: var(--text-sec); font-size: .67rem; line-height: 1.4; }
+.tt-privacy-option input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--pink-dark); }
+.tt-privacy-required { color: var(--pink-dark) !important; font-weight: 800; white-space: nowrap; }
+.tt-privacy-details-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 13px; }
+.tt-privacy-details-actions a { color: var(--pink-dark); font-size: .7rem; font-weight: 700; text-underline-offset: 3px; }
+@keyframes ttPrivacyIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
 @media (max-width: 768px) {
-  .tt-analytics-consent {
+  .tt-privacy-consent {
+    right: 12px;
     bottom: calc(86px + env(safe-area-inset-bottom, 0px));
-    padding: 15px;
-    align-items: stretch;
-    flex-direction: column;
-    gap: 12px;
+    width: calc(100vw - 24px);
+    max-height: min(70vh, 580px);
+    overflow: auto;
+    padding: 16px;
+    border-radius: 20px;
   }
-  .tt-analytics-consent-actions { flex-wrap: wrap; justify-content: flex-start; }
+  .tt-privacy-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .tt-privacy-link-btn { grid-column: 1 / -1; }
+  .tt-privacy-details-actions { align-items: stretch; flex-direction: column; }
+  .tt-privacy-details-actions .tt-privacy-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-privacy-consent { animation: none; }
 }
 
 /* Respuesta táctil estable, similar a la barra móvil de Instagram: la

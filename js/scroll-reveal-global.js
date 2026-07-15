@@ -5,7 +5,7 @@
   window.TintinGlobalScrollRevealBooted = true;
 
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
-  const fixedExclusions = '#tt-loader,#tt-intro,#tt-welcome-tutorial,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
+  const fixedExclusions = '#tt-loader,#tt-intro,#tt-welcome-tutorial,#tt-privacy-consent,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
   const revealSelectors = [
     'main>section', '.section', '.section-sm', '.tt-section', '.tt-page-hero', '.tt-hero', '.tt-trust-bar', '.tt-editorial', '.tt-products-section', '.tt-reviews-section', '.tt-footer',
     '.tt-card', '.tt-product-card', '.tt-coll-card', '.tt-category-card', '.tt-review-card', '.tt-trust-item', '.tt-info-block', '.tt-dropdown-card', '.tt-sheet-item',

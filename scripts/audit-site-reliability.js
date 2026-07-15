@@ -16,10 +16,18 @@ const loader = read('js/page-loader.js');
 const parity = read('css/tintin-parity-safe.css');
 const accountFix = read('js/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
+const privacyConsent = read('js/privacy-consent.js');
+const analytics = read('js/analytics.js');
 const geoFunction = read('netlify/functions/visitor-geo.mjs');
 const rules = read('firestore.rules');
 const admin = read('admin.html');
+const welcomeAdmin = read('js/admin-welcome-control.js');
+const welcomeConfig = read('js/welcome-config.js');
+const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
+const login = read('login.html');
+const profile = read('perfil.html');
 const privacy = read('privacidad.html');
+const styles = read('styles.css');
 const theme = read('css/tintin-unified-theme.css');
 const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
@@ -39,10 +47,21 @@ check('La actividad cuenta una sola sesión por pestaña y día',
   activity.includes('storageSet(window.sessionStorage, recordedKey, sessionId)'));
 check('La presencia usa latidos espaciados y solo mientras la página es visible',
   activity.includes('const HEARTBEAT_MS = 60000') && activity.includes("document.visibilityState === 'hidden'"));
-check('Las estadísticas requieren elección afirmativa y permiten revocarla',
-  activity.includes("CONSENT_KEY = 'tt_activity_consent_v1'") &&
-  activity.includes("consentChoice() === 'granted'") &&
+check('Cookies y estadísticas comparten una sola elección revocable',
+  privacyConsent.includes("const COOKIE_NAME = 'tt_privacy_choice'") &&
+  privacyConsent.includes("const LEGACY_CONSENT_KEY = 'tt_activity_consent_v1'") &&
+  privacyConsent.includes('export function openPrivacyPreferences()') &&
   privacy.includes('id="tt-open-privacy-settings"'));
+check('La tarjeta de privacidad no bloquea ni cubre toda la página',
+  styles.includes('.tt-privacy-consent') &&
+  styles.includes('width: min(430px, calc(100vw - 36px))') &&
+  !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
+check('La actividad propia y Google Analytics esperan el permiso opcional',
+  activity.includes("from './privacy-consent.js'") &&
+  activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
+  analytics.includes("from './privacy-consent.js'") &&
+  analytics.includes('if (!hasStatisticsConsent()) return;') &&
+  analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   geoFunction.includes('context?.geo') &&
   !/\bcontext\.ip\s*[;,)]/.test(geoFunction.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')) &&
@@ -82,6 +101,23 @@ check('Las estadisticas combinan pedidos, usuarios, catalogo, visitas y paginas'
   admin.includes('statistics-order-locations') &&
   admin.includes('statistics-entry-pages') &&
   admin.includes('statistics-live-pages'));
+check('La primera sesión de una clienta llega a inicio con bienvenida pendiente',
+  login.includes('explicitLoginInProgress = true') &&
+  login.includes("'index.html?welcome=1'") &&
+  login.includes('welcomeTutorialPending: welcomePending') &&
+  welcomeRuntime.includes('data?.welcomeTutorialPending === true'));
+check('Bienvenida pública y Super Admin usan una sola configuración',
+  welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v4-unified'") &&
+  welcomeRuntime.includes("from './welcome-config.js'") &&
+  welcomeAdmin.includes("from './welcome-config.js'") &&
+  !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
+  !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
+  !profile.includes("./js/onboarding.js"));
+check('Super Admin puede probar y reactivar la bienvenida en lotes seguros',
+  welcomeRuntime.includes('config.previewEnabled') &&
+  welcomeAdmin.includes('resetWelcomeForClients()') &&
+  welcomeAdmin.includes('offset += 450') &&
+  welcomeAdmin.includes('user.email !== SUPER_ADMIN'));
 check('Las reglas aceptan solo geografía aproximada y campos conocidos',
   rules.includes('activityGeoIsValid(data)') &&
   rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
@@ -127,10 +163,10 @@ check('El repositorio no contiene marcas explicitas de autoria por IA',
 
 const staleVersions = [];
 for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
-  if (/tintin-20260715-[234567]/.test(read(file))) staleVersions.push(file);
+  if (/tintin-20260715-[2345678]/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-8'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-9'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

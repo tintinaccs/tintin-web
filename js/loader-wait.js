@@ -5,7 +5,7 @@
 // pueden insertarse en el DOM mientras el loader todavía está arriba,
 // quedando invisibles y sin poder tocarse durante varios segundos en una
 // conexión lenta. Mismo patrón (evento + MutationObserver + timeout de
-// seguridad) que ya usa js/onboarding.js para esperar el splash.
+// seguridad) que usa el runtime único de bienvenida para esperar el splash.
 export function waitForLoaderHidden() {
   return new Promise(resolve => {
     const loader = document.getElementById('tt-loader');

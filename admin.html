@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-8"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-9"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -17,12 +17,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-8">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-8">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-9">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-9">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -87,9 +87,6 @@
     <button type="button" class="adm-nav-item" data-section="mensajes">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> Mensajes
     </button>
-    <button type="button" class="adm-nav-item" data-section="onboarding" id="nav-onboarding">
-      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Onboarding
-    </button>
     <button type="button" class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
@@ -126,7 +123,6 @@
   <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
-  <button type="button" class="adm-mobile-tab" data-section="onboarding" id="mtab-onboarding"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Onboarding</button>
   <button type="button" class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
   <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
   <button type="button" class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
@@ -747,42 +743,6 @@
           <a href="https://wa.me/595981299331" target="_blank" id="mensajes-wa-link" class="adm-btn adm-btn-primary">
             Abrir WhatsApp Business
           </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===================== ONBOARDING ===================== -->
-    <div class="adm-section" id="section-onboarding">
-      <div class="adm-card" style="margin-bottom:20px">
-        <div class="adm-card-head">
-          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg>Configuración de Onboarding</div>
-        </div>
-        <div class="adm-card-body">
-          <div class="adm-toggle-wrap" style="margin-bottom:20px">
-            <label class="adm-toggle">
-              <input type="checkbox" id="ob-toggle" />
-              <span class="adm-toggle-slider"></span>
-            </label>
-            <div>
-              <div class="adm-toggle-label">Activar tutorial de bienvenida para nuevos usuarios</div>
-              <div class="adm-toggle-desc">
-                Cuando está activado, los nuevos usuarios ven el asistente de bienvenida (Tina) al iniciar sesión por primera vez.
-              </div>
-            </div>
-          </div>
-          <button type="button" class="adm-btn adm-btn-primary" id="btn-save-ob">Guardar configuración</button>
-        </div>
-      </div>
-
-      <div class="adm-card">
-        <div class="adm-card-head">
-          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Resetear onboarding</div>
-        </div>
-        <div class="adm-card-body">
-          <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
-            Esto marca el onboarding como no completado para todos los usuarios. La próxima vez que inicien sesión, verán el tutorial de bienvenida.
-          </p>
-          <button type="button" class="adm-btn adm-btn-danger" id="btn-reset-ob">Resetear onboarding para todos los usuarios</button>
         </div>
       </div>
     </div>
@@ -2015,7 +1975,6 @@ const SECTION_LABELS = {
   productos: 'Productos',
   colecciones: 'Colecciones',
   mensajes: 'Mensajes',
-  onboarding: 'Onboarding',
   auditoria: 'Auditoría',
   correos: 'Correos',
   configuracion: 'Configuración',
@@ -2030,7 +1989,6 @@ const SECTION_LABELS = {
 const SECTION_PERMISSION = {
   estadisticas:  'manageSettings',
   usuarios:      'manageUsers',
-  onboarding:    'manageSettings',
   configuracion: 'manageSettings',
   // La importación CSV puede sobrescribir el catálogo entero de una sola vez
   // — es una acción de riesgo distinto a editar un producto por vez, así que
@@ -2080,7 +2038,6 @@ function switchSection(target) {
   if (target === 'pedidos') loadOrders();
   if (target === 'productos') loadProductos();
   if (target === 'colecciones') loadColecciones();
-  if (target === 'onboarding') loadOnboardingSettings();
   if (target === 'auditoria') loadAuditLog();
   if (target === 'correos') loadCorreos();
   if (target === 'configuracion') loadConfig();
@@ -3743,43 +3700,6 @@ window.bulkExportOrders = function(scope) {
   if (!list.length) { toast('No hay pedidos para exportar'); return; }
   downloadCsv(`pedidos_${scope}_${Date.now()}.csv`, orderRowsToCsv_(list));
   toast(`Exportados ${list.length} pedido(s) a CSV`);
-};
-
-// ======== ONBOARDING ========
-async function loadOnboardingSettings() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'general'));
-    const enabled = snap.exists() ? snap.data().onboardingEnabled !== false : true;
-    document.getElementById('ob-toggle').checked = enabled;
-  } catch(e) {}
-}
-
-document.getElementById('btn-save-ob').onclick = async () => {
-  const enabled = document.getElementById('ob-toggle').checked;
-  try {
-    await setDoc(doc(db, 'settings', 'general'), {
-      onboardingEnabled: enabled,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-    toast(`Onboarding ${enabled ? 'activado' : 'desactivado'}`);
-  } catch(e) {
-    toast('Error al guardar configuración');
-  }
-};
-
-document.getElementById('btn-reset-ob').onclick = async () => {
-  if (!confirm('¿Resetear el onboarding para TODOS los usuarios? Verán el tutorial de nuevo.')) return;
-  try {
-    const snap = await getDocs(collection(db, 'users'));
-    const batch = writeBatch(db);
-    snap.docs.forEach(d => {
-      batch.update(d.ref, { onboardingCompleted: false });
-    });
-    await batch.commit();
-    toast(`Onboarding reseteado para ${snap.size} usuarios`);
-  } catch(e) {
-    toast('Error al resetear onboarding');
-  }
 };
 
 // ======== CONFIGURACIÓN ========
@@ -5666,10 +5586,6 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
   if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
 
-  const onboardingToggle = document.getElementById('ob-toggle');
-  if (onboardingToggle && document.activeElement !== onboardingToggle) {
-    onboardingToggle.checked = d.onboardingEnabled !== false;
-  }
   if (d.waConfirmMessage) waConfirmMessageTemplate = d.waConfirmMessage;
 });
 

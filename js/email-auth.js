@@ -80,6 +80,7 @@ export async function ensureUserDocForEmailLogin(user) {
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
+    const welcomePending = role === 'client';
     await setDoc(ref, {
       name: user.displayName || '',
       email: user.email,
@@ -87,10 +88,10 @@ export async function ensureUserDocForEmailLogin(user) {
       photoURL: user.photoURL || '',
       role,
       provider: 'emailLink',
-      onboardingCompleted: false,
-      welcomeTutorialSeen: false,
-      welcomeTutorialPending: role === 'client',
-      welcomeTutorialVersion: 'home-welcome-v1',
+      onboardingCompleted: !welcomePending,
+      welcomeTutorialSeen: !welcomePending,
+      welcomeTutorialPending: welcomePending,
+      welcomeTutorialVersion: 'home-welcome-v4-unified',
       blocked: false,
       purchaseCount: 0,
       totalSpent: 0,
@@ -98,7 +99,7 @@ export async function ensureUserDocForEmailLogin(user) {
       updatedAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
-    return { role, blocked: false, isNew: true };
+    return { role, blocked: false, isNew: true, welcomePending };
   }
   const data = snap.data();
   if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
@@ -106,7 +107,9 @@ export async function ensureUserDocForEmailLogin(user) {
     return { role: 'superadmin', blocked: false, isNew: false };
   }
   await setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
-  return { role: data.role || 'client', blocked: !!data.blocked, isNew: false };
+  const role = data.role || 'client';
+  const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
+  return { role, blocked: !!data.blocked, isNew: false, welcomePending };
 }
 
 /** Mismo chequeo de cuenta bloqueada que usa el login con Google (Fase E). */

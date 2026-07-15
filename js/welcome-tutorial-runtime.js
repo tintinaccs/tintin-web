@@ -2,14 +2,11 @@ import { auth, db } from './firebase.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getUserRole, SUPER_ADMIN } from './roles.js';
-
-const VERSION = 'home-welcome-v3-reliable';
-const DEFAULT_STEPS = [
-  { icon:'🌸', title:'Bienvenida a Tintin', text:'Te cuento rapidito cómo comprar y encontrar tus accesorios favoritos sin perderte.', cta:'Empezar', active:true },
-  { icon:'🛍️', title:'Explorá la tienda', text:'Desde “Tienda” podés ver relojes, aros, collares, bags, pulseras y más.', cta:'Siguiente', active:true },
-  { icon:'🛒', title:'Agregá al carrito', text:'Cuando veas algo que te guste, agregalo al carrito. Tu carrito queda separado por cuenta.', cta:'Siguiente', active:true },
-  { icon:'✨', title:'Finalizá tu pedido', text:'Completá tus datos de entrega y pago. Si necesitás ayuda, podés escribirnos por WhatsApp.', cta:'Entendido', active:true }
-];
+import {
+  DEFAULT_WELCOME_STEPS,
+  WELCOME_VERSION,
+  normalizeWelcomeConfig
+} from './welcome-config.js';
 
 (function(){
   'use strict';
@@ -27,6 +24,13 @@ const DEFAULT_STEPS = [
     const p = new URLSearchParams(location.search);
     if (p.get('welcomePreview') === '1') return true;
     try { return sessionStorage.getItem('tt_welcome_preview_superadmin') === '1' || localStorage.getItem('tt_welcome_preview_superadmin') === '1'; } catch { return false; }
+  }
+
+  function clearPreviewMode(){
+    try {
+      sessionStorage.removeItem('tt_welcome_preview_superadmin');
+      localStorage.removeItem('tt_welcome_preview_superadmin');
+    } catch {}
   }
 
   function toDate(v){
@@ -64,16 +68,10 @@ const DEFAULT_STEPS = [
     try {
       const snap = await getDoc(doc(db, 'settings', 'welcomeTutorial'));
       const data = snap.exists() ? snap.data() : {};
-      const steps = Array.isArray(data.steps) ? data.steps.filter(s => s && s.active !== false) : [];
-      return {
-        enabled: data.enabled !== false,
-        title: data.title || 'Mensaje de bienvenida',
-        subtitle: data.subtitle || 'Tu primera guía Tintin',
-        steps: steps.length ? steps : DEFAULT_STEPS
-      };
+      return normalizeWelcomeConfig(data);
     } catch (e) {
       console.warn('[welcome-runtime] configuración base usada:', e);
-      return { enabled:true, title:'Mensaje de bienvenida', subtitle:'Tu primera guía Tintin', steps:DEFAULT_STEPS };
+      return normalizeWelcomeConfig();
     }
   }
 
@@ -93,7 +91,7 @@ const DEFAULT_STEPS = [
       welcomeTutorialPending: false,
       welcomeTutorialCompletedAt: serverTimestamp(),
       welcomeTutorialClosedReason: reason,
-      welcomeTutorialVersion: VERSION,
+      welcomeTutorialVersion: WELCOME_VERSION,
       onboardingCompleted: true,
       onboardingCompletedAt: serverTimestamp(),
       updatedAt: serverTimestamp()
@@ -158,7 +156,7 @@ const DEFAULT_STEPS = [
     if (document.getElementById('tt-welcome-runtime-style')) return;
     const st = document.createElement('style');
     st.id = 'tt-welcome-runtime-style';
-    st.textContent = `html.tt-welcome-scroll-locked,html.tt-welcome-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}.tt-welcome-overlay{position:fixed;inset:0;z-index:2147482500;background:rgba(91,35,57,.42);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px;font-family:'Poppins',sans-serif;animation:ttWelcomeFade .24s ease both}.tt-welcome-card{width:min(520px,100%);max-height:min(82vh,720px);overflow:auto;background:#fff;border:1.5px solid rgba(255,182,200,.8);border-radius:28px;box-shadow:0 24px 80px rgba(139,38,66,.30);animation:ttWelcomeIn .32s cubic-bezier(.34,1.56,.64,1) both}.tt-welcome-top{background:linear-gradient(135deg,#F6B7C8,#FDECF2);padding:24px 24px 18px;text-align:center;position:relative}.tt-welcome-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:999px;background:rgba(255,255,255,.76);color:#2B2B2B;font-size:20px;cursor:pointer}.tt-welcome-icon{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;box-shadow:0 10px 30px rgba(212,106,138,.18)}.tt-welcome-title{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);line-height:1.03;margin:0;color:#2B2B2B;font-weight:800}.tt-welcome-sub{margin:8px auto 0;color:#2B2B2B;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.tt-welcome-body{padding:24px}.tt-welcome-step-title{font-size:18px;font-weight:900;color:#2B2B2B;margin:0 0 8px;text-align:center}.tt-welcome-text{font-size:14px;line-height:1.7;color:#7B6F72;text-align:center;margin:0 auto;max-width:420px}.tt-welcome-dots{display:flex;justify-content:center;gap:8px;margin:22px 0 0}.tt-welcome-dot{width:8px;height:8px;border-radius:999px;background:#FAD6DF;transition:all .2s ease}.tt-welcome-dot.active{width:26px;background:#AD3F67}.tt-welcome-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:24px}.tt-welcome-btn{border:0;border-radius:999px;padding:12px 18px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;background:#FDECF2;color:#2B2B2B}.tt-welcome-btn-primary{background:#AD3F67;color:#fff;box-shadow:0 10px 26px rgba(212,106,138,.25)}.tt-welcome-btn-ghost{background:transparent;color:#2B2B2B}@keyframes ttWelcomeFade{from{opacity:0}to{opacity:1}}@keyframes ttWelcomeIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@media(max-width:600px){.tt-welcome-overlay{align-items:flex-end;padding:12px}.tt-welcome-card{border-radius:24px 24px 18px 18px;max-height:86vh}.tt-welcome-top{padding:22px 18px 16px}.tt-welcome-body{padding:20px 18px 18px}.tt-welcome-actions{flex-direction:column-reverse;align-items:stretch}.tt-welcome-btn{width:100%}.tt-welcome-icon{width:64px;height:64px;font-size:32px}}`;
+    st.textContent = `html.tt-welcome-scroll-locked,html.tt-welcome-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}.tt-welcome-overlay{position:fixed;inset:0;z-index:2147482500;background:rgba(91,35,57,.42);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px;font-family:'Poppins',sans-serif;animation:ttWelcomeFade .24s ease both}.tt-welcome-card{width:min(520px,100%);max-height:min(82vh,720px);overflow:auto;background:#fff;border:1.5px solid rgba(255,182,200,.8);border-radius:28px;box-shadow:0 24px 80px rgba(139,38,66,.30);animation:ttWelcomeIn .32s cubic-bezier(.34,1.56,.64,1) both}.tt-welcome-top{background:linear-gradient(135deg,#F6B7C8,#FDECF2);padding:24px 24px 18px;text-align:center;position:relative}.tt-welcome-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;border-radius:999px;background:rgba(255,255,255,.76);color:#2B2B2B;font-size:20px;cursor:pointer}.tt-welcome-icon{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;box-shadow:0 10px 30px rgba(212,106,138,.18)}.tt-welcome-title{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);line-height:1.03;margin:0;color:#2B2B2B;font-weight:800}.tt-welcome-sub{margin:8px auto 0;color:#2B2B2B;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.tt-welcome-body{padding:24px}.tt-welcome-step-title{font-size:18px;font-weight:900;color:#2B2B2B;margin:0 0 8px;text-align:center}.tt-welcome-text{font-size:14px;line-height:1.7;color:#7B6F72;text-align:center;margin:0 auto;max-width:420px}.tt-welcome-dots{display:flex;justify-content:center;gap:8px;margin:22px 0 0}.tt-welcome-dot{width:8px;height:8px;border-radius:999px;background:#FAD6DF;transition:all .2s ease}.tt-welcome-dot.active{width:26px;background:#AD3F67}.tt-welcome-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:24px}.tt-welcome-btn{min-height:44px;border:0;border-radius:999px;padding:12px 18px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;background:#FDECF2;color:#2B2B2B}.tt-welcome-btn-primary{background:#AD3F67;color:#fff;box-shadow:0 10px 26px rgba(212,106,138,.25)}.tt-welcome-btn-ghost{background:transparent;color:#2B2B2B}@keyframes ttWelcomeFade{from{opacity:0}to{opacity:1}}@keyframes ttWelcomeIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@media(max-width:600px){.tt-welcome-overlay{align-items:flex-end;padding:12px}.tt-welcome-card{border-radius:24px 24px 18px 18px;max-height:86vh}.tt-welcome-top{padding:22px 18px 16px}.tt-welcome-body{padding:20px 18px 18px}.tt-welcome-actions{flex-direction:column-reverse;align-items:stretch}.tt-welcome-btn{width:100%}.tt-welcome-icon{width:64px;height:64px;font-size:32px}}@media(prefers-reduced-motion:reduce){.tt-welcome-overlay,.tt-welcome-card{animation:none}.tt-welcome-dot,.tt-welcome-overlay{transition:none!important}}`;
     document.head.appendChild(st);
   }
 
@@ -166,24 +164,33 @@ const DEFAULT_STEPS = [
     document.getElementById('tt-welcome-tutorial')?.remove();
     cleanUrl(); styles();
     let i = 0;
-    const steps = (config.steps || DEFAULT_STEPS).filter(s => s && s.active !== false);
+    const steps = (config.steps || DEFAULT_WELCOME_STEPS).filter(s => s && s.active !== false);
+    if (!steps.length) return;
     const ov = document.createElement('div');
     ov.id = 'tt-welcome-tutorial';
     ov.className = 'tt-welcome-overlay';
     ov.setAttribute('role','dialog');
     ov.setAttribute('aria-modal','true');
+    ov.setAttribute('aria-labelledby','tt-welcome-title');
+    let finishing = false;
 
     const finish = async reason => {
+      if (finishing) return;
+      finishing = true;
       ov.style.opacity = '0'; ov.style.transition = 'opacity .22s ease';
-      if (preview) { try { sessionStorage.removeItem('tt_welcome_preview_superadmin'); localStorage.removeItem('tt_welcome_preview_superadmin'); } catch {} }
+      if (preview) clearPreviewMode();
       else await markSeen(user.uid, reason).catch(e => console.warn('[welcome-runtime] no se pudo marcar visto', e));
-      setTimeout(() => { ov.remove(); unlock(); }, 240);
+      setTimeout(() => {
+        ov.remove();
+        unlock();
+        window.dispatchEvent(new CustomEvent('tintin:welcome:closed', { detail: { reason } }));
+      }, 240);
     };
 
     const render = () => {
-      const step = steps[i] || DEFAULT_STEPS[0];
+      const step = steps[i] || DEFAULT_WELCOME_STEPS[0];
       const last = i === steps.length - 1;
-      ov.innerHTML = `<div class="tt-welcome-card"><div class="tt-welcome-top"><button type="button" class="tt-welcome-close" id="tt-welcome-close" aria-label="Cerrar">×</button><div class="tt-welcome-icon">${esc(step.icon || '🌸')}</div><h2 class="tt-welcome-title">${esc(config.title || 'Mensaje de bienvenida')}</h2><div class="tt-welcome-sub">${esc(config.subtitle || 'Tu primera guía Tintin')}</div></div><div class="tt-welcome-body"><h3 class="tt-welcome-step-title">${esc(step.title || '')}</h3><p class="tt-welcome-text">${esc(step.text || '')}</p><div class="tt-welcome-dots" aria-hidden="true">${steps.map((_,idx)=>`<span class="tt-welcome-dot ${idx===i?'active':''}"></span>`).join('')}</div><div class="tt-welcome-actions"><button type="button" class="tt-welcome-btn tt-welcome-btn-ghost" id="tt-welcome-skip">Cerrar</button><div style="display:flex;gap:10px;flex:1;justify-content:flex-end;flex-wrap:wrap">${i>0?'<button type="button" class="tt-welcome-btn" id="tt-welcome-prev">Atrás</button>':''}<button type="button" class="tt-welcome-btn tt-welcome-btn-primary" id="tt-welcome-next">${esc(last?'Finalizar':(step.cta || 'Siguiente'))}</button></div></div></div></div>`;
+      ov.innerHTML = `<div class="tt-welcome-card"><div class="tt-welcome-top"><button type="button" class="tt-welcome-close" id="tt-welcome-close" aria-label="Cerrar">×</button><div class="tt-welcome-icon">${esc(step.icon || '🌸')}</div><h2 class="tt-welcome-title" id="tt-welcome-title">${esc(config.title || 'Mensaje de bienvenida')}</h2><div class="tt-welcome-sub">${esc(config.subtitle || 'Tu primera guía Tintin')}</div></div><div class="tt-welcome-body"><h3 class="tt-welcome-step-title">${esc(step.title || '')}</h3><p class="tt-welcome-text">${esc(step.text || '')}</p><div class="tt-welcome-dots" aria-hidden="true">${steps.map((_,idx)=>`<span class="tt-welcome-dot ${idx===i?'active':''}"></span>`).join('')}</div><div class="tt-welcome-actions"><button type="button" class="tt-welcome-btn tt-welcome-btn-ghost" id="tt-welcome-skip">Cerrar</button><div style="display:flex;gap:10px;flex:1;justify-content:flex-end;flex-wrap:wrap">${i>0?'<button type="button" class="tt-welcome-btn" id="tt-welcome-prev">Atrás</button>':''}<button type="button" class="tt-welcome-btn tt-welcome-btn-primary" id="tt-welcome-next">${esc(last?'Finalizar':(step.cta || 'Siguiente'))}</button></div></div></div></div>`;
       ov.querySelector('#tt-welcome-close').onclick = () => finish('closed');
       ov.querySelector('#tt-welcome-skip').onclick = () => finish('closed');
       ov.querySelector('#tt-welcome-prev')?.addEventListener('click', () => { i = Math.max(0, i - 1); render(); });
@@ -196,17 +203,37 @@ const DEFAULT_STEPS = [
     render();
     document.body.appendChild(ov);
     lock();
+    window.dispatchEvent(new CustomEvent('tintin:welcome:opened'));
   }
 
   onAuthStateChanged(auth, async user => {
     if (!user) return;
     try {
-      const preview = previewMode() && user.email === SUPER_ADMIN;
+      const previewRequested = previewMode() && user.email === SUPER_ADMIN;
       const role = await getUserRole(user.uid, user.email);
-      if (!preview && role !== 'client') return;
+      if (!previewRequested && role !== 'client') return;
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
-      if (!preview && !config.enabled) return;
-      if (!shouldShow(user, data, preview)) return;
+      const preview = previewRequested && config.previewEnabled;
+      if (previewRequested && !preview) {
+        clearPreviewMode();
+        cleanUrl();
+        return;
+      }
+      if (!preview && !config.enabled) {
+        cleanUrl();
+        await markSeen(user.uid, 'disabled').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida desactivada', error));
+        return;
+      }
+      if (!config.steps.some(step => step && step.active !== false)) {
+        if (previewRequested) clearPreviewMode();
+        else await markSeen(user.uid, 'no_active_steps').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida vacía', error));
+        cleanUrl();
+        return;
+      }
+      if (!shouldShow(user, data, preview)) {
+        cleanUrl();
+        return;
+      }
       await waitReady();
       show(user, config, preview);
     } catch (e) {

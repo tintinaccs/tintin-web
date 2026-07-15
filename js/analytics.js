@@ -1,33 +1,82 @@
 /**
- * TINTIN — Google Analytics 4 (preparado, no activado)
- * Lee settings/general.ga4MeasurementId (Super Admin → Configuración). Si
- * está vacío, no carga ningún script ni hace ninguna llamada externa — el
- * sitio funciona exactamente igual que sin este archivo. Recién cuando se
- * cargue un Measurement ID real (ej: G-XXXXXXXXXX) empieza a medir visitas.
+ * Google Analytics 4 opcional.
+ *
+ * El script externo solo se solicita después de aceptar las estadísticas en
+ * el centro de privacidad. Si se revoca el permiso, se desactiva el envío de
+ * nuevos eventos inmediatamente.
  */
 import { db } from './firebase.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  hasStatisticsConsent,
+  onPrivacyConsentChange
+} from './privacy-consent.js';
 
-async function initAnalytics() {
-  let id = '';
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'general'));
-    id = snap.exists() ? String(snap.data().ga4MeasurementId || '').trim() : '';
-  } catch (e) {
-    return; // sin config disponible, no se activa nada
-  }
-  if (!id) return;
+let measurementId = '';
+let configPromise = null;
+let scriptLoaded = false;
 
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
-  document.head.appendChild(script);
-
+function gtag() {
   window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', id);
+  window.dataLayer.push(arguments);
 }
 
-initAnalytics();
+function clearAnalyticsCookies() {
+  const names = document.cookie
+    .split(';')
+    .map(item => item.split('=')[0].trim())
+    .filter(name => /^_ga(?:_|$)|^_gid$|^_gat(?:_|$)/.test(name));
+  const paths = ['/', location.pathname.replace(/[^/]*$/, '') || '/'];
+  names.forEach(name => {
+    paths.forEach(path => {
+      document.cookie = `${name}=; Max-Age=0; Path=${path}; SameSite=Lax`;
+      document.cookie = `${name}=; Max-Age=0; Path=${path}; Domain=${location.hostname}; SameSite=Lax`;
+    });
+  });
+}
+
+async function configuredMeasurementId() {
+  if (!configPromise) {
+    configPromise = getDoc(doc(db, 'settings', 'general'))
+      .then(snapshot => snapshot.exists() ? String(snapshot.data().ga4MeasurementId || '').trim() : '')
+      .catch(() => '');
+  }
+  return configPromise;
+}
+
+function disableAnalytics() {
+  if (measurementId) window[`ga-disable-${measurementId}`] = true;
+  if (window.dataLayer) {
+    gtag('consent', 'update', { analytics_storage: 'denied' });
+  }
+  clearAnalyticsCookies();
+}
+
+async function enableAnalytics() {
+  if (!hasStatisticsConsent()) return;
+  measurementId = await configuredMeasurementId();
+  if (!measurementId || !hasStatisticsConsent()) return;
+
+  window[`ga-disable-${measurementId}`] = false;
+  window.gtag = gtag;
+  gtag('consent', 'default', { analytics_storage: 'granted' });
+
+  if (!scriptLoaded) {
+    scriptLoaded = true;
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+    document.head.appendChild(script);
+    gtag('js', new Date());
+    gtag('config', measurementId, { anonymize_ip: true });
+  } else {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+  }
+}
+
+if (hasStatisticsConsent()) enableAnalytics();
+else disableAnalytics();
+onPrivacyConsentChange(preferences => {
+  if (preferences.statistics) enableAnalytics();
+  else disableAnalytics();
+});
