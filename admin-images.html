@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-3"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-5"></script>
   <title>Tintin — Gestión de Imágenes</title>
-  <meta name="theme-color" content="#D46A8A">
+  <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#AD3F67">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -298,7 +300,7 @@
 <!-- HEADER -->
 <header class="adm-header" id="adm-header" style="display:none;">
   <div style="display:flex;align-items:center;gap:12px;">
-    <button class="adm-hamburger" id="adm-hamburger" aria-label="Menú">☰</button>
+    <button type="button" class="adm-hamburger" id="adm-hamburger" aria-label="Menú">☰</button>
     <div class="adm-logo">
       Tintin <span>Gestión de Imágenes</span>
     </div>
@@ -312,34 +314,34 @@
 <!-- SIDEBAR -->
 <aside class="adm-sidebar" id="adm-sidebar" style="display:none;">
   <div class="adm-sidebar-title">Secciones</div>
-  <button class="adm-nav-btn active" data-section="hero">
+  <button type="button" class="adm-nav-btn active" data-section="hero">
     <span class="nav-icon">🏠</span> Inicio / Hero
   </button>
-  <button class="adm-nav-btn" data-section="productos">
+  <button type="button" class="adm-nav-btn" data-section="productos">
     <span class="nav-icon">⌚</span> Productos
   </button>
-  <button class="adm-nav-btn" data-section="editorial">
+  <button type="button" class="adm-nav-btn" data-section="editorial">
     <span class="nav-icon">🖼️</span> Editorial / Colecciones
   </button>
-  <button class="adm-nav-btn" data-section="iconos">
+  <button type="button" class="adm-nav-btn" data-section="iconos">
     <span class="nav-icon">✨</span> Íconos / Trust
   </button>
-  <button class="adm-nav-btn" data-section="nosotros">
+  <button type="button" class="adm-nav-btn" data-section="nosotros">
     <span class="nav-icon">🌸</span> Nosotros
   </button>
-  <button class="adm-nav-btn" data-section="branding">
+  <button type="button" class="adm-nav-btn" data-section="branding">
     <span class="nav-icon">🏷️</span> Branding / Logo
   </button>
 </aside>
 
 <!-- MOBILE BOTTOM TABS -->
 <nav class="adm-mobile-tabs" id="adm-mobile-tabs">
-  <button class="adm-mobile-tab active" data-section="hero"><span class="nav-icon">🏠</span>Hero</button>
-  <button class="adm-mobile-tab" data-section="productos"><span class="nav-icon">🛍️</span>Productos</button>
-  <button class="adm-mobile-tab" data-section="editorial"><span class="nav-icon">✨</span>Editorial</button>
-  <button class="adm-mobile-tab" data-section="iconos"><span class="nav-icon">⭐</span>Íconos</button>
-  <button class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
-  <button class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
+  <button type="button" class="adm-mobile-tab active" data-section="hero"><span class="nav-icon">🏠</span>Hero</button>
+  <button type="button" class="adm-mobile-tab" data-section="productos"><span class="nav-icon">🛍️</span>Productos</button>
+  <button type="button" class="adm-mobile-tab" data-section="editorial"><span class="nav-icon">✨</span>Editorial</button>
+  <button type="button" class="adm-mobile-tab" data-section="iconos"><span class="nav-icon">⭐</span>Íconos</button>
+  <button type="button" class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
+  <button type="button" class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
   <a href="admin.html" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
 </nav>
 
@@ -480,8 +482,8 @@ function renderSection(section) {
           value="${url}" autocomplete="off" />
         ${heroControls}
         <div class="adm-card-btns">
-          <button class="adm-btn-save" data-save="${slot.id}">Guardar</button>
-          <button class="adm-btn-clear" data-clear="${slot.id}">Quitar</button>
+          <button type="button" class="adm-btn-save" data-save="${slot.id}">Guardar</button>
+          <button type="button" class="adm-btn-clear" data-clear="${slot.id}">Quitar</button>
         </div>
       </div>
     `;

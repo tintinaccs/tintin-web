@@ -25,6 +25,14 @@ function sanitizePlainText(value, maxLength = 4000) {
     .slice(0, maxLength);
 }
 
+function escapeHtml(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+}
+
+const escapeAttribute = escapeHtml;
+
 function sanitizeClassicImageUrl(value) {
   const raw = String(value || '').trim();
   if (!raw || /['"<>\u0000-\u001f\u007f]/.test(raw) || raw.length > 2048) return '';
@@ -315,24 +323,27 @@ function renderCart() {
   }
 
   body.innerHTML = cart.map(item => {
-    const imgUrl = item.imageUrl || getProductImage(item.id);
+    const imgUrl = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id));
+    const safeId = escapeAttribute(item.id);
+    const safeName = escapeHtml(item.name);
+    const safeVariant = escapeHtml(item.variant || '');
     const imgHtml = imgUrl
-      ? `<img src="${imgUrl}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain;">`
+      ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
     return `
-    <div class="tt-cart-item" data-id="${item.id}">
+    <div class="tt-cart-item" data-id="${safeId}">
       <div class="tt-cart-item-img">${imgHtml}</div>
       <div class="tt-cart-item-info">
-        <div class="tt-cart-item-name">${item.name}</div>
-        ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${item.variant}</div>` : ''}
+        <div class="tt-cart-item-name">${safeName}</div>
+        ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${safeVariant}</div>` : ''}
         <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
         <div class="tt-cart-qty">
-          <button class="tt-cart-qty-btn" onclick="updateQty('${item.id}', -1)" aria-label="Restar">−</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button class="tt-cart-qty-btn" onclick="updateQty('${item.id}', 1)" aria-label="Sumar">+</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-delta="1" aria-label="Sumar">+</button>
         </div>
       </div>
-      <button class="tt-cart-item-remove" onclick="removeFromCart('${item.id}')" aria-label="Eliminar">✕</button>
+      <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" aria-label="Eliminar">✕</button>
     </div>
   `;
   }).join('');
@@ -347,7 +358,7 @@ function renderCart() {
       <a href="checkout.html" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button onclick="closeCart()" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #eee;border-radius:50px;font-size:0.78rem;color:#C86B86;cursor:pointer;font-family:inherit">
+      <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:inherit">
         Seguir comprando
       </button>
     `;
@@ -681,18 +692,19 @@ function initSearch() {
         results.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:0.9rem;">No encontramos productos con esa búsqueda.</div>';
       } else {
         results.innerHTML = matches.map(p => {
-          const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
+          const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+          const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
           const thumb = imgUrl
-            ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+            ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
             : '';
           return `
-          <div class="tt-search-result-item" onclick="window.location.href='product.html?id=${p.id}'">
+          <a class="tt-search-result-item" href="${productHref}" style="color:inherit!important;text-decoration:none;">
             <div class="tt-search-result-thumb">${thumb}</div>
             <div class="tt-search-result-info">
-              <div class="tt-search-result-name">${p.name}</div>
+              <div class="tt-search-result-name">${escapeHtml(p.name)}</div>
               <div class="tt-search-result-price">${formatPrice(p.price)}</div>
             </div>
-          </div>
+          </a>
         `;
         }).join('');
       }
@@ -726,6 +738,15 @@ function initCartEvents() {
 
   // Delegated click for "add to cart" buttons
   document.addEventListener('click', (e) => {
+    const cartAction = e.target.closest('[data-cart-action]');
+    if (cartAction) {
+      const action = cartAction.dataset.cartAction;
+      const id = cartAction.dataset.cartId;
+      if (action === 'quantity' && id) updateQty(id, Number(cartAction.dataset.cartDelta) || 0);
+      if (action === 'remove' && id) removeFromCart(id);
+      if (action === 'close') closeCart();
+      return;
+    }
     const btn = e.target.closest('.tt-add-to-cart');
     if (btn) {
       const id = btn.dataset.id;
@@ -762,7 +783,7 @@ function _showProductsLoadError(containerId) {
   container.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
       <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
-      <button class="tt-btn" onclick="location.reload()">Reintentar</button>
+      <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
     </div>`;
 }
 
@@ -786,24 +807,26 @@ function renderProductsGrid(containerId, products) {
 
   container.innerHTML = products.map(p => {
     const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
-    const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${p.badge}</span>` : '';
-    const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
+    const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
+    const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+    const safeId = escapeAttribute(p.id);
+    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
+      ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
       : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
     return `
-      <div class="tt-product-card" data-id="${p.id}">
+      <div class="tt-product-card" data-id="${safeId}">
         <div class="tt-product-img">
           ${badgeHTML}
           ${imgContent}
         </div>
         <div class="tt-product-info">
-          <div class="tt-product-cat">${p.cat}</div>
-          <div class="tt-product-name">${p.name}</div>
+          <div class="tt-product-cat">${escapeHtml(p.cat)}</div>
+          <div class="tt-product-name">${escapeHtml(p.name)}</div>
           <div class="tt-product-price">${formatPrice(p.price)}</div>
           <div class="tt-product-actions">
-            <a href="product.html?id=${p.id}" class="tt-btn tt-btn-sm">Ver producto</a>
-            <button class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${p.id}" aria-label="Agregar al carrito">+ Carrito</button>
+            <a href="${productHref}" class="tt-btn tt-btn-sm">Ver producto</a>
+            <button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar al carrito">+ Carrito</button>
           </div>
         </div>
       </div>
@@ -824,21 +847,23 @@ function renderLookCombo() {
   currentCombo = pickRandom(productPool, 3);
 
   grid.innerHTML = currentCombo.map(p => {
-    const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
+    const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+    const safeId = escapeAttribute(p.id);
+    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imgContent = imgUrl
-      ? `<img src="${imgUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;background:transparent;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
+      ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
       : '';
     return `
     <div class="tt-look-card">
-      <a href="product.html?id=${p.id}" class="tt-look-card-inner">
+      <a href="${productHref}" class="tt-look-card-inner">
         <div class="tt-look-card-img${imgUrl ? '' : ' tt-look-card-img-ph'}">${imgContent}</div>
         <div class="tt-look-card-body">
-          <div class="tt-look-card-name">${p.name}</div>
+          <div class="tt-look-card-name">${escapeHtml(p.name)}</div>
           <div class="tt-look-card-price">${formatPrice(p.price)}</div>
         </div>
       </a>
       <div class="tt-look-card-foot">
-        <button class="tt-btn tt-btn-sm tt-add-to-cart" data-id="${p.id}" style="width:100%;">+ Agregar al carrito</button>
+        <button type="button" class="tt-btn tt-btn-sm tt-add-to-cart" data-id="${safeId}" style="width:100%;">+ Agregar al carrito</button>
       </div>
     </div>`;
   }).join('');
@@ -1105,14 +1130,16 @@ function _renderProductDetail(product) {
   }
 
   // Gallery
-  const mainImgUrl = product.imageUrl || product.image || getProductImage(product.id) || '';
-  const extraImages = Array.isArray(product.imagesExtra) ? product.imagesExtra : [];
+  const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '');
+  const extraImages = Array.isArray(product.imagesExtra)
+    ? product.imagesExtra.map(sanitizeClassicImageUrl).filter(Boolean)
+    : [];
   const allImages = mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages;
 
   const galleryMain = document.getElementById('gallery-main');
   if (galleryMain) {
     if (mainImgUrl) {
-      galleryMain.innerHTML = `<img src="${mainImgUrl}" alt="${product.name}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+      galleryMain.innerHTML = `<img src="${escapeAttribute(mainImgUrl)}" alt="${escapeAttribute(product.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
       galleryMain.style.display = 'flex';
@@ -1126,9 +1153,9 @@ function _renderProductDetail(product) {
   if (thumbsEl && allImages.length > 1) {
     thumbsEl.style.display = '';
     thumbsEl.innerHTML = allImages.map((url, i) => `
-      <div class="tt-gallery-thumb${i === 0 ? ' active' : ''}" data-src="${url}" onclick="_galleryThumbClick(this)">
-        <img src="${url}" alt="Vista ${i + 1}" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
-      </div>
+      <button type="button" class="tt-gallery-thumb${i === 0 ? ' active' : ''}" data-src="${escapeAttribute(url)}" onclick="_galleryThumbClick(this)" aria-label="Ver imagen ${i + 1}">
+        <img src="${escapeAttribute(url)}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
+      </button>
     `).join('');
   }
 
@@ -1140,11 +1167,11 @@ function _renderProductDetail(product) {
   if (variantsContainer) {
     if (product.variants && Object.keys(product.variants).length) {
       variantsContainer.innerHTML = Object.entries(product.variants).map(([key, values]) => `
-        <div class="tt-product-variants" data-variant-key="${key}">
-          <div class="tt-variant-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
-          <div class="tt-variant-options" id="variants-${key}">
+        <div class="tt-product-variants" data-variant-key="${escapeAttribute(key)}">
+          <div class="tt-variant-label">${escapeHtml(key.charAt(0).toUpperCase() + key.slice(1))}</div>
+          <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
-              <button class="tt-variant-option" onclick="selectVariant(this)">${v}</button>
+              <button type="button" class="tt-variant-option" onclick="selectVariant(this)">${escapeHtml(v)}</button>
             `).join('') : ''}
           </div>
         </div>
@@ -1205,7 +1232,6 @@ function _renderProductDetail(product) {
   const btnWA = document.getElementById('btn-product-wa');
   if (btnWA) {
     btnWA.onclick = () => directWAProduct(product);
-    btnWA.href = undefined;
   }
 
   // Share buttons
@@ -1365,11 +1391,17 @@ function _galleryThumbClick(thumb) {
   const galleryMain = document.getElementById('gallery-main');
   if (thumbsEl) thumbsEl.querySelectorAll('.tt-gallery-thumb').forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
-  const src = thumb.dataset.src;
+  const src = sanitizeClassicImageUrl(thumb.dataset.src);
   if (galleryMain && src) {
     const img = galleryMain.querySelector('img');
     if (img) img.src = src;
-    else galleryMain.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+    else {
+      const created = document.createElement('img');
+      created.src = src;
+      created.alt = '';
+      created.style.cssText = 'width:100%;height:100%;object-fit:contain;background:transparent;display:block;';
+      galleryMain.replaceChildren(created);
+    }
   }
 }
 window._galleryThumbClick = _galleryThumbClick;

@@ -11,11 +11,11 @@
   --tt-muted:#7B6F72;
   --tt-border:#F1E4E7;
   --tt-line:#F7E9ED;
-  --tt-accent:#D46A8A;
-  --tt-accent-hover:#B84C72;
+  --tt-accent:#AD3F67;
+  --tt-accent-hover:#8B2642;
   --tt-accent-soft:#FDECF2;
   --tt-accent-mid:#F6B7C8;
-  --tt-focus:rgba(212,106,138,.18);
+  --tt-focus:rgba(173,63,103,.24);
   --tt-shadow:0 14px 38px rgba(212,106,138,.10);
   --tt-shadow-soft:0 8px 24px rgba(212,106,138,.08);
   --tt-radius:20px;
@@ -106,3 +106,4 @@ svg,.tt-trust-icon,.tt-dropdown-icon,.tt-contact-info-icon,.perfil-wa-icon,.adm-
 .login-error,.ck-error,.adm-error,.perfil-toast,.tt-added-toast,.tt-store-closed-box,.login-success,.ck-ship-reminder,.ck-pay-note,.perfil-wa-box,.tt-empty,.cat-empty,.adm-loading{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
 #tt-loader,#tt-intro{background:var(--tt-page-bg)!important;gap:0!important}
 ::selection{background:var(--tt-accent)!important;color:#fff!important}
+.tt-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}

@@ -50,7 +50,7 @@ function exists(rel) {
 }
 
 function read(rel) {
-  return fs.readFileSync(path.join(root, rel), 'utf8');
+  return fs.readFileSync(path.join(root, rel), 'utf8').replace(/\r\n?/g, '\n');
 }
 
 function walk(dir = root, out = []) {
@@ -130,13 +130,7 @@ function checkPackageJson() {
   }
 
   const scripts = pkg.scripts || {};
-  const expectedScripts = [
-    'audit:tintin',
-    'fix:tintin',
-    'prepare:hosting',
-    'deploy:hosting',
-    'deploy:rules'
-  ];
+  const expectedScripts = ['audit:tintin', 'fix:tintin', 'deploy:rules'];
 
   for (const script of expectedScripts) {
     if (!scripts[script]) {
@@ -170,14 +164,15 @@ function checkFirebaseJson() {
     );
   }
 
-  if (!json.hosting) {
+  const usesGitHubPages = exists('.github/workflows/deploy-pages.yml');
+  if (!json.hosting && !usesGitHubPages) {
     add(
       LEVELS.WARN,
       'firebase.json',
       'Firebase Hosting todavía no está configurado.',
       'Configurar hosting con public: "public".'
     );
-  } else if (json.hosting.public !== 'public') {
+  } else if (json.hosting && json.hosting.public !== 'public') {
     add(
       LEVELS.WARN,
       'firebase.json',
@@ -244,6 +239,10 @@ function checkFirestoreRules() {
 
 function checkHtml(file) {
   const html = read(file);
+  // Los template literals de los módulos embebidos no son HTML estático.
+  // Quitarlos evita interpretar `${url}` o `${user.photoURL}` como enlaces e
+  // imágenes rotas que supuestamente existirían en disco.
+  const staticHtml = html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
 
   if (!/<html[^>]+lang=["']/.test(html)) {
     add(LEVELS.INFO, file, 'El HTML no tiene atributo lang.', 'Agregar lang="es-PY" o lang="es".');
@@ -279,7 +278,7 @@ function checkHtml(file) {
     );
   }
 
-  const idMatches = [...html.matchAll(/\sid=["']([^"']+)["']/gi)].map(m => m[1]);
+  const idMatches = [...staticHtml.matchAll(/\sid=["']([^"']+)["']/gi)].map(m => m[1]);
   const repeated = [...new Set(idMatches.filter((id, idx) => idMatches.indexOf(id) !== idx))];
 
   for (const id of repeated) {
@@ -292,7 +291,7 @@ function checkHtml(file) {
   }
 
   const attrRegex = /\s(?:src|href)=["']([^"']+)["']/gi;
-  for (const match of html.matchAll(attrRegex)) {
+  for (const match of staticHtml.matchAll(attrRegex)) {
     const raw = match[1];
     const resolved = resolveLocal(file, raw);
     if (!resolved) continue;
@@ -310,7 +309,7 @@ function checkHtml(file) {
   }
 
   const imgRegex = /<img\b[^>]*>/gi;
-  for (const match of html.matchAll(imgRegex)) {
+  for (const match of staticHtml.matchAll(imgRegex)) {
     const tag = match[0];
     const src = getAttr(tag, 'src') || '';
     const alt = getAttr(tag, 'alt');
@@ -325,7 +324,7 @@ function checkHtml(file) {
   }
 
   const linkRegex = /<a\b[^>]*>/gi;
-  for (const match of html.matchAll(linkRegex)) {
+  for (const match of staticHtml.matchAll(linkRegex)) {
     const tag = match[0];
     const href = getAttr(tag, 'href');
 
@@ -337,7 +336,7 @@ function checkHtml(file) {
   }
 
   const buttonRegex = /<button\b[^>]*>/gi;
-  for (const match of html.matchAll(buttonRegex)) {
+  for (const match of staticHtml.matchAll(buttonRegex)) {
     const tag = match[0];
     const type = getAttr(tag, 'type');
     const hasAction =
@@ -353,7 +352,7 @@ function checkHtml(file) {
   }
 
   const formRegex = /<form\b[^>]*>/gi;
-  for (const match of html.matchAll(formRegex)) {
+  for (const match of staticHtml.matchAll(formRegex)) {
     const tag = match[0];
     const action = getAttr(tag, 'action');
     const hasId = getAttr(tag, 'id');
@@ -370,7 +369,7 @@ function checkHtml(file) {
   }
 
   const inputRegex = /<input\b[^>]*>/gi;
-  for (const match of html.matchAll(inputRegex)) {
+  for (const match of staticHtml.matchAll(inputRegex)) {
     const tag = match[0];
     const type = getAttr(tag, 'type') || 'text';
     const name = getAttr(tag, 'name');
@@ -440,7 +439,7 @@ function checkJs(file) {
     );
   }
 
-  if (/debugger;/.test(js)) {
+  if (file !== 'scripts/audit-deep.js' && /debugger\s*;/.test(js)) {
     add(LEVELS.ERROR, file, 'Contiene debugger;.', 'Eliminar debugger antes de publicar.');
   }
 

@@ -48,7 +48,7 @@
     panel.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:50vh;overflow:auto;' +
       'background:rgba(10,4,8,.94);color:#9fe870;font:10px/1.4 ui-monospace,Menlo,monospace;' +
       'z-index:2147483647;padding:8px 10px;white-space:pre-wrap;word-break:break-word;' +
-      'border-top:2px solid #D46A8A;-webkit-user-select:text;user-select:text';
+      'border-top:2px solid #AD3F67;-webkit-user-select:text;user-select:text';
     var headRow = document.createElement('div');
     headRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px';
     var head = document.createElement('div');
@@ -61,7 +61,7 @@
     copyBtn = document.createElement('button');
     copyBtn.type = 'button';
     copyBtn.textContent = 'copiar todo';
-    copyBtn.style.cssText = 'flex:0 0 auto;background:#D46A8A;color:#fff;border:0;border-radius:6px;' +
+    copyBtn.style.cssText = 'flex:0 0 auto;background:#AD3F67;color:#fff;border:0;border-radius:6px;' +
       'padding:4px 8px;font:9px ui-monospace,Menlo,monospace;font-weight:700';
     copyBtn.addEventListener('click', function (e) {
       e.stopPropagation();

@@ -97,6 +97,63 @@ service cloud.firestore {
        TINTIN — ROLES Y PERMISOS DINÁMICOS
        ============================================================ */
 
+    /* Actividad anónima: no guarda IP, navegador, ubicación, nombre ni correo.
+       Las visitas solo pueden escribir su propia sesión/presencia y únicamente
+       Super Admin puede leer los contadores. */
+    function activityUserIdIsValid(data) {
+      return data.userId is string &&
+        data.userId.size() <= 128 &&
+        (
+          data.userId == '' ||
+          (isSignedIn() && data.userId == request.auth.uid)
+        );
+    }
+
+    function presenceIsValid(visitorId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'visitorId', 'sessionId', 'userId', 'page', 'lastSeen'
+        ]) &&
+        data.keys().hasOnly([
+          'visitorId', 'sessionId', 'userId', 'page', 'lastSeen'
+        ]) &&
+        data.visitorId == visitorId &&
+        data.visitorId is string && data.visitorId.size() >= 8 && data.visitorId.size() <= 80 &&
+        data.sessionId is string && data.sessionId.size() >= 8 && data.sessionId.size() <= 80 &&
+        activityUserIdIsValid(data) &&
+        data.page is string && data.page.size() >= 1 && data.page.size() <= 160 &&
+        data.lastSeen == request.time;
+    }
+
+    function trafficSessionIsValid(dateKey, sessionId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt'
+        ]) &&
+        data.dayKey == dateKey &&
+        data.dayKey is string && data.dayKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
+        data.sessionId == sessionId &&
+        data.sessionId is string && data.sessionId.size() >= 8 && data.sessionId.size() <= 80 &&
+        data.visitorId is string && data.visitorId.size() >= 8 && data.visitorId.size() <= 80 &&
+        activityUserIdIsValid(data) &&
+        data.landingPage is string && data.landingPage.size() >= 1 && data.landingPage.size() <= 160 &&
+        data.startedAt == request.time;
+    }
+
+    match /sitePresence/{visitorId} {
+      allow read, delete: if isSuperAdmin();
+      allow create, update: if isStoreOpenOrAllowed() && presenceIsValid(visitorId);
+    }
+
+    match /siteTraffic/{dateKey}/sessions/{sessionId} {
+      allow read, delete: if isSuperAdmin();
+      allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);
+      allow update: if false;
+    }
+
     function rolePermAllows(role, moduleKey, actionKey) {
       return exists(/databases/$(database)/documents/rolePermissions/main) &&
         get(/databases/$(database)/documents/rolePermissions/main).data
