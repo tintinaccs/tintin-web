@@ -3,9 +3,7 @@
 // =============================================
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
@@ -21,20 +19,16 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Persistent local cache (IndexedDB): onSnapshot listeners resolve instantly
-// from disk on every load after the first — no more staring at "Cargando…"
-// while waiting on a network round-trip. Firestore still syncs live in the
-// background and reconciles automatically. Falls back to plain in-memory
-// Firestore (old behavior) if IndexedDB is unavailable (private browsing, etc).
-let db;
-try {
-  db = initializeFirestore(app, {
-    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-  });
-} catch (e) {
-  console.warn('[firebase] Persistent cache unavailable or already initialized, using existing Firestore:', e);
-  db = getFirestore(app);
-}
+// Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
+// persistentLocalCache + persistentMultipleTabManager para que los listeners
+// resuelvan al instante desde disco, pero esa coordinación entre pestañas
+// puede quedarse esperando para siempre en navegadores que restringen
+// IndexedDB (navegación privada, Brave con Shields, etc.) sin tirar ningún
+// error — el try/catch alrededor de initializeFirestore solo protege contra
+// un fallo síncrono inmediato, no contra ese cuelgue silencioso posterior.
+// Resultado real: el sitio se quedaba en el logo para siempre. getFirestore()
+// no depende de IndexedDB para nada, así que no tiene ese riesgo.
+const db = getFirestore(app);
 
 const auth = getAuth(app);
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
