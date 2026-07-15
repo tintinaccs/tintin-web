@@ -38,9 +38,17 @@ check(
 check(
   'Runtime diferido hasta permitir acceso',
   pageLoader.includes("if (state === 'allowed')") &&
+    pageLoader.includes('function bootPublicRuntime()') &&
     pageLoader.includes('function bootPageRuntime()') &&
     pageLoader.includes('if (!storeGateRequired) bootPageRuntime();'),
   'las páginas públicas no deben iniciar módulos visuales antes de resolver el gate'
+);
+check(
+  'Runtime público sin observadores globales duplicados',
+  /function bootPublicRuntime\(\) \{[\s\S]*?window\.setTimeout\(bootPublicRuntime, 0\)/.test(pageLoader) &&
+    !/function bootPublicRuntime\(\) \{[\s\S]*?bootGlobalQuality\(\)[\s\S]*?\n  \}/.test(pageLoader) &&
+    !/function bootPublicRuntime\(\) \{[\s\S]*?bootScrollReveal\(\)[\s\S]*?\n  \}/.test(pageLoader),
+  'las páginas públicas ya cargan sus datos desde HTML y no deben duplicar el paquete quality/reveal'
 );
 check(
   'Loader se retira ante cierre o indisponibilidad',
