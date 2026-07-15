@@ -273,13 +273,134 @@
       color: var(--adm-muted);
     }
 
+    /* ======== ACTIVIDAD Y UBICACIÓN APROXIMADA ======== */
+    .adm-visitor-card { margin-bottom: 24px; }
+    .adm-visitor-card[hidden] { display: none; }
+    .adm-visitor-card-head { gap: 18px; }
+    .adm-card-subtitle {
+      margin-top: 5px;
+      color: var(--adm-muted);
+      font-size: 12px;
+      line-height: 1.45;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .adm-live-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #edf9f1;
+      color: #176b3a;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .adm-live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #24a35a;
+      box-shadow: 0 0 0 4px rgba(36,163,90,.14);
+      animation: adm-live-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes adm-live-pulse {
+      50% { box-shadow: 0 0 0 7px rgba(36,163,90,0); }
+    }
+    .adm-visitor-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .adm-visitor-panel {
+      min-width: 0;
+      border: 1px solid var(--adm-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .adm-visitor-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--adm-border);
+      background: #fdf8fa;
+    }
+    .adm-visitor-panel-head h3 {
+      margin: 0;
+      color: var(--adm-text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .adm-visitor-panel-head span {
+      color: var(--adm-muted);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .adm-visitor-list { min-height: 116px; }
+    .adm-visitor-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 15px;
+      border-bottom: 1px solid #f1e5e9;
+    }
+    .adm-visitor-row:last-child { border-bottom: 0; }
+    .adm-visitor-location {
+      overflow: hidden;
+      color: var(--adm-text);
+      font-size: 12px;
+      font-weight: 750;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .adm-visitor-meta {
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--adm-muted);
+      font-size: 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .adm-visitor-count {
+      min-width: 38px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: var(--pink-pale);
+      color: var(--adm-accent);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .adm-visitor-empty {
+      padding: 30px 15px;
+      color: var(--adm-muted);
+      font-size: 12px;
+      text-align: center;
+    }
+    .adm-visitor-note {
+      padding: 12px 22px;
+      border-top: 1px solid var(--adm-border);
+      background: #fcfafb;
+      color: var(--adm-muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .adm-live-dot { animation: none; }
+    }
+    @media (max-width: 760px) {
+      .adm-visitor-card-head { align-items: flex-start; flex-direction: column; }
+      .adm-visitor-grid { grid-template-columns: 1fr; }
+    }
+
     /* ======== SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS ========
-       Reutilizado en Pedidos/Usuarios (mismo criterio visual que el
-       bulk-toolbar que ya existía en Productos). La columna de checkbox y la
-       de "Eliminar"/"Acciones" quedan `position: sticky` a los costados de
-       la tabla para que nunca dependan de scroll horizontal — pedido
-       explícito: en Pedidos las acciones quedaban "al final de la tabla,
-       hay que mover la barra horizontal". */
+       Reutilizado en Pedidos/Usuarios y Productos. */
     .adm-bulk-toolbar {
       display: none; align-items: center; gap: 10px; flex-wrap: wrap;
       padding: 10px 16px; background: #fff3e0; border-bottom: 1px solid var(--adm-border);

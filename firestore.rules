@@ -97,9 +97,9 @@ service cloud.firestore {
        TINTIN — ROLES Y PERMISOS DINÁMICOS
        ============================================================ */
 
-    /* Actividad anónima: no guarda IP, navegador, ubicación, nombre ni correo.
-       Las visitas solo pueden escribir su propia sesión/presencia y únicamente
-       Super Admin puede leer los contadores. */
+    /* Actividad anónima: puede guardar ciudad/región/país aproximados, pero
+       nunca IP, GPS, coordenadas, código postal, navegador, nombre ni correo.
+       Solo Super Admin puede leer las sesiones y la presencia. */
     function activityUserIdIsValid(data) {
       return data.userId is string &&
         data.userId.size() <= 128 &&
@@ -109,18 +109,30 @@ service cloud.firestore {
         );
     }
 
+    function activityGeoIsValid(data) {
+      return data.get('city', '') is string && data.get('city', '').size() <= 80 &&
+        data.get('region', '') is string && data.get('region', '').size() <= 80 &&
+        data.get('country', '') is string && data.get('country', '').size() <= 80 &&
+        data.get('countryCode', '') is string &&
+        data.get('countryCode', '').matches('^$|^[A-Z]{2}$') &&
+        data.get('geoSource', '') is string &&
+        data.get('geoSource', '').matches('^$|^netlify$|^unavailable$');
+    }
+
     function presenceIsValid(visitorId) {
       let data = request.resource.data;
       return data.keys().hasAll([
           'visitorId', 'sessionId', 'userId', 'page', 'lastSeen'
         ]) &&
         data.keys().hasOnly([
-          'visitorId', 'sessionId', 'userId', 'page', 'lastSeen'
+          'visitorId', 'sessionId', 'userId', 'page', 'lastSeen',
+          'city', 'region', 'country', 'countryCode', 'geoSource'
         ]) &&
         data.visitorId == visitorId &&
         data.visitorId is string && data.visitorId.size() >= 8 && data.visitorId.size() <= 80 &&
         data.sessionId is string && data.sessionId.size() >= 8 && data.sessionId.size() <= 80 &&
         activityUserIdIsValid(data) &&
+        activityGeoIsValid(data) &&
         data.page is string && data.page.size() >= 1 && data.page.size() <= 160 &&
         data.lastSeen == request.time;
     }
@@ -131,7 +143,8 @@ service cloud.firestore {
           'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt'
         ]) &&
         data.keys().hasOnly([
-          'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt'
+          'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt',
+          'city', 'region', 'country', 'countryCode', 'geoSource'
         ]) &&
         data.dayKey == dateKey &&
         data.dayKey is string && data.dayKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
@@ -139,6 +152,7 @@ service cloud.firestore {
         data.sessionId is string && data.sessionId.size() >= 8 && data.sessionId.size() <= 80 &&
         data.visitorId is string && data.visitorId.size() >= 8 && data.visitorId.size() <= 80 &&
         activityUserIdIsValid(data) &&
+        activityGeoIsValid(data) &&
         data.landingPage is string && data.landingPage.size() >= 1 && data.landingPage.size() <= 160 &&
         data.startedAt == request.time;
     }

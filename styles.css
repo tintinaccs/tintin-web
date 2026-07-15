@@ -1919,6 +1919,64 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-tabbar-btn svg { width: 20px; height: 20px; }
 
+/* Preferencia de estadísticas: visible, breve y sin bloquear la navegación. */
+.tt-analytics-consent {
+  position: fixed;
+  z-index: 2200;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  width: min(720px, calc(100vw - 32px));
+  padding: 16px 18px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  transform: translateX(-50%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 12px 40px rgba(38,24,30,.2);
+  color: var(--text);
+}
+.tt-analytics-consent p {
+  margin: 0;
+  font-size: .82rem;
+  line-height: 1.55;
+}
+.tt-analytics-consent-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.tt-analytics-consent-actions .tt-btn {
+  min-height: 44px;
+  white-space: nowrap;
+}
+.tt-analytics-consent-actions a {
+  display: inline-flex;
+  min-height: 44px;
+  padding: 0 6px;
+  align-items: center;
+  color: var(--pink-dark);
+  font-size: .75rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  .tt-analytics-consent {
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    padding: 15px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tt-analytics-consent-actions { flex-wrap: wrap; justify-content: flex-start; }
+}
+
 /* Respuesta táctil estable, similar a la barra móvil de Instagram: la
    barra no salta al desplazarse y solo el icono pulsado responde. */
 .tt-tabbar-btn:active { transform: scale(.9); }
