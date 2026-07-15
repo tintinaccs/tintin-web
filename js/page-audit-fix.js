@@ -18,7 +18,15 @@ function replaceOldPreloads(){
 }
 function cleanHomeSplash(){
  if(!isHome())return;
- document.documentElement.classList.add('tt-home-splash-clean');
+ // classList.add() de una clase ya presente igual dispara un registro de
+ // MutationObserver en esta clase de elemento con muchas clases — y este
+ // mismo módulo observa cambios de "class" en <html> para volver a llamar
+ // a run(). Sin este chequeo, cada llamada a run() generaba una mutación
+ // que disparaba la siguiente llamada a run(), en un ciclo que nunca
+ // terminaba y consumía CPU sin parar.
+ if(!document.documentElement.classList.contains('tt-home-splash-clean')){
+  document.documentElement.classList.add('tt-home-splash-clean');
+ }
  replaceOldPreloads();
  document.querySelectorAll('#tt-intro-fallback,.tt-splash-line').forEach(function(el){el.remove();});
  document.querySelectorAll('#tt-intro-logo').forEach(function(img){
@@ -28,8 +36,15 @@ function cleanHomeSplash(){
   img.addEventListener('error',function(){img.style.display='none';},{once:true});
  });
 }
-function ensureCheckoutExclusion(){if(isCheckout())document.body?.classList.add('tt-checkout-header-excluded');}
-function mark(){document.documentElement.classList.add('tt-page-audit-ready');}
+function ensureCheckoutExclusion(){
+ if(!isCheckout())return;
+ if(!document.body||document.body.classList.contains('tt-checkout-header-excluded'))return;
+ document.body.classList.add('tt-checkout-header-excluded');
+}
+function mark(){
+ if(document.documentElement.classList.contains('tt-page-audit-ready'))return;
+ document.documentElement.classList.add('tt-page-audit-ready');
+}
 function run(){versionLocalCssLinks();ensureCheckoutExclusion();cleanHomeSplash();mark();}
 function boot(){addStyle();run();if('MutationObserver'in window){var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(run,80);}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['href','class','id']});}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();

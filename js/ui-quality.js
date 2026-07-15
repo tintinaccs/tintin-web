@@ -30,7 +30,7 @@ function bootAdminContentPhase6(){var path=(location.pathname||'').toLowerCase()
 function bootCartPhase7(){var path=(location.pathname||'').toLowerCase();if(path.endsWith('/admin.html')||path.endsWith('/admin')||path.endsWith('/admin-images.html')||path.endsWith('/admin-images'))return;import(versioned('./cart-sync.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Cart Sync Phase 7:',e)})}
 function bootAdminUsersPhase8(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin-users-phase8.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Users Phase 8:',e)})}
 function bootAdminImportPhase9(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin-import-phase9.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Import Phase 9:',e)})}
-function parity(){document.documentElement.classList.remove('tt-parity-guard');document.documentElement.classList.add('tt-parity-safe')}
+function parity(){var r=document.documentElement;if(r.classList.contains('tt-parity-guard'))r.classList.remove('tt-parity-guard');if(!r.classList.contains('tt-parity-safe'))r.classList.add('tt-parity-safe')}
 function adminMobileSidebar(){
  var path=(location.pathname||'').toLowerCase();
  if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;
