@@ -1,34 +1,70 @@
-# Configuración de Cloudinary Free para Tintin
+# Configuración gratuita de Cloudinary + Cloudflare Pages para Tintin
 
-Esta migración elimina Firebase Storage por completo. Firebase continúa en el plan Spark únicamente para Authentication y Firestore. Las imágenes se almacenan en Cloudinary y las operaciones sensibles se autorizan mediante Netlify Functions.
+Esta arquitectura no usa Firebase Storage ni Netlify Functions. Firebase continúa en el plan Spark únicamente para Authentication y Firestore. Las imágenes se almacenan en Cloudinary y las operaciones sensibles se autorizan mediante Cloudflare Pages Functions.
 
-## 1. Crear la cuenta gratuita de Cloudinary
+## 1. Preparar la cuenta gratuita de Cloudinary
 
-1. Abrí el sitio oficial de Cloudinary desde el navegador.
-2. Elegí el plan **Free**.
-3. Registrate con el correo que administrará Tintin.
-4. No agregues tarjeta, facturación ni un plan pago.
-5. Al entrar al panel, verificá que el producto/environment aparezca activo.
+1. Entrá a Cloudinary con la cuenta que administrará Tintin.
+2. Conservá el plan **Free**.
+3. No agregues tarjeta, facturación ni un plan pago.
+4. En **Settings → API Keys**, creá una clave específica para producción.
+5. Usá un nombre claro, por ejemplo `Cloudflare Tintin Production`.
+6. Copiá estos tres datos:
 
-No hace falta crear un upload preset público. Este proyecto usa subidas firmadas para que nadie pueda subir archivos sin autenticarse como Super Admin.
+```text
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+```
 
-## 2. Copiar las tres credenciales
+El API Secret es confidencial. No lo pegues en HTML, JavaScript del navegador, GitHub, Cloud Shell, capturas ni mensajes.
 
-En el Dashboard de Cloudinary buscá la sección de credenciales del producto/environment y copiá:
+Si una clave anterior quedó expuesta, creá una nueva, configurala primero en Cloudflare y después desactivá la clave comprometida.
 
-- **Cloud name** → `CLOUDINARY_CLOUD_NAME`
-- **API Key** → `CLOUDINARY_API_KEY`
-- **API Secret** → `CLOUDINARY_API_SECRET`
+No hace falta crear un upload preset público. El proyecto usa subidas firmadas para que nadie pueda cargar archivos sin autenticarse como Super Admin.
 
-El API Secret es confidencial. No lo pegues en archivos HTML, JavaScript del navegador, GitHub, Cloud Shell ni mensajes públicos.
+## 2. Crear el proyecto gratuito en Cloudflare Pages
 
-## 3. Cargar las variables en Netlify
+1. Abrí el panel de Cloudflare.
+2. Entrá a **Workers & Pages**.
+3. Elegí **Create application → Pages → Connect to Git**.
+4. Conectá GitHub y autorizá el repositorio `tintinaccs/tintin-web`.
+5. Configurá el proyecto así:
 
-1. Abrí Netlify en el navegador.
-2. Entrá al sitio **tintinaccesorios**.
-3. Abrí **Project configuration**.
-4. Entrá a **Environment variables**.
-5. Creá estas tres variables, una por una:
+```text
+Project name: tintinaccesorios
+Production branch: main
+Framework preset: None
+Build command: dejar vacío
+Build output directory: .
+Root directory: dejar vacío
+```
+
+6. Guardá y ejecutá el primer despliegue.
+
+El sitio quedará disponible normalmente en:
+
+```text
+https://tintinaccesorios.pages.dev
+```
+
+Cloudflare detecta la carpeta raíz `functions/` y publica estas rutas:
+
+```text
+/api/cloudinary-sign-upload
+/api/cloudinary-delete
+/api/visitor-geo
+```
+
+El archivo `_routes.json` limita las invocaciones de Functions a esas tres rutas, de modo que los archivos estáticos no consumen solicitudes de Workers.
+
+## 3. Agregar las variables y secretos en Cloudflare
+
+Después de crear el proyecto:
+
+1. Entrá al proyecto **tintinaccesorios**.
+2. Abrí **Settings → Variables and Secrets**.
+3. Agregá las tres claves:
 
 ```text
 CLOUDINARY_CLOUD_NAME=tu_cloud_name
@@ -36,31 +72,35 @@ CLOUDINARY_API_KEY=tu_api_key
 CLOUDINARY_API_SECRET=tu_api_secret
 ```
 
-6. Cuando Netlify permita elegir alcance, asegurate de incluir **Functions**.
-7. Aplicá las variables al contexto de **Production**. Podés agregarlas también a Deploy Previews si querés probar la rama antes del merge.
-8. Marcá `CLOUDINARY_API_SECRET` como valor secreto/sensible cuando la interfaz lo ofrezca.
+4. Aplicá los valores al entorno **Production**.
+5. Agregalos también a **Preview** para que los pull requests puedan probar las funciones.
+6. Marcá como **Encrypt** al menos `CLOUDINARY_API_SECRET`. También podés cifrar las otras dos.
+7. Guardá los cambios.
 
-No coloques estas variables en `netlify.toml`, porque ese archivo queda público en GitHub.
+No coloques estos valores en `package.json`, `_routes.json`, archivos JavaScript, variables del navegador ni archivos versionados.
 
-## 4. Volver a desplegar Netlify
+## 4. Volver a desplegar Cloudflare Pages
 
-Las variables nuevas se aplican después de un despliegue.
+Las variables nuevas se aplican en un despliegue posterior.
 
-1. En Netlify abrí **Deploys**.
-2. Elegí **Trigger deploy**.
-3. Ejecutá **Deploy site** o **Clear cache and deploy site**.
-4. Esperá a que el despliegue figure como **Published**.
+1. Entrá a **Deployments**.
+2. Buscá el despliegue de `main`.
+3. Elegí **Retry deployment** o iniciá un nuevo despliegue desde GitHub.
+4. Esperá a que figure como exitoso.
 
-Las funciones que deben quedar publicadas son:
+La ruta pública de ubicación aproximada puede comprobarse abriendo:
 
-- `/.netlify/functions/cloudinary-sign-upload`
-- `/.netlify/functions/cloudinary-delete`
+```text
+https://tintinaccesorios.pages.dev/api/visitor-geo
+```
 
-No deben abrirse manualmente con GET: aceptan POST autenticado desde el panel.
+Debe responder JSON sin IP, coordenadas ni datos personales.
+
+Las rutas de Cloudinary no se prueban abriéndolas con el navegador: aceptan únicamente solicitudes autenticadas desde el panel.
 
 ## 5. Desplegar únicamente las reglas de Firestore
 
-Desde Google Cloud Shell, dentro de `~/tintin-web`, actualizá el repositorio y ejecutá:
+Desde Google Cloud Shell, dentro de `~/tintin-web`, ejecutá:
 
 ```bash
 git checkout main
@@ -68,32 +108,32 @@ git pull origin main
 npm run deploy:rules
 ```
 
-El comando ahora despliega solamente:
+El comando despliega solamente:
 
 ```text
 firestore:rules
 ```
 
-Ya no intenta activar Firebase Storage y no requiere el plan Blaze.
+No intenta activar Firebase Storage y no requiere el plan Blaze.
 
-## 6. Probar el sistema
+## 6. Probar el sistema completo
 
-1. Abrí el sitio publicado en Netlify.
+1. Abrí `https://tintinaccesorios.pages.dev/admin-images.html`.
 2. Iniciá sesión con `tintinaccs@gmail.com`.
-3. Entrá a `/admin-images.html`.
-4. Subí una imagen de prueba.
-5. Confirmá que:
+3. Subí una imagen de prueba.
+4. Confirmá que:
    - se muestra la vista previa antes de subir;
-   - la imagen se optimiza y se guarda;
+   - la imagen se valida, redimensiona y optimiza;
+   - se guarda en Cloudinary;
    - aparece en la Biblioteca multimedia;
    - aparece en el sitio público;
-   - **Reemplazar** guarda la nueva imagen;
+   - **Reemplazar** guarda la imagen nueva;
    - **Quitar** restaura el respaldo predeterminado;
-   - **Borrar** desde la biblioteca funciona únicamente cuando la imagen ya no está en uso.
+   - **Borrar** funciona únicamente cuando la imagen ya no está en uso.
 
 ## 7. Comprobaciones en Cloudinary y Firestore
 
-En Cloudinary, las imágenes quedan dentro de public IDs con esta estructura:
+En Cloudinary, las imágenes quedan con esta estructura de public ID:
 
 ```text
 tintin/media/<mediaId>/full
@@ -120,12 +160,17 @@ En Firestore, la colección `media` conserva únicamente metadata administrativa
 - `uploadedAt`
 - `updatedAt`
 
+## Compatibilidad temporal
+
+Si una copia del sitio continúa publicada en GitHub Pages o en el dominio antiguo de Netlify, el navegador enviará las solicitudes de imágenes al origen gratuito de Cloudflare Pages. La aplicación ya no necesita que Netlify ejecute Functions.
+
 ## Seguridad aplicada
 
-- El API Secret existe solo en Netlify.
+- El API Secret existe únicamente como secreto cifrado de Cloudflare.
 - El navegador recibe una firma temporal, nunca el secreto.
-- Netlify valida la firma, audiencia, emisor y vencimiento del token de Firebase.
-- Solo el correo Super Admin `tintinaccs@gmail.com` puede solicitar firmas o borrar archivos.
-- Los public IDs aceptados están restringidos a la carpeta `tintin/media/`.
+- Cloudflare envía el ID token a Firebase Auth para validar la sesión en el servidor.
+- Solo el correo verificado `tintinaccs@gmail.com` puede solicitar firmas o borrar archivos.
+- Los public IDs aceptados están restringidos a `tintin/media/`.
 - Cloudinary invalida la caché al borrar una imagen.
 - Firestore continúa protegido por sus reglas de Super Admin.
+- La función de ubicación devuelve solo ciudad, región y país aproximados; nunca IP ni coordenadas.
