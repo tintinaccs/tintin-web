@@ -8879,9 +8879,9 @@ function aparBuildTokenRow(tok, overrideMap, editingOverride) {
     <button type="button" class="tcp-swatch" data-tcp-swatch="1" style="background:${currentVal}"></button>
     <div style="flex:1;min-width:0">
       <div style="font-size:12.5px;font-weight:600;color:var(--adm-text)">${tok.label}${isInherited ? ' <span style=\"font-weight:400;color:var(--adm-muted);font-size:10.5px\">(heredado)</span>' : ''}</div>
-      <div style="font-size:10.5px;color:var(--adm-muted);font-family:monospace">${tok.cssVar}</div>
+      <div style="font-size:10.5px;color:var(--adm-muted)">${tok.cssVar}</div>
     </div>
-    <span style="font-size:11px;color:var(--adm-muted);font-family:monospace;min-width:64px;text-align:right" data-val-label>${currentVal}</span>
+    <span style="font-size:11px;color:var(--adm-muted);min-width:64px;text-align:right" data-val-label>${currentVal}</span>
     <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-reset title="Restablecer">↺</button>
   `;
   const swatch = row.querySelector('[data-tcp-swatch]');
@@ -8926,9 +8926,9 @@ function aparRenderPreview() {
   const R = APAR_PREVIEW_ROLES[aparScope];
   const c = key => aparResolve(R[key]);
   frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><style>
-    *{box-sizing:border-box;font-family:'Poppins',sans-serif}
+    *{box-sizing:border-box;font-family:Montserrat}
     body{margin:0;padding:18px;background:${c('bgPage')};color:${c('textPrimary')}}
-    h2{font-family:'Playfair Display',serif;color:${c('textTitle')};margin:0 0 4px}
+    h2{color:${c('textTitle')};margin:0 0 4px}
     p.sub{color:${c('textSecondary')};font-size:13px;margin:0 0 16px}
     .card{background:${c('bgSurface')};border:1px solid ${c('cardBorder')};border-radius:12px;padding:14px;margin-bottom:12px}
     .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}

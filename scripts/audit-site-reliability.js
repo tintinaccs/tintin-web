@@ -29,6 +29,7 @@ const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');
 const theme = read('css/tintin-unified-theme.css');
+const colorTokens = read('css/color-tokens.css');
 const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
 const imagePerformance = read('js/image-performance.js');
@@ -130,7 +131,8 @@ check('Las reglas aceptan solo geografía aproximada y campos conocidos',
   rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
 
 check('El rosa principal cumple contraste AA sobre blanco',
-  theme.includes('--tt-accent:#AD3F67') && theme.includes('--tt-accent-hover:#8B2642'));
+  theme.includes('--tt-accent:var(--color-brand-primary)') && theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
+  colorTokens.includes('--color-brand-primary: #AD3F67') && colorTokens.includes('--color-brand-primary-hover: #8B2642'));
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
