@@ -19,6 +19,7 @@ const pageLoader = read('js/page-loader.js');
 const gateCore = read('js/store-gate-core.js');
 const gateRuntime = read('js/store-gate.js');
 const adminSync = read('js/admin-store-control.js');
+const adminApp = read('js/admin-app.js');
 const authNav = read('js/auth-nav.js');
 const uiQuality = read('js/ui-quality.js');
 const pageAudit = read('js/page-audit-fix.js');
@@ -155,6 +156,19 @@ check(
     adminSync.includes('gateResolved') &&
     adminSync.includes('if (!generalResolved || !gateResolved || !latestGeneral.exists) return;'),
   'el panel no debe publicar storeOpen:false mientras Firestore todavía está cargando'
+);
+check(
+  'Guardado atómico del estado de tienda',
+  adminApp.includes('settingsBatch.set(generalRef') &&
+    adminApp.includes('settingsBatch.set(storeGateRef') &&
+    adminApp.includes('await settingsBatch.commit();'),
+  'settings/general y settings/storeGate deben cambiar juntos para no bloquear productos por una sincronización incompleta'
+);
+check(
+  'Estado administrativo coherente con las reglas',
+  adminApp.includes('const storeOpen = d.storeOpen === true;') &&
+    adminApp.includes('tiendaActiva:    willBeOpen'),
+  'el panel debe exigir true explícito y mantener consistente el campo legado'
 );
 
 check(

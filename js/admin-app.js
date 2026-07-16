@@ -2180,7 +2180,9 @@ async function loadConfig() {
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
     document.getElementById('cfg-ga4-id').value = d.ga4MeasurementId || '';
-    const storeOpen = d.storeOpen !== false;
+    // La interfaz debe usar exactamente el mismo criterio que storeGate y
+    // firestore.rules: solo `true` explícito significa tienda abierta.
+    const storeOpen = d.storeOpen === true;
     document.getElementById('cfg-store-open').checked = storeOpen;
     _lastKnownStoreOpen = storeOpen;
     updateStoreStatePill_(storeOpen);
@@ -2242,7 +2244,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       const input = document.getElementById('ma-' + role);
       maintenanceAccess[role] = !!(input && input.checked);
     });
-    await setDoc(doc(db, 'settings', 'general'), {
+    const generalRef = doc(db, 'settings', 'general');
+    const storeGateRef = doc(db, 'settings', 'storeGate');
+    const settingsBatch = writeBatch(db);
+
+    settingsBatch.set(generalRef, {
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
       waConfirmMessage: document.getElementById('cfg-wa-confirm-msg').value.trim() || DEFAULT_WA_CONFIRM_MSG,
       contactEmail:    document.getElementById('cfg-contact-email').value.trim(),
@@ -2255,6 +2261,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
       ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
       storeOpen:       willBeOpen,
+      // Mantiene sincronizado el campo legado mientras todavía exista código
+      // o integraciones históricas que lo consulten.
+      tiendaActiva:    willBeOpen,
+      storeStatusUpdatedAt: serverTimestamp(),
+      storeStatusUpdatedBy: currentUser?.email || SUPER_ADMIN,
       maintenanceAccess,
       headerDesktopTabletEnabled: document.getElementById('cfg-header-desktop-tablet').checked,
       headerMobileEnabled:        document.getElementById('cfg-header-mobile').checked,
@@ -2269,6 +2280,18 @@ document.getElementById('btn-save-config').onclick = async () => {
       },
       updatedAt: serverTimestamp()
     }, { merge: true });
+
+    // La configuración completa y el documento público mínimo deben cambiar
+    // en el mismo commit. Así no existe una ventana donde el panel diga
+    // "abierta" pero las reglas todavía bloqueen products/collections.
+    settingsBatch.set(storeGateRef, {
+      storeOpen: willBeOpen,
+      maintenanceAccess,
+      updatedAt: serverTimestamp(),
+      updatedBy: currentUser?.email || SUPER_ADMIN
+    }, { merge: true });
+
+    await settingsBatch.commit();
     if (_lastKnownStoreOpen !== willBeOpen) {
       const antes = _lastKnownStoreOpen ? 'Abierta' : 'Cerrada';
       const despues = willBeOpen ? 'Abierta' : 'Cerrada';
