@@ -122,7 +122,12 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
       const el = document.getElementById(id);
       if (el && !el._ttWelcomeWired) {
         el._ttWelcomeWired = true;
-        el.addEventListener('click', e => { e.preventDefault(); openSection(); });
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          window.AdminUnsaved
+            ? window.AdminUnsaved.requestNavigation(openSection)
+            : openSection();
+        });
       }
     });
   }
@@ -151,6 +156,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     }
     await setDoc(REF, { ...state, updatedAt: serverTimestamp(), updatedBy: auth.currentUser?.email || 'superadmin' }, { merge: true });
     toast('Mensaje de bienvenida guardado');
+    window.AdminUnsaved?.markClean('welcome-config');
     return true;
   }
 
@@ -185,6 +191,14 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     if (!section) return;
     section.innerHTML = `<div class="tt-welcome-admin-grid"><div class="tt-welcome-admin-card"><h2 class="tt-welcome-admin-title">Mensaje de bienvenida</h2><p class="tt-welcome-admin-sub">Configurá los mensajes que ve una clienta nueva cuando inicia sesión por primera vez y llega a la página principal.</p><div class="tt-welcome-preview-note">La prueba se abre como Super Admin, pero muestra exactamente la experiencia de bienvenida como si fueras una usuaria nueva.</div><div class="tt-welcome-admin-row" style="margin-top:16px"><div class="tt-welcome-admin-field"><label>Título general</label><input id="welcome-title" value="${escapeHtml(state.title)}"></div><div class="tt-welcome-admin-field"><label>Subtítulo</label><input id="welcome-subtitle" value="${escapeHtml(state.subtitle)}"></div></div><div class="tt-welcome-admin-switches"><label class="tt-welcome-pill"><input type="checkbox" id="welcome-enabled" ${state.enabled ? 'checked' : ''}> Activar bienvenida para usuarios nuevos</label><label class="tt-welcome-pill"><input type="checkbox" id="welcome-preview-enabled" ${state.previewEnabled ? 'checked' : ''}> Permitir prueba Super Admin</label></div></div><div class="tt-welcome-admin-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><div><h3 class="tt-welcome-admin-title" style="font-size:17px">Mensajes</h3><p class="tt-welcome-admin-sub">Podés agregar, editar, ordenar o eliminar mensajes.</p></div><button type="button" class="tt-welcome-btn primary" id="welcome-add">+ Agregar mensaje</button></div><div id="welcome-steps">${state.steps.length ? state.steps.map(renderStep).join('') : '<div class="tt-welcome-empty">Todavía no hay mensajes. Agregá el primero.</div>'}</div><div class="tt-welcome-admin-actions"><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn" id="welcome-reset">Restaurar mensajes base</button><button type="button" class="tt-welcome-btn danger" id="welcome-reset-users">Reactivar para clientas</button></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn dark" id="welcome-test">Probar como nuevo usuario</button><button type="button" class="tt-welcome-btn primary" id="welcome-save">Guardar cambios</button></div></div></div></div>`;
     wireCrud();
+    if (!window.AdminUnsaved?.has('welcome-config')) {
+      window.AdminUnsaved?.register('welcome-config', {
+        root: section,
+        active: () => section.classList.contains('active'),
+        label: 'Mensaje de bienvenida',
+        save: saveConfig,
+      });
+    }
   }
 
   function syncStateFromDom() {

@@ -264,6 +264,40 @@ service cloud.firestore {
         (!('lastLogin' in data) || data.lastLogin == request.time);
     }
 
+    function cartItemValid(itemId) {
+      let data = request.resource.data;
+      let productPath = /databases/$(database)/documents/products/$(data.id);
+      return data.keys().hasAll([
+          'schemaVersion', 'lineId', 'id', 'variant', 'qty',
+          'name', 'cat', 'price', 'imageUrl', 'updatedAt', 'updatedByDevice'
+        ]) &&
+        data.keys().hasOnly([
+          'schemaVersion', 'lineId', 'id', 'variant', 'qty',
+          'name', 'cat', 'price', 'imageUrl', 'updatedAt', 'updatedByDevice'
+        ]) &&
+        data.schemaVersion == 2 &&
+        data.lineId == itemId &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 180 &&
+        data.variant is string && data.variant.size() <= 120 &&
+        data.qty is int && data.qty >= 1 && data.qty <= 99 &&
+        data.name is string && data.name.size() <= 180 &&
+        data.cat is string && data.cat.size() <= 120 &&
+        data.price is number && data.price >= 0 &&
+        data.imageUrl is string && data.imageUrl.size() <= 1200 &&
+        data.updatedAt == request.time &&
+        data.updatedByDevice is string && data.updatedByDevice.size() >= 8 && data.updatedByDevice.size() <= 180 &&
+        exists(productPath) &&
+        get(productPath).data.get('active', true) != false &&
+        (
+          !('stock' in get(productPath).data) ||
+          get(productPath).data.stock == null ||
+          (
+            get(productPath).data.stock is number &&
+            data.qty <= get(productPath).data.stock
+          )
+        );
+    }
+
     /* ============================================================
        TINTIN — PEDIDOS SIN BLAZE (SPARK)
 
@@ -596,7 +630,16 @@ service cloud.firestore {
         !isSuperAdminAccount(resource.data);
 
       match /cart/{itemId} {
-        allow read, write: if isSignedIn() &&
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
+        allow create, update: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed() &&
+          cartItemValid(itemId);
+        allow delete: if isSignedIn() &&
           !isBlockedUser() &&
           request.auth.uid == userId &&
           isStoreOpenOrAllowed();

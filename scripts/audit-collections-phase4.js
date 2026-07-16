@@ -133,11 +133,11 @@ check(
 
 check(
   'Los destacados de colecciones tienen un límite de rendimiento',
-  files.collectionsPageRuntime.includes('const FEATURED_LIMIT = 8') &&
+  files.collectionsPageRuntime.includes('const FEATURED_LIMIT = 5') &&
     files.collectionsPage.includes("id=\"collections-featured-grid\"") &&
     !files.collectionsPage.includes('id="colls-products-grid"') &&
     files.collectionsPageRuntime.includes('.slice(0, FEATURED_LIMIT)'),
-  'la página no debe intentar montar el catálogo completo debajo de las colecciones'
+  'la página no debe intentar montar el catálogo completo debajo de las colecciones ni superar cinco recomendaciones'
 );
 
 check(

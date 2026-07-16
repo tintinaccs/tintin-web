@@ -1,9 +1,9 @@
-const FEATURED_LIMIT = 8;
+const FEATURED_LIMIT = 5;
 const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
-const cartSyncPromise = import('./cart-sync.js?v=tintin-20260715-16');
+const cartSyncPromise = import('./cart-sync.js?v=tintin-20260715-17');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;
@@ -222,9 +222,10 @@ featuredGrid?.addEventListener('click', async event => {
       cat: product.category || product.cat || '',
       price: product.price,
       qty: 1,
+      stock: product.stock,
       imageUrl: product.imageUrl || ''
     });
-    button.textContent = result.item ? (result.capped ? 'Stock máximo' : '✓ Agregado') : 'Sin stock';
+    button.textContent = result.changed ? '✓ Agregado' : (result.reason === 'already_in_cart' ? 'Ya está en tu carrito' : 'Stock máximo');
   } catch (error) {
     console.error('[collections] No se pudo agregar el producto:', error);
     button.textContent = 'Reintentar';

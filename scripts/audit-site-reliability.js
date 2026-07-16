@@ -38,6 +38,7 @@ const contentSchema = read('js/content-schema.js');
 const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
 const loadImagesInit = read('js/load-images-init.js');
+const collectionsPhase4 = read('js/collections-phase4.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('El menú de cuenta arranca también en el runtime público',
@@ -158,9 +159,9 @@ check('La portada usa la forma correcta TU ESTILO incluso con contenido históri
   contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
   siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
 check('La colección Bolsos conserva su portada real después de sincronizar',
-  home.includes("const COLL_SLUG_FILE_MAP = Object.freeze({ bolsos: 'bags' })") &&
-  home.includes('col-${collImageFile(c.slug)}.webp') &&
-  home.includes("label.textContent = c.name.toUpperCase()"));
+  collectionsPhase4.includes("const SLUG_FILE_MAP = { bolsos: 'bags' }") &&
+  collectionsPhase4.includes('col-${file}.webp') &&
+  collectionsPhase4.includes('label.textContent = (clean(collection.name) || clean(collection.slug)).toUpperCase()'));
 check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   publicShell.includes('id="search-panel" role="search"') &&
   publicShell.includes('id="cart-drawer" role="dialog"') &&
@@ -171,8 +172,8 @@ check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   main.includes("menu.setAttribute('aria-hidden', 'false')"));
 check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
   productsStore.includes(".filter(p => p.active !== false && Boolean(p.name))") &&
-  productsStore.includes('featuredProducts.slice(0, 6)') &&
-  loadImagesInit.includes('featuredProducts.slice(0, 6)') &&
+  productsStore.includes('featuredProducts.slice(0, 5)') &&
+  loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
   main.includes('window.isFeaturable = isFeaturable'));
 
 const forbiddenAuthorship = /\b(?:chatgpt|openai|codex|gemini|claude|copilot)\b|inteligencia\s+artificial|(?:generad[oa]|cread[oa]|asistid[oa])\s+(?:por|con)\s+(?:una\s+)?ia\b/i;
@@ -194,7 +195,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-16'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-17'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

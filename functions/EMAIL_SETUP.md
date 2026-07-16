@@ -893,12 +893,12 @@ implementación desplegada desde `tintinpedidos@gmail.com`:
 
 ```javascript
 export const EMAIL_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxia47SEM2GmGrjSF2Cy1cviYhTt9PVF7n3M_vYVuIl26PQeoZ-f2OqSC0IyMBr5Ob0lA/exec';
-export const EMAIL_SECRET = '58964bb773a19a7b207be3c75673866b914a070c106bec92';
 ```
 
 Si en algún momento se vuelve a implementar el script de cero (URL `/exec` nueva) o se
-rota el secreto, hay que actualizar esas dos líneas en `js/email-config.js` — el
-`EMAIL_SECRET` del sitio y el `SHARED_SECRET` del script deben coincidir exacto.
+rota la implementación, hay que actualizar solamente la URL en `js/email-config.js`.
+El flujo actual valida la identidad de Firebase y no publica secretos en el navegador
+ni en esta documentación.
 
 El proyecto viejo bajo `tintinaccs@gmail.com` ya no está conectado a nada — el
 sitio no le manda ninguna llamada. Si todavía existe una implementación activa

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-16"></script>
-  <script src="js/public-shell.js?v=tintin-20260715-16" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260715-17"></script>
+  <script src="js/public-shell.js?v=tintin-20260715-17" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -21,13 +21,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-17">
 </head>
 <body>
 <h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
@@ -325,7 +325,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260715-16";
+} from "./js/cart-sync.js?v=tintin-20260715-17";
 import { sendOrderNotification } from "./js/email-notify.js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
@@ -346,6 +346,7 @@ function sanitizeCheckoutProduct(id, raw = {}) {
     cat: cleanText(raw.cat || raw.category || '', 120),
     category: cleanText(raw.category || raw.cat || '', 120),
     price: Number(raw.price || 0),
+    stock: raw.stock == null ? null : Number(raw.stock),
     imageUrl: sanitizeImageUrl(raw.imageUrl || raw.image || raw.img || ''),
     active: raw.active !== false,
   };
@@ -562,18 +563,22 @@ async function renderCart() {
     let featured = [];
     try {
       if (window.PRODUCTS?.length) {
-        featured = window.PRODUCTS.filter(p => p.active !== false).slice(0, 6);
+        featured = window.PRODUCTS.filter(p => p.active !== false && (p.stock == null || Number(p.stock) > 0)).slice(0, 5);
       }
       if (!featured.length) {
         const cached = JSON.parse(sessionStorage.getItem('tt_products_cache') || 'null');
-        if (cached?.products?.length) featured = cached.products.slice(0, 6);
+        if (cached?.products?.length) featured = cached.products.slice(0, 5);
       }
       if (!featured.length) {
-        const snap = await getDocs(query(collection(db, 'products'), limit(6)));
+        const snap = await getDocs(query(collection(db, 'products'), limit(5)));
         featured = snap.docs.map(d => sanitizeCheckoutProduct(d.id, d.data()));
       }
     } catch(e) { console.warn('Suggested products error:', e); }
-    featured = featured.map(p => sanitizeCheckoutProduct(p.id, p)).filter(p => p.id && p.name && p.active !== false);
+    featured = featured
+      .map(p => sanitizeCheckoutProduct(p.id, p))
+      .filter(p => p.id && p.name && p.active !== false && (p.stock == null || Number(p.stock) > 0))
+      .filter((p, index, list) => list.findIndex(item => String(item.id) === String(p.id)) === index)
+      .slice(0, 5);
 
     container.innerHTML = `
       <div class="ck-empty">
@@ -601,7 +606,7 @@ async function renderCart() {
               <div class="ck-sug-name">${safeName}</div>
               <div class="ck-sug-cat">${safeCat}</div>
               <div class="ck-sug-price">${formatPrice(p.price)}</div>
-              <button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>
+              <button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-stock="${p.stock == null ? '' : Number(p.stock)}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>
             </div>`;
           }).join('')}
         </div>
@@ -611,16 +616,16 @@ async function renderCart() {
 
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const { id, name, cat, price, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-16');
-        const result = await addToCart({ id, name, cat, price: Number(price), imgUrl: img || '', imageUrl: img || '', qty: 1 });
+        const { id, name, cat, price, stock, img } = btn.dataset;
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260715-17');
+        const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
           return;
         }
-        btn.textContent = '✓ Agregado';
-        btn.disabled = true;
-        btn.style.background = '#4caf50';
+        btn.textContent = result.changed ? '✓ Agregado' : 'Ya está en tu carrito';
+        btn.disabled = !result.changed || result.reason === 'already_in_cart';
+        btn.style.background = result.changed ? '#4caf50' : '#8f294f';
         renderCart();
       });
     });
@@ -1752,7 +1757,7 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-16"></script>
-<script src="script.js?v=tintin-20260715-16" defer></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-17"></script>
+<script src="script.js?v=tintin-20260715-17" defer></script>
 </body>
 </html>
