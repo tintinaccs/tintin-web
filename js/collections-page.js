@@ -3,7 +3,7 @@ const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
-const cartSyncPromise = import('./cart-sync.js?v=tintin-20260715-17');
+const cartSyncPromise = import('./cart-sync.js?v=tintin-20260716-color-scheme-1');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;

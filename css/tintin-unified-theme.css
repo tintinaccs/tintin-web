@@ -150,3 +150,149 @@ body:has(.adm-main) .adm-error{background:var(--admin-color-background-surface)!
 #tt-loader,#tt-intro{background:var(--tt-page-bg)!important;gap:0!important}
 ::selection{background:var(--tt-accent)!important;color:#fff!important}
 .tt-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+/* Enlaces semánticos del Esquema de colores.
+   Cada token editable controla un consumidor real o un estado reutilizable.
+   Se conservan los alias anteriores, pero los componentes específicos usan el
+   token más preciso para que dos opciones distintas no queden vinculadas por
+   accidente. */
+body:not(:has(.adm-main)) .tt-header{background:var(--color-background-header)!important}
+body:not(:has(.adm-main)) .tt-footer,
+body:not(:has(.adm-main)) .tt-footer-bottom{background:var(--color-background-footer)!important}
+body:not(:has(.adm-main)) :is(.tt-mobile-menu,.tt-dropdown,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-account-panel){background:var(--color-background-menu)!important}
+body:not(:has(.adm-main)) :is(.tt-submenu,.tt-dropdown-submenu,.tt-collections-submenu,[role="menu"] [role="menu"]){background:var(--color-background-submenu)!important}
+body:not(:has(.adm-main)) table{background:var(--color-background-table)!important}
+body:not(:has(.adm-main)) tbody tr:hover{background:var(--color-background-table-row-hover)!important}
+body:not(:has(.adm-main)) :is(input,textarea,select,option,.cat-search,.cat-sort){background:var(--color-background-field)!important}
+body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-floating,.floating-action){background:var(--color-background-float)!important}
+body:not(:has(.adm-main)) :is(.tt-modal-overlay,.modal-overlay,.tt-drawer-overlay,.tt-search-overlay){background:var(--color-background-overlay)!important}
+body:not(:has(.adm-main)) :is([aria-selected="true"],[aria-current="page"],.is-selected,.selected){background-color:var(--color-background-selected)!important}
+body:not(:has(.adm-main)) :is(button,input,select,textarea,[role="button"]):disabled,
+body:not(:has(.adm-main)) [aria-disabled="true"]{background-color:var(--color-background-disabled)!important;color:var(--color-text-disabled)!important}
+
+body:not(:has(.adm-main)) :is(.tt-section-desc,.tt-card-sub,.tt-product-meta,.ck-muted,.perfil-muted){color:var(--color-text-secondary)!important}
+body:not(:has(.adm-main)) :is(.tt-caption,.tt-overline,.tt-meta,.text-tertiary){color:var(--color-text-tertiary)!important}
+body:not(:has(.adm-main)) :is(.tt-muted,.text-muted,.muted){color:var(--color-text-muted)!important}
+body:not(:has(.adm-main)) :is(h1,h2,h3,h4,h5,h6,.tt-title,.tt-section-title){color:var(--color-text-title)!important}
+body:not(:has(.adm-main)) :is(.tt-subtitle,.tt-section-sub,.login-heading-sub){color:var(--color-text-subtitle)!important}
+body:not(:has(.adm-main)) :is(label,legend,.field-label,.form-label){color:var(--color-text-label)!important}
+body:not(:has(.adm-main)) :is(input,textarea)::placeholder{color:var(--color-text-placeholder)!important}
+body:not(:has(.adm-main)) a:not(.tt-btn):not(.ck-btn):not(.login-google){color:var(--color-text-link)!important}
+body:not(:has(.adm-main)) a:visited:not(.tt-btn):not(.ck-btn):not(.login-google){color:var(--color-text-link-visited)!important}
+body:not(:has(.adm-main)) :is(.help-text,.field-help,.ck-help,.form-help){color:var(--color-text-help)!important}
+body:not(:has(.adm-main)) :is(.on-dark,.text-inverse,.tt-btn-primary,.tt-wa-float){color:var(--color-text-inverse)!important}
+
+body:not(:has(.adm-main)) :is(.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn-primary,.login-email-btn){
+  background:var(--color-button-primary-background)!important;
+  color:var(--color-button-primary-text)!important;
+  border-color:var(--color-button-primary-border)!important
+}
+body:not(:has(.adm-main)) :is(.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn-primary,.login-email-btn):hover{background:var(--color-button-primary-hover)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn-primary,.login-email-btn):active{background:var(--color-button-primary-active)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn-primary,.login-email-btn):focus-visible{box-shadow:0 0 0 3px var(--color-button-primary-focus-ring)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn-primary,.login-email-btn):disabled{
+  background:var(--color-button-primary-disabled-background)!important;
+  color:var(--color-button-primary-disabled-text)!important
+}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.tt-added-toast-continue){
+  background:var(--color-button-secondary-background)!important;
+  color:var(--color-button-secondary-text)!important;
+  border-color:var(--color-button-secondary-border)!important
+}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.tt-added-toast-continue):hover{background:var(--color-button-secondary-hover)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.tt-added-toast-continue):active{background:var(--color-button-secondary-active)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.tt-added-toast-continue):focus-visible{box-shadow:0 0 0 3px var(--color-button-secondary-focus-ring)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.tt-added-toast-continue):disabled{
+  background:var(--color-button-secondary-disabled-background)!important;
+  color:var(--color-button-secondary-disabled-text)!important
+}
+body:not(:has(.adm-main)) :is(.tt-btn-success,.btn-success,[data-button-variant="success"]){background:var(--color-button-success-background)!important;color:var(--color-button-success-text)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-warning,.btn-warning,[data-button-variant="warning"]){background:var(--color-button-warning-background)!important;color:var(--color-button-warning-text)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-danger,.btn-danger,[data-button-variant="danger"]){background:var(--color-button-danger-background)!important;color:var(--color-button-danger-text)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-danger,.btn-danger,[data-button-variant="danger"]):hover{background:var(--color-button-danger-hover)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-info,.btn-info,[data-button-variant="info"]){background:var(--color-button-info-background)!important;color:var(--color-button-info-text)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-neutral,.btn-neutral,[data-button-variant="neutral"]){background:var(--color-button-neutral-background)!important;color:var(--color-button-neutral-text)!important}
+body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link){background:var(--color-button-whatsapp-background)!important;color:var(--color-button-whatsapp-text)!important}
+body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link):hover{background:var(--color-button-whatsapp-hover)!important}
+body:not(:has(.adm-main)) :is(.tt-icon-btn,.icon-button,[data-button-variant="icon"]){color:var(--color-button-icon-text)!important}
+body:not(:has(.adm-main)) :is(.tt-icon-btn,.icon-button,[data-button-variant="icon"]):disabled{color:var(--color-button-icon-disabled-text)!important}
+body:not(:has(.adm-main)) :is(.tt-floating-btn,.floating-button,[data-button-variant="floating"]){background:var(--color-button-floating-background)!important;color:var(--color-button-floating-text)!important}
+body:not(:has(.adm-main)) :is(.tt-sticky-btn,.sticky-button,[data-button-variant="sticky"]){background:var(--color-button-sticky-background)!important;color:var(--color-button-sticky-text)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-outline,[data-button-variant="outline"]){background:var(--color-button-outline-background)!important;color:var(--color-button-outline-text)!important;border-color:var(--color-button-outline-border)!important}
+body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transparent"]){background:transparent!important;color:var(--color-button-transparent-text)!important}
+
+body:not(:has(.adm-main)) :is(.tt-card,.tt-product-card,.tt-review-card,.tt-category-card,.perfil-card,.ck-panel,.login-box){border-color:var(--color-card-border)!important;box-shadow:0 14px 38px var(--color-card-shadow)!important}
+body:not(:has(.adm-main)) :is(hr,.divider,.tt-divider){border-color:var(--color-border-secondary)!important}
+body:not(:has(.adm-main)) :is(input,textarea,select,[tabindex]):focus-visible{border-color:var(--color-border-focus)!important}
+body:not(:has(.adm-main)) :is(.is-invalid,[aria-invalid="true"],.field-error){border-color:var(--color-border-error)!important}
+body:not(:has(.adm-main)) :is(.is-valid,.field-success){border-color:var(--color-border-success)!important}
+body:not(:has(.adm-main)) :is(.field-warning,.is-warning){border-color:var(--color-border-warning)!important}
+
+body:not(:has(.adm-main)) :is(.alert-info,.tt-info,.state-info){background:var(--color-info-background)!important;color:var(--color-info-text)!important}
+body:not(:has(.adm-main)) :is(.alert-success,.tt-success,.state-success,.login-success){background:var(--color-success-background)!important;color:var(--color-success-text)!important}
+body:not(:has(.adm-main)) :is(.alert-warning,.tt-warning,.state-warning){background:var(--color-warning-background)!important;color:var(--color-warning-text)!important}
+body:not(:has(.adm-main)) :is(.alert-error,.tt-error,.state-error,.login-error,.ck-error){background:var(--color-error-background)!important;color:var(--color-error-text)!important}
+body:not(:has(.adm-main)) :is(.alert-danger,.tt-danger,.state-danger){background:var(--color-danger-background)!important;color:var(--color-danger-text)!important}
+body:not(:has(.adm-main)) :is(.alert-neutral,.tt-neutral,.state-neutral){background:var(--color-neutral-background)!important;color:var(--color-neutral-text)!important}
+body:not(:has(.adm-main)) :is(.in-stock,.available,.tt-available){color:var(--color-state-available)!important}
+body:not(:has(.adm-main)) :is(.sold-out,.agotado,.tt-soldout){color:var(--color-state-soldout)!important}
+body:not(:has(.adm-main)) :is(.discount,.descuento,.tt-discount){color:var(--color-state-discount)!important}
+body:not(:has(.adm-main)) :is(.promo,.promocion,.tt-promo){color:var(--color-state-promo)!important}
+body:not(:has(.adm-main)) :is(.is-selected,[aria-selected="true"]){outline-color:var(--color-state-selected)!important}
+body:not(:has(.adm-main)) :is(.tt-interactive,[role="option"],[role="menuitem"]):hover{background-color:var(--color-state-hover)!important}
+body:not(:has(.adm-main)) :is(.tt-interactive,[role="option"],[role="menuitem"]):focus-visible{box-shadow:0 0 0 3px var(--color-state-focus)!important}
+body:not(:has(.adm-main)) :is(.tt-interactive,[role="option"],[role="menuitem"]):active{background-color:var(--color-state-active)!important}
+body:not(:has(.adm-main)) :is(.tt-interactive,[role="option"],[role="menuitem"])[aria-disabled="true"]{color:var(--color-state-disabled)!important}
+
+body:not(:has(.adm-main)) :is(input,textarea,select,.tt-field){background:var(--color-field-background)!important;color:var(--color-field-text)!important;border-color:var(--color-field-border)!important}
+body:not(:has(.adm-main)) :is(input,textarea,select,.tt-field):focus{border-color:var(--color-field-border-focus)!important}
+body:not(:has(.adm-main)) :is(input,textarea)::placeholder{color:var(--color-field-placeholder)!important}
+
+body:not(:has(.adm-main)) :is(.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active,[aria-current="page"]){background:var(--color-nav-active-background)!important;color:var(--color-nav-active-text)!important}
+body:not(:has(.adm-main)) :is(.tt-nav a,.tt-mobile-nav a,.tt-tabbar-btn):not(.active){color:var(--color-nav-inactive-text)!important}
+body:not(:has(.adm-main)) :is(.tab.active,[role="tab"][aria-selected="true"]){background:var(--color-tab-active-background)!important;color:var(--color-tab-active-text)!important}
+body:not(:has(.adm-main)) :is(.tab,[role="tab"]):not(.active):not([aria-selected="true"]){color:var(--color-tab-inactive-text)!important}
+body:not(:has(.adm-main)) :is(.breadcrumb,.breadcrumbs,.tt-breadcrumb){color:var(--color-breadcrumb-text)!important}
+body:not(:has(.adm-main)) :is(.breadcrumb [aria-current="page"],.breadcrumbs .active,.tt-breadcrumb .active){color:var(--color-breadcrumb-active-text)!important}
+body:not(:has(.adm-main)) :is(summary,.accordion-header,.tt-accordion-header){background:var(--color-accordion-header-background)!important}
+body:not(:has(.adm-main)) :is(.indicator,.dot,.tt-indicator,.swiper-pagination-bullet-active){background-color:var(--color-indicator)!important}
+
+body:not(:has(.adm-main)) :is(table,th,td){border-color:var(--color-table-border)!important}
+body:not(:has(.adm-main)) th{background:var(--color-table-header-background)!important;color:var(--color-table-header-text)!important}
+body:not(:has(.adm-main)) :is(.badge,[class*="-badge"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important}
+body:not(:has(.adm-main)) :is(.chip,[class*="-chip"]){background:var(--color-chip-background)!important;color:var(--color-chip-text)!important}
+
+body:not(:has(.adm-main)) :is(.tt-modal,.modal,.dialog,[role="dialog"]){background:var(--color-modal-background)!important;border-color:var(--color-modal-border)!important}
+body:not(:has(.adm-main)) :is(.tt-modal-backdrop,.modal-backdrop,[data-modal-overlay]){background:var(--color-modal-overlay)!important}
+body:not(:has(.adm-main)) :is(.tooltip,[role="tooltip"],.tt-tooltip){background:var(--color-tooltip-background)!important;color:var(--color-tooltip-text)!important}
+body:not(:has(.adm-main)) :is(.tt-empty,.cat-empty,.empty-state){color:var(--color-empty-state-text)!important}
+
+body:not(:has(.adm-main)) :is(.tt-product-price,.price,.product-price){color:var(--color-price)!important}
+body:not(:has(.adm-main)) :is(.tt-product-price-old,.old-price,.price-old){color:var(--color-price-old)!important}
+body:not(:has(.adm-main)) :is(.rating-star,.tt-rating-star,[data-rating-star]){color:var(--color-rating-star)!important}
+body:not(:has(.adm-main)) :is(.tt-cart-badge,.cart-badge){background:var(--color-cart-badge-background)!important;color:var(--color-cart-badge-text)!important}
+
+body:not(:has(.adm-main)) :is(svg,.icon,.tt-icon){color:var(--color-icon-primary)!important}
+body:not(:has(.adm-main)) :is(.icon-accent,.tt-icon-accent,.tt-dropdown-icon){color:var(--color-icon-secondary)!important}
+body:not(:has(.adm-main)) :is(button:disabled svg,.icon.disabled,.tt-icon-disabled){color:var(--color-icon-disabled)!important}
+body:not(:has(.adm-main)){scrollbar-color:var(--color-scrollbar-thumb) var(--color-scrollbar-track)}
+body:not(:has(.adm-main)) ::-webkit-scrollbar-track{background:var(--color-scrollbar-track)!important}
+body:not(:has(.adm-main)) ::-webkit-scrollbar-thumb{background:var(--color-scrollbar-thumb)!important}
+body:not(:has(.adm-main)) :is(.switch,.tt-switch,[role="switch"])[aria-checked="true"]{background:var(--color-switch-on-background)!important}
+body:not(:has(.adm-main)) :is(.switch,.tt-switch,[role="switch"])[aria-checked="false"]{background:var(--color-switch-off-background)!important}
+body:not(:has(.adm-main)) :is(.switch-thumb,.tt-switch-thumb){background:var(--color-switch-thumb)!important}
+body:not(:has(.adm-main)) input[type="checkbox"]{border-color:var(--color-checkbox-border)!important}
+body:not(:has(.adm-main)) input[type="checkbox"]:checked{background-color:var(--color-checkbox-checked-background)!important}
+body:not(:has(.adm-main)) input[type="radio"]{border-color:var(--color-radio-border)!important}
+body:not(:has(.adm-main)) input[type="radio"]:checked{background-color:var(--color-radio-checked-background)!important}
+body:not(:has(.adm-main)) :is(progress,.progress,.tt-progress){background:var(--color-progress-track)!important}
+body:not(:has(.adm-main)) :is(progress,.progress,.tt-progress)::-webkit-progress-value,
+body:not(:has(.adm-main)) :is(.progress-fill,.tt-progress-fill){background:var(--color-progress-fill)!important}
+body:not(:has(.adm-main)) :is(.skeleton,.tt-skeleton){background-color:var(--color-skeleton-base)!important;background-image:linear-gradient(90deg,var(--color-skeleton-base),var(--color-skeleton-shine),var(--color-skeleton-base))!important}
+body:not(:has(.adm-main)) ::selection{background:var(--color-selection-background)!important;color:var(--color-selection-text)!important}
+body:not(:has(.adm-main)) :is(.spinner,.loader-spinner,.tt-spinner){border-color:var(--color-loading-spinner)!important}
+
+body:has(.adm-main) .adm-topbar{background:var(--admin-color-background-header)!important}
+body:has(.adm-main) :is(.adm-hint,.adm-caption,.adm-meta){color:var(--admin-color-text-tertiary)!important}
+body:has(.adm-main) :is(.adm-modal,.adm-dialog,[role="dialog"]){background:var(--admin-color-modal-background)!important}
+body:has(.adm-main) :is(.adm-modal-overlay,.adm-backdrop,[data-admin-modal-overlay]){background:var(--admin-color-modal-overlay)!important}

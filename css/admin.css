@@ -1912,3 +1912,53 @@
   .adm-diagnostic-history-head { align-items: flex-start; flex-direction: column; }
   .adm-diagnostic-badges { justify-content: flex-start; }
 }
+
+/* Apariencia -> Esquema de colores */
+.apar-main-grid {
+  min-width: 0;
+}
+.apar-preview-column {
+  min-width: 0;
+}
+.apar-preview-shell {
+  min-width: 0;
+  max-width: 100%;
+}
+.apar-token-row > * {
+  min-width: 0;
+}
+@media (max-width: 1180px) {
+  .apar-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .apar-preview-column {
+    position: static !important;
+  }
+}
+@media (max-width: 620px) {
+  .apar-token-row {
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+  }
+  .apar-token-row [data-val-label] {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 100%;
+  }
+  .apar-token-row [data-reset] {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+  .apar-token-impact {
+    grid-column: 1 / -1 !important;
+  }
+  #apar-toolbar,
+  #apar-scheme-bar {
+    align-items: stretch !important;
+  }
+  #apar-toolbar .adm-btn,
+  #apar-scheme-bar .adm-btn,
+  #apar-scheme-bar .adm-select {
+    flex: 1 1 150px;
+    max-width: none !important;
+  }
+}

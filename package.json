@@ -1,6 +1,7 @@
 {
   "scripts": {
     "audit:typography": "node scripts/audit-typography.js",
+    "audit:colors": "node scripts/audit-color-scheme.js",
     "fix:tintin": "node scripts/fix-tintin-source.js",
     "sync:public-shell": "node scripts/sync-public-shell.js",
     "audit:public-shell": "node scripts/audit-public-shell.js",
@@ -18,7 +19,7 @@
     "build:diagnostics": "node scripts/build-diagnostic-manifest.js",
     "audit:diagnostics": "node scripts/audit-diagnostics.js",
     "audit:diagnostic-findings": "node scripts/audit-diagnostic-findings.js",
-    "audit:final": "npm run audit:typography && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability",
+    "audit:final": "npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js",

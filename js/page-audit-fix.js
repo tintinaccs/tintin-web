@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinPageAuditFixBooted)return;
 window.TintinPageAuditFixBooted=true;
-var VERSION='tintin-20260715-17';
+var VERSION='tintin-20260716-color-scheme-1';
 function isHome(){var p=(location.pathname||'').toLowerCase();return p.endsWith('/')||p.endsWith('/index.html')||p==='';}
 function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;if(u.searchParams.get('v')===VERSION)return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
 function versionLocalCssLinks(){document.querySelectorAll('link[href$=".css"],link[href*=".css?"]').forEach(function(link){var href=link.getAttribute('href')||'';var next=versionUrl(href);if(next!==href){link.setAttribute('href',next);link.setAttribute('data-tt-css-versioned','true');}})}
