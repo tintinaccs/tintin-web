@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-16T18:07:37.487Z",
-  "sourceFingerprint": "67b939ecda1bbf1ebe2eecfb54adff9b29247a706787d30d4d650cdf2960c834",
+  "generatedAt": "2026-07-16T18:25:02.283Z",
+  "sourceFingerprint": "2515e465c1c8a44c86b562cdd4f02a12e14cb12c38a5eae2d96ba5d7d91b8b43",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 216,
-    "textFiles": 176,
-    "totalBytes": 5419974,
+    "files": 221,
+    "textFiles": 181,
+    "totalBytes": 5439661,
     "pages": 18,
-    "modules": 101
+    "modules": 106
   },
   "viewports": [
     {
@@ -1403,8 +1403,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 152207,
-      "sha256": "d472290a07a6666f0ba395381e4324712c1983e0ad6b6dc1dbe07bbd7b32aeca",
+      "bytes": 152385,
+      "sha256": "c7311f487d2bb12bac0aba8c1f235941d1a0b6078392e1ebc9b86c70bc54517f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1440,12 +1440,12 @@
         {
           "raw": "js/admin-app.js?v=tintin-20260716-products-restore-1",
           "target": "js/admin-app.js",
-          "line": 1793
+          "line": 1795
         },
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-product-page-1",
           "target": "js/admin-color-scheme.js",
-          "line": 1991
+          "line": 1993
         }
       ],
       "styles": [
@@ -1582,7 +1582,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1756
+          "line": 1758
         },
         {
           "raw": "https://api.imgbb.com",
@@ -1592,7 +1592,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1768
+          "line": 1770
         }
       ],
       "references": [
@@ -1611,13 +1611,13 @@
         {
           "raw": "js/admin-app.js?v=tintin-20260716-products-restore-1",
           "target": "js/admin-app.js",
-          "line": 1793,
+          "line": 1795,
           "exists": true
         },
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-product-page-1",
           "target": "js/admin-color-scheme.js",
-          "line": 1991,
+          "line": 1993,
           "exists": true
         },
         {
@@ -1707,7 +1707,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 1756,
+          "line": 1758,
           "exists": true
         }
       ],
@@ -1741,32 +1741,32 @@
         {
           "id": "",
           "classes": "adm-table adm-table-correos-dash",
-          "line": 933
+          "line": 935
         },
         {
           "id": "",
           "classes": "adm-table adm-table-correos-pedidos",
-          "line": 957
+          "line": 959
         },
         {
           "id": "",
           "classes": "adm-table adm-table-plantillas",
-          "line": 1037
+          "line": 1039
         },
         {
           "id": "",
           "classes": "adm-table adm-table-clientas",
-          "line": 1070
+          "line": 1072
         },
         {
           "id": "",
           "classes": "adm-table adm-table-historial",
-          "line": 1155
+          "line": 1157
         },
         {
           "id": "csv-preview-table",
           "classes": "adm-table",
-          "line": 1701
+          "line": 1703
         }
       ],
       "modals": [
@@ -1774,7 +1774,7 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 1799
+          "line": 1801
         }
       ],
       "tabs": [
@@ -1787,16 +1787,6 @@
           "id": "",
           "role": "",
           "line": 329
-        },
-        {
-          "id": "",
-          "role": "",
-          "line": 911
-        },
-        {
-          "id": "",
-          "role": "",
-          "line": 912
         },
         {
           "id": "",
@@ -1831,12 +1821,22 @@
         {
           "id": "",
           "role": "",
-          "line": 1413
+          "line": 919
         },
         {
           "id": "",
           "role": "",
-          "line": 1414
+          "line": 920
+        },
+        {
+          "id": "",
+          "role": "",
+          "line": 1415
+        },
+        {
+          "id": "",
+          "role": "",
+          "line": 1416
         }
       ],
       "sections": [
@@ -1888,82 +1888,82 @@
         {
           "id": "section-correos",
           "classes": "adm-section",
-          "line": 909
+          "line": 911
         },
         {
           "id": "correos-panel-dashboard",
           "classes": "correos-panel active",
-          "line": 922
+          "line": 924
         },
         {
           "id": "correos-panel-pedidos",
           "classes": "correos-panel",
-          "line": 942
+          "line": 944
         },
         {
           "id": "correos-panel-prueba",
           "classes": "correos-panel",
-          "line": 966
+          "line": 968
         },
         {
           "id": "correos-panel-plantillas",
           "classes": "correos-panel",
-          "line": 1010
+          "line": 1012
         },
         {
           "id": "correos-panel-clientas",
           "classes": "correos-panel",
-          "line": 1047
+          "line": 1049
         },
         {
           "id": "correos-panel-promociones",
           "classes": "correos-panel",
-          "line": 1080
+          "line": 1082
         },
         {
           "id": "correos-panel-historial",
           "classes": "correos-panel",
-          "line": 1125
+          "line": 1127
         },
         {
           "id": "correos-panel-config",
           "classes": "correos-panel",
-          "line": 1165
+          "line": 1167
         },
         {
           "id": "section-configuracion",
           "classes": "adm-section",
-          "line": 1256
+          "line": 1258
         },
         {
           "id": "ship-panel-delivery",
           "classes": "ship-tab-panel active",
-          "line": 1417
+          "line": 1419
         },
         {
           "id": "ship-panel-encomienda",
           "classes": "ship-tab-panel",
-          "line": 1438
+          "line": 1440
         },
         {
           "id": "section-permisos",
           "classes": "adm-section",
-          "line": 1546
+          "line": 1548
         },
         {
           "id": "section-apariencia",
           "classes": "adm-section",
-          "line": 1596
+          "line": 1598
         },
         {
           "id": "section-importar",
           "classes": "adm-section",
-          "line": 1642
+          "line": 1644
         },
         {
           "id": "section-contenido",
           "classes": "adm-section",
-          "line": 1748
+          "line": 1750
         }
       ],
       "buttons": [
@@ -3254,7 +3254,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 893
+          "line": 895
         },
         {
           "id": "btn-export-site-diagnostics",
@@ -3270,7 +3270,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 894
+          "line": 896
         },
         {
           "id": "",
@@ -3286,7 +3286,7 @@
             "data-diagnostic-view": "active"
           },
           "hasSourceReference": true,
-          "line": 897
+          "line": 899
         },
         {
           "id": "",
@@ -3300,7 +3300,7 @@
             "data-diagnostic-view": "coverage"
           },
           "hasSourceReference": "",
-          "line": 898
+          "line": 900
         },
         {
           "id": "",
@@ -3314,7 +3314,7 @@
             "data-diagnostic-view": "history"
           },
           "hasSourceReference": "",
-          "line": 899
+          "line": 901
         },
         {
           "id": "",
@@ -3331,7 +3331,7 @@
             "data-correos-tab": "dashboard"
           },
           "hasSourceReference": true,
-          "line": 911
+          "line": 913
         },
         {
           "id": "",
@@ -3347,7 +3347,7 @@
             "data-correos-tab": "pedidos"
           },
           "hasSourceReference": true,
-          "line": 912
+          "line": 914
         },
         {
           "id": "",
@@ -3363,7 +3363,7 @@
             "data-correos-tab": "prueba"
           },
           "hasSourceReference": true,
-          "line": 913
+          "line": 915
         },
         {
           "id": "",
@@ -3379,7 +3379,7 @@
             "data-correos-tab": "plantillas"
           },
           "hasSourceReference": true,
-          "line": 914
+          "line": 916
         },
         {
           "id": "",
@@ -3395,7 +3395,7 @@
             "data-correos-tab": "clientas"
           },
           "hasSourceReference": true,
-          "line": 915
+          "line": 917
         },
         {
           "id": "",
@@ -3411,7 +3411,7 @@
             "data-correos-tab": "promociones"
           },
           "hasSourceReference": true,
-          "line": 916
+          "line": 918
         },
         {
           "id": "",
@@ -3427,7 +3427,7 @@
             "data-correos-tab": "historial"
           },
           "hasSourceReference": true,
-          "line": 917
+          "line": 919
         },
         {
           "id": "",
@@ -3443,7 +3443,7 @@
             "data-correos-tab": "config"
           },
           "hasSourceReference": true,
-          "line": 918
+          "line": 920
         },
         {
           "id": "",
@@ -3458,7 +3458,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 952
+          "line": 954
         },
         {
           "id": "",
@@ -3473,7 +3473,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 953
+          "line": 955
         },
         {
           "id": "",
@@ -3488,7 +3488,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 954
+          "line": 956
         },
         {
           "id": "",
@@ -3505,7 +3505,7 @@
             "data-prueba-mode": "manual"
           },
           "hasSourceReference": true,
-          "line": 980
+          "line": 982
         },
         {
           "id": "",
@@ -3521,7 +3521,7 @@
             "data-prueba-mode": "cliente"
           },
           "hasSourceReference": true,
-          "line": 981
+          "line": 983
         },
         {
           "id": "btn-test-email",
@@ -3536,7 +3536,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 996
+          "line": 998
         },
         {
           "id": "btn-test-preview",
@@ -3551,7 +3551,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 997
+          "line": 999
         },
         {
           "id": "btn-tpl-nueva",
@@ -3567,7 +3567,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1014
+          "line": 1016
         },
         {
           "id": "",
@@ -3582,7 +3582,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1031
+          "line": 1033
         },
         {
           "id": "",
@@ -3597,7 +3597,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1032
+          "line": 1034
         },
         {
           "id": "",
@@ -3613,7 +3613,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1033
+          "line": 1035
         },
         {
           "id": "",
@@ -3628,7 +3628,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1034
+          "line": 1036
         },
         {
           "id": "cli-clear-selection",
@@ -3644,7 +3644,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1066
+          "line": 1068
         },
         {
           "id": "cli-use-in-promo",
@@ -3660,7 +3660,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1067
+          "line": 1069
         },
         {
           "id": "promo-add-email-btn",
@@ -3675,7 +3675,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1105
+          "line": 1107
         },
         {
           "id": "promo-preview-btn",
@@ -3690,7 +3690,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1112
+          "line": 1114
         },
         {
           "id": "promo-open-confirm-btn",
@@ -3705,7 +3705,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1113
+          "line": 1115
         },
         {
           "id": "",
@@ -3720,7 +3720,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1150
+          "line": 1152
         },
         {
           "id": "",
@@ -3735,7 +3735,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1151
+          "line": 1153
         },
         {
           "id": "",
@@ -3750,7 +3750,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1152
+          "line": 1154
         },
         {
           "id": "btn-save-correos-config",
@@ -3765,7 +3765,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1252
+          "line": 1254
         },
         {
           "id": "",
@@ -3782,7 +3782,7 @@
             "data-ship-tab": "delivery"
           },
           "hasSourceReference": true,
-          "line": 1413
+          "line": 1415
         },
         {
           "id": "",
@@ -3798,7 +3798,7 @@
             "data-ship-tab": "encomienda"
           },
           "hasSourceReference": true,
-          "line": 1414
+          "line": 1416
         },
         {
           "id": "ship-delivery-add",
@@ -3813,7 +3813,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1427
+          "line": 1429
         },
         {
           "id": "ship-delivery-cancel",
@@ -3829,7 +3829,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1429
+          "line": 1431
         },
         {
           "id": "",
@@ -3845,7 +3845,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1432
+          "line": 1434
         },
         {
           "id": "",
@@ -3860,7 +3860,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1433
+          "line": 1435
         },
         {
           "id": "ship-encomienda-add",
@@ -3875,7 +3875,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1448
+          "line": 1450
         },
         {
           "id": "ship-encomienda-cancel",
@@ -3891,7 +3891,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1450
+          "line": 1452
         },
         {
           "id": "",
@@ -3907,7 +3907,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1453
+          "line": 1455
         },
         {
           "id": "",
@@ -3922,7 +3922,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1454
+          "line": 1456
         },
         {
           "id": "btn-save-config",
@@ -3937,7 +3937,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1542
+          "line": 1544
         },
         {
           "id": "btn-perm-restore",
@@ -3953,7 +3953,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1552
+          "line": 1554
         },
         {
           "id": "btn-perm-save",
@@ -3969,7 +3969,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1553
+          "line": 1555
         },
         {
           "id": "",
@@ -3986,7 +3986,7 @@
             "data-apar-scope": "global"
           },
           "hasSourceReference": true,
-          "line": 1604
+          "line": 1606
         },
         {
           "id": "",
@@ -4002,7 +4002,7 @@
             "data-apar-scope": "admin"
           },
           "hasSourceReference": true,
-          "line": 1605
+          "line": 1607
         },
         {
           "id": "btn-exportar",
@@ -4017,7 +4017,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1649
+          "line": 1651
         },
         {
           "id": "btn-exportar-pedidos",
@@ -4032,7 +4032,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1660
+          "line": 1662
         },
         {
           "id": "btn-exportar-usuarios",
@@ -4047,7 +4047,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1671
+          "line": 1673
         },
         {
           "id": "btn-csv-limpiar",
@@ -4063,7 +4063,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1695
+          "line": 1697
         },
         {
           "id": "btn-csv-importar-seleccionados",
@@ -4078,7 +4078,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1696
+          "line": 1698
         },
         {
           "id": "btn-csv-importar",
@@ -4093,7 +4093,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1697
+          "line": 1699
         },
         {
           "id": "btn-importar",
@@ -4108,7 +4108,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1739
+          "line": 1741
         },
         {
           "id": "btn-importar-sample",
@@ -4123,7 +4123,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1740
+          "line": 1742
         },
         {
           "id": "cont-save-all",
@@ -4139,7 +4139,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1755
+          "line": 1757
         },
         {
           "id": "cont-add-page",
@@ -4155,7 +4155,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1763
+          "line": 1765
         },
         {
           "id": "",
@@ -4171,7 +4171,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1770
+          "line": 1772
         },
         {
           "id": "",
@@ -4185,7 +4185,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1775
+          "line": 1777
         },
         {
           "id": "unsaved-modal-save",
@@ -4200,7 +4200,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1805
+          "line": 1807
         },
         {
           "id": "unsaved-modal-discard",
@@ -4215,7 +4215,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1806
+          "line": 1808
         },
         {
           "id": "unsaved-modal-stay",
@@ -4230,7 +4230,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1807
+          "line": 1809
         },
         {
           "id": "",
@@ -4244,7 +4244,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1819
+          "line": 1821
         },
         {
           "id": "",
@@ -4258,7 +4258,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1909
+          "line": 1911
         },
         {
           "id": "oe-save-btn",
@@ -4273,7 +4273,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1910
+          "line": 1912
         },
         {
           "id": "",
@@ -4287,7 +4287,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1922
+          "line": 1924
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -4303,7 +4303,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1953
+          "line": 1955
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -4319,7 +4319,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1954
+          "line": 1956
         },
         {
           "id": "",
@@ -4333,7 +4333,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1957
+          "line": 1959
         },
         {
           "id": "tpl-edit-save-btn",
@@ -4348,7 +4348,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1958
+          "line": 1960
         },
         {
           "id": "",
@@ -4362,7 +4362,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1968
+          "line": 1970
         },
         {
           "id": "",
@@ -4376,7 +4376,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1985
+          "line": 1987
         },
         {
           "id": "promo-confirm-send-btn",
@@ -4391,7 +4391,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1986
+          "line": 1988
         }
       ],
       "controls": [
@@ -4779,7 +4779,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 814,
+          "line": 816,
           "labeled": true
         },
         {
@@ -4788,7 +4788,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 827,
+          "line": 829,
           "labeled": true
         },
         {
@@ -4797,7 +4797,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 831,
+          "line": 833,
           "labeled": true
         },
         {
@@ -4806,7 +4806,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "",
-          "line": 845,
+          "line": 847,
           "labeled": true
         },
         {
@@ -4815,7 +4815,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por gravedad",
-          "line": 847,
+          "line": 849,
           "labeled": true
         },
         {
@@ -4824,7 +4824,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por confirmación",
-          "line": 855,
+          "line": 857,
           "labeled": true
         },
         {
@@ -4833,7 +4833,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por categoría",
-          "line": 866,
+          "line": 868,
           "labeled": true
         },
         {
@@ -4842,7 +4842,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por página",
-          "line": 869,
+          "line": 871,
           "labeled": true
         },
         {
@@ -4851,7 +4851,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por ruta",
-          "line": 872,
+          "line": 874,
           "labeled": true
         },
         {
@@ -4860,7 +4860,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por sección",
-          "line": 875,
+          "line": 877,
           "labeled": true
         },
         {
@@ -4869,7 +4869,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por componente",
-          "line": 878,
+          "line": 880,
           "labeled": true
         },
         {
@@ -4878,7 +4878,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por dispositivo",
-          "line": 881,
+          "line": 883,
           "labeled": true
         },
         {
@@ -4887,7 +4887,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por rol",
-          "line": 884,
+          "line": 886,
           "labeled": true
         },
         {
@@ -4896,7 +4896,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar por recurrencia",
-          "line": 887,
+          "line": 889,
           "labeled": true
         },
         {
@@ -4905,7 +4905,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "Filtrar por fecha de detección",
-          "line": 892,
+          "line": 894,
           "labeled": true
         },
         {
@@ -4914,7 +4914,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 958,
+          "line": 960,
           "labeled": true
         },
         {
@@ -4923,7 +4923,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 972,
+          "line": 974,
           "labeled": true
         },
         {
@@ -4932,7 +4932,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 985,
+          "line": 987,
           "labeled": true
         },
         {
@@ -4941,7 +4941,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 989,
+          "line": 991,
           "labeled": true
         },
         {
@@ -4950,7 +4950,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 993,
+          "line": 995,
           "labeled": true
         },
         {
@@ -4959,7 +4959,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1018,
+          "line": 1020,
           "labeled": true
         },
         {
@@ -4968,7 +4968,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1019,
+          "line": 1021,
           "labeled": true
         },
         {
@@ -4977,7 +4977,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1026,
+          "line": 1028,
           "labeled": true
         },
         {
@@ -4986,7 +4986,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1038,
+          "line": 1040,
           "labeled": true
         },
         {
@@ -4995,7 +4995,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1052,
+          "line": 1054,
           "labeled": true
         },
         {
@@ -5004,7 +5004,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1053,
+          "line": 1055,
           "labeled": true
         },
         {
@@ -5013,7 +5013,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1063,
+          "line": 1065,
           "labeled": true
         },
         {
@@ -5022,7 +5022,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1086,
+          "line": 1088,
           "labeled": true
         },
         {
@@ -5031,7 +5031,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1099,
+          "line": 1101,
           "labeled": true
         },
         {
@@ -5040,7 +5040,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1104,
+          "line": 1106,
           "labeled": true
         },
         {
@@ -5049,7 +5049,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1130,
+          "line": 1132,
           "labeled": true
         },
         {
@@ -5058,7 +5058,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1131,
+          "line": 1133,
           "labeled": true
         },
         {
@@ -5067,7 +5067,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1138,
+          "line": 1140,
           "labeled": true
         },
         {
@@ -5076,7 +5076,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1144,
+          "line": 1146,
           "labeled": true
         },
         {
@@ -5085,7 +5085,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "",
-          "line": 1145,
+          "line": 1147,
           "labeled": true
         },
         {
@@ -5094,7 +5094,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "",
-          "line": 1146,
+          "line": 1148,
           "labeled": true
         },
         {
@@ -5103,7 +5103,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1156,
+          "line": 1158,
           "labeled": true
         },
         {
@@ -5112,7 +5112,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1170,
+          "line": 1172,
           "labeled": true
         },
         {
@@ -5121,7 +5121,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1174,
+          "line": 1176,
           "labeled": true
         },
         {
@@ -5130,7 +5130,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1178,
+          "line": 1180,
           "labeled": true
         },
         {
@@ -5139,7 +5139,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1182,
+          "line": 1184,
           "labeled": true
         },
         {
@@ -5148,7 +5148,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1186,
+          "line": 1188,
           "labeled": true
         },
         {
@@ -5157,7 +5157,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1202,
+          "line": 1204,
           "labeled": true
         },
         {
@@ -5166,7 +5166,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1206,
+          "line": 1208,
           "labeled": true
         },
         {
@@ -5175,7 +5175,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1210,
+          "line": 1212,
           "labeled": true
         },
         {
@@ -5184,7 +5184,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1214,
+          "line": 1216,
           "labeled": true
         },
         {
@@ -5193,7 +5193,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1219,
+          "line": 1221,
           "labeled": true
         },
         {
@@ -5202,7 +5202,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1223,
+          "line": 1225,
           "labeled": true
         },
         {
@@ -5211,7 +5211,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1234,
+          "line": 1236,
           "labeled": true
         },
         {
@@ -5220,7 +5220,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1238,
+          "line": 1240,
           "labeled": true
         },
         {
@@ -5229,7 +5229,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1242,
+          "line": 1244,
           "labeled": true
         },
         {
@@ -5238,7 +5238,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1266,
+          "line": 1268,
           "labeled": true
         },
         {
@@ -5247,7 +5247,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1291,
+          "line": 1293,
           "labeled": true
         },
         {
@@ -5256,7 +5256,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1295,
+          "line": 1297,
           "labeled": true
         },
         {
@@ -5265,7 +5265,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1299,
+          "line": 1301,
           "labeled": true
         },
         {
@@ -5274,7 +5274,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1306,
+          "line": 1308,
           "labeled": true
         },
         {
@@ -5283,7 +5283,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1310,
+          "line": 1312,
           "labeled": true
         },
         {
@@ -5292,7 +5292,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1314,
+          "line": 1316,
           "labeled": true
         },
         {
@@ -5301,7 +5301,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1330,
+          "line": 1332,
           "labeled": true
         },
         {
@@ -5310,7 +5310,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1340,
+          "line": 1342,
           "labeled": true
         },
         {
@@ -5319,7 +5319,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1360,
+          "line": 1362,
           "labeled": true
         },
         {
@@ -5328,7 +5328,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1364,
+          "line": 1366,
           "labeled": true
         },
         {
@@ -5337,7 +5337,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1368,
+          "line": 1370,
           "labeled": true
         },
         {
@@ -5346,7 +5346,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1372,
+          "line": 1374,
           "labeled": true
         },
         {
@@ -5355,7 +5355,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1384,
+          "line": 1386,
           "labeled": true
         },
         {
@@ -5364,7 +5364,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1405,
+          "line": 1407,
           "labeled": true
         },
         {
@@ -5373,7 +5373,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1409,
+          "line": 1411,
           "labeled": true
         },
         {
@@ -5382,7 +5382,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1421,
+          "line": 1423,
           "labeled": true
         },
         {
@@ -5391,7 +5391,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1425,
+          "line": 1427,
           "labeled": true
         },
         {
@@ -5400,7 +5400,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1442,
+          "line": 1444,
           "labeled": true
         },
         {
@@ -5409,7 +5409,7 @@
           "name": "",
           "type": "number",
           "ariaLabel": "",
-          "line": 1446,
+          "line": 1448,
           "labeled": true
         },
         {
@@ -5418,7 +5418,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1470,
+          "line": 1472,
           "labeled": true
         },
         {
@@ -5427,7 +5427,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1474,
+          "line": 1476,
           "labeled": true
         },
         {
@@ -5436,7 +5436,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1478,
+          "line": 1480,
           "labeled": true
         },
         {
@@ -5445,7 +5445,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1492,
+          "line": 1494,
           "labeled": true
         },
         {
@@ -5454,7 +5454,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1508,
+          "line": 1510,
           "labeled": true
         },
         {
@@ -5463,7 +5463,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1511,
+          "line": 1513,
           "labeled": true
         },
         {
@@ -5472,7 +5472,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1514,
+          "line": 1516,
           "labeled": true
         },
         {
@@ -5481,7 +5481,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1520,
+          "line": 1522,
           "labeled": true
         },
         {
@@ -5490,7 +5490,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1522,
+          "line": 1524,
           "labeled": true
         },
         {
@@ -5499,7 +5499,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1563,
+          "line": 1565,
           "labeled": true
         },
         {
@@ -5508,7 +5508,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1565,
+          "line": 1567,
           "labeled": true
         },
         {
@@ -5517,7 +5517,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1568,
+          "line": 1570,
           "labeled": true
         },
         {
@@ -5526,7 +5526,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1613,
+          "line": 1615,
           "labeled": true
         },
         {
@@ -5535,7 +5535,7 @@
           "name": "",
           "type": "file",
           "ariaLabel": "",
-          "line": 1688,
+          "line": 1690,
           "labeled": true
         },
         {
@@ -5544,7 +5544,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1704,
+          "line": 1706,
           "labeled": true
         },
         {
@@ -5553,7 +5553,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1737,
+          "line": 1739,
           "labeled": true
         },
         {
@@ -5562,7 +5562,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1769,
+          "line": 1771,
           "labeled": true
         },
         {
@@ -5571,7 +5571,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 1822,
+          "line": 1824,
           "labeled": true
         },
         {
@@ -5580,7 +5580,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1826,
+          "line": 1828,
           "labeled": true
         },
         {
@@ -5589,7 +5589,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1830,
+          "line": 1832,
           "labeled": true
         },
         {
@@ -5598,7 +5598,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1834,
+          "line": 1836,
           "labeled": true
         },
         {
@@ -5607,7 +5607,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1839,
+          "line": 1841,
           "labeled": true
         },
         {
@@ -5616,7 +5616,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1843,
+          "line": 1845,
           "labeled": true
         },
         {
@@ -5625,7 +5625,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1851,
+          "line": 1853,
           "labeled": true
         },
         {
@@ -5634,7 +5634,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1855,
+          "line": 1857,
           "labeled": true
         },
         {
@@ -5643,7 +5643,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1864,
+          "line": 1866,
           "labeled": true
         },
         {
@@ -5652,7 +5652,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1872,
+          "line": 1874,
           "labeled": true
         },
         {
@@ -5661,7 +5661,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1882,
+          "line": 1884,
           "labeled": true
         },
         {
@@ -5670,7 +5670,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1895,
+          "line": 1897,
           "labeled": true
         },
         {
@@ -5679,7 +5679,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 1925,
+          "line": 1927,
           "labeled": true
         },
         {
@@ -5688,7 +5688,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1928,
+          "line": 1930,
           "labeled": true
         },
         {
@@ -5697,7 +5697,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1930,
+          "line": 1932,
           "labeled": true
         },
         {
@@ -5706,7 +5706,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1931,
+          "line": 1933,
           "labeled": true
         },
         {
@@ -5715,7 +5715,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1932,
+          "line": 1934,
           "labeled": true
         },
         {
@@ -5724,7 +5724,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1933,
+          "line": 1935,
           "labeled": true
         },
         {
@@ -5733,7 +5733,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1934,
+          "line": 1936,
           "labeled": true
         },
         {
@@ -5742,7 +5742,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1935,
+          "line": 1937,
           "labeled": true
         },
         {
@@ -5751,7 +5751,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1937,
+          "line": 1939,
           "labeled": true
         },
         {
@@ -5760,7 +5760,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 1938,
+          "line": 1940,
           "labeled": true
         },
         {
@@ -5769,7 +5769,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1940,
+          "line": 1942,
           "labeled": true
         },
         {
@@ -5778,7 +5778,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1941,
+          "line": 1943,
           "labeled": true
         },
         {
@@ -5787,7 +5787,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1943,
+          "line": 1945,
           "labeled": true
         },
         {
@@ -5796,7 +5796,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1983,
+          "line": 1985,
           "labeled": true
         }
       ]
@@ -13842,8 +13842,8 @@
     },
     {
       "path": "js/admin-site-diagnostics.js",
-      "bytes": 76035,
-      "sha256": "b330170a53daa1e10b0fc6d070e229142acbc59d9f5062cdd26ade2fe64a12ff",
+      "bytes": 80994,
+      "sha256": "00fa6fb2387f688cdf32ab25bd1bf0fd48bb55e938710bd669384b872d424951",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13878,6 +13878,30 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "line": 8
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 509
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js",
+          "line": 510
+        },
+        {
+          "url": "https://www.gstatic.com/",
+          "line": 559
+        },
+        {
+          "url": "https://*.googleapis.com/",
+          "line": 560
+        },
+        {
+          "url": "https://*.firebaseio.com/",
+          "line": 560
+        },
+        {
+          "url": "https://*.firebasestorage.app/",
+          "line": 560
         }
       ]
     },
@@ -14398,14 +14422,129 @@
     },
     {
       "path": "js/diagnostic-core.js",
-      "bytes": 37574,
-      "sha256": "dfd3a28ccbbff8a44bb941ca53eebb097f7515a007c931c7239a4803658a535e",
+      "bytes": 37858,
+      "sha256": "c0b864eb6059e2780640fb9ed8df7adb0156772d0b8ae4fc3223adf220252f75",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "js/diagnostic-shims/auth-shim.js",
+      "bytes": 2429,
+      "sha256": "0c68e572a72ca361012c84741835c8a76bcae6af22dded2a91566f8738bff5a2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./diagnostic-shim-report.js",
+          "target": "js/diagnostic-shims/diagnostic-shim-report.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "path": "js/diagnostic-shims/diagnostic-shim-report.js",
+      "bytes": 798,
+      "sha256": "51a83256e8446f21a2068a2310c1c8db2f5ae86ef4288a38f30cb1e0dad1e4bb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/diagnostic-shims/firestore-shim.js",
+      "bytes": 2411,
+      "sha256": "68c1d09df2b12a9dd00b68ff4a586dd05bf7842814998403b325e4a0a741a977",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./diagnostic-shim-report.js",
+          "target": "js/diagnostic-shims/diagnostic-shim-report.js",
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 19
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "path": "js/diagnostic-shims/network-guard.js",
+      "bytes": 3417,
+      "sha256": "571a64d4633ecdac07b5ac3c9f55a366ba9dc80df6d281fa1c94e5471655f084",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/diagnostic-shims/storage-shim.js",
+      "bytes": 1684,
+      "sha256": "38a89e17c497a89853e0962c7dc1b2b8cd06486c31a51d27a3f55ccb3dcd42e7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./diagnostic-shim-report.js",
+          "target": "js/diagnostic-shims/diagnostic-shim-report.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js",
+          "target": null,
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js",
+          "line": 11
+        }
+      ]
     },
     {
       "path": "js/edit-badge.js",
@@ -14936,8 +15075,8 @@
     },
     {
       "path": "js/product-related.js",
-      "bytes": 12751,
-      "sha256": "e7dbf489c02c8518c60c679a0885cdaf23fff328734ef5e30adac26944d13a10",
+      "bytes": 14008,
+      "sha256": "eef42191285fdc56c7e7949869e8d5b477ccff6b3a1302641f93e28fd6887a8e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15628,14 +15767,38 @@
     },
     {
       "path": "scripts/audit-diagnostics.js",
-      "bytes": 6225,
-      "sha256": "4b3549036657801b8bfdf7fc8a05c57ef3058c16d4875f5e3da4113a6b58e722",
+      "bytes": 8495,
+      "sha256": "e5edfbdfd6aa58f4893b22101be6b884e2e9e9bb2de2b637ed1b0e0dc93cbe1d",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
-      "endpoints": []
+      "imports": [
+        {
+          "raw": "https://www.gstatic.com/firebasejs/",
+          "target": null,
+          "dynamic": false,
+          "line": 49
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/",
+          "target": null,
+          "dynamic": false,
+          "line": 56
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/",
+          "target": null,
+          "dynamic": false,
+          "line": 63
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/",
+          "line": 49
+        }
+      ]
     },
     {
       "path": "scripts/audit-email-phase3.js",
@@ -16000,8 +16163,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 152207,
-      "sha256": "d472290a07a6666f0ba395381e4324712c1983e0ad6b6dc1dbe07bbd7b32aeca"
+      "bytes": 152385,
+      "sha256": "c7311f487d2bb12bac0aba8c1f235941d1a0b6078392e1ebc9b86c70bc54517f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -16540,8 +16703,8 @@
     {
       "path": "js/admin-site-diagnostics.js",
       "extension": ".js",
-      "bytes": 76035,
-      "sha256": "b330170a53daa1e10b0fc6d070e229142acbc59d9f5062cdd26ade2fe64a12ff"
+      "bytes": 80994,
+      "sha256": "00fa6fb2387f688cdf32ab25bd1bf0fd48bb55e938710bd669384b872d424951"
     },
     {
       "path": "js/admin-store-control.js",
@@ -16654,8 +16817,38 @@
     {
       "path": "js/diagnostic-core.js",
       "extension": ".js",
-      "bytes": 37574,
-      "sha256": "dfd3a28ccbbff8a44bb941ca53eebb097f7515a007c931c7239a4803658a535e"
+      "bytes": 37858,
+      "sha256": "c0b864eb6059e2780640fb9ed8df7adb0156772d0b8ae4fc3223adf220252f75"
+    },
+    {
+      "path": "js/diagnostic-shims/auth-shim.js",
+      "extension": ".js",
+      "bytes": 2429,
+      "sha256": "0c68e572a72ca361012c84741835c8a76bcae6af22dded2a91566f8738bff5a2"
+    },
+    {
+      "path": "js/diagnostic-shims/diagnostic-shim-report.js",
+      "extension": ".js",
+      "bytes": 798,
+      "sha256": "51a83256e8446f21a2068a2310c1c8db2f5ae86ef4288a38f30cb1e0dad1e4bb"
+    },
+    {
+      "path": "js/diagnostic-shims/firestore-shim.js",
+      "extension": ".js",
+      "bytes": 2411,
+      "sha256": "68c1d09df2b12a9dd00b68ff4a586dd05bf7842814998403b325e4a0a741a977"
+    },
+    {
+      "path": "js/diagnostic-shims/network-guard.js",
+      "extension": ".js",
+      "bytes": 3417,
+      "sha256": "571a64d4633ecdac07b5ac3c9f55a366ba9dc80df6d281fa1c94e5471655f084"
+    },
+    {
+      "path": "js/diagnostic-shims/storage-shim.js",
+      "extension": ".js",
+      "bytes": 1684,
+      "sha256": "38a89e17c497a89853e0962c7dc1b2b8cd06486c31a51d27a3f55ccb3dcd42e7"
     },
     {
       "path": "js/edit-badge.js",
@@ -16804,8 +16997,8 @@
     {
       "path": "js/product-related.js",
       "extension": ".js",
-      "bytes": 12751,
-      "sha256": "e7dbf489c02c8518c60c679a0885cdaf23fff328734ef5e30adac26944d13a10"
+      "bytes": 14008,
+      "sha256": "eef42191285fdc56c7e7949869e8d5b477ccff6b3a1302641f93e28fd6887a8e"
     },
     {
       "path": "js/product-selection.js",
@@ -17026,8 +17219,8 @@
     {
       "path": "scripts/audit-diagnostics.js",
       "extension": ".js",
-      "bytes": 6225,
-      "sha256": "4b3549036657801b8bfdf7fc8a05c57ef3058c16d4875f5e3da4113a6b58e722"
+      "bytes": 8495,
+      "sha256": "e5edfbdfd6aa58f4893b22101be6b884e2e9e9bb2de2b637ed1b0e0dc93cbe1d"
     },
     {
       "path": "scripts/audit-email-phase3.js",
@@ -17418,7 +17611,7 @@
     },
     {
       "file": "admin.html",
-      "line": 1756,
+      "line": 1758,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -18286,126 +18479,126 @@
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 213,
+      "line": 233,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 213,
+      "line": 233,
       "raw": "admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 214,
+      "line": 234,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 214,
+      "line": 234,
       "raw": "collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 214,
+      "line": 234,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 214,
+      "line": 234,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 215,
+      "line": 235,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 215,
+      "line": 235,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 215,
+      "line": 235,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 218,
+      "line": 238,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 218,
+      "line": 238,
       "raw": "admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 218,
+      "line": 238,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 218,
+      "line": 238,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 218,
+      "line": 238,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 368,
+      "line": 388,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 368,
+      "line": 388,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 1001,
+      "line": 1087,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 1057,
+      "line": 1143,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -18895,7 +19088,7 @@
     },
     {
       "file": "js/product-related.js",
-      "line": 164,
+      "line": 194,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -20228,7 +20421,7 @@
         },
         {
           "file": "js/product-related.js",
-          "line": 164
+          "line": 194
         },
         {
           "file": "js/product-selection.js",
@@ -21099,7 +21292,7 @@
           },
           {
             "file": "js/admin-site-diagnostics.js",
-            "line": 980,
+            "line": 1066,
             "operation": "collection"
           },
           {

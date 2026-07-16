@@ -64,6 +64,26 @@ let activeView = 'active';
 let preparationPromise = null;
 const pageHtmlCache = new Map();
 
+// Escucha los avisos que firestore-shim.js/auth-shim.js/storage-shim.js y
+// network-guard.js mandan por postMessage cada vez que el iframe aislado
+// intenta una escritura real y la bloquean. No son hallazgos (bloquear la
+// escritura es el comportamiento correcto): son evidencia de que la página
+// intentó escribir durante la carga y de que el bloqueo funcionó de verdad.
+const blockedWriteEvents = [];
+window.addEventListener('message', event => {
+  if (event.origin !== window.location.origin) return;
+  if (event.data?.source !== 'tt-diagnostic-shim') return;
+  blockedWriteEvents.push({
+    blockedCall: event.data.blockedCall,
+    detail: event.data.detail,
+    at: event.data.at
+  });
+});
+
+function collectBlockedWritesSince(fromLength) {
+  return blockedWriteEvents.splice(fromLength);
+}
+
 function $(id) {
   return document.getElementById(id);
 }
@@ -478,10 +498,28 @@ async function fetchPage(page) {
   return { findings, coverage, completedTests: [testId], testResults, pageResult: final };
 }
 
+// Rutas de los shims que reemplazan al SDK real de Firebase únicamente
+// dentro del iframe aislado del Diagnóstico. Todo lo que no sea una función
+// que escribe/muta pasa directo al SDK real (reexportado tal cual); ver
+// js/diagnostic-shims/*.js. El importmap redirige la URL EXACTA del CDN que
+// ya usa cada módulo de la plataforma (js/firebase.js, admin-app.js, etc.),
+// así que ninguna página necesita saber que está siendo inspeccionada.
+const DIAGNOSTIC_SHIM_MAP = {
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js': 'js/diagnostic-shims/firestore-shim.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js': 'js/diagnostic-shims/auth-shim.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js': 'js/diagnostic-shims/storage-shim.js'
+};
+
 function safeHtml(html, sourceUrl) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  doc.querySelectorAll('script,iframe,object,embed,portal').forEach(node => node.remove());
+  // Los frames/objetos anidados quedan fuera de alcance: el diagnóstico no
+  // necesita recursar dentro de ellos y así evita crecer sin control.
+  doc.querySelectorAll('iframe,object,embed,portal').forEach(node => node.remove());
   doc.querySelectorAll('meta[http-equiv="refresh"]').forEach(node => node.remove());
+  // Los manejadores inline (onclick, onsubmit...) solo importan si algo los
+  // dispara; el diagnóstico nunca hace clic ni envía formularios, pero se
+  // quitan igual como resguardo ante un script que intente disparar uno por
+  // su cuenta (por ejemplo, un submit programático).
   doc.querySelectorAll('[onload],[onclick],[onerror],[onsubmit],[onchange],[oninput]').forEach(node => {
     [...node.attributes].forEach(attribute => {
       if (/^on/i.test(attribute.name)) node.removeAttribute(attribute.name);
@@ -494,12 +532,32 @@ function safeHtml(html, sourceUrl) {
   const base = doc.createElement('base');
   base.href = sourceUrl;
   doc.head.prepend(base);
+
+  const importMap = doc.createElement('script');
+  importMap.type = 'importmap';
+  importMap.textContent = JSON.stringify({ imports: Object.fromEntries(
+    Object.entries(DIAGNOSTIC_SHIM_MAP).map(([real, shim]) => [real, pageUrl(shim)])
+  ) });
+  doc.head.prepend(importMap);
+
+  // Guardia de red: debe quedar como el primer <script> clásico del
+  // documento para correr antes que cualquier otro script de la página real
+  // (los módulos siempre se difieren hasta después de parsear el documento).
+  const networkGuard = doc.createElement('script');
+  networkGuard.src = pageUrl('js/diagnostic-shims/network-guard.js');
+  doc.head.prepend(networkGuard);
+
   const csp = doc.createElement('meta');
   csp.httpEquiv = 'Content-Security-Policy';
   csp.content = [
     "default-src 'self' https: data: blob:",
-    "script-src 'none'",
-    "connect-src 'none'",
+    // Los scripts de la propia plataforma (mismo origen) y el SDK de
+    // Firebase (gstatic) pueden ejecutarse de verdad: la seguridad contra
+    // escrituras no depende de impedir que corra JavaScript, sino de que
+    // firestore-shim.js/auth-shim.js/storage-shim.js reemplacen únicamente
+    // las funciones que escriben, más la guardia de red como segunda capa.
+    "script-src 'self' 'unsafe-inline' https://www.gstatic.com",
+    "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebasestorage.app wss://*.firebaseio.com",
     "frame-src 'none'",
     "object-src 'none'",
     "form-action 'none'",
@@ -514,7 +572,14 @@ function loadSafeFrame(page, html, viewport) {
   return new Promise(resolve => {
     const frame = document.createElement('iframe');
     frame.className = 'adm-diagnostic-frame';
-    frame.setAttribute('sandbox', 'allow-same-origin');
+    // allow-scripts habilita la ejecución real de JavaScript de la página;
+    // allow-same-origin permite que conserve el origen real del sitio (para
+    // que las rutas relativas y Firebase Auth/Firestore funcionen como en
+    // producción). Nunca se agrega allow-forms, allow-popups,
+    // allow-top-navigation ni allow-modals: el documento no puede enviar
+    // formularios, abrir ventanas, navegar la pestaña real ni bloquear el
+    // escaneo con un alert/confirm/prompt.
+    frame.setAttribute('sandbox', 'allow-same-origin allow-scripts');
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
     frame.width = String(viewport.width);
@@ -529,9 +594,13 @@ function loadSafeFrame(page, html, viewport) {
       resolve({ frame, ...result });
     };
     frame.addEventListener('load', () => {
-      setTimeout(() => finish({ ok: true }), 450);
+      // Con scripts reales corriendo, hay que dar tiempo a que los módulos,
+      // los listeners de Firestore (onSnapshot) y el color-scheme apliquen
+      // su estado antes de medir; con scripts bloqueados 450ms alcanzaba,
+      // pero ahora hace falta esperar una carga de datos real.
+      setTimeout(() => finish({ ok: true }), 1400);
     }, { once: true });
-    const timer = setTimeout(() => finish({ ok: false, error: 'Tiempo de carga agotado' }), 9000);
+    const timer = setTimeout(() => finish({ ok: false, error: 'Tiempo de carga agotado' }), 12000);
     document.body.appendChild(frame);
     frame.srcdoc = safeHtml(html, pageUrl(page.path));
   });
@@ -814,6 +883,7 @@ async function analyzeVisualPage(page, viewports) {
 
   for (const viewport of viewports) {
     const testId = `visual.safe-frame.${page.path}.${viewport.id}`;
+    const blockedWritesBefore = blockedWriteEvents.length;
     const loaded = await loadSafeFrame(page, html, viewport);
     if (!loaded.ok) {
       coverage.push(createCoverageItem({
@@ -870,15 +940,15 @@ async function analyzeVisualPage(page, viewports) {
           file: page.sourceFile,
           device: `${viewport.label} (${viewport.width}×${viewport.height})`,
           role: page.roles.join(', '),
-          state: 'HTML y CSS iniciales; scripts bloqueados',
-          steps: `Cargar /${page.path} sin scripts en ${viewport.width}×${viewport.height} y repetir la medición.`,
+          state: 'Página cargada con sus scripts reales en ejecución (solo se bloquean escrituras)',
+          steps: `Cargar /${page.path} con JavaScript real en ${viewport.width}×${viewport.height} y repetir la medición.`,
           expected: 'Composición sin desbordes, recursos rotos, recortes ni incumplimientos medibles.',
           actual: observation.actual,
           evidence: `${observation.evidence} Confirmado en dos mediciones consecutivas.`,
           consequence: observation.category === 'accessibility'
             ? 'Puede dificultar la lectura o interacción accesible.'
             : 'La presentación puede resultar dañada en esta resolución.',
-          testName: 'Inspección visual estática repetida y sin ejecución de scripts',
+          testName: 'Inspección visual repetida con ejecución real de scripts',
           correctionLocation: `${page.sourceFile} / ${observation.component}`,
           locationCertainty: 'probable',
           solutionStatus: 'possible',
@@ -917,13 +987,29 @@ async function analyzeVisualPage(page, viewports) {
         id: testId,
         name: 'Inspección visual segura',
         target: `${page.path} · ${viewport.label}`,
-        expected: 'La prueba debe completarse sin ejecutar scripts.',
+        expected: 'La prueba debe completarse ejecutando los scripts reales de la página.',
         actual: error.message,
         evidence: 'La prueba no produjo una conclusión sobre ausencia de problemas.',
         status: 'not-available',
         executedAt: new Date().toISOString()
       });
     } finally {
+      const blocked = collectBlockedWritesSince(blockedWritesBefore);
+      if (blocked.length) {
+        coverage.push(createCoverageItem({
+          id: `visual-blocked-writes-${page.path}-${viewport.id}`,
+          kind: 'write-guard',
+          label: `Escrituras bloqueadas al cargar ${page.label} · ${viewport.label}`,
+          target: page.path,
+          status: 'intentional',
+          reason: `La página intentó ${blocked.length} llamada(s) de escritura durante la carga y el diagnóstico las bloqueó de forma segura sin llegar a la plataforma real: ${
+            [...new Set(blocked.map(item => item.blockedCall))].join(', ')
+          }.`,
+          requiredPermission: page.requiresAuth ? page.roles.join(', ') : 'No requerido',
+          testId,
+          device: viewport.id
+        }));
+      }
       loaded.frame.remove();
     }
   }

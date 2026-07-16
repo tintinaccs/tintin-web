@@ -664,8 +664,8 @@ export function buildStaticAnalysis(manifest, scope = { mode: 'full' }) {
         kind: 'functional-state',
         label: 'Estados dinámicos y acciones reales',
         target: page.path,
-        status: 'not-available',
-        reason: 'No se ejecutan scripts ni acciones que puedan escribir datos desde el diagnóstico de producción.',
+        status: 'partial',
+        reason: 'Los scripts reales corren en un entorno que solo bloquea escrituras, así que los estados que aparecen automáticamente al cargar se observan de verdad; el diagnóstico no simula clics, envíos de formulario ni otras acciones manuales.',
         requiredPermission: page.requiresAuth ? page.roles.join(', ') : 'No requerido',
         testId: testId
       }));
@@ -725,7 +725,7 @@ export function buildStaticAnalysis(manifest, scope = { mode: 'full' }) {
         label: 'Estados visuales creados por JavaScript',
         target: page.path,
         status: 'partial',
-        reason: 'La inspección visual segura carga HTML y CSS, pero bloquea scripts y no inventa estados dinámicos.',
+        reason: 'La inspección visual segura ejecuta los scripts reales de la página (solo bloquea escrituras), así que mide el estado visual real que producen; no inventa estados que solo aparecerían tras una interacción manual (clic, hover, envío de formulario).',
         requiredPermission: page.requiresAuth ? page.roles.join(', ') : 'No requerido',
         testId: `visual.safe-frame.${page.path}`
       }));
