@@ -274,6 +274,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-btn-lg {
   padding: 16px 40px;
   font-size: 0.9rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tt-btn-icon {
@@ -1267,7 +1269,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: var(--radius-md);
   padding: 24px 16px;
   position: relative;
-  overflow: hidden;
+  min-width: 0;
+  overflow: visible;
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
@@ -1307,12 +1310,16 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text);
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .tt-trust-desc {
   font-size: 0.8rem;
   color: var(--text-sec);
   line-height: 1.5;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1606,6 +1613,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   overflow: hidden;
 }
 
+.tt-product-card-img-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
 .tt-product-img-placeholder {
   width: 100%;
   height: 100%;
@@ -1709,6 +1722,16 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   text-transform: uppercase;
   color: var(--text);
   line-height: 1.3;
+  margin: 0;
+}
+
+.tt-product-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tt-product-name a:hover {
+  color: var(--pink-dark);
 }
 
 .tt-product-price {
@@ -1725,7 +1748,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-top: 12px;
 }
 
-.tt-product-actions .tt-btn { flex: 1; }
+.tt-product-actions .tt-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 40px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
+}
 
 /* ═══════════════════════════════════════════════
    REVIEWS
@@ -1855,6 +1885,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-footer-col ul li { margin-bottom: 10px; }
 .tt-footer-col ul li a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  min-height: 24px;
   font-size: 0.85rem;
   color: rgba(255,255,255,0.7);
   transition: color var(--transition);
@@ -2826,6 +2860,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   font-size: 4rem;
   margin-bottom: 12px;
   position: relative;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-family: "Montserrat";
 }
 .tt-gallery-main img {
   position: absolute;
@@ -2982,6 +3021,30 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin: 0 auto;
 }
 @keyframes tt-spin { to { transform: rotate(360deg); } }
+
+.tt-product-state {
+  text-align: center;
+  padding: 72px 20px;
+}
+
+.tt-product-state-icon {
+  color: var(--pink-dark);
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+}
+
+.tt-product-state h2 {
+  color: var(--pink-dark);
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  margin-bottom: 10px;
+}
+
+.tt-product-state p {
+  color: var(--text-sec);
+  line-height: 1.6;
+  margin: 0 auto 22px;
+  max-width: 520px;
+}
 
 /* Quantity selector */
 .tt-qty-wrap {
@@ -3174,6 +3237,21 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 32px;
 }
 
+.tt-product-wa-link {
+  min-width: 44px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: "Montserrat";
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .tt-product-trust-badges {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3206,14 +3284,100 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-related-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+}
+
+.tt-related-refresh {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1.5px solid var(--pink-dark);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--pink-dark);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.tt-related-refresh:hover {
+  color: var(--white);
+  background: var(--pink-dark);
+  transform: rotate(20deg);
+}
+
+.tt-related-refresh:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.tt-related-refresh svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tt-related-refresh.is-refreshing svg {
+  animation: tt-related-spin 0.75s linear infinite;
+}
+
+@keyframes tt-related-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tt-related-status {
+  min-height: 1px;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .tt-related-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  align-items: stretch;
+}
+
+.tt-related-slot {
+  min-width: 0;
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.tt-related-slot > .tt-product-card {
+  width: 100%;
+  height: 100%;
+}
+
+.tt-related-slot.is-leaving {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  pointer-events: none;
+}
+
+.tt-related-slot.is-entering {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.985);
 }
 
 /* ═══════════════════════════════════════════════
@@ -3240,7 +3404,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   }
 }
 
-.tt-breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+.tt-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  min-height: 24px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
 .tt-breadcrumb a:hover { color: var(--pink-dark); }
 .tt-breadcrumb span { color: var(--text-sec); }
 
@@ -3264,7 +3436,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-contact-grid { gap: 40px; }
   .tt-colls-page-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .tt-related-grid { grid-template-columns: repeat(3, 1fr); }
+  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ═══════════════════════════════════════════════
@@ -3414,8 +3586,9 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-colls-page-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
   .tt-product-detail-grid { grid-template-columns: 1fr; }
+  .tt-product-gallery { width: min(100%, 620px); margin: 0 auto; }
   .tt-product-trust-badges { grid-template-columns: 1fr; }
-  .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   /* Mobile hero — bloque de contenido centrado horizontalmente y apoyado
      hacia abajo (no en el medio vertical del banner), con un margen
@@ -3491,10 +3664,19 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-watch-feature-content { padding: 32px 20px; }
 
   .tt-colls-page-grid { grid-template-columns: 1fr; }
-  .tt-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
   .tt-product-detail-grid { gap: 32px; }
   .tt-product-detail-name { font-size: 1.6rem; }
+  .tt-product-page { padding-top: 28px; }
+  .tt-qty-wrap { flex-wrap: wrap; gap: 10px 12px; }
+  .tt-qty-stock { flex: 1 1 100%; }
+  .tt-related-header { justify-content: space-between; text-align: left; margin-bottom: 26px; }
+  .tt-related-refresh { width: 44px; height: 44px; flex-basis: 44px; }
+  .tt-added-toast { width: calc(100vw - 32px); min-width: 0; bottom: 82px; }
+  .tt-added-toast-actions { flex-wrap: wrap; }
+  .tt-added-toast-btn { min-width: 120px; min-height: 40px; }
+  .tt-share-btn { min-height: 40px; }
 
   /* Product card: stack buttons vertically on small phones */
   .tt-product-actions { flex-direction: column; gap: 6px; }
@@ -3504,6 +3686,26 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
      nowrap text — stack and let them wrap instead of clipping edge-to-edge */
   .tt-look-actions { flex-direction: column; align-items: stretch; }
   .tt-look-actions .tt-btn { width: 100%; white-space: normal; text-align: center; }
+}
+
+@media (max-width: 380px) {
+  .tt-related-grid { grid-template-columns: 1fr; }
+  .tt-related-section { padding: 48px 0; }
+  .tt-related-header .tt-section-title { font-size: clamp(1.45rem, 8vw, 2rem); }
+  .tt-product-actions-panel .tt-btn { padding-inline: 14px; letter-spacing: 0.06em; }
+  .tt-product-share { align-items: stretch; }
+  .tt-share-btn { flex: 1 1 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-related-slot,
+  .tt-related-refresh {
+    transition: none;
+  }
+
+  .tt-related-refresh.is-refreshing svg {
+    animation: none;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3658,6 +3860,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   letter-spacing: 0.06em;
 }
 .tt-gallery-main { cursor: zoom-in; }
+.tt-gallery-main:disabled { cursor: default; }
 @media (max-width: 767px) {
   .tt-lightbox-nav { display: none; }
   .tt-lightbox-img { max-height: 75vh; }
@@ -3817,4 +4020,31 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */
 @media (prefers-reduced-motion: reduce) {
   .tt-hero-actions .tt-btn:not(.tt-btn-outline) { animation: none; }
+}
+
+/* Mini mobile: el ancho se resuelve en el propio componente, sin ocultar
+   desbordes del documento. */
+@media (max-width: 360px) {
+  .tt-hero-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+  .tt-hero-actions .tt-btn,
+  .tt-btn-lg {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-inline: 16px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  .tt-trust-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .tt-trust-item {
+    width: 100%;
+    padding: 20px 14px;
+  }
 }

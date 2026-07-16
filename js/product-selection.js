@@ -69,6 +69,7 @@ function render(){
       var safeId = escapeHtml(item.id);
       var safeName = escapeHtml(item.name);
       var safeVariant = escapeHtml(item.variant || '');
+      var safeVariantAttr = escapeHtml(item.variant || '');
       var img = item.imageUrl || item.imgUrl || '';
       var url = 'product.html?id=' + encodeURIComponent(item.id);
       return (
@@ -82,11 +83,11 @@ function render(){
             '<p class="tinsel-item-price">' + fmt(item.price * item.qty) + '</p>' +
           '</div>' +
           '<div class="tinsel-qty">' +
-            '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-delta="-1" aria-label="Restar">−</button>' +
+            '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-cart-delta="-1" aria-label="Restar">−</button>' +
             '<span class="tinsel-qnum">' + item.qty + '</span>' +
-            '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-delta="1" aria-label="Sumar">+</button>' +
+            '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-cart-delta="1" aria-label="Sumar">+</button>' +
           '</div>' +
-          '<button type="button" class="tinsel-del" data-cart-action="remove" data-cart-id="' + safeId + '" data-tinsel-remove="1" aria-label="Eliminar">' +
+          '<button type="button" class="tinsel-del" data-cart-action="remove" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-tinsel-remove="1" aria-label="Eliminar">' +
             '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
           '</button>' +
         '</div>'

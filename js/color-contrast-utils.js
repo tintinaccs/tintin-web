@@ -28,11 +28,19 @@ function parseColor(input) {
     };
   }
   m = s.match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/i);
-  if (m) return { r: +m[1], g: +m[2], b: +m[3], a: m[4] !== undefined ? +m[4] : 1 };
+  if (m) {
+    const color = { r: +m[1], g: +m[2], b: +m[3], a: m[4] !== undefined ? +m[4] : 1 };
+    if ([color.r, color.g, color.b].some(value => value < 0 || value > 255) || color.a < 0 || color.a > 1) return null;
+    return color;
+  }
   m = s.match(/^hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*(?:,\s*([\d.]+)\s*)?\)$/i);
   if (m) {
-    const { r, g, b } = hslToRgb(+m[1], +m[2], +m[3]);
-    return { r, g, b, a: m[4] !== undefined ? +m[4] : 1 };
+    const saturation = +m[2];
+    const lightness = +m[3];
+    const alpha = m[4] !== undefined ? +m[4] : 1;
+    if (saturation < 0 || saturation > 100 || lightness < 0 || lightness > 100 || alpha < 0 || alpha > 1) return null;
+    const { r, g, b } = hslToRgb(+m[1], saturation, lightness);
+    return { r, g, b, a: alpha };
   }
   return null;
 }

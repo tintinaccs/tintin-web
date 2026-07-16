@@ -40,6 +40,15 @@ function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), 'utf8');
 }
 
+function canonicalBuffer(relative) {
+  const buffer = fs.readFileSync(path.join(ROOT, relative));
+  const extension = path.extname(relative).toLowerCase();
+  if (!TEXT_EXTENSIONS.has(extension) && !PUBLIC_FILENAMES.has(path.basename(relative))) {
+    return buffer;
+  }
+  return Buffer.from(buffer.toString('utf8').replace(/\r\n?/g, '\n'), 'utf8');
+}
+
 function hash(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
@@ -265,7 +274,7 @@ function extractPage(file, allPaths, jsCorpus) {
     }));
 
   const access = pageAccess(file);
-  const buffer = fs.readFileSync(path.join(ROOT, file));
+  const buffer = canonicalBuffer(file);
   const inlineScripts = [...html.matchAll(/<script\b([^>]*)(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)]
     .filter(match => !/\bsrc\s*=/i.test(match[1]) && !/type=["'](?:application\/ld\+json|application\/json)["']/i.test(match[1]))
     .map(match => ({
@@ -507,7 +516,7 @@ const pages = allFiles
 
 const modules = jsFiles.map(file => {
   const source = read(file);
-  const buffer = fs.readFileSync(path.join(ROOT, file));
+  const buffer = canonicalBuffer(file);
   const syntax = childProcess.spawnSync(process.execPath, ['--check', path.join(ROOT, file)], {
     encoding: 'utf8',
     maxBuffer: 1024 * 1024
@@ -531,7 +540,7 @@ const routePatterns = extractRoutePatterns(textFiles);
 const apiCalls = extractApiCalls(textFiles);
 
 const files = allFiles.map(file => {
-  const buffer = fs.readFileSync(path.join(ROOT, file));
+  const buffer = canonicalBuffer(file);
   return {
     path: file,
     extension: path.extname(file).toLowerCase(),

@@ -583,14 +583,14 @@ service cloud.firestore {
 
     /* ============================================================
        APARIENCIA Y ESQUEMAS DE COLOR (Super Admin → Apariencia)
-       Lectura pública: las páginas públicas necesitan el esquema activo
-       para pintarse, incluso sin sesión iniciada. Escritura exclusiva de
-       Super Admin — mismo criterio que Configuración/Correos/Usuarios,
-       no se agrega como permiso dinámico acotable (ver js/role-permissions.js).
+       Las páginas públicas leen por ID el esquema activo, pero no pueden
+       enumerar la colección. El listado y la administración quedan
+       exclusivamente en manos del Super Admin.
        ============================================================ */
     match /colorSchemes/{schemeId} {
-      allow read: if true;
-      allow write: if isSuperAdmin();
+      allow get: if true;
+      allow list: if isSuperAdmin();
+      allow create, update, delete: if isSuperAdmin();
 
       match /history/{entryId} {
         allow read: if isSuperAdmin();

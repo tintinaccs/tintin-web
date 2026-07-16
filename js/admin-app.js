@@ -17,14 +17,14 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 import { normalizeCollectionDoc } from "./collections-store.js";
 import { sanitizeImageUrl } from "./image-utils.js";
 import { getDocsPaginated } from "./firestore-pagination.js";
-import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-diagnostics-fix-1";
+import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-product-page-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
 } from "./color-scheme-catalog.js";
-import { contrastRatio, passesWcag } from "./color-contrast-utils.js";
-import { attachColorPicker } from "./color-picker-widget.js";
+import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-product-page-1";
+import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-product-page-1";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -908,7 +908,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(20000)), snapshot => {
+    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000)), snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
@@ -923,7 +923,7 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(20000)), snapshot => {
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000)), snapshot => {
       allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();
@@ -2180,7 +2180,9 @@ async function loadConfig() {
     document.getElementById('cfg-facebook').value = d.facebook || '';
     document.getElementById('cfg-tiktok').value = d.tiktok || '';
     document.getElementById('cfg-ga4-id').value = d.ga4MeasurementId || '';
-    const storeOpen = d.storeOpen !== false;
+    // La interfaz debe usar exactamente el mismo criterio que storeGate y
+    // firestore.rules: solo `true` explícito significa tienda abierta.
+    const storeOpen = d.storeOpen === true;
     document.getElementById('cfg-store-open').checked = storeOpen;
     _lastKnownStoreOpen = storeOpen;
     updateStoreStatePill_(storeOpen);
@@ -2242,7 +2244,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       const input = document.getElementById('ma-' + role);
       maintenanceAccess[role] = !!(input && input.checked);
     });
-    await setDoc(doc(db, 'settings', 'general'), {
+    const generalRef = doc(db, 'settings', 'general');
+    const storeGateRef = doc(db, 'settings', 'storeGate');
+    const settingsBatch = writeBatch(db);
+
+    settingsBatch.set(generalRef, {
       whatsappNumber:  document.getElementById('cfg-wa-number').value.trim(),
       waConfirmMessage: document.getElementById('cfg-wa-confirm-msg').value.trim() || DEFAULT_WA_CONFIRM_MSG,
       contactEmail:    document.getElementById('cfg-contact-email').value.trim(),
@@ -2255,6 +2261,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       tiktok:          document.getElementById('cfg-tiktok').value.trim(),
       ga4MeasurementId: document.getElementById('cfg-ga4-id').value.trim(),
       storeOpen:       willBeOpen,
+      // Mantiene sincronizado el campo legado mientras todavía exista código
+      // o integraciones históricas que lo consulten.
+      tiendaActiva:    willBeOpen,
+      storeStatusUpdatedAt: serverTimestamp(),
+      storeStatusUpdatedBy: currentUser?.email || SUPER_ADMIN,
       maintenanceAccess,
       headerDesktopTabletEnabled: document.getElementById('cfg-header-desktop-tablet').checked,
       headerMobileEnabled:        document.getElementById('cfg-header-mobile').checked,
@@ -2269,6 +2280,18 @@ document.getElementById('btn-save-config').onclick = async () => {
       },
       updatedAt: serverTimestamp()
     }, { merge: true });
+
+    // La configuración completa y el documento público mínimo deben cambiar
+    // en el mismo commit. Así no existe una ventana donde el panel diga
+    // "abierta" pero las reglas todavía bloqueen products/collections.
+    settingsBatch.set(storeGateRef, {
+      storeOpen: willBeOpen,
+      maintenanceAccess,
+      updatedAt: serverTimestamp(),
+      updatedBy: currentUser?.email || SUPER_ADMIN
+    }, { merge: true });
+
+    await settingsBatch.commit();
     if (_lastKnownStoreOpen !== willBeOpen) {
       const antes = _lastKnownStoreOpen ? 'Abierta' : 'Cerrada';
       const despues = willBeOpen ? 'Abierta' : 'Cerrada';
@@ -6869,21 +6892,147 @@ let aparSchemes = { global: [], admin: [] };
 let aparEditingSchemeId = { global: null, admin: null };
 let aparActiveSchemeId = { global: null, admin: null };
 let aparDraft = { global: {}, admin: {} };
+let aparPublished = { global: {}, admin: {} };
 let aparDeviceOverrideEnabled = { global: false };
 let aparDeviceOverrides = { global: {} };
+let aparPublishedDeviceOverrideEnabled = { global: false };
+let aparPublishedDeviceOverrides = { global: {} };
+let aparSavedState = { global: '', admin: '' };
+let aparUndoStack = { global: [], admin: [] };
+let aparTransientColor = null;
 let aparSearchTerm = '';
 let aparPreviewDevice = 'desktop';
 let aparDeviceTab = 'desktopLg';
 let aparBootstrapped = false;
+let aparUnsavedRegistered = false;
+
+const APAR_CATEGORY_IMPACT = {
+  global: {
+    generales: 'marca, enlaces, acciones destacadas y componentes que comparten el color corporativo en toda la plataforma',
+    fondos: 'fondos de páginas, secciones, header, footer, menús, tablas, campos, overlays y superficies públicas/privadas',
+    tipografia: 'títulos, textos, etiquetas, ayudas, enlaces y contenido dinámico de clientes y visitantes',
+    botones: 'botones y sus estados normal, hover, focus, active y disabled en desktop, tablet y mobile',
+    bordes: 'bordes, divisores, foco y validaciones de formularios, tarjetas y tablas',
+    estados: 'mensajes, badges y estados de éxito, error, advertencia, información, stock, selección y deshabilitado',
+    formularios: 'inputs, selects, textareas, placeholders, foco y validación',
+    navegacion: 'header, menús, pestañas, breadcrumbs, acordeones e indicadores',
+    tarjetas: 'tarjetas, tablas, encabezados, filas, badges y chips',
+    modales: 'modales, fondos oscurecidos, tooltips, popups y estados vacíos',
+    productos: 'productos, precios, promociones, valoraciones y carrito',
+    avanzado: 'íconos, scrollbars, switches, checks, radios, progreso, skeletons, selección y carga',
+  },
+  admin: {
+    generales: 'acento y acciones compartidas de todo el Super Admin',
+    estructura: 'dashboard, sidebar, header, superficies y bordes del panel',
+    tipografia: 'títulos, textos principales y textos secundarios del panel',
+    botones: 'botones administrativos y sus estados',
+    tarjetas: 'tarjetas, tablas, filas y badges administrativos',
+    formularios: 'campos, filtros, buscadores y estados de foco',
+    estados: 'alertas y mensajes de éxito, error y advertencia',
+    modales: 'modales y overlays del Super Admin',
+  },
+};
 
 function aparCatalog() { return APAR_CATALOG[aparScope]; }
 function aparDefaultMap() { return buildDefaultTokenMap(aparCatalog().tokens); }
-function aparResolve(key, overrideMap) {
+function aparTokenImpact(tok, scope = aparScope) {
+  return APAR_CATEGORY_IMPACT[scope]?.[tok.category] || 'componentes que utilizan este token compartido';
+}
+function aparResolve(key, overrideMap, deviceKey = null) {
+  if (aparTransientColor && aparTransientColor.scope === aparScope && aparTransientColor.key === key) {
+    const sameLayer = aparTransientColor.deviceKey
+      ? aparTransientColor.deviceKey === deviceKey
+      : !deviceKey;
+    if (sameLayer) return aparTransientColor.value;
+  }
   if (overrideMap && overrideMap[key] != null && overrideMap[key] !== '') return overrideMap[key];
   const d = aparDraft[aparScope];
   if (d && d[key] != null && d[key] !== '') return d[key];
   const tok = findTokenByKey(aparCatalog().tokens, key);
   return tok ? tok.default : '#000000';
+}
+function aparResolvePreview(key) {
+  if (aparScope === 'global' && aparDeviceOverrideEnabled.global) {
+    const overrideMap = aparDeviceOverrides.global[aparPreviewDevice] || null;
+    return aparResolve(key, overrideMap, aparPreviewDevice);
+  }
+  return aparResolve(key);
+}
+function aparEditingOverrideMap() {
+  if (aparScope !== 'global' || !aparDeviceOverrideEnabled.global) return null;
+  return aparDeviceOverrides.global[aparDeviceTab] || (aparDeviceOverrides.global[aparDeviceTab] = {});
+}
+function aparStateObject(scope = aparScope) {
+  return {
+    schemeId: aparEditingSchemeId[scope] || '',
+    tokens: aparDraft[scope] || {},
+    deviceOverrideEnabled: scope === 'global' ? !!aparDeviceOverrideEnabled.global : false,
+    deviceOverrides: scope === 'global' ? (aparDeviceOverrides.global || {}) : {},
+  };
+}
+function aparStateString(scope = aparScope) {
+  return JSON.stringify(aparStateObject(scope));
+}
+function aparAllStateString() {
+  return JSON.stringify({ global: aparStateObject('global'), admin: aparStateObject('admin') });
+}
+function aparSnapshot(scope = aparScope) {
+  return JSON.parse(JSON.stringify(aparStateObject(scope)));
+}
+function aparRestoreSnapshot(snapshot, scope = aparScope) {
+  aparEditingSchemeId[scope] = snapshot.schemeId;
+  aparDraft[scope] = { ...(snapshot.tokens || {}) };
+  if (scope === 'global') {
+    aparDeviceOverrideEnabled.global = !!snapshot.deviceOverrideEnabled;
+    aparDeviceOverrides.global = JSON.parse(JSON.stringify(snapshot.deviceOverrides || {}));
+  }
+}
+function aparHasPending(scope = aparScope) {
+  return aparStateString(scope) !== aparSavedState[scope];
+}
+function aparSyncUnsavedState() {
+  window.AdminUnsaved?.updateState?.();
+}
+function aparMarkClean(scope = aparScope) {
+  aparSavedState[scope] = aparStateString(scope);
+  window.AdminUnsaved?.markClean?.('appearance-colors');
+}
+function aparMutate(label, mutation, { renderAll = false } = {}) {
+  const before = aparSnapshot();
+  mutation();
+  aparTransientColor = null;
+  if (JSON.stringify(before) === aparStateString()) return false;
+  aparUndoStack[aparScope].push({ label, snapshot: before });
+  if (aparUndoStack[aparScope].length > 40) aparUndoStack[aparScope].shift();
+  if (renderAll) aparRenderAll();
+  else {
+    aparRenderCategories();
+    aparRenderPreview();
+    aparRenderContrast();
+    aparRenderToolbar();
+  }
+  aparSyncUnsavedState();
+  return true;
+}
+function aparUndoLast() {
+  const entry = aparUndoStack[aparScope].pop();
+  if (!entry) return;
+  aparTransientColor = null;
+  aparRestoreSnapshot(entry.snapshot);
+  aparRenderAll();
+  aparSyncUnsavedState();
+  toast(`Cambio deshecho: ${entry.label}`);
+}
+function aparRegisterUnsavedGuard() {
+  if (aparUnsavedRegistered || !window.AdminUnsaved) return;
+  window.AdminUnsaved.register('appearance-colors', {
+    root: '#section-apariencia',
+    serialize: aparAllStateString,
+    save: aparSaveDraft,
+    active: () => document.getElementById('section-apariencia')?.classList.contains('active'),
+    label: 'Apariencia y esquema de colores',
+  });
+  aparUnsavedRegistered = true;
 }
 
 async function aparEnsureBootstrap() {
@@ -6932,12 +7081,22 @@ async function loadApariencia() {
   await aparLoadSchemeIntoDraft('global', aparEditingSchemeId.global);
   await aparLoadSchemeIntoDraft('admin', aparEditingSchemeId.admin);
   aparRenderAll();
+  aparRegisterUnsavedGuard();
+  window.AdminUnsaved?.markClean?.('appearance-colors');
 
   document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(btn => {
-    btn.onclick = () => {
-      aparScope = btn.dataset.aparScope;
+    btn.onclick = async () => {
+      const nextScope = btn.dataset.aparScope;
+      if (nextScope === aparScope) return;
+      if (aparHasPending(aparScope)) {
+        const leave = confirm('Hay cambios sin guardar en este esquema. Si cambiás de pestaña se descartarán. ¿Continuar?');
+        if (!leave) return;
+        await aparReloadCurrentScheme(aparScope);
+      }
+      aparScope = nextScope;
       document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
       aparRenderAll();
+      window.AdminUnsaved?.markClean?.('appearance-colors');
     };
   });
   const searchEl = document.getElementById('apar-search');
@@ -6958,11 +7117,26 @@ async function aparLoadSchemeIntoDraft(scope, schemeId) {
     const snap = await getDoc(doc(db, 'colorSchemes', schemeId));
     const data = snap.exists() ? snap.data() : {};
     aparDraft[scope] = { ...(data.draftTokens || data.tokens || {}) };
+    aparPublished[scope] = { ...(data.tokens || {}) };
     if (scope === 'global') {
       aparDeviceOverrideEnabled.global = !!data.draftDeviceOverrideEnabled;
       aparDeviceOverrides.global = data.draftDeviceOverrides || {};
+      aparPublishedDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
+      aparPublishedDeviceOverrides.global = data.deviceOverrides || {};
     }
-  } catch (e) { console.error('[apariencia] no se pudo cargar esquema', schemeId, e); aparDraft[scope] = {}; }
+    aparSavedState[scope] = aparStateString(scope);
+    aparUndoStack[scope] = [];
+  } catch (e) {
+    console.error('[apariencia] no se pudo cargar esquema', schemeId, e);
+    aparDraft[scope] = {};
+    aparPublished[scope] = {};
+    aparSavedState[scope] = aparStateString(scope);
+  }
+}
+
+async function aparReloadCurrentScheme(scope = aparScope) {
+  await aparLoadSchemeIntoDraft(scope, aparEditingSchemeId[scope]);
+  aparTransientColor = null;
 }
 
 function aparRenderAll() {
@@ -6976,11 +7150,16 @@ function aparRenderAll() {
 
 function aparRenderToolbar() {
   const el = document.getElementById('apar-toolbar');
+  const pending = aparHasPending();
+  const undoEntry = aparUndoStack[aparScope][aparUndoStack[aparScope].length - 1];
   el.innerHTML = `
-    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-discard">Descartar cambios</button>
-    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-save-draft">Guardar borrador</button>
+    <span class="tt-store-state-pill" style="background:${pending ? 'var(--admin-color-warning-background)' : 'var(--admin-color-success-background)'};color:${pending ? 'var(--admin-color-warning-text)' : 'var(--admin-color-success-text)'}">${pending ? 'CAMBIOS SIN GUARDAR' : 'SIN CAMBIOS PENDIENTES'}</span>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-undo" ${undoEntry ? '' : 'disabled'} title="${undoEntry ? `Deshacer: ${escapeHtmlAdmin(undoEntry.label)}` : 'No hay cambios para deshacer'}">Deshacer último cambio</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-discard" ${pending ? '' : 'disabled'}>Cancelar cambios</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-save-draft" ${pending ? '' : 'disabled'}>Guardar borrador</button>
     <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="apar-btn-publish">Publicar cambios</button>
   `;
+  document.getElementById('apar-btn-undo').onclick = aparUndoLast;
   document.getElementById('apar-btn-save-draft').onclick = aparSaveDraft;
   document.getElementById('apar-btn-publish').onclick = aparPublish;
   document.getElementById('apar-btn-discard').onclick = aparDiscard;
@@ -7005,9 +7184,20 @@ function aparRenderSchemeBar() {
     ${list.length > 1 && !list.find(s => s.id === editingId)?.isDefault ? '<button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="apar-btn-delete">Eliminar</button>' : ''}
   `;
   document.getElementById('apar-scheme-select').onchange = async e => {
-    aparEditingSchemeId[aparScope] = e.target.value;
-    await aparLoadSchemeIntoDraft(aparScope, e.target.value);
+    const previousId = aparEditingSchemeId[aparScope];
+    const nextId = e.target.value;
+    if (nextId === previousId) return;
+    if (aparHasPending()) {
+      const leave = confirm('Hay cambios sin guardar en este esquema. Si elegís otro se descartarán. ¿Continuar?');
+      if (!leave) {
+        e.target.value = previousId;
+        return;
+      }
+    }
+    aparEditingSchemeId[aparScope] = nextId;
+    await aparLoadSchemeIntoDraft(aparScope, nextId);
     aparRenderAll();
+    window.AdminUnsaved?.markClean?.('appearance-colors');
   };
   const btnActivate = document.getElementById('apar-btn-activate');
   if (btnActivate) btnActivate.onclick = aparActivateScheme;
@@ -7041,8 +7231,11 @@ function aparRenderCategories() {
     `;
     container.appendChild(devRow);
     document.getElementById('apar-device-toggle').onchange = e => {
-      aparDeviceOverrideEnabled.global = e.target.checked;
-      aparRenderCategories();
+      const enabled = e.target.checked;
+      aparMutate(
+        enabled ? 'activar colores por dispositivo' : 'desactivar colores por dispositivo',
+        () => { aparDeviceOverrideEnabled.global = enabled; }
+      );
     };
     if (aparDeviceOverrideEnabled.global) {
       const tabsEl = devRow.querySelector('#apar-device-tabs');
@@ -7062,8 +7255,9 @@ function aparRenderCategories() {
   const editingOverride = overrideMap !== null;
 
   categories.forEach(cat => {
-    const catTokens = tokens.filter(t => t.category === cat.key && (!term ||
-      t.label.toLowerCase().includes(term) || t.key.toLowerCase().includes(term) || cat.label.toLowerCase().includes(term)));
+    const allCatTokens = tokens.filter(t => t.category === cat.key);
+    const catTokens = allCatTokens.filter(t => !term ||
+      t.label.toLowerCase().includes(term) || t.key.toLowerCase().includes(term) || cat.label.toLowerCase().includes(term));
     if (!catTokens.length) return;
     const details = document.createElement('details');
     details.open = !!term;
@@ -7081,10 +7275,12 @@ function aparRenderCategories() {
     summary.querySelector('[data-reset-cat]').addEventListener('click', ev => {
       ev.preventDefault(); ev.stopPropagation();
       if (!confirm(`¿Restablecer todos los colores de "${cat.label}" a su valor por defecto?`)) return;
-      catTokens.forEach(t => {
-        if (editingOverride) delete overrideMap[t.key]; else aparDraft[aparScope][t.key] = t.default;
+      aparMutate(`restablecer la categoría ${cat.label}`, () => {
+        allCatTokens.forEach(t => {
+          if (editingOverride) delete overrideMap[t.key];
+          else aparDraft[aparScope][t.key] = t.default;
+        });
       });
-      aparRenderCategories(); aparRenderPreview(); aparRenderContrast();
     });
   });
 
@@ -7095,38 +7291,58 @@ function aparRenderCategories() {
 
 function aparBuildTokenRow(tok, overrideMap, editingOverride) {
   const row = document.createElement('div');
-  row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--adm-border)';
+  row.className = 'apar-token-row';
+  row.style.cssText = 'display:grid;grid-template-columns:auto minmax(120px,1fr) auto auto;align-items:center;gap:8px 10px;padding:9px 0;border-bottom:1px solid var(--adm-border)';
   const isInherited = editingOverride && (overrideMap[tok.key] == null);
-  const currentVal = editingOverride ? (overrideMap[tok.key] != null ? overrideMap[tok.key] : aparResolve(tok.key)) : aparResolve(tok.key);
+  const currentVal = aparResolve(tok.key, editingOverride ? overrideMap : null, editingOverride ? aparDeviceTab : null);
+  const resetValue = editingOverride ? (aparDraft[aparScope][tok.key] || tok.default) : tok.default;
+  const impact = aparTokenImpact(tok);
   row.innerHTML = `
-    <button type="button" class="tcp-swatch" data-tcp-swatch="1" style="background:${currentVal}"></button>
+    <button type="button" class="tcp-swatch" data-tcp-swatch="1" style="background:${currentVal}" aria-label="Editar ${tok.label}" title="Editar color"></button>
     <div style="flex:1;min-width:0">
       <div style="font-size:12.5px;font-weight:600;color:var(--adm-text)">${tok.label}${isInherited ? ' <span style=\"font-weight:400;color:var(--adm-muted);font-size:10.5px\">(heredado)</span>' : ''}</div>
       <div style="font-size:10.5px;color:var(--adm-muted);font-family:'Montserrat'">${tok.cssVar}</div>
     </div>
-    <span style="font-size:11px;color:var(--adm-muted);font-family:'Montserrat';min-width:64px;text-align:right" data-val-label>${currentVal}</span>
-    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-reset title="Restablecer">↺</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" style="font-size:10.5px;min-width:78px;padding-inline:8px" data-val-label aria-label="Editar valor ${currentVal}">${currentVal}</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-reset title="Restablecer solamente ${tok.label}" aria-label="Restablecer solamente ${tok.label}">↺</button>
+    <div class="apar-token-impact" style="grid-column:2 / -1;font-size:10px;line-height:1.35;color:var(--adm-muted)"><strong>Impacta:</strong> ${impact}.</div>
   `;
   const swatch = row.querySelector('[data-tcp-swatch]');
   const valLabel = row.querySelector('[data-val-label]');
-  attachColorPicker(swatch, {
+  const deviceKey = editingOverride ? aparDeviceTab : null;
+  const picker = attachColorPicker(swatch, {
     value: currentVal,
-    onChange(v) {
-      if (editingOverride) overrideMap[tok.key] = v; else aparDraft[aparScope][tok.key] = v;
+    defaultValue: resetValue,
+    label: tok.label,
+    cssVar: tok.cssVar,
+    impact,
+    onPreview(v) {
+      aparTransientColor = { scope: aparScope, key: tok.key, value: v, deviceKey };
       valLabel.textContent = v;
+      valLabel.setAttribute('aria-label', `Editar valor ${v}`);
+      if (deviceKey) aparPreviewDevice = deviceKey;
       aparRenderPreview(); aparRenderContrast();
     },
-    onReset() {
-      if (editingOverride) delete overrideMap[tok.key]; else aparDraft[aparScope][tok.key] = tok.default;
-      const v = editingOverride ? aparResolve(tok.key) : tok.default;
-      valLabel.textContent = v;
+    onCancel() {
+      aparTransientColor = null;
+      valLabel.textContent = currentVal;
+      valLabel.setAttribute('aria-label', `Editar valor ${currentVal}`);
       aparRenderPreview(); aparRenderContrast();
-      return v;
+    },
+    onConfirm(v) {
+      aparTransientColor = null;
+      aparMutate(`cambiar ${tok.label}`, () => {
+        if (editingOverride) overrideMap[tok.key] = v;
+        else aparDraft[aparScope][tok.key] = v;
+      });
     },
   });
+  valLabel.addEventListener('click', () => picker.open());
   row.querySelector('[data-reset]').addEventListener('click', () => {
-    if (editingOverride) delete overrideMap[tok.key]; else aparDraft[aparScope][tok.key] = tok.default;
-    aparRenderCategories(); aparRenderPreview(); aparRenderContrast();
+    aparMutate(`restablecer ${tok.label}`, () => {
+      if (editingOverride) delete overrideMap[tok.key];
+      else aparDraft[aparScope][tok.key] = tok.default;
+    });
   });
   return row;
 }
@@ -7147,7 +7363,7 @@ function aparRenderPreview() {
   frame.style.width = dev.w + 'px';
 
   const R = APAR_PREVIEW_ROLES[aparScope];
-  const c = key => aparResolve(R[key]);
+  const c = key => aparResolvePreview(R[key]);
   frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><style>
     *{box-sizing:border-box;font-family:'Montserrat'}
     body{margin:0;padding:18px;background:${c('bgPage')};color:${c('textPrimary')}}
@@ -7192,8 +7408,10 @@ function aparRenderPreview() {
 function aparRenderContrast() {
   const el = document.getElementById('apar-contrast-list');
   const { pairs } = aparCatalog();
+  const overrideMap = aparEditingOverrideMap();
   el.innerHTML = pairs.map(p => {
-    const fg = aparResolve(p.fg), bg = aparResolve(p.bg);
+    const fg = aparResolve(p.fg, overrideMap, overrideMap ? aparDeviceTab : null);
+    const bg = aparResolve(p.bg, overrideMap, overrideMap ? aparDeviceTab : null);
     const ratio = contrastRatio(fg, bg);
     const ok = passesWcag(ratio, p.level);
     const min = p.level === 'normal' ? '4.5' : '3';
@@ -7236,6 +7454,35 @@ async function aparLogHistory(schemeId, action, before, after) {
   } catch (e) { console.error('[apariencia] no se pudo registrar historial:', e); }
 }
 
+function aparPublishedChanges() {
+  const changedTokens = aparCatalog().tokens.filter(tok =>
+    (aparDraft[aparScope][tok.key] || tok.default) !== (aparPublished[aparScope][tok.key] || tok.default)
+  );
+  const devicesChanged = aparScope === 'global' && (
+    aparDeviceOverrideEnabled.global !== aparPublishedDeviceOverrideEnabled.global ||
+    JSON.stringify(aparDeviceOverrides.global || {}) !== JSON.stringify(aparPublishedDeviceOverrides.global || {})
+  );
+  return { changedTokens, devicesChanged };
+}
+
+function aparPublishImpactMessage(changedTokens, devicesChanged) {
+  const categories = [...new Set(changedTokens.map(tok => tok.category))];
+  const impacts = categories.map(category => APAR_CATEGORY_IMPACT[aparScope]?.[category]).filter(Boolean);
+  const shown = changedTokens.slice(0, 10).map(tok => `• ${tok.label} (${tok.cssVar})`).join('\n');
+  const remaining = changedTokens.length > 10 ? `\n• y ${changedTokens.length - 10} colores más` : '';
+  const scopeText = aparScope === 'global'
+    ? 'todas las páginas públicas y privadas de clientes y visitantes'
+    : 'todas las secciones del Super Admin';
+  return `Se publicarán ${changedTokens.length} color(es)${devicesChanged ? ' y cambios por dispositivo' : ''} en ${scopeText}.
+
+${shown || '• Configuración por dispositivo'}${remaining}
+
+Impacto compartido:
+${impacts.map(impact => `• ${impact}`).join('\n') || '• componentes que consumen estos tokens globales'}
+
+La vista previa y la plataforma usarán exactamente estos valores. ¿Confirmás la publicación?`;
+}
+
 async function aparSaveDraft() {
   const schemeId = aparEditingSchemeId[aparScope];
   const patch = { draftTokens: aparDraft[aparScope], updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' };
@@ -7246,18 +7493,50 @@ async function aparSaveDraft() {
   try {
     await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
     await aparLogHistory(schemeId, 'save-draft', {}, aparDraft[aparScope]);
+    aparMarkClean();
     toast('Borrador guardado');
     aparRenderHistory();
-  } catch (e) { toast('Error al guardar borrador: ' + e.message); }
+    aparRenderToolbar();
+    return true;
+  } catch (e) {
+    toast('Error al guardar borrador: ' + e.message);
+    return false;
+  }
 }
 
 async function aparPublish() {
   const { pairs } = aparCatalog();
-  const failing = pairs.filter(p => {
-    const ratio = contrastRatio(aparResolve(p.fg), aparResolve(p.bg));
-    return !passesWcag(ratio, p.level);
+  const contrastContexts = [{ label: 'general', map: null, deviceKey: null }];
+  if (aparScope === 'global' && aparDeviceOverrideEnabled.global) {
+    DEVICE_BREAKPOINTS.forEach(device => {
+      contrastContexts.push({
+        label: device.label,
+        map: aparDeviceOverrides.global[device.key] || null,
+        deviceKey: device.key,
+      });
+    });
+  }
+  const failing = [];
+  contrastContexts.forEach(context => {
+    pairs.forEach(pair => {
+      const ratio = contrastRatio(
+        aparResolve(pair.fg, context.map, context.deviceKey),
+        aparResolve(pair.bg, context.map, context.deviceKey)
+      );
+      if (!passesWcag(ratio, pair.level)) failing.push(`${pair.label} (${context.label})`);
+    });
   });
-  if (failing.length && !confirm(`${failing.length} combinación(es) no cumplen el contraste mínimo WCAG (${failing.map(f => f.label).join(', ')}). ¿Publicar de todas formas?`)) return;
+  if (failing.length && !confirm(`${failing.length} combinación(es) no cumplen el contraste mínimo WCAG:
+
+${failing.slice(0, 12).join('\n')}${failing.length > 12 ? `\n… y ${failing.length - 12} más` : ''}
+
+¿Publicar de todas formas?`)) return false;
+  const { changedTokens, devicesChanged } = aparPublishedChanges();
+  if (!changedTokens.length && !devicesChanged) {
+    toast('No hay cambios nuevos para publicar');
+    return true;
+  }
+  if (!confirm(aparPublishImpactMessage(changedTokens, devicesChanged))) return false;
   const schemeId = aparEditingSchemeId[aparScope];
   try {
     const before = (await getDoc(doc(db, 'colorSchemes', schemeId))).data()?.tokens || {};
@@ -7274,28 +7553,55 @@ async function aparPublish() {
     }
     await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
     await aparLogHistory(schemeId, 'publish', before, aparDraft[aparScope]);
-    toast('Cambios publicados — ya están en vivo en todo el sitio');
+    aparPublished[aparScope] = { ...aparDraft[aparScope] };
+    if (aparScope === 'global') {
+      aparPublishedDeviceOverrideEnabled.global = aparDeviceOverrideEnabled.global;
+      aparPublishedDeviceOverrides.global = JSON.parse(JSON.stringify(aparDeviceOverrides.global || {}));
+    }
+    aparMarkClean();
+    toast('Cambios publicados — ya están en vivo en toda la plataforma');
     aparRenderHistory();
-  } catch (e) { toast('Error al publicar: ' + e.message); }
+    aparRenderToolbar();
+    return true;
+  } catch (e) {
+    toast('Error al publicar: ' + e.message);
+    return false;
+  }
 }
 
 async function aparDiscard() {
-  if (!confirm('¿Descartar los cambios sin publicar y volver a la última versión publicada?')) return;
+  if (!confirm('¿Cancelar los cambios actuales y volver a la última versión publicada?')) return false;
   try {
     const snap = await getDoc(doc(db, 'colorSchemes', aparEditingSchemeId[aparScope]));
     const data = snap.exists() ? snap.data() : {};
     aparDraft[aparScope] = { ...(data.tokens || {}) };
-    if (aparScope === 'global') { aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled; aparDeviceOverrides.global = data.deviceOverrides || {}; }
-  } catch (e) { toast('Error al descartar: ' + e.message); return; }
+    aparPublished[aparScope] = { ...(data.tokens || {}) };
+    if (aparScope === 'global') {
+      aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
+      aparDeviceOverrides.global = data.deviceOverrides || {};
+      aparPublishedDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
+      aparPublishedDeviceOverrides.global = data.deviceOverrides || {};
+    }
+  } catch (e) {
+    toast('Error al cancelar: ' + e.message);
+    return false;
+  }
+  aparUndoStack[aparScope] = [];
+  aparMarkClean();
   aparRenderAll();
-  toast('Cambios descartados');
+  toast('Cambios cancelados');
+  return true;
 }
 
 function aparResetAll() {
-  if (!confirm('¿Restablecer TODO el esquema a los valores predeterminados del sistema? Esto no se publica hasta que apretés "Publicar".')) return;
-  aparDraft[aparScope] = aparDefaultMap();
-  if (aparScope === 'global') { aparDeviceOverrideEnabled.global = false; aparDeviceOverrides.global = {}; }
-  aparRenderAll();
+  if (!confirm('¿Restablecer TODO el esquema a los valores predeterminados del sistema? No se publicará hasta que confirmes “Publicar cambios”.')) return;
+  aparMutate('restablecer todo el esquema', () => {
+    aparDraft[aparScope] = aparDefaultMap();
+    if (aparScope === 'global') {
+      aparDeviceOverrideEnabled.global = false;
+      aparDeviceOverrides.global = {};
+    }
+  }, { renderAll: true });
 }
 
 async function aparRestoreVersion(entryId) {
@@ -7304,8 +7610,9 @@ async function aparRestoreVersion(entryId) {
     const snap = await getDoc(doc(db, 'colorSchemes', aparEditingSchemeId[aparScope], 'history', entryId));
     if (!snap.exists()) return;
     const h = snap.data();
-    aparDraft[aparScope] = { ...(h.after || h.before || {}) };
-    aparRenderAll();
+    aparMutate('restaurar una versión del historial', () => {
+      aparDraft[aparScope] = { ...(h.after || h.before || {}) };
+    }, { renderAll: true });
     toast('Versión cargada en el borrador — revisá y publicá si está bien');
   } catch (e) { toast('Error al restaurar: ' + e.message); }
 }
@@ -7313,6 +7620,7 @@ async function aparRestoreVersion(entryId) {
 async function aparActivateScheme() {
   const schemeId = aparEditingSchemeId[aparScope];
   const field = aparScope === 'global' ? 'activeGlobalSchemeId' : 'activeAdminSchemeId';
+  if (aparHasPending() && !confirm('Este esquema tiene cambios sin publicar. Al activarlo se usará la última versión publicada, no el borrador actual. ¿Continuar?')) return;
   try {
     await setDoc(doc(db, 'settings', 'appearance'), { [field]: schemeId }, { merge: true });
     await aparLogHistory(schemeId, 'activate', {}, {});
@@ -7337,6 +7645,7 @@ async function aparCreateScheme() {
     aparEditingSchemeId[aparScope] = ref.id;
     await aparLoadSchemeIntoDraft(aparScope, ref.id);
     aparRenderAll();
+    window.AdminUnsaved?.markClean?.('appearance-colors');
     toast('Esquema creado');
   } catch (e) { toast('Error al crear esquema: ' + e.message); }
 }
@@ -7357,7 +7666,9 @@ async function aparDuplicateScheme() {
     });
     await aparLoadSchemesList(aparScope);
     aparEditingSchemeId[aparScope] = ref.id;
+    await aparLoadSchemeIntoDraft(aparScope, ref.id);
     aparRenderAll();
+    window.AdminUnsaved?.markClean?.('appearance-colors');
     toast('Esquema duplicado');
   } catch (e) { toast('Error al duplicar: ' + e.message); }
 }
@@ -7387,6 +7698,7 @@ async function aparDeleteScheme() {
     await aparLoadSchemesList(aparScope);
     await aparLoadSchemeIntoDraft(aparScope, aparEditingSchemeId[aparScope]);
     aparRenderAll();
+    window.AdminUnsaved?.markClean?.('appearance-colors');
     toast('Esquema eliminado');
   } catch (e) { toast('Error al eliminar: ' + e.message); }
 }
@@ -7426,12 +7738,28 @@ function aparImportScheme() {
           if (!validKeys.has(k)) return;
           if (typeof v === 'string' && isValidColorLocal(v)) clean[k] = v; else invalidCount++;
         });
-        aparDraft[aparScope] = { ...aparDraft[aparScope], ...clean };
-        if (aparScope === 'global' && data.deviceOverrideEnabled != null) {
-          aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
-          aparDeviceOverrides.global = data.deviceOverrides || {};
+        const cleanDeviceOverrides = {};
+        if (aparScope === 'global' && data.deviceOverrides && typeof data.deviceOverrides === 'object') {
+          const validDevices = new Set(DEVICE_BREAKPOINTS.map(device => device.key));
+          Object.entries(data.deviceOverrides).forEach(([deviceKey, values]) => {
+            if (!validDevices.has(deviceKey) || !values || typeof values !== 'object') return;
+            cleanDeviceOverrides[deviceKey] = {};
+            Object.entries(values).forEach(([key, value]) => {
+              if (validKeys.has(key) && typeof value === 'string' && isValidColorLocal(value)) {
+                cleanDeviceOverrides[deviceKey][key] = value;
+              } else {
+                invalidCount++;
+              }
+            });
+          });
         }
-        aparRenderAll();
+        aparMutate('importar un esquema de colores', () => {
+          aparDraft[aparScope] = { ...aparDraft[aparScope], ...clean };
+          if (aparScope === 'global' && data.deviceOverrideEnabled != null) {
+            aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
+            aparDeviceOverrides.global = cleanDeviceOverrides;
+          }
+        }, { renderAll: true });
         toast(`Esquema importado (${Object.keys(clean).length} colores)${invalidCount ? `, ${invalidCount} valores inválidos ignorados` : ''}`);
       } catch (e) { toast('El archivo no es un JSON válido'); }
     };

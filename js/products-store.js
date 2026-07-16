@@ -121,15 +121,20 @@ function handleSnapshot(snap) {
     const p = products.find(pr => String(pr.id) === String(id));
     if (p && typeof window._renderProductDetail === 'function') {
       window._renderProductDetail(p);
+    } else if (Array.isArray(window.PRODUCTS) && typeof window._showProductNotFound === 'function') {
+      // A live admin deletion/deactivation must remove the stale detail
+      // immediately. initProductPage is deliberately one-shot and therefore
+      // cannot be used to refresh this state.
+      window._showProductNotFound();
     } else if (typeof window.initProductPage === 'function') {
-      window.initProductPage(); // first load: page not inited yet, or product not found yet
+      window.initProductPage();
     }
   }
 }
 
 // Live subscription — any create/edit/delete/activate/deactivate from Super Admin
 // pushes to every open tab immediately, no reload needed.
-onSnapshot(query(collection(db, 'products'), limit(20000)), handleSnapshot, e => {
+onSnapshot(query(collection(db, 'products'), limit(10000)), handleSnapshot, e => {
   console.error('[products-store] Firestore realtime listener failed:', e);
   // Let pages waiting on window.PRODUCTS (catalogo/collections skeletons) know
   // the listener failed, instead of spinning forever with no feedback.

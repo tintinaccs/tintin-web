@@ -3,8 +3,12 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const VERSION = 'tintin-20260715-17';
+const VERSION = 'tintin-20260716-product-page-1';
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
+const LEGACY_VERSIONS = [
+  'tintin-20260715-17',
+  'tintin-20260716-diagnostics-fix-1',
+];
 
 function walk(dir) {
   const out = [];
@@ -28,7 +32,7 @@ function versionLocalAsset(url) {
 }
 
 function fixHtml(content, rel) {
-  let out = content;
+  let out = replaceLegacyVersions(content);
 
   out = out.replace(/(href=["'])([^"']+\.css(?:\?[^"']*)?)(["'])/gi, (_, a, url, b) => `${a}${versionLocalAsset(url)}${b}`);
   out = out.replace(/(src=["'])([^"']+\.js(?:\?[^"']*)?)(["'])/gi, (_, a, url, b) => `${a}${versionLocalAsset(url)}${b}`);
@@ -44,6 +48,13 @@ function fixHtml(content, rel) {
   return out;
 }
 
+function replaceLegacyVersions(content) {
+  return LEGACY_VERSIONS.reduce(
+    (current, legacy) => current.replaceAll(legacy, VERSION),
+    content
+  );
+}
+
 let changed = 0;
 for (const rel of walk(ROOT).filter(f => f.endsWith('.html'))) {
   const full = path.join(ROOT, rel);
@@ -53,6 +64,17 @@ for (const rel of walk(ROOT).filter(f => f.endsWith('.html'))) {
     fs.writeFileSync(full, after);
     changed += 1;
     console.log(`fixed ${rel}`);
+  }
+}
+
+for (const rel of walk(ROOT).filter(f => f !== 'scripts/fix-tintin-source.js' && /\.(?:js|json|yml|yaml)$/i.test(f))) {
+  const full = path.join(ROOT, rel);
+  const before = fs.readFileSync(full, 'utf8');
+  const after = replaceLegacyVersions(before);
+  if (after !== before) {
+    fs.writeFileSync(full, after);
+    changed += 1;
+    console.log(`versioned ${rel}`);
   }
 }
 

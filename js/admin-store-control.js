@@ -167,8 +167,9 @@ async function syncStoreGate() {
 
     await setDoc(STORE_GATE_REF, {
       ...desired,
-      updatedAt: serverTimestamp()
-    });
+      updatedAt: serverTimestamp(),
+      updatedBy: currentEmail
+    }, { merge: true });
   } catch (error) {
     console.error('[admin-store-control] No se pudo sincronizar storeGate:', error);
     setPanel(
@@ -287,6 +288,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./admin-email-gate-sync.js?v=tintin-20260715-17').catch(error => {
+import('./admin-email-gate-sync.js?v=tintin-20260716-product-page-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

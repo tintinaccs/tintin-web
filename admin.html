@@ -4,27 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-17"></script>
-  <script src="js/admin-unsaved-guard.js?v=tintin-20260715-17" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260716-products-restore-1"></script>
+  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-product-page-1" defer></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-diagnostics-fix-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-product-page-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostics-fix-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-diagnostics-fix-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-product-page-1">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -1609,19 +1609,19 @@
 
           <div id="apar-scheme-bar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0;padding:12px;background:var(--adm-bg);border-radius:12px;border:1px solid var(--adm-border)"></div>
 
-          <div style="display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(260px,1fr);gap:20px;align-items:start">
+          <div class="apar-main-grid" style="display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(260px,1fr);gap:20px;align-items:start">
             <div>
               <div style="margin-bottom:12px">
                 <input type="text" class="adm-input" id="apar-search" placeholder="🔍 Buscar configuración (fondo, texto, botón, hover, WhatsApp...)">
               </div>
               <div id="apar-categories"></div>
             </div>
-            <div style="position:sticky;top:12px">
+            <div class="apar-preview-column" style="position:sticky;top:12px">
               <div class="adm-card" style="margin-bottom:16px">
                 <div class="adm-card-head"><div class="adm-card-title" style="font-size:13px">Vista previa en tiempo real</div></div>
                 <div class="adm-card-body">
                   <div id="apar-preview-devices" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
-                  <div style="overflow:auto;border:1px solid var(--adm-border);border-radius:10px;background:#ddd;padding:12px;display:flex;justify-content:center">
+                  <div class="apar-preview-shell" style="overflow:auto;border:1px solid var(--adm-border);border-radius:10px;background:#ddd;padding:12px;display:flex;justify-content:center">
                     <iframe id="apar-preview-frame" style="border:0;width:960px;height:520px;background:#fff;border-radius:8px;transition:width .2s ease" title="Vista previa"></iframe>
                   </div>
                 </div>
@@ -1774,7 +1774,7 @@
           if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('API key guardada');}
           else toast('Pegá tu key primero');
         " class="adm-btn adm-btn-primary adm-btn-sm">Guardar key</button>
-        <button type="button" onclick="document.getElementById('imgbb-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:16px;color:#999">✕</button>
+        <button type="button" class="adm-icon-close" aria-label="Cerrar aviso de ImgBB" onclick="document.getElementById('imgbb-banner').style.display='none'">✕</button>
       </div>
 
       <!-- Loading -->
@@ -1792,7 +1792,7 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin-app.js?v=tintin-20260716-diagnostics-fix-1"></script>
+<script type="module" src="js/admin-app.js?v=tintin-20260716-products-restore-1"></script>
 
 
 <!-- ══════════════════════════════════════
@@ -1818,7 +1818,7 @@
   <div style="background:#fff;border-radius:16px;max-width:780px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)"> Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
-      <button type="button" onclick="closeOrderEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" class="adm-icon-close" aria-label="Cerrar editor de pedido" onclick="closeOrderEdit()">✕</button>
     </div>
     <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px" id="oe-body">
       <input type="hidden" id="oe-id">
@@ -1921,7 +1921,7 @@
   <div style="background:#fff;border-radius:16px;max-width:640px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Editar plantilla <span id="tpl-edit-name" style="color:var(--adm-muted);font-size:13px"></span></div>
-      <button type="button" onclick="closeTplEdit()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" class="adm-icon-close" aria-label="Cerrar editor de plantilla" onclick="closeTplEdit()">✕</button>
     </div>
     <div style="padding:24px;display:flex;flex-direction:column;gap:14px;max-height:60vh;overflow-y:auto">
       <input type="hidden" id="tpl-edit-id">
@@ -1967,7 +1967,7 @@
   <div style="background:#fff;border-radius:16px;max-width:680px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Vista previa</div>
-      <button type="button" onclick="closeTplPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#aaa">✕</button>
+      <button type="button" class="adm-icon-close" aria-label="Cerrar vista previa" onclick="closeTplPreview()">✕</button>
     </div>
     <div style="padding:20px 24px">
       <div style="font-size:12px;color:var(--adm-muted);margin-bottom:10px">Asunto: <strong id="tpl-preview-subject" style="color:var(--adm-text)"></strong></div>
@@ -1990,6 +1990,6 @@
   </div>
 </div>
 
-<script type="module" src="js/admin-color-scheme.js?v=tintin-20260715-17"></script>
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-product-page-1"></script>
 </body>
 </html>

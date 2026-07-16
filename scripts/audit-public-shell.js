@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260715-17';
+const VERSION = 'tintin-20260716-product-page-1';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',

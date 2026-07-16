@@ -20,7 +20,8 @@ function check(label, condition) {
 }
 
 function sha256(source) {
-  return crypto.createHash('sha256').update(source).digest('hex');
+  const canonical = String(source).replace(/\r\n?/g, '\n');
+  return crypto.createHash('sha256').update(canonical).digest('hex');
 }
 
 function contrastRatio(hexA, hexB) {
@@ -40,6 +41,7 @@ const manifest = JSON.parse(read('diagnostic-manifest.json'));
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin-app.js');
 const diagnostics = read('js/admin-site-diagnostics.js');
+const manifestBuilder = read('scripts/build-diagnostic-manifest.js');
 const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
 const nosotros = read('nosotros.html');
@@ -57,6 +59,11 @@ check(
   manifest.pages.every(page => exists(page.path) && sha256(read(page.path)) === page.sha256)
 );
 check(
+  'Las huellas de texto son independientes de CRLF o LF',
+  manifestBuilder.includes("replace(/\\r\\n?/g, '\\n')") &&
+    manifestBuilder.includes('const buffer = canonicalBuffer(file)')
+);
+check(
   'No quedan lecturas directas sin límite detectadas',
   Array.isArray(manifest.firestore?.unboundedReads) &&
     manifest.firestore.unboundedReads.length === 0
@@ -71,8 +78,8 @@ check(
 check('El panel administrativo conserva exactamente un H1', (adminHtml.match(/<h1\b/gi) || []).length === 1);
 check(
   'Las escuchas en tiempo real de pedidos, usuarios y plantillas están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]orders['"]\),\s*limit\(20000\)\)/.test(adminApp) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(20000\)\)/.test(adminApp) &&
+  /onSnapshot\(query\(collection\(db,\s*['"]orders['"]\),\s*limit\(10000\)\)/.test(adminApp) &&
+    /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(adminApp) &&
     /onSnapshot\(query\(collection\(db,\s*['"]emailTemplates['"]\),\s*limit\(500\)\)/.test(adminApp)
 );
 check(
@@ -81,9 +88,14 @@ check(
 );
 check(
   'Las escuchas públicas y administrativas restantes también están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(20000\)\)/.test(read('js/admin-users-phase8.js')) &&
+  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin-users-phase8.js')) &&
     (read('js/collections-store.js').match(/onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(5000\)\)/g) || []).length === 2 &&
-    /onSnapshot\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(20000\)\)/.test(read('js/products-store.js'))
+    /onSnapshot\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(10000\)\)/.test(read('js/products-store.js'))
+);
+
+check(
+  'Los esquemas públicos se leen por ID y solo Super Admin puede listarlos o administrarlos',
+  /match\s+\/colorSchemes\/\{schemeId\}[\s\S]*?allow get:\s*if true;[\s\S]*?allow list:\s*if isSuperAdmin\(\);[\s\S]*?allow create, update, delete:\s*if isSuperAdmin\(\);/.test(rules)
 );
 
 check(
