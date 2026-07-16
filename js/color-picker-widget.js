@@ -18,7 +18,7 @@ function injectStyles() {
   stylesInjected = true;
   const style = document.createElement('style');
   style.textContent = `
-    .tcp-pop{position:fixed;z-index:9000;width:264px;background:var(--admin-color-background-surface,#fff);border:1px solid var(--admin-color-border,#F1E4E7);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:14px}
+    .tcp-pop{position:fixed;z-index:9000;width:264px;background:var(--admin-color-background-surface,#fff);border:1px solid var(--admin-color-border,#F1E4E7);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:14px;font-family:"Montserrat"}
     .tcp-sv{position:relative;width:100%;height:130px;border-radius:8px;cursor:crosshair;margin-bottom:10px;overflow:hidden}
     .tcp-sv-white{position:absolute;inset:0;background:linear-gradient(to right,#fff,transparent)}
     .tcp-sv-black{position:absolute;inset:0;background:linear-gradient(to top,#000,transparent)}
@@ -30,7 +30,7 @@ function injectStyles() {
     .tcp-alpha-fill{position:absolute;inset:0;border-radius:7px}
     .tcp-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.3);transform:translate(-50%,-50%);cursor:grab}
     .tcp-input-row{display:flex;gap:6px;margin-bottom:8px}
-    .tcp-input{flex:1;min-width:0;padding:7px 8px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:8px;font-size:12.5px;color:var(--admin-color-text-primary,#2B2B2B);background:var(--admin-color-field-background,#fff)}
+    .tcp-input{flex:1;min-width:0;padding:7px 8px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:8px;font-size:12.5px;font-family:"Montserrat";color:var(--admin-color-text-primary,#2B2B2B);background:var(--admin-color-field-background,#fff)}
     .tcp-input.tcp-invalid{border-color:var(--admin-color-error-text,#b8341f)}
     .tcp-err{font-size:11px;color:var(--admin-color-error-text,#b8341f);margin:-4px 0 8px}
     .tcp-btnrow{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}

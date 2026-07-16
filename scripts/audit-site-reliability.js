@@ -20,7 +20,7 @@ const privacyConsent = read('js/privacy-consent.js');
 const analytics = read('js/analytics.js');
 const geoFunction = read('netlify/functions/visitor-geo.mjs');
 const rules = read('firestore.rules');
-const admin = read('admin.html');
+const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
 const welcomeAdmin = read('js/admin-welcome-control.js');
 const welcomeConfig = read('js/welcome-config.js');
 const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
@@ -29,7 +29,6 @@ const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');
 const theme = read('css/tintin-unified-theme.css');
-const colorTokens = read('css/color-tokens.css');
 const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
 const imagePerformance = read('js/image-performance.js');
@@ -99,8 +98,8 @@ check('El centro estadistico general esta reservado a Super Admin',
   admin.includes('id="statistics-revenue-trend"') &&
   admin.includes('id="statistics-visit-locations"'));
 check('Pedidos, usuarios, auditoria y correos se actualizan sin F5',
-  admin.includes("adminOrdersUnsubscribe = onSnapshot(collection(db, 'orders')") &&
-  admin.includes("adminUsersUnsubscribe = onSnapshot(collection(db, 'users')") &&
+  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(20000))") &&
+  admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(20000))") &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
   admin.includes('function startCorreosRealtimeListeners()'));
 check('Las estadisticas combinan pedidos, usuarios, catalogo, visitas y paginas',
@@ -131,8 +130,10 @@ check('Las reglas aceptan solo geografía aproximada y campos conocidos',
   rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
 
 check('El rosa principal cumple contraste AA sobre blanco',
-  theme.includes('--tt-accent:var(--color-brand-primary)') && theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
-  colorTokens.includes('--color-brand-primary: #AD3F67') && colorTokens.includes('--color-brand-primary-hover: #8B2642'));
+  theme.includes('--tt-accent:var(--color-brand-primary)') &&
+  theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
+  read('css/color-tokens.css').includes('--color-brand-primary: #AD3F67') &&
+  read('css/color-tokens.css').includes('--color-brand-primary-hover: #8B2642'));
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));

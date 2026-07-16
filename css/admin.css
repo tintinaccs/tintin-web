@@ -164,6 +164,14 @@
     }
     .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
 
+    .adm-sidebar button,
+    .adm-sidebar a,
+    .adm-main button,
+    .adm-topbar button,
+    .adm-topbar a {
+      min-height: 24px;
+    }
+
     .adm-nav-bottom {
       padding: 12px 0 20px;
       border-top: 1px solid rgba(255,255,255,.12);

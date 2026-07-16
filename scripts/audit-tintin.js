@@ -155,7 +155,11 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   // comparación para la migración puntual en Firestore (contLoadPage) — no
   // se muestra ni se usa como fallback. audit-tintin.js lo referencia acá
   // mismo para poder detectarlo en el resto del sitio.
-  const eyebrowRegressionExclusions = new Set(['admin.html', 'scripts/audit-tintin.js']);
+  const eyebrowRegressionExclusions = new Set([
+    'admin.html',
+    'js/admin-app.js',
+    'scripts/audit-tintin.js'
+  ]);
   for (const file of [...htmlFiles, ...jsFiles]) {
     if (eyebrowRegressionExclusions.has(file)) continue;
     const content = read(file);

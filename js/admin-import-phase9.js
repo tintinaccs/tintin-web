@@ -11,11 +11,11 @@ import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/f
 import {
   collection,
   doc,
-  getDocs,
   writeBatch,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js';
+import { getDocsPaginated } from './firestore-pagination.js';
 
 if (!window.TintinAdminImportPhase9Booted) {
   window.TintinAdminImportPhase9Booted = true;
@@ -369,7 +369,13 @@ if (!window.TintinAdminImportPhase9Booted) {
   }
 
   async function readCollection(name) {
-    const snapshot = await getDocs(collection(db, name));
+    const snapshot = await getDocsPaginated(collection(db, name), {
+      pageSize: 500,
+      maxDocs: 20000
+    });
+    if (snapshot.truncated) {
+      throw new Error(`La colección ${name} supera el límite seguro de 20.000 documentos.`);
+    }
     return snapshot.docs.map(item => ({ id: item.id, ...toPlain(item.data()) }));
   }
 
@@ -490,9 +496,12 @@ if (!window.TintinAdminImportPhase9Booted) {
 
   async function refreshReferenceData() {
     const [collectionsSnapshot, productsSnapshot] = await Promise.all([
-      getDocs(collection(db, 'collections')),
-      getDocs(collection(db, 'products')),
+      getDocsPaginated(collection(db, 'collections'), { pageSize: 100, maxDocs: 1000 }),
+      getDocsPaginated(collection(db, 'products'), { pageSize: 500, maxDocs: 20000 }),
     ]);
+    if (collectionsSnapshot.truncated || productsSnapshot.truncated) {
+      throw new Error('La base supera el límite seguro de referencia para validar duplicados.');
+    }
     state.collections = collectionsSnapshot.docs
       .map(item => ({ id: item.id, ...item.data(), slug: item.data().slug || item.id }))
       .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
