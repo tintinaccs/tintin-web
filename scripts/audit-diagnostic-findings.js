@@ -20,7 +20,8 @@ function check(label, condition) {
 }
 
 function sha256(source) {
-  return crypto.createHash('sha256').update(source).digest('hex');
+  const canonical = String(source).replace(/\r\n?/g, '\n');
+  return crypto.createHash('sha256').update(canonical).digest('hex');
 }
 
 function contrastRatio(hexA, hexB) {
@@ -40,6 +41,7 @@ const manifest = JSON.parse(read('diagnostic-manifest.json'));
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin-app.js');
 const diagnostics = read('js/admin-site-diagnostics.js');
+const manifestBuilder = read('scripts/build-diagnostic-manifest.js');
 const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
 const nosotros = read('nosotros.html');
@@ -55,6 +57,11 @@ check(
 check(
   'Las 18 huellas HTML coinciden con los archivos actuales',
   manifest.pages.every(page => exists(page.path) && sha256(read(page.path)) === page.sha256)
+);
+check(
+  'Las huellas de texto son independientes de CRLF o LF',
+  manifestBuilder.includes("replace(/\\r\\n?/g, '\\n')") &&
+    manifestBuilder.includes('const buffer = canonicalBuffer(file)')
 );
 check(
   'No quedan lecturas directas sin límite detectadas',
