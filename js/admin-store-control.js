@@ -40,6 +40,10 @@ let latestGeneral = { exists: false, data: {} };
 let latestGate = { exists: false, data: {} };
 let generalResolved = false;
 let gateResolved = false;
+let generalReadError = false;
+let gateReadError = false;
+let localStoreDraft = null;
+let localSaveState = 'idle';
 let syncInFlight = false;
 let syncQueued = false;
 let dom = null;
@@ -136,11 +140,37 @@ function comparableGate(data) {
 }
 
 function gateMatchesGeneral() {
-  if (!latestGate.exists) return false;
+  if (!latestGate.exists || gateReadError) return false;
   return (
     JSON.stringify(comparableGate(latestGate.data)) ===
     JSON.stringify(desiredGateData())
   );
+}
+
+function remoteStoreOpen() {
+  return latestGeneral.exists && latestGeneral.data.storeOpen === true;
+}
+
+function reconcileLocalDraft() {
+  if (localStoreDraft === null || !latestGeneral.exists) return;
+
+  if (remoteStoreOpen() === localStoreDraft) {
+    localStoreDraft = null;
+    localSaveState = 'idle';
+  }
+}
+
+function captureDraftFromDom() {
+  if (!dom || !latestGeneral.exists) return;
+
+  const selected = dom.checkbox.checked === true;
+  if (selected === remoteStoreOpen()) {
+    localStoreDraft = null;
+    localSaveState = 'idle';
+    return;
+  }
+
+  localStoreDraft = selected;
 }
 
 async function syncStoreGate() {
@@ -149,7 +179,14 @@ async function syncStoreGate() {
   // Al abrir el panel, Auth suele resolver antes que Firestore; antes de este
   // guard ese intervalo escribía storeOpen:false y hacía parpadear el aviso de
   // mantenimiento a todas las visitas hasta que llegaba settings/general.
-  if (!generalResolved || !gateResolved || !latestGeneral.exists) return;
+  if (
+    !generalResolved ||
+    !gateResolved ||
+    generalReadError ||
+    gateReadError ||
+    !latestGeneral.exists ||
+    localStoreDraft !== null
+  ) return;
   if (syncInFlight) {
     syncQueued = true;
     return;
@@ -182,13 +219,61 @@ async function syncStoreGate() {
   }
 }
 
+function renderLocalDraft() {
+  const selected = localStoreDraft === true;
+  dom.checkbox.checked = selected;
+  setPill(selected);
+
+  if (localSaveState === 'saving') {
+    setPanel(
+      'warning',
+      `Guardando el cambio para dejar la tienda ${selected ? 'ABIERTA' : 'CERRADA'} en desktop, tablet y mobile…`
+    );
+    return;
+  }
+
+  if (localSaveState === 'error') {
+    setPanel(
+      'error',
+      `No se pudo guardar todavía. La selección ${selected ? 'ABIERTA' : 'CERRADA'} se mantiene para que puedas volver a presionar “Guardar toda la configuración”.`
+    );
+    return;
+  }
+
+  setPanel(
+    'warning',
+    `Cambio pendiente: la tienda quedará ${selected ? 'ABIERTA' : 'CERRADA'} en desktop, tablet y mobile cuando presiones “Guardar toda la configuración”.`
+  );
+}
+
 function renderState() {
   if (!dom) return;
 
-  if (!generalResolved || !gateResolved) {
+  if (!generalResolved) {
     dom.saveBtn.disabled = true;
     setPill(false, 'COMPROBANDO');
     setPanel('warning', 'Comprobando el estado real de la tienda…');
+    return;
+  }
+
+  if (generalReadError) {
+    dom.saveBtn.disabled = true;
+    setPill(false, 'SIN CONEXIÓN');
+    setPanel(
+      'error',
+      'No se pudo leer la configuración completa. El botón Guardar queda bloqueado para evitar cambios a ciegas.'
+    );
+    return;
+  }
+
+  // settings/general es la fuente editable. Una falla al comprobar storeGate no
+  // debe inutilizar el botón: el guardado principal escribe ambos documentos en
+  // un mismo batch y puede reparar la sincronización al reintentar.
+  dom.saveBtn.disabled = false;
+
+  reconcileLocalDraft();
+  if (localStoreDraft !== null) {
+    renderLocalDraft();
     return;
   }
 
@@ -199,19 +284,33 @@ function renderState() {
       'error',
       'No existe settings/general. Por seguridad la tienda se considera CERRADA hasta que guardes la configuración.'
     );
-    // Un documento ausente requiere una acción explícita de Guardar. No se
-    // crea automáticamente como "cerrado" al entrar al panel.
     return;
   }
 
-  const open = latestGeneral.data.storeOpen === true;
+  const open = remoteStoreOpen();
   dom.checkbox.checked = open;
   setPill(open);
+
+  if (!gateResolved) {
+    setPanel(
+      'warning',
+      'La configuración principal ya está disponible. Todavía estamos comprobando su publicación global; podés guardar igualmente.'
+    );
+    return;
+  }
+
+  if (gateReadError) {
+    setPanel(
+      'error',
+      'No se pudo comprobar settings/storeGate. El botón Guardar sigue disponible para volver a publicar el estado en todo el sitio.'
+    );
+    return;
+  }
 
   if (!gateMatchesGeneral()) {
     setPanel(
       'warning',
-      'El panel cambió, pero el cierre global todavía se está sincronizando…'
+      'La configuración principal cambió, pero el estado global todavía se está sincronizando…'
     );
     if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL) syncStoreGate();
     return;
@@ -220,8 +319,8 @@ function renderState() {
   setPanel(
     open ? 'ok' : 'closed',
     open
-      ? 'Sincronizado con Firebase: la tienda está ABIERTA en todo el sitio.'
-      : 'Sincronizado con Firebase: la tienda está CERRADA en todas las páginas. Solo entran Super Admin y las excepciones activadas.'
+      ? 'Sincronizado con Firebase: la tienda está ABIERTA en desktop, tablet y mobile.'
+      : 'Sincronizado con Firebase: la tienda está CERRADA en desktop, tablet y mobile. Solo entran Super Admin y las excepciones activadas.'
   );
 }
 
@@ -234,6 +333,32 @@ async function boot() {
     panel: ensureStatusPanel(found.checkbox)
   };
 
+  dom.checkbox.addEventListener('change', event => {
+    localStoreDraft = event.target.checked === true;
+    localSaveState = 'dirty';
+    renderState();
+  });
+
+  dom.saveBtn.addEventListener('click', () => {
+    captureDraftFromDom();
+    if (localStoreDraft !== null) {
+      localSaveState = 'saving';
+      renderState();
+    }
+  }, { capture: true });
+
+  window.addEventListener('tintin:admin-config-saved', () => {
+    localSaveState = 'saving';
+    reconcileLocalDraft();
+    renderState();
+  });
+
+  window.addEventListener('tintin:admin-config-save-failed', () => {
+    captureDraftFromDom();
+    if (localStoreDraft !== null) localSaveState = 'error';
+    renderState();
+  });
+
   onAuthStateChanged(auth, user => {
     currentEmail = user?.email || '';
     renderState();
@@ -243,22 +368,19 @@ async function boot() {
     GENERAL_REF,
     snapshot => {
       generalResolved = true;
+      generalReadError = false;
       latestGeneral = {
         exists: snapshot.exists(),
         data: snapshot.exists() ? snapshot.data() || {} : {}
       };
-      dom.saveBtn.disabled = false;
+      reconcileLocalDraft();
       renderState();
     },
     error => {
       generalResolved = true;
+      generalReadError = true;
       console.error('[admin-store-control] No se pudo leer settings/general:', error);
-      dom.saveBtn.disabled = true;
-      setPill(false, 'SIN CONEXIÓN');
-      setPanel(
-        'error',
-        'No se pudo leer la configuración completa. El botón Guardar queda bloqueado para evitar cambios a ciegas.'
-      );
+      renderState();
     }
   );
 
@@ -266,6 +388,7 @@ async function boot() {
     STORE_GATE_REF,
     snapshot => {
       gateResolved = true;
+      gateReadError = false;
       latestGate = {
         exists: snapshot.exists(),
         data: snapshot.exists() ? snapshot.data() || {} : {}
@@ -274,12 +397,10 @@ async function boot() {
     },
     error => {
       gateResolved = true;
+      gateReadError = true;
       console.error('[admin-store-control] No se pudo leer settings/storeGate:', error);
       latestGate = { exists: false, data: {} };
-      setPanel(
-        'error',
-        'No se pudo comprobar el cierre global. La tienda debe permanecer bloqueada hasta recuperar la conexión.'
-      );
+      renderState();
     }
   );
 }
