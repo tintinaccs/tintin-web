@@ -16,11 +16,11 @@ loadImages().then(() => {
         ? window.isFeaturable(product)
         : Boolean(product?.name) && !(product.stock != null && Number(product.stock) <= 0)
     );
-    ['colls-products-grid', 'related-grid'].forEach(id => {
+    ['colls-products-grid'].forEach(id => {
       if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
     });
     if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 6));
+      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
     }
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {

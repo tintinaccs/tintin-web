@@ -63,6 +63,40 @@
 
 html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 100%; }
 
+.tt-cart-feedback {
+  position: fixed;
+  left: 50%;
+  bottom: max(88px, calc(24px + env(safe-area-inset-bottom)));
+  z-index: 10020;
+  width: min(92vw, 520px);
+  padding: 13px 20px;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 16px;
+  background: #8f294f;
+  color: #fff !important;
+  box-shadow: 0 12px 34px rgba(57,16,31,.28);
+  font-size: .84rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 18px);
+  transition: opacity .22s ease, transform .22s ease;
+}
+.tt-cart-feedback.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.tt-cart-feedback[data-state="warning"] { background: #7e2546; }
+@media (max-width: 767px) {
+  .tt-cart-feedback {
+    bottom: max(84px, calc(76px + env(safe-area-inset-bottom)));
+    padding: 12px 16px;
+    font-size: .8rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tt-cart-feedback { transition: none; }
+}
+
 /* ═══════════════════════════════════════════════
    SCROLLBAR ROSA GLOBAL
    scrollbar-color cubre Firefox; ::-webkit-scrollbar cubre Chrome/Safari/

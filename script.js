@@ -195,45 +195,24 @@ function getStockLimit(productId) {
   return Math.max(Number(product.stock), 0);
 }
 
-function addToCart(productId) {
-  const cart = getCart();
-  const sid = String(productId);
-  const existing = cart.find(item => String(item.id) === sid);
-  const limit = getStockLimit(productId);
-  let productName = '';
-  if (existing) {
-    if (existing.qty >= limit) {
-      showCartToast(`Ya tenés el máximo disponible de "${existing.name}" en el carrito`);
-      return;
-    }
-    existing.qty += 1;
-    productName = existing.name;
-  } else {
-    const product = getProductById(productId);
-    if (!product) return;
-    if (limit <= 0) {
-      showCartToast(`"${product.name}" está sin stock`);
-      return;
-    }
-    const imgUrl = product.imageUrl || product.image || getProductImage(product.id);
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      qty: 1,
-      cat: product.cat || product.category || '',
-      imageUrl: imgUrl || ''
-    });
-    productName = product.name;
+async function addToCart(productId) {
+  const product = getProductById(productId);
+  if (!product) return null;
+  const cartSync = await import('./js/cart-sync.js?v=tintin-20260715-17');
+  const result = await cartSync.addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    qty: 1,
+    stock: product.stock,
+    cat: product.cat || product.category || '',
+    imageUrl: product.imageUrl || product.image || getProductImage(product.id) || ''
+  });
+  if (result?.changed) {
+    openCart();
+    showAddedToCart(product.name);
   }
-  saveCart(cart);
-  updateCartBadge();
-  renderCart();
-  openCart();
-  showAddedToCart(productName);
-  // Sync to Firestore too when logged in (js/cart-sync.js bridge, if loaded on this page)
-  const savedItem = existing || cart[cart.length - 1];
-  window.CartFirestoreSync?.saveItem(savedItem);
+  return result;
 }
 
 function removeFromCart(productId) {
@@ -928,34 +907,34 @@ function initLookCombinator() {
 
   if (btnAdd && !btnAdd.dataset.ttBound) {
     btnAdd.dataset.ttBound = '1';
-    btnAdd.addEventListener('click', () => {
+    btnAdd.addEventListener('click', async () => {
       if (currentCombo.length === 0) return;
-      let anySkipped = false;
-      currentCombo.forEach(p => {
-        const cart = getCart();
-        const existing = cart.find(i => String(i.id) === String(p.id));
-        const limit = getStockLimit(p.id);
-        if (existing) {
-          if (existing.qty >= limit) { anySkipped = true; return; }
-          existing.qty += 1;
-        } else {
-          if (limit <= 0) { anySkipped = true; return; }
-          const imgUrl = p.imageUrl || p.image || getProductImage(p.id);
-          cart.push({
+      btnAdd.disabled = true;
+      btnAdd.setAttribute('aria-busy', 'true');
+      try {
+        const cartSync = await import('./js/cart-sync.js?v=tintin-20260715-17');
+        const results = [];
+        for (const p of currentCombo) {
+          results.push(await cartSync.addToCart({
             id: p.id,
             name: p.name,
             price: p.price,
             qty: 1,
+            stock: p.stock,
             cat: p.cat || p.category || '',
-            imageUrl: imgUrl || ''
-          });
+            imageUrl: p.imageUrl || p.image || getProductImage(p.id) || ''
+          }));
         }
-        saveCart(cart);
-      });
-      if (anySkipped) showCartToast('Algunos productos de la combinación ya llegaron a su stock máximo');
-      updateCartBadge();
-      renderCart();
-      openCart();
+        const anySkipped = results.some(result => !result?.changed);
+        if (anySkipped) showCartToast('Algunos productos de la combinación ya llegaron a su stock máximo');
+        openCart();
+      } catch (error) {
+        console.error('[look-combo] No se pudo agregar la combinación al carrito.', error);
+        showCartToast('No pudimos agregar la combinación. Inténtalo nuevamente.');
+      } finally {
+        btnAdd.disabled = false;
+        btnAdd.removeAttribute('aria-busy');
+      }
     });
   }
 }
@@ -1380,11 +1359,11 @@ function _renderProductDetail(product) {
     }
     if (!btnAdd.dataset.ttBound) {
       btnAdd.dataset.ttBound = '1';
-      btnAdd.addEventListener('click', () => {
+      btnAdd.addEventListener('click', async () => {
         if (!validateVariants()) return;
         const variantStr = getSelectedVariant();
-        _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-        _showProductToast(_pdProduct.name);
+        const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+        if (result?.changed) _showProductToast(_pdProduct.name);
       });
     }
   }
@@ -1401,11 +1380,11 @@ function _renderProductDetail(product) {
     }
     if (!btnBuyNow.dataset.ttBound) {
       btnBuyNow.dataset.ttBound = '1';
-      btnBuyNow.addEventListener('click', () => {
+      btnBuyNow.addEventListener('click', async () => {
         if (!validateVariants()) return;
         const variantStr = getSelectedVariant();
-        _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-        window.location.href = 'checkout.html';
+        const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+        if (result?.item) window.location.href = 'checkout.html';
       });
     }
   }
@@ -1438,40 +1417,18 @@ function _galleryThumbClick(thumb) {
 }
 window._galleryThumbClick = _galleryThumbClick;
 
-function _addToCartWithQty(product, qty, variantStr) {
-  const cart = getCart();
-  const sid = String(product.id);
-  const stockTracked = product.stock !== null && product.stock !== undefined;
-  const limit = stockTracked ? Math.max(Number(product.stock), 0) : 99; // 99 = generic anti-abuse ceiling, not real stock
-  const limitMsg = stockTracked
-    ? `Solo hay ${limit} unidades disponibles de "${product.name}"`
-    : `Ya alcanzaste la cantidad máxima para "${product.name}"`;
-  const existing = cart.find(item => String(item.id) === sid && item.variant === (variantStr || undefined));
-  if (existing) {
-    const wanted = existing.qty + qty;
-    existing.qty = Math.min(wanted, limit);
-    if (wanted > limit) showCartToast(limitMsg);
-  } else {
-    const cappedQty = Math.min(qty, limit);
-    if (cappedQty <= 0) {
-      showCartToast(`"${product.name}" está sin stock`);
-      return;
-    }
-    if (cappedQty < qty) showCartToast(limitMsg);
-    const imgUrl = product.imageUrl || product.image || getProductImage(product.id) || '';
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      qty: cappedQty,
-      cat: product.category || product.cat || '',
-      imageUrl: imgUrl,
-      ...(variantStr ? { variant: variantStr } : {}),
-    });
-  }
-  saveCart(cart);
-  updateCartBadge();
-  renderCart();
+async function _addToCartWithQty(product, qty, variantStr) {
+  const cartSync = await import('./js/cart-sync.js?v=tintin-20260715-17');
+  return cartSync.addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    qty,
+    stock: product.stock,
+    cat: product.category || product.cat || '',
+    imageUrl: product.imageUrl || product.image || getProductImage(product.id) || '',
+    ...(variantStr ? { variant: variantStr } : {}),
+  });
 }
 window._addToCartWithQty = _addToCartWithQty;
 
@@ -1720,7 +1677,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // yet" — both are otherwise falsy-length.
   if (document.getElementById('products-grid')) {
     if (Array.isArray(window.PRODUCTS)) {
-      renderProductsGrid('products-grid', window.PRODUCTS.filter(isFeaturable).slice(0, 6));
+      renderProductsGrid('products-grid', window.PRODUCTS.filter(isFeaturable).slice(0, 5));
     } else {
       _showProductsSkeleton('products-grid');
       const _fallbackHome = () => {
@@ -1780,7 +1737,7 @@ window.addEventListener('tintin:products-loaded', () => {
   renderCart();
   updateCartBadge();
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', (window.PRODUCTS || []).filter(isFeaturable).slice(0, 6));
+    renderProductsGrid('products-grid', (window.PRODUCTS || []).filter(isFeaturable).slice(0, 5));
   }
 
   if (document.getElementById('colls-products-grid')) {
