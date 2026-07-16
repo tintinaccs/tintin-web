@@ -22,6 +22,12 @@ function applyWaNumber(rawNumber) {
   document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
     a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + digits);
   });
+  // Mismo número que WhatsApp, pero como tel: — el ítem "Contacto" del pie
+  // (y su equivalente en contact.html) muestra el teléfono para llamar, no
+  // para abrir WhatsApp; ese acceso directo ya tiene su propio botón.
+  document.querySelectorAll('a.tt-contact-phone').forEach(a => {
+    a.href = 'tel:+' + digits;
+  });
 }
 
 // El email de contacto vive en dos lugares por página (footer + bloque
