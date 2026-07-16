@@ -7,7 +7,7 @@
 
 /* ── 02 — BENEFICIOS RÁPIDOS ───────────────────────────────── */
 .tinben{
-  --acc: #d4789a;
+  --acc: #AD3F67;
   --bg: #fdf0f5;
   --fg: #2d2d2d;
   --card-bg: #ffffff;
@@ -34,7 +34,7 @@
 }
 .tinben-subtitle{
   font-size: 13px;
-  color: rgba(45,45,45,.52);
+  color: rgba(45,45,45,.7);
 }
 .tinben-grid{
   display: grid;
@@ -97,7 +97,7 @@
 }
 .tinben-card-text{
   font-size: 13px;
-  color: rgba(45,45,45,.6);
+  color: rgba(45,45,45,.7);
   margin: 0;
   line-height: 1.6;
 }
@@ -120,10 +120,10 @@
 
 /* ── 05 — TU SELECCIÓN (LISTA RÁPIDA) ──────────────────────── */
 .tinsel{
-  --acc: #d4789a;
+  --acc: #AD3F67;
   --bg: #fdf0f5;
   --fg: #2d2d2d;
-  --pbtn: #d4789a;
+  --pbtn: #AD3F67;
   --pbtnT: #ffffff;
   --r: 16px;
   background: var(--bg);
@@ -169,7 +169,7 @@
   display:flex; align-items:baseline; gap:8px;
 }
 .tinsel-total-label{
-  font-size:11px; color:rgba(45,45,45,.5);
+  font-size:11px; color:rgba(45,45,45,.7);
   text-transform:uppercase; letter-spacing:.08em;
 }
 .tinsel-total{
@@ -180,7 +180,7 @@
 .tinsel-items{ display:flex; flex-direction:column; gap:10px; }
 .tinsel-empty{
   text-align:center; padding:28px 0;
-  color:rgba(45,45,45,.45); font-size:14px;
+  color:rgba(45,45,45,.7); font-size:14px;
 }
 .tinsel-empty-icon{ font-size:32px; margin-bottom:8px; }
 .tinsel-item{
@@ -220,7 +220,7 @@
   color:var(--acc);
 }
 .tinsel-item-variant{
-  font-size:11px; color:rgba(45,45,45,.52); margin:0 0 4px;
+  font-size:11px; color:rgba(45,45,45,.7); margin:0 0 4px;
 }
 .tinsel-item-price{
   font-size:14px; font-weight:700; color:var(--acc); margin:0;
@@ -247,7 +247,7 @@
 }
 .tinsel-del{
   background:none; border:none; padding:8px;
-  color:rgba(45,45,45,.35); cursor:pointer;
+  color:rgba(45,45,45,.6); cursor:pointer;
   border-radius:50%;
   transition:color .18s, background .18s;
   flex-shrink:0;
@@ -260,7 +260,7 @@
   flex-wrap:wrap; gap:12px;
 }
 .tinsel-footer-total{ display:flex; flex-direction:column; gap:2px; }
-.tinsel-footer-label{ font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(45,45,45,.45); }
+.tinsel-footer-label{ font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(45,45,45,.7); }
 .tinsel-footer-amount{
   font-size:clamp(20px,1.8vw,26px);
   font-weight:700; color:var(--acc); letter-spacing:-.02em;
@@ -289,7 +289,7 @@
   bottom:clamp(80px,10vw,110px); left:50%;
   transform:translateX(-50%) translateY(14px);
   opacity:0;
-  background:#fff; color:#d4789a;
+  background:#fff; color:#AD3F67;
   border:1px solid rgba(212,120,154,.2);
   box-shadow:0 12px 40px rgba(0,0,0,.12);
   padding:11px 22px; border-radius:50px;

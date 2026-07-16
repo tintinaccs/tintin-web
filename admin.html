@@ -474,7 +474,7 @@
         </div>
         <!-- Bulk action toolbar (shown when products are selected) -->
         <div id="bulk-toolbar" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fff3e0;border-bottom:1px solid var(--adm-border)">
-          <span style="font-size:13px;font-weight:700;color:#e65100" id="bulk-sel-count">0 seleccionados</span>
+          <span style="font-size:13px;font-weight:700;color:#bf360c" id="bulk-sel-count">0 seleccionados</span>
           <span id="prod-bulk-masivas-group" style="display:contents">
           <select id="bulk-category-input" class="adm-select" style="font-size:12px;padding:5px 8px">
             <option value="">— Asignar a colección —</option>
@@ -483,7 +483,7 @@
           <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkSetCategory()" title="Asignar la colección elegida a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Asignar colección</button>
           <button type="button" class="adm-btn adm-btn-sm" onclick="bulkRemoveFromCollection()" title="Quitar de su colección a los productos seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Quitar de colección</button>
           <button type="button" class="adm-btn adm-btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="bulkActivate(true)" title="Activar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Activar</button>
-          <button type="button" class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#e65100" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
+          <button type="button" class="adm-btn adm-btn-sm" style="background:#fff3e0;color:#bf360c" onclick="bulkActivate(false)" title="Desactivar seleccionados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Desactivar</button>
           </span>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           <button type="button" class="adm-btn adm-btn-sm" id="prod-bulk-export-btn" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV">⬇️ Exportar CSV</button>
@@ -1464,7 +1464,7 @@
         <div class="adm-card-head">
           <div class="adm-card-title">Roles y Permisos</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <span id="perm-unsaved-badge" class="adm-badge" style="display:none;background:#fff3e0;color:#e65100">Cambios sin guardar</span>
+            <span id="perm-unsaved-badge" class="adm-badge" style="display:none;background:#fff3e0;color:#bf360c">Cambios sin guardar</span>
             <button class="adm-btn adm-btn-outline adm-btn-sm" id="btn-perm-restore" type="button">Restaurar valores por defecto</button>
             <button class="adm-btn adm-btn-primary adm-btn-sm" id="btn-perm-save" type="button" disabled>Guardar cambios</button>
           </div>
@@ -1915,7 +1915,7 @@ function renderAuditLogTable() {
   [..._selectedAuditLogs].forEach(id => { if (!visibleIds.has(id)) _selectedAuditLogs.delete(id); });
   tbody.innerHTML = _allAuditLogs.map(l => {
     const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
-    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#e65100;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
+    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#bf360c;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
     return `
       <tr>
         <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${escapeHtmlAdmin(l.id)}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
@@ -5758,7 +5758,7 @@ function productRowHtml(p) {
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
           ${canEditProd ? `<button type="button" class="adm-btn adm-btn-sm" onclick="prodEditar(${docIdArg})" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
-          ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="prodToggleActive(${docIdArg}, ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+          ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="prodToggleActive(${docIdArg}, ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
           ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar(${docIdArg},${nameArg})" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
           ${!canEditProd && !canToggleProd && !canDeleteProd ? '—' : ''}
         </div>
@@ -6318,7 +6318,7 @@ function renderColeccionesGrid(list) {
         <input type="checkbox" class="coll-row-check" data-slug="${safeSlug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
       </label>
       <div style="height:120px;background:${imageUrl ? `url('${escapeHtmlAdmin(imageUrl)}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
-        ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#e65100;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
+        ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#bf360c;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
       </div>
       <div style="padding:14px">
         <div style="font-weight:800;font-size:14px">${escapeHtmlAdmin(c.name || c.slug)}</div>
@@ -6336,7 +6336,7 @@ function renderColeccionesGrid(list) {
     const slugArg = inlineArgumentAdmin(u.slug);
     return `
     <div class="adm-card" style="margin:0;overflow:hidden;border:1.5px dashed #e8a0b4">
-      <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#e65100">SIN GESTIONAR</div>
+      <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#bf360c">SIN GESTIONAR</div>
       <div style="padding:14px">
         <div style="font-weight:800;font-size:14px">${safeSlug}</div>
         <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">Categoría usada en productos, sin colección creada</div>
@@ -6498,7 +6498,7 @@ function renderCollCurrentList() {
       <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
-      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#e65100' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
       ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>` : ''}
     </div>`;
   }).join('');

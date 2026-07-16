@@ -38,7 +38,7 @@
       --adm-card:           #ffffff;
       --adm-accent:         var(--pink-dark);
       --adm-text:           var(--ink);
-      --adm-muted:          #888;
+      --adm-muted:          #6b6b6b;
       --adm-border:         var(--border);
       --adm-font:           var(--font-body);
       --adm-radius-sm:      var(--radius-sm);
@@ -115,7 +115,7 @@
     }
     .role-superadmin { background: #8b2642; color: #fff; }
     .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
-    .role-agent      { background: #7b68ee; color: #fff; }
+    .role-agent      { background: #5f4bcf; color: #fff; }
 
     /* Reloj en vivo debajo del badge de rol — hora real del dispositivo,
        actualizado solo (un setInterval de 1s), no un valor fijo. */
@@ -127,8 +127,8 @@
       font-variant-numeric: tabular-nums;
       letter-spacing: .02em;
     }
-    .role-viewer     { background: #4a90d9; color: #fff; }
-    .role-client     { background: #888; color: #fff; }
+    .role-viewer     { background: #2568b5; color: #fff; }
+    .role-client     { background: #5f6b77; color: #fff; }
 
     .adm-nav {
       flex: 1;
@@ -632,7 +632,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #e9e3e6; color: #8a7d84; border: 1.5px solid transparent;
+      background: #e9e3e6; color: #655e62; border: 1.5px solid transparent;
       transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
     .perm-pill-text { display: none; white-space: nowrap; }
@@ -681,7 +681,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 118px; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #e9e3e6; color: #8a7d84; border: 1.5px solid transparent;
+      background: #e9e3e6; color: #655e62; border: 1.5px solid transparent;
       transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
     .tt-access-pill-text { display: none; white-space: nowrap; }
@@ -708,10 +708,10 @@
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 130px; height: 30px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #e0f5e6; color: #1e8a45;
+      background: #e0f5e6; color: #166534;
     }
     .tt-store-state-pill.tt-store-state-pill-closed {
-      background: #fde3e1; color: #c0392b;
+      background: #fde3e1; color: #b8341f;
     }
     @media (max-width: 720px) {
       .tt-access-pill-track, .tt-access-pill-locked { min-width: 108px; height: 30px; font-size: 10px; }
@@ -719,7 +719,7 @@
     }
     .perm-danger-badge {
       display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #fde3e1; color: #c0392b; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+      background: #fde3e1; color: #b8341f; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
     }
     .perm-uionly-badge {
       display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
@@ -794,7 +794,7 @@
     /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
        puedan distinguir de un vistazo en la misma columna — son estados
        "terminales" distintos, no el mismo. */
-    .badge-rechazado   { background: #fde3e1; color: #c0392b; }
+    .badge-rechazado   { background: #fde3e1; color: #b8341f; }
     .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
     /* Listo para retirar: único estado de pedido con el rosa de marca en vez
        de la paleta semántica genérica — es un hito positivo específico de
@@ -1042,8 +1042,8 @@
     }
     .adm-btn-primary { background: var(--adm-accent); color: #fff; }
     .adm-btn-primary:hover { background: var(--rose); }
-    .adm-btn-danger { background: #ef4444; color: #fff; }
-    .adm-btn-danger:hover { background: #dc2626; }
+    .adm-btn-danger { background: #dc2626; color: #fff; }
+    .adm-btn-danger:hover { background: #b91c1c; }
     .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
     .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
     .adm-btn-sm { padding: 5px 12px; font-size: 11px; }
