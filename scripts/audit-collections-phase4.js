@@ -11,6 +11,7 @@ const files = {
   uiQuality: read('js/ui-quality.js'),
   store: read('js/collections-store.js'),
   collectionsPage: read('collections.html'),
+  catalogPage: read('catalogo.html'),
   collectionsPageRuntime: read('js/collections-page.js'),
   collectionsPageStyles: read('css/collections-page.css'),
   packageJson: read('package.json')
@@ -156,6 +157,18 @@ check(
     files.collectionsPageStyles.includes('@media (max-width: 768px)') &&
     files.collectionsPageStyles.includes('padding: 36px 0 44px'),
   'mobile no debe reservar el espacio del header oculto y los grids deben comunicar su estado'
+);
+
+check(
+  'Los filtros del catálogo se adaptan a la altura de cada pantalla',
+  files.catalogPage.includes('max-height: calc(100svh - var(--header-h) - 24px)') &&
+    files.catalogPage.includes('max-height: calc(100dvh - var(--header-h) - 24px)') &&
+    files.catalogPage.includes('.cat-sidebar.open { max-height: calc(100dvh - 128px); }') &&
+    files.catalogPage.includes('overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain') &&
+    files.catalogPage.includes('@media (min-width: 769px) and (max-height: 760px)') &&
+    files.publicPhase4.includes("target.querySelector('.tt-filtro-btn.activo')") &&
+    files.publicPhase4.includes("button.setAttribute('aria-pressed', String(selected))"),
+  'el panel compartido por catálogo y colecciones filtradas debe caber en desktop, tablet y mobile sin quedar cortado'
 );
 
 check(
