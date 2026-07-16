@@ -232,7 +232,7 @@ if (
   !window.TintinCheckoutEmailBridgeLoading
 ) {
   window.TintinCheckoutEmailBridgeLoading = true;
-  import('./checkout-email-bridge.js?v=tintin-20260715-15').catch(error => {
+  import('./checkout-email-bridge.js?v=tintin-20260715-16').catch(error => {
     console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
   });
 }
