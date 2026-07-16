@@ -805,8 +805,10 @@
         <div class="adm-card-body">
           <div class="adm-diagnostic-safety" role="note">
             <strong>Modo de solo lectura.</strong>
-            Las páginas se inspeccionan sin ejecutar sus scripts. Las consultas de datos usan límites y no crean,
-            actualizan ni eliminan registros. El historial se guarda únicamente en este navegador.
+            Las páginas se inspeccionan ejecutando de verdad sus scripts, dentro de un entorno aislado que
+            únicamente bloquea las llamadas que podrían crear, actualizar o eliminar datos (Firestore, Storage y
+            sesión). Las consultas de datos usan límites y no crean, actualizan ni eliminan registros.
+            El historial se guarda únicamente en este navegador.
           </div>
           <div class="adm-diagnostic-runner" aria-label="Configuración del diagnóstico">
             <label>

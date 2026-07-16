@@ -19,22 +19,56 @@ const core = read('js/diagnostic-core.js');
 const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
 const css = read('css/admin.css');
 const pkg = JSON.parse(read('package.json'));
+const firestoreShim = read('js/diagnostic-shims/firestore-shim.js');
+const authShim = read('js/diagnostic-shims/auth-shim.js');
+const storageShim = read('js/diagnostic-shims/storage-shim.js');
+const networkGuard = read('js/diagnostic-shims/network-guard.js');
 
 const forbiddenWrites = [
   'addDoc', 'setDoc', 'updateDoc', 'deleteDoc', 'writeBatch', 'runTransaction',
   'serverTimestamp', 'localStorage.setItem', 'sessionStorage.setItem'
 ];
 check(
-  'El motor no importa ni ejecuta escrituras sobre la plataforma',
+  'El motor de orquestación no importa ni ejecuta escrituras él mismo (las páginas inspeccionadas sí ejecutan scripts, pero solo a través de los shims que bloquean escritura)',
   forbiddenWrites.every(token => !runtime.includes(token)) &&
     !runtime.includes("transaction.objectStore(HISTORY_STORE).delete")
 );
 check(
-  'Las páginas se inspeccionan con scripts y conexiones bloqueados',
-  runtime.includes("script-src 'none'") &&
-    runtime.includes("connect-src 'none'") &&
-    runtime.includes("frame.setAttribute('sandbox', 'allow-same-origin')") &&
-    !runtime.includes('allow-scripts')
+  'Las páginas se inspeccionan ejecutando scripts reales, pero el SDK de Firebase queda redirigido a shims de solo lectura',
+  runtime.includes("frame.setAttribute('sandbox', 'allow-same-origin allow-scripts')") &&
+    runtime.includes("frame-src 'none'") &&
+    runtime.includes("object-src 'none'") &&
+    runtime.includes('DIAGNOSTIC_SHIM_MAP') &&
+    runtime.includes('js/diagnostic-shims/firestore-shim.js') &&
+    runtime.includes('js/diagnostic-shims/auth-shim.js') &&
+    runtime.includes('js/diagnostic-shims/storage-shim.js') &&
+    runtime.includes('js/diagnostic-shims/network-guard.js')
+);
+check(
+  'El shim de Firestore reexporta el SDK real y bloquea únicamente sus funciones de escritura',
+  firestoreShim.includes("export * from 'https://www.gstatic.com/firebasejs/") &&
+    ['addDoc', 'setDoc', 'updateDoc', 'deleteDoc', 'writeBatch', 'runTransaction']
+      .every(name => firestoreShim.includes(`function ${name}`) || firestoreShim.includes(`export function ${name}`)) &&
+    firestoreShim.includes('reportBlockedWrite')
+);
+check(
+  'El shim de Auth reexporta el SDK real y bloquea únicamente sus funciones que cambian sesión, credenciales o disparan correos/popups reales',
+  authShim.includes("export * from 'https://www.gstatic.com/firebasejs/") &&
+    ['signOut', 'updateProfile', 'updatePassword', 'deleteUser', 'signInWithPopup', 'sendSignInLinkToEmail', 'sendPasswordResetEmail']
+      .every(name => authShim.includes(name)) &&
+    authShim.includes('reportBlockedWrite')
+);
+check(
+  'El shim de Storage reexporta el SDK real y bloquea únicamente sus funciones de subida/borrado',
+  storageShim.includes("export * from 'https://www.gstatic.com/firebasejs/") &&
+    ['uploadBytes', 'uploadString', 'uploadBytesResumable', 'deleteObject'].every(name => storageShim.includes(name)) &&
+    storageShim.includes('reportBlockedWrite')
+);
+check(
+  'Existe una guardia de red independiente que bloquea llamadas de escritura de Firestore por la forma de la URL, sin depender de una lista de hosts',
+  networkGuard.includes('WRITE_PATTERN') &&
+    networkGuard.includes('window.fetch') &&
+    networkGuard.includes('XMLHttpRequest.prototype.send')
 );
 check(
   'El historial aislado usa IndexedDB local y no permite resolución manual',
