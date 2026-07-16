@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260715-16"></script>
-  <script src="js/page-loader.js?v=tintin-20260715-16"></script>
-  <script src="js/public-shell.js?v=tintin-20260715-16" defer></script>
+  <script src="js/color-scheme-instant.js?v=tintin-20260715-17"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-17"></script>
+  <script src="js/public-shell.js?v=tintin-20260715-17" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. page-loader.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -25,6 +25,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <!-- Google Search Console (Fase 2): creá la propiedad en
        https://search.google.com/search-console con esta misma URL, elegí
        verificación por "etiqueta HTML" y pegá el content= que te dé acá
@@ -43,19 +46,17 @@
   <meta name="twitter:description" content="Tienda de accesorios femeninos en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más. Envíos a todo el país.">
   <meta name="twitter:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/index.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="styles.css?v=tintin-20260715-16" as="style">
+  <link rel="preload" href="styles.css?v=tintin-20260716-font-1" as="style">
   <!-- Hero image preloads — browser picks the matching one per breakpoint -->
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/images.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
@@ -65,9 +66,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/images.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260716-font-1">
 </head>
 <body class="tt-home-premium">
 
@@ -503,120 +502,15 @@
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
 })();
 </script>
-<script src="script.js?v=tintin-20260715-16" defer></script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260715-16"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-16"></script>
-<script type="module" src="js/load-images-init.js?v=tintin-20260715-16"></script>
+<script src="script.js?v=tintin-20260715-17" defer></script>
+<script type="module" src="js/whatsapp.js?v=tintin-20260715-17"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-17"></script>
+<script type="module" src="js/load-images-init.js?v=tintin-20260715-17"></script>
 <script type="module">
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('index');
 </script>
-<script type="module" src="js/edit-badge.js?v=tintin-20260715-16"></script>
-<script type="module">
-import { onCollectionsUpdate } from './js/collections-store.js';
-
-const COLL_IMG_BASE = 'assets-tintin/images/collections/';
-const COLL_PLACEHOLDER = COLL_IMG_BASE + 'col-placeholder.webp';
-const COLL_SLUG_FILE_MAP = Object.freeze({ bolsos: 'bags' });
-
-function collImageFile(slug) {
-  const normalized = String(slug || '').replace(/[^a-z0-9_-]/gi, '');
-  return COLL_SLUG_FILE_MAP[normalized] || normalized;
-}
-
-// Custom image from Super Admin wins; otherwise try the static cover that
-// matches the slug; if that file doesn't exist either, fall back to the
-// generic placeholder. Never leaves a broken/empty image.
-function collCardImg(c) {
-  const image = document.createElement('img');
-  const bySlugFallback = `${COLL_IMG_BASE}col-${collImageFile(c.slug)}.webp`;
-  image.src = c.image || bySlugFallback;
-  image.alt = `Colección ${c.name}`;
-  image.loading = 'lazy';
-  image.decoding = 'async';
-  image.style.cssText = 'width:100%;height:100%;object-fit:contain;background:transparent;display:block;';
-  image.addEventListener('error', () => {
-    if (image.src.endsWith(COLL_PLACEHOLDER)) return;
-    image.src = COLL_PLACEHOLDER;
-  });
-  return image;
-}
-
-function buildCollCard(c) {
-  const a = document.createElement('a');
-  const imageWrap = document.createElement('div');
-  const overlay = document.createElement('div');
-  const label = document.createElement('span');
-  a.href = `catalogo.html?cat=${encodeURIComponent(c.slug)}`;
-  a.className = 'tt-coll-card';
-  a.dataset.slug = c.slug;
-  imageWrap.className = 'tt-coll-card-img';
-  imageWrap.appendChild(collCardImg(c));
-  overlay.className = 'tt-coll-card-overlay';
-  label.className = 'tt-coll-card-label';
-  label.textContent = c.name.toUpperCase();
-  overlay.appendChild(label);
-  a.append(imageWrap, overlay);
-  return a;
-}
-
-// Exact full render: the grid ends up with precisely one card per visible
-// collection, in Firestore order — a renamed/reordered/hidden/deleted
-// collection is never left as a stale, merely-hidden DOM node.
-onCollectionsUpdate(cols => {
-  const grid = document.querySelector('.tt-collections-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  if (!cols.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px 20px;color:var(--text-muted)">No hay colecciones disponibles todavía.</div>`;
-    return;
-  }
-  cols.forEach(c => grid.appendChild(buildCollCard(c)));
-}, e => {
-  const grid = document.querySelector('.tt-collections-grid');
-  if (!grid) return;
-  grid.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:32px 20px;color:var(--text-muted)">
-      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar las colecciones. Revisá tu conexión e intentá de nuevo.</p>
-      <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
-    </div>`;
-});
-</script>
-<script type="module">
-import { onImagesUpdate } from './js/images.js';
-
-// Real-time: applies immediately with cached data, then re-applies live every
-// time Super Admin saves a new image — no reload needed.
-onImagesUpdate((images) => {
-  document.querySelectorAll('[data-img-slot]').forEach(el => {
-    const slotId = el.dataset.imgSlot;
-    const url = images[slotId];
-    if (!url) return;
-
-    // Fotos de producto/colección se ven completas (contain, sin fondo agregado);
-    // banners editoriales/hero cubren el marco (cover) — no es una sola regla ciega.
-    const fit = slotId.startsWith('coll_') ? 'contain' : 'cover';
-    const bg = fit === 'contain' ? 'background:transparent;' : '';
-
-    if (el.tagName === 'IMG') {
-      el.src = url;
-      el.style.objectFit = fit;
-      el.style.display = '';
-    } else {
-      el.innerHTML = `
-        <img
-          src="${url}"
-          alt=""
-          loading="lazy"
-          decoding="async"
-          style="width:100%;height:100%;object-fit:${fit};${bg}display:block;"
-          onerror="this.remove();"
-        >
-      `;
-    }
-  });
-});
-</script>
+<script type="module" src="js/edit-badge.js?v=tintin-20260715-17"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

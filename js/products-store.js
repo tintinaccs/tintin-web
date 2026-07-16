@@ -93,11 +93,11 @@ function handleSnapshot(snap) {
 
   // Re-render homepage product grids
   if (typeof window.renderProductsGrid === 'function') {
-    ['colls-products-grid', 'related-grid'].forEach(id => {
+    ['colls-products-grid'].forEach(id => {
       if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
     });
     if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 6));
+      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
     }
   }
 

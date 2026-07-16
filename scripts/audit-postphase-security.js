@@ -16,6 +16,7 @@ const emailConfig = read('js/email-config.js');
 const emailNotify = read('js/email-notify.js');
 const bridge = read('js/checkout-email-bridge.js');
 const apps = read('apps-script/Phase3Security.gs');
+const emailSetup = read('functions/EMAIL_SETUP.md');
 check('Productos se normalizan como texto plano', products.includes('cleanMultilineText') && products.includes('sanitizeVariantData'));
 check('Carrito local se limpia antes de renderizar', script.includes('normalizeClassicCart') && cart.includes('replace(/[<>]/g'));
 check('Descripción de producto no ejecuta HTML', !script.includes('descEl.innerHTML = product.desc'));
@@ -23,7 +24,13 @@ check('Super Admin depende de Firebase Auth', roles.includes("auth.currentUser?.
 check('Email del perfil es campo protegido', rules.includes("'email', 'createdAt', 'provider', 'role'"));
 check('Creación de usuario obliga estadísticas en cero', rules.includes('function userCreateValid(userId)') && rules.includes("data.get('totalSpent', 0) == 0"));
 check('Cliente no puede escribir notificationStatus', !rules.includes("hasOnly(['notificationStatus', 'updatedAt'])"));
-check('Secreto público eliminado', !emailConfig.includes('EMAIL_SECRET') && !emailNotify.includes('secret:'));
+check(
+  'Secreto público eliminado',
+  !emailConfig.includes('EMAIL_SECRET') &&
+    !emailNotify.includes('secret:') &&
+    !/export\s+const\s+EMAIL_SECRET\s*=/.test(emailSetup) &&
+    !/[a-f0-9]{40,}\s*['"`]\s*;/.test(emailSetup)
+);
 check('Apps Script escribe estado autorizado', apps.includes('phase3UpdateOrderNotificationStatus_') && apps.includes('ScriptApp.getOAuthToken()'));
 check('Checkout ya no actualiza estado desde cliente', !bridge.includes("await updateDoc(doc(db, 'orders'"));
 if (failures) process.exit(1);

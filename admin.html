@@ -4,27 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-16"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-17"></script>
+  <script src="js/admin-unsaved-guard.js?v=tintin-20260715-17" defer></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -604,7 +604,7 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Variantes (una por línea: Color: Rojo, Dorado)</label>
-              <textarea id="prod-variants-text" class="adm-input" rows="3" placeholder="Color: Rojo&#10;Color: Dorado&#10;Material: Acero inoxidable" style="resize:vertical;font-size:12px;font-family:monospace"></textarea>
+              <textarea id="prod-variants-text" class="adm-input" rows="3" placeholder="Color: Rojo&#10;Color: Dorado&#10;Material: Acero inoxidable" style="resize:vertical;font-size:12px;font-family:Montserrat"></textarea>
             </div>
             <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
@@ -797,31 +797,109 @@
       <div class="adm-card adm-diagnostic-card">
         <div class="adm-card-head adm-diagnostic-head">
           <div>
-            <div class="adm-card-title">Diagnóstico integral del sitio</div>
-            <p>Analiza todas las páginas públicas bajo demanda. No cambia datos ni código.</p>
+            <div class="adm-card-title">Diagnóstico integral de la plataforma</div>
+            <p>Inspecciona, confirma y documenta problemas reales. Nunca repara ni altera la plataforma.</p>
           </div>
-          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-site-diagnostics">Analizar sitio</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-site-diagnostics">Ejecutar diagnóstico</button>
         </div>
         <div class="adm-card-body">
+          <div class="adm-diagnostic-safety" role="note">
+            <strong>Modo de solo lectura.</strong>
+            Las páginas se inspeccionan sin ejecutar sus scripts. Las consultas de datos usan límites y no crean,
+            actualizan ni eliminan registros. El historial se guarda únicamente en este navegador.
+          </div>
+          <div class="adm-diagnostic-runner" aria-label="Configuración del diagnóstico">
+            <label>
+              <span>Tipo de ejecución</span>
+              <select class="adm-select" id="site-diagnostic-mode">
+                <option value="full">Diagnóstico completo</option>
+                <option value="page">Por página</option>
+                <option value="module">Por módulo</option>
+                <option value="visual">Visual, responsive y accesibilidad</option>
+                <option value="functional">Funcional y conexiones</option>
+                <option value="technical">Técnico y estructural</option>
+                <option value="data">Datos y consistencia</option>
+                <option value="role">Por rol y permisos</option>
+              </select>
+            </label>
+            <label id="site-diagnostic-target-wrap" hidden>
+              <span>Objetivo</span>
+              <select class="adm-select" id="site-diagnostic-target"></select>
+            </label>
+            <label id="site-diagnostic-role-wrap" hidden>
+              <span>Rol a comprobar</span>
+              <select class="adm-select" id="site-diagnostic-role"></select>
+            </label>
+          </div>
           <div id="site-diagnostic-status" class="adm-diagnostic-status" role="status" aria-live="polite">
-            Presioná “Analizar sitio” para comprobar rendimiento, errores, recursos, accesibilidad y responsive.
+            Cargando el inventario verificable de páginas, módulos, componentes y conexiones…
           </div>
           <div class="adm-diagnostic-progress" id="site-diagnostic-progress" hidden>
             <span id="site-diagnostic-progress-bar"></span>
           </div>
           <div class="adm-diagnostic-summary" id="site-diagnostic-summary" hidden></div>
+          <div class="adm-diagnostic-coverage" id="site-diagnostic-coverage" hidden></div>
           <div class="adm-diagnostic-toolbar" id="site-diagnostic-toolbar" hidden>
-            <label for="site-diagnostic-filter">Mostrar</label>
-            <select class="adm-select" id="site-diagnostic-filter">
-              <option value="all">Todos los hallazgos</option>
-              <option value="critical">Críticos</option>
-              <option value="warning">Advertencias</option>
-              <option value="info">Informativos</option>
+            <label class="adm-diagnostic-search">
+              <span class="tt-sr-only">Buscar problema</span>
+              <input class="adm-input" id="site-diagnostic-search" type="search" placeholder="Buscar problema, página, ruta, archivo o evidencia">
+            </label>
+            <select class="adm-select" id="site-diagnostic-severity" aria-label="Filtrar por gravedad">
+              <option value="">Todas las gravedades</option>
+              <option value="critical">Crítico</option>
+              <option value="high">Alto</option>
+              <option value="medium">Medio</option>
+              <option value="low">Bajo</option>
+              <option value="minimal">Mínimo</option>
             </select>
+            <select class="adm-select" id="site-diagnostic-confirmation" aria-label="Filtrar por confirmación">
+              <option value="">Todos los estados</option>
+              <option value="confirmed">Error confirmado</option>
+              <option value="manual">Requiere verificación manual</option>
+              <option value="not-reviewed">No revisado</option>
+              <option value="not-available">Prueba no disponible</option>
+              <option value="no-longer-detected">Ya no detectado</option>
+              <option value="not-reverified">No se pudo volver a verificar</option>
+              <option value="intentional">Comportamiento intencional</option>
+              <option value="false-positive">Falso positivo descartado</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-category" aria-label="Filtrar por categoría">
+              <option value="">Todas las categorías</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-page" aria-label="Filtrar por página">
+              <option value="">Todas las páginas</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-route" aria-label="Filtrar por ruta">
+              <option value="">Todas las rutas</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-section" aria-label="Filtrar por sección">
+              <option value="">Todas las secciones</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-component" aria-label="Filtrar por componente">
+              <option value="">Todos los componentes</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-device" aria-label="Filtrar por dispositivo">
+              <option value="">Todos los dispositivos</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-role-filter" aria-label="Filtrar por rol">
+              <option value="">Todos los roles</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-state" aria-label="Filtrar por recurrencia">
+              <option value="">Nuevos y recurrentes</option>
+              <option value="new">Nuevo</option>
+              <option value="recurrent">Recurrente</option>
+            </select>
+            <input class="adm-input" id="site-diagnostic-date" type="date" aria-label="Filtrar por fecha de detección">
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-copy-site-diagnostics">Copiar informe</button>
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-export-site-diagnostics">Exportar JSON</button>
           </div>
+          <div class="adm-diagnostic-view-tabs" id="site-diagnostic-view-tabs" hidden>
+            <button type="button" class="active" data-diagnostic-view="active">Problemas activos</button>
+            <button type="button" data-diagnostic-view="coverage">No revisados y pruebas fallidas</button>
+            <button type="button" data-diagnostic-view="history">Historial y comparación</button>
+          </div>
           <div id="site-diagnostic-results" class="adm-diagnostic-results"></div>
+          <div id="site-diagnostic-history" class="adm-diagnostic-history" hidden></div>
         </div>
       </div>
     </div>
@@ -1656,7 +1734,7 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
             Pegá un JSON con un array de productos. Cada item debe tener: <code>name, category, price, imageUrl, stock, active</code>.
           </p>
-          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
+          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:Montserrat" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
           <div style="margin-top:12px;display:flex;gap:12px">
             <button type="button" class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
             <button type="button" class="adm-btn adm-btn-outline" id="btn-importar-sample">Cargar ejemplo</button>
@@ -1688,7 +1766,7 @@
       <!-- ImgBB key banner -->
       <div id="imgbb-banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap">
         <span style="font-size:13px;font-weight:600;flex:1;min-width:200px">Pegá tu API key de <a href="https://api.imgbb.com" target="_blank" style="color:var(--adm-accent)">imgbb.com</a> para subir imágenes desde tu dispositivo:</span>
-        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
+        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:Montserrat;flex:1;min-width:220px;max-width:340px" />
         <button type="button" onclick="
           const k=document.getElementById('imgbb-key-input').value.trim();
           if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('API key guardada');}
@@ -1731,7 +1809,7 @@ import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 import { normalizeCollectionDoc } from "./js/collections-store.js";
 import { sanitizeImageUrl } from "./js/image-utils.js";
-import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260715-16";
+import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260716-diagnostics-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
@@ -2157,8 +2235,9 @@ function switchSection(target) {
 
 navItems.forEach(btn => {
   btn.addEventListener('click', () => {
-    // Leaving Productos/Colecciones with an open, unsaved form? Confirm first.
-    if (typeof UnsavedGuard !== 'undefined') {
+    if (window.AdminUnsaved) {
+      window.AdminUnsaved.requestNavigation(() => switchSection(btn.dataset.section));
+    } else if (typeof UnsavedGuard !== 'undefined') {
       UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section));
     } else {
       switchSection(btn.dataset.section);
@@ -2170,12 +2249,15 @@ function closeSidebar() {}
 
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
-if (mtabLogout) mtabLogout.onclick = async () => { await signOut(auth); window.location.href = 'login.html'; };
+if (mtabLogout) mtabLogout.onclick = () => {
+  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
+};
 
 // ---- LOGOUT ----
-document.getElementById('adm-logout').onclick = async () => {
-  await signOut(auth);
-  window.location.href = 'login.html';
+document.getElementById('adm-logout').onclick = () => {
+  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ======== AUTH GUARD ========
@@ -3857,6 +3939,21 @@ function updateStoreStatePill_(isOpen) {
   pill.classList.toggle('tt-store-state-pill-closed', !isOpen);
 }
 
+function serializeGeneralConfig_() {
+  const ids = [
+    'cfg-wa-number', 'cfg-wa-confirm-msg', 'cfg-contact-email', 'cfg-store-address',
+    'cfg-currency', 'cfg-delivery-cost', 'cfg-encomienda-cost', 'cfg-instagram',
+    'cfg-facebook', 'cfg-tiktok', 'cfg-ga4-id', 'cfg-store-open',
+    'cfg-header-desktop-tablet', 'cfg-header-mobile', 'cfg-pay-efectivo',
+    'cfg-pay-transferencia', 'cfg-pay-pagopark', 'cfg-bank-ueno', 'cfg-bank-atlas',
+    ...MAINTENANCE_ROLE_KEYS.map(role => 'ma-' + role),
+  ];
+  return JSON.stringify(ids.map(id => {
+    const input = document.getElementById(id);
+    return [id, input?.type === 'checkbox' ? Boolean(input.checked) : (input?.value || '')];
+  }));
+}
+
 async function loadConfig() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'general'));
@@ -3899,6 +3996,15 @@ async function loadConfig() {
       const input = document.getElementById('ma-' + role);
       if (input) input.checked = allowed;
     });
+    window.AdminUnsaved?.register('general-config', {
+      serialize: serializeGeneralConfig_,
+      label: 'Configuración general',
+      save: () => {
+        const waiting = window.AdminUnsaved.waitForEvent('tintin:admin-config-saved', 'tintin:admin-config-save-failed');
+        document.getElementById('btn-save-config').click();
+        return waiting;
+      },
+    });
   } catch(e) {
     console.error('loadConfig error:', e);
   }
@@ -3916,6 +4022,7 @@ document.getElementById('btn-save-config').onclick = async () => {
       if (!confirmed) {
         document.getElementById('cfg-store-open').checked = true;
         updateStoreStatePill_(true);
+        window.dispatchEvent(new Event('tintin:admin-config-save-failed'));
         return;
       }
     }
@@ -3971,8 +4078,11 @@ document.getElementById('btn-save-config').onclick = async () => {
     _lastKnownHeaderMode = newHeaderMode;
     updateStoreStatePill_(willBeOpen);
     toast('Configuración guardada correctamente');
+    window.AdminUnsaved?.markClean('general-config');
+    window.dispatchEvent(new Event('tintin:admin-config-saved'));
   } catch(e) {
     toast('Error al guardar configuración: ' + e.message);
+    window.dispatchEvent(new Event('tintin:admin-config-save-failed'));
   }
 };
 
@@ -4183,7 +4293,13 @@ function buildPreviewHtml_(t, vars) {
   const buttonHtml = (buttonText && buttonUrl)
     ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
     : '';
-  return `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
+  const fontBase = new URL('assets-tintin/fonts/', document.baseURI).href;
+  const fontCss = `<style>` +
+    `@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:block;src:url("${fontBase}montserrat-latin-wght-normal.woff2") format("woff2")}` +
+    `@font-face{font-family:Montserrat;font-style:italic;font-weight:100 900;font-display:block;src:url("${fontBase}montserrat-latin-wght-italic.woff2") format("woff2")}` +
+    `html,body,body *{font-family:Montserrat!important;font-synthesis:none}` +
+    `</style>`;
+  return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
     `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
     (brandPhrase ? `<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
     (greeting ? `<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
@@ -4249,8 +4365,10 @@ async function getEmailSettingsFresh_() {
 async function saveEmailSettingsMerge_(patch) {
   try {
     await setDoc(doc(db, 'emailSettings', 'main'), { ...patch, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }, { merge: true });
+    return true;
   } catch (e) {
     toast('Error al guardar: ' + e.message);
+    return false;
   }
 }
 
@@ -4894,17 +5012,30 @@ window.openTplEdit = (id) => {
   document.getElementById('tpl-edit-active').checked = t.active !== false;
   document.getElementById('tpl-edit-vars-list').innerHTML = PROTECTED_VARS.map(v => `<code style="background:#fff;border:1px solid var(--adm-border);border-radius:6px;padding:2px 6px">{{${v}}}</code>`).join('');
   document.getElementById('tpl-edit-overlay').style.display = '';
+  window.AdminUnsaved?.register('email-template-editor', {
+    root: '#tpl-edit-overlay',
+    active: () => document.getElementById('tpl-edit-overlay')?.style.display !== 'none',
+    label: 'la plantilla de correo',
+    save: saveTplEdit_,
+  });
 };
-window.closeTplEdit = () => { document.getElementById('tpl-edit-overlay').style.display = 'none'; };
+window.closeTplEdit = (force = false) => {
+  if (!force && window.AdminUnsaved?.isDirty('email-template-editor')) {
+    window.AdminUnsaved.requestNavigation(() => window.closeTplEdit(true), { scopeIds: ['email-template-editor'] });
+    return;
+  }
+  document.getElementById('tpl-edit-overlay').style.display = 'none';
+  window.AdminUnsaved?.unregister('email-template-editor');
+};
 
 document.getElementById('tpl-edit-preview-btn').onclick = () => {
   window.previewTemplateById(document.getElementById('tpl-edit-id').value);
 };
 
-document.getElementById('tpl-edit-save-btn').onclick = async () => {
+async function saveTplEdit_() {
   const id = document.getElementById('tpl-edit-id').value;
   const t = allEmailTemplates.find(x => x.id === id);
-  if (!t) return;
+  if (!t) return false;
   const patch = {
     subject: document.getElementById('tpl-edit-subject').value,
     greeting: document.getElementById('tpl-edit-greeting').value,
@@ -4924,15 +5055,19 @@ document.getElementById('tpl-edit-save-btn').onclick = async () => {
     await updateDoc(doc(db, 'emailTemplates', id), patch);
     Object.assign(t, patch, { updatedAt: new Date() });
     toast('Plantilla guardada');
-    document.getElementById('tpl-edit-overlay').style.display = 'none';
+    window.AdminUnsaved?.markClean('email-template-editor');
+    window.closeTplEdit(true);
     renderCorreosPlantillasTab();
     renderCorreosPedidosTab();
     renderCorreosPruebaTab();
     renderCorreosPromocionesTab();
+    return true;
   } catch (e) {
     toast('Error al guardar la plantilla: ' + e.message);
+    return false;
   }
-};
+}
+document.getElementById('tpl-edit-save-btn').onclick = saveTplEdit_;
 
 document.getElementById('tpl-edit-restore-btn').onclick = async () => {
   const id = document.getElementById('tpl-edit-id').value;
@@ -5483,6 +5618,16 @@ function renderCorreosConfigTab() {
   const alertEl = document.getElementById('cec-gmail-sender-alert');
   alertEl.style.display = gmailSender ? '' : 'none';
   if (gmailSender) document.getElementById('cec-gmail-sender-name').textContent = s.senderEmail || EMAIL_SENDER_ADDRESS;
+  window.AdminUnsaved?.register('email-config', {
+    root: '#correos-panel-config',
+    active: () => document.getElementById('section-correos')?.classList.contains('active'),
+    label: 'Configuración de correos',
+    save: () => {
+      const waiting = window.AdminUnsaved.waitForEvent('tintin:admin-email-config-saved', 'tintin:admin-email-config-save-failed');
+      document.getElementById('btn-save-correos-config').click();
+      return waiting;
+    },
+  });
 }
 
 document.getElementById('btn-save-correos-config').onclick = async () => {
@@ -5506,18 +5651,33 @@ document.getElementById('btn-save-correos-config').onclick = async () => {
     resendDailyLimit: Number(document.getElementById('cec-resend-limit').value) || 30,
     promoDailyLimit: Number(document.getElementById('cec-promo-limit').value) || 100,
   };
-  emailSettingsCache = Object.assign(emailSettingsCache || defaultEmailSettings_(), patch);
-  await saveEmailSettingsMerge_(patch);
-  toast('Configuración de correos guardada');
-  renderCorreosDashboard();
-  renderCorreosConfigTab();
+  try {
+    emailSettingsCache = Object.assign(emailSettingsCache || defaultEmailSettings_(), patch);
+    const saved = await saveEmailSettingsMerge_(patch);
+    if (!saved) throw new Error('No se pudo guardar la configuración de correos.');
+    toast('Configuración de correos guardada');
+    renderCorreosDashboard();
+    renderCorreosConfigTab();
+    window.AdminUnsaved?.markClean('email-config');
+    window.dispatchEvent(new Event('tintin:admin-email-config-saved'));
+  } catch (error) {
+    window.dispatchEvent(new Event('tintin:admin-email-config-save-failed'));
+    throw error;
+  }
 };
 
 // ---- Tabs del módulo Correos ----
 document.querySelectorAll('#correos-tabs .correos-tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('#correos-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.querySelectorAll('.correos-panel').forEach(p => p.classList.toggle('active', p.id === `correos-panel-${btn.dataset.correosTab}`));
+    const switchNow = () => {
+      document.querySelectorAll('#correos-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.correos-panel').forEach(p => p.classList.toggle('active', p.id === `correos-panel-${btn.dataset.correosTab}`));
+    };
+    if (window.AdminUnsaved?.isDirty('email-config')) {
+      window.AdminUnsaved.requestNavigation(switchNow, { scopeIds: ['email-config'] });
+    } else {
+      switchNow();
+    }
   });
 });
 
@@ -5721,44 +5881,40 @@ document.querySelectorAll('.ship-tab-btn').forEach(btn => {
    ============================================= */
 const UnsavedGuard = {
   _serializeFn: null,
-  _original: null,
   _onSave: null,
 
   /** Call once the form is populated with the item being edited/created. */
   track(serializeFn, onSave) {
     this._serializeFn = serializeFn;
-    this._original = JSON.stringify(serializeFn());
     this._onSave = onSave;
+    window.AdminUnsaved?.register('primary-editor', {
+      serialize: () => JSON.stringify(serializeFn()),
+      save: onSave,
+      label: 'el formulario abierto',
+    });
   },
   clear() {
     this._serializeFn = null;
-    this._original = null;
     this._onSave = null;
+    window.AdminUnsaved?.unregister('primary-editor');
   },
   isDirty() {
-    if (!this._serializeFn) return false;
-    return JSON.stringify(this._serializeFn()) !== this._original;
+    return window.AdminUnsaved?.isDirty('primary-editor') || false;
   },
   /** Call before navigating away from the form. Runs `proceed` immediately
    *  if nothing changed; otherwise blocks with a Guardar/Descartar modal. */
   confirmLeave(proceed) {
-    if (!this.isDirty()) { this.clear(); proceed(); return; }
-    const modal = document.getElementById('unsaved-modal');
-    const btnSave = document.getElementById('unsaved-modal-save');
-    const btnDiscard = document.getElementById('unsaved-modal-discard');
-    modal.style.display = 'flex';
-    const cleanup = () => { modal.style.display = 'none'; btnSave.onclick = null; btnDiscard.onclick = null; };
-    btnSave.onclick = async () => {
-      btnSave.disabled = true;
-      try {
-        const ok = await this._onSave();
-        cleanup();
-        if (ok === false) return; // validation/save failed — form stays open with its error message
+    if (!window.AdminUnsaved) {
+      if (!this.isDirty() || window.confirm('Tenés cambios sin guardar. ¿Deseás salir sin guardarlos?')) {
         this.clear();
         proceed();
-      } finally { btnSave.disabled = false; }
-    };
-    btnDiscard.onclick = () => { this.clear(); cleanup(); proceed(); };
+      }
+      return;
+    }
+    window.AdminUnsaved.requestNavigation(() => {
+      this.clear();
+      proceed();
+    }, { scopeIds: ['primary-editor'] });
   }
 };
 
@@ -7252,6 +7408,12 @@ async function loadPermisosSection() {
   document.getElementById('perm-filter-role').onchange = renderPermisosMatrix;
   document.getElementById('btn-perm-save').onclick = savePermisosChanges;
   document.getElementById('btn-perm-restore').onclick = restorePermisosDefaults;
+  window.AdminUnsaved?.register('permissions', {
+    serialize: () => JSON.stringify(_permPending),
+    active: () => document.getElementById('section-permisos')?.classList.contains('active'),
+    label: 'Roles y permisos',
+    save: savePermisosChanges,
+  });
 }
 
 function renderPermisosMatrix() {
@@ -7362,18 +7524,18 @@ window.restorePermisosDefaults = function restorePermisosDefaults() {
 
 async function savePermisosChanges() {
   const diff = computePermDiff();
-  if (!diff.length) return;
+  if (!diff.length) return true;
 
   const dangerousEnabling = diff.filter(d => d.act.dangerous && d.after === true);
   const deleteEnabling = dangerousEnabling.filter(d => d.actKey === 'eliminar');
 
   if (dangerousEnabling.length) {
     const summary = dangerousEnabling.map(d => `${PERM_ROLE_LABELS[d.role]}: ${PERMISSION_MODULES[d.modKey].label} → ${d.act.label}`).join('\n');
-    if (!confirm(`⚠️ Este cambio puede afectar datos importantes de la tienda:\n\n${summary}\n\n¿Confirmás que querés habilitar esto?`)) return;
+    if (!confirm(`⚠️ Este cambio puede afectar datos importantes de la tienda:\n\n${summary}\n\n¿Confirmás que querés habilitar esto?`)) return false;
   }
   if (deleteEnabling.length) {
     const typed = prompt(`Para confirmar la habilitación de acciones de ELIMINAR, escribí CONFIRMAR:\n\n${deleteEnabling.map(d => `${PERM_ROLE_LABELS[d.role]}: ${d.act.label}`).join('\n')}`);
-    if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
+    if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return false; }
   }
 
   const saveBtn = document.getElementById('btn-perm-save');
@@ -7388,9 +7550,12 @@ async function savePermisosChanges() {
     }
     _permOriginal = JSON.parse(JSON.stringify(_permPending));
     updatePermDirtyState();
+    window.AdminUnsaved?.markClean('permissions');
     toast(`${diff.length} permiso(s) actualizados — algunos cambios se aplican al cambiar de sección o recargar la página`);
+    return true;
   } catch (e) {
     toast('Error al guardar permisos: ' + e.message);
+    return false;
   } finally {
     saveBtn.textContent = 'Guardar cambios';
     saveBtn.disabled = !computePermDiff().length;
@@ -7763,6 +7928,19 @@ async function contRenderPage(pageId) {
   });
   loadingEl.style.display = 'none';
   sectionsEl.style.display = 'block';
+  sectionsEl.querySelectorAll('.cont-section').forEach(sectionEl => {
+    const sectionId = sectionEl.dataset.section;
+    const scopeId = `content:${pageId}:${sectionId}`;
+    window.AdminUnsaved?.register(scopeId, {
+      root: sectionEl,
+      active: () => contCurrentPage === pageId && document.getElementById('section-contenido')?.classList.contains('active'),
+      label: `Contenido · ${pageSchema?.label || pageId} · ${sectionId}`,
+      save: async () => {
+        const button = sectionEl.querySelector('.cont-section-actions .adm-btn-primary');
+        return button ? window.contSaveSectionBtn(button, pageId, sectionId) : false;
+      },
+    });
+  });
 }
 
 window.contUploadImage = async function(fileInput, inputId) {
@@ -7845,10 +8023,12 @@ window.contSaveSectionBtn = async function(btn, pageId, sectionId) {
     sectionEl.classList.remove('dirty'); sectionEl.classList.add('saved');
     sectionEl.querySelector('.cont-dirty-dot').style.display='none';
     setTimeout(()=>sectionEl.classList.remove('saved'), 2000);
+    window.AdminUnsaved?.markClean(`content:${pageId}:${sectionId}`);
     toast('Sección guardada — los cambios ya son visibles en el sitio');
   } else {
     toast('Error al guardar la sección');
   }
+  return Boolean(ok);
 };
 
 window.contRestoreSection = function(btn, pageId, sectionId) {
@@ -7899,11 +8079,19 @@ async function contRenderTabs() {
 }
 
 window.contSwitchPage = async function(pageId) {
-  contCurrentPage = pageId;
-  document.querySelectorAll('.cont-page-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.pageid === pageId);
-  });
-  await contRenderPage(pageId);
+  const switchNow = async () => {
+    contCurrentPage = pageId;
+    document.querySelectorAll('.cont-page-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.pageid === pageId);
+    });
+    await contRenderPage(pageId);
+  };
+  const currentScopes = window.AdminUnsaved?.dirtyScopes().filter(id => id.startsWith(`content:${contCurrentPage}:`)) || [];
+  if (currentScopes.length) {
+    window.AdminUnsaved.requestNavigation(switchNow, { scopeIds: currentScopes });
+  } else {
+    await switchNow();
+  }
 };
 
 document.addEventListener('click', async e => {
@@ -8244,12 +8432,27 @@ window.openOrderEdit = function(orderId) {
   renderOeItems();
   document.getElementById('order-edit-overlay').style.display = '';
   document.body.style.overflow = 'hidden';
+  window.AdminUnsaved?.register('order-editor', {
+    root: '#order-edit-overlay',
+    active: () => document.getElementById('order-edit-overlay')?.style.display !== 'none' && Boolean(_editingOrder),
+    serialize: () => JSON.stringify({
+      form: window.AdminUnsaved.serializeRoot(document.getElementById('order-edit-overlay')),
+      items: _editingOrder?.items || [],
+    }),
+    label: 'el pedido abierto',
+    save: window.saveOrderEdit,
+  });
 };
 
-window.closeOrderEdit = function() {
+window.closeOrderEdit = function(force = false) {
+  if (!force && window.AdminUnsaved?.isDirty('order-editor')) {
+    window.AdminUnsaved.requestNavigation(() => window.closeOrderEdit(true), { scopeIds: ['order-editor'] });
+    return;
+  }
   document.getElementById('order-edit-overlay').style.display = 'none';
   document.body.style.overflow = '';
   _editingOrder = null;
+  window.AdminUnsaved?.unregister('order-editor');
 };
 
 function renderOeItems() {
@@ -8308,9 +8511,9 @@ function recalcOeTotals() {
 }
 
 window.saveOrderEdit = async function() {
-  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'editarCompleto')) { toast('No tenés permiso para editar el pedido completo'); return; }
+  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'editarCompleto')) { toast('No tenés permiso para editar el pedido completo'); return false; }
   const orderId = document.getElementById('oe-id').value;
-  if (!orderId || !_editingOrder) return;
+  if (!orderId || !_editingOrder) return false;
   // Snapshot ANTES de tocar allOrders (más abajo se sobreescribe con
   // Object.assign) — así se puede armar un resumen simple de qué cambió.
   const _before = allOrders.find(x => x.id === orderId);
@@ -8320,13 +8523,13 @@ window.saveOrderEdit = async function() {
   // Validations
   const name  = document.getElementById('oe-name').value.trim();
   const phone = document.getElementById('oe-phone').value.trim();
-  if (!name)  { toast('El nombre del cliente es obligatorio'); document.getElementById('oe-name').focus(); return; }
-  if (!phone) { toast('El teléfono del cliente es obligatorio'); document.getElementById('oe-phone').focus(); return; }
+  if (!name)  { toast('El nombre del cliente es obligatorio'); document.getElementById('oe-name').focus(); return false; }
+  if (!phone) { toast('El teléfono del cliente es obligatorio'); document.getElementById('oe-phone').focus(); return false; }
   const items = _editingOrder.items || [];
-  if (items.some(i => !i.qty || i.qty < 1)) { toast('Las cantidades deben ser al menos 1'); return; }
+  if (items.some(i => !i.qty || i.qty < 1)) { toast('Las cantidades deben ser al menos 1'); return false; }
   const total    = _editingOrder._calcTotal ?? (_editingOrder.total || 0);
   const subtotal = _editingOrder._calcSubtotal ?? (_editingOrder.subtotal || 0);
-  if (total < 0) { toast('El total no puede ser negativo'); return; }
+  if (total < 0) { toast('El total no puede ser negativo'); return false; }
 
   const btn = document.getElementById('oe-save-btn');
   btn.disabled = true; btn.textContent = 'Guardando…';
@@ -8379,10 +8582,13 @@ window.saveOrderEdit = async function() {
     if (_beforeTotal !== total) changes.push(`Total: ${_beforeTotal ?? 0} → ${total}`);
     logAudit('editar_pedido', 'pedido', orderId, _before?.shortId || orderId, changes.join(' · ') || 'Datos del pedido actualizados');
     toast('Pedido actualizado');
-    closeOrderEdit();
+    window.AdminUnsaved?.markClean('order-editor');
+    closeOrderEdit(true);
     applyOrderFilters();
+    return true;
   } catch(e) {
     toast('Error al guardar: ' + e.message);
+    return false;
   } finally {
     btn.disabled = false; btn.textContent = 'Guardar cambios';
   }
@@ -9020,14 +9226,15 @@ function isValidColorLocal(v) {
 <!-- ══════════════════════════════════════
      UNSAVED CHANGES MODAL (shared: products + collections)
 ══════════════════════════════════════ -->
-<div id="unsaved-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:var(--shadow-lg);text-align:center">
+<div id="unsaved-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="unsaved-modal-title" aria-describedby="unsaved-modal-detail" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:16px;max-width:460px;width:100%;padding:28px;box-shadow:var(--shadow-lg);text-align:center">
     <div style="font-size:32px;margin-bottom:10px">⚠️</div>
-    <div style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
-    <div style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>
+    <div id="unsaved-modal-title" style="font-size:16px;font-weight:800;margin-bottom:8px">Tenés cambios sin guardar</div>
+    <div id="unsaved-modal-detail" style="font-size:13px;color:var(--adm-muted);margin-bottom:22px">Si salís ahora vas a perder lo que modificaste. ¿Qué querés hacer?</div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button type="button" class="adm-btn adm-btn-primary" id="unsaved-modal-save">Guardar cambios</button>
       <button type="button" class="adm-btn adm-btn-danger" id="unsaved-modal-discard">Descartar cambios</button>
+      <button type="button" class="adm-btn adm-btn-outline" id="unsaved-modal-stay">Seguir editando</button>
     </div>
   </div>
 </div>
@@ -9211,6 +9418,6 @@ function isValidColorLocal(v) {
   </div>
 </div>
 
-<script type="module" src="js/admin-color-scheme.js?v=tintin-20260715-16"></script>
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260715-17"></script>
 </body>
 </html>

@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260715-16"></script>
-  <script src="js/page-loader.js?v=tintin-20260715-16"></script>
-  <script src="js/public-shell.js?v=tintin-20260715-16" defer></script>
+  <script src="js/color-scheme-instant.js?v=tintin-20260715-17"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-17"></script>
+  <script src="js/public-shell.js?v=tintin-20260715-17" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -15,18 +15,17 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/perfil.html" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-16" />
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-16">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-font-1" />
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <style>
     /* Alias variables para que los estilos de perfil funcionen con styles.css */
     :root {
@@ -35,7 +34,7 @@
       --acc-light: var(--pink-mid);
       --acc-pale:  var(--pink-pale);
       --radius:    var(--radius-md);
-      --font:      var(--font-body);
+      --font: "Montserrat";
     }
 
     body { background: var(--pink-pale); }
@@ -98,7 +97,7 @@
     .perfil-input {
       padding: 11px 16px; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); font-size: 14px;
-      font-family: var(--font-body); color: var(--text); background: #fafafa;
+      font-family:Montserrat; color: var(--text); background: #fafafa;
       transition: border .2s, box-shadow .2s;
     }
     .perfil-input:focus {
@@ -109,7 +108,7 @@
     .perfil-btn {
       padding: 11px 24px; border-radius: 50px; font-size: 12px;
       font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
-      cursor: pointer; font-family: var(--font-body); border: none; transition: all .2s;
+      cursor: pointer; font-family:Montserrat; border: none; transition: all .2s;
       text-decoration: none; display: inline-flex; align-items: center;
     }
     .perfil-btn-primary { background: var(--acc); color: #fff !important; }
@@ -139,7 +138,7 @@
       background: var(--acc); color: #fff !important; padding: 12px 24px;
       border-radius: 50px; font-size: 13px; font-weight: 700;
       display: none; z-index: 999; box-shadow: 0 4px 16px rgba(0,0,0,.18);
-      font-family: var(--font-body);
+      font-family:Montserrat;
     }
     .perfil-toast.show { display: block; }
 
@@ -259,7 +258,7 @@
 
 
 <!-- Scripts -->
-<script src="script.js?v=tintin-20260715-16"></script>
+<script src="script.js?v=tintin-20260715-17"></script>
 
 <script type="module">
 import { auth, db } from "./js/firebase.js";
@@ -271,7 +270,7 @@ import {
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js";
-import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260715-16";
+import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260715-17";
 import { sanitizeImageUrl } from "./js/image-utils.js";
 
 const ROLE_COLORS = {
@@ -494,8 +493,8 @@ async function loadUserOrders(user) {
   }
 }
 </script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260715-16"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-16"></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260715-16"></script>
+<script type="module" src="js/whatsapp.js?v=tintin-20260715-17"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-17"></script>
+  <script type="module" src="js/color-scheme.js?v=tintin-20260715-17"></script>
 </body>
 </html>

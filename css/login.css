@@ -16,13 +16,13 @@
   --acc-pale:  var(--pink-pale);
   --text:      var(--ink);
   --muted:     #9e7a89; /* tono propio de login, más neutro que --text-muted del sitio público — se mantiene a propósito para no perder legibilidad en los inputs */
-  --font:      var(--font-body);
-  --serif:     var(--font-heading);
+  --font: "Montserrat";
+  --serif: "Montserrat";
 }
 
 html, body {
   height: 100%;
-  font-family: var(--font);
+  font-family:Montserrat;
   background: var(--acc-pale);
   overflow-x: clip;
 }
@@ -52,7 +52,7 @@ html, body {
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 .login-brand-logo {
-  font-family: var(--font);
+  font-family:Montserrat;
   font-size: 42px; font-weight: 900;
   letter-spacing: .18em;
   color: #fff !important;
@@ -67,7 +67,7 @@ html, body {
   position: relative;
 }
 .login-brand-tagline {
-  font-family: var(--serif);
+  font-family:Montserrat;
   font-style: italic;
   font-size: 26px; color: rgba(255,255,255,.9) !important;
   text-align: center; line-height: 1.4;
@@ -141,7 +141,7 @@ html, body {
   width: 100%;
   padding: 15px; border: 1.5px solid var(--border); border-radius: 50px;
   font-size: 14px; font-weight: 700; color: var(--text);
-  cursor: pointer; background: #fff; font-family: var(--font);
+  cursor: pointer; background: #fff; font-family:Montserrat;
   transition: all .2s;
   box-shadow: 0 4px 16px rgba(184,76,114,.12);
 }
@@ -184,7 +184,7 @@ html, body {
 }
 .login-email-input {
   width: 100%; padding: 14px 16px; border: 1.5px solid var(--border);
-  border-radius: 12px; font-size: 14px; font-family: var(--font);
+  border-radius: 12px; font-size: 14px; font-family:Montserrat;
   color: var(--text); background: #fff; transition: border .2s;
   margin-bottom: 12px;
 }
@@ -194,7 +194,7 @@ html, body {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; padding: 15px; border: none; border-radius: 50px;
   font-size: 14px; font-weight: 700; color: #fff;
-  cursor: pointer; background: var(--acc); font-family: var(--font);
+  cursor: pointer; background: var(--acc); font-family:Montserrat;
   transition: all .2s;
 }
 .login-email-btn:hover:not(:disabled) { background: var(--acc-dark); }
@@ -204,7 +204,7 @@ html, body {
 .login-email-resend {
   display: block; width: 100%; text-align: center; margin-top: 12px;
   background: none; border: none; font-size: 12px; font-weight: 700;
-  color: var(--acc); cursor: pointer; font-family: var(--font);
+  color: var(--acc); cursor: pointer; font-family:Montserrat;
 }
 .login-email-resend:disabled { color: var(--muted); cursor: not-allowed; }
 

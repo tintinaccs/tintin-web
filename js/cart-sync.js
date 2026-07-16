@@ -62,6 +62,8 @@ function createRuntime() {
   let status = 'guest';
   let readyResolve = null;
   let readyPromise = new Promise(resolve => { readyResolve = resolve; });
+  let mutationChain = Promise.resolve();
+  let feedbackTimer = 0;
 
   function rawString(key) {
     try { return nativeGetItem.call(window.localStorage, key); } catch { return null; }
@@ -187,6 +189,20 @@ function createRuntime() {
     return [...map.values()].slice(0, MAX_CART_LINES);
   }
 
+  function enforceStockLimits(items) {
+    const normalized = normalizeCart(items);
+    if (!Array.isArray(window.PRODUCTS)) return normalized;
+    const usedByProduct = new Map();
+    return normalized.flatMap(item => {
+      const limit = stockLimit(item.id);
+      const used = usedByProduct.get(String(item.id)) || 0;
+      const allowed = Math.max(0, Math.min(item.qty, limit - used));
+      if (!allowed) return [];
+      usedByProduct.set(String(item.id), used + allowed);
+      return [{ ...item, qty: allowed }];
+    });
+  }
+
   function projection(items) {
     return JSON.stringify(
       normalizeCart(items)
@@ -200,7 +216,7 @@ function createRuntime() {
   }
 
   function currentLocalCart() {
-    const normalized = normalizeCart(rawGet(activeCartKey));
+    const normalized = enforceStockLimits(rawGet(activeCartKey));
     const before = rawString(activeCartKey) || '[]';
     const after = JSON.stringify(normalized);
     if (before !== after) rawSet(activeCartKey, normalized);
@@ -208,7 +224,7 @@ function createRuntime() {
   }
 
   function writeLocal(items, { notify = true } = {}) {
-    const normalized = normalizeCart(items);
+    const normalized = enforceStockLimits(items);
     rawSet(activeCartKey, normalized);
     if (notify) dispatchCartUpdated();
     return normalized;
@@ -248,6 +264,38 @@ function createRuntime() {
     updateSyncIndicator();
   }
 
+  function showFeedback(message, state = 'info') {
+    if (!message || !document.body) return;
+    let node = document.getElementById('tt-cart-feedback');
+    if (!node) {
+      node = document.createElement('div');
+      node.id = 'tt-cart-feedback';
+      node.className = 'tt-cart-feedback';
+      node.setAttribute('role', 'status');
+      node.setAttribute('aria-live', 'polite');
+      node.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(node);
+    }
+    node.textContent = message;
+    node.dataset.state = state;
+    node.classList.add('is-visible');
+    window.clearTimeout(feedbackTimer);
+    feedbackTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
+  }
+
+  function withCartMutation(operation) {
+    const run = () => Promise.resolve().then(operation);
+    const queued = mutationChain.then(async () => {
+      if (navigator.locks?.request) {
+        const lockName = `tintin-cart-${activeCartKey}`.replace(/[^A-Za-z0-9_-]/g, '_');
+        return navigator.locks.request(lockName, { mode: 'exclusive' }, run);
+      }
+      return run();
+    });
+    mutationChain = queued.catch(() => {});
+    return queued;
+  }
+
   function enhanceCartRows() {
     const items = currentLocalCart();
     const drawerRows = [...document.querySelectorAll('.tt-cart-item')];
@@ -257,7 +305,17 @@ function createRuntime() {
       row.dataset.lineId = item.lineId;
       const qtyButtons = row.querySelectorAll('.tt-cart-qty-btn');
       if (qtyButtons[0]) qtyButtons[0].dataset.cartAction = 'minus';
-      if (qtyButtons[1]) qtyButtons[1].dataset.cartAction = 'plus';
+      if (qtyButtons[1]) {
+        qtyButtons[1].dataset.cartAction = 'plus';
+        const limit = stockLimit(item.id);
+        const productQty = items
+          .filter(entry => String(entry.id) === String(item.id))
+          .reduce((sum, entry) => sum + entry.qty, 0);
+        const maxed = productQty >= limit;
+        qtyButtons[1].disabled = maxed;
+        qtyButtons[1].setAttribute('aria-disabled', String(maxed));
+        qtyButtons[1].title = maxed ? `Stock máximo disponible: ${limit}` : '';
+      }
       const remove = row.querySelector('.tt-cart-item-remove');
       if (remove) remove.dataset.cartAction = 'remove';
     });
@@ -270,6 +328,17 @@ function createRuntime() {
       row.querySelectorAll('[data-action]').forEach(button => {
         button.dataset.cartAction = button.dataset.action;
       });
+      const plus = row.querySelector('[data-action="plus"]');
+      if (plus) {
+        const limit = stockLimit(item.id);
+        const productQty = items
+          .filter(entry => String(entry.id) === String(item.id))
+          .reduce((sum, entry) => sum + entry.qty, 0);
+        const maxed = productQty >= limit;
+        plus.disabled = maxed;
+        plus.setAttribute('aria-disabled', String(maxed));
+        plus.title = maxed ? `Stock máximo disponible: ${limit}` : '';
+      }
     });
     ensureSyncIndicator();
   }
@@ -373,7 +442,7 @@ function createRuntime() {
   }
 
   async function replaceRemoteCart(uid, items) {
-    const normalized = normalizeCart(items);
+    const normalized = enforceStockLimits(items);
     const cartRef = collection(db, 'users', uid, 'cart');
     const snapshot = await getDocs(cartRef);
     const desiredIds = new Set(normalized.map(item => item.lineId));
@@ -629,12 +698,14 @@ function createRuntime() {
     };
   }
 
-  function stockLimit(productId) {
+  function stockLimit(productId, fallbackStock = undefined) {
     const pool = window.PRODUCTS;
-    if (!Array.isArray(pool)) return MAX_QTY;
-    const product = pool.find(entry => String(entry.id) === String(productId));
-    if (!product || product.stock === null || product.stock === undefined) return MAX_QTY;
-    const parsed = Number(product.stock);
+    const product = Array.isArray(pool)
+      ? pool.find(entry => String(entry.id) === String(productId))
+      : null;
+    const rawStock = product?.stock ?? fallbackStock;
+    if (rawStock === null || rawStock === undefined || rawStock === '') return MAX_QTY;
+    const parsed = Number(rawStock);
     return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : MAX_QTY;
   }
 
@@ -649,72 +720,97 @@ function createRuntime() {
 
   async function addToCart(item) {
     const incoming = normalizeItem(item);
-    if (!incoming) return { item: null, capped: false };
-    const items = currentLocalCart();
-    const existing = items.find(entry => entry.lineId === incoming.lineId);
-    const limit = stockLimit(incoming.id);
-    const currentProductQty = items
-      .filter(entry => String(entry.id) === String(incoming.id))
-      .reduce((sum, entry) => sum + entry.qty, 0);
-    const requested = Math.max(1, Number(incoming.qty || 1));
-    const available = Math.max(0, limit - currentProductQty);
-    const accepted = Math.min(requested, available);
-    const capped = accepted < requested;
+    if (!incoming) return { item: null, capped: false, changed: false, reason: 'invalid' };
+    return withCartMutation(() => {
+      const items = currentLocalCart();
+      const existing = items.find(entry => entry.lineId === incoming.lineId);
+      const limit = stockLimit(incoming.id, item?.stock);
+      const currentProductQty = items
+        .filter(entry => String(entry.id) === String(incoming.id))
+        .reduce((sum, entry) => sum + entry.qty, 0);
+      const requested = Math.max(1, Number(incoming.qty || 1));
+      const available = Math.max(0, limit - currentProductQty);
+      const accepted = Math.min(requested, available);
+      const capped = accepted < requested;
 
-    if (existing) {
-      const extra = Math.min(requested, Math.max(0, limit - currentProductQty));
-      if (extra <= 0) return { item: existing, capped: true };
-      existing.qty = Math.min(MAX_QTY, existing.qty + extra);
-      Object.assign(existing, mergeMetadata(incoming, existing), { qty: existing.qty });
-    } else {
-      if (accepted <= 0) return { item: null, capped: true };
-      incoming.qty = accepted;
-      items.push(incoming);
-    }
+      if (existing && accepted <= 0) {
+        const reason = limit <= 1 ? 'already_in_cart' : 'stock_limit';
+        const message = limit <= 1
+          ? 'Este producto ya se encuentra en tu carrito y solo hay una unidad disponible.'
+          : `Ya alcanzaste el stock disponible de “${incoming.name || existing.name || 'este producto'}”.`;
+        showFeedback(message, 'warning');
+        return { item: existing, capped: true, changed: false, reason, limit, requested, accepted: 0 };
+      }
+      if (!existing && accepted <= 0) {
+        showFeedback(`“${incoming.name || 'Este producto'}” está sin stock.`, 'warning');
+        return { item: null, capped: true, changed: false, reason: 'out_of_stock', limit, requested, accepted: 0 };
+      }
 
-    const normalized = writeLocal(items, { notify: true });
-    scheduleRemoteSync(normalized);
-    const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
-    return { item: saved, capped };
+      if (existing) {
+        existing.qty = Math.min(MAX_QTY, existing.qty + accepted);
+        Object.assign(existing, mergeMetadata(incoming, existing), { qty: existing.qty });
+      } else {
+        incoming.qty = accepted;
+        items.push(incoming);
+      }
+
+      const normalized = writeLocal(items, { notify: true });
+      scheduleRemoteSync(normalized);
+      const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
+      if (capped) {
+        showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
+      }
+      return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
+    });
   }
 
   async function removeFromCart(identifier, variantValue = undefined) {
-    const items = currentLocalCart();
-    const line = findLine(items, identifier, variantValue);
-    if (!line) return false;
-    const normalized = writeLocal(items.filter(item => item.lineId !== line.lineId), { notify: true });
-    scheduleRemoteSync(normalized);
-    return true;
+    return withCartMutation(() => {
+      const items = currentLocalCart();
+      const line = findLine(items, identifier, variantValue);
+      if (!line) return false;
+      const normalized = writeLocal(items.filter(item => item.lineId !== line.lineId), { notify: true });
+      scheduleRemoteSync(normalized);
+      return true;
+    });
   }
 
   async function updateQty(identifier, delta, variantValue = undefined) {
-    const items = currentLocalCart();
-    const line = findLine(items, identifier, variantValue);
-    if (!line) return { capped: false, item: null };
-    const numericDelta = Math.trunc(Number(delta) || 0);
-    if (!numericDelta) return { capped: false, item: line };
+    return withCartMutation(() => {
+      const items = currentLocalCart();
+      const line = findLine(items, identifier, variantValue);
+      if (!line) return { capped: false, changed: false, item: null, reason: 'missing' };
+      const numericDelta = Math.trunc(Number(delta) || 0);
+      if (!numericDelta) return { capped: false, changed: false, item: line, reason: 'unchanged' };
 
-    let capped = false;
-    if (numericDelta > 0) {
-      const limit = stockLimit(line.id);
-      const currentProductQty = items
-        .filter(item => String(item.id) === String(line.id))
-        .reduce((sum, item) => sum + item.qty, 0);
-      const allowedDelta = Math.max(0, Math.min(numericDelta, limit - currentProductQty));
-      capped = allowedDelta < numericDelta;
-      line.qty = Math.min(MAX_QTY, line.qty + allowedDelta);
-    } else {
-      line.qty = Math.max(1, line.qty + numericDelta);
-    }
+      let capped = false;
+      let changed = true;
+      if (numericDelta > 0) {
+        const limit = stockLimit(line.id);
+        const currentProductQty = items
+          .filter(item => String(item.id) === String(line.id))
+          .reduce((sum, item) => sum + item.qty, 0);
+        const allowedDelta = Math.max(0, Math.min(numericDelta, limit - currentProductQty));
+        capped = allowedDelta < numericDelta;
+        changed = allowedDelta > 0;
+        line.qty = Math.min(MAX_QTY, line.qty + allowedDelta);
+        if (capped) showFeedback(`No podés superar el stock disponible (${limit}).`, 'warning');
+      } else {
+        line.qty = Math.max(1, line.qty + numericDelta);
+      }
 
-    const normalized = writeLocal(items, { notify: true });
-    scheduleRemoteSync(normalized);
-    return { capped, item: normalized.find(item => item.lineId === line.lineId) || null };
+      if (!changed) return { capped, changed: false, item: line, reason: 'stock_limit' };
+      const normalized = writeLocal(items, { notify: true });
+      scheduleRemoteSync(normalized);
+      return { capped, changed: true, item: normalized.find(item => item.lineId === line.lineId) || null, reason: capped ? 'stock_limit' : 'updated' };
+    });
   }
 
   async function clearCart() {
-    const normalized = writeLocal([], { notify: true });
-    scheduleRemoteSync(normalized);
+    await withCartMutation(() => {
+      const normalized = writeLocal([], { notify: true });
+      scheduleRemoteSync(normalized);
+    });
     await flushCartSync();
   }
 
@@ -754,7 +850,7 @@ function createRuntime() {
     return normalizeCart(items).reduce((sum, item) => sum + Number(item.price || 0) * item.qty, 0);
   }
 
-  function interceptLegacyCartButtons(event) {
+  async function interceptLegacyCartButtons(event) {
     const button = event.target?.closest?.(
       '.tt-cart-qty-btn,.tt-cart-item-remove,.ck-qty-btn,.ck-remove-btn'
     );
@@ -768,8 +864,8 @@ function createRuntime() {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    if (action === 'remove') removeFromCart(lineId);
-    else updateQty(lineId, action === 'plus' ? 1 : -1);
+    if (action === 'remove') await removeFromCart(lineId);
+    else await updateQty(lineId, action === 'plus' ? 1 : -1);
   }
 
   function boot() {
@@ -820,6 +916,8 @@ function createRuntime() {
     getActiveKey: () => activeCartKey,
     getStatus: () => status,
     refreshVisibleCart,
+    showFeedback,
+    stockLimit,
   };
 
   window.CartFirestoreSync = {
@@ -834,6 +932,7 @@ function createRuntime() {
     ready: api.awaitCartReady,
     getStatus: api.getStatus,
   };
+  window.TintinCartRuntime = api;
 
   window.TintinCartSyncV2 = api;
   boot();
@@ -842,6 +941,7 @@ function createRuntime() {
 
 const runtime = existingRuntime || createRuntime();
 if (!existingRuntime) window.__TintinCartSyncV2 = runtime;
+window.TintinCartRuntime = runtime;
 
 export const getCartLocal = (...args) => runtime.getCartLocal(...args);
 export const setCartLocal = (...args) => runtime.setCartLocal(...args);
@@ -856,6 +956,8 @@ export const awaitCartReady = (...args) => runtime.awaitCartReady(...args);
 export const formatPrice = (...args) => runtime.formatPrice(...args);
 export const cartTotal = (...args) => runtime.cartTotal(...args);
 export const lineIdFor = (...args) => runtime.lineIdFor(...args);
+export const showCartFeedback = (...args) => runtime.showFeedback(...args);
+export const getStockLimit = (...args) => runtime.stockLimit(...args);
 
 // checkout.html ya carga este módulo. Desde acá se inicia el guardado seguro
 // únicamente en la pantalla de compra, sin afectar catálogo, producto o carrito.
@@ -865,7 +967,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('./secure-checkout-order.js?v=tintin-20260715-16').catch(error => {
+  import('./secure-checkout-order.js?v=tintin-20260715-17').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

@@ -557,7 +557,7 @@ function buildGenericEmailHtml_(t, vars) {
   const buttonHtml = (buttonText && buttonUrl)
     ? '<p style="text-align:center;margin:24px 0"><a href="' + buttonUrl + '" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">' + buttonText + '</a></p>'
     : '';
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
     (brandPhrase ? '<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">' + brandPhrase + '</p>' : '') +
     (greeting ? '<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">' + greeting + '</h2>' : '') +
@@ -769,7 +769,7 @@ function buildAdminHtml(shortId, order) {
   const discount = discountAmount(order);
   const itemRows = (order.items || []).map(itemRowHtml).join('');
 
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:24px">' +
     '<h2 style="color:#b84c72;margin:0 0 16px;font-size:18px">Nuevo pedido en ' + STORE_NAME + '</h2>' +
     '<p style="color:#666;margin:0 0 20px;font-size:13px">Pedido #' + shortId + ' recibido el ' + fmtDate(order.createdAt) + '</p>' +
@@ -841,7 +841,7 @@ function buildCustomerHtml(shortId, order, isTest) {
     ? '<div style="background:#fff3cd;color:#856404;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:12px;text-align:center">Este es un correo de prueba de Tintin Accesorios. No corresponde a un pedido real.</div>'
     : '';
 
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
     testBanner +
     '<h2 style="color:#b84c72;margin:0 0 12px;font-size:18px">Gracias por tu pedido' + (first ? ', ' + first : '') + '.</h2>' +
@@ -893,12 +893,12 @@ implementación desplegada desde `tintinpedidos@gmail.com`:
 
 ```javascript
 export const EMAIL_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxia47SEM2GmGrjSF2Cy1cviYhTt9PVF7n3M_vYVuIl26PQeoZ-f2OqSC0IyMBr5Ob0lA/exec';
-export const EMAIL_SECRET = '58964bb773a19a7b207be3c75673866b914a070c106bec92';
 ```
 
 Si en algún momento se vuelve a implementar el script de cero (URL `/exec` nueva) o se
-rota el secreto, hay que actualizar esas dos líneas en `js/email-config.js` — el
-`EMAIL_SECRET` del sitio y el `SHARED_SECRET` del script deben coincidir exacto.
+rota la implementación, hay que actualizar solamente la URL en `js/email-config.js`.
+El flujo actual valida la identidad de Firebase y no publica secretos en el navegador
+ni en esta documentación.
 
 El proyecto viejo bajo `tintinaccs@gmail.com` ya no está conectado a nada — el
 sitio no le manda ninguna llamada. Si todavía existe una implementación activa
