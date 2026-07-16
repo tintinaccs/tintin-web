@@ -55,14 +55,6 @@ service cloud.firestore {
       return hasRole("viewer");
     }
 
-    function isModerator() {
-      return hasRole("moderator");
-    }
-
-    function isSupport() {
-      return hasRole("support");
-    }
-
     function isSuperAdminAccount(data) {
       return data.email == "tintinaccs@gmail.com";
     }
