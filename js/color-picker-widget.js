@@ -7,7 +7,7 @@
  * valor anterior. Acepta HEX, RGB(A) y HSL(A), e integra EyeDropper cuando el
  * navegador lo ofrece.
  */
-import { parseColor, isValidColor } from './color-contrast-utils.js?v=tintin-20260716-diagnostic-fixes-2';
+import { parseColor, isValidColor } from './color-contrast-utils.js?v=tintin-20260716-product-page-1';
 
 let stylesInjected = false;
 
