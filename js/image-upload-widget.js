@@ -4,7 +4,7 @@
    Reemplaza cualquier <input type="url"> por un componente visual de carga
    directa: clic, arrastrar y soltar, previsualización, progreso, reemplazo,
    borrado y biblioteca. El procesamiento ocurre en el navegador y la subida
-   real se realiza con firmas temporales de Cloudinary emitidas por Netlify.
+   real se realiza con firmas temporales de Cloudinary emitidas por Cloudflare.
    ============================================================= */
 
 import { validateImageFile } from './image-processing.js';
@@ -42,10 +42,11 @@ function ensureStyles() {
     .tt-iuw-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .tt-iuw-btn{border:1px solid #e3c3cf;background:#fff;border-radius:8px;padding:6px 12px;font:600 11.5px Montserrat,sans-serif;color:#7a3a4d;cursor:pointer}
     .tt-iuw-btn:hover{background:#fdf0f5}
-    .tt-iuw-btn:disabled{opacity:.5;cursor:wait}
+    .tt-iuw-btn:disabled{opacity:.5;cursor:not-allowed}
     .tt-iuw-btn-danger{color:#b23a3a;border-color:#e8c3c3}
-    .tt-iuw-btn-primary{background:#AD3F67;border-color:#AD3F67;color:#fff}
+    .tt-iuw-btn-primary{background:#AD3F67;border-color:#AD3F67;color:#fff;flex:1 1 150px;min-width:150px}
     .tt-iuw-btn-primary:hover{background:#95355a}
+    .tt-iuw-btn-primary:disabled:hover{background:#AD3F67}
     .tt-iuw-progress{margin-top:8px;height:6px;border-radius:999px;background:#f1e3e8;overflow:hidden;display:none}
     .tt-iuw-progress.show{display:block}
     .tt-iuw-progress-bar{height:100%;width:35%;background:#AD3F67;border-radius:999px;animation:tt-iuw-indeterminate 1.1s ease-in-out infinite}
@@ -161,11 +162,17 @@ export function attachImageUploadWidget(container, options = {}) {
     actions.replaceChildren();
     if (busy) return;
 
+    const confirmButton = createButton(
+      'Confirmar y subir',
+      'tt-iuw-btn tt-iuw-btn-primary',
+      commitPendingFile
+    );
+    confirmButton.disabled = !pendingFile;
+    confirmButton.setAttribute('aria-disabled', String(!pendingFile));
+    actions.append(confirmButton);
+
     if (pendingFile) {
-      actions.append(
-        createButton('Confirmar y subir', 'tt-iuw-btn tt-iuw-btn-primary', commitPendingFile),
-        createButton('Cancelar', 'tt-iuw-btn', cancelPendingFile)
-      );
+      actions.append(createButton('Cancelar', 'tt-iuw-btn', cancelPendingFile));
       return;
     }
 
