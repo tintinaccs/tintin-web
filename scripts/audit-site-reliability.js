@@ -198,7 +198,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260715-17'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-color-scheme-1'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);
