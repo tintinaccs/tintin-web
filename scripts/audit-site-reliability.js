@@ -18,7 +18,7 @@ const accountFix = read('js/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
 const privacyConsent = read('js/privacy-consent.js');
 const analytics = read('js/analytics.js');
-const geoFunction = read('netlify/functions/visitor-geo.mjs');
+const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
 const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
 const welcomeAdmin = read('js/admin-welcome-control.js');
@@ -70,13 +70,18 @@ check('La actividad propia y Google Analytics esperan el permiso opcional',
   analytics.includes('if (!hasStatisticsConsent()) return;') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
-  geoFunction.includes('context?.geo') &&
-  !/\bcontext\.ip\s*[;,)]/.test(geoFunction.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')) &&
+  geoFunction.includes('const cf = request.cf || {}') &&
+  geoFunction.includes("source: countryCode || cf.city ? 'cloudflare'") &&
+  !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
-check('GitHub Pages usa el servicio geografico inmutable ya publicado',
-  activity.includes("const GEO_SERVICE_URL = 'https://6a57b4b29630770008053f55--tintinaccesorios.netlify.app/.netlify/functions/visitor-geo'") &&
-  activity.includes('return GEO_SERVICE_URL;') &&
-  !activity.includes('https://tintinaccesorios.netlify.app/.netlify/functions/visitor-geo'));
+check('GitHub Pages usa el servicio geográfico de Cloudflare',
+  activity.includes("const GEO_SERVICE_URL = 'https://tintinaccesorios.pages.dev/api/visitor-geo'") &&
+  activity.includes("return '/api/visitor-geo';") &&
+  activity.includes("hostname.endsWith('github.io')") &&
+  !activity.includes('/.netlify/functions/'));
+check('Los previews de Cloudflare no escriben estadísticas',
+  activity.includes("const cloudflarePreview = /\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname)") &&
+  activity.includes('!netlifyPreview && !cloudflarePreview'));
 check('Las reglas limitan la escritura de sesiones y presencia',
   rules.includes('presenceIsValid(visitorId)') &&
   rules.includes('trafficSessionIsValid(dateKey, sessionId)') &&
@@ -92,17 +97,17 @@ check('El dashboard muestra sesiones de hoy y personas en línea',
 check('El dashboard recibe sesiones y presencia en tiempo real',
   admin.includes('dashboardSessionUnsubscribe = onSnapshot') &&
   admin.includes('dashboardPresenceUnsubscribe = onSnapshot'));
-check('El centro estadistico general esta reservado a Super Admin',
+check('El centro estadístico general está reservado a Super Admin',
   admin.includes('id="section-estadisticas"') &&
   admin.includes("target === 'estadisticas' && currentRole !== 'superadmin'") &&
   admin.includes('id="statistics-revenue-trend"') &&
   admin.includes('id="statistics-visit-locations"'));
-check('Pedidos, usuarios, auditoria y correos se actualizan sin F5',
+check('Pedidos, usuarios, auditoría y correos se actualizan sin F5',
   admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000))") &&
   admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000))") &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
   admin.includes('function startCorreosRealtimeListeners()'));
-check('Las estadisticas combinan pedidos, usuarios, catalogo, visitas y paginas',
+check('Las estadísticas combinan pedidos, usuarios, catálogo, visitas y páginas',
   admin.includes('function renderGeneralStatistics()') &&
   admin.includes('statistics-top-products') &&
   admin.includes('statistics-order-locations') &&
@@ -119,7 +124,7 @@ check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeAdmin.includes("from './welcome-config.js'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
-  !profile.includes("./js/onboarding.js"));
+  !profile.includes('./js/onboarding.js'));
 check('Super Admin puede probar y reactivar la bienvenida en lotes seguros',
   welcomeRuntime.includes('config.previewEnabled') &&
   welcomeAdmin.includes('resetWelcomeForClients()') &&
@@ -142,7 +147,7 @@ check('El reveal es irreversible, liviano y procesa solo nodos agregados',
   scrollReveal.includes("element.classList.add('tt-visible')") &&
   scrollReveal.includes('scheduleScan(node)') &&
   !scrollReveal.includes('filter:blur'));
-check('Las imagenes dinamicas reciben carga diferida y prioridad automatica',
+check('Las imágenes dinámicas reciben carga diferida y prioridad automática',
   imagePerformance.includes("image.loading = priority ? 'eager' : 'lazy'") &&
   imagePerformance.includes("image.decoding = 'async'") &&
   loader.includes('bootImagePerformance();'));
@@ -174,7 +179,7 @@ check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
   main.includes("menu.setAttribute('aria-hidden', 'false')"));
 check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
-  productsStore.includes(".filter(p => p.active !== false && Boolean(p.name))") &&
+  productsStore.includes('.filter(p => p.active !== false && Boolean(p.name))') &&
   productsStore.includes('featuredProducts.slice(0, 5)') &&
   loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
   main.includes('window.isFeaturable = isFeaturable'));
@@ -190,7 +195,7 @@ function sourceFiles(dir) {
     return [absolute];
   });
 }
-check('El repositorio no contiene marcas explicitas de autoria por IA',
+check('El repositorio no contiene marcas explícitas de autoría automatizada',
   sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
 
 const staleVersions = [];
