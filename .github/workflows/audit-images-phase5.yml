@@ -69,7 +69,18 @@ jobs:
           node --check scripts/audit-images-phase5.js
           node --check scripts/audit-site-reliability.js
       - name: Compilar Pages Functions
-        run: npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=.
+        shell: bash
+        run: |
+          set -o pipefail
+          npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=. 2>&1 | tee wrangler-build.log
+      - name: Guardar registro de Wrangler
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler-build-log
+          path: wrangler-build.log
+          if-no-files-found: warn
+          retention-days: 1
       - name: Revisar integración
         run: npm run audit:images
       - name: Revisar confiabilidad
