@@ -1,14 +1,35 @@
 // =============================================================
-// TINTIN — Diagnóstico integral: shim de solo lectura para Firebase Storage
+// TINTIN — Diagnóstico integral: compatibilidad histórica de Storage
 // =============================================================
-// Ninguna página de la plataforma sube ni borra archivos en la carga inicial
-// hoy, pero este shim existe igual como resguardo: si en el futuro algún
-// módulo llamara una de estas funciones durante la carga, el diagnóstico no
-// debe poder subir ni borrar archivos reales. Lecturas (getDownloadURL, ref,
-// listAll, getMetadata) pasan directo al SDK real.
+// Firebase Storage ya no forma parte de la plataforma. Este módulo conserva
+// únicamente una superficie inerte para que un diagnóstico antiguo no pueda
+// romperse si encuentra una referencia histórica durante una inspección. No
+// importa el SDK de Firebase Storage ni realiza solicitudes de red.
 import { reportBlockedWrite } from './diagnostic-shim-report.js';
 
-export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+export function getStorage() {
+  return { app: null, __diagnosticOnly: true };
+}
+
+export function ref(_storage, path = '') {
+  return {
+    fullPath: String(path || ''),
+    name: String(path || '').split('/').pop() || '',
+    bucket: 'diagnostic-disabled'
+  };
+}
+
+export async function getDownloadURL() {
+  return '';
+}
+
+export async function getMetadata(reference) {
+  return { fullPath: reference?.fullPath || '', contentType: null, size: 0 };
+}
+
+export async function listAll() {
+  return { items: [], prefixes: [] };
+}
 
 export async function uploadBytes(reference) {
   reportBlockedWrite('uploadBytes', reference?.fullPath || null);
@@ -22,7 +43,6 @@ export async function uploadString(reference) {
 
 export function uploadBytesResumable(reference) {
   reportBlockedWrite('uploadBytesResumable', reference?.fullPath || null);
-  const listeners = {};
   return {
     on: (_event, _progress, _error, complete) => {
       if (typeof complete === 'function') complete();

@@ -1,15 +1,18 @@
 /* =============================================================
    TINTIN — Widget reutilizable de carga de imágenes
 
-   Reemplaza cualquier <input type="url"> de imagen por un componente visual
-   de carga directa: clic, arrastrar y soltar, previsualización antes de
-   subir, progreso, reemplazo, borrado y mensajes de error/éxito. Se apoya en
-   image-processing.js (validar/redimensionar/WebP) y media-library.js
-   (subida real a Storage + registro en Firestore).
+   Reemplaza cualquier <input type="url"> por un componente visual de carga
+   directa: clic, arrastrar y soltar, previsualización, progreso, reemplazo,
+   borrado y biblioteca. El procesamiento ocurre en el navegador y la subida
+   real se realiza con firmas temporales de Cloudinary emitidas por Netlify.
    ============================================================= */
 
 import { validateImageFile } from './image-processing.js';
-import { uploadImageToLibrary } from './media-library.js';
+import {
+  deleteMediaByUrlIfUnused,
+  deleteMediaItem,
+  uploadImageToLibrary
+} from './media-library.js';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',
@@ -61,14 +64,9 @@ function iconSvg() {
 }
 
 /**
- * Monta el widget dentro de `container` (se le reemplaza el contenido).
- * options: {
- *   value, label, hint (texto de tamaño/proporción recomendada),
- *   maxWidth, maxHeight, quality, thumbSize,
- *   onChange(url, meta|null), onOpenLibrary() -> Promise<string|null>,
- *   confirmRemove (bool, default true)
- * }
- * Devuelve { setValue(url), destroy() }.
+ * Monta el widget dentro de `container`.
+ * options: value, label, hint, maxWidth, maxHeight, quality, thumbSize,
+ * section, slotKey, onChange(url, meta), onOpenLibrary(), confirmRemove.
  */
 export function attachImageUploadWidget(container, options = {}) {
   if (!container) return { setValue() {}, destroy() {} };
@@ -81,6 +79,8 @@ export function attachImageUploadWidget(container, options = {}) {
     maxHeight = 2000,
     quality,
     thumbSize,
+    section = 'biblioteca',
+    slotKey = null,
     onChange,
     onOpenLibrary,
     confirmRemove = true,
@@ -102,10 +102,8 @@ export function attachImageUploadWidget(container, options = {}) {
 
   const body = document.createElement('div');
   body.className = 'tt-iuw-body';
-
   const preview = document.createElement('div');
   preview.className = 'tt-iuw-preview';
-
   const drop = document.createElement('div');
   drop.className = 'tt-iuw-drop';
   drop.tabIndex = 0;
@@ -116,19 +114,15 @@ export function attachImageUploadWidget(container, options = {}) {
   input.type = 'file';
   input.accept = 'image/jpeg,image/png,image/webp,image/avif';
   input.className = 'tt-iuw-input';
-
   body.append(preview, drop);
 
   const actions = document.createElement('div');
   actions.className = 'tt-iuw-actions';
-
   const progress = document.createElement('div');
   progress.className = 'tt-iuw-progress';
   progress.innerHTML = '<div class="tt-iuw-progress-bar"></div>';
-
   const status = document.createElement('div');
   status.className = 'tt-iuw-status';
-
   root.append(head, body, actions, progress, status, input);
   container.replaceChildren(root);
 
@@ -154,65 +148,67 @@ export function attachImageUploadWidget(container, options = {}) {
     }
   }
 
+  function createButton(text, className, handler) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = className;
+    button.textContent = text;
+    button.addEventListener('click', handler);
+    return button;
+  }
+
   function renderActions() {
     actions.replaceChildren();
     if (busy) return;
 
     if (pendingFile) {
-      const confirmBtn = document.createElement('button');
-      confirmBtn.type = 'button';
-      confirmBtn.className = 'tt-iuw-btn tt-iuw-btn-primary';
-      confirmBtn.textContent = 'Confirmar y subir';
-      confirmBtn.addEventListener('click', commitPendingFile);
-
-      const cancelBtn = document.createElement('button');
-      cancelBtn.type = 'button';
-      cancelBtn.className = 'tt-iuw-btn';
-      cancelBtn.textContent = 'Cancelar';
-      cancelBtn.addEventListener('click', cancelPendingFile);
-
-      actions.append(confirmBtn, cancelBtn);
+      actions.append(
+        createButton('Confirmar y subir', 'tt-iuw-btn tt-iuw-btn-primary', commitPendingFile),
+        createButton('Cancelar', 'tt-iuw-btn', cancelPendingFile)
+      );
       return;
     }
 
     if (currentUrl) {
-      const replaceBtn = document.createElement('button');
-      replaceBtn.type = 'button';
-      replaceBtn.className = 'tt-iuw-btn';
-      replaceBtn.textContent = 'Reemplazar';
-      replaceBtn.addEventListener('click', () => input.click());
-
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'tt-iuw-btn tt-iuw-btn-danger';
-      removeBtn.textContent = 'Quitar';
-      removeBtn.addEventListener('click', removeImage);
-
-      actions.append(replaceBtn, removeBtn);
+      actions.append(
+        createButton('Reemplazar', 'tt-iuw-btn', () => input.click()),
+        createButton('Quitar', 'tt-iuw-btn tt-iuw-btn-danger', removeImage)
+      );
     }
 
     if (typeof onOpenLibrary === 'function') {
-      const libraryBtn = document.createElement('button');
-      libraryBtn.type = 'button';
-      libraryBtn.className = 'tt-iuw-btn';
-      libraryBtn.textContent = 'Elegir de la biblioteca';
-      libraryBtn.addEventListener('click', pickFromLibrary);
-      actions.append(libraryBtn);
+      actions.append(createButton('Elegir de la biblioteca', 'tt-iuw-btn', pickFromLibrary));
+    }
+  }
+
+  async function cleanPreviousUrl(previousUrl, nextUrl) {
+    if (!previousUrl || previousUrl === nextUrl) return;
+    try {
+      await deleteMediaByUrlIfUnused(previousUrl);
+    } catch (error) {
+      console.warn('[image-upload-widget] No se pudo limpiar la imagen anterior:', error);
     }
   }
 
   async function pickFromLibrary() {
+    if (busy) return;
     try {
       const picked = await onOpenLibrary();
-      if (!picked) return;
+      if (!picked || picked === currentUrl) return;
+      const previousUrl = currentUrl;
+      setBusy(true, 'saving');
+      await onChange?.(picked, { fromLibrary: true });
       currentUrl = picked;
       pendingFile = null;
       pendingPreviewUrl = '';
+      await cleanPreviousUrl(previousUrl, picked);
+      setBusy(false);
       renderPreview();
       renderActions();
-      setStatus('✅ Imagen elegida de la biblioteca', 'success');
-      onChange?.(currentUrl, { fromLibrary: true });
+      setStatus('Imagen elegida de la biblioteca', 'success');
     } catch (error) {
+      setBusy(false);
+      renderActions();
       setStatus(error?.message || 'No se pudo abrir la biblioteca.', 'error');
     }
   }
@@ -226,17 +222,29 @@ export function attachImageUploadWidget(container, options = {}) {
     setStatus('Carga cancelada.');
   }
 
-  function removeImage() {
+  async function removeImage() {
+    if (busy || !currentUrl) return;
     if (confirmRemove && !window.confirm('¿Quitar esta imagen?')) return;
-    currentUrl = '';
-    renderPreview();
-    renderActions();
-    setStatus('✅ Imagen quitada', 'success');
-    onChange?.(null, null);
+    const previousUrl = currentUrl;
+    try {
+      setBusy(true, 'saving');
+      await onChange?.(null, null);
+      currentUrl = '';
+      await cleanPreviousUrl(previousUrl, '');
+      setBusy(false);
+      renderPreview();
+      renderActions();
+      setStatus('Imagen quitada', 'success');
+    } catch (error) {
+      setBusy(false);
+      renderPreview();
+      renderActions();
+      setStatus(error?.message || 'No se pudo quitar la imagen.', 'error');
+    }
   }
 
   async function handleFile(file) {
-    if (!file) return;
+    if (!file || busy) return;
     setStatus('Validando archivo…', 'busy');
     const validation = await validateImageFile(file);
     if (!validation.ok) {
@@ -252,37 +260,46 @@ export function attachImageUploadWidget(container, options = {}) {
   }
 
   async function commitPendingFile() {
-    if (!pendingFile) return;
+    if (!pendingFile || busy) return;
     const file = pendingFile;
+    const previousUrl = currentUrl;
+    let result = null;
     setBusy(true, 'processing');
     try {
-      const result = await uploadImageToLibrary(file, {
+      result = await uploadImageToLibrary(file, {
         maxWidth,
         maxHeight,
         quality,
         thumbSize,
+        section,
+        slotKey,
+        alt: label,
         onProgress: stage => setBusy(true, stage),
       });
+      await onChange?.(result.url, result);
       currentUrl = result.url;
+      await cleanPreviousUrl(previousUrl, result.url);
       if (pendingPreviewUrl) URL.revokeObjectURL(pendingPreviewUrl);
       pendingFile = null;
       pendingPreviewUrl = '';
       setBusy(false);
       renderPreview();
       renderActions();
-      setStatus('✅ Imagen guardada correctamente', 'success');
-      onChange?.(currentUrl, result);
+      setStatus('Imagen guardada correctamente', 'success');
     } catch (error) {
       console.error('[image-upload-widget] upload failed:', error);
+      if (result?.mediaId) {
+        try { await deleteMediaItem(result.mediaId, { force: true }); } catch {}
+      }
       setBusy(false);
       renderActions();
       setStatus(error?.message || 'No se pudo subir la imagen. Intentá de nuevo.', 'error');
     }
   }
 
-  drop.addEventListener('click', () => input.click());
+  drop.addEventListener('click', () => { if (!busy) input.click(); });
   drop.addEventListener('keydown', event => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (!busy && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       input.click();
     }
@@ -296,7 +313,7 @@ export function attachImageUploadWidget(container, options = {}) {
   ['dragenter', 'dragover'].forEach(name => {
     drop.addEventListener(name, event => {
       event.preventDefault();
-      root.classList.add('tt-iuw-drag');
+      if (!busy) root.classList.add('tt-iuw-drag');
     });
   });
   ['dragleave', 'drop'].forEach(name => {

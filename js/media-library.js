@@ -1,13 +1,12 @@
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin
 
-   Sube archivos ya procesados (image-processing.js) a Firebase Storage bajo
-   media/{mediaId}/ y guarda su metadata en Firestore (media/{mediaId}) para
-   que el panel pueda listar, buscar y reutilizar imágenes ya subidas sin
-   tocar Storage directamente.
+   Procesa imágenes en el navegador, solicita firmas temporales a funciones
+   de Netlify y sube los archivos directamente a Cloudinary. Firestore guarda
+   únicamente la metadata y las URLs públicas de la biblioteca.
    ============================================================= */
 
-import { auth, db, storage } from './firebase.js';
+import { auth, db } from './firebase.js';
 import {
   collection,
   doc,
@@ -22,29 +21,98 @@ import {
   setDoc,
   where,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 import { validateImageFile, processImage } from './image-processing.js';
 
 const MEDIA_COLLECTION = 'media';
+const NETLIFY_FALLBACK_ORIGIN = 'https://tintinaccesorios.netlify.app';
 
 function randomId() {
   if (window.crypto?.randomUUID) return window.crypto.randomUUID().replace(/-/g, '');
   return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function functionOrigin() {
+  const configured = String(window.TINTIN_FUNCTION_ORIGIN || '').trim().replace(/\/$/, '');
+  if (configured) return configured;
+  if (window.location.hostname.endsWith('github.io')) return NETLIFY_FALLBACK_ORIGIN;
+  return '';
+}
+
+function functionUrl(name) {
+  return `${functionOrigin()}/.netlify/functions/${name}`;
+}
+
+async function parseJsonResponse(response) {
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data?.error || `El servicio de imágenes respondió HTTP ${response.status}`);
+  }
+  return data;
+}
+
+async function callSecureFunction(name, payload) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Tu sesión venció. Volvé a iniciar sesión.');
+  const token = await user.getIdToken();
+  const response = await fetch(functionUrl(name), {
+    method: 'POST',
+    headers: {
+      'authorization': `Bearer ${token}`,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+  return parseJsonResponse(response);
+}
+
+async function uploadBlobToCloudinary(blob, mediaId, variant) {
+  const authorization = await callSecureFunction('cloudinary-sign-upload', { mediaId, variant });
+  const form = new FormData();
+  form.append('file', blob, `${variant}.${variant === 'thumb' ? 'webp' : (blob.type.split('/')[1] || 'webp')}`);
+  form.append('api_key', authorization.apiKey);
+  form.append('timestamp', String(authorization.timestamp));
+  form.append('signature', authorization.signature);
+  form.append('public_id', authorization.publicId);
+  form.append('overwrite', 'true');
+
+  const response = await fetch(authorization.uploadUrl, {
+    method: 'POST',
+    body: form
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(result?.error?.message || `Cloudinary respondió HTTP ${response.status}`);
+  }
+  if (!result.secure_url || !result.public_id) {
+    throw new Error('Cloudinary no devolvió una URL válida para la imagen.');
+  }
+  return result;
+}
+
+async function deleteCloudinaryAssets(publicIds) {
+  const cleanIds = [...new Set((publicIds || []).filter(Boolean))];
+  if (!cleanIds.length) return [];
+  const result = await callSecureFunction('cloudinary-delete', { publicIds: cleanIds });
+  return result.results || [];
+}
+
 /**
  * Valida, procesa y sube un archivo a la biblioteca multimedia. Progreso se
  * reporta vía onProgress(stage) con stage en 'validating'|'processing'|
- * 'uploading'|'saving'. Lanza un Error con mensaje claro en cualquier fallo
- * (nunca deja una referencia a medias parcialmente subidas en Firestore).
+ * 'uploading'|'saving'. Si alguna etapa falla, limpia de Cloudinary cualquier
+ * archivo que haya quedado subido antes de guardar la metadata.
  */
 export async function uploadImageToLibrary(file, options = {}) {
-  const { maxWidth, maxHeight, quality, thumbSize, onProgress } = options;
+  const {
+    maxWidth,
+    maxHeight,
+    quality,
+    thumbSize,
+    onProgress,
+    section = 'biblioteca',
+    slotKey = null,
+    alt = ''
+  } = options;
   const report = stage => { try { onProgress?.(stage); } catch {} };
 
   report('validating');
@@ -55,41 +123,65 @@ export async function uploadImageToLibrary(file, options = {}) {
   const processed = await processImage(file, { maxWidth, maxHeight, quality, thumbSize });
 
   const mediaId = randomId();
-  const fullPath = `media/${mediaId}/full.${processed.format}`;
-  const thumbPath = `media/${mediaId}/thumb.webp`;
+  let fullUpload = null;
+  let thumbUpload = null;
 
-  report('uploading');
-  const fullRef = ref(storage, fullPath);
-  const thumbRef = ref(storage, thumbPath);
-  await uploadBytes(fullRef, processed.fullBlob, { contentType: processed.fullBlob.type || `image/${processed.format}` });
-  await uploadBytes(thumbRef, processed.thumbBlob, { contentType: processed.thumbBlob.type || 'image/webp' });
-  const [url, thumbUrl] = await Promise.all([getDownloadURL(fullRef), getDownloadURL(thumbRef)]);
+  try {
+    report('uploading');
+    fullUpload = await uploadBlobToCloudinary(processed.fullBlob, mediaId, 'full');
+    thumbUpload = await uploadBlobToCloudinary(processed.thumbBlob, mediaId, 'thumb');
 
-  report('saving');
-  const record = {
-    path: fullPath,
-    thumbPath,
-    url,
-    thumbUrl,
-    originalName: String(file.name || '').slice(0, 200),
-    format: processed.format,
-    width: processed.width,
-    height: processed.height,
-    bytes: processed.bytes,
-    uploadedBy: auth.currentUser?.email || null,
-    uploadedAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  };
-  await setDoc(doc(db, MEDIA_COLLECTION, mediaId), record);
+    report('saving');
+    const record = {
+      provider: 'cloudinary',
+      publicId: fullUpload.public_id,
+      thumbPublicId: thumbUpload.public_id,
+      url: fullUpload.secure_url,
+      thumbUrl: thumbUpload.secure_url,
+      originalName: String(file.name || '').slice(0, 200),
+      alt: String(alt || file.name || '').slice(0, 240),
+      section: String(section || 'biblioteca').slice(0, 80),
+      slotKey: slotKey ? String(slotKey).slice(0, 160) : null,
+      format: String(fullUpload.format || processed.format || '').slice(0, 20),
+      width: Number(fullUpload.width || processed.width || 0),
+      height: Number(fullUpload.height || processed.height || 0),
+      bytes: Number(fullUpload.bytes || processed.bytes || 0),
+      thumbBytes: Number(thumbUpload.bytes || 0),
+      uploadedBy: auth.currentUser?.email || null,
+      uploadedByUid: auth.currentUser?.uid || null,
+      uploadedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+    await setDoc(doc(db, MEDIA_COLLECTION, mediaId), record);
 
-  return { mediaId, url, thumbUrl, width: processed.width, height: processed.height, bytes: processed.bytes, format: processed.format };
+    return {
+      mediaId,
+      publicId: record.publicId,
+      thumbPublicId: record.thumbPublicId,
+      url: record.url,
+      thumbUrl: record.thumbUrl,
+      width: record.width,
+      height: record.height,
+      bytes: record.bytes,
+      format: record.format,
+      provider: 'cloudinary'
+    };
+  } catch (error) {
+    const uploadedIds = [fullUpload?.public_id, thumbUpload?.public_id].filter(Boolean);
+    if (uploadedIds.length) {
+      try {
+        await deleteCloudinaryAssets(uploadedIds);
+      } catch (cleanupError) {
+        console.warn('[media-library] No se pudo limpiar una carga incompleta:', cleanupError);
+      }
+    }
+    throw error;
+  }
 }
 
 /**
  * Revisa si una URL de imagen sigue en uso en algún lugar de la plataforma
- * antes de borrarla: settings/images (todos los espacios + variantes por
- * dispositivo), products.imageUrl y collections.image. Devuelve un array de
- * descripciones legibles de dónde se usa (vacío si es seguro borrar).
+ * antes de borrarla: settings/images, products.imageUrl y collections.image.
  */
 export async function findImageUsage(url) {
   if (!url) return [];
@@ -129,16 +221,15 @@ export async function findImageUsage(url) {
 }
 
 /**
- * Borra un elemento de la biblioteca: primero revisa uso real (a menos que
- * force=true), borra los archivos de Storage y finalmente el documento de
- * Firestore. Lanza un Error con el detalle de uso si está activo y no se
- * fuerza el borrado.
+ * Borra un elemento de la biblioteca: primero revisa uso real (salvo force),
+ * después elimina los assets de Cloudinary y por último borra la metadata de
+ * Firestore. Así nunca queda un documento apuntando a un archivo inexistente.
  */
 export async function deleteMediaItem(mediaId, { force = false } = {}) {
   const mediaRef = doc(db, MEDIA_COLLECTION, mediaId);
   const snap = await getDoc(mediaRef);
-  if (!snap.exists()) return;
-  const data = snap.data();
+  if (!snap.exists()) return false;
+  const data = snap.data() || {};
 
   if (!force) {
     const usage = await findImageUsage(data.url);
@@ -149,11 +240,27 @@ export async function deleteMediaItem(mediaId, { force = false } = {}) {
     }
   }
 
-  await Promise.allSettled([
-    data.path ? deleteObject(ref(storage, data.path)) : Promise.resolve(),
-    data.thumbPath ? deleteObject(ref(storage, data.thumbPath)) : Promise.resolve(),
-  ]);
+  await deleteCloudinaryAssets([data.publicId, data.thumbPublicId]);
   await deleteDoc(mediaRef);
+  return true;
+}
+
+/**
+ * Limpia automáticamente una imagen anterior solo cuando ya no aparece en
+ * ningún slot, producto o colección. Se usa después de reemplazar o quitar.
+ */
+export async function deleteMediaByUrlIfUnused(url) {
+  if (!url) return false;
+  const usage = await findImageUsage(url);
+  if (usage.length) return false;
+
+  const snap = await getDocs(query(collection(db, MEDIA_COLLECTION), where('url', '==', url), limit(10)));
+  let deleted = false;
+  for (const item of snap.docs) {
+    await deleteMediaItem(item.id, { force: true });
+    deleted = true;
+  }
+  return deleted;
 }
 
 /** Suscripción en vivo a toda la biblioteca, más recientes primero. */

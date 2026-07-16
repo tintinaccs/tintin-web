@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const filePath = file => path.join(root, file);
+const read = file => fs.readFileSync(filePath(file), 'utf8');
+const exists = file => fs.existsSync(filePath(file));
 
 const files = {
   utils: read('js/image-utils.js'),
@@ -14,10 +16,16 @@ const files = {
   uploadWidget: read('js/image-upload-widget.js'),
   processing: read('js/image-processing.js'),
   mediaLibrary: read('js/media-library.js'),
+  firebase: read('js/firebase.js'),
   products: read('js/products-store.js'),
   ui: read('js/ui-quality.js'),
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),
+  firebaseJson: read('firebase.json'),
+  cloudinarySecurity: read('netlify/functions/_cloudinary-security.mjs'),
+  cloudinarySign: read('netlify/functions/cloudinary-sign-upload.mjs'),
+  cloudinaryDelete: read('netlify/functions/cloudinary-delete.mjs'),
+  cloudinarySetup: read('CLOUDINARY_SETUP.md'),
 };
 
 let failures = 0;
@@ -89,27 +97,27 @@ check(
     files.runtime.includes('STATIC.placeholder') &&
     files.runtime.includes('resolvedSlotUrls(slotId, fallback)') &&
     files.runtime.includes("resolveSlotImage(images, slotId, 'desktop') || absolute(fallback.desktop)"),
-  'no deben quedar contenedores vacíos después de quitar una URL, en ningún dispositivo'
+  'no deben quedar contenedores vacíos después de quitar una URL'
 );
 
 check(
-  'Cada slot admite imagen independiente por dispositivo con reutilización automática de desktop',
+  'Cada slot admite imagen independiente por dispositivo',
   files.images.includes('DEVICE_VARIANT_SLOT_IDS') &&
     files.images.includes('resolveSlotImage') &&
     files.images.includes("`${slotId}_tablet`") &&
     files.images.includes("`${slotId}_mobile`") &&
     files.images.includes("`${slotId}_autoReuseDesktop`"),
-  'logo, editoriales y Nosotros deben poder tener imagen propia en tablet/mobile, no solo el hero'
+  'logo, editoriales y Nosotros deben aceptar variantes por dispositivo'
 );
 
 check(
-  'La cascada de dispositivo está centralizada en un único resolver',
+  'La cascada de dispositivo está centralizada',
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
     files.runtime.includes("from './images.js'") &&
     files.runtime.includes('resolveSlotImage'),
-  'ninguna página debe reimplementar la prioridad desktop/tablet/mobile por su cuenta'
+  'ninguna página debe reimplementar la prioridad responsive'
 );
 
 check(
@@ -117,7 +125,7 @@ check(
   files.runtime.includes("'.tt-logo-img,#tt-loader-logo,#tt-intro-logo'") &&
     files.runtime.includes("document.querySelectorAll('[data-img-slot]')") &&
     files.runtime.includes('applyContentSlot'),
-  'el logo y los data-img-slot deben usar el mismo snapshot'
+  'todos los componentes deben usar el mismo snapshot'
 );
 
 check(
@@ -129,42 +137,135 @@ check(
 );
 
 check(
-  'Ya no existe el campo de URL insegura: cada slot sube un archivo real',
+  'Ya no existe el campo de URL manual',
   !files.adminHtml.includes('adm-url-input') &&
     !files.adminHtml.includes('placeholder="https://… pegar URL aquí"') &&
     files.adminHtml.includes('attachImageUploadWidget') &&
     files.adminHtml.includes('mountDeviceWidget') &&
     files.adminHtml.includes('saveImages('),
-  'nadie debe poder pegar ni escribir una URL a mano en este panel'
-);
-check(
-  'El archivo subido se valida por su contenido real, no por su extensión',
-  files.processing.includes('detectRealImageMime') &&
-    files.processing.includes('createImageBitmap') &&
-    files.processing.includes('SIGNATURES'),
-  'un ejecutable renombrado a .png no debe poder pasar por imagen'
-);
-check(
-  'La subida procesa (redimensiona/WebP), guarda en Storage y registra la metadata',
-  files.uploadWidget.includes("import { uploadImageToLibrary } from './media-library.js'") &&
-    files.mediaLibrary.includes('uploadBytes(') &&
-    files.mediaLibrary.includes("setDoc(doc(db, MEDIA_COLLECTION, mediaId)"),
-  'la biblioteca debe quedar como la única fuente de imágenes subidas'
-);
-check(
-  'Borrar una imagen de la biblioteca revisa primero si sigue en uso',
-  files.mediaLibrary.includes('export async function findImageUsage') &&
-    files.mediaLibrary.includes("where('imageUrl', '==', url)") &&
-    files.mediaLibrary.includes("where('image', '==', url)"),
-  'no debe poder borrarse por accidente una imagen todavía activa'
+  'cada slot debe subir un archivo real'
 );
 
 check(
-  'El panel oculta secciones duplicadas y explica la nueva propiedad',
+  'El archivo se valida por su contenido real',
+  files.processing.includes('detectRealImageMime') &&
+    files.processing.includes('createImageBitmap') &&
+    files.processing.includes('SIGNATURES'),
+  'un ejecutable renombrado no debe pasar como imagen'
+);
+
+check(
+  'El navegador conserva procesamiento, WebP y vista previa',
+  files.uploadWidget.includes("import { validateImageFile } from './image-processing.js'") &&
+    files.uploadWidget.includes('pendingPreviewUrl = URL.createObjectURL(file)') &&
+    files.uploadWidget.includes('uploadImageToLibrary(file') &&
+    files.processing.includes('canvas.toBlob'),
+  'la migración no debe quitar la optimización existente'
+);
+
+check(
+  'La biblioteca usa Cloudinary con firmas temporales',
+  files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
+    files.mediaLibrary.includes('uploadBlobToCloudinary') &&
+    files.mediaLibrary.includes("provider: 'cloudinary'") &&
+    files.mediaLibrary.includes('publicId: fullUpload.public_id') &&
+    files.mediaLibrary.includes('setDoc(doc(db, MEDIA_COLLECTION, mediaId)'),
+  'Firestore debe guardar metadata, no archivos binarios'
+);
+
+check(
+  'Borrar una imagen usa la función protegida de Cloudinary',
+  files.mediaLibrary.includes("callSecureFunction('cloudinary-delete'") &&
+    files.mediaLibrary.includes('deleteCloudinaryAssets') &&
+    files.mediaLibrary.includes('await deleteDoc(mediaRef)') &&
+    files.mediaLibrary.indexOf('await deleteCloudinaryAssets') < files.mediaLibrary.indexOf('await deleteDoc(mediaRef)'),
+  'los assets deben borrarse antes de eliminar su metadata'
+);
+
+check(
+  'Reemplazar o quitar limpia solo imágenes sin uso',
+  files.uploadWidget.includes('deleteMediaByUrlIfUnused') &&
+    files.uploadWidget.includes('cleanPreviousUrl(previousUrl') &&
+    files.mediaLibrary.includes('export async function deleteMediaByUrlIfUnused') &&
+    files.mediaLibrary.includes('const usage = await findImageUsage(url)'),
+  'una URL compartida no debe borrarse por accidente'
+);
+
+check(
+  'Borrar revisa settings, productos y colecciones',
+  files.mediaLibrary.includes('export async function findImageUsage') &&
+    files.mediaLibrary.includes("where('imageUrl', '==', url)") &&
+    files.mediaLibrary.includes("where('image', '==', url)"),
+  'no debe borrarse una imagen activa'
+);
+
+check(
+  'El API Secret existe únicamente en la función de servidor',
+  !files.mediaLibrary.includes('CLOUDINARY_API_SECRET') &&
+    !files.uploadWidget.includes('CLOUDINARY_API_SECRET') &&
+    files.cloudinarySecurity.includes('process.env.CLOUDINARY_API_SECRET') &&
+    !files.cloudinarySign.includes('apiSecret,') &&
+    !files.cloudinarySign.includes('apiSecret:'),
+  'el secreto nunca puede llegar al navegador ni a la respuesta JSON'
+);
+
+check(
+  'Netlify verifica criptográficamente el token de Firebase',
+  files.cloudinarySecurity.includes("createVerify('RSA-SHA256')") &&
+    files.cloudinarySecurity.includes('GOOGLE_CERTS_URL') &&
+    files.cloudinarySecurity.includes('payload.aud !== FIREBASE_PROJECT_ID') &&
+    files.cloudinarySecurity.includes('payload.iss !== FIREBASE_ISSUER') &&
+    files.cloudinarySecurity.includes("email !== SUPERADMIN_EMAIL") &&
+    files.cloudinarySecurity.includes('payload.exp <= now'),
+  'no alcanza con confiar en un correo enviado por el navegador'
+);
+
+check(
+  'Las firmas limitan la subida a la carpeta privada de administración',
+  files.cloudinarySign.includes('cleanMediaId(body?.mediaId)') &&
+    files.cloudinarySign.includes('cleanVariant(body?.variant)') &&
+    files.cloudinarySign.includes('tintin/media/${mediaId}/${variant}') &&
+    files.cloudinarySign.includes('cloudinarySignature(signedParameters, apiSecret)'),
+  'el navegador no debe elegir public IDs arbitrarios'
+);
+
+check(
+  'El borrado solo admite public IDs de Tintin',
+  files.cloudinaryDelete.includes('cleanPublicId') &&
+    files.cloudinaryDelete.includes("invalidate: 'true'") &&
+    files.cloudinarySecurity.includes("^tintin\\/media\\/") &&
+    files.cloudinaryDelete.includes("['ok', 'not found'].includes(data.result)"),
+  'no se debe poder borrar otro asset de la cuenta'
+);
+
+check(
+  'Firebase Storage no se inicializa ni se importa',
+  !files.firebase.includes('firebase-storage.js') &&
+    !files.firebase.includes('getStorage') &&
+    !files.firebase.includes('storageBucket') &&
+    !files.firebase.includes('export { db, auth, provider, storage }') &&
+    !files.mediaLibrary.includes('firebase-storage.js') &&
+    !files.mediaLibrary.includes('uploadBytes(') &&
+    !files.mediaLibrary.includes('deleteObject('),
+  'la web no debe depender de Firebase Storage'
+);
+
+check(
+  'El despliegue de Firebase queda en el plan Spark',
+  files.packageJson.includes('firebase deploy --only firestore:rules --project tintin-accesorios') &&
+    !files.packageJson.includes('firestore:rules,storage') &&
+    !files.firebaseJson.includes('"storage"') &&
+    !exists('storage.rules'),
+  'npm run deploy:rules no debe intentar activar Storage'
+);
+
+check(
+  'El panel conserva la misma navegación y biblioteca',
   files.admin.includes('supportedSections') &&
+    files.admin.includes("'biblioteca'") &&
     files.admin.includes("button.style.display = 'none'") &&
-    files.admin.includes('Fotos de productos: se cambian desde Productos'),
-  'no deben aparecer slots antiguos sin efecto'
+    files.adminHtml.includes('mountMediaLibrarySection(grid)'),
+  'la migración interna no debe quitar funcionalidades visibles'
 );
 
 check(
@@ -172,11 +273,11 @@ check(
   files.products.includes("from './image-utils.js'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
-  'ningún renderer público debe recibir una URL cruda del producto'
+  'ningún renderer público debe recibir una URL cruda'
 );
 
 check(
-  'La Fase 5 se inicia en todas las páginas y en el panel de imágenes',
+  'La Fase 5 se inicia en todas las páginas y en el panel',
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
     files.ui.includes("'./images-phase5.js'") &&
@@ -191,6 +292,17 @@ check(
     files.readme.includes('collections/{slug}.image') &&
     files.readme.includes('settings/images'),
   'la guía no debe recomendar slots duplicados'
+);
+
+check(
+  'Existe una guía completa de configuración online',
+  files.cloudinarySetup.includes('CLOUDINARY_CLOUD_NAME') &&
+    files.cloudinarySetup.includes('CLOUDINARY_API_KEY') &&
+    files.cloudinarySetup.includes('CLOUDINARY_API_SECRET') &&
+    files.cloudinarySetup.includes('Environment variables') &&
+    files.cloudinarySetup.includes('npm run deploy:rules') &&
+    files.cloudinarySetup.includes('/admin-images.html'),
+  'la configuración manual debe quedar documentada sin exponer secretos'
 );
 
 check(
