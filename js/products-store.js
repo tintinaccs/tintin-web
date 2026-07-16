@@ -129,7 +129,7 @@ function handleSnapshot(snap) {
 
 // Live subscription — any create/edit/delete/activate/deactivate from Super Admin
 // pushes to every open tab immediately, no reload needed.
-onSnapshot(query(collection(db, 'products'), limit(20000)), handleSnapshot, e => {
+onSnapshot(query(collection(db, 'products'), limit(10000)), handleSnapshot, e => {
   console.error('[products-store] Firestore realtime listener failed:', e);
   // Let pages waiting on window.PRODUCTS (catalogo/collections skeletons) know
   // the listener failed, instead of spinning forever with no feedback.

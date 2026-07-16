@@ -17,14 +17,14 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 import { normalizeCollectionDoc } from "./collections-store.js";
 import { sanitizeImageUrl } from "./image-utils.js";
 import { getDocsPaginated } from "./firestore-pagination.js";
-import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-color-scheme-1";
+import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-diagnostic-fixes-2";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
 } from "./color-scheme-catalog.js";
-import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-color-scheme-1";
-import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-color-scheme-1";
+import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-diagnostic-fixes-2";
+import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-diagnostic-fixes-2";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -908,7 +908,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(20000)), snapshot => {
+    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000)), snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
@@ -923,7 +923,7 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(20000)), snapshot => {
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000)), snapshot => {
       allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();

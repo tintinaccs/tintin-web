@@ -274,6 +274,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-btn-lg {
   padding: 16px 40px;
   font-size: 0.9rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tt-btn-icon {
@@ -1267,7 +1269,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: var(--radius-md);
   padding: 24px 16px;
   position: relative;
-  overflow: hidden;
+  min-width: 0;
+  overflow: visible;
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
@@ -1307,12 +1310,16 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text);
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .tt-trust-desc {
   font-size: 0.8rem;
   color: var(--text-sec);
   line-height: 1.5;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1855,6 +1862,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-footer-col ul li { margin-bottom: 10px; }
 .tt-footer-col ul li a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  min-height: 24px;
   font-size: 0.85rem;
   color: rgba(255,255,255,0.7);
   transition: color var(--transition);
@@ -3240,7 +3251,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   }
 }
 
-.tt-breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+.tt-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  min-height: 24px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
 .tt-breadcrumb a:hover { color: var(--pink-dark); }
 .tt-breadcrumb span { color: var(--text-sec); }
 
@@ -3817,4 +3836,31 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */
 @media (prefers-reduced-motion: reduce) {
   .tt-hero-actions .tt-btn:not(.tt-btn-outline) { animation: none; }
+}
+
+/* Mini mobile: el ancho se resuelve en el propio componente, sin ocultar
+   desbordes del documento. */
+@media (max-width: 360px) {
+  .tt-hero-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+  .tt-hero-actions .tt-btn,
+  .tt-btn-lg {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-inline: 16px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  .tt-trust-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .tt-trust-item {
+    width: 100%;
+    padding: 20px 14px;
+  }
 }
