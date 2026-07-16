@@ -1577,7 +1577,7 @@
     .adm-mobile-tab svg,
     .adm-mobile-tab .adm-nav-icon { font-size: 18px; }
 
-/* Diagnóstico integral — módulo exclusivo de Super Admin. */
+/* Diagnóstico integral — inspección de solo lectura para Super Admin. */
 .adm-diagnostic-head {
   display: flex;
   align-items: center;
@@ -1586,9 +1586,11 @@
   flex-wrap: wrap;
 }
 .adm-diagnostic-head p {
+  max-width: 760px;
   margin: 5px 0 0;
   color: var(--adm-muted);
   font-size: 12px;
+  line-height: 1.55;
 }
 .adm-diagnostic-head #btn-run-site-diagnostics {
   display: inline-flex;
@@ -1599,7 +1601,6 @@
   padding-inline: 22px;
   border: 1px solid var(--adm-accent) !important;
   background: var(--adm-accent) !important;
-  background-color: var(--adm-accent) !important;
   color: #fff !important;
   opacity: 1 !important;
   visibility: visible !important;
@@ -1608,9 +1609,32 @@
 .adm-diagnostic-head #btn-run-site-diagnostics:focus-visible {
   border-color: var(--rose) !important;
   background: var(--rose) !important;
-  background-color: var(--rose) !important;
   color: #fff !important;
 }
+.adm-diagnostic-safety {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid #b8d9c4;
+  border-radius: 12px;
+  background: #f1fbf4;
+  color: #205a35;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.adm-diagnostic-runner {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.adm-diagnostic-runner label {
+  display: grid;
+  gap: 6px;
+  color: var(--adm-text);
+  font-size: 11px;
+  font-weight: 800;
+}
+.adm-diagnostic-runner .adm-select { width: 100%; }
 .adm-diagnostic-status {
   padding: 13px 15px;
   border: 1px solid var(--adm-border);
@@ -1637,38 +1661,104 @@
 }
 .adm-diagnostic-summary {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin-top: 16px;
 }
 .adm-diagnostic-kpi {
+  min-width: 0;
   padding: 14px;
   border: 1px solid var(--adm-border);
   border-radius: 12px;
   background: #fff;
 }
-.adm-diagnostic-kpi strong { display: block; font-size: 22px; line-height: 1.1; }
-.adm-diagnostic-kpi span { display: block; margin-top: 5px; color: var(--adm-muted); font-size: 11px; }
-.adm-diagnostic-kpi-critical strong { color: #b42318; }
-.adm-diagnostic-kpi-warning strong { color: #b54708; }
-.adm-diagnostic-kpi-info strong { color: #175cd3; }
-.adm-diagnostic-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 16px 0 12px;
+.adm-diagnostic-kpi strong {
+  display: block;
+  color: var(--adm-text);
+  font-size: 22px;
+  line-height: 1.1;
 }
-.adm-diagnostic-toolbar label { font-size: 12px; font-weight: 700; }
-.adm-diagnostic-toolbar .adm-select { width: min(100%, 230px); }
-.adm-diagnostic-results { display: grid; gap: 10px; }
-.adm-diagnostic-page {
+.adm-diagnostic-kpi span {
+  display: block;
+  margin-top: 5px;
+  color: var(--adm-muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+.adm-diagnostic-kpi-critical strong { color: #b42318; }
+.adm-diagnostic-kpi-high strong { color: #c4320a; }
+.adm-diagnostic-kpi-medium strong { color: #b54708; }
+.adm-diagnostic-kpi-low strong { color: #175cd3; }
+.adm-diagnostic-kpi-minimal strong { color: #475467; }
+.adm-diagnostic-coverage {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.adm-diagnostic-coverage-card {
+  padding: 12px 13px;
+  border: 1px solid var(--adm-border);
+  border-radius: 12px;
+  background: #fbfafb;
+}
+.adm-diagnostic-coverage-card strong {
+  display: block;
+  color: var(--adm-text);
+  font-size: 15px;
+}
+.adm-diagnostic-coverage-card span {
+  display: block;
+  margin-top: 4px;
+  color: var(--adm-muted);
+  font-size: 10px;
+  line-height: 1.4;
+}
+.adm-diagnostic-toolbar {
+  display: grid;
+  grid-template-columns: minmax(230px, 2fr) repeat(5, minmax(145px, 1fr)) auto auto;
+  gap: 8px;
+  margin: 16px 0 12px;
+  align-items: center;
+}
+.adm-diagnostic-toolbar .adm-select,
+.adm-diagnostic-toolbar .adm-input { width: 100%; min-width: 0; }
+.adm-diagnostic-search { min-width: 0; }
+.adm-diagnostic-view-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 4px 0 12px;
+  padding-bottom: 2px;
+}
+.adm-diagnostic-view-tabs button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid var(--adm-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--adm-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.adm-diagnostic-view-tabs button.active {
+  border-color: var(--adm-accent);
+  background: var(--adm-accent);
+  color: #fff;
+}
+.adm-diagnostic-results,
+.adm-diagnostic-history { display: grid; gap: 10px; }
+.adm-diagnostic-page,
+.adm-diagnostic-history-card {
   overflow: hidden;
   border: 1px solid var(--adm-border);
   border-radius: 14px;
   background: #fff;
 }
-.adm-diagnostic-page summary {
+.adm-diagnostic-page > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1678,37 +1768,139 @@
   font-size: 13px;
   font-weight: 800;
 }
-.adm-diagnostic-page summary small { color: var(--adm-muted); font-weight: 600; }
-.adm-diagnostic-page-body { display: grid; gap: 8px; padding: 0 12px 12px; }
+.adm-diagnostic-page > summary small { color: var(--adm-muted); font-weight: 600; }
+.adm-diagnostic-page-body { display: grid; gap: 9px; padding: 0 12px 12px; }
 .adm-diagnostic-item {
-  padding: 12px 13px;
+  padding: 13px 14px;
   border-left: 4px solid #98a2b3;
   border-radius: 10px;
   background: #f8fafc;
 }
 .adm-diagnostic-item-critical { border-left-color: #d92d20; background: #fff4f2; }
-.adm-diagnostic-item-warning { border-left-color: #f79009; background: #fffaeb; }
-.adm-diagnostic-item-info { border-left-color: #2e90fa; background: #eff8ff; }
-.adm-diagnostic-item h4 { margin: 0 0 4px; color: var(--adm-text); font-size: 13px; }
-.adm-diagnostic-item p { margin: 0; color: var(--adm-muted); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
-.adm-diagnostic-item code { font-size: 11px; color: #7f1d1d; white-space: normal; }
-.adm-diagnostic-empty { padding: 22px; text-align: center; color: var(--adm-muted); }
+.adm-diagnostic-item-high { border-left-color: #e04f16; background: #fff6ed; }
+.adm-diagnostic-item-medium { border-left-color: #f79009; background: #fffaeb; }
+.adm-diagnostic-item-low { border-left-color: #2e90fa; background: #eff8ff; }
+.adm-diagnostic-item-minimal { border-left-color: #98a2b3; background: #f8fafc; }
+.adm-diagnostic-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.adm-diagnostic-item h4 { margin: 0; color: var(--adm-text); font-size: 13px; line-height: 1.45; }
+.adm-diagnostic-badges { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+.adm-diagnostic-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #344054;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.adm-diagnostic-badge-confirmed { background: #fee4e2; color: #b42318; }
+.adm-diagnostic-badge-manual { background: #fff1cc; color: #7a4a00; }
+.adm-diagnostic-badge-new { background: #e0f2fe; color: #075985; }
+.adm-diagnostic-badge-recurrent { background: #ede9fe; color: #5b21b6; }
+.adm-diagnostic-item details {
+  margin-top: 9px;
+  border-top: 1px solid rgba(0,0,0,.08);
+  padding-top: 8px;
+}
+.adm-diagnostic-item details summary {
+  cursor: pointer;
+  color: var(--adm-text);
+  font-size: 11px;
+  font-weight: 800;
+}
+.adm-diagnostic-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+  margin-top: 9px;
+}
+.adm-diagnostic-detail-grid div {
+  min-width: 0;
+  color: var(--adm-muted);
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.adm-diagnostic-detail-grid strong { color: var(--adm-text); }
+.adm-diagnostic-item p {
+  margin: 0;
+  color: var(--adm-muted);
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.adm-diagnostic-item code {
+  color: #7f1d1d;
+  font-size: 10px;
+  white-space: normal;
+}
+.adm-diagnostic-evidence {
+  margin-top: 8px !important;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.72);
+  color: #344054 !important;
+}
+.adm-diagnostic-empty { padding: 24px; text-align: center; color: var(--adm-muted); }
+.adm-diagnostic-history-card { padding: 14px; }
+.adm-diagnostic-history-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.adm-diagnostic-history-head strong { color: var(--adm-text); font-size: 13px; }
+.adm-diagnostic-history-head span { color: var(--adm-muted); font-size: 10px; }
+.adm-diagnostic-history-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+  color: var(--adm-muted);
+  font-size: 10px;
+}
+.adm-diagnostic-history-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
 .adm-diagnostic-frame {
   position: fixed;
-  left: -10000px;
+  left: -12000px;
   top: 0;
   width: 1024px;
   height: 768px;
-  visibility: hidden;
+  border: 0;
+  opacity: 0;
   pointer-events: none;
 }
+@media (max-width: 1300px) {
+  .adm-diagnostic-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .adm-diagnostic-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .adm-diagnostic-search { grid-column: span 2; }
+}
 @media (max-width: 900px) {
+  .adm-diagnostic-runner,
+  .adm-diagnostic-coverage { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .adm-diagnostic-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-diagnostic-toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-diagnostic-search { grid-column: 1 / -1; }
 }
 @media (max-width: 760px) {
   .adm-diagnostic-head #btn-run-site-diagnostics { width: 100%; }
-  .adm-diagnostic-toolbar { align-items: stretch; }
+  .adm-diagnostic-runner,
+  .adm-diagnostic-coverage,
+  .adm-diagnostic-toolbar,
+  .adm-diagnostic-detail-grid { grid-template-columns: 1fr; }
+  .adm-diagnostic-search { grid-column: auto; }
   .adm-diagnostic-toolbar > * { width: 100% !important; }
-  .adm-diagnostic-summary { grid-template-columns: 1fr 1fr; }
-  .adm-diagnostic-page summary { align-items: flex-start; flex-direction: column; }
+  .adm-diagnostic-page > summary,
+  .adm-diagnostic-item-head,
+  .adm-diagnostic-history-head { align-items: flex-start; flex-direction: column; }
+  .adm-diagnostic-badges { justify-content: flex-start; }
 }
