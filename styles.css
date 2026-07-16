@@ -107,18 +107,18 @@ html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 
    general sin tocarlos. */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #EA7EA3 #FDF0F5;
+  scrollbar-color: var(--color-scrollbar-thumb, #EA7EA3) var(--color-scrollbar-track, #FDF0F5);
 }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #FDF0F5; }
+::-webkit-scrollbar-track { background: var(--color-scrollbar-track, #FDF0F5); }
 ::-webkit-scrollbar-thumb {
-  background: #EA7EA3;
+  background: var(--color-scrollbar-thumb, #EA7EA3);
   border-radius: 999px;
-  border: 2px solid #FDF0F5;
+  border: 2px solid var(--color-scrollbar-track, #FDF0F5);
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
-::-webkit-scrollbar-corner { background: #FDF0F5; }
+::-webkit-scrollbar-corner { background: var(--color-scrollbar-track, #FDF0F5); }
 
 body {
   font-family:Montserrat;

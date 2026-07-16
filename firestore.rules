@@ -572,8 +572,31 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
+    match /settings/appearance {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
     match /settings/{docId} {
       allow read, write: if isSuperAdmin();
+    }
+
+    /* ============================================================
+       APARIENCIA Y ESQUEMAS DE COLOR (Super Admin → Apariencia)
+       Lectura pública: las páginas públicas necesitan el esquema activo
+       para pintarse, incluso sin sesión iniciada. Escritura exclusiva de
+       Super Admin — mismo criterio que Configuración/Correos/Usuarios,
+       no se agrega como permiso dinámico acotable (ver js/role-permissions.js).
+       ============================================================ */
+    match /colorSchemes/{schemeId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+
+      match /history/{entryId} {
+        allow read: if isSuperAdmin();
+        allow create: if isSuperAdmin();
+        allow update, delete: if false;
+      }
     }
 
     /* ============================================================

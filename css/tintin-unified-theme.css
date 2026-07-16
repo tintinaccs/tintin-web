@@ -1,23 +1,29 @@
 :root{
   color-scheme:light;
 
-  /* Fuente única de verdad */
-  --tt-page-bg:#FFF6FA;
-  --tt-surface:#FFFFFF;
-  --tt-surface-soft:#FFF9FC;
-  --tt-surface-strong:#FFFFFF;
-  --tt-title:#2B2B2B;
-  --tt-text:#2B2B2B;
-  --tt-muted:#7B6F72;
-  --tt-border:#F1E4E7;
-  --tt-line:#F7E9ED;
-  --tt-accent:#AD3F67;
-  --tt-accent-hover:#8B2642;
-  --tt-accent-soft:#FDECF2;
-  --tt-accent-mid:#F6B7C8;
-  --tt-focus:rgba(173,63,103,.24);
-  --tt-shadow:0 14px 38px rgba(212,106,138,.10);
-  --tt-shadow-soft:0 8px 24px rgba(212,106,138,.08);
+  /* Fuente única de verdad — ahora apunta al catálogo de tokens semánticos
+     de css/color-tokens.css (Super Admin → Apariencia → Esquema global),
+     que a su vez es lo que js/color-scheme.js reescribe en caliente sobre
+     <html> con el esquema activo publicado en Firestore. Estos nombres
+     --tt-* se mantienen como alias de compatibilidad: todo el CSS del
+     sitio ya consume var(--tt-*), así que cambiar el token real basta
+     para que se propague solo, sin tocar cada regla una por una. */
+  --tt-page-bg:var(--color-background-page);
+  --tt-surface:var(--color-background-surface);
+  --tt-surface-soft:var(--color-background-surface-soft);
+  --tt-surface-strong:var(--color-background-elevated);
+  --tt-title:var(--color-text-title);
+  --tt-text:var(--color-text-primary);
+  --tt-muted:var(--color-text-muted);
+  --tt-border:var(--color-border-primary);
+  --tt-line:var(--color-border-secondary);
+  --tt-accent:var(--color-brand-primary);
+  --tt-accent-hover:var(--color-brand-primary-hover);
+  --tt-accent-soft:var(--color-brand-accent);
+  --tt-accent-mid:var(--color-brand-secondary);
+  --tt-focus:var(--color-button-primary-focus-ring);
+  --tt-shadow:0 14px 38px var(--color-card-shadow);
+  --tt-shadow-soft:0 8px 24px var(--color-card-shadow);
   --tt-radius:20px;
   --tt-radius-sm:14px;
 
@@ -40,25 +46,14 @@
   --gold:var(--tt-accent)!important;
   --gold-hover:var(--tt-accent-hover)!important;
   --gold-light:var(--tt-surface-soft)!important;
-  --whatsapp:var(--tt-accent)!important;
-  --whatsapp-h:var(--tt-accent-hover)!important;
-  --error:var(--tt-accent)!important;
-  --success:var(--tt-accent)!important;
+  --whatsapp:var(--color-button-whatsapp-background)!important;
+  --whatsapp-h:var(--color-button-whatsapp-hover)!important;
+  --error:var(--color-error-text)!important;
+  --success:var(--color-success-text)!important;
 
-  /* Aliases admin */
-  --adm-bg:var(--tt-page-bg)!important;
-  --adm-card:var(--tt-surface)!important;
-  --adm-text:var(--tt-text)!important;
-  --adm-muted:var(--tt-muted)!important;
-  --adm-accent:var(--tt-accent)!important;
-  --adm-accent-dark:var(--tt-accent-hover)!important;
-  --adm-border:var(--tt-border)!important;
-  --adm-sidebar:var(--tt-surface)!important;
-  --adm-sidebar-text:var(--tt-text)!important;
-  --adm-sidebar-hover:var(--tt-accent-soft)!important;
-  --adm-sidebar-active:var(--tt-accent-soft)!important;
-
-  /* Aliases checkout/perfil/login */
+  /* Aliases checkout/perfil/login (todos parte del esquema GLOBAL — el
+     checkout, el login y el perfil son páginas públicas/de usuario, no
+     del panel administrativo) */
   --ck-bg:var(--tt-page-bg)!important;
   --ck-card:var(--tt-surface)!important;
   --ck-text:var(--tt-text)!important;
@@ -71,40 +66,87 @@
   --login-card:var(--tt-surface)!important;
 }
 
+/* Aliases del Super Admin — a propósito YA NO apuntan a --tt-* (el
+   esquema global): el panel tiene su propio esquema independiente en
+   css/admin-color-tokens.css (Super Admin → Apariencia → Esquema de
+   Super Admin), cargado solo en admin.html/admin-images.html. Antes esta
+   sección forzaba --adm-* = --tt-* con !important en TODAS las páginas,
+   lo que hacía que el panel "heredara" el esquema público sin poder
+   independizarse nunca (admin.css ya definía sus propios --adm-* pero
+   quedaban pisados). Ahora, si --admin-color-* no está definido (páginas
+   públicas, que nunca cargan admin-color-tokens.css), estos alias no
+   tienen efecto porque las clases .adm-* tampoco existen ahí. */
+body:has(.adm-main){
+  --adm-bg:var(--admin-color-background-page)!important;
+  --adm-card:var(--admin-color-background-surface)!important;
+  --adm-text:var(--admin-color-text-primary)!important;
+  --adm-muted:var(--admin-color-text-secondary)!important;
+  --adm-accent:var(--admin-color-brand)!important;
+  --adm-accent-dark:var(--admin-color-brand-hover)!important;
+  --adm-border:var(--admin-color-border)!important;
+  --adm-sidebar:var(--admin-color-background-sidebar)!important;
+  --adm-sidebar-text:var(--admin-color-text-sidebar)!important;
+  --adm-sidebar-hover:var(--admin-color-background-sidebar-active)!important;
+  --adm-sidebar-active:var(--admin-color-background-sidebar-active)!important;
+}
+
 html,body{background:var(--tt-page-bg)!important;color:var(--tt-text)!important;color-scheme:light!important}body{accent-color:var(--tt-accent)}
-main,section,.section,.section-sm,.tt-section,.tt-page,.tt-page-hero,.tt-products-section,.tt-reviews-section,.tt-trust-bar,.cat-wrap,.cat-hero,.perfil-wrap,.login-page,.ck-body,.adm-main,.adm-content{background:var(--tt-page-bg)!important;color:var(--tt-text)!important}
+body:has(.adm-main){background:var(--admin-color-background-page)!important;color:var(--admin-color-text-primary)!important;accent-color:var(--admin-color-brand)}
+main,section,.section,.section-sm,.tt-section,.tt-page,.tt-page-hero,.tt-products-section,.tt-reviews-section,.tt-trust-bar,.cat-wrap,.cat-hero,.perfil-wrap,.login-page,.ck-body{background:var(--tt-page-bg)!important;color:var(--tt-text)!important}
+body:has(.adm-main) .adm-main,body:has(.adm-main) .adm-content{background:var(--admin-color-background-page)!important;color:var(--admin-color-text-primary)!important}
 
-.tt-header,.tt-mobile-menu,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-account-panel,.tt-dropdown,.tt-card,.tt-product-card,.tt-review-card,.tt-info-block,.tt-trust-item,.tt-coll-card,.tt-category-card,.tt-quick-cat,.tt-sheet-item,.tt-mobile-cat-card,.cat-sidebar,.cat-top,.cat-filter-option,.cat-product-card,.perfil-card,.login-box,.ck-panel,.ck-header,.adm-sidebar,.adm-topbar,.adm-card,.adm-table-wrap,.adm-modal,.adm-img-card,.tt-welcome-card,.tt-welcome-admin-card,.tt-welcome-step-card{background:var(--tt-surface)!important;background-color:var(--tt-surface)!important;border-color:var(--tt-border)!important;color:var(--tt-text)!important}
+.tt-header,.tt-mobile-menu,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-account-panel,.tt-dropdown,.tt-card,.tt-product-card,.tt-review-card,.tt-info-block,.tt-trust-item,.tt-coll-card,.tt-category-card,.tt-quick-cat,.tt-sheet-item,.tt-mobile-cat-card,.cat-sidebar,.cat-top,.cat-filter-option,.cat-product-card,.perfil-card,.login-box,.ck-panel,.ck-header,.tt-welcome-card,.tt-welcome-admin-card,.tt-welcome-step-card{background:var(--tt-surface)!important;background-color:var(--tt-surface)!important;border-color:var(--tt-border)!important;color:var(--tt-text)!important}
+body:has(.adm-main) .adm-topbar,body:has(.adm-main) .adm-card,body:has(.adm-main) .adm-table-wrap,body:has(.adm-main) .adm-modal,body:has(.adm-main) .adm-img-card{background:var(--admin-color-background-surface)!important;background-color:var(--admin-color-background-surface)!important;border-color:var(--admin-color-border)!important;color:var(--admin-color-text-primary)!important}
+body:has(.adm-main) .adm-sidebar{background:var(--admin-color-background-sidebar)!important;background-color:var(--admin-color-background-sidebar)!important;border-color:var(--admin-color-border)!important;color:var(--admin-color-text-sidebar)!important}
 
-h1,h2,h3,h4,h5,h6,.tt-section-title,.tt-page-hero-title,.tt-hero-title,.tt-watch-title,.tt-editorial-title,.tt-cart-title,.perfil-name,.login-heading,.ck-panel-title,.adm-card-title,.adm-section-header h1,.adm-topbar-title,.adm-sidebar-logo-text,.tt-footer-col-title{color:var(--tt-title)!important}
-body,p,li,span,small,label,th,td,div,a,input,textarea,select,option,button,.tt-card-text,.tt-card-title,.tt-product-name,.tt-product-price,.tt-dropdown-label,.cat-count,.perfil-email,.login-heading-sub,.adm-user-email,.adm-section-header p,.adm-label,.adm-table td,.adm-table th{color:var(--tt-text)!important}
-.tt-muted,.text-muted,.tt-section-desc,.tt-section-sub,.tt-card-sub,.tt-product-meta,.tt-footer p,.tt-footer a:not(.tt-footer-wa),.perfil-muted,.ck-muted,.ck-help,.adm-muted,.adm-loading,.adm-sidebar-logo-sub,.adm-live-clock{color:var(--tt-muted)!important}
+h1,h2,h3,h4,h5,h6,.tt-section-title,.tt-page-hero-title,.tt-hero-title,.tt-watch-title,.tt-editorial-title,.tt-cart-title,.perfil-name,.login-heading,.ck-panel-title,.tt-footer-col-title{color:var(--tt-title)!important}
+body:has(.adm-main) .adm-card-title,body:has(.adm-main) .adm-section-header h1,body:has(.adm-main) .adm-topbar-title,body:has(.adm-main) .adm-sidebar-logo-text{color:var(--admin-color-text-title)!important}
+body,p,li,span,small,label,th,td,div,a,input,textarea,select,option,button,.tt-card-text,.tt-card-title,.tt-product-name,.tt-product-price,.tt-dropdown-label,.cat-count,.perfil-email,.login-heading-sub{color:var(--tt-text)!important}
+body:has(.adm-main) .adm-user-email,body:has(.adm-main) .adm-section-header p,body:has(.adm-main) .adm-label,body:has(.adm-main) .adm-table td,body:has(.adm-main) .adm-table th{color:var(--admin-color-text-primary)!important}
+.tt-muted,.text-muted,.tt-section-desc,.tt-section-sub,.tt-card-sub,.tt-product-meta,.tt-footer p,.tt-footer a:not(.tt-footer-wa),.perfil-muted,.ck-muted,.ck-help{color:var(--tt-muted)!important}
+body:has(.adm-main) .adm-muted,body:has(.adm-main) .adm-loading,body:has(.adm-main) .adm-sidebar-logo-sub,body:has(.adm-main) .adm-live-clock{color:var(--admin-color-text-secondary)!important}
 
-input,textarea,select,.cat-search,.cat-sort,.cat-range-input,.perfil-input,.ck-input,.ck-select,.ck-textarea,.login-email-input,.adm-input,.adm-select{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+input,textarea,select,.cat-search,.cat-sort,.cat-range-input,.perfil-input,.ck-input,.ck-select,.ck-textarea,.login-email-input{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+body:has(.adm-main) .adm-input,body:has(.adm-main) .adm-select{background:var(--admin-color-field-background)!important;color:var(--admin-color-text-primary)!important;border-color:var(--admin-color-field-border)!important}
 input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity:.78!important}
-input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus,.adm-input:focus,.adm-select:focus{border-color:var(--tt-accent)!important;box-shadow:0 0 0 3px var(--tt-focus)!important;outline:none!important}
+input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus{border-color:var(--tt-accent)!important;box-shadow:0 0 0 3px var(--tt-focus)!important;outline:none!important}
+body:has(.adm-main) .adm-input:focus,body:has(.adm-main) .adm-select:focus{border-color:var(--admin-color-field-border-focus)!important;box-shadow:0 0 0 3px var(--admin-color-brand)!important;outline:none!important}
 
-.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.adm-btn-primary,.adm-btn-save,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent)!important;color:#fff!important}
-.tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.adm-btn-primary *,.adm-btn-save *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#fff!important}
-.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover,.adm-btn-primary:hover,.adm-btn-save:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#fff!important}
-.adm-btn-danger,.adm-btn-danger *{color:#fff!important}
-.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.adm-btn-outline,.adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save),.login-email-resend,.tt-added-toast-continue{background:var(--tt-surface)!important;border-color:var(--tt-accent)!important;color:var(--tt-accent)!important}
-.tt-btn-outline *,.tt-btn-outline-full *,.ck-btn-back *,.perfil-btn-outline *,.adm-btn-outline *,.adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save) *,.login-email-resend *,.tt-added-toast-continue *{color:var(--tt-accent)!important}
+.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent)!important;color:#fff!important}
+.tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#fff!important}
+.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#fff!important}
+body:has(.adm-main) .adm-btn-primary,body:has(.adm-main) .adm-btn-save{background:var(--admin-color-button-primary-background)!important;background-color:var(--admin-color-button-primary-background)!important;border-color:var(--admin-color-button-primary-background)!important;color:var(--admin-color-button-primary-text)!important}
+body:has(.adm-main) .adm-btn-primary *,body:has(.adm-main) .adm-btn-save *{color:var(--admin-color-button-primary-text)!important}
+body:has(.adm-main) .adm-btn-primary:hover,body:has(.adm-main) .adm-btn-save:hover{background:var(--admin-color-button-primary-hover)!important;background-color:var(--admin-color-button-primary-hover)!important;color:var(--admin-color-button-primary-text)!important}
+body:has(.adm-main) .adm-btn-danger,body:has(.adm-main) .adm-btn-danger *{color:var(--admin-color-button-danger-text)!important;background:var(--admin-color-button-danger-background)!important}
+.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.login-email-resend,.tt-added-toast-continue{background:var(--tt-surface)!important;border-color:var(--tt-accent)!important;color:var(--tt-accent)!important}
+.tt-btn-outline *,.tt-btn-outline-full *,.ck-btn-back *,.perfil-btn-outline *,.login-email-resend *,.tt-added-toast-continue *{color:var(--tt-accent)!important}
+body:has(.adm-main) .adm-btn-outline,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save){background:var(--admin-color-background-surface)!important;border-color:var(--admin-color-brand)!important;color:var(--admin-color-button-outline-text)!important}
+body:has(.adm-main) .adm-btn-outline *,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save) *{color:var(--admin-color-button-outline-text)!important}
 
-.tt-cart-badge,.tt-card-badge,.tt-product-status,.tt-product-badge,.adm-user-role-badge,.adm-nav-badge,.adm-section-badge,.cat-filter-dot,.ck-step-num,.perfil-role-badge,[class*="badge"],[class*="status"]{background:var(--tt-accent-soft)!important;color:var(--tt-accent)!important;border-color:var(--tt-accent-mid)!important}
-.ck-step.active .ck-step-num,.ck-step.active,.cat-filter-option.active,.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active,.adm-nav-item.active,.adm-mobile-tab.active,.adm-nav-item:hover,.adm-mobile-tab:hover{background:var(--tt-accent-soft)!important;color:var(--tt-accent)!important;border-color:var(--tt-accent-mid)!important}
+.tt-cart-badge,.tt-card-badge,.tt-product-status,.tt-product-badge,.cat-filter-dot,.ck-step-num,.perfil-role-badge,[class*="badge"]:not([class*="adm-"]),[class*="status"]:not([class*="adm-"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important;border-color:var(--tt-accent-mid)!important}
+body:has(.adm-main) .adm-user-role-badge,body:has(.adm-main) .adm-nav-badge,body:has(.adm-main) .adm-section-badge{background:var(--admin-color-badge-background)!important;color:var(--admin-color-badge-text)!important;border-color:var(--admin-color-brand)!important}
+.ck-step.active .ck-step-num,.ck-step.active,.cat-filter-option.active,.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active{background:var(--tt-accent-soft)!important;color:var(--tt-accent)!important;border-color:var(--tt-accent-mid)!important}
+body:has(.adm-main) .adm-nav-item.active,body:has(.adm-main) .adm-mobile-tab.active,body:has(.adm-main) .adm-nav-item:hover,body:has(.adm-main) .adm-mobile-tab:hover{background:var(--admin-color-background-sidebar-active)!important;color:var(--admin-color-text-sidebar-active)!important}
 
-.adm-table thead,.adm-table th,thead,.adm-bulk-toolbar,#bulk-toolbar,#orders-bulk-toolbar{background:var(--tt-accent-soft)!important;color:var(--tt-title)!important;border-color:var(--tt-border)!important}
-.adm-table tr:hover,.cat-filter-option:hover,.tt-dropdown-card:hover,.tt-sheet-item:hover,.tt-quick-cat:hover,.tt-mobile-cat-card:hover{background:var(--tt-surface-soft)!important;color:var(--tt-accent)!important}
+thead{background:var(--tt-accent-soft)!important;color:var(--tt-title)!important;border-color:var(--tt-border)!important}
+body:has(.adm-main) .adm-table thead,body:has(.adm-main) .adm-table th,body:has(.adm-main) .adm-bulk-toolbar,body:has(.adm-main) #bulk-toolbar,body:has(.adm-main) #orders-bulk-toolbar{background:var(--admin-color-table-header-background)!important;color:var(--admin-color-text-title)!important;border-color:var(--admin-color-border)!important}
+.cat-filter-option:hover,.tt-dropdown-card:hover,.tt-sheet-item:hover,.tt-quick-cat:hover,.tt-mobile-cat-card:hover{background:var(--tt-surface-soft)!important;color:var(--tt-accent)!important}
+body:has(.adm-main) .adm-table tr:hover{background:var(--admin-color-table-row-hover)!important;color:var(--admin-color-brand)!important}
 
-hr,.tt-footer,.tt-footer-bottom,.tt-cart-header,.tt-cart-footer,.tt-sheet-header,.tt-sheet-footer,.adm-nav-divider,.perfil-section-title,.tt-info-title,.ck-panel-head,.adm-card-head{border-color:var(--tt-border)!important}
-.tt-footer,.tt-footer-bottom,.tt-tabbar,.adm-mobile-tabs{background:rgba(255,255,255,.97)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+hr,.tt-footer,.tt-footer-bottom,.tt-cart-header,.tt-cart-footer,.tt-sheet-header,.tt-sheet-footer,.perfil-section-title,.tt-info-title,.ck-panel-head{border-color:var(--tt-border)!important}
+body:has(.adm-main) .adm-nav-divider,body:has(.adm-main) .adm-card-head{border-color:var(--admin-color-border)!important}
+.tt-footer,.tt-footer-bottom,.tt-tabbar{background:rgba(255,255,255,.97)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+body:has(.adm-main) .adm-mobile-tabs{background:var(--admin-color-background-surface)!important;color:var(--admin-color-text-primary)!important;border-color:var(--admin-color-border)!important}
 a,.tt-footer a:hover,.tt-contact-email{color:var(--tt-accent)!important}
 
-svg,.tt-trust-icon,.tt-dropdown-icon,.tt-contact-info-icon,.perfil-wa-icon,.adm-nav-icon,.nav-icon,.tt-404-icon{color:var(--tt-muted)!important}
-.tt-btn svg,.ck-btn svg,.login-google svg,.adm-btn-primary svg,.tt-wa-float svg,.tt-footer-wa svg,.tt-contact-wa-link svg{color:#fff!important}
+svg,.tt-trust-icon,.tt-dropdown-icon,.tt-contact-info-icon,.perfil-wa-icon,.nav-icon,.tt-404-icon{color:var(--tt-muted)!important}
+body:has(.adm-main) .adm-nav-icon{color:var(--admin-color-text-secondary)!important}
+.tt-btn svg,.ck-btn svg,.login-google svg,.tt-wa-float svg,.tt-footer-wa svg,.tt-contact-wa-link svg{color:#fff!important}
+body:has(.adm-main) .adm-btn-primary svg{color:var(--admin-color-button-primary-text)!important}
 
-.login-error,.ck-error,.adm-error,.perfil-toast,.tt-added-toast,.tt-store-closed-box,.login-success,.ck-ship-reminder,.ck-pay-note,.perfil-wa-box,.tt-empty,.cat-empty,.adm-loading{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+.login-error,.ck-error,.perfil-toast,.tt-added-toast,.tt-store-closed-box,.login-success,.ck-ship-reminder,.ck-pay-note,.perfil-wa-box,.tt-empty,.cat-empty{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)!important}
+body:has(.adm-main) .adm-error{background:var(--admin-color-background-surface)!important;color:var(--admin-color-text-primary)!important;border-color:var(--admin-color-border)!important}
 #tt-loader,#tt-intro{background:var(--tt-page-bg)!important;gap:0!important}
 ::selection{background:var(--tt-accent)!important;color:#fff!important}
 .tt-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
