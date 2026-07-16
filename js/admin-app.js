@@ -17,6 +17,8 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 import { normalizeCollectionDoc } from "./collections-store.js";
 import { sanitizeImageUrl } from "./image-utils.js";
 import { getDocsPaginated } from "./firestore-pagination.js";
+import { attachImageUploadWidget } from "./image-upload-widget.js";
+import { openMediaLibraryPicker } from "./admin-media-library-ui.js";
 import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-product-page-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -4297,6 +4299,29 @@ function applyProductFilters() {
 document.getElementById('prod-search').addEventListener('input', applyProductFilters);
 document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
 
+// Widgets de imagen de formulario: la carga real (validar/optimizar/subir a
+// Storage) pasa apenas se confirma, pero el valor solo queda "aplicado" al
+// producto/colección cuando se guarda el formulario completo — por eso el
+// widget escribe en un <input type="hidden"> en vez de guardar solo, igual
+// que cualquier otro campo del mismo form.
+const _formImageWidgets = new Map();
+function mountFormImageWidget(containerId, hiddenInputId, { value, label, hint } = {}) {
+  _formImageWidgets.get(containerId)?.destroy();
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const hiddenInput = document.getElementById(hiddenInputId);
+  const controller = attachImageUploadWidget(container, {
+    label: label || 'Imagen',
+    hint,
+    value: value || '',
+    onOpenLibrary: openMediaLibraryPicker,
+    onChange: url => {
+      if (hiddenInput) hiddenInput.value = url || '';
+    },
+  });
+  _formImageWidgets.set(containerId, controller);
+}
+
 function serializeProductForm() {
   return {
     name: document.getElementById('prod-name').value,
@@ -4329,6 +4354,10 @@ function _prodNuevoNow() {
   document.getElementById('prod-price-before').value = '';
   document.getElementById('prod-stock').value = '';
   document.getElementById('prod-imageUrl').value = '';
+  mountFormImageWidget('prod-image-widget', 'prod-imageUrl', {
+    label: 'Imagen principal',
+    hint: 'Se muestra en la grilla y la ficha del producto',
+  });
   document.getElementById('prod-description').value = '';
   document.getElementById('prod-tags').value = '';
   document.getElementById('prod-variants-text').value = '';
@@ -4337,7 +4366,6 @@ function _prodNuevoNow() {
   document.getElementById('prod-active').checked = true;
   document.getElementById('prod-oferta').checked = false;
   document.getElementById('prod-destacado').checked = false;
-  document.getElementById('prod-img-preview').style.display = 'none';
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
@@ -4359,6 +4387,11 @@ function _prodEditarNow(docId) {
   document.getElementById('prod-price-before').value = p.priceBefore || '';
   document.getElementById('prod-stock').value = p.stock ?? '';
   document.getElementById('prod-imageUrl').value = p.imageUrl || '';
+  mountFormImageWidget('prod-image-widget', 'prod-imageUrl', {
+    value: p.imageUrl || '',
+    label: 'Imagen principal',
+    hint: 'Se muestra en la grilla y la ficha del producto',
+  });
   document.getElementById('prod-description').value = p.description || '';
   document.getElementById('prod-badge').value = p.badge || '';
   document.getElementById('prod-collection').value = p.collection || '';
@@ -4376,22 +4409,11 @@ function _prodEditarNow(docId) {
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
   document.getElementById('prod-destacado').checked = !!p.destacado;
-  const preview = document.getElementById('prod-img-preview');
-  if (p.imageUrl) { preview.src = p.imageUrl; preview.style.display = ''; }
-  else preview.style.display = 'none';
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
   UnsavedGuard.track(serializeProductForm, prodGuardar);
 }
-
-// Live image preview
-document.getElementById('prod-imageUrl').addEventListener('input', e => {
-  const preview = document.getElementById('prod-img-preview');
-  const url = e.target.value.trim();
-  if (url) { preview.src = url; preview.style.display = ''; }
-  else preview.style.display = 'none';
-});
 
 function _prodCloseForm() {
   document.getElementById('prod-form-card').style.display = 'none';
@@ -4851,7 +4873,10 @@ function _collNuevaNow() {
   document.getElementById('coll-slug').value = '';
   document.getElementById('coll-description').value = '';
   document.getElementById('coll-image').value = '';
-  document.getElementById('coll-img-preview').style.display = 'none';
+  mountFormImageWidget('coll-image-widget', 'coll-image', {
+    label: 'Imagen de portada',
+    hint: 'Si la dejás vacía, se usa automáticamente la imagen del primer producto de la colección',
+  });
   document.getElementById('coll-order').value = _allCollections.length;
   document.getElementById('coll-visible').checked = true;
   document.getElementById('coll-form-error').style.display = 'none';
@@ -4883,8 +4908,11 @@ function _collEditarNow(slug) {
   document.getElementById('coll-slug').value = c.slug || '';
   document.getElementById('coll-description').value = c.description || '';
   document.getElementById('coll-image').value = c.image || '';
-  const prev = document.getElementById('coll-img-preview');
-  prev.src = c.image || ''; prev.style.display = c.image ? '' : 'none';
+  mountFormImageWidget('coll-image-widget', 'coll-image', {
+    value: c.image || '',
+    label: 'Imagen de portada',
+    hint: 'Si la dejás vacía, se usa automáticamente la imagen del primer producto de la colección',
+  });
   document.getElementById('coll-order').value = c.order ?? 0;
   document.getElementById('coll-visible').checked = c.visible !== false;
   document.getElementById('coll-form-error').style.display = 'none';
@@ -4907,11 +4935,6 @@ function _collCloseForm() {
 window.collCancelForm = function() {
   UnsavedGuard.confirmLeave(_collCloseForm);
 };
-
-document.getElementById('coll-image').addEventListener('input', function() {
-  const prev = document.getElementById('coll-img-preview');
-  prev.src = this.value; prev.style.display = this.value ? '' : 'none';
-});
 
 /* =============================================
    COLECCIONES — Products workspace (bulk add/remove, manual reorder)

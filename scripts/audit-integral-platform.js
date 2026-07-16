@@ -140,9 +140,16 @@ check(
     '`content:${pageId}:${sectionId}`',
     "'primary-editor'",
   ].every(token => files.admin.includes(token)) &&
-    files.adminImages.includes('`image:${slotId}`') &&
     files.welcome.includes("'welcome-config'"),
-  'productos, colecciones, configuración, permisos, contenido, pedidos, correos, bienvenida e imágenes deben quedar protegidos'
+  'productos, colecciones, configuración, permisos, contenido, pedidos, correos y bienvenida deben quedar protegidos'
+);
+
+check(
+  'Las imágenes se guardan al instante, sin dejar un borrador sin confirmar que proteger',
+  files.adminImages.includes('attachImageUploadWidget') &&
+    files.adminImages.includes('saveImages(') &&
+    !files.adminImages.includes('AdminUnsaved'),
+  'cada carga confirma y sube antes de aplicarse — no hay un estado "sin guardar" que pueda perderse al navegar'
 );
 
 if (failures) {

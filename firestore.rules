@@ -577,7 +577,23 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
+    match /settings/imageDefaults {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
     match /settings/{docId} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    /* ============================================================
+       BIBLIOTECA MULTIMEDIA (Super Admin → Imágenes)
+       Los archivos en sí viven en Storage con su propia download URL
+       pública; estos documentos son solo la metadata de administración
+       (nombre, tamaño, quién subió, dónde se usa), por eso quedan
+       restringidos a Super Admin igual que el resto del panel.
+       ============================================================ */
+    match /media/{mediaId} {
       allow read, write: if isSuperAdmin();
     }
 

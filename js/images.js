@@ -15,6 +15,7 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { sanitizeImageUrl } from './image-utils.js';
+import { resolveDeviceImage } from './image-resolver.js';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de images.js. Ambas son idempotentes.
@@ -49,12 +50,31 @@ export const IMAGE_SLOT_IDS = Object.freeze(IMAGE_SLOTS.map(slot => slot.id));
 const IMAGE_SLOT_SET = new Set(IMAGE_SLOT_IDS);
 const HERO_SLOT_SET = new Set(IMAGE_SLOT_IDS.filter(id => id.startsWith('hero_bg_')));
 
+// Slots que además de su valor "desktop" (el id de siempre) admiten
+// variantes por dispositivo con reutilización automática — todo lo que no
+// sea el trío hero (que ya son 3 slots independientes desktop/tablet/mobile).
+// Cada uno gana ${id}_tablet, ${id}_mobile y ${id}_autoReuseDesktop.
+export const DEVICE_VARIANT_SLOT_IDS = Object.freeze(
+  IMAGE_SLOT_IDS.filter(id => !id.startsWith('hero_bg_'))
+);
+const DEVICE_VARIANT_SLOT_SET = new Set(DEVICE_VARIANT_SLOT_IDS);
+const HERO_GROUP_AUTOREUSE_KEY = 'hero_bg_autoReuseDesktop';
+
 function isHeroMetaKey(key) {
   return /^(hero_bg_(?:desktop|tablet|mobile))_(?:size|pos)$/.test(key);
 }
 
+function deviceVariantKeyInfo(key) {
+  const match = /^(.+)_(tablet|mobile|autoReuseDesktop)$/.exec(key);
+  if (!match || !DEVICE_VARIANT_SLOT_SET.has(match[1])) return null;
+  return { baseId: match[1], suffix: match[2] };
+}
+
 function allowedSettingKey(key) {
-  return IMAGE_SLOT_SET.has(key) || isHeroMetaKey(key);
+  if (IMAGE_SLOT_SET.has(key)) return true;
+  if (isHeroMetaKey(key)) return true;
+  if (key === HERO_GROUP_AUTOREUSE_KEY) return true;
+  return Boolean(deviceVariantKeyInfo(key));
 }
 
 function normalizeMetaValue(key, value) {
@@ -65,6 +85,13 @@ function normalizeMetaValue(key, value) {
     return HERO_POSITION_VALUES.includes(value) ? value : 'center center';
   }
   return '';
+}
+
+function normalizeBoolean(value, fallback = true) {
+  if (typeof value === 'boolean') return value;
+  if (value === 'false') return false;
+  if (value === 'true') return true;
+  return fallback;
 }
 
 export function normalizeImagesData(raw) {
@@ -82,6 +109,18 @@ export function normalizeImagesData(raw) {
     normalized[sizeKey] = normalizeMetaValue(sizeKey, source[sizeKey]);
     normalized[posKey] = normalizeMetaValue(posKey, source[posKey]);
   });
+  normalized[HERO_GROUP_AUTOREUSE_KEY] = normalizeBoolean(source[HERO_GROUP_AUTOREUSE_KEY]);
+
+  DEVICE_VARIANT_SLOT_IDS.forEach(id => {
+    const tabletKey = `${id}_tablet`;
+    const mobileKey = `${id}_mobile`;
+    const autoKey = `${id}_autoReuseDesktop`;
+    const tablet = sanitizeImageUrl(source[tabletKey]);
+    const mobile = sanitizeImageUrl(source[mobileKey]);
+    if (tablet) normalized[tabletKey] = tablet;
+    if (mobile) normalized[mobileKey] = mobile;
+    normalized[autoKey] = normalizeBoolean(source[autoKey]);
+  });
 
   return normalized;
 }
@@ -95,12 +134,17 @@ export function normalizeImagePatch(data) {
   Object.entries(data).forEach(([key, value]) => {
     if (!allowedSettingKey(key)) return;
 
+    if (key === HERO_GROUP_AUTOREUSE_KEY || deviceVariantKeyInfo(key)?.suffix === 'autoReuseDesktop') {
+      patch[key] = normalizeBoolean(value);
+      return;
+    }
+
     if (value == null || value === '') {
       patch[key] = null;
       return;
     }
 
-    if (IMAGE_SLOT_SET.has(key)) {
+    if (IMAGE_SLOT_SET.has(key) || deviceVariantKeyInfo(key)) {
       const safe = sanitizeImageUrl(value);
       if (!safe) throw new Error(`La URL de “${key}” no es válida o no es segura.`);
       patch[key] = safe;
@@ -111,6 +155,30 @@ export function normalizeImagePatch(data) {
   });
 
   return patch;
+}
+
+/**
+ * Resuelve la imagen efectiva de un slot para un dispositivo dado, aplicando
+ * la cascada de reutilización automática (image-resolver.js). Para el trío
+ * hero usa hero_bg_desktop/tablet/mobile + hero_bg_autoReuseDesktop; para el
+ * resto usa ${id} (desktop) + ${id}_tablet + ${id}_mobile + ${id}_autoReuseDesktop.
+ */
+export function resolveSlotImage(images, slotId, device = 'desktop') {
+  const data = images || {};
+  if (slotId === 'hero_bg') {
+    return resolveDeviceImage({
+      desktop: data.hero_bg_desktop,
+      tablet: data.hero_bg_tablet,
+      mobile: data.hero_bg_mobile,
+      autoReuseDesktop: data[HERO_GROUP_AUTOREUSE_KEY] !== false,
+    }, device);
+  }
+  return resolveDeviceImage({
+    desktop: data[slotId],
+    tablet: data[`${slotId}_tablet`],
+    mobile: data[`${slotId}_mobile`],
+    autoReuseDesktop: data[`${slotId}_autoReuseDesktop`] !== false,
+  }, device);
 }
 
 let _cache = null;

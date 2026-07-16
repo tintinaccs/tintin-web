@@ -7,8 +7,13 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   utils: read('js/image-utils.js'),
   images: read('js/images.js'),
+  resolver: read('js/image-resolver.js'),
   runtime: read('js/images-phase5.js'),
   admin: read('js/admin-images-phase5.js'),
+  adminHtml: read('admin-images.html'),
+  uploadWidget: read('js/image-upload-widget.js'),
+  processing: read('js/image-processing.js'),
+  mediaLibrary: read('js/media-library.js'),
   products: read('js/products-store.js'),
   ui: read('js/ui-quality.js'),
   readme: read('assets-tintin/images/README-IMAGENES.md'),
@@ -79,11 +84,32 @@ check(
 );
 
 check(
-  'Quitar una personalización restaura imágenes responsive',
+  'Quitar una personalización restaura imágenes responsive por dispositivo',
   files.runtime.includes('buildResponsivePicture') &&
     files.runtime.includes('STATIC.placeholder') &&
-    files.runtime.includes("url ? buildCustomImage(slotId, url) : buildResponsivePicture(fallback)"),
-  'no deben quedar contenedores vacíos después de quitar una URL'
+    files.runtime.includes('resolvedSlotUrls(slotId, fallback)') &&
+    files.runtime.includes("resolveSlotImage(images, slotId, 'desktop') || absolute(fallback.desktop)"),
+  'no deben quedar contenedores vacíos después de quitar una URL, en ningún dispositivo'
+);
+
+check(
+  'Cada slot admite imagen independiente por dispositivo con reutilización automática de desktop',
+  files.images.includes('DEVICE_VARIANT_SLOT_IDS') &&
+    files.images.includes('resolveSlotImage') &&
+    files.images.includes("`${slotId}_tablet`") &&
+    files.images.includes("`${slotId}_mobile`") &&
+    files.images.includes("`${slotId}_autoReuseDesktop`"),
+  'logo, editoriales y Nosotros deben poder tener imagen propia en tablet/mobile, no solo el hero'
+);
+
+check(
+  'La cascada de dispositivo está centralizada en un único resolver',
+  files.resolver.includes('export function resolveDeviceImage') &&
+    files.resolver.includes('export function resolveCollectionImage') &&
+    files.resolver.includes('export function firstEligibleProductImage') &&
+    files.runtime.includes("from './images.js'") &&
+    files.runtime.includes('resolveSlotImage'),
+  'ninguna página debe reimplementar la prioridad desktop/tablet/mobile por su cuenta'
 );
 
 check(
@@ -103,12 +129,34 @@ check(
 );
 
 check(
-  'El panel intercepta guardados inseguros antes del código legado',
-  files.admin.includes("document.addEventListener('click'") &&
-    files.admin.includes('event.stopImmediatePropagation()') &&
-    files.admin.includes('saveImages(') &&
-    files.admin.includes("}, true);"),
-  'la validación debe ejecutarse en fase de captura'
+  'Ya no existe el campo de URL insegura: cada slot sube un archivo real',
+  !files.adminHtml.includes('adm-url-input') &&
+    !files.adminHtml.includes('placeholder="https://… pegar URL aquí"') &&
+    files.adminHtml.includes('attachImageUploadWidget') &&
+    files.adminHtml.includes('mountDeviceWidget') &&
+    files.adminHtml.includes('saveImages('),
+  'nadie debe poder pegar ni escribir una URL a mano en este panel'
+);
+check(
+  'El archivo subido se valida por su contenido real, no por su extensión',
+  files.processing.includes('detectRealImageMime') &&
+    files.processing.includes('createImageBitmap') &&
+    files.processing.includes('SIGNATURES'),
+  'un ejecutable renombrado a .png no debe poder pasar por imagen'
+);
+check(
+  'La subida procesa (redimensiona/WebP), guarda en Storage y registra la metadata',
+  files.uploadWidget.includes("import { uploadImageToLibrary } from './media-library.js'") &&
+    files.mediaLibrary.includes('uploadBytes(') &&
+    files.mediaLibrary.includes("setDoc(doc(db, MEDIA_COLLECTION, mediaId)"),
+  'la biblioteca debe quedar como la única fuente de imágenes subidas'
+);
+check(
+  'Borrar una imagen de la biblioteca revisa primero si sigue en uso',
+  files.mediaLibrary.includes('export async function findImageUsage') &&
+    files.mediaLibrary.includes("where('imageUrl', '==', url)") &&
+    files.mediaLibrary.includes("where('image', '==', url)"),
+  'no debe poder borrarse por accidente una imagen todavía activa'
 );
 
 check(
