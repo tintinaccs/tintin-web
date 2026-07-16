@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-16T19:12:18.637Z",
-  "sourceFingerprint": "4971c37fb855225c78f3ec815f83d1f5a7ec3bc4ce9f268692e67ca629f8ada6",
+  "generatedAt": "2026-07-16T19:16:01.863Z",
+  "sourceFingerprint": "707655a929012b57b7a65b85776e194e3a244e3ac28e86c7bb0bcefa9e8ed4d9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 227,
     "textFiles": 187,
-    "totalBytes": 5478294,
+    "totalBytes": 5481991,
     "pages": 18,
     "modules": 111
   },
@@ -13946,8 +13946,8 @@
     },
     {
       "path": "js/admin-store-control.js",
-      "bytes": 8629,
-      "sha256": "4f7d80cc18260f1c12a2d4ba828a57c7bf77f28f90de90df2dc329a0185ebb70",
+      "bytes": 11607,
+      "sha256": "fda0d758172361012cec07033377013978faebdd01bfee4381a0c0dfaa62fb08",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13975,7 +13975,7 @@
           "raw": "./admin-email-gate-sync.js?v=tintin-20260716-product-page-1",
           "target": "js/admin-email-gate-sync.js",
           "dynamic": true,
-          "line": 291
+          "line": 412
         }
       ],
       "endpoints": [
@@ -16159,8 +16159,8 @@
     },
     {
       "path": "scripts/audit-store-gate.js",
-      "bytes": 9893,
-      "sha256": "84d60415025381ba49eb5ffa41522c6de780d6d71921b39a246ccec3e380e8f3",
+      "bytes": 10612,
+      "sha256": "d7f95273cae1a97e949af3ade265f6c894a0b8264ce060c791106317b89ab6e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16893,8 +16893,8 @@
     {
       "path": "js/admin-store-control.js",
       "extension": ".js",
-      "bytes": 8629,
-      "sha256": "4f7d80cc18260f1c12a2d4ba828a57c7bf77f28f90de90df2dc329a0185ebb70"
+      "bytes": 11607,
+      "sha256": "fda0d758172361012cec07033377013978faebdd01bfee4381a0c0dfaa62fb08"
     },
     {
       "path": "js/admin-unsaved-guard.js",
@@ -17487,8 +17487,8 @@
     {
       "path": "scripts/audit-store-gate.js",
       "extension": ".js",
-      "bytes": 9893,
-      "sha256": "84d60415025381ba49eb5ffa41522c6de780d6d71921b39a246ccec3e380e8f3"
+      "bytes": 10612,
+      "sha256": "d7f95273cae1a97e949af3ade265f6c894a0b8264ce060c791106317b89ab6e9"
     },
     {
       "path": "scripts/audit-tintin.js",

@@ -154,8 +154,24 @@ check(
   'Sin cierre temporal al abrir el panel',
   adminSync.includes('generalResolved') &&
     adminSync.includes('gateResolved') &&
-    adminSync.includes('if (!generalResolved || !gateResolved || !latestGeneral.exists) return;'),
-  'el panel no debe publicar storeOpen:false mientras Firestore todavía está cargando'
+    adminSync.includes('!latestGeneral.exists') &&
+    adminSync.includes('generalReadError') &&
+    adminSync.includes('gateReadError'),
+  'el panel no debe publicar storeOpen:false mientras Firestore todavía está cargando o una lectura falló'
+);
+check(
+  'Selección local protegida hasta guardar',
+  adminSync.includes('localStoreDraft') &&
+    adminSync.includes("dom.checkbox.addEventListener('change'") &&
+    adminSync.includes('renderLocalDraft()') &&
+    adminSync.includes('reconcileLocalDraft()'),
+  'los snapshots no deben reemplazar la selección abierta/cerrada antes de guardar'
+);
+check(
+  'Guardado disponible si falla solo storeGate',
+  adminSync.includes('dom.saveBtn.disabled = false;') &&
+    adminSync.includes("'No se pudo comprobar settings/storeGate. El botón Guardar sigue disponible"),
+  'una falla secundaria de comprobación no debe bloquear Guardar toda la configuración'
 );
 check(
   'Guardado atómico del estado de tienda',
