@@ -12,13 +12,20 @@
   --pink-mid:    #d4748e;
   --pink-dark:   #b84c72;
   --rose:        #8b2642;
-  --gold:        #c9a96e;
-  --gold-hover:  #b8934e;
-  --gold-light:  #f5ead0;
-  --text:        #C86B86;
-  --text-sec:    #C86B86;
-  --text-muted:  #d48fa6;
-  --text-title:  #EA7EA3;
+  /* --gold/--text*: css/tintin-unified-theme.css redeclara estos mismos
+     nombres con !important en :root y gana en todas las páginas que la
+     cargan (todas menos admin-images.html) — esos valores (#AD3F67/#2B2B2B/
+     #7B6F72) son los que realmente se ven. Los de acá quedaban desalineados:
+     un texto "gold" #c9a96e y un texto principal #C86B86 dan menos de 2.3:1
+     y 3.6:1 de contraste sobre blanco. Se alinean a los valores reales para
+     que no quede una verdad distinta "en el papel" de la que se renderiza. */
+  --gold:        #AD3F67;
+  --gold-hover:  #8B2642;
+  --gold-light:  #FFF9FC;
+  --text:        #2B2B2B;
+  --text-sec:    #7B6F72;
+  --text-muted:  #7B6F72;
+  --text-title:  #2B2B2B;
   --border:      #f0d8e0;
   --white:       #ffffff;
   --whatsapp:    #25d366;

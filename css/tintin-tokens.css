@@ -22,8 +22,13 @@
   --pink-mid: #F6B7C8;
   --pink-dark: var(--tt-primary);
   --rose: var(--tt-primary);
-  --gold: var(--tt-card);
-  --gold-hover: var(--tt-light);
+  /* Antes apuntaba a --tt-card (blanco), lo que dejaba invisible cualquier
+     texto/borde/badge que usara --gold: estrellas de reseñas blancas sobre
+     tarjeta blanca, categoría del producto blanca sobre fondo blanco, el
+     badge "NUEVO" blanco sobre blanco, etc. Ahora es un dorado real con
+     contraste AA (4.9:1) tanto sobre blanco como con texto blanco encima. */
+  --gold: #8a6d1f;
+  --gold-hover: #6f5718;
   --gold-light: var(--tt-soft);
   --ink: var(--tt-title);
   --text: var(--tt-text);
