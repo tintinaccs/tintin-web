@@ -251,6 +251,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     button.type = 'button';
     button.className = `cat-filter-option${selected ? ' active' : ''}`;
     button.dataset.cat = clean(collection.slug);
+    button.setAttribute('aria-pressed', String(selected));
     dot.className = 'cat-filter-dot';
     label.textContent = clean(collection.name) || clean(collection.slug);
     count.className = 'cat-filter-count';
@@ -274,6 +275,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     all.type = 'button';
     all.className = `cat-filter-option${selected === 'todos' ? ' active' : ''}`;
     all.dataset.cat = 'todos';
+    all.setAttribute('aria-pressed', String(selected === 'todos'));
     dot.className = 'cat-filter-dot';
     label.textContent = 'Todas';
     count.className = 'cat-filter-count';
@@ -296,6 +298,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     button.type = 'button';
     button.className = `tt-filtro-btn${selected ? ' activo' : ''}`;
     button.dataset.cat = clean(collection.slug);
+    button.setAttribute('aria-pressed', String(selected));
     button.textContent = clean(collection.name) || clean(collection.slug);
     button.addEventListener('click', () => navigateCatalog(collection.slug));
     return button;
@@ -307,6 +310,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     all.type = 'button';
     all.className = `tt-filtro-btn${selected === 'todos' ? ' activo' : ''}`;
     all.dataset.cat = 'todos';
+    all.setAttribute('aria-pressed', String(selected === 'todos'));
     all.textContent = 'Todos';
     all.addEventListener('click', () => navigateCatalog('todos'));
 
@@ -325,6 +329,11 @@ if (!window.TintinCollectionsPhase4Booted) {
       );
     }
     replaceOwned(target, nodes, 'catalog-mobile');
+    requestAnimationFrame(() => {
+      const active = target.querySelector('.tt-filtro-btn.activo');
+      if (!active) return;
+      target.scrollLeft = Math.max(0, active.offsetLeft - ((target.clientWidth - active.offsetWidth) / 2));
+    });
   }
 
   function buildFooterItem(collection) {
