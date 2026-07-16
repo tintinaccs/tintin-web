@@ -7,17 +7,21 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin
-} from './_cloudinary-security.mjs';
+} from '../../cloudflare/cloudinary-security.js';
 
-export default async (request) => {
+export async function onRequest(context) {
+  const { request, env } = context;
   const origin = request.headers.get('origin') || '';
+  const requestUrl = request.url;
 
-  if (!originIsAllowed(origin)) {
-    return jsonResponse({ error: 'Origen no permitido' }, 403, origin);
+  if (!originIsAllowed(origin, requestUrl)) {
+    return jsonResponse({ error: 'Origen no permitido' }, 403, origin, requestUrl);
   }
-  if (request.method === 'OPTIONS') return preflightResponse(origin);
+  if (request.method === 'OPTIONS') {
+    return preflightResponse(origin, requestUrl);
+  }
   if (request.method !== 'POST') {
-    return jsonResponse({ error: 'Método no permitido' }, 405, origin);
+    return jsonResponse({ error: 'Método no permitido' }, 405, origin, requestUrl);
   }
 
   try {
@@ -25,7 +29,7 @@ export default async (request) => {
     const body = await request.json();
     const mediaId = cleanMediaId(body?.mediaId);
     const variant = cleanVariant(body?.variant);
-    const { cloudName, apiKey, apiSecret } = getCloudinaryConfig();
+    const { cloudName, apiKey, apiSecret } = getCloudinaryConfig(env);
 
     const publicId = `tintin/media/${mediaId}/${variant}`;
     const timestamp = Math.floor(Date.now() / 1000);
@@ -34,7 +38,7 @@ export default async (request) => {
       public_id: publicId,
       timestamp
     };
-    const signature = cloudinarySignature(signedParameters, apiSecret);
+    const signature = await cloudinarySignature(signedParameters, apiSecret);
 
     return jsonResponse({
       cloudName,
@@ -44,19 +48,10 @@ export default async (request) => {
       signature,
       overwrite: true,
       uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`
-    }, 200, origin);
+    }, 200, origin, requestUrl);
   } catch (error) {
     const message = error?.message || 'No se pudo autorizar la subida';
     const status = /Cloudinary todavía no está configurado/i.test(message) ? 503 : 401;
-    return jsonResponse({ error: message }, status, origin);
+    return jsonResponse({ error: message }, status, origin, requestUrl);
   }
-};
-
-export const config = {
-  rateLimit: {
-    action: 'rate_limit',
-    aggregateBy: ['domain', 'ip'],
-    windowSize: 60,
-    windowLimit: 30
-  }
-};
+}

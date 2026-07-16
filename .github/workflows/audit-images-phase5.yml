@@ -16,15 +16,19 @@ on:
       - 'js/admin-media-library-ui.js'
       - 'js/diagnostic-shims/storage-shim.js'
       - 'js/products-store.js'
+      - 'js/site-activity.js'
       - 'js/ui-quality.js'
-      - 'netlify/functions/_cloudinary-security.mjs'
-      - 'netlify/functions/cloudinary-sign-upload.mjs'
-      - 'netlify/functions/cloudinary-delete.mjs'
+      - 'cloudflare/cloudinary-security.js'
+      - 'functions/api/cloudinary-sign-upload.js'
+      - 'functions/api/cloudinary-delete.js'
+      - 'functions/api/visitor-geo.js'
+      - '_routes.json'
       - 'assets-tintin/images/README-IMAGENES.md'
       - 'CLOUDINARY_SETUP.md'
       - 'firebase.json'
       - 'storage.rules'
       - 'scripts/audit-images-phase5.js'
+      - 'scripts/audit-site-reliability.js'
       - 'package.json'
       - '.github/workflows/audit-images-phase5.yml'
   workflow_dispatch:
@@ -41,7 +45,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Revisar sintaxis
         run: |
           node --check js/firebase.js
@@ -56,10 +60,28 @@ jobs:
           node --check js/admin-media-library-ui.js
           node --check js/diagnostic-shims/storage-shim.js
           node --check js/products-store.js
+          node --check js/site-activity.js
           node --check js/ui-quality.js
-          node --check netlify/functions/_cloudinary-security.mjs
-          node --check netlify/functions/cloudinary-sign-upload.mjs
-          node --check netlify/functions/cloudinary-delete.mjs
+          node --check cloudflare/cloudinary-security.js
+          node --check functions/api/cloudinary-sign-upload.js
+          node --check functions/api/cloudinary-delete.js
+          node --check functions/api/visitor-geo.js
           node --check scripts/audit-images-phase5.js
+          node --check scripts/audit-site-reliability.js
+      - name: Compilar Pages Functions
+        shell: bash
+        run: |
+          set -o pipefail
+          npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=. 2>&1 | tee wrangler-build.log
+      - name: Guardar registro de Wrangler
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler-build-log
+          path: wrangler-build.log
+          if-no-files-found: warn
+          retention-days: 1
       - name: Revisar integración
         run: npm run audit:images
+      - name: Revisar confiabilidad
+        run: npm run audit:reliability

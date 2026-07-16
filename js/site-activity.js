@@ -25,7 +25,7 @@ if (!window.TintinSiteActivityBooted) {
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
-  const GEO_SERVICE_URL = 'https://6a57b4b29630770008053f55--tintinaccesorios.netlify.app/.netlify/functions/visitor-geo';
+  const GEO_SERVICE_URL = 'https://tintinaccesorios.pages.dev/api/visitor-geo';
   const HEARTBEAT_MS = 60000;
   const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
   let heartbeatTimer = 0;
@@ -115,22 +115,30 @@ if (!window.TintinSiteActivityBooted) {
     const countryCode = /^[A-Z]{2}$/i.test(value?.countryCode || '')
       ? String(value.countryCode).toUpperCase()
       : '';
+
+    // Firestore conserva el valor histórico "netlify" para no exigir una
+    // migración de reglas únicamente por el cambio de proveedor de edge.
+    const provider = value?.source === 'cloudflare' || value?.source === 'netlify'
+      ? 'netlify'
+      : 'unavailable';
+
     return {
       city: cleanGeoText(value?.city),
       region: cleanGeoText(value?.region),
       country: cleanGeoText(value?.country),
       countryCode,
-      geoSource: value?.source === 'netlify' && (countryCode || value?.city)
+      geoSource: provider === 'netlify' && (countryCode || value?.city)
         ? 'netlify'
         : 'unavailable'
     };
   }
 
   function geoEndpoint() {
-    if (/\.netlify\.app$/i.test(window.location.hostname)) {
-      return '/.netlify/functions/visitor-geo';
+    const hostname = String(window.location.hostname || '').toLowerCase();
+    if (hostname.endsWith('github.io') || hostname.endsWith('netlify.app')) {
+      return GEO_SERVICE_URL;
     }
-    return GEO_SERVICE_URL;
+    return '/api/visitor-geo';
   }
 
   async function fetchApproximateGeo() {
@@ -259,10 +267,12 @@ if (!window.TintinSiteActivityBooted) {
     geoPromise = null;
   }
 
-  const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(window.location.hostname);
-  const deployPreview = /^deploy-preview-/i.test(window.location.hostname);
+  const hostname = String(window.location.hostname || '').toLowerCase();
+  const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(hostname);
+  const netlifyPreview = /^deploy-preview-/i.test(hostname);
+  const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname);
   const trackablePage = !ADMIN_PAGES.test(window.location.pathname);
-  analyticsWritable = !localHost && !deployPreview;
+  analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
 
   if (trackablePage) {
     if (hasConsent() && analyticsWritable) startActivity();

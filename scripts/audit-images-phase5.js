@@ -22,9 +22,11 @@ const files = {
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),
   firebaseJson: read('firebase.json'),
-  cloudinarySecurity: read('netlify/functions/_cloudinary-security.mjs'),
-  cloudinarySign: read('netlify/functions/cloudinary-sign-upload.mjs'),
-  cloudinaryDelete: read('netlify/functions/cloudinary-delete.mjs'),
+  cloudinarySecurity: read('cloudflare/cloudinary-security.js'),
+  cloudinarySign: read('functions/api/cloudinary-sign-upload.js'),
+  cloudinaryDelete: read('functions/api/cloudinary-delete.js'),
+  geoFunction: read('functions/api/visitor-geo.js'),
+  routes: read('_routes.json'),
   cloudinarySetup: read('CLOUDINARY_SETUP.md'),
 };
 
@@ -92,7 +94,7 @@ check(
 );
 
 check(
-  'Quitar una personalización restaura imágenes responsive por dispositivo',
+  'Quitar una personalización restaura imágenes responsive',
   files.runtime.includes('buildResponsivePicture') &&
     files.runtime.includes('STATIC.placeholder') &&
     files.runtime.includes('resolvedSlotUrls(slotId, fallback)') &&
@@ -129,14 +131,6 @@ check(
 );
 
 check(
-  'Renderers heredados no pueden restaurar imágenes viejas',
-  files.runtime.includes('new MutationObserver(scheduleApply)') &&
-    files.runtime.includes('ttImagePhase5Signature') &&
-    files.runtime.includes('data-tt-image-phase5'),
-  'el runtime debe volver a imponer el valor actual sin crear un bucle'
-);
-
-check(
   'Ya no existe el campo de URL manual',
   !files.adminHtml.includes('adm-url-input') &&
     !files.adminHtml.includes('placeholder="https://… pegar URL aquí"') &&
@@ -151,7 +145,7 @@ check(
   files.processing.includes('detectRealImageMime') &&
     files.processing.includes('createImageBitmap') &&
     files.processing.includes('SIGNATURES'),
-  'un ejecutable renombrado no debe pasar como imagen'
+  'un archivo renombrado no debe pasar como imagen'
 );
 
 check(
@@ -164,13 +158,15 @@ check(
 );
 
 check(
-  'La biblioteca usa Cloudinary con firmas temporales',
+  'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
+    files.mediaLibrary.includes("/api/${name}") &&
+    files.mediaLibrary.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
     files.mediaLibrary.includes('uploadBlobToCloudinary') &&
     files.mediaLibrary.includes("provider: 'cloudinary'") &&
     files.mediaLibrary.includes('publicId: fullUpload.public_id') &&
     files.mediaLibrary.includes('setDoc(doc(db, MEDIA_COLLECTION, mediaId)'),
-  'Firestore debe guardar metadata, no archivos binarios'
+  'Firestore debe guardar metadata y el navegador debe usar /api'
 );
 
 check(
@@ -200,32 +196,31 @@ check(
 );
 
 check(
-  'El API Secret existe únicamente en la función de servidor',
+  'El API Secret existe únicamente en el runtime de Cloudflare',
   !files.mediaLibrary.includes('CLOUDINARY_API_SECRET') &&
     !files.uploadWidget.includes('CLOUDINARY_API_SECRET') &&
-    files.cloudinarySecurity.includes('process.env.CLOUDINARY_API_SECRET') &&
+    files.cloudinarySecurity.includes('env.CLOUDINARY_API_SECRET') &&
     !files.cloudinarySign.includes('apiSecret,') &&
     !files.cloudinarySign.includes('apiSecret:'),
   'el secreto nunca puede llegar al navegador ni a la respuesta JSON'
 );
 
 check(
-  'Netlify verifica criptográficamente el token de Firebase',
-  files.cloudinarySecurity.includes("createVerify('RSA-SHA256')") &&
-    files.cloudinarySecurity.includes('GOOGLE_CERTS_URL') &&
-    files.cloudinarySecurity.includes('payload.aud !== FIREBASE_PROJECT_ID') &&
-    files.cloudinarySecurity.includes('payload.iss !== FIREBASE_ISSUER') &&
+  'Cloudflare valida el ID token con Firebase Auth en el servidor',
+  files.cloudinarySecurity.includes('identitytoolkit.googleapis.com/v1/accounts:lookup') &&
+    files.cloudinarySecurity.includes('JSON.stringify({ idToken: token })') &&
     files.cloudinarySecurity.includes("email !== SUPERADMIN_EMAIL") &&
-    files.cloudinarySecurity.includes('payload.exp <= now'),
+    files.cloudinarySecurity.includes('user.emailVerified !== true'),
   'no alcanza con confiar en un correo enviado por el navegador'
 );
 
 check(
-  'Las firmas limitan la subida a la carpeta privada de administración',
-  files.cloudinarySign.includes('cleanMediaId(body?.mediaId)') &&
+  'Las firmas usan Web Crypto y limitan los public IDs',
+  files.cloudinarySecurity.includes("crypto.subtle.digest('SHA-1'") &&
+    files.cloudinarySign.includes('cleanMediaId(body?.mediaId)') &&
     files.cloudinarySign.includes('cleanVariant(body?.variant)') &&
     files.cloudinarySign.includes('tintin/media/${mediaId}/${variant}') &&
-    files.cloudinarySign.includes('cloudinarySignature(signedParameters, apiSecret)'),
+    files.cloudinarySign.includes('await cloudinarySignature(signedParameters, apiSecret)'),
   'el navegador no debe elegir public IDs arbitrarios'
 );
 
@@ -233,9 +228,46 @@ check(
   'El borrado solo admite public IDs de Tintin',
   files.cloudinaryDelete.includes('cleanPublicId') &&
     files.cloudinaryDelete.includes("invalidate: 'true'") &&
-    files.cloudinarySecurity.includes("^tintin\\/media\\/") &&
+    files.cloudinarySecurity.includes('^tintin\\/media\\/') &&
     files.cloudinaryDelete.includes("['ok', 'not found'].includes(data.result)"),
   'no se debe poder borrar otro asset de la cuenta'
+);
+
+check(
+  'Las Pages Functions exportan handlers compatibles',
+  files.cloudinarySign.includes('export async function onRequest(context)') &&
+    files.cloudinaryDelete.includes('export async function onRequest(context)') &&
+    files.geoFunction.includes('export async function onRequest(context)') &&
+    files.cloudinarySign.includes('const { request, env } = context') &&
+    files.cloudinaryDelete.includes('const { request, env } = context'),
+  'las funciones deben recibir request y env desde Cloudflare'
+);
+
+check(
+  'La función geográfica no devuelve IP ni coordenadas',
+  files.geoFunction.includes('const cf = request.cf || {}') &&
+    files.geoFunction.includes("source: countryCode || cf.city ? 'cloudflare'") &&
+    !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(files.geoFunction),
+  'solo debe devolver ubicación aproximada'
+);
+
+check(
+  'Las rutas de Functions están limitadas a tres endpoints',
+  files.routes.includes('"/api/cloudinary-sign-upload"') &&
+    files.routes.includes('"/api/cloudinary-delete"') &&
+    files.routes.includes('"/api/visitor-geo"') &&
+    !files.routes.includes('"/api/*"'),
+  'los archivos estáticos no deben invocar Workers'
+);
+
+check(
+  'No quedan Netlify Functions activas',
+  !exists('netlify/functions/_cloudinary-security.mjs') &&
+    !exists('netlify/functions/cloudinary-sign-upload.mjs') &&
+    !exists('netlify/functions/cloudinary-delete.mjs') &&
+    !exists('netlify/functions/visitor-geo.mjs') &&
+    !files.mediaLibrary.includes('/.netlify/functions/'),
+  'la plataforma no debe depender de créditos de Netlify'
 );
 
 check(
@@ -299,7 +331,8 @@ check(
   files.cloudinarySetup.includes('CLOUDINARY_CLOUD_NAME') &&
     files.cloudinarySetup.includes('CLOUDINARY_API_KEY') &&
     files.cloudinarySetup.includes('CLOUDINARY_API_SECRET') &&
-    files.cloudinarySetup.includes('Environment variables') &&
+    files.cloudinarySetup.includes('Workers & Pages') &&
+    files.cloudinarySetup.includes('Variables and Secrets') &&
     files.cloudinarySetup.includes('npm run deploy:rules') &&
     files.cloudinarySetup.includes('/admin-images.html'),
   'la configuración manual debe quedar documentada sin exponer secretos'

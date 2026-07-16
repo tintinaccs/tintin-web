@@ -6,7 +6,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin
-} from './_cloudinary-security.mjs';
+} from '../../cloudflare/cloudinary-security.js';
 
 async function destroyAsset(publicId, config) {
   const timestamp = Math.floor(Date.now() / 1000);
@@ -16,7 +16,7 @@ async function destroyAsset(publicId, config) {
     timestamp,
     type: 'upload'
   };
-  const signature = cloudinarySignature(signedParameters, config.apiSecret);
+  const signature = await cloudinarySignature(signedParameters, config.apiSecret);
   const form = new URLSearchParams({
     api_key: config.apiKey,
     invalidate: 'true',
@@ -44,15 +44,19 @@ async function destroyAsset(publicId, config) {
   return { publicId, result: data.result };
 }
 
-export default async (request) => {
+export async function onRequest(context) {
+  const { request, env } = context;
   const origin = request.headers.get('origin') || '';
+  const requestUrl = request.url;
 
-  if (!originIsAllowed(origin)) {
-    return jsonResponse({ error: 'Origen no permitido' }, 403, origin);
+  if (!originIsAllowed(origin, requestUrl)) {
+    return jsonResponse({ error: 'Origen no permitido' }, 403, origin, requestUrl);
   }
-  if (request.method === 'OPTIONS') return preflightResponse(origin);
+  if (request.method === 'OPTIONS') {
+    return preflightResponse(origin, requestUrl);
+  }
   if (request.method !== 'POST') {
-    return jsonResponse({ error: 'Método no permitido' }, 405, origin);
+    return jsonResponse({ error: 'Método no permitido' }, 405, origin, requestUrl);
   }
 
   try {
@@ -64,25 +68,16 @@ export default async (request) => {
       throw new Error('Cantidad de archivos inválida');
     }
 
-    const config = getCloudinaryConfig();
+    const config = getCloudinaryConfig(env);
     const results = [];
     for (const publicId of publicIds) {
       results.push(await destroyAsset(publicId, config));
     }
 
-    return jsonResponse({ ok: true, results }, 200, origin);
+    return jsonResponse({ ok: true, results }, 200, origin, requestUrl);
   } catch (error) {
     const message = error?.message || 'No se pudo borrar la imagen';
     const status = /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400;
-    return jsonResponse({ error: message }, status, origin);
+    return jsonResponse({ error: message }, status, origin, requestUrl);
   }
-};
-
-export const config = {
-  rateLimit: {
-    action: 'rate_limit',
-    aggregateBy: ['domain', 'ip'],
-    windowSize: 60,
-    windowLimit: 20
-  }
-};
+}

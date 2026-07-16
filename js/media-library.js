@@ -1,9 +1,9 @@
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin
 
-   Procesa imágenes en el navegador, solicita firmas temporales a funciones
-   de Netlify y sube los archivos directamente a Cloudinary. Firestore guarda
-   únicamente la metadata y las URLs públicas de la biblioteca.
+   Procesa imágenes en el navegador, solicita firmas temporales a Cloudflare
+   Pages Functions y sube los archivos directamente a Cloudinary. Firestore
+   guarda únicamente la metadata y las URLs públicas de la biblioteca.
    ============================================================= */
 
 import { auth, db } from './firebase.js';
@@ -24,7 +24,7 @@ import {
 import { validateImageFile, processImage } from './image-processing.js';
 
 const MEDIA_COLLECTION = 'media';
-const NETLIFY_FALLBACK_ORIGIN = 'https://tintinaccesorios.netlify.app';
+const CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
 function randomId() {
   if (window.crypto?.randomUUID) return window.crypto.randomUUID().replace(/-/g, '');
@@ -34,12 +34,19 @@ function randomId() {
 function functionOrigin() {
   const configured = String(window.TINTIN_FUNCTION_ORIGIN || '').trim().replace(/\/$/, '');
   if (configured) return configured;
-  if (window.location.hostname.endsWith('github.io')) return NETLIFY_FALLBACK_ORIGIN;
+
+  const hostname = String(window.location.hostname || '').toLowerCase();
+  if (hostname.endsWith('github.io') || hostname.endsWith('netlify.app')) {
+    return CLOUDFLARE_FALLBACK_ORIGIN;
+  }
+
+  // En Cloudflare Pages, un dominio personalizado o desarrollo local, las
+  // funciones viven bajo el mismo origen que el sitio.
   return '';
 }
 
 function functionUrl(name) {
-  return `${functionOrigin()}/.netlify/functions/${name}`;
+  return `${functionOrigin()}/api/${name}`;
 }
 
 async function parseJsonResponse(response) {
