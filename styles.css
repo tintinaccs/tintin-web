@@ -3140,27 +3140,6 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   margin-bottom: 32px;
 }
 
-.tt-product-wa-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: #25d366;
-  color: var(--white);
-  padding: 14px 28px;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.tt-product-wa-btn:hover { background: #128c3c; transform: translateY(-1px); }
-.tt-product-wa-btn svg { width: 20px; height: 20px; fill: white; }
-
 .tt-product-trust-badges {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
