@@ -10,6 +10,9 @@ const files = {
   adminPhase4: read('js/admin-collections-phase4.js'),
   uiQuality: read('js/ui-quality.js'),
   store: read('js/collections-store.js'),
+  collectionsPage: read('collections.html'),
+  collectionsPageRuntime: read('js/collections-page.js'),
+  collectionsPageStyles: read('css/collections-page.css'),
   packageJson: read('package.json')
 };
 
@@ -116,6 +119,43 @@ check(
     files.uiQuality.includes("'./collections-phase4.js'") &&
     files.uiQuality.includes("'./admin-collections-phase4.js'"),
   'debe ejecutarse incluso en páginas con HTML legado'
+);
+
+check(
+  'La página de colecciones no duplica el listener de Firestore',
+  !files.collectionsPage.includes("import('./js/collections-store.js')") &&
+    !files.collectionsPageRuntime.includes("import('./collections-store.js')") &&
+    files.collectionsPageRuntime.includes('tintin:collections-phase4-ready') &&
+    files.collectionsPageRuntime.includes('phase4CollectionsOwner'),
+  'collections.html debe consumir el renderer global, no abrir un segundo snapshot y competir por el mismo grid'
+);
+
+check(
+  'Los destacados de colecciones tienen un límite de rendimiento',
+  files.collectionsPageRuntime.includes('const FEATURED_LIMIT = 8') &&
+    files.collectionsPage.includes("id=\"collections-featured-grid\"") &&
+    !files.collectionsPage.includes('id="colls-products-grid"') &&
+    files.collectionsPageRuntime.includes('.slice(0, FEATURED_LIMIT)'),
+  'la página no debe intentar montar el catálogo completo debajo de las colecciones'
+);
+
+check(
+  'Colecciones usa el carrito compartido y valida stock',
+  files.collectionsPageRuntime.includes("import('./cart-sync.js?v=") &&
+    files.collectionsPageRuntime.includes('cartSync.addToCart') &&
+    files.collectionsPageRuntime.includes('Number(product.stock) <= 0'),
+  'los CTA destacados deben usar la misma sincronización y disponibilidad que el resto de la tienda'
+);
+
+check(
+  'La experiencia responsive conserva navegación y carga accesibles',
+  files.collectionsPage.includes('class="tt-collections-page"') &&
+    files.collectionsPage.includes('aria-busy="true"') &&
+    files.collectionsPage.includes('css/collections-page.css') &&
+    files.collectionsPage.includes('js/collections-page.js') &&
+    files.collectionsPageStyles.includes('@media (max-width: 768px)') &&
+    files.collectionsPageStyles.includes('padding: 36px 0 44px'),
+  'mobile no debe reservar el espacio del header oculto y los grids deben comunicar su estado'
 );
 
 check(

@@ -1,0 +1,195 @@
+.tt-collections-page .tt-page-hero .container,
+.tt-collections-page .tt-colls-page-section .container,
+.tt-collections-page .tt-products-section .container {
+  width: min(1180px, calc(100% - 40px));
+}
+
+.tt-collections-page .tt-page-hero-sub {
+  max-width: 680px;
+  line-height: 1.75;
+}
+
+.tt-collections-page .tt-colls-page-grid {
+  align-items: stretch;
+}
+
+.tt-collections-page .tt-coll-page-card {
+  height: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 360px 520px;
+}
+
+.tt-collections-page .tt-coll-page-img {
+  aspect-ratio: 4 / 3;
+  height: auto;
+  min-height: 220px;
+  cursor: pointer;
+}
+
+.tt-collections-page .tt-coll-page-img:focus-visible {
+  outline: 3px solid var(--pink-dark);
+  outline-offset: -5px;
+}
+
+.tt-collections-page .tt-coll-page-body {
+  gap: 6px;
+}
+
+.tt-collections-page .tt-coll-page-initial {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background: var(--pink-pale);
+  color: var(--pink-dark) !important;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.tt-collections-page .tt-coll-page-name {
+  margin-bottom: 0;
+  color: #2b2b2b !important;
+  line-height: 1.45;
+}
+
+.tt-collections-page .tt-coll-page-count {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 28px;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f9e6ed;
+  color: #83304d !important;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.tt-collections-page .tt-coll-page-desc {
+  color: #55494e !important;
+}
+
+.tt-collections-page .tt-coll-page-body > .tt-btn {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: auto;
+}
+
+.tt-collections-page .tt-products-section {
+  border-top: 1px solid var(--border);
+}
+
+.tt-collections-page .tt-products-header {
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+.tt-collections-page .tt-products-intro {
+  max-width: 620px;
+  margin: 10px auto 0;
+  color: #55494e !important;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.tt-collections-page .tt-products-grid {
+  align-items: stretch;
+}
+
+.tt-collections-page .tt-product-card {
+  height: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 260px 500px;
+}
+
+.tt-collections-page .tt-product-img[data-product-href] {
+  cursor: pointer;
+}
+
+.tt-collections-page .tt-product-img[data-product-href]:focus-visible {
+  outline: 3px solid var(--pink-dark);
+  outline-offset: -5px;
+}
+
+.tt-collections-page .tt-collections-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.tt-collections-page .tt-inline-support-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  color: #55494e !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.tt-collections-page .tt-collections-state {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 44px 20px;
+  color: #55494e !important;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .tt-collections-page .tt-page-hero {
+    padding: 36px 0 44px;
+  }
+
+  .tt-collections-page .tt-page-hero .container,
+  .tt-collections-page .tt-colls-page-section .container,
+  .tt-collections-page .tt-products-section .container {
+    width: min(720px, calc(100% - 24px));
+  }
+
+  .tt-collections-page .tt-page-hero-title {
+    font-size: clamp(1.9rem, 7vw, 2.8rem);
+  }
+
+  .tt-collections-page .tt-coll-page-body {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tt-collections-page .tt-page-hero {
+    padding: 28px 0 36px;
+  }
+
+  .tt-collections-page .tt-coll-page-img {
+    min-height: 210px;
+  }
+
+  .tt-collections-page .tt-products-grid {
+    gap: 10px;
+  }
+
+  .tt-collections-page .tt-product-info {
+    padding: 11px;
+  }
+
+  .tt-collections-page .tt-product-name {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-collections-page .tt-coll-page-card,
+  .tt-collections-page .tt-coll-page-img,
+  .tt-collections-page .tt-product-card {
+    transition: none !important;
+  }
+}
