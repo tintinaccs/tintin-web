@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-13"></script>
+  <script src="js/page-loader.js?v=tintin-20260715-14"></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -17,12 +17,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-13">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-13">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-13">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-13">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-13">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-13">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-14">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-14">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-14">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-14">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-14">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-14">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -90,6 +90,9 @@
     <button type="button" class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
+    <button type="button" class="adm-nav-item" data-section="diagnostico" id="nav-diagnostico">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6M11 8v6"/></svg></span> Diagnóstico
+    </button>
     <button type="button" class="adm-nav-item" data-section="correos" id="nav-correos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> Correos
     </button>
@@ -124,6 +127,7 @@
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
   <button type="button" class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
+  <button type="button" class="adm-mobile-tab" data-section="diagnostico" id="mtab-diagnostico"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6"/></svg></span>Diagnóstico</button>
   <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
   <button type="button" class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
   <button type="button" class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
@@ -778,6 +782,40 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DIAGNÓSTICO DEL SITIO (Solo Super Admin) ===================== -->
+    <div class="adm-section" id="section-diagnostico">
+      <div class="adm-card adm-diagnostic-card">
+        <div class="adm-card-head adm-diagnostic-head">
+          <div>
+            <div class="adm-card-title">Diagnóstico integral del sitio</div>
+            <p>Analiza todas las páginas públicas bajo demanda. No cambia datos ni código.</p>
+          </div>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-site-diagnostics">Analizar sitio</button>
+        </div>
+        <div class="adm-card-body">
+          <div id="site-diagnostic-status" class="adm-diagnostic-status" role="status" aria-live="polite">
+            Presioná “Analizar sitio” para comprobar rendimiento, errores, recursos, accesibilidad y responsive.
+          </div>
+          <div class="adm-diagnostic-progress" id="site-diagnostic-progress" hidden>
+            <span id="site-diagnostic-progress-bar"></span>
+          </div>
+          <div class="adm-diagnostic-summary" id="site-diagnostic-summary" hidden></div>
+          <div class="adm-diagnostic-toolbar" id="site-diagnostic-toolbar" hidden>
+            <label for="site-diagnostic-filter">Mostrar</label>
+            <select class="adm-select" id="site-diagnostic-filter">
+              <option value="all">Todos los hallazgos</option>
+              <option value="critical">Críticos</option>
+              <option value="warning">Advertencias</option>
+              <option value="info">Informativos</option>
+            </select>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-copy-site-diagnostics">Copiar informe</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-export-site-diagnostics">Exportar JSON</button>
+          </div>
+          <div id="site-diagnostic-results" class="adm-diagnostic-results"></div>
         </div>
       </div>
     </div>
@@ -1641,6 +1679,7 @@ import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 import { normalizeCollectionDoc } from "./js/collections-store.js";
 import { sanitizeImageUrl } from "./js/image-utils.js";
+import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260715-14";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -1976,6 +2015,7 @@ const SECTION_LABELS = {
   colecciones: 'Colecciones',
   mensajes: 'Mensajes',
   auditoria: 'Auditoría',
+  diagnostico: 'Diagnóstico',
   correos: 'Correos',
   configuracion: 'Configuración',
   importar: 'Import / Export',
@@ -1999,6 +2039,7 @@ const SECTION_PERMISSION = {
   // Admin. El Modder puede aparecer COMO ACTOR dentro del registro (sus
   // acciones se anotan igual), pero no puede abrir esta sección a verlo.
   auditoria:     'manageSettings',
+  diagnostico:   'manageSettings',
   // Correos: mismo criterio que Usuarios/Configuración/Auditoría — exclusivo
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
@@ -2024,6 +2065,10 @@ function switchSection(target) {
   }
   if (target === 'estadisticas' && currentRole !== 'superadmin') {
     toast('Estadísticas generales es exclusivo de Super Admin');
+    target = 'dashboard';
+  }
+  if (target === 'diagnostico' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
+    toast('Diagnóstico es exclusivo de Super Admin');
     target = 'dashboard';
   }
   navItems.forEach(b => b.classList.remove('active'));
@@ -2126,6 +2171,9 @@ onAuthStateChanged(auth, async user => {
     // Set up UI and reveal page
     setupUserInfo(user, role);
     setupPermissions(role);
+    if (role === 'superadmin' && user.email === SUPER_ADMIN) {
+      initSiteDiagnostics({ role });
+    }
     startAdminRealtimeData();
     loadDashboard();
     // Load eagerly (not just on nav click) so category/collection selects in
@@ -2174,6 +2222,12 @@ function setupPermissions(role) {
       });
     }
   });
+
+  if (role !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) {
+    document.querySelectorAll('[data-section="diagnostico"]').forEach(el => {
+      el.style.display = 'none';
+    });
+  }
 
   // Botones de "crear nuevo" que viven fuera de las filas de la tabla (no se
   // regeneran por producto/colección, así que se ocultan una sola vez acá).

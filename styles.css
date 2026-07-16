@@ -456,7 +456,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 8px;
-  width: 210px;
+  width: min(240px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
   box-shadow: var(--shadow-lg);
   opacity: 0;
   visibility: hidden;
@@ -510,6 +511,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   font-family: inherit;
   white-space: nowrap;
   transition: var(--transition);
+  overflow: visible;
 }
 
 .tt-account-panel .tt-account-item:hover { background: var(--pink-pale); color: var(--pink-dark); }
@@ -3292,6 +3294,16 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   #tt-header-desktop-tablet .tt-header-actions a {
     width: 44px;
     height: 44px;
+  }
+  /* Los links del panel viven dentro de .tt-header-actions, pero no son
+     iconos del header. La regla anterior los comprimía a 44px y cortaba
+     "Ingresar con Google" exactamente en el breakpoint tablet. */
+  #tt-header-desktop-tablet .tt-account-panel .tt-account-item {
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    justify-content: flex-start;
+    overflow: visible;
   }
   #tt-header-desktop-tablet .tt-nav { display: none; }
 

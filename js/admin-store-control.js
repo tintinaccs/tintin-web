@@ -38,6 +38,8 @@ const MAINTENANCE_ROLES = [
 let currentEmail = '';
 let latestGeneral = { exists: false, data: {} };
 let latestGate = { exists: false, data: {} };
+let generalResolved = false;
+let gateResolved = false;
 let syncInFlight = false;
 let syncQueued = false;
 let dom = null;
@@ -143,6 +145,11 @@ function gateMatchesGeneral() {
 
 async function syncStoreGate() {
   if (currentEmail.toLowerCase() !== SUPER_ADMIN_EMAIL) return;
+  // Nunca publiques valores construidos desde los placeholders iniciales.
+  // Al abrir el panel, Auth suele resolver antes que Firestore; antes de este
+  // guard ese intervalo escribía storeOpen:false y hacía parpadear el aviso de
+  // mantenimiento a todas las visitas hasta que llegaba settings/general.
+  if (!generalResolved || !gateResolved || !latestGeneral.exists) return;
   if (syncInFlight) {
     syncQueued = true;
     return;
@@ -177,6 +184,13 @@ async function syncStoreGate() {
 function renderState() {
   if (!dom) return;
 
+  if (!generalResolved || !gateResolved) {
+    dom.saveBtn.disabled = true;
+    setPill(false, 'COMPROBANDO');
+    setPanel('warning', 'Comprobando el estado real de la tienda…');
+    return;
+  }
+
   if (!latestGeneral.exists) {
     dom.checkbox.checked = false;
     setPill(false, 'CONFIGURACIÓN FALTANTE');
@@ -184,9 +198,8 @@ function renderState() {
       'error',
       'No existe settings/general. Por seguridad la tienda se considera CERRADA hasta que guardes la configuración.'
     );
-    if (currentEmail.toLowerCase() === SUPER_ADMIN_EMAIL && !gateMatchesGeneral()) {
-      syncStoreGate();
-    }
+    // Un documento ausente requiere una acción explícita de Guardar. No se
+    // crea automáticamente como "cerrado" al entrar al panel.
     return;
   }
 
@@ -228,6 +241,7 @@ async function boot() {
   onSnapshot(
     GENERAL_REF,
     snapshot => {
+      generalResolved = true;
       latestGeneral = {
         exists: snapshot.exists(),
         data: snapshot.exists() ? snapshot.data() || {} : {}
@@ -236,6 +250,7 @@ async function boot() {
       renderState();
     },
     error => {
+      generalResolved = true;
       console.error('[admin-store-control] No se pudo leer settings/general:', error);
       dom.saveBtn.disabled = true;
       setPill(false, 'SIN CONEXIÓN');
@@ -249,6 +264,7 @@ async function boot() {
   onSnapshot(
     STORE_GATE_REF,
     snapshot => {
+      gateResolved = true;
       latestGate = {
         exists: snapshot.exists(),
         data: snapshot.exists() ? snapshot.data() || {} : {}
@@ -256,6 +272,7 @@ async function boot() {
       renderState();
     },
     error => {
+      gateResolved = true;
       console.error('[admin-store-control] No se pudo leer settings/storeGate:', error);
       latestGate = { exists: false, data: {} };
       setPanel(
@@ -270,6 +287,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./admin-email-gate-sync.js?v=tintin-20260715-13').catch(error => {
+import('./admin-email-gate-sync.js?v=tintin-20260715-14').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

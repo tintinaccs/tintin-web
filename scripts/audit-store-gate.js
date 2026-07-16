@@ -149,6 +149,13 @@ check(
     adminSync.includes('setDoc(STORE_GATE_REF'),
   'el switch debe publicar el documento mínimo'
 );
+check(
+  'Sin cierre temporal al abrir el panel',
+  adminSync.includes('generalResolved') &&
+    adminSync.includes('gateResolved') &&
+    adminSync.includes('if (!generalResolved || !gateResolved || !latestGeneral.exists) return;'),
+  'el panel no debe publicar storeOpen:false mientras Firestore todavía está cargando'
+);
 
 check(
   'Regla pública mínima',
