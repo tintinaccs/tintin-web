@@ -12,7 +12,12 @@
  * callback), never silently replaced by fake data.
  */
 import { db } from './firebase.js';
-import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  collection,
+  limit,
+  onSnapshot,
+  query
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { cleanText, cleanMultilineText } from './security-utils.js';
 import { sanitizeImageUrl } from './image-utils.js';
 
@@ -49,7 +54,7 @@ function sortCols(list) {
  * Returns the onSnapshot unsubscribe function.
  */
 export function onCollectionsUpdate(cb, onError) {
-  return onSnapshot(collection(db, 'collections'), snap => {
+  return onSnapshot(query(collection(db, 'collections'), limit(5000)), snap => {
     const cols = sortCols(
       snap.docs.map(d => normalizeCollectionDoc(d.id, d.data())).filter(c => c.visible)
     );
@@ -69,7 +74,7 @@ export function onCollectionsUpdate(cb, onError) {
  * collections yet").
  */
 export function onAllCollectionsUpdate(cb) {
-  return onSnapshot(collection(db, 'collections'), snap => {
+  return onSnapshot(query(collection(db, 'collections'), limit(5000)), snap => {
     cb(sortCols(snap.docs.map(d => normalizeCollectionDoc(d.id, d.data()))), null);
   }, e => {
     console.error('[collections-store] admin listener failed:', e.code, e.message);

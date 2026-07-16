@@ -118,6 +118,9 @@ function labelForPage(file, title) {
 }
 
 function pageAccess(file) {
+  if (file === 'nosotros.html') {
+    return { visibility: 'hidden', requiresAuth: false, roles: ['guest', 'client'] };
+  }
   if (file === 'admin.html' || file === 'admin-images.html') {
     return { visibility: 'protected', requiresAuth: true, roles: ['superadmin', 'admin', 'agent', 'viewer'] };
   }
@@ -283,6 +286,9 @@ function extractPage(file, allPaths, jsCorpus) {
     metadata: {
       hasViewport: /<meta\b[^>]*name=["']viewport["']/i.test(html),
       hasDescription: Boolean(description),
+      noindex: /<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html),
+      redirectsTo: attr((html.match(/<meta\b[^>]*http-equiv=["']refresh["'][^>]*>/i) || [])[0] || '', 'content')
+        .replace(/^[^;]*;\s*url\s*=\s*/i, ''),
       htmlLang: attr((html.match(/<html\b[^>]*>/i) || [])[0] || '', 'lang'),
       h1Count: h1Lines.length,
       h1Lines

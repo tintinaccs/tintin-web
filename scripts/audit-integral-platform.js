@@ -13,7 +13,7 @@ const files = {
   checkout: read('checkout.html'),
   cart: read('js/cart-sync.js'),
   rules: read('firestore.rules'),
-  admin: read('admin.html'),
+  admin: `${read('admin.html')}\n${read('js/admin-app.js')}`,
   adminImages: read('admin-images.html'),
   adminGuard: read('js/admin-unsaved-guard.js'),
   welcome: read('js/admin-welcome-control.js'),

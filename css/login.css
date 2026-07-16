@@ -205,6 +205,7 @@ html, body {
   display: block; width: 100%; text-align: center; margin-top: 12px;
   background: none; border: none; font-size: 12px; font-weight: 700;
   color: var(--acc); cursor: pointer; font-family:Montserrat;
+  min-height: 32px;
 }
 .login-email-resend:disabled { color: var(--muted); cursor: not-allowed; }
 

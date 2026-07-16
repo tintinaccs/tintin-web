@@ -10,6 +10,7 @@ import { db } from './firebase.js';
 import {
   collection, doc, getDoc, getDocs, query, where, setDoc, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getDocsPaginated } from './firestore-pagination.js';
 
 const ZERO_STATS = Object.freeze({
   orderCount: 0,
@@ -191,9 +192,12 @@ export async function recalculateOrderOwnerStats(order) {
 
 export async function recalculateAllUserOrderStats() {
   const [usersSnap, ordersSnap] = await Promise.all([
-    getDocs(collection(db, 'users')),
-    getDocs(collection(db, 'orders'))
+    getDocsPaginated(collection(db, 'users'), { pageSize: 500, maxDocs: 20000 }),
+    getDocsPaginated(collection(db, 'orders'), { pageSize: 500, maxDocs: 20000 })
   ]);
+  if (usersSnap.truncated || ordersSnap.truncated) {
+    throw new Error('La recalculación global superó el límite seguro de 20.000 registros por colección.');
+  }
   const users = usersSnap.docs.map(d => ({ uid: d.id, ...d.data() }));
   const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
   const ordersByUid = new Map();

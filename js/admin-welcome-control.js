@@ -7,8 +7,9 @@
 
 import { auth, db } from './firebase.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js';
+import { getDocsPaginated } from './firestore-pagination.js';
 import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
@@ -162,7 +163,14 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
 
   async function resetWelcomeForClients() {
     if (!confirm('¿Mostrar nuevamente la bienvenida a todas las clientas? Se aplicará en su próximo ingreso a la página principal.')) return;
-    const snapshot = await getDocs(collection(db, 'users'));
+    const snapshot = await getDocsPaginated(collection(db, 'users'), {
+      pageSize: 500,
+      maxDocs: 20000
+    });
+    if (snapshot.truncated) {
+      toast('Hay más de 20.000 usuarios. Reactivá la bienvenida por segmentos para evitar una operación demasiado grande.');
+      return;
+    }
     const clients = snapshot.docs.filter(item => (item.data().role || 'client') === 'client');
     for (let offset = 0; offset < clients.length; offset += 450) {
       const batch = writeBatch(db);

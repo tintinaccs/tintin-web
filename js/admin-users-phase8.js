@@ -452,7 +452,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
   function startListeners() {
     state.stopUsers?.();
     state.stopLogs?.();
-    state.stopUsers = onSnapshot(collection(db, 'users'), snapshot => {
+    state.stopUsers = onSnapshot(query(collection(db, 'users'), limit(20000)), snapshot => {
       state.users = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       renderUsers();
     }, error => toast(`No se pudieron cargar los usuarios: ${error.message}`, true));
