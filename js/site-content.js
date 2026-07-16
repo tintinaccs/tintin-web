@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   getPageSchema,
@@ -15,7 +15,7 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './content-schema.js';
+} from './content-schema.js?v=tintin-20260716-cloudinary-fix-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

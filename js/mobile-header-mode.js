@@ -77,7 +77,7 @@
 
   (async function () {
     try {
-      var fbMod = await import('./firebase.js');
+      var fbMod = await import('./firebase.js?v=tintin-20260716-cloudinary-fix-1');
       var fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       fs.onSnapshot(fs.doc(fbMod.db, 'settings', 'general'), function (snap) {
         var mode = normalize(snap.exists() ? snap.data() : {});

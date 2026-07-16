@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   query,
@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from './email-notify.js';
+} from './email-notify.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;

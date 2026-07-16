@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260716-product-page-1';
+const VERSION = 'tintin-20260716-cloudinary-fix-1';
 const TEXT_EXTENSIONS = new Set(['.html', '.css', '.js', '.mjs', '.md', '.txt', '.json']);
 const EXCLUDED_DIRECTORIES = new Set(['.git', 'node_modules']);
 const EXCLUDED_FILES = new Set([

@@ -9,7 +9,7 @@
    - listeners en tiempo real
    ============================================================= */
 
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,
@@ -21,7 +21,7 @@ import {
   writeBatch,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { SUPER_ADMIN, ROLE_LABELS } from './roles.js';
+import { SUPER_ADMIN, ROLE_LABELS } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinAdminUsersPhase8Booted) {
   window.TintinAdminUsersPhase8Booted = true;

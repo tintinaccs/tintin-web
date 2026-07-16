@@ -117,7 +117,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './images.js'") &&
+    files.runtime.includes("from './images.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
@@ -150,7 +150,7 @@ check(
 
 check(
   'El navegador conserva procesamiento, WebP y vista previa',
-  files.uploadWidget.includes("import { validateImageFile } from './image-processing.js'") &&
+  files.uploadWidget.includes("import { validateImageFile } from './image-processing.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.uploadWidget.includes('pendingPreviewUrl = URL.createObjectURL(file)') &&
     files.uploadWidget.includes('uploadImageToLibrary(file') &&
     files.processing.includes('canvas.toBlob'),
@@ -302,7 +302,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from './image-utils.js'") &&
+  files.products.includes("from './image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'
@@ -342,6 +342,74 @@ check(
   'El comando de auditoría está publicado',
   files.packageJson.includes('"audit:images"'),
   'package.json debe exponer npm run audit:images'
+);
+
+check(
+  'Confirmar y subir existe en todo widget, deshabilitado sin archivo y sin devoluciones silenciosas',
+  files.uploadWidget.includes("'Confirmar y subir'") &&
+    files.uploadWidget.includes('confirmButton.disabled = !pendingFile') &&
+    files.uploadWidget.includes('commitPendingFile') &&
+    !files.uploadWidget.includes('if (!pendingFile || busy) return;'),
+  'debe aparecer en Desktop/Tablet/Mobile y avisar en vez de no hacer nada si falta el archivo'
+);
+
+check(
+  'El clic en confirmar siempre deja evidencia y usa el flujo real de subida',
+  files.uploadWidget.includes("console.debug('[image-upload-widget] confirm clicked'") &&
+    files.uploadWidget.includes("result = await uploadImageToLibrary(file") &&
+    files.uploadWidget.includes("setStatus('Imagen guardada correctamente', 'success')") &&
+    files.uploadWidget.includes("setStatus(error?.message || 'No se pudo subir la imagen"),
+  'todo error real debe mostrarse en el estado del widget, nunca quedar en silencio'
+);
+
+check(
+  'Las operaciones de red del flujo de subida tienen timeout con mensaje claro',
+  files.mediaLibrary.includes('function withTimeout') &&
+    files.mediaLibrary.includes('new AbortController()') &&
+    files.mediaLibrary.includes('TOKEN_TIMEOUT_MS') &&
+    files.mediaLibrary.includes('SIGN_TIMEOUT_MS') &&
+    files.mediaLibrary.includes('UPLOAD_TIMEOUT_MS'),
+  'ninguna operación de red debe poder quedar colgada indefinidamente sin avisar'
+);
+
+check(
+  'La lista de orígenes confiables incluye el dominio real de producción',
+  files.cloudinarySecurity.includes("'https://tintinaccesorios.pages.dev'"),
+  'el dominio publicado en Cloudflare Pages debe estar en TRUSTED_CROSS_ORIGINS'
+);
+
+check(
+  'Los errores de subida identifican si el rechazo vino de Cloudflare o de Cloudinary',
+  files.mediaLibrary.includes('async function parseJsonResponse(response, name)') &&
+    files.mediaLibrary.includes('`Cloudflare (${name}) rechazó la solicitud: ${raw}`') &&
+    files.mediaLibrary.includes('`Cloudinary (${variant}) rechazó la subida: ${raw}`'),
+  'sin el origen del rechazo en el mensaje no se puede saber si hay que revisar la función de Cloudflare o la cuenta de Cloudinary'
+);
+
+const CURRENT_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
+check(
+  'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
+  files.uploadWidget.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
+    files.uploadWidget.includes(`./media-library.js?${CURRENT_VERSION_QUERY}`) &&
+    files.mediaLibrary.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
+    files.adminHtml.includes(`./js/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+    files.adminHtml.includes(`./js/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+  'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
+);
+
+check(
+  'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
+  read('js/admin-app.js').includes(`./image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+    read('js/admin-app.js').includes(`./admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+  'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
+);
+
+check(
+  'La herramienta de versionado también cubre imports estáticos, no solo <script src>/<link href>',
+  read('scripts/fix-tintin-source.js').includes('function versionStaticImports') &&
+    read('scripts/fix-tintin-source.js').includes("from\\s+[\"']") &&
+    read('scripts/fix-tintin-source.js').includes('NO_STATIC_IMPORT_VERSIONING'),
+  'sin esto, un import { x } from \'./y.js\' nunca se revisiona y puede quedar obsoleto para siempre'
 );
 
 if (failures) {

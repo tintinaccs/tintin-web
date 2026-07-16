@@ -13,7 +13,7 @@
 // intento (para que el propio diagnóstico lo documente como evidencia) y
 // devuelven una respuesta inerte con la forma que el código que llama
 // espera, sin tocar Firestore.
-import { reportBlockedWrite } from './diagnostic-shim-report.js';
+import { reportBlockedWrite } from './diagnostic-shim-report.js?v=tintin-20260716-cloudinary-fix-1';
 
 export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';

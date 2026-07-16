@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc,
@@ -14,8 +14,8 @@ import {
   onSnapshot,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { sanitizeImageUrl } from './image-utils.js';
-import { resolveDeviceImage } from './image-resolver.js';
+import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { resolveDeviceImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de images.js. Ambas son idempotentes.

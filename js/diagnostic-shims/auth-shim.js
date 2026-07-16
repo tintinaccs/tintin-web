@@ -7,7 +7,7 @@
 // abrir popups/redirects reales, por versiones inertes que nunca llegan a
 // Firebase. `onAuthStateChanged`/`getAuth` no se tocan: el diagnóstico debe
 // ver la sesión real de quien lo ejecuta, solo sin poder modificarla.
-import { reportBlockedWrite } from './diagnostic-shim-report.js';
+import { reportBlockedWrite } from './diagnostic-shim-report.js?v=tintin-20260716-cloudinary-fix-1';
 
 export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 

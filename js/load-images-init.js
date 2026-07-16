@@ -7,7 +7,7 @@
 // splash bespoke de index.html (#tt-intro), que ahora usa el mismo
 // js/page-loader.js que el resto del sitio (con su propio scroll-lock ya
 // incluido).
-import { loadImages } from './images.js';
+import { loadImages } from './images.js?v=tintin-20260716-cloudinary-fix-1';
 
 loadImages().then(() => {
   if (typeof window.renderProductsGrid === 'function' && Array.isArray(window.PRODUCTS)) {

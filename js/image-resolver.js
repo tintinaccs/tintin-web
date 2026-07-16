@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc,
@@ -17,7 +17,7 @@ import {
   serverTimestamp,
   setDoc,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { sanitizeImageUrl } from './image-utils.js';
+import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];
 export const DEFAULT_IMAGE_TYPES = Object.freeze(['collection', 'category', 'product', 'banner', 'general']);

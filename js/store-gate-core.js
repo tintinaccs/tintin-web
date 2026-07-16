@@ -5,12 +5,12 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { SUPER_ADMIN } from './roles.js';
+import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const STYLE_ID = 'tt-store-gate-style';

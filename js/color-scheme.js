@@ -18,9 +18,9 @@
  * trae el valor real desde Firestore, lo aplica, y re-cachea para la
  * próxima visita.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './color-scheme-catalog.js';
+import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1';
 
 const CACHE_KEY = 'tt_color_scheme_global';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };

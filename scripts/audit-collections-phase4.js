@@ -124,8 +124,8 @@ check(
 
 check(
   'La página de colecciones no duplica el listener de Firestore',
-  !files.collectionsPage.includes("import('./js/collections-store.js')") &&
-    !files.collectionsPageRuntime.includes("import('./collections-store.js')") &&
+  !files.collectionsPage.includes("import('./js/collections-store.js?v=tintin-20260716-cloudinary-fix-1')") &&
+    !files.collectionsPageRuntime.includes("import('./collections-store.js?v=tintin-20260716-cloudinary-fix-1')") &&
     files.collectionsPageRuntime.includes('tintin:collections-phase4-ready') &&
     files.collectionsPageRuntime.includes('phase4CollectionsOwner'),
   'collections.html debe consumir el renderer global, no abrir un segundo snapshot y competir por el mismo grid'
@@ -142,7 +142,7 @@ check(
 
 check(
   'Colecciones usa el carrito compartido y valida stock',
-  files.collectionsPageRuntime.includes("import('./cart-sync.js?v=") &&
+  files.collectionsPageRuntime.includes("import('./cart-sync.js?v=tintin-20260716-cloudinary-fix-1") &&
     files.collectionsPageRuntime.includes('cartSync.addToCart') &&
     files.collectionsPageRuntime.includes('Number(product.stock) <= 0'),
   'los CTA destacados deben usar la misma sincronización y disponibilidad que el resto de la tienda'

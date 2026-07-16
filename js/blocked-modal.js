@@ -8,7 +8,7 @@
 // distintos según la página. Autocontenido (estilos inline) para no
 // depender de ningún CSS de la página que lo use.
 
-import { waitForLoaderHidden } from './loader-wait.js';
+import { waitForLoaderHidden } from './loader-wait.js?v=tintin-20260716-cloudinary-fix-1';
 
 export const WHATSAPP_SUPPORT_TEXT = 'Hola Tintin, necesito ayuda con el acceso a mi cuenta.';
 export const WHATSAPP_SUPPORT_URL = 'https://wa.me/595981299331?text=' + encodeURIComponent(WHATSAPP_SUPPORT_TEXT);

@@ -5,8 +5,8 @@
  * segura del Apps Script vuelve a leer el pedido desde Firestore y no confía
  * en nombres, precios, destinatarios ni totales enviados por el navegador.
  */
-import { EMAIL_WEBHOOK_URL } from './email-config.js';
-import { db, auth } from './firebase.js';
+import { EMAIL_WEBHOOK_URL } from './email-config.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc,
@@ -232,7 +232,7 @@ if (
   !window.TintinCheckoutEmailBridgeLoading
 ) {
   window.TintinCheckoutEmailBridgeLoading = true;
-  import('./checkout-email-bridge.js?v=tintin-20260716-product-page-1').catch(error => {
+  import('./checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
     console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
   });
 }

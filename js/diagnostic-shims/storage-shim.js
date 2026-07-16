@@ -5,7 +5,7 @@
 // únicamente una superficie inerte para que un diagnóstico antiguo no pueda
 // romperse si encuentra una referencia histórica durante una inspección. No
 // importa el SDK de Firebase Storage ni realiza solicitudes de red.
-import { reportBlockedWrite } from './diagnostic-shim-report.js';
+import { reportBlockedWrite } from './diagnostic-shim-report.js?v=tintin-20260716-cloudinary-fix-1';
 
 export function getStorage() {
   return { app: null, __diagnosticOnly: true };

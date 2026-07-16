@@ -7,7 +7,7 @@
  *   código postal, navegador, nombre, correo ni referidor.
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   serverTimestamp,
@@ -16,7 +16,7 @@ import {
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './privacy-consent.js';
+} from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinSiteActivityBooted) {
   window.TintinSiteActivityBooted = true;

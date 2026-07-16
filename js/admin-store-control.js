@@ -12,7 +12,7 @@
    completos dejan de ser públicos.
    ============================================================= */
 
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -409,6 +409,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./admin-email-gate-sync.js?v=tintin-20260716-product-page-1').catch(error => {
+import('./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });
