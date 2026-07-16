@@ -10,13 +10,13 @@
   <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
   <style>
     :root {
       --rose: #b84c72;
@@ -28,7 +28,7 @@
       --border: #eee;
       --sidebar-w: 220px;
       --header-h: 60px;
-      --font: 'Poppins', sans-serif;
+      --font: "Montserrat";
       --radius: 10px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,7 +38,7 @@
     ::-webkit-scrollbar-thumb { background: #EA7EA3; border-radius: 999px; border: 2px solid #FDF0F5; background-clip: padding-box; }
     ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
     ::-webkit-scrollbar-corner { background: #FDF0F5; }
-    body { font-family: var(--font); background: #f8f8f8; color: var(--text); min-height: 100vh; }
+    body { font-family:Montserrat; background: #f8f8f8; color: var(--text); min-height: 100vh; }
 
     /* ── AUTH GATE (denegado) — la carga la cubre el loader de marca ── */
     #auth-denied {
@@ -86,7 +86,7 @@
     .adm-nav-btn {
       display: flex; align-items: center; gap: 10px; width: 100%;
       padding: 11px 20px; border: none; background: none; text-align: left;
-      font-family: var(--font); font-size: 0.88rem; color: var(--text-sec);
+      font-family:Montserrat; font-size: 0.88rem; color: var(--text-sec);
       cursor: pointer; border-left: 3px solid transparent; transition: all .15s;
     }
     .adm-nav-btn:hover { background: var(--rose-pale); color: var(--rose); }
@@ -133,7 +133,7 @@
     .adm-bulk-count { font-size: 0.82rem; font-weight: 700; color: #e65100; }
     .adm-bulk-btn {
       padding: 7px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff;
-      font-family: var(--font); font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text-sec);
+      font-family:Montserrat; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text-sec);
       transition: all .15s;
     }
     .adm-bulk-btn:hover { border-color: var(--rose); color: var(--rose); }
@@ -190,7 +190,7 @@
     /* ── URL INPUT ── */
     .adm-url-input {
       width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
-      border-radius: 8px; font-family: var(--font); font-size: 0.82rem;
+      border-radius: 8px; font-family:Montserrat; font-size: 0.82rem;
       color: var(--text); outline: none; transition: border-color .2s;
     }
     .adm-url-input:focus { border-color: var(--rose); }
@@ -201,7 +201,7 @@
     .adm-hero-ctrl-row label { font-size: 0.75rem; font-weight: 600; color: var(--muted); min-width: 64px; }
     .adm-hero-select {
       flex: 1; padding: 7px 10px; border: 1.5px solid #e8d0d9; border-radius: 8px;
-      font-family: var(--font); font-size: 0.82rem; background: #fff; color: #333;
+      font-family:Montserrat; font-size: 0.82rem; background: #fff; color: #333;
       cursor: pointer; outline: none;
     }
     .adm-hero-select:focus { border-color: var(--rose); }
@@ -210,13 +210,13 @@
     .adm-card-btns { display: flex; gap: 8px; }
     .adm-btn-save {
       flex: 1; padding: 9px 0; background: var(--rose); color: #fff;
-      border: none; border-radius: 8px; font-family: var(--font); font-size: 0.82rem;
+      border: none; border-radius: 8px; font-family:Montserrat; font-size: 0.82rem;
       font-weight: 600; cursor: pointer; transition: opacity .2s;
     }
     .adm-btn-save:hover { opacity: .88; }
     .adm-btn-clear {
       padding: 9px 14px; background: #fff; color: var(--text-sec);
-      border: 1.5px solid var(--border); border-radius: 8px; font-family: var(--font);
+      border: 1.5px solid var(--border); border-radius: 8px; font-family:Montserrat;
       font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all .2s;
     }
     .adm-btn-clear:hover { border-color: var(--rose); color: var(--rose); }
@@ -278,7 +278,7 @@
       gap: 2px; padding: 4px 14px; flex-shrink: 0;
       font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
       color: var(--text-sec); cursor: pointer; background: none; border: none;
-      font-family: var(--font); text-decoration: none; white-space: nowrap;
+      font-family:Montserrat; text-decoration: none; white-space: nowrap;
       border-bottom: 2px solid transparent; transition: color .15s;
     }
     .adm-mobile-tab.active, .adm-mobile-tab:hover { color: var(--rose); border-bottom-color: var(--rose); }

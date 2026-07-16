@@ -175,7 +175,7 @@ function showCartToast(message) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'tt-added-toast';
-    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Poppins,sans-serif;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
+    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Montserrat;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
     document.body.appendChild(toast);
   }
   toast.textContent = message;
@@ -337,7 +337,7 @@ function renderCart() {
       <a href="checkout.html" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:inherit">
+      <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
         Seguir comprando
       </button>
     `;

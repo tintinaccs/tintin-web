@@ -21,7 +21,7 @@
   overflow: hidden;
   background: var(--bg) !important;
   color: var(--text);
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -166,7 +166,7 @@ html, body {
   gap: 10px;
   margin: 0 0 16px;
   color: var(--accent);
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   font-size: 12px;
   line-height: 1.2;
   letter-spacing: 0.32em;
@@ -184,7 +184,7 @@ html, body {
 
 #tintin-about-{{ sid }} .ta-title {
   margin: 0;
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   font-size: clamp(28px, 4.5vw, var(--title-size));
   line-height: 1.05;
   letter-spacing: 0.04em;
@@ -209,7 +209,7 @@ html, body {
 #tintin-about-{{ sid }} .ta-desc {
   margin: 0;
   color: var(--muted);
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   font-size: clamp(10px, 1vw, 14px);
   line-height: 1.7;
   font-weight: 600;
@@ -236,7 +236,7 @@ html, body {
 #tintin-about-{{ sid }} .ta-point-title {
   display: block;
   margin-bottom: 7px;
-  font-family: var(--font-heading-family);
+  font-family:Montserrat;
   font-size: clamp(24px, 2.6vw, 36px);
   line-height: 1;
   font-style: italic;

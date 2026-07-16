@@ -557,7 +557,7 @@ function buildGenericEmailHtml_(t, vars) {
   const buttonHtml = (buttonText && buttonUrl)
     ? '<p style="text-align:center;margin:24px 0"><a href="' + buttonUrl + '" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">' + buttonText + '</a></p>'
     : '';
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
     (brandPhrase ? '<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">' + brandPhrase + '</p>' : '') +
     (greeting ? '<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">' + greeting + '</h2>' : '') +
@@ -769,7 +769,7 @@ function buildAdminHtml(shortId, order) {
   const discount = discountAmount(order);
   const itemRows = (order.items || []).map(itemRowHtml).join('');
 
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:24px">' +
     '<h2 style="color:#b84c72;margin:0 0 16px;font-size:18px">Nuevo pedido en ' + STORE_NAME + '</h2>' +
     '<p style="color:#666;margin:0 0 20px;font-size:13px">Pedido #' + shortId + ' recibido el ' + fmtDate(order.createdAt) + '</p>' +
@@ -841,7 +841,7 @@ function buildCustomerHtml(shortId, order, isTest) {
     ? '<div style="background:#fff3cd;color:#856404;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:12px;text-align:center">Este es un correo de prueba de Tintin Accesorios. No corresponde a un pedido real.</div>'
     : '';
 
-  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">' +
     '<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">' +
     testBanner +
     '<h2 style="color:#b84c72;margin:0 0 12px;font-size:18px">Gracias por tu pedido' + (first ? ', ' + first : '') + '.</h2>' +

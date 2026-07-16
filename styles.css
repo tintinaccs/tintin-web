@@ -41,8 +41,8 @@
   --radius-pill: 999px;
   --transition:  0.3s cubic-bezier(0.4,0,0.2,1);
   --header-h:    72px;
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body:    'Poppins', sans-serif;
+  --font-heading: "Montserrat";
+  --font-body: "Montserrat";
   /* z-index system */
   --z-dropdown:   200;
   --z-whatsapp:   900;
@@ -121,7 +121,7 @@ html {
 ::-webkit-scrollbar-corner { background: #FDF0F5; }
 
 body {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -134,14 +134,14 @@ body {
 img { max-width: 100%; height: auto; display: block; object-position: center; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
-input, textarea, select { font-family: inherit; }
+button { cursor: pointer; border: none; background: none; font-family:Montserrat; }
+input, textarea, select { font-family:Montserrat; }
 
 /* ── Typography ── */
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; color: var(--text-title); }
+h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 1.2; color: var(--text-title); }
 
 .tt-section-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
   color: var(--text-title);
@@ -150,7 +150,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-section-sub {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.95rem;
   color: var(--text-muted);
   letter-spacing: 0.06em;
@@ -229,7 +229,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   gap: 8px;
   padding: 12px 28px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -409,7 +409,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 
 .tt-nav > a,
 .tt-nav-dropdown > button {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -549,7 +549,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   background: none;
   border: none;
   text-align: left;
-  font-family: inherit;
+  font-family:Montserrat;
   white-space: nowrap;
   transition: var(--transition);
   overflow: visible;
@@ -918,7 +918,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   background: none;
   border: 1px solid var(--border);
   color: var(--rose);
-  font-family: inherit;
+  font-family:Montserrat;
   font-size: 0.82rem;
   font-weight: 600;
   text-align: center;
@@ -953,7 +953,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border: none;
   outline: none;
   font-size: 1.1rem;
-  font-family: var(--font-body);
+  font-family:Montserrat;
   color: var(--text);
   background: transparent;
 }
@@ -1124,7 +1124,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.32em;
@@ -1144,7 +1144,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-hero-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(2.2rem, 4vw, 3.5rem);
   font-weight: 700;
   color: var(--text-title);
@@ -1156,7 +1156,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 /* Vacío por defecto (Super Admin → Contenido → Hero → Subtítulo) — :empty
    lo saca del flujo por completo así no deja un hueco cuando nadie lo usa. */
 .tt-hero-subtitle {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   font-weight: 400;
   color: var(--text-sec);
@@ -1166,7 +1166,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-hero-subtitle:empty { display: none; margin: 0; }
 
 .tt-hero-tagline {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: clamp(0.78rem, 1.4vw, 0.92rem);
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -1176,7 +1176,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-hero-sub {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: clamp(0.72rem, 1.2vw, 0.82rem);
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -1301,7 +1301,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-trust-title {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1351,7 +1351,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-editorial-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 700;
   color: var(--text-title);
@@ -1429,7 +1429,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-coll-card-label {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1491,7 +1491,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-look-card-body { padding: 14px 16px 8px; }
 
 .tt-look-card-name {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1552,7 +1552,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-watch-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
   font-weight: 700;
   color: var(--text-title);
@@ -1702,7 +1702,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-product-name {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1844,7 +1844,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-footer-wa:hover { background: #128c3c; transform: translateY(-1px); }
 
 .tt-footer-col-title {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -1977,7 +1977,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   background: rgba(255,255,255,.98);
   box-shadow: 0 18px 54px rgba(38,24,30,.16);
   color: var(--text);
-  font-family: var(--font-body);
+  font-family:Montserrat;
   box-sizing: border-box;
   animation: ttPrivacyIn .28s cubic-bezier(.2,.8,.2,1) both;
 }
@@ -2257,7 +2257,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-cart-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--text);
@@ -2407,7 +2407,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-cart-total-value {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--pink-dark);
@@ -2466,7 +2466,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-page-hero-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
   color: var(--pink-dark);
@@ -2491,7 +2491,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   border: 1px solid #f0d8e0;
 }
 .tt-info-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.25rem;
   color: var(--pink-dark);
   margin: 0 0 12px;
@@ -2570,7 +2570,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 .tt-about-content {}
 
 .tt-about-greeting {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 700;
   color: var(--pink-dark);
@@ -2609,7 +2609,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-about-signature {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.3rem;
   font-style: italic;
   color: var(--pink-dark);
@@ -2629,7 +2629,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-contact-form-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--text);
@@ -2680,7 +2680,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-contact-alt-title {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text);
@@ -2777,14 +2777,14 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-coll-page-initial {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 2rem;
   color: var(--pink);
   margin-bottom: 8px;
 }
 
 .tt-coll-page-name {
-  font-family: var(--font-body);
+  font-family:Montserrat;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -2908,7 +2908,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-product-detail-name {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
   color: var(--text);
@@ -2918,7 +2918,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
 }
 
 .tt-product-detail-price {
-  font-family: var(--font-heading);
+  font-family:Montserrat;
   font-size: 2rem;
   font-weight: 700;
   color: var(--pink-dark);
@@ -3654,7 +3654,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   transform: translateX(-50%);
   color: rgba(255,255,255,0.7);
   font-size: 0.78rem;
-  font-family: var(--font-body);
+  font-family:Montserrat;
   letter-spacing: 0.06em;
 }
 .tt-gallery-main { cursor: zoom-in; }
@@ -3694,7 +3694,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   color: var(--text-sec);
   font-size: 0.75rem;
   font-weight: 500;
-  font-family: var(--font-body);
+  font-family:Montserrat;
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
@@ -3778,7 +3778,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; lin
   gap: 5px;
   font-size: 0.7rem;
   color: var(--text-muted);
-  font-family: var(--font-body);
+  font-family:Montserrat;
 }
 
 /* ══════════════════════════════════════════════════════════════

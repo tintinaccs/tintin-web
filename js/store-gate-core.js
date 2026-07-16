@@ -110,7 +110,7 @@ function injectGateStyle() {
     #${OVERLAY_ID} .tt-store-gate-title {
       margin: 0 0 12px !important;
       color: #8b2642 !important;
-      font: 800 clamp(19px, 3.2vw, 22px)/1.25 Poppins, Arial, sans-serif !important;
+      font: 800 clamp(19px, 3.2vw, 22px)/1.25 Montserrat !important;
       overflow-wrap: anywhere !important;
     }
 
@@ -118,7 +118,7 @@ function injectGateStyle() {
       max-width: 360px !important;
       margin: 0 auto 26px !important;
       color: #555 !important;
-      font: 400 clamp(13px, 2.4vw, 14px)/1.65 Poppins, Arial, sans-serif !important;
+      font: 400 clamp(13px, 2.4vw, 14px)/1.65 Montserrat !important;
     }
 
     #${OVERLAY_ID} .tt-store-gate-actions {
@@ -138,7 +138,7 @@ function injectGateStyle() {
       min-height: 46px !important;
       padding: 11px 24px !important;
       border-radius: 999px !important;
-      font: 700 13px/1.2 Poppins, Arial, sans-serif !important;
+      font: 700 13px/1.2 Montserrat !important;
       text-align: center !important;
       text-decoration: none !important;
       cursor: pointer !important;

@@ -9,9 +9,6 @@
    Minimalista, elegante y femenino
    Compatible: Apple, Mejuri, Dior, Glossier
 ══════════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-
 #ess-{{ sid }},
 #ess-{{ sid }} *,
 #ess-{{ sid }} *::before,
@@ -232,7 +229,7 @@
 /* ── Título ── */
 .ess-title-{{ sid }} {
   margin: 0;
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 900;
   line-height: 1.0;
@@ -255,7 +252,7 @@
 /* ── Descripción ── */
 .ess-description-{{ sid }} {
   margin: 0;
-  font-family: "DM Sans", system-ui, sans-serif;
+  font-family:Montserrat;
   font-size: clamp(10px, 1vw, 12px);
   font-weight: 700;
   line-height: 1.7;
@@ -289,7 +286,7 @@
   color: var(--btn-txt) !important;
   border: none !important;
   border-radius: 999px !important;
-  font-family: "DM Sans", system-ui, sans-serif !important;
+  font-family:Montserrat !important;
   font-size: 12px !important;
   font-weight: 800 !important;
   letter-spacing: 0.14em !important;
@@ -707,14 +704,8 @@
       "content": "Tipografía"
     },
     {
-      "type": "select",
-      "id": "title_font_family",
-      "label": "Familia de fuente del título",
-      "options": [
-        { "value": "'Cormorant Garamond', Georgia, serif", "label": "Cormorant Garamond (Serif)" },
-        { "value": "'DM Sans', system-ui, sans-serif", "label": "DM Sans (Sans-serif)" }
-      ],
-      "default": "'DM Sans', system-ui, sans-serif"
+      "type": "paragraph",
+      "content": "Tipografía global: Montserrat"
     },
     {
       "type": "select",

@@ -564,7 +564,7 @@ function buildAdminHtml(shortId, order) {
   const shipping = order.shipping || {};
   const discount = discountAmount(order);
   const itemRows = (order.items || []).map(itemRowHtml).join('');
-  return '<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
     '<div style="background:#fff;border-radius:12px;padding:24px;border:1px solid #f0d8e0">' +
     '<h2 style="color:#b84c72;margin:0 0 16px">🛍️ Pedido — ' + STORE_NAME + '</h2>' +
     '<p style="color:#888;margin:0 0 20px">Pedido <strong>#' + shortId + '</strong> recibido el ' + fmtDate(order.createdAt) + '</p>' +
@@ -626,7 +626,7 @@ function buildCustomerHtml(shortId, order) {
   const first = String(order.userName || '').trim().split(' ')[0] || '';
   const storeWa = waLink(order.storeWhatsapp || DEFAULT_STORE_WHATSAPP, waGreetingToStore(shortId));
   const itemRows = (order.items || []).map(itemRowHtml).join('');
-  return '<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
+  return '<!DOCTYPE html><html><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#fef5f8;padding:24px">' +
     '<div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #f0d8e0">' +
     '<h2 style="color:#b84c72;margin:0 0 12px">💗 ¡Gracias por tu compra' + (first ? ', ' + first : '') + '!</h2>' +
     '<p style="color:#555;line-height:1.6;margin:0 0 20px">Recibimos tu pedido en <strong>' + STORE_NAME + '</strong>. ' +
