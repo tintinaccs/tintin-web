@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-diagnostics-1">
   <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-17">
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-17">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-17">
@@ -792,31 +792,109 @@
       <div class="adm-card adm-diagnostic-card">
         <div class="adm-card-head adm-diagnostic-head">
           <div>
-            <div class="adm-card-title">Diagnóstico integral del sitio</div>
-            <p>Analiza todas las páginas públicas bajo demanda. No cambia datos ni código.</p>
+            <div class="adm-card-title">Diagnóstico integral de la plataforma</div>
+            <p>Inspecciona, confirma y documenta problemas reales. Nunca repara ni altera la plataforma.</p>
           </div>
-          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-site-diagnostics">Analizar sitio</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-site-diagnostics">Ejecutar diagnóstico</button>
         </div>
         <div class="adm-card-body">
+          <div class="adm-diagnostic-safety" role="note">
+            <strong>Modo de solo lectura.</strong>
+            Las páginas se inspeccionan sin ejecutar sus scripts. Las consultas de datos usan límites y no crean,
+            actualizan ni eliminan registros. El historial se guarda únicamente en este navegador.
+          </div>
+          <div class="adm-diagnostic-runner" aria-label="Configuración del diagnóstico">
+            <label>
+              <span>Tipo de ejecución</span>
+              <select class="adm-select" id="site-diagnostic-mode">
+                <option value="full">Diagnóstico completo</option>
+                <option value="page">Por página</option>
+                <option value="module">Por módulo</option>
+                <option value="visual">Visual, responsive y accesibilidad</option>
+                <option value="functional">Funcional y conexiones</option>
+                <option value="technical">Técnico y estructural</option>
+                <option value="data">Datos y consistencia</option>
+                <option value="role">Por rol y permisos</option>
+              </select>
+            </label>
+            <label id="site-diagnostic-target-wrap" hidden>
+              <span>Objetivo</span>
+              <select class="adm-select" id="site-diagnostic-target"></select>
+            </label>
+            <label id="site-diagnostic-role-wrap" hidden>
+              <span>Rol a comprobar</span>
+              <select class="adm-select" id="site-diagnostic-role"></select>
+            </label>
+          </div>
           <div id="site-diagnostic-status" class="adm-diagnostic-status" role="status" aria-live="polite">
-            Presioná “Analizar sitio” para comprobar rendimiento, errores, recursos, accesibilidad y responsive.
+            Cargando el inventario verificable de páginas, módulos, componentes y conexiones…
           </div>
           <div class="adm-diagnostic-progress" id="site-diagnostic-progress" hidden>
             <span id="site-diagnostic-progress-bar"></span>
           </div>
           <div class="adm-diagnostic-summary" id="site-diagnostic-summary" hidden></div>
+          <div class="adm-diagnostic-coverage" id="site-diagnostic-coverage" hidden></div>
           <div class="adm-diagnostic-toolbar" id="site-diagnostic-toolbar" hidden>
-            <label for="site-diagnostic-filter">Mostrar</label>
-            <select class="adm-select" id="site-diagnostic-filter">
-              <option value="all">Todos los hallazgos</option>
-              <option value="critical">Críticos</option>
-              <option value="warning">Advertencias</option>
-              <option value="info">Informativos</option>
+            <label class="adm-diagnostic-search">
+              <span class="tt-sr-only">Buscar problema</span>
+              <input class="adm-input" id="site-diagnostic-search" type="search" placeholder="Buscar problema, página, ruta, archivo o evidencia">
+            </label>
+            <select class="adm-select" id="site-diagnostic-severity" aria-label="Filtrar por gravedad">
+              <option value="">Todas las gravedades</option>
+              <option value="critical">Crítico</option>
+              <option value="high">Alto</option>
+              <option value="medium">Medio</option>
+              <option value="low">Bajo</option>
+              <option value="minimal">Mínimo</option>
             </select>
+            <select class="adm-select" id="site-diagnostic-confirmation" aria-label="Filtrar por confirmación">
+              <option value="">Todos los estados</option>
+              <option value="confirmed">Error confirmado</option>
+              <option value="manual">Requiere verificación manual</option>
+              <option value="not-reviewed">No revisado</option>
+              <option value="not-available">Prueba no disponible</option>
+              <option value="no-longer-detected">Ya no detectado</option>
+              <option value="not-reverified">No se pudo volver a verificar</option>
+              <option value="intentional">Comportamiento intencional</option>
+              <option value="false-positive">Falso positivo descartado</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-category" aria-label="Filtrar por categoría">
+              <option value="">Todas las categorías</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-page" aria-label="Filtrar por página">
+              <option value="">Todas las páginas</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-route" aria-label="Filtrar por ruta">
+              <option value="">Todas las rutas</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-section" aria-label="Filtrar por sección">
+              <option value="">Todas las secciones</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-component" aria-label="Filtrar por componente">
+              <option value="">Todos los componentes</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-device" aria-label="Filtrar por dispositivo">
+              <option value="">Todos los dispositivos</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-role-filter" aria-label="Filtrar por rol">
+              <option value="">Todos los roles</option>
+            </select>
+            <select class="adm-select" id="site-diagnostic-state" aria-label="Filtrar por recurrencia">
+              <option value="">Nuevos y recurrentes</option>
+              <option value="new">Nuevo</option>
+              <option value="recurrent">Recurrente</option>
+            </select>
+            <input class="adm-input" id="site-diagnostic-date" type="date" aria-label="Filtrar por fecha de detección">
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-copy-site-diagnostics">Copiar informe</button>
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-export-site-diagnostics">Exportar JSON</button>
           </div>
+          <div class="adm-diagnostic-view-tabs" id="site-diagnostic-view-tabs" hidden>
+            <button type="button" class="active" data-diagnostic-view="active">Problemas activos</button>
+            <button type="button" data-diagnostic-view="coverage">No revisados y pruebas fallidas</button>
+            <button type="button" data-diagnostic-view="history">Historial y comparación</button>
+          </div>
           <div id="site-diagnostic-results" class="adm-diagnostic-results"></div>
+          <div id="site-diagnostic-history" class="adm-diagnostic-history" hidden></div>
         </div>
       </div>
     </div>
@@ -1680,7 +1758,7 @@ import { EMAIL_WEBHOOK_URL } from "./js/email-config.js";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
 import { normalizeCollectionDoc } from "./js/collections-store.js";
 import { sanitizeImageUrl } from "./js/image-utils.js";
-import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260715-17";
+import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260716-diagnostics-1";
 
 // ---- GLOBALS ----
 let currentUser = null;

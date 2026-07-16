@@ -23,6 +23,7 @@ const allowedTopLevelFiles = [
   'privacidad.html',
   'product.html',
   'terminos.html',
+  'diagnostic-manifest.json',
   'apple-touch-icon.png',
   'favicon.ico',
   'site.webmanifest',
