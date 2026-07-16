@@ -69,10 +69,11 @@ function functionUrl(name) {
   return `${functionOrigin()}/api/${name}`;
 }
 
-async function parseJsonResponse(response) {
+async function parseJsonResponse(response, name) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data?.error || `El servicio de imágenes respondió HTTP ${response.status}`);
+    const raw = data?.error || `respondió HTTP ${response.status}`;
+    throw new Error(`Cloudflare (${name}) rechazó la solicitud: ${raw}`);
   }
   return data;
 }
@@ -104,7 +105,7 @@ async function callSecureFunction(name, payload) {
     if (error instanceof TypeError) throw new Error('No se pudo conectar con el servicio de imágenes.');
     throw error;
   });
-  return parseJsonResponse(response);
+  return parseJsonResponse(response, name);
 }
 
 async function uploadBlobToCloudinary(blob, mediaId, variant) {
@@ -128,7 +129,8 @@ async function uploadBlobToCloudinary(blob, mediaId, variant) {
   });
   const result = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(result?.error?.message || `Cloudinary respondió HTTP ${response.status}`);
+    const raw = result?.error?.message || result?.error || `respondió HTTP ${response.status}`;
+    throw new Error(`Cloudinary (${variant}) rechazó la subida: ${raw}`);
   }
   if (!result.secure_url || !result.public_id) {
     throw new Error('Cloudinary no devolvió una URL válida para la imagen.');

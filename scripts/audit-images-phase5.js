@@ -378,6 +378,14 @@ check(
   'el dominio publicado en Cloudflare Pages debe estar en TRUSTED_CROSS_ORIGINS'
 );
 
+check(
+  'Los errores de subida identifican si el rechazo vino de Cloudflare o de Cloudinary',
+  files.mediaLibrary.includes('async function parseJsonResponse(response, name)') &&
+    files.mediaLibrary.includes('`Cloudflare (${name}) rechazó la solicitud: ${raw}`') &&
+    files.mediaLibrary.includes('`Cloudinary (${variant}) rechazó la subida: ${raw}`'),
+  'sin el origen del rechazo en el mensaje no se puede saber si hay que revisar la función de Cloudflare o la cuenta de Cloudinary'
+);
+
 const CURRENT_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
