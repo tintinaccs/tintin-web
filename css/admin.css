@@ -1590,6 +1590,27 @@
   color: var(--adm-muted);
   font-size: 12px;
 }
+.adm-diagnostic-head #btn-run-site-diagnostics {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding-inline: 22px;
+  border: 1px solid var(--adm-accent) !important;
+  background: var(--adm-accent) !important;
+  background-color: var(--adm-accent) !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.adm-diagnostic-head #btn-run-site-diagnostics:hover,
+.adm-diagnostic-head #btn-run-site-diagnostics:focus-visible {
+  border-color: var(--rose) !important;
+  background: var(--rose) !important;
+  background-color: var(--rose) !important;
+  color: #fff !important;
+}
 .adm-diagnostic-status {
   padding: 13px 15px;
   border: 1px solid var(--adm-border);
@@ -1684,7 +1705,7 @@
 @media (max-width: 900px) {
   .adm-diagnostic-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 560px) {
+@media (max-width: 760px) {
   .adm-diagnostic-head #btn-run-site-diagnostics { width: 100%; }
   .adm-diagnostic-toolbar { align-items: stretch; }
   .adm-diagnostic-toolbar > * { width: 100% !important; }
