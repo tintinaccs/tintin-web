@@ -201,13 +201,13 @@
     .adm-status-dot.on  { background: #22c55e; }
     .adm-status-dot.off { background: #ccc; }
 
-    /* ── URL INPUT ── */
-    .adm-url-input {
-      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
-      border-radius: 8px; font-family:Montserrat; font-size: 0.82rem;
-      color: var(--text); outline: none; transition: border-color .2s;
+    /* ── DEVICE SLOTS (desktop/tablet/mobile por sección) ── */
+    .adm-device-slots { display: flex; flex-direction: column; gap: 10px; margin: 8px 0; }
+    .adm-autoreuse-toggle {
+      display: flex; align-items: flex-start; gap: 8px; font-size: 0.76rem;
+      color: var(--muted); line-height: 1.4; cursor: pointer; margin-top: 4px;
     }
-    .adm-url-input:focus { border-color: var(--rose); }
+    .adm-autoreuse-toggle input { margin-top: 2px; flex-shrink: 0; }
 
     /* ── HERO CONTROLS ── */
     .adm-hero-controls { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
@@ -347,6 +347,9 @@
   <button type="button" class="adm-nav-btn" data-section="branding">
     <span class="nav-icon">🏷️</span> Branding / Logo
   </button>
+  <button type="button" class="adm-nav-btn" data-section="biblioteca">
+    <span class="nav-icon">📁</span> Biblioteca multimedia
+  </button>
 </aside>
 
 <!-- MOBILE BOTTOM TABS -->
@@ -357,6 +360,7 @@
   <button type="button" class="adm-mobile-tab" data-section="iconos"><span class="nav-icon">⭐</span>Íconos</button>
   <button type="button" class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
   <button type="button" class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
+  <button type="button" class="adm-mobile-tab" data-section="biblioteca"><span class="nav-icon">📁</span>Biblioteca</button>
   <a href="admin.html" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
 </nav>
 
@@ -385,8 +389,10 @@
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { IMAGE_SLOTS, loadImages, getImg, setImgCache } from "./js/images.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js";
+import { attachImageUploadWidget } from "./js/image-upload-widget.js";
+import { openMediaLibraryPicker, mountMediaLibrarySection } from "./js/admin-media-library-ui.js";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -402,6 +408,7 @@ const SECTION_META = {
   iconos:    { label: 'Íconos / Trust',            desc: 'Íconos del bloque de beneficios y confianza',    icon: '✨' },
   nosotros:  { label: 'Nosotros',                  desc: 'Foto principal de la página Nosotros/About',      icon: '🌸' },
   branding:  { label: 'Branding / Logo',           desc: 'Logo y elementos de marca del sitio',            icon: '🏷️' },
+  biblioteca: { label: 'Biblioteca multimedia',    desc: 'Todas las imágenes subidas: buscar, ver dónde se usan y borrar las que ya no hacen falta', icon: '📁' },
 };
 
 const BADGE_CLASS = {
@@ -422,6 +429,32 @@ function showToast(msg, isError = false) {
 }
 
 // ── Render cards for a section ──
+const DEVICE_VARIANT_SLOT_SET = new Set(DEVICE_VARIANT_SLOT_IDS);
+
+async function saveField(patch, successMessage) {
+  try {
+    await saveImages(patch);
+    showToast(successMessage);
+    return true;
+  } catch (error) {
+    console.error(error);
+    showToast(error?.message || '❌ Error al guardar. Revisá la conexión.', true);
+    return false;
+  }
+}
+
+function mountDeviceWidget(container, { slotKey, label, hint, currentUrl }) {
+  return attachImageUploadWidget(container, {
+    label,
+    hint,
+    value: currentUrl,
+    onOpenLibrary: openMediaLibraryPicker,
+    onChange: async url => {
+      await saveField({ [slotKey]: url || null }, url ? '✅ Imagen guardada' : '✅ Imagen quitada');
+    },
+  });
+}
+
 function renderSection(section) {
   currentSection = section;
   _selectedImgSlots.clear(); // la selección no tiene sentido al cambiar de sección — son slots distintos
@@ -429,24 +462,60 @@ function renderSection(section) {
   document.getElementById('section-title').textContent = meta.label || section;
   document.getElementById('section-desc').textContent = meta.desc || '';
 
-  const slots = IMAGE_SLOTS.filter(s => s.section === section);
   const grid = document.getElementById('adm-cards-grid');
+  document.getElementById('img-bulk-toolbar').style.display = section === 'biblioteca' ? 'none' : '';
 
-  grid.innerHTML = slots.map(slot => {
-    const url = getImg(slot.id) || '';
-    const configured = !!url;
-    const badgeClass = BADGE_CLASS[slot.section] || '';
-    const previewHtml = url
-      ? `<img src="${url}" alt="${slot.label}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-        + `<div class="adm-preview-empty" style="display:none"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Error cargando imagen</span></div>`
-      : `<div class="adm-preview-empty"><span class="emoji">${slot.emoji || '🖼️'}</span><span class="label">Sin imagen</span></div>`;
+  if (section === 'biblioteca') {
+    grid.replaceChildren();
+    mountMediaLibrarySection(grid);
+    return;
+  }
 
+  const slots = IMAGE_SLOTS.filter(s => s.section === section);
+  grid.replaceChildren();
+
+  slots.forEach(slot => {
     const isHero = slot.id.startsWith('hero_bg_');
-    const curSize = isHero ? (getImg(slot.id + '_size') || 'cover') : '';
-    const curPos  = isHero ? (getImg(slot.id + '_pos')  || 'center center') : '';
+    const isDeviceVariant = DEVICE_VARIANT_SLOT_SET.has(slot.id);
+    const badgeClass = BADGE_CLASS[slot.section] || '';
 
-    const heroControls = isHero ? `
-      <div class="adm-hero-controls">
+    const card = document.createElement('div');
+    card.className = 'adm-img-card';
+    card.dataset.slotId = slot.id;
+
+    const select = document.createElement('input');
+    select.type = 'checkbox';
+    select.className = 'adm-card-select img-slot-check';
+    select.dataset.slotId = slot.id;
+    select.title = 'Seleccionar';
+
+    const top = document.createElement('div');
+    top.className = 'adm-card-top';
+    top.innerHTML = `
+      <div>
+        <div class="adm-card-label">${slot.label}</div>
+        <div class="adm-card-desc">${slot.desc}</div>
+      </div>
+      <span class="adm-section-badge ${badgeClass}">${slot.section}</span>
+    `;
+
+    card.append(select, top);
+
+    if (isHero) {
+      const curSize = getImg(slot.id + '_size') || 'cover';
+      const curPos = getImg(slot.id + '_pos') || 'center center';
+      const widgetMount = document.createElement('div');
+      card.appendChild(widgetMount);
+      mountDeviceWidget(widgetMount, {
+        slotKey: slot.id,
+        label: 'Imagen',
+        hint: 'Tamaño recomendado: 1920×1080px (o similar, formato ancho)',
+        currentUrl: getImg(slot.id) || '',
+      });
+
+      const heroControls = document.createElement('div');
+      heroControls.className = 'adm-hero-controls';
+      heroControls.innerHTML = `
         <div class="adm-hero-ctrl-row">
           <label>Tamaño</label>
           <select id="size-${slot.id}" class="adm-hero-select">
@@ -473,49 +542,45 @@ function renderSection(section) {
             <option value="right bottom"  ${curPos==='right bottom' ?'selected':''}>Abajo derecha</option>
           </select>
         </div>
-      </div>` : '';
+        <button type="button" class="adm-btn-save" data-hero-save="${slot.id}">Guardar tamaño/posición</button>
+      `;
+      card.appendChild(heroControls);
+      heroControls.querySelector(`[data-hero-save]`).addEventListener('click', async () => {
+        const size = document.getElementById(`size-${slot.id}`)?.value || 'cover';
+        const pos = document.getElementById(`pos-${slot.id}`)?.value || 'center center';
+        await saveField({ [`${slot.id}_size`]: size, [`${slot.id}_pos`]: pos }, '✅ Tamaño y posición guardados');
+      });
+    } else if (isDeviceVariant) {
+      const autoReuseKey = `${slot.id}_autoReuseDesktop`;
+      const autoReuse = getAllImages()[autoReuseKey] !== false;
 
-    return `
-      <div class="adm-img-card" data-slot-id="${slot.id}">
-        <input type="checkbox" class="adm-card-select img-slot-check" data-slot-id="${slot.id}" title="Seleccionar">
-        <div class="adm-card-top">
-          <div>
-            <div class="adm-card-label">${slot.label}</div>
-            <div class="adm-card-desc">${slot.desc}</div>
-          </div>
-          <span class="adm-section-badge ${badgeClass}">${slot.section}</span>
-        </div>
-        <div class="adm-preview" id="preview-${slot.id}">
-          ${previewHtml}
-        </div>
-        <div class="adm-status" id="status-${slot.id}">
-          <div class="adm-status-dot ${configured ? 'on' : 'off'}"></div>
-          <span>${configured ? 'Configurada' : 'Sin configurar'}</span>
-        </div>
-        <input type="url" class="adm-url-input" id="input-${slot.id}"
-          placeholder="https://… pegar URL aquí"
-          value="${url}" autocomplete="off" />
-        ${heroControls}
-        <div class="adm-card-btns">
-          <button type="button" class="adm-btn-save" data-save="${slot.id}">Guardar</button>
-          <button type="button" class="adm-btn-clear" data-clear="${slot.id}">Quitar</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  grid.querySelectorAll('.adm-img-card').forEach(card => {
-    const slotId = card.dataset.slotId;
-    window.AdminUnsaved?.register(`image:${slotId}`, {
-      root: card,
-      serialize: () => JSON.stringify({
-        url: document.getElementById(`input-${slotId}`)?.value || '',
-        size: document.getElementById(`size-${slotId}`)?.value || '',
-        position: document.getElementById(`pos-${slotId}`)?.value || '',
-      }),
-      label: `la imagen ${IMAGE_SLOTS.find(slot => slot.id === slotId)?.label || slotId}`,
-      save: () => saveSlot(slotId),
-    });
+      const devicesWrap = document.createElement('div');
+      devicesWrap.className = 'adm-device-slots';
+
+      [
+        { device: 'desktop', key: slot.id, label: 'Desktop', hint: 'Se usa también en tablet/mobile si no cargás una imagen específica' },
+        { device: 'tablet', key: `${slot.id}_tablet`, label: 'Tablet' },
+        { device: 'mobile', key: `${slot.id}_mobile`, label: 'Mobile' },
+      ].forEach(({ key, label }) => {
+        const mount = document.createElement('div');
+        mount.className = 'adm-device-slot';
+        devicesWrap.appendChild(mount);
+        mountDeviceWidget(mount, { slotKey: key, label, currentUrl: getImg(key) || '' });
+      });
+
+      const autoLabel = document.createElement('label');
+      autoLabel.className = 'adm-autoreuse-toggle';
+      autoLabel.innerHTML = `<input type="checkbox" ${autoReuse ? 'checked' : ''}> Reutilizar automáticamente la imagen de desktop en tablet/mobile cuando no haya una específica`;
+      autoLabel.querySelector('input').addEventListener('change', async event => {
+        await saveField({ [autoReuseKey]: event.target.checked }, '✅ Preferencia guardada');
+      });
+
+      card.append(devicesWrap, autoLabel);
+    }
+
+    grid.appendChild(card);
   });
+
   updateImgBulkToolbar();
 }
 
@@ -546,25 +611,19 @@ document.getElementById('btn-img-bulk-clear').addEventListener('click', async ()
   const n = _selectedImgSlots.size;
   if (!confirm(`¿Quitar la imagen de ${n} slot(s) seleccionado(s)? Esta acción no se puede deshacer.`)) return;
   const slotIds = [..._selectedImgSlots];
-  try {
-    const data = {};
-    slotIds.forEach(slotId => {
-      data[slotId] = null;
-      if (slotId.startsWith('hero_bg_')) { data[slotId + '_size'] = null; data[slotId + '_pos'] = null; }
-    });
-    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
-    slotIds.forEach(slotId => {
-      setImgCache(slotId, '');
-      if (slotId.startsWith('hero_bg_')) { setImgCache(slotId + '_size', ''); setImgCache(slotId + '_pos', ''); }
-      updateCardUI(slotId, '');
-      const input = document.getElementById(`input-${slotId}`);
-      if (input) input.value = '';
-    });
-    showToast(`✅ ${n} imagen(es) quitadas`);
+  const data = {};
+  slotIds.forEach(slotId => {
+    data[slotId] = null;
+    if (slotId.startsWith('hero_bg_')) { data[slotId + '_size'] = null; data[slotId + '_pos'] = null; }
+    if (DEVICE_VARIANT_SLOT_IDS.includes(slotId)) {
+      data[`${slotId}_tablet`] = null;
+      data[`${slotId}_mobile`] = null;
+    }
+  });
+  const ok = await saveField(data, `✅ ${n} imagen(es) quitadas`);
+  if (ok) {
     _selectedImgSlots.clear();
     renderSection(currentSection);
-  } catch (e) {
-    showToast('❌ Error al quitar las imágenes seleccionadas.', true);
   }
 });
 
@@ -584,87 +643,14 @@ document.getElementById('btn-img-bulk-export').addEventListener('click', () => {
   showToast(`✅ Exportadas ${_selectedImgSlots.size} URL(s)`);
 });
 
-// ── Update a single card's preview & status without full re-render ──
-function updateCardUI(slotId, url) {
-  const slot = IMAGE_SLOTS.find(s => s.id === slotId);
-  const preview = document.getElementById(`preview-${slotId}`);
-  const status = document.getElementById(`status-${slotId}`);
-  if (!preview || !status) return;
-
-  if (url) {
-    preview.innerHTML = `<img src="${url}" alt="${slot?.label || ''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="adm-preview-empty" style="display:none"><span class="emoji">${slot?.emoji || '🖼️'}</span><span class="label">Error cargando imagen</span></div>`;
-    status.innerHTML = `<div class="adm-status-dot on"></div><span>Configurada</span>`;
-  } else {
-    preview.innerHTML = `<div class="adm-preview-empty"><span class="emoji">${slot?.emoji || '🖼️'}</span><span class="label">Sin imagen</span></div>`;
-    status.innerHTML = `<div class="adm-status-dot off"></div><span>Sin configurar</span>`;
-  }
-}
-
-// ── Save a single slot ──
-async function saveSlot(slotId) {
-  const input = document.getElementById(`input-${slotId}`);
-  const url = input ? input.value.trim() : '';
-  const isHero = slotId.startsWith('hero_bg_');
-  const sizeEl = isHero ? document.getElementById(`size-${slotId}`) : null;
-  const posEl  = isHero ? document.getElementById(`pos-${slotId}`)  : null;
-  const size = sizeEl ? sizeEl.value : null;
-  const pos  = posEl  ? posEl.value  : null;
-  try {
-    const data = { [slotId]: url || null };
-    if (isHero) { data[slotId + '_size'] = size; data[slotId + '_pos'] = pos; }
-    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
-    setImgCache(slotId, url);
-    if (isHero) { setImgCache(slotId + '_size', size); setImgCache(slotId + '_pos', pos); }
-    updateCardUI(slotId, url);
-    window.AdminUnsaved?.markClean(`image:${slotId}`);
-    showToast(url ? '✅ Imagen guardada' : '✅ Imagen quitada');
-    return true;
-  } catch (e) {
-    console.error(e);
-    showToast('❌ Error al guardar. Revisá la conexión.', true);
-    return false;
-  }
-}
-
-// ── Clear a single slot ──
-async function clearSlot(slotId) {
-  const input = document.getElementById(`input-${slotId}`);
-  if (input) input.value = '';
-  const isHero = slotId.startsWith('hero_bg_');
-  try {
-    const data = { [slotId]: null };
-    if (isHero) { data[slotId + '_size'] = null; data[slotId + '_pos'] = null; }
-    await setDoc(doc(db, 'settings', 'images'), data, { merge: true });
-    setImgCache(slotId, '');
-    if (isHero) { setImgCache(slotId + '_size', ''); setImgCache(slotId + '_pos', ''); }
-    updateCardUI(slotId, '');
-    window.AdminUnsaved?.markClean(`image:${slotId}`);
-    showToast('✅ Imagen quitada');
-    return true;
-  } catch (e) {
-    showToast('❌ Error al quitar imagen.', true);
-    return false;
-  }
-}
-
-// ── Event delegation on grid ──
-document.getElementById('adm-cards-grid').addEventListener('click', e => {
-  const saveBtn = e.target.closest('[data-save]');
-  const clearBtn = e.target.closest('[data-clear]');
-  if (saveBtn) saveSlot(saveBtn.dataset.save);
-  if (clearBtn) clearSlot(clearBtn.dataset.clear);
-});
-
 // ── Unified section switch (sidebar + mobile tabs) ──
+// Cada imagen se guarda al confirmar la carga (no hay un estado "sin
+// guardar" pendiente), así que cambiar de sección no necesita pedir
+// confirmación de navegación.
 function switchImgSection(target) {
-  const switchNow = () => {
-    document.querySelectorAll('[data-section]').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
-    renderSection(target);
-  };
-  const dirty = window.AdminUnsaved?.dirtyScopes().filter(id => id.startsWith('image:')) || [];
-  if (dirty.length) window.AdminUnsaved.requestNavigation(switchNow, { scopeIds: dirty });
-  else switchNow();
+  document.querySelectorAll('[data-section]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
+  renderSection(target);
 }
 document.querySelectorAll('[data-section]').forEach(btn => {
   btn.addEventListener('click', () => switchImgSection(btn.dataset.section));

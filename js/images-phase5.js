@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { onImagesUpdate } from './images.js';
+import { onImagesUpdate, resolveSlotImage } from './images.js';
 import { createSafeImage, sanitizeImageUrl } from './image-utils.js';
 
 if (!window.TintinImagesPhase5Booted) {
@@ -53,24 +53,37 @@ if (!window.TintinImagesPhase5Booted) {
     return node;
   }
 
-  function buildResponsivePicture(config) {
+  // Cascada por dispositivo (custom desktop/tablet/mobile con reutilización
+  // automática, resuelta por resolveSlotImage) y solo al final el respaldo
+  // estático empaquetado — así una sola imagen cargada en desktop ya se ve
+  // en tablet/mobile sin que la sección quede nunca vacía.
+  function resolvedSlotUrls(slotId, fallback) {
+    return {
+      desktop: resolveSlotImage(images, slotId, 'desktop') || absolute(fallback.desktop),
+      tablet: resolveSlotImage(images, slotId, 'tablet') || absolute(fallback.tablet),
+      mobile: resolveSlotImage(images, slotId, 'mobile') || absolute(fallback.mobile),
+    };
+  }
+
+  function buildResponsivePicture(slotId, fallback) {
+    const urls = resolvedSlotUrls(slotId, fallback);
     const picture = mark(document.createElement('picture'));
     const mobile = document.createElement('source');
     const tablet = document.createElement('source');
     const image = createSafeImage({
-      src: config.desktop,
-      fallbackUrls: [STATIC.placeholder],
-      alt: config.alt,
+      src: urls.desktop,
+      fallbackUrls: [absolute(fallback.desktop), STATIC.placeholder],
+      alt: fallback.alt,
       fit: 'cover',
       marker: 'ttImagePhase5',
     });
 
+    // Sin `type`: el formato real depende de lo que el navegador de quien
+    // subió la imagen pudo codificar (WebP o el original), no siempre WebP.
     mobile.media = '(max-width: 767px)';
-    mobile.type = 'image/webp';
-    mobile.srcset = absolute(config.mobile);
+    mobile.srcset = urls.mobile;
     tablet.media = '(max-width: 1023px)';
-    tablet.type = 'image/webp';
-    tablet.srcset = absolute(config.tablet);
+    tablet.srcset = urls.tablet;
 
     image.style.width = '100%';
     image.style.height = '100%';
@@ -82,23 +95,8 @@ if (!window.TintinImagesPhase5Booted) {
     return picture;
   }
 
-  function buildCustomImage(slotId, url) {
-    const fallback = STATIC[slotId];
-    const image = createSafeImage({
-      src: url,
-      fallbackUrls: fallback ? [fallback.desktop, STATIC.placeholder] : [STATIC.placeholder],
-      alt: fallback?.alt || '',
-      fit: 'cover',
-      marker: 'ttImagePhase5',
-    });
-    image.style.width = '100%';
-    image.style.height = '100%';
-    image.style.display = 'block';
-    return image;
-  }
-
-  function slotSignature(slotId, url) {
-    return `${slotId}:${url || 'static'}`;
+  function slotSignature(slotId, urls) {
+    return `${slotId}:${urls.desktop}|${urls.tablet}|${urls.mobile}`;
   }
 
   function slotIsCurrent(target, signature) {
@@ -111,12 +109,11 @@ if (!window.TintinImagesPhase5Booted) {
     const fallback = STATIC[slotId];
     if (!fallback) return;
 
-    const url = sanitizeImageUrl(images[slotId]);
-    const signature = slotSignature(slotId, url);
+    const urls = resolvedSlotUrls(slotId, fallback);
+    const signature = slotSignature(slotId, urls);
     if (slotIsCurrent(target, signature)) return;
 
-    const node = url ? buildCustomImage(slotId, url) : buildResponsivePicture(fallback);
-    target.replaceChildren(node);
+    target.replaceChildren(buildResponsivePicture(slotId, fallback));
     target.dataset.ttImagePhase5Signature = signature;
   }
 
@@ -163,9 +160,9 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image || !picture) return;
 
     ensureHeroStyle();
-    const desktop = sanitizeImageUrl(images.hero_bg_desktop) || absolute(STATIC.hero.desktop);
-    const tablet = sanitizeImageUrl(images.hero_bg_tablet) || absolute(STATIC.hero.tablet);
-    const mobile = sanitizeImageUrl(images.hero_bg_mobile) || absolute(STATIC.hero.mobile);
+    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero.desktop);
+    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero.tablet);
+    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero.mobile);
     const signature = [desktop, tablet, mobile,
       images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
       images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
@@ -202,9 +199,14 @@ if (!window.TintinImagesPhase5Booted) {
     image.dataset.ttImagePhase5 = '1';
   }
 
+  function currentDevice() {
+    if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
+    if (window.matchMedia('(max-width: 1023px)').matches) return 'tablet';
+    return 'desktop';
+  }
+
   function applyLogos() {
-    const custom = sanitizeImageUrl(images.logo_main);
-    const src = custom || absolute(STATIC.logo);
+    const src = resolveSlotImage(images, 'logo_main', currentDevice()) || absolute(STATIC.logo);
     document.querySelectorAll('.tt-logo-img,#tt-loader-logo,#tt-intro-logo').forEach(image => {
       if (!(image instanceof HTMLImageElement)) return;
       if (image.dataset.ttLogoPhase5Src === src && image.src === src) return;
@@ -249,6 +251,18 @@ if (!window.TintinImagesPhase5Booted) {
   } else {
     bootDomObserver();
   }
+
+  // El logo puede tener una imagen distinta por dispositivo (igual que el
+  // resto de los slots); a diferencia del hero/editorial (que usan <picture>
+  // con <source media>, resueltos por el propio navegador sin JS), el logo
+  // es un <img> simple reutilizado en header/loader/intro, así que su
+  // dispositivo activo se vuelve a resolver al cruzar un breakpoint.
+  ['(max-width: 767px)', '(max-width: 1023px)'].forEach(query => {
+    const mql = window.matchMedia(query);
+    const listener = () => applyLogos();
+    if (mql.addEventListener) mql.addEventListener('change', listener);
+    else if (mql.addListener) mql.addListener(listener);
+  });
 
   onImagesUpdate(
     nextImages => {

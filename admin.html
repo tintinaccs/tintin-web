@@ -590,9 +590,9 @@
               <input id="prod-price-before" type="number" class="adm-input" placeholder="0 si no aplica" min="0">
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
-              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">URL de imagen principal</label>
-              <input id="prod-imageUrl" type="url" class="adm-input" placeholder="https://...">
-              <img id="prod-img-preview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:contain;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+              <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Imagen principal</label>
+              <input type="hidden" id="prod-imageUrl">
+              <div id="prod-image-widget"></div>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Descripción</label>
@@ -682,8 +682,8 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Imagen de portada</label>
-              <input id="coll-image" type="url" class="adm-input" placeholder="https://...">
-              <img id="coll-img-preview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="display:none;max-height:120px;max-width:200px;object-fit:cover;border-radius:8px;margin-top:6px;border:1px solid var(--adm-border)">
+              <input type="hidden" id="coll-image">
+              <div id="coll-image-widget"></div>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Orden</label>
