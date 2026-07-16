@@ -167,8 +167,9 @@ async function syncStoreGate() {
 
     await setDoc(STORE_GATE_REF, {
       ...desired,
-      updatedAt: serverTimestamp()
-    });
+      updatedAt: serverTimestamp(),
+      updatedBy: currentEmail
+    }, { merge: true });
   } catch (error) {
     console.error('[admin-store-control] No se pudo sincronizar storeGate:', error);
     setPanel(
