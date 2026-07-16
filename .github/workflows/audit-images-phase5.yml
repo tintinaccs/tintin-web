@@ -3,13 +3,27 @@ name: Auditoría de imágenes Fase 5
 on:
   pull_request:
     paths:
+      - 'admin-images.html'
+      - 'js/firebase.js'
       - 'js/image-utils.js'
       - 'js/images.js'
+      - 'js/image-resolver.js'
       - 'js/images-phase5.js'
       - 'js/admin-images-phase5.js'
+      - 'js/image-processing.js'
+      - 'js/image-upload-widget.js'
+      - 'js/media-library.js'
+      - 'js/admin-media-library-ui.js'
+      - 'js/diagnostic-shims/storage-shim.js'
       - 'js/products-store.js'
       - 'js/ui-quality.js'
+      - 'netlify/functions/_cloudinary-security.mjs'
+      - 'netlify/functions/cloudinary-sign-upload.mjs'
+      - 'netlify/functions/cloudinary-delete.mjs'
       - 'assets-tintin/images/README-IMAGENES.md'
+      - 'CLOUDINARY_SETUP.md'
+      - 'firebase.json'
+      - 'storage.rules'
       - 'scripts/audit-images-phase5.js'
       - 'package.json'
       - '.github/workflows/audit-images-phase5.yml'
@@ -30,12 +44,22 @@ jobs:
           node-version: '20'
       - name: Revisar sintaxis
         run: |
+          node --check js/firebase.js
           node --check js/image-utils.js
           node --check js/images.js
+          node --check js/image-resolver.js
           node --check js/images-phase5.js
           node --check js/admin-images-phase5.js
+          node --check js/image-processing.js
+          node --check js/image-upload-widget.js
+          node --check js/media-library.js
+          node --check js/admin-media-library-ui.js
+          node --check js/diagnostic-shims/storage-shim.js
           node --check js/products-store.js
           node --check js/ui-quality.js
+          node --check netlify/functions/_cloudinary-security.mjs
+          node --check netlify/functions/cloudinary-sign-upload.mjs
+          node --check netlify/functions/cloudinary-delete.mjs
           node --check scripts/audit-images-phase5.js
       - name: Revisar integración
         run: npm run audit:images
