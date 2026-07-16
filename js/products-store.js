@@ -121,8 +121,13 @@ function handleSnapshot(snap) {
     const p = products.find(pr => String(pr.id) === String(id));
     if (p && typeof window._renderProductDetail === 'function') {
       window._renderProductDetail(p);
+    } else if (Array.isArray(window.PRODUCTS) && typeof window._showProductNotFound === 'function') {
+      // A live admin deletion/deactivation must remove the stale detail
+      // immediately. initProductPage is deliberately one-shot and therefore
+      // cannot be used to refresh this state.
+      window._showProductNotFound();
     } else if (typeof window.initProductPage === 'function') {
-      window.initProductPage(); // first load: page not inited yet, or product not found yet
+      window.initProductPage();
     }
   }
 }

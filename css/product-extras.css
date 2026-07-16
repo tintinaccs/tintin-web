@@ -238,6 +238,7 @@
   background:none; border:none;
   color:var(--acc); font-size:18px; font-weight:700;
   cursor:pointer; padding:0 2px; line-height:1;
+  min-width:32px; min-height:32px;
   transition:transform .15s;
 }
 .tinsel-qbtn:hover{ transform:scale(1.3); }
@@ -247,6 +248,7 @@
 }
 .tinsel-del{
   background:none; border:none; padding:8px;
+  min-width:36px; min-height:36px;
   color:rgba(45,45,45,.6); cursor:pointer;
   border-radius:50%;
   transition:color .18s, background .18s;

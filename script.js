@@ -198,7 +198,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2');
+  const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-product-page-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -215,19 +215,29 @@ async function addToCart(productId) {
   return result;
 }
 
-function removeFromCart(productId) {
+function removeFromCart(productId, variant) {
   const sid = String(productId);
-  let cart = getCart().filter(item => String(item.id) !== sid);
+  const hasVariant = variant !== undefined;
+  const normalizedVariant = String(variant || '');
+  let cart = getCart().filter(item =>
+    String(item.id) !== sid
+    || (hasVariant && String(item.variant || '') !== normalizedVariant)
+  );
   saveCart(cart);
   updateCartBadge();
   renderCart();
   window.CartFirestoreSync?.removeItem(sid);
 }
 
-function updateQty(productId, delta) {
+function updateQty(productId, delta, variant) {
   const sid = String(productId);
   const cart = getCart();
-  const item = cart.find(i => String(i.id) === sid);
+  const hasVariant = variant !== undefined;
+  const normalizedVariant = String(variant || '');
+  const item = cart.find(i =>
+    String(i.id) === sid
+    && (!hasVariant || String(i.variant || '') === normalizedVariant)
+  );
   if (!item) return;
   if (delta > 0 && item.qty >= getStockLimit(productId)) {
     showCartToast(`Ya tenés el máximo disponible de "${item.name}" en el carrito`);
@@ -306,6 +316,7 @@ function renderCart() {
     const safeId = escapeAttribute(item.id);
     const safeName = escapeHtml(item.name);
     const safeVariant = escapeHtml(item.variant || '');
+    const safeVariantAttr = escapeAttribute(item.variant || '');
     const imgHtml = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
@@ -317,12 +328,12 @@ function renderCart() {
         ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${safeVariant}</div>` : ''}
         <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
         <div class="tt-cart-qty">
-          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-delta="-1" aria-label="Restar">−</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-delta="1" aria-label="Sumar">+</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar">+</button>
         </div>
       </div>
-      <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" aria-label="Eliminar">✕</button>
+      <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar">✕</button>
     </div>
   `;
   }).join('');
@@ -489,8 +500,13 @@ function goToCheckout() {
   window.location.href = 'checkout.html';
 }
 
-function directWAProduct(product) {
-  const msg = `¡Hola Tintin! 💕 Me interesa este producto:\n\n• ${product.name}\n  Precio: ${formatPrice(product.price)}\n\n¿Está disponible? ¡Gracias!`;
+function directWAProduct(product, variant = '') {
+  if (!product) return;
+  const productUrl = new URL('product.html', window.location.href);
+  productUrl.search = '';
+  productUrl.searchParams.set('id', String(product.id));
+  const variantLine = variant ? `\n  Variante: ${variant}` : '';
+  const msg = `¡Hola Tintin! 💕 Me interesa este producto:\n\n• ${product.name}\n  Precio: ${formatPrice(product.price)}${variantLine}\n  Enlace: ${productUrl.href}\n\n¿Está disponible? ¡Gracias!`;
   const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank', 'noopener');
 }
@@ -750,8 +766,11 @@ function initCartEvents() {
     if (cartAction) {
       const action = cartAction.dataset.cartAction;
       const id = cartAction.dataset.cartId;
-      if (action === 'quantity' && id) updateQty(id, Number(cartAction.dataset.cartDelta) || 0);
-      if (action === 'remove' && id) removeFromCart(id);
+      const variant = Object.hasOwn(cartAction.dataset, 'cartVariant')
+        ? cartAction.dataset.cartVariant
+        : undefined;
+      if (action === 'quantity' && id) updateQty(id, Number(cartAction.dataset.cartDelta) || 0, variant);
+      if (action === 'remove' && id) removeFromCart(id, variant);
       if (action === 'close') closeCart();
       return;
     }
@@ -804,6 +823,42 @@ function _onProductImgError(img) {
 }
 window._onProductImgError = _onProductImgError;
 
+function renderProductCardMarkup(p) {
+  const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
+  const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
+  const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+  const safeId = escapeAttribute(p.id);
+  const safeName = escapeHtml(p.name);
+  const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
+  const imgContent = imgUrl
+    ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
+    : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
+  const hasVariants = p.variants && Object.keys(p.variants).some(key =>
+    Array.isArray(p.variants[key]) && p.variants[key].length
+  );
+  const secondaryAction = hasVariants
+    ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">Elegir opciones</a>`
+    : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">+ Carrito</button>`;
+
+  return `
+    <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
+      <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
+        ${badgeHTML}
+        ${imgContent}
+      </a>
+      <div class="tt-product-info">
+        <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
+        <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
+        <div class="tt-product-price">${formatPrice(p.price)}</div>
+        <div class="tt-product-actions">
+          <a href="${productHref}" class="tt-btn tt-btn-sm">Ver producto</a>
+          ${secondaryAction}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function renderProductsGrid(containerId, products) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -813,33 +868,7 @@ function renderProductsGrid(containerId, products) {
     return;
   }
 
-  container.innerHTML = products.map(p => {
-    const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
-    const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
-    const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
-    const safeId = escapeAttribute(p.id);
-    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
-    const imgContent = imgUrl
-      ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
-      : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
-    return `
-      <div class="tt-product-card" data-id="${safeId}">
-        <div class="tt-product-img">
-          ${badgeHTML}
-          ${imgContent}
-        </div>
-        <div class="tt-product-info">
-          <div class="tt-product-cat">${escapeHtml(p.cat)}</div>
-          <div class="tt-product-name">${escapeHtml(p.name)}</div>
-          <div class="tt-product-price">${formatPrice(p.price)}</div>
-          <div class="tt-product-actions">
-            <a href="${productHref}" class="tt-btn tt-btn-sm">Ver producto</a>
-            <button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar al carrito">+ Carrito</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
+  container.innerHTML = products.map(renderProductCardMarkup).join('');
 }
 
 /* ──────────────────────────────────────
@@ -912,7 +941,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2');
+        const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-product-page-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -959,22 +988,36 @@ function initProductPage() {
   const immediate = getProductById(id);
   if (immediate) {
     _renderProductDetail(immediate);
+  } else if (Array.isArray(window.PRODUCTS)) {
+    // Firestore already answered and this real ID is not in the public
+    // product set (deleted, inactive, nameless or unavailable).
+    _showProductNotFound();
   } else {
-    // Wait for Firebase products to load via tintin:products-loaded event
-    function onProductsLoaded() {
+    // Wait for the first real Firestore response. A connection/rules failure
+    // is a load error, not evidence that the product does not exist.
+    function cleanup() {
       window.removeEventListener('tintin:products-loaded', onProductsLoaded);
+      window.removeEventListener('tintin:products-error', onProductsError);
+      window.clearTimeout(_pdLoadTimer);
+    }
+    function onProductsLoaded() {
+      cleanup();
       const p = getProductById(id);
       if (p) _renderProductDetail(p);
       else _showProductNotFound();
     }
+    function onProductsError() {
+      cleanup();
+      _showProductLoadError();
+    }
     window.addEventListener('tintin:products-loaded', onProductsLoaded);
-    // Fallback: if Firebase never fires (offline / no products), show not-found after 5s
-    setTimeout(() => {
+    window.addEventListener('tintin:products-error', onProductsError);
+    _pdLoadTimer = window.setTimeout(() => {
       if (!_pdProduct) {
-        window.removeEventListener('tintin:products-loaded', onProductsLoaded);
-        _showProductNotFound();
+        cleanup();
+        _showProductLoadError();
       }
-    }, 5000);
+    }, 8000);
   }
 }
 
@@ -989,6 +1032,8 @@ function initProductPage() {
 let _pdProduct = null;
 let _pdQty = 1;
 let _pdMaxQty = 99;
+let _pdGalleryIndex = 0;
+let _pdLoadTimer = 0;
 
 function _pdUpdateQtyUI() {
   const qtyVal = document.getElementById('qty-val');
@@ -999,13 +1044,71 @@ function _pdUpdateQtyUI() {
   if (qtyPlus) qtyPlus.disabled = _pdQty >= _pdMaxQty;
 }
 
+function _pdGetSelectedVariant() {
+  const variantsContainer = document.getElementById('product-variants');
+  if (!variantsContainer || !_pdProduct?.variants || !Object.keys(_pdProduct.variants).length) return null;
+  const parts = [];
+  variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
+    const active = group.querySelector('.tt-variant-option.active');
+    if (active) parts.push(active.textContent.trim());
+  });
+  return parts.length ? parts.join(' / ') : null;
+}
+
+function _pdValidateVariants() {
+  const variantsContainer = document.getElementById('product-variants');
+  if (!variantsContainer || !_pdProduct?.variants || !Object.keys(_pdProduct.variants).length) return true;
+  let valid = true;
+  let firstMissing = null;
+  variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
+    const active = group.querySelector('.tt-variant-option.active');
+    if (active) return;
+    valid = false;
+    if (!firstMissing) firstMissing = group.querySelector('.tt-variant-option');
+    if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) return;
+    const message = document.createElement('span');
+    message.className = 'tt-variant-required-msg';
+    message.textContent = 'Por favor seleccioná una opción';
+    group.classList.add('tt-variant-required');
+    group.parentNode.insertBefore(message, group.nextSibling);
+    window.setTimeout(() => {
+      group.classList.remove('tt-variant-required');
+      message.remove();
+    }, 2500);
+  });
+  if (!valid) firstMissing?.focus();
+  return valid;
+}
+
 function _showProductNotFound() {
   const loading = document.getElementById('product-loading');
   const notFound = document.getElementById('product-not-found');
+  const loadError = document.getElementById('product-load-error');
   const grid = document.getElementById('product-grid');
+  _pdProduct = null;
+  window.clearTimeout(_pdLoadTimer);
   if (loading) loading.style.display = 'none';
   if (grid) grid.style.display = 'none';
+  if (loadError) loadError.hidden = true;
   if (notFound) notFound.style.display = '';
+  window.dispatchEvent(new CustomEvent('tintin:product-unavailable'));
+  window.ttPageReady && window.ttPageReady();
+}
+
+function _showProductLoadError() {
+  const loading = document.getElementById('product-loading');
+  const notFound = document.getElementById('product-not-found');
+  const loadError = document.getElementById('product-load-error');
+  const grid = document.getElementById('product-grid');
+  if (loading) loading.style.display = 'none';
+  if (notFound) notFound.style.display = 'none';
+  if (grid) grid.style.display = 'none';
+  if (loadError) loadError.hidden = false;
+  const retry = document.getElementById('btn-product-retry');
+  if (retry && !retry.dataset.ttBound) {
+    retry.dataset.ttBound = '1';
+    retry.addEventListener('click', () => window.location.reload());
+  }
   window.ttPageReady && window.ttPageReady();
 }
 
@@ -1061,7 +1164,10 @@ function _updateProductMeta(product, mainImgUrl) {
   const description = product.desc
     ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
     : `${product.name} — Tintin Accesorios & Relojes, tu boutique femenina en Paraguay.`;
-  const url = `https://tintinaccs.github.io/tintin-web/product.html?id=${encodeURIComponent(product.id)}`;
+  const productUrl = new URL('product.html', window.location.href);
+  productUrl.search = '';
+  productUrl.searchParams.set('id', String(product.id));
+  const url = productUrl.href;
   const image = mainImgUrl || 'https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg';
 
   document.title = title;
@@ -1083,10 +1189,12 @@ function _renderProductDetail(product) {
 
   const loading = document.getElementById('product-loading');
   const notFound = document.getElementById('product-not-found');
+  const loadError = document.getElementById('product-load-error');
   const grid = document.getElementById('product-grid');
   if (loading) loading.style.display = 'none';
   window.ttPageReady && window.ttPageReady();
   if (notFound) notFound.style.display = 'none';
+  if (loadError) loadError.hidden = true;
   if (grid) grid.style.display = '';
 
   const bc = document.getElementById('breadcrumb-product');
@@ -1142,12 +1250,19 @@ function _renderProductDetail(product) {
   const extraImages = Array.isArray(product.imagesExtra)
     ? product.imagesExtra.map(sanitizeClassicImageUrl).filter(Boolean)
     : [];
-  const allImages = mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages;
+  const allImages = [...new Set(mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages)];
+  if (!isSameProduct) _pdGalleryIndex = 0;
+  if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
 
   const galleryMain = document.getElementById('gallery-main');
   if (galleryMain) {
-    if (mainImgUrl) {
-      galleryMain.innerHTML = `<img src="${escapeAttribute(mainImgUrl)}" alt="${escapeAttribute(product.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+    const selectedImage = allImages[_pdGalleryIndex] || '';
+    galleryMain.style.display = '';
+    galleryMain.style.removeProperty('align-items');
+    galleryMain.style.removeProperty('justify-content');
+    galleryMain.disabled = !selectedImage;
+    if (selectedImage) {
+      galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
       galleryMain.style.display = 'flex';
@@ -1158,13 +1273,22 @@ function _renderProductDetail(product) {
 
   // Thumbs — only show if more than 1 image
   const thumbsEl = document.getElementById('gallery-thumbs');
-  if (thumbsEl && allImages.length > 1) {
-    thumbsEl.style.display = '';
-    thumbsEl.innerHTML = allImages.map((url, i) => `
-      <button type="button" class="tt-gallery-thumb${i === 0 ? ' active' : ''}" data-src="${escapeAttribute(url)}" onclick="_galleryThumbClick(this)" aria-label="Ver imagen ${i + 1}">
+  if (thumbsEl) {
+    thumbsEl.style.display = allImages.length > 1 ? '' : 'none';
+    thumbsEl.innerHTML = allImages.length > 1 ? allImages.map((url, i) => `
+      <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
         <img src="${escapeAttribute(url)}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
-    `).join('');
+    `).join('') : '';
+    if (!thumbsEl.dataset.ttBound) {
+      thumbsEl.dataset.ttBound = '1';
+      thumbsEl.addEventListener('click', event => {
+        const thumb = event.target.closest('.tt-gallery-thumb');
+        if (!thumb) return;
+        _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
+        _galleryThumbClick(thumb);
+      });
+    }
   }
 
   _injectProductJsonLd(product, mainImgUrl, extraImages, stock);
@@ -1173,19 +1297,33 @@ function _renderProductDetail(product) {
   // Variants
   const variantsContainer = document.getElementById('product-variants');
   if (variantsContainer) {
+    const selectedVariants = new Map();
+    if (isSameProduct) {
+      variantsContainer.querySelectorAll('.tt-product-variants').forEach(group => {
+        const selected = group.querySelector('.tt-variant-option.active');
+        if (selected) selectedVariants.set(group.dataset.variantKey, selected.textContent.trim());
+      });
+    }
     if (product.variants && Object.keys(product.variants).length) {
       variantsContainer.innerHTML = Object.entries(product.variants).map(([key, values]) => `
         <div class="tt-product-variants" data-variant-key="${escapeAttribute(key)}">
           <div class="tt-variant-label">${escapeHtml(key.charAt(0).toUpperCase() + key.slice(1))}</div>
           <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
-              <button type="button" class="tt-variant-option" onclick="selectVariant(this)">${escapeHtml(v)}</button>
+              <button type="button" class="tt-variant-option${selectedVariants.get(key) === String(v) ? ' active' : ''}">${escapeHtml(v)}</button>
             `).join('') : ''}
           </div>
         </div>
       `).join('');
     } else {
       variantsContainer.innerHTML = '';
+    }
+    if (!variantsContainer.dataset.ttBound) {
+      variantsContainer.dataset.ttBound = '1';
+      variantsContainer.addEventListener('click', event => {
+        const option = event.target.closest('.tt-variant-option');
+        if (option) selectVariant(option);
+      });
     }
   }
 
@@ -1241,8 +1379,9 @@ function _renderProductDetail(product) {
 
   // WA button
   const btnWA = document.getElementById('btn-product-wa');
-  if (btnWA) {
-    btnWA.onclick = () => directWAProduct(product);
+  if (btnWA && !btnWA.dataset.ttBound) {
+    btnWA.dataset.ttBound = '1';
+    btnWA.addEventListener('click', () => directWAProduct(_pdProduct, _pdGetSelectedVariant()));
   }
 
   // Share buttons
@@ -1253,7 +1392,7 @@ function _renderProductDetail(product) {
     const waHref = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
     let html = `<span class="tt-share-label">Compartir</span>`;
     if (navigator.share) {
-      html += `<button class="tt-share-btn" id="btn-native-share">
+      html += `<button type="button" class="tt-share-btn" data-share-action="native">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Compartir
       </button>`;
@@ -1262,25 +1401,46 @@ function _renderProductDetail(product) {
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.543 4.09 1.5 5.828L0 24l6.343-1.475A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.868 0-3.636-.498-5.17-1.37l-.371-.21-3.768.877.895-3.669-.231-.389C2.51 15.583 2 13.84 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       WhatsApp
     </a>`;
-    html += `<button class="tt-share-btn" id="btn-copy-link">
+    html += `<button type="button" class="tt-share-btn" data-share-action="copy">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
       Copiar enlace
     </button>`;
     shareEl.innerHTML = html;
-
-    const btnNative = document.getElementById('btn-native-share');
-    if (btnNative) btnNative.addEventListener('click', () => {
-      navigator.share({ title: product.name, text: shareText, url: shareUrl }).catch(() => {});
-    });
-
-    const btnCopy = document.getElementById('btn-copy-link');
-    if (btnCopy) btnCopy.addEventListener('click', () => {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        const orig = btnCopy.innerHTML;
-        btnCopy.textContent = '✓ ¡Copiado!';
-        setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
-      }).catch(() => {});
-    });
+    if (!shareEl.dataset.ttBound) {
+      shareEl.dataset.ttBound = '1';
+      shareEl.addEventListener('click', async event => {
+        const button = event.target.closest('[data-share-action]');
+        if (!button || !_pdProduct) return;
+        const currentUrl = window.location.href;
+        const currentText = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name} — ${formatPrice(_pdProduct.price)}`;
+        if (button.dataset.shareAction === 'native' && navigator.share) {
+          await navigator.share({ title: _pdProduct.name, text: currentText, url: currentUrl }).catch(() => {});
+          return;
+        }
+        if (button.dataset.shareAction === 'copy') {
+          const original = button.innerHTML;
+          try {
+            if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(currentUrl);
+            else {
+              const input = document.createElement('textarea');
+              input.value = currentUrl;
+              input.setAttribute('readonly', '');
+              input.style.position = 'fixed';
+              input.style.opacity = '0';
+              document.body.appendChild(input);
+              input.select();
+              document.execCommand('copy');
+              input.remove();
+            }
+            button.textContent = '✓ ¡Copiado!';
+            window.setTimeout(() => { if (button.isConnected) button.innerHTML = original; }, 2000);
+          } catch {
+            button.textContent = 'No se pudo copiar';
+            window.setTimeout(() => { if (button.isConnected) button.innerHTML = original; }, 2000);
+          }
+        }
+      });
+    }
   }
 
   // Gallery: click to open lightbox. Bound once; reads the current image
@@ -1288,58 +1448,16 @@ function _renderProductDetail(product) {
   // so it never goes stale across re-renders.
   if (galleryMain && !galleryMain.dataset.ttBound) {
     galleryMain.dataset.ttBound = '1';
-    let _lbIdx = 0;
     galleryMain.addEventListener('click', () => {
       const p = _pdProduct;
+      if (!p) return;
       const main = p.imageUrl || p.image || getProductImage(p.id) || '';
       const extra = Array.isArray(p.imagesExtra) ? p.imagesExtra : [];
-      const images = main ? [main, ...extra] : extra;
-      if (images.length > 0) _openLightbox(images, Math.min(_lbIdx, images.length - 1));
+      const images = [...new Set(main ? [main, ...extra] : extra)]
+        .map(sanitizeClassicImageUrl)
+        .filter(Boolean);
+      if (images.length > 0) _openLightbox(images, Math.min(_pdGalleryIndex, images.length - 1));
     });
-    // Update index when thumb changes
-    const thumbsContainer = document.getElementById('gallery-thumbs');
-    if (thumbsContainer) {
-      const origThumbClick = window._galleryThumbClick;
-      window._galleryThumbClick = (el) => {
-        if (origThumbClick) origThumbClick(el);
-        const thumbs = thumbsContainer.querySelectorAll('.tt-gallery-thumb');
-        thumbs.forEach((t, i) => { if (t === el || t.contains(el)) _lbIdx = i; });
-      };
-    }
-  }
-
-  // Helper: get selected variant string. Reads _pdProduct (always current)
-  // rather than the `product` param, since these helpers are only captured
-  // once by the add-to-cart/buy-now listeners below.
-  function getSelectedVariant() {
-    if (!variantsContainer || !_pdProduct.variants || !Object.keys(_pdProduct.variants).length) return null;
-    const parts = [];
-    variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
-      const active = group.querySelector('.tt-variant-option.active');
-      if (active) parts.push(active.textContent.trim());
-    });
-    return parts.length ? parts.join(' / ') : null;
-  }
-
-  // Helper: validate variants selected
-  function validateVariants() {
-    if (!_pdProduct.variants || !Object.keys(_pdProduct.variants).length) return true;
-    let valid = true;
-    variantsContainer.querySelectorAll('.tt-variant-options').forEach(group => {
-      const active = group.querySelector('.tt-variant-option.active');
-      if (!active) {
-        valid = false;
-        const existing = group.nextElementSibling;
-        if (existing && existing.classList.contains('tt-variant-required-msg')) return;
-        const msg = document.createElement('span');
-        msg.className = 'tt-variant-required-msg';
-        msg.textContent = 'Por favor seleccioná una opción';
-        group.classList.add('tt-variant-required');
-        group.parentNode.insertBefore(msg, group.nextSibling);
-        setTimeout(() => { group.classList.remove('tt-variant-required'); msg.remove(); }, 2500);
-      }
-    });
-    return valid;
   }
 
   // Add to cart. Stock-driven enable/disable state is safe to re-run on every
@@ -1360,10 +1478,17 @@ function _renderProductDetail(product) {
     if (!btnAdd.dataset.ttBound) {
       btnAdd.dataset.ttBound = '1';
       btnAdd.addEventListener('click', async () => {
-        if (!validateVariants()) return;
-        const variantStr = getSelectedVariant();
-        const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-        if (result?.changed) _showProductToast(_pdProduct.name);
+        if (btnAdd.dataset.busy || !_pdValidateVariants()) return;
+        btnAdd.dataset.busy = '1';
+        btnAdd.disabled = true;
+        try {
+          const variantStr = _pdGetSelectedVariant();
+          const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+          if (result?.changed) _showProductToast(_pdProduct.name);
+        } finally {
+          delete btnAdd.dataset.busy;
+          btnAdd.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
+        }
       });
     }
   }
@@ -1381,20 +1506,21 @@ function _renderProductDetail(product) {
     if (!btnBuyNow.dataset.ttBound) {
       btnBuyNow.dataset.ttBound = '1';
       btnBuyNow.addEventListener('click', async () => {
-        if (!validateVariants()) return;
-        const variantStr = getSelectedVariant();
-        const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-        if (result?.item) window.location.href = 'checkout.html';
+        if (btnBuyNow.dataset.busy || !_pdValidateVariants()) return;
+        btnBuyNow.dataset.busy = '1';
+        btnBuyNow.disabled = true;
+        try {
+          const variantStr = _pdGetSelectedVariant();
+          const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
+          if (result?.item) window.location.assign('checkout.html');
+        } finally {
+          delete btnBuyNow.dataset.busy;
+          btnBuyNow.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
+        }
       });
     }
   }
-
-  // Related products — same category first
-  const pool = (window.PRODUCTS || []).filter(p => String(p.id) !== String(product.id) && isFeaturable(p));
-  const sameCat = pool.filter(p => (p.category || p.cat) === (product.category || product.cat));
-  const others  = pool.filter(p => (p.category || p.cat) !== (product.category || product.cat));
-  const related = [...pickRandom(sameCat, 4), ...pickRandom(others, 4 - Math.min(sameCat.length, 4))].slice(0, 4);
-  renderProductsGrid('related-grid', related);
+  window.dispatchEvent(new CustomEvent('tintin:product-rendered', { detail: { product } }));
 }
 
 function _galleryThumbClick(thumb) {
@@ -1418,7 +1544,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2');
+  const cartSync = await import('./js/cart-sync.js?v=tintin-20260716-product-page-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1436,6 +1562,14 @@ function _showProductToast(productName) {
   const toast = document.getElementById('tt-added-toast');
   const toastText = document.getElementById('tt-added-toast-text');
   if (!toast) return;
+  const continueButton = document.getElementById('tt-added-toast-continue');
+  if (continueButton && !continueButton.dataset.ttBound) {
+    continueButton.dataset.ttBound = '1';
+    continueButton.addEventListener('click', () => {
+      toast.style.display = 'none';
+      window.clearTimeout(toast._hideTimer);
+    });
+  }
   if (toastText) toastText.textContent = `${productName} agregado al carrito`;
   toast.style.display = '';
   clearTimeout(toast._hideTimer);
@@ -1448,30 +1582,22 @@ function selectVariant(btn) {
   if (!group) return;
   group.querySelectorAll('.tt-variant-option').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-}
-
-/* ──────────────────────────────────────
-   GALLERY THUMBS (product page)
-────────────────────────────────────── */
-function initGalleryThumbs() {
-  const thumbs = document.querySelectorAll('.tt-gallery-thumb');
-  thumbs.forEach((thumb, i) => {
-    thumb.addEventListener('click', () => {
-      thumbs.forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
-    });
-  });
+  group.classList.remove('tt-variant-required');
+  if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) {
+    group.nextElementSibling.remove();
+  }
 }
 
 /* ──────────────────────────────────────
    LIGHTBOX
 ────────────────────────────────────── */
-let _lbImages = [], _lbCur = 0;
+let _lbImages = [], _lbCur = 0, _lbReturnFocus = null;
 
 function _openLightbox(images, startIdx) {
   _lbImages = images.filter(Boolean);
   if (!_lbImages.length) return;
   _lbCur = startIdx || 0;
+  _lbReturnFocus = document.activeElement;
 
   let lb = document.getElementById('tt-lightbox');
   if (!lb) {
@@ -1479,14 +1605,15 @@ function _openLightbox(images, startIdx) {
     lb.id = 'tt-lightbox';
     lb.className = 'tt-lightbox';
     lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', 'Imagen ampliada');
     lb.innerHTML = `
-      <button class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
+      <button type="button" class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <button class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
+      <button type="button" class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
       <img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false">
-      <button class="tt-lightbox-nav tt-lightbox-next" id="lb-next" aria-label="Siguiente">›</button>
+      <button type="button" class="tt-lightbox-nav tt-lightbox-next" id="lb-next" aria-label="Siguiente">›</button>
       <div class="tt-lightbox-counter" id="lb-counter"></div>
     `;
     document.body.appendChild(lb);
@@ -1513,7 +1640,10 @@ function _openLightbox(images, startIdx) {
   }
 
   _lbUpdate();
-  requestAnimationFrame(() => lb.classList.add('open'));
+  requestAnimationFrame(() => {
+    lb.classList.add('open');
+    document.getElementById('lb-close')?.focus();
+  });
   document.body.style.overflow = 'hidden';
 }
 
@@ -1537,6 +1667,8 @@ function _closeLightbox() {
   const lb = document.getElementById('tt-lightbox');
   if (lb) lb.classList.remove('open');
   document.body.style.overflow = '';
+  if (_lbReturnFocus instanceof HTMLElement) _lbReturnFocus.focus();
+  _lbReturnFocus = null;
 }
 
 /* ──────────────────────────────────────
@@ -1703,11 +1835,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
   }
 
-  // Gallery thumbs (product page)
-  if (document.querySelector('.tt-gallery-thumb')) {
-    initGalleryThumbs();
-  }
-
   // Collections page — same already-loaded guard as above, plus a
   // skeleton→real-error (timeout + products-error event) so a failed/slow
   // Firestore listener never leaves it spinning forever, and never gets
@@ -1768,10 +1895,12 @@ window.closeCart = closeCart;
 window.goToCheckout = goToCheckout;
 window.initProductPage = initProductPage;
 window._renderProductDetail = _renderProductDetail;
+window._showProductNotFound = _showProductNotFound;
 window.selectVariant = selectVariant;
 window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
 window.renderProductsGrid = renderProductsGrid;
+window.renderProductCardMarkup = renderProductCardMarkup;
 window.isFeaturable = isFeaturable;
 window.renderCart = renderCart;
 window.updateCartBadge = updateCartBadge;

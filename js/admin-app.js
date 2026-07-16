@@ -17,14 +17,14 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 import { normalizeCollectionDoc } from "./collections-store.js";
 import { sanitizeImageUrl } from "./image-utils.js";
 import { getDocsPaginated } from "./firestore-pagination.js";
-import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-diagnostic-fixes-2";
+import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-product-page-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
 } from "./color-scheme-catalog.js";
-import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-diagnostic-fixes-2";
-import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-diagnostic-fixes-2";
+import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-product-page-1";
+import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-product-page-1";
 
 // ---- GLOBALS ----
 let currentUser = null;

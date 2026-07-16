@@ -7,6 +7,7 @@ const files = {
   home: read('index.html'),
   homeFit: read('css/home-fit.css'),
   script: read('script.js'),
+  productRelated: read('js/product-related.js'),
   productsStore: read('js/products-store.js'),
   imageInit: read('js/load-images-init.js'),
   collectionsPage: read('js/collections-page.js'),
@@ -88,12 +89,16 @@ check(
 );
 
 check(
-  'Product.html mantiene un máximo real de cuatro relacionados',
-  files.script.includes("renderProductsGrid('related-grid', related)") &&
-    files.script.includes('.slice(0, 4)') &&
+  'Product.html mantiene cuatro relacionados de colecciones únicas',
+  files.productRelated.includes('const LIMIT = 4') &&
+    files.productRelated.includes('new Set(state.visible.map(categoryKey))') &&
+    files.productRelated.includes('String(product.id) === currentId') &&
+    files.productRelated.includes('prefers-reduced-motion: reduce') &&
+    files.productRelated.includes("document.addEventListener('visibilitychange'") &&
+    files.productRelated.includes('historyFor(category)') &&
     !files.productsStore.includes("['colls-products-grid', 'related-grid']") &&
     !files.imageInit.includes("['colls-products-grid', 'related-grid']"),
-  'los cargadores globales no deben reemplazar la selección relevante'
+  'la rotación debe excluir el producto actual, evitar repeticiones y tener un solo propietario'
 );
 
 check(
