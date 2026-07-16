@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260715-15"></script>
-  <script src="js/public-shell.js?v=tintin-20260715-15" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260715-16"></script>
+  <script src="js/public-shell.js?v=tintin-20260715-16" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. page-loader.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -44,16 +44,16 @@
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/index.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="styles.css?v=tintin-20260715-15" as="style">
+  <link rel="preload" href="styles.css?v=tintin-20260715-16" as="style">
   <!-- Hero image preloads — browser picks the matching one per breakpoint -->
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-15">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-15">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-15">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-15">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-15">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-16">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/images.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
@@ -63,7 +63,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/images.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260715-15">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260715-16">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
 </head>
@@ -501,15 +501,15 @@
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
 })();
 </script>
-<script src="script.js?v=tintin-20260715-15" defer></script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260715-15"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260715-15"></script>
-<script type="module" src="js/load-images-init.js?v=tintin-20260715-15"></script>
+<script src="script.js?v=tintin-20260715-16" defer></script>
+<script type="module" src="js/whatsapp.js?v=tintin-20260715-16"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260715-16"></script>
+<script type="module" src="js/load-images-init.js?v=tintin-20260715-16"></script>
 <script type="module">
 import { initSiteContent } from './js/site-content.js';
 initSiteContent('index');
 </script>
-<script type="module" src="js/edit-badge.js"></script>
+<script type="module" src="js/edit-badge.js?v=tintin-20260715-16"></script>
 <script type="module">
 import { onCollectionsUpdate } from './js/collections-store.js';
 
