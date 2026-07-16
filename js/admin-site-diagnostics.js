@@ -632,6 +632,60 @@ function collectVisualObservations(page, viewport, doc, win) {
   const textElements = [...doc.body.querySelectorAll(
     'p,span,a,button,label,h1,h2,h3,h4,h5,h6,li,td,th,small,strong'
   )].filter(element => isVisible(element, win) && element.textContent.trim()).slice(0, 500);
+
+  const typographyElements = [...doc.body.querySelectorAll(
+    'p,span,a,button,input,textarea,select,option,optgroup,label,legend,summary,' +
+    'h1,h2,h3,h4,h5,h6,li,td,th,small,strong,b,em,i,u,mark,blockquote,' +
+    'figcaption,pre,code,kbd,samp,svg text,svg tspan'
+  )].filter(element => isVisible(element, win) && (
+    element.textContent.trim() ||
+    element.value ||
+    element.getAttribute('placeholder')
+  )).slice(0, 1200);
+
+  let typographyFailures = 0;
+  for (const element of typographyElements) {
+    const style = win.getComputedStyle(element);
+    const primaryFamily = String(style.fontFamily || '')
+      .split(',')[0]
+      .replace(/^['"]|['"]$/g, '')
+      .trim();
+    if (primaryFamily !== 'Montserrat') {
+      observations.push({
+        key: `typography:${selectorFor(element)}`,
+        title: 'Tipografía distinta de Montserrat',
+        category: 'visual',
+        severity: 'high',
+        component: selectorFor(element),
+        actual: `La familia calculada es "${style.fontFamily || 'no determinada'}".`,
+        evidence: 'La comprobación usa getComputedStyle() dentro del viewport seguro.'
+      });
+      typographyFailures += 1;
+    }
+
+    if (element.matches('input[placeholder],textarea[placeholder]')) {
+      const placeholderStyle = win.getComputedStyle(element, '::placeholder');
+      const placeholderFamily = String(placeholderStyle.fontFamily || '')
+        .split(',')[0]
+        .replace(/^['"]|['"]$/g, '')
+        .trim();
+      if (placeholderFamily !== 'Montserrat') {
+        observations.push({
+          key: `typography-placeholder:${selectorFor(element)}`,
+          title: 'Placeholder con tipografía distinta de Montserrat',
+          category: 'visual',
+          severity: 'high',
+          component: selectorFor(element),
+          actual: `La familia calculada del placeholder es "${placeholderStyle.fontFamily || 'no determinada'}".`,
+          evidence: 'La comprobación usa getComputedStyle(element, "::placeholder").'
+        });
+        typographyFailures += 1;
+      }
+    }
+
+    if (typographyFailures >= 12) break;
+  }
+
   for (const element of textElements) {
     const style = win.getComputedStyle(element);
     const foreground = parseColor(style.color);

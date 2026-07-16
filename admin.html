@@ -10,20 +10,19 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-diagnostics-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/admin.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -599,7 +598,7 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1">
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Variantes (una por línea: Color: Rojo, Dorado)</label>
-              <textarea id="prod-variants-text" class="adm-input" rows="3" placeholder="Color: Rojo&#10;Color: Dorado&#10;Material: Acero inoxidable" style="resize:vertical;font-size:12px;font-family:monospace"></textarea>
+              <textarea id="prod-variants-text" class="adm-input" rows="3" placeholder="Color: Rojo&#10;Color: Dorado&#10;Material: Acero inoxidable" style="resize:vertical;font-size:12px;font-family:Montserrat"></textarea>
             </div>
             <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
@@ -1683,7 +1682,7 @@
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
             Pegá un JSON con un array de productos. Cada item debe tener: <code>name, category, price, imageUrl, stock, active</code>.
           </p>
-          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:monospace" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
+          <textarea class="adm-input adm-textarea" id="import-json" style="min-height:160px;font-size:12px;font-family:Montserrat" placeholder='[{"name":"Reloj Dorado","category":"relojes","price":85000,"imageUrl":"https://...","stock":3,"active":true}]'></textarea>
           <div style="margin-top:12px;display:flex;gap:12px">
             <button type="button" class="adm-btn adm-btn-primary" id="btn-importar">⬆️ Importar a Firestore</button>
             <button type="button" class="adm-btn adm-btn-outline" id="btn-importar-sample">Cargar ejemplo</button>
@@ -1715,7 +1714,7 @@
       <!-- ImgBB key banner -->
       <div id="imgbb-banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap">
         <span style="font-size:13px;font-weight:600;flex:1;min-width:200px">Pegá tu API key de <a href="https://api.imgbb.com" target="_blank" style="color:var(--adm-accent)">imgbb.com</a> para subir imágenes desde tu dispositivo:</span>
-        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:monospace;flex:1;min-width:220px;max-width:340px" />
+        <input id="imgbb-key-input" type="text" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="font-size:12px;padding:7px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:Montserrat;flex:1;min-width:220px;max-width:340px" />
         <button type="button" onclick="
           const k=document.getElementById('imgbb-key-input').value.trim();
           if(k){localStorage.setItem('tt_imgbb_key',k);document.getElementById('imgbb-banner').style.display='none';toast('API key guardada');}
@@ -4230,7 +4229,13 @@ function buildPreviewHtml_(t, vars) {
   const buttonHtml = (buttonText && buttonUrl)
     ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
     : '';
-  return `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
+  const fontBase = new URL('assets-tintin/fonts/', document.baseURI).href;
+  const fontCss = `<style>` +
+    `@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:block;src:url("${fontBase}montserrat-latin-wght-normal.woff2") format("woff2")}` +
+    `@font-face{font-family:Montserrat;font-style:italic;font-weight:100 900;font-display:block;src:url("${fontBase}montserrat-latin-wght-italic.woff2") format("woff2")}` +
+    `html,body,body *{font-family:Montserrat!important;font-synthesis:none}` +
+    `</style>`;
+  return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
     `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
     (brandPhrase ? `<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
     (greeting ? `<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +

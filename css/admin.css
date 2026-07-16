@@ -40,14 +40,14 @@
       --adm-text:           var(--ink);
       --adm-muted:          #6b6b6b;
       --adm-border:         var(--border);
-      --adm-font:           var(--font-body);
+      --adm-font: "Montserrat";
       --adm-radius-sm:      var(--radius-sm);
       --adm-radius-md:      var(--radius-md);
       --sidebar-w:          260px;
     }
 
     body {
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       background: var(--adm-bg);
       color: var(--adm-text);
       min-height: 100vh;
@@ -154,7 +154,7 @@
       width: 100%;
       text-align: left;
       text-decoration: none;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
     }
     .adm-nav-item:hover { background: var(--adm-sidebar-hover); color: #fff; }
     .adm-nav-item.active {
@@ -203,7 +203,7 @@
       font-weight: 700;
       border: none;
       cursor: pointer;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       background: var(--adm-accent);
       color: #fff;
       text-decoration: none;
@@ -807,7 +807,7 @@
       border: 1.5px solid var(--adm-border);
       border-radius: 8px;
       font-size: 13px;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       color: var(--adm-text);
       background: #fff;
       transition: border .2s;
@@ -825,7 +825,7 @@
     .ship-tab-btn {
       padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
       border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+      cursor: pointer; font-family:Montserrat; transition: all .2s;
     }
     .ship-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
     .ship-tab-panel { display: none; }
@@ -837,7 +837,7 @@
     .user-tab-btn {
       padding: 9px 22px; border-radius: 999px; font-size: 12px; font-weight: 700;
       border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s;
+      cursor: pointer; font-family:Montserrat; transition: all .2s;
       display: inline-flex; align-items: center; gap: 6px;
     }
     .user-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
@@ -851,7 +851,7 @@
     .correos-tab-btn {
       padding: 9px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
       border: 1.5px solid var(--adm-border); background: #fff; color: var(--adm-muted);
-      cursor: pointer; font-family: var(--adm-font); transition: all .2s; white-space: nowrap;
+      cursor: pointer; font-family:Montserrat; transition: all .2s; white-space: nowrap;
     }
     .correos-tab-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
     .correos-tab-btn.active { background: var(--adm-accent); color: #fff; border-color: var(--adm-accent); }
@@ -1035,7 +1035,7 @@
       font-weight: 700;
       border: none;
       cursor: pointer;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       transition: all .2s;
       text-transform: uppercase;
       letter-spacing: .07em;
@@ -1256,7 +1256,7 @@
       border: 2px solid #eee;
       background: #fff;
       color: var(--adm-muted);
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       transition: all .2s;
     }
     .cont-page-tab:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
@@ -1328,7 +1328,7 @@
       border: 1.5px solid var(--adm-border);
       border-radius: 8px;
       font-size: 14px;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       color: var(--adm-text);
       transition: border .2s;
       width: 100%;
@@ -1564,7 +1564,7 @@
       cursor: pointer;
       background: none;
       border: none;
-      font-family: var(--adm-font);
+      font-family:Montserrat;
       text-decoration: none;
       transition: color .15s, background .15s;
       white-space: nowrap;

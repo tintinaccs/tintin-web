@@ -14,17 +14,16 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/perfil.html" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-17" />
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-font-1" />
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <style>
     /* Alias variables para que los estilos de perfil funcionen con styles.css */
     :root {
@@ -33,7 +32,7 @@
       --acc-light: var(--pink-mid);
       --acc-pale:  var(--pink-pale);
       --radius:    var(--radius-md);
-      --font:      var(--font-body);
+      --font: "Montserrat";
     }
 
     body { background: var(--pink-pale); }
@@ -96,7 +95,7 @@
     .perfil-input {
       padding: 11px 16px; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); font-size: 14px;
-      font-family: var(--font-body); color: var(--text); background: #fafafa;
+      font-family:Montserrat; color: var(--text); background: #fafafa;
       transition: border .2s, box-shadow .2s;
     }
     .perfil-input:focus {
@@ -107,7 +106,7 @@
     .perfil-btn {
       padding: 11px 24px; border-radius: 50px; font-size: 12px;
       font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
-      cursor: pointer; font-family: var(--font-body); border: none; transition: all .2s;
+      cursor: pointer; font-family:Montserrat; border: none; transition: all .2s;
       text-decoration: none; display: inline-flex; align-items: center;
     }
     .perfil-btn-primary { background: var(--acc); color: #fff !important; }
@@ -137,7 +136,7 @@
       background: var(--acc); color: #fff !important; padding: 12px 24px;
       border-radius: 50px; font-size: 13px; font-weight: 700;
       display: none; z-index: 999; box-shadow: 0 4px 16px rgba(0,0,0,.18);
-      font-family: var(--font-body);
+      font-family:Montserrat;
     }
     .perfil-toast.show { display: block; }
 

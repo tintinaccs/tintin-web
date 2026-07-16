@@ -13,6 +13,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-font-1">
   <meta name="description" content="Catálogo completo de Tintin Accesorios. Relojes, aros, collares, bolsos, pulseras y más. Envíos a todo Paraguay.">
   <meta property="og:title" content="Catálogo | TINTIN Accesorios &amp; Relojes">
   <meta property="og:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar.">
@@ -25,15 +28,11 @@
   <meta name="twitter:description" content="Todos nuestros accesorios, relojes y joyas en un solo lugar.">
   <meta name="twitter:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/catalogo.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-17">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-17">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-font-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-font-1">
   <style>
     /* Alias variables so catalog styles stay consistent with the rest of the site */
     :root {
@@ -84,7 +83,7 @@
       flex: 1; min-width: 0; min-height: 44px; padding: 9px 7px; border-radius: 50px; font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: center;
       border: 1.5px solid var(--acc, #c9597a); transition: background .2s, color .2s;
-      font-family: 'Poppins', sans-serif; text-decoration: none;
+      font-family:Montserrat; text-decoration: none;
       display: flex; align-items: center; justify-content: center;
       white-space: normal; line-height: 1.25;
     }
@@ -125,7 +124,7 @@
       border: 1.5px solid var(--acc, #c9597a);
       background: #fff; color: var(--acc, #c9597a);
       font-size: 12px; font-weight: 700; cursor: pointer;
-      white-space: nowrap; font-family: 'Poppins', sans-serif;
+      white-space: nowrap; font-family:Montserrat;
       text-transform: uppercase; letter-spacing: .06em; transition: .2s;
     }
     .tt-filtro-btn:hover, .tt-filtro-btn.activo { background: var(--acc, #c9597a); color: #fff !important; }
@@ -176,7 +175,7 @@
     .cat-filter-option {
       display: flex; align-items: center; gap: 8px; padding: 7px 0; cursor: pointer;
       min-height: 38px; font-size: 13px; font-weight: 600; color: #493c41; transition: color .2s, background .2s;
-      border: none; background: none; width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
+      border: none; background: none; width: 100%; text-align: left; font-family:Montserrat;
     }
     .cat-filter-option:hover { color: var(--acc); }
     .cat-filter-option.active { color: var(--acc); font-weight: 800; }
@@ -191,7 +190,7 @@
     .cat-range-label { display: block; margin-bottom: 5px; color: #5e5257; font-size: 11px; font-weight: 700; }
     .cat-range-input {
       width: 100%; min-height: 42px; padding: 8px 10px; border: 1.5px solid #dfced5; border-radius: 8px;
-      color: #2b2b2b; background: #fff; font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
+      color: #2b2b2b; background: #fff; font-size: 12px; font-family:Montserrat; outline: none;
     }
     .cat-range-input:focus { border-color: var(--acc); }
     .cat-range-sep { font-size: 12px; color: var(--text-muted); font-weight: 600; }
@@ -207,13 +206,13 @@
     .cat-count { font-size: 13px; font-weight: 700; color: var(--text-muted); }
     .cat-sort {
       padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
-      font-size: 12px; font-family: 'Poppins', sans-serif; background: #fce4ec;
+      font-size: 12px; font-family:Montserrat; background: #fce4ec;
       min-height: 44px; color: #493c41; font-weight: 600; cursor: pointer; outline: none;
     }
     .cat-sort:focus { border-color: var(--acc); }
     .cat-search {
       padding: 9px 16px; border: 1.5px solid #eee; border-radius: 50px;
-      min-height: 44px; font-size: 13px; font-family: 'Poppins', sans-serif; outline: none; width: min(250px, 100%);
+      min-height: 44px; font-size: 13px; font-family:Montserrat; outline: none; width: min(250px, 100%);
     }
     .cat-search:focus { border-color: var(--acc); }
 
@@ -224,7 +223,7 @@
       display: none; width: 100%; padding: 12px; background: var(--acc); color: #fff !important;
       border: none; border-radius: 50px; font-size: 13px; font-weight: 800;
       text-transform: uppercase; letter-spacing: .08em; cursor: pointer;
-      font-family: 'Poppins', sans-serif; margin-bottom: 16px;
+      font-family:Montserrat; margin-bottom: 16px;
       min-height: 48px; transition: background .2s ease, transform .2s ease;
     }
 

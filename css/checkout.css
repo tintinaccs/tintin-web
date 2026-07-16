@@ -19,11 +19,11 @@
          una auto-referencia var(--x) dentro de --x, que en CSS invalida la
          propiedad en vez de heredar el valor anterior de la cascada. */
       --radius: var(--radius-md);
-      --font: var(--font-body);
+      --font: "Montserrat";
     }
 
     body {
-      font-family: var(--font);
+      font-family:Montserrat;
       background: #f7f4f6;
       color: var(--text);
       min-height: 100vh;
@@ -287,7 +287,7 @@
       text-transform: uppercase;
       letter-spacing: .1em;
       cursor: pointer;
-      font-family: var(--font);
+      font-family:Montserrat;
       transition: background .2s, transform .15s;
       margin-top: 20px;
     }
@@ -308,7 +308,7 @@
       text-transform: uppercase;
       letter-spacing: .08em;
       cursor: pointer;
-      font-family: var(--font);
+      font-family:Montserrat;
       transition: all .2s;
       margin-top: 10px;
     }
@@ -333,7 +333,7 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       font-size: 14px;
-      font-family: var(--font);
+      font-family:Montserrat;
       color: var(--text);
       transition: border .2s, box-shadow .2s;
       background: #fff;
@@ -536,7 +536,7 @@
       text-transform: uppercase;
       letter-spacing: .08em;
       cursor: pointer;
-      font-family: var(--font);
+      font-family:Montserrat;
       text-decoration: none;
       margin-top: 20px;
       transition: background .2s;
@@ -625,7 +625,7 @@
     .ck-saved-location-hint button {
       background: none; border: none; padding: 0; margin-left: 4px;
       color: #2e7d32; font-weight: 800; text-decoration: underline;
-      cursor: pointer; font-size: 11px; font-family: var(--font);
+      cursor: pointer; font-size: 11px; font-family:Montserrat;
     }
 
     /* Nombre obligatorio de la ubicación + guardar en el perfil */
