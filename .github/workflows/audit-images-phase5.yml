@@ -68,6 +68,8 @@ jobs:
           node --check functions/api/visitor-geo.js
           node --check scripts/audit-images-phase5.js
           node --check scripts/audit-site-reliability.js
+      - name: Compilar Pages Functions
+        run: npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=.
       - name: Revisar integración
         run: npm run audit:images
       - name: Revisar confiabilidad
