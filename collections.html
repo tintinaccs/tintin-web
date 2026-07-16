@@ -13,16 +13,16 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
-  <meta name="description" content="Explorá todas las colecciones de Tintin Accesorios & Relojes — Bags, Collares, Earcuff, Gafas, Brazaletes, Aros, Armcuff, Anillos, Joyeros, Pulseras, Relojes y Tobilleras.">
+  <meta name="description" content="Explorá las colecciones actuales de TINTIN Accesorios & Relojes y encontrá accesorios, bolsos, relojes y más, con envíos a todo Paraguay.">
   <meta property="og:title" content="Colecciones | TINTIN Accesorios & Relojes">
-  <meta property="og:description" content="Explorá nuestras colecciones de accesorios femeninos. Bags, collares, aros, relojes y más en un solo lugar.">
+  <meta property="og:description" content="Explorá las colecciones actuales de TINTIN y encontrá tu próximo accesorio favorito.">
   <meta property="og:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <meta property="og:url" content="https://tintinaccs.github.io/tintin-web/collections.html">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_PY">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Colecciones | TINTIN Accesorios & Relojes">
-  <meta name="twitter:description" content="Explorá nuestras colecciones de accesorios femeninos. Bags, collares, aros, relojes y más en un solo lugar.">
+  <meta name="twitter:description" content="Explorá las colecciones actuales de TINTIN y encontrá tu próximo accesorio favorito.">
   <meta name="twitter:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/collections.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,15 +34,16 @@
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260715-15">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260715-15">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260715-15">
+  <link rel="stylesheet" href="css/collections-page.css?v=tintin-20260715-15">
 </head>
-<body>
+<body class="tt-collections-page">
 
 
 <!-- PAGE HERO -->
-<section class="tt-page-hero" data-tt-editable="collections" data-tt-section="header">
+<section class="tt-page-hero" data-tt-editable="collections" data-tt-section="header" aria-labelledby="collections-title">
   <div class="container">
     <p class="tt-section-sub">Toda nuestra selección</p>
-    <h1 class="tt-page-hero-title">NUESTRAS COLECCIONES</h1>
+    <h1 class="tt-page-hero-title" id="collections-title">NUESTRAS COLECCIONES</h1>
     <p class="tt-page-hero-sub">Accesorios femeninos de acero inoxidable, bolsos, relojes y mucho más — elegidos con amor para que brillés cada día.</p>
   </div>
 </section>
@@ -50,9 +51,9 @@
 <!-- COLLECTIONS PAGE GRID -->
 <section class="section tt-colls-page-section">
   <div class="container">
-    <div class="tt-colls-page-grid" id="colls-page-grid">
-      <!-- Rendered live from Firestore (Super Admin → Colecciones) by the module script below —
-           this loading skeleton is replaced on the first snapshot. -->
+    <p class="tt-sr-only" id="collections-grid-status" role="status" aria-live="polite">Cargando colecciones.</p>
+    <div class="tt-colls-page-grid" id="colls-page-grid" aria-busy="true">
+      <!-- El runtime compartido reemplaza estos esqueletos con las colecciones visibles de Firestore. -->
       <div class="tt-coll-page-card" aria-hidden="true" style="pointer-events:none">
         <div class="tt-coll-page-img tt-skeleton-img"></div>
         <div class="tt-coll-page-body"><div class="tt-skeleton-line" style="width:60%;height:16px"></div></div>
@@ -70,18 +71,35 @@
 </section>
 
 <!-- FEATURED PRODUCTS -->
-<section class="section tt-products-section" style="background:var(--card-bg);">
+<section class="section tt-products-section" aria-labelledby="collections-featured-title">
   <div class="container">
     <div class="tt-products-header">
       <p class="tt-section-sub">Lo más destacado</p>
-      <h2 class="tt-section-title">PRODUCTOS DESTACADOS</h2>
+      <h2 class="tt-section-title" id="collections-featured-title">PRODUCTOS DESTACADOS</h2>
+      <p class="tt-products-intro">Una selección breve de productos disponibles para descubrir sin cargar todo el catálogo de una vez.</p>
     </div>
-    <div class="tt-products-grid" id="colls-products-grid">
-      <!-- Rendered by JS -->
+    <p class="tt-sr-only" id="collections-featured-status" role="status" aria-live="polite">Cargando productos destacados.</p>
+    <div class="tt-products-grid" id="collections-featured-grid" aria-busy="true">
+      <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
+        <div class="tt-product-img tt-skeleton-img"></div>
+        <div class="tt-product-info"><div class="tt-skeleton-line" style="width:75%;height:14px"></div></div>
+      </div>
+      <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
+        <div class="tt-product-img tt-skeleton-img"></div>
+        <div class="tt-product-info"><div class="tt-skeleton-line" style="width:75%;height:14px"></div></div>
+      </div>
+      <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
+        <div class="tt-product-img tt-skeleton-img"></div>
+        <div class="tt-product-info"><div class="tt-skeleton-line" style="width:75%;height:14px"></div></div>
+      </div>
+      <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
+        <div class="tt-product-img tt-skeleton-img"></div>
+        <div class="tt-product-info"><div class="tt-skeleton-line" style="width:75%;height:14px"></div></div>
+      </div>
     </div>
-    <div style="text-align:center;margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+    <div class="tt-collections-actions">
       <a href="catalogo.html" class="tt-btn tt-btn-lg">Ver catálogo completo →</a>
-      <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-inline-support-link" style="font-size:12px;color:var(--text-muted);text-decoration:none;">¿Tenés dudas? Escribinos por WhatsApp</a>
+      <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-inline-support-link">¿Tenés dudas? Escribinos por WhatsApp</a>
     </div>
   </div>
 </section>
@@ -137,82 +155,7 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 <script src="script.js?v=tintin-20260715-15" defer></script>
-<script type="module">
-// Import dinámico: si falla la red/CDN al traer collections-store.js, un
-// import estático dejaría este módulo entero sin correr — incluida la única
-// llamada a ttPageReady() de esta página, con lo que el loader quedaría
-// dependiendo solo del timeout de seguridad de page-loader.js.
-import('./js/collections-store.js')
-  .then(m => m.onCollectionsUpdate(renderCollectionsGrid, showCollectionsError))
-  .catch(e => {
-    console.warn('[collections] collections-store no cargó:', e);
-    showCollectionsError(e);
-    window.ttPageReady && window.ttPageReady();
-  });
-
-const COLL_IMG_BASE = 'assets-tintin/images/collections/';
-const COLL_PLACEHOLDER = COLL_IMG_BASE + 'col-placeholder.webp';
-
-function escapeCollectionsHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[char]);
-}
-
-// The collections doc's own `image` field is the single source of truth for
-// this card's photo — nothing else (no generic image-slot listener) is
-// allowed to overwrite it later with stale data. Custom image wins; else the
-// static cover matching the slug; else the generic placeholder — never a
-// broken/empty image.
-function collPageImage(c) {
-  const fileSlug = String(c.slug || '').replace(/[^a-z0-9_-]/gi, '');
-  const bySlugFallback = `${COLL_IMG_BASE}col-${fileSlug}.webp`;
-  const src = c.image || bySlugFallback;
-  return `<img src="${escapeCollectionsHtml(src)}" alt="${escapeCollectionsHtml(c.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;border-radius:inherit;" onerror="this.onerror=null;this.src='${COLL_PLACEHOLDER}';">`;
-}
-
-function buildCollPageCard(c) {
-  const card = document.createElement('div');
-  card.className = 'tt-coll-page-card';
-  card.dataset.slug = c.slug;
-  const hasDesc = c.description && String(c.description).trim();
-  card.innerHTML = `
-    <div class="tt-coll-page-img">${collPageImage(c)}</div>
-    <div class="tt-coll-page-body">
-      <div class="tt-coll-page-initial">${escapeCollectionsHtml(c.name.charAt(0).toUpperCase())}</div>
-      <div class="tt-coll-page-name">${escapeCollectionsHtml(c.name.toUpperCase())}</div>
-      ${hasDesc ? `<p class="tt-coll-page-desc">${escapeCollectionsHtml(c.description)}</p>` : ''}
-      <a href="catalogo.html?cat=${encodeURIComponent(c.slug)}" class="tt-btn tt-btn-sm">Ver productos →</a>
-    </div>`;
-  return card;
-}
-
-// Exact full render: the grid ends up with precisely one card per visible
-// collection, in Firestore order — a renamed/reordered/hidden/deleted
-// collection is never left as a stale, merely-hidden DOM node.
-function renderCollectionsGrid(cols) {
-  window.ttPageReady && window.ttPageReady();
-  const grid = document.querySelector('.tt-colls-page-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  if (!cols.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text-muted)">No hay colecciones disponibles todavía.</div>`;
-    return;
-  }
-  cols.forEach(c => grid.appendChild(buildCollPageCard(c)));
-}
-
-function showCollectionsError(e) {
-  window.ttPageReady && window.ttPageReady();
-  const grid = document.querySelector('.tt-colls-page-grid');
-  if (!grid) return;
-  grid.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text-muted)">
-      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar las colecciones. Revisá tu conexión e intentá de nuevo.</p>
-      <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
-    </div>`;
-}
-</script>
+<script type="module" src="js/collections-page.js?v=tintin-20260715-15"></script>
 <script type="module" src="js/whatsapp.js?v=tintin-20260715-15"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260715-15"></script>
 <script type="module">
