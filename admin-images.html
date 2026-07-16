@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260716-color-scheme-1"></script>
-  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-color-scheme-1" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2"></script>
+  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-diagnostic-fixes-2" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-color-scheme-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-color-scheme-1">
-  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-color-scheme-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-diagnostic-fixes-2">
   <style>
     :root {
       /* Esta página no carga admin.css (es autocontenida) pero SÍ participa
@@ -52,6 +52,13 @@
       position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
       background: #fff; z-index: 1000; flex-direction: column; gap: 16px;
     }
+    .adm-auth-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      min-height: 44px;
+    }
 
     /* ── HEADER ── */
     .adm-header {
@@ -67,7 +74,7 @@
     .adm-back-btn {
       font-size: 0.82rem; color: var(--rose); text-decoration: none; font-weight: 600;
       padding: 6px 14px; border: 1.5px solid var(--rose-light); border-radius: 20px;
-      transition: background .2s; min-height: 32px; display: inline-flex; align-items: center;
+      transition: background .2s; min-width: 24px; min-height: 32px; display: inline-flex; align-items: center;
     }
     .adm-back-btn:hover { background: var(--rose-pale); }
     .adm-hamburger {
@@ -94,7 +101,7 @@
       display: flex; align-items: center; gap: 10px; width: 100%;
       padding: 11px 20px; border: none; background: none; text-align: left;
       font-family:Montserrat; font-size: 0.88rem; color: var(--text-sec);
-      cursor: pointer; border-left: 3px solid transparent; transition: all .15s; min-height: 44px;
+      cursor: pointer; border-left: 3px solid transparent; transition: all .15s; min-width: 24px; min-height: 44px;
     }
     .adm-nav-btn:hover { background: var(--rose-pale); color: var(--rose); }
     .adm-nav-btn.active { background: var(--rose-pale); color: var(--rose); border-left-color: var(--rose); font-weight: 600; }
@@ -141,7 +148,7 @@
     .adm-bulk-btn {
       padding: 7px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff;
       font-family:Montserrat; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text-sec);
-      transition: all .15s; min-height: 32px;
+      transition: all .15s; min-width: 24px; min-height: 32px;
     }
     .adm-bulk-btn:hover { border-color: var(--rose); color: var(--rose); }
     .adm-bulk-btn.danger { color: #c0392b; border-color: #f0c0c8; }
@@ -286,7 +293,7 @@
       font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
       color: var(--text-sec); cursor: pointer; background: none; border: none;
       font-family:Montserrat; text-decoration: none; white-space: nowrap;
-      border-bottom: 2px solid transparent; transition: color .15s; min-height: 44px;
+      border-bottom: 2px solid transparent; transition: color .15s; min-width: 24px; min-height: 44px;
     }
     .adm-mobile-tab.active, .adm-mobile-tab:hover { color: var(--rose); border-bottom-color: var(--rose); }
     .adm-mobile-tab .nav-icon { font-size: 1.2rem; }
@@ -299,7 +306,7 @@
   <div style="font-size:2.5rem;">🔒</div>
   <h2 style="font-size:1.1rem;">Acceso denegado</h2>
   <p style="font-size:0.88rem;color:#6b6b6b;">No tenés permisos para ver esta página.</p>
-  <a href="login.html" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
+  <a href="login.html" class="adm-auth-login" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
 </div>
 
 <!-- OVERLAY -->
@@ -709,6 +716,6 @@ onAuthStateChanged(auth, async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-color-scheme-1"></script>
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-diagnostic-fixes-2"></script>
 </body>
 </html>

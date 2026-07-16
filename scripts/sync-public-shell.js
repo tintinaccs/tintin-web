@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260716-color-scheme-1';
+const VERSION = 'tintin-20260716-diagnostic-fixes-2';
 const PUBLIC_PAGES = [
   '404.html',
   'about.html',

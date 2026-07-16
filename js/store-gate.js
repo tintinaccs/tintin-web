@@ -23,7 +23,7 @@ import {
   removeStoreClosedOverlay,
   getStoreAccessConfig,
   normalizeStoreAccessConfig
-} from './store-gate-core.js?v=tintin-20260716-color-scheme-1';
+} from './store-gate-core.js?v=tintin-20260716-diagnostic-fixes-2';
 
 export {
   isAccessAllowed,

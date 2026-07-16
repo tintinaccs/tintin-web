@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-16T16:44:29.449Z",
-  "sourceFingerprint": "24b687268555492a2384e4608e8458aaed1116518a0313bb9f6ada3fbac72012",
+  "generatedAt": "2026-07-16T17:08:49.808Z",
+  "sourceFingerprint": "dbe79c98e4f4e7397f655a1b3bf49070366cb85e9b353946cec120b6d826c159",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 215,
     "textFiles": 175,
-    "totalBytes": 5394269,
+    "totalBytes": 5395050,
     "pages": 18,
     "modules": 100
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 6067,
-      "sha256": "bfbf89a902d3b9b27649c29ab634a3150841edf0ef35f7f634a46421e9e46887",
+      "bytes": 6177,
+      "sha256": "aa4fe3c84f7e23b0582dcee006845104eeef211446686d4c948484f2016bf7cf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -91,7 +91,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          130
+          132
         ]
       },
       "duplicateIds": [],
@@ -99,74 +99,74 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
-          "line": 150
-        },
-        {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
-          "target": "js/analytics.js",
-          "line": 151
-        },
-        {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
-          "target": "script.js",
           "line": 152
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "js/analytics.js",
           "line": 153
+        },
+        {
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "script.js",
+          "line": 154
+        },
+        {
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "js/color-scheme.js",
+          "line": 155
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 22
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 23
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 24
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 25
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 26
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 27
         }
@@ -181,7 +181,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 134
+          "line": 136
         },
         {
           "raw": "catalogo.html",
@@ -191,7 +191,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 135
+          "line": 137
         },
         {
           "raw": "catalogo.html?cat=relojes",
@@ -201,7 +201,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 139
+          "line": 141
         },
         {
           "raw": "catalogo.html?cat=aros",
@@ -211,7 +211,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 140
+          "line": 142
         },
         {
           "raw": "catalogo.html?cat=collares",
@@ -221,7 +221,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 141
+          "line": 143
         },
         {
           "raw": "catalogo.html?cat=bolsos",
@@ -231,7 +231,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 142
+          "line": 144
         },
         {
           "raw": "catalogo.html?cat=pulseras",
@@ -241,7 +241,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 143
+          "line": 145
         },
         {
           "raw": "catalogo.html?cat=anillos",
@@ -251,7 +251,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 144
+          "line": 146
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -261,90 +261,90 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 147
+          "line": 149
         }
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
-          "line": 150,
-          "exists": true
-        },
-        {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
-          "target": "js/analytics.js",
-          "line": 151,
-          "exists": true
-        },
-        {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
-          "target": "script.js",
           "line": 152,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "js/analytics.js",
           "line": 153,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "script.js",
+          "line": 154,
+          "exists": true
+        },
+        {
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
+          "target": "js/color-scheme.js",
+          "line": 155,
+          "exists": true
+        },
+        {
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 22,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 23,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 27,
           "exists": true
@@ -352,49 +352,49 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 134,
+          "line": 136,
           "exists": true
         },
         {
           "raw": "catalogo.html",
           "target": "catalogo.html",
-          "line": 135,
+          "line": 137,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=relojes",
           "target": "catalogo.html",
-          "line": 139,
+          "line": 141,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=aros",
           "target": "catalogo.html",
-          "line": 140,
+          "line": 142,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=collares",
           "target": "catalogo.html",
-          "line": 141,
+          "line": 143,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=bolsos",
           "target": "catalogo.html",
-          "line": 142,
+          "line": 144,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=pulseras",
           "target": "catalogo.html",
-          "line": 143,
+          "line": 145,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=anillos",
           "target": "catalogo.html",
-          "line": 144,
+          "line": 146,
           "exists": true
         }
       ],
@@ -419,8 +419,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15088,
-      "sha256": "39aacf39cfeaced7bc0e3fdbeef15660eab59bedb36d79d690486c12a697727a",
+      "bytes": 15148,
+      "sha256": "0332e3ac5add4805ece7b9a6777b64469f85fa072925d900f7594a949b10df0f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -450,79 +450,79 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 200
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 201
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 202
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 236
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 237
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -755,91 +755,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 200,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 201,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 202,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 236,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 237,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -976,8 +976,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 33880,
-      "sha256": "95c4c248080f17ec994c33d021f7c58fa2ac5cdab66c830c7ddacb4d7da8c95b",
+      "bytes": 34156,
+      "sha256": "53059f7d5359bf92faf486a1cc3b77df9ab2d4c6bd6266db126c86fb3e5b4d68",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -986,7 +986,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          360
+          367
         ]
       },
       "duplicateIds": [],
@@ -998,7 +998,7 @@
           "error": ""
         },
         {
-          "line": 378,
+          "line": 385,
           "module": true,
           "ok": true,
           "error": ""
@@ -1007,34 +1007,34 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-unsaved-guard.js",
           "line": 8
         },
         {
-          "raw": "js/admin-color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-color-scheme.js",
-          "line": 712
+          "line": 719
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 15
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 20
         },
         {
-          "raw": "css/admin-color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin-color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin-color-tokens.css",
           "line": 21
         }
@@ -1049,7 +1049,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 302
+          "line": 309
         },
         {
           "raw": "admin.html",
@@ -1059,7 +1059,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 318
+          "line": 325
         },
         {
           "raw": "admin.html",
@@ -1069,42 +1069,42 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 353
+          "line": 360
         }
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-unsaved-guard.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/admin-color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-color-scheme.js",
-          "line": 712,
+          "line": 719,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 15,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/admin-color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin-color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin-color-tokens.css",
           "line": 21,
           "exists": true
@@ -1112,19 +1112,19 @@
         {
           "raw": "login.html",
           "target": "login.html",
-          "line": 302,
+          "line": 309,
           "exists": true
         },
         {
           "raw": "admin.html",
           "target": "admin.html",
-          "line": 318,
+          "line": 325,
           "exists": true
         },
         {
           "raw": "admin.html",
           "target": "admin.html",
-          "line": 353,
+          "line": 360,
           "exists": true
         }
       ],
@@ -1146,7 +1146,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 311
+          "line": 318
         },
         {
           "id": "",
@@ -1163,7 +1163,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 325
+          "line": 332
         },
         {
           "id": "",
@@ -1179,7 +1179,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": "",
-          "line": 328
+          "line": 335
         },
         {
           "id": "",
@@ -1195,7 +1195,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": "",
-          "line": 331
+          "line": 338
         },
         {
           "id": "",
@@ -1211,7 +1211,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": "",
-          "line": 334
+          "line": 341
         },
         {
           "id": "",
@@ -1227,7 +1227,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": "",
-          "line": 337
+          "line": 344
         },
         {
           "id": "",
@@ -1243,7 +1243,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": "",
-          "line": 340
+          "line": 347
         },
         {
           "id": "",
@@ -1260,7 +1260,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 347
+          "line": 354
         },
         {
           "id": "",
@@ -1276,7 +1276,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": true,
-          "line": 348
+          "line": 355
         },
         {
           "id": "",
@@ -1292,7 +1292,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": true,
-          "line": 349
+          "line": 356
         },
         {
           "id": "",
@@ -1308,7 +1308,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": true,
-          "line": 350
+          "line": 357
         },
         {
           "id": "",
@@ -1324,7 +1324,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": true,
-          "line": 351
+          "line": 358
         },
         {
           "id": "",
@@ -1340,7 +1340,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": true,
-          "line": 352
+          "line": 359
         },
         {
           "id": "btn-img-bulk-clear",
@@ -1355,7 +1355,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 365
+          "line": 372
         },
         {
           "id": "btn-img-bulk-export",
@@ -1369,7 +1369,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 366
+          "line": 373
         },
         {
           "id": "btn-img-bulk-clear-sel",
@@ -1383,7 +1383,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 367
+          "line": 374
         }
       ],
       "controls": []
@@ -1403,8 +1403,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 152270,
-      "sha256": "9c89a30b75fcdee7b4cc081bf37198def5dff7ea0e0e8b742f744d578e7a0f4a",
+      "bytes": 152251,
+      "sha256": "4297ad5d4d82c50817db6795f1ddca885bb7fd8f8dfbd8c59d37a118a7af128f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1428,69 +1428,69 @@
       "ids": 442,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-unsaved-guard.js",
           "line": 8
         },
         {
-          "raw": "js/admin-app.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-app.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-app.js",
           "line": 1793
         },
         {
-          "raw": "js/admin-color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-color-scheme.js",
           "line": 1991
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 15
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 20
         },
         {
-          "raw": "css/admin-color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin-color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin-color-tokens.css",
           "line": 21
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 22
         },
         {
-          "raw": "css/admin.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin.css",
           "line": 23
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 24
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 25
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 26
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 27
         }
@@ -1597,79 +1597,79 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-unsaved-guard.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-unsaved-guard.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/admin-app.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-app.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-app.js",
           "line": 1793,
           "exists": true
         },
         {
-          "raw": "js/admin-color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/admin-color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-color-scheme.js",
           "line": 1991,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 15,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/admin-color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin-color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin-color-tokens.css",
           "line": 21,
           "exists": true
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 22,
           "exists": true
         },
         {
-          "raw": "css/admin.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/admin.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/admin.css",
           "line": 23,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 27,
           "exists": true
@@ -4175,10 +4175,12 @@
         },
         {
           "id": "",
-          "classes": [],
+          "classes": [
+            "adm-icon-close"
+          ],
           "type": "button",
           "text": "✕",
-          "ariaLabel": "",
+          "ariaLabel": "Cerrar aviso de ImgBB",
           "title": "",
           "inlineHandler": true,
           "dataAction": {},
@@ -4232,10 +4234,12 @@
         },
         {
           "id": "",
-          "classes": [],
+          "classes": [
+            "adm-icon-close"
+          ],
           "type": "button",
           "text": "✕",
-          "ariaLabel": "",
+          "ariaLabel": "Cerrar editor de pedido",
           "title": "",
           "inlineHandler": true,
           "dataAction": {},
@@ -4273,10 +4277,12 @@
         },
         {
           "id": "",
-          "classes": [],
+          "classes": [
+            "adm-icon-close"
+          ],
           "type": "button",
           "text": "✕",
-          "ariaLabel": "",
+          "ariaLabel": "Cerrar editor de plantilla",
           "title": "",
           "inlineHandler": true,
           "dataAction": {},
@@ -4346,10 +4352,12 @@
         },
         {
           "id": "",
-          "classes": [],
+          "classes": [
+            "adm-icon-close"
+          ],
           "type": "button",
           "text": "✕",
-          "ariaLabel": "",
+          "ariaLabel": "Cerrar vista previa",
           "title": "",
           "inlineHandler": true,
           "dataAction": {},
@@ -5806,8 +5814,8 @@
         "guest",
         "client"
       ],
-      "bytes": 10900,
-      "sha256": "e21863cc2d3430c0fa4669052544aedca2949ddaa9d484066d0bb69244d2832a",
+      "bytes": 10960,
+      "sha256": "677a4ef241887a6ca18fce694dde8f084e469298eba11c9768131fe3f783b975",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -5831,79 +5839,79 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 154
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 155
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 156
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 161
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 162
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -6122,91 +6130,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 154,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 155,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 156,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 161,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 162,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -6323,8 +6331,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46868,
-      "sha256": "928ab21340808652d0367068b2e6da9e6890f34b1ced46c6e087e541651049ef",
+      "bytes": 47039,
+      "sha256": "6f1c2d3b7f165d8034a5f6269e905deac045166abca91d2458e6653ed30a85ce",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6360,79 +6368,79 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 458
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 463
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 914
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 915
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 916
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37
         }
@@ -6440,7 +6448,7 @@
       "images": [
         {
           "tag": "img",
-          "raw": "assets-tintin/images/general/logo.png?v=tintin-20260716-color-scheme-1",
+          "raw": "assets-tintin/images/general/logo.png?v=tintin-20260716-diagnostic-fixes-2",
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
@@ -6621,97 +6629,97 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 458,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 463,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 914,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 915,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 916,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/general/logo.png?v=tintin-20260716-color-scheme-1",
+          "raw": "assets-tintin/images/general/logo.png?v=tintin-20260716-diagnostic-fixes-2",
           "target": "assets-tintin/images/general/logo.png",
           "line": 413,
           "exists": true
@@ -6936,8 +6944,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 83541,
-      "sha256": "d08de54aae8be88758f6d82fd9b0c20bf8f625edd3db53eb6d283df433c9cf74",
+      "bytes": 83609,
+      "sha256": "876ac1609f245a6c3e11e7efbdaa00ade47fce334390b1e093db324fd3e6aa82",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6967,39 +6975,39 @@
       "ids": 62,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 1761
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 1762
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 1763
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20
         },
@@ -7009,42 +7017,42 @@
           "line": 23
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 24
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 25
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 26
         },
         {
-          "raw": "css/checkout.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/checkout.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/checkout.css",
           "line": 27
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 28
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 29
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 30
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 31
         }
@@ -7084,91 +7092,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 1761,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 1762,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 1763,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/checkout.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/checkout.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/checkout.css",
           "line": 27,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 28,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 29,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 30,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 31,
           "exists": true
@@ -7476,8 +7484,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12179,
-      "sha256": "455986bafa982c24d1b4b2dd18ab3e75d9b4acc1b8f8c2f9d97c020d1c67b577",
+      "bytes": 12247,
+      "sha256": "8824c28b79bc2a51b9ba16a08d3d280de7200c77003d21d3ac73be29b775b541",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7507,89 +7515,89 @@
       "ids": 7,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 158
         },
         {
-          "raw": "js/collections-page.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/collections-page.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/collections-page.js",
           "line": 159
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 160
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 161
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 166
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 167
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37
         },
         {
-          "raw": "css/collections-page.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/collections-page.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/collections-page.css",
           "line": 38
         }
@@ -7798,103 +7806,103 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 158,
           "exists": true
         },
         {
-          "raw": "js/collections-page.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/collections-page.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/collections-page.js",
           "line": 159,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 160,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 161,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 166,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 167,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/collections-page.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/collections-page.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/collections-page.css",
           "line": 38,
           "exists": true
@@ -8005,8 +8013,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15486,
-      "sha256": "15a1ef608641050672475b049f08bbc23340ea9be6ec847e881e903afb541cd3",
+      "bytes": 15546,
+      "sha256": "caeef5d4dcce72d6726bc6fba1c7acfbc11b735a04084e9e2d2d3183cafcbf3e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8036,79 +8044,79 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 190
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 222
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 223
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 228
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 229
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -8327,91 +8335,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 190,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 222,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 223,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 228,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 229,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -8564,8 +8572,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13090,
-      "sha256": "c96df4ef0327d7cdf2e7674d44b29c8e698df2d7739cf44efde598a03d7f3c8a",
+      "bytes": 13150,
+      "sha256": "ade26ac0e3e42df36560ef19861ed3243a0b975078d6205d20821ce08dbdf0a2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8595,79 +8603,79 @@
       "ids": 3,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 161
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 162
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 163
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 168
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 202
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -8886,91 +8894,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 161,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 162,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 163,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 168,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 202,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -9087,8 +9095,8 @@
         "guest",
         "client"
       ],
-      "bytes": 37046,
-      "sha256": "67f5767a8386c5984d166c6f571b6e2f315d97f441fbf80958d4ed46ceedcdaf",
+      "bytes": 37118,
+      "sha256": "59a84d85d1710983309290012201c96eee5ab3f92c36b4dbccc1723d22e6a3cf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9124,89 +9132,89 @@
       "ids": 10,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 505
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 506
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 507
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/load-images-init.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/load-images-init.js",
           "line": 508
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 513
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 549
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 30
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 54
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 55
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 56
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 57
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 58
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 59
         },
         {
-          "raw": "css/home-fit.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/home-fit.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/home-fit.css",
           "line": 69
         }
@@ -9783,103 +9791,103 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 505,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 506,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 507,
           "exists": true
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/load-images-init.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/load-images-init.js",
           "line": 508,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 513,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 549,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 30,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 59,
           "exists": true
         },
         {
-          "raw": "css/home-fit.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/home-fit.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/home-fit.css",
           "line": 69,
           "exists": true
@@ -10264,8 +10272,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 19053,
-      "sha256": "441ff96791b56f765072bdf94f630fd654e23d5629853b69d0118b36d0ae2ec9",
+      "bytes": 19113,
+      "sha256": "ae39c9bc2ac0886da148db7f85879a6246a77baa2639dbe7d21b56086b895bb6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10295,79 +10303,79 @@
       "ids": 10,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 433
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 434
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 435
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 23
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 24
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 25
         },
         {
-          "raw": "css/login.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/login.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/login.css",
           "line": 26
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 27
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 28
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 29
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 30
         }
@@ -10396,91 +10404,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 433,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 434,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 435,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/tintin-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-tokens.css",
           "line": 23,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "css/login.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/login.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/login.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 27,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 28,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 29,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 30,
           "exists": true
@@ -10566,8 +10574,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1447,
-      "sha256": "c2e9ff1878a6452381d763f3d8fdc87ef52f12b45f554661766a91104cab52f4",
+      "bytes": 1455,
+      "sha256": "63633f20ccf7602318ce88c54fb5c8b0f69b792f5f9dce5eed0ee7946c7a1fa1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10584,14 +10592,14 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 20
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         }
@@ -10611,13 +10619,13 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
@@ -10653,8 +10661,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 21797,
-      "sha256": "6c973bf580373f9d6a5cdcb666decf8e4eccb692dd802da1b36441673aac2ef3",
+      "bytes": 21932,
+      "sha256": "79fe00e8600589af81cf27e49799445251c5bf03f81855ea816dc49742166dd6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10684,74 +10692,74 @@
       "ids": 19,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 263
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 498
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 499
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 500
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 23
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 24
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 25
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 26
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 27
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 28
         }
@@ -10831,85 +10839,85 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 263,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 498,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 499,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 500,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 23,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 27,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 28,
           "exists": true
@@ -11031,8 +11039,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12700,
-      "sha256": "6413e2f3a0083d9fa12334eda23d4a1d661eb3229b45d57f872270eb1d59a3b5",
+      "bytes": 12760,
+      "sha256": "e8b7124a5fa83cc0077f5b7d59cf7ff6d221d28b77d9732ad6a27f9ff03dbc7d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11056,79 +11064,79 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 183
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 184
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 185
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 190
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 191
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -11347,91 +11355,91 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 183,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 184,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 185,
           "exists": true
         },
         {
-          "raw": "js/edit-badge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/edit-badge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/edit-badge.js",
           "line": 190,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 191,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -11548,8 +11556,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14515,
-      "sha256": "d90764fa0afba043e6b2c8c12e4da0cd114fdc6aaf7843e8ba819d3e2a728e40",
+      "bytes": 14571,
+      "sha256": "b29791cdee16b30d3f31bebad0c50c8d07451da7bbe011b5c9f733541ec3e41b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11573,74 +11581,74 @@
       "ids": 2,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 191
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 192
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 193
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 203
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -11889,85 +11897,85 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 191,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 192,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 193,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 203,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -12101,8 +12109,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16147,
-      "sha256": "26786196cc0329839692f4814bbe58a0e6d6fa790836f83189cda2f047363a48",
+      "bytes": 16219,
+      "sha256": "e55a13cf29eaa8565ec076ab097e9ccbf6bce58cce441ba8c0cb288ef47c30d5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12126,94 +12134,94 @@
       "ids": 47,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 283
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/load-images-init.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/load-images-init.js",
           "line": 283
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 284
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 285
         },
         {
-          "raw": "js/product-benefits.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/product-benefits.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/product-benefits.js",
           "line": 286
         },
         {
-          "raw": "js/product-selection.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/product-selection.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/product-selection.js",
           "line": 287
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 288
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37
         },
         {
-          "raw": "css/product-extras.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/product-extras.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/product-extras.css",
           "line": 38
         }
@@ -12422,109 +12430,109 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 9,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 283,
           "exists": true
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/load-images-init.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/load-images-init.js",
           "line": 283,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 284,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 285,
           "exists": true
         },
         {
-          "raw": "js/product-benefits.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/product-benefits.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/product-benefits.js",
           "line": 286,
           "exists": true
         },
         {
-          "raw": "js/product-selection.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/product-selection.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/product-selection.js",
           "line": 287,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 288,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 19,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/product-extras.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/product-extras.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/product-extras.css",
           "line": 38,
           "exists": true
@@ -12759,8 +12767,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12470,
-      "sha256": "922ea6cafe0965303cf52a1384c5d124014309eee61ead45a935d478c13cbd1a",
+      "bytes": 12526,
+      "sha256": "d77bede64d24897b20f00618fb17ad54b12ff85c21bab5fb0a452517432eb827",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12777,74 +12785,74 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 173
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 174
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 175
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 176
         }
       ],
       "styles": [
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36
         }
@@ -13103,85 +13111,85 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme-instant.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/page-loader.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/page-loader.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/public-shell.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/public-shell.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/public-shell.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "script.js?v=tintin-20260716-color-scheme-1",
+          "raw": "script.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "script.js",
           "line": 173,
           "exists": true
         },
         {
-          "raw": "js/whatsapp.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/whatsapp.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/whatsapp.js",
           "line": 174,
           "exists": true
         },
         {
-          "raw": "js/analytics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/analytics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/analytics.js",
           "line": 175,
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-color-scheme-1",
+          "raw": "js/color-scheme.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-scheme.js",
           "line": 176,
           "exists": true
         },
         {
-          "raw": "css/montserrat.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/montserrat.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/color-tokens.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/color-tokens.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/color-tokens.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260716-color-scheme-1",
+          "raw": "styles.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "styles.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/ui-quality.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/ui-quality.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/ui-quality.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-unified-theme.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-unified-theme.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-theme-cleanup.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-theme-cleanup.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-color-scheme-1",
+          "raw": "css/tintin-parity-safe.css?v=tintin-20260716-diagnostic-fixes-2",
           "target": "css/tintin-parity-safe.css",
           "line": 36,
           "exists": true
@@ -13353,8 +13361,8 @@
     },
     {
       "path": "js/admin-app.js",
-      "bytes": 391984,
-      "sha256": "e46f9a46c1e32a50aa56ec6996fd593b76fae14ca10576062bdb952c22e5d128",
+      "bytes": 391996,
+      "sha256": "32d54c0f7b40911dca957ac6fc071c8f9d1b0ac690ef36b548e67dcbe6807d89",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13427,7 +13435,7 @@
           "line": 19
         },
         {
-          "raw": "./admin-site-diagnostics.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./admin-site-diagnostics.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-site-diagnostics.js",
           "dynamic": false,
           "line": 20
@@ -13439,13 +13447,13 @@
           "line": 25
         },
         {
-          "raw": "./color-contrast-utils.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./color-contrast-utils.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-contrast-utils.js",
           "dynamic": false,
           "line": 26
         },
         {
-          "raw": "./color-picker-widget.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./color-picker-widget.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-picker-widget.js",
           "dynamic": false,
           "line": 27
@@ -13733,8 +13741,8 @@
     },
     {
       "path": "js/admin-mobile-sidebar-fix.js",
-      "bytes": 2153,
-      "sha256": "5b6e6d8cadef4093b5e5642ff0f8a7d22c53a0f1535419adcaecda972962a319",
+      "bytes": 320,
+      "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13820,8 +13828,8 @@
     },
     {
       "path": "js/admin-store-control.js",
-      "bytes": 8581,
-      "sha256": "074a0f6bbe8733b1fbb6b0fbbbc6440cfe170e7219b87cb8e5e064f084a0ce20",
+      "bytes": 8585,
+      "sha256": "8962be041206c6badd7800cd66a582e028bb76fd4bae360be50f5f1e4b84cb74",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13846,7 +13854,7 @@
           "line": 24
         },
         {
-          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/admin-email-gate-sync.js",
           "dynamic": true,
           "line": 290
@@ -13877,7 +13885,7 @@
     {
       "path": "js/admin-users-phase8.js",
       "bytes": 19005,
-      "sha256": "ba36c00fc3e582af67569433f8b05933294638a1eae9b0cbaa05199fbca07569",
+      "sha256": "a222002e3e6f3f146c4d401a5be8a861cedf7850b1ef8b24cdd60336b7b41f8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14017,15 +14025,15 @@
     },
     {
       "path": "js/auth-nav.js",
-      "bytes": 6744,
-      "sha256": "23f859081847f8678b9425fd2af5b9a5b80122ef07d63e2916011d879474a178",
+      "bytes": 6752,
+      "sha256": "4e45ba03eac4f14bc021442e13a519c5d9ac12b9180b84bf7875cfad57aa356f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./firebase.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./firebase.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/firebase.js",
           "dynamic": false,
           "line": 3
@@ -14037,7 +14045,7 @@
           "line": 4
         },
         {
-          "raw": "./roles.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./roles.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/roles.js",
           "dynamic": false,
           "line": 5
@@ -14075,8 +14083,8 @@
     },
     {
       "path": "js/cart-sync.js",
-      "bytes": 35231,
-      "sha256": "28ee855c8aa2088bf19c6c7a6e9107f0da47d5ac8c97a285f0002b444d3e4cc6",
+      "bytes": 35235,
+      "sha256": "6a583ac8b446418277f7dda7affd1dd56fde0b1aca77ad2cc9880ee20ebbacd8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14107,7 +14115,7 @@
           "line": 27
         },
         {
-          "raw": "./secure-checkout-order.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./secure-checkout-order.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/secure-checkout-order.js",
           "dynamic": true,
           "line": 970
@@ -14161,15 +14169,15 @@
     },
     {
       "path": "js/collections-page.js",
-      "bytes": 9884,
-      "sha256": "acc95010e004b17d03c2273dc92df0ab226777cb49269af29260b5f8d188bb34",
+      "bytes": 9888,
+      "sha256": "e1c19f2f15ccc0af40cbd3ec73c95bd336c6f637a68e78c35e7982b105a57b41",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./cart-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./cart-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/cart-sync.js",
           "dynamic": true,
           "line": 6
@@ -14249,15 +14257,15 @@
     },
     {
       "path": "js/color-picker-widget.js",
-      "bytes": 19908,
-      "sha256": "08889fae53bdc3191077fc23a08daaf1b9f0facee7e59d57c6baccb01e1cf645",
+      "bytes": 19912,
+      "sha256": "e3f9e08b0017206e62068d4f0a74e7e0200f0c5e3d00f5b464277e6562d030db",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./color-contrast-utils.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./color-contrast-utils.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/color-contrast-utils.js",
           "dynamic": false,
           "line": 10
@@ -14448,8 +14456,8 @@
     },
     {
       "path": "js/email-notify.js",
-      "bytes": 7267,
-      "sha256": "5e0735051119cd5e201bdbfd4109262b9bf762654509c6b5c4a7bcb68b44b2d7",
+      "bytes": 7271,
+      "sha256": "e3049ba697cb9fd984af688c05369ae89030f720c6daec9b5902c4cc9ded8b9a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14474,7 +14482,7 @@
           "line": 16
         },
         {
-          "raw": "./checkout-email-bridge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./checkout-email-bridge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/checkout-email-bridge.js",
           "dynamic": true,
           "line": 235
@@ -14818,8 +14826,8 @@
     },
     {
       "path": "js/page-audit-fix.js",
-      "bytes": 2959,
-      "sha256": "291f52402f7b60f2ba435f2d323a1707acbbfbf8b3f8a0a777fc82f9e4297923",
+      "bytes": 2963,
+      "sha256": "49fc93754377fc53c9edfe70605738bc4f964da249a20279981e48ad9a8a001e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14829,8 +14837,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 24549,
-      "sha256": "1a1500bfbd4e12ce850b6511e2ade4e454cdb9086a8ffafec374459e7b8b4a45",
+      "bytes": 24553,
+      "sha256": "3640e44f4022b5ceb7a8a156da9a64f5e3230e9bd8fb5e53f6703ba51f7e1a0a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14885,7 +14893,7 @@
     {
       "path": "js/products-store.js",
       "bytes": 5939,
-      "sha256": "52807c656f3a17244bff7853776a17adf4c95910d0f9a123edf0d54a96f06c5f",
+      "sha256": "15ce76c6cc91ceea52d7fa222c5af2ba5a6a488777fb971edcc7b9058626da54",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14960,8 +14968,8 @@
     },
     {
       "path": "js/public-shell.js",
-      "bytes": 17414,
-      "sha256": "0163fa9e769b1ad614a27fc3cb2469d42450e402f54c937d83949eee8183186e",
+      "bytes": 17418,
+      "sha256": "278e89b107e714e90c1078e4f00da59fefeb615995f0b21286bd82752c576edc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15222,8 +15230,8 @@
     },
     {
       "path": "js/store-gate.js",
-      "bytes": 4654,
-      "sha256": "375240a6e3d67570f8e809bdcba618f94e2a786b52d37017e1f72e227a0bd4f7",
+      "bytes": 4658,
+      "sha256": "c1a40777da3ac2a170bd48f55ae460dc6cdb8958e90f3c3db96737fa569614b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15254,7 +15262,7 @@
           "line": 18
         },
         {
-          "raw": "./store-gate-core.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./store-gate-core.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/store-gate-core.js",
           "dynamic": false,
           "line": 26
@@ -15284,8 +15292,8 @@
     },
     {
       "path": "js/ui-quality.js",
-      "bytes": 10040,
-      "sha256": "8563274c56e5b2b04d245aa374880acdadf36957c62fc5529366e9bb49d67968",
+      "bytes": 8094,
+      "sha256": "3f014da3701714267eae5d5e48616f9b55c5950474bd014d6b5cb1ac9abcb6a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15406,27 +15414,27 @@
     },
     {
       "path": "script.js",
-      "bytes": 77429,
-      "sha256": "7906dfc3f9c1c3fae2a1aa635156376179fe12fb58006c019fe513b8b25a45be",
+      "bytes": 77441,
+      "sha256": "0413df89cc36c8a23280fc0cfea09e91c636c449403490ba4733a8bccc6a10b1",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/cart-sync.js",
           "dynamic": true,
           "line": 201
         },
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/cart-sync.js",
           "dynamic": true,
           "line": 915
         },
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./js/cart-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "js/cart-sync.js",
           "dynamic": true,
           "line": 1421
@@ -15547,8 +15555,8 @@
     },
     {
       "path": "scripts/audit-diagnostic-findings.js",
-      "bytes": 7437,
-      "sha256": "de1f51db77e585fd3de83497832aad5c4313a9b13514bde78f9788dc3c79e945",
+      "bytes": 7727,
+      "sha256": "a9f324a4bbb9ec50ab0b1f14e8ae39828fd0b8c1432cea34bf3b84fac70bffe0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15569,8 +15577,8 @@
     },
     {
       "path": "scripts/audit-email-phase3.js",
-      "bytes": 4658,
-      "sha256": "3f043332ce480f4a94c540d7d96995f6816ea8e326533c8cf142fc05f5402339",
+      "bytes": 4666,
+      "sha256": "7f62ec51185e1e15ad9e0b065aaff059ba3b4cffecc451555812dcc9fe3a0d28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15583,13 +15591,13 @@
           "line": 24
         },
         {
-          "raw": "./checkout-email-bridge.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./checkout-email-bridge.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "scripts/checkout-email-bridge.js",
           "dynamic": true,
           "line": 25
         },
         {
-          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-color-scheme-1",
+          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-diagnostic-fixes-2",
           "target": "scripts/admin-email-gate-sync.js",
           "dynamic": true,
           "line": 74
@@ -15663,8 +15671,8 @@
     },
     {
       "path": "scripts/audit-public-shell.js",
-      "bytes": 4124,
-      "sha256": "7e5af734bfbcaea2a2bdd637fea7e920a9035f5104739ab15c3d7d2bf3a7a446",
+      "bytes": 4128,
+      "sha256": "71b32f696b212f5a8423406ee076f7e5fa2f3732579a853bf54bf86932085ff3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15693,7 +15701,7 @@
     {
       "path": "scripts/audit-security-phase8.js",
       "bytes": 3869,
-      "sha256": "5edcfdf0d4b11549a291fcc971c8e73e0abad7bd333b1ed96203a1a43dca29f2",
+      "sha256": "a35b1749bd2ca263cf41a46eddc13e1e9e35e48b32bb3ceee8240b321ca8881f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15703,8 +15711,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 12018,
-      "sha256": "c16e63f845a064c55062544f070180bee4711ae22f9f804d2d87e46011b2a51b",
+      "bytes": 12022,
+      "sha256": "6b7f419a6cc6d36feafc312f806966f6e16df5e073da58475695234acbbc6d20",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15759,8 +15767,8 @@
     },
     {
       "path": "scripts/audit-tintin.js",
-      "bytes": 12528,
-      "sha256": "c742bccf56ad789d89eac1859c7407f26823bf9b92b26cdef4acacc716ee1300",
+      "bytes": 12532,
+      "sha256": "ebd223efd9c3d78a2b0216fbd37f81e9e2d492be5e41aa6e8f3d4b2b24a7a9f0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15770,8 +15778,8 @@
     },
     {
       "path": "scripts/audit-typography.js",
-      "bytes": 10945,
-      "sha256": "b0a39fb6e759d1230d25553ba81dbba99e1b926764a25978ad98470487e05421",
+      "bytes": 10949,
+      "sha256": "6838ad9e5f4d823d8172180a3792787c1001273a023a343249c44ac4628975a3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15792,8 +15800,8 @@
     },
     {
       "path": "scripts/fix-tintin-source.js",
-      "bytes": 2718,
-      "sha256": "79883d08c389c50992701512817bfbe18999702925151e91dd4613654c5f2101",
+      "bytes": 2722,
+      "sha256": "aeefad85bd30a96091812b7b696ea2ff832ac61c60d6aa499490e349352f0748",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15814,8 +15822,8 @@
     },
     {
       "path": "scripts/sync-public-shell.js",
-      "bytes": 3878,
-      "sha256": "40578a2f59f26659347dd3b8d45147ba97d0f29fa95450a826a2088497a95388",
+      "bytes": 3882,
+      "sha256": "5e16262c777c8cc6197775a85682f65298cd46ac563fe8835d381d4cf3f44525",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15906,8 +15914,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 6067,
-      "sha256": "bfbf89a902d3b9b27649c29ab634a3150841edf0ef35f7f634a46421e9e46887"
+      "bytes": 6177,
+      "sha256": "aa4fe3c84f7e23b0582dcee006845104eeef211446686d4c948484f2016bf7cf"
     },
     {
       "path": "FIREBASE_DEPLOY.md",
@@ -15918,20 +15926,20 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 15088,
-      "sha256": "39aacf39cfeaced7bc0e3fdbeef15660eab59bedb36d79d690486c12a697727a"
+      "bytes": 15148,
+      "sha256": "0332e3ac5add4805ece7b9a6777b64469f85fa072925d900f7594a949b10df0f"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 33880,
-      "sha256": "95c4c248080f17ec994c33d021f7c58fa2ac5cdab66c830c7ddacb4d7da8c95b"
+      "bytes": 34156,
+      "sha256": "53059f7d5359bf92faf486a1cc3b77df9ab2d4c6bd6266db126c86fb3e5b4d68"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 152270,
-      "sha256": "9c89a30b75fcdee7b4cc081bf37198def5dff7ea0e0e8b742f744d578e7a0f4a"
+      "bytes": 152251,
+      "sha256": "4297ad5d4d82c50817db6795f1ddca885bb7fd8f8dfbd8c59d37a118a7af128f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -16140,32 +16148,32 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 10900,
-      "sha256": "e21863cc2d3430c0fa4669052544aedca2949ddaa9d484066d0bb69244d2832a"
+      "bytes": 10960,
+      "sha256": "677a4ef241887a6ca18fce694dde8f084e469298eba11c9768131fe3f783b975"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 46868,
-      "sha256": "928ab21340808652d0367068b2e6da9e6890f34b1ced46c6e087e541651049ef"
+      "bytes": 47039,
+      "sha256": "6f1c2d3b7f165d8034a5f6269e905deac045166abca91d2458e6653ed30a85ce"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 83541,
-      "sha256": "d08de54aae8be88758f6d82fd9b0c20bf8f625edd3db53eb6d283df433c9cf74"
+      "bytes": 83609,
+      "sha256": "876ac1609f245a6c3e11e7efbdaa00ade47fce334390b1e093db324fd3e6aa82"
     },
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 12179,
-      "sha256": "455986bafa982c24d1b4b2dd18ab3e75d9b4acc1b8f8c2f9d97c020d1c67b577"
+      "bytes": 12247,
+      "sha256": "8824c28b79bc2a51b9ba16a08d3d280de7200c77003d21d3ac73be29b775b541"
     },
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 15486,
-      "sha256": "15a1ef608641050672475b049f08bbc23340ea9be6ec847e881e903afb541cd3"
+      "bytes": 15546,
+      "sha256": "caeef5d4dcce72d6726bc6fba1c7acfbc11b735a04084e9e2d2d3183cafcbf3e"
     },
     {
       "path": "css/admin-color-tokens.css",
@@ -16176,8 +16184,8 @@
     {
       "path": "css/admin.css",
       "extension": ".css",
-      "bytes": 70424,
-      "sha256": "936f5234f2feba7c1ab56d22ce11466e35768586fbc780b42e24a6dd83085968"
+      "bytes": 72334,
+      "sha256": "5d720a331d93599f08f5593671662df22ea30b47d4992a14f29db5ad1079a3a7"
     },
     {
       "path": "css/checkout.css",
@@ -16284,8 +16292,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 13090,
-      "sha256": "c96df4ef0327d7cdf2e7674d44b29c8e698df2d7739cf44efde598a03d7f3c8a"
+      "bytes": 13150,
+      "sha256": "ade26ac0e3e42df36560ef19861ed3243a0b975078d6205d20821ce08dbdf0a2"
     },
     {
       "path": "favicon-16x16.png",
@@ -16326,8 +16334,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 32124,
-      "sha256": "f35a4f340c78376db049c721d1ac6f5adb9506d4dec7b5fff21599cddc34a7f4"
+      "bytes": 32063,
+      "sha256": "b2e086698d8eec05d0a2ecd8c25ff724c08227c4ee401458982899266407bbfc"
     },
     {
       "path": "functions/DEPLOY.md",
@@ -16410,14 +16418,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 37046,
-      "sha256": "67f5767a8386c5984d166c6f571b6e2f315d97f441fbf80958d4ed46ceedcdaf"
+      "bytes": 37118,
+      "sha256": "59a84d85d1710983309290012201c96eee5ab3f92c36b4dbccc1723d22e6a3cf"
     },
     {
       "path": "js/admin-app.js",
       "extension": ".js",
-      "bytes": 391984,
-      "sha256": "e46f9a46c1e32a50aa56ec6996fd593b76fae14ca10576062bdb952c22e5d128"
+      "bytes": 391996,
+      "sha256": "32d54c0f7b40911dca957ac6fc071c8f9d1b0ac690ef36b548e67dcbe6807d89"
     },
     {
       "path": "js/admin-collections-phase4.js",
@@ -16458,8 +16466,8 @@
     {
       "path": "js/admin-mobile-sidebar-fix.js",
       "extension": ".js",
-      "bytes": 2153,
-      "sha256": "5b6e6d8cadef4093b5e5642ff0f8a7d22c53a0f1535419adcaecda972962a319"
+      "bytes": 320,
+      "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0"
     },
     {
       "path": "js/admin-order-delete-fix.js",
@@ -16476,8 +16484,8 @@
     {
       "path": "js/admin-store-control.js",
       "extension": ".js",
-      "bytes": 8581,
-      "sha256": "074a0f6bbe8733b1fbb6b0fbbbc6440cfe170e7219b87cb8e5e064f084a0ce20"
+      "bytes": 8585,
+      "sha256": "8962be041206c6badd7800cd66a582e028bb76fd4bae360be50f5f1e4b84cb74"
     },
     {
       "path": "js/admin-unsaved-guard.js",
@@ -16489,7 +16497,7 @@
       "path": "js/admin-users-phase8.js",
       "extension": ".js",
       "bytes": 19005,
-      "sha256": "ba36c00fc3e582af67569433f8b05933294638a1eae9b0cbaa05199fbca07569"
+      "sha256": "a222002e3e6f3f146c4d401a5be8a861cedf7850b1ef8b24cdd60336b7b41f8b"
     },
     {
       "path": "js/admin-welcome-control.js",
@@ -16506,8 +16514,8 @@
     {
       "path": "js/auth-nav.js",
       "extension": ".js",
-      "bytes": 6744,
-      "sha256": "23f859081847f8678b9425fd2af5b9a5b80122ef07d63e2916011d879474a178"
+      "bytes": 6752,
+      "sha256": "4e45ba03eac4f14bc021442e13a519c5d9ac12b9180b84bf7875cfad57aa356f"
     },
     {
       "path": "js/blocked-modal.js",
@@ -16518,8 +16526,8 @@
     {
       "path": "js/cart-sync.js",
       "extension": ".js",
-      "bytes": 35231,
-      "sha256": "28ee855c8aa2088bf19c6c7a6e9107f0da47d5ac8c97a285f0002b444d3e4cc6"
+      "bytes": 35235,
+      "sha256": "6a583ac8b446418277f7dda7affd1dd56fde0b1aca77ad2cc9880ee20ebbacd8"
     },
     {
       "path": "js/checkout-email-bridge.js",
@@ -16530,8 +16538,8 @@
     {
       "path": "js/collections-page.js",
       "extension": ".js",
-      "bytes": 9884,
-      "sha256": "acc95010e004b17d03c2273dc92df0ab226777cb49269af29260b5f8d188bb34"
+      "bytes": 9888,
+      "sha256": "e1c19f2f15ccc0af40cbd3ec73c95bd336c6f637a68e78c35e7982b105a57b41"
     },
     {
       "path": "js/collections-phase4.js",
@@ -16554,8 +16562,8 @@
     {
       "path": "js/color-picker-widget.js",
       "extension": ".js",
-      "bytes": 19908,
-      "sha256": "08889fae53bdc3191077fc23a08daaf1b9f0facee7e59d57c6baccb01e1cf645"
+      "bytes": 19912,
+      "sha256": "e3f9e08b0017206e62068d4f0a74e7e0200f0c5e3d00f5b464277e6562d030db"
     },
     {
       "path": "js/color-scheme-catalog.js",
@@ -16608,8 +16616,8 @@
     {
       "path": "js/email-notify.js",
       "extension": ".js",
-      "bytes": 7267,
-      "sha256": "5e0735051119cd5e201bdbfd4109262b9bf762654509c6b5c4a7bcb68b44b2d7"
+      "bytes": 7271,
+      "sha256": "e3049ba697cb9fd984af688c05369ae89030f720c6daec9b5902c4cc9ded8b9a"
     },
     {
       "path": "js/firebase.js",
@@ -16704,14 +16712,14 @@
     {
       "path": "js/page-audit-fix.js",
       "extension": ".js",
-      "bytes": 2959,
-      "sha256": "291f52402f7b60f2ba435f2d323a1707acbbfbf8b3f8a0a777fc82f9e4297923"
+      "bytes": 2963,
+      "sha256": "49fc93754377fc53c9edfe70605738bc4f964da249a20279981e48ad9a8a001e"
     },
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 24549,
-      "sha256": "1a1500bfbd4e12ce850b6511e2ade4e454cdb9086a8ffafec374459e7b8b4a45"
+      "bytes": 24553,
+      "sha256": "3640e44f4022b5ceb7a8a156da9a64f5e3230e9bd8fb5e53f6703ba51f7e1a0a"
     },
     {
       "path": "js/phone-utils.js",
@@ -16741,7 +16749,7 @@
       "path": "js/products-store.js",
       "extension": ".js",
       "bytes": 5939,
-      "sha256": "52807c656f3a17244bff7853776a17adf4c95910d0f9a123edf0d54a96f06c5f"
+      "sha256": "15ce76c6cc91ceea52d7fa222c5af2ba5a6a488777fb971edcc7b9058626da54"
     },
     {
       "path": "js/profile-order-stats-fix.js",
@@ -16752,8 +16760,8 @@
     {
       "path": "js/public-shell.js",
       "extension": ".js",
-      "bytes": 17414,
-      "sha256": "0163fa9e769b1ad614a27fc3cb2469d42450e402f54c937d83949eee8183186e"
+      "bytes": 17418,
+      "sha256": "278e89b107e714e90c1078e4f00da59fefeb615995f0b21286bd82752c576edc"
     },
     {
       "path": "js/role-permissions.js",
@@ -16812,8 +16820,8 @@
     {
       "path": "js/store-gate.js",
       "extension": ".js",
-      "bytes": 4654,
-      "sha256": "375240a6e3d67570f8e809bdcba618f94e2a786b52d37017e1f72e227a0bd4f7"
+      "bytes": 4658,
+      "sha256": "c1a40777da3ac2a170bd48f55ae460dc6cdb8958e90f3c3db96737fa569614b6"
     },
     {
       "path": "js/theme-color-sanitizer.js",
@@ -16824,8 +16832,8 @@
     {
       "path": "js/ui-quality.js",
       "extension": ".js",
-      "bytes": 10040,
-      "sha256": "8563274c56e5b2b04d245aa374880acdadf36957c62fc5529366e9bb49d67968"
+      "bytes": 8094,
+      "sha256": "3f014da3701714267eae5d5e48616f9b55c5950474bd014d6b5cb1ac9abcb6a7"
     },
     {
       "path": "js/welcome-config.js",
@@ -16848,8 +16856,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 19053,
-      "sha256": "441ff96791b56f765072bdf94f630fd654e23d5629853b69d0118b36d0ae2ec9"
+      "bytes": 19113,
+      "sha256": "ae39c9bc2ac0886da148db7f85879a6246a77baa2639dbe7d21b56086b895bb6"
     },
     {
       "path": "manifest.json",
@@ -16866,8 +16874,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1447,
-      "sha256": "c2e9ff1878a6452381d763f3d8fdc87ef52f12b45f554661766a91104cab52f4"
+      "bytes": 1455,
+      "sha256": "63633f20ccf7602318ce88c54fb5c8b0f69b792f5f9dce5eed0ee7946c7a1fa1"
     },
     {
       "path": "package.json",
@@ -16878,26 +16886,26 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 21797,
-      "sha256": "6c973bf580373f9d6a5cdcb666decf8e4eccb692dd802da1b36441673aac2ef3"
+      "bytes": 21932,
+      "sha256": "79fe00e8600589af81cf27e49799445251c5bf03f81855ea816dc49742166dd6"
     },
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 12700,
-      "sha256": "6413e2f3a0083d9fa12334eda23d4a1d661eb3229b45d57f872270eb1d59a3b5"
+      "bytes": 12760,
+      "sha256": "e8b7124a5fa83cc0077f5b7d59cf7ff6d221d28b77d9732ad6a27f9ff03dbc7d"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 14515,
-      "sha256": "d90764fa0afba043e6b2c8c12e4da0cd114fdc6aaf7843e8ba819d3e2a728e40"
+      "bytes": 14571,
+      "sha256": "b29791cdee16b30d3f31bebad0c50c8d07451da7bbe011b5c9f733541ec3e41b"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 16147,
-      "sha256": "26786196cc0329839692f4814bbe58a0e6d6fa790836f83189cda2f047363a48"
+      "bytes": 16219,
+      "sha256": "e55a13cf29eaa8565ec076ab097e9ccbf6bce58cce441ba8c0cb288ef47c30d5"
     },
     {
       "path": "robots.txt",
@@ -16908,8 +16916,8 @@
     {
       "path": "script.js",
       "extension": ".js",
-      "bytes": 77429,
-      "sha256": "7906dfc3f9c1c3fae2a1aa635156376179fe12fb58006c019fe513b8b25a45be"
+      "bytes": 77441,
+      "sha256": "0413df89cc36c8a23280fc0cfea09e91c636c449403490ba4733a8bccc6a10b1"
     },
     {
       "path": "scripts/audit-cart-phase7.js",
@@ -16944,8 +16952,8 @@
     {
       "path": "scripts/audit-diagnostic-findings.js",
       "extension": ".js",
-      "bytes": 7437,
-      "sha256": "de1f51db77e585fd3de83497832aad5c4313a9b13514bde78f9788dc3c79e945"
+      "bytes": 7727,
+      "sha256": "a9f324a4bbb9ec50ab0b1f14e8ae39828fd0b8c1432cea34bf3b84fac70bffe0"
     },
     {
       "path": "scripts/audit-diagnostics.js",
@@ -16956,8 +16964,8 @@
     {
       "path": "scripts/audit-email-phase3.js",
       "extension": ".js",
-      "bytes": 4658,
-      "sha256": "3f043332ce480f4a94c540d7d96995f6816ea8e326533c8cf142fc05f5402339"
+      "bytes": 4666,
+      "sha256": "7f62ec51185e1e15ad9e0b065aaff059ba3b4cffecc451555812dcc9fe3a0d28"
     },
     {
       "path": "scripts/audit-final-release.js",
@@ -16986,8 +16994,8 @@
     {
       "path": "scripts/audit-public-shell.js",
       "extension": ".js",
-      "bytes": 4124,
-      "sha256": "7e5af734bfbcaea2a2bdd637fea7e920a9035f5104739ab15c3d7d2bf3a7a446"
+      "bytes": 4128,
+      "sha256": "71b32f696b212f5a8423406ee076f7e5fa2f3732579a853bf54bf86932085ff3"
     },
     {
       "path": "scripts/audit-secure-orders.js",
@@ -16999,13 +17007,13 @@
       "path": "scripts/audit-security-phase8.js",
       "extension": ".js",
       "bytes": 3869,
-      "sha256": "5edcfdf0d4b11549a291fcc971c8e73e0abad7bd333b1ed96203a1a43dca29f2"
+      "sha256": "a35b1749bd2ca263cf41a46eddc13e1e9e35e48b32bb3ceee8240b321ca8881f"
     },
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 12018,
-      "sha256": "c16e63f845a064c55062544f070180bee4711ae22f9f804d2d87e46011b2a51b"
+      "bytes": 12022,
+      "sha256": "6b7f419a6cc6d36feafc312f806966f6e16df5e073da58475695234acbbc6d20"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -17016,14 +17024,14 @@
     {
       "path": "scripts/audit-tintin.js",
       "extension": ".js",
-      "bytes": 12528,
-      "sha256": "c742bccf56ad789d89eac1859c7407f26823bf9b92b26cdef4acacc716ee1300"
+      "bytes": 12532,
+      "sha256": "ebd223efd9c3d78a2b0216fbd37f81e9e2d492be5e41aa6e8f3d4b2b24a7a9f0"
     },
     {
       "path": "scripts/audit-typography.js",
       "extension": ".js",
-      "bytes": 10945,
-      "sha256": "b0a39fb6e759d1230d25553ba81dbba99e1b926764a25978ad98470487e05421"
+      "bytes": 10949,
+      "sha256": "6838ad9e5f4d823d8172180a3792787c1001273a023a343249c44ac4628975a3"
     },
     {
       "path": "scripts/build-diagnostic-manifest.js",
@@ -17034,8 +17042,8 @@
     {
       "path": "scripts/fix-tintin-source.js",
       "extension": ".js",
-      "bytes": 2718,
-      "sha256": "79883d08c389c50992701512817bfbe18999702925151e91dd4613654c5f2101"
+      "bytes": 2722,
+      "sha256": "aeefad85bd30a96091812b7b696ea2ff832ac61c60d6aa499490e349352f0748"
     },
     {
       "path": "scripts/prepare-hosting.js",
@@ -17046,8 +17054,8 @@
     {
       "path": "scripts/sync-public-shell.js",
       "extension": ".js",
-      "bytes": 3878,
-      "sha256": "40578a2f59f26659347dd3b8d45147ba97d0f29fa95450a826a2088497a95388"
+      "bytes": 3882,
+      "sha256": "5e16262c777c8cc6197775a85682f65298cd46ac563fe8835d381d4cf3f44525"
     },
     {
       "path": "sitemap.xml",
@@ -17058,14 +17066,14 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 102849,
-      "sha256": "3f3041aba7c7f42b65458827ab136a33269d0cf42aa6d55dc41d2b4b74cab654"
+      "bytes": 103737,
+      "sha256": "8e81a24f66a9b151bc5b57dbe908dcf7d50c3247cea9e8c2106518a25cf5d329"
     },
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 12470,
-      "sha256": "922ea6cafe0965303cf52a1384c5d124014309eee61ead45a935d478c13cbd1a"
+      "bytes": 12526,
+      "sha256": "d77bede64d24897b20f00618fb17ad54b12ff85c21bab5fb0a452517432eb827"
     },
     {
       "path": "tintin-code-sh/apartadoconfianza.txt",
@@ -17132,28 +17140,14 @@
   "routeReferences": [
     {
       "file": "404.html",
-      "line": 134,
+      "line": 136,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "404.html",
-      "line": 135,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
-      "file": "404.html",
-      "line": 139,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
-      "file": "404.html",
-      "line": 140,
+      "line": 137,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -17182,6 +17176,20 @@
     {
       "file": "404.html",
       "line": 144,
+      "raw": "catalogo.html",
+      "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "404.html",
+      "line": 145,
+      "raw": "catalogo.html",
+      "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "404.html",
+      "line": 146,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -17286,21 +17294,21 @@
     },
     {
       "file": "admin-images.html",
-      "line": 302,
+      "line": 309,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "admin-images.html",
-      "line": 318,
+      "line": 325,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "admin-images.html",
-      "line": 353,
+      "line": 360,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
@@ -19091,13 +19099,6 @@
       "exists": true
     },
     {
-      "file": "js/ui-quality.js",
-      "line": 36,
-      "raw": "/admin.html",
-      "target": "admin.html",
-      "exists": true
-    },
-    {
       "file": "js/welcome-tutorial-runtime.js",
       "line": 19,
       "raw": "/index.html",
@@ -19691,14 +19692,6 @@
       "references": [
         {
           "file": "404.html",
-          "line": 139
-        },
-        {
-          "file": "404.html",
-          "line": 140
-        },
-        {
-          "file": "404.html",
           "line": 141
         },
         {
@@ -19712,6 +19705,14 @@
         {
           "file": "404.html",
           "line": 144
+        },
+        {
+          "file": "404.html",
+          "line": 145
+        },
+        {
+          "file": "404.html",
+          "line": 146
         },
         {
           "file": "about.html",
@@ -20769,17 +20770,17 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 548,
+            "line": 555,
             "operation": "doc"
           },
           {
             "file": "admin-images.html",
-            "line": 608,
+            "line": 615,
             "operation": "doc"
           },
           {
             "file": "admin-images.html",
-            "line": 630,
+            "line": 637,
             "operation": "doc"
           },
           {
@@ -21019,7 +21020,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 688,
+            "line": 695,
             "operation": "doc"
           },
           {

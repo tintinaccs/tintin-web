@@ -59,10 +59,14 @@
       left: 0; top: 0;
       width: var(--sidebar-w);
       height: 100vh;
+      height: 100dvh;
       background: var(--adm-sidebar);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--admin-color-border) transparent;
       z-index: 200;
       transition: transform .3s ease;
     }
@@ -144,6 +148,8 @@
       align-items: center;
       gap: 12px;
       padding: 11px 24px;
+      min-width: 0;
+      min-height: 44px;
       font-size: 13px;
       font-weight: 600;
       color: var(--adm-sidebar-text);
@@ -163,6 +169,32 @@
       font-weight: 700;
     }
     .adm-nav-icon { width: 20px; display:flex; align-items:center; justify-content:center; }
+
+    .adm-icon-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      min-width: 36px;
+      height: 36px;
+      min-height: 36px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--adm-muted);
+      cursor: pointer;
+      line-height: 1;
+      transition: background .15s ease, color .15s ease;
+    }
+    .adm-icon-close:hover {
+      background: var(--admin-color-table-row-hover);
+      color: var(--adm-text);
+    }
+    .adm-icon-close:focus-visible {
+      outline: 3px solid var(--admin-color-brand);
+      outline-offset: 2px;
+    }
 
     .adm-sidebar button,
     .adm-sidebar a,
@@ -1422,11 +1454,12 @@
     /* ======== RESPONSIVE ======== */
     /* ── TABLET: sidebar compacta siempre visible ── */
     @media (max-width: 900px) {
-      :root { --sidebar-w: 64px; }
+      :root { --sidebar-w: 84px; }
 
       .adm-sidebar {
-        width: 64px;
-        overflow: visible;
+        width: var(--sidebar-w);
+        overflow-y: auto;
+        overflow-x: hidden;
       }
       .adm-sidebar-logo,
       .adm-user-info .adm-user-name,
@@ -1436,20 +1469,34 @@
 
       .adm-user-info {
         justify-content: center;
-        padding: 12px 0;
+        padding: 12px 6px;
       }
+      .adm-nav { padding: 8px 0; }
       .adm-nav-item {
         flex-direction: column;
-        gap: 2px;
-        padding: 10px 0;
-        font-size: 9px;
-        letter-spacing: .04em;
+        gap: 4px;
+        padding: 9px 6px;
+        min-height: 50px;
+        font-size: 8px;
+        line-height: 1.18;
+        letter-spacing: 0;
         text-transform: uppercase;
         align-items: center;
         justify-content: center;
         width: 100%;
+        max-width: 100%;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: normal;
+        hyphens: auto;
       }
-      .adm-nav-icon { font-size: 20px; width: auto; }
+      .adm-nav-icon {
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        font-size: 20px;
+      }
 
       .adm-nav-bottom { padding: 8px 0 16px; }
       .adm-hamburger { display: none; }
@@ -1459,21 +1506,56 @@
 
     /* ── MOBILE: bottom tab bar, sidebar oculta ── */
     @media (max-width: 540px) {
-      :root { --sidebar-w: 0px; }
+      :root { --sidebar-w: 78px; }
 
-      .adm-sidebar { display: none; }
+      .adm-sidebar {
+        display: flex;
+        width: var(--sidebar-w);
+      }
 
       .adm-main {
-        margin-left: 0;
-        padding-bottom: 70px;
+        margin-left: var(--sidebar-w);
+        min-width: 0;
+        padding-bottom: 0;
       }
 
       .adm-mobile-tabs {
-        display: flex !important;
+        display: none !important;
       }
 
-      .adm-content { padding: 12px; }
-      .adm-topbar { padding: 12px 16px; }
+      .adm-content {
+        min-width: 0;
+        padding: 10px;
+      }
+      .adm-content > *,
+      .adm-section,
+      .adm-card,
+      .adm-table-wrap {
+        min-width: 0;
+        max-width: 100%;
+      }
+      .adm-topbar {
+        gap: 6px;
+        padding: 10px;
+      }
+      .adm-topbar-title {
+        min-width: 0;
+        font-size: 15px;
+        overflow-wrap: anywhere;
+      }
+      .adm-topbar-btn {
+        flex: 0 1 auto;
+        max-width: 118px;
+        padding: 8px 10px;
+        font-size: 10px;
+        line-height: 1.15;
+        white-space: normal;
+        text-align: center;
+      }
+      .adm-nav-item {
+        padding-inline: 5px;
+        font-size: 7.5px;
+      }
       .adm-stats { grid-template-columns: 1fr 1fr; }
     }
 

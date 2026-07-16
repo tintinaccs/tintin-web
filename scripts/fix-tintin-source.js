@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const VERSION = 'tintin-20260716-color-scheme-1';
+const VERSION = 'tintin-20260716-diagnostic-fixes-2';
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'functions/node_modules']);
 const LEGACY_VERSIONS = [
   'tintin-20260715-17',

@@ -98,8 +98,8 @@ check('El centro estadistico general esta reservado a Super Admin',
   admin.includes('id="statistics-revenue-trend"') &&
   admin.includes('id="statistics-visit-locations"'));
 check('Pedidos, usuarios, auditoria y correos se actualizan sin F5',
-  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(20000))") &&
-  admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(20000))") &&
+  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000))") &&
+  admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000))") &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
   admin.includes('function startCorreosRealtimeListeners()'));
 check('Las estadisticas combinan pedidos, usuarios, catalogo, visitas y paginas',
@@ -198,7 +198,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-color-scheme-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-diagnostic-fixes-2'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

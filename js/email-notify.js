@@ -232,7 +232,7 @@ if (
   !window.TintinCheckoutEmailBridgeLoading
 ) {
   window.TintinCheckoutEmailBridgeLoading = true;
-  import('./checkout-email-bridge.js?v=tintin-20260716-color-scheme-1').catch(error => {
+  import('./checkout-email-bridge.js?v=tintin-20260716-diagnostic-fixes-2').catch(error => {
     console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
   });
 }
