@@ -64,9 +64,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   styles.includes('width: min(430px, calc(100vw - 36px))') &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './privacy-consent.js'") &&
+  activity.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './privacy-consent.js'") &&
+  analytics.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
   analytics.includes('if (!hasStatisticsConsent()) return;') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
@@ -120,8 +120,8 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
   welcomeRuntime.includes('data?.welcomeTutorialPending === true'));
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v4-unified'") &&
-  welcomeRuntime.includes("from './welcome-config.js'") &&
-  welcomeAdmin.includes("from './welcome-config.js'") &&
+  welcomeRuntime.includes("from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  welcomeAdmin.includes("from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));
@@ -203,7 +203,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-product-page-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-cloudinary-fix-1'"));
 
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);

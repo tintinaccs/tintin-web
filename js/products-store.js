@@ -1,8 +1,8 @@
 // TINTIN — Products Store
 // Loads products from Firestore and feeds the homepage/product grids.
-import { db } from './firebase.js';
-import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js';
-import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection, limit, onSnapshot, query
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';

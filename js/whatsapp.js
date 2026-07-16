@@ -13,7 +13,7 @@
  * sin pisar el teléfono de la clienta), así que admin.html no carga este
  * script.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 function applyWaNumber(rawNumber) {

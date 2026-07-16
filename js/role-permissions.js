@@ -17,11 +17,11 @@
 // que ni siquiera Admin tiene hoy (no estaban en el "sugerido" para Admin del
 // pedido original). Se dejan protegidas y se explica en el reporte final.
 
-import { db } from "./firebase.js";
+import { db } from "./firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { PERMISSIONS } from "./roles.js";
+import { PERMISSIONS } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };
 // Roles que aparecen como COLUMNAS editables en la matriz. Super Admin no

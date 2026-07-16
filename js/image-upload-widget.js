@@ -7,12 +7,12 @@
    real se realiza con firmas temporales de Cloudinary emitidas por Cloudflare.
    ============================================================= */
 
-import { validateImageFile } from './image-processing.js';
+import { validateImageFile } from './image-processing.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './media-library.js';
+} from './media-library.js?v=tintin-20260716-cloudinary-fix-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',
@@ -267,7 +267,13 @@ export function attachImageUploadWidget(container, options = {}) {
   }
 
   async function commitPendingFile() {
-    if (!pendingFile || busy) return;
+    console.debug('[image-upload-widget] confirm clicked', { hasPendingFile: Boolean(pendingFile), busy });
+    if (!pendingFile) {
+      setStatus('Elegí una imagen antes de confirmar.', 'error');
+      return;
+    }
+    if (busy) return;
+    console.debug('[image-upload-widget] pending file', pendingFile.name, pendingFile.size);
     const file = pendingFile;
     const previousUrl = currentUrl;
     let result = null;

@@ -86,7 +86,7 @@ check(
 check(
   'El checkout seguro se carga solo donde corresponde',
   cart.includes("checkoutPath.endsWith('/checkout.html')") &&
-    cart.includes("import('./secure-checkout-order.js?v="),
+    cart.includes("import('./secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1"),
   'El módulo debe arrancar únicamente en checkout.'
 );
 

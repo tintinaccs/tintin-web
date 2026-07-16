@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/page-loader.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-product-page-1" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <style>
     :root {
       /* Esta página no carga admin.css (es autocontenida) pero SÍ participa
@@ -387,12 +387,12 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module">
-import { auth, db } from "./js/firebase.js";
+import { auth, db } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js";
-import { attachImageUploadWidget } from "./js/image-upload-widget.js";
-import { openMediaLibraryPicker, mountMediaLibrarySection } from "./js/admin-media-library-ui.js";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachImageUploadWidget } from "./js/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection } from "./js/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -702,6 +702,6 @@ onAuthStateChanged(auth, async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-product-page-1"></script>
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

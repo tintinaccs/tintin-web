@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/public-shell.js?v=tintin-20260716-product-page-1" defer></script>
+  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -17,18 +17,18 @@
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/checkout.html" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
 <body>
 <h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
@@ -315,7 +315,7 @@
 </div><!-- /ck-body -->
 
 <script type="module">
-import { auth, db } from "./js/firebase.js";
+import { auth, db } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -326,19 +326,19 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260716-product-page-1";
-import { sendOrderNotification } from "./js/email-notify.js";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js";
-import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js";
-import { showBlockedModal } from "./js/blocked-modal.js";
+} from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
+import { sendOrderNotification } from "./js/email-notify.js?v=tintin-20260716-cloudinary-fix-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
+import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/store-gate-core.js";
-import { cleanText } from "./js/security-utils.js";
-import { sanitizeImageUrl } from "./js/image-utils.js";
+} from "./js/store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
+import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
   return {
@@ -618,7 +618,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260716-product-page-1');
+        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1758,8 +1758,8 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-product-page-1"></script>
-<script src="script.js?v=tintin-20260716-product-page-1" defer></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-product-page-1"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script src="script.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

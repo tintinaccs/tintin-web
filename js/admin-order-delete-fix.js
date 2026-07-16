@@ -5,13 +5,13 @@
    Después de eliminar pedido(s), recalcula stats reales desde `orders`.
    ============================================================= */
 
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   readOrderBeforeDelete,
   recalculateOrderOwnerStats,
   recalculateAllUserOrderStats
-} from './order-stats.js';
+} from './order-stats.js?v=tintin-20260716-cloudinary-fix-1';
 
 (function () {
   'use strict';

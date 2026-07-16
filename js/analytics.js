@@ -5,12 +5,12 @@
  * el centro de privacidad. Si se revoca el permiso, se desactiva el envío de
  * nuevos eventos inmediatamente.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './privacy-consent.js';
+} from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
 
 let measurementId = '';
 let configPromise = null;

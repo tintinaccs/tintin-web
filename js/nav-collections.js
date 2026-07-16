@@ -203,7 +203,7 @@ function renderError() {
 
 export function initNavCollections() {
   renderLoading();
-  import('./collections-store.js')
+  import('./collections-store.js?v=tintin-20260716-cloudinary-fix-1')
     .then(({ onCollectionsUpdate }) => {
       onCollectionsUpdate(
         collections => {

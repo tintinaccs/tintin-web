@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc,
@@ -11,12 +11,12 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from './cart-sync.js';
+} from './cart-sync.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from './phone-utils.js';
+} from './phone-utils.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;

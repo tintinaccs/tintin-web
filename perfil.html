@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/public-shell.js?v=tintin-20260716-product-page-1" defer></script>
+  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -17,15 +17,15 @@
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/perfil.html" />
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260716-product-page-1" />
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1" />
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
   <style>
     /* Alias variables para que los estilos de perfil funcionen con styles.css */
     :root {
@@ -260,10 +260,10 @@
 
 
 <!-- Scripts -->
-<script src="script.js?v=tintin-20260716-product-page-1"></script>
+<script src="script.js?v=tintin-20260716-cloudinary-fix-1"></script>
 
 <script type="module">
-import { auth, db } from "./js/firebase.js";
+import { auth, db } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -271,9 +271,9 @@ import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js";
-import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260716-product-page-1";
-import { sanitizeImageUrl } from "./js/image-utils.js";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -495,8 +495,8 @@ async function loadUserOrders(user) {
   }
 }
 </script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260716-product-page-1"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-product-page-1"></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-product-page-1"></script>
+<script type="module" src="js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

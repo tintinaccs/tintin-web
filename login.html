@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260716-product-page-1"></script>
-  <script src="js/public-shell.js?v=tintin-20260716-product-page-1" defer></script>
+  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -17,17 +17,17 @@
   <meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/login.html" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/login.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-product-page-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-product-page-1">
+  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/login.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
 <body>
 
@@ -97,7 +97,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/firebase.js";
+import { auth, db, provider } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   signInWithPopup,
   onAuthStateChanged,
@@ -106,13 +106,13 @@ import {
 import {
   doc, setDoc, getDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getUserRole, SUPER_ADMIN } from "./js/roles.js";
+import { getUserRole, SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   isValidEmailFormat, sendLoginEmailLink, isEmailLinkUrl, completeEmailLinkSignIn,
   ensureUserDocForEmailLogin, checkBlockedEmailLogin, emailLinkErrorMessage
-} from "./js/email-auth.js";
-import { showBlockedModal } from "./js/blocked-modal.js";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js";
+} from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
+import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
 // que llegó por correo, el onAuthStateChanged de más abajo (que corre en
@@ -430,8 +430,8 @@ async function tryCompleteEmailLink() {
 }
 tryCompleteEmailLink();
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-product-page-1"></script>
-<script src="script.js?v=tintin-20260716-product-page-1" defer></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-product-page-1"></script>
+<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script src="script.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

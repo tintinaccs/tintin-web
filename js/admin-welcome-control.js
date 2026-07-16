@@ -5,16 +5,16 @@
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { SUPER_ADMIN } from './roles.js';
-import { getDocsPaginated } from './firestore-pagination.js';
+import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { getDocsPaginated } from './firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from './welcome-config.js';
+} from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 

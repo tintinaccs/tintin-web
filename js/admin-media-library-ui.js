@@ -10,7 +10,7 @@
      "Biblioteca" del panel de Imágenes.
    ============================================================= */
 
-import { onMediaLibraryUpdate, deleteMediaItem } from './media-library.js';
+import { onMediaLibraryUpdate, deleteMediaItem } from './media-library.js?v=tintin-20260716-cloudinary-fix-1';
 
 function ensureStyles() {
   if (document.getElementById('tt-media-library-style')) return;

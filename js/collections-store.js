@@ -11,16 +11,16 @@
  * and a listener failure surfaces as a real error (via the onError
  * callback), never silently replaced by fake data.
  */
-import { db } from './firebase.js';
+import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   limit,
   onSnapshot,
   query
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { cleanText, cleanMultilineText } from './security-utils.js';
-import { sanitizeImageUrl } from './image-utils.js';
-import { resolveCollectionImage } from './image-resolver.js';
+import { cleanText, cleanMultilineText } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { resolveCollectionImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
 
 /**
  * Normalize a raw Firestore `collections/{slug}` doc into the canonical

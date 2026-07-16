@@ -8,6 +8,7 @@ const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
 
 const TRUSTED_CROSS_ORIGINS = new Set([
+  'https://tintinaccesorios.pages.dev',
   'https://tintinaccs.github.io',
   'https://tintinaccesorios.netlify.app'
 ]);

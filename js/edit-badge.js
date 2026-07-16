@@ -6,10 +6,10 @@
    marca después de cargar.
    ============================================================= */
 
-import { auth } from './firebase.js';
+import { auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { SUPER_ADMIN, getUserRole } from './roles.js';
-import { loadRolePermissions, canDo } from './role-permissions.js';
+import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { loadRolePermissions, canDo } from './role-permissions.js?v=tintin-20260716-cloudinary-fix-1';
 
 const BADGE_Z = 1250;
 const tracked = new Map();
