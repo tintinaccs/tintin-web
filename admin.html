@@ -17,6 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260715-16">
   <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260715-16">
   <link rel="stylesheet" href="css/admin.css?v=tintin-20260715-16">
   <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260715-16">
@@ -102,6 +104,9 @@
     <button type="button" class="adm-nav-item" data-section="permisos" id="nav-permisos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><path d="M12 15v2"/></svg></span> Roles y Permisos
     </button>
+    <button type="button" class="adm-nav-item" data-section="apariencia" id="nav-apariencia">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 100 20 3 3 0 003-3 2 2 0 012-2h1a5 5 0 000-10h-1a2 2 0 01-2-2 3 3 0 00-3-3z"/></svg></span> Apariencia
+    </button>
   </nav>
 
   <div class="adm-nav-bottom">
@@ -131,6 +136,7 @@
   <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
   <button type="button" class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
   <button type="button" class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
+  <button type="button" class="adm-mobile-tab" data-section="apariencia" id="mtab-apariencia"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 100 20 3 3 0 003-3 2 2 0 012-2h1a5 5 0 000-10h-1a2 2 0 01-2-2 3 3 0 00-3-3z"/></svg></span>Apariencia</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
   <button type="button" class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
 </nav>
@@ -1508,6 +1514,52 @@
       </div>
     </div>
 
+    <!-- ===================== APARIENCIA Y ESQUEMAS DE COLOR ===================== -->
+    <div class="adm-section" id="section-apariencia">
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head">
+          <div class="adm-card-title">🎨 Apariencia y esquemas de colores</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="apar-toolbar"></div>
+        </div>
+        <div class="adm-card-body">
+          <div class="correos-tabs" id="apar-scope-tabs">
+            <button type="button" class="correos-tab-btn active" data-apar-scope="global">Esquema global de la plataforma</button>
+            <button type="button" class="correos-tab-btn" data-apar-scope="admin">Esquema de Super Admin</button>
+          </div>
+
+          <div id="apar-scheme-bar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0;padding:12px;background:var(--adm-bg);border-radius:12px;border:1px solid var(--adm-border)"></div>
+
+          <div style="display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(260px,1fr);gap:20px;align-items:start">
+            <div>
+              <div style="margin-bottom:12px">
+                <input type="text" class="adm-input" id="apar-search" placeholder="🔍 Buscar configuración (fondo, texto, botón, hover, WhatsApp...)">
+              </div>
+              <div id="apar-categories"></div>
+            </div>
+            <div style="position:sticky;top:12px">
+              <div class="adm-card" style="margin-bottom:16px">
+                <div class="adm-card-head"><div class="adm-card-title" style="font-size:13px">Vista previa en tiempo real</div></div>
+                <div class="adm-card-body">
+                  <div id="apar-preview-devices" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+                  <div style="overflow:auto;border:1px solid var(--adm-border);border-radius:10px;background:#ddd;padding:12px;display:flex;justify-content:center">
+                    <iframe id="apar-preview-frame" style="border:0;width:960px;height:520px;background:#fff;border-radius:8px;transition:width .2s ease" title="Vista previa"></iframe>
+                  </div>
+                </div>
+              </div>
+              <div class="adm-card" style="margin-bottom:16px">
+                <div class="adm-card-head"><div class="adm-card-title" style="font-size:13px">Verificación de contraste (WCAG)</div></div>
+                <div class="adm-card-body" id="apar-contrast-list" style="font-size:12.5px"></div>
+              </div>
+              <div class="adm-card">
+                <div class="adm-card-head"><div class="adm-card-title" style="font-size:13px">Historial de cambios</div></div>
+                <div class="adm-card-body" id="apar-history-list" style="font-size:12px;max-height:260px;overflow:auto"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ===================== IMPORT / EXPORT ===================== -->
     <div class="adm-section" id="section-importar">
       <div class="adm-card" style="margin-bottom:20px">
@@ -1680,6 +1732,13 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 import { normalizeCollectionDoc } from "./js/collections-store.js";
 import { sanitizeImageUrl } from "./js/image-utils.js";
 import { initSiteDiagnostics } from "./js/admin-site-diagnostics.js?v=tintin-20260715-16";
+import {
+  GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
+  GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
+  findTokenByKey, buildDefaultTokenMap
+} from "./js/color-scheme-catalog.js";
+import { contrastRatio, passesWcag } from "./js/color-contrast-utils.js";
+import { attachColorPicker } from "./js/color-picker-widget.js";
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2019,7 +2078,8 @@ const SECTION_LABELS = {
   correos: 'Correos',
   configuracion: 'Configuración',
   importar: 'Import / Export',
-  contenido: 'Contenido del Sitio'
+  contenido: 'Contenido del Sitio',
+  apariencia: 'Apariencia y esquemas de colores'
 };
 
 // Secciones sensibles y el permiso que hace falta para entrar — una sola
@@ -2044,6 +2104,9 @@ const SECTION_PERMISSION = {
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
   correos:       'manageSettings',
+  // Apariencia: cambia el esquema de colores de TODA la plataforma (o del
+  // panel) — mismo criterio de sensibilidad que Configuración/Correos.
+  apariencia:    'manageSettings',
   // Roles y Permisos: la sección MÁS sensible del panel — poder editarla
   // equivale a poder otorgarse cualquier otro permiso. manageSettings ya la
   // deja fuera del alcance de admin/agent/viewer (solo superadmin la tiene),
@@ -2089,6 +2152,7 @@ function switchSection(target) {
   if (target === 'importar') loadImportar();
   if (target === 'contenido') loadContenido();
   if (target === 'permisos') loadPermisosSection();
+  if (target === 'apariencia') loadApariencia();
 }
 
 navItems.forEach(btn => {
@@ -8348,6 +8412,608 @@ document.addEventListener('change', e => {
 ttSyncSwitchAria();
 setInterval(ttSyncSwitchAria, 1200);
 
+// ══════════════════════════════════════════════════════════════
+// APARIENCIA Y ESQUEMAS DE COLOR (Super Admin, exclusivo — mismo
+// criterio de acceso que Configuración/Correos, ver SECTION_PERMISSION)
+// ══════════════════════════════════════════════════════════════
+const APAR_CATALOG = {
+  global: { tokens: GLOBAL_TOKENS, categories: GLOBAL_CATEGORIES, pairs: GLOBAL_CONTRAST_PAIRS, defaultSchemeId: 'default-global' },
+  admin:  { tokens: ADMIN_TOKENS,  categories: ADMIN_CATEGORIES,  pairs: ADMIN_CONTRAST_PAIRS,  defaultSchemeId: 'default-admin' },
+};
+const APAR_PREVIEW_ROLES = {
+  global: { bgPage:'bg-page', bgSurface:'bg-surface', textPrimary:'text-primary', textSecondary:'text-secondary', textTertiary:'text-tertiary', textTitle:'text-title',
+    btnPrimaryBg:'btn-primary-bg', btnPrimaryText:'btn-primary-text', btnSecondaryBg:'btn-secondary-bg', btnSecondaryText:'btn-secondary-text', btnSecondaryBorder:'btn-secondary-border',
+    fieldBg:'field-bg', fieldBorder:'field-border', fieldText:'field-text', cardBorder:'card-border',
+    tableHeaderBg:'table-header-bg', tableHeaderText:'table-header-text', tableBorder:'table-border',
+    successBg:'state-success-bg', successText:'state-success-text', errorBg:'state-error-bg', errorText:'state-error-text', warningBg:'state-warning-bg', warningText:'state-warning-text',
+    link:'text-link', badgeBg:'badge-bg', badgeText:'badge-text', border:'border-primary' },
+  admin: { bgPage:'bg-page', bgSurface:'bg-surface', textPrimary:'text-primary', textSecondary:'text-secondary', textTertiary:'text-tertiary', textTitle:'text-title',
+    btnPrimaryBg:'btn-primary-bg', btnPrimaryText:'btn-primary-text', btnSecondaryBg:'bg-surface', btnSecondaryText:'btn-outline-text', btnSecondaryBorder:'btn-outline-text',
+    fieldBg:'field-bg', fieldBorder:'field-border', fieldText:'text-primary', cardBorder:'border',
+    tableHeaderBg:'table-header-bg', tableHeaderText:'text-title', tableBorder:'border',
+    successBg:'state-success-bg', successText:'state-success-text', errorBg:'state-error-bg', errorText:'state-error-text', warningBg:'state-warning-bg', warningText:'state-warning-text',
+    link:'brand', badgeBg:'badge-bg', badgeText:'badge-text', border:'border' },
+};
+
+let aparScope = 'global';
+let aparSchemes = { global: [], admin: [] };
+let aparEditingSchemeId = { global: null, admin: null };
+let aparActiveSchemeId = { global: null, admin: null };
+let aparDraft = { global: {}, admin: {} };
+let aparDeviceOverrideEnabled = { global: false };
+let aparDeviceOverrides = { global: {} };
+let aparSearchTerm = '';
+let aparPreviewDevice = 'desktop';
+let aparDeviceTab = 'desktopLg';
+let aparBootstrapped = false;
+
+function aparCatalog() { return APAR_CATALOG[aparScope]; }
+function aparDefaultMap() { return buildDefaultTokenMap(aparCatalog().tokens); }
+function aparResolve(key, overrideMap) {
+  if (overrideMap && overrideMap[key] != null && overrideMap[key] !== '') return overrideMap[key];
+  const d = aparDraft[aparScope];
+  if (d && d[key] != null && d[key] !== '') return d[key];
+  const tok = findTokenByKey(aparCatalog().tokens, key);
+  return tok ? tok.default : '#000000';
+}
+
+async function aparEnsureBootstrap() {
+  if (aparBootstrapped) return;
+  aparBootstrapped = true;
+  try {
+    const appearanceSnap = await getDoc(doc(db, 'settings', 'appearance'));
+    let cfg = appearanceSnap.exists() ? appearanceSnap.data() : {};
+    let changed = false;
+    if (!cfg.activeGlobalSchemeId) { cfg = { ...cfg, activeGlobalSchemeId: 'default-global' }; changed = true; }
+    if (!cfg.activeAdminSchemeId) { cfg = { ...cfg, activeAdminSchemeId: 'default-admin' }; changed = true; }
+    for (const scope of ['global', 'admin']) {
+      const id = APAR_CATALOG[scope].defaultSchemeId;
+      const schemeSnap = await getDoc(doc(db, 'colorSchemes', id));
+      if (!schemeSnap.exists()) {
+        const defaults = buildDefaultTokenMap(APAR_CATALOG[scope].tokens);
+        await setDoc(doc(db, 'colorSchemes', id), {
+          scope, name: 'Predeterminado', isDefault: true, active: true,
+          tokens: defaults, draftTokens: defaults,
+          deviceOverrideEnabled: false, draftDeviceOverrideEnabled: false,
+          deviceOverrides: {}, draftDeviceOverrides: {},
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
+        });
+      }
+    }
+    if (changed) await setDoc(doc(db, 'settings', 'appearance'), cfg, { merge: true });
+  } catch (e) { console.error('[apariencia] bootstrap error:', e); }
+}
+
+async function loadApariencia() {
+  await aparEnsureBootstrap();
+  await aparLoadSchemesList('global');
+  await aparLoadSchemesList('admin');
+  try {
+    const appearanceSnap = await getDoc(doc(db, 'settings', 'appearance'));
+    const cfg = appearanceSnap.exists() ? appearanceSnap.data() : {};
+    aparActiveSchemeId.global = cfg.activeGlobalSchemeId || 'default-global';
+    aparActiveSchemeId.admin = cfg.activeAdminSchemeId || 'default-admin';
+  } catch (e) {
+    console.error('[apariencia] no se pudo leer settings/appearance:', e);
+    aparActiveSchemeId.global = aparActiveSchemeId.global || 'default-global';
+    aparActiveSchemeId.admin = aparActiveSchemeId.admin || 'default-admin';
+  }
+  aparEditingSchemeId.global = aparEditingSchemeId.global || aparActiveSchemeId.global;
+  aparEditingSchemeId.admin = aparEditingSchemeId.admin || aparActiveSchemeId.admin;
+  await aparLoadSchemeIntoDraft('global', aparEditingSchemeId.global);
+  await aparLoadSchemeIntoDraft('admin', aparEditingSchemeId.admin);
+  aparRenderAll();
+
+  document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      aparScope = btn.dataset.aparScope;
+      document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      aparRenderAll();
+    };
+  });
+  const searchEl = document.getElementById('apar-search');
+  searchEl.value = aparSearchTerm;
+  searchEl.oninput = () => { aparSearchTerm = searchEl.value.trim().toLowerCase(); aparRenderCategories(); };
+}
+
+async function aparLoadSchemesList(scope) {
+  try {
+    const q = query(collection(db, 'colorSchemes'), where('scope', '==', scope));
+    const snap = await getDocs(q);
+    aparSchemes[scope] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) { console.error('[apariencia] no se pudo listar esquemas', scope, e); aparSchemes[scope] = []; }
+}
+
+async function aparLoadSchemeIntoDraft(scope, schemeId) {
+  try {
+    const snap = await getDoc(doc(db, 'colorSchemes', schemeId));
+    const data = snap.exists() ? snap.data() : {};
+    aparDraft[scope] = { ...(data.draftTokens || data.tokens || {}) };
+    if (scope === 'global') {
+      aparDeviceOverrideEnabled.global = !!data.draftDeviceOverrideEnabled;
+      aparDeviceOverrides.global = data.draftDeviceOverrides || {};
+    }
+  } catch (e) { console.error('[apariencia] no se pudo cargar esquema', schemeId, e); aparDraft[scope] = {}; }
+}
+
+function aparRenderAll() {
+  aparRenderSchemeBar();
+  aparRenderCategories();
+  aparRenderPreview();
+  aparRenderContrast();
+  aparRenderHistory();
+  aparRenderToolbar();
+}
+
+function aparRenderToolbar() {
+  const el = document.getElementById('apar-toolbar');
+  el.innerHTML = `
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-discard">Descartar cambios</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-save-draft">Guardar borrador</button>
+    <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="apar-btn-publish">Publicar cambios</button>
+  `;
+  document.getElementById('apar-btn-save-draft').onclick = aparSaveDraft;
+  document.getElementById('apar-btn-publish').onclick = aparPublish;
+  document.getElementById('apar-btn-discard').onclick = aparDiscard;
+}
+
+function aparRenderSchemeBar() {
+  const el = document.getElementById('apar-scheme-bar');
+  const list = aparSchemes[aparScope] || [];
+  const editingId = aparEditingSchemeId[aparScope];
+  const activeId = aparActiveSchemeId[aparScope];
+  const opts = list.map(s => `<option value="${s.id}" ${s.id === editingId ? 'selected' : ''}>${escapeHtmlAdmin(s.name)}${s.id === activeId ? ' (activo)' : ''}</option>`).join('');
+  el.innerHTML = `
+    <label style="font-size:12px;font-weight:700;color:var(--adm-muted)">Esquema:</label>
+    <select class="adm-select" id="apar-scheme-select" style="max-width:220px">${opts}</select>
+    ${editingId === activeId ? '<span class="tt-store-state-pill">ACTIVO</span>' : `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="apar-btn-activate">Activar este esquema</button>`}
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-new">+ Nuevo</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-duplicate">Duplicar</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-rename">Renombrar</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-export">Exportar</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-import">Importar</button>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-reset-all">Restablecer</button>
+    ${list.length > 1 && !list.find(s => s.id === editingId)?.isDefault ? '<button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="apar-btn-delete">Eliminar</button>' : ''}
+  `;
+  document.getElementById('apar-scheme-select').onchange = async e => {
+    aparEditingSchemeId[aparScope] = e.target.value;
+    await aparLoadSchemeIntoDraft(aparScope, e.target.value);
+    aparRenderAll();
+  };
+  const btnActivate = document.getElementById('apar-btn-activate');
+  if (btnActivate) btnActivate.onclick = aparActivateScheme;
+  document.getElementById('apar-btn-new').onclick = aparCreateScheme;
+  document.getElementById('apar-btn-duplicate').onclick = aparDuplicateScheme;
+  document.getElementById('apar-btn-rename').onclick = aparRenameScheme;
+  document.getElementById('apar-btn-export').onclick = aparExportScheme;
+  document.getElementById('apar-btn-import').onclick = aparImportScheme;
+  document.getElementById('apar-btn-reset-all').onclick = aparResetAll;
+  const btnDelete = document.getElementById('apar-btn-delete');
+  if (btnDelete) btnDelete.onclick = aparDeleteScheme;
+}
+
+function aparRenderCategories() {
+  const container = document.getElementById('apar-categories');
+  const { tokens, categories } = aparCatalog();
+  const term = aparSearchTerm;
+  container.innerHTML = '';
+
+  if (aparScope === 'global') {
+    const devRow = document.createElement('div');
+    devRow.className = 'adm-card';
+    devRow.style.marginBottom = '12px';
+    devRow.innerHTML = `
+      <div class="adm-card-body" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label class="adm-toggle"><input type="checkbox" id="apar-device-toggle" ${aparDeviceOverrideEnabled.global ? 'checked' : ''}><span></span></label>
+        <span style="font-size:13px;font-weight:700">Personalizar colores por dispositivo</span>
+        <span style="font-size:12px;color:var(--adm-muted)">Desactivado: todas las pantallas usan el esquema global. Activado: podés sobrescribir valores puntuales por resolución (lo no sobrescrito hereda del esquema general).</span>
+      </div>
+      <div id="apar-device-tabs" style="display:${aparDeviceOverrideEnabled.global ? 'flex' : 'none'};gap:6px;flex-wrap:wrap;padding:0 16px 14px"></div>
+    `;
+    container.appendChild(devRow);
+    document.getElementById('apar-device-toggle').onchange = e => {
+      aparDeviceOverrideEnabled.global = e.target.checked;
+      aparRenderCategories();
+    };
+    if (aparDeviceOverrideEnabled.global) {
+      const tabsEl = devRow.querySelector('#apar-device-tabs');
+      tabsEl.style.display = 'flex';
+      tabsEl.innerHTML = DEVICE_BREAKPOINTS.map(bp =>
+        `<button type="button" class="adm-btn ${bp.key === aparDeviceTab ? 'adm-btn-primary' : 'adm-btn-outline'} adm-btn-sm" data-dev="${bp.key}">${bp.label}</button>`
+      ).join('');
+      tabsEl.querySelectorAll('[data-dev]').forEach(btn => {
+        btn.onclick = () => { aparDeviceTab = btn.dataset.dev; aparRenderCategories(); };
+      });
+    }
+  }
+
+  const overrideMap = (aparScope === 'global' && aparDeviceOverrideEnabled.global)
+    ? (aparDeviceOverrides.global[aparDeviceTab] || (aparDeviceOverrides.global[aparDeviceTab] = {}))
+    : null;
+  const editingOverride = overrideMap !== null;
+
+  categories.forEach(cat => {
+    const catTokens = tokens.filter(t => t.category === cat.key && (!term ||
+      t.label.toLowerCase().includes(term) || t.key.toLowerCase().includes(term) || cat.label.toLowerCase().includes(term)));
+    if (!catTokens.length) return;
+    const details = document.createElement('details');
+    details.open = !!term;
+    details.className = 'adm-card';
+    details.style.marginBottom = '10px';
+    const summary = document.createElement('summary');
+    summary.style.cssText = 'cursor:pointer;padding:12px 16px;font-weight:800;font-size:13px;color:var(--adm-text);display:flex;justify-content:space-between;align-items:center';
+    summary.innerHTML = `<span>${cat.label} <span style="font-weight:400;color:var(--adm-muted)">(${catTokens.length})</span></span><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-reset-cat="${cat.key}" style="font-size:10px">Restablecer categoría</button>`;
+    details.appendChild(summary);
+    const body = document.createElement('div');
+    body.style.cssText = 'padding:4px 16px 14px';
+    catTokens.forEach(tok => body.appendChild(aparBuildTokenRow(tok, overrideMap, editingOverride)));
+    details.appendChild(body);
+    container.appendChild(details);
+    summary.querySelector('[data-reset-cat]').addEventListener('click', ev => {
+      ev.preventDefault(); ev.stopPropagation();
+      if (!confirm(`¿Restablecer todos los colores de "${cat.label}" a su valor por defecto?`)) return;
+      catTokens.forEach(t => {
+        if (editingOverride) delete overrideMap[t.key]; else aparDraft[aparScope][t.key] = t.default;
+      });
+      aparRenderCategories(); aparRenderPreview(); aparRenderContrast();
+    });
+  });
+
+  if (!container.children.length) {
+    container.innerHTML += '<p style="font-size:13px;color:var(--adm-muted);padding:12px">No se encontraron configuraciones para esa búsqueda.</p>';
+  }
+}
+
+function aparBuildTokenRow(tok, overrideMap, editingOverride) {
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--adm-border)';
+  const isInherited = editingOverride && (overrideMap[tok.key] == null);
+  const currentVal = editingOverride ? (overrideMap[tok.key] != null ? overrideMap[tok.key] : aparResolve(tok.key)) : aparResolve(tok.key);
+  row.innerHTML = `
+    <button type="button" class="tcp-swatch" data-tcp-swatch="1" style="background:${currentVal}"></button>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:12.5px;font-weight:600;color:var(--adm-text)">${tok.label}${isInherited ? ' <span style=\"font-weight:400;color:var(--adm-muted);font-size:10.5px\">(heredado)</span>' : ''}</div>
+      <div style="font-size:10.5px;color:var(--adm-muted);font-family:monospace">${tok.cssVar}</div>
+    </div>
+    <span style="font-size:11px;color:var(--adm-muted);font-family:monospace;min-width:64px;text-align:right" data-val-label>${currentVal}</span>
+    <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-reset title="Restablecer">↺</button>
+  `;
+  const swatch = row.querySelector('[data-tcp-swatch]');
+  const valLabel = row.querySelector('[data-val-label]');
+  attachColorPicker(swatch, {
+    value: currentVal,
+    onChange(v) {
+      if (editingOverride) overrideMap[tok.key] = v; else aparDraft[aparScope][tok.key] = v;
+      valLabel.textContent = v;
+      aparRenderPreview(); aparRenderContrast();
+    },
+    onReset() {
+      if (editingOverride) delete overrideMap[tok.key]; else aparDraft[aparScope][tok.key] = tok.default;
+      const v = editingOverride ? aparResolve(tok.key) : tok.default;
+      valLabel.textContent = v;
+      aparRenderPreview(); aparRenderContrast();
+      return v;
+    },
+  });
+  row.querySelector('[data-reset]').addEventListener('click', () => {
+    if (editingOverride) delete overrideMap[tok.key]; else aparDraft[aparScope][tok.key] = tok.default;
+    aparRenderCategories(); aparRenderPreview(); aparRenderContrast();
+  });
+  return row;
+}
+
+function aparRenderPreview() {
+  const devices = [
+    { key: 'desktop', label: 'Desktop', w: 960 },
+    { key: 'laptop', label: 'Laptop', w: 760 },
+    { key: 'tablet', label: 'Tablet', w: 560 },
+    { key: 'mobile', label: 'Mobile', w: 360 },
+    { key: 'miniMobile', label: 'Mini', w: 280 },
+  ];
+  const devEl = document.getElementById('apar-preview-devices');
+  devEl.innerHTML = devices.map(d => `<button type="button" class="adm-btn ${d.key === aparPreviewDevice ? 'adm-btn-primary' : 'adm-btn-outline'} adm-btn-sm" data-pdev="${d.key}">${d.label}</button>`).join('');
+  devEl.querySelectorAll('[data-pdev]').forEach(btn => { btn.onclick = () => { aparPreviewDevice = btn.dataset.pdev; aparRenderPreview(); }; });
+  const frame = document.getElementById('apar-preview-frame');
+  const dev = devices.find(d => d.key === aparPreviewDevice) || devices[0];
+  frame.style.width = dev.w + 'px';
+
+  const R = APAR_PREVIEW_ROLES[aparScope];
+  const c = key => aparResolve(R[key]);
+  frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><style>
+    *{box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{margin:0;padding:18px;background:${c('bgPage')};color:${c('textPrimary')}}
+    h2{font-family:'Playfair Display',serif;color:${c('textTitle')};margin:0 0 4px}
+    p.sub{color:${c('textSecondary')};font-size:13px;margin:0 0 16px}
+    .card{background:${c('bgSurface')};border:1px solid ${c('cardBorder')};border-radius:12px;padding:14px;margin-bottom:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .btn{padding:9px 16px;border-radius:8px;font-size:12.5px;font-weight:700;border:none;cursor:pointer}
+    .btn-p{background:${c('btnPrimaryBg')};color:${c('btnPrimaryText')}}
+    .btn-s{background:${c('btnSecondaryBg')};color:${c('btnSecondaryText')};border:2px solid ${c('btnSecondaryBorder')}}
+    input{padding:8px 10px;border-radius:8px;border:1px solid ${c('fieldBorder')};background:${c('fieldBg')};color:${c('fieldText')};font-size:12.5px;width:100%;margin-bottom:10px}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+    th{background:${c('tableHeaderBg')};color:${c('tableHeaderText')};padding:7px;text-align:left;border:1px solid ${c('tableBorder')}}
+    td{padding:7px;border:1px solid ${c('tableBorder')}}
+    .alert{padding:10px 12px;border-radius:8px;font-size:12.5px;font-weight:600;margin-bottom:8px}
+    .a-success{background:${c('successBg')};color:${c('successText')}}
+    .a-error{background:${c('errorBg')};color:${c('errorText')}}
+    .a-warning{background:${c('warningBg')};color:${c('warningText')}}
+    a{color:${c('link')}}
+    .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:800;background:${c('badgeBg')};color:${c('badgeText')}}
+    .menu{display:flex;gap:14px;padding:10px 14px;border:1px solid ${c('border')};border-radius:10px;margin-bottom:12px;font-size:12.5px}
+  </style></head><body>
+    <h2>Título de ejemplo</h2>
+    <p class="sub">Texto secundario de ejemplo — así se ve la tipografía.</p>
+    <div class="menu"><a href="#">Inicio</a><a href="#">Catálogo</a><a href="#">Contacto</a></div>
+    <div class="row">
+      <button class="btn btn-p">Botón principal</button>
+      <button class="btn btn-s">Botón secundario</button>
+      <span class="badge">NUEVO</span>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 8px;font-size:13px">Tarjeta de ejemplo con texto principal y <a href="#">un enlace</a>.</p>
+      <input placeholder="Campo de ejemplo">
+    </div>
+    <table><tr><th>Producto</th><th>Precio</th></tr><tr><td>Reloj Ámbar</td><td>Gs. 85.000</td></tr></table>
+    <div class="alert a-success">Estado de éxito</div>
+    <div class="alert a-error">Estado de error</div>
+    <div class="alert a-warning">Estado de advertencia</div>
+  </body></html>`;
+}
+
+function aparRenderContrast() {
+  const el = document.getElementById('apar-contrast-list');
+  const { pairs } = aparCatalog();
+  el.innerHTML = pairs.map(p => {
+    const fg = aparResolve(p.fg), bg = aparResolve(p.bg);
+    const ratio = contrastRatio(fg, bg);
+    const ok = passesWcag(ratio, p.level);
+    const min = p.level === 'normal' ? '4.5' : '3';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--adm-border)">
+      <span>${p.label}</span>
+      <span style="font-weight:700;color:${ok ? 'var(--admin-color-success-text)' : 'var(--admin-color-error-text)'}">${ratio ? ratio.toFixed(2) : '?'}:1 ${ok ? '✓' : `✗ (mín ${min}:1)`}</span>
+    </div>`;
+  }).join('');
+}
+
+async function aparRenderHistory() {
+  const el = document.getElementById('apar-history-list');
+  el.innerHTML = '<p style="color:var(--adm-muted)">Cargando...</p>';
+  try {
+    const schemeId = aparEditingSchemeId[aparScope];
+    const snap = await getDocs(query(collection(db, 'colorSchemes', schemeId, 'history'), orderBy('at', 'desc'), limit(10)));
+    if (snap.empty) { el.innerHTML = '<p style="color:var(--adm-muted)">Sin cambios registrados todavía.</p>'; return; }
+    el.innerHTML = snap.docs.map(d => {
+      const h = d.data();
+      const when = h.at?.toDate ? h.at.toDate().toLocaleString('es-PY') : '';
+      const actionLabel = { publish: 'Publicado', restore: 'Restaurado', 'save-draft': 'Borrador guardado', create: 'Creado', activate: 'Activado' }[h.action] || h.action;
+      return `<div style="padding:7px 0;border-bottom:1px solid var(--adm-border)">
+        <div style="font-weight:700">${actionLabel}</div>
+        <div style="color:var(--adm-muted)">${when} — ${escapeHtmlAdmin(h.byEmail || '')}</div>
+        ${h.action === 'publish' ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-restore="${d.id}" style="margin-top:4px;font-size:10px">Restaurar esta versión</button>` : ''}
+      </div>`;
+    }).join('');
+    el.querySelectorAll('[data-restore]').forEach(btn => {
+      btn.onclick = () => aparRestoreVersion(btn.dataset.restore);
+    });
+  } catch (e) { console.error('[apariencia] historial error', e); el.innerHTML = '<p style="color:var(--adm-muted)">No se pudo cargar el historial.</p>'; }
+}
+
+async function aparLogHistory(schemeId, action, before, after) {
+  try {
+    await addDoc(collection(db, 'colorSchemes', schemeId, 'history'), {
+      at: serverTimestamp(), byUid: currentUser?.uid || '', byEmail: currentUser?.email || '',
+      action, before: before || {}, after: after || {},
+    });
+  } catch (e) { console.error('[apariencia] no se pudo registrar historial:', e); }
+}
+
+async function aparSaveDraft() {
+  const schemeId = aparEditingSchemeId[aparScope];
+  const patch = { draftTokens: aparDraft[aparScope], updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' };
+  if (aparScope === 'global') {
+    patch.draftDeviceOverrideEnabled = aparDeviceOverrideEnabled.global;
+    patch.draftDeviceOverrides = aparDeviceOverrides.global;
+  }
+  try {
+    await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
+    await aparLogHistory(schemeId, 'save-draft', {}, aparDraft[aparScope]);
+    toast('Borrador guardado');
+    aparRenderHistory();
+  } catch (e) { toast('Error al guardar borrador: ' + e.message); }
+}
+
+async function aparPublish() {
+  const { pairs } = aparCatalog();
+  const failing = pairs.filter(p => {
+    const ratio = contrastRatio(aparResolve(p.fg), aparResolve(p.bg));
+    return !passesWcag(ratio, p.level);
+  });
+  if (failing.length && !confirm(`${failing.length} combinación(es) no cumplen el contraste mínimo WCAG (${failing.map(f => f.label).join(', ')}). ¿Publicar de todas formas?`)) return;
+  const schemeId = aparEditingSchemeId[aparScope];
+  try {
+    const before = (await getDoc(doc(db, 'colorSchemes', schemeId))).data()?.tokens || {};
+    const patch = {
+      tokens: aparDraft[aparScope], draftTokens: aparDraft[aparScope],
+      updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
+      publishedAt: serverTimestamp(), publishedBy: currentUser?.email || '',
+    };
+    if (aparScope === 'global') {
+      patch.deviceOverrideEnabled = aparDeviceOverrideEnabled.global;
+      patch.deviceOverrides = aparDeviceOverrides.global;
+      patch.draftDeviceOverrideEnabled = aparDeviceOverrideEnabled.global;
+      patch.draftDeviceOverrides = aparDeviceOverrides.global;
+    }
+    await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
+    await aparLogHistory(schemeId, 'publish', before, aparDraft[aparScope]);
+    toast('Cambios publicados — ya están en vivo en todo el sitio');
+    aparRenderHistory();
+  } catch (e) { toast('Error al publicar: ' + e.message); }
+}
+
+async function aparDiscard() {
+  if (!confirm('¿Descartar los cambios sin publicar y volver a la última versión publicada?')) return;
+  try {
+    const snap = await getDoc(doc(db, 'colorSchemes', aparEditingSchemeId[aparScope]));
+    const data = snap.exists() ? snap.data() : {};
+    aparDraft[aparScope] = { ...(data.tokens || {}) };
+    if (aparScope === 'global') { aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled; aparDeviceOverrides.global = data.deviceOverrides || {}; }
+  } catch (e) { toast('Error al descartar: ' + e.message); return; }
+  aparRenderAll();
+  toast('Cambios descartados');
+}
+
+function aparResetAll() {
+  if (!confirm('¿Restablecer TODO el esquema a los valores predeterminados del sistema? Esto no se publica hasta que apretés "Publicar".')) return;
+  aparDraft[aparScope] = aparDefaultMap();
+  if (aparScope === 'global') { aparDeviceOverrideEnabled.global = false; aparDeviceOverrides.global = {}; }
+  aparRenderAll();
+}
+
+async function aparRestoreVersion(entryId) {
+  if (!confirm('¿Restaurar esta versión anterior como borrador? Vas a poder revisarla antes de publicar.')) return;
+  try {
+    const snap = await getDoc(doc(db, 'colorSchemes', aparEditingSchemeId[aparScope], 'history', entryId));
+    if (!snap.exists()) return;
+    const h = snap.data();
+    aparDraft[aparScope] = { ...(h.after || h.before || {}) };
+    aparRenderAll();
+    toast('Versión cargada en el borrador — revisá y publicá si está bien');
+  } catch (e) { toast('Error al restaurar: ' + e.message); }
+}
+
+async function aparActivateScheme() {
+  const schemeId = aparEditingSchemeId[aparScope];
+  const field = aparScope === 'global' ? 'activeGlobalSchemeId' : 'activeAdminSchemeId';
+  try {
+    await setDoc(doc(db, 'settings', 'appearance'), { [field]: schemeId }, { merge: true });
+    await aparLogHistory(schemeId, 'activate', {}, {});
+    aparActiveSchemeId[aparScope] = schemeId;
+    toast('Esquema activado');
+    aparRenderSchemeBar();
+  } catch (e) { toast('Error al activar esquema: ' + e.message); }
+}
+
+async function aparCreateScheme() {
+  const name = prompt('Nombre del nuevo esquema:');
+  if (!name || !name.trim()) return;
+  const defaults = aparDefaultMap();
+  try {
+    const ref = await addDoc(collection(db, 'colorSchemes'), {
+      scope: aparScope, name: name.trim(), isDefault: false, active: false,
+      tokens: defaults, draftTokens: defaults,
+      deviceOverrideEnabled: false, draftDeviceOverrideEnabled: false, deviceOverrides: {}, draftDeviceOverrides: {},
+      createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
+    });
+    await aparLoadSchemesList(aparScope);
+    aparEditingSchemeId[aparScope] = ref.id;
+    await aparLoadSchemeIntoDraft(aparScope, ref.id);
+    aparRenderAll();
+    toast('Esquema creado');
+  } catch (e) { toast('Error al crear esquema: ' + e.message); }
+}
+
+async function aparDuplicateScheme() {
+  const src = aparSchemes[aparScope].find(s => s.id === aparEditingSchemeId[aparScope]);
+  const name = prompt('Nombre para la copia:', (src?.name || 'Esquema') + ' (copia)');
+  if (!name || !name.trim()) return;
+  try {
+    const ref = await addDoc(collection(db, 'colorSchemes'), {
+      scope: aparScope, name: name.trim(), isDefault: false, active: false,
+      tokens: { ...aparDraft[aparScope] }, draftTokens: { ...aparDraft[aparScope] },
+      deviceOverrideEnabled: aparScope === 'global' ? aparDeviceOverrideEnabled.global : false,
+      draftDeviceOverrideEnabled: aparScope === 'global' ? aparDeviceOverrideEnabled.global : false,
+      deviceOverrides: aparScope === 'global' ? aparDeviceOverrides.global : {},
+      draftDeviceOverrides: aparScope === 'global' ? aparDeviceOverrides.global : {},
+      createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
+    });
+    await aparLoadSchemesList(aparScope);
+    aparEditingSchemeId[aparScope] = ref.id;
+    aparRenderAll();
+    toast('Esquema duplicado');
+  } catch (e) { toast('Error al duplicar: ' + e.message); }
+}
+
+async function aparRenameScheme() {
+  const schemeId = aparEditingSchemeId[aparScope];
+  const current = aparSchemes[aparScope].find(s => s.id === schemeId);
+  const name = prompt('Nuevo nombre:', current?.name || '');
+  if (!name || !name.trim()) return;
+  try {
+    await setDoc(doc(db, 'colorSchemes', schemeId), { name: name.trim() }, { merge: true });
+    await aparLoadSchemesList(aparScope);
+    aparRenderSchemeBar();
+    toast('Esquema renombrado');
+  } catch (e) { toast('Error al renombrar: ' + e.message); }
+}
+
+async function aparDeleteScheme() {
+  const schemeId = aparEditingSchemeId[aparScope];
+  const current = aparSchemes[aparScope].find(s => s.id === schemeId);
+  if (current?.isDefault) { toast('No se puede eliminar el esquema predeterminado'); return; }
+  if (schemeId === aparActiveSchemeId[aparScope]) { toast('No se puede eliminar el esquema activo — activá otro primero'); return; }
+  if (!confirm(`¿Eliminar el esquema "${current?.name}"? Esta acción no se puede deshacer.`)) return;
+  try {
+    await deleteDoc(doc(db, 'colorSchemes', schemeId));
+    aparEditingSchemeId[aparScope] = APAR_CATALOG[aparScope].defaultSchemeId;
+    await aparLoadSchemesList(aparScope);
+    await aparLoadSchemeIntoDraft(aparScope, aparEditingSchemeId[aparScope]);
+    aparRenderAll();
+    toast('Esquema eliminado');
+  } catch (e) { toast('Error al eliminar: ' + e.message); }
+}
+
+function aparExportScheme() {
+  const schemeId = aparEditingSchemeId[aparScope];
+  const current = aparSchemes[aparScope].find(s => s.id === schemeId);
+  const payload = {
+    scope: aparScope, name: current?.name || 'Esquema', tokens: aparDraft[aparScope],
+    deviceOverrideEnabled: aparScope === 'global' ? aparDeviceOverrideEnabled.global : undefined,
+    deviceOverrides: aparScope === 'global' ? aparDeviceOverrides.global : undefined,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tintin-esquema-${aparScope}-${(current?.name || 'esquema').replace(/\s+/g, '-').toLowerCase()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function aparImportScheme() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'application/json';
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!data || typeof data.tokens !== 'object') { toast('El archivo no tiene un formato de esquema válido'); return; }
+        const { tokens: catalogTokens } = aparCatalog();
+        const validKeys = new Set(catalogTokens.map(t => t.key));
+        const clean = {};
+        let invalidCount = 0;
+        Object.entries(data.tokens).forEach(([k, v]) => {
+          if (!validKeys.has(k)) return;
+          if (typeof v === 'string' && isValidColorLocal(v)) clean[k] = v; else invalidCount++;
+        });
+        aparDraft[aparScope] = { ...aparDraft[aparScope], ...clean };
+        if (aparScope === 'global' && data.deviceOverrideEnabled != null) {
+          aparDeviceOverrideEnabled.global = !!data.deviceOverrideEnabled;
+          aparDeviceOverrides.global = data.deviceOverrides || {};
+        }
+        aparRenderAll();
+        toast(`Esquema importado (${Object.keys(clean).length} colores)${invalidCount ? `, ${invalidCount} valores inválidos ignorados` : ''}`);
+      } catch (e) { toast('El archivo no es un JSON válido'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+function isValidColorLocal(v) {
+  return /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v) || /^rgba?\(/i.test(v) || /^hsla?\(/i.test(v);
+}
+
 </script>
 
 
@@ -8545,5 +9211,6 @@ setInterval(ttSyncSwitchAria, 1200);
   </div>
 </div>
 
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260715-16"></script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+/**
+ * TINTIN — Tokens de color del SUPER ADMIN (Super Admin → Apariencia →
+ * Esquema de Super Admin). Generado a partir de js/color-scheme-catalog.js
+ * (ADMIN_TOKENS). Se carga SOLO en admin.html y admin-images.html — el
+ * panel administrativo nunca depende de esto para heredar del esquema
+ * público; si algún valor no está definido acá, no existe en absoluto en
+ * las demás páginas, así que no hay forma de "filtrarse" por accidente.
+ */
+:root {
+  --admin-color-brand: #AD3F67;
+  --admin-color-brand-hover: #8B2642;
+  --admin-color-background-page: #FFF6FA;
+  --admin-color-background-sidebar: #FFFFFF;
+  --admin-color-text-sidebar: #2B2B2B;
+  --admin-color-background-sidebar-active: #FDECF2;
+  --admin-color-text-sidebar-active: #2B2B2B;
+  --admin-color-background-header: #FFFFFF;
+  --admin-color-background-surface: #FFFFFF;
+  --admin-color-border: #F1E4E7;
+  --admin-color-text-primary: #2B2B2B;
+  --admin-color-text-secondary: #7B6F72;
+  --admin-color-text-tertiary: #948890;
+  --admin-color-text-title: #2B2B2B;
+  --admin-color-button-primary-background: #AD3F67;
+  --admin-color-button-primary-text: #FFFFFF;
+  --admin-color-button-primary-hover: #8B2642;
+  --admin-color-button-outline-text: #AD3F67;
+  --admin-color-button-danger-background: #dc2626;
+  --admin-color-button-danger-text: #FFFFFF;
+  --admin-color-button-danger-hover: #b91c1c;
+  --admin-color-table-header-background: #FDECF2;
+  --admin-color-table-row-hover: #FFF9FC;
+  --admin-color-badge-background: #FDECF2;
+  --admin-color-badge-text: #AD3F67;
+  --admin-color-field-background: #FFFFFF;
+  --admin-color-field-border: #F1E4E7;
+  --admin-color-field-border-focus: #AD3F67;
+  --admin-color-success-background: #e0f5e6;
+  --admin-color-success-text: #166534;
+  --admin-color-warning-background: #fff3e0;
+  --admin-color-warning-text: #bf360c;
+  --admin-color-error-background: #fde3e1;
+  --admin-color-error-text: #b8341f;
+  --admin-color-modal-background: #FFFFFF;
+  --admin-color-modal-overlay: rgba(20,10,14,0.55);
+}

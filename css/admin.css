@@ -23,23 +23,23 @@
     ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
     ::-webkit-scrollbar-corner { background: #FDF0F5; }
 
-    /* Fase 3: misma paleta que el resto del sitio (css/tintin-tokens.css) —
-       los nombres --adm-* se mantienen porque los usa toda la hoja de acá
-       abajo, pero ahora apuntan al mismo valor real en todas las
-       superficies. --adm-bg queda con su propio valor a propósito: es un
-       gris-rosado más neutro, pensado para un panel de uso prolongado,
-       distinto del fondo más saturado del sitio público. */
+    /* Los tokens --adm-* ahora vienen de css/admin-color-tokens.css (Super
+       Admin → Apariencia → Esquema de Super Admin) vía los alias de
+       css/tintin-unified-theme.css — panel independiente del esquema
+       público, editable aparte. Los valores por defecto siguen siendo los
+       mismos que ya estaban en vivo, así que activar el módulo no cambia
+       nada hasta que se edite un color a propósito. */
     :root {
-      --adm-sidebar:        var(--pink-dark);
-      --adm-sidebar-hover:  rgba(255,255,255,.12);
-      --adm-sidebar-active: rgba(255,255,255,.95);
-      --adm-sidebar-text:   rgba(255,255,255,.85);
-      --adm-bg:             #f7f4f6;
-      --adm-card:           #ffffff;
-      --adm-accent:         var(--pink-dark);
-      --adm-text:           var(--ink);
-      --adm-muted:          #6b6b6b;
-      --adm-border:         var(--border);
+      --adm-sidebar:        var(--admin-color-background-sidebar);
+      --adm-sidebar-hover:  var(--admin-color-background-sidebar-active);
+      --adm-sidebar-active: var(--admin-color-background-sidebar-active);
+      --adm-sidebar-text:   var(--admin-color-text-sidebar);
+      --adm-bg:             var(--admin-color-background-page);
+      --adm-card:           var(--admin-color-background-surface);
+      --adm-accent:         var(--admin-color-brand);
+      --adm-text:           var(--admin-color-text-primary);
+      --adm-muted:          var(--admin-color-text-secondary);
+      --adm-border:         var(--admin-color-border);
       --adm-font:           var(--font-body);
       --adm-radius-sm:      var(--radius-sm);
       --adm-radius-md:      var(--radius-md);
@@ -708,10 +708,10 @@
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 130px; height: 30px; padding: 0 14px; border-radius: 999px; box-sizing: border-box;
       font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #e0f5e6; color: #166534;
+      background: var(--admin-color-success-background); color: var(--admin-color-success-text);
     }
     .tt-store-state-pill.tt-store-state-pill-closed {
-      background: #fde3e1; color: #b8341f;
+      background: var(--admin-color-error-background); color: var(--admin-color-error-text);
     }
     @media (max-width: 720px) {
       .tt-access-pill-track, .tt-access-pill-locked { min-width: 108px; height: 30px; font-size: 10px; }
@@ -719,7 +719,7 @@
     }
     .perm-danger-badge {
       display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
-      background: #fde3e1; color: #b8341f; padding: 2px 7px; border-radius: 20px; margin-left: 6px;
+      background: var(--admin-color-error-background); color: var(--admin-color-error-text); padding: 2px 7px; border-radius: 20px; margin-left: 6px;
     }
     .perm-uionly-badge {
       display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
@@ -794,7 +794,7 @@
     /* Rechazado usa un rojo más cálido que Cancelado (#991b1b) para que se
        puedan distinguir de un vistazo en la misma columna — son estados
        "terminales" distintos, no el mismo. */
-    .badge-rechazado   { background: #fde3e1; color: #b8341f; }
+    .badge-rechazado   { background: var(--admin-color-error-background); color: var(--admin-color-error-text); }
     .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
     /* Listo para retirar: único estado de pedido con el rosa de marca en vez
        de la paleta semántica genérica — es un hito positivo específico de
@@ -1040,10 +1040,10 @@
       text-transform: uppercase;
       letter-spacing: .07em;
     }
-    .adm-btn-primary { background: var(--adm-accent); color: #fff; }
-    .adm-btn-primary:hover { background: var(--rose); }
-    .adm-btn-danger { background: #dc2626; color: #fff; }
-    .adm-btn-danger:hover { background: #b91c1c; }
+    .adm-btn-primary { background: var(--admin-color-button-primary-background); color: var(--admin-color-button-primary-text); }
+    .adm-btn-primary:hover { background: var(--admin-color-button-primary-hover); }
+    .adm-btn-danger { background: var(--admin-color-button-danger-background); color: var(--admin-color-button-danger-text); }
+    .adm-btn-danger:hover { background: var(--admin-color-button-danger-hover); }
     .adm-btn-outline { background: transparent; border: 2px solid var(--adm-border); color: var(--adm-muted); }
     .adm-btn-outline:hover { border-color: var(--adm-accent); color: var(--adm-accent); }
     .adm-btn-sm { padding: 5px 12px; font-size: 11px; }

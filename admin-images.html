@@ -16,15 +16,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
+  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260715-16">
+  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260715-16">
   <style>
     :root {
-      --rose: #b84c72;
-      --rose-light: #f5d4e0;
-      --rose-pale: #fff3f7;
-      --text: #1a1a1a;
-      --text-sec: #555;
-      --muted: #6b6b6b;
-      --border: #eee;
+      /* Esta página no carga admin.css (es autocontenida) pero SÍ participa
+         del esquema de colores del Super Admin — estos alias locales ahora
+         apuntan a css/admin-color-tokens.css en vez de traer su propio
+         valor fijo, así Apariencia → Esquema de Super Admin también la
+         controla a ella. */
+      --rose: var(--admin-color-brand);
+      --rose-light: var(--admin-color-badge-background);
+      --rose-pale: var(--admin-color-background-page);
+      --text: var(--admin-color-text-primary);
+      --text-sec: var(--admin-color-text-secondary);
+      --muted: var(--admin-color-text-secondary);
+      --border: var(--admin-color-border);
       --sidebar-w: 220px;
       --header-h: 60px;
       --font: 'Poppins', sans-serif;
@@ -37,7 +44,7 @@
     ::-webkit-scrollbar-thumb { background: #EA7EA3; border-radius: 999px; border: 2px solid #FDF0F5; background-clip: padding-box; }
     ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
     ::-webkit-scrollbar-corner { background: #FDF0F5; }
-    body { font-family: var(--font); background: #f8f8f8; color: var(--text); min-height: 100vh; }
+    body { font-family: var(--font); background: var(--rose-pale); color: var(--text); min-height: 100vh; }
 
     /* ── AUTH GATE (denegado) — la carga la cubre el loader de marca ── */
     #auth-denied {
@@ -677,5 +684,6 @@ onAuthStateChanged(auth, async (user) => {
   renderSection(currentSection);
 });
 </script>
+<script type="module" src="js/admin-color-scheme.js?v=tintin-20260715-16"></script>
 </body>
 </html>
