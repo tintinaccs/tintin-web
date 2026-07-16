@@ -59,10 +59,13 @@ check(
     authShim.includes('reportBlockedWrite')
 );
 check(
-  'El shim de Storage reexporta el SDK real y bloquea únicamente sus funciones de subida/borrado',
-  storageShim.includes("export * from 'https://www.gstatic.com/firebasejs/") &&
-    ['uploadBytes', 'uploadString', 'uploadBytesResumable', 'deleteObject'].every(name => storageShim.includes(name)) &&
-    storageShim.includes('reportBlockedWrite')
+  'El shim histórico de Storage es completamente inerte y no importa el SDK eliminado',
+  !storageShim.includes("export * from 'https://www.gstatic.com/firebasejs/") &&
+    !storageShim.includes('firebase-storage.js') &&
+    ['getStorage', 'ref', 'getDownloadURL', 'uploadBytes', 'uploadString', 'uploadBytesResumable', 'deleteObject']
+      .every(name => storageShim.includes(`function ${name}`)) &&
+    storageShim.includes('reportBlockedWrite') &&
+    storageShim.includes('__diagnosticOnly')
 );
 check(
   'Existe una guardia de red independiente que bloquea llamadas de escritura de Firestore por la forma de la URL, sin depender de una lista de hosts',
@@ -107,7 +110,7 @@ check(
   core.includes('completed.has(old.testId) ? current.resolved : current.notReverified') &&
     core.includes("confirmation: completed.has(old.testId) ? 'no-longer-detected' : 'not-reverified'") &&
     core.includes('...(previous.notReverified || [])') &&
-    core.includes("severityChange")
+    core.includes('severityChange')
 );
 check(
   'Los falsos positivos visuales requieren dos mediciones iguales',
