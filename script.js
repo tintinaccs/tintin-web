@@ -1243,10 +1243,13 @@ function _renderProductDetail(product) {
   if (trustEl) {
     const cat = (product.category || product.cat || '').toLowerCase();
     const isWatch = cat.includes('reloj') || cat.includes('watch');
+    // El envío a todo el país ya lo dice "Beneficios rápidos" más abajo en
+    // esta misma página, y la atención por WhatsApp ya tiene su propio botón
+    // funcional en las acciones de arriba — repetirlos acá como texto suelto,
+    // sin acción, solo saturaba la pantalla sin sumar nada nuevo. Se dejan
+    // solo los dos datos que no aparecen en ningún otro lado de la página.
     const badges = [
-      { icon: '🚚', text: 'Entrega en todo Paraguay' },
       { icon: '✅', text: 'Productos originales garantizados' },
-      { icon: '💬', text: 'Atención personalizada por WhatsApp' },
       ...(isWatch ? [{ icon: '⌚', text: 'Ajuste de malla incluido' }] : [{ icon: '🎀', text: 'Empaque especial de regalo' }]),
     ];
     trustEl.innerHTML = badges.map(b => `
