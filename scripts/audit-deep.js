@@ -15,7 +15,7 @@ const IGNORE_DIRS = new Set([
 const REQUIRED_FILES = [
   'index.html',
   'catalogo.html',
-  'producto.html',
+  'product.html',
   'checkout.html',
   'login.html',
   'perfil.html',
@@ -501,7 +501,7 @@ function checkImportantPages(files) {
   const expected = [
     'index.html',
     'catalogo.html',
-    'producto.html',
+    'product.html',
     'checkout.html',
     'login.html',
     'perfil.html',

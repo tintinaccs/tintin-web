@@ -22,7 +22,6 @@ const allowedTopLevelFiles = [
   'preguntas-frecuentes.html',
   'privacidad.html',
   'product.html',
-  'producto.html',
   'terminos.html',
   'apple-touch-icon.png',
   'favicon.ico',
