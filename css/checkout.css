@@ -45,6 +45,8 @@
       gap: 6px;
       text-transform: uppercase;
       letter-spacing: .06em;
+      min-height: 32px;
+      width: fit-content;
     }
     .ck-header-back:hover { color: var(--acc); }
     @media (max-width: 768px) { .ck-back-row { padding-top: 16px; } }

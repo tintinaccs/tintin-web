@@ -74,7 +74,7 @@ check(
 
 check(
   'Los usuarios se actualizan en tiempo real',
-  phase.includes("onSnapshot(collection(db, 'users')") &&
+  phase.includes("onSnapshot(query(collection(db, 'users'), limit(20000))") &&
     phase.includes("query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(300))"),
   'No debe requerir recargar el panel'
 );

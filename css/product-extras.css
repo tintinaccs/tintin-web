@@ -277,6 +277,10 @@
   background:var(--pbtn); color:var(--pbtnT);
   box-shadow:0 8px 22px rgba(212,120,154,.3);
 }
+#tinsel-checkout-btn{
+  background:#8B1E47 !important;
+  color:#FFFFFF !important;
+}
 .tinsel-btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(212,120,154,.42); }
 .tinsel-btn-secondary{
   background:#fff; color:var(--acc);

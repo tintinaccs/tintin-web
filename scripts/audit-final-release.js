@@ -75,7 +75,7 @@ check(
 
 check(
   'Las colecciones reales validan cada producto',
-  phase9.includes("getDocs(collection(db, 'collections'))") &&
+  phase9.includes("getDocsPaginated(collection(db, 'collections')") &&
     phase9.includes('currentCategorySlugs().has(product.category)') &&
     !phase9.includes("const CAT_MAP ="),
   'No debe volver a una lista fija de categorías'

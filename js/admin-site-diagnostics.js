@@ -582,13 +582,42 @@ function effectiveBackground(element, win) {
 }
 
 function isVisible(element, win) {
+  if (element.hidden || element.getAttribute('aria-hidden') === 'true') return false;
+  if (element.closest('.tt-sr-only,[data-diagnostic-ignore-visual="true"]')) return false;
   const style = win.getComputedStyle(element);
   const rect = element.getBoundingClientRect();
+  const visuallyClipped = style.clip === 'rect(0px, 0px, 0px, 0px)' ||
+    style.clipPath === 'inset(50%)';
   return style.display !== 'none' &&
     style.visibility !== 'hidden' &&
     Number(style.opacity || 1) > 0.02 &&
+    !visuallyClipped &&
     rect.width > 0 &&
     rect.height > 0;
+}
+
+function isInlineTextLink(element, win) {
+  if (element.tagName !== 'A' || win.getComputedStyle(element).display !== 'inline') return false;
+  const container = element.closest('p,li,td,th,figcaption,blockquote');
+  if (!container) return false;
+  const linkText = element.textContent.trim();
+  const containerText = container.textContent.trim();
+  return containerText.length > linkText.length || container.children.length > 1;
+}
+
+function effectiveTouchRect(element, doc) {
+  if (element.matches('input[type="checkbox"],input[type="radio"]')) {
+    const wrappingLabel = element.closest('label');
+    const escapedId = element.id && doc.defaultView?.CSS?.escape
+      ? doc.defaultView.CSS.escape(element.id)
+      : String(element.id || '').replace(/["\\]/g, '\\$&');
+    const explicitLabel = escapedId
+      ? doc.querySelector(`label[for="${escapedId}"]`)
+      : null;
+    const label = wrappingLabel || explicitLabel;
+    if (label) return label.getBoundingClientRect();
+  }
+  return element.getBoundingClientRect();
 }
 
 function collectVisualObservations(page, viewport, doc, win) {
@@ -710,10 +739,14 @@ function collectVisualObservations(page, viewport, doc, win) {
 
   if (viewport.width <= 390) {
     [...doc.querySelectorAll('button,a[href],input,select,textarea')]
-      .filter(element => isVisible(element, win))
+      .filter(element =>
+        isVisible(element, win) &&
+        !element.disabled &&
+        !isInlineTextLink(element, win)
+      )
       .slice(0, 400)
       .forEach(element => {
-        const rect = element.getBoundingClientRect();
+        const rect = effectiveTouchRect(element, doc);
         if (rect.width >= 24 && rect.height >= 24) return;
         observations.push({
           key: `touch:${selectorFor(element)}`,
@@ -732,9 +765,16 @@ function collectVisualObservations(page, viewport, doc, win) {
     .slice(0, 1200)
     .forEach(element => {
       const style = win.getComputedStyle(element);
-      if (!/(hidden|clip)/.test(`${style.overflowX} ${style.textOverflow}`)) return;
       if (!element.textContent.trim()) return;
-      if (element.scrollWidth <= element.clientWidth + 3 && element.scrollHeight <= element.clientHeight + 3) return;
+      const clipsHorizontally = /(hidden|clip)/.test(style.overflowX) &&
+        element.scrollWidth > element.clientWidth + 3;
+      const clipsVertically = /(hidden|clip)/.test(style.overflowY) &&
+        element.scrollHeight > element.clientHeight + 3;
+      const intentionalEllipsis = clipsHorizontally &&
+        style.textOverflow === 'ellipsis' &&
+        style.whiteSpace === 'nowrap' &&
+        Boolean(element.getAttribute('title') || element.getAttribute('aria-label'));
+      if ((!clipsHorizontally && !clipsVertically) || intentionalEllipsis) return;
       observations.push({
         key: `clipped:${selectorFor(element)}`,
         title: 'Contenido recortado por su contenedor',
@@ -742,7 +782,10 @@ function collectVisualObservations(page, viewport, doc, win) {
         severity: 'low',
         component: selectorFor(element),
         actual: `Contenido ${element.scrollWidth}×${element.scrollHeight}px dentro de ${element.clientWidth}×${element.clientHeight}px.`,
-        evidence: `overflow-x=${style.overflowX}; overflow-y=${style.overflowY}; text-overflow=${style.textOverflow}.`
+        evidence: `Ejes recortados: ${[
+          clipsHorizontally ? 'horizontal' : '',
+          clipsVertically ? 'vertical' : ''
+        ].filter(Boolean).join(' y ')}. overflow-x=${style.overflowX}; overflow-y=${style.overflowY}; text-overflow=${style.textOverflow}.`
       });
     });
   return observations;
@@ -933,7 +976,15 @@ async function analyzeDataReadonly(scope) {
   for (const name of collections) {
     const accessTestId = `data.read.${name}`;
     try {
-      const snapshot = await getDocs(query(collection(db, name), limit(sampleTargets.has(name) ? 30 : 1)));
+      const targetCollection = name === 'siteTraffic'
+        ? collection(db, 'siteTraffic', new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Asuncion',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }).format(new Date()), 'sessions')
+        : collection(db, name);
+      const snapshot = await getDocs(query(targetCollection, limit(sampleTargets.has(name) ? 30 : 1)));
       completedTests.push(accessTestId);
       if (sampleTargets.has(name)) {
         snapshot.docs.forEach(documentSnapshot => {

@@ -16,7 +16,7 @@ function check(label, condition) {
 
 const runtime = read('js/admin-site-diagnostics.js');
 const core = read('js/diagnostic-core.js');
-const admin = read('admin.html');
+const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
 const css = read('css/admin.css');
 const pkg = JSON.parse(read('package.json'));
 
