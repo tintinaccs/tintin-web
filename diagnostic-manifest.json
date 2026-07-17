@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T00:49:32.279Z",
-  "sourceFingerprint": "95adb5e346e601f373d0da8089ebe52cc98a6b56d33d3a2ff03f07fe9ecb71cc",
+  "generatedAt": "2026-07-17T02:17:00.712Z",
+  "sourceFingerprint": "0cc5905872bc8173a2900e6aba7eaee9e0de59733491cb2ec45fb6afdda84308",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 231,
     "textFiles": 191,
-    "totalBytes": 5523497,
+    "totalBytes": 5526044,
     "pages": 18,
     "modules": 114
   },
@@ -976,8 +976,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 33046,
-      "sha256": "b9adbdeaa03a3b8d1faa88de9969f5b0ad2a6cea795b221e18066b4c78cdc452",
+      "bytes": 34012,
+      "sha256": "10678e83504274cac8c97137685e89419b8a9d7fa7b402f66475025c068c458f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1019,7 +1019,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 705
+          "line": 725
         }
       ],
       "styles": [
@@ -1088,7 +1088,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 705,
+          "line": 725,
           "exists": true
         },
         {
@@ -15019,8 +15019,8 @@
     },
     {
       "path": "js/images-phase5.js",
-      "bytes": 11229,
-      "sha256": "50c81091a904988895d176e49ab665b469a73b3a4f179cd77461ae8a750c9769",
+      "bytes": 11731,
+      "sha256": "6ada4b6cde748b49db5bba068fb28eb146abdf827621f1c82002822a95b59969",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16054,8 +16054,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 18519,
-      "sha256": "fabae2493154b96ce992d5a6e8ffa7a32735a7e39b4a1e2a54a64c455f5f96f9",
+      "bytes": 19598,
+      "sha256": "13028dbd424e8359758d285508ce1ec99436063ce6f7d06d7c7334b25b99a867",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16083,7 +16083,7 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 385
+          "line": 402
         }
       ]
     },
@@ -16393,8 +16393,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 33046,
-      "sha256": "b9adbdeaa03a3b8d1faa88de9969f5b0ad2a6cea795b221e18066b4c78cdc452"
+      "bytes": 34012,
+      "sha256": "10678e83504274cac8c97137685e89419b8a9d7fa7b402f66475025c068c458f"
     },
     {
       "path": "admin.html",
@@ -17209,8 +17209,8 @@
     {
       "path": "js/images-phase5.js",
       "extension": ".js",
-      "bytes": 11229,
-      "sha256": "50c81091a904988895d176e49ab665b469a73b3a4f179cd77461ae8a750c9769"
+      "bytes": 11731,
+      "sha256": "6ada4b6cde748b49db5bba068fb28eb146abdf827621f1c82002822a95b59969"
     },
     {
       "path": "js/images.js",
@@ -17521,8 +17521,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 18519,
-      "sha256": "fabae2493154b96ce992d5a6e8ffa7a32735a7e39b4a1e2a54a64c455f5f96f9"
+      "bytes": 19598,
+      "sha256": "13028dbd424e8359758d285508ce1ec99436063ce6f7d06d7c7334b25b99a867"
     },
     {
       "path": "scripts/audit-integral-platform.js",
@@ -21591,7 +21591,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 681,
+            "line": 701,
             "operation": "doc"
           },
           {

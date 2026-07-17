@@ -420,16 +420,36 @@ let currentSection = 'hero';
 let _selectedImgSlots = new Set();
 
 // ── Toast ──
+// Los errores no se auto-cierran: un toast que desaparece solo a los 2.8s
+// puede pasar totalmente desapercibido si el guardado falla en silencio.
+// El usuario tiene que poder verlo y cerrarlo, no perderlo entre parpadeos.
+let _toastAutoHide = null;
 function showToast(msg, isError = false) {
   const t = document.getElementById('adm-toast');
   t.textContent = msg;
   t.style.background = isError ? '#c0392b' : '#1a1a1a';
+  t.style.cursor = isError ? 'pointer' : '';
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  clearTimeout(_toastAutoHide);
+  if (isError) {
+    t.onclick = () => { t.classList.remove('show'); t.onclick = null; };
+  } else {
+    t.onclick = null;
+    _toastAutoHide = setTimeout(() => t.classList.remove('show'), 2800);
+  }
 }
 
 // ── Render cards for a section ──
 const DEVICE_VARIANT_SLOT_SET = new Set(DEVICE_VARIANT_SLOT_IDS);
+
+function describeSaveError(error) {
+  const code = error?.code ? ` (${error.code})` : '';
+  if (error?.code === 'permission-denied') {
+    return `❌ Firestore rechazó el guardado por permisos${code}. Cerrá sesión y volvé a entrar, y confirmá que firestore.rules esté desplegado (npm run deploy:rules).`;
+  }
+  const message = error?.message || 'motivo desconocido';
+  return `❌ No se guardó: ${message}${code}. Hacé clic para cerrar y reintentá.`;
+}
 
 async function saveField(patch, successMessage) {
   try {
@@ -437,8 +457,8 @@ async function saveField(patch, successMessage) {
     showToast(successMessage);
     return true;
   } catch (error) {
-    console.error(error);
-    showToast(error?.message || '❌ Error al guardar. Revisá la conexión.', true);
+    console.error('[admin-images] saveField failed:', error?.code, error?.message, error);
+    showToast(describeSaveError(error), true);
     return false;
   }
 }

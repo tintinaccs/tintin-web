@@ -371,6 +371,23 @@ check(
 );
 
 check(
+  'Los errores al guardar una imagen en un slot nunca se pierden en un toast que desaparece solo',
+  files.adminHtml.includes("if (isError) {") &&
+    files.adminHtml.includes("t.onclick = () => { t.classList.remove('show'); t.onclick = null; };") &&
+    files.adminHtml.includes('function describeSaveError(error)') &&
+    files.adminHtml.includes("error?.code === 'permission-denied'"),
+  'un fallo de Firestore silencioso (toast de 2.8s) puede pasar totalmente desapercibido para Super Admin'
+);
+
+check(
+  'El renderizado del hero y del resto de slots públicos deja evidencia de qué datos llegaron y si se aplicaron',
+  files.runtime.includes("console.debug('[images-phase5] onImagesUpdate: datos recibidos de Firestore'") &&
+    files.runtime.includes("console.debug('[images-phase5] applyHero: aplicando URLs nuevas'") &&
+    files.runtime.includes("console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM'"),
+  'sin esta traza no hay forma de saber, desde la consola del navegador, si el problema está en Firestore o en el DOM'
+);
+
+check(
   'Las operaciones de red del flujo de subida tienen timeout con mensaje claro',
   files.mediaLibrary.includes('function withTimeout') &&
     files.mediaLibrary.includes('new AbortController()') &&
