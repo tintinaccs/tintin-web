@@ -166,7 +166,7 @@ function createStateNode(message, kind = 'info') {
     retry.type = 'button';
     retry.textContent = 'Reintentar';
     retry.style.cssText =
-      'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#b84c72;color:#fff;font:700 11px Montserrat;cursor:pointer;';
+      'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#b84c72;color:#fff!important;font:700 11px Montserrat;cursor:pointer;';
     retry.addEventListener('click', () => window.location.reload());
     wrap.appendChild(retry);
   }
