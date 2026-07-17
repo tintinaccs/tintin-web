@@ -10,6 +10,19 @@ html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:vis
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
 
+/* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo. El
+   hero empieza exactamente después de su altura y descuenta esa misma altura
+   del viewport: no queda oculto detrás de la navegación ni aumenta
+   innecesariamente la primera pantalla. Mobile conserva su layout sin header
+   superior y no recibe este desplazamiento. */
+@media(min-width:768px){
+  html body.tt-home-premium .tt-hero{
+    margin-top:var(--header-h,72px)!important;
+    height:calc(100svh - var(--header-h,72px))!important;
+    min-height:clamp(560px,calc(88svh - var(--header-h,72px)),808px)!important;
+  }
+}
+
 /* Header y cookies de Inicio: fondos realmente sólidos. Estas reglas viven en
    la última hoja del home y usan selectores de alta especificidad para que ni
    el esquema publicado, ni estados de scroll, ni transparencias heredadas
