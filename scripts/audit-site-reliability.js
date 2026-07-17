@@ -171,6 +171,9 @@ check('El loader de la portada espera a que la foto del hero cargue antes de ocu
   home.includes("return !media.classList.contains('tt-hero-pending');") &&
   home.includes('function waitForHeroImageThenRelease()') &&
   home.includes('HERO_WAIT_CEILING_MS = 4500'));
+check('El loader pasa de un punto a otro sin un cross-fade visible',
+  loader.includes("transition:opacity .01s linear,visibility .01s linear") &&
+  !loader.includes('.38s ease'));
 check('La colección Bolsos conserva su portada real después de sincronizar',
   collectionsPhase4.includes("const SLUG_FILE_MAP = { bolsos: 'bags' }") &&
   collectionsPhase4.includes('col-${file}.webp') &&
