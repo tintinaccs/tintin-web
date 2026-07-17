@@ -169,7 +169,11 @@ if (!window.TintinImagesPhase5Booted) {
       images.hero_bg_mobile_size, images.hero_bg_mobile_pos,
     ].join('|');
 
-    if (image.dataset.ttHeroPhase5Signature === signature) return;
+    if (image.dataset.ttHeroPhase5Signature === signature) {
+      console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
+      return;
+    }
+    console.debug('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
 
     let mobileSource = picture.querySelector('source[media*="767"]');
     let tabletSource = picture.querySelector('source[media*="1023"]');
@@ -267,6 +271,11 @@ if (!window.TintinImagesPhase5Booted) {
   onImagesUpdate(
     nextImages => {
       images = nextImages || {};
+      console.debug('[images-phase5] onImagesUpdate: datos recibidos de Firestore', {
+        hero_bg_desktop: images.hero_bg_desktop || null,
+        hero_bg_tablet: images.hero_bg_tablet || null,
+        hero_bg_mobile: images.hero_bg_mobile || null,
+      });
       scheduleApply();
       window.dispatchEvent(new CustomEvent('tintin:images-phase5-ready', {
         detail: { configured: Object.keys(images).filter(key => !key.endsWith('_size') && !key.endsWith('_pos')).length }
