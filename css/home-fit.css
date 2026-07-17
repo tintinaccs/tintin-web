@@ -9,11 +9,63 @@ html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:vis
 .tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
-/* Nunca usar el antiguo respaldo oscuro del hero. Si la imagen remota todavía
-   no está lista o falla, el único color transitorio permitido es el rosa claro
-   de la marca; el loader normalmente lo cubre hasta que el hero está listo. */
+/* El hero puede recibir PNG/WebP con transparencia desde el panel. Toda la
+   cadena visual usa un respaldo sólido para que nunca se vea el contenido de
+   atrás ni aparezcan zonas transparentes en desktop, tablet o mobile. */
 .tt-home-premium .tt-hero,
-.tt-home-premium .tt-hero-media{background:#FFF6FA!important}
+.tt-home-premium .tt-hero-media,
+.tt-home-premium .tt-hero-media picture,
+.tt-home-premium .tt-hero-img{
+  background:#FFF6FA!important;
+  background-color:#FFF6FA!important;
+}
+.tt-home-premium .tt-hero-media picture{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+/* El banner debe entrar completo en el dispositivo activo. Se conserva la
+   posición y la escala configuradas desde Super Admin, pero se evita cover,
+   que recortaba partes de la imagen al cambiar de proporción de pantalla. */
+body.tt-home-premium #tt-hero-img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:var(--tt-hero-pos-desktop,center center)!important;
+  transform:scale(var(--tt-hero-scale-desktop,1))!important;
+  transform-origin:var(--tt-hero-pos-desktop,center center)!important;
+}
+@media(max-width:1023px){
+  body.tt-home-premium #tt-hero-img{
+    object-position:var(--tt-hero-pos-tablet,center center)!important;
+    transform:scale(var(--tt-hero-scale-tablet,1))!important;
+    transform-origin:var(--tt-hero-pos-tablet,center center)!important;
+  }
+}
+@media(max-width:767px){
+  body.tt-home-premium #tt-hero-img{
+    object-position:var(--tt-hero-pos-mobile,center center)!important;
+    transform:scale(var(--tt-hero-scale-mobile,1))!important;
+    transform-origin:var(--tt-hero-pos-mobile,center center)!important;
+  }
+}
+/* El botón secundario del hero no puede depender de un token transparente:
+   siempre se ve como botón real sobre cualquier foto. */
+body.tt-home-premium .tt-hero-actions .tt-btn-outline{
+  background:#FFFFFF!important;
+  background-color:#FFFFFF!important;
+  border-color:var(--tt-accent,#AD3F67)!important;
+  color:var(--tt-accent,#AD3F67)!important;
+  box-shadow:0 8px 24px rgba(38,24,30,.12)!important;
+  opacity:1!important;
+}
+body.tt-home-premium .tt-hero-actions .tt-btn-outline:hover,
+body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
+  background:var(--tt-accent,#AD3F67)!important;
+  background-color:var(--tt-accent,#AD3F67)!important;
+  color:#FFFFFF!important;
+}
 .tt-home-premium .tt-trust-bar,
 .tt-home-premium .section-sm,
 .tt-home-premium .tt-collections-section,
