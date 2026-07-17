@@ -205,6 +205,16 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
 check('Los recursos críticos usan una sola versión de caché',
   staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260716-cloudinary-fix-1'"));
 
+check(
+  'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',
+  loader.includes('function bootImagesPhase5Public()') &&
+    loader.includes('function bootCollectionsPhase4Public()') &&
+    loader.includes('function bootCartSyncPublic()') &&
+    loader.includes('function bootThemeColorSanitizerPublic()') &&
+    loader.includes('function bootPageAuditFixPublic()') &&
+    /function bootPublicRuntime\(\) \{[\s\S]*?bootImagesPhase5Public\(\);[\s\S]*?bootCollectionsPhase4Public\(\);[\s\S]*?bootCartSyncPublic\(\);[\s\S]*?bootThemeColorSanitizerPublic\(\);[\s\S]*?bootPageAuditFixPublic\(\);[\s\S]*?\n  \}/.test(loader)
+);
+
 if (failures.length) {
   console.error(`\nAuditoría de confiabilidad: ${failures.length} falla(s).`);
   process.exit(1);

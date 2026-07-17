@@ -512,6 +512,42 @@
     }
   }
 
+  // Estos 5 módulos solo se cargaban a través de ui-quality.js (bootGlobalQuality),
+  // que bootPublicRuntime dejó de llamar para evitar observadores duplicados
+  // (ver #86). Pero ninguno de los 5 tiene otra forma de cargarse en páginas
+  // públicas — sin esto, ni las imágenes de settings/images, ni las colecciones
+  // de Fase 4, ni el carrito multi-pestaña, ni el esquema de colores de
+  // Apariencia se aplican nunca fuera de admin-images.html. Se importan acá
+  // directamente (mismo patrón que el resto de este archivo) para no volver a
+  // traer el paquete pesado de ui-quality.js que causó el freeze original.
+  function bootImagesPhase5Public() {
+    if (!window.TintinImagesPhase5Booted) {
+      importSibling('images-phase5.js', 'Images Phase 5');
+    }
+  }
+
+  function bootCollectionsPhase4Public() {
+    if (!window.TintinCollectionsPhase4Booted) {
+      importSibling('collections-phase4.js', 'Collections Phase 4');
+    }
+  }
+
+  function bootCartSyncPublic() {
+    importSibling('cart-sync.js', 'Cart Sync');
+  }
+
+  function bootThemeColorSanitizerPublic() {
+    if (!window.TintinThemeColorSanitizerBooted) {
+      importSibling('theme-color-sanitizer.js', 'Theme Color Sanitizer');
+    }
+  }
+
+  function bootPageAuditFixPublic() {
+    if (!window.TintinPageAuditFixBooted) {
+      importSibling('page-audit-fix.js', 'Page Audit Fix');
+    }
+  }
+
   function bootPageRuntime() {
     if (runtimeBooted) return;
     runtimeBooted = true;
@@ -530,12 +566,11 @@
     if (runtimeBooted) return;
     runtimeBooted = true;
 
-    // Las páginas públicas ya cargan sus módulos funcionales desde el HTML
-    // (productos, colecciones, imágenes, carrito y contenido). Volver a
-    // iniciar acá el paquete global de "quality" duplicaba esos renderers y
-    // agregaba varios MutationObserver sobre todo el documento. En cuentas
-    // autorizadas —incluido Super Admin— esa cascada podía monopolizar el
-    // hilo principal y dejar el navegador detenido sobre el loader.
+    // Volver a traer el paquete completo de ui-quality.js acá (css(), forms(),
+    // refresh() con su timer, bootMobileHeader duplicando bootHeaderMode, etc.)
+    // agregaba varios MutationObserver sobre todo el documento y eso fue lo que
+    // congelaba el navegador (#86) — por eso las funciones de abajo importan
+    // cada módulo por separado, igual que hace este archivo con el resto.
     bootHeaderMode();
     bootHeaderDropdownFix();
     bootHeaderAccountFix();
@@ -544,6 +579,11 @@
     bootScrollReveal();
     bootImagePerformance();
     bootSiteActivity();
+    bootImagesPhase5Public();
+    bootCollectionsPhase4Public();
+    bootCartSyncPublic();
+    bootThemeColorSanitizerPublic();
+    bootPageAuditFixPublic();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
     documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
