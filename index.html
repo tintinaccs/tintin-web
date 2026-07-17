@@ -76,8 +76,11 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- Real image: loads immediately, no JS, no Firestore dependency -->
-  <div class="tt-hero-media">
+  <!-- La imagen estática se pinta al instante para no perder LCP, pero queda
+       oculta (ver .tt-hero-pending en styles.css) hasta que images-phase5.js
+       confirme la imagen real — así nunca se ve un banner distinto al
+       configurado, ni siquiera un instante. -->
+  <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
       <source media="(max-width: 767px)"  srcset="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  type="image/webp">
       <source media="(max-width: 1023px)" srcset="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  type="image/webp">
@@ -96,6 +99,15 @@
       >
     </picture>
   </div>
+  <script>
+    // Red de seguridad independiente de images-phase5.js: si por lo que sea
+    // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
+    // puede quedar invisible para siempre.
+    window.setTimeout(function () {
+      var media = document.getElementById('tt-hero-media');
+      if (media) media.classList.remove('tt-hero-pending');
+    }, 900);
+  </script>
 
   <!-- Overlay: keeps text readable over any image -->
   <div class="tt-hero-overlay" aria-hidden="true"></div>
