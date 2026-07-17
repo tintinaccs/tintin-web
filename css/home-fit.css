@@ -10,16 +10,21 @@ html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:vis
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
 
-/* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo. El
-   hero empieza exactamente después de su altura y descuenta esa misma altura
-   del viewport: no queda oculto detrás de la navegación ni aumenta
-   innecesariamente la primera pantalla. Mobile conserva su layout sin header
-   superior y no recibe este desplazamiento. */
-@media(min-width:768px){
-  html body.tt-home-premium .tt-hero{
-    margin-top:var(--header-h,72px)!important;
-    height:calc(100svh - var(--header-h,72px))!important;
-    min-height:clamp(560px,calc(88svh - var(--header-h,72px)),808px)!important;
+/* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo:
+   sin este margen, el hero arranca en y=0 y el header queda superpuesto
+   sobre su parte superior. margin-top reserva ese espacio empujando TODO
+   el hero hacia abajo (imagen, picture, media, contenido, botones) sin
+   tocar su height/min-height — el hero conserva el alto completo que ya
+   tenía (100svh/min-height de arriba) y el total pasa a ser altura del
+   header + altura completa del hero, nunca menos.
+   769px porque ahí es donde .tt-header deja de tener display:none (ver
+   styles.css) — es el mismo corte que usan .tt-breadcrumb y .login-page
+   para el mismo problema. --header-h es la única fuente de verdad (se
+   define y redefine únicamente en styles.css); mobile no recibe ningún
+   margen porque no usa este header. */
+@media (min-width: 769px) {
+  body.tt-home-premium .tt-hero {
+    margin-top: var(--header-h);
   }
 }
 
