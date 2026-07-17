@@ -1,6 +1,19 @@
+/* Primera pintura de Inicio: mientras el loader todavía está activo, el body
+   queda oculto desde el primer frame. El loader puede sobrescribir visibility
+   aunque la herede del body; cuando pasa a .tt-out, :has() revela el contenido
+   en el mismo recálculo de estilos, sin un frame blanco/rosado intermedio. */
+html.tt-initializing body.tt-home-premium{visibility:hidden!important;background:#FFF6FA!important}
+html.tt-initializing body.tt-home-premium>#tt-loader{visibility:visible!important}
+html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:visible!important}
+
 .tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
+/* Nunca usar el antiguo respaldo oscuro del hero. Si la imagen remota todavía
+   no está lista o falla, el único color transitorio permitido es el rosa claro
+   de la marca; el loader normalmente lo cubre hasta que el hero está listo. */
+.tt-home-premium .tt-hero,
+.tt-home-premium .tt-hero-media{background:#FFF6FA!important}
 .tt-home-premium .tt-trust-bar,
 .tt-home-premium .section-sm,
 .tt-home-premium .tt-collections-section,
