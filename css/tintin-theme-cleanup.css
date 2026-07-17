@@ -1,26 +1,45 @@
 :root{--tt-admin-action-bg:var(--tt-accent);--tt-admin-action-fg:#FFFFFF;--tt-admin-action-border:var(--tt-accent);--tt-admin-action-icon-bg:rgba(255,255,255,.18)}.tt-account-header{display:flex!important;align-items:center!important;gap:10px!important}.tt-account-header span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}.tt-account-panel-avatar{width:32px!important;height:32px!important;max-width:none!important;max-height:none!important;border-radius:50%!important;object-fit:cover!important;flex-shrink:0!important;display:block!important}.tt-mobile-user-photo{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;display:block!important;flex-shrink:0!important}.tt-mobile-user-profile-static{pointer-events:none!important}.tt-mobile-user-admin{background:var(--tt-admin-action-bg)!important;background-color:var(--tt-admin-action-bg)!important;color:var(--tt-admin-action-fg)!important;border-color:var(--tt-admin-action-border)!important}.tt-mobile-user-admin *{color:var(--tt-admin-action-fg)!important}.tt-mobile-user-admin-icon{display:grid!important;place-items:center!important;width:26px!important;height:26px!important;border-radius:50%!important;background:var(--tt-admin-action-icon-bg)!important;flex:0 0 auto!important}.ck-trust-item{color:var(--tt-text)!important}.ck-trust-item svg,.tt-themed-vector{stroke:currentColor!important;color:var(--tt-accent)!important}.ck-trust-item:first-child svg{color:var(--tt-accent)!important}svg[stroke="#4caf50"],svg[stroke="#b84c72"],svg[stroke="#B84C72"],svg[stroke="#D46A8A"],svg[stroke="#F6B7C8"],svg[stroke="#2B2B2B"],svg[stroke="#7B6F72"]{stroke:currentColor!important;color:var(--tt-accent)!important}[style*="#2B2B2B"],[style*="#7B6F72"],[style*="#D46A8A"],[style*="#F6B7C8"],[style*="#B84C72"],[style*="#b84c72"],[style*="#4caf50"]{--tt-inline-color-cleaned:1}
 
-/* Controles públicos que deben conservar siempre un fondo real y legible,
-   incluso cuando el esquema publicado tenga valores transparentes. */
-#tt-privacy-consent{
+/* Fondos sólidos obligatorios en la navegación pública. El esquema global
+   puede personalizar colores, pero no convertir el header ni cookies en capas
+   transparentes que dejen ver la fotografía del hero por detrás. */
+html body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
+html body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
+  border-bottom:1px solid #F1E4E7!important;
+  box-shadow:0 2px 18px rgba(173,63,103,.10)!important;
 }
-#tt-privacy-consent .tt-privacy-btn-primary{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
-  border:1px solid var(--tt-accent,#AD3F67)!important;
+html body:not(:has(.adm-main)) #tt-privacy-consent.tt-privacy-consent{
+  background:#FFFFFF!important;
+  background-color:#FFFFFF!important;
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  isolation:isolate!important;
+  border:1px solid #F1E4E7!important;
+  box-shadow:0 18px 54px rgba(38,24,30,.18)!important;
+}
+html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary{
+  background:#AD3F67!important;
+  background-color:#AD3F67!important;
+  border:1px solid #AD3F67!important;
   color:#FFFFFF!important;
   opacity:1!important;
 }
-#tt-privacy-consent .tt-privacy-btn-primary *{color:#FFFFFF!important}
-#tt-privacy-consent .tt-privacy-btn-secondary{
+html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary *{color:#FFFFFF!important}
+html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border:1px solid var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border:1px solid #AD3F67!important;
+  color:#AD3F67!important;
   opacity:1!important;
 }
 
