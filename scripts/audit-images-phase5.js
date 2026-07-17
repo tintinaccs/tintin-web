@@ -88,9 +88,28 @@ check(
   files.runtime.includes('hero_bg_desktop') &&
     files.runtime.includes('hero_bg_tablet') &&
     files.runtime.includes('hero_bg_mobile') &&
-    files.runtime.includes('mobileSource.srcset = mobile') &&
-    files.runtime.includes('tabletSource.srcset = tablet'),
+    files.runtime.includes("if (mobile) mobileSource.srcset = mobile;") &&
+    files.runtime.includes("if (tablet) tabletSource.srcset = tablet;"),
   'los tres controles del panel deben tener efecto visual real'
+);
+
+check(
+  'El Hero es Cloudinary exclusivo: sin respaldo estático empaquetado',
+  !files.runtime.includes('STATIC.hero') &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop');") &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'tablet');") &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile');") &&
+    files.runtime.includes("if (desktop) image.src = desktop; else image.removeAttribute('src');"),
+  'nunca debe verse una imagen distinta a la guardada en Super Admin → Imágenes, ni siquiera de relleno'
+);
+
+check(
+  'index.html no referencia ningún banner estático empaquetado para el Hero',
+  !read('index.html').includes('hero-banner-desktop.webp') &&
+    !read('index.html').includes('hero-banner-tablet.webp') &&
+    !read('index.html').includes('hero-banner-mobile.webp') &&
+    !exists('assets-tintin/images/home/hero-banner'),
+  'el Hero depende únicamente de la URL de Cloudinary guardada en Firestore, sin archivo de respaldo'
 );
 
 check(

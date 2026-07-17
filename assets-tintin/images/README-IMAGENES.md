@@ -7,7 +7,7 @@ Esta carpeta (`assets-tintin/images/`) contiene las imágenes base y de respaldo
 - **Fotos de productos:** Super Admin → Productos. Se guardan en `products/{id}.imageUrl`.
 - **Portadas de colecciones:** Super Admin → Colecciones. Se guardan en `collections/{slug}.image`.
 - **Hero, editoriales, Nosotros y logo:** Super Admin → Imágenes. Se guardan en `settings/images`.
-- **Archivos de esta carpeta:** funcionan como respaldo cuando un espacio del panel no tiene una URL configurada o esa URL falla.
+- **Archivos de esta carpeta:** funcionan como respaldo cuando un espacio del panel no tiene una URL configurada o esa URL falla — **excepto el Hero**, que no tiene ningún respaldo de archivo: es Cloudinary exclusivo (ver sección 4).
 
 No vuelvas a crear fotos de productos o colecciones dentro de `settings/images`: esas opciones antiguas ya no aparecen en el panel y se ignoran para evitar duplicaciones.
 
@@ -53,13 +53,15 @@ Cuando quitás una URL, el sitio vuelve automáticamente a los archivos de respa
 
 ### Inicio — Hero
 
-Carpeta: `assets-tintin/images/home/hero-banner/`
+**Cloudinary exclusivo — no existe archivo de respaldo en esta carpeta.**
 
-| Archivo | Se usa en | Tamaño recomendado |
-|---|---|---|
-| `hero-banner-desktop.webp` | PC/notebook | mínimo 1920×1080px |
-| `hero-banner-tablet.webp` | Tablet | mínimo 1024×1366px |
-| `hero-banner-mobile.webp` | Celular | mínimo 750×1000px |
+El Hero se administra únicamente desde **Super Admin → Imágenes → Hero**, con una imagen independiente por Desktop/Tablet/Mobile. Si un tamaño no tiene URL guardada, esa vista del Hero queda sin imagen (solo el fondo oscuro) hasta que se suba una — nunca se completa con una foto de archivo, para que jamás se vea algo distinto a lo que subiste.
+
+| Tamaño | Recomendado |
+|---|---|
+| Desktop (≥1024px) | mínimo 1920×1080px |
+| Tablet (768–1023px) | mínimo 1024×1366px |
+| Mobile (≤767px) | mínimo 750×1000px |
 
 ### Editorial Bags
 
@@ -127,8 +129,8 @@ Carpeta: `assets-tintin/images/general/`
 ## 5. Seguridad y fallos
 
 - Solo se aceptan direcciones `http://` o `https://` sin comillas ni código.
-- Si una URL guardada deja de funcionar, aparece la imagen base correspondiente.
-- Al quitar una personalización, el sitio restaura la versión responsive de escritorio, tablet y celular.
+- Si una URL guardada deja de funcionar, aparece la imagen base correspondiente — **salvo en el Hero**, que no tiene imagen base: si la URL de Cloudinary falla, esa vista queda solo con el fondo oscuro.
+- Al quitar una personalización, el sitio restaura la versión responsive de escritorio, tablet y celular — **salvo en el Hero**, que queda sin imagen hasta subir una nueva.
 - El caché local acelera la primera vista, pero Firestore vuelve a comprobar el valor y actualiza todas las pestañas.
 
 ## 6. Resumen rápido
@@ -136,6 +138,7 @@ Carpeta: `assets-tintin/images/general/`
 - Producto → Productos.
 - Colección → Colecciones.
 - Hero/editoriales/Nosotros/logo → Imágenes.
+- Hero → Cloudinary exclusivo, sin archivo de respaldo (a diferencia del resto).
 - Fotos grandes → WEBP.
 - Logo de respaldo → PNG transparente.
-- Después de modificar archivos en GitHub → `Ctrl + Shift + R`.
+- Después de modificar archivos en GitHub → `Ctrl + Shift + R` (no aplica al Hero).

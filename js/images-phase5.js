@@ -15,11 +15,6 @@ if (!window.TintinImagesPhase5Booted) {
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
-    hero: {
-      desktop: 'assets-tintin/images/home/hero-banner/hero-banner-desktop.webp',
-      tablet: 'assets-tintin/images/home/hero-banner/hero-banner-tablet.webp',
-      mobile: 'assets-tintin/images/home/hero-banner/hero-banner-mobile.webp',
-    },
     edit_bolsos: {
       desktop: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp',
       tablet: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp',
@@ -171,9 +166,13 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image || !picture) return;
 
     ensureHeroStyle();
-    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero.desktop);
-    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero.tablet);
-    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero.mobile);
+    // Cloudinary (subido desde Super Admin → Imágenes) es la ÚNICA fuente
+    // permitida para el hero: sin respaldo estático. Si no hay URL guardada,
+    // no se setea ningún src — nunca debe verse una imagen distinta a la
+    // configurada, ni siquiera una de relleno.
+    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop');
+    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet');
+    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile');
     const signature = [desktop, tablet, mobile,
       images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
       images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
@@ -199,9 +198,17 @@ if (!window.TintinImagesPhase5Booted) {
       tabletSource.media = '(max-width: 1023px)';
       picture.insertBefore(tabletSource, image);
     }
-    mobileSource.srcset = mobile;
-    tabletSource.srcset = tablet;
-    image.src = desktop;
+    if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
+    if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
+    if (desktop) image.src = desktop; else image.removeAttribute('src');
+
+    if (!image.dataset.ttHeroPhase5ErrorBound) {
+      image.dataset.ttHeroPhase5ErrorBound = '1';
+      image.addEventListener('error', () => {
+        const fallback = absolute(STATIC.placeholder);
+        if (image.src !== fallback) image.src = fallback;
+      });
+    }
 
     ['desktop', 'tablet', 'mobile'].forEach(device => {
       const display = heroDisplay(images[`hero_bg_${device}_size`]);

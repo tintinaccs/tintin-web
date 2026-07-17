@@ -47,10 +47,6 @@
   <meta name="twitter:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/index.html">
   <link rel="preload" href="styles.css?v=tintin-20260716-cloudinary-fix-1" as="style">
-  <!-- Hero image preloads — browser picks the matching one per breakpoint -->
-  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp" media="(min-width: 1024px)" fetchpriority="high">
-  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  media="(min-width: 768px) and (max-width: 1023px)" fetchpriority="high">
-  <link rel="preload" as="image" href="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  media="(max-width: 767px)" fetchpriority="high">
   <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
@@ -76,18 +72,16 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- La imagen estática se pinta al instante para no perder LCP, pero queda
-       oculta (ver .tt-hero-pending en styles.css) hasta que images-phase5.js
-       confirme la imagen real — así nunca se ve un banner distinto al
-       configurado, ni siquiera un instante. -->
+  <!-- El Hero no tiene imagen de respaldo empaquetada: Cloudinary (subida
+       desde Super Admin → Imágenes) es la única fuente permitida. Queda
+       oculto (ver .tt-hero-pending en styles.css) hasta que images-phase5.js
+       confirme esa URL real — nunca se ve ninguna otra imagen, ni siquiera
+       un instante. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
-      <source media="(max-width: 767px)"  srcset="assets-tintin/images/home/hero-banner/hero-banner-mobile.webp"  type="image/webp">
-      <source media="(max-width: 1023px)" srcset="assets-tintin/images/home/hero-banner/hero-banner-tablet.webp"  type="image/webp">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
-        src="assets-tintin/images/home/hero-banner/hero-banner-desktop.webp"
         alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
         width="1920"
         height="1080"
@@ -95,7 +89,6 @@
         decoding="async"
         fetchpriority="high"
         draggable="false"
-        onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
       >
     </picture>
   </div>
