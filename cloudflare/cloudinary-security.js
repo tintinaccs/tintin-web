@@ -132,7 +132,7 @@ export function cleanVariant(value) {
 
 export function cleanPublicId(value) {
   const publicId = String(value || '').trim();
-  if (!/^tintin\/media\/[A-Za-z0-9_-]{8,80}\/(?:full|thumb)$/.test(publicId)) {
+  if (!/^tintin_media_[A-Za-z0-9_-]{8,80}_(?:full|thumb)$/.test(publicId)) {
     throw new Error('El archivo solicitado no pertenece a la biblioteca de Tintin');
   }
   return publicId;

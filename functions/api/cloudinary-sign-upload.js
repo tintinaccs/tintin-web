@@ -31,7 +31,9 @@ export async function onRequest(context) {
     const variant = cleanVariant(body?.variant);
     const { cloudName, apiKey, apiSecret } = getCloudinaryConfig(env);
 
-    const publicId = `tintin/media/${mediaId}/${variant}`;
+    // Sin "/": un public_id con carpetas exige permiso de creación de carpeta en
+    // cuentas con Dynamic Folder Mode, y eso puede rechazar cada subida nueva.
+    const publicId = `tintin_media_${mediaId}_${variant}`;
     const timestamp = Math.floor(Date.now() / 1000);
     const signedParameters = {
       overwrite: 'true',
