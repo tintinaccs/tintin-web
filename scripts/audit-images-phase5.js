@@ -219,16 +219,24 @@ check(
   files.cloudinarySecurity.includes("crypto.subtle.digest('SHA-1'") &&
     files.cloudinarySign.includes('cleanMediaId(body?.mediaId)') &&
     files.cloudinarySign.includes('cleanVariant(body?.variant)') &&
-    files.cloudinarySign.includes('tintin/media/${mediaId}/${variant}') &&
+    files.cloudinarySign.includes('tintin_media_${mediaId}_${variant}') &&
     files.cloudinarySign.includes('await cloudinarySignature(signedParameters, apiSecret)'),
   'el navegador no debe elegir public IDs arbitrarios'
+);
+
+check(
+  'El public ID no crea carpetas en Cloudinary (evita el bloqueo de Dynamic Folder Mode)',
+  !files.cloudinarySign.includes('`tintin/media/') &&
+    !files.cloudinarySecurity.includes('tintin\\/media\\/') &&
+    files.cloudinarySecurity.includes('tintin_media_'),
+  'un public_id con "/" exige permiso de creación de carpeta y puede rechazar cada subida con una cuenta nueva'
 );
 
 check(
   'El borrado solo admite public IDs de Tintin',
   files.cloudinaryDelete.includes('cleanPublicId') &&
     files.cloudinaryDelete.includes("invalidate: 'true'") &&
-    files.cloudinarySecurity.includes('^tintin\\/media\\/') &&
+    files.cloudinarySecurity.includes('^tintin_media_') &&
     files.cloudinaryDelete.includes("['ok', 'not found'].includes(data.result)"),
   'no se debe poder borrar otro asset de la cuenta'
 );

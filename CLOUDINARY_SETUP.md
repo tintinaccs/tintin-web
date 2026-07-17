@@ -133,12 +133,19 @@ No intenta activar Firebase Storage y no requiere el plan Blaze.
 
 ## 7. Comprobaciones en Cloudinary y Firestore
 
-En Cloudinary, las imágenes quedan con esta estructura de public ID:
+En Cloudinary, las imágenes quedan con esta estructura de public ID (sin carpetas):
 
 ```text
-tintin/media/<mediaId>/full
-tintin/media/<mediaId>/thumb
+tintin_media_<mediaId>_full
+tintin_media_<mediaId>_thumb
 ```
+
+No se usan carpetas ("/") a propósito: en cuentas con Dynamic Folder Mode
+activado, crear una carpeta nueva requiere un permiso separado del de subir
+un archivo, y como cada imagen genera un `mediaId` distinto, un public ID
+con carpetas puede terminar rechazando cada subida con el error "Request
+forbidden due to missing permissions (actions=[\"create\"])" sin que haga
+falta tocar ningún rol ni configuración de la cuenta.
 
 En Firestore, la colección `media` conserva únicamente metadata administrativa:
 
@@ -170,7 +177,7 @@ Si una copia del sitio continúa publicada en GitHub Pages o en el dominio antig
 - El navegador recibe una firma temporal, nunca el secreto.
 - Cloudflare envía el ID token a Firebase Auth para validar la sesión en el servidor.
 - Solo el correo verificado `tintinaccs@gmail.com` puede solicitar firmas o borrar archivos.
-- Los public IDs aceptados están restringidos a `tintin/media/`.
+- Los public IDs aceptados están restringidos al prefijo `tintin_media_`.
 - Cloudinary invalida la caché al borrar una imagen.
 - Firestore continúa protegido por sus reglas de Super Admin.
 - La función de ubicación devuelve solo ciudad, región y país aproximados; nunca IP ni coordenadas.

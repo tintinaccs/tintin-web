@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-16T22:31:05.722Z",
-  "sourceFingerprint": "215904f947a1772a642603e9bb730b19b4377faf0201dc1ea516ac43a7af5b6e",
+  "generatedAt": "2026-07-17T00:49:32.279Z",
+  "sourceFingerprint": "95adb5e346e601f373d0da8089ebe52cc98a6b56d33d3a2ff03f07fe9ecb71cc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 231,
     "textFiles": 191,
-    "totalBytes": 5521870,
+    "totalBytes": 5523497,
     "pages": 18,
     "modules": 114
   },
@@ -13385,8 +13385,8 @@
   "modules": [
     {
       "path": "cloudflare/cloudinary-security.js",
-      "bytes": 5135,
-      "sha256": "f11d368f83d2283428272b91bf996b69f733a91c030e4f29da4e34508f9b5381",
+      "bytes": 5132,
+      "sha256": "957fa737b5f6929e5b3b2ac0d00ae0ab6010d6ea2b6a16d814b3185b9dd9a366",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13436,8 +13436,8 @@
     },
     {
       "path": "functions/api/cloudinary-sign-upload.js",
-      "bytes": 1806,
-      "sha256": "bf408f0f91d5181878335a9a96edfd3268aae4efd77c6cebbee271d9b30b22d3",
+      "bytes": 1969,
+      "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13453,7 +13453,7 @@
       "endpoints": [
         {
           "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(cloudName",
-          "line": 50
+          "line": 52
         }
       ]
     },
@@ -15125,8 +15125,8 @@
     },
     {
       "path": "js/media-library.js",
-      "bytes": 11674,
-      "sha256": "f47e1b346db1a5343d9ab3550160201f4b99ced0c2de43ea79124d193e38adb5",
+      "bytes": 11807,
+      "sha256": "2c2aaad573e0b7611d311165a916c9f58aa422e8b1bc7abdd583c8aa6938e97d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16054,8 +16054,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 17638,
-      "sha256": "d77d0aa0bb59b4ad95100e1cbd9e43f636eb8ca3392dba09f467e26ad57b6a4f",
+      "bytes": 18519,
+      "sha256": "fabae2493154b96ce992d5a6e8ffa7a32735a7e39b4a1e2a54a64c455f5f96f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16077,13 +16077,13 @@
           "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/image-utils.js",
           "dynamic": false,
-          "line": 305
+          "line": 313
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 377
+          "line": 385
         }
       ]
     },
@@ -16369,8 +16369,8 @@
     {
       "path": "CLOUDINARY_SETUP.md",
       "extension": ".md",
-      "bytes": 5718,
-      "sha256": "b4fa37fed8548bd8f378af77e7b72773d5e1bfb29765945275e8b298eb0f5859"
+      "bytes": 6171,
+      "sha256": "0bf1feb6e2d630259d6cac62a47e2af1061ee7a89ce304d91017ac6c471effc1"
     },
     {
       "path": "FIREBASE_DEPLOY.md",
@@ -16627,8 +16627,8 @@
     {
       "path": "cloudflare/cloudinary-security.js",
       "extension": ".js",
-      "bytes": 5135,
-      "sha256": "f11d368f83d2283428272b91bf996b69f733a91c030e4f29da4e34508f9b5381"
+      "bytes": 5132,
+      "sha256": "957fa737b5f6929e5b3b2ac0d00ae0ab6010d6ea2b6a16d814b3185b9dd9a366"
     },
     {
       "path": "collections.html",
@@ -16849,8 +16849,8 @@
     {
       "path": "functions/api/cloudinary-sign-upload.js",
       "extension": ".js",
-      "bytes": 1806,
-      "sha256": "bf408f0f91d5181878335a9a96edfd3268aae4efd77c6cebbee271d9b30b22d3"
+      "bytes": 1969,
+      "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1"
     },
     {
       "path": "functions/api/visitor-geo.js",
@@ -17233,8 +17233,8 @@
     {
       "path": "js/media-library.js",
       "extension": ".js",
-      "bytes": 11674,
-      "sha256": "f47e1b346db1a5343d9ab3550160201f4b99ced0c2de43ea79124d193e38adb5"
+      "bytes": 11807,
+      "sha256": "2c2aaad573e0b7611d311165a916c9f58aa422e8b1bc7abdd583c8aa6938e97d"
     },
     {
       "path": "js/mobile-header-mode.js",
@@ -17521,8 +17521,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 17638,
-      "sha256": "d77d0aa0bb59b4ad95100e1cbd9e43f636eb8ca3392dba09f467e26ad57b6a4f"
+      "bytes": 18519,
+      "sha256": "fabae2493154b96ce992d5a6e8ffa7a32735a7e39b4a1e2a54a64c455f5f96f9"
     },
     {
       "path": "scripts/audit-integral-platform.js",
@@ -20856,7 +20856,7 @@
           },
           {
             "file": "js/media-library.js",
-            "line": 268,
+            "line": 270,
             "operation": "collection"
           },
           {
@@ -21316,7 +21316,7 @@
           },
           {
             "file": "js/media-library.js",
-            "line": 259,
+            "line": 261,
             "operation": "collection"
           },
           {
@@ -21436,7 +21436,7 @@
           },
           {
             "file": "js/media-library.js",
-            "line": 247,
+            "line": 249,
             "operation": "doc"
           },
           {
