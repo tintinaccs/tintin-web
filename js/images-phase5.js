@@ -50,6 +50,26 @@ if (!window.TintinImagesPhase5Booted) {
     if (media) media.classList.remove('tt-hero-pending');
   }
 
+  // Revelar apenas Firestore confirma la URL no alcanza: la foto todavía
+  // puede estar descargándose, y mientras tanto se ve el fondo de
+  // .tt-hero-media (un parpadeo de color antes de la imagen real). Por eso
+  // se espera también a que el <img> termine de cargar (o falle, para no
+  // quedar colgado) antes de sacar .tt-hero-pending — así la transición es
+  // directa al contenido final, nunca pasa por el fondo a la vista.
+  function revealHeroWhenImageReady(image) {
+    if (!image.getAttribute('src') || (image.complete && image.naturalWidth > 0)) {
+      revealHero();
+      return;
+    }
+    const onSettle = () => {
+      image.removeEventListener('load', onSettle);
+      image.removeEventListener('error', onSettle);
+      revealHero();
+    };
+    image.addEventListener('load', onSettle, { once: true });
+    image.addEventListener('error', onSettle, { once: true });
+  }
+
   function absolute(value) {
     return sanitizeImageUrl(value);
   }
@@ -181,7 +201,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     if (image.dataset.ttHeroPhase5Signature === signature) {
       console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
-      if (heroDataConfirmed) revealHero();
+      if (heroDataConfirmed) revealHeroWhenImageReady(image);
       return;
     }
     console.debug('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
@@ -220,7 +240,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     image.dataset.ttHeroPhase5Signature = signature;
     image.dataset.ttImagePhase5 = '1';
-    if (heroDataConfirmed) revealHero();
+    if (heroDataConfirmed) revealHeroWhenImageReady(image);
   }
 
   function currentDevice() {

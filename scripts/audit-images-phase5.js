@@ -29,6 +29,7 @@ const files = {
   routes: read('_routes.json'),
   cloudinarySetup: read('CLOUDINARY_SETUP.md'),
   loader: read('js/page-loader.js'),
+  indexHtml: read('index.html'),
 };
 
 let failures = 0;
@@ -126,6 +127,23 @@ check(
     files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile');") &&
     files.runtime.includes("if (desktop) image.src = desktop; else image.removeAttribute('src');"),
   'nunca debe verse una imagen distinta a la guardada en Super Admin → Imágenes, ni siquiera de relleno'
+);
+
+check(
+  'El Hero se revela recién cuando la imagen real terminó de cargar, no solo cuando Firestore confirma la URL',
+  files.runtime.includes('function revealHeroWhenImageReady(image)') &&
+    files.runtime.includes('image.addEventListener(\'load\', onSettle, { once: true });') &&
+    files.runtime.includes('image.addEventListener(\'error\', onSettle, { once: true });') &&
+    (files.runtime.match(/revealHeroWhenImageReady\(image\)/g) || []).length >= 2,
+  'sin esto, Firestore puede confirmar la URL antes de que la foto termine de descargarse, dejando ver el fondo de .tt-hero-media un instante'
+);
+
+check(
+  'La red de seguridad del Hero espera a la imagen en camino antes de revelar a ciegas',
+  files.indexHtml.includes('imageStillLoading') &&
+    files.indexHtml.includes('deadline') &&
+    /var deadline = Date\.now\(\) \+ 4000;/.test(files.indexHtml),
+  'con red lenta, revelar a los 900ms sin mirar si la imagen ya cargó muestra el mismo parpadeo de fondo que se reportó'
 );
 
 check(
