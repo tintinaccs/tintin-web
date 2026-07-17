@@ -25,9 +25,15 @@ import './welcome-tutorial-runtime.js';
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
 
-export const HERO_SIZE_VALUES = Object.freeze([
-  'cover', 'contain', 'auto', '80%', '60%', '50%', '40%'
+export const HERO_FIT_VALUES = Object.freeze([
+  'cover', 'contain', 'auto'
 ]);
+export const HERO_ZOOM_VALUES = Object.freeze([
+  '40%', '50%', '60%', '80%', '100%',
+  '110%', '125%', '140%', '160%', '180%', '200%'
+]);
+// Alias conservado para cualquier módulo antiguo que todavía importe este nombre.
+export const HERO_SIZE_VALUES = HERO_FIT_VALUES;
 export const HERO_POSITION_VALUES = Object.freeze([
   'center center', 'center top', 'center bottom',
   'left center', 'right center', 'left top', 'right top',
@@ -60,8 +66,50 @@ export const DEVICE_VARIANT_SLOT_IDS = Object.freeze(
 const DEVICE_VARIANT_SLOT_SET = new Set(DEVICE_VARIANT_SLOT_IDS);
 const HERO_GROUP_AUTOREUSE_KEY = 'hero_bg_autoReuseDesktop';
 
+function normalizeHeroFit(value) {
+  const raw = String(value || '').trim();
+  if (HERO_FIT_VALUES.includes(raw)) return raw;
+  // Compatibilidad con el panel antiguo, que mezclaba zoom y ajuste.
+  if (/^(?:40|50|60|80|100|110|125|140|160|180|200)%$/.test(raw)) return 'contain';
+  return 'cover';
+}
+
+function normalizeHeroZoom(value, legacySize = '') {
+  const raw = String(value || '').trim();
+  if (HERO_ZOOM_VALUES.includes(raw)) return raw;
+  const legacy = String(legacySize || '').trim();
+  if (HERO_ZOOM_VALUES.includes(legacy)) return legacy;
+  return '100%';
+}
+
+function zoomToScale(zoom) {
+  const numeric = Number(String(zoom || '100%').replace('%', ''));
+  if (!Number.isFinite(numeric)) return '1';
+  return String(Math.min(200, Math.max(40, numeric)) / 100);
+}
+
+export function resolveHeroDisplaySettings(images, device = 'desktop') {
+  const safeDevice = ['desktop', 'tablet', 'mobile'].includes(device) ? device : 'desktop';
+  const data = images && typeof images === 'object' ? images : {};
+  const prefix = `hero_bg_${safeDevice}`;
+  const rawSize = data[`${prefix}_size`];
+  const mode = normalizeHeroFit(rawSize);
+  const zoom = normalizeHeroZoom(data[`${prefix}_zoom`], rawSize);
+  const position = HERO_POSITION_VALUES.includes(data[`${prefix}_pos`])
+    ? data[`${prefix}_pos`]
+    : 'center center';
+
+  return {
+    mode,
+    fit: mode === 'auto' ? 'none' : mode,
+    zoom,
+    scale: zoomToScale(zoom),
+    position,
+  };
+}
+
 function isHeroMetaKey(key) {
-  return /^(hero_bg_(?:desktop|tablet|mobile))_(?:size|pos)$/.test(key);
+  return /^(hero_bg_(?:desktop|tablet|mobile))_(?:size|zoom|pos)$/.test(key);
 }
 
 function deviceVariantKeyInfo(key) {
@@ -79,7 +127,10 @@ function allowedSettingKey(key) {
 
 function normalizeMetaValue(key, value) {
   if (key.endsWith('_size')) {
-    return HERO_SIZE_VALUES.includes(value) ? value : 'cover';
+    return normalizeHeroFit(value);
+  }
+  if (key.endsWith('_zoom')) {
+    return normalizeHeroZoom(value);
   }
   if (key.endsWith('_pos')) {
     return HERO_POSITION_VALUES.includes(value) ? value : 'center center';
@@ -105,8 +156,11 @@ export function normalizeImagesData(raw) {
 
   HERO_SLOT_SET.forEach(id => {
     const sizeKey = `${id}_size`;
+    const zoomKey = `${id}_zoom`;
     const posKey = `${id}_pos`;
-    normalized[sizeKey] = normalizeMetaValue(sizeKey, source[sizeKey]);
+    const rawSize = source[sizeKey];
+    normalized[sizeKey] = normalizeHeroFit(rawSize);
+    normalized[zoomKey] = normalizeHeroZoom(source[zoomKey], rawSize);
     normalized[posKey] = normalizeMetaValue(posKey, source[posKey]);
   });
   normalized[HERO_GROUP_AUTOREUSE_KEY] = normalizeBoolean(source[HERO_GROUP_AUTOREUSE_KEY]);
@@ -185,6 +239,7 @@ let _cache = null;
 let _listenerStarted = false;
 const _subscribers = new Set();
 const _errorSubscribers = new Set();
+let _heroApplyToken = 0;
 
 function fromLocalStorage() {
   try {
@@ -200,6 +255,32 @@ function toLocalStorage(data) {
   } catch {}
 }
 
+function applyHeroDisplayVariables(data) {
+  if (typeof document === 'undefined') return;
+  const image = document.getElementById('tt-hero-img');
+  if (!(image instanceof HTMLImageElement)) return;
+
+  ['desktop', 'tablet', 'mobile'].forEach(device => {
+    const display = resolveHeroDisplaySettings(data, device);
+    image.style.setProperty(`--tt-hero-fit-${device}`, display.fit);
+    image.style.setProperty(`--tt-hero-scale-${device}`, display.scale);
+    image.style.setProperty(`--tt-hero-pos-${device}`, display.position);
+  });
+}
+
+function scheduleHeroDisplayVariables(data = _cache || fromLocalStorage()) {
+  if (typeof window === 'undefined') return;
+  const token = ++_heroApplyToken;
+  const run = () => {
+    if (token !== _heroApplyToken) return;
+    applyHeroDisplayVariables(_cache || data);
+  };
+
+  // Doble frame: images-phase5 aplica primero URLs y estilos base; este puente
+  // aplica después el ajuste/zoom/posición final, sin que otro CSS lo anule.
+  requestAnimationFrame(() => requestAnimationFrame(run));
+}
+
 function publish(data) {
   const snapshot = normalizeImagesData(data);
   _cache = snapshot;
@@ -208,6 +289,7 @@ function publish(data) {
     try { fn({ ...snapshot }); }
     catch (error) { console.warn('[images] subscriber error:', error); }
   });
+  scheduleHeroDisplayVariables(snapshot);
   return snapshot;
 }
 
@@ -225,6 +307,7 @@ export async function loadImages(options = {}) {
     _cache = fromLocalStorage();
   }
   if (!force && _cache && Object.keys(_cache).length && _listenerStarted) {
+    scheduleHeroDisplayVariables(_cache);
     return { ..._cache };
   }
 
@@ -234,6 +317,7 @@ export async function loadImages(options = {}) {
   } catch (error) {
     console.warn('[images] Firestore load failed:', error);
     publishError(error);
+    scheduleHeroDisplayVariables(_cache || {});
     return { ...(_cache || {}) };
   }
 }
@@ -276,10 +360,22 @@ export function setImgCache(id, value) {
     const safe = sanitizeImageUrl(value);
     if (!safe) return;
     _cache[id] = safe;
+  } else if (deviceVariantKeyInfo(id)) {
+    const info = deviceVariantKeyInfo(id);
+    if (info?.suffix === 'autoReuseDesktop') {
+      _cache[id] = normalizeBoolean(value);
+    } else {
+      const safe = sanitizeImageUrl(value);
+      if (!safe) return;
+      _cache[id] = safe;
+    }
+  } else if (id === HERO_GROUP_AUTOREUSE_KEY) {
+    _cache[id] = normalizeBoolean(value);
   } else {
     _cache[id] = normalizeMetaValue(id, String(value));
   }
   toLocalStorage(_cache);
+  scheduleHeroDisplayVariables(_cache);
 }
 
 export function onImagesUpdate(callback, onError) {
@@ -287,6 +383,7 @@ export function onImagesUpdate(callback, onError) {
     _subscribers.add(callback);
     if (!_cache) _cache = fromLocalStorage();
     callback({ ..._cache });
+    scheduleHeroDisplayVariables(_cache);
   }
   if (typeof onError === 'function') _errorSubscribers.add(onError);
 
@@ -307,3 +404,190 @@ export function onImagesUpdate(callback, onError) {
     if (typeof onError === 'function') _errorSubscribers.delete(onError);
   };
 }
+
+function setAdminToast(message, isError = false) {
+  const toast = document.getElementById('adm-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.style.background = isError ? '#c0392b' : '#1a1a1a';
+  toast.classList.add('show');
+  window.clearTimeout(toast._ttHideTimer);
+  toast._ttHideTimer = window.setTimeout(() => toast.classList.remove('show'), isError ? 5500 : 2800);
+}
+
+function applyAdminHeroPreview(card) {
+  const slotId = card?.dataset?.slotId;
+  if (!slotId) return;
+
+  const mode = document.getElementById(`size-${slotId}`)?.value || 'cover';
+  const zoom = document.getElementById(`zoom-${slotId}`)?.value || '100%';
+  const position = document.getElementById(`pos-${slotId}`)?.value || 'center center';
+  const preview = card.querySelector('.adm-preview');
+  const image = preview?.querySelector('img');
+
+  if (preview) {
+    preview.style.background = '#FFF6FA';
+    preview.style.backgroundImage = 'none';
+  }
+  if (!(image instanceof HTMLImageElement)) return;
+
+  image.style.objectFit = mode === 'auto' ? 'none' : mode;
+  image.style.objectPosition = position;
+  image.style.transform = `scale(${zoomToScale(zoom)})`;
+  image.style.transformOrigin = position;
+  image.style.maxWidth = 'none';
+  image.style.maxHeight = 'none';
+}
+
+function installAdminHeroControls() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!/(?:^|\/)admin-images\.html$/.test(window.location.pathname)) return;
+  if (window.TintinAdminHeroControlsV2Booted) return;
+  window.TintinAdminHeroControlsV2Booted = true;
+
+  const addStyles = () => {
+    if (document.getElementById('tt-admin-hero-controls-v2-style')) return;
+    const style = document.createElement('style');
+    style.id = 'tt-admin-hero-controls-v2-style';
+    style.textContent = `
+      .adm-hero-help{
+        margin:2px 0 4px;
+        padding:10px 12px;
+        border-radius:8px;
+        background:#fff6fa;
+        color:#6f5b63;
+        font-size:.72rem;
+        line-height:1.45;
+      }
+      .adm-hero-help strong{color:#9f2d57}
+      .adm-hero-controls-v2 .adm-hero-ctrl-row{align-items:center}
+    `;
+    document.head.appendChild(style);
+  };
+
+  const enhance = () => {
+    document.querySelectorAll('.adm-img-card[data-slot-id^="hero_bg_"]').forEach(card => {
+      const slotId = card.dataset.slotId;
+      const controls = card.querySelector('.adm-hero-controls');
+      if (!controls) return;
+
+      if (controls.dataset.ttHeroControlsV2 === '1') {
+        applyAdminHeroPreview(card);
+        return;
+      }
+
+      const sizeSelect = document.getElementById(`size-${slotId}`);
+      const posSelect = document.getElementById(`pos-${slotId}`);
+      const oldButton = controls.querySelector(`[data-hero-save="${slotId}"]`);
+      if (!(sizeSelect instanceof HTMLSelectElement) ||
+          !(posSelect instanceof HTMLSelectElement) ||
+          !(oldButton instanceof HTMLButtonElement)) return;
+
+      const rawSize = getImg(`${slotId}_size`) || sizeSelect.value || 'cover';
+      const fit = normalizeHeroFit(rawSize);
+      const zoom = normalizeHeroZoom(getImg(`${slotId}_zoom`), rawSize);
+
+      sizeSelect.innerHTML = `
+        <option value="cover">Cubrir contenedor (cover)</option>
+        <option value="contain">Mostrar completa (contain)</option>
+        <option value="auto">Tamaño original (auto)</option>
+      `;
+      sizeSelect.value = fit;
+      sizeSelect.closest('.adm-hero-ctrl-row')?.querySelector('label')?.replaceChildren('Ajuste');
+
+      const zoomRow = document.createElement('div');
+      zoomRow.className = 'adm-hero-ctrl-row';
+      zoomRow.innerHTML = `
+        <label>Zoom</label>
+        <select id="zoom-${slotId}" class="adm-hero-select">
+          ${HERO_ZOOM_VALUES.map(value =>
+            `<option value="${value}" ${value === zoom ? 'selected' : ''}>${value}</option>`
+          ).join('')}
+        </select>
+      `;
+
+      const posRow = posSelect.closest('.adm-hero-ctrl-row');
+      controls.insertBefore(zoomRow, posRow || oldButton);
+
+      const help = document.createElement('p');
+      help.className = 'adm-hero-help';
+      help.innerHTML = '<strong>Cover</strong> llena el bloque. Si la imagen ya trae espacio vacío dentro del archivo, aumentá el <strong>Zoom</strong> y ajustá la <strong>Posición</strong>.';
+      controls.insertBefore(help, oldButton);
+
+      const saveButton = oldButton.cloneNode(true);
+      saveButton.textContent = 'Guardar ajuste, zoom y posición';
+      oldButton.replaceWith(saveButton);
+
+      const zoomSelect = document.getElementById(`zoom-${slotId}`);
+      [sizeSelect, zoomSelect, posSelect].forEach(select => {
+        select?.addEventListener('change', () => applyAdminHeroPreview(card));
+      });
+
+      saveButton.addEventListener('click', async () => {
+        const nextFit = sizeSelect.value || 'cover';
+        const nextZoom = zoomSelect?.value || '100%';
+        const nextPos = posSelect.value || 'center center';
+
+        saveButton.disabled = true;
+        try {
+          await saveImages({
+            [`${slotId}_size`]: nextFit,
+            [`${slotId}_zoom`]: nextZoom,
+            [`${slotId}_pos`]: nextPos,
+          });
+          setAdminToast('✅ Ajuste, zoom y posición guardados');
+          applyAdminHeroPreview(card);
+        } catch (error) {
+          console.error('[images] No se pudo guardar el hero:', error);
+          setAdminToast(`❌ No se pudo guardar: ${error?.message || 'error desconocido'}`, true);
+        } finally {
+          saveButton.disabled = false;
+        }
+      });
+
+      controls.classList.add('adm-hero-controls-v2');
+      controls.dataset.ttHeroControlsV2 = '1';
+      applyAdminHeroPreview(card);
+    });
+  };
+
+  const boot = () => {
+    addStyles();
+    const grid = document.getElementById('adm-cards-grid');
+    if (!grid) {
+      window.setTimeout(boot, 80);
+      return;
+    }
+    enhance();
+    const observer = new MutationObserver(enhance);
+    observer.observe(grid, { childList: true, subtree: true });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+}
+
+function installHeroDisplayBridge() {
+  if (typeof window === 'undefined') return;
+  const reapply = () => scheduleHeroDisplayVariables(_cache || fromLocalStorage());
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', reapply, { once: true });
+  } else {
+    reapply();
+  }
+  window.addEventListener('load', reapply, { once: true });
+  window.addEventListener('tintin:images-phase5-ready', reapply);
+
+  ['(max-width: 767px)', '(max-width: 1023px)'].forEach(query => {
+    const mql = window.matchMedia(query);
+    if (mql.addEventListener) mql.addEventListener('change', reapply);
+    else if (mql.addListener) mql.addListener(reapply);
+  });
+}
+
+installHeroDisplayBridge();
+installAdminHeroControls();
