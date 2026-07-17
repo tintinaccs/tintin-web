@@ -38,6 +38,12 @@ check(
   'debe quedar bloqueado incluso si el módulo o Firebase no responden'
 );
 check(
+  'El tope de espera da margen real a redes o equipos lentos',
+  pageLoader.includes('const STORE_GATE_TIMEOUT_MS = 9000') &&
+    pageLoader.includes('const SAFETY_MS = 11000'),
+  'un tope demasiado corto (4.5-5.2s) bloquea la tienda igual cuando la conexión es lenta pero funciona'
+);
+check(
   'Runtime diferido hasta permitir acceso',
   pageLoader.includes("if (state === 'allowed')") &&
     pageLoader.includes('function bootPublicRuntime()') &&

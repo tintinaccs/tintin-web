@@ -68,8 +68,17 @@
 
   const TT_CACHE_VERSION = 'tintin-20260716-cloudinary-fix-1';
   const MIN_SHOW_MS = 520;
-  const STORE_GATE_TIMEOUT_MS = 4500;
-  const SAFETY_MS = 5200;
+  // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
+  // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
+  // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
+  // cumpliera — cargar page-loader.js → store-gate.js → Firebase Auth/
+  // Firestore (todos módulos ES encadenados, algunos desde el CDN de
+  // Google) puede tardar más que 4.5-5.2s en una red o equipo lentos. Se
+  // duplica el margen sin tocar el comportamiento "fail closed": si de
+  // verdad no se puede comprobar el estado, se sigue bloqueando igual, solo
+  // que se le da más tiempo real a la conexión antes de decidir eso.
+  const STORE_GATE_TIMEOUT_MS = 9000;
+  const SAFETY_MS = 11000;
   const START = Date.now();
   const SCRIPT_SRC = document.currentScript && document.currentScript.src;
 

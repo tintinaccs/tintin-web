@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T14:56:03.210Z",
-  "sourceFingerprint": "3f1ff4e0e5bcdfd670266105e6ce6f7114fd1b4f7b111d7ab9160d198db49313",
+  "generatedAt": "2026-07-17T15:20:54.594Z",
+  "sourceFingerprint": "5c52857ba68932d3117c28cb9a22b3189b9d62ad8c4c4b36c286fdbbf92e78b3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 228,
     "textFiles": 191,
-    "totalBytes": 4978201,
+    "totalBytes": 4979166,
     "pages": 18,
     "modules": 114
   },
@@ -15226,8 +15226,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 27266,
-      "sha256": "6b2eebc9b66fa0487cf8f3f5e9b1747e631b23e14aa56620313d6f0505a061cd",
+      "bytes": 27937,
+      "sha256": "6a08c0e971f341612b249f5e3b2cf6f76185d286e115a59a692ce3b9ab1033d1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16178,8 +16178,8 @@
     },
     {
       "path": "scripts/audit-store-gate.js",
-      "bytes": 10612,
-      "sha256": "d7f95273cae1a97e949af3ade265f6c894a0b8264ce060c791106317b89ab6e9",
+      "bytes": 10906,
+      "sha256": "75eeb34ef4f96477b63dadb88ac0d54e8ff3a913713cdbeaff0bc530364119e7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17218,8 +17218,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 27266,
-      "sha256": "6b2eebc9b66fa0487cf8f3f5e9b1747e631b23e14aa56620313d6f0505a061cd"
+      "bytes": 27937,
+      "sha256": "6a08c0e971f341612b249f5e3b2cf6f76185d286e115a59a692ce3b9ab1033d1"
     },
     {
       "path": "js/phone-utils.js",
@@ -17518,8 +17518,8 @@
     {
       "path": "scripts/audit-store-gate.js",
       "extension": ".js",
-      "bytes": 10612,
-      "sha256": "d7f95273cae1a97e949af3ade265f6c894a0b8264ce060c791106317b89ab6e9"
+      "bytes": 10906,
+      "sha256": "75eeb34ef4f96477b63dadb88ac0d54e8ff3a913713cdbeaff0bc530364119e7"
     },
     {
       "path": "scripts/audit-tintin.js",
@@ -19292,28 +19292,28 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 113,
+      "line": 122,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 373,
+      "line": 382,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 514,
+      "line": 523,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 520,
+      "line": 529,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -21446,17 +21446,17 @@
           },
           {
             "file": "scripts/audit-store-gate.js",
-            "line": 124,
+            "line": 130,
             "operation": "doc"
           },
           {
             "file": "scripts/audit-store-gate.js",
-            "line": 125,
+            "line": 131,
             "operation": "doc"
           },
           {
             "file": "scripts/audit-store-gate.js",
-            "line": 149,
+            "line": 155,
             "operation": "doc"
           }
         ]
