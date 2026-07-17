@@ -3,6 +3,23 @@
 
   if (window.TintinLoader) return;
 
+  // Preconecta con Cloudinary (DNS + TLS) antes de que se descubra la
+  // primera imagen real — recorta el primer byte de cualquier foto servida
+  // desde ahí (hero, editorial, Nosotros, logo, productos, colecciones) en
+  // TODAS las páginas, sin depender de que cada HTML lo declare por separado.
+  if (document.head && !document.getElementById('tt-cloudinary-preconnect')) {
+    const preconnect = document.createElement('link');
+    preconnect.id = 'tt-cloudinary-preconnect';
+    preconnect.rel = 'preconnect';
+    preconnect.href = 'https://res.cloudinary.com';
+    preconnect.crossOrigin = 'anonymous';
+    document.head.appendChild(preconnect);
+    const dnsPrefetch = document.createElement('link');
+    dnsPrefetch.rel = 'dns-prefetch';
+    dnsPrefetch.href = 'https://res.cloudinary.com';
+    document.head.appendChild(dnsPrefetch);
+  }
+
   const documentElement = document.documentElement;
   const path = (window.location.pathname || '').toLowerCase();
   const isOwnGuardPage =

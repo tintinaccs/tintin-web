@@ -5,6 +5,31 @@
 const MAX_IMAGE_URL_LENGTH = 2048;
 const FORBIDDEN_URL_CHARS = /['"<>\u0000-\u001f\u007f]/;
 
+const CLOUDINARY_HOST = 'res.cloudinary.com';
+const CLOUDINARY_UPLOAD_MARKER = '/upload/';
+
+/**
+ * Inserta f_auto,q_auto en cualquier URL de entrega de Cloudinary: el CDN
+ * elige automáticamente el formato más liviano que el navegador soporte
+ * (AVIF/WebP) y la calidad perceptual óptima para esa imagen puntual, sin
+ * tocar el archivo original subido. Resultado: misma nitidez percibida, con
+ * bytes bastante menores y sin ningún cambio en la firma de subida ni en
+ * Cloudinary mismo — es puro reescritura de URL en el momento de mostrarla.
+ */
+function withCloudinaryAutoDelivery(href) {
+  try {
+    const url = new URL(href);
+    if (url.hostname !== CLOUDINARY_HOST) return href;
+    const idx = url.pathname.indexOf(CLOUDINARY_UPLOAD_MARKER);
+    if (idx === -1 || url.pathname.includes(`${CLOUDINARY_UPLOAD_MARKER}f_auto`)) return href;
+    const insertAt = idx + CLOUDINARY_UPLOAD_MARKER.length;
+    url.pathname = `${url.pathname.slice(0, insertAt)}f_auto,q_auto/${url.pathname.slice(insertAt)}`;
+    return url.href;
+  } catch {
+    return href;
+  }
+}
+
 export function sanitizeImageUrl(value, options = {}) {
   const {
     allowRelative = true,
@@ -34,7 +59,7 @@ export function sanitizeImageUrl(value, options = {}) {
       return '';
     }
 
-    return parsed.href;
+    return withCloudinaryAutoDelivery(parsed.href);
   } catch {
     return '';
   }

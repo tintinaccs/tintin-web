@@ -463,11 +463,19 @@ async function saveField(patch, successMessage) {
   }
 }
 
-function mountDeviceWidget(container, { slotKey, label, hint, currentUrl }) {
+// Hero/Editorial/Nosotros son fotos grandes a pantalla completa: admiten
+// hasta 4K real (3840px) a mayor calidad. El logo y el resto usan el
+// respaldo de 2000px/0.82 de image-processing.js, de sobra para su tamaño.
+const FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.92 };
+
+function mountDeviceWidget(container, { slotKey, label, hint, currentUrl, maxWidth, maxHeight, quality }) {
   return attachImageUploadWidget(container, {
     label,
     hint,
     value: currentUrl,
+    maxWidth,
+    maxHeight,
+    quality,
     onOpenLibrary: openMediaLibraryPicker,
     onChange: async url => {
       await saveField({ [slotKey]: url || null }, url ? '✅ Imagen guardada' : '✅ Imagen quitada');
@@ -529,8 +537,9 @@ function renderSection(section) {
       mountDeviceWidget(widgetMount, {
         slotKey: slot.id,
         label: 'Imagen',
-        hint: 'Tamaño recomendado: 1920×1080px (o similar, formato ancho)',
+        hint: 'Tamaño recomendado: 1920×1080px o más — se admite hasta 4K (3840px) para máxima nitidez',
         currentUrl: getImg(slot.id) || '',
+        ...FULL_BLEED_UPLOAD_LIMITS,
       });
 
       const heroControls = document.createElement('div');
@@ -573,6 +582,9 @@ function renderSection(section) {
     } else if (isDeviceVariant) {
       const autoReuseKey = `${slot.id}_autoReuseDesktop`;
       const autoReuse = getAllImages()[autoReuseKey] !== false;
+      // Editorial y Nosotros son fotos grandes a pantalla completa (igual que
+      // el Hero); el logo es chico y no necesita 4K.
+      const uploadLimits = slot.id === 'logo_main' ? {} : FULL_BLEED_UPLOAD_LIMITS;
 
       const devicesWrap = document.createElement('div');
       devicesWrap.className = 'adm-device-slots';
@@ -585,7 +597,7 @@ function renderSection(section) {
         const mount = document.createElement('div');
         mount.className = 'adm-device-slot';
         devicesWrap.appendChild(mount);
-        mountDeviceWidget(mount, { slotKey: key, label, currentUrl: getImg(key) || '' });
+        mountDeviceWidget(mount, { slotKey: key, label, currentUrl: getImg(key) || '', ...uploadLimits });
       });
 
       const autoLabel = document.createElement('label');

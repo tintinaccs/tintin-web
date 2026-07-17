@@ -28,6 +28,7 @@ const files = {
   geoFunction: read('functions/api/visitor-geo.js'),
   routes: read('_routes.json'),
   cloudinarySetup: read('CLOUDINARY_SETUP.md'),
+  loader: read('js/page-loader.js'),
 };
 
 let failures = 0;
@@ -46,6 +47,30 @@ check(
     files.utils.includes('FORBIDDEN_URL_CHARS') &&
     files.utils.includes('MAX_IMAGE_URL_LENGTH'),
   'deben rechazarse esquemas, comillas y URLs excesivas'
+);
+
+check(
+  'Toda URL de Cloudinary recibe entrega automática f_auto,q_auto',
+  files.utils.includes('function withCloudinaryAutoDelivery') &&
+    files.utils.includes("f_auto,q_auto") &&
+    files.utils.includes('return withCloudinaryAutoDelivery(parsed.href);'),
+  'sin esto, cada imagen de Cloudinary se sirve en el formato/calidad fijos que subió el archivo, más pesados de lo necesario'
+);
+
+check(
+  'El sitio preconecta con Cloudinary en todas las páginas',
+  files.loader.includes("rel = 'preconnect'") &&
+    files.loader.includes("href = 'https://res.cloudinary.com'") &&
+    files.loader.includes("rel = 'dns-prefetch'"),
+  'sin preconectar, la primera imagen de Cloudinary de cada página paga DNS+TLS completos antes de empezar a descargarse'
+);
+
+check(
+  'Hero, Editorial y Nosotros admiten subidas de hasta 4K con mayor calidad',
+  files.adminHtml.includes('FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.92 }') &&
+    files.adminHtml.includes('...FULL_BLEED_UPLOAD_LIMITS') &&
+    files.adminHtml.includes("slot.id === 'logo_main' ? {} : FULL_BLEED_UPLOAD_LIMITS"),
+  'las fotos a pantalla completa no deben quedar limitadas al tope genérico de 2000px pensado para tarjetas chicas'
 );
 
 check(

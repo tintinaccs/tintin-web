@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T11:28:57.006Z",
-  "sourceFingerprint": "61e28dec8d71c9d504a97b7b45b60740cbba9fcaba53d7310f21e87ec6d22384",
+  "generatedAt": "2026-07-17T11:50:19.354Z",
+  "sourceFingerprint": "026117356caf532eaaa19e2dd5d62bd5bd36ca88f8c36f32d3adeaedc39d3967",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 228,
     "textFiles": 191,
-    "totalBytes": 4969204,
+    "totalBytes": 4973110,
     "pages": 18,
     "modules": 114
   },
@@ -976,8 +976,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 34012,
-      "sha256": "10678e83504274cac8c97137685e89419b8a9d7fa7b402f66475025c068c458f",
+      "bytes": 34695,
+      "sha256": "5f7ab9040ab6b68f0f0949c846191d639cb0466122cc34a57d6f07d1eee312a9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1019,7 +1019,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 725
+          "line": 737
         }
       ],
       "styles": [
@@ -1088,7 +1088,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 725,
+          "line": 737,
           "exists": true
         },
         {
@@ -14972,8 +14972,8 @@
     },
     {
       "path": "js/image-utils.js",
-      "bytes": 2453,
-      "sha256": "0b49b055d71b7147a40dff789f6185f7d78ab75a7b4d9d8f63d7a60714437d37",
+      "bytes": 3554,
+      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15226,14 +15226,19 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 26036,
-      "sha256": "487a1763cacae30fa8f1f2c91cd6107c98d20aff9d810ecb1062ba056b89fe2e",
+      "bytes": 26892,
+      "sha256": "bd4ee1abb24efb2b0f7eb58fb9d19f56e9d9ab40343a0c2aba3ac28788d85869",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://res.cloudinary.com/",
+          "line": 14
+        }
+      ]
     },
     {
       "path": "js/phone-utils.js",
@@ -16018,8 +16023,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 20637,
-      "sha256": "e88f8b403c258530238b931d6b7bd312853a4b87f076495aa8dc9c977abae03e",
+      "bytes": 21903,
+      "sha256": "292ce73c6e511c187c3746550729b79cde7bf668a45780560ab31cc7f481c028",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16029,25 +16034,29 @@
           "raw": "./images.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/images.js",
           "dynamic": false,
-          "line": 139
+          "line": 164
         },
         {
           "raw": "./image-processing.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/image-processing.js",
           "dynamic": false,
-          "line": 172
+          "line": 197
         },
         {
           "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/image-utils.js",
           "dynamic": false,
-          "line": 332
+          "line": 357
         }
       ],
       "endpoints": [
         {
+          "url": "https://res.cloudinary.com/",
+          "line": 63
+        },
+        {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 421
+          "line": 446
         }
       ]
     },
@@ -16357,8 +16366,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 34012,
-      "sha256": "10678e83504274cac8c97137685e89419b8a9d7fa7b402f66475025c068c458f"
+      "bytes": 34695,
+      "sha256": "5f7ab9040ab6b68f0f0949c846191d639cb0466122cc34a57d6f07d1eee312a9"
     },
     {
       "path": "admin.html",
@@ -17149,8 +17158,8 @@
     {
       "path": "js/image-utils.js",
       "extension": ".js",
-      "bytes": 2453,
-      "sha256": "0b49b055d71b7147a40dff789f6185f7d78ab75a7b4d9d8f63d7a60714437d37"
+      "bytes": 3554,
+      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6"
     },
     {
       "path": "js/images-phase5.js",
@@ -17209,8 +17218,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 26036,
-      "sha256": "487a1763cacae30fa8f1f2c91cd6107c98d20aff9d810ecb1062ba056b89fe2e"
+      "bytes": 26892,
+      "sha256": "bd4ee1abb24efb2b0f7eb58fb9d19f56e9d9ab40343a0c2aba3ac28788d85869"
     },
     {
       "path": "js/phone-utils.js",
@@ -17467,8 +17476,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 20637,
-      "sha256": "e88f8b403c258530238b931d6b7bd312853a4b87f076495aa8dc9c977abae03e"
+      "bytes": 21903,
+      "sha256": "292ce73c6e511c187c3746550729b79cde7bf668a45780560ab31cc7f481c028"
     },
     {
       "path": "scripts/audit-integral-platform.js",
@@ -19255,56 +19264,56 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 9,
+      "line": 26,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 11,
+      "line": 28,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 14,
+      "line": 31,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 17,
+      "line": 34,
       "raw": "/admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 96,
+      "line": 113,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 351,
+      "line": 368,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 492,
+      "line": 509,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 498,
+      "line": 515,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -21537,7 +21546,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 701,
+            "line": 713,
             "operation": "doc"
           },
           {
