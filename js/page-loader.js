@@ -138,7 +138,12 @@
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFF6FA;transition:opacity .38s ease,visibility .38s ease;overflow:hidden;overscroll-behavior:none;touch-action:none}',
+    // Sin transición: el cambio de logo de carga a contenido final tiene que
+    // ser directo, de un punto a otro, nunca un cross-fade visible del fondo
+    // claro del loader mezclándose con el contenido de abajo (aunque ese
+    // contenido ya esté 100% listo y correcto, la mezcla en sí se percibe
+    // como "otro paso" antes de llegar al resultado final).
+    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFF6FA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}',
     '#tt-loader-logo{position:relative;z-index:1;width:clamp(180px,15vw,230px);max-width:72vw;height:auto;object-fit:contain;display:block;opacity:0;transform:scale(.96);filter:drop-shadow(0 8px 22px rgba(212,106,138,.18));user-select:none;pointer-events:none}',
