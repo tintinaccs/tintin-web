@@ -486,12 +486,43 @@
      requestAnimationFrame() del <head>, que podía dispararse con el <body>
      todavía sin terminar de parsearse (medido con document.readyState
      todavía en 'loading' en ese punto). Acá abajo, después de todas las
-     secciones estáticas, la condición depende solo de que existan de
-     verdad y de que el documento ya tenga un rango desplazable real — no
-     de recursos remotos (imágenes, productos, Firebase, fuentes). -->
+     secciones estáticas, la condición depende de que existan de verdad, de
+     que el documento ya tenga un rango desplazable real, y de que la foto
+     del hero (si hay una configurada) ya haya terminado de cargar — así el
+     loader nunca se oculta mostrando el fondo oscuro del hero un instante
+     antes de que aparezca la imagen real, ni de golpe "transforma" el
+     diseño frente a quien mira. No depende de otros recursos remotos
+     (productos, Firebase, fuentes). -->
 <script>
 (function () {
   var attempts = 0;
+  var heroWaitStart = null;
+  // Un poco más que el tope duro de 4s de la red de seguridad del propio
+  // hero (ver más abajo): para cuando este tope se cumple, esa red de
+  // seguridad ya tuvo su oportunidad de revelar el hero igual (con o sin
+  // imagen real) — así nunca compiten entre sí ni el loader se queda
+  // esperando más de lo que el propio hero está dispuesto a esperar.
+  var HERO_WAIT_CEILING_MS = 4500;
+
+  function heroReady() {
+    // Reusa la misma señal que ya decide cuándo se ve el hero (images-phase5.js
+    // o su propia red de seguridad): en vez de volver a adivinar si hay una
+    // imagen en camino, simplemente espera a que esa decisión ya se haya
+    // tomado — evita la carrera de creer "no hay imagen" solo porque
+    // images-phase5.js todavía no tuvo tiempo de asignar el src.
+    var media = document.getElementById('tt-hero-media');
+    if (!media) return true;
+    return !media.classList.contains('tt-hero-pending');
+  }
+
+  function waitForHeroImageThenRelease() {
+    if (heroWaitStart === null) heroWaitStart = Date.now();
+    if (heroReady() || Date.now() - heroWaitStart >= HERO_WAIT_CEILING_MS) {
+      window.ttPageReady && window.ttPageReady();
+      return;
+    }
+    window.setTimeout(waitForHeroImageThenRelease, 80);
+  }
 
   function releaseHomeWhenStructurallyReady() {
     attempts += 1;
@@ -508,7 +539,7 @@
     var hasScrollableHeight = root.scrollHeight > viewportHeight + 40;
 
     if (hasStaticStructure && hasScrollableHeight) {
-      window.ttPageReady && window.ttPageReady();
+      waitForHeroImageThenRelease();
       return;
     }
 
@@ -517,7 +548,7 @@
       return;
     }
 
-    window.ttPageReady && window.ttPageReady();
+    waitForHeroImageThenRelease();
   }
 
   requestAnimationFrame(releaseHomeWhenStructurallyReady);

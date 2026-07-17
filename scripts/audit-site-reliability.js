@@ -166,6 +166,11 @@ check('La portada usa la forma correcta TU ESTILO incluso con contenido históri
   !home.includes('TÚ ESTILO</h1>') &&
   contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
   siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
+check('El loader de la portada espera a que la foto del hero cargue antes de ocultarse',
+  home.includes('function heroReady()') &&
+  home.includes("return !media.classList.contains('tt-hero-pending');") &&
+  home.includes('function waitForHeroImageThenRelease()') &&
+  home.includes('HERO_WAIT_CEILING_MS = 4500'));
 check('La colección Bolsos conserva su portada real después de sincronizar',
   collectionsPhase4.includes("const SLUG_FILE_MAP = { bolsos: 'bags' }") &&
   collectionsPhase4.includes('col-${file}.webp') &&
