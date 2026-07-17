@@ -177,8 +177,8 @@ body:not(:has(.adm-main)) :is(h1,h2,h3,h4,h5,h6,.tt-title,.tt-section-title){col
 body:not(:has(.adm-main)) :is(.tt-subtitle,.tt-section-sub,.login-heading-sub){color:var(--color-text-subtitle)!important}
 body:not(:has(.adm-main)) :is(label,legend,.field-label,.form-label){color:var(--color-text-label)!important}
 body:not(:has(.adm-main)) :is(input,textarea)::placeholder{color:var(--color-text-placeholder)!important}
-body:not(:has(.adm-main)) a:not(.tt-btn):not(.ck-btn):not(.login-google){color:var(--color-text-link)!important}
-body:not(:has(.adm-main)) a:visited:not(.tt-btn):not(.ck-btn):not(.login-google){color:var(--color-text-link-visited)!important}
+body:not(:has(.adm-main)) a:not(.tt-btn):not(.ck-btn):not(.login-google):not(.tt-wa-float):not(.tt-footer-wa):not(.tt-contact-wa-link):not(.tt-cart-goto-btn):not(.tt-added-toast-checkout){color:var(--color-text-link)!important}
+body:not(:has(.adm-main)) a:visited:not(.tt-btn):not(.ck-btn):not(.login-google):not(.tt-wa-float):not(.tt-footer-wa):not(.tt-contact-wa-link):not(.tt-cart-goto-btn):not(.tt-added-toast-checkout){color:var(--color-text-link-visited)!important}
 body:not(:has(.adm-main)) :is(.help-text,.field-help,.ck-help,.form-help){color:var(--color-text-help)!important}
 body:not(:has(.adm-main)) :is(.on-dark,.text-inverse,.tt-btn-primary,.tt-wa-float){color:var(--color-text-inverse)!important}
 
