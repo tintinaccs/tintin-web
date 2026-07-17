@@ -68,20 +68,21 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   height:100%;
   overflow:hidden;
 }
-/* El banner debe entrar completo en el dispositivo activo. Se conserva la
-   posición y la escala configuradas desde Super Admin, pero se evita cover,
-   que recortaba partes de la imagen al cambiar de proporción de pantalla. */
+/* El tamaño y la posición se leen de las variables que configura Super Admin
+   para cada dispositivo. No se fija contain/cover acá: desktop, tablet y
+   mobile deben respetar de forma independiente su selección publicada. */
 body.tt-home-premium #tt-hero-img{
   width:100%!important;
   height:100%!important;
   max-width:none!important;
-  object-fit:contain!important;
+  object-fit:var(--tt-hero-fit-desktop,cover)!important;
   object-position:var(--tt-hero-pos-desktop,center center)!important;
   transform:scale(var(--tt-hero-scale-desktop,1))!important;
   transform-origin:var(--tt-hero-pos-desktop,center center)!important;
 }
 @media(max-width:1023px){
   body.tt-home-premium #tt-hero-img{
+    object-fit:var(--tt-hero-fit-tablet,cover)!important;
     object-position:var(--tt-hero-pos-tablet,center center)!important;
     transform:scale(var(--tt-hero-scale-tablet,1))!important;
     transform-origin:var(--tt-hero-pos-tablet,center center)!important;
@@ -89,6 +90,7 @@ body.tt-home-premium #tt-hero-img{
 }
 @media(max-width:767px){
   body.tt-home-premium #tt-hero-img{
+    object-fit:var(--tt-hero-fit-mobile,cover)!important;
     object-position:var(--tt-hero-pos-mobile,center center)!important;
     transform:scale(var(--tt-hero-scale-mobile,1))!important;
     transform-origin:var(--tt-hero-pos-mobile,center center)!important;
@@ -132,7 +134,7 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
 .tt-home-premium .tt-footer a.tt-footer-wa:hover{color:#fff!important}
 .tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#2B2B2B!important;font-weight:800!important;opacity:1!important}
 .tt-home-premium .tt-footer-brand strong,.tt-home-premium .tt-footer-logo strong{font-weight:900!important;color:#2B2B2B!important}
-@media(max-width:767px){.tt-home-premium .tt-hero{min-height:max(520px,calc(100svh - 16px))}.tt-home-premium .section{padding:56px 0}.tt-home-premium .section-sm{padding:42px 0}.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tt-home-motion{transform:translateY(22px) scale(.99);filter:blur(4px)}}
+@media(max-width:767px){.tt-home-premium .tt-hero{min-height:max(520px,calc(100svh - 16px))}.tt-home-premium .section{padding:56px 0}.tt-home-premium .section-sm{padding:42px 0}.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tt-home-motion{transform:translateY(22px) scale(.99)}}
 @media(max-width:380px){.tt-home-premium .section{padding:44px 0}.tt-home-premium .section-sm{padding:34px 0}.tt-home-premium .tt-hero{min-height:max(500px,100svh)}}
 @media(max-height:520px) and (orientation:landscape){.tt-home-premium .tt-hero{min-height:500px}.tt-home-premium .tt-hero-content{padding-top:86px;padding-bottom:38px}}
 @media(prefers-reduced-motion:reduce){.tt-home-motion,.tt-home-motion.is-visible{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}
