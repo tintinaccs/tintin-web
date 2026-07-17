@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T14:09:24.190Z",
-  "sourceFingerprint": "4e5fe16b4f3623d5ef25f8ab651d05fdc1405de81bb391779b7acc96f7b7f93a",
+  "generatedAt": "2026-07-17T14:38:02.142Z",
+  "sourceFingerprint": "cd077781207096779a957bc91029e2de52c82d8003132f60bb39b2d1505a4f07",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 228,
     "textFiles": 191,
-    "totalBytes": 4975796,
+    "totalBytes": 4977646,
     "pages": 18,
     "modules": 114
   },
@@ -9110,8 +9110,8 @@
         "guest",
         "client"
       ],
-      "bytes": 37537,
-      "sha256": "2b295d507a4f58cb90d1c53f628461bea6ff6f9dce20dae2fa9c8f275912e27d",
+      "bytes": 39070,
+      "sha256": "c01be3e82772cd32724bc8052cb8f7181fb6caffdfde38b5f58531cd7e1928e6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9138,13 +9138,13 @@
           "error": ""
         },
         {
-          "line": 492,
+          "line": 496,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 530,
+          "line": 561,
           "module": true,
           "ok": true,
           "error": ""
@@ -9170,32 +9170,32 @@
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 526
+          "line": 557
         },
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 527
+          "line": 558
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 528
+          "line": 559
         },
         {
           "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/load-images-init.js",
-          "line": 529
+          "line": 560
         },
         {
           "raw": "js/edit-badge.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/edit-badge.js",
-          "line": 534
+          "line": 565
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 570
+          "line": 601
         }
       ],
       "styles": [
@@ -9808,37 +9808,37 @@
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 526,
+          "line": 557,
           "exists": true
         },
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 527,
+          "line": 558,
           "exists": true
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 528,
+          "line": 559,
           "exists": true
         },
         {
           "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/load-images-init.js",
-          "line": 529,
+          "line": 560,
           "exists": true
         },
         {
           "raw": "js/edit-badge.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/edit-badge.js",
-          "line": 534,
+          "line": 565,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 570,
+          "line": 601,
           "exists": true
         },
         {
@@ -16137,8 +16137,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 13141,
-      "sha256": "955e09a74438248c7c7a211faa5e861ced3d025e393163bae47b65a71e31b2a0",
+      "bytes": 13458,
+      "sha256": "cf9d85ed1d64b6bd02eba6018d236d2ba4734310b63d2090c97309c7e3b41f1b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16858,8 +16858,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 37537,
-      "sha256": "2b295d507a4f58cb90d1c53f628461bea6ff6f9dce20dae2fa9c8f275912e27d"
+      "bytes": 39070,
+      "sha256": "c01be3e82772cd32724bc8052cb8f7181fb6caffdfde38b5f58531cd7e1928e6"
     },
     {
       "path": "js/admin-app.js",
@@ -17512,8 +17512,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 13141,
-      "sha256": "955e09a74438248c7c7a211faa5e861ced3d025e393163bae47b65a71e31b2a0"
+      "bytes": 13458,
+      "sha256": "cf9d85ed1d64b6bd02eba6018d236d2ba4734310b63d2090c97309c7e3b41f1b"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -20586,7 +20586,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 548
+          "line": 579
         }
       ]
     },
