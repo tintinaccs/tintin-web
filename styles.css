@@ -1062,12 +1062,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   -webkit-user-select: none;
 }
 
-/* Oculta la imagen estática empaquetada hasta que images-phase5.js confirme
-   cuál es la imagen real (la que subió Super Admin, o esa misma estática si
-   no hay ninguna cargada) — evita el parpadeo de ver una imagen distinta un
-   instante antes de la correcta. Queda el fondo oscuro de .tt-hero-media
-   como transición, nunca un hueco en blanco. Un script de seguridad en el
-   HTML quita esta clase igual si JS/Firestore tarda demasiado. */
+/* Oculta el <img> del hero hasta que images-phase5.js confirme la URL real
+   de Cloudinary Y esa foto haya terminado de descargarse — así la sección
+   nunca queda revelada con el fondo oscuro a la vista mientras la imagen
+   todavía carga. Queda el fondo oscuro de .tt-hero-media como transición,
+   nunca un hueco en blanco. Un script de seguridad en el HTML quita esta
+   clase igual si JS/Firestore tarda demasiado. */
 .tt-hero-media.tt-hero-pending .tt-hero-img {
   visibility: hidden;
 }

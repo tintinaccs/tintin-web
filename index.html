@@ -95,11 +95,27 @@
   <script>
     // Red de seguridad independiente de images-phase5.js: si por lo que sea
     // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
-    // puede quedar invisible para siempre.
-    window.setTimeout(function () {
+    // puede quedar invisible para siempre. Si a los 900ms ya hay una imagen
+    // en camino (images-phase5.js le asignó un src real) pero todavía no
+    // terminó de descargarse, espera un poco más en vez de revelar el fondo
+    // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
+    // nunca de una red que jamás responda.
+    (function () {
       var media = document.getElementById('tt-hero-media');
-      if (media) media.classList.remove('tt-hero-pending');
-    }, 900);
+      var img = document.getElementById('tt-hero-img');
+      if (!media) return;
+      var deadline = Date.now() + 4000;
+      function reveal() { media.classList.remove('tt-hero-pending'); }
+      function tick() {
+        var imageStillLoading = img && img.getAttribute('src') && !(img.complete && img.naturalWidth > 0);
+        if (imageStillLoading && Date.now() < deadline) {
+          window.setTimeout(tick, 150);
+          return;
+        }
+        reveal();
+      }
+      window.setTimeout(tick, 900);
+    })();
   </script>
 
   <!-- Overlay: keeps text readable over any image -->
