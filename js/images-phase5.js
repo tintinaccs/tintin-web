@@ -43,6 +43,17 @@ if (!window.TintinImagesPhase5Booted) {
   let images = {};
   let observer = null;
   let scheduled = false;
+  // onImagesUpdate entrega el caché local en la primera llamada (síncrona,
+  // puede estar vacío o desactualizado) y recién en la segunda llamada en
+  // adelante entrega el snapshot real de Firestore. El hero se mantiene
+  // oculto (.tt-hero-pending, ver styles.css) hasta esa segunda llamada, para
+  // no mostrar nunca una imagen que no sea la configurada de verdad.
+  let heroDataConfirmed = false;
+
+  function revealHero() {
+    const media = document.getElementById('tt-hero-media');
+    if (media) media.classList.remove('tt-hero-pending');
+  }
 
   function absolute(value) {
     return sanitizeImageUrl(value);
@@ -171,6 +182,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     if (image.dataset.ttHeroPhase5Signature === signature) {
       console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
+      if (heroDataConfirmed) revealHero();
       return;
     }
     console.debug('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
@@ -201,6 +213,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     image.dataset.ttHeroPhase5Signature = signature;
     image.dataset.ttImagePhase5 = '1';
+    if (heroDataConfirmed) revealHero();
   }
 
   function currentDevice() {
@@ -268,9 +281,14 @@ if (!window.TintinImagesPhase5Booted) {
     else if (mql.addListener) mql.addListener(listener);
   });
 
+  let imagesUpdateCount = 0;
   onImagesUpdate(
     nextImages => {
       images = nextImages || {};
+      imagesUpdateCount += 1;
+      // La primera llamada es el caché local (posiblemente vacío o viejo); de
+      // la segunda en adelante ya es el snapshot real de Firestore.
+      if (imagesUpdateCount >= 2) heroDataConfirmed = true;
       console.debug('[images-phase5] onImagesUpdate: datos recibidos de Firestore', {
         hero_bg_desktop: images.hero_bg_desktop || null,
         hero_bg_tablet: images.hero_bg_tablet || null,
@@ -282,6 +300,10 @@ if (!window.TintinImagesPhase5Booted) {
       }));
     },
     error => {
+      // Sin datos mejores en camino: revelar el hero igual (con lo que haya
+      // en caché o el respaldo estático) en vez de dejarlo oculto hasta que
+      // dispare la red de seguridad de 900ms.
+      heroDataConfirmed = true;
       console.warn('[images-phase5] No se pudo actualizar desde Firestore:', error);
       scheduleApply();
       window.dispatchEvent(new CustomEvent('tintin:images-phase5-error', {
