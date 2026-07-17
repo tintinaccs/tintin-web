@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from './email-notify.js?v=tintin-20260716-cloudinary-fix-1';
+} from './resend-order-notify.js?v=tintin-20260717-resend-1';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;
@@ -95,20 +95,16 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
         return;
       }
 
-      // Compatibilidad con la versión anterior del Apps Script: usa el correo
-      // de contacto guardado en el pedido. La versión segura nueva ignora este
-      // objeto y vuelve a cargarlo desde Firestore.
+      // El endpoint de Cloudflare ignora los datos sensibles del navegador y
+      // vuelve a cargar el pedido real desde Firestore usando la sesión vigente.
       const compatibilityOrder = {
         ...order,
-        userEmail: order.contactEmail || order.userEmail || user.email || '',
+        userEmail: order.userEmail || user.email || '',
         createdAt: order.createdAt?.toDate?.().toISOString?.() || new Date().toISOString()
       };
 
       const result = await sendOrderNotification(found.id, compatibilityOrder, false);
       const status = notificationStatusFromResult(result);
-
-      // Apps Script actualiza notificationStatus usando su identidad de
-      // servidor. El navegador solo informa el resultado visualmente.
 
       try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {}
       window.dispatchEvent(new CustomEvent('tintin:order-email-result', {
