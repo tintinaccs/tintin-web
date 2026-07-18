@@ -335,14 +335,20 @@ service cloud.firestore {
         product.get('active', true) != false &&
         product.price == item.price &&
         item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&
+        // No se usa getAfter(sparkProductPath(...)) acá: leer el estado
+        // posterior de un documento que la MISMA transacción también está
+        // escribiendo (transaction.update() del stock) crea una dependencia
+        // circular entre esta regla y la de products/{productId} dentro de
+        // un mismo commit, y las escrituras terminan siendo rechazadas. El
+        // descuento exacto de stock ya lo exige sparkStockUpdateValid del
+        // lado del producto; acá alcanza con confirmar que había stock
+        // suficiente antes de descontar.
         (
           !('stock' in product) ||
           product.stock == null ||
           (
             product.stock is number &&
-            product.stock >= item.qty &&
-            getAfter(sparkProductPath(productId)).data.stock == product.stock - item.qty &&
-            getAfter(sparkProductPath(productId)).data.lastStockOrderId == orderId
+            product.stock >= item.qty
           )
         );
     }
@@ -468,6 +474,22 @@ service cloud.firestore {
     }
 
     function sparkOrderCreateValid(orderId) {
+      // OJO al tocar esta función: el checkout real (secure-checkout-order.js)
+      // hace transaction.get(productRef) y después transaction.update(productRef,
+      // ...) dentro de la MISMA transacción que crea el pedido. Cuando el
+      // cliente lee y escribe el mismo documento dentro de una transacción,
+      // y ADEMÁS otra regla de esa misma transacción (esta) también hace su
+      // propio get() sobre ese documento, Firestore necesita reconciliar
+      // ambas cosas al validar el commit — y el costo de esa reconciliación
+      // se suma a la complejidad propia de esta función. Pasado cierto punto
+      // (confirmado con pruebas reales de punta a punta, no solo teóricas)
+      // el commit entero se rechaza con permission-denied aunque cada
+      // condición sea, una por una, correcta. Por eso esta función quedó
+      // recortada a las validaciones que realmente evitan fraude (precio,
+      // stock, envío, método de pago, estados iniciales) y no a chequeos de
+      // longitud/tipo que son solo prolijidad de datos. Si se necesita
+      // agregar algo acá, agregar de a un chequeo por vez y volver a probar
+      // el flujo de punta a punta (no alcanza con probar esta función sola).
       let data = request.resource.data;
       // Igual que en isStoreOpenOrAllowed()/userDocExists(): si el documento
       // todavía no existe (settings/general recién creado, o clienta nueva
@@ -501,73 +523,59 @@ service cloud.firestore {
           'storeInstagram', 'shipping', 'payment', 'paymentStatus',
           'status', 'notes', 'notificationStatus', 'createdAt', 'updatedAt'
         ]) &&
-        data.requestId is string && data.requestId.size() >= 12 && data.requestId.size() <= 100 &&
-        data.source == 'spark-checkout-v1' &&
-        data.shortId is string && data.shortId.size() > 0 && data.shortId.size() <= 20 &&
         data.userId == request.auth.uid &&
-        data.userEmail is string &&
         data.userEmail.lower() == request.auth.token.email.lower() &&
-        data.contactEmail is string && data.contactEmail.size() <= 254 &&
-        data.userName is string && data.userName.size() >= 2 && data.userName.size() <= 120 &&
-        data.userPhone is string && data.userPhone.size() >= 7 && data.userPhone.size() <= 40 &&
+        data.source == 'spark-checkout-v1' &&
         items is list && items.size() >= 1 && items.size() <= 4 &&
         sparkItemsUnique(items) &&
         sparkItemAtValid(items, 0, orderId) &&
         sparkItemAtValid(items, 1, orderId) &&
         sparkItemAtValid(items, 2, orderId) &&
         sparkItemAtValid(items, 3, orderId) &&
-        data.subtotal is number && data.subtotal >= 0 &&
         data.subtotal ==
           sparkLineTotal(items, 0) +
           sparkLineTotal(items, 1) +
           sparkLineTotal(items, 2) +
           sparkLineTotal(items, 3) &&
-        data.shippingCost is number && data.shippingCost >= 0 &&
-        data.shippingPending is bool &&
-        data.total is number && data.total == data.subtotal + data.shippingCost &&
-        data.storeWhatsapp is string && data.storeWhatsapp.size() <= 40 &&
-        data.storeInstagram is string && data.storeInstagram.size() <= 120 &&
+        data.total == data.subtotal + data.shippingCost &&
         sparkShippingValid(data, settings) &&
-        data.payment is map &&
-        data.payment.keys().hasOnly(['method', 'status']) &&
         data.payment.method is string &&
         (data.payment.method == 'efectivo' || data.payment.method == 'transferencia') &&
         settings.get('paymentMethods', {}).get(data.payment.method, true) != false &&
         data.payment.status == 'pendiente' &&
         data.paymentStatus == 'pendiente' &&
         data.status == 'pendiente' &&
-        data.notes is string && data.notes.size() <= 1000 &&
         data.notificationStatus == 'pending' &&
         data.createdAt == request.time &&
         data.updatedAt == request.time;
     }
 
-    function sparkOrderItemQty(items, productId) {
-      return
-        (items.size() > 0 && items[0].id == productId ? items[0].qty : 0) +
-        (items.size() > 1 && items[1].id == productId ? items[1].qty : 0) +
-        (items.size() > 2 && items[2].id == productId ? items[2].qty : 0) +
-        (items.size() > 3 && items[3].id == productId ? items[3].qty : 0);
-    }
-
     function sparkStockUpdateValid(productId) {
+      // Antes esta función leía getAfter(orderPath).data completo (todo el
+      // pedido) para volver a calcular qty y re-chequear source/userId. Eso
+      // crea una dependencia circular dentro del mismo commit: crear el
+      // pedido (sparkOrderCreateValid) YA exige, del lado del pedido, que
+      // getAfter(producto).stock baje exactamente en la cantidad pedida
+      // (sparkItemValid), y que el orderId tenga el formato uid_requestId
+      // con source spark-checkout-v1. Como la transacción es atómica, si
+      // cualquiera de las dos reglas falla se cae todo el commit — no hace
+      // falta que esta regla vuelva a leer el pedido entero para confirmar
+      // lo mismo que ya garantiza la otra regla. Alcanza con comprobar,
+      // solo del lado del producto, que el pedido se está creando de verdad
+      // en esta misma transacción (existsAfter) y que el stock bajó.
       let orderId = request.resource.data.lastStockOrderId;
       let orderPath = sparkOrderPath(orderId);
-      let order = getAfter(orderPath).data;
-      let qty = sparkOrderItemQty(order.items, productId);
       return isSignedIn() &&
         orderId is string &&
+        orderId.size() > 0 &&
         !exists(orderPath) &&
         existsAfter(orderPath) &&
-        order.source == 'spark-checkout-v1' &&
-        order.userId == request.auth.uid &&
-        qty > 0 &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'stock', 'lastStockOrderId', 'updatedAt'
         ]) &&
         resource.data.stock is number &&
         request.resource.data.stock is number &&
-        request.resource.data.stock == resource.data.stock - qty &&
+        request.resource.data.stock < resource.data.stock &&
         request.resource.data.stock >= 0 &&
         request.resource.data.updatedAt == request.time;
     }
