@@ -456,8 +456,19 @@ service cloud.firestore {
 
     function sparkOrderCreateValid(orderId) {
       let data = request.resource.data;
-      let settings = get(/databases/$(database)/documents/settings/general).data;
-      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      // Igual que en isStoreOpenOrAllowed()/userDocExists(): si el documento
+      // todavía no existe (settings/general recién creado, o clienta nueva
+      // que compra antes de que exista su users/{uid}), get(...).data da
+      // null y llamar .get() sobre null tira un error de evaluación que
+      // Firestore expone como permission-denied. Por eso se guarda con
+      // exists()/userDocExists() antes de leer, en vez de asumir que siempre
+      // están creados.
+      let settings = exists(/databases/$(database)/documents/settings/general)
+        ? get(/databases/$(database)/documents/settings/general).data
+        : {};
+      let userData = userDocExists()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+        : null;
       let items = data.items;
       return isSignedIn() &&
         request.auth.token.email != null &&
@@ -466,7 +477,7 @@ service cloud.firestore {
           isSuperAdmin() ||
           (
             settings.get('storeOpen', false) == true &&
-            userData.get('blocked', false) != true
+            (userData == null || userData.get('blocked', false) != true)
           )
         ) &&
         orderId == request.auth.uid + '_' + data.requestId &&

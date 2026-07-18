@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-18T02:00:29.753Z",
-  "sourceFingerprint": "8f952dfc216bb4a6802dd3dd53280168b107770cb1e5652c2ac58f39c6b75892",
+  "generatedAt": "2026-07-18T12:05:50.423Z",
+  "sourceFingerprint": "fc72ba6ce3e44d41f4aa60194178bfebd326e7d8d783e53383ffd1e6b3cc2bc3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 231,
-    "textFiles": 194,
-    "totalBytes": 5044995,
+    "files": 235,
+    "textFiles": 198,
+    "totalBytes": 5068739,
     "pages": 18,
-    "modules": 117
+    "modules": 119
   },
   "viewports": [
     {
@@ -13423,8 +13423,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 18186,
-      "sha256": "8f0a8a289007a8d6bbf173b80651d061b07e36cd3a14d46a0e52c447138d28e3",
+      "bytes": 18154,
+      "sha256": "509525374f64c9c855c170a1ee41381890f5e10721281d41decb655bd00439b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13462,8 +13462,8 @@
     },
     {
       "path": "functions/api/test-email.js",
-      "bytes": 5298,
-      "sha256": "968bd1a2561dd632fea93aafcb8f1498e6ecaac0a5cbb5be7b9f9e625eb41c2b",
+      "bytes": 5282,
+      "sha256": "0200c663b916b35fd8f22935fb424b79913fabb43ae21b70ea8601e257d6184b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14261,8 +14261,8 @@
     },
     {
       "path": "js/auth-nav.js",
-      "bytes": 6748,
-      "sha256": "71aa306adbafef00901fabc3b5c80ff950f3974a952601311429ec1f7e6776a3",
+      "bytes": 8545,
+      "sha256": "58a8e83502710a85150217d9cf43132e28d8bffee8e16977a776eb5816f79d67",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14281,16 +14281,26 @@
           "line": 4
         },
         {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/roles.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "line": 4
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 5
         }
       ]
     },
@@ -14400,6 +14410,35 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "line": 10
+        }
+      ]
+    },
+    {
+      "path": "js/checkout-name-auth-sync.js",
+      "bytes": 696,
+      "sha256": "fc53aa57bcdd3b5d9c81deec4ad4bb6483eff3fbfd8c332d891ce713920be02a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 2
         }
       ]
     },
@@ -14528,8 +14567,8 @@
     },
     {
       "path": "js/color-scheme-instant.js",
-      "bytes": 1611,
-      "sha256": "06c881d8e35604b9d22af88335d54138af09eeef8a60cb57662d9bfa8a50126d",
+      "bytes": 8656,
+      "sha256": "ec97902c01401a7fed379471f932f8ae5ee7aa0fa7defee12eaaacb6dd125fca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14539,8 +14578,8 @@
     },
     {
       "path": "js/color-scheme.js",
-      "bytes": 4380,
-      "sha256": "9e176dcf127eaa346de8cedbe8fe96ec4baf0c71f8e54b0d810a80949338ca7e",
+      "bytes": 4506,
+      "sha256": "2f1647640c0693e3790995a227661a29d8631d588c2531f8e24996556f05776d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14550,25 +14589,25 @@
           "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 21
+          "line": 10
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 22
+          "line": 11
         },
         {
           "raw": "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme-catalog.js",
           "dynamic": false,
-          "line": 23
+          "line": 12
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 22
+          "line": 11
         }
       ]
     },
@@ -15315,8 +15354,8 @@
     },
     {
       "path": "js/privacy-consent.js",
-      "bytes": 7587,
-      "sha256": "2cbbc1f5f0345b6d58ce98761c2daf5c96fd3a1858535c1592ec970400eeb384",
+      "bytes": 7993,
+      "sha256": "68660140200178930aa22948eb381ea8a0fa13511da024d939a3fc5a9af90f14",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15994,8 +16033,8 @@
     },
     {
       "path": "scripts/audit-color-scheme.js",
-      "bytes": 8174,
-      "sha256": "9acb3c0c7593cd845be8194b2c1a4f32539dfc3d78475512cec63fc4ab5b83ec",
+      "bytes": 9340,
+      "sha256": "36111bc30f23396ae762bd5ebda1f69c01595766c96d49eabd04d8b04eb37eee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16173,6 +16212,17 @@
           "line": 36
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/audit-loader-solid.js",
+      "bytes": 1752,
+      "sha256": "d25793e67d3ebc36bada6127c8304346ede290080c2da0ba690dcd2b20ceae9d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -16421,8 +16471,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 444,
-      "sha256": "ef99a0299ebfbd8326391a57652da0447bb9202f425ebf393fb58cd225cc0766"
+      "bytes": 538,
+      "sha256": "14877dc9f22c0bb32e48841e367a2b9abf482eac19df0f7f27abdc4b4553d060"
     },
     {
       "path": "404.html",
@@ -16715,14 +16765,20 @@
     {
       "path": "css/color-tokens.css",
       "extension": ".css",
-      "bytes": 6567,
-      "sha256": "5cb43bc5dbc719ed834082faca9647345d81cfcf591f10860156e5dd61b8aecb"
+      "bytes": 6647,
+      "sha256": "51f0f5758ae8f353043e0a8d465aaa5e7ca9eb82148724202c4631727f8fca43"
     },
     {
       "path": "css/home-fit.css",
       "extension": ".css",
       "bytes": 8789,
       "sha256": "560c49692860a3f8257eda823963246d2799d0a9e491f035b57563fc615e4251"
+    },
+    {
+      "path": "css/loader-solid-background.css",
+      "extension": ".css",
+      "bytes": 1403,
+      "sha256": "d97597401f69c2977695c89705cad3fd6c94c8e7ebae5b6d1c459dd1443c4488"
     },
     {
       "path": "css/login.css",
@@ -16743,10 +16799,16 @@
       "sha256": "cd7732af6d4c67fcf4cd9954c4083b816e04179e91da361d1cd4813d37c78b3c"
     },
     {
+      "path": "css/solid-ui-surfaces.css",
+      "extension": ".css",
+      "bytes": 5461,
+      "sha256": "a880944289aecccc7381b1b1975d11084fde039f104b085d25db4dc6a762e2dd"
+    },
+    {
       "path": "css/tintin-parity-safe.css",
       "extension": ".css",
-      "bytes": 2275,
-      "sha256": "6ed9d9030cc2fac64127e4fc46dd5da0b236883081e6ffe18da82e505f604158"
+      "bytes": 5418,
+      "sha256": "3b9958fa808e7bf23affaace6c2314c7569f142f04619201755ee30726f80afb"
     },
     {
       "path": "css/tintin-theme-cleanup.css",
@@ -16847,8 +16909,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 32727,
-      "sha256": "f28a9042ddedfe8581e6a89d7d52a30494be7c2ab53cdfc445b84a80b79b0551"
+      "bytes": 33350,
+      "sha256": "b2131782bc4d276310dd02d550143a9a15b3fe02a2f74d946a358acecbff3cef"
     },
     {
       "path": "functions/DEPLOY.md",
@@ -16901,14 +16963,14 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 18186,
-      "sha256": "8f0a8a289007a8d6bbf173b80651d061b07e36cd3a14d46a0e52c447138d28e3"
+      "bytes": 18154,
+      "sha256": "509525374f64c9c855c170a1ee41381890f5e10721281d41decb655bd00439b6"
     },
     {
       "path": "functions/api/test-email.js",
       "extension": ".js",
-      "bytes": 5298,
-      "sha256": "968bd1a2561dd632fea93aafcb8f1498e6ecaac0a5cbb5be7b9f9e625eb41c2b"
+      "bytes": 5282,
+      "sha256": "0200c663b916b35fd8f22935fb424b79913fabb43ae21b70ea8601e257d6184b"
     },
     {
       "path": "functions/api/visitor-geo.js",
@@ -17063,8 +17125,8 @@
     {
       "path": "js/auth-nav.js",
       "extension": ".js",
-      "bytes": 6748,
-      "sha256": "71aa306adbafef00901fabc3b5c80ff950f3974a952601311429ec1f7e6776a3"
+      "bytes": 8545,
+      "sha256": "58a8e83502710a85150217d9cf43132e28d8bffee8e16977a776eb5816f79d67"
     },
     {
       "path": "js/blocked-modal.js",
@@ -17083,6 +17145,12 @@
       "extension": ".js",
       "bytes": 4684,
       "sha256": "096a0a472a00d2188278b9fd9abb352ff5fe337f60e3417e26a9e0b553204267"
+    },
+    {
+      "path": "js/checkout-name-auth-sync.js",
+      "extension": ".js",
+      "bytes": 696,
+      "sha256": "fc53aa57bcdd3b5d9c81deec4ad4bb6483eff3fbfd8c332d891ce713920be02a"
     },
     {
       "path": "js/collections-page.js",
@@ -17123,14 +17191,14 @@
     {
       "path": "js/color-scheme-instant.js",
       "extension": ".js",
-      "bytes": 1611,
-      "sha256": "06c881d8e35604b9d22af88335d54138af09eeef8a60cb57662d9bfa8a50126d"
+      "bytes": 8656,
+      "sha256": "ec97902c01401a7fed379471f932f8ae5ee7aa0fa7defee12eaaacb6dd125fca"
     },
     {
       "path": "js/color-scheme.js",
       "extension": ".js",
-      "bytes": 4380,
-      "sha256": "9e176dcf127eaa346de8cedbe8fe96ec4baf0c71f8e54b0d810a80949338ca7e"
+      "bytes": 4506,
+      "sha256": "2f1647640c0693e3790995a227661a29d8631d588c2531f8e24996556f05776d"
     },
     {
       "path": "js/content-schema.js",
@@ -17333,8 +17401,8 @@
     {
       "path": "js/privacy-consent.js",
       "extension": ".js",
-      "bytes": 7587,
-      "sha256": "2cbbc1f5f0345b6d58ce98761c2daf5c96fd3a1858535c1592ec970400eeb384"
+      "bytes": 7993,
+      "sha256": "68660140200178930aa22948eb381ea8a0fa13511da024d939a3fc5a9af90f14"
     },
     {
       "path": "js/product-benefits.js",
@@ -17543,8 +17611,8 @@
     {
       "path": "scripts/audit-color-scheme.js",
       "extension": ".js",
-      "bytes": 8174,
-      "sha256": "9acb3c0c7593cd845be8194b2c1a4f32539dfc3d78475512cec63fc4ab5b83ec"
+      "bytes": 9340,
+      "sha256": "36111bc30f23396ae762bd5ebda1f69c01595766c96d49eabd04d8b04eb37eee"
     },
     {
       "path": "scripts/audit-content-phase6.js",
@@ -17593,6 +17661,12 @@
       "extension": ".js",
       "bytes": 6468,
       "sha256": "886074e896795d8c21683523cdf7515fc1f1d40a441e8c2a10cee1c42516738b"
+    },
+    {
+      "path": "scripts/audit-loader-solid.js",
+      "extension": ".js",
+      "bytes": 1752,
+      "sha256": "d25793e67d3ebc36bada6127c8304346ede290080c2da0ba690dcd2b20ceae9d"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -18960,51 +19034,23 @@
     },
     {
       "file": "js/auth-nav.js",
-      "line": 12,
+      "line": 16,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/auth-nav.js",
-      "line": 19,
-      "raw": "perfil.html",
-      "target": "perfil.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 19,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 48,
-      "raw": "perfil.html",
-      "target": "perfil.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 48,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 62,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 65,
+      "line": 58,
       "raw": "admin.html",
       "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 58,
+      "raw": "index.html",
+      "target": "index.html",
       "exists": true
     },
     {
@@ -19017,34 +19063,76 @@
     {
       "file": "js/auth-nav.js",
       "line": 66,
-      "raw": "perfil.html",
-      "target": "perfil.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 76,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/auth-nav.js",
-      "line": 80,
-      "raw": "admin.html",
-      "target": "admin.html",
-      "exists": true
-    },
-    {
-      "file": "js/auth-nav.js",
-      "line": 81,
+      "line": 95,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "js/auth-nav.js",
-      "line": 81,
+      "line": 95,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 109,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 112,
+      "raw": "admin.html",
+      "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 113,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 113,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 123,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 127,
+      "raw": "admin.html",
+      "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 128,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/auth-nav.js",
+      "line": 128,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -19082,6 +19170,13 @@
       "line": 361,
       "raw": "catalogo.html",
       "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "js/color-scheme-instant.js",
+      "line": 61,
+      "raw": "/checkout.html",
+      "target": "checkout.html",
       "exists": true
     },
     {
@@ -19429,7 +19524,7 @@
     },
     {
       "file": "js/privacy-consent.js",
-      "line": 89,
+      "line": 94,
       "raw": "privacidad.html",
       "target": "privacidad.html",
       "exists": true
@@ -21020,17 +21115,17 @@
           },
           {
             "file": "js/color-scheme.js",
-            "line": 93,
-            "operation": "doc"
-          },
-          {
-            "file": "scripts/audit-color-scheme.js",
-            "line": 115,
+            "line": 111,
             "operation": "doc"
           },
           {
             "file": "scripts/audit-color-scheme.js",
             "line": 116,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-color-scheme.js",
+            "line": 117,
             "operation": "doc"
           }
         ]
@@ -21737,6 +21832,11 @@
             "file": "js/admin-welcome-control.js",
             "line": 166,
             "operation": "collection"
+          },
+          {
+            "file": "js/auth-nav.js",
+            "line": 35,
+            "operation": "doc"
           },
           {
             "file": "js/cart-sync.js",
