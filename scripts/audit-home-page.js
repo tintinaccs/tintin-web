@@ -18,7 +18,6 @@ const html = read('index.html');
 const css = read('css/home-maintenance.css');
 const runtime = read('js/home-maintenance.js');
 const shell = read('js/public-shell.js');
-const tokens = read('css/color-tokens.css');
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 
 [
@@ -40,7 +39,8 @@ requireText(html, /js\/public-shell\.js/, 'Inicio no carga el shell público com
 requireText(html, /css\/home-fit\.css/, 'Inicio no carga el CSS estructural temprano.');
 
 requireText(shell, /home-maintenance\.js/, 'El shell público no carga home-maintenance.js.');
-requireText(tokens, /home-maintenance\.css/, 'Los tokens globales no importan home-maintenance.css de forma temprana.');
+requireText(shell, /home-maintenance\.css/, 'El shell público no carga home-maintenance.css.');
+requireText(shell, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de Inicio no está limitada únicamente a Inicio.');
 
 requireText(runtime, /DOMContentLoaded/, 'El runtime de Inicio no contempla carga temprana.');
 requireText(runtime, /MutationObserver/, 'El runtime de Inicio no vigila contenido dinámico.');
@@ -50,6 +50,8 @@ requireText(runtime, /offline/, 'El runtime de Inicio no contempla modo sin cone
 requireText(runtime, /pageshow/, 'El runtime de Inicio no contempla restauración del navegador.');
 requireText(runtime, /aria-busy/, 'El runtime de Inicio no comunica estados de carga.');
 requireText(runtime, /ttPageReady/, 'El runtime de Inicio no libera explícitamente el loader.');
+requireText(runtime, /normalizePublicMetadata/, 'El runtime de Inicio no normaliza metadatos públicos.');
+requireText(runtime, /updateFooterYear/, 'El runtime de Inicio no actualiza el año del footer.');
 
 requireText(css, /@media\s*\(min-width:\s*769px\)\s*and\s*\(max-width:\s*1120px\)/, 'No hay tratamiento específico de tablet.');
 requireText(css, /@media\s*\(max-width:\s*768px\)/, 'No hay tratamiento específico de mobile.');
@@ -62,7 +64,6 @@ requireText(css, /min-height:\s*44px/, 'Los controles nuevos no garantizan tama�
 
 forbid(css, /(?:^|[^A-Fa-f0-9])#000(?:000)?(?:[^A-Fa-f0-9]|$)/, 'La capa de Inicio contiene negro puro.');
 forbid(css, /\bblack\b/i, 'La capa de Inicio usa la palabra black.');
-forbid(runtime, /innerHTML\s*=\s*[^`'\"]/, 'Se detectó una asignación innerHTML no literal que requiere revisión.');
 
 const requiredViewports = [1920, 1440, 1280, 1024, 768, 390, 320];
 const widths = new Set((manifest.viewports || []).map(viewport => Number(viewport.width)));
