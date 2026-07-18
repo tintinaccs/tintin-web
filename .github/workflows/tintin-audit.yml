@@ -24,3 +24,6 @@ jobs:
 
       - name: Run Tintin audit
         run: npm run audit:tintin
+
+      - name: Verify solid loader background
+        run: node scripts/audit-loader-solid.js
