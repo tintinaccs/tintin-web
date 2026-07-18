@@ -53,6 +53,7 @@ const adminCss = read('css/admin-color-tokens.css');
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin-app.js');
 const picker = read('js/color-picker-widget.js');
+const instantRuntime = read('js/color-scheme-instant.js');
 const globalRuntime = read('js/color-scheme.js');
 const adminRuntime = read('js/admin-color-scheme.js');
 
@@ -116,6 +117,17 @@ check('El runtime público escucha Firestore en tiempo real', globalRuntime.incl
 check('El runtime administrativo escucha Firestore en tiempo real', adminRuntime.includes('onSnapshot') && adminRuntime.includes("doc(db, 'colorSchemes'"));
 check('Los cambios publicados se aplican como variables CSS reales', globalRuntime.includes('root.style.setProperty') && adminRuntime.includes('root.style.setProperty'));
 check('El runtime conserva caché para evitar parpadeos', globalRuntime.includes('localStorage.setItem') && adminRuntime.includes('localStorage.setItem'));
+check('La primera pintura bloquea el contenido hasta resolver el esquema definitivo', [
+  'tt-color-scheme-pending',
+  'tt-first-paint-style',
+  'html.tt-color-scheme-pending #tt-loader',
+  'RELEASE_TIMEOUT_MS',
+].every(fragment => instantRuntime.includes(fragment)));
+check('El runtime libera la primera pintura al aplicar o fallar la lectura', [
+  'function markColorSchemeReady',
+  "markColorSchemeReady('firestore')",
+  "markColorSchemeReady('scheme-read-error')",
+].every(fragment => globalRuntime.includes(fragment)));
 
 const htmlFiles = fs.readdirSync(ROOT).filter(file => file.endsWith('.html'));
 const publicPages = htmlFiles.filter(file => !['admin.html', 'admin-images.html', 'nosotros.html'].includes(file));
@@ -127,6 +139,17 @@ const missingPublicAssets = publicPages.filter(file => {
     !html.includes('js/color-scheme.js');
 });
 check('Todas las páginas públicas cargan tokens, bindings y runtime', missingPublicAssets.length === 0, missingPublicAssets.join(', '));
+
+const badFirstPaintOrder = publicPages.filter(file => {
+  const html = read(file);
+  const instantIndex = html.indexOf('js/color-scheme-instant.js');
+  const loaderIndex = html.indexOf('js/page-loader.js');
+  const firstStylesheetIndex = html.indexOf('<link rel="stylesheet"');
+  return instantIndex < 0 || loaderIndex < 0 || firstStylesheetIndex < 0 ||
+    instantIndex > loaderIndex || instantIndex > firstStylesheetIndex;
+});
+check('Todas las páginas públicas estabilizan el fondo antes del loader y del CSS', badFirstPaintOrder.length === 0, badFirstPaintOrder.join(', '));
+
 check('Las páginas administrativas cargan su esquema independiente', ['admin.html', 'admin-images.html'].every(file => {
   const html = read(file);
   return html.includes('css/admin-color-tokens.css') && html.includes('js/admin-color-scheme.js');
