@@ -104,7 +104,8 @@ async function fetchOrder(orderId, idToken) {
   if (response.status === 404) throw new Error('No se encontró el pedido.');
   if (!response.ok) {
     if (response.status === 403) throw new Error('No tenés permiso para acceder a este pedido.');
-    throw new Error('No se pudo leer el pedido.');
+    const reason = clean(data?.error?.message || data?.error?.status, 200);
+    throw new Error(`No se pudo leer el pedido (HTTP ${response.status}${reason ? `: ${reason}` : ''}).`);
   }
 
   return decodeFirestoreFields(data.fields || {});
