@@ -45,3 +45,6 @@ jobs:
 
       - name: Audit login page on all viewports
         run: node scripts/audit-login-page.js
+
+      - name: Audit profile and orders on all viewports
+        run: node scripts/audit-profile-orders-page.js
