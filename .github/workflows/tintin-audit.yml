@@ -36,3 +36,6 @@ jobs:
 
       - name: Audit collections page on all viewports
         run: node scripts/audit-collections-page.js
+
+      - name: Audit product page on all viewports
+        run: node scripts/audit-product-page.js

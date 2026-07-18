@@ -1,5 +1,6 @@
 import './catalog-maintenance.js?v=tintin-20260718-catalog-maintenance-1';
 import './collections-maintenance.js?v=tintin-20260718-collections-maintenance-1';
+import './product-maintenance.js?v=tintin-20260718-product-maintenance-1';
 
 /**
  * TINTIN — Collections Store
