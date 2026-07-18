@@ -1,0 +1,61 @@
+TINTIN-WEB — MANTENIMIENTO 02: CATÁLOGO
+Archivo principal: catalogo.html
+Estado: EN CORRECCIÓN
+
+ALCANCE REVISADO
+- HTML completo de catalogo.html.
+- Header, navegación, búsqueda global, cuenta y carrito compartidos.
+- Hero del catálogo.
+- Categorías desktop, tablet y mobile.
+- Filtros por categoría, precio y stock.
+- Búsqueda local del catálogo.
+- Ordenamiento.
+- Render de tarjetas, imágenes, stock, precios y botones.
+- Carga inicial, skeletons, estados vacíos, errores y sin conexión.
+- Integración con productos, colecciones, carrito, Firebase y Super Admin.
+- Footer, metadatos y WhatsApp.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] El archivo contiene numerosos colores y fondos fijos que no siguen completamente el esquema publicado desde Super Admin.
+[ALTO] Tarjetas e imágenes usan fondos transparentes; pueden dejar pasar un color anterior o el fondo de la página durante la carga.
+[ALTO] La experiencia depende del orden de llegada de productos, colecciones, Firebase y módulos dinámicos; una demora puede dejar skeletons o contenido incompleto.
+[ALTO] No existe una auditoría CI exclusiva para Catálogo.
+[MEDIO] Canonical, Open Graph y Twitter apuntan al dominio histórico de GitHub Pages.
+[MEDIO] El sidebar mobile usa transiciones de altura y opacidad que pueden provocar pestañeos, saltos o contenido inaccesible.
+[MEDIO] Los estados vacío, sin conexión y error no están unificados ni ofrecen siempre recuperación.
+[MEDIO] La búsqueda, filtros y ordenamiento necesitan sincronizar URL y estado visual para que Atrás/Adelante funcionen de forma coherente.
+[MEDIO] El footer tiene año fijo.
+[MEDIO] Algunos controles y etiquetas pueden perder contraste con esquemas personalizados.
+[BAJO] Hay estilos inline repetidos y responsabilidades mezcladas dentro de catalogo.html.
+
+CORRECCIONES DE ESTA ETAPA
+1. Capa visual basada en tokens del Super Admin, sin transparencias críticas.
+2. Fondo sólido para página, hero, sidebar, controles, tarjetas, imágenes y footer.
+3. Desactivación de transiciones durante la preparación inicial.
+4. Responsive explícito para siete viewports.
+5. Estados uniformes de carga, vacío, error y sin conexión.
+6. Recuperación por eventos de productos, colecciones, carrito, conexión, visibilidad y navegación.
+7. Sincronización de filtros, búsqueda y ordenamiento con la URL.
+8. Restauración segura al usar Atrás/Adelante.
+9. Metadatos normalizados al dominio publicado.
+10. Año del footer automático.
+11. Auditoría CI exclusiva de Catálogo.
+
+PRUEBAS OBLIGATORIAS
+- Sintaxis JavaScript.
+- Auditoría general Tintin.
+- Auditoría tipográfica.
+- Auditoría específica de Catálogo.
+- Estructura para siete viewports.
+- Tokens de color y ausencia de transparencias críticas.
+- Estados loading, empty, error y offline.
+- Sincronización URL/filtros.
+- Carga del runtime desde public-shell.
+
+PENDIENTES DE CIERRE
+- Aplicar correcciones.
+- Ejecutar auditorías.
+- Corregir cualquier fallo.
+- Actualizar este registro a TERMINADO.
+- Mergear en main antes de iniciar Colecciones.
