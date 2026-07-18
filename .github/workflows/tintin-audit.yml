@@ -51,3 +51,6 @@ jobs:
 
       - name: Audit about page on all viewports
         run: node scripts/audit-about-page.js
+
+      - name: Audit contact page on all viewports
+        run: node scripts/audit-contact-page.js
