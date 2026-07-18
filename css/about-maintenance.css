@@ -1,0 +1,87 @@
+/* TINTIN — mantenimiento integral de about.html */
+.tt-about-maintained {
+  --about-surface: var(--surface, #fff);
+  --about-soft: var(--pink-pale, #fff6fa);
+  --about-text: var(--text, #2b2b2b);
+  --about-muted: var(--text-muted, #6f6267);
+  --about-accent: var(--pink-dark, #ad3f67);
+  --about-border: var(--border, #f0d6df);
+  background: var(--about-surface);
+  color: var(--about-text);
+}
+.tt-about-maintained .tt-page-hero,
+.tt-about-maintained .tt-about-section,
+.tt-about-maintained .tt-trust-bar,
+.tt-about-maintained .tt-footer { background-color: var(--about-surface); }
+.tt-about-maintained .tt-page-hero { background: var(--about-soft); }
+.tt-about-maintained .tt-about-grid { align-items: stretch; gap: clamp(28px, 5vw, 72px); }
+.tt-about-maintained .tt-about-img,
+.tt-about-maintained .tt-img-placeholder {
+  min-height: 480px;
+  height: 100%;
+  border-radius: clamp(18px, 2vw, 28px);
+  overflow: hidden;
+  background: var(--about-soft) !important;
+  border: 1px solid var(--about-border);
+}
+.tt-about-maintained .tt-img-placeholder picture,
+.tt-about-maintained .tt-img-placeholder img { width: 100%; height: 100%; display: block; }
+.tt-about-maintained .tt-img-placeholder img { object-fit: cover; background: var(--about-soft); }
+.tt-about-maintained .tt-img-placeholder.is-error { display: grid; place-items: center; min-height: 360px; }
+.tt-about-maintained .tt-img-placeholder.is-error::after {
+  content: 'No pudimos mostrar esta imagen. La historia de Tintin sigue disponible en el texto.';
+  max-width: 30ch;
+  padding: 24px;
+  color: var(--about-muted);
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+.tt-about-maintained .tt-about-content { min-width: 0; }
+.tt-about-maintained .tt-about-text,
+.tt-about-maintained .tt-page-hero-sub,
+.tt-about-maintained .tt-trust-desc { color: var(--about-muted) !important; }
+.tt-about-maintained .tt-about-mission strong { color: var(--about-accent) !important; }
+.tt-about-maintained .tt-about-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.tt-about-maintained .tt-about-actions .tt-btn { min-height: 44px; }
+.tt-about-maintained .tt-values-heading { margin-bottom: 40px; text-align: center; }
+.tt-about-maintained .tt-trust-grid { align-items: stretch; }
+.tt-about-maintained .tt-trust-item {
+  height: 100%;
+  background: var(--about-surface);
+  border: 1px solid var(--about-border);
+  border-radius: 20px;
+}
+.tt-about-maintained .tt-trust-icon { background: var(--about-soft); }
+.tt-about-maintained a:focus-visible,
+.tt-about-maintained button:focus-visible { outline: 3px solid var(--about-accent); outline-offset: 3px; }
+@media (min-width: 769px) and (max-width: 1100px) {
+  .tt-about-maintained .tt-about-grid { grid-template-columns: minmax(280px, .9fr) minmax(0, 1.1fr); gap: 32px; }
+  .tt-about-maintained .tt-about-img,
+  .tt-about-maintained .tt-img-placeholder { min-height: 520px; }
+}
+@media (max-width: 768px) {
+  .tt-about-maintained .tt-page-hero { padding: 36px 0 42px; }
+  .tt-about-maintained .tt-about-grid { grid-template-columns: 1fr; gap: 28px; }
+  .tt-about-maintained .tt-about-img,
+  .tt-about-maintained .tt-img-placeholder { min-height: min(118vw, 520px); }
+  .tt-about-maintained .tt-about-actions { flex-direction: column; }
+  .tt-about-maintained .tt-about-actions .tt-btn { width: 100%; justify-content: center; }
+  .tt-about-maintained .tt-trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+}
+@media (max-width: 420px) {
+  .tt-about-maintained .container { width: min(100% - 24px, 1180px); }
+  .tt-about-maintained .tt-page-hero-title { font-size: clamp(1.9rem, 10vw, 2.5rem); }
+  .tt-about-maintained .tt-about-img,
+  .tt-about-maintained .tt-img-placeholder { min-height: 390px; border-radius: 16px; }
+  .tt-about-maintained .tt-trust-grid { grid-template-columns: 1fr; }
+  .tt-about-maintained .tt-trust-item { padding: 22px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tt-about-maintained *, .tt-about-maintained *::before, .tt-about-maintained *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
