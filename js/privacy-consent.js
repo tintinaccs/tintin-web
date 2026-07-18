@@ -10,7 +10,12 @@ const COOKIE_NAME = 'tt_privacy_choice';
 const COOKIE_VERSION = 'v2';
 const LEGACY_CONSENT_KEY = 'tt_activity_consent_v1';
 const COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
-const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
+
+function isAdminPage() {
+  const path = location.pathname.replace(/\/+$/, '');
+  const lastSegment = path.split('/').filter(Boolean).pop() || '';
+  return /^admin(?:-[a-z0-9-]+)?(?:\.html)?$/i.test(lastSegment);
+}
 
 let memoryChoice = '';
 let preferenceOpener = null;
@@ -90,6 +95,11 @@ function privacyUrl() {
 }
 
 function renderConsent(customize = false, focusDetails = false) {
+  if (isAdminPage()) {
+    document.getElementById('tt-privacy-consent')?.remove();
+    return;
+  }
+
   const existing = document.getElementById('tt-privacy-consent');
   if (existing) existing.remove();
 
@@ -147,7 +157,7 @@ function renderConsent(customize = false, focusDetails = false) {
 }
 
 export function openPrivacyPreferences() {
-  if (!document.body || ADMIN_PAGES.test(location.pathname)) return;
+  if (!document.body || isAdminPage()) return;
   preferenceOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   renderConsent(true, true);
 }
@@ -159,7 +169,10 @@ export function onPrivacyConsentChange(listener) {
 }
 
 function showInitialChoice() {
-  if (!document.body || ADMIN_PAGES.test(location.pathname) || privacyPreferences().decided) return;
+  if (!document.body || isAdminPage() || privacyPreferences().decided) {
+    if (isAdminPage()) document.getElementById('tt-privacy-consent')?.remove();
+    return;
+  }
   renderConsent(false);
 }
 
@@ -174,6 +187,10 @@ window.addEventListener('tintin:welcome:opened', () => {
   if (banner) banner.hidden = true;
 });
 window.addEventListener('tintin:welcome:closed', () => {
+  if (isAdminPage()) {
+    document.getElementById('tt-privacy-consent')?.remove();
+    return;
+  }
   const banner = document.getElementById('tt-privacy-consent');
   if (banner) banner.hidden = false;
   else if (!privacyPreferences().decided) showInitialChoice();
