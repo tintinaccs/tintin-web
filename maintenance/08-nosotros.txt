@@ -1,0 +1,31 @@
+TINTIN-WEB — MANTENIMIENTO 08: NOSOTROS
+Archivo: about.html
+Estado: COMPLETADO EN RAMA
+
+REVISADO
+- Hero, historia, imagen principal, misión, valores, botones y footer.
+- SEO, canonical, Open Graph y Twitter.
+- Accesibilidad, foco y reducción de movimiento.
+- Desktop, laptop, tablets, mobile y mini mobile.
+
+HALLAZGOS
+- Metadatos con dominio histórico.
+- Texto de envío sensible a cambios operativos.
+- Imagen sin estado claro de error.
+- Valores sin semántica de lista.
+- Colores y fondos con valores fijos.
+- Footer con año fijo.
+- Sin auditoría exclusiva.
+
+CORRECCIONES
+- Metadatos normalizados con la URL publicada.
+- Texto de entrega reemplazado por información estable.
+- Fondo sólido y mensaje de error para la imagen.
+- Valores convertidos en lista semántica.
+- Colores conectados a tokens configurables.
+- Año automático.
+- Responsive para siete viewports.
+- Auditoría scripts/audit-about-page.js.
+
+NOTA
+La auditoría automática valida código, estructura y reglas responsive. No reemplaza una prueba manual en dispositivos físicos con datos reales.
