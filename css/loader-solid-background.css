@@ -7,6 +7,12 @@
  * abrir Google desde login) pueda dejar visible el contenido de la página por
  * detrás del logo.
  */
+html:has(body #tt-loader:not(.tt-out)),
+html:has(body #tt-loader:not(.tt-out)) body {
+  background: #FFF6FA !important;
+  background-color: #FFF6FA !important;
+}
+
 html body #tt-loader {
   background: #FFF6FA !important;
   background-color: #FFF6FA !important;
