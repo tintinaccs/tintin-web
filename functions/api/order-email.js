@@ -163,7 +163,7 @@ function customerEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Arial,Helvetica,sans-serif;color:#2b2b2b">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
   <div style="max-width:620px;margin:0 auto;padding:28px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;overflow:hidden">
       <div style="background:#ad3f67;padding:24px;text-align:center">
@@ -233,7 +233,7 @@ function adminEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Arial,Helvetica,sans-serif;color:#2b2b2b">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
   <div style="max-width:680px;margin:0 auto;padding:24px 14px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;padding:26px">
       <h1 style="margin:0 0 6px;color:#ad3f67;font-size:24px">Nuevo pedido #${escapeHtml(shortId)}</h1>
