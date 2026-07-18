@@ -1,0 +1,42 @@
+/*
+ * Fondo sólido universal del loader de marca.
+ *
+ * Este archivo se carga desde color-tokens.css en todas las páginas. El loader
+ * también tiene un fondo base en js/page-loader.js, pero esta segunda capa
+ * evita que cualquier tema, regla tardía o estado interactivo (por ejemplo,
+ * abrir Google desde login) pueda dejar visible el contenido de la página por
+ * detrás del logo.
+ */
+html body #tt-loader {
+  background: #FFF6FA !important;
+  background-color: #FFF6FA !important;
+  background-image: none !important;
+  background-blend-mode: normal !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+}
+
+html body #tt-loader:not(.tt-out) {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+html body #tt-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  background: #FFF6FA !important;
+  background-color: #FFF6FA !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  pointer-events: none;
+}
+
+html body #tt-loader > * {
+  position: relative;
+  z-index: 1;
+}
