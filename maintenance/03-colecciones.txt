@@ -1,0 +1,47 @@
+TINTIN-WEB — MANTENIMIENTO 03: COLECCIONES
+Archivo principal: collections.html
+Estado: TERMINADO
+
+ALCANCE REVISADO
+- HTML, CSS y JavaScript completos de la página.
+- Hero, grilla de colecciones y productos destacados.
+- Firestore collections y catálogo de productos.
+- Navegación a catálogo y producto.
+- Agregar al carrito.
+- Estados loading, empty, error y offline.
+- Header, footer, metadatos y WhatsApp.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS CORREGIDOS
+[ALTO] Colores, textos, badges y estados ahora siguen los tokens configurables del Super Admin.
+[ALTO] Colecciones y productos destacados se recuperan y completan de forma independiente.
+[ALTO] Se agregó auditoría CI exclusiva para collections.html.
+[MEDIO] Las cargas lentas tienen watchdogs separados y reaccionan a reconexión y regreso a la pestaña.
+[MEDIO] Metadatos se normalizan al dominio publicado.
+[MEDIO] Footer usa año automático.
+[MEDIO] Se agregó estado visible de sincronización y recuperación al volver internet.
+[MEDIO] Skeletons, imágenes y tarjetas tienen superficies sólidas configurables.
+[BAJO] Se agregó tratamiento explícito para tablet horizontal, tablet vertical, mobile y mini mobile.
+
+CORRECCIONES APLICADAS
+1. Colores y superficies conectados a tokens configurables.
+2. Fondos sólidos desde la primera pintura.
+3. Recuperación independiente de colecciones y productos destacados.
+4. Observación de conexión, visibilidad, pageshow y eventos de datos.
+5. Metadatos y footer normalizados.
+6. Responsive explícito para siete viewports.
+7. Auditoría CI específica.
+8. Estados accesibles y recuperación con reintento.
+
+PRUEBAS EJECUTADAS
+- Sintaxis JavaScript: APROBADA.
+- Auditoría general Tintin: APROBADA.
+- Auditoría tipográfica Montserrat: APROBADA.
+- Auditoría de colecciones Fase 4: APROBADA.
+- Auditoría específica de la página Colecciones: APROBADA.
+- Siete viewports verificados por contrato.
+
+RESULTADO
+- Hallazgos críticos y altos: CORREGIDOS.
+- Comprobaciones automáticas: VERDES.
+- Pendiente único: mergear PR #161 en main.
