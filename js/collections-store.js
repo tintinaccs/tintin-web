@@ -5,6 +5,7 @@ import './checkout-maintenance.js?v=tintin-20260718-checkout-maintenance-1';
 import './login-maintenance.js?v=tintin-20260718-login-maintenance-1';
 import './profile-maintenance.js?v=tintin-20260718-profile-maintenance-1';
 import './about-maintenance.js?v=tintin-20260718-about-maintenance-1';
+import './contact-maintenance.js?v=tintin-20260718-contact-maintenance-1';
 
 /**
  * TINTIN — Collections Store
