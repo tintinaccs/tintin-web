@@ -1,0 +1,255 @@
+/* TINTIN — Mantenimiento integral del Catálogo */
+body.tt-catalog-maintenance {
+  background: var(--color-background-page, #FFF6FA) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  overflow-x: clip;
+}
+
+body.tt-catalog-maintenance:not(.tt-catalog-runtime-ready) *,
+body.tt-catalog-maintenance:not(.tt-catalog-runtime-ready) *::before,
+body.tt-catalog-maintenance:not(.tt-catalog-runtime-ready) *::after {
+  transition-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+body.tt-catalog-maintenance .cat-wrap,
+body.tt-catalog-maintenance .cat-main,
+body.tt-catalog-maintenance .cat-layout {
+  min-width: 0;
+}
+
+body.tt-catalog-maintenance .cat-hero {
+  background: var(--color-background-surface-soft, #FFF9FC) !important;
+  border: 1px solid var(--color-border-primary, #F1E4E7);
+  box-shadow: 0 10px 30px var(--color-card-shadow, rgba(212,106,138,.10));
+}
+
+body.tt-catalog-maintenance .cat-hero-title {
+  color: var(--color-text-title, #2B2B2B) !important;
+}
+
+body.tt-catalog-maintenance .cat-hero-sub,
+body.tt-catalog-maintenance .cat-count,
+body.tt-catalog-maintenance .cat-filter-count,
+body.tt-catalog-maintenance .cat-range-sep {
+  color: var(--color-text-secondary, #7B6F72) !important;
+}
+
+body.tt-catalog-maintenance .cat-sidebar,
+body.tt-catalog-maintenance .cat-top,
+body.tt-catalog-maintenance .tt-card,
+body.tt-catalog-maintenance .cat-sort,
+body.tt-catalog-maintenance .cat-search,
+body.tt-catalog-maintenance .cat-range-input,
+body.tt-catalog-maintenance .tt-filtro-btn,
+body.tt-catalog-maintenance .cat-card-placeholder {
+  background: var(--color-background-surface, #FFFFFF) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  border-color: var(--color-border-primary, #F1E4E7) !important;
+}
+
+body.tt-catalog-maintenance .cat-sidebar,
+body.tt-catalog-maintenance .cat-top,
+body.tt-catalog-maintenance .tt-card {
+  box-shadow: 0 8px 28px var(--color-card-shadow, rgba(212,106,138,.10));
+}
+
+body.tt-catalog-maintenance .tt-card-img-wrap,
+body.tt-catalog-maintenance .tt-card-img-wrap img,
+body.tt-catalog-maintenance .cat-card-placeholder {
+  background-color: var(--color-background-surface-soft, #FFF9FC) !important;
+  background-image: none !important;
+}
+
+body.tt-catalog-maintenance .tt-card-name,
+body.tt-catalog-maintenance .tt-card-name a,
+body.tt-catalog-maintenance .cat-filter-option,
+body.tt-catalog-maintenance .cat-range-label {
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+body.tt-catalog-maintenance .tt-card-cat,
+body.tt-catalog-maintenance .tt-card-price,
+body.tt-catalog-maintenance .cat-filter-title,
+body.tt-catalog-maintenance .cat-filter-option.active,
+body.tt-catalog-maintenance .cat-card-placeholder {
+  color: var(--color-brand-primary, #AD3F67) !important;
+}
+
+body.tt-catalog-maintenance .tt-card-btn-cart,
+body.tt-catalog-maintenance .cat-filter-toggle,
+body.tt-catalog-maintenance .tt-filtro-btn.activo,
+body.tt-catalog-maintenance .tt-filtro-btn.active {
+  background: var(--color-button-primary-background, #AD3F67) !important;
+  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  color: var(--color-button-primary-text, #FFFFFF) !important;
+}
+
+body.tt-catalog-maintenance .tt-card-btn-view,
+body.tt-catalog-maintenance .tt-filtro-btn:not(.activo):not(.active) {
+  background: var(--color-button-secondary-background, #FFFFFF) !important;
+  border-color: var(--color-button-secondary-border, #AD3F67) !important;
+  color: var(--color-button-secondary-text, #AD3F67) !important;
+}
+
+body.tt-catalog-maintenance .tt-card-btn:focus-visible,
+body.tt-catalog-maintenance .tt-filtro-btn:focus-visible,
+body.tt-catalog-maintenance .cat-filter-option:focus-visible,
+body.tt-catalog-maintenance .cat-filter-toggle:focus-visible,
+body.tt-catalog-maintenance .cat-search:focus-visible,
+body.tt-catalog-maintenance .cat-sort:focus-visible,
+body.tt-catalog-maintenance .cat-range-input:focus-visible,
+body.tt-catalog-maintenance a:focus-visible {
+  outline: 3px solid var(--color-button-primary-focus-ring, rgba(173,63,103,.24));
+  outline-offset: 3px;
+}
+
+body.tt-catalog-maintenance .tt-card-badge {
+  background: var(--color-badge-background, #FDECF2) !important;
+  color: var(--color-badge-text, #AD3F67) !important;
+  border: 1px solid var(--color-card-border, #F1E4E7);
+}
+
+body.tt-catalog-maintenance .tt-card-badge--out {
+  background: var(--color-error-background, #FDE3E1) !important;
+  color: var(--color-error-text, #B8341F) !important;
+}
+
+body.tt-catalog-maintenance .tt-skeleton {
+  background: linear-gradient(90deg,
+    var(--color-skeleton-base, #F1E4E7) 25%,
+    var(--color-skeleton-shine, #FDECF2) 50%,
+    var(--color-skeleton-base, #F1E4E7) 75%) !important;
+  background-size: 200% 100% !important;
+}
+
+body.tt-catalog-maintenance .cat-filter-dot {
+  background: var(--color-state-disabled, #B7ADB0) !important;
+}
+body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
+  background: var(--color-state-selected, #AD3F67) !important;
+}
+
+.tt-catalog-runtime-state {
+  grid-column: 1 / -1;
+  min-height: 250px;
+  display: grid;
+  place-items: center;
+  padding: 30px 20px;
+  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border-radius: 18px;
+  background: var(--color-background-surface, #FFFFFF);
+  color: var(--color-text-secondary, #7B6F72);
+  text-align: center;
+  font: 600 13px/1.6 Montserrat;
+}
+.tt-catalog-runtime-state strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-text-title, #2B2B2B);
+  font-size: 16px;
+}
+.tt-catalog-runtime-state button,
+.tt-catalog-runtime-state a {
+  min-height: 44px;
+  margin-top: 14px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--color-button-primary-border, #AD3F67);
+  border-radius: 999px;
+  background: var(--color-button-primary-background, #AD3F67);
+  color: var(--color-button-primary-text, #FFFFFF) !important;
+  font: 800 12px/1.2 Montserrat;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#tt-catalog-sync-state {
+  min-height: 22px;
+  margin: -8px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  color: var(--color-text-secondary, #7B6F72);
+  font: 700 11px/1.3 Montserrat;
+}
+#tt-catalog-sync-state::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-border-success, #166534);
+}
+#tt-catalog-sync-state[data-state="loading"]::before { background: var(--color-border-warning, #BF360C); }
+#tt-catalog-sync-state[data-state="error"]::before,
+#tt-catalog-sync-state[data-state="offline"]::before { background: var(--color-border-error, #B8341F); }
+
+body.tt-catalog-maintenance .tt-footer {
+  background: var(--color-background-footer, #FFFFFF) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+}
+body.tt-catalog-maintenance .tt-footer a,
+body.tt-catalog-maintenance .tt-footer-col-title,
+body.tt-catalog-maintenance .tt-footer-bottom,
+body.tt-catalog-maintenance .tt-footer-tagline {
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+@media (min-width: 1025px) {
+  body.tt-catalog-maintenance .cat-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body.tt-catalog-maintenance .cat-wrap { padding-inline: 18px; }
+  body.tt-catalog-maintenance .cat-layout { grid-template-columns: 210px minmax(0,1fr); gap: 18px; }
+  body.tt-catalog-maintenance .cat-sidebar { padding: 18px; }
+  body.tt-catalog-maintenance .cat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+  body.tt-catalog-maintenance .cat-controls { flex-basis: 100%; }
+}
+
+@media (max-width: 768px) {
+  body.tt-catalog-maintenance { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  body.tt-catalog-maintenance .cat-wrap { padding: 16px 14px 90px; }
+  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 24px 16px; border-radius: 16px; }
+  body.tt-catalog-maintenance .cat-sidebar {
+    display: none !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+  }
+  body.tt-catalog-maintenance .cat-sidebar.open {
+    display: block !important;
+    padding: 18px 16px !important;
+    margin-bottom: 16px;
+  }
+  body.tt-catalog-maintenance .cat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+  body.tt-catalog-maintenance .cat-top { align-items: stretch; }
+  body.tt-catalog-maintenance .cat-controls { display: grid; grid-template-columns: 1fr; }
+  body.tt-catalog-maintenance .cat-search,
+  body.tt-catalog-maintenance .cat-sort { width: 100%; }
+  body.tt-catalog-maintenance .tt-card-btns { flex-direction: column; }
+  body.tt-catalog-maintenance .tt-card-btn { min-height: 44px; }
+  #tt-catalog-sync-state { justify-content: center; text-align: center; }
+}
+
+@media (max-width: 360px) {
+  body.tt-catalog-maintenance .cat-wrap { padding-inline: 10px; }
+  body.tt-catalog-maintenance .cat-grid { gap: 8px; }
+  body.tt-catalog-maintenance .tt-card-info { padding: 9px; }
+  body.tt-catalog-maintenance .tt-card-name { font-size: 11px; }
+  body.tt-catalog-maintenance .tt-card-price { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.tt-catalog-maintenance *,
+  body.tt-catalog-maintenance *::before,
+  body.tt-catalog-maintenance *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

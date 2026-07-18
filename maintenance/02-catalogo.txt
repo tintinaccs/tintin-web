@@ -1,0 +1,57 @@
+TINTIN-WEB — MANTENIMIENTO 02: CATÁLOGO
+Archivo principal: catalogo.html
+Estado: TERMINADO
+
+ALCANCE REVISADO
+- HTML completo de catalogo.html.
+- Header, navegación, búsqueda global, cuenta y carrito compartidos.
+- Hero del catálogo.
+- Categorías desktop, tablet y mobile.
+- Filtros por categoría, precio y stock.
+- Búsqueda local del catálogo.
+- Ordenamiento.
+- Render de tarjetas, imágenes, stock, precios y botones.
+- Carga inicial, skeletons, estados vacíos, errores y sin conexión.
+- Integración con productos, colecciones, carrito, Firebase y Super Admin.
+- Footer, metadatos y WhatsApp.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS CORREGIDOS
+[ALTO] Los colores y fondos fijos quedan cubiertos por una capa conectada al esquema del Super Admin.
+[ALTO] Tarjetas e imágenes ahora tienen superficies sólidas y no dejan pasar fondos anteriores.
+[ALTO] El catálogo recupera estados incompletos cuando productos, colecciones o Firebase llegan fuera de orden.
+[ALTO] Se agregó una auditoría CI exclusiva para Catálogo.
+[MEDIO] Canonical, Open Graph y Twitter se normalizan al dominio publicado.
+[MEDIO] El sidebar mobile usa apertura estable, sin alturas intermedias ni contenido atrapado.
+[MEDIO] Se unificaron estados de carga, sin conexión y error con opción de reintento.
+[MEDIO] Búsqueda, precio, stock y ordenamiento sincronizan su estado con la URL.
+[MEDIO] El año del footer se actualiza automáticamente.
+[MEDIO] Controles, labels, tarjetas y fondos usan tokens configurables con contraste protegido.
+
+CORRECCIONES APLICADAS
+1. Capa visual basada en tokens del Super Admin, sin transparencias críticas.
+2. Fondo sólido para página, hero, sidebar, controles, tarjetas, imágenes y footer.
+3. Transiciones desactivadas durante la preparación inicial.
+4. Responsive explícito para siete viewports.
+5. Estados uniformes de carga, vacío, error y sin conexión.
+6. Recuperación por eventos de productos, colecciones, carrito, conexión, visibilidad y navegación.
+7. Sincronización de filtros, búsqueda y ordenamiento con la URL.
+8. Restauración segura al usar Atrás/Adelante y bfcache.
+9. Metadatos normalizados al dominio publicado.
+10. Año del footer automático.
+11. Auditoría CI exclusiva de Catálogo.
+
+PRUEBAS EJECUTADAS
+- Sintaxis JavaScript: APROBADA.
+- Auditoría general Tintin: APROBADA.
+- Auditoría tipográfica Montserrat: APROBADA.
+- Auditoría específica de Catálogo: APROBADA.
+- Auditoría de colecciones Fase 4: APROBADA.
+- Siete viewports verificados por contrato de auditoría.
+- Tokens, estados y sincronización URL verificados.
+- Runtime cargado desde collections-store, fuente utilizada por catalogo.html.
+
+RESULTADO
+- Hallazgos críticos y altos de esta etapa: CORREGIDOS.
+- Comprobaciones automáticas: VERDES.
+- Pendiente único: mergear PR #160 en main.

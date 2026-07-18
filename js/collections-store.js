@@ -1,3 +1,5 @@
+import './catalog-maintenance.js?v=tintin-20260718-catalog-maintenance-1';
+
 /**
  * TINTIN — Collections Store
  * Real-time read of the `collections` Firestore collection (managed from
@@ -80,10 +82,6 @@ function republishToPublicSubscribers() {
 function attachProductsReactivity() {
   if (productsReactivityAttached) return;
   productsReactivityAttached = true;
-  // Si el producto usado como respaldo de una colección cambia, se
-  // desactiva, cambia de colección o pierde su imagen, esto vuelve a
-  // resolver y emite la lista actualizada sin esperar un nuevo snapshot de
-  // `collections` (que no cambió) ni una recarga de página.
   window.addEventListener('tintin:products-loaded', republishToPublicSubscribers);
 }
 
