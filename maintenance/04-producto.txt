@@ -1,0 +1,39 @@
+TINTIN-WEB — MANTENIMIENTO 04: PRODUCTO
+Archivo principal: product.html
+Estado: EN CORRECCIÓN
+
+ALCANCE REVISADO
+- Carga del producto desde Firestore.
+- Estado cargando, no encontrado y error.
+- Metadatos y JSON-LD dinámicos.
+- Galería principal, miniaturas e imagen ampliada.
+- Nombre, categoría, descripción, precio, badge y stock.
+- Variantes obligatorias.
+- Selector de cantidad y límites de stock.
+- Agregar al carrito, comprar ahora y WhatsApp.
+- Beneficios rápidos.
+- Selección rápida y sincronización del carrito.
+- Productos relacionados.
+- Header, footer y navegación.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] Galería principal y miniaturas usan fondo transparente y pueden mostrar colores anteriores durante la carga.
+[ALTO] La página depende de varios módulos y señales; el loader puede liberarse antes o después de que todos tengan un estado válido.
+[ALTO] No existe una auditoría CI exclusiva de product.html.
+[MEDIO] Estado de stock y módulos auxiliares usan colores fijos fuera del esquema del Super Admin.
+[MEDIO] Fallback social todavía usa el dominio histórico de GitHub Pages.
+[MEDIO] Timeout rígido de carga sin recuperación coordinada al volver internet o regresar a la pestaña.
+[MEDIO] Footer con año fijo.
+[MEDIO] Beneficios y selección rápida usan variables privadas y valores fijos que pueden perder contraste.
+[MEDIO] Productos relacionados necesitan estado independiente de carga/error.
+[BAJO] Hay estilos inline de carga y estados que dificultan mantener una apariencia uniforme.
+
+CORRECCIONES PREVISTAS
+1. Superficies sólidas y tokens configurables en toda la página.
+2. Fondo sólido para galería, imágenes, miniaturas, selección y relacionados.
+3. Coordinación de estados product/detail/related/selection sin bloquear la página.
+4. Recuperación online, offline, pageshow y visibilitychange.
+5. Normalización de metadatos y footer.
+6. Responsive explícito para siete viewports.
+7. Auditoría CI específica.
