@@ -1,21 +1,68 @@
 // page-loader.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
-import { auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 
 const PERSON_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 const ADMIN_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`;
 const ORDER_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l2 4v16H4V6l2-4z"/><path d="M4 6h16"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>`;
 
+const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
+let instantLoginRedirectStarted = false;
+
 function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 function doLogout(){signOut(auth).then(()=>{window.location.href='index.html';});}
 function hasAdminAccess(user,role){if(!user)return false;if(user.email===SUPER_ADMIN)return true;return can(role,'viewDashboard')===true;}
 function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
 
+function isFirstAuthentication(user){
+ const created=Date.parse(user?.metadata?.creationTime||'');
+ const signed=Date.parse(user?.metadata?.lastSignInTime||'');
+ return Number.isFinite(created)&&Number.isFinite(signed)&&Math.abs(signed-created)<3000;
+}
+
+function persistLoginMetadata(user){
+ const email=String(user?.email||'').trim().toLowerCase();
+ const payload={
+  name:user?.displayName||'',
+  email:user?.email||'',
+  photoURL:user?.photoURL||'',
+  lastLogin:serverTimestamp()
+ };
+ if(email===SUPER_ADMIN)payload.role='superadmin';
+ return setDoc(doc(db,'users',user.uid),payload,{merge:true}).catch(error=>{
+  console.warn('[auth-nav] No se pudo actualizar el perfil durante el acceso rápido:',error);
+ });
+}
+
+async function redirectAuthenticatedLogin(user){
+ if(!IS_LOGIN_PAGE||!user||instantLoginRedirectStarted)return false;
+ instantLoginRedirectStarted=true;
+ window.TintinLoginFastRedirecting=true;
+ window.TintinLoader?.show?.();
+ window.TintinLoader?.setText?.('Ingresando…');
+
+ const persistPromise=persistLoginMetadata(user);
+ // En una cuenta recién creada damos un margen muy corto para crear su perfil.
+ // En accesos habituales la navegación no espera ninguna lectura ni escritura.
+ if(isFirstAuthentication(user)){
+  await Promise.race([
+   persistPromise,
+   new Promise(resolve=>window.setTimeout(resolve,450))
+  ]);
+ }
+
+ const email=String(user.email||'').trim().toLowerCase();
+ window.location.replace(email===SUPER_ADMIN?'admin.html':'index.html');
+ return true;
+}
+
 const accountBtnDefaults=new Map();
 
 onAuthStateChanged(auth,async user=>{
+ if(await redirectAuthenticatedLogin(user))return;
  document.querySelectorAll("#tabbar-cuenta,[data-auth-link='cuenta']").forEach(el=>{el.href=user?'perfil.html':'login.html';});
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
