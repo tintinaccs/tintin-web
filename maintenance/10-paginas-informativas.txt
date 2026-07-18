@@ -1,0 +1,36 @@
+ETAPA 10 — PÁGINAS INFORMATIVAS
+Archivos revisados: terminos.html y privacidad.html
+Fecha: 2026-07-18
+
+ALCANCE
+- Estructura y legibilidad.
+- Metadatos y enlaces sociales.
+- Contacto público sincronizado.
+- Accesibilidad y navegación por teclado.
+- Responsive en desktop, laptop, tablet y mobile.
+- Integración con colores configurables.
+- Auditoría automática permanente.
+
+HALLAZGOS
+1. Canonical, Open Graph y Twitter usaban el dominio histórico.
+2. El correo y WhatsApp estaban duplicados directamente en el HTML.
+3. El contenido extenso no tenía índice interno.
+4. Había estilos inline para ancho, fecha y acciones.
+5. Los bloques no estaban vinculados semánticamente con sus títulos.
+6. El footer tenía un año fijo.
+7. No existían reglas específicas para mobile pequeño ni reducción de movimiento.
+8. No existía una auditoría CI propia para estas páginas.
+
+CORRECCIONES
+- Canonical y metadatos sociales resueltos desde la URL publicada.
+- WhatsApp y correo sincronizados desde settings/general.
+- Índice accesible generado automáticamente.
+- Identificadores y aria-labelledby para cada sección.
+- Superficies sólidas, bordes y colores mediante tokens del tema.
+- Responsive explícito para tablet, mobile y mini mobile.
+- Compatibilidad con prefers-reduced-motion.
+- Año del footer automático.
+- Nueva auditoría scripts/audit-legal-pages.js añadida al workflow.
+
+NOTA
+Esta etapa es una revisión técnica, visual y de coherencia del contenido existente. No sustituye una revisión jurídica profesional de las políticas de la tienda.
