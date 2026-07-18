@@ -1,0 +1,310 @@
+/* TINTIN — Mantenimiento integral de Producto */
+body.tt-product-maintenance {
+  background: var(--color-background-page, #FFF6FA) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  overflow-x: clip;
+}
+
+body.tt-product-maintenance:not(.tt-product-runtime-ready) *,
+body.tt-product-maintenance:not(.tt-product-runtime-ready) *::before,
+body.tt-product-maintenance:not(.tt-product-runtime-ready) *::after {
+  transition-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+body.tt-product-maintenance .tt-product-page,
+body.tt-product-maintenance .tinben,
+body.tt-product-maintenance .tinsel,
+body.tt-product-maintenance .tt-related-section {
+  background: var(--color-background-page, #FFF6FA) !important;
+  background-image: none !important;
+}
+
+body.tt-product-maintenance .tt-product-detail-grid,
+body.tt-product-maintenance .tt-product-gallery,
+body.tt-product-maintenance .tt-product-info-panel,
+body.tt-product-maintenance .tinben-card,
+body.tt-product-maintenance .tinsel-box,
+body.tt-product-maintenance .tinsel-item,
+body.tt-product-maintenance .tt-related-card,
+body.tt-product-maintenance .tt-product-state,
+body.tt-product-maintenance #product-loading,
+body.tt-product-maintenance #product-not-found {
+  background: var(--color-background-surface, #FFFFFF) !important;
+  border-color: var(--color-card-border, #F1E4E7) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+body.tt-product-maintenance .tt-product-info-panel,
+body.tt-product-maintenance .tinben-card,
+body.tt-product-maintenance .tinsel-box,
+body.tt-product-maintenance .tt-related-card,
+body.tt-product-maintenance .tt-product-state {
+  box-shadow: 0 10px 32px var(--color-card-shadow, rgba(212,106,138,.10));
+}
+
+body.tt-product-maintenance .tt-gallery-main,
+body.tt-product-maintenance .tt-gallery-main img,
+body.tt-product-maintenance .tt-gallery-thumb,
+body.tt-product-maintenance .tt-gallery-thumb img,
+body.tt-product-maintenance .tinsel-item-img,
+body.tt-product-maintenance .tinsel-item-img img,
+body.tt-product-maintenance .tt-related-card-img,
+body.tt-product-maintenance .tt-related-card-img img,
+body.tt-product-maintenance .tt-product-img,
+body.tt-product-maintenance .tt-product-img img {
+  background: var(--color-background-surface-soft, #FFF9FC) !important;
+  background-image: none !important;
+}
+
+body.tt-product-maintenance .tt-product-detail-name,
+body.tt-product-maintenance .tinben-title,
+body.tt-product-maintenance .tinben-card-title,
+body.tt-product-maintenance .tinsel-title,
+body.tt-product-maintenance .tinsel-item-name,
+body.tt-product-maintenance .tt-section-title,
+body.tt-product-maintenance .tt-related-card-name,
+body.tt-product-maintenance #product-not-found h2,
+body.tt-product-maintenance .tt-product-state h2 {
+  color: var(--color-text-title, #2B2B2B) !important;
+}
+
+body.tt-product-maintenance .tt-product-detail-desc,
+body.tt-product-maintenance .tinben-subtitle,
+body.tt-product-maintenance .tinben-card-text,
+body.tt-product-maintenance .tinsel-total-label,
+body.tt-product-maintenance .tinsel-empty,
+body.tt-product-maintenance .tinsel-item-variant,
+body.tt-product-maintenance .tinsel-footer-label,
+body.tt-product-maintenance .tt-related-status,
+body.tt-product-maintenance #product-loading p,
+body.tt-product-maintenance #product-not-found p,
+body.tt-product-maintenance .tt-product-state p {
+  color: var(--color-text-secondary, #7B6F72) !important;
+}
+
+body.tt-product-maintenance .tt-product-detail-cat,
+body.tt-product-maintenance .tt-product-detail-price,
+body.tt-product-maintenance .tinsel-total,
+body.tt-product-maintenance .tinsel-item-price,
+body.tt-product-maintenance .tinsel-footer-amount,
+body.tt-product-maintenance .tt-section-sub,
+body.tt-product-maintenance .tt-related-card-price {
+  color: var(--color-brand-primary, #AD3F67) !important;
+}
+
+body.tt-product-maintenance .tt-product-status,
+body.tt-product-maintenance .tt-product-badge,
+body.tt-product-maintenance .tinsel-badge {
+  background: var(--color-badge-background, #FDECF2) !important;
+  color: var(--color-badge-text, #AD3F67) !important;
+  border: 1px solid var(--color-card-border, #F1E4E7);
+}
+
+body.tt-product-maintenance .tt-product-status[data-stock-state="out"] {
+  background: var(--color-error-background, #FDE3E1) !important;
+  color: var(--color-error-text, #B8341F) !important;
+}
+
+body.tt-product-maintenance .tt-qty-selector,
+body.tt-product-maintenance .tt-variant-option,
+body.tt-product-maintenance .tt-share-btn,
+body.tt-product-maintenance .tinsel-qty,
+body.tt-product-maintenance .tinsel-btn-secondary {
+  background: var(--color-button-secondary-background, #FFFFFF) !important;
+  border-color: var(--color-button-secondary-border, #AD3F67) !important;
+  color: var(--color-button-secondary-text, #AD3F67) !important;
+}
+
+body.tt-product-maintenance .tt-variant-option.active,
+body.tt-product-maintenance .tt-btn-primary-full,
+body.tt-product-maintenance .tinsel-btn-primary,
+body.tt-product-maintenance #tinsel-checkout-btn,
+body.tt-product-maintenance .tt-added-toast-checkout {
+  background: var(--color-button-primary-background, #AD3F67) !important;
+  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  color: var(--color-button-primary-text, #FFFFFF) !important;
+}
+
+body.tt-product-maintenance .tt-gallery-main:focus-visible,
+body.tt-product-maintenance .tt-gallery-thumb:focus-visible,
+body.tt-product-maintenance .tt-variant-option:focus-visible,
+body.tt-product-maintenance .tt-qty-btn:focus-visible,
+body.tt-product-maintenance button:focus-visible,
+body.tt-product-maintenance a:focus-visible {
+  outline: 3px solid var(--color-button-primary-focus-ring, rgba(173,63,103,.24));
+  outline-offset: 3px;
+}
+
+body.tt-product-maintenance .tinben-icon,
+body.tt-product-maintenance .tinsel-item,
+body.tt-product-maintenance .tinsel-qty,
+body.tt-product-maintenance .tinsel-item-img {
+  background-color: var(--color-background-surface-soft, #FFF9FC) !important;
+}
+
+body.tt-product-maintenance .tinsel-toast,
+body.tt-product-maintenance .tt-added-toast {
+  background: var(--color-background-elevated, #FFFFFF) !important;
+  color: var(--color-brand-primary, #AD3F67) !important;
+  border-color: var(--color-card-border, #F1E4E7) !important;
+  box-shadow: 0 12px 40px var(--color-card-shadow, rgba(212,106,138,.16)) !important;
+}
+
+.tt-product-runtime-state {
+  width: 100%;
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  padding: 36px 20px;
+  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border-radius: 20px;
+  background: var(--color-background-surface, #FFFFFF);
+  color: var(--color-text-secondary, #7B6F72);
+  text-align: center;
+}
+
+.tt-product-runtime-state strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-text-title, #2B2B2B);
+  font-size: 16px;
+}
+
+#tt-product-sync-state {
+  width: min(1180px, calc(100% - 40px));
+  min-height: 24px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  color: var(--color-text-secondary, #7B6F72);
+  font: 700 11px/1.35 Montserrat;
+}
+
+#tt-product-sync-state::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-border-success, #166534);
+}
+
+#tt-product-sync-state[data-state="loading"]::before {
+  background: var(--color-border-warning, #BF360C);
+}
+
+#tt-product-sync-state[data-state="error"]::before,
+#tt-product-sync-state[data-state="offline"]::before {
+  background: var(--color-border-error, #B8341F);
+}
+
+body.tt-product-maintenance .tt-footer {
+  background: var(--color-background-footer, #FFFFFF) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+}
+
+body.tt-product-maintenance .tt-footer a,
+body.tt-product-maintenance .tt-footer-col-title,
+body.tt-product-maintenance .tt-footer-bottom,
+body.tt-product-maintenance .tt-footer-tagline {
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+@media (min-width: 1025px) {
+  body.tt-product-maintenance .tt-product-detail-grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+    gap: clamp(32px, 4vw, 64px);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body.tt-product-maintenance .tt-product-detail-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr);
+    gap: 24px;
+  }
+
+  body.tt-product-maintenance .tinben-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.tt-product-maintenance .tt-related-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  body.tt-product-maintenance {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  body.tt-product-maintenance .tt-product-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  body.tt-product-maintenance .tt-product-info-panel {
+    padding: 20px 16px;
+  }
+
+  body.tt-product-maintenance .tt-product-actions-panel .tt-btn,
+  body.tt-product-maintenance .tinsel-footer-btns,
+  body.tt-product-maintenance .tinsel-footer-btns .tinsel-btn {
+    width: 100%;
+  }
+
+  body.tt-product-maintenance .tinsel-footer {
+    align-items: stretch;
+  }
+
+  body.tt-product-maintenance .tt-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #tt-product-sync-state {
+    width: calc(100% - 24px);
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  body.tt-product-maintenance .tinben-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.tt-product-maintenance .tinsel-item {
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+  }
+
+  body.tt-product-maintenance .tinsel-del {
+    grid-column: 3;
+  }
+}
+
+@media (max-width: 360px) {
+  body.tt-product-maintenance .tt-product-detail-name {
+    overflow-wrap: anywhere;
+  }
+
+  body.tt-product-maintenance .tt-related-grid {
+    gap: 8px;
+  }
+
+  body.tt-product-maintenance .tt-product-info-panel {
+    padding-inline: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.tt-product-maintenance *,
+  body.tt-product-maintenance *::before,
+  body.tt-product-maintenance *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
