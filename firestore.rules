@@ -178,7 +178,14 @@ service cloud.firestore {
        ============================================================ */
 
     function isOwnOrderByUidOrEmail() {
+      // El checkout hace transaction.get(orderRef) para revisar si ese pedido
+      // ya existe (evita duplicados en reintentos) ANTES de crearlo. Para un
+      // orderId que todavía no existe, resource es null, y resource.data
+      // sobre null revienta la evaluación igual que get(...).data — por eso
+      // se permite la lectura cuando el documento no existe todavía (no hay
+      // datos ajenos que proteger) en vez de asumir que siempre existe.
       return isSignedIn() && !isBlockedUser() && (
+        resource == null ||
         resource.data.userId == request.auth.uid ||
         (
           resource.data.userEmail is string &&
@@ -307,7 +314,12 @@ service cloud.firestore {
 
     function sparkItemValid(item, orderId) {
       let productId = item.id;
-      let product = get(sparkProductPath(productId)).data;
+      // Igual que en las otras funciones: si el producto ya no existe
+      // (se borró entre agregarlo al carrito y confirmar el pedido),
+      // get(...).data da null y product.get(...) revienta la evaluación.
+      let product = exists(sparkProductPath(productId))
+        ? get(sparkProductPath(productId)).data
+        : null;
       return item is map &&
         item.keys().hasOnly([
           'id', 'name', 'cat', 'price', 'qty', 'variant', 'imageUrl'
@@ -319,6 +331,7 @@ service cloud.firestore {
         item.qty is int && item.qty >= 1 && item.qty <= 99 &&
         item.variant is string && item.variant.size() <= 120 &&
         item.imageUrl is string && item.imageUrl.size() <= 900 &&
+        product != null &&
         product.get('active', true) != false &&
         product.price == item.price &&
         item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&
