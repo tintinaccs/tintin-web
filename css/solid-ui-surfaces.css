@@ -1,0 +1,160 @@
+/*
+ * Superficies críticas siempre sólidas.
+ *
+ * Este archivo se carga desde color-tokens.css en toda la plataforma y usa
+ * selectores deliberadamente específicos para que ningún esquema tardío,
+ * estilo inyectado por JavaScript o regla global vuelva transparentes el
+ * mensaje de bienvenida, el header de tablet/desktop o los pasos del checkout.
+ */
+
+/* Mientras el loader está visible, el checkout nunca puede asomarse por detrás. */
+body > #tt-loader:not(.tt-out) ~ .ck-back-row,
+body > #tt-loader:not(.tt-out) ~ .ck-steps,
+body > #tt-loader:not(.tt-out) ~ .ck-body {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Fondo estable del checkout desde la primera pintura. */
+html:has(#ck-steps),
+html:has(#ck-steps) body,
+html:has(#ck-steps) .ck-body {
+  background: #FFF6FA !important;
+  background-color: #FFF6FA !important;
+  background-image: none !important;
+  transition-property: none !important;
+}
+
+/* Los contenedores de cada paso no deben recibir la cápsula/cuadrado global. */
+html body .ck-steps .ck-step,
+html body .ck-steps .ck-step.active,
+html body .ck-steps .ck-step.done {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* Los números 1–5 son círculos reales y conservan la forma en todos los estados. */
+html body .ck-steps .ck-step .ck-step-num {
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border: 2px solid #F1E4E7 !important;
+  border-radius: 999px !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  color: #7B6F72 !important;
+  box-shadow: 0 3px 10px rgba(173, 63, 103, 0.08) !important;
+  overflow: hidden !important;
+  flex: 0 0 34px !important;
+}
+
+html body .ck-steps .ck-step.active .ck-step-num,
+html body .ck-steps .ck-step.done .ck-step-num {
+  border-color: #AD3F67 !important;
+  background: #AD3F67 !important;
+  background-color: #AD3F67 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 0 4px #FDECF2, 0 5px 14px rgba(173, 63, 103, 0.18) !important;
+}
+
+html body .ck-steps .ck-step-label {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Mensaje de bienvenida: pantalla y tarjeta completamente opacas. */
+html body #tt-welcome-tutorial.tt-welcome-overlay {
+  background: #FDECF2 !important;
+  background-color: #FDECF2 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+}
+
+html body #tt-welcome-tutorial .tt-welcome-card {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border: 1.5px solid #F1C8D5 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+}
+
+html body #tt-welcome-tutorial .tt-welcome-top {
+  background: linear-gradient(135deg, #F6B7C8 0%, #FDECF2 100%) !important;
+  background-color: #F6B7C8 !important;
+  opacity: 1 !important;
+}
+
+html body #tt-welcome-tutorial .tt-welcome-body {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+html body #tt-welcome-tutorial .tt-welcome-close,
+html body #tt-welcome-tutorial .tt-welcome-icon,
+html body #tt-welcome-tutorial .tt-welcome-btn:not(.tt-welcome-btn-primary) {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Header y paneles de tablet/desktop: blanco sólido con borde rosado. */
+@media (min-width: 769px) {
+  html body #tt-header-desktop-tablet.tt-header,
+  html body .tt-header {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-bottom: 1px solid #F1E4E7 !important;
+    box-shadow: 0 8px 24px rgba(173, 63, 103, 0.08) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  html body #tt-header-desktop-tablet .tt-dropdown,
+  html body #tt-header-desktop-tablet .tt-search-panel,
+  html body #tt-header-desktop-tablet .tt-search-results,
+  html body #tt-header-desktop-tablet .tt-account-panel,
+  html body #tt-header-desktop-tablet .tt-cart-drawer,
+  html body #tt-header-desktop-tablet .tt-collections-sheet,
+  html body .tt-dropdown,
+  html body .tt-search-panel,
+  html body .tt-search-results,
+  html body .tt-account-panel,
+  html body .tt-cart-drawer,
+  html body .tt-collections-sheet {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-color: #F1C8D5 !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+    box-shadow: 0 16px 40px rgba(82, 27, 49, 0.16) !important;
+  }
+}
