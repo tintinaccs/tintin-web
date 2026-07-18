@@ -1,4 +1,5 @@
 import './catalog-maintenance.js?v=tintin-20260718-catalog-maintenance-1';
+import './collections-maintenance.js?v=tintin-20260718-collections-maintenance-1';
 
 /**
  * TINTIN — Collections Store
@@ -24,18 +25,6 @@ import { cleanText, cleanMultilineText } from './security-utils.js?v=tintin-2026
 import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { resolveCollectionImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
 
-/**
- * Normalize a raw Firestore `collections/{slug}` doc into the canonical
- * shape the whole app relies on. The document ID is ALWAYS the canonical
- * slug — a stray `slug` field inside the doc data (legacy/manual edits)
- * must never override it, so this reads `id` last-and-explicit, never via
- * object-spread order.
- *
- * `image` here is always the collection's OWN configured cover — raw, not
- * resolved with any fallback. Admin editing screens need that truth (so an
- * empty value correctly shows "no image set yet"). Public consumers get the
- * resolved value instead, via onCollectionsUpdate below.
- */
 export function normalizeCollectionDoc(id, data) {
   const d = data || {};
   const orderNum = Number(d.order);
@@ -57,11 +46,6 @@ function currentProducts() {
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }
 
-/**
- * Devuelve la misma lista con `image` reemplazado por la imagen EFECTIVA de
- * cada colección (propia -> primer producto elegible -> respaldo global),
- * vía image-resolver.js. Nunca duplica esa lógica acá.
- */
 function withResolvedImages(cols) {
   const products = currentProducts();
   return cols.map(col => ({ ...col, image: resolveCollectionImage(col, products) }));
@@ -85,18 +69,6 @@ function attachProductsReactivity() {
   window.addEventListener('tintin:products-loaded', republishToPublicSubscribers);
 }
 
-/**
- * cb(cols) receives the live array of PUBLIC (visible !== false) collections,
- * sorted by order, every time Firestore changes — including an empty array
- * when zero collections exist. Each collection's `image` is already the
- * EFFECTIVE image to show (own cover -> first eligible product -> global
- * default), re-derived automatically whenever window.PRODUCTS updates too,
- * not just when the collection doc itself changes.
- * onError(e), if provided, fires on a real listener failure (e.g.
- * permission-denied); cb is NOT called with fake data in that case, so
- * callers can tell "empty" and "broken" apart.
- * Returns an unsubscribe function.
- */
 export function onCollectionsUpdate(cb, onError) {
   attachProductsReactivity();
   publicSubscribers.add(cb);
@@ -117,16 +89,6 @@ export function onCollectionsUpdate(cb, onError) {
   };
 }
 
-/**
- * Same live data, but UNFILTERED by visibility and including an `error`
- * signal — for admin/management UIs that must still see+edit hidden
- * collections. `image` here stays RAW (never resolved with a product
- * fallback) so the panel always shows the truth about what's actually
- * configured. cb(cols, error): error is null on a normal update, or the
- * Firestore error object on listener failure (cols is [] in that case —
- * callers should render an explicit error state, not treat it as "no
- * collections yet").
- */
 export function onAllCollectionsUpdate(cb) {
   return onSnapshot(query(collection(db, 'collections'), limit(5000)), snap => {
     cb(sortCols(snap.docs.map(d => normalizeCollectionDoc(d.id, d.data()))), null);
