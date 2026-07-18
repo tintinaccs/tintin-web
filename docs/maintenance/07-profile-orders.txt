@@ -1,0 +1,48 @@
+TINTIN-WEB — MANTENIMIENTO 07: PERFIL Y PEDIDOS
+Archivos principales: perfil.html, js/profile-maintenance.js
+Estado: TERMINADO
+
+ALCANCE REVISADO
+- Sesión y redirección a Login.
+- Cuenta bloqueada y acceso por roles.
+- Avatar, nombre, correo, teléfono y dirección.
+- Guardado de datos personales.
+- Ubicación guardada y eliminación.
+- Historial de pedidos y estadísticas.
+- Estados de pedidos en tiempo real.
+- Cierre de sesión, accesos rápidos y WhatsApp.
+- Firebase Auth, Firestore y sincronización de carrito.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] Los pedidos se consultaban una sola vez; cambios de estado administrativos no se reflejaban en tiempo real.
+[ALTO] No existía auditoría CI exclusiva para Perfil y Pedidos.
+[MEDIO] Canonical apuntaba al dominio histórico de GitHub Pages.
+[MEDIO] Colores de roles, estados, WhatsApp, errores y peligro estaban fijados directamente y podían perder contraste.
+[MEDIO] Los labels de nombre, teléfono y dirección no estaban asociados con sus inputs.
+[MEDIO] Guardar, borrar ubicación y cerrar sesión aceptaban pulsaciones repetidas durante operaciones remotas.
+[MEDIO] El error de pedidos no distinguía falta de conexión ni ofrecía reintento.
+[MEDIO] El historial mostraba solo cinco pedidos sin informar que podían existir más.
+[BAJO] Faltaban reglas explícitas para tablet horizontal y mini mobile.
+
+CORRECCIONES APLICADAS
+1. Runtime exclusivo para perfil con canonical dinámico y estado online/offline.
+2. Listener Firestore en tiempo real para pedidos del usuario activo.
+3. Render seguro de historial con estados semánticos, contador y aviso de pedidos adicionales.
+4. Recuperación automática al reconectar, volver a la pestaña o restaurar desde bfcache.
+5. Reintento visible ante error de consulta.
+6. Asociación for/id de labels y campos.
+7. Bloqueo temporal y aria-busy en acciones remotas.
+8. Superficies sólidas y colores vinculados a tokens configurables.
+9. Responsive explícito para siete viewports.
+10. Auditoría CI exclusiva de Perfil y Pedidos.
+
+PRUEBAS OBLIGATORIAS
+- Sintaxis del runtime.
+- Canonical dinámico.
+- Listener onSnapshot de pedidos.
+- Estados loading, empty, error y offline.
+- Accesibilidad de labels, mensajes y botones.
+- Tokens de color y superficies sólidas.
+- Reglas para siete viewports.
+- Auditoría general Tintin, tipografía y colecciones Fase 4.
