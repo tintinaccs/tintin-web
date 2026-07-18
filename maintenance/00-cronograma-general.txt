@@ -1,0 +1,69 @@
+TINTIN-WEB — CRONOGRAMA INTEGRAL DE MANTENIMIENTO
+Fecha de inicio: 18/07/2026
+
+REGLA PERMANENTE
+Toda modificación, corrección, actualización, alta, baja, edición, CRUD, cambio visual o cambio lógico debe comprobarse y funcionar en:
+- Desktop grande: 1920x1080
+- Desktop: 1440x900
+- Laptop: 1280x720
+- Tablet horizontal: 1024x768
+- Tablet vertical: 768x1024
+- Mobile: 390x844
+- Mini mobile: 320x568
+
+También debe comprobarse, según corresponda, para estos roles:
+- Invitado
+- Cliente
+- Viewer
+- Agente
+- Admin
+- Super Admin
+
+Cada etapa incluye obligatoriamente:
+1. Inventario completo de HTML, CSS, JavaScript, Firebase, Storage, Auth y configuración involucrada.
+2. Carga inicial: fondo, loader, fuentes, imágenes, header, contenido y ausencia de parpadeos.
+3. Responsive real en desktop, tablet y mobile, incluyendo orientación horizontal y vertical.
+4. Lógica, validaciones, errores, reintentos, estados vacíos, sin conexión y conexiones lentas.
+5. Sincronización en tiempo real y coherencia entre Super Admin, cliente y otras pestañas.
+6. CRUD completo cuando la página administra datos.
+7. Colores y contraste; evitar negro puro y reemplazar valores fijos por tokens configurables cuando corresponda.
+8. Accesibilidad: teclado, foco, labels, aria, tamaños táctiles y lectores de pantalla.
+9. Rendimiento: evitar bloqueos, esperas innecesarias, CLS, dobles listeners, observadores duplicados y recursos repetidos.
+10. Seguridad: permisos, sanitización, enlaces, Firebase Rules y exposición de información.
+11. SEO y metadatos en páginas públicas.
+12. Auditoría automática en CI para impedir regresiones.
+13. Registro TXT de hallazgos, correcciones, pruebas y pendientes reales.
+14. Commit, Pull Request, comprobaciones verdes y merge antes de pasar a la siguiente etapa.
+
+ORDEN DE ETAPAS
+01. Página principal — index.html
+02. Catálogo — catalogo.html
+03. Colecciones — collections.html
+04. Producto — product.html
+05. Checkout — checkout.html
+06. Login — login.html
+07. Perfil y pedidos del cliente — perfil.html
+08. Nosotros — about.html
+09. Contacto — contact.html
+10. Envíos — envios.html
+11. Cambios y devoluciones — cambios-devoluciones.html
+12. Preguntas frecuentes — preguntas-frecuentes.html
+13. Términos — terminos.html
+14. Privacidad — privacidad.html
+15. Página 404 — 404.html
+16. Super Admin — admin.html, todos sus módulos y CRUD
+17. Administración de imágenes — admin-images.html
+18. Funciones, correos, Firestore Rules, sincronización, deployment y auditorías transversales
+
+CRITERIO PARA CERRAR UNA ETAPA
+Una etapa solamente se considera terminada cuando:
+- el registro de mantenimiento está actualizado;
+- los hallazgos críticos y altos están corregidos;
+- no quedan errores de sintaxis;
+- las auditorías automáticas terminan correctamente;
+- la modificación contempla todos los viewports y roles aplicables;
+- el cambio está integrado en main.
+
+ESTADO
+Etapa activa: 01 — Página principal.
+Las demás etapas permanecen pendientes hasta cerrar la etapa activa.

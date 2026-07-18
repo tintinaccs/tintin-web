@@ -1,0 +1,316 @@
+/* =============================================================
+   TINTIN — Mantenimiento integral de la página principal
+   Se carga globalmente, pero todos los selectores quedan limitados a Inicio.
+   ============================================================= */
+
+body.tt-home-premium {
+  background: var(--color-background-page, #FFF6FA) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  overflow-x: clip;
+}
+
+/* Durante la preparación inicial no se permite que colores, tamaños o fondos
+   cambien mediante transiciones visibles. */
+body.tt-home-premium:not(.tt-home-runtime-ready) *,
+body.tt-home-premium:not(.tt-home-runtime-ready) *::before,
+body.tt-home-premium:not(.tt-home-runtime-ready) *::after {
+  transition-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+body.tt-home-premium .tt-hero,
+body.tt-home-premium .tt-hero-media,
+body.tt-home-premium .tt-hero-overlay {
+  background-color: var(--color-brand-secondary, #F6B7C8);
+}
+
+body.tt-home-premium .tt-hero {
+  min-height: clamp(520px, 76svh, 900px);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+body.tt-home-premium .tt-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+body.tt-home-premium .tt-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--color-brand-secondary, #F6B7C8);
+}
+
+body.tt-home-premium .tt-hero-overlay {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 68%, transparent),
+    color-mix(in srgb, var(--color-brand-primary, #AD3F67) 32%, transparent) 52%,
+    transparent 100%
+  ) !important;
+}
+
+body.tt-home-premium .tt-hero-content,
+body.tt-home-premium .tt-hero-title,
+body.tt-home-premium .tt-hero-eyebrow,
+body.tt-home-premium .tt-hero-subtitle {
+  color: var(--color-text-inverse, #FFFFFF) !important;
+  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 54%, transparent);
+}
+
+body.tt-home-premium .tt-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+body.tt-home-premium .tt-trust-bar,
+body.tt-home-premium .tt-collections-section,
+body.tt-home-premium .tt-look-section,
+body.tt-home-premium .tt-products-section,
+body.tt-home-premium .tt-reviews-section {
+  background-color: var(--color-background-page, #FFF6FA) !important;
+  background-image: none !important;
+}
+
+body.tt-home-premium .tt-editorial,
+body.tt-home-premium .tt-watch-feature,
+body.tt-home-premium .tt-review-card,
+body.tt-home-premium .tt-product-card,
+body.tt-home-premium .tt-look-card,
+body.tt-home-premium .tt-trust-item {
+  background-color: var(--color-background-surface, #FFFFFF) !important;
+  border-color: var(--color-card-border, #F1E4E7) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+body.tt-home-premium .tt-section-title,
+body.tt-home-premium .tt-editorial-title,
+body.tt-home-premium .tt-watch-title,
+body.tt-home-premium .tt-trust-title,
+body.tt-home-premium .tt-review-name,
+body.tt-home-premium .tt-product-name,
+body.tt-home-premium .tt-coll-card-label {
+  color: var(--color-text-title, #2B2B2B) !important;
+}
+
+body.tt-home-premium .tt-section-sub,
+body.tt-home-premium .tt-editorial-eyebrow,
+body.tt-home-premium .tt-watch-eyebrow,
+body.tt-home-premium .tt-product-price,
+body.tt-home-premium .tt-review-stars {
+  color: var(--color-brand-primary, #AD3F67) !important;
+}
+
+body.tt-home-premium .tt-section-desc,
+body.tt-home-premium .tt-editorial-desc,
+body.tt-home-premium .tt-watch-desc,
+body.tt-home-premium .tt-trust-desc,
+body.tt-home-premium .tt-review-text,
+body.tt-home-premium .tt-review-product {
+  color: var(--color-text-secondary, #7B6F72) !important;
+}
+
+body.tt-home-premium .tt-btn {
+  background-color: var(--color-button-primary-background, #AD3F67);
+  border-color: var(--color-button-primary-border, #AD3F67);
+  color: var(--color-button-primary-text, #FFFFFF) !important;
+}
+
+body.tt-home-premium .tt-btn-outline {
+  background-color: var(--color-button-secondary-background, #FFFFFF);
+  border-color: var(--color-button-secondary-border, #AD3F67);
+  color: var(--color-button-secondary-text, #AD3F67) !important;
+}
+
+body.tt-home-premium .tt-btn:focus-visible,
+body.tt-home-premium a:focus-visible,
+body.tt-home-premium button:focus-visible {
+  outline: 3px solid var(--color-button-primary-focus-ring, rgba(173, 63, 103, .24));
+  outline-offset: 3px;
+}
+
+/* Las secciones de contenido remoto siempre reservan espacio y muestran un
+   estado comprensible, evitando huecos o saltos de layout. */
+body.tt-home-premium #products-grid,
+body.tt-home-premium #look-grid {
+  min-height: 280px;
+  align-content: start;
+}
+
+.tt-home-runtime-state {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  padding: 28px 20px;
+  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border-radius: 20px;
+  background: var(--color-background-surface, #FFFFFF);
+  color: var(--color-text-secondary, #7B6F72);
+  text-align: center;
+  font: 600 13px/1.6 Montserrat;
+}
+
+.tt-home-runtime-state-inner {
+  max-width: 430px;
+}
+
+.tt-home-runtime-state strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-text-title, #2B2B2B);
+  font-size: 15px;
+}
+
+.tt-home-runtime-state a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--color-button-primary-background, #AD3F67);
+  color: var(--color-button-primary-text, #FFFFFF) !important;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.tt-home-runtime-state[data-state="loading"]::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  margin-bottom: 12px;
+  border: 3px solid var(--color-progress-track, #F1E4E7);
+  border-top-color: var(--color-progress-fill, #AD3F67);
+  border-radius: 50%;
+  animation: tt-home-spin .8s linear infinite;
+}
+
+@keyframes tt-home-spin {
+  to { transform: rotate(360deg); }
+}
+
+body.tt-home-premium .tt-img-placeholder,
+body.tt-home-premium .tt-coll-card-img,
+body.tt-home-premium .tt-product-img,
+body.tt-home-premium .tt-look-card-img {
+  background-color: var(--color-skeleton-base, #F1E4E7) !important;
+}
+
+body.tt-home-premium .tt-img-placeholder img,
+body.tt-home-premium .tt-coll-card-img img,
+body.tt-home-premium .tt-product-img img,
+body.tt-home-premium .tt-look-card-img img {
+  display: block;
+  max-width: 100%;
+}
+
+body.tt-home-premium .tt-footer {
+  background: var(--color-background-footer, #FFFFFF) !important;
+  color: var(--color-text-primary, #2B2B2B) !important;
+  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+}
+
+body.tt-home-premium .tt-footer a,
+body.tt-home-premium .tt-footer-col-title,
+body.tt-home-premium .tt-footer-bottom,
+body.tt-home-premium .tt-footer-tagline {
+  color: var(--color-text-primary, #2B2B2B) !important;
+}
+
+body.tt-home-premium .tt-footer-wa {
+  background: var(--color-button-whatsapp-background, #0D8043) !important;
+  color: var(--color-button-whatsapp-text, #FFFFFF) !important;
+}
+
+body.tt-home-premium .tt-footer-wa *,
+body.tt-home-premium .tt-wa-float * {
+  color: var(--color-button-whatsapp-text, #FFFFFF) !important;
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1120px) {
+  body.tt-home-premium .tt-hero {
+    min-height: clamp(540px, 72svh, 760px);
+  }
+
+  body.tt-home-premium .tt-editorial,
+  body.tt-home-premium .tt-watch-feature {
+    min-width: 0;
+  }
+
+  body.tt-home-premium #products-grid,
+  body.tt-home-premium #look-grid {
+    min-height: 240px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  body.tt-home-premium {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  body.tt-home-premium .tt-hero {
+    min-height: max(560px, 82svh);
+  }
+
+  body.tt-home-premium .tt-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 20%, transparent),
+      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 72%, transparent) 78%,
+      var(--color-brand-primary-hover, #8B2642) 100%
+    ) !important;
+  }
+
+  body.tt-home-premium .tt-hero-actions,
+  body.tt-home-premium .tt-look-actions {
+    width: 100%;
+  }
+
+  body.tt-home-premium .tt-hero-actions .tt-btn,
+  body.tt-home-premium .tt-look-actions .tt-btn {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  body.tt-home-premium #products-grid,
+  body.tt-home-premium #look-grid {
+    min-height: 210px;
+  }
+
+  .tt-home-runtime-state {
+    min-height: 190px;
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  body.tt-home-premium .tt-hero-title {
+    font-size: clamp(30px, 10vw, 42px);
+  }
+
+  body.tt-home-premium .tt-section-title,
+  body.tt-home-premium .tt-editorial-title,
+  body.tt-home-premium .tt-watch-title {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.tt-home-premium *,
+  body.tt-home-premium *::before,
+  body.tt-home-premium *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,0 +1,73 @@
+TINTIN-WEB — MANTENIMIENTO 01: PÁGINA PRINCIPAL
+Archivo principal: index.html
+Estado: CORREGIDO Y VALIDADO
+
+ALCANCE REVISADO
+- HTML completo de index.html.
+- Header y navegación compartidos.
+- Loader y control de tienda.
+- Hero e imágenes administrables.
+- Barra de confianza.
+- Editorial de bolsos.
+- Colecciones.
+- Completá tu look.
+- Editorial de relojes.
+- Productos más vendidos.
+- Reseñas.
+- Footer, contacto y WhatsApp.
+- Esquema global de colores.
+- Firebase, productos, imágenes, contenido, carrito y eventos en vivo relacionados.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS CORREGIDOS
+[ALTO] Se redujo la dependencia visual del hero mediante una superficie estable y una recuperación independiente del contenido remoto.
+[ALTO] Productos y combinaciones ahora muestran estados accesibles de carga, vacío, error y sin conexión.
+[ALTO] Se agregó recuperación automática cuando Firebase, imágenes, contenido o productos llegan fuera de orden.
+[ALTO] Se agregó una auditoría automática exclusiva para la página principal dentro de GitHub Actions.
+[MEDIO] Canonical, Open Graph, Twitter Card y JSON-LD se normalizan al dominio actual durante la ejecución.
+[MEDIO] El año del footer se actualiza automáticamente.
+[MEDIO] Las superficies principales usan tokens configurables del esquema global y no exigen negro puro.
+[MEDIO] Las transiciones se desactivan durante la preparación inicial para evitar pestañeos y cambios de forma.
+[MEDIO] Se agregaron aria-busy, aria-live, foco visible y respeto por reduced motion.
+[MEDIO] El catálogo cuenta con recuperación visible y reintento al volver la conexión.
+
+ARCHIVOS AÑADIDOS
+- css/home-maintenance.css
+- js/home-maintenance.js
+- scripts/audit-home-page.js
+- maintenance/00-cronograma-general.txt
+- maintenance/01-pagina-principal.txt
+
+ARCHIVOS ACTUALIZADOS
+- js/public-shell.js
+- .github/workflows/tintin-audit.yml
+
+COMPORTAMIENTO RESPONSIVE
+- 1920x1080: cubierto por estructura fluida y límites máximos.
+- 1440x900: cubierto.
+- 1280x720: cubierto.
+- 1024x768: reglas específicas de tablet.
+- 768x1024: reglas de tablet/mobile en el punto de corte.
+- 390x844: reglas específicas de mobile.
+- 320x568: reglas de mini mobile y control de desbordamiento.
+
+SINCRONIZACIÓN Y RECUPERACIÓN
+- Escucha productos cargados.
+- Escucha actualizaciones de contenido e imágenes.
+- Reacciona a conexión online/offline.
+- Revalida al volver a la pestaña.
+- Recupera superficies ocultas por carreras de carga.
+- Mantiene estados comprensibles mientras llegan datos remotos.
+
+PRUEBAS EJECUTADAS
+- Auditoría general Tintin: APROBADA.
+- Fondo sólido del loader: APROBADO.
+- Auditoría específica de Inicio: APROBADA.
+- Sintaxis JavaScript: APROBADA.
+- Auditoría tipográfica Montserrat: APROBADA.
+
+RESULTADO
+La etapa 01 queda técnicamente cerrada. La página principal dispone ahora de una capa permanente de estabilidad visual, respuesta lógica, sincronización y auditoría para desktop, tablet y mobile.
+
+NOTA CONTROLADA
+El HTML conserva algunas URLs históricas de GitHub Pages en su fuente, pero el runtime las reemplaza por el dominio actual antes de uso. La auditoría lo mantiene como aviso no bloqueante para una futura migración estática del documento completo.
