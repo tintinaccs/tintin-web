@@ -6,7 +6,12 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { sendOrderNotification, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./email-notify.js?v=tintin-20260716-cloudinary-fix-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./email-notify.js?v=tintin-20260716-cloudinary-fix-1";
+// El reenvío de correos de pedido usa el mismo camino por Resend que el envío
+// automático del checkout (js/checkout-email-bridge.js), no el webhook viejo
+// de Apps Script de email-notify.js — evita reenviar por un canal que ya no
+// se usa para pedidos reales.
+import { sendOrderNotification } from "./resend-order-notify.js?v=tintin-20260717-resend-1";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
@@ -3819,7 +3824,15 @@ window.viewLogDetail = (id) => {
 
 window.retryFailedLog = async (id) => {
   const l = allEmailLogs.find(x => x.id === id);
-  if (!l || !l.templateKey) { toast('No se puede reintentar este envío'); return; }
+  if (!l) { toast('No se puede reintentar este envío'); return; }
+  // Los correos de pedido (pedido_nuevo/reenvio_pedido) no tienen templateKey:
+  // se arman desde el pedido real, no desde una plantilla. Reintentarlos usa
+  // el mismo camino que el botón "Reenviar" del módulo Pedidos.
+  if (l.orderId && (l.type === 'pedido_nuevo' || l.type === 'reenvio_pedido')) {
+    await window.resendOrderEmail(l.orderId);
+    return;
+  }
+  if (!l.templateKey) { toast('No se puede reintentar este envío'); return; }
   const tpl = allEmailTemplates.find(t => (t.key || t.id) === l.templateKey);
   if (!tpl) { toast('La plantilla original ya no existe'); return; }
   try {
