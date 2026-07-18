@@ -228,6 +228,7 @@
       import(versioned('./nav-collections.js')),
       import(versioned('./products-store.js')),
       import(versioned('./cart-sync.js')),
+      import(versioned('./checkout-reliability.js')),
     ]).then(results => {
       const failed = results.filter(result => result.status === 'rejected');
       if (failed.length) console.warn('[PublicShell] Algunos datos en vivo no pudieron cargarse.', failed.map(item => item.reason));
