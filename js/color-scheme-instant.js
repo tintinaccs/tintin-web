@@ -1,37 +1,103 @@
 /**
- * TINTIN — Aplicación instantánea del esquema de colores (Super Admin →
- * Apariencia → Esquema global), SIN esperar a Firebase.
+ * TINTIN — Primera pintura estable del esquema global.
  *
- * Script clásico (no type="module"), cargado lo antes posible en <head>,
- * ANTES de cualquier hoja de estilos — se ejecuta de forma síncrona y
- * bloqueante para pintar con el último esquema conocido (cacheado por
- * js/color-scheme.js en la visita anterior) desde el primer frame, sin
- * parpadeo de "colores por defecto → colores reales" al cargar la página.
- * Si todavía no hay nada cacheado (primera visita), simplemente no hace
- * nada y css/color-tokens.css se encarga de los valores por defecto.
+ * Este script clásico se ejecuta de forma síncrona antes de las hojas CSS y
+ * del loader. Aplica la última caché conocida, pero mantiene el contenido
+ * cubierto por el loader hasta que js/color-scheme.js confirma el esquema
+ * publicado en Firestore. Así nunca queda visible el salto entre un fondo
+ * anterior/cacheado y el fondo definitivo de la página.
  */
 (function () {
-  try {
-    var raw = localStorage.getItem('tt_color_scheme_global');
-    if (!raw) return;
-    var data = JSON.parse(raw);
-    if (!data || typeof data.tokens !== 'object') return;
-    var root = document.documentElement;
-    var k;
-    for (k in data.tokens) {
-      if (Object.prototype.hasOwnProperty.call(data.tokens, k)) {
-        root.style.setProperty(k, data.tokens[k]);
+  'use strict';
+
+  var root = document.documentElement;
+  var CACHE_KEY = 'tt_color_scheme_global';
+  var FALLBACK_PAGE_BG = '#FFF6FA';
+  var RELEASE_TIMEOUT_MS = 6500;
+  var released = false;
+
+  function applyMap(map) {
+    if (!map || typeof map !== 'object') return;
+    var key;
+    for (key in map) {
+      if (Object.prototype.hasOwnProperty.call(map, key)) {
+        root.style.setProperty(key, map[key]);
       }
     }
-    if (data.deviceOverrideEnabled && data.deviceOverrides) {
-      var w = window.innerWidth;
-      var bp = w >= 1440 ? 'desktopLg' : w >= 1200 ? 'desktop' : w >= 992 ? 'laptop' : w >= 768 ? 'tablet' : w >= 480 ? 'mobile' : 'miniMobile';
-      var over = data.deviceOverrides[bp];
-      if (over) {
-        for (k in over) {
-          if (Object.prototype.hasOwnProperty.call(over, k)) root.style.setProperty(k, over[k]);
+  }
+
+  function currentBreakpoint() {
+    var width = window.innerWidth;
+    return width >= 1440
+      ? 'desktopLg'
+      : width >= 1200
+        ? 'desktop'
+        : width >= 992
+          ? 'laptop'
+          : width >= 768
+            ? 'tablet'
+            : width >= 480
+              ? 'mobile'
+              : 'miniMobile';
+  }
+
+  function release(source) {
+    if (released) return;
+    released = true;
+    root.classList.remove('tt-color-scheme-pending');
+    root.classList.add('tt-color-scheme-ready');
+    try {
+      window.dispatchEvent(new CustomEvent('tintin:color-scheme-ready', {
+        detail: { source: source || 'unknown' }
+      }));
+    } catch (error) {
+      /* CustomEvent no disponible: la clase CSS ya liberó la página. */
+    }
+  }
+
+  root.classList.add('tt-first-paint-bg', 'tt-color-scheme-pending');
+
+  try {
+    var raw = localStorage.getItem(CACHE_KEY);
+    if (raw) {
+      var data = JSON.parse(raw);
+      if (data && typeof data.tokens === 'object') {
+        applyMap(data.tokens);
+        if (data.deviceOverrideEnabled && data.deviceOverrides) {
+          applyMap(data.deviceOverrides[currentBreakpoint()]);
         }
       }
     }
-  } catch (e) { /* localStorage bloqueado o dato corrupto: no rompe la página */ }
+  } catch (error) {
+    /* localStorage bloqueado o dato corrupto: se usa el respaldo estable. */
+  }
+
+  var cachedPageBackground = root.style
+    .getPropertyValue('--color-background-page')
+    .trim();
+  if (!cachedPageBackground) cachedPageBackground = FALLBACK_PAGE_BG;
+  root.style.setProperty('--tt-first-paint-bg', cachedPageBackground);
+  root.style.backgroundColor = FALLBACK_PAGE_BG;
+
+  if (!document.getElementById('tt-first-paint-style')) {
+    var style = document.createElement('style');
+    style.id = 'tt-first-paint-style';
+    style.textContent = [
+      'html.tt-first-paint-bg,html.tt-first-paint-bg body{background:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important;background-color:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important}',
+      'html.tt-first-paint-bg,html.tt-first-paint-bg body{transition:none!important}',
+      'html.tt-color-scheme-pending,html.tt-color-scheme-pending body,html.tt-color-scheme-pending.tt-store-gate-pending,html.tt-color-scheme-pending.tt-store-gate-blocked{background:#FFF6FA!important;background-color:#FFF6FA!important}',
+      'html.tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important}',
+      'html.tt-color-scheme-pending #tt-loader,html.tt-color-scheme-pending #tt-loader.tt-out{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;background:#FFF6FA!important;background-color:#FFF6FA!important}'
+    ].join('');
+    document.head.appendChild(style);
+  }
+
+  window.TintinColorSchemeFirstPaint = {
+    release: release,
+    fallbackBackground: FALLBACK_PAGE_BG
+  };
+
+  window.setTimeout(function () {
+    release('safety-timeout');
+  }, RELEASE_TIMEOUT_MS);
 })();
