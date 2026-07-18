@@ -1,0 +1,177 @@
+/* TINTIN — Mantenimiento integral 05: Checkout */
+body:has(.ck-body) {
+  --ck-surface: var(--tt-surface, #fff);
+  --ck-page: var(--tt-page-bg, #fff8fb);
+  --ck-text: var(--tt-text, #352b2f);
+  --ck-muted: var(--tt-text-muted, #75666c);
+  --ck-accent: var(--tt-accent, #ad3f67);
+  --ck-accent-soft: var(--tt-accent-soft, #f9e8ef);
+  --ck-border: var(--tt-border, #edcbd7);
+  background: var(--ck-page) !important;
+  color: var(--ck-text) !important;
+}
+
+body:has(.ck-body) .ck-back-row,
+body:has(.ck-body) .ck-steps,
+body:has(.ck-body) .ck-body,
+body:has(.ck-body) .ck-panel,
+body:has(.ck-body) .ck-panel-head,
+body:has(.ck-body) .ck-panel-body,
+body:has(.ck-body) .ck-item,
+body:has(.ck-body) .ck-ship-info,
+body:has(.ck-body) .ck-ship-reminder,
+body:has(.ck-body) .ck-map-wrap,
+body:has(.ck-body) .ck-bank-details,
+body:has(.ck-body) .ck-pay-note,
+body:has(.ck-body) #ck-post-confirm > div {
+  background-color: var(--ck-surface) !important;
+  background-image: none !important;
+}
+
+body:has(.ck-body) .ck-panel,
+body:has(.ck-body) .ck-item,
+body:has(.ck-body) .ck-ship-info,
+body:has(.ck-body) .ck-ship-reminder,
+body:has(.ck-body) .ck-map-wrap,
+body:has(.ck-body) .ck-pay-label,
+body:has(.ck-body) .ck-bank-details,
+body:has(.ck-body) .ck-pay-note {
+  border-color: var(--ck-border) !important;
+}
+
+body:has(.ck-body) .ck-panel-title,
+body:has(.ck-body) .ck-item-name,
+body:has(.ck-body) .ck-pay-title,
+body:has(.ck-body) .ck-label,
+body:has(.ck-body) .ck-subtotal-val,
+body:has(.ck-body) .ck-confirm-title {
+  color: var(--ck-text) !important;
+}
+
+body:has(.ck-body) .ck-panel-sub,
+body:has(.ck-body) .ck-item-cat,
+body:has(.ck-body) .ck-pay-desc,
+body:has(.ck-body) .ck-confirm-sub,
+body:has(.ck-body) .ck-map-tip-steps,
+body:has(.ck-body) .ck-trust-item {
+  color: var(--ck-muted) !important;
+}
+
+body:has(.ck-body) .ck-input,
+body:has(.ck-body) .ck-select,
+body:has(.ck-body) .ck-textarea,
+body:has(.ck-body) .ck-map-search-results,
+body:has(.ck-body) .ck-map-search-result {
+  background: var(--ck-surface) !important;
+  color: var(--ck-text) !important;
+  border-color: var(--ck-border) !important;
+}
+
+body:has(.ck-body) .ck-input::placeholder,
+body:has(.ck-body) .ck-textarea::placeholder {
+  color: var(--ck-muted) !important;
+  opacity: .8;
+}
+
+body:has(.ck-body) .ck-btn,
+body:has(.ck-body) #ck-confirm-btn {
+  min-height: 48px;
+  background: var(--ck-accent) !important;
+  color: #fff !important;
+  border: 1px solid var(--ck-accent) !important;
+}
+
+body:has(.ck-body) .ck-btn-back,
+body:has(.ck-body) .ck-header-back,
+body:has(.ck-body) .ck-saved-location-hint button {
+  color: var(--ck-accent) !important;
+}
+
+body:has(.ck-body) .ck-step-num,
+body:has(.ck-body) .ck-product-status,
+body:has(.ck-body) .ck-map-coords {
+  background: var(--ck-accent-soft) !important;
+  color: var(--ck-accent) !important;
+}
+
+body:has(.ck-body) .ck-step.active .ck-step-num,
+body:has(.ck-body) .ck-step.done .ck-step-num {
+  background: var(--ck-accent) !important;
+  color: #fff !important;
+}
+
+body:has(.ck-body) .ck-item-img,
+body:has(.ck-body) .ck-item-img-placeholder,
+body:has(.ck-body) #ck-map,
+body:has(.ck-body) .leaflet-container {
+  background-color: var(--ck-surface) !important;
+}
+
+body:has(.ck-body) :is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--ck-accent) 35%, transparent) !important;
+  outline-offset: 2px;
+}
+
+body:has(.ck-body) .ck-error.show,
+body:has(.ck-body) .ck-map-coords-missing {
+  color: #9f263c !important;
+  background: #fff0f3 !important;
+  border-color: #e9a8b6 !important;
+}
+
+body:has(.ck-body).tt-checkout-offline .ck-btn:not(.ck-btn-back),
+body:has(.ck-body).tt-checkout-submitting #ck-confirm-btn {
+  cursor: wait;
+}
+
+body:has(.ck-body).tt-checkout-submitting #ck-confirm-btn {
+  opacity: .68;
+  pointer-events: none;
+}
+
+@media (min-width: 1440px) {
+  body:has(.ck-body) .ck-body,
+  body:has(.ck-body) .ck-steps { width: min(860px, calc(100% - 64px)); }
+}
+
+@media (min-width: 1025px) and (max-width: 1439px) {
+  body:has(.ck-body) .ck-body,
+  body:has(.ck-body) .ck-steps { width: min(780px, calc(100% - 48px)); }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body:has(.ck-body) .ck-body,
+  body:has(.ck-body) .ck-steps { width: min(720px, calc(100% - 32px)); }
+  body:has(.ck-body) .ck-panel-body { padding-inline: 28px; }
+}
+
+@media (max-width: 768px) {
+  body:has(.ck-body) { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  body:has(.ck-body) .ck-back-row,
+  body:has(.ck-body) .ck-body,
+  body:has(.ck-body) .ck-steps { width: calc(100% - 24px); }
+  body:has(.ck-body) .ck-steps { overflow-x: auto; scrollbar-width: none; justify-content: flex-start; }
+  body:has(.ck-body) .ck-step { min-width: 70px; flex: 0 0 70px; }
+  body:has(.ck-body) .ck-panel-body { padding: 20px 16px; }
+  body:has(.ck-body) .ck-item { grid-template-columns: 72px minmax(0,1fr); }
+  body:has(.ck-body) .ck-item-controls { grid-column: 1 / -1; justify-content: flex-end; }
+  body:has(.ck-body) .ck-trust-bar { grid-template-columns: 1fr; }
+  body:has(.ck-body) .ck-btn,
+  body:has(.ck-body) .ck-btn-back { width: 100%; }
+}
+
+@media (max-width: 420px) {
+  body:has(.ck-body) .ck-back-row,
+  body:has(.ck-body) .ck-body,
+  body:has(.ck-body) .ck-steps { width: calc(100% - 16px); }
+  body:has(.ck-body) .ck-panel-head { padding-inline: 14px; }
+  body:has(.ck-body) .ck-panel-title { font-size: 1.05rem; }
+  body:has(.ck-body) .ck-item { grid-template-columns: 60px minmax(0,1fr); gap: 10px; }
+  body:has(.ck-body) #ck-phone-country { flex-basis: 112px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.ck-body) *,
+  body:has(.ck-body) *::before,
+  body:has(.ck-body) *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
