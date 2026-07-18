@@ -10,10 +10,25 @@ const COOKIE_NAME = 'tt_privacy_choice';
 const COOKIE_VERSION = 'v2';
 const LEGACY_CONSENT_KEY = 'tt_activity_consent_v1';
 const COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
-const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
+// El panel puede publicarse con o sin extensión .html y, según el hosting,
+// también con una barra final. Todas esas variantes son la misma superficie
+// administrativa y nunca deben mostrar el consentimiento público.
+const ADMIN_PAGES = /\/admin(?:-images)?(?:\.html)?\/?$/i;
 
 let memoryChoice = '';
 let preferenceOpener = null;
+
+function isAdminPage() {
+  const pathname = String(location.pathname || '').replace(/\/{2,}/g, '/');
+  return ADMIN_PAGES.test(pathname) || Boolean(document.getElementById('adm-sidebar'));
+}
+
+function removeAdminConsentBanner() {
+  if (!isAdminPage()) return false;
+  document.getElementById('tt-privacy-consent')?.remove();
+  preferenceOpener = null;
+  return true;
+}
 
 function cookiePath() {
   if (!/\.github\.io$/i.test(location.hostname)) return '/';
@@ -90,6 +105,10 @@ function privacyUrl() {
 }
 
 function renderConsent(customize = false, focusDetails = false) {
+  // Defensa central: aunque otro módulo intente abrir el componente, en el
+  // Super Admin se desmonta y no llega a renderizarse en ningún dispositivo.
+  if (removeAdminConsentBanner()) return;
+
   const existing = document.getElementById('tt-privacy-consent');
   if (existing) existing.remove();
 
@@ -147,7 +166,8 @@ function renderConsent(customize = false, focusDetails = false) {
 }
 
 export function openPrivacyPreferences() {
-  if (!document.body || ADMIN_PAGES.test(location.pathname)) return;
+  if (!document.body) return;
+  if (removeAdminConsentBanner()) return;
   preferenceOpener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   renderConsent(true, true);
 }
@@ -159,7 +179,7 @@ export function onPrivacyConsentChange(listener) {
 }
 
 function showInitialChoice() {
-  if (!document.body || ADMIN_PAGES.test(location.pathname) || privacyPreferences().decided) return;
+  if (!document.body || removeAdminConsentBanner() || privacyPreferences().decided) return;
   renderConsent(false);
 }
 
@@ -170,10 +190,12 @@ window.TintinActivityPrivacy = {
 };
 
 window.addEventListener('tintin:welcome:opened', () => {
+  if (removeAdminConsentBanner()) return;
   const banner = document.getElementById('tt-privacy-consent');
   if (banner) banner.hidden = true;
 });
 window.addEventListener('tintin:welcome:closed', () => {
+  if (removeAdminConsentBanner()) return;
   const banner = document.getElementById('tt-privacy-consent');
   if (banner) banner.hidden = false;
   else if (!privacyPreferences().decided) showInitialChoice();
