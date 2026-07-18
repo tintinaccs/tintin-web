@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T23:21:35.581Z",
-  "sourceFingerprint": "cf7b6d318c87a418a49eba648f936c00f03d6ab817eb2b214104e8a366cddae0",
+  "generatedAt": "2026-07-17T23:56:34.828Z",
+  "sourceFingerprint": "4d3380ff364fe198e6e101f2ce997c8be332e022428294145efc4c8a704a0f0b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 231,
     "textFiles": 194,
-    "totalBytes": 5034351,
+    "totalBytes": 5034856,
     "pages": 18,
     "modules": 117
   },
@@ -13999,8 +13999,8 @@
     },
     {
       "path": "js/admin-site-diagnostics.js",
-      "bytes": 81067,
-      "sha256": "cb75511a04493853f896a9d5a54cbcd444ed7e83d3ba7ba631ac45f7a478af85",
+      "bytes": 81572,
+      "sha256": "d8cce792ab03094a97f06003b1de43267eba39edd0503f459136e942b33568c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14050,15 +14050,15 @@
         },
         {
           "url": "https://*.googleapis.com/",
-          "line": 560
+          "line": 567
         },
         {
           "url": "https://*.firebaseio.com/",
-          "line": 560
+          "line": 567
         },
         {
           "url": "https://*.firebasestorage.app/",
-          "line": 560
+          "line": 567
         }
       ]
     },
@@ -17027,8 +17027,8 @@
     {
       "path": "js/admin-site-diagnostics.js",
       "extension": ".js",
-      "bytes": 81067,
-      "sha256": "cb75511a04493853f896a9d5a54cbcd444ed7e83d3ba7ba631ac45f7a478af85"
+      "bytes": 81572,
+      "sha256": "d8cce792ab03094a97f06003b1de43267eba39edd0503f459136e942b33568c9"
     },
     {
       "path": "js/admin-store-control.js",
@@ -18939,14 +18939,14 @@
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 1087,
+      "line": 1094,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/admin-site-diagnostics.js",
-      "line": 1143,
+      "line": 1150,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -21650,7 +21650,7 @@
           },
           {
             "file": "js/admin-site-diagnostics.js",
-            "line": 1066,
+            "line": 1073,
             "operation": "collection"
           },
           {

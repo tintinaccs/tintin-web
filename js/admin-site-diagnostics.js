@@ -557,6 +557,13 @@ function safeHtml(html, sourceUrl) {
     // firestore-shim.js/auth-shim.js/storage-shim.js reemplacen únicamente
     // las funciones que escriben, más la guardia de red como segunda capa.
     "script-src 'self' 'unsafe-inline' https://www.gstatic.com",
+    // Sin esto, style-src hereda de default-src (que no trae 'unsafe-inline')
+    // y el navegador descarta en silencio cualquier <style> embebido en la
+    // página (404.html, perfil.html, catalogo.html, admin-images.html, entre
+    // otras) — el elemento queda sin su tamaño/color real y el diagnóstico
+    // termina midiendo el render por defecto del navegador, no la página
+    // real. Nada que ver con bloquear escrituras: es solo dejar pasar CSS.
+    "style-src 'self' 'unsafe-inline'",
     "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebasestorage.app wss://*.firebaseio.com",
     "frame-src 'none'",
     "object-src 'none'",
