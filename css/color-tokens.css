@@ -10,6 +10,8 @@
  * Se carga en TODAS las páginas (incluido admin.html, que además carga
  * css/admin-color-tokens.css encima para su propio esquema).
  */
+@import url("./loader-solid-background.css?v=tintin-20260718-loader-solid-1");
+
 :root {
   --color-brand-primary: #AD3F67;
   --color-brand-secondary: #F6B7C8;
