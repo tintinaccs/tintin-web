@@ -27,3 +27,6 @@ jobs:
 
       - name: Verify solid loader background
         run: node scripts/audit-loader-solid.js
+
+      - name: Audit home page on all viewports
+        run: node scripts/audit-home-page.js
