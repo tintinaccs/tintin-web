@@ -11,9 +11,29 @@ const ORDER_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" 
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 let instantLoginRedirectStarted = false;
+let silentLogoutStarted = false;
 
 function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
-function doLogout(){signOut(auth).then(()=>{window.location.href='index.html';});}
+function beginSilentAuthTransition(){
+ document.documentElement.classList.add('tt-auth-silent-transition');
+ window.TintinLoader?.show?.();
+}
+function endSilentAuthTransition(){
+ document.documentElement.classList.remove('tt-auth-silent-transition');
+ window.TintinLoader?.hide?.();
+}
+function doLogout(){
+ if(silentLogoutStarted)return;
+ silentLogoutStarted=true;
+ beginSilentAuthTransition();
+ signOut(auth)
+  .then(()=>window.location.replace('index.html'))
+  .catch(error=>{
+   console.error('[auth-nav] No se pudo cerrar sesión:',error);
+   silentLogoutStarted=false;
+   endSilentAuthTransition();
+  });
+}
 function hasAdminAccess(user,role){if(!user)return false;if(user.email===SUPER_ADMIN)return true;return can(role,'viewDashboard')===true;}
 function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
 
@@ -41,12 +61,9 @@ async function redirectAuthenticatedLogin(user){
  if(!IS_LOGIN_PAGE||!user||instantLoginRedirectStarted)return false;
  instantLoginRedirectStarted=true;
  window.TintinLoginFastRedirecting=true;
- window.TintinLoader?.show?.();
- window.TintinLoader?.setText?.('Ingresando…');
+ beginSilentAuthTransition();
 
  const persistPromise=persistLoginMetadata(user);
- // En una cuenta recién creada damos un margen muy corto para crear su perfil.
- // En accesos habituales la navegación no espera ninguna lectura ni escritura.
  if(isFirstAuthentication(user)){
   await Promise.race([
    persistPromise,
@@ -61,6 +78,22 @@ async function redirectAuthenticatedLogin(user){
 
 const accountBtnDefaults=new Map();
 
+/* Apenas se toca Google, la página de Login desaparece debajo de una superficie
+   sólida. Solo vuelve a mostrarse si el popup se cierra o el ingreso falla. */
+document.addEventListener('click',event=>{
+ const googleButton=event.target.closest?.('#btn-google');
+ if(googleButton)beginSilentAuthTransition();
+ const logoutButton=event.target.closest?.('#account-logout-btn,#mobile-user-logout-btn,#btn-logout');
+ if(logoutButton){
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  doLogout();
+ }
+},{capture:true});
+
+window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
+window.addEventListener('tintin:login-failed',endSilentAuthTransition);
+
 onAuthStateChanged(auth,async user=>{
  if(await redirectAuthenticatedLogin(user))return;
  document.querySelectorAll("#tabbar-cuenta,[data-auth-link='cuenta']").forEach(el=>{el.href=user?'perfil.html':'login.html';});
@@ -73,8 +106,6 @@ onAuthStateChanged(auth,async user=>{
 });
 
 function renderAccountButtonPhoto(user){
- // btn-cuenta vive en el header Desktop/Tablet — único botón de cuenta
- // superior del sitio (mobile usa tabbar-cuenta, ver renderMobileTabbarPhoto).
  const btn=document.getElementById('btn-cuenta');
  if(!btn)return;
  if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
@@ -102,8 +133,6 @@ function renderMobileTabbarPhoto(user){
 }
 
 function renderAccountPanel(user,role='client'){
- // account-panel vive en el header Desktop/Tablet — único panel de cuenta
- // superior del sitio (mobile usa tt-mobile-user, ver renderMobileUserPanel).
  const panel=document.getElementById('account-panel');
  if(!panel)return;
  if(!user){panel.innerHTML=`<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;return;}
