@@ -158,3 +158,43 @@ html body #tt-welcome-tutorial .tt-welcome-btn:not(.tt-welcome-btn-primary) {
     box-shadow: 0 16px 40px rgba(82, 27, 49, 0.16) !important;
   }
 }
+
+/* Login: mientras Firebase resuelve o cambia de cuenta, solo se muestra una
+   superficie sólida. El logo, el formulario y el header no pueden reaparecer
+   entre el popup de Google y la redirección final. */
+html:has(.login-page) #tt-loader,
+html.tt-auth-silent-transition #tt-loader {
+  background: #FFF6FA !important;
+  background-color: #FFF6FA !important;
+  background-image: none !important;
+}
+
+html:has(.login-page) #tt-loader-spin-wrap,
+html.tt-auth-silent-transition #tt-loader-spin-wrap {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+html:has(.login-page) body > #tt-loader:not(.tt-out) ~ *,
+html.tt-auth-silent-transition body > #tt-loader:not(.tt-out) ~ * {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Super Admin: una sola sección puede estar visible a la vez. Esto evita que
+   Diagnóstico y Mensaje de bienvenida se fusionen por reglas globales. */
+html body .adm-content > .adm-section:not(.active) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html body .adm-content > .adm-section.active {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+html body #section-welcome:not(.active) {
+  display: none !important;
+}
