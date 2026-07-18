@@ -15,6 +15,7 @@
   var FALLBACK_PAGE_BG = '#FFF6FA';
   var RELEASE_TIMEOUT_MS = 6500;
   var released = false;
+  var scriptUrl = document.currentScript && document.currentScript.src;
 
   function applyMap(map) {
     if (!map || typeof map !== 'object') return;
@@ -55,7 +56,155 @@
     }
   }
 
+  function installCheckoutNameGuard() {
+    var path = String(window.location.pathname || '').toLowerCase();
+    var isCheckout = path.endsWith('/checkout.html') || path.endsWith('/checkout');
+    if (!isCheckout || window.TintinCheckoutNameGuard) return;
+
+    var preferredName = '';
+
+    function normalizeName(value) {
+      return String(value == null ? '' : value)
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 120);
+    }
+
+    function isCompleteName(value) {
+      var normalized = normalizeName(value);
+      var letters = normalized.replace(/[^A-Za-zÀ-ÖØ-öø-ÿÑñ]/g, '');
+      return normalized.length >= 2 && letters.length >= 2;
+    }
+
+    function nameInput() {
+      return document.getElementById('ck-name');
+    }
+
+    function updateSummary(value) {
+      var rows = document.querySelectorAll('.ck-summary-row');
+      var index;
+      for (index = 0; index < rows.length; index += 1) {
+        var label = rows[index].querySelector('.ck-summary-label');
+        if (label && String(label.textContent || '').indexOf('Cliente') !== -1) {
+          var target = rows[index].querySelector('.ck-summary-val');
+          if (target) target.textContent = value;
+          break;
+        }
+      }
+    }
+
+    function clearError() {
+      var error = document.getElementById('error-2');
+      if (error) {
+        error.classList.remove('show');
+        error.textContent = '';
+      }
+      var input = nameInput();
+      if (input) {
+        input.removeAttribute('aria-invalid');
+        input.style.borderColor = '';
+      }
+    }
+
+    function showError() {
+      var input = nameInput();
+      var error = document.getElementById('error-2');
+      if (error) {
+        error.textContent = 'Ingresá tu nombre completo, no solamente una inicial.';
+        error.classList.add('show');
+      }
+      if (input) {
+        input.setAttribute('aria-invalid', 'true');
+        input.style.borderColor = '#b8341f';
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function activateDataStep() {
+      var panels = document.querySelectorAll('.ck-panel');
+      var steps = document.querySelectorAll('.ck-step');
+      var index;
+      for (index = 0; index < panels.length; index += 1) {
+        panels[index].classList.toggle('active', index === 2);
+      }
+      for (index = 0; index < steps.length; index += 1) {
+        steps[index].classList.remove('active', 'done');
+        if (index < 2) steps[index].classList.add('done');
+        if (index === 2) steps[index].classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function applyPreferredName(value) {
+      var normalized = normalizeName(value);
+      if (isCompleteName(normalized)) preferredName = normalized;
+
+      var input = nameInput();
+      if (!input) return normalized;
+      input.setAttribute('autocomplete', 'name');
+
+      var current = normalizeName(input.value);
+      if (!isCompleteName(current) && isCompleteName(preferredName)) {
+        input.value = preferredName;
+        try {
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        } catch (error) {}
+        updateSummary(preferredName);
+        clearError();
+        return preferredName;
+      }
+      return current;
+    }
+
+    function currentValidName() {
+      return applyPreferredName(preferredName);
+    }
+
+    function interceptIncompleteName(event) {
+      var button = event.target && event.target.closest
+        ? event.target.closest('#btn-step3-next,#ck-confirm-btn')
+        : null;
+      if (!button) return;
+
+      var value = currentValidName();
+      if (isCompleteName(value)) {
+        clearError();
+        updateSummary(value);
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      if (button.id === 'ck-confirm-btn') activateDataStep();
+      showError();
+    }
+
+    window.TintinCheckoutNameGuard = {
+      normalizeName: normalizeName,
+      isCompleteName: isCompleteName,
+      applyPreferredName: applyPreferredName,
+      currentValidName: currentValidName
+    };
+
+    window.addEventListener('click', interceptIncompleteName, true);
+
+    if (!document.getElementById('tt-checkout-name-auth-sync')) {
+      var helper = document.createElement('script');
+      helper.id = 'tt-checkout-name-auth-sync';
+      helper.type = 'module';
+      helper.src = new URL(
+        'checkout-name-auth-sync.js?v=tintin-20260718-checkout-name-1',
+        scriptUrl || window.location.href
+      ).href;
+      document.head.appendChild(helper);
+    }
+  }
+
   root.classList.add('tt-first-paint-bg', 'tt-color-scheme-pending');
+  installCheckoutNameGuard();
 
   try {
     var raw = localStorage.getItem(CACHE_KEY);
