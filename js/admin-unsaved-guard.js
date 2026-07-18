@@ -7,6 +7,7 @@
   let activePrompt = null;
   let lastFocused = null;
   let tabSyncQueued = false;
+  let scrollActiveTabIntoView = false;
 
   function text(value) {
     return String(value == null ? '' : value);
@@ -381,6 +382,13 @@
 
   function syncTabSemantics() {
     tabSyncQueued = false;
+    // Solo se hace scroll cuando queueTabSync(true) lo pidió explícitamente
+    // (un clic o una flecha de teclado sobre una pestaña real) — nunca en una
+    // pasada disparada por el MutationObserver, o cualquier actualización en
+    // tiempo real en cualquier parte del panel (Pedidos, Usuarios, Clientas)
+    // termina arrastrando el scroll de vuelta hacia la pestaña activa.
+    const shouldScroll = scrollActiveTabIntoView;
+    scrollActiveTabIntoView = false;
     document.querySelectorAll('.correos-tabs,.ship-tabs,.user-tabs').forEach((list, listIndex) => {
       list.setAttribute('role', 'tablist');
       const buttons = [...list.querySelectorAll(':scope > .correos-tab-btn,:scope > .ship-tab-btn,:scope > .user-tab-btn')];
@@ -400,12 +408,13 @@
             panel.setAttribute('aria-hidden', active ? 'false' : 'true');
           }
         }
-        if (active) button.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        if (active && shouldScroll) button.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       });
     });
   }
 
-  function queueTabSync() {
+  function queueTabSync(scrollIntoView) {
+    if (scrollIntoView) scrollActiveTabIntoView = true;
     if (tabSyncQueued) return;
     tabSyncQueued = true;
     window.requestAnimationFrame(syncTabSemantics);
@@ -444,7 +453,8 @@
   document.addEventListener('change', noteTrustedInteraction, true);
   document.addEventListener('click', event => {
     noteTrustedInteraction(event);
-    queueTabSync();
+    const tabClicked = Boolean(event.target?.closest?.('.correos-tab-btn,.ship-tab-btn,.user-tab-btn'));
+    queueTabSync(tabClicked);
   }, true);
   document.addEventListener('keydown', event => {
     handleTabKeyboard(event);
@@ -454,7 +464,11 @@
     }
   }, true);
 
-  const tabObserver = new MutationObserver(queueTabSync);
+  // Sin el wrapper, el propio MutationObserver pasaría su lista de mutaciones
+  // (un array, siempre truthy) como primer argumento de queueTabSync — que es
+  // exactamente el flag que decide si hay que hacer scroll. Eso reactivaría
+  // el scroll en cada mutación y anularía todo el arreglo de arriba.
+  const tabObserver = new MutationObserver(() => queueTabSync(false));
   if (document.body) tabObserver.observe(document.body, { childList: true, subtree: true });
   else window.addEventListener('DOMContentLoaded', () => tabObserver.observe(document.body, { childList: true, subtree: true }), { once: true });
 
