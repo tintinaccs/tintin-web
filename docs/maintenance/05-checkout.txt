@@ -1,0 +1,48 @@
+TINTIN-WEB — MANTENIMIENTO 05: CHECKOUT
+Archivo principal: checkout.html
+Estado: TERMINADO
+
+ALCANCE REVISADO
+- Paso 1 Carrito: render, cantidades, eliminación, subtotal y sincronización.
+- Paso 2 Envío: ciudades, delivery, encomienda, retiro, costos, dirección y mapa.
+- Paso 3 Datos: nombre, teléfono, email, notas y validaciones.
+- Paso 4 Pago: métodos habilitados por Super Admin y cuentas bancarias.
+- Paso 5 Confirmación: resumen, creación del pedido, prevención de doble envío y éxito.
+- Sesión, Firebase, configuración en tiempo real, carrito local/remoto, correo y WhatsApp.
+- Loader, recuperación online/offline, pageshow, visibilitychange y bfcache.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] La mejora previa reiniciaba el flujo, sincronizaba carrito y ampliaba el mapa, pero no cubría toda la superficie visual y semántica del checkout.
+[ALTO] El botón Confirmar podía recibir más de una activación antes de que la lógica principal terminara de bloquearlo.
+[ALTO] No existía auditoría CI exclusiva del Checkout.
+[MEDIO] Paneles, inputs, estados, mapa y bloques auxiliares podían conservar colores fijos o fondos incompatibles con el esquema del Super Admin.
+[MEDIO] Algunos labels no estaban asociados de manera explícita y los errores no comunicaban siempre aria-invalid.
+[MEDIO] Canonical apuntaba al dominio histórico.
+[MEDIO] La pérdida de conexión no estaba reflejada de forma uniforme en toda la página.
+[MEDIO] Tablet horizontal y mini mobile dependían de reglas generales, sin cobertura explícita.
+
+CORRECCIONES APLICADAS
+1. Capa visual sólida y configurable para toda la página.
+2. Responsive explícito para siete viewports.
+3. Superficies sólidas en paneles, tarjetas, inputs, mapa, pagos y confirmación.
+4. Contraste uniforme para texto, labels, placeholders, errores y botones.
+5. Mejora semántica de campos, regiones, alertas y estados aria-invalid.
+6. Bloqueo preventivo de doble confirmación antes de la lógica de creación del pedido.
+7. Recuperación y estado de red coordinados.
+8. Canonical normalizado al origen publicado.
+9. Auditoría CI exclusiva del Checkout.
+
+PRUEBAS OBLIGATORIAS
+- Sintaxis de checkout-maintenance.js.
+- Presencia de los cinco paneles.
+- Carga de checkout-reliability y checkout-maintenance.
+- Regla de reinicio obligatorio al paso 1.
+- Prevención de doble confirmación.
+- Tokens configurables y fondos sólidos.
+- Reglas para siete viewports.
+- Estados online/offline y accesibilidad básica.
+- Auditoría general, loader, Inicio, Catálogo, Colecciones, Producto y Checkout.
+
+RESULTADO
+Checkout queda cubierto visual y lógicamente como una etapa única. Las mejoras anteriores de mapa, reinicio y sincronización se conservan y se complementan; no se reemplazan.

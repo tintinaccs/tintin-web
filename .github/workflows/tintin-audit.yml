@@ -39,3 +39,6 @@ jobs:
 
       - name: Audit product page on all viewports
         run: node scripts/audit-product-page.js
+
+      - name: Audit checkout page on all viewports
+        run: node scripts/audit-checkout-page.js
