@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-18T22:11:53.248Z",
-  "sourceFingerprint": "58d39ddd4341a8ad49770bbba467376ae1737af494477dfd156e86e73f69009a",
+  "generatedAt": "2026-07-18T23:32:50.657Z",
+  "sourceFingerprint": "8f96b6c15df264ef649d3777790f5ded44b042c7b09936231373a8f1c5345bf1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 263,
-    "textFiles": 226,
-    "totalBytes": 5245659,
+    "files": 275,
+    "textFiles": 238,
+    "totalBytes": 5302424,
     "pages": 18,
-    "modules": 134
+    "modules": 141
   },
   "viewports": [
     {
@@ -13548,6 +13548,17 @@
       "endpoints": []
     },
     {
+      "path": "js/about-maintenance.js",
+      "bytes": 3772,
+      "sha256": "832dae86aae26884c1e0ff060f3b89155903b8f295e7900be4dc806ced680093",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/admin-app.js",
       "bytes": 395150,
       "sha256": "abb449790e524e2fee6c1eda2e051a0e2c4ddd5c0a0012eac5db12f62aebfa16",
@@ -14543,8 +14554,8 @@
     },
     {
       "path": "js/collections-store.js",
-      "bytes": 3956,
-      "sha256": "cf8893d2ab96893835ea1760389b9aa73d5f083688ff801273af112413daef3c",
+      "bytes": 4173,
+      "sha256": "26db6f05ede4b53a4f0bbd55685079eb7487030bd2ea4c5f67d5ff35577ebde5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14554,31 +14565,31 @@
           "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 21
+          "line": 24
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 27
+          "line": 30
         },
         {
           "raw": "./security-utils.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/security-utils.js",
           "dynamic": false,
-          "line": 28
+          "line": 31
         },
         {
           "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/image-utils.js",
           "dynamic": false,
-          "line": 29
+          "line": 32
         },
         {
           "raw": "./image-resolver.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/image-resolver.js",
           "dynamic": false,
-          "line": 30
+          "line": 33
         },
         {
           "raw": "./catalog-maintenance.js?v=tintin-20260718-catalog-maintenance-1",
@@ -14615,12 +14626,30 @@
           "target": "js/profile-maintenance.js",
           "dynamic": false,
           "line": 6
+        },
+        {
+          "raw": "./about-maintenance.js?v=tintin-20260718-about-maintenance-1",
+          "target": "js/about-maintenance.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "./contact-maintenance.js?v=tintin-20260718-contact-maintenance-1",
+          "target": "js/contact-maintenance.js",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "./legal-maintenance.js?v=tintin-20260718-legal-maintenance-1",
+          "target": "js/legal-maintenance.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 27
+          "line": 30
         }
       ]
     },
@@ -14707,6 +14736,47 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "line": 11
+        }
+      ]
+    },
+    {
+      "path": "js/contact-maintenance.js",
+      "bytes": 12034,
+      "sha256": "d89889676da8cb065ea242d6648829cf4239e1e433dcd1f46324a4b09c589779",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 2
+        },
+        {
+          "url": "https://wa.me/$%7Bwa%7D$%7Btext",
+          "line": 129
+        },
+        {
+          "url": "https://instagram.com/$%7Binstagram%7D",
+          "line": 135
+        },
+        {
+          "url": "https://wa.me/$%7Bconfig.whatsapp%7D",
+          "line": 173
         }
       ]
     },
@@ -15275,6 +15345,39 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "line": 16
+        }
+      ]
+    },
+    {
+      "path": "js/legal-maintenance.js",
+      "bytes": 7255,
+      "sha256": "6863a24c628b34e7b3f6939d1bcce6ee5b451c0a59f7021751705728bdc84c6e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 2
+        },
+        {
+          "url": "https://wa.me/$%7Bcontact.whatsapp%7D$%7Btext",
+          "line": 114
         }
       ]
     },
@@ -16165,6 +16268,28 @@
       ]
     },
     {
+      "path": "scripts/audit-about-page.js",
+      "bytes": 2072,
+      "sha256": "500b822127b8e0af4f54ac1cf5efc5eb7de48ece886aa1ef6a69298e74628927",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/audit-admin-public-sync.js",
+      "bytes": 12719,
+      "sha256": "1ffdaa80e7250ef9811c417214f1d5ebb0bcee49f42450aedb8992a1afd69a24",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-cart-phase7.js",
       "bytes": 5713,
       "sha256": "508e5fb079a594dd7a2d53519e1187ffa1722f41b5fe00b38fe7f28b9351b554",
@@ -16261,6 +16386,24 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/audit-contact-page.js",
+      "bytes": 1430,
+      "sha256": "902abc558a9de8465483bb748b64d85fc692b59d57022a41c590417c7980a9f5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./contact-maintenance.js",
+          "target": "scripts/contact-maintenance.js",
+          "dynamic": false,
+          "line": 33
+        }
+      ],
       "endpoints": []
     },
     {
@@ -16444,6 +16587,17 @@
           "line": 36
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/audit-legal-pages.js",
+      "bytes": 1892,
+      "sha256": "43eebe4f45389214882417c0abecce2bbd9d684f828025035a1c1716fc3cc223",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -16743,8 +16897,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 1244,
-      "sha256": "d456e15e2914ccee6ce2a19482efeb6b220de7eb64cd27d4866aa6ee4223bcb8"
+      "bytes": 1667,
+      "sha256": "0a75ad8a8069ed9579104969e7d3e56d98139930f79287bd95aadaf7e26fa205"
     },
     {
       "path": "404.html",
@@ -17009,6 +17163,12 @@
       "extension": ".html",
       "bytes": 15551,
       "sha256": "71b444853f9ae5e8364e1c8ce0d6dfa7291f434a27ea6fbdf0e985c05dbf3f9c"
+    },
+    {
+      "path": "css/about-maintenance.css",
+      "extension": ".css",
+      "bytes": 4215,
+      "sha256": "b5629cabd391b18b1afd947e469d90cc87c9acbff1baed7e531a41318a5b8eed"
     },
     {
       "path": "css/admin-color-tokens.css",
@@ -17347,6 +17507,12 @@
       "sha256": "c01be3e82772cd32724bc8052cb8f7181fb6caffdfde38b5f58531cd7e1928e6"
     },
     {
+      "path": "js/about-maintenance.js",
+      "extension": ".js",
+      "bytes": 3772,
+      "sha256": "832dae86aae26884c1e0ff060f3b89155903b8f295e7900be4dc806ced680093"
+    },
+    {
       "path": "js/admin-app.js",
       "extension": ".js",
       "bytes": 395150,
@@ -17511,8 +17677,8 @@
     {
       "path": "js/collections-store.js",
       "extension": ".js",
-      "bytes": 3956,
-      "sha256": "cf8893d2ab96893835ea1760389b9aa73d5f083688ff801273af112413daef3c"
+      "bytes": 4173,
+      "sha256": "26db6f05ede4b53a4f0bbd55685079eb7487030bd2ea4c5f67d5ff35577ebde5"
     },
     {
       "path": "js/color-contrast-utils.js",
@@ -17543,6 +17709,12 @@
       "extension": ".js",
       "bytes": 4506,
       "sha256": "2f1647640c0693e3790995a227661a29d8631d588c2531f8e24996556f05776d"
+    },
+    {
+      "path": "js/contact-maintenance.js",
+      "extension": ".js",
+      "bytes": 12034,
+      "sha256": "d89889676da8cb065ea242d6648829cf4239e1e433dcd1f46324a4b09c589779"
     },
     {
       "path": "js/content-schema.js",
@@ -17693,6 +17865,12 @@
       "extension": ".js",
       "bytes": 20912,
       "sha256": "0e537759899d4a2ebc19c23f20630993a0ea78dfdf0e803435f17ecdfd869e75"
+    },
+    {
+      "path": "js/legal-maintenance.js",
+      "extension": ".js",
+      "bytes": 7255,
+      "sha256": "6863a24c628b34e7b3f6939d1bcce6ee5b451c0a59f7021751705728bdc84c6e"
     },
     {
       "path": "js/load-images-init.js",
@@ -17941,6 +18119,30 @@
       "sha256": "308cec895f77b27735fa333685031ba921325494a1b89bdeb112818042586cf6"
     },
     {
+      "path": "maintenance/08-nosotros.txt",
+      "extension": ".txt",
+      "bytes": 1076,
+      "sha256": "581b5c79376963dc3337d5a468e60628db9aa226c926430a8339357596456e83"
+    },
+    {
+      "path": "maintenance/09-contacto.txt",
+      "extension": ".txt",
+      "bytes": 1365,
+      "sha256": "caa239802910a758e68c975eff1b6096d44ff35e5457899ac0204257ecdfc474"
+    },
+    {
+      "path": "maintenance/10-paginas-informativas.txt",
+      "extension": ".txt",
+      "bytes": 1569,
+      "sha256": "9757c50b3e1c3e0cf02c6217e3caa5393b63e525240af8294c13cdb96baf2e27"
+    },
+    {
+      "path": "maintenance/11-admin-configuracion-sincronizacion.txt",
+      "extension": ".txt",
+      "bytes": 6631,
+      "sha256": "4e4b07596f5fd1bc236934a39839aba4c7f260d820d3d8646171aec761cf9f14"
+    },
+    {
       "path": "manifest.json",
       "extension": ".json",
       "bytes": 658,
@@ -17955,8 +18157,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 2169,
-      "sha256": "182efa0420f2a0aa99bd56b85f9a8abd5d0eebc2ed23db09aa71aab69bc33225"
+      "bytes": 2264,
+      "sha256": "8767800a474a7050b0a255ffb7b445e072fb47c87c3c10bf70aacf008b1ee0bb"
     },
     {
       "path": "perfil.html",
@@ -17995,6 +18197,18 @@
       "sha256": "768a4761e015b7eb8abe43e5f7130e9c0100c56a391bdfad01ebf93da1aa966e"
     },
     {
+      "path": "scripts/audit-about-page.js",
+      "extension": ".js",
+      "bytes": 2072,
+      "sha256": "500b822127b8e0af4f54ac1cf5efc5eb7de48ece886aa1ef6a69298e74628927"
+    },
+    {
+      "path": "scripts/audit-admin-public-sync.js",
+      "extension": ".js",
+      "bytes": 12719,
+      "sha256": "1ffdaa80e7250ef9811c417214f1d5ebb0bcee49f42450aedb8992a1afd69a24"
+    },
+    {
       "path": "scripts/audit-cart-phase7.js",
       "extension": ".js",
       "bytes": 5713,
@@ -18029,6 +18243,12 @@
       "extension": ".js",
       "bytes": 9340,
       "sha256": "36111bc30f23396ae762bd5ebda1f69c01595766c96d49eabd04d8b04eb37eee"
+    },
+    {
+      "path": "scripts/audit-contact-page.js",
+      "extension": ".js",
+      "bytes": 1430,
+      "sha256": "902abc558a9de8465483bb748b64d85fc692b59d57022a41c590417c7980a9f5"
     },
     {
       "path": "scripts/audit-content-phase6.js",
@@ -18083,6 +18303,12 @@
       "extension": ".js",
       "bytes": 6468,
       "sha256": "886074e896795d8c21683523cdf7515fc1f1d40a441e8c2a10cee1c42516738b"
+    },
+    {
+      "path": "scripts/audit-legal-pages.js",
+      "extension": ".js",
+      "bytes": 1892,
+      "sha256": "43eebe4f45389214882417c0abecce2bbd9d684f828025035a1c1716fc3cc223"
     },
     {
       "path": "scripts/audit-loader-solid.js",
@@ -19200,6 +19426,13 @@
       "exists": true
     },
     {
+      "file": "js/about-maintenance.js",
+      "line": 17,
+      "raw": "about.html",
+      "target": "about.html",
+      "exists": true
+    },
+    {
       "file": "js/admin-app.js",
       "line": 468,
       "raw": "login.html",
@@ -19634,6 +19867,20 @@
       "exists": true
     },
     {
+      "file": "js/contact-maintenance.js",
+      "line": 5,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
+      "file": "js/contact-maintenance.js",
+      "line": 55,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
       "file": "js/content-schema.js",
       "line": 18,
       "raw": "index.html",
@@ -19925,6 +20172,20 @@
       "line": 6,
       "raw": "/index.html",
       "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "js/legal-maintenance.js",
+      "line": 5,
+      "raw": "terminos.html",
+      "target": "terminos.html",
+      "exists": true
+    },
+    {
+      "file": "js/legal-maintenance.js",
+      "line": 5,
+      "raw": "privacidad.html",
+      "target": "privacidad.html",
       "exists": true
     },
     {
@@ -21508,12 +21769,12 @@
           },
           {
             "file": "js/collections-store.js",
-            "line": 80,
+            "line": 83,
             "operation": "collection"
           },
           {
             "file": "js/collections-store.js",
-            "line": 97,
+            "line": 100,
             "operation": "collection"
           },
           {
@@ -22107,8 +22368,18 @@
             "operation": "doc"
           },
           {
+            "file": "js/contact-maintenance.js",
+            "line": 195,
+            "operation": "doc"
+          },
+          {
             "file": "js/email-notify.js",
             "line": 18,
+            "operation": "doc"
+          },
+          {
+            "file": "js/legal-maintenance.js",
+            "line": 130,
             "operation": "doc"
           },
           {
@@ -22154,6 +22425,16 @@
           {
             "file": "js/whatsapp.js",
             "line": 75,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-admin-public-sync.js",
+            "line": 61,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-contact-page.js",
+            "line": 19,
             "operation": "doc"
           },
           {

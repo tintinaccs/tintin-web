@@ -1,0 +1,121 @@
+TINTIN-WEB — MANTENIMIENTO 11.1
+CONFIGURACIÓN DEL SUPER ADMIN ↔ SINCRONIZACIÓN CON EL SITIO PÚBLICO
+====================================================================
+
+Fecha: 18/07/2026
+Rama: maintenance/admin-settings-public-sync
+PR: Mantenimiento integral 11.1: Configuración y sincronización pública
+
+OBJETIVO
+--------
+Auditar y blindar que cada opción de Super Admin → Configuración produzca un
+cambio REAL en las páginas públicas. El problema histórico reportado era el de
+opciones que aparecen en el panel pero no cambian nada en la tienda.
+
+ARCHIVOS REVISADOS
+------------------
+- admin.html  ................. formulario de Configuración (controles cfg-*).
+- js/admin-app.js  ........... carga (loadConfig) y guardado (btn-save-config,
+                               writeBatch general + storeGate; saveShipCities).
+- js/mobile-header-mode.js  .. runtime del header por dispositivo.
+- js/whatsapp.js  ............ datos de contacto/redes en páginas públicas.
+- js/site-content.js  ........ textos de página (site_content/{pageId}).
+- js/page-loader.js  ......... orquestador único que carga el runtime público.
+- js/public-shell.js  ........ inyección del header y anti-duplicación.
+- js/analytics.js  ........... GA4 con consentimiento.
+- js/secure-checkout-order.js  transacción de checkout.
+- checkout.html  ............. consumo de pagos, envío, WhatsApp y apertura.
+- envios.html  ............... consumo de ciudades/costos de envío.
+
+FUENTE ÚNICA DE VERDAD
+----------------------
+Configuración general: documento Firestore settings/general.
+Estado de tienda/acceso: settings/storeGate (espejo público mínimo escrito en
+  el MISMO commit que settings/general, vía writeBatch).
+Textos de página: colección site_content/{pageId} (esquema en content-schema.js).
+Apariencia/colores: settings/appearance (fuera del alcance de esta etapa).
+
+No se encontraron valores de la misma configuración duplicados en HTML + JS +
+fallback + localStorage que se contradigan. Los defaults presentes en el código
+(por ejemplo el número de WhatsApp inicial o "San Lorenzo, Paraguay") son solo
+el estado antes de que llegue Firestore; el snapshot los reemplaza en vivo.
+
+CONTRATO DE CAMPOS (admin escribe == runtime público lee)
+---------------------------------------------------------
+whatsappNumber, contactEmail, instagram, storeAddress, facebook, tiktok
+  -> js/whatsapp.js (onSnapshot settings/general), clases tt-contact-*.
+headerDesktopTabletEnabled, headerMobileEnabled
+  -> js/mobile-header-mode.js (onSnapshot), aplica clases en <html>.
+paymentMethods, bankAccounts, deliveryCities, encomiendaCities,
+deliveryCost, encomiendaCost, whatsappNumber, instagram, storeOpen
+  -> checkout.html (onSnapshot) y js/secure-checkout-order.js.
+ga4MeasurementId -> js/analytics.js (solo con consentimiento estadístico).
+storeOpen, maintenanceAccess -> store-gate (settings/storeGate).
+
+Todos los campos que el panel guarda tienen al menos un consumidor público
+real. No se detectaron opciones "muertas" nuevas.
+
+PROBLEMAS YA RESUELTOS QUE NO SE TOCARON
+----------------------------------------
+- Header por dispositivo: dos booleanos independientes, cada uno acotado a su
+  rango (>=769px header superior; <=768px tabbar), sin solaparse. Ya estaba
+  correcto y en vivo (onSnapshot). Intacto.
+- Anti-duplicación de header: public-shell.js quita cualquier header/nav previo
+  por id antes de inyectar el suyo, con guardas TintinPublicShellBooted y
+  tt-public-shell-mounted. Ya estaba correcto. Intacto.
+- Carga universal: page-loader.js arranca el header por dispositivo tanto en el
+  runtime liviano público como en el completo (bootHeaderMode en ambos). Ya
+  estaba correcto. Intacto.
+- Selector de moneda: deshabilitado a propósito con una sola opción real
+  (Guaraní), con nota explícita de que no se ofrece una opción sin efecto. Es
+  la decisión correcta mientras no exista formateo multi-moneda. Intacto.
+- Escritura atómica de storeOpen en general + storeGate (writeBatch). Intacto.
+
+CAMBIOS APLICADOS EN ESTA ETAPA
+-------------------------------
+- NUEVO scripts/audit-admin-public-sync.js: guardia de regresión que bloquea el
+  contrato Configuración ↔ público. Comprueba, por nombre de campo COMPLETO (no
+  subcadena):
+    * settings/general como fuente única y storeGate atómico;
+    * coherencia de nombres de campo del header entre admin y runtime;
+    * header en vivo (onSnapshot), defaults seguros y rangos que no se cruzan;
+    * carga universal del header vía page-loader (>=2 llamadas a bootHeaderMode);
+    * whatsapp.js consume los campos de contacto y usa las clases reales;
+    * presencia de las marcas tt-contact-* en las páginas públicas;
+    * anti-duplicación de header en public-shell.js;
+    * checkout escucha settings/general y aplica pagos/envío;
+    * selector de moneda deshabilitado (sin opción muerta);
+    * cada campo guardado tiene consumidor público;
+    * GA4 solo con consentimiento.
+- package.json: nuevo script "audit:admin-sync" e incorporación a "audit:final".
+- .github/workflows/tintin-audit.yml: nuevo paso que corre la auditoría en CI.
+
+PRUEBAS EJECUTADAS
+------------------
+- node --check scripts/audit-admin-public-sync.js -> sin errores de sintaxis.
+- node scripts/audit-admin-public-sync.js -> 44 comprobaciones OK (exit 0).
+- Prueba NEGATIVA 1: renombrar headerDesktopTabletEnabled en el runtime público
+  -> la auditoría FALLA (exit 1), 2 problemas. Confirma que no es una auditoría
+  que siempre pasa.
+- Prueba NEGATIVA 2: renombrar contactEmail en whatsapp.js -> la auditoría FALLA
+  (exit 1), 2 problemas. Restaurado y vuelve a pasar.
+- npm run audit:final -> toda la suite en verde (incluye la nueva auditoría).
+
+LIMITACIONES / VERIFICACIÓN MANUAL PENDIENTE
+--------------------------------------------
+- La comprobación es estática (no abre navegador). El comportamiento visual real
+  en los 7 viewports lo cubren las auditorías de página existentes; esta etapa
+  se concentra en el cableado de datos Configuración ↔ público.
+- No se pudo probar el guardado real contra Firestore desde este entorno (sin
+  credenciales del proyecto); la lógica de guardado (writeBatch, merge, revert
+  en error, toast de éxito solo tras commit) se revisó por lectura de código.
+
+ALCANCE RESPETADO
+-----------------
+No se modificó el flujo de creación de pedidos, firestore.rules,
+secure-checkout-order.js ni la lógica de checkout. Los cambios se limitan a una
+auditoría nueva y su integración en CI/package.json, más esta documentación.
+
+COMMIT FINAL / MERGE
+--------------------
+(se completa al mergear)
