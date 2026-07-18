@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-18T13:31:52.884Z",
-  "sourceFingerprint": "9d714d64a87017c6f8bcd65c69d522613d2a2efd87aa1cbbbe8b5127f4e961f3",
+  "generatedAt": "2026-07-18T15:33:06.679Z",
+  "sourceFingerprint": "7458b1e229f2dd29b945652c94cbd924eebc2ca2a1a201f4be8785a945efcb34",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 235,
     "textFiles": 198,
-    "totalBytes": 5071541,
+    "totalBytes": 5072985,
     "pages": 18,
     "modules": 119
   },
@@ -16249,8 +16249,8 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 3786,
-      "sha256": "cb6dda916fdb86ad9570500929a37fd369b397fff087dad6d2e3e4ef57c09100",
+      "bytes": 4239,
+      "sha256": "94937efb5f4210cb11af345717d097fb77cd3c5fad3b5c0d753f5aa350337759",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16260,7 +16260,7 @@
           "raw": "./secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/secure-checkout-order.js",
           "dynamic": true,
-          "line": 89
+          "line": 96
         }
       ],
       "endpoints": []
@@ -16909,8 +16909,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 34146,
-      "sha256": "bcef18ebf07ef52d9f6089882cd09dd60ddefbe3be3eacfe96092565b7d81b98"
+      "bytes": 35137,
+      "sha256": "5b5dc6f9f48f9eb3bc90bccd1be0fc5338f2c36feeceb6eeb0deac7ba9d421bf"
     },
     {
       "path": "functions/DEPLOY.md",
@@ -17683,8 +17683,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 3786,
-      "sha256": "cb6dda916fdb86ad9570500929a37fd369b397fff087dad6d2e3e4ef57c09100"
+      "bytes": 4239,
+      "sha256": "94937efb5f4210cb11af345717d097fb77cd3c5fad3b5c0d753f5aa350337759"
     },
     {
       "path": "scripts/audit-security-phase8.js",
