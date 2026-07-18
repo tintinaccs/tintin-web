@@ -36,8 +36,8 @@ Cada etapa incluye obligatoriamente:
 14. Commit, Pull Request, comprobaciones verdes y merge antes de pasar a la siguiente etapa.
 
 ORDEN DE ETAPAS
-01. Página principal — index.html
-02. Catálogo — catalogo.html
+01. Página principal — index.html — CERRADA
+02. Catálogo — catalogo.html — SIGUIENTE
 03. Colecciones — collections.html
 04. Producto — product.html
 05. Checkout — checkout.html
@@ -65,5 +65,5 @@ Una etapa solamente se considera terminada cuando:
 - el cambio está integrado en main.
 
 ESTADO
-Etapa activa: 01 — Página principal.
-Las demás etapas permanecen pendientes hasta cerrar la etapa activa.
+Etapa 01 cerrada y mergeada.
+Próxima etapa: 02 — Catálogo.
