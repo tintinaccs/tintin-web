@@ -1,0 +1,61 @@
+TINTIN-WEB — MANTENIMIENTO 01: PÁGINA PRINCIPAL
+Archivo principal: index.html
+Estado: EN CORRECCIÓN
+
+ALCANCE REVISADO
+- HTML completo de index.html.
+- Header y navegación compartidos.
+- Loader y control de tienda.
+- Hero e imágenes administrables.
+- Barra de confianza.
+- Editorial de bolsos.
+- Colecciones.
+- Completá tu look.
+- Editorial de relojes.
+- Productos más vendidos.
+- Reseñas.
+- Footer, contacto y WhatsApp.
+- Esquema global de colores.
+- Firebase, productos, imágenes, contenido, carrito y eventos en vivo relacionados.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS INICIALES
+[ALTO] La página dependía demasiado del hero para retirar el loader. Una imagen lenta podía retener la experiencia durante varios segundos.
+[ALTO] Los contenedores dinámicos de productos y combinaciones podían permanecer vacíos sin explicar si estaban cargando, sin conexión o sin datos.
+[ALTO] No existía una capa específica que recuperara Inicio si Firebase, imágenes o productos llegaban fuera de orden.
+[ALTO] No existía una auditoría automática exclusiva para la página principal; una regresión podía pasar aunque la auditoría general terminara correctamente.
+[MEDIO] Canonical, Open Graph, Twitter Card y JSON-LD todavía apuntaban al dominio histórico de GitHub Pages en lugar del dominio publicado actual.
+[MEDIO] El año del footer estaba fijado manualmente.
+[MEDIO] Parte de la apariencia de Inicio dependía de colores fijos y podía perder contraste al publicar otro esquema desde Super Admin.
+[MEDIO] Algunas superficies podían usar transiciones durante la hidratación y dar la sensación de pestañeo o cambio de forma.
+[MEDIO] Las secciones dinámicas no tenían siempre aria-busy, aria-live ni estado vacío accesible.
+[MEDIO] No había una recuperación visible y segura cuando el catálogo no podía cargarse.
+[BAJO] El footer y ciertos enlaces utilizan contenido fijo; deben mantenerse coherentes con la configuración central.
+
+CORRECCIONES DE ESTA ETAPA
+1. Capa temprana de estabilidad visual para Inicio, basada únicamente en tokens configurables.
+2. Ninguna superficie principal utiliza negro puro como color obligatorio.
+3. Se desactivan transiciones durante la preparación inicial y se habilitan cuando la página queda estable.
+4. Estados de carga y recuperación para productos y combinaciones, sin dejar espacios vacíos.
+5. Eventos en tiempo real para productos, imágenes, contenido, esquema de colores, conexión y visibilidad de pestaña.
+6. Recuperación automática si un módulo llega fuera de orden.
+7. Metadatos de URL normalizados en ejecución al dominio actual.
+8. Año del footer actualizado automáticamente.
+9. Contraste mínimo protegido en títulos, labels, botones y superficies críticas mediante tokens.
+10. Auditoría CI específica de Inicio para estructura, responsive, colores, metadatos, accesibilidad y runtime.
+
+PRUEBAS OBLIGATORIAS
+- Sintaxis JavaScript.
+- Auditoría general Tintin.
+- Auditoría tipográfica Montserrat.
+- Auditoría específica de Inicio.
+- Estructura responsive para los siete viewports del manifiesto.
+- Presencia de estados de carga, vacío y error.
+- Ausencia de negro puro en la nueva capa.
+- Carga del runtime de Inicio desde el shell compartido.
+
+PENDIENTES DE CIERRE
+- Ejecutar las auditorías del Pull Request.
+- Corregir cualquier fallo que aparezca.
+- Actualizar este archivo con el resultado final.
+- Mergear en main antes de iniciar Catálogo.
