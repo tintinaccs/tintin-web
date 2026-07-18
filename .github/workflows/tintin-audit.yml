@@ -33,3 +33,6 @@ jobs:
 
       - name: Audit catalog page on all viewports
         run: node scripts/audit-catalog-page.js
+
+      - name: Audit collections page on all viewports
+        run: node scripts/audit-collections-page.js
