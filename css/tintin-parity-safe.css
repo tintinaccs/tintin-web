@@ -1,1 +1,29 @@
 html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-responsive-parity:safe}.tt-parity-safe main>section,.tt-parity-safe .section,.tt-parity-safe .section-sm,.tt-parity-safe .tt-section,.tt-parity-safe .tt-page-hero,.tt-parity-safe .tt-hero,.tt-parity-safe .tt-products-section,.tt-parity-safe .tt-reviews-section,.tt-parity-safe .tt-collections-section,.tt-parity-safe .tt-footer,.tt-parity-safe .perfil-card,.tt-parity-safe .ck-panel,.tt-parity-safe .login-box,.tt-parity-safe .adm-card,.tt-parity-safe .adm-table-wrap{visibility:visible!important;opacity:1}.tt-parity-safe [data-parity="always"],.tt-parity-safe .tt-parity-always{visibility:visible!important;opacity:1!important}.tt-parity-safe .tt-mobile-menu:not(.open),.tt-parity-safe .tt-cart-drawer:not(.open),.tt-parity-safe .tt-search-panel:not(.open),.tt-parity-safe .tt-collections-sheet:not(.open),.tt-parity-safe #account-dropdown:not(.open):not(.tt-account-open)>.tt-account-panel,.tt-parity-safe .adm-modal:not(.open),.tt-parity-safe [hidden]{display:none!important}.tt-parity-safe .tt-header,.tt-parity-safe .tt-header *,.tt-parity-safe .tt-nav,.tt-parity-safe .tt-nav *,.tt-parity-safe .tt-mobile-menu,.tt-parity-safe .tt-mobile-menu *,.tt-parity-safe .tt-tabbar,.tt-parity-safe .tt-tabbar *{--tt-header-keeps-own-responsive:1}.tt-parity-safe .desktop-only:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *),.tt-parity-safe .tablet-only:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *),.tt-parity-safe .mobile-only:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *){visibility:visible!important}.tt-parity-safe .hide-mobile:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *),.tt-parity-safe .hide-desktop:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *),.tt-parity-safe .hide-tablet:not(.tt-header *):not(.tt-nav *):not(.tt-mobile-menu *):not(.tt-tabbar *){visibility:visible!important}.tt-parity-safe .tt-parity-layout{display:revert!important}.tt-parity-safe .tt-dropdown:not(.open),.tt-parity-safe #account-dropdown:not(.open):not(.tt-account-open)>.tt-account-panel,.tt-parity-safe .tt-sheet:not(.open),.tt-parity-safe .tt-modal:not(.open){pointer-events:none}
+
+/* Header desktop/tablet: superficies sólidas para que los paneles no hereden
+   transparencias del esquema global configurable. Mobile queda sin cambios. */
+@media (min-width:769px){
+  body:not(:has(.adm-main)) :is(.tt-dropdown,.tt-search-panel,.tt-search-results,.tt-account-panel,.tt-cart-drawer){
+    background:#fff!important;
+    background-color:#fff!important;
+    border-color:#f0d8e0!important;
+  }
+  body:not(:has(.adm-main)) :is(.tt-dropdown,.tt-account-panel){
+    border:1px solid #f0d8e0!important;
+    box-shadow:0 16px 40px rgba(139,38,66,.16)!important;
+  }
+  body:not(:has(.adm-main)) .tt-search-panel{
+    border:1px solid #f0d8e0!important;
+    border-top:0!important;
+    box-shadow:0 14px 34px rgba(139,38,66,.14)!important;
+  }
+  body:not(:has(.adm-main)) .tt-search-results{
+    border:1px solid #f0d8e0!important;
+    border-top:0!important;
+    box-shadow:0 16px 36px rgba(139,38,66,.12)!important;
+  }
+  body:not(:has(.adm-main)) .tt-cart-drawer{
+    border-left:1px solid #f0d8e0!important;
+    box-shadow:-12px 0 40px rgba(139,38,66,.16)!important;
+  }
+}
