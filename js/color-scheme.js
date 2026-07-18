@@ -3,20 +3,9 @@
  * Esquema global), en vivo.
  *
  * Se suscribe al esquema activo publicado en Firestore y reescribe las
- * variables --color-* sobre <html> (inline, gana por especificidad a
- * cualquier regla de hoja de estilos sin necesitar !important en cada
- * consumidor) — como todo el CSS del sitio ya lee var(--color-*) a través
- * de los alias --tt-*, un solo cambio acá se propaga a toda página,
- * componente y estado sin tocar código.
- *
- * Solo consume campos PUBLICADOS (tokens/deviceOverrides/deviceOverrideEnabled)
- * — nunca el borrador (draftTokens/...), así lo que un Super Admin está
- * editando no se filtra al sitio público hasta que aprieta "Publicar".
- *
- * Complementa (no reemplaza) js/color-scheme-instant.js: ese script pinta
- * con el último valor cacheado antes de que cargue nada más; este motor
- * trae el valor real desde Firestore, lo aplica, y re-cachea para la
- * próxima visita.
+ * variables --color-* sobre <html>. Además confirma explícitamente cuándo
+ * terminó la primera resolución del esquema para que el loader no revele una
+ * página con un fondo cacheado y lo cambie un instante después.
  */
 import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -30,33 +19,38 @@ let unsubScheme = null;
 let lastCssVarMap = null;
 let lastDeviceOverrideMaps = null;
 let lastDeviceOverrideEnabled = false;
+let firstResolutionFinished = false;
 
 function keyMapToCssVarMap(tokensByKey) {
   const out = {};
   if (!tokensByKey) return out;
-  GLOBAL_TOKENS.forEach(t => {
-    if (tokensByKey[t.key] != null && tokensByKey[t.key] !== '') out[t.cssVar] = tokensByKey[t.key];
+  GLOBAL_TOKENS.forEach(token => {
+    if (tokensByKey[token.key] != null && tokensByKey[token.key] !== '') {
+      out[token.cssVar] = tokensByKey[token.key];
+    }
   });
   return out;
 }
 
 function currentBreakpointKey() {
-  const w = window.innerWidth;
-  const found = DEVICE_BREAKPOINTS.find(b => w >= b.min && (b.max == null || w <= b.max));
+  const width = window.innerWidth;
+  const found = DEVICE_BREAKPOINTS.find(bp => (
+    width >= bp.min && (bp.max == null || width <= bp.max)
+  ));
   return found ? found.key : 'desktop';
 }
 
 function applyCssVarMap(map) {
   const root = document.documentElement;
-  Object.entries(map).forEach(([k, v]) => root.style.setProperty(k, v));
+  Object.entries(map).forEach(([key, value]) => root.style.setProperty(key, value));
 }
 
 function applyForCurrentBreakpoint() {
   if (!lastCssVarMap) return;
   applyCssVarMap(lastCssVarMap);
   if (lastDeviceOverrideEnabled && lastDeviceOverrideMaps) {
-    const over = lastDeviceOverrideMaps[currentBreakpointKey()];
-    if (over) applyCssVarMap(over);
+    const override = lastDeviceOverrideMaps[currentBreakpointKey()];
+    if (override) applyCssVarMap(override);
   }
 }
 
@@ -67,43 +61,73 @@ function cacheToLocalStorage() {
       deviceOverrideEnabled: !!lastDeviceOverrideEnabled,
       deviceOverrides: lastDeviceOverrideMaps || null,
     }));
-  } catch (e) { /* almacenamiento lleno o bloqueado: no crítico, solo se pierde el "sin parpadeo" en la próxima carga */ }
+  } catch (error) {
+    /* Almacenamiento bloqueado: no rompe la página. */
+  }
 }
 
-function applyScheme(schemeData) {
+function markColorSchemeReady(source) {
+  if (firstResolutionFinished) return;
+  firstResolutionFinished = true;
+
+  const bridge = window.TintinColorSchemeFirstPaint;
+  if (bridge && typeof bridge.release === 'function') {
+    bridge.release(source || 'firestore');
+    return;
+  }
+
+  const root = document.documentElement;
+  root.classList.remove('tt-color-scheme-pending');
+  root.classList.add('tt-color-scheme-ready');
+}
+
+function applyScheme(schemeData = {}) {
   const defaults = buildDefaultTokenMap(GLOBAL_TOKENS);
   const merged = Object.assign({}, defaults, schemeData.tokens || {});
   lastCssVarMap = keyMapToCssVarMap(merged);
   lastDeviceOverrideEnabled = !!schemeData.deviceOverrideEnabled;
   lastDeviceOverrideMaps = null;
+
   if (lastDeviceOverrideEnabled && schemeData.deviceOverrides) {
     lastDeviceOverrideMaps = {};
     DEVICE_BREAKPOINTS.forEach(bp => {
-      const over = schemeData.deviceOverrides[bp.key];
-      if (over) lastDeviceOverrideMaps[bp.key] = keyMapToCssVarMap(over);
+      const override = schemeData.deviceOverrides[bp.key];
+      if (override) lastDeviceOverrideMaps[bp.key] = keyMapToCssVarMap(override);
     });
   }
+
   applyForCurrentBreakpoint();
   cacheToLocalStorage();
+  markColorSchemeReady('firestore');
 }
 
 function subscribeToScheme(schemeId) {
-  if (unsubScheme) { unsubScheme(); unsubScheme = null; }
+  if (unsubScheme) {
+    unsubScheme();
+    unsubScheme = null;
+  }
+
   unsubScheme = onSnapshot(
     doc(db, 'colorSchemes', schemeId || DEFAULT_SCHEME_ID),
-    snap => { if (snap.exists()) applyScheme(snap.data()); },
-    err => console.warn('[color-scheme] No se pudo cargar el esquema activo, se mantiene el último aplicado/cacheado:', err)
+    snapshot => {
+      if (snapshot.exists()) applyScheme(snapshot.data());
+      else applyScheme({});
+    },
+    error => {
+      console.warn('[color-scheme] No se pudo cargar el esquema activo; se mantiene el último aplicado/cacheado:', error);
+      markColorSchemeReady('scheme-read-error');
+    }
   );
 }
 
 onSnapshot(
   doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
-  snap => {
-    const cfg = snap.exists() ? snap.data() : {};
-    subscribeToScheme(cfg.activeGlobalSchemeId || DEFAULT_SCHEME_ID);
+  snapshot => {
+    const config = snapshot.exists() ? snapshot.data() : {};
+    subscribeToScheme(config.activeGlobalSchemeId || DEFAULT_SCHEME_ID);
   },
-  err => {
-    console.warn('[color-scheme] settings/appearance no disponible, se usa el esquema por defecto:', err);
+  error => {
+    console.warn('[color-scheme] settings/appearance no disponible; se usa el esquema por defecto:', error);
     subscribeToScheme(DEFAULT_SCHEME_ID);
   }
 );
