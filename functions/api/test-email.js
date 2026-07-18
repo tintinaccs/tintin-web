@@ -30,7 +30,7 @@ async function sendWithResend(apiKey, toEmail) {
   const text = `Este es un correo de prueba de Tintin Accesorios.\n\nNo corresponde a un pedido real y no modifica stock.\n\nRemitente: pedidos@tintinaccs.com\nResponder a: tintinaccs@gmail.com\n\nPedido de prueba: #TEST123\nCliente: Cliente de prueba\nProducto: 1x BAG RUBY\nTotal: Gs. 190.000\nEntrega: Delivery — San Lorenzo\nEstado: Pendiente de confirmación`;
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Arial,Helvetica,sans-serif;color:#2b2b2b">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
   <div style="max-width:620px;margin:0 auto;padding:28px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;overflow:hidden">
       <div style="background:#ad3f67;padding:22px;text-align:center;color:#ffffff">
