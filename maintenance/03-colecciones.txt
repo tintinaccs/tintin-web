@@ -1,0 +1,33 @@
+TINTIN-WEB — MANTENIMIENTO 03: COLECCIONES
+Archivo principal: collections.html
+Estado: EN CORRECCIÓN
+
+ALCANCE REVISADO
+- HTML, CSS y JavaScript completos de la página.
+- Hero, grilla de colecciones y productos destacados.
+- Firestore collections y catálogo de productos.
+- Navegación a catálogo y producto.
+- Agregar al carrito.
+- Estados loading, empty, error y offline.
+- Header, footer, metadatos y WhatsApp.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] Colores fijos en textos, badges y estados no siguen completamente los tokens del Super Admin.
+[ALTO] Colecciones y productos destacados dependen de señales distintas; una puede terminar y la otra quedar bloqueada.
+[ALTO] No existe auditoría CI exclusiva para collections.html.
+[MEDIO] El timeout de 5 segundos convierte una carga lenta en error sin observar reconexión o regreso a la pestaña.
+[MEDIO] Metadatos apuntan al dominio histórico.
+[MEDIO] Footer con año fijo.
+[MEDIO] Falta un estado de sincronización visible y recuperación al volver internet.
+[MEDIO] Skeletons e imágenes necesitan superficies sólidas configurables.
+[BAJO] El layout no tiene un tratamiento específico para tablet horizontal y mini mobile.
+
+CORRECCIONES PREVISTAS
+1. Conectar colores y superficies a tokens configurables.
+2. Mantener fondos sólidos desde la primera pintura.
+3. Recuperar independientemente colecciones y destacados.
+4. Observar conexión, visibilidad, pageshow y eventos de datos.
+5. Normalizar metadatos y footer.
+6. Añadir responsive explícito para siete viewports.
+7. Añadir auditoría CI específica.
