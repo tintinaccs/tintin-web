@@ -48,3 +48,6 @@ jobs:
 
       - name: Audit profile and orders on all viewports
         run: node scripts/audit-profile-orders-page.js
+
+      - name: Audit about page on all viewports
+        run: node scripts/audit-about-page.js
