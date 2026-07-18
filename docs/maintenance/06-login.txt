@@ -1,0 +1,32 @@
+TINTIN-WEB — MANTENIMIENTO 06: LOGIN
+Archivo principal: login.html
+Estado: TERMINADO
+
+ALCANCE REVISADO
+- Inicio con Google.
+- Inicio por enlace de correo.
+- Sesión existente y redirección por rol.
+- Cuenta bloqueada, tienda cerrada y loader.
+- Mensajes de error y éxito.
+- Parámetro de retorno `from`.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+[ALTO] El parámetro `from` debía normalizarse para impedir redirecciones fuera del mismo origen.
+[ALTO] No existía auditoría CI exclusiva de Login.
+[MEDIO] Canonical apuntaba al dominio histórico.
+[MEDIO] Fondos y bordes podían depender de valores fijos incompatibles con el esquema del Super Admin.
+[MEDIO] Mensajes de error y éxito no tenían roles accesibles explícitos.
+[MEDIO] Tablet horizontal y mini mobile dependían solo de reglas generales.
+
+CORRECCIONES APLICADAS
+1. Normalización del parámetro `from` a rutas internas del mismo origen.
+2. Canonical dinámico.
+3. Superficies sólidas y colores configurables.
+4. Responsive explícito para siete viewports.
+5. Roles aria-live para error y éxito.
+6. Estado visual de conexión.
+7. Auditoría CI exclusiva de Login.
+
+RESULTADO
+Login mantiene la lógica existente de Google, correo, roles, bloqueo y tienda cerrada, agregando protección de redirección y consistencia visual sin duplicar listeners de autenticación.
