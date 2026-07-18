@@ -57,3 +57,6 @@ jobs:
 
       - name: Audit terms and privacy pages on all viewports
         run: node scripts/audit-legal-pages.js
+
+      - name: Audit Super Admin configuration to public site sync
+        run: node scripts/audit-admin-public-sync.js

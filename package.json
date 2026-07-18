@@ -19,12 +19,13 @@
     "build:diagnostics": "node scripts/build-diagnostic-manifest.js",
     "audit:diagnostics": "node scripts/audit-diagnostics.js",
     "audit:diagnostic-findings": "node scripts/audit-diagnostic-findings.js",
-    "audit:final": "npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability",
+    "audit:final": "npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js",
     "audit:postphase": "node scripts/audit-postphase-security.js",
-    "audit:reliability": "node scripts/audit-site-reliability.js"
+    "audit:reliability": "node scripts/audit-site-reliability.js",
+    "audit:admin-sync": "node scripts/audit-admin-public-sync.js"
   },
   "devDependencies": {
     "firebase-tools": "latest"
