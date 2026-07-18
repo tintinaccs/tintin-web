@@ -1,0 +1,30 @@
+TINTIN-WEB — MANTENIMIENTO 09: CONTACTO
+Archivo principal: contact.html
+Estado: COMPLETADO
+
+ALCANCE
+- Hero, formulario, datos públicos, WhatsApp, Instagram, email, teléfono, ubicación, horario y footer.
+- Validaciones, accesibilidad, conexión, metadatos y responsive.
+- Desktop grande, desktop, laptop, tablet horizontal, tablet vertical, mobile y mini mobile.
+
+HALLAZGOS
+- Metadatos apuntaban al dominio histórico.
+- Datos de contacto estaban duplicados y hardcodeados.
+- El formulario usaba alert y no mostraba errores por campo.
+- El email no se incorporaba al mensaje.
+- No había protección contra envíos repetidos.
+- El formulario quedaba oculto después del primer envío.
+- Horarios y promesas de respuesta podían quedar desactualizados.
+- Estados de éxito y offline no eran accesibles.
+- No existía auditoría CI exclusiva.
+
+CORRECCIONES
+- Canonical, Open Graph y Twitter normalizados.
+- Datos públicos sincronizados en tiempo real desde settings/general.
+- Validación accesible por campo, límites de longitud y foco al primer error.
+- Estado offline visible.
+- Envío único y recuperación para una nueva consulta.
+- Email, teléfono y mensaje incluidos de forma segura en WhatsApp.
+- Superficies sólidas, tokens configurables y responsive completo.
+- Año del footer automático.
+- Auditoría automática agregada al workflow principal.
