@@ -27,3 +27,56 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
     box-shadow:-12px 0 40px rgba(139,38,66,.16)!important;
   }
 }
+
+/* Super Admin: todos los interruptores de activar/desactivar conservan la
+   misma cápsula y el mismo contorno rosado, estén encendidos o apagados.
+   Estas reglas se cargan al final para que el esquema global no vuelva a
+   convertir en blanco el fondo de los switches activos. */
+body:has(.adm-main) input[type="checkbox"].tt-mini-switch{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  width:40px!important;
+  height:24px!important;
+  min-width:40px!important;
+  padding:0!important;
+  margin:0 8px 0 0!important;
+  border:2px solid #e8b6c8!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  background-color:#fff!important;
+  box-shadow:0 2px 7px rgba(139,38,66,.10)!important;
+}
+body:has(.adm-main) input[type="checkbox"].tt-mini-switch::before{
+  top:1px!important;
+  left:1px!important;
+  width:18px!important;
+  height:18px!important;
+  background:#fff!important;
+  border:1px solid rgba(173,63,103,.12)!important;
+  box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
+}
+body:has(.adm-main) input[type="checkbox"].tt-mini-switch:checked{
+  background:var(--admin-color-brand,#ad3f67)!important;
+  background-color:var(--admin-color-brand,#ad3f67)!important;
+  border-color:var(--admin-color-brand,#ad3f67)!important;
+}
+body:has(.adm-main) input[type="checkbox"].tt-mini-switch:checked::before{
+  transform:translateX(16px)!important;
+}
+body:has(.adm-main) .adm-toggle-slider{
+  box-sizing:border-box!important;
+  background:#fff!important;
+  background-color:#fff!important;
+  border:2px solid #e8b6c8!important;
+  box-shadow:0 2px 7px rgba(139,38,66,.10)!important;
+}
+body:has(.adm-main) .adm-toggle-slider::before{
+  background:#fff!important;
+  border:1px solid rgba(173,63,103,.12)!important;
+  box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
+}
+body:has(.adm-main) .adm-toggle input:checked + .adm-toggle-slider{
+  background:var(--admin-color-brand,#ad3f67)!important;
+  background-color:var(--admin-color-brand,#ad3f67)!important;
+  border-color:var(--admin-color-brand,#ad3f67)!important;
+}
