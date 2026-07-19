@@ -1,0 +1,152 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.3
+PRODUCTOS, COLECCIONES E IMÁGENES
+Fecha: 19/07/2026
+Rama: maintenance/admin-products-media
+Auditoría nueva: scripts/audit-admin-products-media.js  (npm run audit:products-media)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de: Productos, Categorías, Colecciones, Biblioteca de
+imágenes, Subida de imágenes, Cloudinary, Firebase Storage, ImgBB (solo si en
+uso), Importación CSV, Importación JSON y Exportación de productos.
+
+Antes de tocar archivos se revisó main, los PR mergeados, maintenance/ y las
+auditorías existentes (audit-collections-phase4, audit-images-phase5,
+audit-product-page, audit-catalog-page). Las correcciones ya resueltas en fases
+previas NO se rehicieron.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL DEL DOMINIO
+═══════════════════════════════════════════════════════════════════════
+CRUD de productos ............ js/admin-app.js (loadProductos, prodGuardar,
+                               prodEliminar, prodToggleActive, bulk *)
+CRUD de colecciones .......... js/admin-app.js (collGuardar, collEliminar,
+                               collMoveProduct, bulk *)
+Importación / copia .......... js/admin-import-phase9.js (CSV Shopify + JSON,
+                               copia operativa)
+Exportación de productos ..... js/admin-app.js (bulkExportProducts → CSV)
+Biblioteca / subida .......... js/media-library.js, js/image-upload-widget.js,
+                               js/image-processing.js, js/image-resolver.js,
+                               js/images.js, admin-images.html
+Sanitización de URL/alt ...... js/image-utils.js (sanitizeImageUrl/Alt)
+Tienda (render + carrito) .... script.js, js/products-store.js,
+                               js/collections-store.js
+
+PROVEEDORES DE IMAGEN (estado real):
+- Cloudinary — ACTIVO. Es el único destino de subida de productos, colecciones
+  y biblioteca. La subida se FIRMA del lado servidor con una Cloudflare Pages
+  Function (`/api/cloudinary-sign-upload`); el cliente nunca lleva el secreto.
+- Firebase Storage — NO se usa para subir imágenes de catálogo (solo aparece en
+  js/admin-site-diagnostics.js como comprobación de disponibilidad).
+- ImgBB — EN USO, pero acotado al módulo "Contenido" (window.contUploadImage),
+  con una clave que ingresa el propio usuario y se guarda en localStorage
+  (tt_imgbb_key). No hay clave compartida embebida en el bundle. Por eso NO se
+  eliminó: sigue siendo el subidor del editor de Contenido. (Recomendación
+  futura no urgente: migrar Contenido al widget Cloudinary para unificar y que
+  esas imágenes también entren a la limpieza de huérfanas.)
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+PRODUCTOS
+- Crear/editar/eliminar con permisos reales (addProducts/editProducts/
+  deleteProducts + permiso dinámico) — no solo se ocultan botones.
+- Validación: nombre, categoría y precio obligatorios.
+- Confirmación destructiva en eliminar; anti-doble-guardado (btn.disabled).
+- Stock vacío = null (no controlado), distinto de 0 (agotado) — coherente con
+  la tienda.
+- Listener en tiempo real con guardia anti-duplicado (if (_productosUnsub)
+  return). Render escapado (escapeHtmlAdmin + sanitizeImageUrl).
+- Activar/desactivar, oferta, destacado, precio, precio anterior, stock: todos
+  con permiso y auditoría (individual y masivo).
+- Búsqueda, filtros por categoría, agrupado por colección, selección masiva y
+  acciones masivas (stock/precio/oferta/destacado/colección/eliminar).
+- Exportación a CSV con permiso 'productos.exportar'.
+
+COLECCIONES
+- Slug único (rechaza duplicados). Renombrar crea el doc nuevo, mueve los
+  productos por lotes (batchUpdateChunked, ≤450/lote) y borra el viejo — sin
+  orfandad. Eliminar con productos fuerza reasignación explícita.
+
+TIENDA / CARRITO
+- Escapa nombre, categoría, badge y variante (anti-XSS).
+- Oculta productos inactivos, agotados (stock ≤ 0) y sin nombre.
+- syncCartWithCatalog quita del carrito lo borrado/desactivado y refresca
+  precio/nombre. El comportamiento "producto agotado que sigue activo permanece
+  en el carrito" es DELIBERADO y consistente entre script.js y checkout.html
+  (el stock final lo confirma la vendedora; addToCart ya clampa al agregar). Se
+  deja como está a propósito.
+
+IMPORTACIÓN (Fase 9)
+- Límite de 5 MB y 1.000 filas. Solo Super Admin. Parser CSV con comillas/BOM;
+  JSON como array o copia operativa. Filas inválidas con errores por fila
+  (nombre/categoría/precio/URL/colección inexistente). Vista previa con estado
+  por fila y selección de colección por fila. Progreso por lote. Duplicados por
+  huella (importFingerprint) + nombre::categoría, se omiten. Normalización de
+  categoría contra colecciones reales. URLs saneadas (safeUrl bloquea no-http).
+  Escritura por lotes (≤350) creando documentos NUEVOS (nunca sobrescribe) y
+  con registro de auditoría. Recuperación ante error parcial. Confirmación.
+
+IMÁGENES
+- Validación por magic bytes (SIGNATURES/detectRealImageMime), no por extensión;
+  máx 15 MB; rechaza vacío. Redimensión ≤2000px y re-codificación a WebP con
+  fallback + thumbnail. Timeouts en firma/subida/guardado. Limpieza de subida
+  parcial ante fallo. Limpieza de huérfanas (findImageUsage revisa products/
+  collections/settings; deleteMediaByUrlIfUnused). alt saneado (sanitizeImageAlt).
+  sanitizeImageUrl bloquea esquemas peligrosos y mixed-content en el render.
+
+═══════════════════════════════════════════════════════════════════════
+HALLAZGO CORREGIDO
+═══════════════════════════════════════════════════════════════════════
+F1 [MEDIO] — El CRUD de colección INDIVIDUAL no dejaba rastro en Auditoría.
+  Los productos registran cada alta/edición/baja y las acciones MASIVAS de
+  colecciones también (bulkSetCollVisible / bulkDeleteCollections), pero
+  collGuardar (crear/editar/renombrar) y collEliminar (eliminar con o sin
+  reasignación) no llamaban a logAudit — quedaban huecos en el historial.
+  FIX (js/admin-app.js):
+    - Se agregó la etiqueta de auditoría `crear_coleccion` al mapa.
+    - collGuardar registra crear_coleccion / editar_coleccion (incluye el
+      renombrado con la cantidad de productos movidos).
+    - collEliminar registra eliminar_coleccion (incluye la reasignación).
+
+Otros puntos evaluados y descartados como cambio (para no fabricar arreglos):
+- priceBefore <= price en el formulario manual: la importación lo advierte, pero
+  priceBefore HOY no se renderiza en ninguna parte de la tienda, así que no es
+  un bug visible. Se documenta como observación, sin tocar código.
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-products-media.js
+═══════════════════════════════════════════════════════════════════════
+34 comprobaciones estáticas agrupadas en: CRUD de productos, CRUD de
+colecciones (incluida la auditoría F1), tienda/carrito, importación segura,
+imágenes/Cloudinary, proveedores/secretos y campos legacy.
+
+Wiring:
+  - package.json: "audit:products-media" + incluida en "audit:final".
+  - .github/workflows/tintin-audit.yml: paso "Audit products, collections and
+    images" (corre en cada push/PR a main).
+
+Prueba de que REALMENTE falla cuando se rompe el contrato: se revirtió el
+logAudit de crear_coleccion (F1) → ERROR + exit 1; se subió MAX_IMPORT_ROWS a
+999999 → ERROR + exit 1; al restaurar, ambos vuelven a OK. Registrado.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS
+═══════════════════════════════════════════════════════════════════════
+- node --check de js/admin-app.js: OK.
+- npm run audit:products-media: 34/34 OK.
+- npm run audit:final (incluye la nueva): exit 0.
+- audit:tintin: CRITICAL 0. audit:diagnostics: OK (manifest regenerado por el
+  nuevo módulo).
+
+ARCHIVOS TOCADOS
+- js/admin-app.js                          (F1: auditoría de colección + label)
+- scripts/audit-admin-products-media.js    (NUEVO)
+- package.json                             (script + audit:final)
+- .github/workflows/tintin-audit.yml       (paso CI)
+- maintenance/11-2-productos-colecciones-imagenes.txt (este registro)
+- diagnostic-manifest.json                 (regenerado)
+
+PENDIENTES REALES: ninguno crítico/alto dentro del alcance. Recomendación
+futura no urgente: unificar la subida de Contenido (ImgBB) al widget Cloudinary.

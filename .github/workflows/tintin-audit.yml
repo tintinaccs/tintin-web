@@ -63,3 +63,6 @@ jobs:
 
       - name: Audit Super Admin foundation (auth, nav, a11y, modals)
         run: node scripts/audit-admin-foundation.js
+
+      - name: Audit products, collections and images (admin + storefront)
+        run: node scripts/audit-admin-products-media.js
