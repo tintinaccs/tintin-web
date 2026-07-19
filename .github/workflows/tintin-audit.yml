@@ -87,3 +87,6 @@ jobs:
 
       - name: Audit auxiliary pages (404 error page + legacy nosotros redirect)
         run: node scripts/audit-aux-pages.js
+
+      - name: Final integration audit (single sources of truth, admin↔public, SEO, PWA, no obsolete)
+        run: node scripts/audit-final-integration.js

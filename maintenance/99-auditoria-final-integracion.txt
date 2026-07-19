@@ -1,0 +1,154 @@
+TINTIN-WEB — AUDITORÍA FINAL INTEGRAL DE INTEGRACIÓN
+Fecha: 19/07/2026
+Rama: maintenance/final-integration-audit
+Auditoría nueva: scripts/audit-final-integration.js  (npm run audit:final-integration)
+
+Objetivo: revisión transversal de toda la aplicación después de los
+mantenimientos previos (etapas 01–10, serie 11.x del Super Admin, correos 11.7,
+estadísticas 11.8 y páginas públicas 12.x). No se reescribió ningún módulo que
+ya funciona; solo se buscaron problemas restantes, contradicciones, regresiones
+y conexiones incompletas.
+
+═══════════════════════════════════════════════════════════════════════
+1) MÓDULOS VERIFICADOS
+═══════════════════════════════════════════════════════════════════════
+SITIO PÚBLICO ..... index, catalogo, collections, product, contact, about,
+                    envios, cambios-devoluciones, preguntas-frecuentes,
+                    terminos, privacidad, 404 y la ruta legacy nosotros.
+SUPER ADMIN ....... admin.html + admin-images.html: base/seguridad, productos/
+                    colecciones/imágenes, pedidos, usuarios/roles/permisos,
+                    contenido/apariencia, correos/mensajes, estadísticas/
+                    auditoría/diagnóstico.
+PLATAFORMA ........ Firebase (Auth/Firestore), reglas firestore.rules,
+                    Cloudflare Pages Functions (5 endpoints /api/*), Resend,
+                    Cloudinary, analítica propia y esquema de color en vivo.
+
+Integración Super Admin ↔ público (todo por documentos Firestore; el admin
+escribe, el público lee — sin datos hardcodeados que contradigan la config):
+  settings/general   → contacto (whatsapp.js), ciudades de envío (envios.html).
+  settings/storeGate → tienda abierta/cerrada (store-gate-core.js).
+  settings/appearance + colorSchemes → color en vivo (color-scheme.js).
+  site_content       → textos/imagenes editables (site-content.js).
+  products/collections → catálogo y carrito (products-store/collections-store).
+  emailSettings/storeGate.emailAccess → correos (admin-email-gate-sync).
+
+Fuentes ÚNICAS de verdad confirmadas:
+  - Firebase se inicializa SOLO en js/firebase.js (un initializeApp, un config).
+  - "Tienda abierta/cerrada" tiene un núcleo único: store-gate.js se apoya en
+    store-gate-core.js; se entrega en todas las páginas vía page-loader.js.
+  - Catálogo: fuente única en Firestore (sin PRODUCTS de relleno).
+
+═══════════════════════════════════════════════════════════════════════
+2) PROBLEMAS CORREGIDOS EN ESTA AUDITORÍA
+═══════════════════════════════════════════════════════════════════════
+A. Archivos obsoletos eliminados (código muerto / de otra plataforma):
+   - tintin-code-sh/ (8 .txt): fragmentos de plantillas SHOPIFY LIQUID
+     ({% liquid %}, section.settings…), ajenos a esta app (Firebase/Cloudflare)
+     y sin ninguna referencia. Eran duplicación de markup con riesgo de "drift".
+   - images/Mi cuenta.png, images/Busqueda.png, images/Carrito.png: íconos PNG
+     de header reemplazados hace tiempo por SVG inline; sin ninguna referencia.
+   (No se tocó images/.gitkeep ni assets/og-cover.jpg, que sí se usa.)
+
+B. Auditoría CI nueva scripts/audit-final-integration.js (17 comprobaciones)
+   que fija de forma permanente las garantías de integración transversal
+   (ver sección 5). Wireada en package.json (audit:final) y en el workflow
+   tintin-audit.yml.
+
+No hubo que corregir código de módulos funcionales: la revisión no encontró
+bugs de comportamiento nuevos. Los mantenimientos previos ya dejaron el sistema
+en verde.
+
+═══════════════════════════════════════════════════════════════════════
+3) PROBLEMAS YA RESUELTOS (verificados sin regresión)
+═══════════════════════════════════════════════════════════════════════
+- Correos: un solo canal real (Resend/Cloudflare) para el pedido; el checkout ya
+  no usa el webhook viejo de Apps Script (etapa 11.7). Sin doble envío.
+- Estadísticas: los indicadores muestran "—" (no "0") ante consulta cargando o
+  fallida; se diferencia vacío/error/sin permisos/sin conexión (etapa 11.8).
+- Auditoría: inmutable (update/delete: if false), con actor/acción/fecha/objetivo.
+- Tienda cerrada: bloqueo real server-side (settings/storeGate + reglas) y
+  overlay que no se puede ocultar tras el loader.
+- Catálogo/colecciones: fuente única Firestore, sin fallback ficticio.
+- Imágenes: Cloudinary firmado en el servidor; sin claves en el frontend.
+- Permisos: el Super Admin real (Firebase Auth) nunca se bloquea; cada acción
+  sensible valida rol/permiso, no solo la UI.
+- Privacidad analítica: nunca IP/GPS; geo aproximada; IDs que rotan por día.
+- SEO: robots.txt desindexa admin/login/checkout/perfil; sitemap solo páginas
+  públicas de contenido; canonical en un dominio único; 404 y nosotros noindex.
+
+═══════════════════════════════════════════════════════════════════════
+4) RIESGOS RESTANTES / LIMITACIONES CONOCIDAS
+═══════════════════════════════════════════════════════════════════════
+- SIN SERVICE WORKER: manifest.json declara display:standalone pero no hay SW.
+  El sitio funciona sin offline; en algunos navegadores el prompt de instalación
+  puede ser limitado. Es una decisión de alcance (no se requiere offline). NO se
+  agregó un SW para no introducir una capa de caché nueva con riesgo sobre el
+  esquema de cache-busting existente.
+- VERSIONES DE CACHÉ MÚLTIPLES: convive la versión dominante
+  tintin-20260716-cloudinary-fix-1 con sufijos puntuales (-resend-1,
+  -checkout-name-1, 15/16 de logo/producto). Es solo cache-busting: no rompe la
+  carga; es una inconsistencia cosmética a unificar en un futuro bump global.
+- DOBLE LISTENER MENOR: envios.html mantiene 1 listener propio de settings/general
+  (ciudades) además del global de whatsapp.js (contacto). Apuntan a DOM distinto;
+  es una lectura extra mínima, no un conflicto.
+- apiKey de Firebase en el cliente (js/firebase.js): es el comportamiento normal
+  de Firebase web (identificador de proyecto, no secreto). La seguridad real la
+  imponen firestore.rules y las Functions del servidor.
+- Contenido legal (terminos/privacidad): revisión técnica, NO jurídica.
+- Apps Script legacy (email-notify.js): permanece importado por admin-app.js
+  como respaldo inerte detrás del interceptor Resend y de los botones de promo
+  deshabilitados. No se elimina porque sigue con un import activo; no envía.
+
+═══════════════════════════════════════════════════════════════════════
+5) PRUEBAS AUTOMÁTICAS
+═══════════════════════════════════════════════════════════════════════
+Suite completa: `npm run audit:final` encadena 29 auditorías estáticas
+(41 archivos scripts/audit-*.js en total). Todas en verde; CRITICAL: 0.
+
+Auditoría nueva de integración (scripts/audit-final-integration.js, 17 checks):
+  Fuente única  → Firebase (una sola init) y núcleo único de tienda.
+  Admin↔público → settings/general, storeGate, appearance+colorSchemes,
+                  site_content consumidos por los módulos públicos.
+  SEO           → robots bloquea privadas + sitemap sin admin/404/nosotros.
+  PWA/hosting   → manifest válido con íconos existentes; _routes.json == las 5
+                  funciones reales; firebase.json solo reglas.
+  Limpieza      → sin tintin-code-sh, sin PNG obsoletos, sin Liquid ajeno.
+  CI            → todo `node scripts/*.js` de package.json y de los workflows
+                  existe en disco (sin referencias rotas).
+
+CI del repositorio (GitHub Actions): tintin-audit.yml corre las auditorías por
+dominio + esta final; existen workflows por fase (email/collections/images/etc.)
+y deploy-pages.yml. diagnostic-manifest.json regenerado y consistente
+(audit:diagnostics verde).
+
+═══════════════════════════════════════════════════════════════════════
+6) PRUEBAS MANUALES RECOMENDADAS (no automatizables en CI estático)
+═══════════════════════════════════════════════════════════════════════
+Como esta auditoría es estática (no abre navegador ni toca datos reales), se
+recomienda validar manualmente en el entorno real:
+  1. Login del Super Admin real y de cada rol (admin/agent/viewer/client).
+  2. Alta/edición/baja de producto → reflejo inmediato en catálogo y carrito.
+  3. Checkout completo → correo de confirmación por Resend (admin + clienta).
+  4. Reenvío de correo desde el panel (solo Super Admin).
+  5. Cambiar contacto/redes en Configuración → verlo en el footer público.
+  6. Cambiar esquema de color en Apariencia → verlo en vivo en el público.
+  7. Editar textos de una página informativa → verlo aplicado por selector.
+  8. Cerrar la tienda → overlay en todas las páginas públicas.
+  9. Estadísticas con y sin datos / con permisos denegados → "—" vs "0".
+ 10. Responsive real en desktop/tablet/mobile de las páginas tocadas.
+
+═══════════════════════════════════════════════════════════════════════
+7) ESTADO FINAL DEL REPOSITORIO
+═══════════════════════════════════════════════════════════════════════
+- Todas las páginas HTML públicas tienen mantenimiento documentado (maintenance/,
+  18 registros) y auditoría CI específica.
+- 41 auditorías estáticas; audit:final en verde (CRITICAL: 0).
+- Fuentes de verdad únicas confirmadas (Firebase, tienda, catálogo).
+- Sin archivos obsoletos conocidos ni plantillas de otra plataforma.
+- Integración Super Admin ↔ público verificada de punta a punta.
+- Riesgos restantes documentados (arriba), ninguno bloqueante.
+
+Conclusión: la aplicación queda integrada y consistente. Los puntos abiertos son
+mejoras opcionales (Service Worker, unificación de versión de caché), no defectos.
+
+Merge únicamente con CI en verde.
