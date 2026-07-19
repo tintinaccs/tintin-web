@@ -1,0 +1,168 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.8
+ESTADÍSTICAS, AUDITORÍA Y DIAGNÓSTICO
+Fecha: 19/07/2026
+Rama: maintenance/admin-analytics-audit
+Auditoría nueva: scripts/audit-admin-analytics-audit.js  (npm run audit:analytics-audit)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de: Dashboard, Estadísticas, Presencia, Sesiones,
+Visitantes, Ubicación aproximada, Auditoría, Logs y Diagnóstico del sitio.
+
+Antes de tocar nada se revisó main, los PR mergeados (hasta #177), maintenance/
+y las auditorías existentes:
+- audit-admin-foundation.js  → base del panel (auth, nav, limpieza de listeners).
+- audit-security-phase8.js / audit-postphase-security.js → identidad Super Admin,
+  logs, reglas por rol.
+- audit-diagnostics.js / audit-diagnostic-findings.js → diagnóstico del sitio.
+No se rehízo nada de eso.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL
+═══════════════════════════════════════════════════════════════════════
+Dashboard + Estadísticas ..... js/admin-app.js (renderDashboardData,
+                               renderGeneralStatistics, renderStatisticsTrend,
+                               listenStatisticsTraffic, listenDashboardSessions,
+                               listenDashboardPresence)
+Analítica del sitio .......... js/site-activity.js (sesiones/presencia/geo
+                               aproximada, consentida)
+Endpoint de geo .............. functions/api/visitor-geo.js (Cloudflare edge)
+Stats por usuaria ............ js/order-stats.js
+Auditoría / Logs ............. js/admin-app.js (logAudit, loadAuditLog,
+                               renderAuditLogTable, bulkExportAuditLog)
+Diagnóstico .................. js/admin-site-diagnostics.js, js/diagnostic-core.js
+Reglas server-side ........... firestore.rules (sitePresence, siteTraffic,
+                               auditLog)
+
+═══════════════════════════════════════════════════════════════════════
+BUG REAL ENCONTRADO — "0" cuando la consulta no cargó / falló
+═══════════════════════════════════════════════════════════════════════
+En Estadísticas, los indicadores de pedidos y usuarios ya mostraban "—" cuando
+su consulta no estaba lista o fallaba (adminRealtimeReady.orders / .users). Pero
+los indicadores derivados de TRÁFICO, PRESENCIA y PRODUCTOS se pintaban con el
+conteo crudo, así que ante una lectura fallida o aún en curso mostraban "0":
+
+  - statistics-visitors  → "0"        (siteTraffic no leído/falló)
+  - statistics-sessions  → "0 sesiones"
+  - statistics-online    → "0"        (sitePresence falló; el Dashboard sí ponía
+                                        "—", la sección Estadísticas no)
+  - statistics-active-products / statistics-low-stock → "0 con stock bajo"
+                                        (products aún sin cargar o con error)
+  - statistics-blocked-users → "0 bloqueados" (sin respetar disponibilidad)
+
+Eso viola la regla explícita: "No presentes cero cuando la consulta falló;
+diferenciá claramente vacío, error, sin permisos y sin conexión." Un "0" ahí es
+indistinguible de "no hay datos" cuando en realidad la consulta no se completó.
+
+═══════════════════════════════════════════════════════════════════════
+CAMBIOS APLICADOS (mínimos y quirúrgicos) — js/admin-app.js
+═══════════════════════════════════════════════════════════════════════
+1) adminRealtimeReady ahora tiene una bandera por fuente:
+   { orders, users, products, traffic, presence }.
+
+2) renderGeneralStatistics: cada indicador derivado se gatea con su bandera y
+   cae a "—" si la fuente no resolvió con éxito:
+   - visitors / sessions → adminRealtimeReady.traffic
+   - conversion          → adminRealtimeReady.orders && .traffic && uniqueVisitors
+   - online              → adminRealtimeReady.presence
+   - active-products / low-stock → adminRealtimeReady.products
+   - blocked-users       → adminRealtimeReady.users
+
+3) Las banderas se encienden al primer éxito y se apagan al fallar, con
+   re-render inmediato para que el indicador vuelva a "—" (no quede un valor
+   viejo ni un "0"):
+   - listenStatisticsTraffic: traffic=false al iniciar, true tras cargar el
+     historial, false + renderGeneralStatistics() en el catch.
+   - listenDashboardPresence: presence=true en éxito, false + render en error.
+   - loadProductos: products=true en éxito, false + render en error.
+
+Diferenciación resultante:
+   - Cargando / sin resolver → "—"
+   - Error / sin permisos / sin conexión (la lectura lanza) → "—" + estado de
+     error visible (statistics-live-status / prod-loading / dashboard-live-status)
+   - Vacío real (fuente OK, cero registros) → "0" legítimo
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+ZONA HORARIA DE PARAGUAY
+- statisticsDayKey, renderStatisticsTrend, listenStatisticsTraffic y
+  paraguayDayKey (site-activity.js) agrupan por día con America/Asuncion.
+
+CÁLCULOS
+- Cancelados/rechazados fuera de facturación (statisticsOrderIsValid) y del
+  gasto por usuaria (order-stats: validForSpent = !isCancelled, Math.max(0,…)).
+- Ticket promedio = revenue / validOrders.length con guardia de cero y bandera.
+- Conversión con guardia de denominador (uniqueVisitors) — nunca divide por 0.
+
+PRIVACIDAD (no IP / no GPS)
+- site-activity.js: guarda solo ciudad/región/país/countryCode/geoSource
+  aproximados; nunca IP, GPS, coordenadas, código postal, navegador, nombre,
+  correo ni referidor. ID aleatorio que ROTA por día (dailyId) y no se vincula a
+  la cuenta. Todo bajo consentimiento (hasStatisticsConsent / onPrivacyConsentChange).
+- functions/api/visitor-geo.js: devuelve approximate:true con ciudad/región/país;
+  "Nunca se devuelve IP, coordenadas, código postal, ASN…".
+- firestore.rules: presenceIsValid / trafficSessionIsValid usan hasOnly con la
+  lista blanca de campos → el servidor RECHAZA cualquier IP/lat/lng/postal.
+
+SESIONES / PRESENCIA
+- Una sesión por pestaña y día (SESSION_RECORDED_PREFIX); heartbeat 60s que se
+  detiene con la pestaña oculta o en pagehide; el panel (admin/admin-images) no
+  se cuenta como tráfico; localhost/previews tampoco escriben.
+- Listeners liberados en pagehide (stopAdminRealtimeData / stopDashboardActivityMetrics).
+
+AUDITORÍA / LOGS
+- logAudit registra actor (email+rol), acción, objetivo (tipo/id/label), fecha
+  (serverTimestamp) y si fue masiva (bulk/bulkCount).
+- firestore.rules: auditLog read solo Super Admin; update/delete: if false
+  (inmutable). La tabla diferencia cargando / error / vacío. La única acción
+  masiva es exportar CSV (nunca editar/borrar).
+- sitePresence/siteTraffic: read/delete solo Super Admin; sesiones de tráfico
+  con update: if false (inmutables).
+
+DIAGNÓSTICO
+- initSiteDiagnostics se inicia solo para el Super Admin real
+  (role === 'superadmin' && email === SUPER_ADMIN). Cobertura de falsos positivos
+  y diagnóstico real ya blindada por audit-diagnostics.js / audit-diagnostic-findings.js.
+
+LÍMITES / PAGINACIÓN
+- Historial de tráfico con getDocsPaginated (maxDocs 5000). Recalculación global
+  de stats corta si supera el tope seguro (truncated → error explícito).
+- Listeners de pedidos/usuarios con limit(10000); auditLog con limit(200).
+
+NOTA (revisado, sin cambio): renderDashboardData calcula "pedidos hoy" y "ventas
+del mes" con la medianoche LOCAL del dispositivo. Para la tienda (admin en
+Paraguay) coincide con America/Asuncion; la sección Estadísticas ya normaliza
+todo a Paraguay. No se cambia para no introducir riesgo sin beneficio real.
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-analytics-audit.js (31 checks)
+═══════════════════════════════════════════════════════════════════════
+1. No mostrar "0" ante fallo/carga: banderas por fuente, indicadores gateados,
+   encendido/apagado con re-render, y PRUEBA NEGATIVA de que el patrón viejo
+   (conteo crudo sin bandera) ya no existe.  (9)
+2. Zona horaria de Paraguay en estadísticas y en la analítica del sitio.  (2)
+3. Cálculos: cancelados fuera de facturación, ticket promedio con guardia,
+   gasto sin negativos.  (3)
+4. Privacidad: nada de IP/GPS en cliente, endpoint ni reglas (hasOnly), ID que
+   rota por día, consentimiento.  (5)
+5. Sesiones/presencia: una por pestaña/día, heartbeat que se detiene, panel no
+   rastreado, listeners liberados.  (4)
+6. Auditoría inmutable con actor/acción/fecha/objetivo/masivo; diferencia
+   cargando/error/vacío; exportación de solo lectura.  (4)
+7. Presencia/tráfico solo Super Admin (+ sesiones inmutables) y diagnóstico
+   gateado al Super Admin real.  (2)
+8. Límites/paginación con topes y corte por truncado.  (2)
+
+═══════════════════════════════════════════════════════════════════════
+CI / VERIFICACIÓN
+═══════════════════════════════════════════════════════════════════════
+- npm run audit:analytics-audit  → 31/31 OK
+- node --check js/admin-app.js / js/site-activity.js → OK
+- npm run audit:final → exit 0 (todas las auditorías estáticas verdes, CRITICAL: 0)
+- diagnostic-manifest.json regenerado (deriva por corrimiento de líneas + índice
+  de la auditoría nueva; audit:diagnostics verde).
+- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+
+Merge únicamente con CI verde.

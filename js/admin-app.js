@@ -40,7 +40,11 @@ let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
 let adminUsersUnsubscribe = null;
-let adminRealtimeReady = { orders: false, users: false };
+// Cada bandera indica si esa consulta ya resolvió al menos una vez con éxito.
+// Sirve para NO mostrar "0" cuando en realidad la consulta está cargando o
+// falló (permisos/conexión) — en ese caso el indicador muestra "—", igual que
+// los de pedidos/usuarios, y así se diferencia "vacío" de "error/cargando".
+let adminRealtimeReady = { orders: false, users: false, products: false, traffic: false, presence: false };
 let statisticsTrafficSessions = [];
 let statisticsTrafficHistorySessions = [];
 let statisticsRangeDays = 7;
@@ -958,13 +962,13 @@ function renderGeneralStatistics() {
   statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders && validOrders.length ? formatPrice(revenue / validOrders.length) : '—');
   statisticsSetText('statistics-new-users', adminRealtimeReady.users ? String(rangeUsers.length) : '—');
   statisticsSetText('statistics-active-users', adminRealtimeReady.users ? String(activeUsers) : '—');
-  statisticsSetText('statistics-blocked-users', `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}`);
-  statisticsSetText('statistics-visitors', String(uniqueVisitors));
-  statisticsSetText('statistics-sessions', `${statisticsTrafficSessions.length} sesión${statisticsTrafficSessions.length === 1 ? '' : 'es'}`);
-  statisticsSetText('statistics-conversion', uniqueVisitors ? `${(validOrders.length / uniqueVisitors * 100).toFixed(1)}%` : '—');
-  statisticsSetText('statistics-online', String(activePresence.length));
-  statisticsSetText('statistics-active-products', String(activeProducts.length));
-  statisticsSetText('statistics-low-stock', `${lowStockProducts} con stock bajo`);
+  statisticsSetText('statistics-blocked-users', adminRealtimeReady.users ? `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}` : '—');
+  statisticsSetText('statistics-visitors', adminRealtimeReady.traffic ? String(uniqueVisitors) : '—');
+  statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${statisticsTrafficSessions.length} sesión${statisticsTrafficSessions.length === 1 ? '' : 'es'}` : '—');
+  statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && uniqueVisitors ? `${(validOrders.length / uniqueVisitors * 100).toFixed(1)}%` : '—');
+  statisticsSetText('statistics-online', adminRealtimeReady.presence ? String(activePresence.length) : '—');
+  statisticsSetText('statistics-active-products', adminRealtimeReady.products ? String(activeProducts.length) : '—');
+  statisticsSetText('statistics-low-stock', adminRealtimeReady.products ? `${lowStockProducts} con stock bajo` : '—');
 
   const orderStatuses = new Map();
   const paymentStatuses = new Map();
@@ -1028,6 +1032,7 @@ async function listenStatisticsTraffic() {
   statisticsTrafficHistorySessions = [];
   if (currentRole !== 'superadmin') return;
   const loadToken = ++statisticsTrafficLoadToken;
+  adminRealtimeReady.traffic = false;
   const dayKeys = [];
   for (let offset = statisticsRangeDays - 1; offset >= 0; offset -= 1) {
     const date = new Date();
@@ -1050,11 +1055,15 @@ async function listenStatisticsTraffic() {
     );
     statisticsTrafficHistorySessions = historical;
     statisticsTrafficSessions = historical.concat(dashboardActivityState.sessions);
+    adminRealtimeReady.traffic = true;
     renderGeneralStatistics();
   } catch (error) {
     if (loadToken !== statisticsTrafficLoadToken) return;
+    adminRealtimeReady.traffic = false;
     statisticsSetText('statistics-live-status', 'Actividad no disponible');
     statisticsSetText('statistics-data-status', `No se pudo actualizar la actividad: ${error.code || error.message}`);
+    // Que los indicadores de visitantes/sesiones muestren "—" (no "0") al fallar.
+    renderGeneralStatistics();
     console.warn('Historial de actividad no disponible:', error);
   }
 }
@@ -1248,11 +1257,15 @@ function listenDashboardPresence() {
     query(collection(db, 'sitePresence'), where('lastSeen', '>=', recentSince)),
     snapshot => {
       dashboardActivityState.presence = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      adminRealtimeReady.presence = true;
       renderDashboardActivityMetrics();
     },
     error => {
+      adminRealtimeReady.presence = false;
       document.getElementById('stat-online-now').textContent = '—';
       document.getElementById('dashboard-live-status').textContent = 'Presencia no disponible';
+      // El indicador "En línea" de Estadísticas muestra "—" (no "0") al fallar.
+      renderGeneralStatistics();
       console.warn('Métrica de presencia no disponible:', error);
     }
   );
@@ -4379,11 +4392,15 @@ function loadProductos() {
     query(collection(db, 'products'), orderBy('name')),
     snap => {
       _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+      adminRealtimeReady.products = true;
       applyProductFilters();
       renderGeneralStatistics();
     },
     e => {
+      adminRealtimeReady.products = false;
       document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
+      // Los indicadores de productos activos/stock bajo muestran "—" (no "0").
+      renderGeneralStatistics();
       console.error(e);
     }
   );
