@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T13:39:57.191Z",
-  "sourceFingerprint": "61eb9bf8100f22f969a1db1f56f428d955852fbaee5c2f52e10dd140639874b0",
+  "generatedAt": "2026-07-19T14:00:24.458Z",
+  "sourceFingerprint": "91792d1b12ddb5db92498543d183d191b3bd9d8721e0991e6b181223dff1a00a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 283,
-    "textFiles": 246,
-    "totalBytes": 5409371,
+    "files": 285,
+    "textFiles": 248,
+    "totalBytes": 5430444,
     "pages": 18,
-    "modules": 145
+    "modules": 146
   },
   "viewports": [
     {
@@ -14719,8 +14719,8 @@
     },
     {
       "path": "js/color-scheme-instant.js",
-      "bytes": 8656,
-      "sha256": "ec97902c01401a7fed379471f932f8ae5ee7aa0fa7defee12eaaacb6dd125fca",
+      "bytes": 9254,
+      "sha256": "d629b50db6d9aa2291aae3dc69d5077d21832308818246f7335ceaadb6000433",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14730,8 +14730,8 @@
     },
     {
       "path": "js/color-scheme.js",
-      "bytes": 4506,
-      "sha256": "2f1647640c0693e3790995a227661a29d8631d588c2531f8e24996556f05776d",
+      "bytes": 5379,
+      "sha256": "9d37b944eb758a8692a6b15bcbb0a4cb91c7721cba0db318a1bfc32ebe342edd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16303,6 +16303,17 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-admin-content-appearance.js",
+      "bytes": 9475,
+      "sha256": "755727f8ded2c969a712f46ab6d5255828427132127d966b6b81599f92291faa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-admin-foundation.js",
       "bytes": 14731,
       "sha256": "347fd48abea394d40d97189132284f20555be9ddaffb539242de37e60c487755",
@@ -16965,8 +16976,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 2167,
-      "sha256": "26abc2204cac96ae0fd5fec52a64f341b26c99c036f9bb4e49194167849a45c9"
+      "bytes": 2300,
+      "sha256": "13158cc429d6f57b2dd4b46c9918c237712616ab8eed3b39d5ef2741cd8a22ea"
     },
     {
       "path": "404.html",
@@ -17769,14 +17780,14 @@
     {
       "path": "js/color-scheme-instant.js",
       "extension": ".js",
-      "bytes": 8656,
-      "sha256": "ec97902c01401a7fed379471f932f8ae5ee7aa0fa7defee12eaaacb6dd125fca"
+      "bytes": 9254,
+      "sha256": "d629b50db6d9aa2291aae3dc69d5077d21832308818246f7335ceaadb6000433"
     },
     {
       "path": "js/color-scheme.js",
       "extension": ".js",
-      "bytes": 4506,
-      "sha256": "2f1647640c0693e3790995a227661a29d8631d588c2531f8e24996556f05776d"
+      "bytes": 5379,
+      "sha256": "9d37b944eb758a8692a6b15bcbb0a4cb91c7721cba0db318a1bfc32ebe342edd"
     },
     {
       "path": "js/contact-maintenance.js",
@@ -18229,6 +18240,12 @@
       "sha256": "7dcf7a91332d292ea5e375683e31704a265233475c5011f4cb7419ec75889b94"
     },
     {
+      "path": "maintenance/11-5-contenido-apariencia.txt",
+      "extension": ".txt",
+      "bytes": 9876,
+      "sha256": "97049a4c85b982c64001662a1c7dbd02cc84576dedea0897e9803a0f6c4673b2"
+    },
+    {
       "path": "maintenance/11-admin-configuracion-sincronizacion.txt",
       "extension": ".txt",
       "bytes": 6631,
@@ -18249,8 +18266,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 2667,
-      "sha256": "ba0326db2168459e901f85fd8383d399ab1fbe406ffc4163edd5985135c989f8"
+      "bytes": 2785,
+      "sha256": "66bab8aded170b41a681ab3883032bcee4b0dde501aea7f59b86d4ac6e3ab4bc"
     },
     {
       "path": "perfil.html",
@@ -18293,6 +18310,12 @@
       "extension": ".js",
       "bytes": 2072,
       "sha256": "500b822127b8e0af4f54ac1cf5efc5eb7de48ece886aa1ef6a69298e74628927"
+    },
+    {
+      "path": "scripts/audit-admin-content-appearance.js",
+      "extension": ".js",
+      "bytes": 9475,
+      "sha256": "755727f8ded2c969a712f46ab6d5255828427132127d966b6b81599f92291faa"
     },
     {
       "path": "scripts/audit-admin-foundation.js",
@@ -19977,7 +20000,7 @@
     },
     {
       "file": "js/color-scheme-instant.js",
-      "line": 61,
+      "line": 73,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -22004,7 +22027,7 @@
           },
           {
             "file": "js/color-scheme.js",
-            "line": 111,
+            "line": 128,
             "operation": "doc"
           },
           {

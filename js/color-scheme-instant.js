@@ -17,11 +17,23 @@
   var released = false;
   var scriptUrl = document.currentScript && document.currentScript.src;
 
+  // Mismo enforcement que js/color-scheme.js: en la primera pintura solo se
+  // aplican valores que sean un color estricto (HEX / rgb(a) / hsl(a)). Así una
+  // caché manipulada o vieja nunca inyecta un url(...) ni CSS arbitrario.
+  function isSafeColorValue(value) {
+    if (typeof value !== 'string') return false;
+    var v = value.trim();
+    if (!v || v.length > 64) return false;
+    return /^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v) ||
+      /^rgba?\(\s*[0-9.\s,%/]+\)$/i.test(v) ||
+      /^hsla?\(\s*[0-9.\s,%/deg]+\)$/i.test(v);
+  }
+
   function applyMap(map) {
     if (!map || typeof map !== 'object') return;
     var key;
     for (key in map) {
-      if (Object.prototype.hasOwnProperty.call(map, key)) {
+      if (Object.prototype.hasOwnProperty.call(map, key) && isSafeColorValue(map[key])) {
         root.style.setProperty(key, map[key]);
       }
     }

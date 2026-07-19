@@ -1,0 +1,139 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.6
+CONTENIDO Y APARIENCIA (panel + sitio público)
+Fecha: 19/07/2026
+Rama: maintenance/admin-content-appearance
+Auditoría nueva: scripts/audit-admin-content-appearance.js  (npm run audit:content-appearance)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de los módulos administrativos que controlan contenido
+y apariencia del sitio público. Antes de tocar nada se revisó main, los PR
+mergeados, maintenance/ y las auditorías existentes:
+- audit-content-phase6.js  → ya blinda el editor de Contenido (esquema fijo,
+  Firestore guarda valores no HTML, render público con nodos de texto, enlaces
+  saneados con sanitizeContentHref, campos ausentes conservan el HTML publicado).
+- audit-color-scheme.js     → ya blinda Apariencia (catálogo de tokens completo,
+  sin duplicados, cada token con respaldo CSS y "cada token controla un consumidor
+  real", filas con nombre/variable/muestra/valor/reset, preview inmediato sin
+  mutar borrador, selector HEX/RGB/HSL con validación).
+No se rehízo nada de eso.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL
+═══════════════════════════════════════════════════════════════════════
+CONTENIDO
+- Esquema ............ js/content-schema.js (CONTENT_PAGE_IDS: 8 páginas fijas,
+                       campos con selector + tope de longitud)
+- Editor (panel) ..... js/admin-content-phase6.js (+ sección Contenido en admin-app.js,
+                       contUploadImage por ImgBB con clave del usuario — ver 11.3)
+- Aplicación pública . js/site-content.js (onSnapshot → selector real, nodos de
+                       texto, sanitizeContentHref)
+- Bienvenida ......... js/welcome-config.js, welcome-tutorial-runtime.js,
+                       admin-welcome-control.js
+APARIENCIA
+- Catálogo de tokens . js/color-scheme-catalog.js (GLOBAL_TOKENS, ADMIN_TOKENS,
+                       DEVICE_BREAKPOINTS)
+- Editor (panel) ..... sección Apariencia en admin-app.js (apar*), color-picker-widget.js,
+                       color-contrast-utils.js
+- Aplicación pública . js/color-scheme.js (onSnapshot colorSchemes + settings/appearance)
+                       + js/color-scheme-instant.js (primera pintura desde caché)
+- Panel admin ........ js/admin-color-scheme.js (tokens administrativos)
+
+Un dato importante: NO existe "agregar/eliminar página". El editor de contenido
+edita VALORES sobre 8 páginas fijas por selector en código — nunca crea/borra
+páginas ni inyecta HTML/CSS/selectores. No hay ningún botón decorativo de
+"nueva página": es honesto por diseño.
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+CONTENIDO
+- Firestore guarda valores, nunca HTML/CSS/selectores (los selectores viven en
+  content-schema.js). El sitio público aplica cada valor a su selector real
+  (querySelectorAll(item.selector)) → cada control produce un cambio real.
+- Render seguro: createTextNode + replaceChildren + appendPlainLines; jamás
+  innerHTML de datos de Firestore. Los enlaces pasan por sanitizeContentHref
+  (bloquea javascript:/data:/vbscript:/file:) antes de setAttribute('href').
+- onSnapshot para reflejar cambios en vivo; campos ausentes conservan el HTML
+  publicado (fallback).
+- Reglas: site_content acotado a Super Admin o al permiso dinámico de contenido.
+
+APARIENCIA
+- Cada token del catálogo mapea a una variable CSS real (--color-*) que un
+  consumidor usa (verificado por audit-color-scheme) → sin opciones decorativas.
+- Los colores se aplican como custom properties (root.style.setProperty valor
+  puro), nunca como reglas/bloques CSS.
+- Preview inmediato sin mutar el borrador (aparTransientColor / onPreview),
+  guardia de cambios sin guardar (aparHasPending / aparRegisterUnsavedGuard),
+  overrides por dispositivo (DEVICE_BREAKPOINTS + deviceOverrides), y
+  sincronización en tiempo real (onSnapshot sobre colorSchemes y settings/appearance).
+- Ante un error de lectura del esquema, se conserva el último aplicado/cacheado
+  y se libera el loader igual (no bloquea la página).
+- Importar un esquema valida cada color (isValidColorLocal) y descarta inválidos.
+- Reglas: settings/appearance y colorSchemes → write solo Super Admin.
+
+No hay modo claro/oscuro alternable por el usuario final: el esquema de colores
+es único y configurable por el Super Admin (se documenta como inexistente, no
+como pendiente).
+
+═══════════════════════════════════════════════════════════════════════
+HALLAZGO CORREGIDO
+═══════════════════════════════════════════════════════════════════════
+F1 [MEDIO — seguridad] — El apply público de colores no validaba el valor.
+  El editor valida la entrada (HEX/RGB/HSL en el picker) y el import también,
+  y solo el Super Admin puede escribir esquemas (firestore.rules). Pero el punto
+  donde un valor de Firestore/caché se vuelve CSS en vivo —
+  js/color-scheme.js (keyMapToCssVarMap → setProperty) y
+  js/color-scheme-instant.js (applyMap en la primera pintura)— aplicaba CUALQUIER
+  string sin validar. Un token usado como `background: var(--x)` con un valor
+  url(...) podría cargar una URL; y CSS arbitrario podría colarse por esa vía.
+  FIX: se agregó isSafeColorValue() en ambos módulos públicos. Un token solo se
+  aplica si su valor es un color ESTRICTO (HEX de 3/4/6/8, rgb(a) o hsl(a),
+  anclado ^...$, máx 64 chars). Cualquier otro valor se omite y el token cae a
+  su default de color-tokens.css. Así el sitio público NUNCA aplica una URL
+  peligrosa ni CSS arbitrario, sin importar cómo haya llegado el valor
+  (defensa en profundidad — cumple "no permitas insertar ... URLs peligrosas
+  desde el editor" en el punto de enforcement).
+  Verificado con casos: acepta #AD3F67, #fff, rgba(20,10,14,0.55), hsl(210 50% 40%);
+  rechaza url(https://evil), "red; } body{...}", "rgb(1,2,3) url(x)",
+  "expression(...)", "<script>".
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-content-appearance.js
+═══════════════════════════════════════════════════════════════════════
+21 comprobaciones estáticas: esquema de contenido fijo, aplicación por selector
+real y render seguro, enforcement de color seguro en el apply público (F1),
+tokens conectados, preview/unsaved/dispositivo/realtime, recuperación ante error
+y reglas de Firestore.
+
+Wiring:
+  - package.json: "audit:content-appearance" + incluida en "audit:final".
+  - .github/workflows/tintin-audit.yml: paso "Audit content and appearance".
+
+Prueba de que REALMENTE falla al romper el contrato: se quitó la validación de
+color del apply (F1) → ERROR + exit 1; se hizo que el contenido público usara
+innerHTML con datos → ERROR + exit 1; al restaurar, ambos vuelven a OK. Registrado.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS
+═══════════════════════════════════════════════════════════════════════
+- node --check de color-scheme.js y color-scheme-instant.js: OK.
+- Test del validador isSafeColorValue con 13 casos (válidos e inseguros): TODOS OK.
+- npm run audit:content-appearance: 21/21 OK.
+- npm run audit:content (Fase 6) y audit:colors: OK.
+- npm run audit:final (incluye la nueva): exit 0.
+- audit:tintin CRITICAL 0. audit:diagnostics OK (manifest regenerado).
+- Smoke test en Chromium (index público): sin errores JS propios; el esquema de
+  colores se aplica normal.
+
+ARCHIVOS TOCADOS
+- js/color-scheme.js                        (F1: isSafeColorValue en apply)
+- js/color-scheme-instant.js                (F1: isSafeColorValue en primera pintura)
+- scripts/audit-admin-content-appearance.js (NUEVO)
+- package.json                              (script + audit:final)
+- .github/workflows/tintin-audit.yml        (paso CI)
+- maintenance/11-5-contenido-apariencia.txt (este registro)
+- diagnostic-manifest.json                  (regenerado)
+
+PENDIENTES REALES: ninguno crítico/alto dentro del alcance.
