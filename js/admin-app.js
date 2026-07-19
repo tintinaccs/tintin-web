@@ -222,6 +222,7 @@ const AUDIT_ACTION_LABELS = {
   plantilla_creada:       '➕ Duplicó plantilla',
   plantilla_archivada:    '🗄️ Archivó/reactivó plantilla',
   plantilla_eliminada:    '🗑️ Eliminó plantilla',
+  crear_coleccion:        '➕ Creó colección',
   editar_coleccion:       '✏️ Editó colección',
   eliminar_coleccion:     '🗑️ Eliminó colección',
   config_correo_pedido:   '⚙️ Cambió correos automáticos de pedido',
@@ -5346,13 +5347,19 @@ window.collGuardar = async function() {
         await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: slug, updatedAt: serverTimestamp() }));
       }
       await deleteDoc(doc(db, 'collections', originalSlug));
+      // El CRUD de colección individual ahora deja rastro en Auditoría igual que
+      // el de productos y las acciones masivas de colecciones (antes solo se
+      // registraban las masivas, dejando huecos en el historial).
+      logAudit('editar_coleccion', 'coleccion', slug, name, `Renombrada "${originalSlug}" → "${slug}" · ${affected.length} producto(s) movidos`);
       toast(`Colección renombrada — ${affected.length} producto(s) actualizados`);
     } else if (originalSlug) {
       await updateDoc(doc(db, 'collections', originalSlug), data);
+      logAudit('editar_coleccion', 'coleccion', originalSlug, name, 'Datos actualizados');
       toast('Colección actualizada');
     } else {
       data.createdAt = serverTimestamp();
       await setDoc(doc(db, 'collections', slug), data);
+      logAudit('crear_coleccion', 'coleccion', slug, name, `Orden: ${order} · ${visible ? 'visible' : 'oculta'}`);
       toast('Colección creada');
     }
     UnsavedGuard.clear();
@@ -5393,6 +5400,7 @@ window.collEliminar = async function(slug, count) {
       // fails on Firestore's 500-write batch cap.
       await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
       await deleteDoc(doc(db, 'collections', slug));
+      logAudit('eliminar_coleccion', 'coleccion', slug, label, `${affected.length} producto(s) reasignados a "${targetSlug || '(sin colección)'}"`);
       toast(`${affected.length} producto(s) movidos y "${label}" eliminada`);
     } catch (e) {
       toast('Error al eliminar: ' + e.message);
@@ -5403,6 +5411,7 @@ window.collEliminar = async function(slug, count) {
   if (!confirm(`¿Eliminar la colección "${label}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'collections', slug));
+    logAudit('eliminar_coleccion', 'coleccion', slug, label, 'Colección vacía eliminada');
     toast('Colección eliminada');
   } catch (e) {
     toast('Error al eliminar: ' + e.message);
