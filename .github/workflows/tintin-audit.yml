@@ -84,3 +84,6 @@ jobs:
 
       - name: Audit help pages (envíos, cambios/devoluciones, preguntas frecuentes)
         run: node scripts/audit-help-pages.js
+
+      - name: Audit auxiliary pages (404 error page + legacy nosotros redirect)
+        run: node scripts/audit-aux-pages.js

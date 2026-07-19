@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T22:11:41.953Z",
-  "sourceFingerprint": "37799bce385f22acba22693bcc50f006ffed2d9a2bfbc2a854a81dfda6103e27",
+  "generatedAt": "2026-07-19T22:17:58.835Z",
+  "sourceFingerprint": "e802e8ce0a7fd8fdd132ca76fe9b773b3cc23c92bb5c6600ea6e09ec94e25bad",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 291,
-    "textFiles": 254,
-    "totalBytes": 5501747,
+    "files": 293,
+    "textFiles": 256,
+    "totalBytes": 5514848,
     "pages": 18,
-    "modules": 149
+    "modules": 150
   },
   "viewports": [
     {
@@ -16409,6 +16409,22 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-aux-pages.js",
+      "bytes": 6455,
+      "sha256": "f068ea3c080fabc961548d36ae270ad12e42b6c2811d1d75b7b2a31ecf742a24",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web/about.html",
+          "line": 115
+        }
+      ]
+    },
+    {
       "path": "scripts/audit-cart-phase7.js",
       "bytes": 5713,
       "sha256": "508e5fb079a594dd7a2d53519e1187ffa1722f41b5fe00b38fe7f28b9351b554",
@@ -17030,8 +17046,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 2745,
-      "sha256": "93af9896525102aba99f322d9180d509dc1229bd4f15594ad35df050652fc5bf"
+      "bytes": 2871,
+      "sha256": "8aaf611c8d019429945cab69b5ff38f2ad7a4fc3530bd237a91ad522c160fc4e"
     },
     {
       "path": "404.html",
@@ -18324,6 +18340,12 @@
       "sha256": "8cddc628080cc94ff8f30ad18b69f81f6ed5578744248a6095e258b82174d173"
     },
     {
+      "path": "maintenance/12-2-paginas-auxiliares.txt",
+      "extension": ".txt",
+      "bytes": 6435,
+      "sha256": "4c09cac4445e7dfdaf6e8a8924d7cba92600defeed88548f1c72d0eb1eeec64f"
+    },
+    {
       "path": "manifest.json",
       "extension": ".json",
       "bytes": 658,
@@ -18338,8 +18360,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 3091,
-      "sha256": "15b18715d2e4946d0463f77292340747d8038a7abf11dac92f7726974f567803"
+      "bytes": 3176,
+      "sha256": "b064ac4f3b2063976e83e2e1e5e8e059391f314420aa5eb7e4ff14dd7548969a"
     },
     {
       "path": "perfil.html",
@@ -18430,6 +18452,12 @@
       "extension": ".js",
       "bytes": 11563,
       "sha256": "a1cfbb4b263d5c71805bd5b1327a363db9f7f4dee2f65eb681f770c9657ee772"
+    },
+    {
+      "path": "scripts/audit-aux-pages.js",
+      "extension": ".js",
+      "bytes": 6455,
+      "sha256": "f068ea3c080fabc961548d36ae270ad12e42b6c2811d1d75b7b2a31ecf742a24"
     },
     {
       "path": "scripts/audit-cart-phase7.js",
