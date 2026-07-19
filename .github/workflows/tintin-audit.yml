@@ -75,3 +75,6 @@ jobs:
 
       - name: Audit content and appearance (editor safety, color apply)
         run: node scripts/audit-admin-content-appearance.js
+
+      - name: Audit emails and messaging (single Resend channel, no frontend secrets, WhatsApp)
+        run: node scripts/audit-admin-email-messaging.js
