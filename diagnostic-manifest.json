@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T22:17:58.835Z",
-  "sourceFingerprint": "e802e8ce0a7fd8fdd132ca76fe9b773b3cc23c92bb5c6600ea6e09ec94e25bad",
+  "generatedAt": "2026-07-19T22:57:57.897Z",
+  "sourceFingerprint": "ea1e02110bc387faad84b2370f8666807bd23249cb0f2c8ba79e108758f449fb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 293,
-    "textFiles": 256,
-    "totalBytes": 5514848,
+    "files": 284,
+    "textFiles": 250,
+    "totalBytes": 4495033,
     "pages": 18,
-    "modules": 150
+    "modules": 151
   },
   "viewports": [
     {
@@ -16634,6 +16634,24 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-final-integration.js",
+      "bytes": 9459,
+      "sha256": "3276117e4f7779e5443fac957c9b284ddb16bfab65ba8b4e92a1e50ebf53f41c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./store-gate-core.js",
+          "target": "scripts/store-gate-core.js",
+          "dynamic": false,
+          "line": 55
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-final-release.js",
       "bytes": 5291,
       "sha256": "f1711e14d649a68a2fd16c517cd1793c5716cd16ded860b50d4879816904e296",
@@ -17046,8 +17064,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 2871,
-      "sha256": "8aaf611c8d019429945cab69b5ff38f2ad7a4fc3530bd237a91ad522c160fc4e"
+      "bytes": 3028,
+      "sha256": "928fc374ed54802be47638d6942a6d3d6238625b3c5faf7de74e8934359927a3"
     },
     {
       "path": "404.html",
@@ -17630,24 +17648,6 @@
       "extension": ".json",
       "bytes": 342,
       "sha256": "adc15c1ff999c3b7bb77db5f03f7d8b51c27d7895630e84269cdc5ab55965f41"
-    },
-    {
-      "path": "images/Busqueda.png",
-      "extension": ".png",
-      "bytes": 237714,
-      "sha256": "65f2658d2bfec126b23b7c232e28d9482003eec1db1a67cbaa532834bd827324"
-    },
-    {
-      "path": "images/Carrito.png",
-      "extension": ".png",
-      "bytes": 266378,
-      "sha256": "0f0bdc7f33128f2bee96b2e99d921470dc7261451e1255f08f099b81d47aa06a"
-    },
-    {
-      "path": "images/Mi cuenta.png",
-      "extension": ".png",
-      "bytes": 250183,
-      "sha256": "853499f16495fe9e1e4ef25387d28bab92f1726fbdbfda0e7cbe43473debe2ae"
     },
     {
       "path": "index.html",
@@ -18346,6 +18346,12 @@
       "sha256": "4c09cac4445e7dfdaf6e8a8924d7cba92600defeed88548f1c72d0eb1eeec64f"
     },
     {
+      "path": "maintenance/99-auditoria-final-integracion.txt",
+      "extension": ".txt",
+      "bytes": 11626,
+      "sha256": "35437abd6212bd1ca4a7e3cb94fd5ba5687ae80cb4ea46bc1c538e666b2638b3"
+    },
+    {
       "path": "manifest.json",
       "extension": ".json",
       "bytes": 658,
@@ -18360,8 +18366,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 3176,
-      "sha256": "b064ac4f3b2063976e83e2e1e5e8e059391f314420aa5eb7e4ff14dd7548969a"
+      "bytes": 3285,
+      "sha256": "cb7dcb47e4872f3a0f23f68f3e25ef8d58141af8527bff3e72271bc63b07bb7f"
     },
     {
       "path": "perfil.html",
@@ -18532,6 +18538,12 @@
       "sha256": "a8835ede55959d2afb27a0b379665b466eb2f8866dfdcd500283ba8f008cb3ab"
     },
     {
+      "path": "scripts/audit-final-integration.js",
+      "extension": ".js",
+      "bytes": 9459,
+      "sha256": "3276117e4f7779e5443fac957c9b284ddb16bfab65ba8b4e92a1e50ebf53f41c"
+    },
+    {
       "path": "scripts/audit-final-release.js",
       "extension": ".js",
       "bytes": 5291,
@@ -18680,54 +18692,6 @@
       "extension": ".html",
       "bytes": 12498,
       "sha256": "5817d4f2919af3f2b06c906509b233c6c3d378915fb04372b9eb225e96aaff19"
-    },
-    {
-      "path": "tintin-code-sh/apartadoconfianza.txt",
-      "extension": ".txt",
-      "bytes": 8710,
-      "sha256": "f2a1187936e2444ec31debec68d08f045019fd8965e90ae4eb4440e1accd349b"
-    },
-    {
-      "path": "tintin-code-sh/carruselcolecciones.txt",
-      "extension": ".txt",
-      "bytes": 54208,
-      "sha256": "ea9bcf252160301815934a8f6d24f451670479d12c345c5ad428cd1a08660858"
-    },
-    {
-      "path": "tintin-code-sh/carruselproductos.txt",
-      "extension": ".txt",
-      "bytes": 56660,
-      "sha256": "58ddd8dda7e57a9e4b6efb2504ee52e6f614d66f08e6f8aefb977e663a1d6507"
-    },
-    {
-      "path": "tintin-code-sh/completatulook.txt",
-      "extension": ".txt",
-      "bytes": 32821,
-      "sha256": "04eaa19afc82ee645e657d9b8d341fb414be532e2f985b487299614c291b648e"
-    },
-    {
-      "path": "tintin-code-sh/editorial.txt",
-      "extension": ".txt",
-      "bytes": 24441,
-      "sha256": "8541856442b292b2f16aa2d9fe28d611a29687c45657187afcfbd7c23d1d221c"
-    },
-    {
-      "path": "tintin-code-sh/headerdesktoptablet.txt",
-      "extension": ".txt",
-      "bytes": 42053,
-      "sha256": "0a9db00eb841d1581834b2c97b8d66f597e9cafe8376931ee5864771f8a9262b"
-    },
-    {
-      "path": "tintin-code-sh/headermobile.txt",
-      "extension": ".txt",
-      "bytes": 37016,
-      "sha256": "a00e61a0dc278591d49ea38c7a38935c41b11eac886a27469b5286df966443d4"
-    },
-    {
-      "path": "tintin-code-sh/herobanner.txt",
-      "extension": ".txt",
-      "bytes": 30982,
-      "sha256": "414c97ddfb80efe26161d903a14ce57a808de775535e3cf354693d463822d7d4"
     }
   ],
   "sitemapRoutes": [
@@ -22751,6 +22715,21 @@
           {
             "file": "scripts/audit-email-phase3.js",
             "line": 66,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-final-integration.js",
+            "line": 56,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-final-integration.js",
+            "line": 66,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-final-integration.js",
+            "line": 71,
             "operation": "doc"
           },
           {
