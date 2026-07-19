@@ -69,3 +69,6 @@ jobs:
 
       - name: Audit orders lifecycle (admin edit, status, integrity)
         run: node scripts/audit-admin-orders.js
+
+      - name: Audit users, roles and permissions (Super Admin protections)
+        run: node scripts/audit-admin-users-roles.js

@@ -1,0 +1,151 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.5
+USUARIOS, ROLES, PERMISOS Y ACCESO POR CUENTA
+Fecha: 19/07/2026
+Rama: maintenance/admin-users-permissions
+Auditoría nueva: scripts/audit-admin-users-roles.js  (npm run audit:users-roles)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de usuarios, roles, permisos y acceso por cuenta.
+Antes de tocar nada se revisó main, los PR mergeados, maintenance/ y las
+auditorías existentes:
+- audit-security-phase8.js   → ya blinda el módulo admin-users-phase8.js
+  (Super Admin por email, no asignar superadmin, render sin HTML, cambio+
+  auditoría en batch, bloqueo degrada a client, borrado solo Firestore, listener
+  realtime, reglas por UID, auditoría de solo lectura).
+- audit-postphase-security.js → Super Admin depende de Firebase Auth, email
+  protegido en reglas, creación de usuario con estadísticas en cero.
+No se rehízo nada de eso.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL
+═══════════════════════════════════════════════════════════════════════
+Identidad / techo de roles ... js/roles.js (SUPER_ADMIN, PERMISSIONS, can,
+                               getUserRole, setUserRole)
+Matriz dinámica .............. js/role-permissions.js (PERMISSION_MODULES,
+                               buildDefaultRolePermissions, loadRolePermissions,
+                               canDo, saveRolePermissions) + UI "Roles y Permisos"
+CRUD de usuarios ............. js/admin-app.js (updateUserRole, blockUser,
+                               restoreUser, deleteUser, bulk*) y
+                               js/admin-users-phase8.js (módulo paralelo, Super
+                               Admin real)
+Reglas server-side ........... firestore.rules (users, rolePermissions, auditLog)
+Acceso al panel .............. js/admin-app.js (guard onAuthStateChanged)
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+IDENTIDAD Y TECHO
+- getUserRole devuelve 'superadmin' SOLO si el email autenticado es
+  tintinaccs@gmail.com — la ficha de Firestore nunca concede la identidad. Sin
+  ficha o con rol desconocido → 'client'. setUserRole solo acepta admin/agent/
+  viewer/client (jamás 'superadmin').
+- El Super Admin real SIEMPRE tiene todos los permisos y no depende de la matriz.
+
+MATRIZ DINÁMICA (Roles y Permisos)
+- Acotada por el techo fijo: los defaults derivan de PERMISSIONS (roles.js), así
+  la pantalla solo puede REDUCIR, nunca ampliar más allá de lo que roles.js y
+  firestore.rules ya permiten.
+- Fail-safe: si falta el documento rolePermissions/main o la lectura falla, se
+  usan los defaults (equivale a "todo como siempre"), nunca "bloquear todo".
+- canDo sin caché cae al techo fijo (mínimo seguro). Niega acciones no
+  implementadas y roles sin columna editable.
+- roleCanDo() en admin-app.js devuelve true para superadmin ANTES de consultar la
+  matriz → una matriz defectuosa NUNCA bloquea al Super Admin.
+- saveRolePermissions guarda el documento completo (merge:false) con updatedBy;
+  los cambios se registran en auditLog (editar_permiso).
+
+CRUD DE USUARIOS
+- blockUser tiene guarda dura (email === SUPER_ADMIN → return). Bloquear degrada
+  el rol a 'client' y guarda roleBeforeBlock para restaurar.
+- Las acciones masivas (rol, bloqueo, restauración) filtran u.email !== SUPER_ADMIN
+  (guarda dura, no solo ocultar el checkbox).
+- restoreUser pide confirmación explícita para devolver un rol elevado; por
+  defecto restaura como Cliente.
+- Toda acción (cambiar_rol, bloquear, restaurar, eliminar) queda en Auditoría.
+- La tabla escapa nombre, email y avatar (anti-XSS).
+- El módulo Fase 8 protege al Super Admin en block/delete/masivas (isSuperRecord)
+  y solo maneja roles reales.
+
+REGLAS SERVER-SIDE (defensa real, no solo UI)
+- users delete: isSuperAdmin() && !isSuperAdminAccount(resource.data) → NADIE
+  (ni el propio Super Admin) puede borrar su ficha desde el cliente.
+- users update: no se puede escribir role:'superadmin' salvo la cuenta oficial.
+- rolePermissions/main: allow write solo isSuperAdmin() → un Admin no puede tocar
+  la matriz.
+- users read: solo el dueño o el Super Admin. auditLog: lectura solo Super Admin.
+
+ACCESO
+- Los permisos dinámicos se cargan (loadRolePermissions) ANTES de armar la UI, así
+  canDo tiene datos reales desde el primer render (aplicación inmediata; un cambio
+  de matriz que hace otro admin se refleja al recargar el panel del afectado —
+  documentado en la UI de Roles y Permisos).
+- Un cliente o cuenta sin rol se redirige a perfil.html; bloqueado → login?blocked=1;
+  tienda cerrada → overlay (ver 11.1 / audit-admin-foundation).
+
+═══════════════════════════════════════════════════════════════════════
+HALLAZGOS CORREGIDOS (defensa en profundidad — "ocultar un botón no es seguridad")
+═══════════════════════════════════════════════════════════════════════
+Las funciones globales window.deleteUser / window.updateUserRole de admin-app.js
+son llamables desde consola aunque su botón esté oculto. Las reglas de Firestore
+ya neutralizan el abuso (borrar al Super Admin está bloqueado; role:'superadmin'
+está bloqueado; getUserRole ignora el campo role de la ficha para el Super Admin),
+pero faltaba la validación en la propia acción cliente, que la consigna pide
+explícitamente ("cada acción sensible debe validar el rol").
+
+F1 [MEDIO] — deleteUser no protegía la ficha del Super Admin ni validaba permiso.
+  FIX (js/admin-app.js): guarda dura (si el usuario objetivo es SUPER_ADMIN →
+  aviso y return) + chequeo can(currentRole, 'deleteUsers') antes de continuar.
+
+F2 [MEDIO] — updateUserRole solo bloqueaba el cambio de rol del Super Admin para
+  quien NO fuera superadmin (para el propio superadmin lo permitía, dejando una
+  ficha inconsistente), y no validaba el rol destino (podía escribir 'superadmin'
+  o un valor basura en la ficha de otro).
+  FIX (js/admin-app.js): (a) bloqueo duro de cualquier cambio de rol sobre
+  SUPER_ADMIN; (b) chequeo can(currentRole, 'assignRoles'); (c) allowlist de rol
+  ['admin','agent','viewer','client'] — 'superadmin' nunca es asignable desde acá,
+  igual que setUserRole y el módulo Fase 8.
+
+Nota: ambos son funcionalmente inocuos hoy (las reglas y getUserRole ya protegen),
+pero cierran la brecha "función global sin validar el rol" y dan un mensaje claro
+en vez de un error de reglas confuso.
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-users-roles.js
+═══════════════════════════════════════════════════════════════════════
+27 comprobaciones estáticas: identidad/techo de roles, matriz dinámica acotada y
+fail-safe, protecciones del Super Admin en el CRUD (incluidas F1/F2), módulo Fase
+8, reglas server-side y acceso/aplicación inmediata de permisos.
+
+Wiring:
+  - package.json: "audit:users-roles" + incluida en "audit:final".
+  - .github/workflows/tintin-audit.yml: paso "Audit users, roles and permissions".
+
+Prueba de que REALMENTE falla al romper el contrato: se quitó la guarda de Super
+Admin de deleteUser (F1) → ERROR + exit 1; se abrió rolePermissions write a
+isSignedIn() → ERROR + exit 1; al restaurar, ambos vuelven a OK. Registrado.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS
+═══════════════════════════════════════════════════════════════════════
+- node --check de js/admin-app.js: OK.
+- npm run audit:users-roles: 27/27 OK.
+- npm run audit:security (Fase 8) y audit:postphase: OK.
+- npm run audit:final (incluye la nueva): exit 0.
+- audit:tintin CRITICAL 0. audit:diagnostics OK (manifest regenerado).
+- Smoke test en Chromium sin sesión: sin errores JS propios, panel oculto.
+
+ARCHIVOS TOCADOS
+- js/admin-app.js                          (F1: deleteUser; F2: updateUserRole)
+- scripts/audit-admin-users-roles.js       (NUEVO)
+- package.json                             (script + audit:final)
+- .github/workflows/tintin-audit.yml       (paso CI)
+- maintenance/11-4-usuarios-roles-permisos.txt (este registro)
+- diagnostic-manifest.json                 (regenerado)
+
+PENDIENTES REALES: ninguno crítico/alto dentro del alcance. Observación (sin
+cambio, fuera de alcance de seguridad): admin-app.js y admin-users-phase8.js
+renderizan ambos en #users-tbody; conviven desde hace fases y ambos protegen al
+Super Admin — unificarlos sería una refactorización aparte, no un arreglo de
+seguridad.

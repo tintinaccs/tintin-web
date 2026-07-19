@@ -1524,8 +1524,21 @@ document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
 });
 
 window.updateUserRole = async (uid, role, email) => {
-  if (email === SUPER_ADMIN && currentRole !== 'superadmin') {
-    toast('No podés cambiar el rol del Super Admin');
+  // El rol del Super Admin real está protegido de raíz — no solo se oculta el
+  // <select>. Su identidad viene únicamente de Firebase Auth (roles.js), así que
+  // tocar el campo role de su ficha no lo degrada, pero dejaría un estado
+  // inconsistente; se bloquea siempre ("no debe poder degradarse accidentalmente").
+  if (email === SUPER_ADMIN) {
+    toast('El rol del Super Admin está protegido y no se puede cambiar');
+    return;
+  }
+  // Cada acción sensible valida el rol del actor, no solo la UI.
+  if (!can(currentRole, 'assignRoles')) { toast('No tenés permiso para cambiar roles'); return; }
+  // 'superadmin' es una identidad protegida por email, nunca un rol asignable
+  // desde el panel (igual que setUserRole en roles.js y phase8). Un valor fuera
+  // de la lista se rechaza en vez de escribir un rol inválido en la ficha.
+  if (!['admin', 'agent', 'viewer', 'client'].includes(role)) {
+    toast('Rol no válido');
     return;
   }
   try {
@@ -1610,6 +1623,13 @@ window.restoreUser = async (uid) => {
 };
 
 window.deleteUser = async (uid, name) => {
+  // El perfil del Super Admin real no se puede eliminar (firestore.rules también
+  // lo bloquea del lado servidor, línea 692-693). Sin esta guarda el botón solo
+  // se oculta en la fila, y "ocultar un botón no cuenta como seguridad".
+  const _target = allUsers.find(x => x.uid === uid);
+  if (_target && _target.email === SUPER_ADMIN) { toast('El perfil del Super Admin no se puede eliminar'); return; }
+  // Cada acción sensible valida el permiso del actor, no solo la UI.
+  if (!can(currentRole, 'deleteUsers')) { toast('No tenés permiso para eliminar usuarios'); return; }
   // Aclaración honesta (Fase E): esto borra la FICHA de Firestore, no la cuenta
   // real de acceso en Firebase Authentication — eso requeriría Cloud Functions
   // con facturación habilitada (Blaze), que este proyecto no usa. Si la persona
