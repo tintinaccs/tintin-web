@@ -66,3 +66,6 @@ jobs:
 
       - name: Audit products, collections and images (admin + storefront)
         run: node scripts/audit-admin-products-media.js
+
+      - name: Audit orders lifecycle (admin edit, status, integrity)
+        run: node scripts/audit-admin-orders.js
