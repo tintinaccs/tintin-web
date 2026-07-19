@@ -1,0 +1,92 @@
+TINTIN-WEB — MANTENIMIENTO DE PÁGINAS PÚBLICAS
+GRUPO: PÁGINAS AUXILIARES Y RUTA LEGACY
+Fecha: 19/07/2026
+Rama: maintenance/public-aux-pages
+Auditoría nueva: scripts/audit-aux-pages.js  (npm run audit:aux-pages)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Segundo (y último) grupo del inventario de páginas públicas que quedaban sin
+documentación ni auditoría específica. Se separan del grupo de páginas de ayuda
+por ser páginas de SISTEMA, no de contenido:
+
+  - 404.html       → página de error.
+  - nosotros.html  → ruta antigua / no enlazada, redirige a about.html.
+
+(El grupo de páginas informativas de ayuda —envíos, cambios/devoluciones,
+preguntas frecuentes— se documenta y audita en maintenance/12-1-paginas-ayuda.txt
+y scripts/audit-help-pages.js.)
+
+═══════════════════════════════════════════════════════════════════════
+REVISIÓN (checklist completo)
+═══════════════════════════════════════════════════════════════════════
+Se revisó, en ambas páginas: funcionalidad, metadatos, canonical, Open Graph,
+responsive, accesibilidad, navegación, footer, datos de contacto, colores/
+tokens, textos, enlaces rotos, estados, rendimiento y seguridad.
+
+RESULTADO: ambas páginas están correctas. No se hallaron bugs reales. El
+faltante era la documentación y una auditoría CI que fije estas garantías.
+
+404.html — CONFIRMADO CORRECTO
+- No indexable: <meta name="robots" content="noindex"> (correcto para un error;
+  el canonical propio queda subordinado al noindex y no fuerza indexación).
+- Metadatos: lang, viewport, título y descripción reales; theme-color, favicon
+  y manifest.
+- Tema del sitio: color-scheme-instant (primera pintura) + color-scheme.js (en
+  vivo) — el 404 se ve con el mismo esquema que el resto del sitio.
+- Recuperación: siempre ofrece salida — "Volver al inicio", "Ver catálogo",
+  accesos por categoría (relojes/aros/collares/bags/pulseras/anillos) y ayuda
+  por WhatsApp. Todos los enlaces internos resuelven a archivos reales.
+- Contacto/analítica: whatsapp.js sincroniza el enlace de ayuda desde
+  settings/general; analytics.js mide la visita.
+- Accesibilidad: un H1 claro, tap targets con tamaño adecuado, animación
+  suave del icono; sin manejadores de eventos inline.
+- Rendimiento: fuentes precargadas, scripts con defer/module.
+- Diseño: página de error enfocada (sin footer completo a propósito, para
+  priorizar las acciones de recuperación).
+
+nosotros.html — CONFIRMADO CORRECTO (ruta legacy)
+- Es un stub de redirección mínimo (< 2 KB): <meta http-equiv="refresh"
+  content="0; url=about.html"> + enlace visible de respaldo a about.html por si
+  el refresh está deshabilitado.
+- SEO: robots "noindex, follow" (no se indexa, pero transmite el enlace) y
+  canonical → about.html (consolida señales en la página real).
+- No duplica contenido: no trae footer, ni site-content, ni el stack completo —
+  así no puede "driftar" y convertirse en una copia desactualizada de about.html.
+- No está enlazada desde ninguna página pública (ruta antigua pura). about.html
+  es la única "Quiénes somos" enlazada en la navegación, y se canoniza en sí
+  misma (sin bucle con la ruta legacy).
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-aux-pages.js (15 comprobaciones)
+═══════════════════════════════════════════════════════════════════════
+404.html (8):
+  metadatos; robots noindex; tema (instant + vivo); contacto+analítica;
+  recuperación (inicio/catálogo/categorías); ayuda por WhatsApp; H1 + sin
+  inline handlers; enlaces internos que resuelven contra el filesystem.
+nosotros.html (6):
+  meta refresh → about.html; robots noindex,follow; canonical → about.html;
+  enlace de respaldo; stub mínimo (sin footer/site-content, < 2 KB);
+  destino about.html existe y se canoniza en sí mismo (sin bucle).
+Global (1):
+  ninguna página pública enlaza a la ruta legacy nosotros.html.
+
+═══════════════════════════════════════════════════════════════════════
+CIERRE DEL INVENTARIO
+═══════════════════════════════════════════════════════════════════════
+Con este grupo, TODAS las páginas HTML públicas del sitio quedan con
+documentación de mantenimiento y auditoría CI específica:
+  index, catalogo, collections, product, checkout, login, perfil, about,
+  contact, terminos, privacidad, envios, cambios-devoluciones,
+  preguntas-frecuentes, 404 y la ruta legacy nosotros.
+(admin.html y admin-images.html son del panel y tienen su propia serie 11-x.)
+
+═══════════════════════════════════════════════════════════════════════
+CI / VERIFICACIÓN
+═══════════════════════════════════════════════════════════════════════
+- npm run audit:aux-pages → 15/15 OK
+- npm run audit:final → exit 0 (todas las auditorías verdes, CRITICAL: 0)
+- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+
+Merge únicamente con CI verde.
