@@ -1,0 +1,99 @@
+TINTIN-WEB — MANTENIMIENTO DE PÁGINAS PÚBLICAS
+GRUPO: PÁGINAS INFORMATIVAS DE AYUDA
+Fecha: 19/07/2026
+Rama: maintenance/public-help-pages
+Auditoría nueva: scripts/audit-help-pages.js  (npm run audit:help-pages)
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO Y MOTIVO
+═══════════════════════════════════════════════════════════════════════
+Se inventariaron todos los HTML públicos y se cruzó cada uno con la
+documentación de mantenimiento (maintenance/) y con las auditorías CI
+específicas (scripts/audit-*-page.js, audit-legal-pages.js).
+
+Ya tenían mantenimiento + auditoría propia:
+  index (home), catalogo, collections, product, checkout, login, perfil,
+  about (Quiénes somos), contact, terminos, privacidad.
+
+Quedaban SIN documentación ni auditoría específica:
+  envios.html, cambios-devoluciones.html, preguntas-frecuentes.html   ← este grupo
+  404.html, nosotros.html                                             ← grupo aparte (auxiliares)
+
+Este registro cubre EXCLUSIVAMENTE las tres páginas informativas de ayuda,
+por ser un grupo lógico homogéneo (contenido de servicio al cliente, misma
+plantilla y mismos scripts compartidos que terminos/privacidad).
+
+═══════════════════════════════════════════════════════════════════════
+REVISIÓN (checklist completo)
+═══════════════════════════════════════════════════════════════════════
+Se revisó, en las tres páginas: funcionalidad, metadatos, canonical, Open
+Graph/Twitter, responsive, accesibilidad, navegación, footer, datos de
+contacto, configuración desde Super Admin, colores/tokens, textos, enlaces
+rotos, estados, rendimiento y seguridad.
+
+RESULTADO: las tres páginas están correctas y consistentes con las páginas ya
+auditadas. No se encontraron bugs reales que corregir. El faltante real era la
+ausencia de documentación y de una auditoría CI que fije estas garantías.
+
+CONFIRMADO CORRECTO (sin cambios de código):
+- Metadatos: lang=es, viewport, título propio y meta description real.
+- Canonical propio hacia el dominio canónico publicado
+  (tintinaccs.github.io/tintin-web/<pagina>.html), criterio idéntico al resto
+  del sitio (una sola casa canónica; los demás orígenes no compiten por índice).
+- Open Graph + Twitter completos (title/description/url/type/locale + card),
+  con og:image y twitter:image → assets/og-cover.jpg, que EXISTE en el repo.
+- Responsive: viewport + hoja de estilos unificada + estilos propios acotados.
+- Accesibilidad: un solo H1 por página, jerarquía de encabezados, foco nativo.
+  (El sitio no usa landmark <main> ni skip-link en NINGUNA página pública; es
+  una convención global, no un defecto de estas páginas — no se cambió para no
+  introducir una inconsistencia puntual.)
+- Navegación / footer: enlaza de forma coherente a las páginas hermanas de
+  información (envíos, cambios, FAQ, términos, privacidad) y a about/contact.
+- Datos de contacto: teléfono/WhatsApp, email, Instagram y dirección salen del
+  documento settings/general vía js/whatsapp.js (clases tt-contact-phone/
+  tt-contact-email/tt-contact-addr y a[href*="wa.me/"]). El número fijo del HTML
+  es solo respaldo hasta que el snapshot lo reescribe.
+- Configuración desde Super Admin: cada página declara data-tt-editable +
+  data-tt-section, inicializa site-content con su id (envios/cambios/faq) y ese
+  id está en el esquema de contenido (CONTENT_PAGE_IDS + PAGE_ID_BY_PATH). El
+  editor de contenido y el edit-badge funcionan sobre ellas.
+- Colores/tokens: color-scheme-instant.js (primera pintura estable) + motor en
+  vivo color-scheme.js; superficies y acentos mediante variables --color-*/tokens.
+- Textos: editables por selector desde el panel; sin literales contradictorios.
+- Enlaces rotos: TODOS los enlaces internos .html resuelven a archivos reales.
+- Estados: envios.html lee ciudades/costos de settings/general con estado de
+  carga ("Cargando ciudades…"), vacío ("Todavía no cargamos ciudades…") y
+  manejo de error (onSnapshot error → lista vacía + consejo de WhatsApp).
+- Rendimiento: fuentes precargadas, scripts con defer/module, logo eager.
+- Seguridad: sin manejadores de eventos inline (onclick=…); el comportamiento
+  vive en módulos externos; enlaces externos con rel="noopener".
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-help-pages.js (36 comprobaciones)
+═══════════════════════════════════════════════════════════════════════
+Por cada página (envios / cambios-devoluciones / preguntas-frecuentes):
+  1. lang/viewport/título/descripción.
+  2. canonical propio hacia el dominio canónico.
+  3. Open Graph + Twitter completos con imagen que existe en el repo.
+  4. theme-color + favicon + manifest.
+  5. contenido editable (data-tt-editable + init + esquema).
+  6. esquema de color: primera pintura + motor en vivo.
+  7. scripts compartidos (shell, loader, contacto, analítica, script.js).
+  8. footer con clases de contacto sincronizable + copyright vigente.
+  9. el footer enlaza a las páginas hermanas de información.
+ 10. sin manejadores de eventos inline.
+ 11. todos los enlaces internos .html resuelven (prueba real contra el FS).
+Específicas:
+ - envios: ciudades desde settings/general con carga/vacío/error.
+ - faq: pares pregunta/respuesta mapeados a campos editables del esquema.
+ - el esquema de contenido reconoce las tres páginas de ayuda.
+
+═══════════════════════════════════════════════════════════════════════
+CI / VERIFICACIÓN
+═══════════════════════════════════════════════════════════════════════
+- npm run audit:help-pages → 36/36 OK
+- npm run audit:final → exit 0 (todas las auditorías verdes, CRITICAL: 0)
+- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+
+Merge únicamente con CI verde. Las páginas auxiliares (404.html y la ruta
+legacy nosotros.html) se documentan y auditan en un grupo/PR aparte.

@@ -81,3 +81,6 @@ jobs:
 
       - name: Audit statistics, audit log and diagnostics (no false zeros, privacy, immutable audit)
         run: node scripts/audit-admin-analytics-audit.js
+
+      - name: Audit help pages (envíos, cambios/devoluciones, preguntas frecuentes)
+        run: node scripts/audit-help-pages.js
