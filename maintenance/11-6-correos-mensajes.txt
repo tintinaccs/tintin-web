@@ -1,0 +1,201 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.7
+CORREOS Y MENSAJES
+Fecha: 19/07/2026
+Rama: maintenance/admin-email-messaging
+Auditoría nueva: scripts/audit-admin-email-messaging.js  (npm run audit:email-messaging)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de: correos automáticos y manuales, plantillas,
+reenvíos, promociones, mensajes, WhatsApp, configuración del remitente,
+límites, cooldowns, Resend, Apps Script (solo si seguía en uso) y
+notificaciones de pedidos.
+
+Antes de tocar nada se revisó main, los PR mergeados (hasta #176), maintenance/
+y las auditorías existentes:
+- audit-email-phase3.js → cubre la seguridad del Apps Script legacy (vuelve a
+  leer el pedido real, verifica identidad/propiedad, reenvío con rol+permiso) y
+  el registro de intentos. No se rehízo nada de eso; solo se ajustó UNA
+  comprobación (ver "CAMBIOS").
+- audit-postphase-security.js / audit-security-phase8.js → identidad Super Admin
+  por Firebase Auth, logs inmutables, reglas por rol. No se rehízo.
+
+═══════════════════════════════════════════════════════════════════════
+CANAL REAL IDENTIFICADO
+═══════════════════════════════════════════════════════════════════════
+El sitio tenía DOS canales de correo conviviendo:
+
+  A) Resend + Cloudflare Functions (ACTUAL / real)
+     js/resend-order-notify.js → POST /api/order-email
+     functions/api/order-email.js  (nuevo pedido + reenvío)
+     functions/api/test-email.js   (correo de prueba)
+     js/admin-email-gate-sync.js   (capa admin activa: remitente
+       pedidos@tintinaccs.com, prueba por Resend, promos apagadas)
+     La clave RESEND_API_KEY solo vive en env del servidor.
+
+  B) Apps Script / webhook viejo (LEGACY)
+     js/email-notify.js → EMAIL_WEBHOOK_URL (script.google.com)
+     js/email-config.js, apps-script/Phase3Security.gs
+
+El propio código ya documentaba que Resend es el canal real:
+- admin-app.js:11-14 → "el reenvío usa el mismo canal automático del checkout
+  (Resend), no el webhook viejo de Apps Script de email-notify.js".
+- admin-email-gate-sync.js → "Los correos de pedidos y las pruebas ya usan
+  Resend con pedidos@tintinaccs.com"; "Promociones seguirá desactivado hasta su
+  migración independiente".
+
+═══════════════════════════════════════════════════════════════════════
+BUG REAL ENCONTRADO (dos sistemas contradictorios para el MISMO correo)
+═══════════════════════════════════════════════════════════════════════
+checkout.html seguía enrutando el correo AUTOMÁTICO del pedido por el canal
+LEGACY (Apps Script), en contra del diseño real:
+
+  1) checkout.html:330 importaba sendOrderNotification desde
+     js/email-notify.js (Apps Script).
+  2) Al importar email-notify.js, su cola (líneas 229-238) auto-cargaba
+     js/checkout-email-bridge.js, que envía el MISMO correo por Resend.
+  3) checkout.html:1395 llamaba sendOrderNotification (Apps Script) apenas se
+     creaba el pedido, fire-and-forget, y escribía notificationStatus.
+
+Consecuencia por pedido nuevo:
+- Si Apps Script fallaba (producción usa Resend), la línea 1395 dejaba
+  notificationStatus = 'failed'; el puente entonces veía notificationStatus
+  != 'pending' y SE SALTEABA su envío por Resend → la clienta podía quedarse
+  SIN correo de confirmación (un intento fallido del canal viejo envenenaba el
+  estado y bloqueaba el canal que sí funciona).
+- Si Apps Script seguía activo → correo duplicado o con remitente equivocado.
+
+═══════════════════════════════════════════════════════════════════════
+CAMBIOS APLICADOS (mínimos y quirúrgicos)
+═══════════════════════════════════════════════════════════════════════
+1) checkout.html:330
+   -  import { sendOrderNotification } from "./js/email-notify.js?v=...cloudinary-fix-1";
+   +  import { sendOrderNotification } from "./js/resend-order-notify.js?v=tintin-20260717-resend-1";
+
+   Efecto:
+   - checkout.html:1395 ahora envía el correo del pedido por Resend
+     directamente, con el orderRef.id exacto, ni bien se crea el pedido, y fija
+     notificationStatus con el resultado real (sent/partial/failed).
+   - Como el checkout ya NO importa email-notify.js, su auto-cargador del puente
+     no se dispara → checkout-email-bridge.js no vuelve a enviar. Queda UN solo
+     canal, UN solo punto de envío. Sin duplicado, sin contradicción.
+
+2) scripts/audit-email-phase3.js — 1 comprobación actualizada
+   La comprobación #1 afirmaba el cableado viejo (checkout importa email-notify +
+   auto-carga del puente). Ahora afirma el cableado correcto: el checkout envía
+   por Resend (resend-order-notify.js) y NO importa email-notify.js. El resto de
+   la auditoría (seguridad del Apps Script legacy) se mantiene intacto.
+
+3) scripts/audit-admin-email-messaging.js — auditoría nueva (29 comprobaciones,
+   con pruebas negativas). Wireada en package.json (audit:email-messaging +
+   audit:final) y en .github/workflows/tintin-audit.yml.
+
+4) diagnostic-manifest.json — regenerado (npm run build:diagnostics). Refleja que
+   el grafo del checkout ahora usa resend-order-notify.js y ya no arrastra
+   email-notify.js ni checkout-email-bridge.js.
+
+NO se borró email-notify.js ni checkout-email-bridge.js: email-notify.js sigue
+importado por admin-app.js (sendTestCustomerEmail / sendTemplatedEmail /
+sendBulkTemplatedEmail). Se comprobó que esas rutas están SUPERADAS en tiempo de
+ejecución (ver abajo), pero como el import sigue vivo no se elimina el módulo
+("no eliminar un sistema hasta comprobar que no tenga usos activos").
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+ENVÍO / SEGURIDAD DEL SERVIDOR (functions/api/order-email.js)
+- Lista blanca de acciones: solo sendOrderEmail / resendOrderEmail.
+- Verifica el idToken, re-lee el pedido REAL desde Firestore por orderId (no
+  confía en nombres/precios/destinatarios del navegador).
+- Valida propiedad: si no es Super Admin, order.userId debe == uid y
+  order.userEmail debe == email de la sesión.
+- Reenvío server-side: isResend && !isSuperAdmin → "Solo el Super Admin puede
+  reenviar correos." Ocultar el botón NO es la única barrera.
+- Idempotency-key en Resend (new-v1 / resend-*) para no duplicar.
+- RESEND_API_KEY se lee de env; nunca viaja al frontend.
+
+REMITENTE / REPLY-TO / CONFIGURACIÓN
+- Remitente fijo "Tintin Pedidos <pedidos@tintinaccs.com>", reply-to
+  tintinaccs@gmail.com (test-email.js). admin-email-gate-sync.js fija
+  senderEmail, emailProvider='resend', replyTo y promoEnabled=false en
+  emailSettings/main.
+
+CORREO DE PRUEBA (Resend)
+- El botón #btn-test-email lo intercepta admin-email-gate-sync.js en fase de
+  captura con stopImmediatePropagation → se envía por /api/test-email (Resend);
+  el handler viejo de Apps Script (admin-app.js:3239) NO llega a ejecutarse.
+- Cooldown anti-doble-clic de 120s (sessionStorage tt_resend_test_last), valida
+  email y el interruptor testEmailsEnabled, y deshabilita el botón mientras
+  envía. /api/test-email exige Super Admin (requireSuperAdmin) y valida el
+  destinatario.
+
+REENVÍO MANUAL (admin)
+- admin-app.js reenvía por resend-order-notify.js (Resend), no por el webhook
+  viejo. El servidor lo restringe a Super Admin.
+
+PROMOCIONES
+- No migradas a Resend: admin-email-gate-sync.js desactiva el toggle
+  (promo-enabled-toggle, cec-promo-enabled) y los botones de promo
+  (promo-open-confirm-btn, promo-preview-btn, etc.), y muestra el aviso de
+  bloqueo. Así el canal viejo de Gmail no puede lanzar campañas. Las llamadas
+  Apps Script de promo (admin-app.js) quedan inalcanzables (botones deshabilitados).
+
+LÍMITES / DEDUP / ESTADO
+- notificationStatusFromResult traduce adminSent/customerSent a sent/partial/
+  failed; el pedido nunca queda pegado en "pending".
+- El puente (si se cargara) deduplica por sessionStorage
+  tt_order_email_attempted_ y por notificationStatus != 'pending'.
+
+LOGS / AUDITORÍA (firestore.rules)
+- emailLogs: lectura solo Super Admin; create acotado (Super Admin, o rol admin/
+  agent con permiso pedidos.reenviarCorreo, o la dueña creando el log de SU
+  pedido nuevo); update/delete: false (inmutable). Separación real/prueba por
+  category ('pedido' vs 'prueba').
+- emailSettings / emailTemplates: read+write solo Super Admin.
+
+WHATSAPP / MENSAJES (js/whatsapp.js + orígenes de mensaje)
+- Número configurable en vivo desde settings/general (whatsappNumber); se
+  normaliza a solo dígitos antes de armar wa.me/ y tel:+.
+- Texto configurable: el mensaje de confirmación del admin usa waConfirmMessage
+  (settings) con default de respaldo; {nombre} se reemplaza por el del cliente.
+- Encoding: el texto pasa por encodeURIComponent en TODOS los orígenes
+  (admin per-pedido, checkout, contacto, soporte/blocked-modal, legal).
+- Facebook/TikTok del pie solo se agregan si Super Admin cargó la URL (no
+  hardcodeados, sin duplicar el ítem).
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-email-messaging.js (29 checks)
+═══════════════════════════════════════════════════════════════════════
+1. Canal único de pedidos (Resend), checkout ya NO usa Apps Script, un solo
+   disparo, Bearer token al endpoint, el puente usa el mismo canal.  (5)
+2. Sin secretos en el frontend: escaneo de js/ + HTML por RESEND_API_KEY y por
+   claves tipo "re_..." (prueba negativa); clave solo en env; el servidor re-lee
+   el pedido real.  (3)
+3. Permisos/remitente: reenvío solo Super Admin, propiedad del pedido, lista
+   blanca de acciones, remitente/reply-to fijos.  (4)
+4. Prueba por Resend: interceptor que anula el envío viejo, cooldown 120s,
+   validación + botón bloqueado, endpoint exige Super Admin.  (5)
+5. Promociones desactivadas (toggles/botones) y proveedor forzado a Resend.  (2)
+6. Logs/estado: registro de pedido y de prueba por separado, traducción a
+   sent/partial/failed, emailLogs inmutable/solo-lectura, settings/plantillas
+   solo Super Admin.  (5)
+7. WhatsApp/mensajes: número configurable, normalización a dígitos, encoding del
+   texto en todos los orígenes, texto configurable con fallback, sociales no
+   hardcodeados.  (5)
+
+Pruebas negativas verificadas: el regex de secretos NO marca identificadores
+inocentes (store_closed / store_config) y SÍ marca una clave "re_..." real; el
+checkout con el import viejo (email-notify.js) haría fallar los checks #1 y #2.
+
+═══════════════════════════════════════════════════════════════════════
+CI / VERIFICACIÓN
+═══════════════════════════════════════════════════════════════════════
+- npm run audit:email-messaging  → 29/29 OK
+- npm run audit:emails (phase3, actualizada) → OK
+- npm run audit:final → exit 0 (todas las auditorías estáticas verdes, CRITICAL: 0)
+- diagnostic-manifest.json regenerado y consistente.
+- Wiring CI: .github/workflows/tintin-audit.yml (paso nuevo) y
+  .github/workflows/audit-email-phase3.yml (se dispara por package.json/scripts).
+
+Merge únicamente con CI verde.

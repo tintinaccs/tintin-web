@@ -20,10 +20,10 @@ const appsScript = read('apps-script/Phase3Security.gs');
 const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');
 
 check(
-  'El checkout ya carga el sistema de correos',
-  checkout.includes('import { sendOrderNotification } from "./js/email-notify.js?v=tintin-20260716-cloudinary-fix-1"') &&
-    notify.includes("import('./checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1')"),
-  'El puente debe arrancar desde el módulo que checkout ya importa.'
+  'El checkout envía la notificación de pedido por Resend (canal único)',
+  checkout.includes('import { sendOrderNotification } from "./js/resend-order-notify.js?v=tintin-20260717-resend-1"') &&
+    !checkout.includes('email-notify.js'),
+  'El checkout debe enviar el correo del pedido por el canal Resend (resend-order-notify.js), no por el webhook viejo de Apps Script (email-notify.js).'
 );
 
 check(
