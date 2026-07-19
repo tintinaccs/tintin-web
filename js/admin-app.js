@@ -6863,11 +6863,19 @@ window.bulkSetDestacado = async function(destacado) {
 // ORDERS: EDIT MODAL
 // ══════════════════════════════════════════════
 let _editingOrder = null;
+// Marca de tiempo (updatedAt) del pedido en el momento en que se abrió el
+// editor. Sirve para la concurrencia optimista de saveOrderEdit: si otro
+// administrador escribió el mismo pedido mientras este editor estaba abierto,
+// no se pisan sus cambios en silencio.
+let _orderEditBaselineMillis = null;
 
 window.openOrderEdit = function(orderId) {
   const o = allOrders.find(x => x.id === orderId);
   if (!o) return;
   _editingOrder = JSON.parse(JSON.stringify(o)); // deep copy
+  // Guarda el updatedAt real (Timestamp de Firestore) — no la copia JSON, que
+  // pierde el tipo — para comparar contra el servidor al guardar.
+  _orderEditBaselineMillis = toJsDate_(o.updatedAt)?.getTime() ?? null;
 
   document.getElementById('oe-id').value = orderId;
   document.getElementById('oe-short-id').textContent = '#' + orderId.slice(-6).toUpperCase();
@@ -6917,6 +6925,7 @@ window.closeOrderEdit = function(force = false) {
   document.getElementById('order-edit-overlay').style.display = 'none';
   document.body.style.overflow = '';
   _editingOrder = null;
+  _orderEditBaselineMillis = null;
   window.AdminUnsaved?.unregister('order-editor');
 };
 
@@ -7019,6 +7028,19 @@ window.saveOrderEdit = async function() {
   };
 
   try {
+    // Concurrencia optimista: si otro administrador escribió este pedido después
+    // de que se abrió el editor, no pisamos sus cambios en silencio. Fail-open:
+    // si no se puede comparar (sin updatedAt, o falla la lectura), se guarda
+    // igual para no bloquear una edición legítima.
+    try {
+      const freshSnap = await getDoc(doc(db, 'orders', orderId));
+      if (!freshSnap.exists()) { toast('El pedido ya no existe (puede haber sido eliminado).'); return false; }
+      const freshMillis = toJsDate_(freshSnap.data()?.updatedAt)?.getTime() ?? null;
+      if (_orderEditBaselineMillis && freshMillis && freshMillis > _orderEditBaselineMillis) {
+        toast('Otro administrador modificó este pedido mientras lo editabas. Cerralo y volvé a abrirlo para no pisar sus cambios.');
+        return false;
+      }
+    } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
     await updateDoc(doc(db, 'orders', orderId), updateData);
     // Sync local array
     const idx = allOrders.findIndex(x => x.id === orderId);

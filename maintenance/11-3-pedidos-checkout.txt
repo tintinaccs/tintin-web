@@ -1,0 +1,140 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.4
+PEDIDOS Y CHECKOUT (Super Admin + checkout + perfil del cliente)
+Fecha: 19/07/2026
+Rama: maintenance/admin-orders-checkout
+Auditoría nueva: scripts/audit-admin-orders.js  (npm run audit:admin-orders)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo del sistema de pedidos, en Super Admin, checkout y
+perfil del cliente. Antes de tocar nada se revisó main, los PR mergeados,
+maintenance/ y las auditorías existentes:
+- audit-secure-orders.js  → ya blinda la CREACIÓN segura del pedido (transacción
+  de Firestore, re-lectura de precios, descuento de stock atómico, dedup por
+  reintento, quote_changed, insufficient_stock, reglas que validan precio/nombre/
+  subtotal/total/tienda/cuenta/correo). NO se rehízo nada de eso.
+- audit-checkout-page.js y audit-profile-orders-page.js → responsive/estados.
+
+Esta etapa cubre el resto del ciclo de vida (edición, estados, eliminación,
+masivas, reenvío) y la integridad/consistencia entre superficies.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL
+═══════════════════════════════════════════════════════════════════════
+Creación .................. js/secure-checkout-order.js (transacción) + checkout.html
+Reglas de integridad ...... firestore.rules (orders)
+Edición completa .......... js/admin-app.js (openOrderEdit, saveOrderEdit,
+                            renderOeItems, updateOeItemQty, removeOeItem, recalcOeTotals)
+Estados / pago ............ js/admin-app.js (updateOrderStatus, updatePayStatus)
+Eliminación / masivas ..... js/admin-app.js (deleteOrder, bulkDeleteOrders,
+                            bulkUpdateOrderStatus/Pay, bulkExportOrders)
+Reenvío de correo ......... js/admin-app.js (resendOrderEmail + cooldown) →
+                            js/resend-order-notify.js / Apps Script
+Perfil del cliente ........ perfil.html, js/profile-maintenance.js,
+                            js/profile-order-stats-fix.js
+Estadísticas .............. js/order-stats.js
+WhatsApp .................. admin-app.js (link wa.me con datos del pedido),
+                            checkout.html (soporte)
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+CREACIÓN (reglas de Firestore + transacción)
+- qty entero 1..99, precio >= 0, 1..4 ítems distintos, subtotal derivado de las
+  líneas y total == subtotal + envío. Bloquea cantidades inválidas y totales
+  negativos ANTES de escribir. Tienda abierta, cuenta no bloqueada y correo
+  verificado son obligatorios.
+
+EDICIÓN COMPLETA (saveOrderEdit)
+- Permiso manageOrdersFull + editarCompleto. Valida nombre y teléfono. Rechaza
+  cantidades < 1 y total < 0. El total se DERIVA (subtotal + envío), usando el
+  precio HISTÓRICO guardado en cada ítem (nunca re-consulta el producto), así el
+  pedido conserva sus montos aunque el producto luego cambie o se borre. No deja
+  quitar el último producto. Anti-doble-guardado (btn.disabled). Registra
+  editar_pedido en Auditoría. Recuperación ante error.
+
+ESTADOS / PAGO / ELIMINACIÓN / MASIVAS
+- updateOrderStatus / updatePayStatus: permiso + auditoría + recuperación (si
+  falla, repone el valor real). Estados provienen de <select> fijos → no hay
+  estados imposibles. Correo automático opcional fire-and-forget (nunca bloquea
+  ni revierte el cambio).
+- deleteOrder: permiso manageOrdersFull + confirmación destructiva + auditoría.
+- Acciones masivas: permiso accionesMasivas + el permiso puntual (estado/pago) +
+  auditoría con conteo.
+- Reenvío: cooldown fijo de 60 s por pedido + permiso reenviarCorreo + límite
+  diario del lado servidor (Apps Script).
+
+CONSISTENCIA ENTRE SUPERFICIES
+- El pedido es AUTOCONTENIDO: guarda cliente (nombre/tel/email), envío (ciudad/
+  dirección/referencia/mapa/método), pago (método/estado), ítems con su precio,
+  subtotal, envío, total, notas y timestamps. Alias heredados (city/address/
+  paymentStatus/shippingMethod) se leen con fallback.
+- Perfil del cliente lee o.items/o.total guardados (escapados), no el producto
+  en vivo. Estadísticas suman con Math.max(0, ...) → nunca un total negativo.
+- WhatsApp del cliente en el panel usa o.userPhone/o.userName del pedido.
+
+═══════════════════════════════════════════════════════════════════════
+HALLAZGO CORREGIDO
+═══════════════════════════════════════════════════════════════════════
+F1 [MEDIO] — Conflicto entre administradores al editar el mismo pedido.
+  saveOrderEdit hacía un updateDoc "ciego" con el snapshot tomado al abrir el
+  editor. Si un segundo administrador cambiaba el pedido (estado, nota, etc.)
+  mientras el primero tenía el editor abierto, al guardar se pisaban sus cambios
+  en silencio (lost update). El btn.disabled solo evitaba el doble clic del mismo
+  administrador, no el conflicto entre dos.
+  FIX (js/admin-app.js) — concurrencia optimista, FAIL-OPEN:
+    - openOrderEdit guarda _orderEditBaselineMillis = updatedAt real del pedido.
+    - saveOrderEdit, antes de escribir, relee el pedido (getDoc) y:
+        · si ya no existe → avisa (no lo recrea);
+        · si su updatedAt es más nuevo que la base → aborta con aviso claro para
+          que el admin cierre y reabra sin pisar cambios ajenos.
+    - Si por cualquier motivo no se puede comparar (sin updatedAt, error de red),
+      se guarda igual (fail-open) para no bloquear una edición legítima.
+    - closeOrderEdit resetea la base.
+
+Evaluado y descartado como cambio (para no fabricar arreglos ni cambiar
+comportamiento intencional):
+- Restaurar stock al eliminar/cancelar un pedido: la creación descuenta stock en
+  la transacción, pero eliminar/cancelar NO lo repone. Es una simplificación
+  deliberada del plan gratuito (el stock se ajusta manualmente); reponerlo
+  requeriría otra transacción con casos borde (producto borrado, stock ya
+  ajustado a mano). Se documenta como comportamiento conocido, no se toca.
+- Recalcular el costo de envío al cambiar método/ciudad en el editor: el modal no
+  expone un campo de costo de envío (se conserva el del checkout); no es un bug
+  visible. Documentado.
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-orders.js
+═══════════════════════════════════════════════════════════════════════
+24 comprobaciones estáticas: edición completa, concurrencia optimista (F1),
+estados/pago/eliminación/masivas, reenvío con cooldown, integridad/consistencia
+(autocontención, perfil, estadísticas sin negativos) y reglas de Firestore.
+
+Wiring:
+  - package.json: "audit:admin-orders" + incluida en "audit:final".
+  - .github/workflows/tintin-audit.yml: paso "Audit orders lifecycle".
+
+Prueba de que REALMENTE falla al romper el contrato: se anuló el chequeo de
+concurrencia (F1) → ERROR + exit 1; se relajó la regla de qty (>= 1 a >= 0) →
+ERROR + exit 1; al restaurar, ambos vuelven a OK. Registrado.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS
+═══════════════════════════════════════════════════════════════════════
+- node --check de js/admin-app.js: OK.
+- npm run audit:admin-orders: 24/24 OK.
+- npm run audit:secure-orders (creación): OK.
+- npm run audit:final (incluye la nueva): exit 0.
+- audit:tintin CRITICAL 0. audit:diagnostics OK (manifest regenerado).
+- Smoke test en Chromium sin sesión: sin errores JS propios, panel oculto.
+
+ARCHIVOS TOCADOS
+- js/admin-app.js                      (F1: concurrencia optimista en saveOrderEdit)
+- scripts/audit-admin-orders.js        (NUEVO)
+- package.json                         (script + audit:final)
+- .github/workflows/tintin-audit.yml   (paso CI)
+- maintenance/11-3-pedidos-checkout.txt (este registro)
+- diagnostic-manifest.json             (regenerado)
+
+PENDIENTES REALES: ninguno crítico/alto dentro del alcance.
