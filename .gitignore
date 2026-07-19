@@ -7,3 +7,7 @@ public/
 
 # Wrangler build verification output
 .cloudflare-functions/
+
+# Playwright (pruebas de rendimiento a demanda)
+test-results/
+playwright-report/

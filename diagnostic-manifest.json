@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T22:57:57.897Z",
-  "sourceFingerprint": "ea1e02110bc387faad84b2370f8666807bd23249cb0f2c8ba79e108758f449fb",
+  "generatedAt": "2026-07-19T23:24:39.053Z",
+  "sourceFingerprint": "b7b5c0c3831cb6bfa9f1363b39e655cf8572d0448d566249402f64897669d9e5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 284,
-    "textFiles": 250,
-    "totalBytes": 4495033,
+    "files": 294,
+    "textFiles": 260,
+    "totalBytes": 4537498,
     "pages": 18,
-    "modules": 151
+    "modules": 159
   },
   "viewports": [
     {
@@ -16229,6 +16229,22 @@
       ]
     },
     {
+      "path": "playwright.config.js",
+      "bytes": 1127,
+      "sha256": "61880272d8fd1f9c673f9450970d4f6c0e001fba88ef5ef1b858cbcfa6fbaf9d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web",
+          "line": 9
+        }
+      ]
+    },
+    {
       "path": "script.js",
       "bytes": 83250,
       "sha256": "768a4761e015b7eb8abe43e5f7130e9c0100c56a391bdfad01ebf93da1aa966e",
@@ -16790,6 +16806,22 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-performance-realtime.js",
+      "bytes": 10091,
+      "sha256": "8e1ef0f78e952c9d75bb532d0b208e0ff4cc7dc4fece891319f341a6fa1a7128",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://res.cloudinary.com/",
+          "line": 116
+        }
+      ]
+    },
+    {
       "path": "scripts/audit-postphase-security.js",
       "bytes": 2264,
       "sha256": "538842d02b13baa6a84a83eed0d613b905b32bc3198709e930ca4726460a8731",
@@ -16934,8 +16966,8 @@
     },
     {
       "path": "scripts/audit-typography.js",
-      "bytes": 10947,
-      "sha256": "eb6e69567fdcb4342fd697280681d848b7ea312d3e4985c569449f533d9698c9",
+      "bytes": 11146,
+      "sha256": "becd7e4f3630c26f35c35d456dd9151acffe85fe8900f2c118a622e9277354be",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16980,6 +17012,77 @@
       "path": "scripts/sync-public-shell.js",
       "bytes": 3880,
       "sha256": "2e55b705b80b1fb92951c76455260fff13118d50401fa7c20e052c912fb983d2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/performance/_helpers.js",
+      "bytes": 3501,
+      "sha256": "0da2783f444ab076632c8b6e5acc2aad3428e17a3f9fe966a5fd64acfcb6fe5e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web",
+          "line": 10
+        }
+      ]
+    },
+    {
+      "path": "tests/performance/admin.performance.spec.js",
+      "bytes": 1874,
+      "sha256": "9fce8f980069379398f6513a97302d7112b5aa7bfdbb1b60fa204e870e4af796",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/performance/offline-recovery.spec.js",
+      "bytes": 2015,
+      "sha256": "3e410e518e33e623f86e430b7abaa8f2f93867d01465c625818dd82f81059498",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/performance/public-pages.performance.spec.js",
+      "bytes": 1641,
+      "sha256": "b124f6e5d66dc841cf56507d0dcb6b07004c3ba77b64ab6a0e84d8e5ee317bc5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/performance/realtime-sync.spec.js",
+      "bytes": 2345,
+      "sha256": "d5fafc7227fea648517d789c1c259b2f7df75d1fef88d9b8ce4537220ca9fd30",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/performance/responsive-performance.spec.js",
+      "bytes": 1561,
+      "sha256": "f952d54a623413dca31482a04a549fab78d7affef5d37fde615419fe00698f40",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17064,8 +17167,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 3028,
-      "sha256": "928fc374ed54802be47638d6942a6d3d6238625b3c5faf7de74e8934359927a3"
+      "bytes": 3176,
+      "sha256": "0c48572363e4fd56354aab1aed382f827429a56dfecc221daeeb415f5c597c9d"
     },
     {
       "path": "404.html",
@@ -17412,8 +17515,8 @@
     {
       "path": "css/montserrat.css",
       "extension": ".css",
-      "bytes": 4731,
-      "sha256": "bbb6af48f4ef6db5697d4181c5c20314982e93ffd772fde4ea5e103fe352ca47"
+      "bytes": 5046,
+      "sha256": "a7d4a1439fc6a2f74456c406f43f94e22ae32b97d9f7d83a5341349967bad41c"
     },
     {
       "path": "css/product-extras.css",
@@ -18346,6 +18449,12 @@
       "sha256": "4c09cac4445e7dfdaf6e8a8924d7cba92600defeed88548f1c72d0eb1eeec64f"
     },
     {
+      "path": "maintenance/12-rendimiento-velocidad-sincronizacion.txt",
+      "extension": ".txt",
+      "bytes": 15857,
+      "sha256": "8f05fe80389f631969ba2504e8de21751b4478f07d73ecff4707004f03e98a36"
+    },
+    {
       "path": "maintenance/99-auditoria-final-integracion.txt",
       "extension": ".txt",
       "bytes": 11626,
@@ -18366,14 +18475,20 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 3285,
-      "sha256": "cb7dcb47e4872f3a0f23f68f3e25ef8d58141af8527bff3e72271bc63b07bb7f"
+      "bytes": 3446,
+      "sha256": "24cb3434b56079ef7240b9810d54e0302c0a56c43833d5340baa7da5d21ab6eb"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 22007,
       "sha256": "58f4850a4c2a1f62d0002fe0ecd6449a07b5c59d6053104a0252b6cc210cc674"
+    },
+    {
+      "path": "playwright.config.js",
+      "extension": ".js",
+      "bytes": 1127,
+      "sha256": "61880272d8fd1f9c673f9450970d4f6c0e001fba88ef5ef1b858cbcfa6fbaf9d"
     },
     {
       "path": "preguntas-frecuentes.html",
@@ -18592,6 +18707,12 @@
       "sha256": "8451fff69f9560e17f498046d4c3f4a001d22576c8e68bb85cfc0086a1353400"
     },
     {
+      "path": "scripts/audit-performance-realtime.js",
+      "extension": ".js",
+      "bytes": 10091,
+      "sha256": "8e1ef0f78e952c9d75bb532d0b208e0ff4cc7dc4fece891319f341a6fa1a7128"
+    },
+    {
       "path": "scripts/audit-postphase-security.js",
       "extension": ".js",
       "bytes": 2264,
@@ -18648,8 +18769,8 @@
     {
       "path": "scripts/audit-typography.js",
       "extension": ".js",
-      "bytes": 10947,
-      "sha256": "eb6e69567fdcb4342fd697280681d848b7ea312d3e4985c569449f533d9698c9"
+      "bytes": 11146,
+      "sha256": "becd7e4f3630c26f35c35d456dd9151acffe85fe8900f2c118a622e9277354be"
     },
     {
       "path": "scripts/build-diagnostic-manifest.js",
@@ -18692,6 +18813,48 @@
       "extension": ".html",
       "bytes": 12498,
       "sha256": "5817d4f2919af3f2b06c906509b233c6c3d378915fb04372b9eb225e96aaff19"
+    },
+    {
+      "path": "tests/performance/README.md",
+      "extension": ".md",
+      "bytes": 1630,
+      "sha256": "46b0be47b4c2def025b150489b63709e001e02a11db080669ba31ade8e7f8047"
+    },
+    {
+      "path": "tests/performance/_helpers.js",
+      "extension": ".js",
+      "bytes": 3501,
+      "sha256": "0da2783f444ab076632c8b6e5acc2aad3428e17a3f9fe966a5fd64acfcb6fe5e"
+    },
+    {
+      "path": "tests/performance/admin.performance.spec.js",
+      "extension": ".js",
+      "bytes": 1874,
+      "sha256": "9fce8f980069379398f6513a97302d7112b5aa7bfdbb1b60fa204e870e4af796"
+    },
+    {
+      "path": "tests/performance/offline-recovery.spec.js",
+      "extension": ".js",
+      "bytes": 2015,
+      "sha256": "3e410e518e33e623f86e430b7abaa8f2f93867d01465c625818dd82f81059498"
+    },
+    {
+      "path": "tests/performance/public-pages.performance.spec.js",
+      "extension": ".js",
+      "bytes": 1641,
+      "sha256": "b124f6e5d66dc841cf56507d0dcb6b07004c3ba77b64ab6a0e84d8e5ee317bc5"
+    },
+    {
+      "path": "tests/performance/realtime-sync.spec.js",
+      "extension": ".js",
+      "bytes": 2345,
+      "sha256": "d5fafc7227fea648517d789c1c259b2f7df75d1fef88d9b8ce4537220ca9fd30"
+    },
+    {
+      "path": "tests/performance/responsive-performance.spec.js",
+      "extension": ".js",
+      "bytes": 1561,
+      "sha256": "f952d54a623413dca31482a04a549fab78d7affef5d37fde615419fe00698f40"
     }
   ],
   "sitemapRoutes": [

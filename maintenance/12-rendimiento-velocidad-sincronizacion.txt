@@ -1,0 +1,202 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 12
+RENDIMIENTO, VELOCIDAD Y SINCRONIZACIÓN EN TIEMPO REAL
+Fecha: 19/07/2026
+Rama: maintenance/performance-realtime-optimization
+Auditoría nueva: scripts/audit-performance-realtime.js  (npm run audit:performance)
+Pruebas nuevas: tests/performance/*.spec.js (Playwright, a demanda)
+
+═══════════════════════════════════════════════════════════════════════
+REGLA DE MANTENIMIENTOS ANTERIORES (cumplida antes de tocar nada)
+═══════════════════════════════════════════════════════════════════════
+Se revisó main, los PR mergeados (hasta #181), maintenance/ (18 registros) y las
+auditorías existentes. Se confirmó qué optimizaciones YA existen y no se
+rehicieron ni deshicieron. Solo se cambió algo anterior con evidencia clara.
+
+═══════════════════════════════════════════════════════════════════════
+PÁGINAS / MÓDULOS AUDITADOS
+═══════════════════════════════════════════════════════════════════════
+Públicas: index, catalogo, collections, product, contact, about, envios,
+  cambios-devoluciones, preguntas-frecuentes, terminos, privacidad, 404, login,
+  perfil, checkout, ruta legacy nosotros.
+Super Admin: admin.html (dashboard, estadísticas, usuarios, pedidos, productos,
+  colecciones, contenido, imágenes, correos, mensajes, auditoría, diagnóstico,
+  configuración, permisos, apariencia) y admin-images.html.
+Módulos compartidos: page-loader.js, public-shell.js, script.js,
+  color-scheme(-instant).js, store-gate(.js/-core.js), whatsapp.js,
+  products-store.js, collections-store.js, site-content.js, image-performance.js,
+  site-activity.js, firebase.js.
+
+═══════════════════════════════════════════════════════════════════════
+RESOLUCIONES / HERRAMIENTAS / CONEXIÓN
+═══════════════════════════════════════════════════════════════════════
+Resoluciones objetivo (encoded en tests/performance/_helpers.js): 1920, 1440,
+  1280, 1024, 768, 390 y 320 px.
+Herramientas: análisis estático (Node) + Playwright (Chromium) instalado para
+  medir Web Vitals.
+Conexión: NO medida en este entorno — el navegador headless no alcanza la red
+  externa (proxy del sandbox: ERR_TUNNEL_CONNECTION_FAILED al abrir el sitio),
+  y la app depende de Firebase/gstatic/Cloudinary. Ver LIMITACIONES.
+
+═══════════════════════════════════════════════════════════════════════
+MÉTRICAS INICIALES
+═══════════════════════════════════════════════════════════════════════
+MEDIDAS (estáticas, reproducibles — bytes en disco, sin comprimir):
+  - CSS local del home ......... 279 KB (raw; ~50–60 KB con gzip)
+  - JS referenciado directo home  154 KB (raw; sin contar imports transitivos)
+  - Fuentes (latín normal+itálica) 76 KB (precargadas)
+  - SDK Firebase (gstatic CDN) ... app + auth + firestore (cacheado por gstatic)
+NO MEDIDAS (requieren navegador con red — ver LIMITACIONES):
+  TTFB, FCP, LCP, INP, CLS, TBT, tiempo hasta interacción, cantidad de
+  solicitudes en vivo, tiempo de autenticación/rol, tiempo de apertura del panel
+  y de cada sección: NO MEDIDA en este entorno.
+
+═══════════════════════════════════════════════════════════════════════
+PROBLEMA COMPROBADO Y CORREGIDO
+═══════════════════════════════════════════════════════════════════════
+FOIT — texto invisible durante la carga (css/montserrat.css)
+  Evidencia: los 10 @font-face de Montserrat usaban font-display: block. "block"
+  oculta el texto hasta 3 s mientras carga la fuente (Flash Of Invisible Text),
+  justo en conexiones lentas/inestables — el escenario que este mantenimiento
+  debe mejorar y que el encargo prohíbe ("No provoques texto invisible durante
+  la carga").
+  Cambio: font-display: block → swap en los 10 @font-face. El subconjunto latino
+  ya se precarga en cada página, así que en conexiones normales la fuente está
+  lista antes de la primera pintura (sin salto); en conexiones lentas el texto
+  se muestra de inmediato con la fuente de respaldo en vez de quedar invisible.
+  Riesgo: mínimo. swap puede producir un refinamiento tipográfico tardío en
+  conexiones muy lentas, preferible a texto invisible; el preload lo evita en el
+  caso normal.
+
+═══════════════════════════════════════════════════════════════════════
+PROBLEMAS ANTERIORES YA SOLUCIONADOS (revisados, NO tocados)
+═══════════════════════════════════════════════════════════════════════
+- Loader con salida garantizada: page-loader.js (STORE_GATE_TIMEOUT_MS=9000) +
+  color-scheme-instant.js (RELEASE_TIMEOUT_MS=6500). El runtime secundario
+  arranca en setTimeout(0) y no retiene el loader; ante gate cerrado/indisponible
+  se retira sin esperar. → No hay spinner infinito.
+- Imágenes: image-performance.js aplica decoding=async y loading=lazy (eager solo
+  en prioritarias); product cards con loading="lazy"; preconnect+dns-prefetch a
+  Cloudinary desde page-loader; entrega f_auto,q_auto. → Ya optimizado.
+- Tiempo real del catálogo: products-store.js y collections-store.js usan
+  onSnapshot con limit() (no getDocs). Un cambio del Super Admin se refleja en
+  vivo sin recargar. → Ya optimizado.
+- Listeners del panel: orders/users con onSnapshot limit(10000), COMPARTIDOS por
+  Dashboard/Pedidos/Usuarios/Estadísticas (una sola suscripción, no duplicada).
+- Timers: dashboard (clearInterval en stopDashboardActivityMetrics), heartbeat de
+  presencia (clearInterval en pagehide/visibility), puente de checkout
+  (clearInterval en pagehide). Watchdogs de mantenimiento (catalog/collections/
+  product) con clearInterval en pagehide. → Sin fugas.
+- Guardia anti-respuesta-obsoleta en estadísticas: statisticsTrafficLoadToken.
+- Estados diferenciados (cargando/vacío/error/sin permisos): estadísticas (etapa
+  11.8), envíos (ciudades), auditoría, catálogo.
+- Firebase de una sola fuente (js/firebase.js): una conexión compartida.
+- El bundle del Super Admin (admin-app.js) NO se descarga en páginas públicas.
+
+═══════════════════════════════════════════════════════════════════════
+CONSULTAS / LISTENERS DUPLICADOS ENCONTRADOS
+═══════════════════════════════════════════════════════════════════════
+- envios.html abre, además del listener de contacto de whatsapp.js, un listener
+  propio a settings/general para las ciudades de envío (2 lecturas del mismo doc
+  en la misma página). Impacto: 1 lectura extra en una sola página; los datos que
+  usa (ciudades) son distintos de los de contacto. Se documenta como ADVERTENCIA
+  (no fallo) en la auditoría; unificarlo requeriría un proveedor compartido de
+  settings/general y no aporta un beneficio comprobable hoy. No se tocó.
+- No se encontraron onSnapshot recreados sin cancelar, ni listeners que
+  sobrevivan al cambio de sección sin limpieza, ni consultas en bucles/N+1, ni
+  listeners activos en páginas que no los necesitan.
+
+LOADERS PROBLEMÁTICOS: ninguno (ver "ya solucionados").
+RECURSOS PESADOS: CSS del home 279 KB raw (varias hojas). Es una ADVERTENCIA de
+  presupuesto (no un fallo). No se bundlea porque el proyecto no tiene build de
+  CSS y HTTP/2 multiplexa; se documenta como oportunidad futura, sin cambio
+  riesgoso ahora.
+
+═══════════════════════════════════════════════════════════════════════
+CAMBIOS APLICADOS
+═══════════════════════════════════════════════════════════════════════
+- css/montserrat.css: font-display block → swap (10 reglas) + comentario.
+- scripts/audit-performance-realtime.js: auditoría estática nueva (12 fallos
+  críticos + presupuestos como advertencias). Wireada en package.json
+  (audit:final) y en .github/workflows/tintin-audit.yml.
+- tests/performance/: suite Playwright (public-pages, responsive, admin,
+  realtime-sync, offline-recovery) + _helpers + README; playwright.config.js.
+- package.json: scripts audit:performance y test:performance.
+- .gitignore: ignora test-results/ y playwright-report/.
+
+═══════════════════════════════════════════════════════════════════════
+MÉTRICAS POSTERIORES / MEJORAS VERIFICADAS
+═══════════════════════════════════════════════════════════════════════
+- font-display: 10 reglas en "swap", 0 en "block" (verificado por la auditoría).
+- Mejora esperada del cambio: elimina el período de texto invisible (hasta 3 s)
+  en conexiones lentas; comportamiento estándar recomendado para texto. La
+  MEJORA EN MILISEGUNDOS DE FCP/LCP NO SE MIDIÓ en este entorno (sin navegador con
+  red); queda para ejecutar tests/performance en un entorno con red.
+- audit:performance → 12/12 comprobaciones críticas OK, 0 fallos; 2 advertencias
+  (presupuesto CSS del home; doble listener en envios), ambas informativas.
+- audit:final → verde, CRITICAL: 0 (sin regresiones en las 30 auditorías).
+
+REGRESIONES DESCARTADAS: la suite audit:final completa quedó en verde tras el
+cambio; el cambio de font-display no altera lógica, sólo la política de pintado
+de la fuente.
+
+═══════════════════════════════════════════════════════════════════════
+LIMITACIONES (declaradas con honestidad)
+═══════════════════════════════════════════════════════════════════════
+- No se midieron métricas de laboratorio (TTFB/FCP/LCP/INP/CLS/TBT) ni tiempos
+  reales por sección: el navegador headless de este entorno no alcanza la red
+  externa (proxy) y la app requiere Firebase/gstatic. Las pruebas Playwright
+  quedan listas y producen números reales donde haya navegador + red
+  (PERF_BASE_URL). En este informe esas métricas figuran como "no medida".
+- No se probaron escenarios de red reales (Slow 4G, latencia, offline en vivo)
+  por la misma razón; la lógica de recuperación offline se cubre por
+  tests/performance/offline-recovery.spec.js para ejecutarse con navegador.
+- No se cambió CSS/JS grande "por preferencia": el proyecto no tiene bundler y
+  las mejoras de bundling requerirían un build nuevo; se documentan como
+  oportunidades, no se aplicaron para no arriesgar regresiones.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS AUTOMÁTICAS
+═══════════════════════════════════════════════════════════════════════
+- scripts/audit-performance-realtime.js (estática, en CI): FOIT, timeout del
+  loader, listeners en vivo con límite, timers limpiados, imágenes lazy/async,
+  bundle admin fuera del público, preconnect Cloudinary, guardia de respuestas
+  obsoletas, Firebase única fuente, scripts de <head> sin defer solo los
+  imprescindibles; presupuestos como advertencias.
+- tests/performance/*.spec.js (Playwright, a demanda, NO en CI por dependencias):
+  Web Vitals + loader cerrado + sin overflow en 7 resoluciones, gate del admin,
+  canal en vivo del catálogo, recuperación offline.
+
+PRUEBAS MANUALES RECOMENDADAS (requieren sesión/entorno real):
+  1. Abrir el panel como Super Admin y cronometrar apertura de cada sección.
+  2. Editar un producto y ver el reflejo en el catálogo público sin recargar.
+  3. Cerrar la tienda y verificar el overlay en todas las páginas.
+  4. Simular Slow 4G (DevTools) y confirmar que el texto aparece de inmediato
+     (swap) y el loader se cierra.
+  5. Cortar la red y confirmar recuperación (sin pantalla en blanco).
+
+═══════════════════════════════════════════════════════════════════════
+ARCHIVOS MODIFICADOS / CREADOS
+═══════════════════════════════════════════════════════════════════════
+M  css/montserrat.css
+A  scripts/audit-performance-realtime.js
+A  tests/performance/_helpers.js
+A  tests/performance/public-pages.performance.spec.js
+A  tests/performance/responsive-performance.spec.js
+A  tests/performance/admin.performance.spec.js
+A  tests/performance/realtime-sync.spec.js
+A  tests/performance/offline-recovery.spec.js
+A  tests/performance/README.md
+A  playwright.config.js
+M  package.json
+M  .github/workflows/tintin-audit.yml
+M  .gitignore
+A  maintenance/12-rendimiento-velocidad-sincronizacion.txt
+M  diagnostic-manifest.json (regenerado)
+
+═══════════════════════════════════════════════════════════════════════
+PR / COMMIT / MERGE
+═══════════════════════════════════════════════════════════════════════
+PR: "Mantenimiento integral 12: Rendimiento y sincronización en tiempo real"
+Commit final de la rama y SHA de merge: se registran en el PR al mergear con CI
+verde (el merge squash genera el SHA en main). No se mergea con pruebas
+pendientes, canceladas, fallidas ni incompletas.
