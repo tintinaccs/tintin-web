@@ -354,8 +354,12 @@ function statusBadge(status) {
 }
 
 // ---- SIDEBAR NAVIGATION ----
+// navItems: los botones ESTÁTICOS de navegación (sidebar + tabs móvil) que
+// existen al cargar el módulo; solo se usa para cablear sus clics. La
+// deactivación/activación de secciones NO usa NodeList estáticas — se hace con
+// querySelectorAll en vivo dentro de switchSection para incluir las secciones
+// que otros módulos agregan después (p. ej. "Mensaje de bienvenida").
 const navItems = document.querySelectorAll('[data-section]');
-const sections = document.querySelectorAll('.adm-section');
 const topbarTitle = document.getElementById('adm-topbar-title');
 
 const SECTION_LABELS = {
@@ -372,6 +376,9 @@ const SECTION_LABELS = {
   configuracion: 'Configuración',
   importar: 'Import / Export',
   contenido: 'Contenido del Sitio',
+  // Sin esta entrada el topbar mostraba la clave cruda "permisos" en lugar de
+  // un título legible al entrar a Roles y Permisos.
+  permisos: 'Roles y Permisos',
   apariencia: 'Apariencia y esquemas de colores'
 };
 
@@ -409,6 +416,9 @@ const SECTION_PERMISSION = {
   permisos:      'manageSettings'
 };
 
+// Evita el bucle switchSection → replaceState(#x) → hashchange → switchSection.
+let admSuppressHashSync = false;
+
 function switchSection(target) {
   const requiredPerm = SECTION_PERMISSION[target];
   if (requiredPerm && !can(currentRole, requiredPerm)) {
@@ -427,13 +437,35 @@ function switchSection(target) {
     toast('Diagnóstico es exclusivo de Super Admin');
     target = 'dashboard';
   }
-  navItems.forEach(b => b.classList.remove('active'));
+  // IMPORTANTE: se consultan en vivo (no las NodeList estáticas navItems /
+  // sections capturadas al cargar el módulo). Módulos que se inicializan
+  // después — p. ej. admin-welcome-control.js agrega la sección "Mensaje de
+  // bienvenida" (nav-welcome / mtab-welcome / section-welcome) recién cuando
+  // resuelve el auth del Super Admin — quedan fuera de esas listas fijas. Si se
+  // usaran, al salir de una sección dinámica su botón quedaría resaltado y su
+  // panel visible DEBAJO del nuevo (dos secciones activas a la vez).
+  document.querySelectorAll('.adm-nav-item, .adm-mobile-tab').forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');
+  });
   // activate all items matching this section (sidebar + mobile tabs)
-  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => b.classList.add('active'));
-  sections.forEach(s => s.classList.remove('active'));
+  document.querySelectorAll(`[data-section="${target}"]`).forEach(b => {
+    b.classList.add('active');
+    // aria-current="page" para que lectores de pantalla anuncien cuál sección
+    // está abierta — antes solo cambiaba la clase visual .active.
+    b.setAttribute('aria-current', 'page');
+  });
+  document.querySelectorAll('.adm-section').forEach(s => s.classList.remove('active'));
   const targetSection = document.getElementById(`section-${target}`);
   if (targetSection) targetSection.classList.add('active');
   topbarTitle.textContent = SECTION_LABELS[target] || target;
+  // Refleja la sección activa en la URL (#hash) sin crear entradas de historial
+  // ni provocar scroll, para que el estado sea compartible y coherente con la
+  // navegación por hash de abajo.
+  if (!admSuppressHashSync && location.hash.slice(1) !== target) {
+    admSuppressHashSync = true;
+    try { history.replaceState(null, '', `#${target}`); } finally { admSuppressHashSync = false; }
+  }
   if (target === 'usuarios') loadUsers();
   if (target === 'estadisticas') renderGeneralStatistics();
   if (target === 'pedidos') loadOrders();
@@ -461,6 +493,147 @@ navItems.forEach(btn => {
 });
 
 function closeSidebar() {}
+
+// ---- DEEP-LINK POR URL / HASH ----
+// Permite abrir una sección directamente con admin.html#usuarios o
+// admin.html?section=pedidos, y navegar cambiando el hash. Siempre pasa por
+// switchSection(), así que hereda TODOS los chequeos de permiso/email (un rol
+// sin acceso termina en dashboard, nunca en la sección restringida). Solo
+// considera valores que existan como sección real, para no generar estados
+// contradictorios con claves inventadas.
+function isKnownSection(name) {
+  return !!name && !!document.getElementById(`section-${name}`);
+}
+function sectionFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const fromQuery = params.get('section');
+  if (isKnownSection(fromQuery)) return fromQuery;
+  const fromHash = (location.hash || '').replace(/^#/, '');
+  if (isKnownSection(fromHash)) return fromHash;
+  return null;
+}
+function applyInitialSectionFromUrl() {
+  // El deep-link de Contenido (?tab=contenido&page=…&section=…) tiene su propio
+  // manejador (handleContentDeepLink) — no se pisa acá.
+  if (new URLSearchParams(location.search).get('tab') === 'contenido') return;
+  const target = sectionFromUrl();
+  if (target && target !== 'dashboard') switchSection(target);
+}
+window.addEventListener('hashchange', () => {
+  if (admSuppressHashSync) return;
+  const target = sectionFromUrl();
+  if (!target) return;
+  const active = document.querySelector('.adm-section.active');
+  if (active && active.id === `section-${target}`) return;
+  const go = () => switchSection(target);
+  window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(go) : go();
+});
+
+// ---- ACCESIBILIDAD DE MODALES OPERATIVOS (compartido) ----
+// El modal de "cambios sin guardar" (#unsaved-modal) ya trae su propio manejo
+// de foco/Escape en admin-unsaved-guard.js. Este bloque agrega, de forma
+// centralizada y aditiva (sin tocar cada open/close), el mismo nivel para los
+// cuatro overlays operativos: cerrar con Escape, bloquear el scroll de fondo
+// mientras hay uno abierto, mover el foco adentro al abrir y devolverlo al
+// abrir/al cerrar, y atrapar el Tab dentro del overlay superior.
+(function setupAdminOverlayA11y() {
+  const OVERLAYS = [
+    { id: 'order-edit-overlay',   close: () => window.closeOrderEdit && window.closeOrderEdit() },
+    { id: 'tpl-edit-overlay',     close: () => window.closeTplEdit && window.closeTplEdit() },
+    { id: 'tpl-preview-overlay',  close: () => window.closeTplPreview && window.closeTplPreview() },
+    { id: 'promo-confirm-overlay',close: () => window.closePromoConfirm && window.closePromoConfirm() }
+  ];
+  const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),iframe,[tabindex]:not([tabindex="-1"])';
+  const openers = new Map();
+  const wasVisible = new Map();
+
+  const isVisible = el => !!el && el.style.display !== 'none' && getComputedStyle(el).display !== 'none';
+  const unsavedOpen = () => isVisible(document.getElementById('unsaved-modal'));
+
+  // El de mayor z-index gana: promo (4100) > tpl-preview (3100) > tpl-edit /
+  // order-edit (3000). Se recorre en orden inverso al array para respetarlo.
+  function topOverlay() {
+    for (let i = OVERLAYS.length - 1; i >= 0; i--) {
+      const el = document.getElementById(OVERLAYS[i].id);
+      if (isVisible(el)) return { def: OVERLAYS[i], el };
+    }
+    return null;
+  }
+  function anyOpen() {
+    return OVERLAYS.some(o => isVisible(document.getElementById(o.id))) || unsavedOpen();
+  }
+  function focusablesIn(el) {
+    return [...el.querySelectorAll(FOCUSABLE)].filter(n => n.offsetParent !== null || n === document.activeElement);
+  }
+
+  function syncScrollLock() {
+    document.body.style.overflow = anyOpen() ? 'hidden' : '';
+  }
+
+  function onOverlayShown(el) {
+    openers.set(el.id, document.activeElement);
+    el.setAttribute('aria-hidden', 'false');
+    // Enfoca el primer control real del modal para que teclado y lector de
+    // pantalla entren adentro en vez de quedar detrás.
+    const first = focusablesIn(el)[0];
+    if (first) { try { first.focus({ preventScroll: true }); } catch(_) { first.focus(); } }
+  }
+  function onOverlayHidden(el) {
+    el.setAttribute('aria-hidden', 'true');
+    const opener = openers.get(el.id);
+    openers.delete(el.id);
+    // Devuelve el foco a lo que estaba enfocado antes de abrir, salvo que haya
+    // quedado otro overlay abierto arriba.
+    if (opener && opener.isConnected && !topOverlay()) {
+      try { opener.focus({ preventScroll: true }); } catch(_) { opener.focus(); }
+    }
+  }
+
+  function handleMutation() {
+    OVERLAYS.forEach(o => {
+      const el = document.getElementById(o.id);
+      if (!el) return;
+      const now = isVisible(el);
+      const before = wasVisible.get(o.id) || false;
+      if (now && !before) onOverlayShown(el);
+      else if (!now && before) onOverlayHidden(el);
+      wasVisible.set(o.id, now);
+    });
+    syncScrollLock();
+  }
+
+  OVERLAYS.forEach(o => {
+    const el = document.getElementById(o.id);
+    if (!el) return;
+    wasVisible.set(o.id, isVisible(el));
+    new MutationObserver(handleMutation).observe(el, { attributes: true, attributeFilter: ['style'] });
+  });
+
+  document.addEventListener('keydown', event => {
+    // Si está el modal de cambios sin guardar, lo maneja su propio guard.
+    if (unsavedOpen()) return;
+    const top = topOverlay();
+    if (!top) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      top.def.close();
+      return;
+    }
+    if (event.key === 'Tab') {
+      const items = focusablesIn(top.el);
+      if (!items.length) { event.preventDefault(); return; }
+      const firstEl = items[0];
+      const lastEl = items[items.length - 1];
+      const active = document.activeElement;
+      // Mantiene el foco en ciclo dentro del overlay superior.
+      if (!top.el.contains(active)) { event.preventDefault(); firstEl.focus(); return; }
+      if (event.shiftKey && active === firstEl) { event.preventDefault(); lastEl.focus(); }
+      else if (!event.shiftKey && active === lastEl) { event.preventDefault(); firstEl.focus(); }
+    }
+  }, true);
+
+  syncScrollLock();
+})();
 
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
@@ -542,6 +715,7 @@ onAuthStateChanged(auth, async user => {
     loadProductos();
     loadColecciones();
     handleContentDeepLink();
+    applyInitialSectionFromUrl();
     document.documentElement.classList.add('adm-auth-ready');
     hideOverlay();
   } catch(e) {

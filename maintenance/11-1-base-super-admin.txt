@@ -1,0 +1,186 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.2
+BASE Y SEGURIDAD DEL SUPER ADMIN (admin.html + su fundación)
+Fecha: 19/07/2026
+Rama: maintenance/admin-foundation-security
+Auditoría nueva: scripts/audit-admin-foundation.js  (npm run audit:admin-foundation)
+
+═══════════════════════════════════════════════════════════════════════
+ALCANCE
+═══════════════════════════════════════════════════════════════════════
+Mantenimiento exclusivo de la BASE del Super Admin: autenticación, protección
+inicial, navegación (sidebar escritorio/tablet + tabs móviles), cambio de
+secciones, deep-link por URL/hash, modales compartidos, accesibilidad y
+estructura responsive. NO se tocó la lógica de negocio de cada módulo
+(Pedidos, Productos, Correos, etc.) ni la sincronización pública ya blindada
+en la etapa 11.1.
+
+Antes de cambiar nada se revisó main, los PR mergeados, maintenance/ y las
+auditorías existentes. Las correcciones que ya funcionan NO se rehicieron.
+
+═══════════════════════════════════════════════════════════════════════
+INVENTARIO REAL (extraído de admin.html, no supuesto)
+═══════════════════════════════════════════════════════════════════════
+15 secciones estáticas, coherentes en las TRES superficies (sidebar de
+escritorio, tabs móviles y paneles section-*):
+  dashboard, estadisticas, usuarios, pedidos, productos, colecciones,
+  contenido, importar, mensajes, auditoria, diagnostico, correos,
+  configuracion, permisos, apariencia
+
++ 1 sección DINÁMICA agregada por js/admin-welcome-control.js SOLO para el
+  Super Admin real: "welcome" (nav-welcome / mtab-welcome / section-welcome).
+
+Enlaces (no secciones): Imágenes (admin-images.html), Ver tienda (index.html),
+Cerrar sesión.
+
+Modales / overlays:
+  - #unsaved-modal        (cambios sin guardar; lo gestiona admin-unsaved-guard.js)
+  - #order-edit-overlay   (editar pedido)
+  - #tpl-edit-overlay     (editar plantilla de correo)
+  - #tpl-preview-overlay  (vista previa de correo)
+  - #promo-confirm-overlay(confirmar envío de promoción)
+
+Modelo de navegación real: rail de iconos persistente en todos los tamaños.
+En ≤900px la sidebar se vuelve compacta (icon-rail 84px); en ≤540px se mantiene
+el rail (78px) y la barra inferior .adm-mobile-tabs queda oculta. El
+#adm-hamburger y #adm-overlay existen en el markup pero están display:none en
+todos los breakpoints (modelo sin drawer) — se conservan porque
+admin-welcome-control.js los referencia de forma defensiva (null-safe) y
+quitarlos no aporta valor y sí riesgo. No son controles alcanzables ni
+enfocables (display:none ⇒ fuera del orden de tabulación).
+
+═══════════════════════════════════════════════════════════════════════
+AUTENTICACIÓN Y PROTECCIÓN INICIAL — auditado, YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+Se verificó y se dejó intacto lo que ya funcionaba:
+
+- Contenido privado NO visible antes de resolver el auth: el <head> mantiene
+  #adm-sidebar, #adm-mobile-tabs y .adm-main en visibility:hidden hasta que se
+  agrega html.adm-auth-ready. Esa clase se agrega UNA sola vez, al final del
+  único camino exitoso del guard (comprobado con smoke test en Chromium: sin
+  sesión, el chrome queda hidden y adm-auth-ready=false).
+- Usuarios no autorizados nunca acceden: !user → login.html; role client/sin
+  rol → perfil.html; cuenta blocked → signOut + login.html?blocked=1; tienda
+  cerrada sin excepción de rol → overlay (sin cerrar la sesión del Super Admin);
+  cualquier error inesperado del init → destino seguro login.html.
+- El Super Admin (SUPER_ADMIN) siempre conserva acceso total: el chequeo de
+  bloqueo lo exceptúa explícitamente.
+- Permisos REALES, no solo ocultar: switchSection() valida SECTION_PERMISSION
+  con can() antes de abrir cualquier sección sensible, y Roles y Permisos exige
+  el email exacto del Super Admin. Un acceso directo por hash/consola a una
+  sección restringida cae a dashboard.
+
+═══════════════════════════════════════════════════════════════════════
+HALLAZGOS CORREGIDOS
+═══════════════════════════════════════════════════════════════════════
+F1 [ALTO] — Estado contradictorio al salir de la sección dinámica "welcome".
+  switchSection() deactivaba usando las NodeList estáticas navItems/sections
+  capturadas al cargar el módulo. Esas listas NO contienen la sección de
+  bienvenida (la agrega admin-welcome-control.js después, al resolver el auth
+  del Super Admin). Resultado: al pasar de "Mensaje de bienvenida" a otra
+  sección, section-welcome quedaba visible DEBAJO de la nueva y su botón seguía
+  resaltado (dos secciones activas a la vez).
+  FIX: switchSection() ahora deactiva/activa con querySelectorAll EN VIVO
+  ('.adm-nav-item, .adm-mobile-tab' y '.adm-section'). Se eliminó la NodeList
+  estática 'sections' (quedaba muerta). js/admin-app.js.
+
+F2 [BAJO] — Título del topbar crudo en Roles y Permisos.
+  SECTION_LABELS no tenía la clave 'permisos', así que el topbar mostraba
+  "permisos" en minúscula. FIX: se agregó permisos: 'Roles y Permisos'.
+
+F3 [MEDIO, accesibilidad] — Navegación sin aria-current ni aria-label.
+  Los ítems de navegación solo cambiaban la clase visual .active; ningún lector
+  de pantalla anunciaba la sección abierta. FIX: switchSection() (y openSection()
+  del módulo de bienvenida) marcan aria-current="page" en la sección activa y lo
+  quitan del resto; los contenedores #adm-nav y #adm-mobile-tabs recibieron
+  aria-label; el Dashboard inicial arranca con aria-current="page" en el HTML.
+
+F4 [MEDIO, accesibilidad/UX] — Modales operativos sin base de accesibilidad.
+  Los cuatro overlays operativos no tenían role=dialog/aria-modal, no cerraban
+  con Escape, no atrapaban el foco ni bloqueaban el scroll de fondo de forma
+  consistente (solo order-edit lo bloqueaba). FIX:
+    - HTML: role="dialog" aria-modal="true" aria-label en los 4 overlays.
+    - JS: helper compartido setupAdminOverlayA11y() (aditivo, sin tocar cada
+      open/close). Observa los 4 overlays y, mientras hay alguno abierto:
+      cierra el superior con Escape, bloquea el scroll del fondo, mueve el foco
+      adentro al abrir y lo devuelve al cerrar, y atrapa el Tab en ciclo. Cede
+      el control al #unsaved-modal cuando este está abierto (ese ya trae su
+      propio manejo de foco/Escape en admin-unsaved-guard.js). No pisa el
+      scroll-lock manual de order-edit (ambos coinciden).
+
+F5 [MEJORA] — Deep-link solo para Contenido.
+  Antes solo existía ?tab=contenido. FIX: se agregó deep-link genérico por URL
+  (?section=X) y por hash (#X), más navegación al cambiar el hash. Siempre pasa
+  por switchSection(), así que HEREDA todos los chequeos de permiso/email (un
+  rol sin acceso termina en dashboard, nunca en la sección restringida) y solo
+  acepta valores que existan como sección real (isKnownSection), para no generar
+  estados contradictorios. switchSection() refleja la sección activa en el hash
+  con history.replaceState (sin entradas de historial ni scroll).
+
+═══════════════════════════════════════════════════════════════════════
+REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
+═══════════════════════════════════════════════════════════════════════
+- IDs únicos en admin.html (0 duplicados).
+- Correspondencia exacta data-section ↔ section-* en las 3 superficies.
+- Sincronización de la sección activa entre sidebar y tabs móviles: comparten
+  el mismo data-section, y setupPermissions() oculta/ muestra ambas superficies
+  a la vez con un solo querySelectorAll([data-section]).
+- Modal de cambios sin guardar (admin-unsaved-guard.js): role=dialog, Escape,
+  restauración de foco, semántica de pestañas (role=tablist/tab/tabpanel,
+  flechas), beforeunload, intercepción de enlaces. Robusto — no se tocó.
+- Limpieza de recursos: order-edit y tpl-edit registran/DES-registran su scope
+  del guard de cambios; el guard usa timeouts en el guardado; el helper de
+  overlays usa MutationObserver acotado a attributeFilter:['style'].
+- Colores: sin colores nuevos hardcodeados; los overlays usan var(--adm-*).
+- Responsive: breakpoints 900px (tablet) y 540px (mobile) intactos; el helper
+  de accesibilidad no cambia layout.
+
+═══════════════════════════════════════════════════════════════════════
+AUDITORÍA NUEVA — scripts/audit-admin-foundation.js
+═══════════════════════════════════════════════════════════════════════
+40 comprobaciones estáticas agrupadas en: autenticación, protección inicial,
+navegación (correspondencia data-section↔section-*, ids únicos, deactivación en
+vivo, deep-link), permisos reales, accesibilidad (aria-current/aria-label,
+role=dialog/aria-modal, Escape, scroll-lock, restauración de foco), modales
+compartidos y responsive. Inventaría las secciones desde el propio HTML (no de
+una lista fija).
+
+Wiring:
+  - package.json: "audit:admin-foundation" + incluida en "audit:final".
+  - .github/workflows/tintin-audit.yml: paso "Audit Super Admin foundation"
+    (corre en cada push/PR a main).
+
+Prueba de que la auditoría REALMENTE falla (no siempre pasa): se reintrodujo
+temporalmente el patrón estático de deactivación (F1) → ERROR + exit 1; se quitó
+role=dialog de un overlay (F4) → ERROR + exit 1; al restaurar, ambos vuelven a
+OK. Registrado.
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS
+═══════════════════════════════════════════════════════════════════════
+- node --check de admin-app.js y admin-welcome-control.js: OK.
+- npm run audit:final (19 auditorías, incluida la nueva): exit 0.
+- audit:tintin: CRITICAL 0.
+- Smoke test en Chromium (Playwright) cargando admin.html sin sesión:
+  adm-auth-ready=false, sidebar/main en visibility:hidden (protección inicial
+  OK), role=dialog/aria-modal presentes en el DOM vivo, nav con aria-label,
+  Dashboard con aria-current=page, y CERO errores JS propios (los 3 errores
+  observados son de Firebase/red, esperables sin backend).
+
+Nota: la verificación funcional completa del panel (login real, CRUD, cambio de
+secciones con datos) requiere una sesión Firebase autenticada, igual que en las
+etapas previas; el guard de auth impide ejercitarla headless sin backend.
+
+═══════════════════════════════════════════════════════════════════════
+ARCHIVOS TOCADOS
+═══════════════════════════════════════════════════════════════════════
+- admin.html                         (role/aria-modal en 4 overlays, aria-label
+                                      en nav, aria-current inicial en Dashboard)
+- js/admin-app.js                    (F1 live-query, F2 label, F3 aria-current,
+                                      F4 helper de overlays, F5 deep-link)
+- js/admin-welcome-control.js        (aria-current en openSection)
+- scripts/audit-admin-foundation.js  (NUEVO)
+- package.json                       (script + audit:final)
+- .github/workflows/tintin-audit.yml (paso CI)
+- maintenance/11-1-base-super-admin.txt (este registro)
+
+PENDIENTES REALES: ninguno dentro del alcance de la base del Super Admin.

@@ -60,3 +60,6 @@ jobs:
 
       - name: Audit Super Admin configuration to public site sync
         run: node scripts/audit-admin-public-sync.js
+
+      - name: Audit Super Admin foundation (auth, nav, a11y, modals)
+        run: node scripts/audit-admin-foundation.js

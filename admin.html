@@ -57,8 +57,8 @@
     </div>
   </div>
 
-  <nav class="adm-nav" id="adm-nav">
-    <button type="button" class="adm-nav-item active" data-section="dashboard">
+  <nav class="adm-nav" id="adm-nav" aria-label="Navegación principal del panel">
+    <button type="button" class="adm-nav-item active" aria-current="page" data-section="dashboard">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard
     </button>
     <button type="button" class="adm-nav-item" data-section="estadisticas" id="nav-estadisticas">
@@ -120,8 +120,8 @@
 </aside>
 
 <!-- MOBILE BOTTOM TABS -->
-<nav class="adm-mobile-tabs" id="adm-mobile-tabs">
-  <button type="button" class="adm-mobile-tab active" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
+<nav class="adm-mobile-tabs" id="adm-mobile-tabs" aria-label="Navegación del panel (móvil)">
+  <button type="button" class="adm-mobile-tab active" aria-current="page" data-section="dashboard"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
   <button type="button" class="adm-mobile-tab" data-section="estadisticas" id="mtab-estadisticas"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span>Estadísticas</button>
   <button type="button" class="adm-mobile-tab" data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
   <button type="button" class="adm-mobile-tab" data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
@@ -1814,7 +1814,7 @@
 <!-- ══════════════════════════════════════
      ORDER EDIT MODAL
 ══════════════════════════════════════ -->
-<div id="order-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
+<div id="order-edit-overlay" role="dialog" aria-modal="true" aria-label="Editar pedido" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
   <div style="background:#fff;border-radius:16px;max-width:780px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)"> Editar pedido <span id="oe-short-id" style="color:var(--adm-muted);font-size:13px"></span></div>
@@ -1917,7 +1917,7 @@
 <!-- ══════════════════════════════════════
      CORREOS — MODALES (editar plantilla / vista previa / confirmar promoción)
 ══════════════════════════════════════ -->
-<div id="tpl-edit-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
+<div id="tpl-edit-overlay" role="dialog" aria-modal="true" aria-label="Editar plantilla de correo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;overflow-y:auto;padding:24px 16px">
   <div style="background:#fff;border-radius:16px;max-width:640px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Editar plantilla <span id="tpl-edit-name" style="color:var(--adm-muted);font-size:13px"></span></div>
@@ -1963,7 +1963,7 @@
   </div>
 </div>
 
-<div id="tpl-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3100;overflow-y:auto;padding:24px 16px">
+<div id="tpl-preview-overlay" role="dialog" aria-modal="true" aria-label="Vista previa del correo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3100;overflow-y:auto;padding:24px 16px">
   <div style="background:#fff;border-radius:16px;max-width:680px;margin:auto;padding:0;box-shadow:0 8px 48px rgba(0,0,0,.18)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--adm-border)">
       <div style="font-weight:800;font-size:16px;color:var(--adm-primary)">Vista previa</div>
@@ -1976,7 +1976,7 @@
   </div>
 </div>
 
-<div id="promo-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4100;align-items:center;justify-content:center;padding:16px">
+<div id="promo-confirm-overlay" role="dialog" aria-modal="true" aria-label="Confirmar envío de promoción" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4100;align-items:center;justify-content:center;padding:16px">
   <div style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px;box-shadow:var(--shadow-lg)">
     <div style="font-size:16px;font-weight:800;margin-bottom:10px">Confirmar envío de promoción</div>
     <div id="promo-confirm-summary" style="font-size:13px;color:var(--adm-muted);margin-bottom:8px"></div>

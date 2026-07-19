@@ -107,10 +107,15 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
 
   function openSection() {
     document.querySelectorAll('.adm-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.adm-nav-item,.adm-mobile-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.adm-nav-item,.adm-mobile-tab').forEach(b => {
+      b.classList.remove('active');
+      b.removeAttribute('aria-current');
+    });
     document.getElementById('section-welcome')?.classList.add('active');
-    document.getElementById('nav-welcome')?.classList.add('active');
-    document.getElementById('mtab-welcome')?.classList.add('active');
+    ['nav-welcome', 'mtab-welcome'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.add('active'); el.setAttribute('aria-current', 'page'); }
+    });
     const title = document.getElementById('adm-topbar-title');
     if (title) title.textContent = 'Mensaje de bienvenida';
     document.getElementById('adm-sidebar')?.classList.remove('open');
