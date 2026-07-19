@@ -153,7 +153,8 @@ check(countMatches(globalCss, /@font-face\s*\{/gi) === 10, 'css/montserrat.css d
 check(countMatches(globalCss, /font-style:\s*normal\s*;/gi) === 5, 'Deben existir 5 subconjuntos normales de Montserrat.');
 check(countMatches(globalCss, /font-style:\s*italic\s*;/gi) === 5, 'Deben existir 5 subconjuntos italic de Montserrat.');
 check(countMatches(globalCss, /font-weight:\s*100 900\s*;/gi) === 10, 'Cada @font-face debe cubrir pesos reales 100–900.');
-check(countMatches(globalCss, /font-display:\s*block\s*;/gi) === 10, 'Cada @font-face debe bloquear el fallback visible durante la carga.');
+check(countMatches(globalCss, /font-display:\s*swap\s*;/gi) === 10, 'Cada @font-face debe usar swap: texto visible de inmediato (nunca invisible/FOIT) durante la carga.');
+check(countMatches(globalCss, /font-display:\s*block\s*;/gi) === 0, 'Ningún @font-face debe usar block: dejaría el texto invisible hasta 3 s en conexiones lentas.');
 check(/body\s*\*/i.test(globalCss), 'La regla global debe cubrir contenido insertado dinámicamente.');
 check(/\*::before[\s\S]*\*::after[\s\S]*\*::placeholder/i.test(globalCss), 'La regla global debe cubrir pseudoelementos y placeholders.');
 check(/svg text[\s\S]*svg tspan/i.test(globalCss), 'La regla global debe cubrir texto SVG.');

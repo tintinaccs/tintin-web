@@ -90,3 +90,6 @@ jobs:
 
       - name: Final integration audit (single sources of truth, admin↔public, SEO, PWA, no obsolete)
         run: node scripts/audit-final-integration.js
+
+      - name: Performance & realtime audit (FOIT, loader timeout, live listeners, budgets)
+        run: node scripts/audit-performance-realtime.js
