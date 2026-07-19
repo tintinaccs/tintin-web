@@ -72,3 +72,6 @@ jobs:
 
       - name: Audit users, roles and permissions (Super Admin protections)
         run: node scripts/audit-admin-users-roles.js
+
+      - name: Audit content and appearance (editor safety, color apply)
+        run: node scripts/audit-admin-content-appearance.js

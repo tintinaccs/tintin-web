@@ -21,12 +21,29 @@ let lastDeviceOverrideMaps = null;
 let lastDeviceOverrideEnabled = false;
 let firstResolutionFinished = false;
 
+// Enforcement final: un token solo se aplica al sitio público si su valor es un
+// color estricto (HEX / rgb(a) / hsl(a)). Aunque solo el Super Admin puede
+// escribir esquemas (firestore.rules) y el editor ya valida la entrada, este es
+// el punto donde un valor de Firestore/caché se vuelve CSS en vivo — validarlo
+// acá garantiza que NUNCA se aplique una URL peligrosa, un url(...) ni CSS
+// arbitrario, sin importar cómo haya llegado el valor. Un valor inválido se
+// omite y el token cae a su default de color-tokens.css.
+function isSafeColorValue(value) {
+  if (typeof value !== 'string') return false;
+  const v = value.trim();
+  if (!v || v.length > 64) return false;
+  return /^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v) ||
+    /^rgba?\(\s*[0-9.\s,%/]+\)$/i.test(v) ||
+    /^hsla?\(\s*[0-9.\s,%/deg]+\)$/i.test(v);
+}
+
 function keyMapToCssVarMap(tokensByKey) {
   const out = {};
   if (!tokensByKey) return out;
   GLOBAL_TOKENS.forEach(token => {
-    if (tokensByKey[token.key] != null && tokensByKey[token.key] !== '') {
-      out[token.cssVar] = tokensByKey[token.key];
+    const value = tokensByKey[token.key];
+    if (value != null && value !== '' && isSafeColorValue(value)) {
+      out[token.cssVar] = value;
     }
   });
   return out;

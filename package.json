@@ -19,7 +19,7 @@
     "build:diagnostics": "node scripts/build-diagnostic-manifest.js",
     "audit:diagnostics": "node scripts/audit-diagnostics.js",
     "audit:diagnostic-findings": "node scripts/audit-diagnostic-findings.js",
-    "audit:final": "npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync && npm run audit:admin-foundation && npm run audit:products-media && npm run audit:admin-orders && npm run audit:users-roles",
+    "audit:final": "npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync && npm run audit:admin-foundation && npm run audit:products-media && npm run audit:admin-orders && npm run audit:users-roles && npm run audit:content-appearance",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js",
@@ -29,7 +29,8 @@
     "audit:admin-foundation": "node scripts/audit-admin-foundation.js",
     "audit:products-media": "node scripts/audit-admin-products-media.js",
     "audit:admin-orders": "node scripts/audit-admin-orders.js",
-    "audit:users-roles": "node scripts/audit-admin-users-roles.js"
+    "audit:users-roles": "node scripts/audit-admin-users-roles.js",
+    "audit:content-appearance": "node scripts/audit-admin-content-appearance.js"
   },
   "devDependencies": {
     "firebase-tools": "latest"
