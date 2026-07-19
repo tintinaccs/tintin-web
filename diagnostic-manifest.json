@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T20:11:00.338Z",
-  "sourceFingerprint": "773fe477287647293eb838bf6d722f4d8d815f8d8a68ee0582a600f7d37143b6",
+  "generatedAt": "2026-07-19T22:11:41.953Z",
+  "sourceFingerprint": "37799bce385f22acba22693bcc50f006ffed2d9a2bfbc2a854a81dfda6103e27",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 288,
-    "textFiles": 251,
-    "totalBytes": 5475035,
+    "files": 291,
+    "textFiles": 254,
+    "totalBytes": 5501747,
     "pages": 18,
-    "modules": 148
+    "modules": 149
   },
   "viewports": [
     {
@@ -16629,6 +16629,26 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-help-pages.js",
+      "bytes": 7873,
+      "sha256": "a8d00becdfef4c4f0520d1aa9d336eb09ee449543bb2550fa93603f251bba046",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web/$%7Bfile%7D",
+          "line": 67
+        },
+        {
+          "url": "https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg",
+          "line": 78
+        }
+      ]
+    },
+    {
       "path": "scripts/audit-home-page.js",
       "bytes": 5606,
       "sha256": "8ee65fa50fc15d2089e662e2672606f579c3f6ba5a835adcc51d6dbb770cebee",
@@ -17010,8 +17030,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 2613,
-      "sha256": "966e0c8dd32e978a49354db5de22ca827212bdf7703e794575de23da13427cfc"
+      "bytes": 2745,
+      "sha256": "93af9896525102aba99f322d9180d509dc1229bd4f15594ad35df050652fc5bf"
     },
     {
       "path": "404.html",
@@ -18286,10 +18306,22 @@
       "sha256": "d99701aba6af9530be800ba981e1c9f45e1309a635e8d2435add305c622db171"
     },
     {
+      "path": "maintenance/11-7-estadisticas-auditoria-diagnostico.txt",
+      "extension": ".txt",
+      "bytes": 11547,
+      "sha256": "122f66a328e0655b3fb39f913b93dd4bebca00ca91fc282c856876ee06dc8cc3"
+    },
+    {
       "path": "maintenance/11-admin-configuracion-sincronizacion.txt",
       "extension": ".txt",
       "bytes": 6631,
       "sha256": "4e4b07596f5fd1bc236934a39839aba4c7f260d820d3d8646171aec761cf9f14"
+    },
+    {
+      "path": "maintenance/12-1-paginas-ayuda.txt",
+      "extension": ".txt",
+      "bytes": 7072,
+      "sha256": "8cddc628080cc94ff8f30ad18b69f81f6ed5578744248a6095e258b82174d173"
     },
     {
       "path": "manifest.json",
@@ -18306,8 +18338,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 3003,
-      "sha256": "d7626a806ff907a3a7c5db6697bbf4aff9a1c63d3adc013faa32d386da6287b7"
+      "bytes": 3091,
+      "sha256": "15b18715d2e4946d0463f77292340747d8038a7abf11dac92f7726974f567803"
     },
     {
       "path": "perfil.html",
@@ -18476,6 +18508,12 @@
       "extension": ".js",
       "bytes": 5291,
       "sha256": "f1711e14d649a68a2fd16c517cd1793c5716cd16ded860b50d4879816904e296"
+    },
+    {
+      "path": "scripts/audit-help-pages.js",
+      "extension": ".js",
+      "bytes": 7873,
+      "sha256": "a8d00becdfef4c4f0520d1aa9d336eb09ee449543bb2550fa93603f251bba046"
     },
     {
       "path": "scripts/audit-home-page.js",
@@ -22685,6 +22723,11 @@
           {
             "file": "scripts/audit-email-phase3.js",
             "line": 66,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-help-pages.js",
+            "line": 160,
             "operation": "doc"
           },
           {
