@@ -1,10 +1,12 @@
-/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:429
-  /(currentRolePermAllows\('pedidos', 'cambiarEstado'\)
-  ^
+/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:51
+  if (!match) throw new Error('saveOrderEdit: no se encontró la escritura del pedido.');
+              ^
 
-SyntaxError: Invalid regular expression: missing /
-    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
-    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+Error: saveOrderEdit: no se encontró la escritura del pedido.
+    at replaceOrderUpdateInsideSave (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:51:21)
+    at patchAdmin (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:527:12)
+    at Object.<anonymous> (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:701:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
     at Module.load (node:internal/modules/cjs/loader:1266:32)
     at Module._load (node:internal/modules/cjs/loader:1091:12)
