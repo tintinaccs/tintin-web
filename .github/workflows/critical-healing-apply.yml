@@ -39,14 +39,15 @@ jobs:
           path = Path('scripts/apply-critical-healing-once.cjs')
           text = path.read_text()
           pattern = re.compile(
-              r"(rules\s*=\s*)replaceExact\(\s*rules,\s*\"        'profileStatsUpdatedAt', 'orderStats'\","
+              r'(rules\s*=\s*)replaceExact\(\s*rules,\s*"        \'profileStatsUpdatedAt\', \'orderStats\'",'
           )
-          replacement = (
-              r"\1replaceFirstAfter(\n"
-              r"    rules,\n"
-              r"    'function protectedUserFieldsChanged()',\n"
-              r"    \"        'profileStatsUpdatedAt', 'orderStats'\","
-          )
+          def replacement(match):
+              return (
+                  match.group(1) + 'replaceFirstAfter(\n'
+                  + '    rules,\n'
+                  + "    'function protectedUserFieldsChanged()',\n"
+                  + '    "        \'profileStatsUpdatedAt\', \'orderStats\'",'
+              )
           text, count = pattern.subn(replacement, text, count=1)
           if count != 1:
               raise SystemExit(f'No se encontró una única llamada a refinar: {count}')
