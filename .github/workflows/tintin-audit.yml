@@ -93,3 +93,6 @@ jobs:
 
       - name: Performance & realtime audit (FOIT, loader timeout, live listeners, budgets)
         run: node scripts/audit-performance-realtime.js
+
+      - name: Post-optimization regression tripwire (all domains intact after perf changes)
+        run: node scripts/audit-performance-regressions.js
