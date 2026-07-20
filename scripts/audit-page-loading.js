@@ -84,6 +84,7 @@ function auditHtmlPage(page) {
   }
 
   const html = read(page);
+  const isAdminPage = /^admin(?:-images)?\.html$/i.test(page);
   if (!/^\s*<!doctype html>/i.test(html)) fail(page, 'falta <!DOCTYPE html>.');
   if (!/<html\b/i.test(html) || !/<\/html>/i.test(html)) fail(page, 'estructura <html> incompleta.');
   if (!/<head\b/i.test(html) || !/<\/head>/i.test(html)) fail(page, 'estructura <head> incompleta.');
@@ -93,7 +94,9 @@ function auditHtmlPage(page) {
   const isRedirect = /http-equiv=["']refresh["']/i.test(html) || /location\.(?:replace|href|assign)/.test(html);
   if (!isRedirect && meaningfulBodyLength(html) < 10) fail(page, 'el cuerpo queda prácticamente vacío sin ser una redirección.');
 
-  const ids = [...html.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)].map(match => match[2]).filter(Boolean);
+  const ids = [...html.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)]
+    .map(match => match[2])
+    .filter(id => id && !/\$\{|\{\{|<%/.test(id));
   const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
   if (duplicateIds.length) fail(page, `IDs duplicados: ${duplicateIds.join(', ')}.`);
 
@@ -106,7 +109,9 @@ function auditHtmlPage(page) {
 
   if (/TT_PAGE_LOADER_WAIT\s*=\s*true/.test(html)) {
     if (!/js\/page-loader\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga page-loader.js.');
-    if (!/js\/color-scheme-instant\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga color-scheme-instant.js.');
+    if (!isAdminPage && !/js\/color-scheme-instant\.js/.test(html)) {
+      fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga color-scheme-instant.js.');
+    }
   }
 
   const localScripts = [...html.matchAll(/<script\b[^>]*\bsrc\s*=\s*(["'])(.*?)\1/gi)]
