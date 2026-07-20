@@ -8,7 +8,7 @@ const requireText = (text, pattern, message) => { if (!pattern.test(text)) error
 const html = read('product.html');
 const css = read('css/product-maintenance.css');
 const runtime = read('js/product-maintenance.js');
-const store = read('js/collections-store.js');
+const loader = read('js/page-maintenance-loader.js');
 const core = read('script.js');
 const record = read('maintenance/04-producto.txt');
 
@@ -17,13 +17,11 @@ const record = read('maintenance/04-producto.txt');
 });
 requireText(html, /aria-busy="true"/, 'Falta estado inicial aria-busy.');
 requireText(html, /aria-live="polite"/, 'Falta estado accesible en relacionados.');
-
 requireText(core, /dataset\.ttBound/, 'La lógica principal no protege listeners duplicados.');
 requireText(core, /_pdValidateVariants/, 'Falta validación de variantes.');
 requireText(core, /_pdMaxQty/, 'Falta límite de stock en cantidad.');
 requireText(core, /_injectProductJsonLd/, 'Falta JSON-LD de producto.');
 requireText(core, /_updateProductMeta/, 'Falta actualización dinámica de metadatos.');
-
 requireText(css, /body\.tt-product-maintenance/, 'CSS no está limitado a Producto.');
 requireText(css, /var\(--color-background-page/, 'Fondo no usa tokens.');
 requireText(css, /tt-gallery-main[\s\S]*background:\s*var\(/, 'Galería no tiene superficie sólida configurable.');
@@ -32,7 +30,6 @@ requireText(css, /@media \(max-width: 768px\)/, 'Falta responsive mobile.');
 requireText(css, /@media \(max-width: 360px\)/, 'Falta mini mobile.');
 requireText(css, /prefers-reduced-motion/, 'Falta reduced motion.');
 if (/(^|[^\w-])#000(?:000)?\b/i.test(css)) errors.push('La capa contiene negro puro.');
-
 requireText(runtime, /PRODUCT_PATH_RE/, 'Runtime no reconoce la ruta product.html.');
 requireText(runtime, /function isProductPage\(\)/, 'Falta detector único de la página Producto.');
 requireText(runtime, /document\.getElementById\('product-detail'\)/, 'El detector no tiene respaldo por estructura DOM.');
@@ -46,17 +43,14 @@ requireText(runtime, /function queueInspect/, 'Falta coalescer las inspecciones 
 requireText(runtime, /if \(pageReleased\) return;/, 'La liberación del loader puede ejecutarse repetidamente.');
 requireText(runtime, /const commonConfig[\s\S]*attributeFilter:\s*\['style', 'hidden', 'class'\]/, 'El observer común no está aislado de aria-busy.');
 requireText(runtime, /observer\.observe\(relatedGrid,[\s\S]*attributeFilter:\s*\['style', 'hidden', 'class', 'aria-busy'\]/, 'Relacionados no observa su aria-busy de forma aislada.');
-if (/detailGrid\??\.setAttribute\(\s*['"]aria-busy['"]/.test(runtime)) {
-  errors.push('Regresión: product-grid escribe aria-busy directamente dentro del observer.');
-}
+if (/detailGrid\??\.setAttribute\(\s*['"]aria-busy['"]/.test(runtime)) errors.push('Regresión: product-grid escribe aria-busy directamente dentro del observer.');
 requireText(runtime, /visibilitychange/, 'Falta recuperación al regresar a la pestaña.');
 requireText(runtime, /pageshow/, 'Falta recuperación bfcache.');
 requireText(runtime, /window\.addEventListener\('online'/, 'Falta recuperación online.');
 requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado offline.');
 requireText(runtime, /location\.origin/, 'Falta normalización del dominio.');
 requireText(runtime, /getFullYear/, 'Falta año automático.');
-requireText(store, /import '\.\/product-maintenance\.js/, 'Runtime de Producto no se carga desde el shell público.');
-
+requireText(loader, /product[\s\S]*load\('product-maintenance\.js'\)/, 'Runtime de Producto no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');
 requireText(record, /tablet/i, 'Registro no contempla tablet.');
 requireText(record, /mobile/i, 'Registro no contempla mobile.');
@@ -69,4 +63,4 @@ if (errors.length) {
   errors.forEach((error, index) => console.error(`${index + 1}. ${error}`));
   process.exit(1);
 }
-console.log('AUDITORÍA PRODUCTO: OK · reconocimiento robusto · observer idempotente · 7 viewports · galería · variantes · stock · carrito · metadatos · recuperación.');
+console.log('AUDITORÍA PRODUCTO: OK · reconocimiento robusto · carga específica · 7 viewports · variantes · stock · metadatos.');
