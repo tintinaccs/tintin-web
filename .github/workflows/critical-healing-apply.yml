@@ -78,7 +78,12 @@ jobs:
         run: |
           set +e
           rm -f critical-patch.log
-          node scripts/apply-critical-healing-once.cjs > critical-patch.log 2>&1
+          {
+            echo '=== CONTEXTO DEL EDITOR DE PEDIDO ==='
+            grep -n -E "saveOrderEdit|openOrderEdit|orderEditBaseline|oe-save|updateDoc.*orders" js/admin-app.js || true
+            echo '=== RESULTADO DEL PARCHE ==='
+          } > critical-patch.log
+          node scripts/apply-critical-healing-once.cjs >> critical-patch.log 2>&1
           code=$?
           cat critical-patch.log
           if [ "$code" -ne 0 ]; then
