@@ -43,6 +43,7 @@ jobs:
           rules = rules_path.read_text()
           already = (
               "request.resource.data.stock < resource.data.stock" in rules and
+              "allow update: if checkoutGuardOnlyUpdate(userId) ||" in rules and
               "(isSuperAdmin() || settings.get('storeOpen', false) == true)" in rules
           )
 
@@ -65,6 +66,33 @@ jobs:
                   "allow update: if sparkStockUpdateValid(productId) ||\n        adminInventoryStockUpdateValid(productId) ||\n        isSuperAdmin() ||",
                   'Priorizar caminos acotados de inventario'
               )
+
+              users_start = rules.index('    match /users/{userId} {')
+              update_start = rules.index('      allow update: if isSignedIn() && (', users_start)
+              delete_start = rules.index('\n\n      allow delete:', update_start)
+              update_block = rules[update_start:delete_start]
+              update_block = update_block.replace(
+                  '      allow update: if isSignedIn() && (',
+                  '      allow update: if checkoutGuardOnlyUpdate(userId) ||\n        (\n          isSignedIn() && ('
+              )
+              nested_guard = '            loginMetadataOnlyUpdate() ||\n            checkoutGuardOnlyUpdate(userId)'
+              if update_block.count(nested_guard) != 1:
+                  raise SystemExit('No se encontró una única rama anidada del guard de checkout')
+              update_block = update_block.replace(nested_guard, '            loginMetadataOnlyUpdate()')
+              if not update_block.endswith('      );'):
+                  raise SystemExit('El bloque de actualización de usuario no termina como se esperaba')
+              update_block = update_block[:-len('      );')] + '          )\n        );'
+              rules = rules[:update_start] + update_block + rules[delete_start:]
+
+              decorative_checks = [
+                  r"\s*item\.cat is string && item\.cat\.size\(\) <= 120 &&",
+                  r"\s*item\.variant is string && item\.variant\.size\(\) <= 120 &&",
+                  r"\s*item\.imageUrl is string && item\.imageUrl\.size\(\) <= 900 &&",
+                  r"\s*item\.name == product\.get\('name', product\.get\('title', product\.get\('Title', 'Producto'\)\)\) &&"
+              ]
+              for index, pattern in enumerate(decorative_checks, start=1):
+                  rules = sub_one(rules, pattern, '', f'Quitar chequeo decorativo redundante {index}')
+
               rules_path.write_text(rules)
 
           critical_path = Path('scripts/audit-critical-healing.js')
