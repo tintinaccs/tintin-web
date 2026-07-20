@@ -23,7 +23,22 @@ jobs:
           node-version: 20
 
       - name: Audit load contracts for every HTML page
-        run: npm run audit:page-loading
+        id: page_load_audit
+        continue-on-error: true
+        run: npm run audit:page-loading > page-loading-audit.log 2>&1
+
+      - name: Upload page-load audit log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: page-loading-audit-log
+          path: page-loading-audit.log
+          retention-days: 7
+
+      - name: Enforce page-load audit result
+        run: |
+          cat page-loading-audit.log
+          test "${{ steps.page_load_audit.outcome }}" = "success"
 
       - name: Run Tintin audit
         run: npm run audit:tintin
