@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - security/critical-healing-pass
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
