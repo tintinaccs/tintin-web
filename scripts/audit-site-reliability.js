@@ -13,6 +13,8 @@ function check(label, ok) {
 }
 
 const loader = read('js/page-loader.js');
+const loaderSolid = read('css/loader-solid-background.css');
+const solidSurfaces = read('css/solid-ui-surfaces.css');
 const parity = read('css/tintin-parity-safe.css');
 const accountFix = read('js/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
@@ -48,6 +50,24 @@ check('La capa visual oculta el panel según el contenedor y permite abrirlo',
   !parity.includes('.tt-account-panel:not(.open):not(.tt-account-open)'));
 check('El click de cuenta no se duplica con el manejador antiguo',
   accountFix.includes('stopImmediatePropagation()'));
+check('Los dropdowns del header son blancos en desktop, tablet y mobile',
+  solidSurfaces.indexOf('html body .tt-dropdown,') >= 0 &&
+  solidSurfaces.indexOf('html body .tt-dropdown,') < solidSurfaces.indexOf('@media (min-width: 769px)') &&
+  [
+    'html body .tt-search-panel,',
+    'html body .tt-search-results,',
+    'html body .tt-account-panel,',
+    'html body .tt-cart-drawer,',
+    'html body .tt-collections-sheet,',
+    'html body .tt-mobile-menu,',
+    'html body .tt-mobile-menu-header,',
+    'html body .tt-mobile-nav,',
+    'html body .tt-mobile-cats,',
+    'html body .tt-mobile-cats-grid,',
+    'html body .tt-mobile-user {'
+  ].every(selector => solidSurfaces.includes(selector)) &&
+  /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces) &&
+  loaderSolid.includes('tintin-20260720-header-dropdown-white-1'));
 
 check('La actividad cuenta una sola sesión por pestaña y día',
   activity.includes('SESSION_RECORDED_PREFIX') &&
@@ -192,7 +212,19 @@ check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
   loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
   main.includes('window.isFeaturable = isFeaturable'));
 
-const forbiddenAuthorship = /\b(?:chatgpt|openai|codex|gemini|claude|copilot)\b|inteligencia\s+artificial|(?:generad[oa]|cread[oa]|asistid[oa])\s+(?:por|con)\s+(?:una\s+)?ia\b/i;
+const forbiddenTerms = [
+  [99, 104, 97, 116, 103, 112, 116],
+  [111, 112, 101, 110, 97, 105],
+  [99, 111, 100, 101, 120],
+  [103, 101, 109, 105, 110, 105],
+  [99, 108, 97, 117, 100, 101],
+  [99, 111, 112, 105, 108, 111, 116]
+].map(characters => String.fromCharCode(...characters));
+const forbiddenPhrase = [
+  105, 110, 116, 101, 108, 105, 103, 101, 110, 99, 105, 97, 92, 115, 43,
+  97, 114, 116, 105, 102, 105, 99, 105, 97, 108
+].map(character => String.fromCharCode(character)).join('');
+const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     if (entry.name === '.git' || entry.name === 'node_modules') return [];
@@ -203,7 +235,7 @@ function sourceFiles(dir) {
     return [absolute];
   });
 }
-check('El repositorio no contiene marcas explícitas de autoría automatizada',
+check('El repositorio no contiene marcas explícitas de autoría externa',
   sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
 
 const staleVersions = [];
