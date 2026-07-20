@@ -1,12 +1,10 @@
-/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:18
-    throw new Error(`${label}: se esperaban ${expected} coincidencias y se encontraron ${count}.`);
+/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:100
+    \"        'profileStatsUpdatedAt', 'orderStats'\",
     ^
 
-Error: Proteger campos del guard de checkout: se esperaban 1 coincidencias y se encontraron 2.
-    at replaceExact (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:18:11)
-    at patchRules (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:97:11)
-    at Object.<anonymous> (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:717:1)
-    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
     at Module.load (node:internal/modules/cjs/loader:1266:32)
     at Module._load (node:internal/modules/cjs/loader:1091:12)
