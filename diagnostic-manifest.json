@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-19T23:24:39.053Z",
-  "sourceFingerprint": "b7b5c0c3831cb6bfa9f1363b39e655cf8572d0448d566249402f64897669d9e5",
+  "generatedAt": "2026-07-20T10:23:19.373Z",
+  "sourceFingerprint": "cb9df5ddd9245380fc597ba672a8d6edec0ce2b5de7d70dc069c342a58cdf6f6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 294,
-    "textFiles": 260,
-    "totalBytes": 4537498,
+    "files": 296,
+    "textFiles": 262,
+    "totalBytes": 4560469,
     "pages": 18,
-    "modules": 159
+    "modules": 160
   },
   "viewports": [
     {
@@ -16822,6 +16822,30 @@
       ]
     },
     {
+      "path": "scripts/audit-performance-regressions.js",
+      "bytes": 10202,
+      "sha256": "1e35133e93cb4d0aefc19ec070b9320af93d1532e2fdf04df00335f3f6b95675",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./js/resend-order-notify.js",
+          "target": "scripts/js/resend-order-notify.js",
+          "dynamic": false,
+          "line": 112
+        },
+        {
+          "raw": "./store-gate-core.js",
+          "target": "scripts/store-gate-core.js",
+          "dynamic": false,
+          "line": 136
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-postphase-security.js",
       "bytes": 2264,
       "sha256": "538842d02b13baa6a84a83eed0d613b905b32bc3198709e930ca4726460a8731",
@@ -17167,8 +17191,8 @@
     {
       "path": ".github/workflows/tintin-audit.yml",
       "extension": ".yml",
-      "bytes": 3176,
-      "sha256": "0c48572363e4fd56354aab1aed382f827429a56dfecc221daeeb415f5c597c9d"
+      "bytes": 3328,
+      "sha256": "30f7a3521ea90f1742e8c1833ea6ae719b01a4f2fdb0aaaf6e7b259c668fd398"
     },
     {
       "path": "404.html",
@@ -18455,6 +18479,12 @@
       "sha256": "8f05fe80389f631969ba2504e8de21751b4478f07d73ecff4707004f03e98a36"
     },
     {
+      "path": "maintenance/13-estabilidad-regresiones-rendimiento.txt",
+      "extension": ".txt",
+      "bytes": 12490,
+      "sha256": "80535f227bb2d636a25873ce5ec96270164c1ef255fb3964dbfe3ab048c809c1"
+    },
+    {
       "path": "maintenance/99-auditoria-final-integracion.txt",
       "extension": ".txt",
       "bytes": 11626,
@@ -18475,8 +18505,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 3446,
-      "sha256": "24cb3434b56079ef7240b9810d54e0302c0a56c43833d5340baa7da5d21ab6eb"
+      "bytes": 3573,
+      "sha256": "15410f2c5a4ad435bc01e2aae8697fc9f82625f5f5cc2b2f08e03f599e168c0d"
     },
     {
       "path": "perfil.html",
@@ -18711,6 +18741,12 @@
       "extension": ".js",
       "bytes": 10091,
       "sha256": "8e1ef0f78e952c9d75bb532d0b208e0ff4cc7dc4fece891319f341a6fa1a7128"
+    },
+    {
+      "path": "scripts/audit-performance-regressions.js",
+      "extension": ".js",
+      "bytes": 10202,
+      "sha256": "1e35133e93cb4d0aefc19ec070b9320af93d1532e2fdf04df00335f3f6b95675"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -22898,6 +22934,16 @@
           {
             "file": "scripts/audit-help-pages.js",
             "line": 160,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-performance-regressions.js",
+            "line": 124,
+            "operation": "doc"
+          },
+          {
+            "file": "scripts/audit-performance-regressions.js",
+            "line": 135,
             "operation": "doc"
           },
           {

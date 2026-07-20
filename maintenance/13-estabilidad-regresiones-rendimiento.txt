@@ -1,0 +1,151 @@
+TINTIN-WEB — MANTENIMIENTO INTEGRAL 13
+ESTABILIDAD Y REGRESIONES POSTERIORES A LA OPTIMIZACIÓN DE RENDIMIENTO
+Fecha: 19/07/2026
+Rama: maintenance/performance-regression-validation
+Auditoría nueva: scripts/audit-performance-regressions.js  (npm run audit:performance-regressions)
+
+═══════════════════════════════════════════════════════════════════════
+REVISIÓN PREVIA (obligatoria) — qué cambió el PR de rendimiento
+═══════════════════════════════════════════════════════════════════════
+Se revisó el PR mergeado #182 (merge SHA 67aee27), su documentación
+(maintenance/12-rendimiento-velocidad-sincronizacion.txt), sus métricas y todos
+los workflows. Confirmación de los cambios aplicados por #182:
+  - ÚNICO cambio de runtime: css/montserrat.css → font-display block → swap.
+  - Todo lo demás fue ADITIVO: scripts/audit-performance-realtime.js,
+    tests/performance/*, playwright.config.js, doc, wiring de CI, actualización
+    de la invariante en scripts/audit-typography.js, regeneración del manifest.
+Conclusión: la superficie de regresión de la optimización es EXCLUSIVAMENTE el
+comportamiento de pintado de la fuente. No se reescribió rendimiento en esta
+etapa; solo se comprobó estabilidad.
+
+═══════════════════════════════════════════════════════════════════════
+COMPARACIÓN DE MÉTRICAS
+═══════════════════════════════════════════════════════════════════════
+                                 Etapa 12 (ref.)     Etapa 13 (actual)
+  CSS local del home (raw) ....  279 KB              279 KB   (sin cambio)
+  JS directo del home (raw) ...  154 KB              154 KB   (sin cambio)
+  Fuentes latín (n+itálica) ...  76 KB               76 KB    (sin cambio)
+  font-display ................  swap (10/10)        swap (10/10)  (mantiene)
+  TTFB/FCP/LCP/INP/CLS/TBT ....  no medida           no medida (ver LIMITACIONES)
+
+El cambio de font-display no altera tamaños de recurso ni cantidad de
+solicitudes: los presupuestos estáticos son idénticos. No hubo regresión de
+presupuesto. Las métricas de laboratorio siguen "no medida" por la misma
+limitación de entorno de la etapa 12 (navegador sin red).
+
+═══════════════════════════════════════════════════════════════════════
+REGRESIONES ENCONTRADAS
+═══════════════════════════════════════════════════════════════════════
+NINGUNA. Evidencia estática reproducible:
+  - npm run audit:final → exit 0, CRITICAL: 0 (30 auditorías por dominio verdes,
+    614 líneas OK/completada). Cada dominio listado tiene su auditoría y todas
+    pasan tras el cambio de fuente.
+  - npm run audit:performance-regressions → 25/25 sin regresiones (tripwire que
+    toca cada dominio + compatibilidad del cambio con el loader).
+
+REGRESIONES CORREGIDAS: no aplica (no se encontró ninguna).
+
+═══════════════════════════════════════════════════════════════════════
+COMPATIBILIDAD DEL CAMBIO DE FUENTE (verificada estáticamente)
+═══════════════════════════════════════════════════════════════════════
+- font-display es swap en las 10 @font-face; 0 con block. Montserrat sigue siendo
+  la familia (no quedó solo el fallback).
+- La primera pintura sigue tapando el contenido (color-scheme-instant.js aplica
+  tt-color-scheme-pending + visibility:hidden) hasta que el esquema resuelve, así
+  que el intercambio de fuente ocurre BAJO el loader: no aparece un "flash" de
+  fuente de respaldo antes de tiempo en conexiones normales; en conexiones lentas
+  el texto es legible de inmediato en lugar de invisible. Sin nuevo layout shift
+  perceptible atribuible al cambio.
+- El loader conserva su timeout de emergencia (page-loader 9000ms +
+  color-scheme-instant 6500ms): sigue sin poder quedar infinito.
+
+═══════════════════════════════════════════════════════════════════════
+FLUJOS VERIFICADOS (por invariante estática; NO ejecutados en navegador)
+═══════════════════════════════════════════════════════════════════════
+Cada flujo mínimo se verificó a nivel de su invariante en el código/reglas, no
+como click real en navegador (ver LIMITACIONES). Cobertura:
+PÚBLICO
+  - Inicio/Catálogo/Colección/Producto: catálogo y colecciones en vivo
+    (onSnapshot+limit) intactos; imágenes lazy/async intactas.
+  - Carrito/cantidad: cart-sync/script.js sin cambios (no tocados por #182).
+  - Checkout: correo del pedido por Resend (no webhook viejo) intacto.
+  - Login/perfil/historial: onAuthStateChanged y recálculo de estadísticas por
+    usuaria (sin contar cancelados) intactos.
+  - Páginas informativas/contacto: contacto desde settings/general intacto.
+  - Cambio de página / conexión lenta / offline: loader con salida garantizada;
+    la lógica de recuperación offline se cubre por la spec Playwright.
+SUPER ADMIN
+  - Login/rol/permisos: bypass total del Super Admin (roleCanDo) intacto;
+    diagnóstico gateado al Super Admin real.
+  - Dashboard/Estadísticas/Usuarios/Pedidos/Productos/Colecciones/Contenido/
+    Imágenes/Correos/Auditoría/Diagnóstico/Configuración/Permisos/Apariencia:
+    listeners de pedidos/usuarios en vivo y acotados; banderas de disponibilidad
+    de estadísticas; auditoría inmutable; guardia anti-respuesta-obsoleta.
+  - Cambio repetido de sección / listeners que no crecen / consultas no
+    repetidas: cubierto por las invariantes de limpieza de timers y de listeners
+    compartidos (etapa 12) — sin cambios en #182 que las alteren.
+
+═══════════════════════════════════════════════════════════════════════
+RESOLUCIONES VERIFICADAS
+═══════════════════════════════════════════════════════════════════════
+1920 / 1440 / 1280 / 1024 / 768 / 390 / 320 px: NO probadas en navegador real en
+este entorno (proxy bloquea la red del navegador). Las 7 resoluciones están
+codificadas en tests/performance/_helpers.js + responsive-performance.spec.js
+para ejecutarse donde haya navegador + red. El cambio de #182 es de política de
+pintado de fuente y no toca CSS responsive ni breakpoints.
+
+═══════════════════════════════════════════════════════════════════════
+COMPROBACIONES DE LA LISTA (estado)
+═══════════════════════════════════════════════════════════════════════
+- Loaders que no terminan: descartado (timeout de emergencia presente).
+- Pantallas en blanco / errores silenciosos / botones bloqueados: cubierto por
+  auditorías de estados (estadísticas, envíos, auditoría, subida de imágenes).
+- Listeners duplicados / memoria creciente / consultas repetidas: sin cambios en
+  #182; invariantes de limpieza y de listeners compartidos verdes.
+- Imágenes rotas / caché vieja / contenido anterior tras deploy: sin Service
+  Worker (no hay caché que sirva HTML viejo); cache-busting por ?v= intacto.
+- Layout shift / scroll lento / modales/inputs lentos: no medibles sin navegador;
+  el cambio no afecta esa lógica. NO MEDIDO en navegador.
+- Datos reemplazados por respuestas antiguas: guardia de token intacta.
+- Errores de consola/red/Firebase/Service Worker: NO observados en navegador
+  (proxy). No aplica Service Worker.
+
+═══════════════════════════════════════════════════════════════════════
+LIMITACIONES (declaradas con honestidad)
+═══════════════════════════════════════════════════════════════════════
+- No se ejecutaron pruebas reales de navegador en este entorno: el navegador
+  headless (Playwright/Chromium preinstalado) no alcanza la red externa
+  (proxy: ERR_TUNNEL_CONNECTION_FAILED, confirmado en esta etapa) y la app
+  depende de Firebase/gstatic. Por lo tanto NO se afirma haber probado clics,
+  Web Vitals ni las 7 resoluciones en navegador; esas verificaciones quedan como
+  pruebas Playwright a demanda (tests/performance) para un entorno con red.
+- No se usaron datos reales de forma destructiva: esta etapa es 100% estática y
+  de solo lectura del código/reglas. No se creó, editó ni eliminó ningún pedido,
+  producto ni usuario real. No existe un entorno de datos de prueba aislado, así
+  que las pruebas se limitaron a comprobaciones no destructivas (documentado).
+
+═══════════════════════════════════════════════════════════════════════
+PRUEBAS AUTOMÁTICAS (esta etapa)
+═══════════════════════════════════════════════════════════════════════
+- scripts/audit-performance-regressions.js (nueva, en CI): 25 comprobaciones —
+  compatibilidad del cambio de fuente con el loader + tripwire por dominio +
+  invariantes de rendimiento preservadas.
+- npm run audit:final → verde (incluye las 30 auditorías por dominio + la nueva).
+- tests/performance/*.spec.js (Playwright): listas para correr con navegador+red.
+
+═══════════════════════════════════════════════════════════════════════
+ARCHIVOS MODIFICADOS / CREADOS
+═══════════════════════════════════════════════════════════════════════
+A  scripts/audit-performance-regressions.js
+A  maintenance/13-estabilidad-regresiones-rendimiento.txt
+M  package.json (audit:performance-regressions + audit:final)
+M  .github/workflows/tintin-audit.yml (paso nuevo)
+M  diagnostic-manifest.json (regenerado)
+
+═══════════════════════════════════════════════════════════════════════
+RESULTADOS DE CI / PR / MERGE
+═══════════════════════════════════════════════════════════════════════
+PR: "Mantenimiento integral 13: Estabilidad posterior a optimización".
+Se espera a que TODOS los workflows terminen en verde; no se mergea con pruebas
+pendientes, canceladas, fallidas ni incompletas. El SHA de merge queda registrado
+en el commit squash sobre main al mergear con CI verde.
