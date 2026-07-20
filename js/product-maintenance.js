@@ -1,8 +1,15 @@
 /* TINTIN — Runtime integral de product.html */
 const PRODUCT_PATH_RE = /(?:^|\/)product(?:\.html)?\/?$/i;
 
-if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMaintenanceBooted) {
+function isProductPage() {
+  let pathname = location.pathname || '';
+  try { pathname = decodeURIComponent(pathname); } catch {}
+  return PRODUCT_PATH_RE.test(pathname) || Boolean(document.getElementById('product-detail'));
+}
+
+if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   window.TintinProductMaintenanceBooted = true;
+  window.TintinProductPageRecognized = true;
 
   const body = document.body;
   const loading = document.getElementById('product-loading');
@@ -15,13 +22,39 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
   let productResolved = false;
   let relatedResolved = false;
   let selectionResolved = false;
+  let inspectQueued = false;
+  let pageReleased = false;
   let watchdog = 0;
+
+  function setAttributeIfChanged(node, name, value) {
+    if (!node || node.getAttribute(name) === value) return false;
+    node.setAttribute(name, value);
+    return true;
+  }
+
+  function setDatasetIfChanged(node, name, value) {
+    if (!node || node.dataset[name] === value) return false;
+    node.dataset[name] = value;
+    return true;
+  }
+
+  function removeStylePropertyIfPresent(node, name) {
+    if (!node?.style?.getPropertyValue(name)) return false;
+    node.style.removeProperty(name);
+    return true;
+  }
+
+  function setTextIfChanged(node, value) {
+    if (!node || node.textContent === value) return false;
+    node.textContent = value;
+    return true;
+  }
 
   function appendStylesheet() {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/product-maintenance.css?v=20260718-1', import.meta.url).href;
+    link.href = new URL('../css/product-maintenance.css?v=20260720-2', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }
@@ -49,8 +82,8 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
       offline: 'Sin conexión · mostrando información disponible',
       error: 'No se pudo actualizar todo el contenido',
     };
-    node.dataset.state = state;
-    node.textContent = message || labels[state] || labels.synced;
+    setDatasetIfChanged(node, 'state', state);
+    setTextIfChanged(node, message || labels[state] || labels.synced);
   }
 
   function isVisible(node) {
@@ -61,16 +94,16 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
   function inspectProduct() {
     productResolved = isVisible(detailGrid) || isVisible(notFound) || isVisible(loadError);
     if (productResolved) {
-      loading?.setAttribute('aria-hidden', 'true');
-      detailGrid?.setAttribute('aria-busy', 'false');
+      setAttributeIfChanged(loading, 'aria-hidden', 'true');
+      setAttributeIfChanged(detailGrid, 'aria-busy', 'false');
     }
 
     if (productStatus) {
       const out = /sin stock/i.test(productStatus.textContent || '');
-      productStatus.dataset.stockState = out ? 'out' : 'available';
-      productStatus.style.removeProperty('background');
-      productStatus.style.removeProperty('color');
-      productStatus.style.removeProperty('--dot-color');
+      setDatasetIfChanged(productStatus, 'stockState', out ? 'out' : 'available');
+      removeStylePropertyIfPresent(productStatus, 'background');
+      removeStylePropertyIfPresent(productStatus, 'color');
+      removeStylePropertyIfPresent(productStatus, '--dot-color');
     }
   }
 
@@ -96,6 +129,8 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
   }
 
   function releasePage() {
+    if (pageReleased) return;
+    pageReleased = true;
     body?.classList.add('tt-product-runtime-ready');
     window.ttPageReady?.();
     requestAnimationFrame(() => window.TintinLoader?.hide?.());
@@ -109,6 +144,17 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
       setSync(navigator.onLine === false ? 'offline' : 'synced');
       releasePage();
     }
+  }
+
+  function queueInspect() {
+    if (inspectQueued) return;
+    inspectQueued = true;
+    const run = () => {
+      inspectQueued = false;
+      inspectAll();
+    };
+    if (typeof queueMicrotask === 'function') queueMicrotask(run);
+    else Promise.resolve().then(run);
   }
 
   function normalizeGenericMetadata() {
@@ -131,38 +177,48 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
   }
 
   function installObservers() {
-    [loading, notFound, loadError, detailGrid, relatedGrid, selectionRoot, productStatus].filter(Boolean).forEach(node => {
-      new MutationObserver(inspectAll).observe(node, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        characterData: true,
+    const observer = new MutationObserver(queueInspect);
+    const commonConfig = {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true,
+      attributeFilter: ['style', 'hidden', 'class'],
+    };
+
+    [loading, notFound, loadError, detailGrid, selectionRoot, productStatus]
+      .filter(Boolean)
+      .forEach(node => observer.observe(node, commonConfig));
+
+    if (relatedGrid) {
+      observer.observe(relatedGrid, {
+        ...commonConfig,
         attributeFilter: ['style', 'hidden', 'class', 'aria-busy'],
       });
-    });
+    }
 
     ['tintin:products-loaded', 'tintin:product-unavailable', 'tt_cart_updated', 'tintin:cart-sync-status', 'tintin:color-scheme-applied'].forEach(name => {
       window.addEventListener(name, () => {
         setSync('loading');
-        setTimeout(inspectAll, 0);
+        queueInspect();
       });
     });
 
     window.addEventListener('tintin:products-error', () => {
       setSync('error');
-      setTimeout(inspectAll, 0);
+      queueInspect();
     });
 
     window.addEventListener('online', () => {
       setSync('loading', 'Conexión recuperada · actualizando producto…');
-      setTimeout(inspectAll, 250);
+      setTimeout(queueInspect, 250);
     });
     window.addEventListener('offline', () => setSync('offline'));
-    window.addEventListener('pageshow', inspectAll);
+    window.addEventListener('pageshow', queueInspect);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         setSync(navigator.onLine === false ? 'offline' : 'loading');
-        setTimeout(inspectAll, 120);
+        setTimeout(queueInspect, 120);
       }
     });
   }
@@ -187,7 +243,7 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
     setTimeout(() => {
       inspectRelated();
       if (!relatedResolved && relatedGrid) {
-        relatedGrid.setAttribute('aria-busy', 'false');
+        setAttributeIfChanged(relatedGrid, 'aria-busy', 'false');
         relatedGrid.innerHTML = '<div class="tt-product-runtime-state"><div><strong>No pudimos cargar las recomendaciones</strong><span>La ficha del producto sigue disponible. Podés abrir el catálogo completo.</span></div></div>';
         relatedResolved = true;
       }
@@ -196,12 +252,12 @@ if (PRODUCT_PATH_RE.test(location.pathname || '') && !window.TintinProductMainte
     setTimeout(() => {
       inspectSelection();
       if (!selectionResolved) {
-        document.getElementById('tinsel-skeleton')?.setAttribute('hidden', '');
+        setAttributeIfChanged(document.getElementById('tinsel-skeleton'), 'hidden', '');
         selectionResolved = true;
       }
     }, 5000);
 
-    watchdog = setInterval(inspectAll, 1300);
+    watchdog = setInterval(queueInspect, 1300);
     window.addEventListener('pagehide', () => clearInterval(watchdog), { once: true });
   }
 
