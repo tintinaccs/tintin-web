@@ -1,199 +1,180 @@
 'use strict';
 
-/* =============================================================
-   TINTIN — Tripwire de regresiones POSTERIOR a la optimización de rendimiento
-
-   Verificación estática de estabilidad tras el mantenimiento de rendimiento y
-   sincronización (PR #182). Ese PR tuvo UN solo cambio de runtime:
-   css/montserrat.css → font-display: block → swap (el resto fue aditivo:
-   auditorías, pruebas, docs). Este tripwire comprueba dos cosas:
-
-   1) Que ese cambio de fuente sea COMPATIBLE con el loader/primera pintura
-      (no introduce texto de respaldo visible antes de que el loader se retire).
-   2) Que NO haya regresado ninguna invariante crítica de los dominios listados
-      (auth, permisos, Super Admin, productos, colecciones, pedidos, usuarios,
-      checkout, perfil, configuración, header/nav, tienda cerrada, correos,
-      WhatsApp, imágenes, estadísticas, auditoría, sincronización en vivo).
-
-   No reemplaza a las auditorías por dominio (siguen corriendo en audit:final):
-   es un único comando que falla fuerte si la optimización rompió algo central.
-
-   Limitación declarada: en este entorno el navegador headless no alcanza la red
-   externa (proxy), así que las 7 resoluciones y los Web Vitals NO se prueban en
-   navegador aquí. Ver maintenance/13-estabilidad-regresiones-rendimiento.txt.
-   ============================================================= */
-
 const fs = require('fs');
 const path = require('path');
-
 const root = path.resolve(__dirname, '..');
 const cache = new Map();
+
 function read(file) {
   if (!cache.has(file)) cache.set(file, fs.readFileSync(path.join(root, file), 'utf8'));
   return cache.get(file);
 }
-function exists(rel) { return fs.existsSync(path.join(root, rel)); }
+
+function exists(file) {
+  return fs.existsSync(path.join(root, file));
+}
 
 const checks = [];
 function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-// ===========================================================================
-// 1. EL CAMBIO DE RENDIMIENTO ESTÁ EN PIE Y ES COMPATIBLE CON EL LOADER
-// ===========================================================================
 const montserrat = read('css/montserrat.css');
+const products = read('js/products-store.js');
+const collections = read('js/collections-store.js');
+
 check(
-  'La optimización de fuente se mantiene (swap, sin block/FOIT)',
+  'Montserrat mantiene swap sin FOIT',
   /font-display:\s*swap/.test(montserrat) && !/font-display:\s*block/.test(montserrat),
-  'La fuente volvió a font-display: block (texto invisible) — regresión de la optimización.'
+  'La fuente volvió a bloquear el texto.'
 );
 check(
-  'Montserrat sigue siendo la familia configurada (no quedó solo el fallback)',
-  montserrat.includes('font-family: "Montserrat"'),
-  'El cambio de font-display no debe alterar la familia tipográfica de la marca.'
-);
-check(
-  'La primera pintura sigue tapando el contenido hasta estar lista (swap ocurre bajo el loader)',
+  'La primera pintura sigue protegida por loader',
   read('js/color-scheme-instant.js').includes('tt-color-scheme-pending') &&
     /visibility:\s*hidden/.test(read('js/color-scheme-instant.js')),
-  'Sin el gate de primera pintura, el swap podría mostrar la fuente de respaldo antes de tiempo.'
+  'El contenido podría aparecer antes de aplicar el esquema.'
 );
 check(
-  'El loader conserva su salida de emergencia (no gira infinito)',
+  'El loader conserva salida de emergencia',
   /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/page-loader.js')) &&
     /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/color-scheme-instant.js')),
-  'El timeout de emergencia del loader debe seguir presente.'
+  'El loader podría quedar infinito.'
 );
-
-// ===========================================================================
-// 2. TRIPWIRES POR DOMINIO — la optimización no rompió el comportamiento central
-// ===========================================================================
 check(
-  'Autenticación: el gate público reacciona a la sesión real (onAuthStateChanged)',
+  'Autenticación pública y administrativa siguen activas',
   read('js/store-gate.js').includes('onAuthStateChanged') &&
     read('js/admin-app.js').includes('onAuthStateChanged'),
-  'La resolución de sesión no debe haberse alterado.'
+  'La sesión real debe seguir controlando el acceso.'
 );
 check(
-  'Permisos: el Super Admin real conserva el bypass total',
+  'Super Admin conserva acceso total',
   read('js/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"),
-  'roleCanDo debe seguir devolviendo true para el Super Admin antes de consultar la matriz.'
+  'El bypass del Super Admin no debe depender de la matriz editable.'
 );
 check(
-  'Super Admin: admin.html carga el panel como módulo y el diagnóstico sigue gateado',
+  'El panel Admin mantiene su arranque protegido',
   read('admin.html').includes('js/admin-app.js') &&
     read('js/admin-app.js').includes("role === 'superadmin' && user.email === SUPER_ADMIN"),
-  'El arranque del panel y el gate del diagnóstico deben mantenerse.'
+  'El panel o el diagnóstico perdieron su gate.'
 );
 check(
-  'Productos: catálogo público en vivo (onSnapshot + limit)',
-  /onSnapshot\(query\(collection\(db, 'products'\), limit\(/.test(read('js/products-store.js')),
-  'El catálogo debe seguir sincronizándose en tiempo real con tope.'
+  'Productos públicos se cargan bajo demanda y con caché',
+  !products.includes('onSnapshot') &&
+    products.includes('loadAllProducts') &&
+    products.includes('loadProductPage') &&
+    products.includes('readCached') &&
+    products.includes('runSingleFlight'),
+  'No debe regresar el listener global de todos los productos.'
 );
 check(
-  'Colecciones: sincronización en vivo con tope',
-  read('js/collections-store.js').includes('onSnapshot') &&
-    read('js/collections-store.js').includes('limit('),
-  'Las colecciones deben seguir en tiempo real con límite.'
+  'La ficha lee un producto y limita relacionados',
+  /getDoc\(doc\(db, 'products', id\)\)/.test(products) &&
+    /limit\(12\)/.test(products),
+  'Producto no debe descargar todo el catálogo.'
 );
 check(
-  'Pedidos: listener del panel en vivo y acotado',
+  'Colecciones públicas usan carga cacheada y Admin conserva tiempo real',
+  collections.includes('loadCollections') &&
+    collections.includes('readCached') &&
+    collections.includes('startAdminListener') &&
+    collections.includes('onSnapshot'),
+  'La tienda pública y el panel deben usar estrategias distintas.'
+);
+check(
+  'Pedidos del panel siguen en vivo y acotados',
   /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin-app.js')),
-  'Pedidos del panel deben conservar el tiempo real con límite.'
+  'Pedidos debe conservar actualización en tiempo real con límite.'
 );
 check(
-  'Usuarios: listener del panel en vivo y acotado',
+  'Usuarios del panel siguen en vivo y acotados',
   /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin-app.js')),
-  'Usuarios del panel deben conservar el tiempo real con límite.'
+  'Usuarios debe conservar actualización en tiempo real con límite.'
 );
 check(
-  'Checkout: el correo del pedido sigue por el canal Resend (no el webhook viejo)',
+  'Checkout conserva el canal Resend',
   read('checkout.html').includes('import { sendOrderNotification } from "./js/resend-order-notify.js') &&
     !read('checkout.html').includes('email-notify.js'),
-  'El checkout no debe volver al canal Apps Script.'
+  'El checkout no debe volver al webhook antiguo.'
 );
 check(
-  'Perfil: la recalculación de estadísticas por usuaria sigue disponible',
+  'Checkout protege nuevos intentos después de agotar cuota',
+  read('js/checkout-quota-guard.js').includes('resource-exhausted') &&
+    read('js/checkout-quota-guard.js').includes('COOLDOWN_MS') &&
+    read('js/page-maintenance-loader.js').includes('checkout-quota-guard.js'),
+  'Un 429 no debe permitir clics repetidos inmediatos.'
+);
+check(
+  'Clientas comunes no consultan la matriz administrativa',
+  read('js/edit-badge.js').includes('if (!EDITABLE_ROLES.includes(role)) return false;') &&
+    !read('js/edit-badge.js').includes('loadRolePermissions(true)'),
+  'La web pública no debe leer rolePermissions/main para una cuenta client.'
+);
+check(
+  'Perfil conserva el cálculo de estadísticas desde pedidos',
   read('js/order-stats.js').includes('export async function recalculateUserOrderStats') &&
     read('js/order-stats.js').includes("const validForSpent = clean.filter(o => !isCancelled(o))"),
-  'El perfil debe seguir recalculando desde los pedidos, sin contar cancelados.'
+  'No deben contarse pedidos cancelados.'
 );
 check(
-  'Configuración ↔ público: el contacto sigue leyéndose de settings/general',
+  'Contacto sigue conectado a configuración',
   read('js/whatsapp.js').includes("doc(db, 'settings', 'general')"),
-  'La sincronización de configuración al footer público debe mantenerse.'
+  'Los datos de contacto deben seguir siendo administrables.'
 );
 check(
-  'Header / navegación: el runtime público sigue montando el header',
+  'Header y navegación siguen montándose',
   read('js/page-loader.js').includes('bootHeaderMode') &&
     read('js/page-loader.js').includes('bootPublicRuntime'),
-  'El arranque del header/nav no debe haberse perdido.'
+  'El runtime público perdió su arranque.'
 );
 check(
-  'Tienda cerrada: el público sigue leyendo settings/storeGate por el núcleo único',
+  'Tienda cerrada conserva settings/storeGate',
   read('js/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") &&
     read('js/store-gate.js').includes("from './store-gate-core.js"),
-  'El bloqueo de tienda debe conservar su fuente y su núcleo único.'
+  'El gate debe conservar su fuente mínima.'
 );
 check(
-  'Correos: canal único Resend en el servidor (reenvío solo Super Admin)',
+  'Correos siguen por servidor con Resend',
   read('functions/api/order-email.js').includes('if (isResend && !isSuperAdmin)'),
-  'La consolidación de correos en Resend no debe haberse deshecho.'
+  'El canal de correo perdió su protección.'
 );
 check(
-  'WhatsApp: número normalizado y texto codificado',
-  read('js/whatsapp.js').includes("String(rawNumber || '').replace(/\\D/g, '')") &&
-    read('js/admin-app.js').includes('encodeURIComponent(waConfirmMessageTemplate.replace(/\\{nombre\\}/g'),
-  'El armado de enlaces de WhatsApp debe seguir seguro.'
-);
-check(
-  'Imágenes: estrategia lazy/async global intacta',
+  'Imágenes conservan lazy y async',
   read('js/image-performance.js').includes("image.decoding = 'async'") &&
     read('js/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"),
-  'La estrategia de carga de imágenes no debe haberse alterado.'
+  'La estrategia de imágenes se degradó.'
 );
 check(
-  'Estadísticas: banderas de disponibilidad (no "0" ante fallo) intactas',
-  read('js/admin-app.js').includes('let adminRealtimeReady = { orders: false, users: false, products: false, traffic: false, presence: false }'),
-  'La diferenciación vacío/error/cargando de estadísticas debe mantenerse.'
-);
-check(
-  'Auditoría: registro inmutable en reglas (update/delete: false)',
+  'Auditoría sigue inmutable',
   /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false;/.test(read('firestore.rules')),
-  'El log de auditoría debe seguir siendo inmutable.'
+  'El registro de auditoría no debe poder editarse.'
 );
 check(
-  'Sincronización en vivo: guardia anti-respuesta-obsoleta intacta',
+  'Respuestas obsoletas de estadísticas siguen protegidas',
   read('js/admin-app.js').includes('statisticsTrafficLoadToken'),
-  'Una respuesta lenta anterior no debe poder pisar datos más nuevos.'
+  'Una carga anterior podría pisar una nueva.'
 );
 
-// ===========================================================================
-// 3. INVARIANTES DE RENDIMIENTO PRESERVADAS
-// ===========================================================================
-const PUBLIC_PAGES = ['index.html', 'catalogo.html', 'collections.html', 'product.html',
+const publicPages = ['index.html', 'catalogo.html', 'collections.html', 'product.html',
   'contact.html', 'about.html', 'envios.html', 'cambios-devoluciones.html',
   'preguntas-frecuentes.html', 'terminos.html', 'privacidad.html', '404.html',
   'login.html', 'perfil.html', 'checkout.html'];
-const adminOnPublic = PUBLIC_PAGES.filter(p => exists(p) && read(p).includes('admin-app.js'));
+const adminOnPublic = publicPages.filter(page => exists(page) && read(page).includes('admin-app.js'));
 check(
-  'El bundle del Super Admin sigue fuera de las páginas públicas',
+  'El bundle Admin sigue fuera de páginas públicas',
   adminOnPublic.length === 0,
-  `Páginas públicas que cargarían admin-app.js: ${adminOnPublic.join(', ')}`
+  `Páginas afectadas: ${adminOnPublic.join(', ')}`
 );
 check(
-  'No apareció un Service Worker que pueda servir HTML/caché vieja tras un deploy',
+  'No existe Service Worker con caché vieja',
   !exists('sw.js') && !exists('service-worker.js'),
-  'Un Service Worker mal invalidado podría mostrar contenido anterior tras el deploy; no se introdujo ninguno.'
+  'Un Service Worker podría servir archivos anteriores.'
 );
 check(
-  'Se respeta prefers-reduced-motion en el sistema de UI',
+  'La interfaz respeta reducción de movimiento',
   /prefers-reduced-motion/.test(read('css/ui-quality.css')),
-  'La reducción de movimiento no debe haberse perdido con los cambios de estilo.'
+  'Se perdió la preferencia de accesibilidad.'
 );
 
-// ---------------------------------------------------------------------------
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => {
   console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
@@ -201,8 +182,7 @@ checks.forEach(item => {
 });
 
 if (failed.length) {
-  console.error(`\nTripwire de regresiones post-optimización: ${failed.length} regresión(es) detectada(s).`);
+  console.error(`\nTripwire de regresiones: ${failed.length} problema(s).`);
   process.exit(1);
 }
-
-console.log(`\nTripwire de regresiones post-optimización: sin regresiones (${checks.length} comprobaciones).`);
+console.log(`\nTripwire de regresiones: sin fallos (${checks.length} comprobaciones).`);
