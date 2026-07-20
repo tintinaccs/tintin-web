@@ -79,13 +79,14 @@ function compactProduct(product) {
 
 function normalizeList(list) {
   return list
-    .filter(product => product && product.active !== false && Boolean(product.name))
+    .filter(Boolean)
+    .filter(p => p.active !== false && Boolean(p.name))
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
 function publish(products, source) {
   const normalized = normalizeList(products);
-  const featured = normalized.filter(product =>
+  const featuredProducts = normalized.filter(product =>
     typeof window.isFeaturable === 'function'
       ? window.isFeaturable(product)
       : !(product.stock != null && Number(product.stock) <= 0)
@@ -95,8 +96,8 @@ function publish(products, source) {
     detail: { products: normalized, source }
   }));
   if (typeof window.renderProductsGrid === 'function') {
-    if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', featured);
-    if (document.getElementById('products-grid')) window.renderProductsGrid('products-grid', featured.slice(0, 5));
+    if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', featuredProducts);
+    if (document.getElementById('products-grid')) window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
     window.initLookCombinator();
