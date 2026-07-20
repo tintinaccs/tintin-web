@@ -31,12 +31,13 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
-          def replace_exact(text, before, after, label):
-              count = text.count(before)
+          def sub_one(text, pattern, replacement, label):
+              updated, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
               if count != 1:
                   raise SystemExit(f'{label}: se esperaba 1 coincidencia y se encontraron {count}')
-              return text.replace(before, after)
+              return updated
 
           rules_path = Path('firestore.rules')
           rules = rules_path.read_text()
@@ -46,85 +47,47 @@ jobs:
           )
 
           if not already:
-              rules = replace_exact(
+              rules = sub_one(
                   rules,
-                  '''        (
-                    isSuperAdmin() ||
-                    (
-                      settings.get('storeOpen', false) == true &&
-                      (userData == null || userData.get('blocked', false) != true)
-                    )
-                  ) &&
-                  (
-                    isSuperAdmin() ||
-                    (
-                      userData != null &&''',
-                  '''        (isSuperAdmin() || settings.get('storeOpen', false) == true) &&
-                  (
-                    isSuperAdmin() ||
-                    (
-                      userData != null &&''',
+                  r"\(\s*isSuperAdmin\(\) \|\|\s*\(\s*settings\.get\('storeOpen', false\) == true &&\s*\(userData == null \|\| userData\.get\('blocked', false\) != true\)\s*\)\s*\) &&\s*\(\s*isSuperAdmin\(\) \|\|\s*\(\s*userData != null &&",
+                  "(isSuperAdmin() || settings.get('storeOpen', false) == true) &&\n        (\n          isSuperAdmin() ||\n          (\n            userData != null &&",
                   'Simplificar tienda/cuenta redundante'
               )
-              rules = replace_exact(
+              rules = sub_one(
                   rules,
-                  '''        resource.data.stock is number &&
-                  request.resource.data.stock is number &&
-                  request.resource.data.stock == resource.data.stock - orderedQty &&
-                  request.resource.data.stock >= 0 &&''',
-                  '''        resource.data.stock is number &&
-                  request.resource.data.stock is number &&
-                  request.resource.data.stock < resource.data.stock &&
-                  request.resource.data.stock >= 0 &&''',
+                  r"resource\.data\.stock is number &&\s*request\.resource\.data\.stock is number &&\s*request\.resource\.data\.stock == resource\.data\.stock - orderedQty &&\s*request\.resource\.data\.stock >= 0 &&",
+                  "resource.data.stock is number &&\n        request.resource.data.stock is number &&\n        request.resource.data.stock < resource.data.stock &&\n        request.resource.data.stock >= 0 &&",
                   'Eliminar aritmética duplicada del lado producto'
               )
-              rules = replace_exact(
+              rules = sub_one(
                   rules,
-                  '''      allow update: if isSuperAdmin() ||
-                    sparkStockUpdateValid(productId) ||
-                    adminInventoryStockUpdateValid(productId) ||''',
-                  '''      allow update: if sparkStockUpdateValid(productId) ||
-                    adminInventoryStockUpdateValid(productId) ||
-                    isSuperAdmin() ||''',
+                  r"allow update: if isSuperAdmin\(\) \|\|\s*sparkStockUpdateValid\(productId\) \|\|\s*adminInventoryStockUpdateValid\(productId\) \|\|",
+                  "allow update: if sparkStockUpdateValid(productId) ||\n        adminInventoryStockUpdateValid(productId) ||\n        isSuperAdmin() ||",
                   'Priorizar caminos acotados de inventario'
               )
               rules_path.write_text(rules)
 
           critical_path = Path('scripts/audit-critical-healing.js')
           critical = critical_path.read_text()
-          old_critical = '''  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-              rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
-            'sparkStockUpdateValid debe leer el pedido creado y exigir la cantidad exacta.'
-          );'''
-          new_critical = '''  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-              rules.includes('orderedQty > 0') &&
-              rules.includes('request.resource.data.stock < resource.data.stock'),
-            'La regla del producto debe rechazar productos ajenos; sparkItemValid conserva la cantidad exacta.'
-          );'''
-          if old_critical in critical:
-              critical = critical.replace(old_critical, new_critical)
+          if "request.resource.data.stock == resource.data.stock - orderedQty" in critical:
+              critical = sub_one(
+                  critical,
+                  r"rules\.includes\('sparkOrderQtyForProduct\(orderData, productId\)'\) &&\s*rules\.includes\('request\.resource\.data\.stock == resource\.data\.stock - orderedQty'\),\s*'sparkStockUpdateValid debe leer el pedido creado y exigir la cantidad exacta\.'",
+                  "rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&\n    rules.includes('orderedQty > 0') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'La regla del producto debe rechazar productos ajenos; sparkItemValid conserva la cantidad exacta.'",
+                  'Actualizar auditoría crítica'
+              )
               critical_path.write_text(critical)
-          elif new_critical not in critical:
-              raise SystemExit('No se encontró la comprobación crítica esperada')
 
           secure_path = Path('scripts/audit-secure-orders.js')
           secure = secure_path.read_text()
-          old_secure = '''  rules.includes('productAfter.stock == product.stock - item.qty') &&
-              rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-              rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
-            'Un pedido debe descontar exactamente su cantidad y no puede tocar productos ajenos.'
-          );'''
-          new_secure = '''  rules.includes('productAfter.stock == product.stock - item.qty') &&
-              rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-              rules.includes('orderedQty > 0') &&
-              rules.includes('request.resource.data.stock < resource.data.stock'),
-            'El pedido obliga la cantidad exacta y la regla del producto rechaza cualquier producto ajeno.'
-          );'''
-          if old_secure in secure:
-              secure = secure.replace(old_secure, new_secure)
+          if "request.resource.data.stock == resource.data.stock - orderedQty" in secure:
+              secure = sub_one(
+                  secure,
+                  r"rules\.includes\('productAfter\.stock == product\.stock - item\.qty'\) &&\s*rules\.includes\('sparkOrderQtyForProduct\(orderData, productId\)'\) &&\s*rules\.includes\('request\.resource\.data\.stock == resource\.data\.stock - orderedQty'\),\s*'Un pedido debe descontar exactamente su cantidad y no puede tocar productos ajenos\.'",
+                  "rules.includes('productAfter.stock == product.stock - item.qty') &&\n    rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&\n    rules.includes('orderedQty > 0') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'El pedido obliga la cantidad exacta y la regla del producto rechaza cualquier producto ajeno.'",
+                  'Actualizar auditoría de pedidos'
+              )
               secure_path.write_text(secure)
-          elif new_secure not in secure:
-              raise SystemExit('No se encontró la auditoría de pedidos esperada')
           PY
 
       - name: Install emulator test dependencies
