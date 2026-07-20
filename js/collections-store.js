@@ -8,6 +8,7 @@ import './about-maintenance.js?v=tintin-20260718-about-maintenance-1';
 import './contact-maintenance.js?v=tintin-20260718-contact-maintenance-1';
 import './legal-maintenance.js?v=tintin-20260718-legal-maintenance-1';
 import './checkout-payment-methods.js?v=tintin-20260720-payment-crud-1';
+import './admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1';
 import './admin-payment-methods.js?v=tintin-20260720-payment-crud-1';
 
 /**
