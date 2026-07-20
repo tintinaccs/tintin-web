@@ -22,6 +22,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Audit load contracts for every HTML page
+        run: npm run audit:page-loading
+
       - name: Run Tintin audit
         run: npm run audit:tintin
 
@@ -96,9 +99,6 @@ jobs:
 
       - name: Post-optimization regression tripwire (all domains intact after perf changes)
         run: node scripts/audit-performance-regressions.js
-
-      - name: Audit load contracts for every HTML page
-        run: npm run audit:page-loading
 
       - name: Install Playwright for browser smoke
         run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
