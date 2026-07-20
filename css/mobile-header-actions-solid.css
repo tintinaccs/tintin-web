@@ -1,0 +1,48 @@
+@media (max-width: 768px) {
+  html body #tt-tabbar {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+    isolation: isolate !important;
+  }
+
+  html body #tt-tabbar #tabbar-tienda,
+  html body #tt-tabbar #tabbar-search,
+  html body #tt-tabbar #tabbar-cart,
+  html body #tt-tabbar #tabbar-tienda:hover,
+  html body #tt-tabbar #tabbar-search:hover,
+  html body #tt-tabbar #tabbar-cart:hover,
+  html body #tt-tabbar #tabbar-tienda:focus-visible,
+  html body #tt-tabbar #tabbar-search:focus-visible,
+  html body #tt-tabbar #tabbar-cart:focus-visible,
+  html body #tt-tabbar #tabbar-tienda.active,
+  html body #tt-tabbar #tabbar-search.active,
+  html body #tt-tabbar #tabbar-cart.active,
+  html body #tt-tabbar #tabbar-tienda[aria-expanded="true"],
+  html body #tt-tabbar #tabbar-search[aria-expanded="true"],
+  html body #tt-tabbar #tabbar-cart[aria-expanded="true"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  html body #search-panel,
+  html body #cart-drawer,
+  html body #collections-sheet {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+}
