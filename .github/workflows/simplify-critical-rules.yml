@@ -99,7 +99,22 @@ jobs:
           node scripts/audit-secure-orders.js
 
       - name: Verify adversarial rules in emulator
-        run: npm run test:rules-critical
+        id: adversarial
+        continue-on-error: true
+        run: npm run test:rules-critical > simplify-critical-emulator.log 2>&1
+
+      - name: Upload simplification emulator report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplify-critical-emulator-report
+          path: simplify-critical-emulator.log
+          retention-days: 3
+
+      - name: Enforce adversarial result
+        run: |
+          cat simplify-critical-emulator.log
+          test "${{ steps.adversarial.outcome }}" = "success"
 
       - name: Commit validated simplification
         run: |
