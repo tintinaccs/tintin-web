@@ -45,6 +45,7 @@ jobs:
               "request.resource.data.stock < resource.data.stock" in rules and
               "allow update: if checkoutGuardOnlyUpdate(userId) ||" in rules and
               "function sparkOrderHasProduct(data, productId)" in rules and
+              "data.shippingCost is number && data.shippingCost >= 0" in rules and
               "(isSuperAdmin() || settings.get('storeOpen', false) == true)" in rules
           )
 
@@ -85,14 +86,6 @@ jobs:
               update_block = update_block[:-len('      );')] + '          )\n        );'
               rules = rules[:update_start] + update_block + rules[delete_start:]
 
-              decorative_checks = [
-                  r"\s*item\.cat is string && item\.cat\.size\(\) <= 120 &&",
-                  r"\s*item\.variant is string && item\.variant\.size\(\) <= 120 &&",
-                  r"\s*item\.imageUrl is string && item\.imageUrl\.size\(\) <= 900 &&"
-              ]
-              for index, pattern in enumerate(decorative_checks, start=1):
-                  rules = sub_one(rules, pattern, '', f'Quitar chequeo decorativo redundante {index}')
-
               rules = sub_one(
                   rules,
                   r"(    function sparkOrderQtyForProduct\(data, productId\) \{.*?\n    \}\n)",
@@ -127,8 +120,22 @@ jobs:
               rules = sub_one(
                   rules,
                   r"    function sparkShippingValid\(data, settings\) \{.*?\n    \}\n\n    function sparkOrderCreateValid",
-                  "    function sparkShippingValid(data, settings) {\n      let shipping = data.shipping;\n      return shipping is map &&\n        shipping.method is string &&\n        (\n          (\n            shipping.method == 'retiro' &&\n            shipping.city == 'San Lorenzo (retiro)' &&\n            shipping.rateIndex == -1 &&\n            data.shippingCost == 0 &&\n            data.shippingPending == false\n          ) ||\n          (shipping.method == 'delivery' && sparkDeliveryValid(data, settings)) ||\n          (shipping.method == 'encomienda' && sparkEncomiendaValid(data, settings))\n        );\n    }\n\n    function sparkOrderCreateValid",
+                  "    function sparkShippingValid(data, settings) {\n      let shipping = data.shipping;\n      return shipping is map &&\n        (\n          (\n            shipping.method == 'retiro' &&\n            shipping.city == 'San Lorenzo (retiro)' &&\n            shipping.rateIndex == -1 &&\n            data.shippingCost == 0 &&\n            data.shippingPending == false\n          ) ||\n          (shipping.method == 'delivery' && sparkDeliveryValid(data, settings)) ||\n          (shipping.method == 'encomienda' && sparkEncomiendaValid(data, settings))\n        );\n    }\n\n    function sparkOrderCreateValid",
                   'Concentrar envío en método y tarifa'
+              )
+
+              rules = sub_one(
+                  rules,
+                  r"    function sparkItemValid\(item, orderId\) \{.*?\n    \}\n\n    function sparkItemAtValid",
+                  "    function sparkItemValid(item, orderId) {\n      let productId = item.id;\n      let productPath = sparkProductPath(productId);\n      let product = exists(productPath) ? get(productPath).data : null;\n      let productAfter = existsAfter(productPath) ? getAfter(productPath).data : null;\n      return product != null &&\n        item.id is string &&\n        item.qty is int && item.qty >= 1 && item.qty <= 99 &&\n        product.get('active', true) != false &&\n        item.price == product.price &&\n        item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&\n        (\n          product.get('stock', null) == null ||\n          (\n            product.stock >= item.qty &&\n            productAfter != null &&\n            productAfter.stock == product.stock - item.qty &&\n            productAfter.lastStockOrderId == orderId\n          )\n        );\n    }\n\n    function sparkItemAtValid",
+                  'Reducir cada línea al contrato real de producto, precio y stock'
+              )
+
+              rules = sub_one(
+                  rules,
+                  r"    function sparkOrderCreateValid\(orderId\) \{.*?\n    \}\n\n    function sparkStockUpdateValid",
+                  "    function sparkOrderCreateValid(orderId) {\n      let data = request.resource.data;\n      let settingsPath = /databases/$(database)/documents/settings/general;\n      let settings = exists(settingsPath) ? get(settingsPath).data : {};\n      let userPath = /databases/$(database)/documents/users/$(request.auth.uid);\n      let userData = existsAfter(userPath) ? getAfter(userPath).data : null;\n      let items = data.items;\n      return request.auth != null &&\n        request.auth.token.email_verified == true &&\n        settings.get('storeOpen', false) == true &&\n        userData != null &&\n        userData.get('blocked', false) != true &&\n        userData.lastCheckoutOrderId == orderId &&\n        userData.lastCheckoutAt == request.time &&\n        orderId == request.auth.uid + '_' + data.requestId &&\n        data.userId == request.auth.uid &&\n        data.source == 'spark-checkout-v1' &&\n        items is list && items.size() >= 1 && items.size() <= 4 &&\n        sparkItemsUnique(items) &&\n        sparkItemAtValid(items, 0, orderId) &&\n        sparkItemAtValid(items, 1, orderId) &&\n        sparkItemAtValid(items, 2, orderId) &&\n        sparkItemAtValid(items, 3, orderId) &&\n        data.subtotal ==\n          sparkLineTotal(items, 0) +\n          sparkLineTotal(items, 1) +\n          sparkLineTotal(items, 2) +\n          sparkLineTotal(items, 3) &&\n        data.shippingCost is number && data.shippingCost >= 0 &&\n        data.total == data.subtotal + data.shippingCost &&\n        sparkShippingValid(data, settings) &&\n        (data.payment.method == 'efectivo' || data.payment.method == 'transferencia') &&\n        settings.get('paymentMethods', {}).get(data.payment.method, true) != false &&\n        data.payment.status == 'pendiente' &&\n        data.paymentStatus == 'pendiente' &&\n        data.status == 'pendiente' &&\n        data.notificationStatus == 'pending' &&\n        data.inventoryState == 'reserved' &&\n        data.inventoryRevision == 1 &&\n        data.inventoryUpdatedAt == request.time &&\n        data.createdAt == request.time &&\n        data.updatedAt == request.time;\n    }\n\n    function sparkStockUpdateValid",
+                  'Reducir pedido al contrato financiero e inventario'
               )
 
               rules_path.write_text(rules)
