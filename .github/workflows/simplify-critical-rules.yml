@@ -87,8 +87,7 @@ jobs:
               decorative_checks = [
                   r"\s*item\.cat is string && item\.cat\.size\(\) <= 120 &&",
                   r"\s*item\.variant is string && item\.variant\.size\(\) <= 120 &&",
-                  r"\s*item\.imageUrl is string && item\.imageUrl\.size\(\) <= 900 &&",
-                  r"\s*item\.name == product\.get\('name', product\.get\('title', product\.get\('Title', 'Producto'\)\)\) &&"
+                  r"\s*item\.imageUrl is string && item\.imageUrl\.size\(\) <= 900 &&"
               ]
               for index, pattern in enumerate(decorative_checks, start=1):
                   rules = sub_one(rules, pattern, '', f'Quitar chequeo decorativo redundante {index}')
