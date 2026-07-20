@@ -93,20 +93,8 @@ jobs:
 
       - name: Apply verified critical patch
         run: |
-          set +e
-          rm -f critical-patch.log
-          node scripts/apply-critical-healing-once.cjs > critical-patch.log 2>&1
-          code=$?
-          cat critical-patch.log
-          if [ "$code" -ne 0 ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add critical-patch.log
-            git commit -m "Record critical patch diagnostic"
-            git push origin HEAD:security/critical-healing-pass
-            exit "$code"
-          fi
-          rm -f critical-patch.log
+          rm -f critical-patch.log push.log
+          node scripts/apply-critical-healing-once.cjs
 
       - name: Validate generated changes
         run: |
@@ -117,7 +105,7 @@ jobs:
           node --check js/firebase.js
           node scripts/test-inventory-model.mjs
 
-      - name: Commit generated patch
+      - name: Create generated commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -125,4 +113,27 @@ jobs:
           git add -A
           git diff --cached --quiet && exit 0
           git commit -m "Fix critical inventory and quota integrity"
-          git push origin HEAD:security/critical-healing-pass
+          git rev-parse HEAD > generated-commit-sha.txt
+
+      - name: Push generated commit
+        id: generated_push
+        continue-on-error: true
+        run: |
+          set +e
+          git push origin HEAD:security/critical-healing-pass > push.log 2>&1
+          code=$?
+          cat push.log
+          exit "$code"
+
+      - name: Upload push diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: critical-healing-push-diagnostic
+          path: |
+            push.log
+            generated-commit-sha.txt
+          retention-days: 2
+
+      - name: Enforce generated push result
+        run: test "${{ steps.generated_push.outcome }}" = "success"
