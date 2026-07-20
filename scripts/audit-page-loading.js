@@ -25,7 +25,7 @@ const expectedPages = [
   'preguntas-frecuentes.html',
   'privacidad.html',
   'product.html',
-  'terminos.html',
+  'terminos.html'
 ];
 
 const exists = relative => fs.existsSync(path.join(root, relative));
@@ -133,14 +133,13 @@ function auditJavascriptReferences() {
   const rootRuntimeFiles = fs.readdirSync(root, { withFileTypes: true })
     .filter(entry => entry.isFile() && /\.(?:js|mjs)$/.test(entry.name))
     .map(entry => path.join(root, entry.name));
-  const jsRuntimeFiles = walk(path.join(root, 'js'))
-    .filter(file => /\.(?:js|mjs)$/.test(file));
+  const jsRuntimeFiles = walk(path.join(root, 'js')).filter(file => /\.(?:js|mjs)$/.test(file));
   const jsFiles = [...new Set([...rootRuntimeFiles, ...jsRuntimeFiles])];
   const patterns = [
     /\bimport\s+(?:[^'"()]+?\s+from\s+)?(["'])(\.{1,2}\/[^"']+)\1/g,
     /\bimport\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g,
     /\bnew\s+URL\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*,\s*import\.meta\.url\s*\)/g,
-    /\bversioned\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g,
+    /\bversioned\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g
   ];
 
   for (const absolute of jsFiles) {
@@ -158,10 +157,7 @@ function auditJavascriptReferences() {
   }
 }
 
-const actualPages = fs.readdirSync(root)
-  .filter(name => name.endsWith('.html'))
-  .sort();
-
+const actualPages = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
 for (const expected of expectedPages) {
   if (!actualPages.includes(expected)) fail('inventario', `falta ${expected}.`);
 }
@@ -171,7 +167,7 @@ auditJavascriptReferences();
 const productHtml = exists('product.html') ? read('product.html') : '';
 const productRuntime = exists('js/product-maintenance.js') ? read('js/product-maintenance.js') : '';
 const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
-const collectionsStore = exists('js/collections-store.js') ? read('js/collections-store.js') : '';
+const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js/page-maintenance-loader.js') : '';
 
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
 if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta el estado #product-loading.');
@@ -179,7 +175,7 @@ if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la
 if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
 if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
 if (!/import\(versioned\('\.\/products-store\.js'\)\)/.test(publicShell)) fail('js/public-shell.js', 'no carga products-store.js.');
-if (!/import '\.\/product-maintenance\.js/.test(collectionsStore)) fail('js/collections-store.js', 'no carga product-maintenance.js.');
+if (!/product[\s\S]*load\('product-maintenance\.js'\)/.test(pageMaintenanceLoader)) fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
 
 if (warnings.length) {
   console.warn('\nADVERTENCIAS DE CARGA');

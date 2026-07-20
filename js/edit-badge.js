@@ -1,15 +1,7 @@
-/* =============================================================
-   TINTIN — Fase 6: accesos directos de edición
-
-   El lápiz aparece únicamente cuando el usuario tiene permiso real de editar
-   textos o visibilidad. También detecta secciones que el runtime de contenido
-   marca después de cargar.
-   ============================================================= */
-
 import { auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { loadRolePermissions, canDo } from './role-permissions.js?v=tintin-20260716-cloudinary-fix-1';
+import { EDITABLE_ROLES, loadRolePermissions, canDo } from './role-permissions.js?v=tintin-20260716-cloudinary-fix-1';
 
 const BADGE_Z = 1250;
 const tracked = new Map();
@@ -31,7 +23,7 @@ function injectStyles() {
     'pointer-events:none}',
     '.tt-edit-badge:hover{background:#fce4ec}',
     '.tt-edit-badge.tt-edit-badge-on{opacity:1;transform:scale(1);pointer-events:auto}',
-    '@media (hover:none){.tt-edit-badge.tt-edit-badge-in-view{opacity:1;transform:scale(1);pointer-events:auto}}',
+    '@media (hover:none){.tt-edit-badge.tt-edit-badge-in-view{opacity:1;transform:scale(1);pointer-events:auto}}'
   ].join('');
   document.head.appendChild(style);
 }
@@ -65,7 +57,6 @@ function createBadge(element) {
   const page = element.dataset.ttEditable;
   const section = element.dataset.ttSection || '';
   if (!page) return null;
-
   const badge = document.createElement('a');
   badge.className = 'tt-edit-badge';
   badge.href = `admin.html?tab=contenido&page=${encodeURIComponent(page)}&section=${encodeURIComponent(section)}`;
@@ -114,14 +105,15 @@ function startDomObserver() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['data-tt-editable', 'data-tt-section', 'hidden'],
+    attributeFilter: ['data-tt-editable', 'data-tt-section', 'hidden']
   });
 }
 
 async function canEditContent(user) {
   if (user.email === SUPER_ADMIN) return true;
   const role = await getUserRole(user.uid, user.email);
-  await loadRolePermissions(true);
+  if (!EDITABLE_ROLES.includes(role)) return false;
+  await loadRolePermissions();
   return (
     canDo(role, 'contenido', 'editarTextos') ||
     canDo(role, 'contenido', 'activarDesactivarSecciones') ||

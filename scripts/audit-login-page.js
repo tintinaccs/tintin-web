@@ -8,14 +8,14 @@ function read(path) {
 const html = read('login.html');
 const css = read('css/login-maintenance.css');
 const runtime = read('js/login-maintenance.js');
-const store = read('js/collections-store.js');
+const loader = read('js/page-maintenance-loader.js');
 
 const checks = [
   ['Google', html.includes('id="btn-google"')],
   ['correo', html.includes('id="login-email-input"') && html.includes('id="btn-send-email-link"')],
   ['errores y éxito', html.includes('id="login-error"') && html.includes('id="login-success"')],
-  ['runtime cargado', store.includes("./login-maintenance.js")],
-  ['redirección interna', runtime.includes("target.origin !== location.origin")],
+  ['runtime cargado por página', /login[\s\S]*load\('login-maintenance\.js'\)/.test(loader)],
+  ['redirección interna', runtime.includes('target.origin !== location.origin')],
   ['canonical dinámico', runtime.includes('normalizeLocation')],
   ['aria-live', runtime.includes("setAttribute('aria-live'")],
   ['tokens configurables', css.includes('--login-accent: var(') && css.includes('--login-surface: var(')],
@@ -25,7 +25,7 @@ const checks = [
   ['tablet', css.includes('max-width: 1024px')],
   ['mobile', css.includes('@media (max-width: 768px)')],
   ['mini mobile', css.includes('@media (max-width: 420px)')],
-  ['movimiento reducido', css.includes('prefers-reduced-motion')],
+  ['movimiento reducido', css.includes('prefers-reduced-motion')]
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
