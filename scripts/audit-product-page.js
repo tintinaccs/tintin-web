@@ -33,11 +33,22 @@ requireText(css, /@media \(max-width: 360px\)/, 'Falta mini mobile.');
 requireText(css, /prefers-reduced-motion/, 'Falta reduced motion.');
 if (/(^|[^\w-])#000(?:000)?\b/i.test(css)) errors.push('La capa contiene negro puro.');
 
-requireText(runtime, /PRODUCT_PATH_RE/, 'Runtime no se limita a product.html.');
+requireText(runtime, /PRODUCT_PATH_RE/, 'Runtime no reconoce la ruta product.html.');
+requireText(runtime, /function isProductPage\(\)/, 'Falta detector único de la página Producto.');
+requireText(runtime, /document\.getElementById\('product-detail'\)/, 'El detector no tiene respaldo por estructura DOM.');
+requireText(runtime, /TintinProductPageRecognized/, 'Falta marca verificable de reconocimiento de Producto.');
 requireText(runtime, /inspectProduct/, 'Falta inspección de ficha.');
 requireText(runtime, /inspectRelated/, 'Falta inspección independiente de relacionados.');
 requireText(runtime, /inspectSelection/, 'Falta inspección de selección.');
 requireText(runtime, /MutationObserver/, 'Falta vigilancia de estados.');
+requireText(runtime, /function setAttributeIfChanged/, 'Las escrituras de atributos no son idempotentes.');
+requireText(runtime, /function queueInspect/, 'Falta coalescer las inspecciones del MutationObserver.');
+requireText(runtime, /if \(pageReleased\) return;/, 'La liberación del loader puede ejecutarse repetidamente.');
+requireText(runtime, /const commonConfig[\s\S]*attributeFilter:\s*\['style', 'hidden', 'class'\]/, 'El observer común no está aislado de aria-busy.');
+requireText(runtime, /observer\.observe\(relatedGrid,[\s\S]*attributeFilter:\s*\['style', 'hidden', 'class', 'aria-busy'\]/, 'Relacionados no observa su aria-busy de forma aislada.');
+if (/detailGrid\??\.setAttribute\(\s*['"]aria-busy['"]/.test(runtime)) {
+  errors.push('Regresión: product-grid escribe aria-busy directamente dentro del observer.');
+}
 requireText(runtime, /visibilitychange/, 'Falta recuperación al regresar a la pestaña.');
 requireText(runtime, /pageshow/, 'Falta recuperación bfcache.');
 requireText(runtime, /window\.addEventListener\('online'/, 'Falta recuperación online.');
@@ -58,4 +69,4 @@ if (errors.length) {
   errors.forEach((error, index) => console.error(`${index + 1}. ${error}`));
   process.exit(1);
 }
-console.log('AUDITORÍA PRODUCTO: OK · 7 viewports · galería · variantes · stock · carrito · metadatos · recuperación.');
+console.log('AUDITORÍA PRODUCTO: OK · reconocimiento robusto · observer idempotente · 7 viewports · galería · variantes · stock · carrito · metadatos · recuperación.');
