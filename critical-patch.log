@@ -1,10 +1,12 @@
-/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:100
-    \"        'profileStatsUpdatedAt', 'orderStats'\",
-    ^
+/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:39
+  if (targetIndex < 0) throw new Error(`${label}: no se encontró el bloque objetivo.`);
+                       ^
 
-SyntaxError: Invalid or unexpected token
-    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
-    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+Error: Exigir reconciliación al cambiar el estado del pedido: no se encontró el bloque objetivo.
+    at replaceFirstAfter (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:39:30)
+    at patchRules (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:438:11)
+    at Object.<anonymous> (/home/runner/work/tintin-web/tintin-web/scripts/apply-critical-healing-once.cjs:718:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
     at Module.load (node:internal/modules/cjs/loader:1266:32)
     at Module._load (node:internal/modules/cjs/loader:1091:12)
