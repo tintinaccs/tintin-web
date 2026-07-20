@@ -1,0 +1,32 @@
+Fecha: 2026-07-20
+Rama: feature/payment-methods-crud-selection
+
+Alcance
+- Selección visual de métodos de pago en Checkout.
+- Sincronización en tiempo real desde settings/general.
+- CRUD de métodos offline en Super Admin.
+- Datos editables de transferencia sin campos bancarios fijos.
+- Compatibilidad con efectivo y transferencia existentes.
+- Responsive en 1920, 1440, 1280, 1024, 768, 390 y 320 px.
+
+Problema confirmado
+La regla de checkout-maintenance.css imponía el borde normal con !important y anulaba el borde de la opción marcada. La interfaz anterior también limitaba la administración a tres toggles y dos campos bancarios fijos.
+
+Cambios
+- Regla de selección con prioridad suficiente, fondo destacado, borde y check visible.
+- Catálogo normalizado paymentMethodsCatalog en settings/general.
+- Alta, lectura, edición, activación, desactivación, orden y eliminación desde Super Admin.
+- Nombre, identificador, tipo seguro, icono, descripción, instrucciones y hasta 24 pares etiqueta/valor por método.
+- Migración compatible desde paymentMethods y bankAccounts.
+- Checkout conserva las opciones anteriores hasta que Firestore responde.
+- Las opciones configurables se traducen a los tipos seguros efectivo o transferencia para conservar las validaciones actuales del pedido.
+- Si no hay opciones activas, Checkout informa el estado y bloquea el avance.
+- Auditoría automática scripts/audit-payment-methods.js incorporada a Tintin Audit.
+
+Seguridad
+- Solo la cuenta Super Admin puede escribir settings/general.
+- Los textos se normalizan, limitan y escapan antes de mostrarse.
+- No se habilita una pasarela de tarjetas sin integración real de backend.
+
+Limitaciones
+Los métodos agregados son métodos offline de tipo efectivo o transferencia. Una pasarela de tarjeta futura requiere una integración específica de servidor y no se simula desde este CRUD.
