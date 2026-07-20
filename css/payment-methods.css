@@ -1,3 +1,9 @@
+body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
+  border-color: var(--ck-accent, var(--acc)) !important;
+  background: var(--ck-accent-soft, var(--acc-pale)) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
+}
+
 #ck-payment-methods-runtime {
   display: grid;
   gap: 12px;
