@@ -1,3 +1,4 @@
+import './page-maintenance-loader.js?v=tintin-20260720-read-budget-1';
 import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
@@ -90,7 +91,7 @@ function publish(products, source) {
     const product = normalized.find(item => String(item.id) === String(id));
     if (product && typeof window._renderProductDetail === 'function') {
       window._renderProductDetail(product);
-    } else if (normalized.length && typeof window._showProductNotFound === 'function') {
+    } else if (Array.isArray(window.PRODUCTS) && source !== 'loading' && typeof window._showProductNotFound === 'function') {
       window._showProductNotFound();
     } else if (typeof window.initProductPage === 'function') {
       window.initProductPage();
@@ -155,7 +156,7 @@ async function fetchRelatedProducts(product) {
 export async function loadProductPage(options = {}) {
   const id = String(options.id || new URLSearchParams(location.search).get('id') || '').trim();
   if (!id) {
-    window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: [], source: 'missing-id' } }));
+    publish([], 'missing-id');
     return [];
   }
 
@@ -195,6 +196,22 @@ export async function ensureProductsForCurrentPage() {
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }
 
+function attachSearchDemand() {
+  ['btn-search', 'tabbar-search'].forEach(id => {
+    const control = document.getElementById(id);
+    if (!control) return;
+    const load = () => ensureProductsForSearch().then(() => {
+      const input = document.getElementById('search-input');
+      if (input?.value) input.dispatchEvent(new Event('input', { bubbles: true }));
+    }).catch(error => {
+      window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+    });
+    control.addEventListener('pointerenter', load, { once: true, passive: true });
+    control.addEventListener('focus', load, { once: true });
+    control.addEventListener('click', load, { once: true });
+  });
+}
+
 window.TintinProductsStore = {
   loadAll: loadAllProducts,
   loadProductPage,
@@ -202,3 +219,8 @@ window.TintinProductsStore = {
   ensureCurrentPage: ensureProductsForCurrentPage,
   getReadBudget: () => window.TintinReadBudget || null
 };
+
+attachSearchDemand();
+ensureProductsForCurrentPage().catch(error => {
+  window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+});
