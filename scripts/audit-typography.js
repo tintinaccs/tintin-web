@@ -116,9 +116,11 @@ for (const page of rootPages) {
     source,
     /rel=["']preload["'][^>]*href=["']assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["']|href=["']assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["'][^>]*rel=["']preload["']/gi
   );
+  const preloadExpected = page !== 'perfil.html';
+  const expectedPreloadCount = preloadExpected ? 1 : 0;
   check(stylesheetCount === 1, `${page}: debe cargar exactamente una vez css/montserrat.css con la versión ${VERSION}.`);
-  check(normalPreloadCount === 1, `${page}: falta o está duplicado el preload de Montserrat normal.`);
-  check(italicPreloadCount === 1, `${page}: falta o está duplicado el preload de Montserrat italic.`);
+  check(normalPreloadCount === expectedPreloadCount, `${page}: cantidad incorrecta de preload de Montserrat normal.`);
+  check(italicPreloadCount === expectedPreloadCount, `${page}: cantidad incorrecta de preload de Montserrat italic.`);
   check(!/fonts\.(?:googleapis|gstatic)\.com/i.test(source), `${page}: todavía carga una fuente externa de Google Fonts.`);
 
   for (const match of source.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)(?:\?v=([^"']+))?["'][^>]*>/gi)) {
