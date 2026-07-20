@@ -125,7 +125,22 @@ jobs:
         run: npm install --no-save --package-lock=false @firebase/rules-unit-testing@3.0.3 firebase@10.12.0 firebase-tools@13.15.0
 
       - name: Run adversarial Firestore emulator tests
-        run: npm run test:rules-critical
+        id: critical_rules
+        continue-on-error: true
+        run: npm run test:rules-critical > firestore-critical.log 2>&1
+
+      - name: Upload adversarial Firestore report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firestore-critical-report
+          path: firestore-critical.log
+          retention-days: 7
+
+      - name: Enforce adversarial Firestore result
+        run: |
+          cat firestore-critical.log
+          test "${{ steps.critical_rules.outcome }}" = "success"
 
       - name: Post-optimization regression tripwire (all domains intact after perf changes)
         run: node scripts/audit-performance-regressions.js
