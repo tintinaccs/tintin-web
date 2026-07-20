@@ -92,11 +92,9 @@ function boot() {
   bridge.hidden = true;
   bridge.setAttribute('aria-hidden', 'true');
   anchor.parentElement.insertBefore(bridge, anchor);
-  efectivo?.remove();
-  transferencia?.remove();
-  document.getElementById('bank-details')?.remove();
 
   let methods = [];
+  let legacyRemoved = false;
   let selectedMethodId = '';
 
   function selectedMethod() {
@@ -124,6 +122,16 @@ function boot() {
 
   function render(nextMethods) {
     methods = nextMethods.filter(method => method.enabled);
+    const legacyChecked = document.querySelector('input[name="ck-pay"]:checked');
+    if (!selectedMethodId && legacyChecked && legacyChecked !== bridge) {
+      selectedMethodId = methods.find(method => method.kind === legacyChecked.value)?.id || '';
+    }
+    if (!legacyRemoved) {
+      efectivo?.remove();
+      transferencia?.remove();
+      document.getElementById('bank-details')?.remove();
+      legacyRemoved = true;
+    }
     const previous = selectedMethodId;
     root.innerHTML = methods.map(methodHtml).join('');
 
