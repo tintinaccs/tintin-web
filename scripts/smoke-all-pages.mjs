@@ -163,8 +163,6 @@ try {
         };
       });
 
-      // A runaway MutationObserver starves timers/microtasks. This responsiveness
-      // probe turns that failure into a deterministic smoke-test error.
       const responsiveness = await Promise.race([
         page.evaluate(async () => {
           const started = performance.now();
@@ -199,6 +197,52 @@ try {
       await page.close();
     }
   }
+
+  for (const width of [390, 768]) {
+    const page = await context.newPage();
+    try {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript(() => {
+        window.TT_DISABLE_STORE_GATE = true;
+      });
+      await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+      await page.waitForSelector('#tt-tabbar #tabbar-tienda', { state: 'attached', timeout: 10_000 });
+      await page.waitForTimeout(350);
+      const surfaces = await page.evaluate(() => {
+        const ids = ['tt-tabbar', 'tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'search-panel', 'cart-drawer', 'collections-sheet'];
+        return Object.fromEntries(ids.map(id => {
+          const element = document.getElementById(id);
+          if (!element) return [id, null];
+          const style = getComputedStyle(element);
+          return [id, {
+            backgroundColor: style.backgroundColor,
+            backgroundImage: style.backgroundImage,
+            opacity: style.opacity,
+          }];
+        }));
+      });
+      for (const [id, style] of Object.entries(surfaces)) {
+        if (!style) {
+          failures.push(`Header mobile ${width}px: falta #${id}.`);
+          continue;
+        }
+        if (style.backgroundColor !== 'rgb(255, 255, 255)') {
+          failures.push(`Header mobile ${width}px: #${id} no es blanco (${style.backgroundColor}).`);
+        }
+        if (style.backgroundImage !== 'none') {
+          failures.push(`Header mobile ${width}px: #${id} conserva imagen o degradado de fondo.`);
+        }
+        if (style.opacity !== '1') {
+          failures.push(`Header mobile ${width}px: #${id} conserva opacidad ${style.opacity}.`);
+        }
+      }
+      console.log(`OK — Header mobile ${width}px · Tienda · Buscar · Carrito · fondos blancos`);
+    } catch (error) {
+      failures.push(`Header mobile ${width}px: ${error.message || String(error)}.`);
+    } finally {
+      await page.close();
+    }
+  }
 } finally {
   await context.close();
   await browser.close();
@@ -211,4 +255,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto.`);
+console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto · header mobile.`);
