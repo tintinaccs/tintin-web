@@ -1,32 +1,7 @@
-import './catalog-maintenance.js?v=tintin-20260718-catalog-maintenance-1';
-import './collections-maintenance.js?v=tintin-20260718-collections-maintenance-1';
-import './product-maintenance.js?v=tintin-20260718-product-maintenance-1';
-import './checkout-maintenance.js?v=tintin-20260718-checkout-maintenance-1';
-import './login-maintenance.js?v=tintin-20260718-login-maintenance-1';
-import './profile-maintenance.js?v=tintin-20260718-profile-maintenance-1';
-import './about-maintenance.js?v=tintin-20260718-about-maintenance-1';
-import './contact-maintenance.js?v=tintin-20260718-contact-maintenance-1';
-import './legal-maintenance.js?v=tintin-20260718-legal-maintenance-1';
-import './checkout-payment-methods.js?v=tintin-20260720-payment-crud-1';
-import './admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1';
-import './admin-payment-methods.js?v=tintin-20260720-payment-crud-1';
-
-/**
- * TINTIN — Collections Store
- * Real-time read of the `collections` Firestore collection (managed from
- * Super Admin → Colecciones). Feeds catalogo.html's sidebar, collections.html,
- * the home "Nuestras Colecciones" grid, and every nav surface that lists
- * collections — one source of truth for which collections exist, their
- * name/image/order/visibility.
- *
- * Firestore is the ONLY source of truth here. There is no hardcoded fallback
- * list: zero collections in Firestore means zero collections on the site,
- * and a listener failure surfaces as a real error (via the onError
- * callback), never silently replaced by fake data.
- */
 import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
+  getDocs,
   limit,
   onSnapshot,
   query
@@ -34,6 +9,23 @@ import {
 import { cleanText, cleanMultilineText } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { resolveCollectionImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
+import {
+  readCached,
+  readStaleCached,
+  recordFirestoreRead,
+  runSingleFlight,
+  writeCached
+} from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
+
+if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
+  Promise.allSettled([
+    import('./admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
+    import('./admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
+  ]);
+}
+
+const CACHE_KEY = 'collections:public';
+const CACHE_TTL = 30 * 60 * 1000;
 
 export function normalizeCollectionDoc(id, data) {
   const d = data || {};
@@ -44,7 +36,7 @@ export function normalizeCollectionDoc(id, data) {
     description: cleanMultilineText(d.description || '', 1000),
     image: sanitizeImageUrl(d.image || d.imageUrl || ''),
     order: Number.isFinite(orderNum) ? orderNum : 9999,
-    visible: d.visible !== false,
+    visible: d.visible !== false
   };
 }
 
@@ -52,58 +44,103 @@ function sortCols(list) {
   return list.slice().sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
 }
 
-function currentProducts() {
-  return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
-}
-
 function withResolvedImages(cols) {
-  const products = currentProducts();
+  const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
   return cols.map(col => ({ ...col, image: resolveCollectionImage(col, products) }));
 }
 
 let latestVisibleCollections = null;
 const publicSubscribers = new Set();
 let productsReactivityAttached = false;
+let adminUnsubscribe = null;
+const adminSubscribers = new Set();
 
-function republishToPublicSubscribers() {
+function republishToPublicSubscribers(source = 'memory') {
   if (!latestVisibleCollections) return;
   const resolved = sortCols(withResolvedImages(latestVisibleCollections));
   publicSubscribers.forEach(cb => {
-    try { cb(resolved); } catch (error) { console.warn('[collections-store] subscriber error:', error); }
+    try {
+      cb(resolved, { source });
+    } catch (error) {
+      console.warn('[collections-store] subscriber error:', error);
+    }
   });
 }
 
 function attachProductsReactivity() {
   if (productsReactivityAttached) return;
   productsReactivityAttached = true;
-  window.addEventListener('tintin:products-loaded', republishToPublicSubscribers);
+  window.addEventListener('tintin:products-loaded', () => republishToPublicSubscribers('products-refresh'));
+}
+
+function publishPublic(collections, source) {
+  latestVisibleCollections = collections.filter(item => item.visible !== false);
+  republishToPublicSubscribers(source);
+  return sortCols(withResolvedImages(latestVisibleCollections));
+}
+
+async function fetchPublicCollections() {
+  const snapshot = await getDocs(query(collection(db, 'collections'), limit(5000)));
+  recordFirestoreRead('collections:public', snapshot.size);
+  const list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
+  writeCached(CACHE_KEY, list);
+  return publishPublic(list, 'server');
+}
+
+export async function loadCollections(options = {}) {
+  const force = options.force === true;
+  if (!force) {
+    const cached = readCached(CACHE_KEY, CACHE_TTL);
+    if (Array.isArray(cached)) return publishPublic(cached, 'cache');
+  }
+
+  const stale = readStaleCached(CACHE_KEY);
+  if (!force && Array.isArray(stale) && stale.length) publishPublic(stale, 'stale-cache');
+
+  try {
+    return await runSingleFlight('collections:public', fetchPublicCollections);
+  } catch (error) {
+    if (Array.isArray(stale) && stale.length) return stale;
+    throw error;
+  }
 }
 
 export function onCollectionsUpdate(cb, onError) {
   attachProductsReactivity();
   publicSubscribers.add(cb);
-
-  const unsubscribeSnapshot = onSnapshot(query(collection(db, 'collections'), limit(5000)), snap => {
-    latestVisibleCollections = snap.docs
-      .map(d => normalizeCollectionDoc(d.id, d.data()))
-      .filter(c => c.visible);
-    republishToPublicSubscribers();
-  }, e => {
-    console.error('[collections-store] listener failed:', e.code, e.message);
-    if (typeof onError === 'function') onError(e);
+  if (latestVisibleCollections) republishToPublicSubscribers('memory');
+  loadCollections().catch(error => {
+    console.error('[collections-store] load failed:', error.code || '', error.message || error);
+    if (typeof onError === 'function') onError(error);
   });
+  return () => publicSubscribers.delete(cb);
+}
 
-  return () => {
-    unsubscribeSnapshot();
-    publicSubscribers.delete(cb);
-  };
+function startAdminListener() {
+  if (adminUnsubscribe) return;
+  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(5000)), snapshot => {
+    recordFirestoreRead('collections:admin-live', snapshot.size);
+    const list = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
+    adminSubscribers.forEach(cb => cb(list, null));
+    writeCached(CACHE_KEY, list);
+  }, error => {
+    adminSubscribers.forEach(cb => cb([], error));
+  });
 }
 
 export function onAllCollectionsUpdate(cb) {
-  return onSnapshot(query(collection(db, 'collections'), limit(5000)), snap => {
-    cb(sortCols(snap.docs.map(d => normalizeCollectionDoc(d.id, d.data()))), null);
-  }, e => {
-    console.error('[collections-store] admin listener failed:', e.code, e.message);
-    cb([], e);
-  });
+  adminSubscribers.add(cb);
+  startAdminListener();
+  return () => {
+    adminSubscribers.delete(cb);
+    if (!adminSubscribers.size && adminUnsubscribe) {
+      adminUnsubscribe();
+      adminUnsubscribe = null;
+    }
+  };
 }
+
+window.TintinCollectionsStore = {
+  load: loadCollections,
+  refresh: () => loadCollections({ force: true })
+};
