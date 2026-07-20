@@ -1,11 +1,3 @@
-/* =============================================================
-   TINTIN — Header Tienda Dropdown Toggle Fix
-   =============================================================
-   Corrige el comportamiento de TIENDA en desktop/tablet y mobile.
-   Desktop + tablet comparten #btn-tienda / #tienda-dropdown.
-   Mobile usa el sistema separado del menú hamburguesa.
-   ============================================================= */
-
 (function () {
   'use strict';
   if (window.TintinHeaderDropdownFixBooted) return;
@@ -21,6 +13,12 @@
     const st = document.createElement('style');
     st.id = 'tt-header-dropdown-fix-style';
     st.textContent = `
+      html.tt-click-dropdown-ready .tt-dropdown,
+      html.tt-click-dropdown-ready .tt-mobile-cats {
+        background: #FFFFFF !important;
+        background-color: #FFFFFF !important;
+        background-image: none !important;
+      }
       html.tt-click-dropdown-ready .tt-nav-dropdown:not(.open) > .tt-dropdown {
         opacity: 0 !important;
         visibility: hidden !important;
@@ -103,10 +101,6 @@
     }
 
     function isDesktopTablet() {
-      // Mismo corte que styles.css (.tt-header{display:none!important} a
-      // <=768px) y que header-account-mobile-fix.js (innerWidth>768) — a
-      // exactamente 768px el header de home ya es el mobile reutilizado, no
-      // el desktop.
       return window.matchMedia ? window.matchMedia('(min-width: 769px)').matches : window.innerWidth >= 769;
     }
 
@@ -146,8 +140,6 @@
     }
 
     if (desktopBtn && desktopWrap) {
-      // Captura primero para anular el listener viejo de script.js y que el
-      // estado sea uno solo: .open + aria-expanded.
       desktopBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -183,8 +175,6 @@
 
     window.addEventListener('scroll', function () {
       if (!isDesktopTablet() || !isDesktopOpen()) return;
-      // No se cierra por pequeños ajustes automáticos del navegador al abrir.
-      // Se cierra cuando la persona hizo un mini scroll real después de abrir.
       if (Date.now() - desktopOpenedAt < 120) return;
       if (Math.abs(currentScrollY() - desktopOpenScrollY) > 3) setDesktop(false, { blur: false });
     }, { passive: true });

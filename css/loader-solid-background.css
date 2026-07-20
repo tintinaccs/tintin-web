@@ -1,14 +1,5 @@
-@import url("./solid-ui-surfaces.css?v=tintin-20260718-solid-surfaces-1");
+@import url("./solid-ui-surfaces.css?v=tintin-20260720-header-dropdown-white-1");
 
-/*
- * Fondo sólido universal del loader de marca.
- *
- * Este archivo se carga desde color-tokens.css en todas las páginas. El loader
- * también tiene un fondo base en js/page-loader.js, pero esta segunda capa
- * evita que cualquier tema, regla tardía o estado interactivo (por ejemplo,
- * abrir Google desde login) pueda dejar visible el contenido de la página por
- * detrás del logo.
- */
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
   background: #FFF6FA !important;
