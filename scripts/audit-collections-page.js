@@ -9,7 +9,7 @@ const requireText = (text, pattern, message) => { if (!pattern.test(text)) error
 const html = read('collections.html');
 const css = read('css/collections-page.css');
 const runtime = read('js/collections-maintenance.js');
-const store = read('js/collections-store.js');
+const loader = read('js/page-maintenance-loader.js');
 const record = read('maintenance/03-colecciones.txt');
 
 requireText(html, /id="colls-page-grid"/, 'Falta grilla de colecciones.');
@@ -17,7 +17,6 @@ requireText(html, /id="collections-featured-grid"/, 'Falta grilla de productos d
 requireText(html, /id="collections-grid-status"[\s\S]*aria-live="polite"/, 'Falta estado accesible de colecciones.');
 requireText(html, /id="collections-featured-status"[\s\S]*aria-live="polite"/, 'Falta estado accesible de destacados.');
 requireText(html, /aria-busy="true"/, 'Falta estado inicial de carga.');
-
 requireText(css, /\.tt-collections-page/, 'CSS no está limitado a Colecciones.');
 requireText(css, /var\(--color-background-page/, 'Fondo no usa tokens globales.');
 requireText(css, /var\(--color-background-surface/, 'Tarjetas no usan superficies configurables.');
@@ -27,7 +26,6 @@ requireText(css, /@media \(max-width: 768px\)/, 'Falta responsive mobile.');
 requireText(css, /@media \(max-width: 360px\)/, 'Falta responsive mini mobile.');
 requireText(css, /prefers-reduced-motion/, 'Falta reduced motion.');
 if (/(^|[^\w-])#000(?:000)?\b/i.test(css)) errors.push('La capa contiene negro puro.');
-
 requireText(runtime, /COLLECTIONS_PATH_RE/, 'Runtime no se limita a collections.html.');
 requireText(runtime, /inspectCollections/, 'Falta recuperación independiente de colecciones.');
 requireText(runtime, /inspectFeatured/, 'Falta recuperación independiente de destacados.');
@@ -39,8 +37,7 @@ requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado sin co
 requireText(runtime, /location\.origin/, 'Metadatos no se normalizan al dominio actual.');
 requireText(runtime, /getFullYear/, 'Footer no usa año automático.');
 requireText(runtime, /tt-collections-runtime-state/, 'Faltan estados visibles de recuperación.');
-
-requireText(store, /import '\.\/collections-maintenance\.js/, 'Runtime no se carga desde collections-store.');
+requireText(loader, /collections[\s\S]*load\('collections-maintenance\.js'\)/, 'Runtime no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');
 requireText(record, /tablet/i, 'Registro no contempla tablet.');
 requireText(record, /mobile/i, 'Registro no contempla mobile.');
@@ -53,5 +50,4 @@ if (errors.length) {
   errors.forEach((error, index) => console.error(`${index + 1}. ${error}`));
   process.exit(1);
 }
-
-console.log('AUDITORÍA PÁGINA COLECCIONES: OK · 7 viewports · dos bloques dinámicos · tokens · recuperación · accesibilidad.');
+console.log('AUDITORÍA PÁGINA COLECCIONES: OK · 7 viewports · carga específica · tokens · recuperación · accesibilidad.');
