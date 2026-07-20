@@ -1,0 +1,50 @@
+TINTIN-WEB — CORRECCIÓN DE CARGA DE PRODUCTO Y REVISIÓN TRANSVERSAL
+Fecha: 20/07/2026
+Rama: fix/product-load-and-all-pages-smoke
+
+HALLAZGO CONFIRMADO
+js/product-maintenance.js observaba aria-busy en #product-grid y, dentro del callback
+que respondía a esa mutación, volvía a ejecutar setAttribute('aria-busy','false').
+MutationObserver puede notificar una escritura aunque el valor ya coincida, por lo
+que la página podía entrar en una cadena continua de microtareas, impedir el pintado
+de la ficha y aparentar que seguía cargando.
+
+CORRECCIÓN
+- Reconocimiento robusto de Producto por ruta y por la raíz DOM #product-detail.
+- Marca de diagnóstico window.TintinProductPageRecognized.
+- Escrituras idempotentes de atributos, dataset, texto y estilos.
+- #product-grid ya no observa aria-busy; solo #related-grid observa ese atributo.
+- Las inspecciones del MutationObserver se agrupan en una microtarea única.
+- La liberación del loader se ejecuta una sola vez.
+- Se mantienen los estados real, no encontrado, error, offline y recuperación.
+
+REGRESIÓN AUTOMATIZADA
+scripts/audit-product-page.js ahora falla si:
+- se pierde el respaldo DOM para reconocer product.html;
+- vuelve una escritura directa de aria-busy sobre #product-grid;
+- el observer común vuelve a observar aria-busy;
+- se eliminan las escrituras idempotentes o la cola de inspección.
+
+REVISIÓN DE TODAS LAS PÁGINAS
+scripts/audit-page-loading.js inventaría los 18 HTML raíz y comprueba:
+- estructura HTML completa y viewport;
+- cuerpo no vacío o redirección declarada;
+- IDs estáticos no duplicados;
+- referencias locales existentes;
+- scripts locales no duplicados;
+- contrato del loader;
+- imports y recursos relativos del runtime público;
+- cadena public-shell → products-store / collections-store → product-maintenance.
+
+scripts/smoke-all-pages.mjs abre en Chromium las 18 rutas, incluyendo Producto con
+un ID de prueba inexistente para confirmar que termina en un estado válido sin
+quedar cargando. Comprueba loader cerrado, body visible, recursos locales sin 4xx,
+ausencia de errores JavaScript no controlados, redirección legacy y capacidad de
+respuesta del hilo principal. Si la tienda está cerrada de forma intencional, el
+overlay de cierre se acepta como estado operativo válido.
+
+LIMITACIÓN
+La revisión de navegador se ejecuta en GitHub Actions contra un servidor estático
+local y los servicios externos reales. No sustituye una compra real ni una sesión
+manual autenticada de Super Admin; sí detecta pantallas en blanco, loaders atascados,
+recursos locales rotos, errores JavaScript y el ciclo de MutationObserver corregido.
