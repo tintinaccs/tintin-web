@@ -31,9 +31,34 @@ jobs:
         with:
           node-version: 20
 
+      - name: Refine verified patch target
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply-critical-healing-once.cjs')
+          text = path.read_text()
+          before = '''  rules = replaceExact(
+            rules,
+            "        'profileStatsUpdatedAt', 'orderStats'",
+            "        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'",
+            'Proteger campos del guard de checkout'
+          );'''
+          after = '''  rules = replaceFirstAfter(
+            rules,
+            'function protectedUserFieldsChanged()',
+            "        'profileStatsUpdatedAt', 'orderStats'",
+            "        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'",
+            'Proteger campos del guard de checkout'
+          );'''
+          if text.count(before) != 1:
+              raise SystemExit(f'No se encontró exactamente el bloque a refinar: {text.count(before)}')
+          path.write_text(text.replace(before, after))
+          PY
+
       - name: Apply verified critical patch
         run: |
           set +e
+          rm -f critical-patch.log
           node scripts/apply-critical-healing-once.cjs > critical-patch.log 2>&1
           code=$?
           cat critical-patch.log
