@@ -61,10 +61,10 @@ jobs:
               r"    'Exigir reconciliación al cambiar el estado del pedido'\n"
               r"  \);"
           )
-          second_replacement = '''  rules = replaceRegex(
+          second_replacement = r'''  rules = replaceRegex(
             rules,
-            /(currentRolePermAllows\('pedidos', 'cambiarEstado'\)\n\s+\) &&)\n(\s+\()/,
-            `$1\n              staffOrderInventoryTransitionValid(orderId) &&\n$2`,
+            /(currentRolePermAllows\('pedidos', 'cambiarEstado'\)\s+\)\s+&&)\s+(\()/,
+            `$1\n              staffOrderInventoryTransitionValid(orderId) &&\n              $2`,
             'Exigir reconciliación al cambiar el estado del pedido'
           );'''
           text, count = second.subn(lambda _: second_replacement, text, count=1)
