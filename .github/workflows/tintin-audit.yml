@@ -118,6 +118,15 @@ jobs:
       - name: Firestore read budget audit
         run: node scripts/audit-firestore-read-budget.js
 
+      - name: Audit critical inventory and quota healing
+        run: npm run audit:critical-healing
+
+      - name: Install Firestore rules test dependencies
+        run: npm install --no-save --package-lock=false @firebase/rules-unit-testing@3.0.3 firebase@10.12.0 firebase-tools@13.15.0
+
+      - name: Run adversarial Firestore emulator tests
+        run: npm run test:rules-critical
+
       - name: Post-optimization regression tripwire (all domains intact after perf changes)
         run: node scripts/audit-performance-regressions.js
 
