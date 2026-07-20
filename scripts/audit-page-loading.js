@@ -117,18 +117,20 @@ function auditHtmlPage(page) {
 }
 
 function walk(directory) {
+  if (!fs.existsSync(directory)) return [];
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) {
-      if (['.git', 'node_modules', 'functions'].includes(entry.name)) return [];
-      return walk(absolute);
-    }
-    return [absolute];
+    return entry.isDirectory() ? walk(absolute) : [absolute];
   });
 }
 
 function auditJavascriptReferences() {
-  const jsFiles = walk(root).filter(file => file.endsWith('.js') || file.endsWith('.mjs'));
+  const rootRuntimeFiles = fs.readdirSync(root, { withFileTypes: true })
+    .filter(entry => entry.isFile() && /\.(?:js|mjs)$/.test(entry.name))
+    .map(entry => path.join(root, entry.name));
+  const jsRuntimeFiles = walk(path.join(root, 'js'))
+    .filter(file => /\.(?:js|mjs)$/.test(file));
+  const jsFiles = [...new Set([...rootRuntimeFiles, ...jsRuntimeFiles])];
   const patterns = [
     /\bimport\s+(?:[^'"()]+?\s+from\s+)?(["'])(\.{1,2}\/[^"']+)\1/g,
     /\bimport\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g,
