@@ -21,6 +21,7 @@ const checks = [
   ['runtime está cargado por el shell compartido', /profile-maintenance\.js/.test(store)],
   ['estadísticas visibles se calculan desde orders', /getOrdersForUserIdentity/.test(statsRuntime) && /calculateOrderStats/.test(statsRuntime)],
   ['el perfil no intenta escribir estadísticas protegidas', !/recalculateUserOrderStats/.test(statsRuntime) && !/setDoc\s*\(/.test(statsRuntime)],
+  ['listeners de refresco se registran una sola vez', (statsRuntime.match(/addEventListener\('storage'/g) || []).length === 1 && (statsRuntime.match(/visibilitychange/g) || []).length === 1 && /scheduleRefresh/.test(statsRuntime)],
   ['las reglas mantienen protegidos los campos de estadísticas', /protectedUserFieldsChanged/.test(rules) && /profileStatsUpdatedAt/.test(rules) && /orderStats/.test(rules)],
   ['Perfil no precarga fuentes que no son críticas', !/rel="preload"[^>]+montserrat-latin-wght-(?:normal|italic)\.woff2/.test(html)],
   ['registro técnico existe', fs.existsSync('docs/maintenance/07-profile-orders.txt')],
