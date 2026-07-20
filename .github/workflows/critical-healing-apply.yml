@@ -32,7 +32,20 @@ jobs:
           node-version: 20
 
       - name: Apply verified critical patch
-        run: node scripts/apply-critical-healing-once.cjs
+        run: |
+          set +e
+          node scripts/apply-critical-healing-once.cjs > critical-patch.log 2>&1
+          code=$?
+          cat critical-patch.log
+          if [ "$code" -ne 0 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add critical-patch.log
+            git commit -m "Record critical patch diagnostic"
+            git push origin HEAD:security/critical-healing-pass
+            exit "$code"
+          fi
+          rm -f critical-patch.log
 
       - name: Validate generated changes
         run: |
