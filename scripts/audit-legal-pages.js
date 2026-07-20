@@ -19,21 +19,23 @@ if (!fs.existsSync(runtimePath)) errors.push('falta js/legal-maintenance.js');
 else {
   const runtime = fs.readFileSync(runtimePath, 'utf8');
   [
-    "terminos.html",
-    "privacidad.html",
-    "tt-legal-nav",
-    "aria-labelledby",
+    'terminos.html',
+    'privacidad.html',
+    'tt-legal-nav',
+    'aria-labelledby',
     "settings', 'general",
     'prefers-reduced-motion',
     '@media(max-width:767px)',
-    '@media(max-width:390px)',
+    '@media(max-width:390px)'
   ].forEach(token => {
     if (!runtime.includes(token)) errors.push(`runtime legal: falta ${token}`);
   });
 }
 
-const store = fs.readFileSync('js/collections-store.js', 'utf8');
-if (!store.includes("./legal-maintenance.js")) errors.push('collections-store no importa legal-maintenance');
+const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
+if (!/terminos\|privacidad[\s\S]*load\('legal-maintenance\.js'\)/.test(loader)) {
+  errors.push('page-maintenance-loader no importa legal-maintenance en páginas legales');
+}
 
 const workflow = fs.readFileSync('.github/workflows/tintin-audit.yml', 'utf8');
 if (!workflow.includes('node scripts/audit-legal-pages.js')) errors.push('workflow no ejecuta auditoría legal');
