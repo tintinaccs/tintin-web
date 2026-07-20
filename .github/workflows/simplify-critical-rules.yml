@@ -44,6 +44,7 @@ jobs:
           already = (
               "request.resource.data.stock < resource.data.stock" in rules and
               "allow update: if checkoutGuardOnlyUpdate(userId) ||" in rules and
+              "function sparkOrderHasProduct(data, productId)" in rules and
               "(isSuperAdmin() || settings.get('storeOpen', false) == true)" in rules
           )
 
@@ -92,6 +93,44 @@ jobs:
               for index, pattern in enumerate(decorative_checks, start=1):
                   rules = sub_one(rules, pattern, '', f'Quitar chequeo decorativo redundante {index}')
 
+              rules = sub_one(
+                  rules,
+                  r"(    function sparkOrderQtyForProduct\(data, productId\) \{.*?\n    \}\n)",
+                  r"\1\n    function sparkOrderHasProduct(data, productId) {\n      let items = data.items;\n      return\n        (items.size() > 0 && items[0].id == productId) ||\n        (items.size() > 1 && items[1].id == productId) ||\n        (items.size() > 2 && items[2].id == productId) ||\n        (items.size() > 3 && items[3].id == productId);\n    }\n",
+                  'Agregar pertenencia directa de producto'
+              )
+              rules = sub_one(
+                  rules,
+                  r"let orderedQty = orderData != null\s*\? sparkOrderQtyForProduct\(orderData, productId\)\s*: 0;",
+                  "let orderHasProduct = orderData != null &&\n        sparkOrderHasProduct(orderData, productId);",
+                  'Evitar suma duplicada de cantidad en producto'
+              )
+              rules = sub_one(
+                  rules,
+                  r"orderedQty > 0 &&",
+                  "orderHasProduct &&",
+                  'Exigir pertenencia directa del producto'
+              )
+
+              rules = sub_one(
+                  rules,
+                  r"    function sparkDeliveryValid\(data, settings\) \{.*?\n    \}\n\n    function sparkEncomiendaValid",
+                  "    function sparkDeliveryValid(data, settings) {\n      let shipping = data.shipping;\n      let index = shipping.rateIndex;\n      return settings.get('deliveryCities', []) is list &&\n        index is int && index >= 0 && index < settings.get('deliveryCities', []).size() &&\n        sparkRateValueValid(\n          settings.get('deliveryCities', [])[index],\n          settings.get('deliveryCost', 0),\n          shipping.city,\n          data.shippingCost,\n          data.shippingPending\n        );\n    }\n\n    function sparkEncomiendaValid",
+                  'Conservar tarifa delivery sin validar geometría decorativa'
+              )
+              rules = sub_one(
+                  rules,
+                  r"    function sparkEncomiendaValid\(data, settings\) \{.*?\n    \}\n\n    function sparkShippingValid",
+                  "    function sparkEncomiendaValid(data, settings) {\n      let shipping = data.shipping;\n      let index = shipping.rateIndex;\n      return settings.get('encomiendaCities', []) is list &&\n        index is int && index >= 0 && index < settings.get('encomiendaCities', []).size() &&\n        sparkRateValueValid(\n          settings.get('encomiendaCities', [])[index],\n          settings.get('encomiendaCost', 0),\n          shipping.city,\n          data.shippingCost,\n          data.shippingPending\n        );\n    }\n\n    function sparkShippingValid",
+                  'Conservar tarifa encomienda sin validar dirección decorativa'
+              )
+              rules = sub_one(
+                  rules,
+                  r"    function sparkShippingValid\(data, settings\) \{.*?\n    \}\n\n    function sparkOrderCreateValid",
+                  "    function sparkShippingValid(data, settings) {\n      let shipping = data.shipping;\n      return shipping is map &&\n        shipping.method is string &&\n        (\n          (\n            shipping.method == 'retiro' &&\n            shipping.city == 'San Lorenzo (retiro)' &&\n            shipping.rateIndex == -1 &&\n            data.shippingCost == 0 &&\n            data.shippingPending == false\n          ) ||\n          (shipping.method == 'delivery' && sparkDeliveryValid(data, settings)) ||\n          (shipping.method == 'encomienda' && sparkEncomiendaValid(data, settings))\n        );\n    }\n\n    function sparkOrderCreateValid",
+                  'Concentrar envío en método y tarifa'
+              )
+
               rules_path.write_text(rules)
 
           critical_path = Path('scripts/audit-critical-healing.js')
@@ -100,7 +139,7 @@ jobs:
               critical = sub_one(
                   critical,
                   r"rules\.includes\('sparkOrderQtyForProduct\(orderData, productId\)'\) &&\s*rules\.includes\('request\.resource\.data\.stock == resource\.data\.stock - orderedQty'\),\s*'sparkStockUpdateValid debe leer el pedido creado y exigir la cantidad exacta\.'",
-                  "rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&\n    rules.includes('orderedQty > 0') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'La regla del producto debe rechazar productos ajenos; sparkItemValid conserva la cantidad exacta.'",
+                  "rules.includes('sparkOrderHasProduct(orderData, productId)') &&\n    rules.includes('orderHasProduct &&') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'La regla del producto debe rechazar productos ajenos; sparkItemValid conserva la cantidad exacta.'",
                   'Actualizar auditoría crítica'
               )
               critical_path.write_text(critical)
@@ -111,7 +150,7 @@ jobs:
               secure = sub_one(
                   secure,
                   r"rules\.includes\('productAfter\.stock == product\.stock - item\.qty'\) &&\s*rules\.includes\('sparkOrderQtyForProduct\(orderData, productId\)'\) &&\s*rules\.includes\('request\.resource\.data\.stock == resource\.data\.stock - orderedQty'\),\s*'Un pedido debe descontar exactamente su cantidad y no puede tocar productos ajenos\.'",
-                  "rules.includes('productAfter.stock == product.stock - item.qty') &&\n    rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&\n    rules.includes('orderedQty > 0') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'El pedido obliga la cantidad exacta y la regla del producto rechaza cualquier producto ajeno.'",
+                  "rules.includes('productAfter.stock == product.stock - item.qty') &&\n    rules.includes('sparkOrderHasProduct(orderData, productId)') &&\n    rules.includes('orderHasProduct &&') &&\n    rules.includes('request.resource.data.stock < resource.data.stock'),\n  'El pedido obliga la cantidad exacta y la regla del producto rechaza cualquier producto ajeno.'",
                   'Actualizar auditoría de pedidos'
               )
               secure_path.write_text(secure)
