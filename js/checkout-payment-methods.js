@@ -1,8 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
-import {
-  doc,
-  onSnapshot,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { onPublicSettings } from './public-settings-store.js?v=tintin-20260720-read-budget-1';
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
@@ -200,11 +196,8 @@ function boot() {
     viewports: VIEWPORTS.slice(),
   };
 
-  onSnapshot(doc(db, 'settings', 'general'), snapshot => {
-    if (!snapshot.exists()) return;
-    render(normalizePaymentCatalog(snapshot.data() || {}));
-  }, error => {
-    console.error('[payment-methods] No se pudieron cargar los métodos de pago:', error);
+  onPublicSettings(settings => {
+    render(normalizePaymentCatalog(settings || {}));
   });
 }
 
