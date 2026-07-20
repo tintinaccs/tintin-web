@@ -52,8 +52,8 @@ export function mapProduct(id, d) {
     imagesExtra: uniqueSafeImageUrls(rawExtraImages).slice(0, 12),
     stock: d.stock ?? d['Variant Inventory Qty'] ?? null,
     active: d.active !== false,
-    oferta: Boolean(d.oferta),
-    destacado: Boolean(d.destacado),
+    oferta: !!d.oferta,
+    destacado: !!d.destacado,
     variants: sanitizeVariantData(d.variants || null),
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999
   };
