@@ -1,0 +1,194 @@
+import fs from 'node:fs';
+import {
+  initializeTestEnvironment,
+  assertFails,
+  assertSucceeds
+} from '@firebase/rules-unit-testing';
+import {
+  doc,
+  runTransaction,
+  serverTimestamp,
+  setDoc
+} from 'firebase/firestore';
+
+const projectId = 'demo-tintin-critical';
+const rules = fs.readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8');
+const testEnv = await initializeTestEnvironment({
+  projectId,
+  firestore: { rules, host: '127.0.0.1', port: 8080 }
+});
+
+const clientClaims = { email: 'clienta@example.com', email_verified: true };
+
+function orderPayload(uid, requestId, items) {
+  return {
+    requestId,
+    source: 'spark-checkout-v1',
+    shortId: requestId.slice(-8).toUpperCase(),
+    userId: uid,
+    userEmail: clientClaims.email,
+    contactEmail: clientClaims.email,
+    userName: 'Clienta Prueba',
+    userPhone: '595981123456',
+    items,
+    subtotal: items.reduce((sum, item) => sum + item.price * item.qty, 0),
+    shippingCost: 15000,
+    shippingPending: false,
+    total: items.reduce((sum, item) => sum + item.price * item.qty, 0) + 15000,
+    storeWhatsapp: '595981299331',
+    storeInstagram: '',
+    shipping: {
+      method: 'delivery', city: 'Asunción', rateIndex: 0,
+      address: '', referencia: '', zone: 'central',
+      mapLocation: { lat: -25.29, lng: -57.58, name: 'Casa', address: '' }
+    },
+    payment: { method: 'efectivo', status: 'pendiente' },
+    paymentStatus: 'pendiente',
+    status: 'pendiente',
+    notes: '',
+    notificationStatus: 'pending',
+    inventoryState: 'reserved',
+    inventoryRevision: 1,
+    inventoryUpdatedAt: serverTimestamp(),
+    inventoryUpdatedBy: clientClaims.email,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+}
+
+async function seedBase() {
+  await testEnv.clearFirestore();
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    await setDoc(doc(db, 'settings', 'storeGate'), { storeOpen: true, maintenanceAccess: {} });
+    await setDoc(doc(db, 'settings', 'general'), {
+      storeOpen: true,
+      paymentMethods: { efectivo: true, transferencia: true },
+      deliveryCost: 15000,
+      deliveryCities: [{ name: 'Asunción', price: 15000 }],
+      encomiendaCost: 25000,
+      encomiendaCities: []
+    });
+    await setDoc(doc(db, 'users', 'u1'), {
+      email: clientClaims.email, role: 'client', blocked: false, name: 'Clienta Prueba'
+    });
+    await setDoc(doc(db, 'products', 'p1'), {
+      name: 'Producto 1', category: 'aros', price: 50000, stock: 10, active: true
+    });
+    await setDoc(doc(db, 'products', 'p2'), {
+      name: 'Producto 2', category: 'anillos', price: 30000, stock: 7, active: true
+    });
+  });
+}
+
+async function checkoutTransaction({ requestId, decrement = 2, updateProduct = true, unrelated = false }) {
+  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  const orderId = `u1_${requestId}`;
+  const item = { id: 'p1', name: 'Producto 1', cat: 'aros', price: 50000, qty: 2, variant: '', imageUrl: '' };
+  return runTransaction(db, async transaction => {
+    const orderRef = doc(db, 'orders', orderId);
+    const userRef = doc(db, 'users', 'u1');
+    const productRef = doc(db, 'products', unrelated ? 'p2' : 'p1');
+    await transaction.get(orderRef);
+    await transaction.get(userRef);
+    const productSnapshot = await transaction.get(productRef);
+    if (updateProduct) {
+      transaction.update(productRef, {
+        stock: Number(productSnapshot.data().stock) - decrement,
+        lastStockOrderId: orderId,
+        updatedAt: serverTimestamp()
+      });
+    }
+    transaction.update(userRef, {
+      lastCheckoutAt: serverTimestamp(),
+      lastCheckoutOrderId: orderId,
+      updatedAt: serverTimestamp()
+    });
+    transaction.set(orderRef, orderPayload('u1', requestId, [item]));
+  }, { maxAttempts: 1 });
+}
+
+try {
+  await seedBase();
+  await assertSucceeds(checkoutTransaction({ requestId: 'req_exact_123456', decrement: 2 }));
+
+  await seedBase();
+  await assertFails(checkoutTransaction({ requestId: 'req_under_123456', decrement: 1 }));
+
+  await seedBase();
+  await assertFails(checkoutTransaction({ requestId: 'req_over_123456', decrement: 4 }));
+
+  await seedBase();
+  await assertFails(checkoutTransaction({ requestId: 'req_none_123456', updateProduct: false }));
+
+  await seedBase();
+  await assertFails(checkoutTransaction({ requestId: 'req_other_123456', decrement: 2, unrelated: true }));
+
+  await seedBase();
+  await assertSucceeds(checkoutTransaction({ requestId: 'req_first_123456', decrement: 2 }));
+  await assertFails(checkoutTransaction({ requestId: 'req_second_123456', decrement: 2 }));
+
+  await seedBase();
+  const anonDb = testEnv.unauthenticatedContext().firestore();
+  await assertFails(setDoc(doc(anonDb, 'sitePresence', 'visitor_123456'), {
+    visitorId: 'visitor_123456', sessionId: 'session_123456', userId: '',
+    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
+    countryCode: '', geoSource: 'unavailable'
+  }));
+  await assertFails(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
+    dayKey: '2026-07-20', sessionId: 'session_123456', visitorId: 'visitor_123456',
+    userId: '', landingPage: '/', startedAt: serverTimestamp(), city: '', region: '',
+    country: '', countryCode: '', geoSource: 'unavailable'
+  }));
+
+  await seedBase();
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    await setDoc(doc(db, 'users', 'agent1'), {
+      email: 'agent@example.com', role: 'agent', blocked: false
+    });
+    await setDoc(doc(db, 'rolePermissions', 'main'), {
+      agent: { pedidos: { ver: true, cambiarEstado: true } }
+    });
+    await setDoc(doc(db, 'products', 'p1'), {
+      name: 'Producto 1', category: 'aros', price: 50000, stock: 8, active: true
+    });
+    await setDoc(doc(db, 'orders', 'u1_existing_order'), {
+      ...orderPayload('u1', 'existing_order', [
+        { id: 'p1', name: 'Producto 1', cat: 'aros', price: 50000, qty: 2, variant: '', imageUrl: '' }
+      ]),
+      createdAt: new Date(), updatedAt: new Date(), inventoryUpdatedAt: new Date()
+    });
+  });
+
+  const agentDb = testEnv.authenticatedContext('agent1', {
+    email: 'agent@example.com', email_verified: true
+  }).firestore();
+  await assertFails(setDoc(doc(agentDb, 'orders', 'u1_existing_order'), {
+    status: 'cancelado', inventoryState: 'released', inventoryRevision: 2,
+    inventoryUpdatedAt: serverTimestamp(), inventoryUpdatedBy: 'agent@example.com',
+    updatedAt: serverTimestamp()
+  }, { merge: true }));
+
+  await assertSucceeds(runTransaction(agentDb, async transaction => {
+    const orderRef = doc(agentDb, 'orders', 'u1_existing_order');
+    const productRef = doc(agentDb, 'products', 'p1');
+    await transaction.get(orderRef);
+    const product = await transaction.get(productRef);
+    transaction.update(productRef, {
+      stock: Number(product.data().stock) + 2,
+      lastInventoryOrderId: 'u1_existing_order',
+      lastInventoryAction: 'release',
+      updatedAt: serverTimestamp()
+    });
+    transaction.update(orderRef, {
+      status: 'cancelado', inventoryState: 'released', inventoryRevision: 2,
+      inventoryUpdatedAt: serverTimestamp(), inventoryUpdatedBy: 'agent@example.com',
+      updatedAt: serverTimestamp()
+    });
+  }, { maxAttempts: 1 }));
+
+  console.log('Reglas críticas: 10 ataques/regresiones verificados.');
+} finally {
+  await testEnv.cleanup();
+}
