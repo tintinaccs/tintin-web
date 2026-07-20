@@ -1,0 +1,296 @@
+body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
+  border-color: var(--ck-accent, var(--acc)) !important;
+  background: var(--ck-accent-soft, var(--acc-pale)) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
+}
+
+#ck-payment-methods-runtime {
+  display: grid;
+  gap: 12px;
+}
+
+.ck-payment-runtime-item {
+  position: relative;
+}
+
+.ck-payment-runtime-item .ck-pay-label {
+  position: relative;
+  width: 100%;
+  min-height: 92px;
+  margin: 0;
+  background: var(--ck-surface, #fff) !important;
+  border-color: var(--ck-border, var(--border)) !important;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.ck-payment-runtime-item .ck-pay-label::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--ck-border, var(--border));
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.ck-payment-runtime-item .ck-pay-option:checked + .ck-pay-label,
+.ck-payment-runtime-item.is-selected .ck-pay-label {
+  border-color: var(--ck-accent, var(--acc)) !important;
+  background: var(--ck-accent-soft, var(--acc-pale)) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
+  transform: translateY(-1px);
+}
+
+.ck-payment-runtime-item .ck-pay-option:checked + .ck-pay-label::after,
+.ck-payment-runtime-item.is-selected .ck-pay-label::after {
+  content: '✓';
+  display: grid;
+  place-items: center;
+  border-color: var(--ck-accent, var(--acc));
+  background: var(--ck-accent, var(--acc));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.ck-payment-runtime-item .ck-pay-option:focus-visible + .ck-pay-label {
+  outline: 3px solid color-mix(in srgb, var(--ck-accent, var(--acc)) 35%, transparent);
+  outline-offset: 3px;
+}
+
+.ck-payment-runtime-copy {
+  min-width: 0;
+  padding-right: 34px;
+}
+
+.ck-payment-runtime-details {
+  display: none;
+  margin-top: 8px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--ck-border, var(--border));
+  border-radius: var(--radius-sm, 12px);
+  background: var(--ck-surface, #fff) !important;
+  color: var(--ck-text, var(--text));
+}
+
+.ck-payment-runtime-item.is-selected .ck-payment-runtime-details {
+  display: block;
+}
+
+.ck-payment-runtime-instructions {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.ck-payment-runtime-detail {
+  display: grid;
+  grid-template-columns: minmax(110px, .7fr) minmax(0, 1.3fr);
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--ck-border, var(--border));
+  font-size: 13px;
+}
+
+.ck-payment-runtime-detail:first-child {
+  border-top: 0;
+}
+
+.ck-payment-runtime-detail strong,
+.ck-payment-runtime-detail span {
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+#tt-payment-admin-root {
+  display: grid;
+  gap: 16px;
+}
+
+.tt-payment-admin-toolbar,
+.tt-payment-admin-actions,
+.tt-payment-admin-form-actions,
+.tt-payment-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tt-payment-admin-toolbar {
+  justify-content: space-between;
+}
+
+.tt-payment-admin-status {
+  min-height: 20px;
+  font-size: 12px;
+  color: var(--adm-muted);
+}
+
+.tt-payment-admin-status[data-state='error'] {
+  color: #a61b35;
+}
+
+.tt-payment-admin-status[data-state='success'] {
+  color: #166534;
+}
+
+.tt-payment-admin-list {
+  display: grid;
+  gap: 10px;
+}
+
+.tt-payment-admin-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 1.5px solid var(--adm-border);
+  border-radius: 12px;
+  background: var(--adm-card, #fff);
+}
+
+.tt-payment-admin-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--adm-bg);
+  font-size: 22px;
+}
+
+.tt-payment-admin-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--adm-text);
+}
+
+.tt-payment-admin-meta,
+.tt-payment-admin-description {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--adm-muted);
+  overflow-wrap: anywhere;
+}
+
+.tt-payment-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  background: #e8f5e9;
+  color: #236a38;
+}
+
+.tt-payment-admin-badge.is-disabled {
+  background: #fce8ee;
+  color: #a61b35;
+}
+
+.tt-payment-admin-editor {
+  display: none;
+  padding: 16px;
+  border: 1.5px solid var(--adm-border);
+  border-radius: 12px;
+  background: var(--adm-bg);
+}
+
+.tt-payment-admin-editor.is-open {
+  display: block;
+}
+
+.tt-payment-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tt-payment-admin-span-2 {
+  grid-column: 1 / -1;
+}
+
+.tt-payment-admin-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tt-payment-detail-list {
+  display: grid;
+  gap: 8px;
+}
+
+.tt-payment-detail-row {
+  display: grid;
+  grid-template-columns: minmax(130px, .7fr) minmax(0, 1.3fr) auto;
+  gap: 8px;
+  align-items: start;
+}
+
+.tt-payment-detail-row textarea {
+  min-height: 44px;
+  resize: vertical;
+}
+
+@media (min-width: 1441px) {
+  #ck-payment-methods-runtime { gap: 14px; }
+}
+
+@media (min-width: 1281px) and (max-width: 1440px) {
+  .ck-payment-runtime-item .ck-pay-label { min-height: 90px; }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .tt-payment-admin-item { grid-template-columns: auto minmax(0, 1fr); }
+  .tt-payment-admin-actions { grid-column: 1 / -1; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tt-payment-admin-item { grid-template-columns: auto minmax(0, 1fr); }
+  .tt-payment-admin-actions { grid-column: 1 / -1; }
+  .tt-payment-detail-row { grid-template-columns: 1fr 1.4fr auto; }
+}
+
+@media (min-width: 391px) and (max-width: 768px) {
+  .ck-payment-runtime-detail { grid-template-columns: 1fr; gap: 3px; }
+  .tt-payment-admin-grid { grid-template-columns: 1fr; }
+  .tt-payment-admin-span-2 { grid-column: auto; }
+  .tt-payment-admin-item { grid-template-columns: auto minmax(0, 1fr); }
+  .tt-payment-admin-actions { grid-column: 1 / -1; }
+  .tt-payment-detail-row { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 321px) and (max-width: 390px) {
+  .ck-payment-runtime-item .ck-pay-label { padding: 14px; gap: 11px; min-height: 88px; }
+  .ck-payment-runtime-detail { grid-template-columns: 1fr; gap: 3px; }
+  .tt-payment-admin-grid,
+  .tt-payment-admin-item,
+  .tt-payment-detail-row { grid-template-columns: 1fr; }
+  .tt-payment-admin-span-2,
+  .tt-payment-admin-actions { grid-column: auto; }
+  .tt-payment-admin-icon { width: 40px; height: 40px; }
+}
+
+@media (max-width: 320px) {
+  .ck-payment-runtime-item .ck-pay-label { padding: 12px; gap: 9px; min-height: 84px; }
+  .ck-payment-runtime-item .ck-pay-label::after { top: 10px; right: 10px; }
+  .ck-payment-runtime-copy { padding-right: 28px; }
+  .ck-payment-runtime-detail,
+  .tt-payment-admin-grid,
+  .tt-payment-admin-item,
+  .tt-payment-detail-row { grid-template-columns: 1fr; }
+  .tt-payment-admin-span-2,
+  .tt-payment-admin-actions { grid-column: auto; }
+  .tt-payment-admin-editor { padding: 12px; }
+}
