@@ -1,0 +1,109 @@
+MANTENIMIENTO 16 — CONTROL DE LECTURAS FIRESTORE
+Fecha: 2026-07-20
+Rama: maintenance/firestore-read-budget
+
+INCIDENTE CONFIRMADO
+- Plan: Spark.
+- Cuota diaria gratuita de lecturas: 50.000.
+- Uso observado en Google Cloud: 51.803 lecturas, 100 %.
+- Uso observado en Firebase durante las 24 horas anteriores: aproximadamente 112.000 lecturas.
+- Resultado visible: HTTP 429, resource-exhausted y Quota exceeded al confirmar pedidos.
+- La transacción fallida no crea un pedido parcial ni descuenta stock parcialmente.
+
+CAUSA PRINCIPAL ENCONTRADA
+- js/products-store.js abría un onSnapshot sobre products con límite 10.000 desde el runtime público compartido.
+- El runtime se cargaba incluso en Perfil, Login, Contacto, Checkout y páginas legales.
+- Cada página podía volver a leer todos los documentos del catálogo aunque no mostrara productos.
+- js/collections-store.js mantenía otra suscripción pública completa para colecciones.
+- js/collections-store.js importaba mantenimientos de todas las páginas, aunque la ruta no los necesitara.
+- Las cuentas client intentaban leer rolePermissions/main para decidir si mostrar insignias de edición.
+- WhatsApp y métodos de pago podían abrir listeners separados al mismo settings/general.
+- Después de un error 429, Checkout habilitaba inmediatamente otro intento manual.
+
+CAMBIOS APLICADOS
+1. Productos
+- Se eliminó el listener público global de products.
+- Inicio, Catálogo y Colecciones cargan el catálogo únicamente cuando la ruta lo necesita.
+- Perfil, Login, Contacto, Checkout, Nosotros y páginas informativas no leen products al entrar.
+- La búsqueda carga el catálogo solo al abrir o enfocar la lupa.
+- Se usa caché local con TTL de 10 minutos.
+- Solicitudes simultáneas se deduplican con single-flight.
+- La caché guarda únicamente datos compactos de tarjetas.
+- Producto lee un solo documento completo por id.
+- Producto consulta como máximo 12 relacionados por categoría.
+- La ficha completa tiene una caché independiente de 15 minutos.
+
+2. Colecciones
+- El sitio público usa una lectura puntual con caché de 30 minutos.
+- El menú Tienda carga colecciones al abrirse en páginas que no muestran colecciones.
+- Inicio, Catálogo y Colecciones pueden cargarlas inmediatamente porque las necesitan.
+- El listener en tiempo real se conserva únicamente para el CRUD del Super Admin.
+- Los suscriptores administrativos comparten una sola suscripción y la cierran cuando ya no se usa.
+
+3. Configuración general
+- Se agregó public-settings-store.js.
+- WhatsApp y métodos de pago comparten una sola suscripción a settings/general.
+- El store entrega el último valor cacheado mientras Firestore responde.
+- Contacto, Términos, Privacidad y páginas de ayuda no abren el listener global si ya administran esa configuración con su runtime propio.
+
+4. Roles y permisos
+- Una cuenta client deja de consultar rolePermissions/main.
+- Solo roles incluidos en EDITABLE_ROLES consultan la matriz administrativa.
+- Se elimina el permission-denied inútil que aparecía al navegar como clienta.
+
+5. Checkout y cuota
+- resource-exhausted y Quota exceeded activan un cooldown de 60 segundos.
+- El botón no permite clics consecutivos durante ese periodo.
+- El mensaje informa que el pedido no fue creado y que el stock no fue descontado.
+- El carrito y los datos permanecen disponibles.
+- El guard se carga exclusivamente en Checkout.
+
+6. Mantenimientos por ruta
+- Los runtimes de Catálogo, Colecciones, Producto, Checkout, Login, Perfil, Nosotros, Contacto y páginas legales se importan solamente en su página correspondiente.
+- collections-store.js deja de funcionar como cargador global de todos los mantenimientos.
+
+7. Control y diagnóstico
+- window.TintinReadBudget registra una estimación de documentos leídos por los stores optimizados.
+- Se agregó scripts/audit-firestore-read-budget.js.
+- La auditoría bloquea la reaparición de listeners públicos completos, consultas administrativas para clientas, módulos globales innecesarios y reintentos consecutivos tras 429.
+- Las auditorías anteriores de rendimiento y regresiones se actualizaron para distinguir tiempo real crítico de datos públicos cacheables.
+
+ESTRATEGIA POR FUNCIÓN
+- Tiempo real conservado: pedidos del perfil, carrito del usuario, estado de tienda, apariencia, contenido editable, pedidos/usuarios/colecciones dentro del Admin.
+- Bajo demanda y cacheado: catálogo público, ficha de producto, relacionados, colecciones del menú y configuración compartida entre módulos públicos.
+- Sin lectura hasta uso: búsqueda y menú Tienda en páginas que no necesitan esos datos.
+
+SIETE RESOLUCIONES
+- 1920 px.
+- 1440 px.
+- 1280 px.
+- 1024 px.
+- 768 px.
+- 390 px.
+- 320 px.
+
+La estrategia de lecturas depende de la ruta y de la función utilizada, no del ancho. Las siete resoluciones ejecutan el mismo presupuesto de lectura para una misma acción. Chromium y las auditorías de cada página deben verificar que la carga diferida no altere el comportamiento responsive.
+
+LIMITACIONES Y DECISIONES
+- No se habilitó persistentLocalCache de Firestore porque previamente provocó bloqueos del loader en navegadores restrictivos e incógnito.
+- La caché propia usa localStorage con fallback a memoria y falla de manera segura si el navegador no permite almacenamiento.
+- Las actualizaciones públicas de productos pueden tardar hasta 10 minutos en un navegador que ya tenga caché válida. Producto completo puede permanecer cacheado hasta 15 minutos. Este límite reduce drásticamente el consumo del plan Spark.
+- La creación del pedido sigue revalidando configuración, usuario, precios y stock dentro de una transacción; esas lecturas son necesarias para seguridad e integridad.
+- El SDK de Firestore puede reintentar internamente una transacción. El cooldown evita nuevos intentos manuales después de recibir 429.
+- No se modificaron precios, stock, pedidos, métodos de envío ni reglas comerciales.
+
+VALIDACIÓN PENDIENTE AL ABRIR EL PR
+- audit:page-loading.
+- audit:tintin.
+- auditorías de Inicio, Catálogo, Colecciones, Producto, Checkout, Login, Perfil, Contacto y páginas informativas.
+- audit-admin-public-sync.
+- audit-final-integration.
+- audit-performance-realtime.
+- audit-firestore-read-budget.
+- audit-performance-regressions.
+- Audit typography.
+- Auditoría de colecciones Fase 4.
+- Smoke de todas las rutas en Chromium.
+
+PR: pendiente.
+MERGE SHA: pendiente.
