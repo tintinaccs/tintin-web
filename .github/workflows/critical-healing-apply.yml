@@ -83,6 +83,11 @@ jobs:
               raise SystemExit(f'No se encontró una única llamada del editor: {text.count(old_editor)}')
           text = text.replace(old_editor, new_editor)
 
+          cleanup = '\nremoveOneTimeFiles();\n'
+          if text.count(cleanup) != 1:
+              raise SystemExit(f'No se encontró una única limpieza temporal: {text.count(cleanup)}')
+          text = text.replace(cleanup, '\n// La limpieza temporal se realiza después del push validado.\n')
+
           path.write_text(text)
           PY
 
