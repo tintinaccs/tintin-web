@@ -1,16 +1,4 @@
-/**
- * TINTIN — Tokens de color GLOBALES (Super Admin → Apariencia → Esquema global)
- * Generado a partir de js/color-scheme-catalog.js (GLOBAL_TOKENS) — estos son
- * los valores POR DEFECTO (el esquema "Predeterminado", igual a lo que ya
- * está en vivo). El motor js/color-scheme.js sobreescribe estas variables en
- * caliente (inline, sobre <html>) con el esquema activo publicado en
- * Firestore — este archivo solo define la base para que nunca quede un
- * var() sin resolver antes de que el script corra.
- *
- * Se carga en TODAS las páginas (incluido admin.html, que además carga
- * css/admin-color-tokens.css encima para su propio esquema).
- */
-@import url("./loader-solid-background.css?v=tintin-20260718-loader-solid-1");
+@import url("./loader-solid-background.css?v=tintin-20260720-header-dropdown-white-1");
 
 :root {
   --color-brand-primary: #AD3F67;
