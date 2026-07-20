@@ -7,11 +7,12 @@ const core = read('js/payment-methods-core.js');
 const css = read('css/payment-methods.css');
 const store = read('js/collections-store.js');
 const loader = read('js/page-maintenance-loader.js');
+const publicSettings = read('js/public-settings-store.js');
 const rules = read('firestore.rules');
 const secureCheckout = read('js/secure-checkout-order.js');
 
 const checks = [
-  ['Checkout carga el catálogo dinámico desde settings/general', /onSnapshot\(doc\(db, 'settings', 'general'\)/.test(checkout) && /normalizePaymentCatalog/.test(checkout)],
+  ['Checkout carga el catálogo dinámico desde settings/general compartido', /onPublicSettings/.test(checkout) && /normalizePaymentCatalog/.test(checkout) && /onSnapshot\(doc\(db, 'settings', 'general'\)/.test(publicSettings)],
   ['las opciones nuevas conservan la validación segura canónica', /bridge\.name = 'ck-pay'/.test(checkout) && /bridge\.value = selected\?\.kind/.test(checkout) && /efectivo.*transferencia/s.test(secureCheckout)],
   ['cada método tiene radio, label y detalles accesibles', /role', 'radiogroup'/.test(checkout) && /aria-describedby/.test(checkout) && /ck-payment-runtime-details/.test(checkout)],
   ['la selección visual vence reglas anteriores con important', /ck-pay-option:checked \+ \.ck-pay-label/.test(css) && /border-color:[^;]+!important/.test(css) && /background:[^;]+!important/.test(css)],
