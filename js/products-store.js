@@ -23,11 +23,14 @@ const ALL_CACHE_KEY = 'products:cards';
 const ALL_CACHE_TTL = 10 * 60 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
 
+function sanitizeProductImage(img) {
+  return sanitizeImageUrl(img);
+}
+
 function normalizeImageUrl(d) {
-  return sanitizeImageUrl(
-    d.imageUrl || d.image || d.img || d.photo || d.imageSrc || d.image_src ||
-    d['Image Src'] || d['Variant Image'] || d.Image || d.Imagen || d.Foto || ''
-  );
+  const img = d.imageUrl || d.image || d.img || d.photo || d.imageSrc || d.image_src ||
+    d['Image Src'] || d['Variant Image'] || d.Image || d.Imagen || d.Foto || '';
+  return sanitizeProductImage(img);
 }
 
 export function mapProduct(id, d) {
