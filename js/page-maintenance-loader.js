@@ -14,7 +14,8 @@ export function loadPageMaintenance() {
   if (/\/checkout(?:\.html)?$/.test(path)) {
     return Promise.allSettled([
       load('checkout-maintenance.js'),
-      load('checkout-payment-methods.js')
+      load('checkout-payment-methods.js'),
+      load('checkout-quota-guard.js')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) return load('login-maintenance.js');
