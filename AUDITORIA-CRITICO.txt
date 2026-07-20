@@ -1,0 +1,112 @@
+================================================================
+ AUDITORÍA TINTIN-WEB — NIVEL CRÍTICO / ALTO RIESGO
+ Fecha: 2026-07-20
+================================================================
+Metodología: revisión del núcleo de seguridad y lógica (reglas de
+Firestore, funciones backend, checkout, carrito, worker de Cloudflare,
+render público y panel admin). El código está en general bien defendido
+(escapado consistente, validación server-side, CORS/token en Cloudflare).
+Estos son los problemas que sí comprometen datos, dinero o disponibilidad.
+
+
+----------------------------------------------------------------
+[C1] El descuento de stock NO está atado a la cantidad pedida
+----------------------------------------------------------------
+PLATAFORMA: Todas (desktop, tablet y mobile) — es backend/reglas.
+
+PROBLEMA:
+Al confirmar un pedido, la misma transacción crea el pedido y actualiza
+el stock de los productos. La regla que autoriza la baja de stock
+(sparkStockUpdateValid) solo exige que el stock BAJE (nuevo < anterior)
+y que exista un pedido creado en esa transacción. NO exige que la baja
+sea igual a la cantidad comprada, ni que el producto forme parte del
+pedido. Del lado del pedido (sparkItemValid) también se quitó el chequeo
+getAfter que ataba el descuento a la cantidad (ver comentario en las
+propias reglas).
+
+QUÉ PROVOCA:
+1) Sabotaje de inventario: cualquier usuaria logueada con correo
+   verificado puede, en la misma transacción de un pedido válido de un
+   producto barato, poner en 0 el stock de CUALQUIER otro producto
+   (aunque no esté en su pedido). Un competidor deja la tienda entera
+   "sin stock".
+2) Sobreventa: pedir cantidad N de un producto y descontar solo 1 del
+   stock, dejando stock fantasma.
+
+CÓMO DEBERÍA FUNCIONAR:
+La baja de stock debe ser exactamente igual a la cantidad de ese
+producto en el pedido recién creado, y solo sobre productos que estén
+en ese pedido: stock_nuevo == stock_anterior - qty_pedida_de_ese_producto.
+
+DÓNDE ESTÁ EL CÓDIGO:
+- firestore.rules → función sparkStockUpdateValid (líneas ~553-581):
+  solo valida "stock < resource.data.stock" y "existsAfter(orderPath)".
+- firestore.rules → función sparkItemValid (líneas ~315-354): comentario
+  ~338-345 documenta que se removió el getAfter que validaba el descuento.
+- js/secure-checkout-order.js (líneas ~483-493): el cliente escribe
+  stock: stock - qty, pero la regla no lo obliga.
+
+SOLUCIÓN:
+En sparkStockUpdateValid, reincorporar el amarre a la cantidad usando el
+pedido que se crea en la misma transacción. Leer el pedido con
+getAfter(orderPath) y validar que:
+- el productId actual esté en getAfter(orderPath).data.items, y
+- request.resource.data.stock == resource.data.stock - (suma de qty de
+  ese productId en items del pedido).
+Si el amarre con getAfter reintroduce el rechazo por dependencia circular
+(el motivo por el que se quitó), la alternativa robusta es mover la baja
+de stock a una Cloud Function con Admin SDK (ya existe functions/
+create-order.js, hoy sin usar) y bloquear en reglas toda escritura de
+stock desde el cliente (allow update de 'stock' solo para isSuperAdmin()
+o vía token de servicio).
+
+
+----------------------------------------------------------------
+[C2] Escrituras públicas de analítica sin límite → agota la cuota
+     diaria de Firestore (plan Spark) y tumba la tienda
+----------------------------------------------------------------
+PLATAFORMA: Todas (desktop, tablet y mobile) — es backend/reglas.
+
+PROBLEMA:
+Las colecciones de presencia y tráfico permiten create/update a
+cualquier visitante (incluso anónimo) sin ningún límite de frecuencia.
+El id del documento y el visitorId los elige quien escribe, así que se
+pueden generar escrituras ilimitadas en bucle.
+
+QUÉ PROVOCA:
+El proyecto corre en plan gratuito (Spark), con tope duro de ~20.000
+escrituras/día. Un atacante con un script simple agota ese tope en
+minutos. Al agotarse, Firestore rechaza TODAS las escrituras del resto
+del día: no se pueden crear pedidos, ni sincronizar carritos, ni guardar
+nada, hasta el reset. Es una denegación de servicio barata sobre toda la
+tienda.
+
+CÓMO DEBERÍA FUNCIONAR:
+La analítica pública debe estar acotada: throttling por visitante
+(p. ej. un update de presencia como máximo cada X segundos, validado con
+resource.data.lastSeen y request.time), y/o mover el registro de
+presencia/tráfico a la Cloud Function / worker de Cloudflare (visitor-geo
+ya existe) para que el cliente no escriba directo a Firestore.
+
+DÓNDE ESTÁ EL CÓDIGO:
+- firestore.rules → match /sitePresence/{visitorId} (líneas ~152-155):
+  allow create, update: if isStoreOpenOrAllowed() && presenceIsValid(...).
+- firestore.rules → match /siteTraffic/{dateKey}/sessions/{sessionId}
+  (líneas ~157-161).
+- firestore.rules → presenceIsValid / trafficSessionIsValid (~114-150):
+  validan forma pero no frecuencia.
+
+SOLUCIÓN:
+1) En sitePresence, exigir intervalo mínimo entre updates del mismo doc:
+   allow update solo si request.time > resource.data.lastSeen + duration
+   (p. ej. 20s). Esto corta el bucle de escrituras.
+2) Idealmente, registrar presencia/tráfico desde el worker de Cloudflare
+   (ya autenticado y con CORS por origen) en vez de escritura directa
+   del navegador a Firestore.
+3) Mientras tanto, activar alertas de presupuesto/uso en Firebase para
+   detectar el pico.
+
+================================================================
+Fin del nivel CRÍTICO. Continúo con el nivel MEDIO en
+AUDITORIA-MEDIO.txt.
+================================================================
