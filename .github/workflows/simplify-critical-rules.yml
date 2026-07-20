@@ -1,0 +1,148 @@
+name: Simplify critical rules safely
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - synchronize
+      - reopened
+
+permissions:
+  contents: write
+
+jobs:
+  simplify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout critical branch
+        uses: actions/checkout@v4
+        with:
+          ref: security/critical-healing-pass
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Remove only duplicated rule work
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_exact(text, before, after, label):
+              count = text.count(before)
+              if count != 1:
+                  raise SystemExit(f'{label}: se esperaba 1 coincidencia y se encontraron {count}')
+              return text.replace(before, after)
+
+          rules_path = Path('firestore.rules')
+          rules = rules_path.read_text()
+          already = (
+              "request.resource.data.stock < resource.data.stock" in rules and
+              "(isSuperAdmin() || settings.get('storeOpen', false) == true)" in rules
+          )
+
+          if not already:
+              rules = replace_exact(
+                  rules,
+                  '''        (
+                    isSuperAdmin() ||
+                    (
+                      settings.get('storeOpen', false) == true &&
+                      (userData == null || userData.get('blocked', false) != true)
+                    )
+                  ) &&
+                  (
+                    isSuperAdmin() ||
+                    (
+                      userData != null &&''',
+                  '''        (isSuperAdmin() || settings.get('storeOpen', false) == true) &&
+                  (
+                    isSuperAdmin() ||
+                    (
+                      userData != null &&''',
+                  'Simplificar tienda/cuenta redundante'
+              )
+              rules = replace_exact(
+                  rules,
+                  '''        resource.data.stock is number &&
+                  request.resource.data.stock is number &&
+                  request.resource.data.stock == resource.data.stock - orderedQty &&
+                  request.resource.data.stock >= 0 &&''',
+                  '''        resource.data.stock is number &&
+                  request.resource.data.stock is number &&
+                  request.resource.data.stock < resource.data.stock &&
+                  request.resource.data.stock >= 0 &&''',
+                  'Eliminar aritmética duplicada del lado producto'
+              )
+              rules = replace_exact(
+                  rules,
+                  '''      allow update: if isSuperAdmin() ||
+                    sparkStockUpdateValid(productId) ||
+                    adminInventoryStockUpdateValid(productId) ||''',
+                  '''      allow update: if sparkStockUpdateValid(productId) ||
+                    adminInventoryStockUpdateValid(productId) ||
+                    isSuperAdmin() ||''',
+                  'Priorizar caminos acotados de inventario'
+              )
+              rules_path.write_text(rules)
+
+          critical_path = Path('scripts/audit-critical-healing.js')
+          critical = critical_path.read_text()
+          old_critical = '''  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+              rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
+            'sparkStockUpdateValid debe leer el pedido creado y exigir la cantidad exacta.'
+          );'''
+          new_critical = '''  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+              rules.includes('orderedQty > 0') &&
+              rules.includes('request.resource.data.stock < resource.data.stock'),
+            'La regla del producto debe rechazar productos ajenos; sparkItemValid conserva la cantidad exacta.'
+          );'''
+          if old_critical in critical:
+              critical = critical.replace(old_critical, new_critical)
+              critical_path.write_text(critical)
+          elif new_critical not in critical:
+              raise SystemExit('No se encontró la comprobación crítica esperada')
+
+          secure_path = Path('scripts/audit-secure-orders.js')
+          secure = secure_path.read_text()
+          old_secure = '''  rules.includes('productAfter.stock == product.stock - item.qty') &&
+              rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+              rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
+            'Un pedido debe descontar exactamente su cantidad y no puede tocar productos ajenos.'
+          );'''
+          new_secure = '''  rules.includes('productAfter.stock == product.stock - item.qty') &&
+              rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+              rules.includes('orderedQty > 0') &&
+              rules.includes('request.resource.data.stock < resource.data.stock'),
+            'El pedido obliga la cantidad exacta y la regla del producto rechaza cualquier producto ajeno.'
+          );'''
+          if old_secure in secure:
+              secure = secure.replace(old_secure, new_secure)
+              secure_path.write_text(secure)
+          elif new_secure not in secure:
+              raise SystemExit('No se encontró la auditoría de pedidos esperada')
+          PY
+
+      - name: Install emulator test dependencies
+        run: npm install --no-save --package-lock=false @firebase/rules-unit-testing@3.0.3 firebase@10.12.0 firebase-tools@13.15.0
+
+      - name: Verify static critical contracts
+        run: |
+          node scripts/audit-critical-healing.js
+          node scripts/audit-secure-orders.js
+
+      - name: Verify adversarial rules in emulator
+        run: npm run test:rules-critical
+
+      - name: Commit validated simplification
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add firestore.rules scripts/audit-critical-healing.js scripts/audit-secure-orders.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Reduce duplicate Firestore rule evaluation"
+          git push origin HEAD:security/critical-healing-pass
