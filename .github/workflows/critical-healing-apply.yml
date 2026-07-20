@@ -31,26 +31,46 @@ jobs:
         with:
           node-version: 20
 
-      - name: Refine verified patch target
+      - name: Refine verified patch targets
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
           path = Path('scripts/apply-critical-healing-once.cjs')
           text = path.read_text()
-          pattern = re.compile(
+
+          first = re.compile(
               r'(rules\s*=\s*)replaceExact\(\s*rules,\s*"        \'profileStatsUpdatedAt\', \'orderStats\'",'
           )
-          def replacement(match):
+          def first_replacement(match):
               return (
                   match.group(1) + 'replaceFirstAfter(\n'
                   + '    rules,\n'
                   + "    'function protectedUserFieldsChanged()',\n"
                   + '    "        \'profileStatsUpdatedAt\', \'orderStats\'",'
               )
-          text, count = pattern.subn(replacement, text, count=1)
+          text, count = first.subn(first_replacement, text, count=1)
           if count != 1:
-              raise SystemExit(f'No se encontró una única llamada a refinar: {count}')
+              raise SystemExit(f'No se encontró una única llamada de campos protegidos: {count}')
+
+          second = re.compile(
+              r"  rules = replaceFirstAfter\(\n"
+              r"    rules,\n"
+              r"    'match /orders/\{orderId\}',\n"
+              r"    `[\s\S]*?"
+              r"    'Exigir reconciliación al cambiar el estado del pedido'\n"
+              r"  \);"
+          )
+          second_replacement = '''  rules = replaceRegex(
+            rules,
+            /(currentRolePermAllows\('pedidos', 'cambiarEstado'\)\n\s+\) &&)\n(\s+\()/,
+            `$1\n              staffOrderInventoryTransitionValid(orderId) &&\n$2`,
+            'Exigir reconciliación al cambiar el estado del pedido'
+          );'''
+          text, count = second.subn(lambda _: second_replacement, text, count=1)
+          if count != 1:
+              raise SystemExit(f'No se encontró una única llamada de transición de pedido: {count}')
+
           path.write_text(text)
           PY
 
