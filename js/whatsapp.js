@@ -79,10 +79,22 @@ function applySocialExtra(config) {
   });
 }
 
-onPublicSettings(config => {
-  applyWaNumber(config.whatsappNumber);
-  applyEmail(config.contactEmail);
-  applyInstagram(config.instagram);
-  applyAddress(config.storeAddress);
-  applySocialExtra(config);
-});
+const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+const pageOwnsSettings = new Set([
+  'contact.html',
+  'terminos.html',
+  'privacidad.html',
+  'envios.html',
+  'cambios-devoluciones.html',
+  'preguntas-frecuentes.html'
+]);
+
+if (!pageOwnsSettings.has(page)) {
+  onPublicSettings(config => {
+    applyWaNumber(config.whatsappNumber);
+    applyEmail(config.contactEmail);
+    applyInstagram(config.instagram);
+    applyAddress(config.storeAddress);
+    applySocialExtra(config);
+  });
+}
