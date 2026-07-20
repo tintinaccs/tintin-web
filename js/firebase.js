@@ -5,6 +5,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
@@ -16,6 +17,20 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// Clave pública de reCAPTCHA v3 creada desde Firebase Console → App Check.
+// Al cargarla y activar Enforcement en Firestore, las llamadas que no provengan
+// de la web legítima quedan rechazadas antes de consumir la API normalmente.
+const FIREBASE_APP_CHECK_SITE_KEY = '';
+if (FIREBASE_APP_CHECK_SITE_KEY) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
+    isTokenAutoRefreshEnabled: true
+  });
+  window.TintinAppCheckStatus = 'enabled';
+} else {
+  window.TintinAppCheckStatus = 'configuration-required';
+}
 
 // Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
 // persistentLocalCache + persistentMultipleTabManager para que los listeners

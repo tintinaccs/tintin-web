@@ -25,6 +25,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   const MAX_DISTINCT_PRODUCTS = 4;
   const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
   const DEFAULT_STORE_WHATSAPP = '595981299331';
+  const CHECKOUT_COOLDOWN_MS = 90 * 1000;
   let submitting = false;
 
   const text = value => String(value == null ? '' : value).trim();
@@ -367,7 +368,22 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
       }
       const settings = settingsSnap.data() || {};
-      const userData = userSnap.exists() ? userSnap.data() || {} : {};
+      if (!userSnap.exists()) {
+        throw appError('profile_missing', 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.');
+      }
+      const userData = userSnap.data() || {};
+      const lastCheckoutAt = userData.lastCheckoutAt;
+      const lastCheckoutMs = typeof lastCheckoutAt?.toMillis === 'function'
+        ? lastCheckoutAt.toMillis()
+        : Number(new Date(lastCheckoutAt || 0));
+      if (
+        email !== SUPER_ADMIN_EMAIL &&
+        Number.isFinite(lastCheckoutMs) &&
+        Date.now() - lastCheckoutMs < CHECKOUT_COOLDOWN_MS
+      ) {
+        const remaining = Math.max(1, Math.ceil((CHECKOUT_COOLDOWN_MS - (Date.now() - lastCheckoutMs)) / 1000));
+        throw appError('checkout_cooldown', 'Esperá un momento antes de crear otro pedido.', { remaining });
+      }
       if (email !== SUPER_ADMIN_EMAIL && settings.storeOpen !== true) {
         throw appError('store_closed', 'La tienda está temporalmente cerrada.');
       }
@@ -476,6 +492,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         status: 'pendiente',
         notes: draft.notes,
         notificationStatus: 'pending',
+        inventoryState: 'reserved',
+        inventoryRevision: 1,
+        inventoryUpdatedAt: serverTimestamp(),
+        inventoryUpdatedBy: email,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
@@ -491,6 +511,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           });
         }
       });
+      transaction.update(userRef, {
+        lastCheckoutAt: serverTimestamp(),
+        lastCheckoutOrderId: orderId,
+        updatedAt: serverTimestamp()
+      });
       transaction.set(orderRef, orderData);
 
       return {
@@ -502,7 +527,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         shipping: orderData.shipping,
         payment: orderData.payment
       };
-    });
+    }, { maxAttempts: 2 });
   }
 
   function buildWhatsAppMessage(result) {
@@ -545,6 +570,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       address_required: 'Ingresá la dirección para la encomienda.',
       shipping_invalid: 'La ciudad elegida ya no está disponible.',
       settings_missing: 'No pudimos comprobar la configuración de la tienda.',
+      profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.',
+      checkout_cooldown: error?.details?.remaining
+        ? `Esperá ${error.details.remaining} segundos antes de crear otro pedido.`
+        : 'Esperá un momento antes de crear otro pedido.',
       login_required: 'Necesitás iniciar sesión con un correo verificado.',
       blocked_account: 'Esta cuenta está bloqueada.',
       store_closed: 'La tienda está temporalmente cerrada.',

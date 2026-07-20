@@ -151,12 +151,12 @@ service cloud.firestore {
 
     match /sitePresence/{visitorId} {
       allow read, delete: if isSuperAdmin();
-      allow create, update: if isStoreOpenOrAllowed() && presenceIsValid(visitorId);
+      allow create, update: if false;
     }
 
     match /siteTraffic/{dateKey}/sessions/{sessionId} {
       allow read, delete: if isSuperAdmin();
-      allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);
+      allow create: if false;
       allow update: if false;
     }
 
@@ -221,13 +221,30 @@ service cloud.firestore {
       ]);
     }
 
+    function checkoutGuardOnlyUpdate(userId) {
+      return isSignedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'lastCheckoutAt', 'lastCheckoutOrderId', 'updatedAt'
+        ]) &&
+        request.resource.data.lastCheckoutAt == request.time &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.lastCheckoutOrderId is string &&
+        request.resource.data.lastCheckoutOrderId.size() >= 16 &&
+        request.resource.data.lastCheckoutOrderId.size() <= 260 &&
+        (
+          !('lastCheckoutAt' in resource.data) ||
+          request.time > resource.data.lastCheckoutAt + duration.value(90, 's')
+        );
+    }
+
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
         'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
-        'profileStatsUpdatedAt', 'orderStats'
+        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'
       ]);
     }
 
@@ -312,6 +329,21 @@ service cloud.firestore {
       return /databases/$(database)/documents/orders/$(orderId);
     }
 
+    function sparkItemQtyForProduct(items, index, productId) {
+      return items.size() > index && items[index].id == productId
+        ? items[index].qty
+        : 0;
+    }
+
+    function sparkOrderQtyForProduct(data, productId) {
+      let items = data.items;
+      return
+        sparkItemQtyForProduct(items, 0, productId) +
+        sparkItemQtyForProduct(items, 1, productId) +
+        sparkItemQtyForProduct(items, 2, productId) +
+        sparkItemQtyForProduct(items, 3, productId);
+    }
+
     function sparkItemValid(item, orderId) {
       let productId = item.id;
       // Igual que en las otras funciones: si el producto ya no existe
@@ -319,6 +351,9 @@ service cloud.firestore {
       // get(...).data da null y product.get(...) revienta la evaluación.
       let product = exists(sparkProductPath(productId))
         ? get(sparkProductPath(productId)).data
+        : null;
+      let productAfter = existsAfter(sparkProductPath(productId))
+        ? getAfter(sparkProductPath(productId)).data
         : null;
       return item is map &&
         item.keys().hasOnly([
@@ -335,20 +370,16 @@ service cloud.firestore {
         product.get('active', true) != false &&
         product.price == item.price &&
         item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&
-        // No se usa getAfter(sparkProductPath(...)) acá: leer el estado
-        // posterior de un documento que la MISMA transacción también está
-        // escribiendo (transaction.update() del stock) crea una dependencia
-        // circular entre esta regla y la de products/{productId} dentro de
-        // un mismo commit, y las escrituras terminan siendo rechazadas. El
-        // descuento exacto de stock ya lo exige sparkStockUpdateValid del
-        // lado del producto; acá alcanza con confirmar que había stock
-        // suficiente antes de descontar.
         (
           !('stock' in product) ||
           product.stock == null ||
           (
             product.stock is number &&
-            product.stock >= item.qty
+            product.stock >= item.qty &&
+            productAfter != null &&
+            productAfter.stock is number &&
+            productAfter.stock == product.stock - item.qty &&
+            productAfter.lastStockOrderId == orderId
           )
         );
     }
@@ -501,8 +532,9 @@ service cloud.firestore {
       let settings = exists(/databases/$(database)/documents/settings/general)
         ? get(/databases/$(database)/documents/settings/general).data
         : {};
-      let userData = userDocExists()
-        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+      let userPath = /databases/$(database)/documents/users/$(request.auth.uid);
+      let userData = existsAfter(userPath)
+        ? getAfter(userPath).data
         : null;
       let items = data.items;
       return isSignedIn() &&
@@ -515,13 +547,24 @@ service cloud.firestore {
             (userData == null || userData.get('blocked', false) != true)
           )
         ) &&
+        (
+          isSuperAdmin() ||
+          (
+            userData != null &&
+            userData.get('blocked', false) != true &&
+            userData.lastCheckoutOrderId == orderId &&
+            userData.lastCheckoutAt == request.time
+          )
+        ) &&
         orderId == request.auth.uid + '_' + data.requestId &&
         data.keys().hasOnly([
           'requestId', 'source', 'shortId', 'userId', 'userEmail',
           'contactEmail', 'userName', 'userPhone', 'items', 'subtotal',
           'shippingCost', 'shippingPending', 'total', 'storeWhatsapp',
           'storeInstagram', 'shipping', 'payment', 'paymentStatus',
-          'status', 'notes', 'notificationStatus', 'createdAt', 'updatedAt'
+          'status', 'notes', 'notificationStatus',
+          'inventoryState', 'inventoryRevision', 'inventoryUpdatedAt',
+          'inventoryUpdatedBy', 'createdAt', 'updatedAt'
         ]) &&
         data.userId == request.auth.uid &&
         data.userEmail.lower() == request.auth.token.email.lower() &&
@@ -546,37 +589,145 @@ service cloud.firestore {
         data.paymentStatus == 'pendiente' &&
         data.status == 'pendiente' &&
         data.notificationStatus == 'pending' &&
+        data.inventoryState == 'reserved' &&
+        data.inventoryRevision == 1 &&
+        data.inventoryUpdatedAt == request.time &&
+        data.inventoryUpdatedBy == request.auth.token.email &&
         data.createdAt == request.time &&
         data.updatedAt == request.time;
     }
 
     function sparkStockUpdateValid(productId) {
-      // Antes esta función leía getAfter(orderPath).data completo (todo el
-      // pedido) para volver a calcular qty y re-chequear source/userId. Eso
-      // crea una dependencia circular dentro del mismo commit: crear el
-      // pedido (sparkOrderCreateValid) YA exige, del lado del pedido, que
-      // getAfter(producto).stock baje exactamente en la cantidad pedida
-      // (sparkItemValid), y que el orderId tenga el formato uid_requestId
-      // con source spark-checkout-v1. Como la transacción es atómica, si
-      // cualquiera de las dos reglas falla se cae todo el commit — no hace
-      // falta que esta regla vuelva a leer el pedido entero para confirmar
-      // lo mismo que ya garantiza la otra regla. Alcanza con comprobar,
-      // solo del lado del producto, que el pedido se está creando de verdad
-      // en esta misma transacción (existsAfter) y que el stock bajó.
       let orderId = request.resource.data.lastStockOrderId;
       let orderPath = sparkOrderPath(orderId);
+      let orderData = existsAfter(orderPath) ? getAfter(orderPath).data : null;
+      let orderedQty = orderData != null
+        ? sparkOrderQtyForProduct(orderData, productId)
+        : 0;
       return isSignedIn() &&
         orderId is string &&
         orderId.size() > 0 &&
         !exists(orderPath) &&
         existsAfter(orderPath) &&
+        orderData != null &&
+        orderData.source == 'spark-checkout-v1' &&
+        orderData.userId == request.auth.uid &&
+        orderId == request.auth.uid + '_' + orderData.requestId &&
+        orderedQty > 0 &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'stock', 'lastStockOrderId', 'updatedAt'
         ]) &&
         resource.data.stock is number &&
         request.resource.data.stock is number &&
-        request.resource.data.stock < resource.data.stock &&
+        request.resource.data.stock == resource.data.stock - orderedQty &&
         request.resource.data.stock >= 0 &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+    function orderStateReservesInventory(data) {
+      let state = data.get('inventoryState', '');
+      return state == 'reserved' ||
+        (
+          state == '' &&
+          data.status != 'cancelado' &&
+          data.status != 'rechazado'
+        );
+    }
+
+    function staffOrderProductInventoryValid(beforeOrder, afterOrder, productId, orderId) {
+      let beforeQty = orderStateReservesInventory(beforeOrder)
+        ? sparkOrderQtyForProduct(beforeOrder, productId)
+        : 0;
+      let afterQty = orderStateReservesInventory(afterOrder)
+        ? sparkOrderQtyForProduct(afterOrder, productId)
+        : 0;
+      let productPath = sparkProductPath(productId);
+      let beforeProduct = exists(productPath) ? get(productPath).data : null;
+      let afterProduct = existsAfter(productPath) ? getAfter(productPath).data : null;
+      return beforeQty == afterQty ||
+        (
+          beforeProduct != null &&
+          afterProduct != null &&
+          (
+            (
+              beforeProduct.get('stock', null) == null &&
+              afterProduct.get('stock', null) == null
+            ) ||
+            (
+              beforeProduct.stock is number &&
+              afterProduct.stock is number &&
+              afterProduct.stock == beforeProduct.stock + beforeQty - afterQty &&
+              afterProduct.lastInventoryOrderId == orderId &&
+              (
+                (afterQty > beforeQty && afterProduct.lastInventoryAction == 'reserve') ||
+                (afterQty < beforeQty && afterProduct.lastInventoryAction == 'release')
+              )
+            )
+          )
+        );
+    }
+
+    function staffOrderItemInventoryAtValid(beforeOrder, afterOrder, index, orderId) {
+      return beforeOrder.items.size() <= index ||
+        staffOrderProductInventoryValid(
+          beforeOrder,
+          afterOrder,
+          beforeOrder.items[index].id,
+          orderId
+        );
+    }
+
+    function staffOrderInventoryTransitionValid(orderId) {
+      let beforeOrder = resource.data;
+      let afterOrder = request.resource.data;
+      let statusChanged = afterOrder.status != beforeOrder.status;
+      return !statusChanged ||
+        (
+          afterOrder.inventoryState == (
+            afterOrder.status == 'cancelado' || afterOrder.status == 'rechazado'
+              ? 'released'
+              : 'reserved'
+          ) &&
+          afterOrder.inventoryRevision is int &&
+          afterOrder.inventoryRevision == beforeOrder.get('inventoryRevision', 0) + 1 &&
+          afterOrder.inventoryUpdatedAt == request.time &&
+          afterOrder.inventoryUpdatedBy == request.auth.token.email &&
+          staffOrderItemInventoryAtValid(beforeOrder, afterOrder, 0, orderId) &&
+          staffOrderItemInventoryAtValid(beforeOrder, afterOrder, 1, orderId) &&
+          staffOrderItemInventoryAtValid(beforeOrder, afterOrder, 2, orderId) &&
+          staffOrderItemInventoryAtValid(beforeOrder, afterOrder, 3, orderId)
+        );
+    }
+
+    function adminInventoryStockUpdateValid(productId) {
+      let orderId = request.resource.data.lastInventoryOrderId;
+      let orderPath = sparkOrderPath(orderId);
+      let beforeOrder = exists(orderPath) ? get(orderPath).data : null;
+      let afterOrder = existsAfter(orderPath) ? getAfter(orderPath).data : null;
+      let beforeQty = beforeOrder != null && orderStateReservesInventory(beforeOrder)
+        ? sparkOrderQtyForProduct(beforeOrder, productId)
+        : 0;
+      let afterQty = afterOrder != null && orderStateReservesInventory(afterOrder)
+        ? sparkOrderQtyForProduct(afterOrder, productId)
+        : 0;
+      return isSignedIn() &&
+        (hasRole('admin') || hasRole('agent')) &&
+        currentRolePermAllows('pedidos', 'cambiarEstado') &&
+        orderId is string &&
+        beforeOrder != null &&
+        afterOrder != null &&
+        beforeQty != afterQty &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
+        ]) &&
+        resource.data.stock is number &&
+        request.resource.data.stock is number &&
+        request.resource.data.stock == resource.data.stock + beforeQty - afterQty &&
+        request.resource.data.stock >= 0 &&
+        (
+          (afterQty > beforeQty && request.resource.data.lastInventoryAction == 'reserve') ||
+          (afterQty < beforeQty && request.resource.data.lastInventoryAction == 'release')
+        ) &&
         request.resource.data.updatedAt == request.time;
     }
 
@@ -666,7 +817,8 @@ service cloud.firestore {
               isStoreOpenOrAllowed() &&
               !protectedUserFieldsChanged()
             ) ||
-            loginMetadataOnlyUpdate()
+            loginMetadataOnlyUpdate() ||
+            checkoutGuardOnlyUpdate(userId)
           )
         ) ||
         (
@@ -714,7 +866,13 @@ service cloud.firestore {
        ============================================================ */
 
     match /products/{productId} {
-      allow read: if isStoreOpenOrAllowed();
+      allow get: if isStoreOpenOrAllowed();
+      allow list: if isSuperAdmin() ||
+        (
+          isStoreOpenOrAllowed() &&
+          request.query.limit != null &&
+          request.query.limit <= 1000
+        );
 
       allow create: if isSuperAdmin() ||
         (
@@ -725,6 +883,7 @@ service cloud.firestore {
 
       allow update: if isSuperAdmin() ||
         sparkStockUpdateValid(productId) ||
+        adminInventoryStockUpdateValid(productId) ||
         (
           isStoreOpenOrAllowed() &&
           (isAdmin() || isAgent()) &&
@@ -735,7 +894,13 @@ service cloud.firestore {
     }
 
     match /collections/{collectionId} {
-      allow read: if isStoreOpenOrAllowed();
+      allow get: if isStoreOpenOrAllowed();
+      allow list: if isSuperAdmin() ||
+        (
+          isStoreOpenOrAllowed() &&
+          request.query.limit != null &&
+          request.query.limit <= 200
+        );
 
       allow create: if isSuperAdmin() ||
         (
@@ -755,7 +920,8 @@ service cloud.firestore {
     }
 
     match /site_content/{pageId} {
-      allow read: if isStoreOpenOrAllowed();
+      allow get: if isStoreOpenOrAllowed();
+      allow list: if isSuperAdmin();
 
       allow create: if isSuperAdmin() ||
         (
@@ -815,6 +981,7 @@ service cloud.firestore {
                   .affectedKeys().hasAny(['status']) ||
                 currentRolePermAllows('pedidos', 'cambiarEstado')
               ) &&
+              staffOrderInventoryTransitionValid(orderId) &&
               (
                 !request.resource.data.diff(resource.data)
                   .affectedKeys().hasAny(['payment', 'paymentStatus']) ||

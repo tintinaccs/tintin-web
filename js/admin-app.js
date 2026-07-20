@@ -32,6 +32,7 @@ import {
 } from "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import './admin-inventory-integrity.js?v=tintin-20260720-critical-healing-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -1982,10 +1983,7 @@ window.updateOrderStatus = async (orderId, status) => {
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
   try {
-    await updateDoc(doc(db, 'orders', orderId), {
-      status,
-      updatedAt: serverTimestamp()
-    });
+    await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
     if (o) o.status = status;
     logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.shortId || orderId,
       `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
@@ -2093,7 +2091,7 @@ window.deleteOrder = async (orderId) => {
   if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return;
   try {
     const o = allOrders.find(x => x.id === orderId);
-    await deleteDoc(doc(db, 'orders', orderId));
+    await window.TintinInventoryIntegrity.deleteOrder(orderId);
     allOrders = allOrders.filter(o => o.id !== orderId);
     logAudit('eliminar_pedido', 'pedido', orderId, o?.shortId || orderId, `Cliente: ${o?.userName || o?.userEmail || '—'}`);
     toast('Pedido eliminado');
@@ -2205,7 +2203,9 @@ window.bulkChangeOrderStatus = async function() {
   if (!confirm(`¿Cambiar el estado a "${ORDER_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
   try {
     const ids = [..._selectedOrders];
-    await batchUpdateChunked(ids, () => ({ status, updatedAt: serverTimestamp() }), 'orders');
+    for (const id of ids) {
+      await window.TintinInventoryIntegrity.transitionStatus(id, status);
+    }
     ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) o.status = status; });
     logAudit('cambiar_estado_pedido', 'pedido', '', '', `Estado → ${ORDER_STATUS_LABELS[status]}`, { bulk: true, count: n });
     toast(`Estado actualizado en ${n} pedido(s)`);
@@ -2280,11 +2280,8 @@ window.bulkDeleteOrders = async function() {
   if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
   try {
     const ids = [..._selectedOrders];
-    const CHUNK = 450;
-    for (let i = 0; i < ids.length; i += CHUNK) {
-      const batch = writeBatch(db);
-      ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'orders', id)));
-      await batch.commit();
+    for (const id of ids) {
+      await window.TintinInventoryIntegrity.deleteOrder(id);
     }
     const idSet = new Set(ids);
     allOrders = allOrders.filter(o => !idSet.has(o.id));
@@ -7078,7 +7075,7 @@ window.saveOrderEdit = async function() {
         return false;
       }
     } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
-    await updateDoc(doc(db, 'orders', orderId), updateData);
+    await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);
     // Sync local array
     const idx = allOrders.findIndex(x => x.id === orderId);
     if (idx >= 0) {

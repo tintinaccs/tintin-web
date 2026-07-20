@@ -94,8 +94,9 @@ function patchRules() {
     `$1${checkoutGuard}\n$2`,
     'Agregar guard atómico de checkout'
   );
-  rules = replaceExact(
+  rules = replaceFirstAfter(
     rules,
+    'function protectedUserFieldsChanged()',
     "        'profileStatsUpdatedAt', 'orderStats'",
     "        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'",
     'Proteger campos del guard de checkout'
@@ -423,31 +424,12 @@ function patchRules() {
     'Impedir enumeración pública de contenido'
   );
 
-  rules = replaceFirstAfter(
-    rules,
-    'match /orders/{orderId}',
-    `                  'status', 'payment', 'paymentStatus', 'resendCount',
-                  'lastResendAt', 'notificationStatus', 'updatedAt'`,
-    `                  'status', 'payment', 'paymentStatus', 'resendCount',
-                  'lastResendAt', 'notificationStatus',
-                  'inventoryState', 'inventoryRevision', 'inventoryUpdatedAt',
-                  'inventoryUpdatedBy', 'updatedAt'`,
-    'Permitir metadatos de reconciliación en transiciones de pedido'
-  );
-  rules = replaceFirstAfter(
-    rules,
-    'match /orders/{orderId}',
-    `               ) &&
-               (
-                 !request.resource.data.diff(resource.data)
-                   .affectedKeys().hasAny(['payment', 'paymentStatus']) ||`,
-    `               ) &&
-               staffOrderInventoryTransitionValid(orderId) &&
-               (
-                 !request.resource.data.diff(resource.data)
-                   .affectedKeys().hasAny(['payment', 'paymentStatus']) ||`,
-    'Exigir reconciliación al cambiar el estado del pedido'
-  );
+  rules = replaceRegex(
+  rules,
+  /(currentRolePermAllows\('pedidos', 'cambiarEstado'\)\s+\)\s+&&)\s+(\()/,
+  `$1\n              staffOrderInventoryTransitionValid(orderId) &&\n              $2`,
+  'Exigir reconciliación al cambiar el estado del pedido'
+);
 
   write('firestore.rules', rules);
 }
@@ -542,7 +524,13 @@ function patchAdmin() {
 import './admin-inventory-integrity.js?v=tintin-20260720-critical-healing-1';`,
     'Cargar reconciliador de inventario en el panel'
   );
-  source = replaceOrderUpdateInsideSave(source);
+  source = replaceFirstAfter(
+  source,
+  'window.saveOrderEdit',
+  "    await updateDoc(doc(db, 'orders', orderId), updateData);",
+  "    await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);",
+  'Reconciliar inventario en la edición completa del pedido'
+);
   source = replaceFirstAfter(
     source,
     'window.updateOrderStatus',
@@ -721,6 +709,6 @@ patchActivityAndReadCaps();
 patchAppCheckReadiness();
 patchLegacyAudits();
 patchPackageAndWorkflow();
-removeOneTimeFiles();
+// La limpieza temporal se realiza después del push validado.
 
 console.log('Parche crítico aplicado y verificado sobre los archivos actuales.');

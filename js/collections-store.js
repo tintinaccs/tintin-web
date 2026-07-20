@@ -80,7 +80,7 @@ function publishPublic(collections, source) {
 }
 
 async function fetchPublicCollections() {
-  const snapshot = await getDocs(query(collection(db, 'collections'), limit(5000)));
+  const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
   recordFirestoreRead('collections:public', snapshot.size);
   const list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
   writeCached(CACHE_KEY, list);
@@ -118,7 +118,7 @@ export function onCollectionsUpdate(cb, onError) {
 
 function startAdminListener() {
   if (adminUnsubscribe) return;
-  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(5000)), snapshot => {
+  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     recordFirestoreRead('collections:admin-live', snapshot.size);
     const list = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
     adminSubscribers.forEach(cb => cb(list, null));
