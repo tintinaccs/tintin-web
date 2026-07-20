@@ -51,7 +51,7 @@ function methodHtml(method) {
     <div class="ck-payment-runtime-item" data-payment-method-id="${escapeHtml(method.id)}">
       <input
         type="radio"
-        name="ck-pay"
+        name="tt-ck-pay"
         id="${escapeHtml(inputId)}"
         value="${escapeHtml(method.kind)}"
         data-payment-method-id="${escapeHtml(method.id)}"
@@ -85,25 +85,38 @@ function boot() {
   root.setAttribute('role', 'radiogroup');
   root.setAttribute('aria-label', 'Métodos de pago disponibles');
   anchor.parentElement.insertBefore(root, anchor);
+  const bridge = document.createElement('input');
+  bridge.type = 'radio';
+  bridge.name = 'ck-pay';
+  bridge.id = 'tt-payment-method-bridge';
+  bridge.hidden = true;
+  bridge.setAttribute('aria-hidden', 'true');
+  anchor.parentElement.insertBefore(bridge, anchor);
+  efectivo?.remove();
+  transferencia?.remove();
+  document.getElementById('bank-details')?.remove();
 
   let methods = [];
   let selectedMethodId = '';
 
   function selectedMethod() {
-    const checked = root.querySelector('input[name="ck-pay"]:checked');
+    const checked = root.querySelector('input[name="tt-ck-pay"]:checked');
     if (!checked) return null;
     return methods.find(method => method.id === checked.dataset.paymentMethodId) || null;
   }
 
   function syncSelection() {
     root.querySelectorAll('.ck-payment-runtime-item').forEach(item => {
-      const input = item.querySelector('input[name="ck-pay"]');
+      const input = item.querySelector('input[name="tt-ck-pay"]');
       const selected = Boolean(input?.checked);
       item.classList.toggle('is-selected', selected);
       item.setAttribute('aria-selected', String(selected));
     });
     const selected = selectedMethod();
     selectedMethodId = selected?.id || '';
+    bridge.checked = Boolean(selected);
+    bridge.value = selected?.kind || '';
+    bridge.id = selected ? (selected.kind === 'transferencia' ? 'pay-transferencia' : 'pay-efectivo') : 'tt-payment-method-bridge';
     window.dispatchEvent(new CustomEvent('tintin:payment-method-selected', {
       detail: selected ? { id: selected.id, kind: selected.kind, title: selected.title } : null,
     }));
@@ -113,8 +126,6 @@ function boot() {
     methods = nextMethods.filter(method => method.enabled);
     const previous = selectedMethodId;
     root.innerHTML = methods.map(methodHtml).join('');
-    if (efectivo) efectivo.style.display = 'none';
-    if (transferencia) transferencia.style.display = 'none';
 
     const none = document.getElementById('error-3-none');
     const next = document.getElementById('btn-step4-next');
@@ -122,6 +133,9 @@ function boot() {
       if (none) none.style.display = 'block';
       if (next) next.disabled = true;
       selectedMethodId = '';
+      bridge.checked = false;
+      bridge.id = 'tt-payment-method-bridge';
+      bridge.value = '';
       return;
     }
 
@@ -136,7 +150,7 @@ function boot() {
   }
 
   root.addEventListener('change', event => {
-    const input = event.target.closest('input[name="ck-pay"]');
+    const input = event.target.closest('input[name="tt-ck-pay"]');
     if (!input) return;
     syncSelection();
     const error = document.getElementById('error-3');
@@ -146,7 +160,7 @@ function boot() {
   root.addEventListener('click', event => {
     const item = event.target.closest('.ck-payment-runtime-item');
     if (!item) return;
-    const input = item.querySelector('input[name="ck-pay"]');
+    const input = item.querySelector('input[name="tt-ck-pay"]');
     if (input && event.target !== input && !event.target.closest('label')) {
       input.checked = true;
       input.dispatchEvent(new Event('change', { bubbles: true }));
