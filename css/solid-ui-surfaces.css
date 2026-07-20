@@ -1,13 +1,3 @@
-/*
- * Superficies críticas siempre sólidas.
- *
- * Este archivo se carga desde color-tokens.css en toda la plataforma y usa
- * selectores deliberadamente específicos para que ningún esquema tardío,
- * estilo inyectado por JavaScript o regla global vuelva transparentes el
- * mensaje de bienvenida, el header de tablet/desktop o los pasos del checkout.
- */
-
-/* Mientras el loader está visible, el checkout nunca puede asomarse por detrás. */
 body > #tt-loader:not(.tt-out) ~ .ck-back-row,
 body > #tt-loader:not(.tt-out) ~ .ck-steps,
 body > #tt-loader:not(.tt-out) ~ .ck-body {
@@ -15,7 +5,6 @@ body > #tt-loader:not(.tt-out) ~ .ck-body {
   pointer-events: none !important;
 }
 
-/* Fondo estable del checkout desde la primera pintura. */
 html:has(#ck-steps),
 html:has(#ck-steps) body,
 html:has(#ck-steps) .ck-body {
@@ -25,7 +14,6 @@ html:has(#ck-steps) .ck-body {
   transition-property: none !important;
 }
 
-/* Los contenedores de cada paso no deben recibir la cápsula/cuadrado global. */
 html body .ck-steps .ck-step,
 html body .ck-steps .ck-step.active,
 html body .ck-steps .ck-step.done {
@@ -38,7 +26,6 @@ html body .ck-steps .ck-step.done {
   outline: 0 !important;
 }
 
-/* Los números 1–5 son círculos reales y conservan la forma en todos los estados. */
 html body .ck-steps .ck-step .ck-step-num {
   width: 34px !important;
   min-width: 34px !important;
@@ -74,7 +61,6 @@ html body .ck-steps .ck-step-label {
   box-shadow: none !important;
 }
 
-/* Mensaje de bienvenida: pantalla y tarjeta completamente opacas. */
 html body #tt-welcome-tutorial.tt-welcome-overlay {
   background: #FDECF2 !important;
   background-color: #FDECF2 !important;
@@ -120,7 +106,38 @@ html body #tt-welcome-tutorial .tt-welcome-btn:not(.tt-welcome-btn-primary) {
   opacity: 1 !important;
 }
 
-/* Header y paneles de tablet/desktop: blanco sólido con borde rosado. */
+html body .tt-dropdown,
+html body .tt-dropdown-grid,
+html body .tt-search-panel,
+html body .tt-search-results,
+html body .tt-account-panel,
+html body .tt-cart-drawer,
+html body .tt-collections-sheet,
+html body .tt-mobile-menu,
+html body .tt-mobile-menu-header,
+html body .tt-mobile-nav,
+html body .tt-mobile-cats,
+html body .tt-mobile-cats-grid,
+html body .tt-mobile-user {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border-color: #F1C8D5 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body .tt-dropdown,
+html body .tt-search-panel,
+html body .tt-search-results,
+html body .tt-account-panel,
+html body .tt-cart-drawer,
+html body .tt-collections-sheet {
+  box-shadow: 0 16px 40px rgba(82, 27, 49, 0.16) !important;
+}
+
 @media (min-width: 769px) {
   html body #tt-header-desktop-tablet.tt-header,
   html body .tt-header {
@@ -134,34 +151,8 @@ html body #tt-welcome-tutorial .tt-welcome-btn:not(.tt-welcome-btn-primary) {
     -webkit-backdrop-filter: none !important;
     mix-blend-mode: normal !important;
   }
-
-  html body #tt-header-desktop-tablet .tt-dropdown,
-  html body #tt-header-desktop-tablet .tt-search-panel,
-  html body #tt-header-desktop-tablet .tt-search-results,
-  html body #tt-header-desktop-tablet .tt-account-panel,
-  html body #tt-header-desktop-tablet .tt-cart-drawer,
-  html body #tt-header-desktop-tablet .tt-collections-sheet,
-  html body .tt-dropdown,
-  html body .tt-search-panel,
-  html body .tt-search-results,
-  html body .tt-account-panel,
-  html body .tt-cart-drawer,
-  html body .tt-collections-sheet {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    background-image: none !important;
-    border-color: #F1C8D5 !important;
-    opacity: 1 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    mix-blend-mode: normal !important;
-    box-shadow: 0 16px 40px rgba(82, 27, 49, 0.16) !important;
-  }
 }
 
-/* Login: mientras Firebase resuelve o cambia de cuenta, solo se muestra una
-   superficie sólida. El logo, el formulario y el header no pueden reaparecer
-   entre el popup de Google y la redirección final. */
 html:has(.login-page) #tt-loader,
 html.tt-auth-silent-transition #tt-loader {
   background: #FFF6FA !important;
@@ -181,8 +172,6 @@ html.tt-auth-silent-transition body > #tt-loader:not(.tt-out) ~ * {
   pointer-events: none !important;
 }
 
-/* Super Admin: una sola sección puede estar visible a la vez. Esto evita que
-   Diagnóstico y Mensaje de bienvenida se fusionen por reglas globales. */
 html body .adm-content > .adm-section:not(.active) {
   display: none !important;
   visibility: hidden !important;
