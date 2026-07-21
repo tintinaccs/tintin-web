@@ -68,6 +68,40 @@ async function dispatchKey(locator, key) {
   }, key);
 }
 
+async function waitForOpenState(page, index, expectedOpen = true) {
+  await page.waitForFunction(
+    ({ itemIndex, shouldBeOpen }) => {
+      const item = document.querySelectorAll('.tt-faq-item')[itemIndex];
+      const answer = item?.querySelector('.tt-faq-a');
+      if (!item || !answer) return false;
+      const isOpen = item.classList.contains('tt-faq-open');
+      const height = answer.getBoundingClientRect().height;
+      return shouldBeOpen ? isOpen && height > 0 : !isOpen;
+    },
+    { itemIndex: index, shouldBeOpen: expectedOpen },
+    { timeout: 3000 },
+  );
+}
+
+async function readItemState(page, index) {
+  return page.locator('.tt-faq-item').nth(index).evaluate(item => {
+    const question = item.querySelector('.tt-faq-q');
+    const answer = item.querySelector('.tt-faq-a');
+    const qr = question.getBoundingClientRect();
+    const ar = answer.getBoundingClientRect();
+    return {
+      open: item.classList.contains('tt-faq-open'),
+      question: {
+        left: Math.round(qr.left), right: Math.round(qr.right), height: Math.round(qr.height),
+      },
+      answer: {
+        left: Math.round(ar.left), right: Math.round(ar.right), height: Math.round(ar.height),
+        scrollWidth: answer.scrollWidth, clientWidth: answer.clientWidth,
+      },
+    };
+  });
+}
+
 try {
   for (const viewport of viewports) {
     const context = await browser.newContext({
@@ -78,104 +112,116 @@ try {
     const page = await context.newPage();
     page.on('pageerror', error => fail(viewport.name, 'runtime', `Error JS: ${error.message}`));
 
-    // Se conserva el HTML y CSS reales, pero se excluyen módulos de Firebase,
-    // shell y analítica: no participan en el acordeón y pueden reemplazar partes
-    // del DOM durante una auditoría larga. Luego se ejecuta el script.js real.
-    await page.setContent(staticHtml(), { waitUntil: 'load' });
-    await page.addStyleTag({ content: `
-      #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay,.tt-header,.tt-mobile-nav{display:none!important}
-      html,body,.section,.tt-info-block,.tt-faq-item,.tt-faq-q,.tt-faq-a{
-        visibility:visible!important;
-        opacity:1!important;
-        transform:none!important;
-        filter:none!important;
-      }
-      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-    ` });
-    await page.addScriptTag({ path: path.join(root, 'script.js') });
-    await page.evaluate(() => {
-      document.documentElement.classList.add('tt-parity-safe');
-      document.body.classList.remove('tt-loading', 'tt-page-loading', 'is-loading', 'scroll-lock');
-      document.querySelectorAll('[inert]').forEach(element => element.removeAttribute('inert'));
-      initFaqAccordion();
-    });
-    await page.waitForSelector('.tt-faq-q[role="button"]', { state: 'attached', timeout: 10000 });
-    await page.waitForTimeout(60);
-
-    const count = await page.locator('.tt-faq-item').count();
-    if (count < 8) fail(viewport.name, 'initial', 'Se cargaron menos preguntas de las esperadas.', { count });
-
-    const firstQuestion = page.locator('.tt-faq-q').first();
-    await dispatchKey(firstQuestion, 'Enter');
-    await page.waitForTimeout(30);
-    const keyboardState = await page.locator('.tt-faq-item').first().evaluate(item => {
-      const answer = item.querySelector('.tt-faq-a');
-      const rect = answer.getBoundingClientRect();
-      return {
-        open: item.classList.contains('tt-faq-open'),
-        answerHeight: Math.round(rect.height), left: Math.round(rect.left),
-        right: Math.round(rect.right), viewport: innerWidth,
-      };
-    });
-    if (!keyboardState.open || keyboardState.answerHeight < 1) {
-      fail(viewport.name, 'keyboard-enter', 'Enter no abre la primera respuesta.', keyboardState);
-    }
-    if (keyboardState.left < -2 || keyboardState.right > viewport.width + 2) {
-      fail(viewport.name, 'keyboard-enter', 'La respuesta abierta sale del viewport.', keyboardState);
-    }
-
-    if (count > 1) {
-      const secondQuestion = page.locator('.tt-faq-q').nth(1);
-      await dispatchKey(secondQuestion, ' ');
-      await page.waitForTimeout(30);
-      const keyboardSpace = await page.locator('.tt-faq-item').evaluateAll(items => items.slice(0, 2).map(item => {
-        const answer = item.querySelector('.tt-faq-a');
-        const rect = answer.getBoundingClientRect();
-        return { open: item.classList.contains('tt-faq-open'), answerHeight: Math.round(rect.height) };
-      }));
-      if (keyboardSpace[0]?.open || !keyboardSpace[1]?.open || keyboardSpace[1]?.answerHeight < 1) {
-        fail(viewport.name, 'keyboard-space', 'Espacio no cambia correctamente la pregunta abierta.', keyboardSpace);
-      }
-    }
-
-    for (let index = 0; index < count; index += 1) {
-      const question = page.locator('.tt-faq-q').nth(index);
-      await question.evaluate(element => element.click());
-      await page.waitForTimeout(20);
-      const state = await page.locator('.tt-faq-item').nth(index).evaluate(item => {
-        const question = item.querySelector('.tt-faq-q');
-        const answer = item.querySelector('.tt-faq-a');
-        const qr = question.getBoundingClientRect();
-        const ar = answer.getBoundingClientRect();
-        return {
-          open: item.classList.contains('tt-faq-open'),
-          question: { left: Math.round(qr.left), right: Math.round(qr.right), height: Math.round(qr.height) },
-          answer: {
-            left: Math.round(ar.left), right: Math.round(ar.right), height: Math.round(ar.height),
-            scrollWidth: answer.scrollWidth, clientWidth: answer.clientWidth,
-          },
-        };
+    try {
+      // Se conserva el HTML y CSS reales, pero se excluyen módulos de Firebase,
+      // shell y analítica: no participan en el acordeón y pueden reemplazar partes
+      // del DOM durante una auditoría larga. Luego se ejecuta el script.js real.
+      await page.setContent(staticHtml(), { waitUntil: 'load' });
+      await page.addStyleTag({ content: `
+        #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay,.tt-header,.tt-mobile-nav{display:none!important}
+        html,body,.section,.tt-info-block,.tt-faq-item,.tt-faq-q,.tt-faq-a{
+          visibility:visible!important;
+          opacity:1!important;
+          transform:none!important;
+          filter:none!important;
+        }
+        *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+      ` });
+      await page.addScriptTag({ path: path.join(root, 'script.js') });
+      await page.evaluate(async () => {
+        document.documentElement.classList.add('tt-parity-safe');
+        document.body.classList.remove('tt-loading', 'tt-page-loading', 'is-loading', 'scroll-lock');
+        document.querySelectorAll('[inert]').forEach(element => element.removeAttribute('inert'));
+        try { await document.fonts.ready; } catch {}
+        initFaqAccordion();
       });
-      if (!state.open || state.answer.height < 1) {
-        fail(viewport.name, `click-${index + 1}`, 'El clic no abre la respuesta.', state);
-      }
-      if (
-        state.question.left < -2 || state.question.right > viewport.width + 2
-        || state.answer.left < -2 || state.answer.right > viewport.width + 2
-        || state.answer.scrollWidth > state.answer.clientWidth + 3
-      ) {
-        fail(viewport.name, `click-${index + 1}`, 'Pregunta o respuesta abierta queda recortada.', state);
-      }
-    }
+      await page.waitForSelector('.tt-faq-q[role="button"]', { state: 'attached', timeout: 10000 });
 
-    const openCount = await page.locator('.tt-faq-item.tt-faq-open').count();
-    if (openCount !== 1) fail(viewport.name, 'final', 'El acordeón debe conservar una sola respuesta abierta.', { openCount });
+      const count = await page.locator('.tt-faq-item').count();
+      if (count < 8) fail(viewport.name, 'initial', 'Se cargaron menos preguntas de las esperadas.', { count });
 
-    report.push({ viewport, questionCount: count, openCount });
-    if (['b320', 'm390', 't768', 'd1280'].includes(viewport.name)) {
-      await page.screenshot({ path: path.join(outDir, `${viewport.name}-faq-interaction.png`), fullPage: true });
+      const firstQuestion = page.locator('.tt-faq-q').first();
+      await dispatchKey(firstQuestion, 'Enter');
+      await waitForOpenState(page, 0, true);
+      const keyboardState = await readItemState(page, 0);
+      if (!keyboardState.open || keyboardState.answer.height < 1) {
+        fail(viewport.name, 'keyboard-enter', 'Enter no abre la primera respuesta.', keyboardState);
+      }
+      if (keyboardState.answer.left < -2 || keyboardState.answer.right > viewport.width + 2) {
+        fail(viewport.name, 'keyboard-enter', 'La respuesta abierta sale del viewport.', keyboardState);
+      }
+
+      if (count > 1) {
+        const secondQuestion = page.locator('.tt-faq-q').nth(1);
+        await dispatchKey(secondQuestion, ' ');
+        await waitForOpenState(page, 1, true);
+        await waitForOpenState(page, 0, false);
+        const keyboardSpace = await page.locator('.tt-faq-item').evaluateAll(items => items.slice(0, 2).map(item => {
+          const answer = item.querySelector('.tt-faq-a');
+          return {
+            open: item.classList.contains('tt-faq-open'),
+            answerHeight: Math.round(answer.getBoundingClientRect().height),
+          };
+        }));
+        if (keyboardSpace[0]?.open || !keyboardSpace[1]?.open || keyboardSpace[1]?.answerHeight < 1) {
+          fail(viewport.name, 'keyboard-space', 'Espacio no cambia correctamente la pregunta abierta.', keyboardSpace);
+        }
+      }
+
+      // Reinicio determinista antes de recorrer todas las preguntas. Así la
+      // primera medición no depende de cuál quedó abierta en la prueba de teclado.
+      await page.evaluate(() => {
+        document.querySelectorAll('.tt-faq-item').forEach(item => item.classList.remove('tt-faq-open'));
+      });
+
+      for (let index = 0; index < count; index += 1) {
+        const question = page.locator('.tt-faq-q').nth(index);
+        await question.evaluate(element => element.click());
+        try {
+          await waitForOpenState(page, index, true);
+        } catch (error) {
+          const state = await readItemState(page, index).catch(() => null);
+          fail(viewport.name, `click-${index + 1}`, 'El clic no estabilizó la respuesta abierta.', {
+            error: error.message,
+            state,
+          });
+          continue;
+        }
+
+        const state = await readItemState(page, index);
+        if (!state.open || state.answer.height < 1) {
+          fail(viewport.name, `click-${index + 1}`, 'El clic no abre la respuesta.', state);
+        }
+        if (
+          state.question.left < -2 || state.question.right > viewport.width + 2
+          || state.answer.left < -2 || state.answer.right > viewport.width + 2
+          || state.answer.scrollWidth > state.answer.clientWidth + 3
+        ) {
+          fail(viewport.name, `click-${index + 1}`, 'Pregunta o respuesta abierta queda recortada.', state);
+        }
+
+        const openCountDuringLoop = await page.locator('.tt-faq-item.tt-faq-open').count();
+        if (openCountDuringLoop !== 1) {
+          fail(viewport.name, `click-${index + 1}`, 'El acordeón abrió más de una respuesta.', {
+            openCount: openCountDuringLoop,
+          });
+        }
+      }
+
+      const openCount = await page.locator('.tt-faq-item.tt-faq-open').count();
+      if (openCount !== 1) fail(viewport.name, 'final', 'El acordeón debe conservar una sola respuesta abierta.', { openCount });
+
+      report.push({ viewport, questionCount: count, openCount });
+      if (['b320', 'm390', 't768', 'd1280'].includes(viewport.name)) {
+        await page.screenshot({ path: path.join(outDir, `${viewport.name}-faq-interaction.png`), fullPage: true });
+      }
+    } catch (error) {
+      fail(viewport.name, 'runner', 'La auditoría interactiva no pudo completar este viewport.', {
+        error: error.message,
+      });
+    } finally {
+      await context.close();
     }
-    await context.close();
   }
 } finally {
   await browser.close();
