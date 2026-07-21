@@ -159,12 +159,14 @@
   text-decoration: none;
 }
 
-.tt-blocked-action-primary {
+#tt-blocked-overlay .tt-blocked-action-primary,
+#tt-blocked-overlay .tt-blocked-action-primary:visited {
   background: #b84c72;
   color: #fff !important;
 }
 
-.tt-blocked-action-secondary {
+#tt-blocked-overlay .tt-blocked-action-secondary,
+#tt-blocked-overlay .tt-blocked-action-secondary:visited {
   background: #fff;
   color: #8b2642 !important;
 }
