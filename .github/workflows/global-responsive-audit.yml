@@ -8,7 +8,7 @@ on:
 
 jobs:
   geometry:
-    name: Geometría pública en 7 pantallas
+    name: Geometría pública en 7 pantallas y límites
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -28,20 +28,20 @@ jobs:
       - name: Audit all public pages and shared surfaces
         id: geometry
         continue-on-error: true
-        run: node scripts/audit-global-responsive-fast.mjs > global-responsive-geometry.log 2>&1
+        run: node scripts/audit-global-responsive-v2.mjs > global-responsive-v2.log 2>&1
 
       - name: Upload report and failure screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: global-responsive-geometry-fast
+          name: global-responsive-geometry-v2
           path: |
-            global-responsive-geometry.log
-            artifacts/global-responsive
+            global-responsive-v2.log
+            artifacts/global-responsive-v2
           if-no-files-found: warn
           retention-days: 7
 
       - name: Enforce responsive geometry
         run: |
-          cat global-responsive-geometry.log
+          cat global-responsive-v2.log
           test "${{ steps.geometry.outcome }}" = "success"
