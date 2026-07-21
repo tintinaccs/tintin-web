@@ -33,7 +33,9 @@ jobs:
       - name: Apply diagnosed simplification
         id: patch
         continue-on-error: true
-        run: python scripts/simplify-critical-rules-once.py > simplify-critical-patch.log 2>&1
+        run: |
+          python scripts/simplify-critical-rules-once.py > simplify-critical-patch.log 2>&1
+          sed -i "s/item.price == product.price/product.price == item.price/" firestore.rules
 
       - name: Upload patch diagnostic
         if: always()
