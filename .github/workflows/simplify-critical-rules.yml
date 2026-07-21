@@ -1,4 +1,4 @@
-name: Lean checkout security rules
+name: Validate two-phase checkout
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 jobs:
-  lean-rules:
+  two-phase:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -36,43 +36,45 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Reduce order and product rule cost
+      - name: Apply two-phase checkout implementation
         run: |
+          python scripts/refactor-checkout-guard-once.py
           python scripts/simplify-critical-rules-once.py
-          python scripts/dispatch-product-update-once.py
 
-      - name: Save generated rules on draft branch
+      - name: Save generated implementation on draft branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add firestore.rules
+          git add js/secure-checkout-order.js firestore.rules
           if ! git diff --cached --quiet; then
-            git commit -m "Reduce checkout rule evaluation cost"
+            git commit -m "Implement two-phase checkout inventory reservation"
             git push origin HEAD:security/critical-healing-pass
           fi
 
       - name: Install test dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Verify static contracts
+      - name: Verify syntax and static contracts
         run: |
+          node --check js/secure-checkout-order.js
+          node --check scripts/test-firestore-critical.mjs
           node scripts/audit-critical-healing.js
           node scripts/audit-secure-orders.js
 
       - name: Verify adversarial rules in emulator
         id: adversarial
         continue-on-error: true
-        run: npm run test:rules-critical > lean-rules-emulator.log 2>&1
+        run: npm run test:rules-critical > two-phase-emulator.log 2>&1
 
       - name: Upload emulator report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lean-rules-emulator-report
-          path: lean-rules-emulator.log
+          name: two-phase-emulator-report
+          path: two-phase-emulator.log
           retention-days: 3
 
       - name: Show and enforce emulator result
         run: |
-          cat lean-rules-emulator.log
+          cat two-phase-emulator.log
           test "${{ steps.adversarial.outcome }}" = "success"
