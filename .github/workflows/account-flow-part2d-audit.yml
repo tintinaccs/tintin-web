@@ -35,6 +35,11 @@ jobs:
         continue-on-error: true
         run: node scripts/enforce-account-flow-part2d.mjs > account-flow-part2d.log 2>&1
 
+      - name: Audit short mobile login
+        id: account_flow_compact
+        continue-on-error: true
+        run: node scripts/audit-account-flow-compact-part2d.mjs > account-flow-part2d-compact.log 2>&1
+
       - name: Upload report and screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -43,6 +48,7 @@ jobs:
           path: |
             account-flow-part2d.log
             account-flow-part2d-raw.log
+            account-flow-part2d-compact.log
             artifacts/account-flow-part2d
           if-no-files-found: warn
           retention-days: 7
@@ -50,4 +56,6 @@ jobs:
       - name: Enforce account flow visual audit
         run: |
           cat account-flow-part2d.log
+          cat account-flow-part2d-compact.log
           test "${{ steps.account_flow_enforce.outcome }}" = "success"
+          test "${{ steps.account_flow_compact.outcome }}" = "success"
