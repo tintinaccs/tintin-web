@@ -47,6 +47,12 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-collections-sheet{
     padding-bottom:calc(var(--tt-mobile-nav-clearance) + 8px + env(safe-area-inset-bottom,0px))!important;
   }
+  /* El CTA inferior del hero terminaba exactamente en la franja donde vive el
+     botón flotante de WhatsApp. Esta reserva conserva 16px visibles entre
+     ambos sin cambiar textos, imágenes, acciones ni la altura del banner. */
+  body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
+  }
 }
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){
