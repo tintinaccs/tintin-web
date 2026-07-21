@@ -36,15 +36,21 @@ const official = [
   { name: 't1024', width: 1024, height: 768 }, { name: 'd1280', width: 1280, height: 900 },
   { name: 'd1440', width: 1440, height: 960 }
 ];
-const boundaries = [320, 480, 481, 767, 769, 1023, 1025, 1920].map(width => ({ name: `b${width}`, width, height: width <= 480 ? 820 : width <= 768 ? 1024 : 900 }));
+const boundaries = [320, 480, 481, 767, 769, 1023, 1025, 1920].map(width => ({
+  name: `b${width}`, width, height: width <= 480 ? 820 : width <= 768 ? 1024 : 900
+}));
 const all = [...official, ...boundaries];
 const failures = [];
 const report = [];
 let productHref = '';
 
-async function settle(page) {
+function addFailure(pageName, viewportName, message, data = null) {
+  failures.push({ page: pageName, viewport: viewportName, message, data });
+}
+
+async function prepare(page) {
   await page.waitForLoadState('domcontentloaded');
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(500);
   await page.evaluate(() => {
     document.documentElement.classList.remove('tt-initializing');
     document.body.hidden = false;
@@ -52,28 +58,44 @@ async function settle(page) {
     document.getElementById('tt-loader')?.classList.add('tt-out');
     document.getElementById('tt-privacy-consent')?.setAttribute('hidden', '');
   });
-  await page.waitForTimeout(600);
+}
+
+async function activateDynamicContent(page, waitMs) {
+  await page.waitForTimeout(waitMs);
+  await page.addStyleTag({ content: `
+    .tt-card,.tt-coll-page-card,.tt-product-card,.tt-related-card{content-visibility:visible!important;contain-intrinsic-size:auto!important}
+    .tt-home-motion{opacity:1!important;transform:none!important;filter:none!important}
+  ` });
   const height = await page.evaluate(() => document.documentElement.scrollHeight);
-  for (let y = 0; y < height; y += 650) {
+  for (let y = 0; y <= height; y += 520) {
     await page.evaluate(value => window.scrollTo(0, value), y);
-    await page.waitForTimeout(35);
+    await page.waitForTimeout(28);
   }
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(180);
+  await page.waitForTimeout(160);
 }
 
 async function visibleGeometry(page) {
   return page.evaluate(() => {
     const viewport = window.innerWidth;
     const bad = [];
+    const isInsideHorizontalScroller = element => {
+      let parent = element.parentElement;
+      while (parent && parent !== document.body) {
+        const style = getComputedStyle(parent);
+        if (/(auto|scroll)/.test(style.overflowX) && parent.scrollWidth > parent.clientWidth + 2) return true;
+        parent = parent.parentElement;
+      }
+      return false;
+    };
     for (const el of document.querySelectorAll('body *')) {
       const style = getComputedStyle(el);
       if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) continue;
       const r = el.getBoundingClientRect();
       if (r.width < 2 || r.height < 2) continue;
       if (r.right > viewport + 3 || r.left < -3) {
-        const position = style.position;
-        if (position === 'fixed' && (r.right <= viewport + 20 && r.left >= -20)) continue;
+        if (isInsideHorizontalScroller(el)) continue;
+        if (style.position === 'fixed' && r.right <= viewport + 20 && r.left >= -20) continue;
         bad.push({ tag: el.tagName, id: el.id, cls: String(el.className || '').slice(0, 100), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width) });
         if (bad.length >= 12) break;
       }
@@ -82,28 +104,30 @@ async function visibleGeometry(page) {
   });
 }
 
-function addFailure(pageName, viewportName, message, data = null) {
-  failures.push({ page: pageName, viewport: viewportName, message, data });
+async function columnsFor(page, selector) {
+  return page.locator(selector).evaluateAll(nodes => {
+    const items = nodes.filter(node => getComputedStyle(node).display !== 'none');
+    if (!items.length) return 0;
+    const firstY = Math.round(items[0].getBoundingClientRect().top);
+    return items.slice(0, 8).filter(node => Math.abs(Math.round(node.getBoundingClientRect().top) - firstY) <= 2).length;
+  }).catch(() => 0);
 }
 
 async function auditCatalog(page, vp) {
   await page.goto('http://127.0.0.1:4173/catalogo.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await settle(page);
-  await page.waitForTimeout(1800);
+  await prepare(page);
+  await activateDynamicContent(page, 2100);
 
-  if (!productHref) {
-    productHref = await page.locator('a[href*="product.html?id="]').first().getAttribute('href').catch(() => '') || '';
-  }
+  if (!productHref) productHref = await page.locator('a[href*="product.html?id="]').first().getAttribute('href').catch(() => '') || '';
 
   if (vp.width <= 768) {
     const toggle = page.locator('#filter-toggle');
     if (await toggle.isVisible().catch(() => false)) {
       await toggle.click();
       await page.waitForTimeout(180);
-      const opened = await page.locator('#cat-sidebar').isVisible().catch(() => false);
-      if (!opened) addFailure('catalogo', vp.name, 'El panel de filtros mobile no queda visible al abrirse.');
-      const sidebarBox = await page.locator('#cat-sidebar').boundingBox().catch(() => null);
-      if (sidebarBox && sidebarBox.x + sidebarBox.width > vp.width + 2) addFailure('catalogo', vp.name, 'El panel de filtros sale del viewport.', sidebarBox);
+      if (!await page.locator('#cat-sidebar').isVisible().catch(() => false)) addFailure('catalogo', vp.name, 'El panel de filtros mobile no queda visible al abrirse.');
+      const box = await page.locator('#cat-sidebar').boundingBox().catch(() => null);
+      if (box && (box.x < -2 || box.x + box.width > vp.width + 2)) addFailure('catalogo', vp.name, 'El panel de filtros sale del viewport.', box);
       await toggle.click().catch(() => {});
     }
   }
@@ -111,25 +135,15 @@ async function auditCatalog(page, vp) {
   const cards = page.locator('#cat-grid .tt-card:not([aria-hidden="true"])');
   const count = await cards.count();
   if (count) {
-    const first = cards.first();
-    const buttons = first.locator('.tt-card-btn');
-    for (let i = 0; i < await buttons.count(); i++) {
-      const box = await buttons.nth(i).boundingBox();
-      if (box && box.height < 39) addFailure('catalogo', vp.name, 'Botón de tarjeta demasiado bajo.', box);
-    }
-    const names = await page.locator('#cat-grid .tt-card-name').evaluateAll(nodes => nodes.slice(0, 12).map(node => ({ scroll: node.scrollWidth, client: node.clientWidth, height: node.getBoundingClientRect().height })));
+    const buttonBoxes = await cards.first().locator('.tt-card-btn').evaluateAll(nodes => nodes.map(node => ({ height: node.getBoundingClientRect().height, width: node.getBoundingClientRect().width })));
+    if (buttonBoxes.some(box => box.height < 39)) addFailure('catalogo', vp.name, 'Botón de tarjeta demasiado bajo.', buttonBoxes);
+    const names = await page.locator('#cat-grid .tt-card-name').evaluateAll(nodes => nodes.slice(0, 12).map(node => ({ scroll: node.scrollWidth, client: node.clientWidth })));
     if (names.some(item => item.scroll > item.client + 2)) addFailure('catalogo', vp.name, 'Un nombre de producto desborda su tarjeta.', names);
   }
 
-  const cols = await page.locator('#cat-grid').evaluate(el => {
-    const items = [...el.children].filter(node => getComputedStyle(node).display !== 'none');
-    if (!items.length) return 0;
-    const ys = items.slice(0, 8).map(node => Math.round(node.getBoundingClientRect().top));
-    const firstY = ys[0];
-    return ys.filter(y => Math.abs(y - firstY) <= 2).length;
-  }).catch(() => 0);
+  const cols = await columnsFor(page, '#cat-grid .tt-card:not([aria-hidden="true"])');
   const expected = vp.width > 1024 ? 3 : 2;
-  if (cols && cols !== expected) addFailure('catalogo', vp.name, `La grilla usa ${cols} columnas; se esperaban ${expected}.`);
+  if (cols && cols !== Math.min(expected, count)) addFailure('catalogo', vp.name, `La grilla usa ${cols} columnas; se esperaban ${Math.min(expected, count)}.`);
 
   const geo = await visibleGeometry(page);
   if (geo.scrollWidth > vp.width + 3 || geo.bad.length) addFailure('catalogo', vp.name, 'Hay desborde horizontal visible.', geo);
@@ -139,18 +153,13 @@ async function auditCatalog(page, vp) {
 
 async function auditCollections(page, vp) {
   await page.goto('http://127.0.0.1:4173/collections.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await settle(page);
-  await page.waitForTimeout(1500);
+  await prepare(page);
+  await activateDynamicContent(page, 1900);
   const cards = page.locator('#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const count = await cards.count();
-  const cols = await page.locator('#colls-page-grid').evaluate(el => {
-    const items = [...el.children].filter(node => getComputedStyle(node).display !== 'none');
-    if (!items.length) return 0;
-    const firstY = Math.round(items[0].getBoundingClientRect().top);
-    return items.slice(0, 8).filter(node => Math.abs(Math.round(node.getBoundingClientRect().top) - firstY) <= 2).length;
-  }).catch(() => 0);
+  const cols = await columnsFor(page, '#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const expected = vp.width <= 480 ? 1 : vp.width <= 1024 ? 2 : 3;
-  if (cols && cols !== expected) addFailure('collections', vp.name, `La grilla usa ${cols} columnas; se esperaban ${expected}.`);
+  if (cols && cols !== Math.min(expected, count)) addFailure('collections', vp.name, `La grilla usa ${cols} columnas; se esperaban ${Math.min(expected, count)}.`);
   const actionWidths = await page.locator('.tt-collections-actions a').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, viewport: innerWidth })));
   if (actionWidths.some(item => item.width > item.viewport - 16)) addFailure('collections', vp.name, 'Una acción excede el ancho disponible.', actionWidths);
   const geo = await visibleGeometry(page);
@@ -162,41 +171,37 @@ async function auditCollections(page, vp) {
 async function auditProduct(page, vp) {
   const target = productHref ? new URL(productHref, 'http://127.0.0.1:4173/').href : 'http://127.0.0.1:4173/product.html?id=1';
   await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await settle(page);
-  await page.waitForTimeout(2200);
+  await prepare(page);
+  await activateDynamicContent(page, 2500);
 
   const loaded = await page.locator('#product-grid').isVisible().catch(() => false);
   if (loaded) {
-    const grid = await page.locator('#product-grid').boundingBox();
     const gallery = await page.locator('.tt-product-gallery').boundingBox();
     const info = await page.locator('.tt-product-info-panel').boundingBox();
-    if (grid && gallery && info) {
+    if (gallery && info) {
       const sideBySide = Math.abs(gallery.y - info.y) < 12;
       if (vp.width > 768 && !sideBySide) addFailure('product', vp.name, 'Galería e información no quedan en dos columnas.', { gallery, info });
       if (vp.width <= 768 && sideBySide) addFailure('product', vp.name, 'Galería e información no se apilan en mobile.', { gallery, info });
-      if (gallery.x + gallery.width > vp.width + 2 || info.x + info.width > vp.width + 2) addFailure('product', vp.name, 'La ficha del producto sale del viewport.', { gallery, info });
+      if (gallery.x < -2 || info.x < -2 || gallery.x + gallery.width > vp.width + 2 || info.x + info.width > vp.width + 2) addFailure('product', vp.name, 'La ficha del producto sale del viewport.', { gallery, info });
     }
     const mainBox = await page.locator('#gallery-main').boundingBox().catch(() => null);
-    if (mainBox && (mainBox.width < 220 || mainBox.height < 220) && vp.width >= 390) addFailure('product', vp.name, 'La galería principal queda demasiado pequeña.', mainBox);
-    const actionBoxes = await page.locator('.tt-product-actions-panel .tt-btn').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, viewport: innerWidth })));
-    if (actionBoxes.some(item => item.height < 44 || item.width > item.viewport - 12)) addFailure('product', vp.name, 'Una acción principal tiene tamaño incorrecto.', actionBoxes);
+    if (mainBox && vp.width >= 390 && (mainBox.width < 220 || mainBox.height < 220)) addFailure('product', vp.name, 'La galería principal queda demasiado pequeña.', mainBox);
+    const actions = await page.locator('.tt-product-actions-panel .tt-btn').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, viewport: innerWidth })));
+    if (actions.some(item => item.height < 44 || item.width > item.viewport - 12)) addFailure('product', vp.name, 'Una acción principal tiene tamaño incorrecto.', actions);
   }
 
-  const relatedCols = await page.locator('.tt-related-grid').evaluate(el => {
-    const items = [...el.children].filter(node => getComputedStyle(node).display !== 'none');
-    if (!items.length) return 0;
-    const y = Math.round(items[0].getBoundingClientRect().top);
-    return items.slice(0, 8).filter(node => Math.abs(Math.round(node.getBoundingClientRect().top) - y) <= 2).length;
-  }).catch(() => 0);
-  if (relatedCols) {
-    const expected = vp.width <= 768 ? 2 : vp.width <= 1024 ? 3 : Math.min(4, relatedCols);
-    if (vp.width <= 1024 && relatedCols !== expected) addFailure('product', vp.name, `Productos relacionados usa ${relatedCols} columnas; se esperaban ${expected}.`);
+  const relatedCount = await page.locator('.tt-related-grid .tt-related-card').count();
+  const relatedCols = await columnsFor(page, '.tt-related-grid .tt-related-card');
+  if (relatedCount >= 2) {
+    const targetCols = vp.width <= 768 ? 2 : vp.width <= 1024 ? 3 : 4;
+    const expected = Math.min(targetCols, relatedCount);
+    if (relatedCols !== expected) addFailure('product', vp.name, `Productos relacionados usa ${relatedCols} columnas; se esperaban ${expected}.`);
   }
 
   const geo = await visibleGeometry(page);
   if (geo.scrollWidth > vp.width + 3 || geo.bad.length) addFailure('product', vp.name, 'Hay desborde horizontal visible.', geo);
   if (official.some(item => item.name === vp.name)) await page.screenshot({ path: path.join(outDir, `${vp.name}-product-full.png`), fullPage: true });
-  report.push({ page: 'product', viewport: vp, loaded, productHref: target, relatedColumns: relatedCols, geometry: geo });
+  report.push({ page: 'product', viewport: vp, loaded, productHref: target, relatedCount, relatedColumns: relatedCols, geometry: geo });
 }
 
 try {
