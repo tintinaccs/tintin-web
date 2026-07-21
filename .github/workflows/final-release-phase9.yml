@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   final-release:
@@ -26,51 +26,6 @@ jobs:
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
-        with:
-          ref: security/critical-healing-pass
-          fetch-depth: 0
-      - name: Actualizar auditoría de lecturas limitadas
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-
-          path = Path('scripts/audit-store-gate.js')
-          text = path.read_text()
-          replacements = {
-            'Productos cerrados': """check(
-            'Productos cerrados',
-            /match\s+\/products\/\{productId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 1000/.test(rules),
-            'productos deben exigir tienda abierta y limitar los listados públicos'
-          );""",
-            'Colecciones cerradas': """check(
-            'Colecciones cerradas',
-            /match\s+\/collections\/\{collectionId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 200/.test(rules),
-            'colecciones deben exigir tienda abierta y limitar los listados públicos'
-          );""",
-            'Contenido cerrado': """check(
-            'Contenido cerrado',
-            /match\s+\/site_content\/\{pageId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?allow list:\s*if isSuperAdmin\(\);/.test(rules),
-            'contenido público debe exigir tienda abierta y su listado quedar reservado'
-          );"""
-          }
-          for label, replacement in replacements.items():
-              pattern = re.compile(
-                  r"check\(\n\s*'" + re.escape(label) + r"',[\s\S]*?\n\);",
-                  re.S,
-              )
-              text, count = pattern.subn(lambda _: replacement, text, count=1)
-              if count != 1:
-                  raise SystemExit(f'No se encontró una única comprobación {label}: {count}')
-          path.write_text(text)
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/audit-store-gate.js
-          if ! git diff --cached --quiet; then
-            git commit -m "Audit limited Firestore reads in store gate"
-            git push origin HEAD:security/critical-healing-pass
-          fi
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
