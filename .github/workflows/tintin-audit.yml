@@ -152,4 +152,19 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Smoke test every page in Chromium
-        run: npm run test:pages
+        id: browser_smoke
+        continue-on-error: true
+        run: npm run test:pages > chromium-smoke.log 2>&1
+
+      - name: Upload Chromium smoke report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chromium-smoke-report
+          path: chromium-smoke.log
+          retention-days: 7
+
+      - name: Enforce Chromium smoke result
+        run: |
+          cat chromium-smoke.log
+          test "${{ steps.browser_smoke.outcome }}" = "success"
