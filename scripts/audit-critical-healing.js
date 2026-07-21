@@ -32,40 +32,42 @@ check(
   'site-activity.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
-  'Cada ítem obliga una escritura de stock marcada por el pedido',
-  rules.includes('productAfter.lastStockOrderId == orderId') &&
-    rules.includes('product.stock >= item.qty'),
-  'El pedido no puede crearse sin que el producto quede marcado por ese pedido.'
+  'Checkout separa borrador y reserva final sin perder atomicidad del stock',
+  checkout.includes('createPendingOrder(draft)') &&
+    checkout.includes('reserveOrderInventory(orderId)') &&
+    checkout.includes("status: 'inventory_pending'") &&
+    checkout.includes("inventoryState: 'pending'") &&
+    checkout.includes("inventoryState: 'reserved'"),
+  'El pedido pendiente debe existir antes de la transacción que reserva stock y lo activa.'
+);
+check(
+  'La activación final exige que todos los productos queden marcados por el pedido',
+  rules.includes('sparkInventoryReserveValid(orderId)') &&
+    rules.includes('sparkReservedItemAtValid(items, 0, orderId)') &&
+    rules.includes('productAfter.lastStockOrderId == orderId'),
+  'No se puede activar un pedido sin escribir el inventario correspondiente.'
 );
 check(
   'Cada baja de stock está ligada al producto y cantidad exacta',
   rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
     rules.includes('request.resource.data.stock == resource.data.stock - orderedQty') &&
     rules.includes('orderedQty > 0'),
-  'La regla del producto debe calcular la baja exacta desde el pedido.'
+  'La regla del producto debe calcular la baja exacta desde el pedido pendiente.'
 );
 check(
-  'Checkout actualiza el guard anti-pedidos repetidos en la misma transacción',
-  checkout.includes('lastCheckoutOrderId: orderId') &&
-    checkout.includes('lastCheckoutAt: serverTimestamp()') &&
+  'Checkout reserva el guard anti-pedidos repetidos antes del pedido',
+  checkout.includes('reserveCheckoutGuard(draft)') &&
+    checkout.includes('lastCheckoutOrderId: orderId') &&
     checkout.includes('checkout_cooldown'),
-  'El guard de frecuencia debe ser atómico y tener mensaje propio.'
+  'El guard de frecuencia debe ser transaccional y tener mensaje propio.'
 );
 check(
   'Las reglas exigen el guard de checkout y el intervalo mínimo',
-  checkout.includes('reserveCheckoutGuard(draft)') &&
-    rules.includes('checkoutGuardWriteValid(userId)') &&
+  rules.includes('checkoutGuardWriteValid(userId)') &&
     rules.includes('match /checkoutGuards/{userId}') &&
     rules.includes("duration.value(90, 's')") &&
     rules.includes('guardData.lastCheckoutOrderId == orderId'),
   'No alcanza con un bloqueo visual en el botón.'
-);
-check(
-  'Los pedidos nuevos registran estado de inventario',
-  checkout.includes("inventoryState: 'reserved'") &&
-    checkout.includes('inventoryRevision: 1') &&
-    rules.includes("data.inventoryState == 'reserved'"),
-  'Todo pedido nuevo debe indicar que su stock está reservado.'
 );
 check(
   'El panel reconcilia inventario de forma transaccional',
@@ -84,14 +86,14 @@ check(
 );
 check(
   'Las consultas públicas tienen límites explícitos',
-  products.includes("limit(1000)") && collections.includes("limit(200)") &&
+  products.includes('limit(1000)') && collections.includes('limit(200)') &&
     rules.includes('request.query.limit <= 1000') && rules.includes('request.query.limit <= 200'),
   'El catálogo público no debe permitir enumeraciones ilimitadas.'
 );
 check(
-  'La transacción de checkout limita los reintentos internos',
-  /runTransaction\(db,[\s\S]*\}, \{ maxAttempts: 2 \}\);/.test(checkout),
-  'Un clic no debe multiplicar hasta cinco veces las lecturas cuando Firestore está saturado.'
+  'Las transacciones críticas limitan sus reintentos internos',
+  (checkout.match(/maxAttempts: 2/g) || []).length >= 3,
+  'Guard, pedido pendiente y reserva de stock deben limitar los reintentos automáticos.'
 );
 
 const failed = checks.filter(item => !item.ok);
