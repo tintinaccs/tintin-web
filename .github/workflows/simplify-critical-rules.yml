@@ -1,4 +1,4 @@
-name: Refactor checkout guard safely
+name: Optimize checkout product rules
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 jobs:
-  refactor:
+  optimize:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -36,60 +36,41 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Apply checkout guard and stock rule refactor
-        id: patch
-        continue-on-error: true
-        run: |
-          python scripts/refactor-checkout-guard-once.py > checkout-guard-patch.log 2>&1
-          python scripts/reduce-stock-rule-once.py >> checkout-guard-patch.log 2>&1
+      - name: Apply lazy product update dispatcher
+        run: python scripts/dispatch-product-update-once.py
 
-      - name: Upload patch diagnostic
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: checkout-guard-patch-report
-          path: checkout-guard-patch.log
-          retention-days: 3
-
-      - name: Show and enforce patch result
-        run: |
-          cat checkout-guard-patch.log
-          test "${{ steps.patch.outcome }}" = "success"
-
-      - name: Save generated refactor on draft branch
+      - name: Save generated dispatcher on draft branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add firestore.rules js/secure-checkout-order.js scripts/test-firestore-critical.mjs scripts/audit-critical-healing.js scripts/audit-secure-orders.js
+          git add firestore.rules
           if ! git diff --cached --quiet; then
-            git commit -m "Stage checkout integrity refactor for emulator review"
+            git commit -m "Dispatch product updates by changed fields"
             git push origin HEAD:security/critical-healing-pass
           fi
 
       - name: Install test dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Verify JavaScript and static contracts
+      - name: Verify static contracts
         run: |
-          node --check js/secure-checkout-order.js
-          node --check scripts/test-firestore-critical.mjs
           node scripts/audit-critical-healing.js
           node scripts/audit-secure-orders.js
 
       - name: Verify adversarial rules in emulator
         id: adversarial
         continue-on-error: true
-        run: npm run test:rules-critical > checkout-guard-emulator.log 2>&1
+        run: npm run test:rules-critical > product-dispatch-emulator.log 2>&1
 
       - name: Upload emulator report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: checkout-guard-emulator-report
-          path: checkout-guard-emulator.log
+          name: product-dispatch-emulator-report
+          path: product-dispatch-emulator.log
           retention-days: 3
 
       - name: Show and enforce emulator result
         run: |
-          cat checkout-guard-emulator.log
+          cat product-dispatch-emulator.log
           test "${{ steps.adversarial.outcome }}" = "success"
