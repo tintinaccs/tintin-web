@@ -617,6 +617,8 @@ service cloud.firestore {
 
     function orderStateReservesInventory
 
+    function orderStateReservesInventory
+
     function orderStateReservesInventory(data) {
       let state = data.get('inventoryState', '');
       return state == 'reserved' ||
