@@ -28,7 +28,17 @@ jobs:
       - name: Audit institutional help and legal pages
         id: part2e_audit
         continue-on-error: true
-        run: node scripts/audit-institutional-help-legal-part2e-v2.mjs > institutional-help-legal-part2e.log 2>&1
+        run: node scripts/audit-institutional-help-legal-part2e-v2.mjs > institutional-help-legal-part2e-raw.log 2>&1
+
+      - name: Enforce actionable visual findings
+        id: part2e_enforce
+        continue-on-error: true
+        run: node scripts/enforce-institutional-help-legal-part2e.mjs > institutional-help-legal-part2e.log 2>&1
+
+      - name: Audit FAQ interactions
+        id: part2e_faq
+        continue-on-error: true
+        run: node scripts/audit-faq-interaction-part2e.mjs > institutional-help-legal-part2e-faq.log 2>&1
 
       - name: Upload report and screenshots
         if: always()
@@ -37,6 +47,8 @@ jobs:
           name: institutional-help-legal-part2e-report
           path: |
             institutional-help-legal-part2e.log
+            institutional-help-legal-part2e-raw.log
+            institutional-help-legal-part2e-faq.log
             artifacts/institutional-help-legal-part2e
           if-no-files-found: warn
           retention-days: 7
@@ -44,4 +56,6 @@ jobs:
       - name: Enforce Part 2E visual audit
         run: |
           cat institutional-help-legal-part2e.log
-          test "${{ steps.part2e_audit.outcome }}" = "success"
+          cat institutional-help-legal-part2e-faq.log
+          test "${{ steps.part2e_enforce.outcome }}" = "success"
+          test "${{ steps.part2e_faq.outcome }}" = "success"
