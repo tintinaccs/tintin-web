@@ -63,13 +63,30 @@ async function prepare(page) {
 async function activateDynamicContent(page, waitMs) {
   await page.waitForTimeout(waitMs);
   await page.addStyleTag({ content: `
-    .tt-card,.tt-coll-page-card,.tt-product-card,.tt-related-card{content-visibility:visible!important;contain-intrinsic-size:auto!important}
-    .tt-home-motion{opacity:1!important;transform:none!important;filter:none!important}
+    .tt-card,.tt-coll-page-card,.tt-product-card,.tt-related-card{
+      content-visibility:visible!important;
+      contain-intrinsic-size:auto!important;
+    }
+    .tt-products-section,.tt-colls-page-section,.tt-product-page,.tinben,.tinsel,.tt-related-section{
+      content-visibility:visible!important;
+      contain:none!important;
+    }
+    .tt-home-motion,.tt-auto-reveal{
+      opacity:1!important;
+      transform:none!important;
+      filter:none!important;
+    }
   ` });
-  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  let height = await page.evaluate(() => document.documentElement.scrollHeight);
   for (let y = 0; y <= height; y += 520) {
     await page.evaluate(value => window.scrollTo(0, value), y);
     await page.waitForTimeout(28);
+  }
+  await page.waitForTimeout(160);
+  height = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y <= height; y += 520) {
+    await page.evaluate(value => window.scrollTo(0, value), y);
+    await page.waitForTimeout(20);
   }
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(160);
@@ -154,18 +171,52 @@ async function auditCatalog(page, vp) {
 async function auditCollections(page, vp) {
   await page.goto('http://127.0.0.1:4173/collections.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
   await prepare(page);
-  await activateDynamicContent(page, 1900);
+  await activateDynamicContent(page, 2200);
+
   const cards = page.locator('#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const count = await cards.count();
   const cols = await columnsFor(page, '#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const expected = vp.width <= 480 ? 1 : vp.width <= 1024 ? 2 : 3;
   if (cols && cols !== Math.min(expected, count)) addFailure('collections', vp.name, `La grilla usa ${cols} columnas; se esperaban ${Math.min(expected, count)}.`);
+
+  const featured = await page.evaluate(() => {
+    const section = document.querySelector('.tt-products-section');
+    const grid = document.getElementById('collections-featured-grid');
+    if (!section || !grid) return { missing: true };
+    const style = getComputedStyle(section);
+    const rect = section.getBoundingClientRect();
+    const cards = grid.querySelectorAll('.tt-product-card:not(.tt-skeleton-card)').length;
+    const states = grid.querySelectorAll('.tt-collections-state,.tt-collections-runtime-state').length;
+    return {
+      missing: false,
+      display: style.display,
+      visibility: style.visibility,
+      opacity: Number(style.opacity),
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      cards,
+      states,
+      busy: grid.getAttribute('aria-busy')
+    };
+  });
+  if (featured.missing) {
+    addFailure('collections', vp.name, 'Falta la sección de productos destacados.');
+  } else {
+    if (featured.display === 'none' || featured.visibility === 'hidden' || featured.opacity < 0.95) {
+      addFailure('collections', vp.name, 'La sección de productos destacados no es visible.', featured);
+    }
+    if (!featured.cards && !featured.states) {
+      addFailure('collections', vp.name, 'Productos destacados no muestra tarjetas ni un estado comprensible.', featured);
+    }
+    if (featured.height < 180) addFailure('collections', vp.name, 'La sección de productos destacados queda colapsada.', featured);
+  }
+
   const actionWidths = await page.locator('.tt-collections-actions a').evaluateAll(nodes => nodes.map(node => ({ width: node.getBoundingClientRect().width, viewport: innerWidth })));
   if (actionWidths.some(item => item.width > item.viewport - 16)) addFailure('collections', vp.name, 'Una acción excede el ancho disponible.', actionWidths);
   const geo = await visibleGeometry(page);
   if (geo.scrollWidth > vp.width + 3 || geo.bad.length) addFailure('collections', vp.name, 'Hay desborde horizontal visible.', geo);
   if (official.some(item => item.name === vp.name)) await page.screenshot({ path: path.join(outDir, `${vp.name}-collections-full.png`), fullPage: true });
-  report.push({ page: 'collections', viewport: vp, cards: count, columns: cols, geometry: geo });
+  report.push({ page: 'collections', viewport: vp, cards: count, columns: cols, featured, geometry: geo });
 }
 
 async function auditProduct(page, vp) {
