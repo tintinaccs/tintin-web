@@ -56,6 +56,16 @@ jobs:
           cat checkout-guard-patch.log
           test "${{ steps.patch.outcome }}" = "success"
 
+      - name: Save generated refactor on draft branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add firestore.rules js/secure-checkout-order.js scripts/test-firestore-critical.mjs scripts/audit-critical-healing.js scripts/audit-secure-orders.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Stage checkout integrity refactor for emulator review"
+            git push origin HEAD:security/critical-healing-pass
+          fi
+
       - name: Install test dependencies
         run: npm install --no-audit --no-fund
 
@@ -83,12 +93,3 @@ jobs:
         run: |
           cat checkout-guard-emulator.log
           test "${{ steps.adversarial.outcome }}" = "success"
-
-      - name: Commit validated checkout guard refactor
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add firestore.rules js/secure-checkout-order.js scripts/test-firestore-critical.mjs scripts/audit-critical-healing.js scripts/audit-secure-orders.js
-          git diff --cached --quiet && exit 0
-          git commit -m "Split checkout guard and reduce stock rule cost"
-          git push origin HEAD:security/critical-healing-pass
