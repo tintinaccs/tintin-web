@@ -1,4 +1,4 @@
-name: Optimize checkout product rules
+name: Balance checkout stock rules
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 jobs:
-  optimize:
+  balance:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -36,16 +36,16 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Apply lazy product update dispatcher
-        run: python scripts/dispatch-product-update-once.py
+      - name: Apply balanced stock validation
+        run: python scripts/rebalance-stock-validation-once.py
 
-      - name: Save generated dispatcher on draft branch
+      - name: Save generated validation on draft branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add firestore.rules
+          git add firestore.rules scripts/audit-critical-healing.js scripts/audit-secure-orders.js
           if ! git diff --cached --quiet; then
-            git commit -m "Dispatch product updates by changed fields"
+            git commit -m "Balance order and product stock validation"
             git push origin HEAD:security/critical-healing-pass
           fi
 
@@ -60,17 +60,17 @@ jobs:
       - name: Verify adversarial rules in emulator
         id: adversarial
         continue-on-error: true
-        run: npm run test:rules-critical > product-dispatch-emulator.log 2>&1
+        run: npm run test:rules-critical > balanced-stock-emulator.log 2>&1
 
       - name: Upload emulator report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: product-dispatch-emulator-report
-          path: product-dispatch-emulator.log
+          name: balanced-stock-emulator-report
+          path: balanced-stock-emulator.log
           retention-days: 3
 
       - name: Show and enforce emulator result
         run: |
-          cat product-dispatch-emulator.log
+          cat balanced-stock-emulator.log
           test "${{ steps.adversarial.outcome }}" = "success"
