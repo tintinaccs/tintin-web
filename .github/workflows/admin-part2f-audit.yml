@@ -26,7 +26,7 @@ jobs:
         run: npx playwright install chromium
 
       - name: Audit Admin and Super Admin visual states
-        run: node scripts/audit-admin-visual-part2f.mjs > admin-part2f.log 2>&1
+        run: node scripts/audit-admin-visual-part2f-v2.mjs > admin-part2f.log 2>&1
 
       - name: Upload reports and screenshots
         if: always()
