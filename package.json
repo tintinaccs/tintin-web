@@ -46,7 +46,7 @@
     "audit:login-isolation": "node scripts/audit-login-isolation.js",
     "audit:hero-background-controls": "node scripts/audit-hero-background-controls.js",
     "audit:storegate-deadlock": "node scripts/audit-storegate-deadlock.js",
-    "audit:global-responsive-geometry": "node scripts/audit-global-responsive-final-v3.mjs"
+    "audit:global-responsive-geometry": "node scripts/audit-global-responsive-final.mjs"
   },
   "devDependencies": {
     "firebase-tools": "13.15.0",

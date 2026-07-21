@@ -57,3 +57,33 @@ html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-secondary{
 #btn-mobile-tienda[aria-expanded="true"]{
   color:var(--tt-accent,#AD3F67)!important;
 }
+
+/* Parte 2A: los dos flotantes usan lados opuestos en mobile para no pisarse. */
+@media (max-width:768px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-back-to-top{
+    left:16px!important;
+    right:auto!important;
+    bottom:calc(var(--tt-mobile-nav-clearance,104px) + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
+/* En 320–360px cuatro columnas comprimen las etiquetas del sheet de Tienda.
+   Tres columnas flexibles conservan imagen, texto y botón dentro del panel. */
+@media (max-width:360px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-collections-sheet{
+    overflow-x:hidden!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-sheet-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-sheet-item{
+    min-width:0!important;
+    overflow-wrap:anywhere;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-sheet-footer :is(.tt-btn,a,button){
+    width:100%;
+    max-width:100%;
+    white-space:normal;
+    text-align:center;
+  }
+}
