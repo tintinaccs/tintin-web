@@ -4,16 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'admin.html'
-      - 'css/admin.css'
-      - 'js/admin-site-diagnostics.js'
-      - 'js/diagnostic-core.js'
-      - 'diagnostic-manifest.json'
-      - 'scripts/build-diagnostic-manifest.js'
-      - 'scripts/audit-diagnostics.js'
-      - 'package.json'
-      - '.github/workflows/audit-diagnostics.yml'
   workflow_dispatch:
 
 permissions:
@@ -25,15 +15,22 @@ jobs:
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Validar sintaxis
         run: |
           node --check js/admin-site-diagnostics.js
           node --check js/diagnostic-core.js
           node --check scripts/build-diagnostic-manifest.js
+          node --check scripts/verify-diagnostic-manifest.js
           node --check scripts/audit-diagnostics.js
+
+      - name: Regenerar y verificar inventario exacto
+        run: npm run build:pages
+
       - name: Auditar modo de solo lectura e inventario
         run: npm run audit:diagnostics
