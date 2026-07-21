@@ -129,6 +129,24 @@ body {
     white-space: normal;
   }
 
+  #ship-panel-delivery > div:first-child,
+  #ship-panel-encomienda > div:first-child {
+    align-items: stretch !important;
+  }
+
+  #ship-panel-delivery > div:first-child > div,
+  #ship-panel-encomienda > div:first-child > div {
+    flex: 1 1 100% !important;
+    inline-size: 100% !important;
+    min-inline-size: 0 !important;
+    max-inline-size: 100% !important;
+  }
+
+  #ship-delivery-add,
+  #ship-encomienda-add {
+    inline-size: 100% !important;
+  }
+
   .adm-header {
     padding-inline: 10px !important;
     gap: 8px;
