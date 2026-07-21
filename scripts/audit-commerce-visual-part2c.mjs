@@ -241,12 +241,31 @@ async function auditProduct(page, vp) {
     if (actions.some(item => item.height < 44 || item.width > item.viewport - 12)) addFailure('product', vp.name, 'Una acción principal tiene tamaño incorrecto.', actions);
   }
 
-  const relatedCount = await page.locator('.tt-related-grid .tt-related-card').count();
-  const relatedCols = await columnsFor(page, '.tt-related-grid .tt-related-card');
+  const relatedSelector = '.tt-related-grid > .tt-related-slot';
+  const relatedCount = await page.locator(relatedSelector).count();
+  const relatedCols = await columnsFor(page, relatedSelector);
   if (relatedCount >= 2) {
     const targetCols = vp.width <= 768 ? 2 : vp.width <= 1024 ? 3 : 4;
     const expected = Math.min(targetCols, relatedCount);
     if (relatedCols !== expected) addFailure('product', vp.name, `Productos relacionados usa ${relatedCols} columnas; se esperaban ${expected}.`);
+  }
+  if (relatedCount === 1) {
+    const centering = await page.evaluate(() => {
+      const grid = document.getElementById('related-grid');
+      const slot = grid?.querySelector(':scope > .tt-related-slot');
+      if (!grid || !slot) return null;
+      const gridRect = grid.getBoundingClientRect();
+      const slotRect = slot.getBoundingClientRect();
+      return {
+        gridCenter: gridRect.left + gridRect.width / 2,
+        slotCenter: slotRect.left + slotRect.width / 2,
+        slotWidth: slotRect.width,
+        gridWidth: gridRect.width
+      };
+    });
+    if (!centering || Math.abs(centering.gridCenter - centering.slotCenter) > 4) {
+      addFailure('product', vp.name, 'La recomendación única no queda centrada.', centering);
+    }
   }
 
   const geo = await visibleGeometry(page);
