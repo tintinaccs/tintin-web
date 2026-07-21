@@ -36,10 +36,12 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Apply dedicated checkout guard refactor
+      - name: Apply checkout guard and stock rule refactor
         id: patch
         continue-on-error: true
-        run: python scripts/refactor-checkout-guard-once.py > checkout-guard-patch.log 2>&1
+        run: |
+          python scripts/refactor-checkout-guard-once.py > checkout-guard-patch.log 2>&1
+          python scripts/reduce-stock-rule-once.py >> checkout-guard-patch.log 2>&1
 
       - name: Upload patch diagnostic
         if: always()
@@ -86,7 +88,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add firestore.rules js/secure-checkout-order.js scripts/test-firestore-critical.mjs scripts/audit-critical-healing.js
+          git add firestore.rules js/secure-checkout-order.js scripts/test-firestore-critical.mjs scripts/audit-critical-healing.js scripts/audit-secure-orders.js
           git diff --cached --quiet && exit 0
-          git commit -m "Move checkout cooldown to dedicated guard"
+          git commit -m "Split checkout guard and reduce stock rule cost"
           git push origin HEAD:security/critical-healing-pass
