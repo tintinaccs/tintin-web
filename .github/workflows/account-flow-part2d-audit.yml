@@ -28,7 +28,12 @@ jobs:
       - name: Audit account flow pages
         id: account_flow_audit
         continue-on-error: true
-        run: node scripts/audit-account-flow-visual-part2d.mjs > account-flow-part2d.log 2>&1
+        run: node scripts/audit-account-flow-visual-part2d.mjs > account-flow-part2d-raw.log 2>&1
+
+      - name: Enforce actionable account flow findings
+        id: account_flow_enforce
+        continue-on-error: true
+        run: node scripts/enforce-account-flow-part2d.mjs > account-flow-part2d.log 2>&1
 
       - name: Upload report and screenshots
         if: always()
@@ -37,6 +42,7 @@ jobs:
           name: account-flow-part2d-report
           path: |
             account-flow-part2d.log
+            account-flow-part2d-raw.log
             artifacts/account-flow-part2d
           if-no-files-found: warn
           retention-days: 7
@@ -44,4 +50,4 @@ jobs:
       - name: Enforce account flow visual audit
         run: |
           cat account-flow-part2d.log
-          test "${{ steps.account_flow_audit.outcome }}" = "success"
+          test "${{ steps.account_flow_enforce.outcome }}" = "success"
