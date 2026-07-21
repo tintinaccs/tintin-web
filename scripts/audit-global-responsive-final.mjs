@@ -83,7 +83,7 @@ async function inspectBase(page, width) {
   return page.evaluate(width => {
     const issues = [];
     const visible = (node, requireViewport = false) => {
-      if (!node || node.hidden || node.closest('[hidden]')) return false;
+      if (!node) return false;
       const style = getComputedStyle(node), r = node.getBoundingClientRect();
       if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01 || r.width <= 0 || r.height <= 0) return false;
       return !requireViewport || (r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth);
@@ -179,7 +179,7 @@ async function inspectMobileBottom(page) {
     const footer = document.querySelector('.tt-footer');
     const whatsapp = document.querySelector('.tt-wa-float');
     const visible = node => {
-      if (!node || node.hidden || node.closest('[hidden]')) return false;
+      if (!node) return false;
       const style = getComputedStyle(node), r = node.getBoundingClientRect();
       return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < innerHeight;
     };
@@ -222,7 +222,7 @@ async function checkSurface(page,trigger,surface,label) {
     if (!node) return [`${label}: falta ${surface}`];
     const style = getComputedStyle(node), r = node.getBoundingClientRect();
     const visible = element => {
-      if (!element || element.hidden || element.closest('[hidden]')) return false;
+      if (!element) return false;
       const s = getComputedStyle(element), box = element.getBoundingClientRect();
       return s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity || 1) > .01 && box.width > 0 && box.height > 0;
     };
@@ -265,7 +265,7 @@ async function inspectPrivacy(page) {
   await page.waitForTimeout(260);
   const issues = await page.evaluate(() => {
     const consent = document.querySelector('.tt-privacy-consent'), tabbar = document.getElementById('tt-tabbar');
-    if (!consent || !tabbar || consent.hidden) return [];
+    if (!consent || !tabbar) return [];
     const cs = getComputedStyle(consent), ts = getComputedStyle(tabbar);
     if (cs.display === 'none' || cs.visibility === 'hidden' || ts.display === 'none' || ts.visibility === 'hidden') return [];
     const c = consent.getBoundingClientRect(), t = tabbar.getBoundingClientRect();
