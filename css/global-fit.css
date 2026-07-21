@@ -17,6 +17,8 @@ body {
 
 :where(main, header, footer, section, article, aside, nav, form, fieldset, div) {
   min-inline-size: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 :where(h1, h2, h3, h4, h5, h6, p, a, span, strong, em, small, label, li, dt, dd, td, th, button) {
