@@ -209,7 +209,7 @@ try {
       await page.waitForSelector('#tt-tabbar #tabbar-tienda', { state: 'attached', timeout: 10_000 });
       await page.waitForTimeout(350);
       const surfaces = await page.evaluate(() => {
-        const ids = ['tt-tabbar', 'tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'search-panel', 'cart-drawer', 'collections-sheet'];
+        const ids = ['tt-tabbar', 'tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta', 'search-panel', 'cart-drawer', 'collections-sheet'];
         return Object.fromEntries(ids.map(id => {
           const element = document.getElementById(id);
           if (!element) return [id, null];
@@ -217,10 +217,14 @@ try {
           return [id, {
             backgroundColor: style.backgroundColor,
             backgroundImage: style.backgroundImage,
+            borderColor: style.borderColor,
+            borderStyle: style.borderStyle,
+            borderWidth: style.borderWidth,
             opacity: style.opacity,
           }];
         }));
       });
+      const borderedPanels = new Set(['search-panel', 'cart-drawer', 'collections-sheet']);
       for (const [id, style] of Object.entries(surfaces)) {
         if (!style) {
           failures.push(`Header mobile ${width}px: falta #${id}.`);
@@ -235,10 +239,85 @@ try {
         if (style.opacity !== '1') {
           failures.push(`Header mobile ${width}px: #${id} conserva opacidad ${style.opacity}.`);
         }
+        if (borderedPanels.has(id) && (style.borderColor !== 'rgb(241, 200, 213)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
+          failures.push(`Header mobile ${width}px: #${id} no conserva el borde rosado sólido.`);
+        }
       }
-      console.log(`OK — Header mobile ${width}px · Tienda · Buscar · Carrito · fondos blancos`);
+      console.log(`OK — Header mobile ${width}px · Tienda · Buscar · Carrito · Cuenta · fondos blancos`);
     } catch (error) {
       failures.push(`Header mobile ${width}px: ${error.message || String(error)}.`);
+    } finally {
+      await page.close();
+    }
+  }
+
+  for (const width of [1024, 1440]) {
+    const page = await context.newPage();
+    try {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript(() => {
+        window.TT_DISABLE_STORE_GATE = true;
+      });
+      await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+      await page.waitForSelector('#tt-header-desktop-tablet #btn-tienda', { state: 'attached', timeout: 10_000 });
+      await page.waitForTimeout(350);
+      const surfaces = await page.evaluate(() => {
+        const ids = [
+          'tt-header-desktop-tablet',
+          'btn-tienda',
+          'btn-search',
+          'btn-cuenta',
+          'btn-cart',
+          'tt-tienda-dropdown-panel',
+          'search-panel',
+          'account-panel',
+          'cart-drawer',
+        ];
+        return Object.fromEntries(ids.map(id => {
+          const element = document.getElementById(id);
+          if (!element) return [id, null];
+          const style = getComputedStyle(element);
+          return [id, {
+            backgroundColor: style.backgroundColor,
+            backgroundImage: style.backgroundImage,
+            borderColor: style.borderColor,
+            borderStyle: style.borderStyle,
+            borderWidth: style.borderWidth,
+            opacity: style.opacity,
+          }];
+        }));
+      });
+      const borderedSurfaces = new Set([
+        'btn-tienda',
+        'btn-search',
+        'btn-cuenta',
+        'btn-cart',
+        'tt-tienda-dropdown-panel',
+        'search-panel',
+        'account-panel',
+        'cart-drawer',
+      ]);
+      for (const [id, style] of Object.entries(surfaces)) {
+        if (!style) {
+          failures.push(`Header desktop/tablet ${width}px: falta #${id}.`);
+          continue;
+        }
+        if (style.backgroundColor !== 'rgb(255, 255, 255)') {
+          failures.push(`Header desktop/tablet ${width}px: #${id} no es blanco (${style.backgroundColor}).`);
+        }
+        if (style.backgroundImage !== 'none') {
+          failures.push(`Header desktop/tablet ${width}px: #${id} conserva imagen o degradado de fondo.`);
+        }
+        if (style.opacity !== '1') {
+          failures.push(`Header desktop/tablet ${width}px: #${id} conserva opacidad ${style.opacity}.`);
+        }
+        if (borderedSurfaces.has(id) && (style.borderColor !== 'rgb(241, 200, 213)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
+          failures.push(`Header desktop/tablet ${width}px: #${id} no conserva el borde rosado sólido.`);
+        }
+      }
+      console.log(`OK — Header desktop/tablet ${width}px · Tienda · Buscar · Cuenta · Carrito · fondos blancos`);
+    } catch (error) {
+      failures.push(`Header desktop/tablet ${width}px: ${error.message || String(error)}.`);
     } finally {
       await page.close();
     }
@@ -255,4 +334,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto · header mobile.`);
+console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto · header mobile y desktop/tablet.`);
