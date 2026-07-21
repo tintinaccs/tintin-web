@@ -7,11 +7,11 @@ const sourcePath = path.join(directory, 'audit-global-responsive-final-v2.mjs');
 const temporaryPath = path.join(directory, '.audit-global-responsive-runtime.mjs');
 let source = fs.readFileSync(sourcePath, 'utf8');
 
-const original = `    document.documentElement.classList.remove('tt-initializing', 'tt-store-gate-pending');
+const originalPreparation = `    document.documentElement.classList.remove('tt-initializing', 'tt-store-gate-pending');
     document.body?.style.removeProperty('visibility');
     document.body?.style.removeProperty('overflow');`;
 
-const replacement = `    document.documentElement.classList.remove(
+const healedPreparation = `    document.documentElement.classList.remove(
       'tt-initializing',
       'tt-store-gate-pending',
       'tt-store-gate-blocked',
@@ -34,13 +34,38 @@ const replacement = `    document.documentElement.classList.remove(
       document.body.style.removeProperty('touch-action');
     }`;
 
-if (!source.includes(original)) {
+if (!source.includes(originalPreparation)) {
   throw new Error('No se encontró el bloque de preparación esperado en la auditoría v2.');
 }
+source = source.replace(originalPreparation, healedPreparation);
 
-source = source.replace(original, replacement);
+const originalWait = `  await page.waitForTimeout(140);`;
+const stableWait = `  await page.waitForFunction(selector => {
+    const node = document.querySelector(selector);
+    if (!node) return false;
+    const style = getComputedStyle(node);
+    const rect = node.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+  }, expected, { timeout: 2500 }).catch(() => {});
+  await page.waitForTimeout(260);`;
+if (!source.includes(originalWait)) throw new Error('No se encontró la espera esperada en la auditoría v2.');
+source = source.replace(originalWait, stableWait);
+
+const originalInternalOverflow = `    if (node.scrollWidth > node.clientWidth + 1) out.push(\`${'${label}'}: contenido interno desborda\`);`;
+const visibleInternalOverflow = `    const visibleChildren = [...node.querySelectorAll('*')].filter(child => {
+      if (child.hidden || child.closest('[hidden],[aria-hidden="true"]')) return false;
+      const style = getComputedStyle(child);
+      const rect = child.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && rect.width > 0 && rect.height > 0;
+    });
+    if (visibleChildren.some(child => {
+      const rect = child.getBoundingClientRect();
+      return rect.left < r.left - 1 || rect.right > r.right + 1;
+    })) out.push(\`${'${label}'}: contenido visible desborda\`);`;
+if (!source.includes(originalInternalOverflow)) throw new Error('No se encontró el control interno esperado en la auditoría v2.');
+source = source.replace(originalInternalOverflow, visibleInternalOverflow);
+
 fs.writeFileSync(temporaryPath, source);
-
 try {
   await import(`${pathToFileURL(temporaryPath).href}?run=${Date.now()}`);
 } finally {
