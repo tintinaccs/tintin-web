@@ -23,7 +23,7 @@ jobs:
         run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
 
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Audit institutional help and legal pages
         id: part2e_audit
