@@ -84,4 +84,17 @@ jobs:
       - name: Revisar integración
         run: npm run audit:images
       - name: Revisar confiabilidad
-        run: npm run audit:reliability
+        id: reliability
+        continue-on-error: true
+        run: npm run audit:reliability > image-reliability-audit.log 2>&1
+      - name: Guardar informe de confiabilidad
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-reliability-audit-log
+          path: image-reliability-audit.log
+          retention-days: 7
+      - name: Exigir resultado de confiabilidad
+        run: |
+          cat image-reliability-audit.log
+          test "${{ steps.reliability.outcome }}" = "success"
