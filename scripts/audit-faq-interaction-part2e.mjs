@@ -140,7 +140,7 @@ try {
 
     for (let index = 0; index < count; index += 1) {
       const question = page.locator('.tt-faq-q').nth(index);
-      await question.click({ force: true });
+      await question.evaluate(element => element.click());
       await page.waitForTimeout(20);
       const state = await page.locator('.tt-faq-item').nth(index).evaluate(item => {
         const question = item.querySelector('.tt-faq-q');
