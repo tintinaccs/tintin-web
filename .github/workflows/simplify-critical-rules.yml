@@ -36,51 +36,16 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Apply two-phase checkout implementation
-        id: patch
-        continue-on-error: true
-        run: |
-          sed -i "s/pattern.subn(replacement, source, count=1)/pattern.subn(lambda _: replacement, source, count=1)/" scripts/refactor-checkout-guard-once.py
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('scripts/simplify-critical-rules-once.py')
-          text = path.read_text()
-          old = """rules, count = product_match.subn(product_rules, rules, count=1)
-          if count != 1:
-              raise RuntimeError(f'product allow update: coincidencias {count}')"""
-          new = """if 'allow update: if productUpdateValid(productId);' in rules:
-              rules, count = product_match.subn(product_rules, rules, count=1)
-              if count != 1:
-                  raise RuntimeError(f'product allow update: coincidencias {count}')
-          elif 'allow update: if sparkStockUpdateValid(productId);' not in rules:
-              raise RuntimeError('No se encontró una ruta válida de actualización de productos')"""
-          if text.count(old) != 1:
-              raise SystemExit(f'Bloque idempotente no encontrado: {text.count(old)}')
-          path.write_text(text.replace(old, new))
-          PY
-          python scripts/refactor-checkout-guard-once.py > two-phase-patch.log 2>&1
-          python scripts/simplify-critical-rules-once.py >> two-phase-patch.log 2>&1
+      - name: Remove generator residue from Firestore rules
+        run: sed -i '/^    function orderStateReservesInventory$/d' firestore.rules
 
-      - name: Upload patch report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: two-phase-patch-report
-          path: two-phase-patch.log
-          retention-days: 3
-
-      - name: Show and enforce patch result
-        run: |
-          cat two-phase-patch.log
-          test "${{ steps.patch.outcome }}" = "success"
-
-      - name: Save generated implementation on draft branch
+      - name: Save cleaned rules on draft branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add js/secure-checkout-order.js firestore.rules
+          git add firestore.rules
           if ! git diff --cached --quiet; then
-            git commit -m "Implement two-phase checkout inventory reservation"
+            git commit -m "Remove two-phase rules generator residue"
             git push origin HEAD:security/critical-healing-pass
           fi
 
