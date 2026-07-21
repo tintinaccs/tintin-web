@@ -15,6 +15,7 @@
   border-radius: 999px;
 }
 
+.tt-privacy-link-btn,
 .tt-privacy-details-actions a {
   display: inline-flex;
   min-height: 44px;
@@ -22,6 +23,54 @@
   justify-content: center;
   padding: 8px 6px;
   border-radius: 10px;
+  text-align: center;
+}
+
+.tt-added-toast {
+  width: min(calc(100vw - 24px), 420px) !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 24px) !important;
+  box-sizing: border-box;
+}
+
+.tt-added-toast-actions {
+  flex-wrap: wrap;
+}
+
+.tt-added-toast-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+}
+
+.adm-toast {
+  width: max-content;
+  max-width: calc(100vw - 24px) !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#auth-denied {
+  max-width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding-left: max(20px, env(safe-area-inset-left));
+  overflow: auto;
+  text-align: center;
+}
+
+#auth-denied .adm-auth-login {
+  min-width: 150px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
   text-align: center;
 }
 
@@ -126,6 +175,14 @@
 }
 
 @media (max-width: 480px) {
+  .tt-added-toast-actions {
+    flex-direction: column;
+  }
+
+  .tt-added-toast-btn {
+    width: 100%;
+  }
+
   .tt-blocked-dialog {
     width: 100%;
     padding: 26px 18px 22px;
