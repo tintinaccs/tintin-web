@@ -1,4 +1,5 @@
 @import url("global-fit.css?v=tintin-20260721-fit-1");
+@import url("system-special-states.css?v=tintin-20260721-special-1");
 /**
  * TINTIN — Tokens de color del SUPER ADMIN (Super Admin → Apariencia →
  * Esquema de Super Admin). Generado a partir de js/color-scheme-catalog.js
@@ -38,10 +39,4 @@
   --admin-color-field-border-focus: #AD3F67;
   --admin-color-success-background: #e0f5e6;
   --admin-color-success-text: #166534;
-  --admin-color-warning-background: #fff3e0;
-  --admin-color-warning-text: #bf360c;
-  --admin-color-error-background: #fde3e1;
-  --admin-color-error-text: #b8341f;
-  --admin-color-modal-background: #FFFFFF;
-  --admin-color-modal-overlay: rgba(20,10,14,0.55);
 }
