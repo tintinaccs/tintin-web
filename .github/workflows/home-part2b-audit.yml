@@ -28,7 +28,7 @@ jobs:
       - name: Audit complete home page
         id: home_audit
         continue-on-error: true
-        run: node scripts/audit-home-visual-part2b.mjs > home-part2b.log 2>&1
+        run: node scripts/audit-home-visual-part2b-v2.mjs > home-part2b.log 2>&1
 
       - name: Upload home report and screenshots
         if: always()
