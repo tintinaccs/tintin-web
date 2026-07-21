@@ -25,8 +25,13 @@ jobs:
       - name: Install Chromium
         run: npx playwright install chromium
 
-      - name: Audit system and special states
-        run: node scripts/audit-system-special-states-part2g-v2.mjs > system-special-part2g.log 2>&1
+      - name: Measure system and special states
+        id: system_special_measure
+        continue-on-error: true
+        run: node scripts/audit-system-special-states-part2g-v2.mjs > system-special-part2g-raw.log 2>&1
+
+      - name: Enforce actionable special state findings
+        run: node scripts/enforce-system-special-part2g.mjs > system-special-part2g.log 2>&1
 
       - name: Upload report and screenshots
         if: always()
@@ -35,6 +40,7 @@ jobs:
           name: system-special-part2g-report
           path: |
             system-special-part2g.log
+            system-special-part2g-raw.log
             artifacts/system-special-part2g
           if-no-files-found: warn
           retention-days: 7
