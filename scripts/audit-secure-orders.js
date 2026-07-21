@@ -20,25 +20,28 @@ check(
   !frontend.includes('httpsCallable') &&
     !frontend.includes('firebase-functions.js') &&
     frontend.includes('runTransaction'),
-  'El checkout gratuito debe usar una transacción de Firestore.'
+  'El checkout gratuito debe usar transacciones de Firestore.'
 );
 check(
-  'La transacción vuelve a leer los productos',
+  'El pedido pendiente vuelve a leer productos y precios reales',
   frontend.includes("doc(db, 'products', line.id)") &&
     frontend.includes('const price = parseMoney(product.price)'),
   'No debe confiar únicamente en precios guardados en el carrito.'
 );
 check(
-  'Pedido y stock se escriben juntos',
-  frontend.includes('transaction.update(productRefs[index]') &&
-    frontend.includes('transaction.set(orderRef, orderData)'),
-  'El descuento de stock debe estar en la misma transacción que el pedido.'
+  'La reserva final escribe stock y activa el pedido en una sola transacción',
+  frontend.includes('async function reserveOrderInventory(orderId)') &&
+    frontend.includes('transaction.update(productRefs[index]') &&
+    frontend.includes("status: 'pendiente'") &&
+    frontend.includes("inventoryState: 'reserved'"),
+  'El stock y la activación final deben confirmarse juntos.'
 );
 check(
-  'Reintentos no duplican pedidos',
+  'Reintentos reanudan pedidos pendientes sin duplicarlos',
   frontend.includes('const existing = await transaction.get(orderRef)') &&
-    frontend.includes('if (existing.exists())'),
-  'La misma solicitud debe devolver el pedido existente.'
+    frontend.includes("data.inventoryState === 'pending'") &&
+    frontend.includes("data.inventoryState === 'reserved'"),
+  'La misma solicitud debe reanudar el pedido existente.'
 );
 check(
   'El plan gratuito limita productos diferentes',
@@ -49,13 +52,13 @@ check(
 check(
   'Cambios de precio requieren nueva confirmación',
   frontend.includes("'quote_changed'") &&
-    frontend.includes("code === 'quote_changed'"),
+    frontend.includes("failure === 'quote_changed'"),
   'No debe guardar silenciosamente un total distinto al mostrado.'
 );
 check(
   'Cambios de stock se explican al cliente',
   frontend.includes("'insufficient_stock'") &&
-    frontend.includes("code === 'insufficient_stock'"),
+    frontend.includes("failure === 'insufficient_stock'"),
   'El checkout debe ajustar el carrito cuando cambia el stock.'
 );
 check(
@@ -65,17 +68,12 @@ check(
   'El pedido no debe aceptar un precio o nombre inventado.'
 );
 check(
-  'Las reglas exigen el descuento de stock',
-  // No usa getAfter(producto) desde la regla del pedido: leer el estado
-  // posterior de un documento que la MISMA transacción también escribe
-  // crea una dependencia circular que hace rechazar el commit entero
-  // (confirmado con pruebas reales de punta a punta). La suficiencia de
-  // stock se valida ANTES de escribir (sparkItemValid) y el descuento en
-  // sí lo exige, del lado del producto, sparkStockUpdateValid.
-  rules.includes('product.stock >= item.qty') &&
-    rules.includes('sparkStockUpdateValid(productId)') &&
-    rules.includes('request.resource.data.stock < resource.data.stock'),
-  'Un pedido con stock no debe guardarse sin descontar la cantidad.'
+  'Las reglas exigen el descuento exacto y la activación vinculada',
+  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty') &&
+    rules.includes('productAfter.lastStockOrderId == orderId') &&
+    rules.includes('sparkInventoryReserveValid(orderId)'),
+  'El producto calcula la baja exacta y el pedido no se activa sin esa escritura.'
 );
 check(
   'Las reglas validan subtotal y total',

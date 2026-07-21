@@ -205,18 +205,18 @@ check(
 );
 check(
   'Productos cerrados',
-  /match\s+\/products\/\{productId\}\s*\{[\s\S]*?allow read:\s*if isStoreOpenOrAllowed\(\);/.test(rules),
-  'productos no deben leerse con la tienda cerrada'
+  /match\s+\/products\/\{productId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 1000/.test(rules),
+  'productos deben exigir tienda abierta y limitar los listados públicos'
 );
 check(
   'Colecciones cerradas',
-  /match\s+\/collections\/\{collectionId\}\s*\{[\s\S]*?allow read:\s*if isStoreOpenOrAllowed\(\);/.test(rules),
-  'colecciones no deben leerse con la tienda cerrada'
+  /match\s+\/collections\/\{collectionId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 200/.test(rules),
+  'colecciones deben exigir tienda abierta y limitar los listados públicos'
 );
 check(
   'Contenido cerrado',
-  /match\s+\/site_content\/\{pageId\}\s*\{[\s\S]*?allow read:\s*if isStoreOpenOrAllowed\(\);/.test(rules),
-  'contenido administrable no debe leerse con la tienda cerrada'
+  /match\s+\/site_content\/\{pageId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?allow list:\s*if isSuperAdmin\(\);/.test(rules),
+  'contenido público debe exigir tienda abierta y su listado quedar reservado'
 );
 check(
   'Carrito cerrado',

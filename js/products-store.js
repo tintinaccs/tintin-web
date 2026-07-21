@@ -118,7 +118,7 @@ function publish(products, source) {
 }
 
 async function fetchAllProducts() {
-  const snapshot = await getDocs(query(collection(db, 'products'), limit(10000)));
+  const snapshot = await getDocs(query(collection(db, 'products'), limit(1000)));
   recordFirestoreRead('products:all', snapshot.size);
   const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
   const cards = products.map(compactProduct);

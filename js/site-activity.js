@@ -18,7 +18,12 @@ import {
   onPrivacyConsentChange
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
 
-if (!window.TintinSiteActivityBooted) {
+if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true) {
+  document.documentElement.dataset.ttActivityState = 'disabled-quota-protection';
+  window.TintinSiteActivity = Object.freeze({ status: 'disabled-quota-protection' });
+}
+
+if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true) {
   window.TintinSiteActivityBooted = true;
 
   const VISITOR_KEY = 'tt_activity_visitor_v2';
