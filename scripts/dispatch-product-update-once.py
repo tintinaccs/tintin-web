@@ -4,49 +4,85 @@ import re
 rules_path = Path('firestore.rules')
 rules = rules_path.read_text(encoding='utf-8')
 
-if 'function productUpdateValid(productId)' not in rules:
-    marker = """    function adminInventoryStockUpdateValid(productId) {
-"""
-    start = rules.index(marker)
-    settings = rules.index("    /* ============================================================\n       SETTINGS", start)
-    helper = """
-    function productUpdateValid(productId) {
-      let changed = request.resource.data.diff(resource.data).affectedKeys();
-      return changed.hasOnly(['stock', 'lastStockOrderId', 'updatedAt'])
-        ? sparkStockUpdateValid(productId)
-        : changed.hasOnly([
-            'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
-          ])
-          ? adminInventoryStockUpdateValid(productId)
-          : (
-              isSuperAdmin() ||
-              (
-                isStoreOpenOrAllowed() &&
-                (isAdmin() || isAgent()) &&
-                currentRolePermAllows('productos', 'editar')
-              )
-            );
-    }
-
-"""
-    rules = rules[:settings] + helper + rules[settings:]
-
-pattern = re.compile(
-    r"      allow update: if sparkStockUpdateValid\(productId\) \|\|\s*"
-    r"adminInventoryStockUpdateValid\(productId\) \|\|\s*"
-    r"isSuperAdmin\(\) \|\|\s*"
-    r"\(\s*isStoreOpenOrAllowed\(\) &&\s*"
-    r"\(isAdmin\(\) \|\| isAgent\(\)\) &&\s*"
-    r"currentRolePermAllows\('productos', 'editar'\)\s*\);",
+admin_pattern = re.compile(
+    r"    function adminInventoryStockUpdateValid\(productId\) \{.*?\n    \}\n\n\n    function productUpdateValid",
     re.S,
 )
-rules, count = pattern.subn(
-    "      allow update: if productUpdateValid(productId);",
-    rules,
-    count=1,
+admin_replacement = """    function adminInventoryStockUpdateValid(productId) {
+      let orderId = request.resource.data.get('lastInventoryOrderId', 'missing-order');
+      let orderPath = sparkOrderPath(orderId);
+      let beforeOrder = exists(orderPath) ? get(orderPath).data : {};
+      let afterOrder = existsAfter(orderPath) ? getAfter(orderPath).data : {};
+      let beforeItems = beforeOrder.get('items', []);
+      let afterItems = afterOrder.get('items', []);
+      let beforeQty = beforeItems.size() > 0 && orderStateReservesInventory(beforeOrder)
+        ? sparkOrderQtyForProduct(beforeOrder, productId)
+        : 0;
+      let afterQty = afterItems.size() > 0 && orderStateReservesInventory(afterOrder)
+        ? sparkOrderQtyForProduct(afterOrder, productId)
+        : 0;
+      return isSignedIn() &&
+        (hasRole('admin') || hasRole('agent')) &&
+        beforeItems.size() > 0 &&
+        afterItems.size() > 0 &&
+        beforeQty != afterQty &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
+        ]) &&
+        resource.data.stock is number &&
+        request.resource.data.stock is number &&
+        request.resource.data.stock == resource.data.stock + beforeQty - afterQty &&
+        request.resource.data.stock >= 0 &&
+        (
+          (afterQty > beforeQty && request.resource.data.lastInventoryAction == 'reserve') ||
+          (afterQty < beforeQty && request.resource.data.lastInventoryAction == 'release')
+        ) &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+
+    function productUpdateValid"""
+rules, count = admin_pattern.subn(admin_replacement, rules, count=1)
+if count != 1:
+    raise RuntimeError(f'adminInventoryStockUpdateValid: coincidencias {count}')
+
+product_pattern = re.compile(
+    r"    function productUpdateValid\(productId\) \{.*?\n    \}\n\n    /\* ============================================================\n       SETTINGS",
+    re.S,
 )
-if count != 1 and 'allow update: if productUpdateValid(productId);' not in rules:
-    raise RuntimeError(f'No se pudo reemplazar la actualización de productos: {count}')
+product_replacement = """    function productUpdateValid(productId) {
+      let changed = request.resource.data.diff(resource.data).affectedKeys();
+      return
+        (
+          changed.hasOnly(['stock', 'lastStockOrderId', 'updatedAt']) &&
+          sparkStockUpdateValid(productId)
+        ) ||
+        (
+          changed.hasOnly([
+            'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
+          ]) &&
+          adminInventoryStockUpdateValid(productId)
+        ) ||
+        (
+          !changed.hasAny([
+            'lastStockOrderId', 'lastInventoryOrderId', 'lastInventoryAction'
+          ]) &&
+          (
+            isSuperAdmin() ||
+            (
+              isStoreOpenOrAllowed() &&
+              (isAdmin() || isAgent()) &&
+              currentRolePermAllows('productos', 'editar')
+            )
+          )
+        );
+    }
+
+    /* ============================================================
+       SETTINGS"""
+rules, count = product_pattern.subn(product_replacement, rules, count=1)
+if count != 1:
+    raise RuntimeError(f'productUpdateValid: coincidencias {count}')
 
 rules_path.write_text(rules, encoding='utf-8')
-print('[done] productUpdateValid separa Checkout, inventario administrativo y edición normal')
+print('[done] rutas de actualización de producto seguras y tolerantes a campos ausentes')
