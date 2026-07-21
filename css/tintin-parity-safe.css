@@ -28,6 +28,38 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   }
 }
 
+/* Estructura pública mobile: una sola distancia de seguridad para todos los
+   elementos que conviven con la tabbar flotante. Así el footer, privacidad,
+   WhatsApp, avisos del carrito y el sheet de Tienda nunca quedan pegados ni
+   escondidos detrás de la navegación en ningún ancho del rango mobile. */
+@media (max-width:768px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)){
+    --tt-mobile-nav-clearance:104px;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-footer-bottom{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 16px + env(safe-area-inset-bottom,0px))!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-privacy-consent,
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-wa-float,
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-cart-feedback{
+    bottom:calc(var(--tt-mobile-nav-clearance) + env(safe-area-inset-bottom,0px))!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-collections-sheet{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 8px + env(safe-area-inset-bottom,0px))!important;
+  }
+  /* El CTA inferior del hero terminaba exactamente en la franja donde vive el
+     botón flotante de WhatsApp. Esta reserva conserva 16px visibles entre
+     ambos sin cambiar textos, imágenes, acciones ni la altura del banner. */
+  body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
+  }
+}
+@media (max-width:480px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)){
+    --tt-mobile-nav-clearance:92px;
+  }
+}
+
 /* Super Admin: todos los interruptores de activar/desactivar conservan la
    misma cápsula y el mismo contorno rosado, estén encendidos o apagados.
    Estas reglas se cargan al final para que el esquema global no vuelva a

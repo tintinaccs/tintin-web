@@ -151,6 +151,27 @@ jobs:
       - name: Install Chromium for browser smoke
         run: npx playwright install --with-deps chromium
 
+      - name: Audit global responsive geometry
+        id: global_geometry
+        continue-on-error: true
+        run: npm run audit:global-responsive-geometry > global-responsive-geometry.log 2>&1
+
+      - name: Upload global responsive report and failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-responsive-geometry
+          path: |
+            global-responsive-geometry.log
+            artifacts/global-responsive
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce global responsive geometry
+        run: |
+          cat global-responsive-geometry.log
+          test "${{ steps.global_geometry.outcome }}" = "success"
+
       - name: Smoke test every page in Chromium
         id: browser_smoke
         continue-on-error: true
