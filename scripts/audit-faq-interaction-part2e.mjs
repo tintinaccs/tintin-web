@@ -9,18 +9,11 @@ const outDir = path.join(root, 'artifacts', 'institutional-help-legal-part2e');
 fs.mkdirSync(outDir, { recursive: true });
 
 const mime = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.mjs': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.webp': 'image/webp',
-  '.woff2': 'font/woff2',
-  '.ico': 'image/x-icon',
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml',
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp', '.woff2': 'font/woff2', '.ico': 'image/x-icon',
 };
 
 const server = http.createServer((req, res) => {
@@ -37,6 +30,13 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(file).pipe(res);
 });
 await new Promise(resolve => server.listen(4177, '127.0.0.1', resolve));
+
+function staticHtml() {
+  return fs.readFileSync(path.join(root, 'preguntas-frecuentes.html'), 'utf8')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*\/\s*>/gi, '')
+    .replace(/<head>/i, '<head><base href="http://127.0.0.1:4177/">');
+}
 
 const viewports = [
   { name: 'b320', width: 320, height: 568 },
@@ -76,23 +76,14 @@ try {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
+    page.on('pageerror', error => fail(viewport.name, 'runtime', `Error JS: ${error.message}`));
 
-    // Los módulos externos de contenido/analítica no son necesarios para probar
-    // el acordeón. Se bloquean para que la validación sea determinista, mientras
-    // script.js y los estilos locales se ejecutan exactamente como en la página.
-    await page.route('https://**/*', route => route.abort());
-    page.on('pageerror', error => {
-      const message = String(error.message || error);
-      if (/firebase|fetch|network|analytics/i.test(message)) return;
-      fail(viewport.name, 'runtime', `Error JS: ${message}`);
-    });
-
-    await page.goto('http://127.0.0.1:4177/preguntas-frecuentes.html', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000,
-    });
+    // Se conserva el HTML y CSS reales, pero se excluyen módulos de Firebase,
+    // shell y analítica: no participan en el acordeón y pueden reemplazar partes
+    // del DOM durante una auditoría larga. Luego se ejecuta el script.js real.
+    await page.setContent(staticHtml(), { waitUntil: 'load' });
     await page.addStyleTag({ content: `
-      #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay{display:none!important}
+      #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay,.tt-header,.tt-mobile-nav{display:none!important}
       html,body,.section,.tt-info-block,.tt-faq-item,.tt-faq-q,.tt-faq-a{
         visibility:visible!important;
         opacity:1!important;
@@ -101,41 +92,29 @@ try {
       }
       *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
     ` });
+    await page.addScriptTag({ path: path.join(root, 'script.js') });
     await page.evaluate(() => {
-      window.ttPageReady?.();
       document.documentElement.classList.add('tt-parity-safe');
-      document.documentElement.classList.remove('tt-loading', 'tt-page-loading');
       document.body.classList.remove('tt-loading', 'tt-page-loading', 'is-loading', 'scroll-lock');
-      document.documentElement.style.removeProperty('overflow');
-      document.body.style.removeProperty('overflow');
       document.querySelectorAll('[inert]').forEach(element => element.removeAttribute('inert'));
-      document.querySelectorAll('#tt-loader,.tt-store-closed-overlay').forEach(element => element.remove());
+      initFaqAccordion();
     });
-    await page.waitForSelector('.tt-faq-q[role="button"]', {
-      state: 'attached',
-      timeout: 10000,
-    });
-    await page.waitForTimeout(80);
+    await page.waitForSelector('.tt-faq-q[role="button"]', { state: 'attached', timeout: 10000 });
+    await page.waitForTimeout(60);
 
     const count = await page.locator('.tt-faq-item').count();
-    if (count < 8) {
-      fail(viewport.name, 'initial', 'Se cargaron menos preguntas de las esperadas.', { count });
-    }
+    if (count < 8) fail(viewport.name, 'initial', 'Se cargaron menos preguntas de las esperadas.', { count });
 
-    // Primera pregunta: teclado Enter.
     const firstQuestion = page.locator('.tt-faq-q').first();
     await dispatchKey(firstQuestion, 'Enter');
-    await page.waitForTimeout(40);
+    await page.waitForTimeout(30);
     const keyboardState = await page.locator('.tt-faq-item').first().evaluate(item => {
       const answer = item.querySelector('.tt-faq-a');
       const rect = answer.getBoundingClientRect();
       return {
         open: item.classList.contains('tt-faq-open'),
-        answerHeight: Math.round(rect.height),
-        answerWidth: Math.round(rect.width),
-        left: Math.round(rect.left),
-        right: Math.round(rect.right),
-        viewport: innerWidth,
+        answerHeight: Math.round(rect.height), left: Math.round(rect.left),
+        right: Math.round(rect.right), viewport: innerWidth,
       };
     });
     if (!keyboardState.open || keyboardState.answerHeight < 1) {
@@ -145,33 +124,24 @@ try {
       fail(viewport.name, 'keyboard-enter', 'La respuesta abierta sale del viewport.', keyboardState);
     }
 
-    // Segunda pregunta: teclado Espacio, comprobando además que la anterior cierre.
     if (count > 1) {
       const secondQuestion = page.locator('.tt-faq-q').nth(1);
       await dispatchKey(secondQuestion, ' ');
-      await page.waitForTimeout(40);
+      await page.waitForTimeout(30);
       const keyboardSpace = await page.locator('.tt-faq-item').evaluateAll(items => items.slice(0, 2).map(item => {
         const answer = item.querySelector('.tt-faq-a');
         const rect = answer.getBoundingClientRect();
-        return {
-          open: item.classList.contains('tt-faq-open'),
-          answerHeight: Math.round(rect.height),
-          left: Math.round(rect.left),
-          right: Math.round(rect.right),
-        };
+        return { open: item.classList.contains('tt-faq-open'), answerHeight: Math.round(rect.height) };
       }));
       if (keyboardSpace[0]?.open || !keyboardSpace[1]?.open || keyboardSpace[1]?.answerHeight < 1) {
         fail(viewport.name, 'keyboard-space', 'Espacio no cambia correctamente la pregunta abierta.', keyboardSpace);
       }
     }
 
-    // Todas las preguntas: clic. Cada clic debe abrir solo su respuesta y
-    // mantener pregunta/respuesta dentro del ancho disponible.
     for (let index = 0; index < count; index += 1) {
       const question = page.locator('.tt-faq-q').nth(index);
-      await question.scrollIntoViewIfNeeded().catch(() => {});
       await question.click({ force: true });
-      await page.waitForTimeout(30);
+      await page.waitForTimeout(20);
       const state = await page.locator('.tt-faq-item').nth(index).evaluate(item => {
         const question = item.querySelector('.tt-faq-q');
         const answer = item.querySelector('.tt-faq-a');
@@ -180,8 +150,10 @@ try {
         return {
           open: item.classList.contains('tt-faq-open'),
           question: { left: Math.round(qr.left), right: Math.round(qr.right), height: Math.round(qr.height) },
-          answer: { left: Math.round(ar.left), right: Math.round(ar.right), height: Math.round(ar.height), scrollWidth: answer.scrollWidth, clientWidth: answer.clientWidth },
-          viewport: innerWidth,
+          answer: {
+            left: Math.round(ar.left), right: Math.round(ar.right), height: Math.round(ar.height),
+            scrollWidth: answer.scrollWidth, clientWidth: answer.clientWidth,
+          },
         };
       });
       if (!state.open || state.answer.height < 1) {
@@ -197,16 +169,11 @@ try {
     }
 
     const openCount = await page.locator('.tt-faq-item.tt-faq-open').count();
-    if (openCount !== 1) {
-      fail(viewport.name, 'final', 'El acordeón debe conservar una sola respuesta abierta.', { openCount });
-    }
+    if (openCount !== 1) fail(viewport.name, 'final', 'El acordeón debe conservar una sola respuesta abierta.', { openCount });
 
     report.push({ viewport, questionCount: count, openCount });
     if (['b320', 'm390', 't768', 'd1280'].includes(viewport.name)) {
-      await page.screenshot({
-        path: path.join(outDir, `${viewport.name}-faq-interaction.png`),
-        fullPage: true,
-      });
+      await page.screenshot({ path: path.join(outDir, `${viewport.name}-faq-interaction.png`), fullPage: true });
     }
     await context.close();
   }
