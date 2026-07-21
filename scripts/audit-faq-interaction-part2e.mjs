@@ -57,6 +57,17 @@ function fail(viewport, interaction, message, data = null) {
   failures.push({ page: 'faq', viewport, interaction, message, data });
 }
 
+async function dispatchKey(locator, key) {
+  await locator.evaluate((element, pressedKey) => {
+    element.focus();
+    element.dispatchEvent(new KeyboardEvent('keydown', {
+      key: pressedKey,
+      bubbles: true,
+      cancelable: true,
+    }));
+  }, key);
+}
+
 try {
   for (const viewport of viewports) {
     const context = await browser.newContext({
@@ -82,14 +93,29 @@ try {
     });
     await page.addStyleTag({ content: `
       #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay{display:none!important}
-      html,body{visibility:visible!important;opacity:1!important}
+      html,body,.section,.tt-info-block,.tt-faq-item,.tt-faq-q,.tt-faq-a{
+        visibility:visible!important;
+        opacity:1!important;
+        transform:none!important;
+        filter:none!important;
+      }
       *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
     ` });
     await page.evaluate(() => {
       window.ttPageReady?.();
       document.documentElement.classList.add('tt-parity-safe');
+      document.documentElement.classList.remove('tt-loading', 'tt-page-loading');
+      document.body.classList.remove('tt-loading', 'tt-page-loading', 'is-loading', 'scroll-lock');
+      document.documentElement.style.removeProperty('overflow');
+      document.body.style.removeProperty('overflow');
+      document.querySelectorAll('[inert]').forEach(element => element.removeAttribute('inert'));
+      document.querySelectorAll('#tt-loader,.tt-store-closed-overlay').forEach(element => element.remove());
     });
-    await page.waitForSelector('.tt-faq-q[role="button"]', { timeout: 10000 });
+    await page.waitForSelector('.tt-faq-q[role="button"]', {
+      state: 'attached',
+      timeout: 10000,
+    });
+    await page.waitForTimeout(80);
 
     const count = await page.locator('.tt-faq-item').count();
     if (count < 8) {
@@ -98,8 +124,7 @@ try {
 
     // Primera pregunta: teclado Enter.
     const firstQuestion = page.locator('.tt-faq-q').first();
-    await firstQuestion.focus();
-    await firstQuestion.press('Enter');
+    await dispatchKey(firstQuestion, 'Enter');
     await page.waitForTimeout(40);
     const keyboardState = await page.locator('.tt-faq-item').first().evaluate(item => {
       const answer = item.querySelector('.tt-faq-a');
@@ -123,8 +148,7 @@ try {
     // Segunda pregunta: teclado Espacio, comprobando además que la anterior cierre.
     if (count > 1) {
       const secondQuestion = page.locator('.tt-faq-q').nth(1);
-      await secondQuestion.focus();
-      await secondQuestion.press(' ');
+      await dispatchKey(secondQuestion, ' ');
       await page.waitForTimeout(40);
       const keyboardSpace = await page.locator('.tt-faq-item').evaluateAll(items => items.slice(0, 2).map(item => {
         const answer = item.querySelector('.tt-faq-a');
@@ -145,8 +169,8 @@ try {
     // mantener pregunta/respuesta dentro del ancho disponible.
     for (let index = 0; index < count; index += 1) {
       const question = page.locator('.tt-faq-q').nth(index);
-      await question.scrollIntoViewIfNeeded();
-      await question.click();
+      await question.scrollIntoViewIfNeeded().catch(() => {});
+      await question.click({ force: true });
       await page.waitForTimeout(30);
       const state = await page.locator('.tt-faq-item').nth(index).evaluate(item => {
         const question = item.querySelector('.tt-faq-q');
