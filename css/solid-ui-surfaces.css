@@ -138,6 +138,24 @@ html body .tt-collections-sheet {
   box-shadow: 0 16px 40px rgba(82, 27, 49, 0.16) !important;
 }
 
+/* Los cuatro menús principales deben conservar una superficie blanca real y
+   borde rosado, aunque una hoja previa declare fondos transparentes. Los IDs
+   evitan afectar otros componentes del sitio. */
+html body #tt-tienda-dropdown-panel,
+html body #search-panel,
+html body #account-panel,
+html body #cart-drawer {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border: 1px solid #F1C8D5 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+}
+
 @media (min-width: 769px) {
   html body #tt-header-desktop-tablet.tt-header,
   html body .tt-header {
@@ -146,6 +164,33 @@ html body .tt-collections-sheet {
     background-image: none !important;
     border-bottom: 1px solid #F1E4E7 !important;
     box-shadow: 0 8px 24px rgba(173, 63, 103, 0.08) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  html body #tt-header-desktop-tablet #btn-tienda,
+  html body #tt-header-desktop-tablet #btn-search,
+  html body #tt-header-desktop-tablet #btn-cuenta,
+  html body #tt-header-desktop-tablet #btn-cart,
+  html body #tt-header-desktop-tablet #btn-tienda:hover,
+  html body #tt-header-desktop-tablet #btn-search:hover,
+  html body #tt-header-desktop-tablet #btn-cuenta:hover,
+  html body #tt-header-desktop-tablet #btn-cart:hover,
+  html body #tt-header-desktop-tablet #btn-tienda:focus-visible,
+  html body #tt-header-desktop-tablet #btn-search:focus-visible,
+  html body #tt-header-desktop-tablet #btn-cuenta:focus-visible,
+  html body #tt-header-desktop-tablet #btn-cart:focus-visible,
+  html body #tt-header-desktop-tablet #btn-tienda.active,
+  html body #tt-header-desktop-tablet #btn-tienda[aria-expanded="true"],
+  html body #tt-header-desktop-tablet #btn-search[aria-expanded="true"],
+  html body #tt-header-desktop-tablet #btn-cuenta[aria-expanded="true"],
+  html body #tt-header-desktop-tablet #btn-cart[aria-expanded="true"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #F1C8D5 !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;

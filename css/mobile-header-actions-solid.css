@@ -13,18 +13,23 @@
   html body #tt-tabbar #tabbar-tienda,
   html body #tt-tabbar #tabbar-search,
   html body #tt-tabbar #tabbar-cart,
+  html body #tt-tabbar #tabbar-cuenta,
   html body #tt-tabbar #tabbar-tienda:hover,
   html body #tt-tabbar #tabbar-search:hover,
   html body #tt-tabbar #tabbar-cart:hover,
+  html body #tt-tabbar #tabbar-cuenta:hover,
   html body #tt-tabbar #tabbar-tienda:focus-visible,
   html body #tt-tabbar #tabbar-search:focus-visible,
   html body #tt-tabbar #tabbar-cart:focus-visible,
+  html body #tt-tabbar #tabbar-cuenta:focus-visible,
   html body #tt-tabbar #tabbar-tienda.active,
   html body #tt-tabbar #tabbar-search.active,
   html body #tt-tabbar #tabbar-cart.active,
+  html body #tt-tabbar #tabbar-cuenta.active,
   html body #tt-tabbar #tabbar-tienda[aria-expanded="true"],
   html body #tt-tabbar #tabbar-search[aria-expanded="true"],
-  html body #tt-tabbar #tabbar-cart[aria-expanded="true"] {
+  html body #tt-tabbar #tabbar-cart[aria-expanded="true"],
+  html body #tt-tabbar #tabbar-cuenta[aria-current="page"] {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
@@ -40,6 +45,7 @@
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
+    border: 1px solid #F1C8D5 !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
