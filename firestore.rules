@@ -746,6 +746,25 @@ service cloud.firestore {
         request.resource.data.updatedAt == request.time;
     }
 
+
+    function productUpdateValid(productId) {
+      let changed = request.resource.data.diff(resource.data).affectedKeys();
+      return changed.hasOnly(['stock', 'lastStockOrderId', 'updatedAt'])
+        ? sparkStockUpdateValid(productId)
+        : changed.hasOnly([
+            'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
+          ])
+          ? adminInventoryStockUpdateValid(productId)
+          : (
+              isSuperAdmin() ||
+              (
+                isStoreOpenOrAllowed() &&
+                (isAdmin() || isAgent()) &&
+                currentRolePermAllows('productos', 'editar')
+              )
+            );
+    }
+
     /* ============================================================
        SETTINGS
        ============================================================ */
@@ -913,14 +932,7 @@ service cloud.firestore {
           currentRolePermAllows('productos', 'crear')
         );
 
-      allow update: if sparkStockUpdateValid(productId) ||
-        adminInventoryStockUpdateValid(productId) ||
-        isSuperAdmin() ||
-        (
-          isStoreOpenOrAllowed() &&
-          (isAdmin() || isAgent()) &&
-          currentRolePermAllows('productos', 'editar')
-        );
+      allow update: if productUpdateValid(productId);
 
       allow delete: if isSuperAdmin();
     }
