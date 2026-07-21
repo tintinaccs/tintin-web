@@ -26,7 +26,7 @@ jobs:
         run: npx playwright install chromium
 
       - name: Audit system and special states
-        run: node scripts/audit-system-special-states-part2g.mjs > system-special-part2g.log 2>&1
+        run: node scripts/audit-system-special-states-part2g-v2.mjs > system-special-part2g.log 2>&1
 
       - name: Upload report and screenshots
         if: always()
