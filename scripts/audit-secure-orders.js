@@ -66,11 +66,11 @@ check(
 );
 check(
   'Las reglas exigen el descuento exacto y vinculado al pedido',
-  rules.includes('productAfter.stock == product.stock - item.qty') &&
-    rules.includes('sparkOrderHasProduct(orderData, productId)') &&
-    rules.includes('orderHasProduct &&') &&
-    rules.includes('request.resource.data.stock < resource.data.stock'),
-  'El pedido obliga la cantidad exacta y products rechaza productos ajenos.'
+  rules.includes('productAfter.lastStockOrderId == orderId') &&
+    rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty') &&
+    rules.includes('orderedQty > 0'),
+  'El pedido exige la escritura y products calcula la cantidad exacta.'
 );
 check(
   'Las reglas validan subtotal y total',

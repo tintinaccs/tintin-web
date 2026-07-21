@@ -393,8 +393,6 @@ service cloud.firestore {
             product.stock is number &&
             product.stock >= item.qty &&
             productAfter != null &&
-            productAfter.stock is number &&
-            productAfter.stock == product.stock - item.qty &&
             productAfter.lastStockOrderId == orderId
           )
         );
@@ -614,27 +612,29 @@ service cloud.firestore {
     }
 
     function sparkStockUpdateValid(productId) {
-      let orderId = request.resource.data.lastStockOrderId;
+      let orderId = request.resource.data.get('lastStockOrderId', '');
       let orderPath = sparkOrderPath(orderId);
-      let orderData = existsAfter(orderPath) ? getAfter(orderPath).data : null;
-      let orderHasProduct = orderData != null &&
-        sparkOrderHasProduct(orderData, productId);
+      let orderData = orderId != '' && existsAfter(orderPath)
+        ? getAfter(orderPath).data
+        : null;
+      let orderedQty = orderData != null
+        ? sparkOrderQtyForProduct(orderData, productId)
+        : 0;
       return isSignedIn() &&
         orderId is string &&
         orderId.size() > 0 &&
         !exists(orderPath) &&
-        existsAfter(orderPath) &&
         orderData != null &&
         orderData.source == 'spark-checkout-v1' &&
         orderData.userId == request.auth.uid &&
         orderId == request.auth.uid + '_' + orderData.requestId &&
-        orderHasProduct &&
+        orderedQty > 0 &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'stock', 'lastStockOrderId', 'updatedAt'
         ]) &&
         resource.data.stock is number &&
         request.resource.data.stock is number &&
-        request.resource.data.stock < resource.data.stock &&
+        request.resource.data.stock == resource.data.stock - orderedQty &&
         request.resource.data.stock >= 0 &&
         request.resource.data.updatedAt == request.time;
     }

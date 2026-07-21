@@ -32,17 +32,17 @@ check(
   'site-activity.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
-  'Cada ítem del pedido obliga el stock posterior exacto',
-  rules.includes('productAfter.stock == product.stock - item.qty') &&
-    rules.includes('productAfter.lastStockOrderId == orderId'),
-  'sparkItemValid debe comprobar el estado posterior exacto del producto.'
+  'Cada ítem obliga una escritura de stock marcada por el pedido',
+  rules.includes('productAfter.lastStockOrderId == orderId') &&
+    rules.includes('product.stock >= item.qty'),
+  'El pedido no puede crearse sin que el producto quede marcado por ese pedido.'
 );
 check(
-  'Cada baja de stock solo puede tocar un producto del pedido',
-  rules.includes('sparkOrderHasProduct(orderData, productId)') &&
-    rules.includes('orderHasProduct &&') &&
-    rules.includes('request.resource.data.stock < resource.data.stock'),
-  'La regla del producto debe rechazar productos ajenos y cualquier aumento.'
+  'Cada baja de stock está ligada al producto y cantidad exacta',
+  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
+    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty') &&
+    rules.includes('orderedQty > 0'),
+  'La regla del producto debe calcular la baja exacta desde el pedido.'
 );
 check(
   'Checkout actualiza el guard anti-pedidos repetidos en la misma transacción',
