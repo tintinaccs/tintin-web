@@ -615,9 +615,7 @@ service cloud.firestore {
         resource.data.inventoryState == 'pending';
     }
 
-    function orderStateReservesInventory
 
-    function orderStateReservesInventory
 
     function orderStateReservesInventory(data) {
       let state = data.get('inventoryState', '');
