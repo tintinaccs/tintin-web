@@ -7,8 +7,9 @@ on:
   # necesitar un commit vacío.
   workflow_dispatch:
 
-# Sitio 100% estático (HTML/CSS/JS de mano, sin build ni Jekyll) — solo
-# necesita leer el repo para subir el artifact.
+# Sitio 100% estático (HTML/CSS/JS de mano, sin Jekyll). Antes de crear el
+# artifact se regenera y verifica el inventario de diagnóstico contra los
+# mismos archivos exactos que se publicarán.
 permissions:
   contents: read
   pages: write
@@ -27,12 +28,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Regenerar y verificar inventario de diagnóstico
+        run: npm run build:pages
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Sube el repo completo tal cual — no hay Jekyll de por medio (a
-      # diferencia del deploy clásico "desde una rama"), así que ningún
-      # archivo/carpeta que empiece con "_" o "." se ignora ni se transforma.
+      # Sube exactamente el mismo árbol sobre el que se generó y verificó el
+      # manifiesto. Así perfil.html y diagnostic-manifest.json pertenecen
+      # siempre a una única versión atómica del despliegue.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

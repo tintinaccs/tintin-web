@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const childProcess = require('child_process');
 
 const root = process.cwd();
 const out = path.join(root, 'public');
@@ -65,6 +66,20 @@ function copyDir(src, dest) {
   }
 }
 
+// El manifiesto se genera y se comprueba antes de copiar cualquier archivo.
+// De esta manera una publicación de Firebase Hosting tampoco puede mezclar
+// una página nueva con un inventario perteneciente a una versión anterior.
+childProcess.execFileSync(
+  process.execPath,
+  [path.join(root, 'scripts', 'build-diagnostic-manifest.js')],
+  { cwd: root, stdio: 'inherit' }
+);
+childProcess.execFileSync(
+  process.execPath,
+  [path.join(root, 'scripts', 'verify-diagnostic-manifest.js')],
+  { cwd: root, stdio: 'inherit' }
+);
+
 removeDir(out);
 fs.mkdirSync(out, { recursive: true });
 
@@ -76,4 +91,4 @@ for (const dir of allowedDirs) {
   copyDir(path.join(root, dir), path.join(out, dir));
 }
 
-console.log('Firebase Hosting preparado en /public');
+console.log('Firebase Hosting preparado en /public con inventario verificado.');
