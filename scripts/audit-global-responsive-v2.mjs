@@ -48,15 +48,40 @@ const listen = () => new Promise((resolve, reject) => { server.once('error', rej
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
 async function prepare(page) {
-  await page.waitForTimeout(650);
+  await page.waitForSelector('body', { state: 'attached', timeout: 5_000 });
+  await page.waitForFunction(() => (
+    document.body?.classList.contains('tt-public-shell-mounted') ||
+    document.getElementById('tt-tabbar') ||
+    document.getElementById('tt-header-desktop-tablet')
+  ), null, { timeout: 4_000 }).catch(() => {});
+
   await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
-    const loader = document.getElementById('tt-loader');
-    if (loader) { loader.classList.add('tt-out'); loader.setAttribute('aria-hidden', 'true'); }
-    document.documentElement.classList.remove('tt-initializing');
-    document.body?.style.removeProperty('visibility');
+
+    const root = document.documentElement;
+    const body = document.body;
+    ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked']
+      .forEach(name => root.classList.remove(name));
+    root.style.removeProperty('overflow');
+    root.style.removeProperty('overscroll-behavior');
+    root.style.removeProperty('touch-action');
+
+    if (body) {
+      body.classList.remove('tt-scroll-locked');
+      ['position', 'top', 'left', 'right', 'width', 'overflow', 'visibility', 'touch-action']
+        .forEach(name => body.style.removeProperty(name));
+    }
+
+    document.getElementById('tt-loader')?.remove();
+    const closed = document.getElementById('tt-store-closed-overlay');
+    if (closed) {
+      closed.hidden = true;
+      closed.setAttribute('aria-hidden', 'true');
+      closed.style.display = 'none';
+    }
+    window.scrollTo(0, 0);
   });
-  await page.waitForTimeout(100);
+  await page.waitForTimeout(180);
 }
 
 async function inspectPage(page, width) {
@@ -157,20 +182,35 @@ async function checkPanel(page, trigger, surface, label) {
   if (!(await button.count()) || !(await button.isVisible().catch(() => false))) return [];
   await page.evaluate(() => { const consent = document.getElementById('tt-privacy-consent'); if (consent) consent.hidden = true; });
   await button.click({ force: true }).catch(() => {});
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(140);
   const issues = await page.evaluate(({surface,label}) => {
     const node = document.querySelector(surface); if (!node) return [`${label}: falta ${surface}`];
     const style = getComputedStyle(node), r = node.getBoundingClientRect();
-    const visible = style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && r.width > 0 && r.height > 0;
-    if (!visible) return [`${label}: no abrió`];
+    const visible = element => {
+      if (!element || element.hidden || element.closest('[hidden],[aria-hidden="true"]')) return false;
+      const s = getComputedStyle(element), rect = element.getBoundingClientRect();
+      return s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity || 1) > .01 && rect.width > 0 && rect.height > 0;
+    };
+    if (!visible(node)) return [`${label}: no abrió`];
     const out = [];
     if (r.left < -1 || r.right > innerWidth + 1) out.push(`${label}: desborde horizontal`);
     if (r.top < -1 || r.bottom > innerHeight + 1) out.push(`${label}: desborde vertical`);
-    if (node.scrollWidth > node.clientWidth + 1) out.push(`${label}: contenido interno desborda`);
+
+    const leftLimit = Math.max(0, r.left) - 2;
+    const rightLimit = Math.min(innerWidth, r.right) + 2;
+    const leakingChild = [...node.querySelectorAll('a,button,input,img,p,span,strong,small,div')]
+      .filter(visible)
+      .find(child => {
+        const childStyle = getComputedStyle(child);
+        if (childStyle.position === 'fixed') return false;
+        const childRect = child.getBoundingClientRect();
+        return childRect.left < leftLimit || childRect.right > rightLimit;
+      });
+    if (leakingChild) out.push(`${label}: un elemento visible sale horizontalmente`);
     return out;
   }, {surface,label});
   await page.keyboard.press('Escape').catch(() => {});
-  await page.waitForTimeout(50);
+  await page.waitForTimeout(60);
   return issues;
 }
 
