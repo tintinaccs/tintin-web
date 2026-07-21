@@ -8,7 +8,7 @@ on:
 
 jobs:
   admin-superadmin:
-    name: Admin y Super Admin
+    name: Admin, Super Admin y ajuste global
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,8 +25,11 @@ jobs:
       - name: Install Chromium
         run: npx playwright install chromium
 
-      - name: Audit Admin and Super Admin visual states
-        run: node scripts/audit-admin-visual-part2f-v2.mjs > admin-part2f.log 2>&1
+      - name: Audit every Admin and Super Admin section
+        run: node scripts/audit-admin-visual-part2f-v3.mjs > admin-part2f.log 2>&1
+
+      - name: Audit global fit on every root page
+        run: node scripts/audit-global-fit-part2f.mjs > global-fit-part2f.log 2>&1
 
       - name: Upload reports and screenshots
         if: always()
@@ -35,6 +38,8 @@ jobs:
           name: admin-part2f-report
           path: |
             admin-part2f.log
+            global-fit-part2f.log
             artifacts/admin-part2f
+            artifacts/global-fit-part2f
           if-no-files-found: warn
           retention-days: 7
