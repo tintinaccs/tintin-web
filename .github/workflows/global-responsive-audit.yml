@@ -28,20 +28,20 @@ jobs:
       - name: Audit all public pages and shared surfaces
         id: geometry
         continue-on-error: true
-        run: node scripts/audit-global-responsive-final.mjs > global-responsive-final.log 2>&1
+        run: node scripts/audit-global-responsive-final-v2.mjs > global-responsive-final-v2.log 2>&1
 
       - name: Upload report and failure screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: global-responsive-final
+          name: global-responsive-final-v2
           path: |
-            global-responsive-final.log
-            artifacts/global-responsive-final
+            global-responsive-final-v2.log
+            artifacts/global-responsive-final-v2
           if-no-files-found: warn
           retention-days: 7
 
       - name: Enforce responsive geometry
         run: |
-          cat global-responsive-final.log
+          cat global-responsive-final-v2.log
           test "${{ steps.geometry.outcome }}" = "success"
