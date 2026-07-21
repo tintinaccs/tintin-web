@@ -33,32 +33,35 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
+
           path = Path('scripts/audit-store-gate.js')
           text = path.read_text()
-          replacements = [
-            (
-              """  /match\\s+\\/products\\/\\{productId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
-              'productos no deben leerse con la tienda cerrada'""",
-              """  /match\\s+\\/products\\/\\{productId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?request\\.query\\.limit <= 1000/.test(rules),
-              'productos deben exigir tienda abierta y limitar los listados públicos'"""
-            ),
-            (
-              """  /match\\s+\\/collections\\/\\{collectionId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
-              'colecciones no deben leerse con la tienda cerrada'""",
-              """  /match\\s+\\/collections\\/\\{collectionId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?request\\.query\\.limit <= 200/.test(rules),
-              'colecciones deben exigir tienda abierta y limitar los listados públicos'"""
-            ),
-            (
-              """  /match\\s+\\/site_content\\/\\{pageId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
-              'contenido administrable no debe leerse con la tienda cerrada'""",
-              """  /match\\s+\\/site_content\\/\\{pageId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?allow list:\\s*if isSuperAdmin\\(\\);/.test(rules),
-              'contenido público debe exigir tienda abierta y su listado quedar reservado'"""
-            )
-          ]
-          for old, new in replacements:
-              if text.count(old) != 1:
-                  raise SystemExit(f'Contrato antiguo no encontrado exactamente: {text.count(old)}')
-              text = text.replace(old, new)
+          replacements = {
+            'Productos cerrados': """check(
+            'Productos cerrados',
+            /match\s+\/products\/\{productId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 1000/.test(rules),
+            'productos deben exigir tienda abierta y limitar los listados públicos'
+          );""",
+            'Colecciones cerradas': """check(
+            'Colecciones cerradas',
+            /match\s+\/collections\/\{collectionId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 200/.test(rules),
+            'colecciones deben exigir tienda abierta y limitar los listados públicos'
+          );""",
+            'Contenido cerrado': """check(
+            'Contenido cerrado',
+            /match\s+\/site_content\/\{pageId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?allow list:\s*if isSuperAdmin\(\);/.test(rules),
+            'contenido público debe exigir tienda abierta y su listado quedar reservado'
+          );"""
+          }
+          for label, replacement in replacements.items():
+              pattern = re.compile(
+                  r"check\(\n\s*'" + re.escape(label) + r"',[\s\S]*?\n\);",
+                  re.S,
+              )
+              text, count = pattern.subn(lambda _: replacement, text, count=1)
+              if count != 1:
+                  raise SystemExit(f'No se encontró una única comprobación {label}: {count}')
           path.write_text(text)
           PY
           git config user.name "github-actions[bot]"
