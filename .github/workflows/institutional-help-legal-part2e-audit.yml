@@ -1,0 +1,47 @@
+name: Auditoría visual Parte 2E
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  institutional-help-legal:
+    name: Institucionales, ayuda y legales
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit institutional help and legal pages
+        id: part2e_audit
+        continue-on-error: true
+        run: node scripts/audit-institutional-help-legal-part2e.mjs > institutional-help-legal-part2e.log 2>&1
+
+      - name: Upload report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: institutional-help-legal-part2e-report
+          path: |
+            institutional-help-legal-part2e.log
+            artifacts/institutional-help-legal-part2e
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce Part 2E visual audit
+        run: |
+          cat institutional-help-legal-part2e.log
+          test "${{ steps.part2e_audit.outcome }}" = "success"
