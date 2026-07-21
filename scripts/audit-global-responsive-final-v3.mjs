@@ -7,6 +7,20 @@ const sourcePath = path.join(directory, 'audit-global-responsive-final-v2.mjs');
 const temporaryPath = path.join(directory, '.audit-global-responsive-runtime.mjs');
 let source = fs.readFileSync(sourcePath, 'utf8');
 
+const originalShellWait = `  await page.waitForSelector(expected, { state: 'attached', timeout: 5000 }).catch(() => {});`;
+const deterministicShellWait = `  let shellAttached = await page.waitForSelector(expected, { state: 'attached', timeout: 1800 })
+    .then(() => true)
+    .catch(() => false);
+  if (!shellAttached) {
+    await page.evaluate(() => { window.TintinPublicShellBooted = false; });
+    await page.addScriptTag({ path: path.join(root, 'js', 'public-shell.js') });
+    shellAttached = await page.waitForSelector(expected, { state: 'attached', timeout: 2500 })
+      .then(() => true)
+      .catch(() => false);
+  }`;
+if (!source.includes(originalShellWait)) throw new Error('No se encontró la espera inicial del shell en la auditoría v2.');
+source = source.replace(originalShellWait, deterministicShellWait);
+
 const originalPreparation = `    document.documentElement.classList.remove('tt-initializing', 'tt-store-gate-pending');
     document.body?.style.removeProperty('visibility');
     document.body?.style.removeProperty('overflow');`;
@@ -46,7 +60,7 @@ const stableWait = `  await page.waitForFunction(selector => {
     const style = getComputedStyle(node);
     const rect = node.getBoundingClientRect();
     return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
-  }, expected, { timeout: 2500 }).catch(() => {});
+  }, expected, { timeout: 4000 }).catch(() => {});
   await page.waitForTimeout(260);`;
 if (!source.includes(originalWait)) throw new Error('No se encontró la espera esperada en la auditoría v2.');
 source = source.replace(originalWait, stableWait);
