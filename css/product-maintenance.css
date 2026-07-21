@@ -200,6 +200,14 @@ body.tt-product-maintenance .tt-added-toast {
   background: var(--color-border-error, #B8341F);
 }
 
+/* Una sola recomendación no debe quedar pegada al extremo izquierdo de una
+   grilla pensada para cuatro tarjetas. Se centra sin cambiar la selección ni
+   el comportamiento de actualización de productos relacionados. */
+body.tt-product-maintenance .tt-related-grid:has(> .tt-related-slot:only-child) {
+  grid-template-columns: minmax(0, 320px) !important;
+  justify-content: center;
+}
+
 body.tt-product-maintenance .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
   color: var(--color-text-primary, #2B2B2B) !important;
