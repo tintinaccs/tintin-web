@@ -34,7 +34,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   audit:
@@ -42,19 +42,6 @@ jobs:
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
-        with:
-          ref: security/critical-healing-pass
-          fetch-depth: 0
-      - name: Actualizar contrato de caché del header
-        run: |
-          sed -i 's/tintin-20260720-header-dropdown-white-1/tintin-20260721-header-surfaces-complete-1/' scripts/audit-site-reliability.js
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/audit-site-reliability.js
-          if ! git diff --cached --quiet; then
-            git commit -m "Update header surface cache audit contract"
-            git push origin HEAD:security/critical-healing-pass
-          fi
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
