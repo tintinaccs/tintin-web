@@ -67,7 +67,7 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
     'html body .tt-mobile-user {'
   ].every(selector => solidSurfaces.includes(selector)) &&
   /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces) &&
-  loaderSolid.includes('tintin-20260720-header-dropdown-white-1'));
+  loaderSolid.includes('tintin-20260721-header-surfaces-complete-1'));
 
 check('La actividad cuenta una sola sesión por pestaña y día',
   activity.includes('SESSION_RECORDED_PREFIX') &&
