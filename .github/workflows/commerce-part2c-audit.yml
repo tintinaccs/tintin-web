@@ -1,0 +1,47 @@
+name: Auditoría visual Parte 2C
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  commerce:
+    name: Catálogo, Colecciones y Producto
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit commerce pages
+        id: commerce_audit
+        continue-on-error: true
+        run: node scripts/audit-commerce-visual-part2c.mjs > commerce-part2c.log 2>&1
+
+      - name: Upload report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commerce-part2c-report
+          path: |
+            commerce-part2c.log
+            artifacts/commerce-part2c
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce commerce visual audit
+        run: |
+          cat commerce-part2c.log
+          test "${{ steps.commerce_audit.outcome }}" = "success"
