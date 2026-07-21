@@ -37,9 +37,25 @@ jobs:
           java-version: '21'
 
       - name: Apply two-phase checkout implementation
+        id: patch
+        continue-on-error: true
         run: |
-          python scripts/refactor-checkout-guard-once.py
-          python scripts/simplify-critical-rules-once.py
+          sed -i "s/pattern.subn(replacement, source, count=1)/pattern.subn(lambda _: replacement, source, count=1)/" scripts/refactor-checkout-guard-once.py
+          python scripts/refactor-checkout-guard-once.py > two-phase-patch.log 2>&1
+          python scripts/simplify-critical-rules-once.py >> two-phase-patch.log 2>&1
+
+      - name: Upload patch report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-phase-patch-report
+          path: two-phase-patch.log
+          retention-days: 3
+
+      - name: Show and enforce patch result
+        run: |
+          cat two-phase-patch.log
+          test "${{ steps.patch.outcome }}" = "success"
 
       - name: Save generated implementation on draft branch
         run: |
