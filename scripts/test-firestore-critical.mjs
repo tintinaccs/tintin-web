@@ -20,7 +20,8 @@ const testEnv = await initializeTestEnvironment({
 
 const clientClaims = { email: 'clienta@example.com', email_verified: true };
 
-function orderPayload(uid, requestId, items) {
+function orderPayload(uid, requestId, items, state = 'pending') {
+  const reserved = state === 'reserved';
   return {
     requestId,
     source: 'spark-checkout-v1',
@@ -44,11 +45,11 @@ function orderPayload(uid, requestId, items) {
     },
     payment: { method: 'efectivo', status: 'pendiente' },
     paymentStatus: 'pendiente',
-    status: 'pendiente',
+    status: reserved ? 'pendiente' : 'inventory_pending',
     notes: '',
     notificationStatus: 'pending',
-    inventoryState: 'reserved',
-    inventoryRevision: 1,
+    inventoryState: reserved ? 'reserved' : 'pending',
+    inventoryRevision: reserved ? 1 : 0,
     inventoryUpdatedAt: serverTimestamp(),
     inventoryUpdatedBy: clientClaims.email,
     createdAt: serverTimestamp(),
@@ -81,7 +82,6 @@ async function seedBase() {
   });
 }
 
-
 async function reserveGuard(requestId) {
   const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
   const orderId = `u1_${requestId}`;
@@ -97,17 +97,27 @@ async function reserveGuard(requestId) {
   }, { maxAttempts: 1 });
 }
 
-async function checkoutTransaction({ requestId, decrement = 2, updateProduct = true, unrelated = false }) {
+function testItem() {
+  return {
+    id: 'p1', name: 'Producto 1', cat: 'aros',
+    price: 50000, qty: 2, variant: '', imageUrl: ''
+  };
+}
+
+async function createPendingOrder(requestId) {
   const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
   const orderId = `u1_${requestId}`;
-  const item = { id: 'p1', name: 'Producto 1', cat: 'aros', price: 50000, qty: 2, variant: '', imageUrl: '' };
   await reserveGuard(requestId);
+  return setDoc(doc(db, 'orders', orderId), orderPayload('u1', requestId, [testItem()], 'pending'));
+}
+
+async function reserveInventory({ requestId, decrement = 2, updateProduct = true, unrelated = false }) {
+  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  const orderId = `u1_${requestId}`;
   return runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', orderId);
-    const userRef = doc(db, 'users', 'u1');
     const productRef = doc(db, 'products', unrelated ? 'p2' : 'p1');
     await transaction.get(orderRef);
-    await transaction.get(userRef);
     const productSnapshot = await transaction.get(productRef);
     if (updateProduct) {
       transaction.update(productRef, {
@@ -116,29 +126,41 @@ async function checkoutTransaction({ requestId, decrement = 2, updateProduct = t
         updatedAt: serverTimestamp()
       });
     }
-    transaction.set(orderRef, orderPayload('u1', requestId, [item]));
+    transaction.update(orderRef, {
+      status: 'pendiente',
+      inventoryState: 'reserved',
+      inventoryRevision: 1,
+      inventoryUpdatedAt: serverTimestamp(),
+      inventoryUpdatedBy: clientClaims.email,
+      updatedAt: serverTimestamp()
+    });
   }, { maxAttempts: 1 });
+}
+
+async function checkoutFlow(options) {
+  await createPendingOrder(options.requestId);
+  return reserveInventory(options);
 }
 
 try {
   await seedBase();
-  await assertSucceeds(checkoutTransaction({ requestId: 'req_exact_123456', decrement: 2 }));
+  await assertSucceeds(checkoutFlow({ requestId: 'req_exact_123456', decrement: 2 }));
 
   await seedBase();
-  await assertFails(checkoutTransaction({ requestId: 'req_under_123456', decrement: 1 }));
+  await assertFails(checkoutFlow({ requestId: 'req_under_123456', decrement: 1 }));
 
   await seedBase();
-  await assertFails(checkoutTransaction({ requestId: 'req_over_123456', decrement: 4 }));
+  await assertFails(checkoutFlow({ requestId: 'req_over_123456', decrement: 4 }));
 
   await seedBase();
-  await assertFails(checkoutTransaction({ requestId: 'req_none_123456', updateProduct: false }));
+  await assertFails(checkoutFlow({ requestId: 'req_none_123456', updateProduct: false }));
 
   await seedBase();
-  await assertFails(checkoutTransaction({ requestId: 'req_other_123456', decrement: 2, unrelated: true }));
+  await assertFails(checkoutFlow({ requestId: 'req_other_123456', decrement: 2, unrelated: true }));
 
   await seedBase();
-  await assertSucceeds(checkoutTransaction({ requestId: 'req_first_123456', decrement: 2 }));
-  await assertFails(checkoutTransaction({ requestId: 'req_second_123456', decrement: 2 }));
+  await assertSucceeds(checkoutFlow({ requestId: 'req_first_123456', decrement: 2 }));
+  await assertFails(reserveGuard('req_second_123456'));
 
   await seedBase();
   const anonDb = testEnv.unauthenticatedContext().firestore();
@@ -166,9 +188,7 @@ try {
       name: 'Producto 1', category: 'aros', price: 50000, stock: 8, active: true
     });
     await setDoc(doc(db, 'orders', 'u1_existing_order'), {
-      ...orderPayload('u1', 'existing_order', [
-        { id: 'p1', name: 'Producto 1', cat: 'aros', price: 50000, qty: 2, variant: '', imageUrl: '' }
-      ]),
+      ...orderPayload('u1', 'existing_order', [testItem()], 'reserved'),
       createdAt: new Date(), updatedAt: new Date(), inventoryUpdatedAt: new Date()
     });
   });
@@ -176,6 +196,7 @@ try {
   const agentDb = testEnv.authenticatedContext('agent1', {
     email: 'agent@example.com', email_verified: true
   }).firestore();
+
   await assertFails(setDoc(doc(agentDb, 'orders', 'u1_existing_order'), {
     status: 'cancelado', inventoryState: 'released', inventoryRevision: 2,
     inventoryUpdatedAt: serverTimestamp(), inventoryUpdatedBy: 'agent@example.com',
