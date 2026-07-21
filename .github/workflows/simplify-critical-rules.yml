@@ -41,6 +41,23 @@ jobs:
         continue-on-error: true
         run: |
           sed -i "s/pattern.subn(replacement, source, count=1)/pattern.subn(lambda _: replacement, source, count=1)/" scripts/refactor-checkout-guard-once.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/simplify-critical-rules-once.py')
+          text = path.read_text()
+          old = """rules, count = product_match.subn(product_rules, rules, count=1)
+          if count != 1:
+              raise RuntimeError(f'product allow update: coincidencias {count}')"""
+          new = """if 'allow update: if productUpdateValid(productId);' in rules:
+              rules, count = product_match.subn(product_rules, rules, count=1)
+              if count != 1:
+                  raise RuntimeError(f'product allow update: coincidencias {count}')
+          elif 'allow update: if sparkStockUpdateValid(productId);' not in rules:
+              raise RuntimeError('No se encontró una ruta válida de actualización de productos')"""
+          if text.count(old) != 1:
+              raise SystemExit(f'Bloque idempotente no encontrado: {text.count(old)}')
+          path.write_text(text.replace(old, new))
+          PY
           python scripts/refactor-checkout-guard-once.py > two-phase-patch.log 2>&1
           python scripts/simplify-critical-rules-once.py >> two-phase-patch.log 2>&1
 
