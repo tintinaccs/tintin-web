@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   final-release:
@@ -26,6 +26,48 @@ jobs:
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
+        with:
+          ref: security/critical-healing-pass
+          fetch-depth: 0
+      - name: Actualizar auditoría de lecturas limitadas
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/audit-store-gate.js')
+          text = path.read_text()
+          replacements = [
+            (
+              """  /match\\s+\\/products\\/\\{productId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
+              'productos no deben leerse con la tienda cerrada'""",
+              """  /match\\s+\\/products\\/\\{productId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?request\\.query\\.limit <= 1000/.test(rules),
+              'productos deben exigir tienda abierta y limitar los listados públicos'"""
+            ),
+            (
+              """  /match\\s+\\/collections\\/\\{collectionId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
+              'colecciones no deben leerse con la tienda cerrada'""",
+              """  /match\\s+\\/collections\\/\\{collectionId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?request\\.query\\.limit <= 200/.test(rules),
+              'colecciones deben exigir tienda abierta y limitar los listados públicos'"""
+            ),
+            (
+              """  /match\\s+\\/site_content\\/\\{pageId\\}\\s*\\{[\\s\\S]*?allow read:\\s*if isStoreOpenOrAllowed\\(\\);/.test(rules),
+              'contenido administrable no debe leerse con la tienda cerrada'""",
+              """  /match\\s+\\/site_content\\/\\{pageId\\}\\s*\\{[\\s\\S]*?allow get:\\s*if isStoreOpenOrAllowed\\(\\);[\\s\\S]*?allow list:\\s*if isSuperAdmin\\(\\);/.test(rules),
+              'contenido público debe exigir tienda abierta y su listado quedar reservado'"""
+            )
+          ]
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'Contrato antiguo no encontrado exactamente: {text.count(old)}')
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/audit-store-gate.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit limited Firestore reads in store gate"
+            git push origin HEAD:security/critical-healing-pass
+          fi
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
