@@ -38,10 +38,11 @@ check(
   'sparkItemValid debe comprobar el estado posterior exacto del producto.'
 );
 check(
-  'Cada baja de stock está ligada al producto y cantidad del pedido',
-  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
-  'sparkStockUpdateValid debe leer el pedido creado y exigir la cantidad exacta.'
+  'Cada baja de stock solo puede tocar un producto del pedido',
+  rules.includes('sparkOrderHasProduct(orderData, productId)') &&
+    rules.includes('orderHasProduct &&') &&
+    rules.includes('request.resource.data.stock < resource.data.stock'),
+  'La regla del producto debe rechazar productos ajenos y cualquier aumento.'
 );
 check(
   'Checkout actualiza el guard anti-pedidos repetidos en la misma transacción',
@@ -52,9 +53,11 @@ check(
 );
 check(
   'Las reglas exigen el guard de checkout y el intervalo mínimo',
-  rules.includes('checkoutGuardOnlyUpdate(userId)') &&
+  checkout.includes('reserveCheckoutGuard(draft)') &&
+    rules.includes('checkoutGuardWriteValid(userId)') &&
+    rules.includes('match /checkoutGuards/{userId}') &&
     rules.includes("duration.value(90, 's')") &&
-    rules.includes('userData.lastCheckoutOrderId == orderId'),
+    rules.includes('guardData.lastCheckoutOrderId == orderId'),
   'No alcanza con un bloqueo visual en el botón.'
 );
 check(

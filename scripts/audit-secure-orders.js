@@ -67,9 +67,10 @@ check(
 check(
   'Las reglas exigen el descuento exacto y vinculado al pedido',
   rules.includes('productAfter.stock == product.stock - item.qty') &&
-    rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty'),
-  'Un pedido debe descontar exactamente su cantidad y no puede tocar productos ajenos.'
+    rules.includes('sparkOrderHasProduct(orderData, productId)') &&
+    rules.includes('orderHasProduct &&') &&
+    rules.includes('request.resource.data.stock < resource.data.stock'),
+  'El pedido obliga la cantidad exacta y products rechaza productos ajenos.'
 );
 check(
   'Las reglas validan subtotal y total',

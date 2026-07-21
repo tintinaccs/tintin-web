@@ -340,6 +340,44 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       <div class="ck-summary-total" style="font-size:18px"><span>TOTAL${quote.shippingPending ? ' (+ envío)' : ''}</span><span class="ck-summary-total-val">${formatPrice(quote.total)}</span></div>`;
   }
 
+
+  async function reserveCheckoutGuard(draft) {
+    const user = auth.currentUser;
+    const uid = user.uid;
+    const email = text(user.email).toLowerCase();
+    const orderId = `${uid}_${draft.requestId}`;
+    const guardRef = doc(db, 'checkoutGuards', uid);
+
+    return runTransaction(db, async transaction => {
+      const guardSnap = await transaction.get(guardRef);
+      const guardData = guardSnap.exists() ? guardSnap.data() || {} : {};
+      const lastCheckoutAt = guardData.lastCheckoutAt;
+      const lastCheckoutMs = typeof lastCheckoutAt?.toMillis === 'function'
+        ? lastCheckoutAt.toMillis()
+        : Number(new Date(lastCheckoutAt || 0));
+      const sameOrder = text(guardData.lastCheckoutOrderId) === orderId;
+
+      if (
+        !sameOrder &&
+        email !== SUPER_ADMIN_EMAIL &&
+        Number.isFinite(lastCheckoutMs) &&
+        Date.now() - lastCheckoutMs < CHECKOUT_COOLDOWN_MS
+      ) {
+        const remaining = Math.max(1, Math.ceil((CHECKOUT_COOLDOWN_MS - (Date.now() - lastCheckoutMs)) / 1000));
+        throw appError('checkout_cooldown', 'Esperá un momento antes de crear otro pedido.', { remaining });
+      }
+
+      transaction.set(guardRef, {
+        userId: uid,
+        lastCheckoutAt: serverTimestamp(),
+        lastCheckoutOrderId: orderId,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      return { orderId };
+    }, { maxAttempts: 2 });
+  }
+
   async function createOrderWithSparkTransaction(draft) {
     const user = auth.currentUser;
     const uid = user.uid;
@@ -372,18 +410,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         throw appError('profile_missing', 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.');
       }
       const userData = userSnap.data() || {};
-      const lastCheckoutAt = userData.lastCheckoutAt;
-      const lastCheckoutMs = typeof lastCheckoutAt?.toMillis === 'function'
-        ? lastCheckoutAt.toMillis()
-        : Number(new Date(lastCheckoutAt || 0));
-      if (
-        email !== SUPER_ADMIN_EMAIL &&
-        Number.isFinite(lastCheckoutMs) &&
-        Date.now() - lastCheckoutMs < CHECKOUT_COOLDOWN_MS
-      ) {
-        const remaining = Math.max(1, Math.ceil((CHECKOUT_COOLDOWN_MS - (Date.now() - lastCheckoutMs)) / 1000));
-        throw appError('checkout_cooldown', 'Esperá un momento antes de crear otro pedido.', { remaining });
-      }
       if (email !== SUPER_ADMIN_EMAIL && settings.storeOpen !== true) {
         throw appError('store_closed', 'La tienda está temporalmente cerrada.');
       }
@@ -511,11 +537,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           });
         }
       });
-      transaction.update(userRef, {
-        lastCheckoutAt: serverTimestamp(),
-        lastCheckoutOrderId: orderId,
-        updatedAt: serverTimestamp()
-      });
       transaction.set(orderRef, orderData);
 
       return {
@@ -601,6 +622,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
     try {
       const draft = await buildDraft();
+      await reserveCheckoutGuard(draft);
       const result = await createOrderWithSparkTransaction(draft);
       await clearCart();
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}

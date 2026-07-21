@@ -81,10 +81,27 @@ async function seedBase() {
   });
 }
 
+
+async function reserveGuard(requestId) {
+  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  const orderId = `u1_${requestId}`;
+  return runTransaction(db, async transaction => {
+    const guardRef = doc(db, 'checkoutGuards', 'u1');
+    await transaction.get(guardRef);
+    transaction.set(guardRef, {
+      userId: 'u1',
+      lastCheckoutAt: serverTimestamp(),
+      lastCheckoutOrderId: orderId,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  }, { maxAttempts: 1 });
+}
+
 async function checkoutTransaction({ requestId, decrement = 2, updateProduct = true, unrelated = false }) {
   const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
   const orderId = `u1_${requestId}`;
   const item = { id: 'p1', name: 'Producto 1', cat: 'aros', price: 50000, qty: 2, variant: '', imageUrl: '' };
+  await reserveGuard(requestId);
   return runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', orderId);
     const userRef = doc(db, 'users', 'u1');
@@ -99,11 +116,6 @@ async function checkoutTransaction({ requestId, decrement = 2, updateProduct = t
         updatedAt: serverTimestamp()
       });
     }
-    transaction.update(userRef, {
-      lastCheckoutAt: serverTimestamp(),
-      lastCheckoutOrderId: orderId,
-      updatedAt: serverTimestamp()
-    });
     transaction.set(orderRef, orderPayload('u1', requestId, [item]));
   }, { maxAttempts: 1 });
 }
