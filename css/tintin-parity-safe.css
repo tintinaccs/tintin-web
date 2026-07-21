@@ -53,6 +53,14 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
     padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
   }
+  /* Privacidad y los avisos del carrito ocupan temporalmente la misma zona
+     segura. El flotante se oculta durante esos estados para no quedar debajo. */
+  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-privacy-consent:not([hidden])) .tt-wa-float,
+  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-cart-feedback.is-visible) .tt-wa-float{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
 }
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){
