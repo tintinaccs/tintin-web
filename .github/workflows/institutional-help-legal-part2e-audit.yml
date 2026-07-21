@@ -28,7 +28,7 @@ jobs:
       - name: Audit institutional help and legal pages
         id: part2e_audit
         continue-on-error: true
-        run: node scripts/audit-institutional-help-legal-part2e.mjs > institutional-help-legal-part2e.log 2>&1
+        run: node scripts/audit-institutional-help-legal-part2e-v2.mjs > institutional-help-legal-part2e.log 2>&1
 
       - name: Upload report and screenshots
         if: always()
