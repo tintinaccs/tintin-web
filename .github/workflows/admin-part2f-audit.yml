@@ -29,6 +29,7 @@ jobs:
         run: node scripts/audit-admin-visual-part2f-v3.mjs > admin-part2f.log 2>&1
 
       - name: Audit global fit on every root page
+        if: always()
         run: node scripts/audit-global-fit-part2f.mjs > global-fit-part2f.log 2>&1
 
       - name: Upload reports and screenshots
