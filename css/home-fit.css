@@ -156,3 +156,79 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
 @media(max-width:380px){.tt-home-premium .section{padding:44px 0}.tt-home-premium .section-sm{padding:34px 0}.tt-home-premium .tt-hero{min-height:max(500px,100svh)}}
 @media(max-height:520px) and (orientation:landscape){.tt-home-premium .tt-hero{min-height:500px}.tt-home-premium .tt-hero-content{padding-top:86px;padding-bottom:38px}}
 @media(prefers-reduced-motion:reduce){.tt-home-motion,.tt-home-motion.is-visible{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}
+
+/* =============================================================
+   PARTE 2B — continuidad visual completa del Inicio
+   ============================================================= */
+
+/* El combinador se oculta inline durante la primera carga de productos. Cuando
+   Firestore responde, el contenido ya se renderiza, pero ese display:none podía
+   quedar pegado para siempre. El Inicio conserva ahora la sección visible y deja
+   que su estado de carga/vacío o sus tarjetas comuniquen la situación real. */
+body.tt-home-premium #look-section{
+  display:block!important;
+}
+
+/* Mientras la fuente real de colecciones responde, no dejamos un texto pequeño
+   flotando dentro de una sección prácticamente vacía. El estado ocupa una
+   superficie estable y legible; cuando llegan las colecciones, el renderer lo
+   reemplaza por las tarjetas reales sin alterar navegación ni datos. */
+body.tt-home-premium .tt-collections-grid:has(> .tt-phase4-collections-state){
+  grid-template-columns:minmax(0,1fr)!important;
+}
+body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state{
+  min-height:clamp(190px,24vw,300px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:clamp(24px,4vw,42px)!important;
+  border:1px solid var(--color-card-border,#F1E4E7);
+  border-radius:24px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,246,250,.96)),
+    var(--color-background-surface,#FFFFFF);
+  box-shadow:0 12px 34px rgba(173,63,103,.08);
+  color:var(--color-text-secondary,#7B6F72)!important;
+  font-size:.86rem!important;
+  font-weight:600;
+  line-height:1.6;
+}
+body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--info::before{
+  content:"";
+  width:34px;
+  height:34px;
+  border:3px solid var(--color-progress-track,#F1E4E7);
+  border-top-color:var(--color-progress-fill,#AD3F67);
+  border-radius:50%;
+  animation:tt-home-collections-spin .8s linear infinite;
+}
+body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--error{
+  border-color:color-mix(in srgb,var(--color-brand-primary,#AD3F67) 28%,#FFFFFF);
+}
+@keyframes tt-home-collections-spin{to{transform:rotate(360deg)}}
+
+/* Las superficies remotas de Inicio mantienen el mismo ancho, radio y altura
+   mínima para que Colecciones, Completá tu look y Productos no produzcan saltos
+   bruscos cuando cambian de loading a contenido real. */
+body.tt-home-premium #look-grid > .tt-home-runtime-state,
+body.tt-home-premium #products-grid > .tt-home-runtime-state{
+  min-height:clamp(190px,24vw,280px);
+  box-shadow:0 12px 34px rgba(173,63,103,.07);
+}
+
+@media(max-width:768px){
+  body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state,
+  body.tt-home-premium #look-grid > .tt-home-runtime-state,
+  body.tt-home-premium #products-grid > .tt-home-runtime-state{
+    min-height:180px;
+    border-radius:18px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--info::before{
+    animation:none;
+  }
+}
