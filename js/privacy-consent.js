@@ -1,3 +1,5 @@
+import './cart-recovery.js?v=tintin-20260722-level4-1';
+
 /**
  * Preferencias de privacidad del sitio.
  *
