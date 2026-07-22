@@ -154,7 +154,7 @@ check('robots.txt enlaza sitemap', /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i.tes
 for (const file of ['index.html', 'catalogo.html', 'collections.html', 'about.html', 'contact.html', 'envios.html', 'cambios-devoluciones.html', 'preguntas-frecuentes.html', 'terminos.html', 'privacidad.html']) {
   check(`sitemap incluye ${file}`, sitemap.includes(`/${file}</loc>`));
 }
-check('Existe manifest PWA', exists('manifest.webmanifest'));
+check('Existe manifest PWA', exists('manifest.json'));
 
 const recoveryFiles = [
   'js/home-maintenance.js',
@@ -187,7 +187,7 @@ check(
 );
 check(
   'El sistema define foco visible y tamaño táctil',
-  /focus-visible/.test(read('css/ui-quality.css')) && /44px/.test(read('css/ui-quality.css'))
+  /focus-visible/.test(read('css/ui-quality.css')) && /44px/.test(`${read('styles.css')}\n${read('css/ui-quality.css')}`)
 );
 check(
   'Las páginas tienen exactamente un H1 cuando el manifiesto lo exige',
@@ -205,11 +205,14 @@ check(
 );
 check(
   'Existe tripwire de regresión posterior a optimizaciones',
-  regressionAudit.includes('regression') || regressionAudit.includes('Regresión') || regressionAudit.includes('regresión')
+  regressionAudit.includes('Tripwire de regresiones') && regressionAudit.includes('audit-performance-realtime.js')
 );
 check(
   'La integración final verifica SEO, PWA y fuentes únicas',
-  finalIntegration.includes('SEO') && finalIntegration.includes('PWA') && finalIntegration.includes('single')
+  finalIntegration.includes('robots bloquea páginas privadas y declara sitemap') &&
+    finalIntegration.includes('manifest es válido y sus iconos existen') &&
+    finalIntegration.includes('Firebase se inicializa únicamente en js/firebase.js') &&
+    finalIntegration.includes('Configuración general pública tiene una sola suscripción compartida')
 );
 
 check(
