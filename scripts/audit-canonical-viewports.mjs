@@ -87,22 +87,14 @@ const listen = () => new Promise((resolve, reject) => {
 });
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
-async function prepare(page) {
+async function prepare(page, width) {
   await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
+  await page.waitForFunction(() => (
+    document.body?.classList.contains('tt-public-shell-mounted') ||
+    document.getElementById('tt-tabbar') ||
+    document.getElementById('tt-header-desktop-tablet')
+  ), null, { timeout: 4000 }).catch(() => {});
 
-  // Los módulos del shell son asíncronos. Esperamos su montaje o, como máximo,
-  // una ventana breve antes de retirar únicamente las capas de carga de prueba.
-  await Promise.race([
-    page.waitForFunction(() => (
-      document.body?.classList.contains('tt-public-shell-mounted') ||
-      document.getElementById('tt-tabbar') ||
-      document.getElementById('tt-header-desktop-tablet') ||
-      document.querySelector('main,form,[role="main"],.admin-login,.login-page')
-    ), null, { timeout: 2200 }).catch(() => {}),
-    page.waitForTimeout(900)
-  ]);
-
-  await page.waitForLoadState('domcontentloaded').catch(() => {});
   await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement;
@@ -110,13 +102,12 @@ async function prepare(page) {
     ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked']
       .forEach(name => root.classList.remove(name));
     root.style.removeProperty('overflow');
-    root.style.removeProperty('visibility');
+    root.style.removeProperty('overscroll-behavior');
+    root.style.removeProperty('touch-action');
     if (body) {
-      ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked']
-        .forEach(name => body.classList.remove(name));
-      ['position', 'top', 'left', 'right', 'width', 'overflow', 'visibility']
+      body.classList.remove('tt-scroll-locked');
+      ['position', 'top', 'left', 'right', 'width', 'overflow', 'visibility', 'touch-action']
         .forEach(name => body.style.removeProperty(name));
-      body.style.setProperty('visibility', 'visible', 'important');
     }
     document.getElementById('tt-loader')?.remove();
     const closed = document.getElementById('tt-store-closed-overlay');
@@ -127,7 +118,16 @@ async function prepare(page) {
     }
     window.scrollTo(0, 0);
   });
-  await page.waitForTimeout(260);
+
+  const expected = width <= 768 ? '#tt-tabbar' : '#tt-header-desktop-tablet';
+  await page.waitForFunction(selector => {
+    const node = document.querySelector(selector);
+    if (!node) return false;
+    const style = getComputedStyle(node);
+    const box = node.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
+  }, expected, { timeout: 4000 }).catch(() => {});
+  await page.waitForTimeout(180);
 }
 
 async function inspect(page, width, pageInfo) {
@@ -148,10 +148,10 @@ async function inspect(page, width, pageInfo) {
       issues.push('la página quedó visualmente vacía');
     }
 
-    const shellMounted = document.body?.classList.contains('tt-public-shell-mounted');
     const shellHeader = document.getElementById('tt-header-desktop-tablet');
     const shellTabbar = document.getElementById('tt-tabbar');
-    if (shellMounted) {
+    const shellPresent = shellHeader || shellTabbar;
+    if (shellPresent) {
       if (width <= 768) {
         if (visible(shellHeader)) issues.push('header desktop visible en mobile');
         if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
@@ -188,12 +188,12 @@ async function inspect(page, width, pageInfo) {
   }, { width, pageInfo });
 }
 
-async function navigateWithRetry(page, url) {
+async function navigateWithRetry(page, url, width) {
   let lastError;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-      await prepare(page);
+      await prepare(page, width);
       return;
     } catch (error) {
       lastError = error;
@@ -226,7 +226,7 @@ try {
       const page = await context.newPage();
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       try {
-        await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`);
+        await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width);
         entry.issues.push(...await inspect(page, viewport.width, pageInfo));
       } catch (error) {
         entry.issues.push(error?.message || String(error));
