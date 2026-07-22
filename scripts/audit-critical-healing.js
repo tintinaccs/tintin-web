@@ -86,12 +86,14 @@ check(
   'El modelo debe distinguir reserved de released.'
 );
 check(
-  'Eliminar un pedido activo devuelve su stock y permite que el pedido desaparezca',
+  'Eliminar un pedido activo libera stock antes de hacerlo desaparecer',
   inventory.includes("lastInventoryAction: 'release'") &&
     !inventory.includes("lastInventoryAction: 'delete-release'") &&
-    rules.includes("(isSuperAdmin() || hasRole('admin') || hasRole('agent'))") &&
-    rules.includes('(isSuperAdmin() && !orderExistsAfter)'),
-  'El panel y las reglas deben compartir la misma acción de devolución y admitir el estado posterior sin pedido.'
+    inventory.includes('const releaseResult = await runTransaction') &&
+    inventory.includes("inventoryState: 'released'") &&
+    inventory.includes('if (orderReservesInventory(orderSnapshot.data() || {}))') &&
+    !rules.includes('(isSuperAdmin() && !orderExistsAfter)'),
+  'La devolución debe confirmarse primero para que un fallo o reintento no duplique stock y no requiera reglas nuevas.'
 );
 check(
   'La eliminación masiva no recalcula toda la base ni oculta fallos parciales',

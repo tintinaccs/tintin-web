@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-22T12:29:07.258Z",
-  "sourceFingerprint": "d97baf9212947304be40bcdca89b3ebd7175974f2ea73123b4dbbc18286534c3",
+  "generatedAt": "2026-07-22T12:44:06.384Z",
+  "sourceFingerprint": "687ae27d28d90e53cbb8c9f3f42302d727682eed07716a284ea7c46e7a3b7613",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 350,
     "textFiles": 316,
-    "totalBytes": 4893709,
+    "totalBytes": 4896945,
     "pages": 18,
     "modules": 196
   },
@@ -1436,7 +1436,7 @@
         "viewer"
       ],
       "bytes": 152305,
-      "sha256": "006f4dcede1af704ef58fde9af0f27591895f8d9f88aa852d4907516ec964274",
+      "sha256": "6543faed7e87ecf09dae6eecc6defb1169b2cacc7bc7adb22ea17e9fbf83beca",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1460,7 +1460,7 @@
       "ids": 442,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260722-order-delete-1",
+          "raw": "js/page-loader.js?v=tintin-20260722-order-delete-2",
           "target": "js/page-loader.js",
           "line": 7
         },
@@ -1470,7 +1470,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin-app.js?v=tintin-20260722-order-delete-1",
+          "raw": "js/admin-app.js?v=tintin-20260722-order-delete-2",
           "target": "js/admin-app.js",
           "line": 1795
         },
@@ -1612,7 +1612,7 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260722-order-delete-1",
+          "raw": "js/page-loader.js?v=tintin-20260722-order-delete-2",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
@@ -1624,7 +1624,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin-app.js?v=tintin-20260722-order-delete-1",
+          "raw": "js/admin-app.js?v=tintin-20260722-order-delete-2",
           "target": "js/admin-app.js",
           "line": 1795,
           "exists": true
@@ -13596,7 +13596,7 @@
     {
       "path": "js/admin-app.js",
       "bytes": 410400,
-      "sha256": "170ac85cc732c1f5abe3d73232f60a13176e600985fc5649b632af0669bcc41b",
+      "sha256": "bf43b231f21dcf0c0e8052ab05d5283a8bff59f2408504e34e85cfdebefb9d8a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13687,7 +13687,7 @@
           "line": 26
         },
         {
-          "raw": "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-1",
+          "raw": "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-2",
           "target": "js/admin-site-diagnostics.js",
           "dynamic": false,
           "line": 27
@@ -13711,7 +13711,7 @@
           "line": 34
         },
         {
-          "raw": "./admin-inventory-integrity.js?v=tintin-20260722-order-delete-1",
+          "raw": "./admin-inventory-integrity.js?v=tintin-20260722-order-delete-2",
           "target": "js/admin-inventory-integrity.js",
           "dynamic": false,
           "line": 35
@@ -13993,8 +13993,8 @@
     },
     {
       "path": "js/admin-inventory-integrity.js",
-      "bytes": 5216,
-      "sha256": "9ad86c559b39f57e4ad27b103aba6e6ca95d2d6387979fec8802327305d82271",
+      "bytes": 6674,
+      "sha256": "9ec42c07f0b34a121c56d76de937e3131d73aa2042a8918b00fa7d4428f23236",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15707,7 +15707,7 @@
     {
       "path": "js/page-loader.js",
       "bytes": 27935,
-      "sha256": "1b85caa6d579eebf44a72565a8f45accd853e8510f57e22ed5083f4a76c7f79f",
+      "sha256": "e008f3dc951a8fa9c7d551e2f9a298d6f6e0fc04d8852b28465f17390aa4008e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16659,8 +16659,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 11652,
-      "sha256": "be446623d234b8d8c9026e7b7583b490134a7ca484fc28ebe35841735ca93695",
+      "bytes": 11896,
+      "sha256": "c541a41c0dd744bd766e3fa59095d8f5c43a289357b208a26df71875869f0907",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16944,8 +16944,8 @@
     },
     {
       "path": "scripts/audit-critical-healing.js",
-      "bytes": 5788,
-      "sha256": "8ea6860d163ae696fa44d535ea7104b16655ea5b7845dbdbbd1da7591f6d78ab",
+      "bytes": 5913,
+      "sha256": "a8f9d1700508c0ccbc0940ae0cb47e194294c032a66e866f876f50a6d6a3af21",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17652,7 +17652,7 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "bytes": 15156,
-      "sha256": "492124a9c7e86011332ab215edfa6e829e5967ba4ecee63ce9b959797c095e47",
+      "sha256": "29eb47eefa4ea15315549d213e5383fb595958243bcd05ab9e2797705d4960ad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17963,8 +17963,8 @@
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
-      "bytes": 10276,
-      "sha256": "64840e9dd3ebb24a1bd24bb38e5a9cd1dee52b4e5db2c395e0a2fa7f9536b4e7",
+      "bytes": 11570,
+      "sha256": "4fa64e1d2307a2ace045508284732cbc3b502ed85e52213f61cb8a1da0cd0748",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18271,7 +18271,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 152305,
-      "sha256": "006f4dcede1af704ef58fde9af0f27591895f8d9f88aa852d4907516ec964274"
+      "sha256": "6543faed7e87ecf09dae6eecc6defb1169b2cacc7bc7adb22ea17e9fbf83beca"
     },
     {
       "path": "apple-touch-icon.png",
@@ -18744,8 +18744,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 41542,
-      "sha256": "57d068c9a4692d75c8959594a28ef308585f982a03aab27b7170e0939c877963"
+      "bytes": 41404,
+      "sha256": "a9e0ddb5acecb4983c8efba4b34da3534bafb05a809fd75993978bc4a6209c52"
     },
     {
       "path": "functions/DEPLOY.md",
@@ -18853,7 +18853,7 @@
       "path": "js/admin-app.js",
       "extension": ".js",
       "bytes": 410400,
-      "sha256": "170ac85cc732c1f5abe3d73232f60a13176e600985fc5649b632af0669bcc41b"
+      "sha256": "bf43b231f21dcf0c0e8052ab05d5283a8bff59f2408504e34e85cfdebefb9d8a"
     },
     {
       "path": "js/admin-collections-phase4.js",
@@ -18894,8 +18894,8 @@
     {
       "path": "js/admin-inventory-integrity.js",
       "extension": ".js",
-      "bytes": 5216,
-      "sha256": "9ad86c559b39f57e4ad27b103aba6e6ca95d2d6387979fec8802327305d82271"
+      "bytes": 6674,
+      "sha256": "9ec42c07f0b34a121c56d76de937e3131d73aa2042a8918b00fa7d4428f23236"
     },
     {
       "path": "js/admin-media-library-ui.js",
@@ -19303,7 +19303,7 @@
       "path": "js/page-loader.js",
       "extension": ".js",
       "bytes": 27935,
-      "sha256": "1b85caa6d579eebf44a72565a8f45accd853e8510f57e22ed5083f4a76c7f79f"
+      "sha256": "e008f3dc951a8fa9c7d551e2f9a298d6f6e0fc04d8852b28465f17390aa4008e"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -19638,8 +19638,8 @@
     {
       "path": "maintenance/18-eliminacion-pedidos-y-diagnostico.txt",
       "extension": ".txt",
-      "bytes": 2424,
-      "sha256": "9da9aaf382313d7ebb58b9bcb1aa03e8d66483ca66cf4203d3d93fa52482535a"
+      "bytes": 2677,
+      "sha256": "2753c3b8504ed9540c9cd3812d5d4076943b674a6cf8321a1a624ac579014b3a"
     },
     {
       "path": "maintenance/99-auditoria-final-integracion.txt",
@@ -19752,8 +19752,8 @@
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 11652,
-      "sha256": "be446623d234b8d8c9026e7b7583b490134a7ca484fc28ebe35841735ca93695"
+      "bytes": 11896,
+      "sha256": "c541a41c0dd744bd766e3fa59095d8f5c43a289357b208a26df71875869f0907"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
@@ -19842,8 +19842,8 @@
     {
       "path": "scripts/audit-critical-healing.js",
       "extension": ".js",
-      "bytes": 5788,
-      "sha256": "8ea6860d163ae696fa44d535ea7104b16655ea5b7845dbdbbd1da7591f6d78ab"
+      "bytes": 5913,
+      "sha256": "a8f9d1700508c0ccbc0940ae0cb47e194294c032a66e866f876f50a6d6a3af21"
     },
     {
       "path": "scripts/audit-deep.js",
@@ -20047,7 +20047,7 @@
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
       "bytes": 15156,
-      "sha256": "492124a9c7e86011332ab215edfa6e829e5967ba4ecee63ce9b959797c095e47"
+      "sha256": "29eb47eefa4ea15315549d213e5383fb595958243bcd05ab9e2797705d4960ad"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -20130,8 +20130,8 @@
     {
       "path": "scripts/test-firestore-critical.mjs",
       "extension": ".mjs",
-      "bytes": 10276,
-      "sha256": "64840e9dd3ebb24a1bd24bb38e5a9cd1dee52b4e5db2c395e0a2fa7f9536b4e7"
+      "bytes": 11570,
+      "sha256": "4fa64e1d2307a2ace045508284732cbc3b502ed85e52213f61cb8a1da0cd0748"
     },
     {
       "path": "scripts/test-inventory-model.mjs",
@@ -23930,7 +23930,12 @@
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 101,
+            "line": 106,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin-inventory-integrity.js",
+            "line": 165,
             "operation": "doc"
           },
           {

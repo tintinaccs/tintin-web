@@ -24,7 +24,7 @@ import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
-import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-1";
+import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
@@ -32,7 +32,7 @@ import {
 } from "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import './admin-inventory-integrity.js?v=tintin-20260722-order-delete-1';
+import './admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 
 // ---- GLOBALS ----
 let currentUser = null;

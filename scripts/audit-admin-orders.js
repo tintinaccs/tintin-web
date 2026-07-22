@@ -148,11 +148,14 @@ check(
   'La eliminación debe pedir confirmación, respetar el permiso y auditar.'
 );
 check(
-  'Eliminar pedido devuelve el inventario con una acción aceptada por las reglas',
+  'Eliminar pedido libera inventario antes de borrar y no depende de reglas nuevas',
   /lastInventoryAction:\s*'release'/.test(inventoryIntegrity) &&
     !/lastInventoryAction:\s*'delete-release'/.test(inventoryIntegrity) &&
-    /isSuperAdmin\(\) && !orderExistsAfter/.test(rules),
-  'La eliminación de un pedido activo debe devolver el stock y permitir que el pedido desaparezca en la misma operación.'
+    /const releaseResult = await runTransaction/.test(inventoryIntegrity) &&
+    /inventoryState:\s*'released'/.test(inventoryIntegrity) &&
+    /if \(orderReservesInventory\(orderSnapshot\.data\(\) \|\| \{\}\)\)/.test(inventoryIntegrity) &&
+    !/isSuperAdmin\(\) && !orderExistsAfter/.test(rules),
+  'La devolución debe quedar confirmada antes de borrar para funcionar con las reglas ya publicadas y soportar reintentos.'
 );
 check(
   'La eliminación individual informa el motivo real y expone el resultado al sincronizador',
@@ -171,9 +174,9 @@ check(
 );
 check(
   'El panel fuerza una versión nueva de los módulos corregidos',
-  /admin-app\.js\?v=tintin-20260722-order-delete-1/.test(read('admin.html')) &&
-    /admin-inventory-integrity\.js\?v=tintin-20260722-order-delete-1/.test(adminApp) &&
-    /TT_CACHE_VERSION = 'tintin-20260722-order-delete-1'/.test(read('js/page-loader.js')),
+  /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
+    /admin-inventory-integrity\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
+    /TT_CACHE_VERSION = 'tintin-20260722-order-delete-2'/.test(read('js/page-loader.js')),
   'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
 );
 check(
