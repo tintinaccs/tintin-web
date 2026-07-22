@@ -90,6 +90,17 @@ const listen = () => new Promise((resolve, reject) => {
 });
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
+async function waitForVisibleBodyContent(page) {
+  await page.waitForFunction(() => {
+    const visible = node => {
+      const style = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
+    };
+    return [...(document.body?.children || [])].some(visible);
+  }, null, { timeout: 3000 }).catch(() => {});
+}
+
 async function prepare(page, width, pageInfo) {
   await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
 
@@ -134,6 +145,8 @@ async function prepare(page, width, pageInfo) {
       const box = node.getBoundingClientRect();
       return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
     }, expected, { timeout: 4000 }).catch(() => {});
+  } else {
+    await waitForVisibleBodyContent(page);
   }
   await page.waitForTimeout(180);
 }
@@ -201,14 +214,14 @@ function isTransientNavigationError(error) {
 
 async function navigateWithRetry(page, url, width, pageInfo) {
   let lastError;
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
       await prepare(page, width, pageInfo);
       return;
     } catch (error) {
       lastError = error;
-      if (attempt < 2) await page.waitForTimeout(500);
+      if (attempt < 3) await page.waitForTimeout(500);
     }
   }
   throw lastError;
@@ -216,13 +229,18 @@ async function navigateWithRetry(page, url, width, pageInfo) {
 
 async function inspectWithRetry(page, width, pageInfo) {
   let lastError;
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      return await inspect(page, width, pageInfo);
+      const issues = await inspect(page, width, pageInfo);
+      const onlyTransientBlank = issues.length === 1 && issues[0] === 'la página quedó visualmente vacía';
+      if (!onlyTransientBlank || attempt >= 3) return issues;
+      await page.waitForTimeout(500);
+      await prepare(page, width, pageInfo);
     } catch (error) {
       lastError = error;
-      if (!isTransientNavigationError(error) || attempt >= 2) break;
+      if (!isTransientNavigationError(error) || attempt >= 3) break;
       await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(400);
       await prepare(page, width, pageInfo);
     }
   }
