@@ -36,7 +36,9 @@ const maintenance = read('maintenance/11-3-pedidos-checkout.txt');
 // Carrito
 check(
   'La línea del carrito se identifica por producto y variante',
-  cart.includes('function lineIdFor') && cart.includes('`${id}\u241f${variant}`') && cart.includes('lineId: lineIdFor({ id, variant })')
+  cart.includes('function lineIdFor') &&
+    /hashLine\(`\$\{id\}(?:\\u241f|␟)\$\{variant\}`\)/.test(cart) &&
+    cart.includes('lineId: lineIdFor({ id, variant })')
 );
 check(
   'Las cantidades del carrito se acotan a 1..99',
