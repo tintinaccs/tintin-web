@@ -145,7 +145,7 @@ async function inspect(page, width, pageInfo) {
 
     const visibleBodyChildren = [...document.body.children].filter(visible);
     if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) {
-      issues.push('la página pública quedó visualmente vacía');
+      issues.push('la página quedó visualmente vacía');
     }
 
     const shellMounted = document.body?.classList.contains('tt-public-shell-mounted');
