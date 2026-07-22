@@ -50,6 +50,7 @@ const bridge         = read('js/checkout-email-bridge.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
 const adminSync      = read('js/admin-email-gate-sync.js');
+const functionOrigin = read('js/function-origin.js');
 const adminApp       = read('js/admin-app.js');
 const whatsapp       = read('js/whatsapp.js');
 const rules          = read('firestore.rules');
@@ -75,10 +76,25 @@ check(
 );
 check(
   'El canal Resend llama al endpoint de Cloudflare con Bearer token',
-  resendNotify.includes("const ORDER_EMAIL_API = '/api/order-email'") &&
+  // El origen (relativo en Cloudflare, pages.dev en GitHub Pages/Netlify) lo
+  // resuelve js/function-origin.js — ver "El fallback de host..." abajo.
+  resendNotify.includes("const ORDER_EMAIL_API = apiUrl('order-email')") &&
     resendNotify.includes('Authorization: `Bearer ${idToken}`') &&
     resendNotify.includes("action: isResend ? 'resendOrderEmail' : 'sendOrderEmail'"),
   'El navegador debe hablar con /api/order-email con la sesión real, no con un webhook con secreto.'
+);
+check(
+  'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
+  // Antes resend-order-notify.js y admin-email-gate-sync.js usaban rutas
+  // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
+  // media-library.js y site-activity.js — eso daba 404 en GitHub Pages y el
+  // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
+  // comparten la misma resolución de origen.
+  resendNotify.includes("import { apiUrl } from './function-origin.js") &&
+    adminSync.includes("import { apiUrl } from './function-origin.js") &&
+    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+    functionOrigin.includes("hostname.endsWith('github.io')"),
+  'Toda ruta /api/* del cliente debe resolverse con js/function-origin.js, no con una constante relativa suelta.'
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
@@ -157,7 +173,7 @@ check(
 // ===========================================================================
 check(
   'La prueba se envía por Resend vía /api/test-email',
-  adminSync.includes("const TEST_ENDPOINT = '/api/test-email'") &&
+  adminSync.includes("const TEST_ENDPOINT = apiUrl('test-email')") &&
     adminSync.includes('fetch(TEST_ENDPOINT, {'),
   'El correo de prueba debe usar el canal Resend, no el webhook viejo.'
 );

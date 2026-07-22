@@ -1,7 +1,9 @@
 ================================================================
  AUDITORÍA TINTIN-WEB — NIVEL MEDIO
- Fecha: 2026-07-20
+ Fecha: 2026-07-20 · Actualizado: 2026-07-22
 ================================================================
+ESTADO: M1 y M2 corregidos y verificados. M3 queda pendiente (requiere
+un nuevo endpoint de Cloudflare, ver nota al final de ese punto).
 Problemas que degradan funciones o experiencia sin comprometer
 directamente seguridad de datos o dinero. Ordenados por impacto.
 
@@ -60,6 +62,16 @@ robots y las 22 URLs de OG apuntan al host equivocado (problema de SEO).
 En cualquiera de los dos casos hay una incoherencia de despliegue que hay
 que resolver.
 
+[RESUELTO 2026-07-22] Se creó js/function-origin.js con la resolución de
+origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
+admin-email-gate-sync.js, media-library.js, site-activity.js) ahora
+importan de ahí en vez de reinventar la constante cada uno. Verificado con
+scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
+(actualizados) y el resto de `npm run audit:final`, sin regresiones.
+Sigue pendiente confirmar/corregir la NOTA de arriba: desde qué host se
+sirve realmente el sitio en producción (no se puede saber solo leyendo el
+repo).
+
 
 ----------------------------------------------------------------
 [M2] Breakpoints mezclados (767 / 768 / 769) → "zona muerta" a 768px
@@ -96,6 +108,16 @@ SOLUCIÓN:
 Unificar todos los "max-width: 767px" a "max-width: 768px" (o viceversa,
 pero uno solo). Verificar después en 768px que header, nav y tabbar
 queden en un único modo.
+
+[RESUELTO 2026-07-22] Se unificaron los 6 puntos que usaban 767px
+(styles.css: 3 · css/home-fit.css: 2 · css/ui-quality.css: 1, este último
+crítico porque fijaba font-size:16px en inputs para evitar el zoom
+automático de iOS) a 768px, alineados con el resto del sitio. Verificado
+con un arnés estático (solo CSS, sin JS/Firebase) midiendo estilos
+computados con Playwright a 767/768/769px: antes del cambio, 768px exacto
+(ancho de iPad en vertical) quedaba con una mezcla de reglas mobile y
+desktop; después del cambio, 767 y 768 comparten los mismos valores y el
+corte a desktop en 769px sigue intacto.
 
 
 ----------------------------------------------------------------

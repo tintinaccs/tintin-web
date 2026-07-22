@@ -16,6 +16,7 @@ const files = {
   uploadWidget: read('js/image-upload-widget.js'),
   processing: read('js/image-processing.js'),
   mediaLibrary: read('js/media-library.js'),
+  functionOrigin: read('js/function-origin.js'),
   firebase: read('js/firebase.js'),
   products: read('js/products-store.js'),
   ui: read('js/ui-quality.js'),
@@ -221,9 +222,14 @@ check(
 
 check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
+  // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
+  // en GitHub Pages/Netlify) vive en js/function-origin.js, compartido con
+  // site-activity.js, resend-order-notify.js y admin-email-gate-sync.js para
+  // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
-    files.mediaLibrary.includes("/api/${name}") &&
-    files.mediaLibrary.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
+    files.mediaLibrary.includes("import { apiUrl } from './function-origin.js") &&
+    files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
+    files.functionOrigin.includes("hostname.endsWith('github.io')") &&
     files.mediaLibrary.includes('uploadBlobToCloudinary') &&
     files.mediaLibrary.includes("provider: 'cloudinary'") &&
     files.mediaLibrary.includes('publicId: fullUpload.public_id') &&

@@ -7,6 +7,7 @@
    ============================================================= */
 
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   doc,
@@ -24,7 +25,6 @@ import {
 import { validateImageFile, processImage } from './image-processing.js?v=tintin-20260716-cloudinary-fix-1';
 
 const MEDIA_COLLECTION = 'media';
-const CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const TOKEN_TIMEOUT_MS = 10000;
 const SIGN_TIMEOUT_MS = 15000;
 const UPLOAD_TIMEOUT_MS = 45000;
@@ -51,22 +51,8 @@ function withTimeout(promiseFactory, timeoutMs, timeoutMessage) {
     });
 }
 
-function functionOrigin() {
-  const configured = String(window.TINTIN_FUNCTION_ORIGIN || '').trim().replace(/\/$/, '');
-  if (configured) return configured;
-
-  const hostname = String(window.location.hostname || '').toLowerCase();
-  if (hostname.endsWith('github.io') || hostname.endsWith('netlify.app')) {
-    return CLOUDFLARE_FALLBACK_ORIGIN;
-  }
-
-  // En Cloudflare Pages, un dominio personalizado o desarrollo local, las
-  // funciones viven bajo el mismo origen que el sitio.
-  return '';
-}
-
 function functionUrl(name) {
-  return `${functionOrigin()}/api/${name}`;
+  return apiUrl(name);
 }
 
 async function parseJsonResponse(response, name) {

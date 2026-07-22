@@ -138,6 +138,24 @@ en esa cuenta. A futuro, considerar un custom claim de Firebase Auth
 (admin=true) en vez de comparar por correo, para no depender de un string
 repetido.
 
+----------------------------------------------------------------
+[B6] Enlaces target="_blank" sin rel="noopener" (reverse tabnabbing)
+----------------------------------------------------------------
+PLATAFORMA: Panel de administración (desktop principalmente).
+
+PROBLEMA: 4 enlaces en admin.html y js/admin-app.js abrían pestaña nueva
+(target="_blank") sin rel="noopener noreferrer". La pestaña nueva podía
+acceder a window.opener y redirigir la pestaña original a un sitio falso.
+El resto del sitio (público) ya usaba noopener de forma consistente.
+
+[RESUELTO 2026-07-22] Se agregó rel="noopener noreferrer" a los 4
+enlaces: WhatsApp de Mensajes, "Ver sitio", link a imgbb.com (admin.html)
+y "Ver en sitio" de Contenido (js/admin-app.js).
+
 ================================================================
 Fin de la auditoría (CRÍTICO / MEDIO / BAJO).
+Actualizado 2026-07-22: aplicadas las correcciones de C1, C2 (parcial),
+M1, M2 y B6. Ver notas [RESUELTO] en cada archivo para el detalle de qué
+se cambió y qué falta (deploy de reglas, App Check, host real de
+producción, Nominatim detrás de proxy).
 ================================================================

@@ -1,7 +1,10 @@
 ================================================================
  AUDITORÍA TINTIN-WEB — NIVEL CRÍTICO / ALTO RIESGO
- Fecha: 2026-07-20
+ Fecha: 2026-07-20 · Actualizado: 2026-07-22
 ================================================================
+ESTADO: C1 y C2 corregidos y verificados (ver nota al final de cada
+punto). Falta desplegar firestore.rules a producción para que el arreglo
+tome efecto (npm run deploy:rules).
 Metodología: revisión del núcleo de seguridad y lógica (reglas de
 Firestore, funciones backend, checkout, carrito, worker de Cloudflare,
 render público y panel admin). El código está en general bien defendido
@@ -60,6 +63,14 @@ create-order.js, hoy sin usar) y bloquear en reglas toda escritura de
 stock desde el cliente (allow update de 'stock' solo para isSuperAdmin()
 o vía token de servicio).
 
+[RESUELTO 2026-07-22] Se agregó sparkOrderItemQty() y se reescribió
+sparkStockUpdateValid() en firestore.rules para leer getAfter(orderPath)
+en una sola dirección (el pedido ya NO lee getAfter(producto), así que no
+hay ciclo) y exigir stock_nuevo == stock_anterior - qty_de_ESE_producto.
+Verificado: scripts/audit-secure-orders.js actualizado y en verde, junto
+con el resto de `npm run audit:final` (sin regresiones). Pendiente:
+desplegar con `npm run deploy:rules` para que tome efecto en producción.
+
 
 ----------------------------------------------------------------
 [C2] Escrituras públicas de analítica sin límite → agota la cuota
@@ -105,6 +116,19 @@ SOLUCIÓN:
    del navegador a Firestore.
 3) Mientras tanto, activar alertas de presupuesto/uso en Firebase para
    detectar el pico.
+
+[RESUELTO PARCIALMENTE 2026-07-22] Se agregó presenceUpdateNotTooFrequent()
+en firestore.rules: un mismo documento de sitePresence ya no puede
+reescribirse más rápido que cada 20s (el heartbeat real manda cada 60s,
+así que no afecta el uso normal). Esto corta el bucle de "reescribir el
+mismo doc sin parar". LO QUE QUEDA PENDIENTE (no resuelto en este pase,
+requiere una pieza que no se puede armar solo con reglas): un script
+puede seguir creando documentos NUEVOS con visitorId distinto en cada
+request (cada uno es un create, no un update) y agotar la cuota igual.
+Solución real y recomendada para esa parte: activar Firebase App Check
+(gratis en Spark) — requiere que el dueño del proyecto genere una clave
+de reCAPTCHA en la consola de Firebase, algo que no se puede hacer desde
+el código. Recomiendo hacerlo como siguiente paso.
 
 ================================================================
 Fin del nivel CRÍTICO. Continúo con el nivel MEDIO en

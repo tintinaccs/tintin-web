@@ -18,6 +18,7 @@ const solidSurfaces = read('css/solid-ui-surfaces.css');
 const parity = read('css/tintin-parity-safe.css');
 const accountFix = read('js/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
+const functionOrigin = read('js/function-origin.js');
 const privacyConsent = read('js/privacy-consent.js');
 const analytics = read('js/analytics.js');
 const geoFunction = read('functions/api/visitor-geo.js');
@@ -95,9 +96,13 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
-  activity.includes("const GEO_SERVICE_URL = 'https://tintinaccesorios.pages.dev/api/visitor-geo'") &&
-  activity.includes("return '/api/visitor-geo';") &&
-  activity.includes("hostname.endsWith('github.io')") &&
+  // El fallback de host vive en js/function-origin.js (compartido con
+  // media-library.js, resend-order-notify.js y admin-email-gate-sync.js)
+  // en vez de reimplementarse acá — así ningún llamador nuevo lo olvida.
+  activity.includes("import { apiUrl } from './function-origin.js") &&
+  activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
+  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+  functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
   activity.includes("const cloudflarePreview = /\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname)") &&

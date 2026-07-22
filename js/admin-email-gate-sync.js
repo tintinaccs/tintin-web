@@ -1,4 +1,5 @@
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   addDoc,
@@ -14,7 +15,7 @@ if (!window.TintinAdminEmailGateSyncBooted) {
 
   const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
   const SENDER_EMAIL = 'pedidos@tintinaccs.com';
-  const TEST_ENDPOINT = '/api/test-email';
+  const TEST_ENDPOINT = apiUrl('test-email');
   const PRIVATE_REF = doc(db, 'emailSettings', 'main');
   // Se reutiliza el documento público mínimo que ya existe y ya tiene reglas.
   // Solo se agrega emailAccess; no se exponen destinatarios ni credenciales.

@@ -65,17 +65,20 @@ check(
   'El pedido no debe aceptar un precio o nombre inventado.'
 );
 check(
-  'Las reglas exigen el descuento de stock',
+  'Las reglas exigen el descuento exacto de stock',
   // No usa getAfter(producto) desde la regla del pedido: leer el estado
   // posterior de un documento que la MISMA transacción también escribe
   // crea una dependencia circular que hace rechazar el commit entero
   // (confirmado con pruebas reales de punta a punta). La suficiencia de
-  // stock se valida ANTES de escribir (sparkItemValid) y el descuento en
-  // sí lo exige, del lado del producto, sparkStockUpdateValid.
+  // stock se valida ANTES de escribir (sparkItemValid) y el descuento
+  // exacto lo exige, del lado del producto, sparkStockUpdateValid — que sí
+  // puede leer getAfter(pedido) en una única dirección (el pedido no lee
+  // el futuro del producto) sin recrear el ciclo.
   rules.includes('product.stock >= item.qty') &&
     rules.includes('sparkStockUpdateValid(productId)') &&
-    rules.includes('request.resource.data.stock < resource.data.stock'),
-  'Un pedido con stock no debe guardarse sin descontar la cantidad.'
+    rules.includes('sparkOrderItemQty(orderItems, productId)') &&
+    rules.includes('request.resource.data.stock == resource.data.stock - qty'),
+  'Un pedido no debe poder descontar más o menos stock del que compró, ni el de otro producto.'
 );
 check(
   'Las reglas validan subtotal y total',

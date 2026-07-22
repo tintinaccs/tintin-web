@@ -129,6 +129,18 @@ service cloud.firestore {
         data.lastSeen == request.time;
     }
 
+    // El heartbeat de presencia real (site-activity.js) manda cada 60s. Un
+    // script que reescriba el mismo documento en bucle sin este freno agota
+    // la cuota diaria de escrituras del plan gratuito (Spark) y deja la
+    // tienda entera sin poder guardar carritos ni pedidos hasta el reset.
+    // Esto NO cubre a quien crea documentos nuevos con visitorId distinto
+    // en cada request (cada uno es un create, no un update) — esa vía
+    // requiere Firebase App Check para cortarla del todo.
+    function presenceUpdateNotTooFrequent() {
+      return resource.data.lastSeen is timestamp &&
+        request.time > resource.data.lastSeen + duration.value(20, 's');
+    }
+
     function trafficSessionIsValid(dateKey, sessionId) {
       let data = request.resource.data;
       return data.keys().hasAll([
@@ -151,7 +163,10 @@ service cloud.firestore {
 
     match /sitePresence/{visitorId} {
       allow read, delete: if isSuperAdmin();
-      allow create, update: if isStoreOpenOrAllowed() && presenceIsValid(visitorId);
+      allow create: if isStoreOpenOrAllowed() && presenceIsValid(visitorId);
+      allow update: if isStoreOpenOrAllowed() &&
+        presenceIsValid(visitorId) &&
+        presenceUpdateNotTooFrequent();
     }
 
     match /siteTraffic/{dateKey}/sessions/{sessionId} {
@@ -550,32 +565,48 @@ service cloud.firestore {
         data.updatedAt == request.time;
     }
 
+    function sparkOrderItemQty(items, productId) {
+      // sparkItemsUnique ya garantiza ids únicos dentro del pedido, así que
+      // como máximo un término de esta suma es distinto de cero — sumar es
+      // solo una forma segura de "encontrar la cantidad de este producto,
+      // o 0 si no está" sin depender de find()/índices, que las reglas de
+      // Firestore no ofrecen.
+      return
+        (items.size() > 0 && items[0].get('id', null) == productId ? items[0].get('qty', 0) : 0) +
+        (items.size() > 1 && items[1].get('id', null) == productId ? items[1].get('qty', 0) : 0) +
+        (items.size() > 2 && items[2].get('id', null) == productId ? items[2].get('qty', 0) : 0) +
+        (items.size() > 3 && items[3].get('id', null) == productId ? items[3].get('qty', 0) : 0);
+    }
+
     function sparkStockUpdateValid(productId) {
       // Antes esta función leía getAfter(orderPath).data completo (todo el
-      // pedido) para volver a calcular qty y re-chequear source/userId. Eso
-      // crea una dependencia circular dentro del mismo commit: crear el
-      // pedido (sparkOrderCreateValid) YA exige, del lado del pedido, que
-      // getAfter(producto).stock baje exactamente en la cantidad pedida
-      // (sparkItemValid), y que el orderId tenga el formato uid_requestId
-      // con source spark-checkout-v1. Como la transacción es atómica, si
-      // cualquiera de las dos reglas falla se cae todo el commit — no hace
-      // falta que esta regla vuelva a leer el pedido entero para confirmar
-      // lo mismo que ya garantiza la otra regla. Alcanza con comprobar,
-      // solo del lado del producto, que el pedido se está creando de verdad
-      // en esta misma transacción (existsAfter) y que el stock bajó.
+      // pedido) para volver a calcular qty. Eso creaba una dependencia
+      // circular dentro del mismo commit MIENTRAS sparkItemValid (del lado
+      // del pedido) también leía getAfter(producto) para validar el mismo
+      // descuento desde el otro extremo — A leyendo el futuro de B y B
+      // leyendo el futuro de A a la vez. Como sparkItemValid ya NO lee
+      // getAfter(producto) (ver su comentario), ese ciclo se rompió: acá
+      // alcanza con leer getAfter(orderPath) en una sola dirección para
+      // atar el descuento a la cantidad real de ESTE producto en el pedido
+      // que se está creando. Sin esto, cualquier cuenta con correo
+      // verificado podía "descontar" el stock de un producto que ni
+      // siquiera estaba en su pedido, o vaciar el de otro cliente.
       let orderId = request.resource.data.lastStockOrderId;
       let orderPath = sparkOrderPath(orderId);
+      let orderItems = existsAfter(orderPath) ? getAfter(orderPath).data.items : [];
+      let qty = sparkOrderItemQty(orderItems, productId);
       return isSignedIn() &&
         orderId is string &&
         orderId.size() > 0 &&
         !exists(orderPath) &&
         existsAfter(orderPath) &&
+        qty > 0 &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'stock', 'lastStockOrderId', 'updatedAt'
         ]) &&
         resource.data.stock is number &&
         request.resource.data.stock is number &&
-        request.resource.data.stock < resource.data.stock &&
+        request.resource.data.stock == resource.data.stock - qty &&
         request.resource.data.stock >= 0 &&
         request.resource.data.updatedAt == request.time;
     }

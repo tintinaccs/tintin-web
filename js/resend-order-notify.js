@@ -1,11 +1,12 @@
 import { db, auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   addDoc,
   serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const ORDER_EMAIL_API = '/api/order-email';
+const ORDER_EMAIL_API = apiUrl('order-email');
 
 function clean(value, maxLength = 1000) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
