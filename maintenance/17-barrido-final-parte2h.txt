@@ -1,0 +1,33 @@
+PARTE 2H — BARRIDO FINAL 2A–2H
+================================
+
+Objetivo
+--------
+Cerrar la segunda revisión integral de TINTIN con una protección reproducible
+que confirme que las entregas 2A–2G siguen conectadas y que ninguna página,
+pantalla oficial, rol o auditoría crítica desaparece por accidente.
+
+Cobertura consolidada
+---------------------
+- 18 rutas HTML del producto, incluidas las áreas Admin y Super Admin.
+- 7 pantallas oficiales: 360x800, 390x844, 430x932, 768x1024,
+  1024x768, 1280x900 y 1440x1000.
+- Límites responsive críticos: 320, 480/481, 767/769, 1023/1025 y 1920 px.
+- 6 roles: invitado, cliente, visor, agente, administrador y superadministrador.
+- Contratos visuales de las Partes 2A, 2B, 2C, 2D, 2E, 2F y 2G.
+- Smoke test de las 18 rutas y diagnóstico de lectura de Firestore.
+
+Protecciones añadidas
+---------------------
+- `npm run audit:part2h` valida el inventario final y el cableado de CI.
+- `npm run audit:final` incluye el contrato 2H.
+- El workflow "Barrido final Parte 2H" reconstruye diagnósticos, ejecuta el
+  auditor profundo, toda la suite estática y el presupuesto de Firestore.
+- Las imágenes cargadas dinámicamente deben declararlo con
+  `data-dynamic-src="true"`, además de conservar id y texto alternativo.
+
+Validación visual
+-----------------
+Los workflows existentes de 2A–2G continúan ejecutándose en cada pull request.
+Así, el cierre 2H no reemplaza las revisiones anteriores: verifica que sigan
+presentes y deja que cada una mida su propio dominio en Chromium.

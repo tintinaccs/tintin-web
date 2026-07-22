@@ -40,6 +40,14 @@ const LEVELS = {
 };
 
 const issues = [];
+const LEGACY_LOGO_CLEANUP_FILES = new Set([
+  'js/page-audit-fix.js',
+  'js/page-loader.js',
+  'js/ui-quality.js',
+  'scripts/audit-deep.js',
+  'scripts/audit-tintin.js',
+  'scripts/fix-tintin-source.js'
+]);
 
 function add(level, file, message, fix = '') {
   issues.push({ level, file, message, fix });
@@ -313,8 +321,9 @@ function checkHtml(file) {
     const tag = match[0];
     const src = getAttr(tag, 'src') || '';
     const alt = getAttr(tag, 'alt');
+    const dynamicSrc = getAttr(tag, 'data-dynamic-src') === 'true';
 
-    if (!src) {
+    if (!src && !dynamicSrc) {
       add(LEVELS.ERROR, file, 'Imagen sin src.', 'Agregar src válido o eliminar imagen.');
     }
 
@@ -430,7 +439,7 @@ function checkCss(file) {
 function checkJs(file) {
   const js = read(file);
 
-  if (/logo-splash|logo-tintin/i.test(js)) {
+  if (/logo-splash|logo-tintin/i.test(js) && !LEGACY_LOGO_CLEANUP_FILES.has(file)) {
     add(
       LEVELS.WARN,
       file,
@@ -452,7 +461,7 @@ function checkJs(file) {
     );
   }
 
-  if (/TODO|FIXME|HACK/i.test(js)) {
+  if (/\b(?:TODO|FIXME|HACK)\b/.test(js)) {
     add(
       LEVELS.INFO,
       file,

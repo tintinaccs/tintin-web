@@ -59,7 +59,9 @@ function extractTagReferences(html) {
   const tagPattern = /<(?:script|link|img|source|a)\b[^>]*>/gi;
   for (const match of html.matchAll(tagPattern)) {
     const tag = match[0];
-    const attrPattern = /\b(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
+    // Exigir espacio antes del atributo evita confundir data-dynamic-src,
+    // data-src u otros nombres compuestos con un src real.
+    const attrPattern = /(?:^|\s)(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
     for (const attr of tag.matchAll(attrPattern)) references.push(attr[2]);
   }
   return references;
@@ -114,7 +116,7 @@ function auditHtmlPage(page) {
     }
   }
 
-  const localScripts = [...html.matchAll(/<script\b[^>]*\bsrc\s*=\s*(["'])(.*?)\1/gi)]
+  const localScripts = [...html.matchAll(/<script\b[^>]*\ssrc\s*=\s*(["'])(.*?)\1/gi)]
     .map(match => match[2])
     .filter(reference => !isIgnoredReference(reference));
   const duplicates = [...new Set(localScripts.filter((value, index) => localScripts.indexOf(value) !== index))];
@@ -158,6 +160,17 @@ function auditJavascriptReferences() {
 }
 
 const actualPages = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
+const referenceParserProbe = extractTagReferences(`
+  <img id="dynamic" data-dynamic-src="true" alt="Dinámica">
+  <script src="js/public-shell.js"></script>
+  <link rel="stylesheet" href="styles.css">
+`);
+if (
+  JSON.stringify(referenceParserProbe) !==
+  JSON.stringify(['js/public-shell.js', 'styles.css'])
+) {
+  fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
+}
 for (const expected of expectedPages) {
   if (!actualPages.includes(expected)) fail('inventario', `falta ${expected}.`);
 }

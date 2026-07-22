@@ -1,0 +1,40 @@
+name: Barrido final Parte 2H
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  final-sweep:
+    name: Integridad final de Partes 2A–2H
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check scripts/audit-deep.js
+          node --check scripts/audit-final-sweep-part2h.js
+
+      - name: Rebuild and verify diagnostics
+        run: npm run build:pages
+
+      - name: Run deep repository audit
+        run: npm run audit:deep
+
+      - name: Run complete static suite
+        run: npm run audit:final
+
+      - name: Verify Firestore read budget
+        run: node scripts/audit-firestore-read-budget.js
