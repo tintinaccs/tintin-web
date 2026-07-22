@@ -223,9 +223,9 @@ try {
     });
   }, { maxAttempts: 1 }));
 
-  // La eliminación real de Super Admin debe poder devolver el stock y borrar
-  // el pedido dentro de la misma transacción. Este caso reproduce los dos
-  // botones del panel (individual y masivo comparten este reconciliador).
+  // La eliminación real de Super Admin libera primero el inventario y borra
+  // después. Así, si el borrado falla o se reintenta, inventoryState=released
+  // impide devolver el stock dos veces y no se necesitan reglas nuevas.
   await seedBase();
   await testEnv.withSecurityRulesDisabled(async context => {
     const db = context.firestore();
@@ -254,6 +254,37 @@ try {
       lastInventoryAction: 'release',
       updatedAt: serverTimestamp()
     });
+    transaction.update(orderRef, {
+      status: 'cancelado',
+      inventoryState: 'released',
+      inventoryRevision: 2,
+      inventoryUpdatedAt: serverTimestamp(),
+      inventoryUpdatedBy: 'tintinaccs@gmail.com',
+      updatedAt: serverTimestamp()
+    });
+  }, { maxAttempts: 1 }));
+
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    const releasedOrder = await getDoc(doc(db, 'orders', 'u1_delete_order'));
+    const restoredProduct = await getDoc(doc(db, 'products', 'p1'));
+    assert.equal(releasedOrder.exists(), true);
+    assert.equal(releasedOrder.data().inventoryState, 'released');
+    assert.equal(restoredProduct.data().stock, 10);
+    assert.equal(restoredProduct.data().lastInventoryAction, 'release');
+  });
+
+  // Un reintento observa released y no vuelve a tocar el producto.
+  await assertSucceeds(runTransaction(superDb, async transaction => {
+    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
+    const order = await transaction.get(orderRef);
+    assert.equal(order.data().inventoryState, 'released');
+  }, { maxAttempts: 1 }));
+
+  await assertSucceeds(runTransaction(superDb, async transaction => {
+    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
+    const order = await transaction.get(orderRef);
+    assert.equal(order.data().inventoryState, 'released');
     transaction.delete(orderRef);
   }, { maxAttempts: 1 }));
 
@@ -263,7 +294,6 @@ try {
     const restoredProduct = await getDoc(doc(db, 'products', 'p1'));
     assert.equal(deletedOrder.exists(), false);
     assert.equal(restoredProduct.data().stock, 10);
-    assert.equal(restoredProduct.data().lastInventoryAction, 'release');
   });
 
   console.log('Reglas críticas: 11 ataques/regresiones verificados.');

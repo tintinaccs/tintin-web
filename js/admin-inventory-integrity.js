@@ -97,10 +97,17 @@ async function deleteOrder(orderId) {
     throw new Error('Solo Super Admin puede eliminar pedidos definitivamente.');
   }
 
-  return runTransaction(db, async transaction => {
+  // Se hace en dos transacciones deliberadamente. Primero el pedido queda
+  // marcado como released junto con la devolución de stock. Solo después se
+  // elimina. Si la segunda operación falla o la pestaña se cierra, un reintento
+  // ve inventoryState=released y no puede devolver el stock dos veces. Además,
+  // este orden funciona con las reglas que ya están publicadas en producción.
+  const releaseResult = await runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', safeOrderId);
     const orderSnapshot = await transaction.get(orderRef);
-    if (!orderSnapshot.exists()) return { orderId: safeOrderId, deleted: false };
+    if (!orderSnapshot.exists()) {
+      return { orderId: safeOrderId, existed: false, restored: false, missingProducts: [] };
+    }
 
     const order = orderSnapshot.data() || {};
     const items = normalizeInventoryItems(order.items || []);
@@ -131,16 +138,45 @@ async function deleteOrder(orderId) {
           updatedAt: serverTimestamp()
         });
       }
+
+      transaction.update(orderRef, {
+        status: 'cancelado',
+        inventoryState: 'released',
+        inventoryRevision: Math.max(0, Number(order.inventoryRevision || 0)) + 1,
+        inventoryUpdatedAt: serverTimestamp(),
+        inventoryUpdatedBy: actorEmail(),
+        updatedAt: serverTimestamp()
+      });
     }
 
-    transaction.delete(orderRef);
     return {
       orderId: safeOrderId,
-      deleted: true,
+      existed: true,
       restored: shouldRestore,
       missingProducts
     };
   }, { maxAttempts: 2 });
+
+  if (!releaseResult.existed) {
+    return { orderId: safeOrderId, deleted: false, restored: false, missingProducts: [] };
+  }
+
+  await runTransaction(db, async transaction => {
+    const orderRef = doc(db, 'orders', safeOrderId);
+    const orderSnapshot = await transaction.get(orderRef);
+    if (!orderSnapshot.exists()) return;
+    if (orderReservesInventory(orderSnapshot.data() || {})) {
+      throw new Error('El pedido cambió mientras se eliminaba. Volvé a intentarlo.');
+    }
+    transaction.delete(orderRef);
+  }, { maxAttempts: 2 });
+
+  return {
+    orderId: safeOrderId,
+    deleted: true,
+    restored: releaseResult.restored,
+    missingProducts: releaseResult.missingProducts
+  };
 }
 
 window.TintinInventoryIntegrity = Object.freeze({

@@ -19,6 +19,10 @@ RESULTADO
 - Los dos botones de eliminar usan la misma corrección.
 - Al borrar un pedido activo, la cantidad reservada vuelve al inventario.
 - Los pedidos antiguos también pueden borrarse si un producto ya no existe.
+- El inventario se libera antes del borrado definitivo; si el segundo paso
+  falla, el reintento no devuelve stock por duplicado.
+- El arreglo funciona con las reglas que ya estaban activas y no necesita una
+  publicación manual adicional en Firebase.
 - Un borrado en grupo conserva y señala los pedidos que no pudo procesar.
 - Solo se actualizan las cuentas realmente afectadas por el borrado.
 - El diagnóstico revisa únicamente el control de la cuenta autenticada y no

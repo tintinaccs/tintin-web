@@ -696,8 +696,7 @@ service cloud.firestore {
       let orderId = request.resource.data.get('lastInventoryOrderId', 'missing-order');
       let orderPath = sparkOrderPath(orderId);
       let beforeOrder = exists(orderPath) ? get(orderPath).data : {};
-      let orderExistsAfter = existsAfter(orderPath);
-      let afterOrder = orderExistsAfter ? getAfter(orderPath).data : {};
+      let afterOrder = existsAfter(orderPath) ? getAfter(orderPath).data : {};
       let beforeItems = beforeOrder.get('items', []);
       let afterItems = afterOrder.get('items', []);
       let beforeQty = beforeItems.size() > 0 && orderStateReservesInventory(beforeOrder)
@@ -707,12 +706,9 @@ service cloud.firestore {
         ? sparkOrderQtyForProduct(afterOrder, productId)
         : 0;
       return isSignedIn() &&
-        (isSuperAdmin() || hasRole('admin') || hasRole('agent')) &&
+        (hasRole('admin') || hasRole('agent')) &&
         beforeItems.size() > 0 &&
-        (
-          afterItems.size() > 0 ||
-          (isSuperAdmin() && !orderExistsAfter)
-        ) &&
+        afterItems.size() > 0 &&
         beforeQty != afterQty &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
