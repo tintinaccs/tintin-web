@@ -52,6 +52,16 @@ for (const page of manifest.pages) {
   }
 }
 
+if (!Array.isArray(manifest.missingReferences)) {
+  fail('El manifiesto no incluye el inventario de referencias faltantes.');
+} else if (manifest.missingReferences.length) {
+  const summary = manifest.missingReferences
+    .slice(0, 10)
+    .map(item => `${item.page}:${item.line || '?'} → ${item.raw || item.target || '?'}`)
+    .join(' | ');
+  fail(`Hay ${manifest.missingReferences.length} referencia(s) local(es) faltante(s): ${summary}.`);
+}
+
 if (process.exitCode) {
   console.error('\nIntegridad página-manifiesto: incorrecta. No se debe publicar esta versión.');
   process.exit(process.exitCode);

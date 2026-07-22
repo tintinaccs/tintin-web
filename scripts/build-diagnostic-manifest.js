@@ -88,8 +88,17 @@ function checkJavaScriptSyntax(source, asModule = false) {
 }
 
 function attr(fragment, name) {
-  const match = fragment.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, 'i'));
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = fragment.match(new RegExp(`(?:^|\\s)${escapedName}\\s*=\\s*["']([^"']*)["']`, 'i'));
   return match ? match[1].trim() : '';
+}
+
+const attributeParserProbe = '<img data-dynamic-src="true" src="real.webp" alt="Prueba">';
+if (
+  attr(attributeParserProbe, 'src') !== 'real.webp' ||
+  attr('<img data-dynamic-src="true" alt="Prueba">', 'src') !== ''
+) {
+  throw new Error('El analizador de atributos confunde nombres data-* con atributos HTML reales.');
 }
 
 function normalizeLocalReference(fromFile, raw) {

@@ -185,7 +185,7 @@ for (const page of expectedPages) {
   const html = read(page);
   for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
     const tag = match[0];
-    const hasSource = /\bsrc\s*=\s*["'][^"']+["']/i.test(tag);
+    const hasSource = /(?:^|\s)src\s*=\s*["'][^"']+["']/i.test(tag);
     const dynamic = /\bdata-dynamic-src\s*=\s*["']true["']/i.test(tag);
     if (!hasSource && !dynamic) imageProblems.push(`${page}: imagen sin origen`);
     if (dynamic && !/\bid\s*=\s*["'][^"']+["']/i.test(tag)) {
@@ -200,6 +200,12 @@ check(
   'Las imágenes sin origen estático declaran su carga dinámica',
   imageProblems.length === 0,
   imageProblems.join(' | ')
+);
+
+check(
+  'El manifiesto final no contiene referencias locales faltantes',
+  Array.isArray(diagnostics?.missingReferences) && diagnostics.missingReferences.length === 0,
+  `Referencias faltantes: ${JSON.stringify(diagnostics?.missingReferences || [])}`
 );
 
 const pkg = JSON.parse(read('package.json'));
