@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-22T11:07:33.256Z",
-  "sourceFingerprint": "590ffef23a6c2a679ee23fffdc6624362aab9ea7b42f1d848b1c63bdf14e0f3f",
+  "generatedAt": "2026-07-22T11:27:48.365Z",
+  "sourceFingerprint": "67950da5fdb67db33fdd76b8c410ad42189ca59efaba5ee8a01fe2949add2702",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 349,
     "textFiles": 315,
-    "totalBytes": 4880031,
+    "totalBytes": 4881231,
     "pages": 18,
     "modules": 196
   },
@@ -9266,14 +9266,6 @@
       ],
       "images": [
         {
-          "tag": "img",
-          "raw": "true",
-          "target": "true",
-          "alt": "Tintin Accesorios y Relojes — boutique femenina Paraguay",
-          "hasAlt": true,
-          "line": 82
-        },
-        {
           "tag": "source",
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
@@ -9920,12 +9912,6 @@
           "target": "css/home-fit.css",
           "line": 65,
           "exists": true
-        },
-        {
-          "raw": "true",
-          "target": "true",
-          "line": 82,
-          "exists": false
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
@@ -16986,8 +16972,8 @@
     },
     {
       "path": "scripts/audit-deep.js",
-      "bytes": 15015,
-      "sha256": "d55ca468a67caebafb23f8cf0c519571df22cf8db727e66f122c3d2bae7f3512",
+      "bytes": 15098,
+      "sha256": "d49fb20200cb6e2cac09c09fc8781953f3823308d8ed2dbbe23322783c64c48a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17147,8 +17133,8 @@
     },
     {
       "path": "scripts/audit-final-sweep-part2h.js",
-      "bytes": 7810,
-      "sha256": "c31ec438fe9333807a663426ffac3222403f9d7bb496678fd70dde5766421187",
+      "bytes": 8072,
+      "sha256": "630f40d9c9173fdca375aacb72c57c150ec9ccc0855d245de7acf0a175a8ac2b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17818,8 +17804,8 @@
     },
     {
       "path": "scripts/build-diagnostic-manifest.js",
-      "bytes": 23192,
-      "sha256": "9fa1922c1c090b26265eb2084d8d8e02c2c82715f399622e38f87e322b30550e",
+      "bytes": 23597,
+      "sha256": "5231a365758622b68af6860d3e9e8f3b05faebe25eb67efb31a311794fa1cf92",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18048,8 +18034,8 @@
     },
     {
       "path": "scripts/verify-diagnostic-manifest.js",
-      "bytes": 1773,
-      "sha256": "39d505879beb79688671d4756616d824f252a816ff0d814a2c90ef941a15aa61",
+      "bytes": 2223,
+      "sha256": "169762488365772a39261343546484418ec5c67e60fe40d1b871c9e0499b42ea",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19867,8 +19853,8 @@
     {
       "path": "scripts/audit-deep.js",
       "extension": ".js",
-      "bytes": 15015,
-      "sha256": "d55ca468a67caebafb23f8cf0c519571df22cf8db727e66f122c3d2bae7f3512"
+      "bytes": 15098,
+      "sha256": "d49fb20200cb6e2cac09c09fc8781953f3823308d8ed2dbbe23322783c64c48a"
     },
     {
       "path": "scripts/audit-diagnostic-findings.js",
@@ -19909,8 +19895,8 @@
     {
       "path": "scripts/audit-final-sweep-part2h.js",
       "extension": ".js",
-      "bytes": 7810,
-      "sha256": "c31ec438fe9333807a663426ffac3222403f9d7bb496678fd70dde5766421187"
+      "bytes": 8072,
+      "sha256": "630f40d9c9173fdca375aacb72c57c150ec9ccc0855d245de7acf0a175a8ac2b"
     },
     {
       "path": "scripts/audit-firestore-read-budget.js",
@@ -20101,8 +20087,8 @@
     {
       "path": "scripts/build-diagnostic-manifest.js",
       "extension": ".js",
-      "bytes": 23192,
-      "sha256": "9fa1922c1c090b26265eb2084d8d8e02c2c82715f399622e38f87e322b30550e"
+      "bytes": 23597,
+      "sha256": "5231a365758622b68af6860d3e9e8f3b05faebe25eb67efb31a311794fa1cf92"
     },
     {
       "path": "scripts/enforce-account-flow-part2d.mjs",
@@ -20161,8 +20147,8 @@
     {
       "path": "scripts/verify-diagnostic-manifest.js",
       "extension": ".js",
-      "bytes": 1773,
-      "sha256": "39d505879beb79688671d4756616d824f252a816ff0d814a2c90ef941a15aa61"
+      "bytes": 2223,
+      "sha256": "169762488365772a39261343546484418ec5c67e60fe40d1b871c9e0499b42ea"
     },
     {
       "path": "sitemap.xml",
@@ -20237,14 +20223,7 @@
     "terminos.html",
     "privacidad.html"
   ],
-  "missingReferences": [
-    {
-      "page": "index.html",
-      "target": "true",
-      "raw": "true",
-      "line": 82
-    }
-  ],
+  "missingReferences": [],
   "routeReferences": [
     {
       "file": "404.html",

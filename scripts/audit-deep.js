@@ -108,7 +108,8 @@ function resolveLocal(fromFile, rawValue) {
 }
 
 function getAttr(tag, attr) {
-  const re = new RegExp(`${attr}\\s*=\\s*["']([^"']*)["']`, 'i');
+  const escapedAttr = attr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(?:^|\\s)${escapedAttr}\\s*=\\s*["']([^"']*)["']`, 'i');
   const match = tag.match(re);
   return match ? match[1] : null;
 }
