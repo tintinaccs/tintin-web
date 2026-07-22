@@ -39,6 +39,7 @@ function isAllowedLegacyLogoReference(file) {
     'js/page-audit-fix.js',
     'js/ui-quality.js',
     'js/page-loader.js',
+    'scripts/audit-deep.js',
     'scripts/audit-tintin.js',
     'scripts/fix-tintin-source.js'
   ].includes(file);

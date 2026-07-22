@@ -84,7 +84,9 @@ check(
 check(
   'La compra final conserva validación transaccional',
   read('js/secure-checkout-order.js').includes('runTransaction') &&
-    read('js/secure-checkout-order.js').includes('stock - draft.cartLines[index].qty'),
+    read('js/secure-checkout-order.js').includes('Number(item.qty) > stock') &&
+    read('js/secure-checkout-order.js').includes('stock - Number(items[index].qty)') &&
+    read('js/secure-checkout-order.js').includes('transaction.update(productRefs[index]'),
   'checkout debe volver a validar el total solicitado'
 );
 

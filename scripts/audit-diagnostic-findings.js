@@ -87,10 +87,11 @@ check(
   /query\(collection\(db,\s*['"]colorSchemes['"]\),\s*where\(['"]scope['"],\s*['"]==['"],\s*scope\),\s*limit\(100\)\)/.test(adminApp)
 );
 check(
-  'Las escuchas públicas y administrativas restantes también están limitadas',
+  'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
   /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin-users-phase8.js')) &&
-    (read('js/collections-store.js').match(/onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(5000\)\)/g) || []).length === 2 &&
-    /onSnapshot\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(10000\)\)/.test(read('js/products-store.js'))
+    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/collections-store.js')) &&
+    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/collections-store.js')) &&
+    /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/products-store.js'))
 );
 
 check(
