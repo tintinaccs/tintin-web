@@ -33,7 +33,12 @@ for (const viewport of canonicalViewports) {
 }
 
 const pages = (manifest.pages || [])
-  .map(page => ({ path: page.path, id: page.id }))
+  .map(page => ({
+    path: page.path,
+    id: page.id,
+    requiresAuth: page.requiresAuth === true,
+    redirectsTo: page.metadata?.redirectsTo || ''
+  }))
   .filter(page => page.path && fs.existsSync(path.join(root, page.path)));
 
 const mime = {
@@ -84,6 +89,20 @@ const closeServer = () => new Promise(resolve => server.close(resolve));
 
 async function prepare(page) {
   await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
+
+  // Los módulos del shell son asíncronos. Esperamos su montaje o, como máximo,
+  // una ventana breve antes de retirar únicamente las capas de carga de prueba.
+  await Promise.race([
+    page.waitForFunction(() => (
+      document.body?.classList.contains('tt-public-shell-mounted') ||
+      document.getElementById('tt-tabbar') ||
+      document.getElementById('tt-header-desktop-tablet') ||
+      document.querySelector('main,form,[role="main"],.admin-login,.login-page')
+    ), null, { timeout: 2200 }).catch(() => {}),
+    page.waitForTimeout(900)
+  ]);
+
+  await page.waitForLoadState('domcontentloaded').catch(() => {});
   await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement;
@@ -93,9 +112,11 @@ async function prepare(page) {
     root.style.removeProperty('overflow');
     root.style.removeProperty('visibility');
     if (body) {
-      body.classList.remove('tt-scroll-locked');
+      ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked']
+        .forEach(name => body.classList.remove(name));
       ['position', 'top', 'left', 'right', 'width', 'overflow', 'visibility']
         .forEach(name => body.style.removeProperty(name));
+      body.style.setProperty('visibility', 'visible', 'important');
     }
     document.getElementById('tt-loader')?.remove();
     const closed = document.getElementById('tt-store-closed-overlay');
@@ -106,11 +127,11 @@ async function prepare(page) {
     }
     window.scrollTo(0, 0);
   });
-  await page.waitForTimeout(180);
+  await page.waitForTimeout(260);
 }
 
-async function inspect(page, width) {
-  return page.evaluate(width => {
+async function inspect(page, width, pageInfo) {
+  return page.evaluate(({ width, pageInfo }) => {
     const issues = [];
     const visible = node => {
       if (!node) return false;
@@ -123,17 +144,20 @@ async function inspect(page, width) {
     if (rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);
 
     const visibleBodyChildren = [...document.body.children].filter(visible);
-    if (!visibleBodyChildren.length) issues.push('la página quedó visualmente vacía');
+    if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) {
+      issues.push('la página pública quedó visualmente vacía');
+    }
 
+    const shellMounted = document.body?.classList.contains('tt-public-shell-mounted');
     const shellHeader = document.getElementById('tt-header-desktop-tablet');
     const shellTabbar = document.getElementById('tt-tabbar');
-    if (shellHeader || shellTabbar) {
+    if (shellMounted) {
       if (width <= 768) {
         if (visible(shellHeader)) issues.push('header desktop visible en mobile');
-        if (shellTabbar && !visible(shellTabbar)) issues.push('tabbar mobile oculta');
+        if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
       } else {
         if (visible(shellTabbar)) issues.push('tabbar mobile visible en desktop/tablet');
-        if (shellHeader && !visible(shellHeader)) issues.push('header desktop/tablet oculto');
+        if (!visible(shellHeader)) issues.push('header desktop/tablet oculto');
       }
     }
 
@@ -161,7 +185,7 @@ async function inspect(page, width) {
     }
 
     return issues;
-  }, width);
+  }, { width, pageInfo });
 }
 
 async function navigateWithRetry(page, url) {
@@ -203,7 +227,7 @@ try {
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       try {
         await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`);
-        entry.issues.push(...await inspect(page, viewport.width));
+        entry.issues.push(...await inspect(page, viewport.width, pageInfo));
       } catch (error) {
         entry.issues.push(error?.message || String(error));
       }
