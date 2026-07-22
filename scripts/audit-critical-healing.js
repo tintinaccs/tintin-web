@@ -13,6 +13,7 @@ const products = read('js/products-store.js');
 const collections = read('js/collections-store.js');
 const inventory = read('js/admin-inventory-integrity.js');
 const model = read('js/inventory-model.mjs');
+const deleteFix = read('js/admin-order-delete-fix.js');
 
 const checks = [];
 function check(name, condition, detail) {
@@ -83,6 +84,23 @@ check(
   model.includes("if (state === 'released') return false") &&
     model.includes('reserveDelta !== 0'),
   'El modelo debe distinguir reserved de released.'
+);
+check(
+  'Eliminar un pedido activo devuelve su stock y permite que el pedido desaparezca',
+  inventory.includes("lastInventoryAction: 'release'") &&
+    !inventory.includes("lastInventoryAction: 'delete-release'") &&
+    rules.includes("(isSuperAdmin() || hasRole('admin') || hasRole('agent'))") &&
+    rules.includes('(isSuperAdmin() && !orderExistsAfter)'),
+  'El panel y las reglas deben compartir la misma acción de devolución y admitir el estado posterior sin pedido.'
+);
+check(
+  'La eliminación masiva no recalcula toda la base ni oculta fallos parciales',
+  !deleteFix.includes('recalculateAllUserOrderStats') &&
+    deleteFix.includes('recalculateOrderOwnerStats') &&
+    admin.includes('const deletedOrders = []') &&
+    admin.includes('const failed = []') &&
+    admin.includes('failed.forEach(item => _selectedOrders.add(item.id))'),
+  'Solo deben recalcularse las cuentas afectadas y los pedidos fallidos deben quedar seleccionados.'
 );
 check(
   'Las consultas públicas tienen límites explícitos',

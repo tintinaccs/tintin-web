@@ -24,7 +24,7 @@ import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
-import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260716-cloudinary-fix-1";
+import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
@@ -32,7 +32,7 @@ import {
 } from "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import './admin-inventory-integrity.js?v=tintin-20260720-critical-healing-1';
+import './admin-inventory-integrity.js?v=tintin-20260722-order-delete-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2086,18 +2086,38 @@ window.updatePayStatus = async (orderId, status) => {
   }
 };
 
+function orderDeleteErrorMessage_(error) {
+  const raw = String(error?.message || error || '').trim();
+  if (/quota|resource-exhausted/i.test(raw)) {
+    return 'Se alcanzó temporalmente el límite de operaciones. Esperá un minuto y volvé a intentar.';
+  }
+  if (/permission-denied|insufficient permissions/i.test(raw)) {
+    return 'La base rechazó la eliminación. Recargá el panel y volvé a intentar como Super Admin.';
+  }
+  return raw ? `No se pudo eliminar el pedido: ${raw}` : 'No se pudo eliminar el pedido.';
+}
+
 window.deleteOrder = async (orderId) => {
-  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return; }
-  if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return;
+  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return { deleted: false }; }
+  if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return { deleted: false, cancelled: true };
+  const orderBefore = allOrders.find(x => x.id === orderId) || null;
   try {
-    const o = allOrders.find(x => x.id === orderId);
-    await window.TintinInventoryIntegrity.deleteOrder(orderId);
+    const result = await window.TintinInventoryIntegrity.deleteOrder(orderId);
     allOrders = allOrders.filter(o => o.id !== orderId);
-    logAudit('eliminar_pedido', 'pedido', orderId, o?.shortId || orderId, `Cliente: ${o?.userName || o?.userEmail || '—'}`);
-    toast('Pedido eliminado');
+    if (result.deleted) {
+      logAudit('eliminar_pedido', 'pedido', orderId, orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}`);
+      toast(result.missingProducts?.length
+        ? 'Pedido eliminado. Algunos productos antiguos ya no estaban en el catálogo.'
+        : 'Pedido eliminado');
+    } else {
+      toast('El pedido ya no existía; la lista fue actualizada.');
+    }
     applyOrderFilters();
+    return { ...result, orderBefore };
   } catch(e) {
-    toast('Error al eliminar pedido');
+    console.error('[orders] No se pudo eliminar el pedido:', e);
+    toast(orderDeleteErrorMessage_(e), 6500);
+    return { deleted: false, error: e, orderBefore };
   }
 };
 
@@ -2272,24 +2292,54 @@ window.bulkResendOrderEmails = async function() {
 };
 
 window.bulkDeleteOrders = async function() {
-  if (!_selectedOrders.size) return;
-  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede eliminar pedidos en lote'); return; }
+  if (!_selectedOrders.size) return { deletedOrders: [], failed: [] };
+  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede eliminar pedidos en lote'); return { deletedOrders: [], failed: [] }; }
   const n = _selectedOrders.size;
-  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} pedido(s)? Esta acción NO se puede deshacer.`)) return;
+  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} pedido(s)? Esta acción NO se puede deshacer.`)) return { deletedOrders: [], failed: [], cancelled: true };
   const typed = prompt(`Para confirmar, escribí CONFIRMAR (${n} pedidos serán eliminados):`);
-  if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return; }
-  try {
-    const ids = [..._selectedOrders];
-    for (const id of ids) {
-      await window.TintinInventoryIntegrity.deleteOrder(id);
+  if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return { deletedOrders: [], failed: [], cancelled: true }; }
+
+  const ids = [..._selectedOrders];
+  const ordersById = new Map(allOrders.map(order => [order.id, order]));
+  const deletedOrders = [];
+  const removedIds = new Set();
+  const failed = [];
+  toast(`Eliminando 0 de ${n}…`, 60000);
+
+  for (let index = 0; index < ids.length; index++) {
+    const id = ids[index];
+    try {
+      const result = await window.TintinInventoryIntegrity.deleteOrder(id);
+      removedIds.add(id);
+      if (result.deleted) deletedOrders.push(ordersById.get(id) || { id });
+    } catch (error) {
+      console.error(`[orders] No se pudo eliminar el pedido ${id}:`, error);
+      failed.push({ id, error });
     }
-    const idSet = new Set(ids);
-    allOrders = allOrders.filter(o => !idSet.has(o.id));
-    logAudit('eliminar_pedido', 'pedido', '', '', `${n} pedidos eliminados`, { bulk: true, count: n });
-    toast(`${n} pedido(s) eliminados definitivamente`);
-    clearOrdersSelection();
-    applyOrderFilters();
-  } catch (e) { toast('Error: ' + e.message); }
+    toast(`Eliminando ${index + 1} de ${n}…`, 60000);
+  }
+
+  allOrders = allOrders.filter(order => !removedIds.has(order.id));
+  _selectedOrders.clear();
+  failed.forEach(item => _selectedOrders.add(item.id));
+
+  if (deletedOrders.length) {
+    logAudit('eliminar_pedido', 'pedido', '', '', `${deletedOrders.length} pedidos eliminados`, {
+      bulk: true,
+      count: deletedOrders.length,
+      failed: failed.length
+    });
+  }
+
+  applyOrderFilters();
+  if (failed.length) {
+    const firstMessage = orderDeleteErrorMessage_(failed[0].error);
+    toast(`${deletedOrders.length} eliminado(s); ${failed.length} no pudieron eliminarse. ${firstMessage}`, 8000);
+  } else {
+    toast(`${deletedOrders.length} pedido(s) eliminados definitivamente`);
+  }
+
+  return { deletedOrders, failed };
 };
 
 function orderRowsToCsv_(orders) {

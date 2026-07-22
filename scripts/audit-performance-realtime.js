@@ -177,8 +177,15 @@ check(
   `Scripts bloqueantes: ${blockingOffenders.join(', ')}`
 );
 
-const homeCssKB = [...read('index.html').matchAll(/href="([^"]+\.css)(?:\?[^"]*)?"/g)]
-  .map(match => match[1]).filter(file => !/^https?:/.test(file)).reduce((sum, file) => sum + sizeKB(file), 0);
+// A stylesheet can appear once as a preload and once as the real stylesheet.
+// Browsers reuse that same response, so count each identical URL only once.
+const homeCssUrls = new Set(
+  [...read('index.html').matchAll(/href="([^"]+\.css(?:\?[^"]*)?)"/g)]
+    .map(match => match[1])
+    .filter(file => !/^https?:/.test(file))
+);
+const homeCssKB = [...homeCssUrls]
+  .reduce((sum, url) => sum + sizeKB(url.split(/[?#]/)[0]), 0);
 budget('Presupuesto CSS del inicio', homeCssKB <= 260, `${homeCssKB} KB sin comprimir.`);
 
 const homeJsKB = [...read('index.html').matchAll(/src="([^"]+\.js)(?:\?[^"]*)?"/g)]
