@@ -121,6 +121,11 @@ check(
   /collection\(db,\s*['"]siteTraffic['"],[\s\S]{0,260}['"]sessions['"]\)/.test(diagnostics)
 );
 check(
+  'checkoutGuards se comprueba por cuenta propia y nunca mediante listado global',
+  /getDoc\(doc\(db,\s*['"]checkoutGuards['"],\s*uid\)\)/.test(diagnostics) &&
+    /const ownDocumentOnly = name === ['"]checkoutGuards['"]/.test(diagnostics),
+);
+check(
   'Las reglas mantienen siteTraffic privado para Super Admin',
   /match \/siteTraffic\/\{dateKey\}\/sessions\/\{sessionId\}[\s\S]{0,120}allow read, delete: if isSuperAdmin\(\);/.test(rules)
 );

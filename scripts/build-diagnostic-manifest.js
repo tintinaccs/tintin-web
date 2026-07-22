@@ -5,7 +5,8 @@ const childProcess = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'diagnostic-manifest.json');
-const EXCLUDED_DIRS = new Set(['.git', 'node_modules', 'public']);
+const EXCLUDED_DIRS = new Set(['.git', 'artifacts', 'node_modules', 'public']);
+const EXCLUDED_FILES = new Set(['firebase-debug.log', 'firestore-debug.log', 'ui-debug.log']);
 const TEXT_EXTENSIONS = new Set([
   '.html', '.js', '.mjs', '.css', '.json', '.xml', '.txt', '.md', '.rules',
   '.gs', '.yml', '.yaml', '.toml'
@@ -21,7 +22,7 @@ function walk(directory, prefix = '') {
   const entries = fs.readdirSync(directory, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
-    if (EXCLUDED_DIRS.has(entry.name)) continue;
+    if (EXCLUDED_DIRS.has(entry.name) || EXCLUDED_FILES.has(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relative = path.posix.join(prefix, entry.name);
     if (entry.isDirectory()) files.push(...walk(absolute, relative));

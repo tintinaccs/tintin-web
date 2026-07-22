@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
 import {
   initializeTestEnvironment,
   assertFails,
@@ -6,6 +7,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   doc,
+  getDoc,
   runTransaction,
   serverTimestamp,
   setDoc
@@ -221,7 +223,50 @@ try {
     });
   }, { maxAttempts: 1 }));
 
-  console.log('Reglas críticas: 10 ataques/regresiones verificados.');
+  // La eliminación real de Super Admin debe poder devolver el stock y borrar
+  // el pedido dentro de la misma transacción. Este caso reproduce los dos
+  // botones del panel (individual y masivo comparten este reconciliador).
+  await seedBase();
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    await setDoc(doc(db, 'products', 'p1'), {
+      name: 'Producto 1', category: 'aros', price: 50000, stock: 8, active: true
+    });
+    await setDoc(doc(db, 'orders', 'u1_delete_order'), {
+      ...orderPayload('u1', 'delete_order', [testItem()], 'reserved'),
+      createdAt: new Date(), updatedAt: new Date(), inventoryUpdatedAt: new Date()
+    });
+  });
+
+  const superDb = testEnv.authenticatedContext('superadmin1', {
+    email: 'tintinaccs@gmail.com', email_verified: true
+  }).firestore();
+
+  await assertSucceeds(runTransaction(superDb, async transaction => {
+    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
+    const productRef = doc(superDb, 'products', 'p1');
+    const order = await transaction.get(orderRef);
+    const product = await transaction.get(productRef);
+    assert.equal(order.exists(), true);
+    transaction.update(productRef, {
+      stock: Number(product.data().stock) + 2,
+      lastInventoryOrderId: 'u1_delete_order',
+      lastInventoryAction: 'release',
+      updatedAt: serverTimestamp()
+    });
+    transaction.delete(orderRef);
+  }, { maxAttempts: 1 }));
+
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    const deletedOrder = await getDoc(doc(db, 'orders', 'u1_delete_order'));
+    const restoredProduct = await getDoc(doc(db, 'products', 'p1'));
+    assert.equal(deletedOrder.exists(), false);
+    assert.equal(restoredProduct.data().stock, 10);
+    assert.equal(restoredProduct.data().lastInventoryAction, 'release');
+  });
+
+  console.log('Reglas críticas: 11 ataques/regresiones verificados.');
 } finally {
   await testEnv.cleanup();
 }

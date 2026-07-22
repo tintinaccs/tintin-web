@@ -2,6 +2,8 @@ import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit,
   query
@@ -1069,18 +1071,33 @@ async function analyzeDataReadonly(scope) {
   for (const name of collections) {
     const accessTestId = `data.read.${name}`;
     try {
-      const targetCollection = name === 'siteTraffic'
-        ? collection(db, 'siteTraffic', new Intl.DateTimeFormat('en-CA', {
-            timeZone: 'America/Asuncion',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          }).format(new Date()), 'sessions')
-        : collection(db, name);
-      const snapshot = await getDocs(query(targetCollection, limit(sampleTargets.has(name) ? 30 : 1)));
+      const ownDocumentOnly = name === 'checkoutGuards';
+      let snapshot;
+      let sampleDocuments;
+      let sampleSize;
+
+      if (ownDocumentOnly) {
+        const uid = String(auth.currentUser?.uid || '').trim();
+        if (!uid) throw new Error('No existe una identidad autenticada para comprobar el control propio.');
+        snapshot = await getDoc(doc(db, 'checkoutGuards', uid));
+        sampleDocuments = snapshot.exists() ? [snapshot] : [];
+        sampleSize = sampleDocuments.length;
+      } else {
+        const targetCollection = name === 'siteTraffic'
+          ? collection(db, 'siteTraffic', new Intl.DateTimeFormat('en-CA', {
+              timeZone: 'America/Asuncion',
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            }).format(new Date()), 'sessions')
+          : collection(db, name);
+        snapshot = await getDocs(query(targetCollection, limit(sampleTargets.has(name) ? 30 : 1)));
+        sampleDocuments = snapshot.docs;
+        sampleSize = snapshot.size;
+      }
       completedTests.push(accessTestId);
       if (sampleTargets.has(name)) {
-        snapshot.docs.forEach(documentSnapshot => {
+        sampleDocuments.forEach(documentSnapshot => {
           const issues = validateSample(name, documentSnapshot.data() || {});
           if (!issues.length) return;
           findings.push(createFinding({
@@ -1117,9 +1134,11 @@ async function analyzeDataReadonly(scope) {
         label: `Lectura de ${name}`,
         target: name,
         status: sampleTargets.has(name) ? 'partial' : 'reviewed',
-        reason: sampleTargets.has(name)
-          ? `Acceso confirmado; se inspeccionaron ${snapshot.size} documentos como máximo.`
-          : 'Acceso de solo lectura confirmado con una consulta limitada a un documento.',
+        reason: ownDocumentOnly
+          ? 'Acceso de solo lectura al control de la cuenta actual confirmado sin enumerar controles de otras cuentas.'
+          : (sampleTargets.has(name)
+            ? `Acceso confirmado; se inspeccionaron ${sampleSize} documentos como máximo.`
+            : 'Acceso de solo lectura confirmado con una consulta limitada a un documento.'),
         requiredPermission: 'superadmin',
         testId: accessTestId
       }));
@@ -1127,9 +1146,15 @@ async function analyzeDataReadonly(scope) {
         id: accessTestId,
         name: 'Disponibilidad de Firestore en solo lectura',
         target: name,
-        expected: 'Consulta limitada permitida para Super Admin.',
-        actual: `Consulta completada con ${snapshot.size} documento(s) como máximo.`,
-        evidence: `Límite aplicado: ${sampleTargets.has(name) ? 30 : 1}. No se exportaron valores personales.`,
+        expected: ownDocumentOnly
+          ? 'Lectura del control propio permitida sin acceso a controles de otras cuentas.'
+          : 'Consulta limitada permitida para Super Admin.',
+        actual: ownDocumentOnly
+          ? `Lectura directa completada; documento propio ${sampleSize ? 'presente' : 'ausente'}.`
+          : `Consulta completada con ${sampleSize} documento(s) como máximo.`,
+        evidence: ownDocumentOnly
+          ? 'Se consultó únicamente el documento cuyo identificador coincide con la cuenta autenticada; no se registró su contenido.'
+          : `Límite aplicado: ${sampleTargets.has(name) ? 30 : 1}. No se exportaron valores personales.`,
         status: 'passed',
         executedAt: new Date().toISOString()
       });
@@ -1153,7 +1178,9 @@ async function analyzeDataReadonly(scope) {
         file: 'Firestore / firestore.rules',
         role: 'superadmin',
         state: 'Consulta limitada de solo lectura',
-        steps: `Ejecutar getDocs(query(collection(db, "${name}"), limit(1))) como Super Admin.`,
+        steps: name === 'checkoutGuards'
+          ? 'Leer únicamente el control correspondiente a la cuenta autenticada.'
+          : `Ejecutar getDocs(query(collection(db, "${name}"), limit(1))) como Super Admin.`,
         expected: 'La colección utilizada por la plataforma debe poder verificarse con el permiso correspondiente.',
         actual: error.code || error.message,
         evidence: `Código: ${error.code || 'no determinado'}. No se registraron datos ni valores sensibles.`,

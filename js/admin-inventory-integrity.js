@@ -107,6 +107,7 @@ async function deleteOrder(orderId) {
     const shouldRestore = orderReservesInventory(order);
     const refs = shouldRestore ? [...items.keys()].map(id => [id, productRef(id)]) : [];
     const snapshots = new Map();
+    const missingProducts = [];
 
     for (const [id, ref] of refs) snapshots.set(id, await transaction.get(ref));
 
@@ -114,21 +115,31 @@ async function deleteOrder(orderId) {
       for (const [id, qty] of items) {
         const snapshot = snapshots.get(id);
         if (!snapshot?.exists()) {
-          throw new Error(`No se puede eliminar sin perder inventario: el producto ${id} ya no existe.`);
+          // Los pedidos históricos deben poder eliminarse aunque uno de sus
+          // productos ya haya sido retirado del catálogo. No hay documento de
+          // stock que restaurar en ese caso; el resto sí se reconcilia dentro
+          // de la misma transacción.
+          missingProducts.push(id);
+          continue;
         }
         const stock = finiteStock(snapshot.data()?.stock);
         if (stock === null) continue;
         transaction.update(snapshot.ref, {
           stock: stock + qty,
           lastInventoryOrderId: safeOrderId,
-          lastInventoryAction: 'delete-release',
+          lastInventoryAction: 'release',
           updatedAt: serverTimestamp()
         });
       }
     }
 
     transaction.delete(orderRef);
-    return { orderId: safeOrderId, deleted: true, restored: shouldRestore };
+    return {
+      orderId: safeOrderId,
+      deleted: true,
+      restored: shouldRestore,
+      missingProducts
+    };
   }, { maxAttempts: 2 });
 }
 

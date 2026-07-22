@@ -5,12 +5,8 @@
    Después de eliminar pedido(s), recalcula stats reales desde `orders`.
    ============================================================= */
 
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
-  readOrderBeforeDelete,
-  recalculateOrderOwnerStats,
-  recalculateAllUserOrderStats
+  recalculateOrderOwnerStats
 } from './order-stats.js?v=tintin-20260716-cloudinary-fix-1';
 
 (function () {
@@ -30,16 +26,6 @@ import {
     el._ttOrderStatsTimer = setTimeout(() => el.classList.remove('show'), duration);
   }
 
-  async function orderStillExists(orderId) {
-    try {
-      const snap = await getDoc(doc(db, 'orders', orderId));
-      return snap.exists();
-    } catch (e) {
-      console.warn('[admin-order-delete-fix] No se pudo verificar si existe el pedido:', e);
-      return true;
-    }
-  }
-
   async function syncDeletedOrder(orderBefore) {
     if (!orderBefore) return;
     try {
@@ -56,13 +42,9 @@ import {
     if (typeof window.deleteOrder !== 'function' || window.deleteOrder._ttStatsWrapped) return false;
     const original = window.deleteOrder;
     const wrapped = async function(orderId) {
-      const before = await readOrderBeforeDelete(orderId).catch(e => {
-        console.warn('[admin-order-delete-fix] No se pudo leer pedido antes de borrar:', e);
-        return null;
-      });
-      await original.apply(this, arguments);
-      const exists = await orderStillExists(orderId);
-      if (!exists) await syncDeletedOrder(before || { id: orderId });
+      const result = await original.apply(this, arguments);
+      if (result?.deleted) await syncDeletedOrder(result.orderBefore || { id: orderId });
+      return result;
     };
     wrapped._ttStatsWrapped = true;
     window.deleteOrder = wrapped;
@@ -73,19 +55,29 @@ import {
     if (typeof window.bulkDeleteOrders !== 'function' || window.bulkDeleteOrders._ttStatsWrapped) return false;
     const original = window.bulkDeleteOrders;
     const wrapped = async function() {
-      await original.apply(this, arguments);
-      // Bulk delete está reservado a Super Admin en el panel. Para evitar stats
-      // fantasma aunque se eliminen muchos pedidos de distintos usuarios, se
-      // recalculan todos los usuarios desde la colección real `orders`.
+      const result = await original.apply(this, arguments);
+      const deletedOrders = Array.isArray(result?.deletedOrders) ? result.deletedOrders : [];
+      if (!deletedOrders.length) return result;
+
+      // Recalcular solo las cuentas afectadas evita volver a leer y escribir
+      // toda la base después de borrar uno o unos pocos pedidos.
+      const owners = new Map();
+      deletedOrders.forEach(order => {
+        const uid = String(order?.userId || order?.uid || order?.customerId || '').trim();
+        const email = String(order?.userEmail || order?.email || order?.customerEmail || '').trim().toLowerCase();
+        const key = uid ? `uid:${uid}` : (email ? `email:${email}` : '');
+        if (key && !owners.has(key)) owners.set(key, order);
+      });
       try {
-        const result = await recalculateAllUserOrderStats();
+        const settled = await Promise.allSettled([...owners.values()].map(order => recalculateOrderOwnerStats(order)));
+        const failed = settled.filter(item => item.status === 'rejected').length;
         localStorage.setItem('tt_profile_stats_refresh', String(Date.now()));
-        console.info('[admin-order-delete-fix] Recalculo global después de eliminación masiva:', result);
-        if (result?.updated) toast(`Stats de perfiles recalculadas (${result.updated} usuarios)`);
+        if (failed) throw new Error(`${failed} cuenta(s) no pudieron recalcularse`);
       } catch (e) {
-        console.warn('[admin-order-delete-fix] No se pudo recalcular stats globales:', e);
-        toast('Pedidos procesados. No se pudieron recalcular todas las stats de perfil.', 6500);
+        console.warn('[admin-order-delete-fix] No se pudieron recalcular todas las cuentas afectadas:', e);
+        toast('Los pedidos se eliminaron, pero algunas estadísticas de perfil no pudieron actualizarse.', 6500);
       }
+      return result;
     };
     wrapped._ttStatsWrapped = true;
     window.bulkDeleteOrders = wrapped;

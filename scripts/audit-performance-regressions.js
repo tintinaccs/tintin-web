@@ -51,6 +51,11 @@ const adminOnPublic = publicPages.filter(page => exists(page) && read(page).incl
 check('Bundle Admin fuera de páginas públicas', adminOnPublic.length === 0, `Páginas afectadas: ${adminOnPublic.join(', ')}`);
 check('No existe Service Worker con caché vieja', !exists('sw.js') && !exists('service-worker.js'), 'Un Service Worker puede servir archivos anteriores.');
 check('La interfaz respeta reducción de movimiento', /prefers-reduced-motion/.test(read('css/ui-quality.css')), 'Se perdió prefers-reduced-motion.');
+check(
+  'El presupuesto de estilos no cuenta dos veces un archivo preparado',
+  read('scripts/audit-performance-realtime.js').includes('const homeCssUrls = new Set('),
+  'La medición volvió a sumar por separado el preload y la hoja de estilos de una misma URL.'
+);
 
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => {
