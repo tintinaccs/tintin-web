@@ -1,0 +1,41 @@
+name: Nivel 2 — Comercio
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  commerce:
+    name: Carrito, checkout, inventario y correos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Level 2 commerce audit
+        id: level2
+        continue-on-error: true
+        run: npm run audit:level2 > level2-commerce-audit.log 2>&1
+
+      - name: Upload Level 2 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: level2-commerce-audit
+          path: level2-commerce-audit.log
+          retention-days: 14
+
+      - name: Enforce Level 2 result
+        run: |
+          cat level2-commerce-audit.log
+          test "${{ steps.level2.outcome }}" = "success"

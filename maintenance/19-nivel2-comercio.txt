@@ -1,0 +1,75 @@
+TINTIN WEB — NIVEL 2: COMERCIO CONFIABLE
+Fecha: 22/07/2026
+Rama: hardening/level-2-commerce
+
+ALCANCE
+- Carrito y sincronización.
+- Checkout y cotización autoritativa.
+- Identidad idempotente de pedidos.
+- Reserva, edición y liberación de inventario.
+- Estados de pedido y pago.
+- Correos automáticos y reenvíos.
+- Contrato para promociones futuras.
+- Coherencia entre checkout, panel, perfil, reglas y documentación.
+
+REVISIÓN CONFIRMADA
+- El carrito identifica líneas por producto + variante, limita cantidades y
+  serializa mutaciones. Los precios guardados son únicamente visuales.
+- El checkout vuelve a leer settings, perfil y productos, y compara subtotal,
+  envío y total antes de confirmar.
+- UID + requestId produce un orderId estable. Reintentar reanuda el mismo pedido.
+- Pedido y stock pasan de inventory_pending/pending a pendiente/reserved dentro
+  de una transacción.
+- El pedido conserva ítems, precios, envío, pago y datos del cliente históricos.
+- La edición administrativa deriva totales del pedido guardado y detecta cambios
+  concurrentes.
+- Eliminar libera inventario antes del borrado y marca released para impedir una
+  segunda devolución durante un reintento.
+- Firestore valida cantidades, precio, subtotal, total, propiedad y permisos.
+- El endpoint de correo vuelve a leer el pedido real y usa claves idempotentes.
+
+HALLAZGO CORREGIDO L2-01 — CORREOS SIN REINTENTO CONTROLADO
+Antes:
+- Un fallo temporal de red, timeout, HTTP 429/5xx o un resultado parcial podía
+  dejar la notificación fallida aunque el pedido estuviera creado correctamente.
+- El cliente registraba el resultado, pero no agotaba un reintento seguro dentro
+  de la misma operación.
+
+Ahora:
+- Máximo de 3 intentos con espera progresiva.
+- Timeout de 15 segundos por solicitud.
+- Reintento solo para red, timeout, 408, 425, 429, 5xx o resultado parcial.
+- Renovación del token una sola vez cuando la sesión venció.
+- El endpoint conserva las mismas claves idempotentes automáticas; un destinatario
+  que ya recibió el correo no recibe otro por el reintento.
+- emailLogs recibe un único resultado final y la cantidad de intentos.
+- Errores de permiso o validación no se repiten indefinidamente.
+
+PROMOCIONES
+- No se fingió un motor de promociones inexistente.
+- El precio autoritativo vigente sigue siendo el documento del producto y se
+  valida dentro del checkout.
+- docs/COMMERCE_CONTRACTS.md deja el contrato obligatorio para una implementación
+  futura: alcance, prioridad, fechas, compatibilidad, validación confiable,
+  persistencia histórica y coherencia en producto, carrito, checkout, pedido,
+  correo, panel y analítica.
+
+DOCUMENTACIÓN CORREGIDA
+- maintenance/11-3-pedidos-checkout.txt contenía una explicación antigua según la
+  cual eliminar no restauraba stock.
+- Se actualizó para reflejar la corrección ya integrada del 22/07/2026 y distinguir
+  claramente eliminación de un simple cambio de estado.
+
+AUDITORÍA
+- Nuevo comando: npm run audit:level2
+- Integrado en npm run audit:final inmediatamente después de Nivel 1.
+- Comprueba contratos de carrito, checkout, idempotencia, cotización, inventario,
+  administración, Firestore, correos, promociones y documentación.
+
+CRITERIO DE CIERRE
+- Auditoría L2 verde.
+- Auditorías históricas verdes.
+- Auditorías visuales y responsive verdes.
+- Smoke de páginas verde.
+- PR integrado en main.
+- Despliegue posterior comprobado.
