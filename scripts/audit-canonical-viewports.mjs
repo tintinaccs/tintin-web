@@ -41,6 +41,9 @@ const pages = (manifest.pages || [])
   }))
   .filter(page => page.path && fs.existsSync(path.join(root, page.path)));
 
+const authShellPages = new Set(['admin.html', 'admin-images.html', 'login.html', 'perfil.html']);
+const expectsPublicShell = pageInfo => !authShellPages.has(pageInfo.path) && !pageInfo.redirectsTo;
+
 const mime = {
   '.css': 'text/css; charset=utf-8',
   '.gif': 'image/gif',
@@ -87,13 +90,16 @@ const listen = () => new Promise((resolve, reject) => {
 });
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
-async function prepare(page, width) {
+async function prepare(page, width, pageInfo) {
   await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
-  await page.waitForFunction(() => (
-    document.body?.classList.contains('tt-public-shell-mounted') ||
-    document.getElementById('tt-tabbar') ||
-    document.getElementById('tt-header-desktop-tablet')
-  ), null, { timeout: 4000 }).catch(() => {});
+
+  if (expectsPublicShell(pageInfo)) {
+    await page.waitForFunction(() => (
+      document.body?.classList.contains('tt-public-shell-mounted') ||
+      document.getElementById('tt-tabbar') ||
+      document.getElementById('tt-header-desktop-tablet')
+    ), null, { timeout: 4000 }).catch(() => {});
+  }
 
   await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
@@ -119,19 +125,21 @@ async function prepare(page, width) {
     window.scrollTo(0, 0);
   });
 
-  const expected = width <= 768 ? '#tt-tabbar' : '#tt-header-desktop-tablet';
-  await page.waitForFunction(selector => {
-    const node = document.querySelector(selector);
-    if (!node) return false;
-    const style = getComputedStyle(node);
-    const box = node.getBoundingClientRect();
-    return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
-  }, expected, { timeout: 4000 }).catch(() => {});
+  if (expectsPublicShell(pageInfo)) {
+    const expected = width <= 768 ? '#tt-tabbar' : '#tt-header-desktop-tablet';
+    await page.waitForFunction(selector => {
+      const node = document.querySelector(selector);
+      if (!node) return false;
+      const style = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
+    }, expected, { timeout: 4000 }).catch(() => {});
+  }
   await page.waitForTimeout(180);
 }
 
 async function inspect(page, width, pageInfo) {
-  return page.evaluate(({ width, pageInfo }) => {
+  return page.evaluate(({ width, pageInfo, shellExpected }) => {
     const issues = [];
     const visible = node => {
       if (!node) return false;
@@ -148,10 +156,9 @@ async function inspect(page, width, pageInfo) {
       issues.push('la página quedó visualmente vacía');
     }
 
-    const shellHeader = document.getElementById('tt-header-desktop-tablet');
-    const shellTabbar = document.getElementById('tt-tabbar');
-    const shellPresent = shellHeader || shellTabbar;
-    if (shellPresent) {
+    if (shellExpected) {
+      const shellHeader = document.getElementById('tt-header-desktop-tablet');
+      const shellTabbar = document.getElementById('tt-tabbar');
       if (width <= 768) {
         if (visible(shellHeader)) issues.push('header desktop visible en mobile');
         if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
@@ -185,15 +192,15 @@ async function inspect(page, width, pageInfo) {
     }
 
     return issues;
-  }, { width, pageInfo });
+  }, { width, pageInfo, shellExpected: expectsPublicShell(pageInfo) });
 }
 
-async function navigateWithRetry(page, url, width) {
+async function navigateWithRetry(page, url, width, pageInfo) {
   let lastError;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-      await prepare(page, width);
+      await prepare(page, width, pageInfo);
       return;
     } catch (error) {
       lastError = error;
@@ -226,7 +233,7 @@ try {
       const page = await context.newPage();
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       try {
-        await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width);
+        await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
         entry.issues.push(...await inspect(page, viewport.width, pageInfo));
       } catch (error) {
         entry.issues.push(error?.message || String(error));
