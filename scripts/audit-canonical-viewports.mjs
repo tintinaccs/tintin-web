@@ -195,6 +195,10 @@ async function inspect(page, width, pageInfo) {
   }, { width, pageInfo, shellExpected: expectsPublicShell(pageInfo) });
 }
 
+function isTransientNavigationError(error) {
+  return /Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(error?.message || String(error));
+}
+
 async function navigateWithRetry(page, url, width, pageInfo) {
   let lastError;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
@@ -205,6 +209,21 @@ async function navigateWithRetry(page, url, width, pageInfo) {
     } catch (error) {
       lastError = error;
       if (attempt < 2) await page.waitForTimeout(500);
+    }
+  }
+  throw lastError;
+}
+
+async function inspectWithRetry(page, width, pageInfo) {
+  let lastError;
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      return await inspect(page, width, pageInfo);
+    } catch (error) {
+      lastError = error;
+      if (!isTransientNavigationError(error) || attempt >= 2) break;
+      await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
+      await prepare(page, width, pageInfo);
     }
   }
   throw lastError;
@@ -234,7 +253,7 @@ try {
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       try {
         await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
-        entry.issues.push(...await inspect(page, viewport.width, pageInfo));
+        entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo));
       } catch (error) {
         entry.issues.push(error?.message || String(error));
       }
