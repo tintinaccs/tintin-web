@@ -1,0 +1,79 @@
+TINTIN WEB — NIVEL 3: CALIDAD INTEGRAL
+Fecha: 22/07/2026
+Rama: hardening/level-3-quality
+
+ALCANCE
+- Responsive en todas las páginas y superficies compartidas.
+- Siete viewports exactos del proyecto.
+- Límites de breakpoint.
+- Estados de carga, vacío, error, desconexión y recuperación.
+- Accesibilidad, teclado, foco, tamaño táctil y movimiento reducido.
+- Rendimiento, loaders, caché, listeners, imágenes y presupuestos.
+- SEO, canonical, Open Graph, sitemap, robots y noindex.
+- Consistencia entre diseño, interacción y lógica.
+- Diagnóstico y reintentos automáticos acotados.
+
+CONTRATOS
+- docs/QUALITY_CONTRACTS.md fija criterios transversales y definición de
+  terminado para interfaz, estados, accesibilidad, rendimiento y SEO.
+- Cualquier cambio en shell, header, tabbar, carrito, búsqueda, cuenta,
+  colecciones, modales, footer o avisos debe revisarse en todas las páginas que
+  consumen esa superficie.
+
+VIEWPORTS CANÓNICOS
+- 1920×1080
+- 1440×900
+- 1280×720
+- 1024×768
+- 768×1024
+- 390×844
+- 320×568
+
+AUDITORÍA NUEVA DE NAVEGADOR
+- scripts/audit-canonical-viewports.mjs lee todas las páginas desde
+  diagnostic-manifest.json y las abre en Chromium en los siete tamaños exactos.
+- Detecta página visualmente vacía, overflow horizontal, navegación equivocada
+  por breakpoint, elementos fijos fuera de pantalla y diálogos visibles cortados.
+- Reintenta una navegación fallida una vez y guarda reporte/captura si persiste.
+
+RECUPERACIÓN AUTOMÁTICA DE AUDITORÍA
+Hallazgo L3-01:
+- Una ejecución responsive aislada podía fallar por una página que no terminaba
+  de renderizar, aunque un segundo intento pasara 204/204 combinaciones.
+
+Corrección:
+- scripts/run-responsive-audit-with-retry.mjs ejecuta la auditoría global.
+- Si falla, espera un segundo y repite exactamente una vez.
+- Si vuelve a fallar, conserva el error y bloquea la integración.
+- No existe bucle infinito ni se oculta una regresión reproducible.
+- Todos los workflows que usan npm run audit:global-responsive-geometry reciben
+  este comportamiento sin duplicar lógica.
+
+AUDITORÍA ESTÁTICA
+- scripts/audit-level3-quality.js verifica:
+  · siete viewports y seis roles;
+  · todas las páginas incluidas en navegador;
+  · geometría, superficies compartidas y límites;
+  · retry acotado;
+  · ausencia de IDs duplicados;
+  · viewport, idioma, H1 y metadatos;
+  · title, description, canonical y Open Graph;
+  · noindex y robots para páginas internas;
+  · sitemap y manifest;
+  · recuperación online en módulos principales;
+  · reduced motion, foco y tamaño táctil;
+  · contratos de rendimiento y regresión.
+
+CI
+- npm run audit:level3 forma parte de npm run audit:final.
+- npm run audit:canonical-viewports requiere Playwright y se ejecuta en
+  .github/workflows/level3-quality-audit.yml.
+- El workflow sube logs, reportes y capturas como artefactos.
+
+CRITERIO DE CIERRE
+- Nivel 3 estático verde.
+- 126 combinaciones canónicas o el total vigente del manifiesto, todas verdes.
+- Geometría global y límites verdes.
+- Smoke Chromium verde.
+- Rendimiento, SEO, accesibilidad y regresión verdes.
+- PR integrado y despliegue confirmado.
