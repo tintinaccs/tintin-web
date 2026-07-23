@@ -149,14 +149,28 @@ service cloud.firestore {
         data.startedAt == request.time;
     }
 
+    // El heartbeat de presencia real (site-activity.js) manda cada 60s. Un
+    // script que reescriba el mismo documento en bucle sin este freno agota
+    // la cuota diaria de escrituras del plan gratuito (Spark/Blaze) — el
+    // mismo incidente que llevó a cerrar esta colección por completo antes.
+    // Reactivada con este freno + Firebase App Check (bloquea scripts que no
+    // sean el sitio real) en vez de mantenerla apagada indefinidamente.
+    function presenceUpdateNotTooFrequent() {
+      return resource.data.lastSeen is timestamp &&
+        request.time > resource.data.lastSeen + duration.value(20, 's');
+    }
+
     match /sitePresence/{visitorId} {
       allow read, delete: if isSuperAdmin();
-      allow create, update: if false;
+      allow create: if isStoreOpenOrAllowed() && presenceIsValid(visitorId);
+      allow update: if isStoreOpenOrAllowed() &&
+        presenceIsValid(visitorId) &&
+        presenceUpdateNotTooFrequent();
     }
 
     match /siteTraffic/{dateKey}/sessions/{sessionId} {
       allow read, delete: if isSuperAdmin();
-      allow create: if false;
+      allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);
       allow update: if false;
     }
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T01:53:28.176Z",
-  "sourceFingerprint": "27d14499ce72b2c6d2972f8d6be22042992fbf02d704a71a0e4fc3c7b0374f99",
+  "generatedAt": "2026-07-23T02:15:29.414Z",
+  "sourceFingerprint": "7b98f11ed4aa33d264c8e0ee398e769d1256b64a967f13d161e61e5c6dbbee30",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 370,
     "textFiles": 336,
-    "totalBytes": 5007907,
+    "totalBytes": 5009660,
     "pages": 18,
     "modules": 202
   },
@@ -15730,8 +15730,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 27935,
-      "sha256": "e008f3dc951a8fa9c7d551e2f9a298d6f6e0fc04d8852b28465f17390aa4008e",
+      "bytes": 28269,
+      "sha256": "a12c445654d4b9d68c32ec87497b958fd2740e97e94c24472f0313f1af448c4f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17035,8 +17035,8 @@
     },
     {
       "path": "scripts/audit-critical-healing.js",
-      "bytes": 5913,
-      "sha256": "a8f9d1700508c0ccbc0940ae0cb47e194294c032a66e866f876f50a6d6a3af21",
+      "bytes": 6467,
+      "sha256": "7c1ae17857eb089f5ae700f462272b495887fc9b77ed0928dfacfa29a6ad8e8f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18982,8 +18982,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 41404,
-      "sha256": "a9e0ddb5acecb4983c8efba4b34da3534bafb05a809fd75993978bc4a6209c52"
+      "bytes": 42269,
+      "sha256": "32d0ae8f2710a27b557bc1925191cb20b7fc70eb441c3291524f1a1094c0cca0"
     },
     {
       "path": "functions/DEPLOY.md",
@@ -19546,8 +19546,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 27935,
-      "sha256": "e008f3dc951a8fa9c7d551e2f9a298d6f6e0fc04d8852b28465f17390aa4008e"
+      "bytes": 28269,
+      "sha256": "a12c445654d4b9d68c32ec87497b958fd2740e97e94c24472f0313f1af448c4f"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -20104,8 +20104,8 @@
     {
       "path": "scripts/audit-critical-healing.js",
       "extension": ".js",
-      "bytes": 5913,
-      "sha256": "a8f9d1700508c0ccbc0940ae0cb47e194294c032a66e866f876f50a6d6a3af21"
+      "bytes": 6467,
+      "sha256": "7c1ae17857eb089f5ae700f462272b495887fc9b77ed0928dfacfa29a6ad8e8f"
     },
     {
       "path": "scripts/audit-deep.js",
@@ -22272,14 +22272,14 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 523,
+      "line": 528,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 529,
+      "line": 534,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true

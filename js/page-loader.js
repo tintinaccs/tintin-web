@@ -508,6 +508,11 @@
 
   function bootSiteActivity() {
     if (!window.TintinSiteActivityBooted) {
+      // Reactivado tras el incidente de cuota: ahora las escrituras de
+      // presencia/tráfico están limitadas por reglas (freno de 20s por
+      // visitante) y protegidas por Firebase App Check, así que ya no
+      // hace falta mantener el interruptor apagado por defecto.
+      window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
       importSibling('site-activity.js', 'Site Activity');
     }
   }
