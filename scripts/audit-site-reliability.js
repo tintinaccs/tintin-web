@@ -88,7 +88,7 @@ check('La actividad propia y Google Analytics esperan el permiso opcional',
   activity.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
   analytics.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
-  analytics.includes('if (!hasStatisticsConsent()) return;') &&
+  analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   geoFunction.includes('const cf = request.cf || {}') &&

@@ -79,7 +79,7 @@ function ensureStyles() {
       background: #fff;
       color: #4d2837;
       box-shadow: 0 16px 44px rgba(73,35,49,.18);
-      font: 600 13px/1.45 Montserrat, Arial, sans-serif;
+      font: 600 13px/1.45 Montserrat, sans-serif;
       opacity: 0;
       pointer-events: none;
       transition: opacity .2s ease, transform .2s ease;
@@ -96,7 +96,7 @@ function ensureStyles() {
       border-radius: 50%;
       background: transparent;
       color: inherit;
-      font: 700 18px/1 Arial, sans-serif;
+      font: 700 18px/1 Montserrat, sans-serif;
       transform: translateY(-50%);
       cursor: pointer;
     }
