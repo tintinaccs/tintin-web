@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T19:51:47.415Z",
-  "sourceFingerprint": "f1937448b86a992ff76516a706d460e188e29e97b05fb28bea393671d9800778",
+  "generatedAt": "2026-07-23T19:56:39.682Z",
+  "sourceFingerprint": "75f4d3da199ceda40f8eda8f1172fd1f0feb0076ffee8678c270b3dec8036033",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 373,
     "textFiles": 339,
-    "totalBytes": 5042589,
+    "totalBytes": 5044405,
     "pages": 18,
     "modules": 204
   },
@@ -13400,8 +13400,8 @@
   "modules": [
     {
       "path": "cloudflare/cloudinary-security.js",
-      "bytes": 5132,
-      "sha256": "957fa737b5f6929e5b3b2ac0d00ae0ab6010d6ea2b6a16d814b3185b9dd9a366",
+      "bytes": 5341,
+      "sha256": "256007c7ccef8cdcd5e0c0f55eedf76113279c80d9ea542ceeeb47b0fd83bddd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13410,19 +13410,19 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 11
+          "line": 14
         },
         {
           "url": "https://tintinaccs.github.io/",
-          "line": 12
+          "line": 15
         },
         {
           "url": "https://tintinaccesorios.netlify.app/",
-          "line": 13
+          "line": 16
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 68
+          "line": 71
         }
       ]
     },
@@ -13555,47 +13555,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 18286,
-      "sha256": "add9782615949eccaba40e2322cd20b92f160a6b588d22ebf6a162b5f5d63239",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
-          "dynamic": false,
-          "line": 5
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/admin.html",
-          "line": 12
-        },
-        {
-          "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 40
-        },
-        {
-          "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
-          "line": 98
-        },
-        {
-          "url": "https://maps.google.com/",
-          "line": 232
-        },
-        {
-          "url": "https://api.resend.com/emails",
-          "line": 300
-        }
-      ]
-    },
-    {
-      "path": "functions/api/test-email.js",
-      "bytes": 5282,
-      "sha256": "0200c663b916b35fd8f22935fb424b79913fabb43ae21b70ea8601e257d6184b",
+      "bytes": 18300,
+      "sha256": "23401ffb8c557ea08ac511a8bed76e6b4ba371ec4154c4d803fa97c78a174b41",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13610,8 +13571,47 @@
       ],
       "endpoints": [
         {
+          "url": "https://tintinaccesorios.pages.dev/admin.html",
+          "line": 13
+        },
+        {
+          "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
+          "line": 41
+        },
+        {
+          "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
+          "line": 99
+        },
+        {
+          "url": "https://maps.google.com/",
+          "line": 233
+        },
+        {
           "url": "https://api.resend.com/emails",
-          "line": 64
+          "line": 301
+        }
+      ]
+    },
+    {
+      "path": "functions/api/test-email.js",
+      "bytes": 5296,
+      "sha256": "4ff860d4a31b78b240bf1fc0cf54d1a1849688e272be7a0b813d5452b7817431",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/cloudinary-security.js",
+          "target": "cloudflare/cloudinary-security.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.resend.com/emails",
+          "line": 65
         }
       ]
     },
@@ -13936,8 +13936,8 @@
     },
     {
       "path": "js/admin-email-gate-sync.js",
-      "bytes": 13115,
-      "sha256": "8e3c7a0c585f4a133158fe0a6becd0b324c0f6fa3e1c7bf59e21059e7f54c0e7",
+      "bytes": 13161,
+      "sha256": "f6f72d7fa4309311774c2d8b9c2f28091d4b7fa716ec4f433726089775f787fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13950,32 +13950,38 @@
           "line": 1
         },
         {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "./function-origin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/function-origin.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 11
+          "line": 12
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 3
+          "line": 4
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 11
+          "line": 12
         }
       ]
     },
@@ -14050,8 +14056,8 @@
     },
     {
       "path": "js/admin-inventory-integrity.js",
-      "bytes": 8828,
-      "sha256": "22be91a64ca6980ac731951921d0822e6e8e2501155ea304adf3886d89a3055f",
+      "bytes": 8875,
+      "sha256": "b22d7f108a9d804289ec0f87db2508383139cef5322f1cbd8787e6e74d9d6478",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14064,22 +14070,28 @@
           "line": 1
         },
         {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "./inventory-model.mjs?v=tintin-20260720-critical-healing-1",
           "target": "js/inventory-model.mjs",
           "dynamic": false,
-          "line": 16
+          "line": 17
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 10
+          "line": 11
         }
       ]
     },
@@ -14143,8 +14155,8 @@
     },
     {
       "path": "js/admin-payment-methods.js",
-      "bytes": 20563,
-      "sha256": "917f661e1bb6478e0b0c48f2b2d6f06f0c8f20721e53a94494255ea7f018d073",
+      "bytes": 20611,
+      "sha256": "27a070133ab0d76a8768bb54062ee481b179a2f792f648960dc8c313e6f31ea0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14157,32 +14169,38 @@
           "line": 1
         },
         {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "./payment-methods-core.js?v=tintin-20260720-payment-crud-1",
           "target": "js/payment-methods-core.js",
           "dynamic": false,
-          "line": 17
+          "line": 18
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 2
+          "line": 3
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 8
+          "line": 9
         }
       ]
     },
@@ -14253,8 +14271,8 @@
     },
     {
       "path": "js/admin-store-control.js",
-      "bytes": 11644,
-      "sha256": "5a41703314fca7a5b3aae6a85ac9cc7ea233411a43fd0353d9a4fa4f4ba8c410",
+      "bytes": 11692,
+      "sha256": "6c3e9fe022ebc8c6cf80d04a76fcfcf47008ca68d0393dd5564dc3863efc0c12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14267,16 +14285,22 @@
           "line": 15
         },
         {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 16
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 18
+          "line": 19
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 24
+          "line": 25
         },
         {
           "raw": "./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1",
@@ -14288,11 +14312,11 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 18
+          "line": 19
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 24
+          "line": 25
         }
       ]
     },
@@ -16139,8 +16163,8 @@
     },
     {
       "path": "js/roles.js",
-      "bytes": 5808,
-      "sha256": "7b1e0c5de9983c823c969f0375558a1a602111a089b12362d9dde49ee0ee9306",
+      "bytes": 6589,
+      "sha256": "71908f878e0aad6e91854a4915d4714cc793394607dc886012804d97dc7609aa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16190,8 +16214,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 28717,
-      "sha256": "d37e429fc9e3347d526cdf7f3bd379d7a7513ea2dfdffe24f0472af9f6dd4e5d",
+      "bytes": 28763,
+      "sha256": "b5855acaccdadc4b19f914c195764a6cf0322280c751d8fad773e3f4343b7a16",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16204,28 +16228,34 @@
           "line": 1
         },
         {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "./cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/cart-sync.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "./phone-utils.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/phone-utils.js",
           "dynamic": false,
-          "line": 19
+          "line": 20
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 7
+          "line": 8
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
@@ -16724,8 +16754,8 @@
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
-      "bytes": 8582,
-      "sha256": "cdaeba0d4cf372127c60706cf32bdac06e61eea45389022fcc099ce0dbbe52f6",
+      "bytes": 8576,
+      "sha256": "cc4ee397473a9230fed42af8db73b18a36327f6cd661484d9eaf3419f7cfa1f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18756,8 +18786,8 @@
     {
       "path": "cloudflare/cloudinary-security.js",
       "extension": ".js",
-      "bytes": 5132,
-      "sha256": "957fa737b5f6929e5b3b2ac0d00ae0ab6010d6ea2b6a16d814b3185b9dd9a366"
+      "bytes": 5341,
+      "sha256": "256007c7ccef8cdcd5e0c0f55eedf76113279c80d9ea542ceeeb47b0fd83bddd"
     },
     {
       "path": "collections.html",
@@ -19086,8 +19116,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 43549,
-      "sha256": "b4f9edff0868e9f2ce747d3dd210abbdfd6dccb3232d608b829630482e9d8180"
+      "bytes": 44118,
+      "sha256": "f46081e75ed99b9f9616daeca5855514b5bd3a03a14a9fa38fea84af51785a0a"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -19140,14 +19170,14 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 18286,
-      "sha256": "add9782615949eccaba40e2322cd20b92f160a6b588d22ebf6a162b5f5d63239"
+      "bytes": 18300,
+      "sha256": "23401ffb8c557ea08ac511a8bed76e6b4ba371ec4154c4d803fa97c78a174b41"
     },
     {
       "path": "functions/api/test-email.js",
       "extension": ".js",
-      "bytes": 5282,
-      "sha256": "0200c663b916b35fd8f22935fb424b79913fabb43ae21b70ea8601e257d6184b"
+      "bytes": 5296,
+      "sha256": "4ff860d4a31b78b240bf1fc0cf54d1a1849688e272be7a0b813d5452b7817431"
     },
     {
       "path": "functions/api/visitor-geo.js",
@@ -19194,8 +19224,8 @@
     {
       "path": "js/admin-email-gate-sync.js",
       "extension": ".js",
-      "bytes": 13115,
-      "sha256": "8e3c7a0c585f4a133158fe0a6becd0b324c0f6fa3e1c7bf59e21059e7f54c0e7"
+      "bytes": 13161,
+      "sha256": "f6f72d7fa4309311774c2d8b9c2f28091d4b7fa716ec4f433726089775f787fe"
     },
     {
       "path": "js/admin-images-phase5.js",
@@ -19212,8 +19242,8 @@
     {
       "path": "js/admin-inventory-integrity.js",
       "extension": ".js",
-      "bytes": 8828,
-      "sha256": "22be91a64ca6980ac731951921d0822e6e8e2501155ea304adf3886d89a3055f"
+      "bytes": 8875,
+      "sha256": "b22d7f108a9d804289ec0f87db2508383139cef5322f1cbd8787e6e74d9d6478"
     },
     {
       "path": "js/admin-media-library-ui.js",
@@ -19242,8 +19272,8 @@
     {
       "path": "js/admin-payment-methods.js",
       "extension": ".js",
-      "bytes": 20563,
-      "sha256": "917f661e1bb6478e0b0c48f2b2d6f06f0c8f20721e53a94494255ea7f018d073"
+      "bytes": 20611,
+      "sha256": "27a070133ab0d76a8768bb54062ee481b179a2f792f648960dc8c313e6f31ea0"
     },
     {
       "path": "js/admin-site-diagnostics.js",
@@ -19254,8 +19284,8 @@
     {
       "path": "js/admin-store-control.js",
       "extension": ".js",
-      "bytes": 11644,
-      "sha256": "5a41703314fca7a5b3aae6a85ac9cc7ea233411a43fd0353d9a4fa4f4ba8c410"
+      "bytes": 11692,
+      "sha256": "6c3e9fe022ebc8c6cf80d04a76fcfcf47008ca68d0393dd5564dc3863efc0c12"
     },
     {
       "path": "js/admin-unsaved-guard.js",
@@ -19728,8 +19758,8 @@
     {
       "path": "js/roles.js",
       "extension": ".js",
-      "bytes": 5808,
-      "sha256": "7b1e0c5de9983c823c969f0375558a1a602111a089b12362d9dde49ee0ee9306"
+      "bytes": 6589,
+      "sha256": "71908f878e0aad6e91854a4915d4714cc793394607dc886012804d97dc7609aa"
     },
     {
       "path": "js/scroll-debug-overlay.js",
@@ -19746,8 +19776,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 28717,
-      "sha256": "d37e429fc9e3347d526cdf7f3bd379d7a7513ea2dfdffe24f0472af9f6dd4e5d"
+      "bytes": 28763,
+      "sha256": "b5855acaccdadc4b19f914c195764a6cf0322280c751d8fad773e3f4343b7a16"
     },
     {
       "path": "js/security-utils.js",
@@ -20082,8 +20112,8 @@
     {
       "path": "scripts/audit-admin-email-messaging.js",
       "extension": ".js",
-      "bytes": 8582,
-      "sha256": "cdaeba0d4cf372127c60706cf32bdac06e61eea45389022fcc099ce0dbbe52f6"
+      "bytes": 8576,
+      "sha256": "cc4ee397473a9230fed42af8db73b18a36327f6cd661484d9eaf3419f7cfa1f7"
     },
     {
       "path": "scripts/audit-admin-foundation.js",
@@ -24297,22 +24327,22 @@
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 199,
+            "line": 198,
             "operation": "collection"
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 39,
+            "line": 38,
             "operation": "doc"
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 110,
+            "line": 109,
             "operation": "doc"
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 169,
+            "line": 168,
             "operation": "doc"
           },
           {
@@ -24472,7 +24502,7 @@
           },
           {
             "file": "js/admin-inventory-integrity.js",
-            "line": 25,
+            "line": 24,
             "operation": "doc"
           },
           {
@@ -24977,12 +25007,12 @@
           },
           {
             "file": "js/roles.js",
-            "line": 166,
+            "line": 177,
             "operation": "doc"
           },
           {
             "file": "js/roles.js",
-            "line": 185,
+            "line": 196,
             "operation": "doc"
           },
           {

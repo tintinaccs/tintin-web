@@ -7,6 +7,17 @@ import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// Única fuente de verdad para el cliente (importada por todo lo demás en
+// js/ que necesita identificar al Super Admin). Cloudflare Pages Functions
+// tiene su propia copia en cloudflare/cloudinary-security.js
+// (SUPERADMIN_EMAIL) porque corre en un runtime distinto y no puede
+// importar de acá; firestore.rules repite el literal seis veces porque el
+// lenguaje de reglas no admite imports ni constantes compartidas entre
+// archivos. Migrar a un custom claim de Firebase Auth (admin=true)
+// eliminaría la comparación por correo en las tres capas, pero asignar un
+// claim requiere el Admin SDK corriendo en un entorno privilegiado (una
+// Cloud Function) — hoy el proyecto está en plan Spark y no las despliega
+// (ver firebase-cloud-functions-inactive/README.md).
 export const SUPER_ADMIN = 'tintinaccs@gmail.com';
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en

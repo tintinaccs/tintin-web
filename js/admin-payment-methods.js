@@ -1,4 +1,5 @@
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   doc,
@@ -17,7 +18,6 @@ import {
 } from './payment-methods-core.js?v=tintin-20260720-payment-crud-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
-const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 const SETTINGS_REF = doc(db, 'settings', 'general');
 
 function escapeHtml(value) {

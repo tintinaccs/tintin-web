@@ -1,4 +1,5 @@
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   getDoc,
@@ -23,7 +24,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   const REQUEST_KEY = 'tt_spark_checkout_request_id';
   const MAX_DISTINCT_PRODUCTS = 4;
-  const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
   const DEFAULT_STORE_WHATSAPP = '595981299331';
   const CHECKOUT_COOLDOWN_MS = 90 * 1000;
   let submitting = false;

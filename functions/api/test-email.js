@@ -2,11 +2,12 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireSuperAdmin
+  requireSuperAdmin,
+  SUPERADMIN_EMAIL
 } from '../../cloudflare/cloudinary-security.js';
 
 const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
-const REPLY_TO = 'tintinaccs@gmail.com';
+const REPLY_TO = SUPERADMIN_EMAIL;
 
 function clean(value, maxLength = 1000) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);

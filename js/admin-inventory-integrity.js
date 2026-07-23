@@ -1,4 +1,5 @@
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   doc,
@@ -14,8 +15,6 @@ import {
   normalizeInventoryItems,
   orderReservesInventory
 } from './inventory-model.mjs?v=tintin-20260720-critical-healing-1';
-
-const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();

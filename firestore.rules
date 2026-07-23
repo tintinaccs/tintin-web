@@ -11,6 +11,14 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // El lenguaje de reglas no admite imports ni constantes compartidas
+    // entre archivos, así que este literal se repite en cada función que lo
+    // necesita en todo el archivo (js/roles.js y cloudflare/cloudinary-
+    // security.js sí tienen una única fuente de verdad cada uno, para sus
+    // respectivos runtimes). Migrar a un custom claim de Firebase Auth
+    // (admin=true) eliminaría la comparación por correo acá también, pero
+    // requiere el Admin SDK en un entorno privilegiado — ver
+    // firebase-cloud-functions-inactive/README.md.
     function isSuperAdmin() {
       return isSignedIn() &&
         request.auth.token.email == "tintinaccs@gmail.com";

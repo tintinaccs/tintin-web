@@ -13,6 +13,7 @@
    ============================================================= */
 
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -23,7 +24,6 @@ import {
   serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 const GENERAL_REF = doc(db, 'settings', 'general');
 const STORE_GATE_REF = doc(db, 'settings', 'storeGate');
 const MAINTENANCE_ROLES = [

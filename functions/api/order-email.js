@@ -1,12 +1,13 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse
+  preflightResponse,
+  SUPERADMIN_EMAIL
 } from '../../cloudflare/cloudinary-security.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
-const ADMIN_EMAIL = 'tintinaccs@gmail.com';
+const ADMIN_EMAIL = SUPERADMIN_EMAIL;
 const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
 const REPLY_TO = ADMIN_EMAIL;
 const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin.html';
