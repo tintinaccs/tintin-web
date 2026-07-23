@@ -9,6 +9,7 @@ const rules = read('firestore.rules');
 const checkout = read('js/secure-checkout-order.js');
 const admin = read('js/admin-app.js');
 const activity = read('js/site-activity.js');
+const loader = read('js/page-loader.js');
 const products = read('js/products-store.js');
 const collections = read('js/collections-store.js');
 const inventory = read('js/admin-inventory-integrity.js');
@@ -21,15 +22,22 @@ function check(name, condition, detail) {
 }
 
 check(
-  'La analítica pública no puede escribir directamente en Firestore',
-  /match \/sitePresence\/{visitorId}[\s\S]{0,160}allow create, update: if false;/.test(rules) &&
-    /match \/siteTraffic\/{dateKey}\/sessions\/{sessionId}[\s\S]{0,180}allow create: if false;/.test(rules),
-  'sitePresence y siteTraffic deben quedar cerrados a escrituras del navegador.'
+  'La analítica pública reactivada exige freno de frecuencia, no escritura libre',
+  // Reactivada tras el incidente de cuota (ver AUDITORIA-CRITICO.txt): ya no
+  // queda cerrada con "if false" a secas, pero tampoco vuelve a la escritura
+  // libre de antes del incidente — cada update exige que hayan pasado al
+  // menos 20s desde el lastSeen anterior, y App Check bloquea scripts que no
+  // sean el sitio real.
+  rules.includes('function presenceUpdateNotTooFrequent()') &&
+    rules.includes('presenceUpdateNotTooFrequent()') &&
+    rules.includes("allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);\n      allow update: if false;"),
+  'sitePresence debe limitar la frecuencia de escritura; siteTraffic no debe permitir update.'
 );
 check(
-  'La actividad pública queda desactivada por defecto en el runtime',
+  'La actividad pública arranca sola en cada página (ya no depende de un interruptor apagado)',
   activity.includes('TINTIN_ENABLE_PUBLIC_ACTIVITY === true') &&
-    activity.includes("ttActivityState = 'disabled-quota-protection'"),
+    activity.includes("ttActivityState = 'disabled-quota-protection'") &&
+    loader.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true'),
   'site-activity.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
