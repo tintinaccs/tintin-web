@@ -117,18 +117,19 @@ SOLUCIÓN:
 3) Mientras tanto, activar alertas de presupuesto/uso en Firebase para
    detectar el pico.
 
-[RESUELTO PARCIALMENTE 2026-07-22] Se agregó presenceUpdateNotTooFrequent()
-en firestore.rules: un mismo documento de sitePresence ya no puede
-reescribirse más rápido que cada 20s (el heartbeat real manda cada 60s,
-así que no afecta el uso normal). Esto corta el bucle de "reescribir el
-mismo doc sin parar". LO QUE QUEDA PENDIENTE (no resuelto en este pase,
-requiere una pieza que no se puede armar solo con reglas): un script
-puede seguir creando documentos NUEVOS con visitorId distinto en cada
-request (cada uno es un create, no un update) y agotar la cuota igual.
-Solución real y recomendada para esa parte: activar Firebase App Check
-(gratis en Spark) — requiere que el dueño del proyecto genere una clave
-de reCAPTCHA en la consola de Firebase, algo que no se puede hacer desde
-el código. Recomiendo hacerlo como siguiente paso.
+[RESUELTO 2026-07-23] Se agregó presenceUpdateNotTooFrequent() en
+firestore.rules (un mismo documento de sitePresence ya no puede
+reescribirse más rápido que cada 20s) Y se activó Firebase App Check
+(reCAPTCHA v3) en js/firebase.js, registrado para los dominios
+tintinaccs.github.io, tintinaccesorios.pages.dev y localhost. App Check
+cubre exactamente el hueco que las reglas solas no podían: ahora un
+script no puede crear documentos nuevos (visitorId distinto en cada
+request) sin pasar primero la verificación, además de servir de defensa
+general contra tráfico automatizado en el resto de la escritura pública
+(carrito, pedidos). Queda en modo "Supervisar" en Firebase Console → App
+Check → APIs hasta confirmar en las métricas que el tráfico real de
+clientas no se ve afectado; recién entonces pasar a "Aplicar" sobre
+Firestore.
 
 ================================================================
 Fin del nivel CRÍTICO. Continúo con el nivel MEDIO en
