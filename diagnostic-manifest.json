@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-22T20:20:02.329Z",
-  "sourceFingerprint": "fde8d9426ddcba9dc4ebe94d12f09a5ed8d238f352c9e12f52b492609298028b",
+  "generatedAt": "2026-07-23T01:17:55.671Z",
+  "sourceFingerprint": "4190cf2a99f842088f9eadc641ea54f923b620f02e08461dfba6a1a121237879",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 311,
     "textFiles": 277,
-    "totalBytes": 4658261,
+    "totalBytes": 4663204,
     "pages": 18,
     "modules": 168
   },
@@ -15190,8 +15190,8 @@
     },
     {
       "path": "js/firebase.js",
-      "bytes": 1799,
-      "sha256": "8afef27ae98802f68598cc5b4bc67bbba98b46ad92bda11503224a88cdcb3a1f",
+      "bytes": 2811,
+      "sha256": "6e8e0c1f4b926f7544defc5bcab68737b50a4528b3bbb7b2a0215f3a4eab34ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15214,6 +15214,12 @@
           "target": null,
           "dynamic": false,
           "line": 7
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js",
+          "target": null,
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": [
@@ -15228,6 +15234,10 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "line": 7
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js",
+          "line": 8
         }
       ]
     },
@@ -17454,20 +17464,20 @@
     {
       "path": "AUDITORIA-BAJO.txt",
       "extension": ".txt",
-      "bytes": 5975,
-      "sha256": "82ae68bfe59d9423dbaef2ee7f1da784c07ab601b03aef381d85e4a02097febd"
+      "bytes": 6979,
+      "sha256": "1b390f408948649d8781296e7cb51ce1198e44f6dbd7cd04a562003bfc3beddb"
     },
     {
       "path": "AUDITORIA-CRITICO.txt",
       "extension": ".txt",
-      "bytes": 5605,
-      "sha256": "95bb8d1c84cd16c24fece88871ce881a44739161244e562a5a66a37e2fa15f90"
+      "bytes": 7164,
+      "sha256": "fc013afb8225bed829660faeefd23172f69532fc59b5a58edacc12723ff20742"
     },
     {
       "path": "AUDITORIA-MEDIO.txt",
       "extension": ".txt",
-      "bytes": 6346,
-      "sha256": "c0efaab10c24f15586113e74129ca8b6df081c687bee3f91a0a11e5b47f10520"
+      "bytes": 7714,
+      "sha256": "c96524e7a89d5b575bd3fb10799857b4d2df0aef21a7ab23da8e551dde3e372c"
     },
     {
       "path": "CLOUDINARY_SETUP.md",
@@ -18360,8 +18370,8 @@
     {
       "path": "js/firebase.js",
       "extension": ".js",
-      "bytes": 1799,
-      "sha256": "8afef27ae98802f68598cc5b4bc67bbba98b46ad92bda11503224a88cdcb3a1f"
+      "bytes": 2811,
+      "sha256": "6e8e0c1f4b926f7544defc5bcab68737b50a4528b3bbb7b2a0215f3a4eab34ff"
     },
     {
       "path": "js/firestore-pagination.js",

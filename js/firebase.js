@@ -5,6 +5,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
@@ -16,6 +17,24 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// App Check (reCAPTCHA v3): certifica ante Firebase que las lecturas y
+// escrituras vienen de este sitio y no de un script externo repitiendo
+// llamadas (el vector de C2 en la auditoría: agotar la cuota diaria de
+// Firestore del plan Spark). Este módulo se carga en todas las páginas
+// (todo el sitio importa firebase.js), así que alcanza con inicializarlo
+// una sola vez acá. try/catch porque initializeAppCheck() revienta si se
+// llama dos veces sobre el mismo app — no debería pasar ya que este
+// archivo se ejecuta una sola vez por versión de caché, pero sale barato
+// no arriesgar una pantalla en blanco por eso.
+try {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider('6LdhrGAtAAAAAIPJJ2nTT9300Vor--WIq0PRCP9m'),
+    isTokenAutoRefreshEnabled: true
+  });
+} catch (error) {
+  console.warn('[firebase] App Check ya estaba inicializado:', error);
+}
 
 // Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
 // persistentLocalCache + persistentMultipleTabManager para que los listeners
