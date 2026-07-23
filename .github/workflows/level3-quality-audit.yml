@@ -1,0 +1,61 @@
+name: Nivel 3 — Calidad integral
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Responsive, accesibilidad, rendimiento y SEO
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Rebuild diagnostics
+        run: npm run build:pages
+
+      - name: Run Level 3 static audit
+        id: level3
+        continue-on-error: true
+        run: npm run audit:level3 > level3-quality-audit.log 2>&1
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Test all pages in canonical viewports
+        id: canonical
+        continue-on-error: true
+        run: npm run audit:canonical-viewports > canonical-viewports.log 2>&1
+
+      - name: Upload Level 3 reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: level3-quality-reports
+          path: |
+            level3-quality-audit.log
+            canonical-viewports.log
+            artifacts/canonical-viewports
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Enforce Level 3 results
+        run: |
+          cat level3-quality-audit.log
+          cat canonical-viewports.log
+          test "${{ steps.level3.outcome }}" = "success"
+          test "${{ steps.canonical.outcome }}" = "success"

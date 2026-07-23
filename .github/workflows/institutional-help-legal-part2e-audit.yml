@@ -1,0 +1,68 @@
+name: Auditoría visual Parte 2E
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  institutional-help-legal:
+    name: Institucionales, ayuda y legales
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install chromium
+
+      # Este primer recorrido conserva continue-on-error porque produce el
+      # reporte bruto que el paso siguiente clasifica. Algunos hallazgos del
+      # reporte son estados colapsados o controles intencionales y no deben
+      # convertir por sí solos el job en rojo.
+      - name: Audit institutional help and legal pages
+        id: part2e_audit
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/audit-institutional-help-legal-part2e-v2.mjs 2>&1 | tee institutional-help-legal-part2e-raw.log
+
+      # Este paso sí representa el resultado visual accionable. Si falla,
+      # GitHub mostrará directamente este nombre en rojo y el log completo.
+      - name: Enforce actionable visual findings
+        id: part2e_enforce
+        run: |
+          set -o pipefail
+          node scripts/enforce-institutional-help-legal-part2e.mjs 2>&1 | tee institutional-help-legal-part2e.log
+
+      # Se ejecuta incluso si la geometría falla, para que el artefacto final
+      # contenga ambos diagnósticos. Sin continue-on-error: un fallo queda
+      # señalado aquí, no escondido detrás de un gate genérico posterior.
+      - name: Audit FAQ interactions
+        id: part2e_faq
+        if: always()
+        run: |
+          set -o pipefail
+          node scripts/audit-faq-interaction-part2e.mjs 2>&1 | tee institutional-help-legal-part2e-faq.log
+
+      - name: Upload report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: institutional-help-legal-part2e-report
+          path: |
+            institutional-help-legal-part2e.log
+            institutional-help-legal-part2e-raw.log
+            institutional-help-legal-part2e-faq.log
+            artifacts/institutional-help-legal-part2e
+          if-no-files-found: warn
+          retention-days: 7

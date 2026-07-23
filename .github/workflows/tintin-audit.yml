@@ -115,6 +115,33 @@ jobs:
       - name: Performance & realtime audit (FOIT, loader timeout, live listeners, budgets)
         run: node scripts/audit-performance-realtime.js
 
+      - name: Firestore read budget audit
+        run: node scripts/audit-firestore-read-budget.js
+
+      - name: Audit critical inventory and quota healing
+        run: npm run audit:critical-healing
+
+      - name: Install Firestore rules test dependencies
+        run: npm install --no-save --package-lock=false @firebase/rules-unit-testing@3.0.3 firebase@10.12.0 firebase-tools@13.15.0
+
+      - name: Run adversarial Firestore emulator tests
+        id: critical_rules
+        continue-on-error: true
+        run: npm run test:rules-critical > firestore-critical.log 2>&1
+
+      - name: Upload adversarial Firestore report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firestore-critical-report
+          path: firestore-critical.log
+          retention-days: 7
+
+      - name: Enforce adversarial Firestore result
+        run: |
+          cat firestore-critical.log
+          test "${{ steps.critical_rules.outcome }}" = "success"
+
       - name: Post-optimization regression tripwire (all domains intact after perf changes)
         run: node scripts/audit-performance-regressions.js
 
@@ -124,5 +151,41 @@ jobs:
       - name: Install Chromium for browser smoke
         run: npx playwright install --with-deps chromium
 
+      - name: Audit global responsive geometry
+        id: global_geometry
+        continue-on-error: true
+        run: npm run audit:global-responsive-geometry > global-responsive-geometry.log 2>&1
+
+      - name: Upload global responsive report and failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-responsive-geometry
+          path: |
+            global-responsive-geometry.log
+            artifacts/global-responsive
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce global responsive geometry
+        run: |
+          cat global-responsive-geometry.log
+          test "${{ steps.global_geometry.outcome }}" = "success"
+
       - name: Smoke test every page in Chromium
-        run: npm run test:pages
+        id: browser_smoke
+        continue-on-error: true
+        run: npm run test:pages > chromium-smoke.log 2>&1
+
+      - name: Upload Chromium smoke report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chromium-smoke-report
+          path: chromium-smoke.log
+          retention-days: 7
+
+      - name: Enforce Chromium smoke result
+        run: |
+          cat chromium-smoke.log
+          test "${{ steps.browser_smoke.outcome }}" = "success"

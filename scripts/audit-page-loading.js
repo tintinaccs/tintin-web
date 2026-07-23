@@ -25,7 +25,7 @@ const expectedPages = [
   'preguntas-frecuentes.html',
   'privacidad.html',
   'product.html',
-  'terminos.html',
+  'terminos.html'
 ];
 
 const exists = relative => fs.existsSync(path.join(root, relative));
@@ -59,7 +59,9 @@ function extractTagReferences(html) {
   const tagPattern = /<(?:script|link|img|source|a)\b[^>]*>/gi;
   for (const match of html.matchAll(tagPattern)) {
     const tag = match[0];
-    const attrPattern = /\b(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
+    // Exigir espacio antes del atributo evita confundir data-dynamic-src,
+    // data-src u otros nombres compuestos con un src real.
+    const attrPattern = /(?:^|\s)(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
     for (const attr of tag.matchAll(attrPattern)) references.push(attr[2]);
   }
   return references;
@@ -114,7 +116,7 @@ function auditHtmlPage(page) {
     }
   }
 
-  const localScripts = [...html.matchAll(/<script\b[^>]*\bsrc\s*=\s*(["'])(.*?)\1/gi)]
+  const localScripts = [...html.matchAll(/<script\b[^>]*\ssrc\s*=\s*(["'])(.*?)\1/gi)]
     .map(match => match[2])
     .filter(reference => !isIgnoredReference(reference));
   const duplicates = [...new Set(localScripts.filter((value, index) => localScripts.indexOf(value) !== index))];
@@ -133,14 +135,13 @@ function auditJavascriptReferences() {
   const rootRuntimeFiles = fs.readdirSync(root, { withFileTypes: true })
     .filter(entry => entry.isFile() && /\.(?:js|mjs)$/.test(entry.name))
     .map(entry => path.join(root, entry.name));
-  const jsRuntimeFiles = walk(path.join(root, 'js'))
-    .filter(file => /\.(?:js|mjs)$/.test(file));
+  const jsRuntimeFiles = walk(path.join(root, 'js')).filter(file => /\.(?:js|mjs)$/.test(file));
   const jsFiles = [...new Set([...rootRuntimeFiles, ...jsRuntimeFiles])];
   const patterns = [
     /\bimport\s+(?:[^'"()]+?\s+from\s+)?(["'])(\.{1,2}\/[^"']+)\1/g,
     /\bimport\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g,
     /\bnew\s+URL\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*,\s*import\.meta\.url\s*\)/g,
-    /\bversioned\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g,
+    /\bversioned\(\s*(["'])(\.{1,2}\/[^"']+)\1\s*\)/g
   ];
 
   for (const absolute of jsFiles) {
@@ -158,10 +159,18 @@ function auditJavascriptReferences() {
   }
 }
 
-const actualPages = fs.readdirSync(root)
-  .filter(name => name.endsWith('.html'))
-  .sort();
-
+const actualPages = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
+const referenceParserProbe = extractTagReferences(`
+  <img id="dynamic" data-dynamic-src="true" alt="Dinámica">
+  <script src="js/public-shell.js"></script>
+  <link rel="stylesheet" href="styles.css">
+`);
+if (
+  JSON.stringify(referenceParserProbe) !==
+  JSON.stringify(['js/public-shell.js', 'styles.css'])
+) {
+  fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
+}
 for (const expected of expectedPages) {
   if (!actualPages.includes(expected)) fail('inventario', `falta ${expected}.`);
 }
@@ -171,7 +180,7 @@ auditJavascriptReferences();
 const productHtml = exists('product.html') ? read('product.html') : '';
 const productRuntime = exists('js/product-maintenance.js') ? read('js/product-maintenance.js') : '';
 const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
-const collectionsStore = exists('js/collections-store.js') ? read('js/collections-store.js') : '';
+const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js/page-maintenance-loader.js') : '';
 
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
 if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta el estado #product-loading.');
@@ -179,7 +188,7 @@ if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la
 if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
 if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
 if (!/import\(versioned\('\.\/products-store\.js'\)\)/.test(publicShell)) fail('js/public-shell.js', 'no carga products-store.js.');
-if (!/import '\.\/product-maintenance\.js/.test(collectionsStore)) fail('js/collections-store.js', 'no carga product-maintenance.js.');
+if (!/product[\s\S]*load\('product-maintenance\.js'\)/.test(pageMaintenanceLoader)) fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
 
 if (warnings.length) {
   console.warn('\nADVERTENCIAS DE CARGA');

@@ -45,6 +45,8 @@ const perfil     = read('perfil.html');
 const orderStats = read('js/order-stats.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/secure-checkout-order.js');
+const inventoryIntegrity = read('js/admin-inventory-integrity.js');
+const deleteFix = read('js/admin-order-delete-fix.js');
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)
@@ -144,6 +146,38 @@ check(
     /confirm\('¿Eliminar este pedido\? Esta acción no se puede deshacer\.'\)/.test(adminApp) &&
     /logAudit\('eliminar_pedido'/.test(adminApp),
   'La eliminación debe pedir confirmación, respetar el permiso y auditar.'
+);
+check(
+  'Eliminar pedido libera inventario antes de borrar y no depende de reglas nuevas',
+  /lastInventoryAction:\s*'release'/.test(inventoryIntegrity) &&
+    !/lastInventoryAction:\s*'delete-release'/.test(inventoryIntegrity) &&
+    /const releaseResult = await runTransaction/.test(inventoryIntegrity) &&
+    /inventoryState:\s*'released'/.test(inventoryIntegrity) &&
+    /if \(orderReservesInventory\(orderSnapshot\.data\(\) \|\| \{\}\)\)/.test(inventoryIntegrity) &&
+    !/isSuperAdmin\(\) && !orderExistsAfter/.test(rules),
+  'La devolución debe quedar confirmada antes de borrar para funcionar con las reglas ya publicadas y soportar reintentos.'
+);
+check(
+  'La eliminación individual informa el motivo real y expone el resultado al sincronizador',
+  /function orderDeleteErrorMessage_/.test(adminApp) &&
+    /return \{ \.\.\.result, orderBefore \}/.test(adminApp) &&
+    /if \(result\?\.deleted\) await syncDeletedOrder/.test(deleteFix),
+  'No debe ocultarse toda falla detrás de un mensaje genérico ni releerse el pedido solo para comprobar si se borró.'
+);
+check(
+  'La eliminación masiva conserva los fallos y recalcula solo cuentas afectadas',
+  /const deletedOrders = \[\]/.test(adminApp) &&
+    /const failed = \[\]/.test(adminApp) &&
+    /failed\.forEach\(item => _selectedOrders\.add\(item\.id\)\)/.test(adminApp) &&
+    !/recalculateAllUserOrderStats/.test(deleteFix),
+  'Un fallo intermedio no debe ocultar los pedidos ya eliminados ni disparar una lectura global de usuarios y pedidos.'
+);
+check(
+  'El panel fuerza una versión nueva de los módulos corregidos',
+  /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
+    /admin-inventory-integrity\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
+    /TT_CACHE_VERSION = 'tintin-20260722-order-delete-2'/.test(read('js/page-loader.js')),
+  'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
 );
 check(
   'Las acciones masivas de pedidos exigen el permiso accionesMasivas',

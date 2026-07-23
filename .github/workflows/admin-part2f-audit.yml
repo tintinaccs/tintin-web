@@ -1,0 +1,46 @@
+name: Auditoría visual Parte 2F
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  admin-superadmin:
+    name: Admin, Super Admin y ajuste global
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install chromium
+
+      - name: Audit every Admin and Super Admin section
+        run: node scripts/audit-admin-visual-part2f-v3.mjs > admin-part2f.log 2>&1
+
+      - name: Audit global fit on every root page
+        if: always()
+        run: node scripts/audit-global-fit-part2f.mjs > global-fit-part2f.log 2>&1
+
+      - name: Upload reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-part2f-report
+          path: |
+            admin-part2f.log
+            global-fit-part2f.log
+            artifacts/admin-part2f
+            artifacts/global-fit-part2f
+          if-no-files-found: warn
+          retention-days: 7

@@ -1,0 +1,47 @@
+name: Auditoría visual Parte 2B
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  home:
+    name: Inicio completo en 7 pantallas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit complete home page
+        id: home_audit
+        continue-on-error: true
+        run: node scripts/audit-home-visual-part2b-v3.mjs > home-part2b.log 2>&1
+
+      - name: Upload home report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-part2b-report
+          path: |
+            home-part2b.log
+            artifacts/home-part2b
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce home visual audit
+        run: |
+          cat home-part2b.log
+          test "${{ steps.home_audit.outcome }}" = "success"

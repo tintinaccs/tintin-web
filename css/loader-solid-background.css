@@ -1,5 +1,5 @@
-@import url("./solid-ui-surfaces.css?v=tintin-20260720-header-dropdown-white-1");
-@import url("./mobile-header-actions-solid.css?v=tintin-20260720-mobile-header-actions-white-1");
+@import url("./solid-ui-surfaces.css?v=tintin-20260721-header-surfaces-complete-1");
+@import url("./mobile-header-actions-solid.css?v=tintin-20260721-header-surfaces-complete-1");
 
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
@@ -37,6 +37,41 @@ html body #tt-loader::before {
 }
 
 html body #tt-loader > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Login funciona como pantalla independiente. El shell público puede montarse
+   técnicamente mientras cargan los scripts, pero jamás debe verse ni reservar
+   espacio alrededor del formulario. */
+html body:has(.login-page) #tt-header-desktop-tablet,
+html body:has(.login-page) #search-panel,
+html body:has(.login-page) #mobile-menu,
+html body:has(.login-page) #tt-tabbar,
+html body:has(.login-page) #cart-overlay,
+html body:has(.login-page) #cart-drawer,
+html body:has(.login-page) #collections-sheet,
+html body:has(.login-page) #sheet-backdrop {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html body:has(.login-page).tt-public-shell-mounted {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Durante autenticación, Login usa solo la superficie sólida del loader. No
+   vuelve a mostrar logo, puntos ni animaciones encima de su propio diseño. */
+html body:has(.login-page) #tt-loader-spin-wrap {
+  display: none !important;
+  visibility: hidden !important;
+  animation: none !important;
+}
+
+html body:has(.login-page) .login-page {
+  min-height: 100dvh !important;
   position: relative;
   z-index: 1;
 }

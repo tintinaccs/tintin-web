@@ -1,0 +1,53 @@
+TINTIN — CORRECCIÓN DE ELIMINACIÓN DE PEDIDOS Y DIAGNÓSTICO
+Fecha: 2026-07-22
+
+PROBLEMAS CONFIRMADOS Y CORREGIDOS
+
+1. Eliminar un pedido desde el botón de su fila fallaba.
+2. Eliminar pedidos desde el botón superior también fallaba y podía dejar un
+   resultado parcial sin explicarlo con claridad.
+3. Después de un borrado en grupo se revisaban innecesariamente todas las
+   cuentas, aunque solo una o unas pocas estuvieran afectadas.
+4. El diagnóstico marcaba checkoutGuards como error porque intentaba consultar
+   todos los controles de compra. Esa lista está cerrada a propósito: cada
+   cuenta solamente puede consultar su propio control.
+5. El inventario del diagnóstico podía incluir capturas temporales producidas
+   por las pruebas y aumentar de tamaño sin representar archivos del sitio.
+
+RESULTADO
+
+- Los dos botones de eliminar usan la misma corrección.
+- Al borrar un pedido activo, la cantidad reservada vuelve al inventario.
+- Los pedidos antiguos también pueden borrarse si un producto ya no existe.
+- El inventario se libera antes del borrado definitivo; si el segundo paso
+  falla, el reintento no devuelve stock por duplicado.
+- El arreglo funciona con las reglas que ya estaban activas y no necesita una
+  publicación manual adicional en Firebase.
+- Un borrado en grupo conserva y señala los pedidos que no pudo procesar.
+- Solo se actualizan las cuentas realmente afectadas por el borrado.
+- El diagnóstico revisa únicamente el control de la cuenta autenticada y no
+  intenta abrir controles de otras cuentas.
+- Las capturas y reportes temporales quedan fuera del inventario final.
+- El panel fuerza la carga de la versión corregida para evitar copias antiguas.
+
+COMPROBACIONES REALIZADAS
+
+- Eliminación real en una base aislada: pedido eliminado y stock restaurado.
+- Revisión visual del Super Admin: 225 estados y 15 tamaños de pantalla.
+- Incluye móvil, tablet, escritorio y tamaños extremos.
+- Revisión completa del repositorio: aprobada.
+- Revisión profunda: 0 errores y 0 advertencias.
+- Diagnóstico: 18 páginas, 7 tamaños y 6 roles, sin referencias faltantes.
+
+CORRECCIÓN DE LA MEDICIÓN DE CARGA
+
+- El aviso de 287 KB no representaba una descarga real: la revisión sumaba
+  dos veces styles.css porque aparece una vez preparado y otra vez aplicado.
+- El navegador reutiliza la misma descarga. El peso único real es de
+  aproximadamente 179 KB, dentro del límite establecido.
+- La revisión ahora cuenta cada dirección idéntica una sola vez y tiene una
+  protección para impedir que vuelva este falso aviso.
+
+PENDIENTES REALES
+
+- Ningún error funcional adicional confirmado después de la revisión global.

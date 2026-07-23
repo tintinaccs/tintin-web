@@ -28,6 +28,46 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   }
 }
 
+/* Estructura pública mobile: una sola distancia de seguridad para todos los
+   elementos que conviven con la tabbar flotante. Así el footer, privacidad,
+   WhatsApp, avisos del carrito y el sheet de Tienda nunca quedan pegados ni
+   escondidos detrás de la navegación en ningún ancho del rango mobile. */
+@media (max-width:768px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)){
+    --tt-mobile-nav-clearance:104px;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-footer-bottom{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 16px + env(safe-area-inset-bottom,0px))!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-privacy-consent,
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-wa-float,
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-cart-feedback{
+    bottom:calc(var(--tt-mobile-nav-clearance) + env(safe-area-inset-bottom,0px))!important;
+  }
+  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-collections-sheet{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 8px + env(safe-area-inset-bottom,0px))!important;
+  }
+  /* El CTA inferior del hero terminaba exactamente en la franja donde vive el
+     botón flotante de WhatsApp. Esta reserva conserva 16px visibles entre
+     ambos sin cambiar textos, imágenes, acciones ni la altura del banner. */
+  body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
+    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
+  }
+  /* Privacidad y los avisos del carrito ocupan temporalmente la misma zona
+     segura. El flotante se oculta durante esos estados para no quedar debajo. */
+  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-privacy-consent:not([hidden])) .tt-wa-float,
+  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-cart-feedback.is-visible) .tt-wa-float{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+@media (max-width:480px){
+  body.tt-public-shell-mounted:not(:has(.adm-main)){
+    --tt-mobile-nav-clearance:92px;
+  }
+}
+
 /* Super Admin: todos los interruptores de activar/desactivar conservan la
    misma cápsula y el mismo contorno rosado, estén encendidos o apagados.
    Estas reglas se cargan al final para que el esquema global no vuelva a
@@ -79,4 +119,54 @@ body:has(.adm-main) .adm-toggle input:checked + .adm-toggle-slider{
   background:var(--admin-color-brand,#ad3f67)!important;
   background-color:var(--admin-color-brand,#ad3f67)!important;
   border-color:var(--admin-color-brand,#ad3f67)!important;
+}
+
+/* Parte 2E: contenido informativo con datos reales de longitud variable.
+   Las ciudades y sus precios deben conservarse dentro de cada tarjeta; en
+   mobile se apilan para que ningún nombre o aviso de precio quede comprimido. */
+.tt-city-price-list{
+  min-width:0;
+}
+.tt-city-price-list li{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:start!important;
+  gap:8px 12px!important;
+  width:100%!important;
+  min-width:0!important;
+}
+.tt-city-price-list li>span{
+  min-width:0!important;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+.tt-city-price-list .tt-city-price-val{
+  max-width:20rem;
+  text-align:right;
+  white-space:normal!important;
+}
+
+/* Los documentos y tarjetas de contacto pueden recibir correos o referencias
+   largas desde contenido administrable. Se quiebran dentro de la tarjeta sin
+   alterar URLs, destino ni texto. */
+:is(.tt-info-block,.tt-contact-info-item) a:not(.tt-btn){
+  min-width:0;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+#tt-open-privacy-settings{
+  min-height:44px;
+  max-width:100%;
+  white-space:normal;
+  line-height:1.3;
+}
+
+@media (max-width:480px){
+  .tt-city-price-list li{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .tt-city-price-list .tt-city-price-val{
+    max-width:none;
+    text-align:left;
+  }
 }

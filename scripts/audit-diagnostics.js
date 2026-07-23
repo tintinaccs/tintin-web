@@ -23,6 +23,7 @@ const firestoreShim = read('js/diagnostic-shims/firestore-shim.js');
 const authShim = read('js/diagnostic-shims/auth-shim.js');
 const storageShim = read('js/diagnostic-shims/storage-shim.js');
 const networkGuard = read('js/diagnostic-shims/network-guard.js');
+const builder = read('scripts/build-diagnostic-manifest.js');
 
 const forbiddenWrites = [
   'addDoc', 'setDoc', 'updateDoc', 'deleteDoc', 'writeBatch', 'runTransaction',
@@ -129,6 +130,12 @@ check(
     !runtime.includes('getCountFromServer')
 );
 check(
+  'El diagnóstico respeta las colecciones limitadas al documento de la cuenta',
+  runtime.includes("const ownDocumentOnly = name === 'checkoutGuards'") &&
+    runtime.includes("getDoc(doc(db, 'checkoutGuards', uid))") &&
+    runtime.includes('sin enumerar controles de otras cuentas'),
+);
+check(
   'Los informes no guardan la identidad personal del Super Admin',
   !runtime.includes('userUid:') &&
     !runtime.includes('userEmail:') &&
@@ -187,6 +194,11 @@ check(
     manifest.routePatterns.length > 0 &&
     manifest.files.some(file => file.path === 'apps-script/Phase3Security.gs') &&
     manifest.files.some(file => file.path === '.github/workflows/deploy-pages.yml')
+);
+check(
+  'El inventario excluye capturas y reportes temporales de las pruebas',
+  builder.includes("new Set(['.git', 'artifacts', 'node_modules', 'public'])") &&
+    builder.includes("new Set(['firebase-debug.log', 'firestore-debug.log', 'ui-debug.log'])")
 );
 
 if (failures) {

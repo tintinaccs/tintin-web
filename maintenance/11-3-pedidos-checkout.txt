@@ -93,23 +93,32 @@ F1 [MEDIO] — Conflicto entre administradores al editar el mismo pedido.
       se guarda igual (fail-open) para no bloquear una edición legítima.
     - closeOrderEdit resetea la base.
 
-Evaluado y descartado como cambio (para no fabricar arreglos ni cambiar
-comportamiento intencional):
-- Restaurar stock al eliminar/cancelar un pedido: la creación descuenta stock en
-  la transacción, pero eliminar/cancelar NO lo repone. Es una simplificación
-  deliberada del plan gratuito (el stock se ajusta manualmente); reponerlo
-  requeriría otra transacción con casos borde (producto borrado, stock ya
-  ajustado a mano). Se documenta como comportamiento conocido, no se toca.
+ACTUALIZACIÓN POSTERIOR — INVENTARIO AL ELIMINAR
+- La simplificación originalmente documentada aquí quedó superada por la
+  corrección del 22/07/2026 registrada en maintenance/18-eliminacion-pedidos-y-diagnostico.txt.
+- Eliminar un pedido que todavía reserva inventario ahora devuelve las cantidades
+  antes del borrado definitivo.
+- El pedido queda marcado como inventoryState='released' antes de eliminarse; un
+  reintento reconoce ese estado y no devuelve stock por duplicado.
+- Si un producto histórico ya no existe, el borrado continúa de forma controlada
+  y el resultado parcial se informa sin ocultar pedidos fallidos.
+- Cancelar y eliminar siguen siendo acciones distintas: esta actualización
+  confirma la liberación al ELIMINAR y no inventa una devolución automática para
+  cualquier cambio de estado.
+
+Evaluado y descartado como cambio en esta etapa original:
 - Recalcular el costo de envío al cambiar método/ciudad en el editor: el modal no
-  expone un campo de costo de envío (se conserva el del checkout); no es un bug
+  expone un campo de costo de envío (se conserva el del checkout); no era un bug
   visible. Documentado.
 
 ═══════════════════════════════════════════════════════════════════════
 AUDITORÍA NUEVA — scripts/audit-admin-orders.js
 ═══════════════════════════════════════════════════════════════════════
-24 comprobaciones estáticas: edición completa, concurrencia optimista (F1),
-estados/pago/eliminación/masivas, reenvío con cooldown, integridad/consistencia
-(autocontención, perfil, estadísticas sin negativos) y reglas de Firestore.
+La auditoría comenzó con 24 comprobaciones estáticas y luego se amplió con los
+contratos de liberación idempotente de inventario y borrado parcial seguro:
+edición completa, concurrencia optimista (F1), estados/pago/eliminación/masivas,
+reenvío con cooldown, integridad/consistencia (autocontención, perfil,
+estadísticas sin negativos) y reglas de Firestore.
 
 Wiring:
   - package.json: "audit:admin-orders" + incluida en "audit:final".
@@ -123,18 +132,23 @@ ERROR + exit 1; al restaurar, ambos vuelven a OK. Registrado.
 PRUEBAS
 ═══════════════════════════════════════════════════════════════════════
 - node --check de js/admin-app.js: OK.
-- npm run audit:admin-orders: 24/24 OK.
+- npm run audit:admin-orders: OK.
 - npm run audit:secure-orders (creación): OK.
 - npm run audit:final (incluye la nueva): exit 0.
 - audit:tintin CRITICAL 0. audit:diagnostics OK (manifest regenerado).
 - Smoke test en Chromium sin sesión: sin errores JS propios, panel oculto.
+- Corrección posterior: eliminación real en base aislada, stock restaurado una
+  sola vez y barrido global verde.
 
-ARCHIVOS TOCADOS
-- js/admin-app.js                      (F1: concurrencia optimista en saveOrderEdit)
-- scripts/audit-admin-orders.js        (NUEVO)
-- package.json                         (script + audit:final)
-- .github/workflows/tintin-audit.yml   (paso CI)
-- maintenance/11-3-pedidos-checkout.txt (este registro)
-- diagnostic-manifest.json             (regenerado)
+ARCHIVOS TOCADOS EN LA ETAPA ORIGINAL
+- js/admin-app.js
+- scripts/audit-admin-orders.js
+- package.json
+- .github/workflows/tintin-audit.yml
+- maintenance/11-3-pedidos-checkout.txt
+- diagnostic-manifest.json
 
-PENDIENTES REALES: ninguno crítico/alto dentro del alcance.
+REFERENCIA POSTERIOR
+- maintenance/18-eliminacion-pedidos-y-diagnostico.txt
+
+PENDIENTES REALES: ninguno crítico/alto confirmado dentro del alcance vigente.

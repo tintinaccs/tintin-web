@@ -1,0 +1,54 @@
+TINTIN-WEB — ETAPA 15 / PARTE 2G
+PÁGINA 404, SISTEMA Y ESTADOS ESPECIALES
+Fecha: 21/07/2026
+
+ALCANCE
+- 404.html.
+- Loader del Inicio y páginas interiores.
+- Preferencias de privacidad: elección inicial y personalización.
+- Cuenta bloqueada.
+- Tienda temporalmente cerrada.
+- Configuración de tienda no disponible y reintento.
+- Catálogo: cargando, sin conexión, error y estado vacío.
+- Aviso de producto agregado.
+- Estado de sincronización del carrito.
+- Acceso denegado y toast de Administración de Imágenes.
+
+HALLAZGOS CONFIRMADOS
+1. Los accesos de categorías de la página 404 medían menos de 44 px.
+2. El enlace de ayuda de la página 404 no tenía una superficie táctil completa.
+3. Los accesos de Personalizar y Política de privacidad eran demasiado bajos.
+4. El modal de cuenta bloqueada dependía de estilos inline, no tenía semántica de diálogo, no administraba correctamente alturas reducidas y sus acciones eran pequeñas.
+5. El aviso de producto agregado usaba acciones menores a 44 px y podía quedar demasiado ajustado en mini mobile.
+6. Los toasts administrativos con textos largos podían conservar una sola línea.
+7. El estado de acceso denegado requería safe areas y desplazamiento interno para alturas extremas.
+
+CORRECCIONES
+- Se incorporó css/system-special-states.css a la cadena global de estilos.
+- Todos los accesos de 404 y privacidad tienen una superficie táctil mínima de 44 px.
+- El modal de cuenta bloqueada usa role=dialog, aria-modal, título y descripción asociados, foco inicial, safe areas, alto máximo, desplazamiento interno y dos acciones completas.
+- Se reforzó el contraste de las acciones del modal contra reglas globales y estados visited.
+- El toast de producto agregado se ajusta al ancho disponible, envuelve sus acciones y mantiene botones de 44 px.
+- Los toasts administrativos permiten varias líneas y respetan el viewport.
+- El acceso denegado se adapta al ancho, alto y safe areas disponibles.
+- Se preservó la regla global: nada puede salir, superponerse, desaparecer o quedar inaccesible; el contenido debe envolver, apilarse o desplazarse de forma controlada.
+
+VALIDACIÓN AUTOMÁTICA
+- 204 estados visuales.
+- 12 tamaños y orientaciones.
+- Rango desde 280×653 hasta 2560×1440.
+- Mobile vertical y horizontal, tablet, laptop, desktop y 2K.
+- Componentes reales de Privacidad y Cuenta bloqueada.
+- Estados sintéticos seguros para tienda, loader, catálogo, toasts y permisos.
+- Sin autenticación real ni escrituras en Firebase.
+
+CLASIFICACIONES DE GEOMETRÍA ESPERADA
+- El contenido inferior de 404 y Catálogo permanece accesible mediante el scroll normal del documento.
+- Chromium reserva el gutter de la barra vertical; el loader cubre toda el área útil y conserva el mismo fondo en el gutter.
+- Estas clasificaciones solamente se aceptan cuando el reporte demuestra que el documento puede desplazarse o que el loader cubre la geometría útil completa.
+
+LÓGICA Y DATOS
+No se modificaron Firebase, cuentas, permisos, carrito, stock, pedidos, estado real de la tienda ni preferencias reales de usuarios.
+
+PENDIENTES REALES
+Ninguno dentro del alcance de Parte 2G.

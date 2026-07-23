@@ -1,0 +1,47 @@
+name: Auditoría responsive global
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  geometry:
+    name: Geometría pública en 7 pantallas y límites
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false --omit=dev playwright@1.54.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit all public pages and shared surfaces
+        id: geometry
+        continue-on-error: true
+        run: npm run audit:global-responsive-geometry > global-responsive-geometry.log 2>&1
+
+      - name: Upload report and failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-responsive-geometry
+          path: |
+            global-responsive-geometry.log
+            artifacts/global-responsive
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce responsive geometry
+        run: |
+          cat global-responsive-geometry.log
+          test "${{ steps.geometry.outcome }}" = "success"

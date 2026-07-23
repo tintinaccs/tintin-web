@@ -3,10 +3,7 @@
 // =============================================
 // Componente compartido por login.html y checkout.html (los dos lugares
 // donde se detecta una cuenta bloqueada durante un intento de acceso) para
-// mostrar SIEMPRE el mismo mensaje, con el mismo diseño estilo Tintin y el
-// mismo enlace de WhatsApp — nada de alert()/confirm() nativos ni textos
-// distintos según la página. Autocontenido (estilos inline) para no
-// depender de ningún CSS de la página que lo use.
+// mostrar siempre el mismo mensaje y las mismas salidas seguras.
 
 import { waitForLoaderHidden } from './loader-wait.js?v=tintin-20260716-cloudinary-fix-1';
 
@@ -17,34 +14,49 @@ const OVERLAY_ID = 'tt-blocked-overlay';
 let pending = false;
 
 /**
- * Muestra el modal de "cuenta bloqueada" tapando toda la página. Idempotente
- * — si ya está mostrado (ej. dos chequeos de bloqueo disparan casi a la vez),
- * no duplica el overlay. No tiene botón de cerrar a propósito: la única
- * salida es "Volver al inicio" o escribir por WhatsApp, nunca seguir
- * navegando en la página bloqueada. Espera a que el loader de pantalla
- * completa (#tt-loader, z-index muy por encima de este overlay) termine de
- * ocultarse antes de insertarse, para no quedar tapado e inaccesible.
+ * Muestra el diálogo de cuenta bloqueada sobre toda la página. Es idempotente
+ * y no tiene cierre: la persona debe volver al Inicio o contactar a soporte.
+ * Espera a que el loader termine para que el aviso quede visible y enfocable.
  */
 export function showBlockedModal() {
   if (document.getElementById(OVERLAY_ID) || pending) return;
   pending = true;
+
   waitForLoaderHidden().then(() => {
     pending = false;
     if (document.getElementById(OVERLAY_ID)) return;
-    const ov = document.createElement('div');
-    ov.id = OVERLAY_ID;
-    ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
-    ov.innerHTML = `
-      <div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:32px 26px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.25);box-sizing:border-box">
-        <div style="font-size:38px;margin-bottom:12px">🚫</div>
-        <div style="font-weight:800;font-size:17px;color:#8b2642;margin-bottom:10px">No podés ingresar</div>
-        <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 22px">
-          Lo siento, ahora no puedes ingresar. Puedes comunicarte con nuestro soporte
-          <a href="${WHATSAPP_SUPPORT_URL}" target="_blank" rel="noopener" style="color:#b84c72;font-weight:700;text-decoration:underline">aquí</a>.
+
+    const overlay = document.createElement('div');
+    overlay.id = OVERLAY_ID;
+    overlay.innerHTML = `
+      <section
+        class="tt-blocked-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tt-blocked-title"
+        aria-describedby="tt-blocked-message"
+        tabindex="-1"
+      >
+        <div class="tt-blocked-icon" aria-hidden="true">🚫</div>
+        <h2 class="tt-blocked-title" id="tt-blocked-title">No podés ingresar</h2>
+        <p class="tt-blocked-message" id="tt-blocked-message">
+          Lo siento, ahora no podés ingresar. Podés comunicarte con nuestro soporte por WhatsApp.
         </p>
-        <a href="index.html" style="display:inline-block;background:#b84c72;color:#fff!important;padding:11px 26px;border-radius:50px;font-weight:700;font-size:13px;text-decoration:none">Volver al inicio</a>
-      </div>`;
-    document.body.appendChild(ov);
+        <div class="tt-blocked-actions">
+          <a
+            class="tt-blocked-action tt-blocked-action-secondary"
+            href="${WHATSAPP_SUPPORT_URL}"
+            target="_blank"
+            rel="noopener"
+          >Contactar soporte</a>
+          <a class="tt-blocked-action tt-blocked-action-primary" href="index.html">Volver al inicio</a>
+        </div>
+      </section>`;
+
+    document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(() => {
+      overlay.querySelector('.tt-blocked-dialog')?.focus({ preventScroll: true });
+    });
   });
 }
