@@ -1,0 +1,161 @@
+================================================================
+ AUDITORÍA TINTIN-WEB — NIVEL BAJO
+ Fecha: 2026-07-20
+================================================================
+Cuestiones menores: mantenibilidad, código muerto, robustez latente y
+peso del repo. No afectan seguridad ni funcionamiento hoy, pero conviene
+limpiarlas para evitar confusión y regresiones futuras.
+
+
+----------------------------------------------------------------
+[B1] Cloud Functions de Firebase presentes pero no desplegables (Spark)
+----------------------------------------------------------------
+PLATAFORMA: Backend (aplica a todos).
+
+PROBLEMA:
+functions/main.js exporta index.js (notifyNewOrder, resendOrderEmail) y
+create-order.js (createOrder), pero: (a) firebase.json solo despliega
+firestore.rules, sin bloque "functions"; y (b) las Cloud Functions v2
+requieren plan Blaze, y el proyecto corre en Spark. Además, ningún
+cliente llama a createOrder (el checkout real usa la transacción "spark"
+validada por reglas, source 'spark-checkout-v1', no 'secure-checkout-v1').
+
+QUÉ PROVOCA:
+~470 líneas en create-order.js y el trigger de email de index.js son
+código que no se ejecuta en producción. Riesgo: creer que las
+notificaciones o la validación de pedidos corren por Firebase cuando en
+realidad dependen de Cloudflare / reglas.
+
+DÓNDE: functions/create-order.js, functions/index.js, functions/main.js,
+firebase.json.
+
+SOLUCIÓN:
+O bien documentar claramente que functions/ es un camino alternativo para
+un futuro Blaze y no está activo; o bien eliminarlo del repo para evitar
+confusión. Si se decide usarlo, migrar a Blaze y ajustar firebase.json.
+
+
+----------------------------------------------------------------
+[B2] Igualdad exacta frágil en reglas para name/price (datos legacy)
+----------------------------------------------------------------
+PLATAFORMA: Backend (aplica a todos) — se manifiesta en checkout.
+
+PROBLEMA:
+La regla sparkItemValid exige item.name == product.name (igualdad exacta)
+y product.price == item.price (con tipado estricto). El checkout envía el
+nombre con text().trim().slice(0,180) y el precio como número. Para los
+productos creados por el panel o el importador esto coincide (ya guardan
+nombre recortado/trim y precio numérico). Pero un producto legacy o
+editado a mano en Firestore con nombre >180 caracteres, con espacios al
+borde, o con precio guardado como string, NO cumpliría la igualdad.
+
+QUÉ PROVOCA:
+Ese producto en particular sería no-comprable: el checkout devolvería
+permission-denied con un mensaje poco claro ("Firebase rechazó el
+pedido…"). Es latente, no afecta al catálogo creado con las herramientas
+propias.
+
+DÓNDE:
+- firestore.rules → sparkItemValid (líneas ~327-337).
+- js/secure-checkout-order.js (líneas ~411-416): text(...).slice(180/120).
+
+SOLUCIÓN:
+Normalizar/validar en el panel que todo producto tenga name<=180 y price
+numérico (ya lo hacen las herramientas; falta un chequeo defensivo para
+datos importados/legacy). Opcional: relajar la regla para comparar contra
+name recortado en servidor.
+
+
+----------------------------------------------------------------
+[B3] diagnostic-manifest.json (~600 KB) versionado en el repo
+----------------------------------------------------------------
+PLATAFORMA: Repo/infra.
+
+PROBLEMA:
+diagnostic-manifest.json pesa ~590 KB y está commiteado. Es un artefacto
+generado (scripts/build-diagnostic-manifest.js).
+
+QUÉ PROVOCA:
+Infla el repo y los diffs; se regenera, no debería vivir en el control de
+versiones.
+
+DÓNDE: /diagnostic-manifest.json, scripts/build-diagnostic-manifest.js.
+
+SOLUCIÓN:
+Agregarlo a .gitignore y generarlo en el build/CI, o moverlo a un
+artefacto de despliegue.
+
+
+----------------------------------------------------------------
+[B4] Uso masivo de !important en CSS (~950 ocurrencias)
+----------------------------------------------------------------
+PLATAFORMA: Todas (desktop, tablet y mobile).
+
+PROBLEMA:
+Hay ~951 !important repartidos en los CSS. Es síntoma de capas de
+parches (archivos *-fix.css, *-maintenance.css, solid-ui-*.css) que
+pelean por especificidad.
+
+QUÉ PROVOCA:
+Cada ajuste nuevo tiende a requerir otro !important; sube el riesgo de
+regresiones visuales difíciles de rastrear.
+
+DÓNDE: css/*.css y styles.css (concentrado en los archivos de "fix"/
+"maintenance"/"solid").
+
+SOLUCIÓN:
+No urgente. A mediano plazo, consolidar la cascada: una sola fuente de
+verdad de tokens/tema y reducir los override en capas. Evitar sumar
+!important nuevos salvo necesidad real.
+
+
+----------------------------------------------------------------
+[B5] El control de Super Admin es un único correo hardcodeado en muchos
+     lugares
+----------------------------------------------------------------
+PLATAFORMA: Backend/seguridad (aplica a todos).
+
+PROBLEMA:
+"tintinaccs@gmail.com" aparece hardcodeado como Super Admin en
+firestore.rules, functions/create-order.js, functions/index.js,
+cloudflare/cloudinary-security.js y en JS del cliente.
+
+QUÉ PROVOCA:
+Duplicación: si cambia la cuenta dueña, hay que tocar varios archivos y
+capas (reglas, Cloudflare, cliente) de forma coordinada; olvidar uno deja
+una inconsistencia de permisos. Además, todo el poder de administración
+depende de la seguridad de esa única cuenta de correo (conviene 2FA
+obligatorio).
+
+DÓNDE: firestore.rules (líneas 16, 39, 59, etc.), functions/create-order.js
+(línea 10), functions/index.js (línea 27), cloudflare/cloudinary-security.js
+(línea 8).
+
+SOLUCIÓN:
+No urgente. Mantener el valor como constante bien identificada en cada
+capa (ya lo está) y documentar el procedimiento de cambio. Asegurar 2FA
+en esa cuenta. A futuro, considerar un custom claim de Firebase Auth
+(admin=true) en vez de comparar por correo, para no depender de un string
+repetido.
+
+----------------------------------------------------------------
+[B6] Enlaces target="_blank" sin rel="noopener" (reverse tabnabbing)
+----------------------------------------------------------------
+PLATAFORMA: Panel de administración (desktop principalmente).
+
+PROBLEMA: 4 enlaces en admin.html y js/admin-app.js abrían pestaña nueva
+(target="_blank") sin rel="noopener noreferrer". La pestaña nueva podía
+acceder a window.opener y redirigir la pestaña original a un sitio falso.
+El resto del sitio (público) ya usaba noopener de forma consistente.
+
+[RESUELTO 2026-07-22] Se agregó rel="noopener noreferrer" a los 4
+enlaces: WhatsApp de Mensajes, "Ver sitio", link a imgbb.com (admin.html)
+y "Ver en sitio" de Contenido (js/admin-app.js).
+
+================================================================
+Fin de la auditoría (CRÍTICO / MEDIO / BAJO).
+Actualizado 2026-07-22: aplicadas las correcciones de C1, C2 (parcial),
+M1, M2 y B6. Ver notas [RESUELTO] en cada archivo para el detalle de qué
+se cambió y qué falta (deploy de reglas, App Check, host real de
+producción, Nominatim detrás de proxy).
+================================================================

@@ -8,6 +8,7 @@
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
 import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
   serverTimestamp,
@@ -30,7 +31,6 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
-  const GEO_SERVICE_URL = 'https://tintinaccesorios.pages.dev/api/visitor-geo';
   const HEARTBEAT_MS = 60000;
   const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
   let heartbeatTimer = 0;
@@ -139,11 +139,7 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   }
 
   function geoEndpoint() {
-    const hostname = String(window.location.hostname || '').toLowerCase();
-    if (hostname.endsWith('github.io') || hostname.endsWith('netlify.app')) {
-      return GEO_SERVICE_URL;
-    }
-    return '/api/visitor-geo';
+    return apiUrl('visitor-geo');
   }
 
   async function fetchApproximateGeo() {

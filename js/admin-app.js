@@ -6433,7 +6433,7 @@ function contRenderSection(pageId, sectionId, schema, savedValues) {
       <div class="cont-section-actions">
         ${canEditCont ? `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
         <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>` : ''}
-        <a href="${pageUrl}" target="_blank" class="adm-btn adm-btn-outline adm-btn-sm">Ver en sitio</a>
+        <a href="${pageUrl}" target="_blank" rel="noopener noreferrer" class="adm-btn adm-btn-outline adm-btn-sm">Ver en sitio</a>
       </div>
     </div>
   </div>`;

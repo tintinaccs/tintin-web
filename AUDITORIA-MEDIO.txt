@@ -1,0 +1,157 @@
+================================================================
+ AUDITORÍA TINTIN-WEB — NIVEL MEDIO
+ Fecha: 2026-07-20 · Actualizado: 2026-07-22
+================================================================
+ESTADO: M1 y M2 corregidos y verificados. M3 queda pendiente (requiere
+un nuevo endpoint de Cloudflare, ver nota al final de ese punto).
+Problemas que degradan funciones o experiencia sin comprometer
+directamente seguridad de datos o dinero. Ordenados por impacto.
+
+
+----------------------------------------------------------------
+[M1] Los correos de pedido usan rutas /api/ relativas SIN fallback a
+     Cloudflare → 404 en GitHub Pages (el dueño no se entera de pedidos)
+----------------------------------------------------------------
+PLATAFORMA: Todas (desktop, tablet y mobile). El aviso de pedido nuevo se
+dispara desde el checkout en cualquier dispositivo; el reenvío/prueba es
+del panel (mayormente desktop).
+
+PROBLEMA:
+El sitio se publica en GitHub Pages (lo confirman canonical, sitemap,
+robots.txt y el enlace del admin en functions/index.js, todos hacia
+tintinaccs.github.io). Las funciones /api/* son de Cloudflare Pages y
+GitHub Pages NO las ejecuta. Dos módulos del proyecto (media-library.js y
+site-activity.js) resuelven esto detectando github.io y redirigiendo a
+https://tintinaccesorios.pages.dev. Pero los módulos de correo NO tienen
+ese fallback: llaman a rutas relativas.
+
+QUÉ PROVOCA:
+En el deploy de GitHub Pages, el POST a /api/order-email cae en
+github.io/api/order-email → 404. Resultado:
+- El correo automático de "pedido nuevo" (checkout) falla en silencio:
+  el pedido se guarda pero el dueño NO recibe el aviso por correo.
+- El reenvío manual desde el panel y el botón "enviar prueba" también
+  fallan (404).
+Además, las Cloud Functions de Firebase que harían este envío
+(notifyNewOrder) no pueden desplegarse en plan Spark, así que no hay
+respaldo por ese lado.
+
+CÓMO DEBERÍA FUNCIONAR:
+Igual que media-library.js: detectar el host y, en github.io/netlify,
+apuntar el fetch al origen de Cloudflare Pages (o usar
+window.TINTIN_FUNCTION_ORIGIN).
+
+DÓNDE ESTÁ EL CÓDIGO:
+- js/resend-order-notify.js (línea 8): const ORDER_EMAIL_API = '/api/order-email';
+  (usado por checkout-email-bridge.js para el aviso de pedido nuevo y por
+  admin-app.js para el reenvío).
+- js/admin-email-gate-sync.js (línea 17): const TEST_ENDPOINT = '/api/test-email';
+- Referencia de la solución correcta: js/media-library.js
+  functionOrigin() (líneas ~54-66) y js/site-activity.js geoEndpoint()
+  (líneas ~136-142).
+
+SOLUCIÓN:
+Reemplazar las constantes relativas por una resolución de origen igual a
+functionOrigin(): si hostname termina en github.io o netlify.app, usar
+'https://tintinaccesorios.pages.dev/api/...'; si no, ruta relativa. Idealmente
+extraer functionOrigin() a un módulo compartido y usarlo en los cuatro
+llamadores para no volver a olvidarlo.
+NOTA: si en realidad el sitio productivo se sirve desde Cloudflare Pages y
+no desde github.io, entonces el bug se invierte: canonical, sitemap,
+robots y las 22 URLs de OG apuntan al host equivocado (problema de SEO).
+En cualquiera de los dos casos hay una incoherencia de despliegue que hay
+que resolver.
+
+[RESUELTO 2026-07-22] Se creó js/function-origin.js con la resolución de
+origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
+admin-email-gate-sync.js, media-library.js, site-activity.js) ahora
+importan de ahí en vez de reinventar la constante cada uno. Verificado con
+scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
+(actualizados) y el resto de `npm run audit:final`, sin regresiones.
+Sigue pendiente confirmar/corregir la NOTA de arriba: desde qué host se
+sirve realmente el sitio en producción (no se puede saber solo leyendo el
+repo).
+
+
+----------------------------------------------------------------
+[M2] Breakpoints mezclados (767 / 768 / 769) → "zona muerta" a 768px
+     exactos (iPad y tablets en vertical) con estilos mixtos
+----------------------------------------------------------------
+PLATAFORMA: Tablet (ancho CSS de 768px, típico de iPad y varias Android
+en vertical). No afecta a mobile chico ni a desktop.
+
+PROBLEMA:
+En styles.css conviven tres cortes distintos para la misma frontera:
+- Bloque mobile principal: @media (max-width: 767px)  (línea 89 y otros)
+- Otros bloques mobile:     @media (max-width: 768px)  (líneas 2090, 2120, 2145, 3546)
+- Bloques desktop:          @media (min-width: 769px)  (líneas 366, 1114, 2113, 3411, 3460)
+A exactamente 768px de ancho: los @media de 767 NO aplican y los de 769
+tampoco. Solo aplican los de 768. Queda un layout híbrido.
+
+QUÉ PROVOCA:
+En un iPad en vertical (768px), el layout mobile principal (bloque de la
+línea 89: header/nav/estructura) no se activa, pero sí se aplican
+retoques mobile sueltos (768px). El resultado es una mezcla
+inconsistente: por ejemplo el header/estructura en modo escritorio pero
+ciertos elementos en modo mobile.
+
+CÓMO DEBERÍA FUNCIONAR:
+Una sola frontera coherente. Convención habitual: mobile hasta 768px
+(max-width: 768px) y desktop desde 769px (min-width: 769px), sin usar
+767 en ningún lado.
+
+DÓNDE ESTÁ EL CÓDIGO:
+- styles.css: @media (max-width: 767px) en líneas 89, 3793, 3874.
+- styles.css: @media (max-width: 768px) en líneas 2090, 2120, 2145, 3546.
+
+SOLUCIÓN:
+Unificar todos los "max-width: 767px" a "max-width: 768px" (o viceversa,
+pero uno solo). Verificar después en 768px que header, nav y tabbar
+queden en un único modo.
+
+[RESUELTO 2026-07-22] Se unificaron los 6 puntos que usaban 767px
+(styles.css: 3 · css/home-fit.css: 2 · css/ui-quality.css: 1, este último
+crítico porque fijaba font-size:16px en inputs para evitar el zoom
+automático de iOS) a 768px, alineados con el resto del sitio. Verificado
+con un arnés estático (solo CSS, sin JS/Firebase) midiendo estilos
+computados con Playwright a 767/768/769px: antes del cambio, 768px exacto
+(ancho de iPad en vertical) quedaba con una mezcla de reglas mobile y
+desktop; después del cambio, 767 y 768 comparten los mismos valores y el
+corte a desktop en 769px sigue intacto.
+
+
+----------------------------------------------------------------
+[M3] Autocompletado de dirección en checkout depende de Nominatim (OSM)
+     llamado directo desde el navegador
+----------------------------------------------------------------
+PLATAFORMA: Todas (desktop, tablet y mobile) — pantalla de checkout.
+
+PROBLEMA:
+El buscador de direcciones del checkout llama a la API pública de
+Nominatim de OpenStreetMap directamente desde el navegador de cada
+cliente. La política de uso de Nominatim desaconseja el uso intensivo
+desde front-end y aplica límites de frecuencia por IP; puede devolver 429
+o bloquear.
+
+QUÉ PROVOCA:
+En picos de tráfico o desde IPs compartidas, el autocompletado puede
+fallar o quedar lento. Hay un fallback a Photon (más permisivo), lo que
+mitiga, pero el camino principal es frágil.
+
+CÓMO DEBERÍA FUNCIONAR:
+El geocoding debería pasar por un proxy propio (una Cloudflare Pages
+Function, como ya existen otras) que cachee resultados y ponga un
+User-Agent/identificación válida, respetando la política de Nominatim.
+
+DÓNDE ESTÁ EL CÓDIGO:
+- js/checkout-reliability.js (líneas ~430-433): nominatimUrl y photonUrl,
+  ambos fetch directos desde el cliente.
+
+SOLUCIÓN:
+Mover Nominatim detrás de /api/geo-search (Cloudflare) con caché y
+cabecera de identificación; dejar Photon como fallback. Mantener el
+timeout ya existente.
+
+================================================================
+Fin del nivel MEDIO. Continúo con el nivel BAJO en AUDITORIA-BAJO.txt.
+================================================================

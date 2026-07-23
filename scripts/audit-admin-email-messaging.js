@@ -7,16 +7,17 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
-const checkout = read('checkout.html');
-const resendNotify = read('js/resend-order-notify.js');
-const bridge = read('js/checkout-email-bridge.js');
-const orderEmailFn = read('functions/api/order-email.js');
-const testEmailFn = read('functions/api/test-email.js');
-const adminSync = read('js/admin-email-gate-sync.js');
-const adminApp = read('js/admin-app.js');
-const whatsapp = read('js/whatsapp.js');
-const settingsStore = read('js/public-settings-store.js');
-const rules = read('firestore.rules');
+const checkout       = read('checkout.html');
+const resendNotify   = read('js/resend-order-notify.js');
+const bridge         = read('js/checkout-email-bridge.js');
+const orderEmailFn   = read('functions/api/order-email.js');
+const testEmailFn    = read('functions/api/test-email.js');
+const adminSync      = read('js/admin-email-gate-sync.js');
+const functionOrigin = read('js/function-origin.js');
+const adminApp       = read('js/admin-app.js');
+const whatsapp       = read('js/whatsapp.js');
+const settingsStore  = read('js/public-settings-store.js');
+const rules          = read('firestore.rules');
 
 check(
   'Checkout usa un solo canal Resend',
@@ -26,16 +27,32 @@ check(
   'El pedido no debe disparar dos proveedores de correo.'
 );
 check(
-  'El cliente llama a Cloudflare con sesión real',
-  resendNotify.includes("const ORDER_EMAIL_API = '/api/order-email'") &&
+  'El canal Resend llama al endpoint de Cloudflare con Bearer token',
+  // El origen (relativo en Cloudflare, pages.dev en GitHub Pages/Netlify) lo
+  // resuelve js/function-origin.js — ver "El fallback de host..." abajo.
+  resendNotify.includes("const ORDER_EMAIL_API = apiUrl('order-email')") &&
     resendNotify.includes('Authorization: `Bearer ${idToken}`') &&
     resendNotify.includes("action: isResend ? 'resendOrderEmail' : 'sendOrderEmail'"),
   'El frontend debe usar /api/order-email con Bearer token.'
 );
 check(
-  'El puente usa el mismo canal',
-  bridge.includes("from './resend-order-notify.js?v=tintin-20260717-resend-1'") && !bridge.includes('email-notify.js'),
-  'checkout-email-bridge no debe introducir otro backend.'
+  'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
+  // Antes resend-order-notify.js y admin-email-gate-sync.js usaban rutas
+  // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
+  // media-library.js y site-activity.js — eso daba 404 en GitHub Pages y el
+  // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
+  // comparten la misma resolución de origen.
+  resendNotify.includes("import { apiUrl } from './function-origin.js") &&
+    adminSync.includes("import { apiUrl } from './function-origin.js") &&
+    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+    functionOrigin.includes("hostname.endsWith('github.io')"),
+  'Toda ruta /api/* del cliente debe resolverse con js/function-origin.js, no con una constante relativa suelta.'
+);
+check(
+  'El puente del checkout, si se carga, usa el MISMO canal Resend',
+  bridge.includes("from './resend-order-notify.js?v=tintin-20260717-resend-1'") &&
+    !bridge.includes('email-notify.js'),
+  'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );
 
 const frontendFiles = [
@@ -84,9 +101,21 @@ check(
   'El proveedor real no debe quedar editable a valores inválidos.'
 );
 check(
-  'Correo de prueba usa Resend con cooldown',
-  adminSync.includes("const TEST_ENDPOINT = '/api/test-email'") &&
-    adminSync.includes("sessionStorage.getItem('tt_resend_test_last')") &&
+  'La prueba se envía por Resend vía /api/test-email',
+  adminSync.includes("const TEST_ENDPOINT = apiUrl('test-email')") &&
+    adminSync.includes('fetch(TEST_ENDPOINT, {'),
+  'El correo de prueba debe usar el canal Resend, no el webhook viejo.'
+);
+check(
+  'El interceptor de prueba anula el envío viejo (Apps Script) del panel',
+  adminSync.includes("event.target?.closest?.('#btn-test-email')") &&
+    adminSync.includes('event.stopImmediatePropagation()') &&
+    adminSync.includes('sendResendTest(button)'),
+  'El botón de prueba debe enrutarse a Resend; el handler viejo no debe ejecutarse en paralelo.'
+);
+check(
+  'El correo de prueba tiene cooldown anti-doble-clic (120s)',
+  adminSync.includes("sessionStorage.getItem('tt_resend_test_last')") &&
     adminSync.includes('120000 - (Date.now() - lastAttempt)') &&
     adminSync.includes('event.stopImmediatePropagation()'),
   'La prueba debe evitar dobles envíos.'

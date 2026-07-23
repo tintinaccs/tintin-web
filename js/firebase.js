@@ -21,7 +21,10 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 // Clave pública de reCAPTCHA v3 creada desde Firebase Console → App Check.
 // Al cargarla y activar Enforcement en Firestore, las llamadas que no provengan
 // de la web legítima quedan rechazadas antes de consumir la API normalmente.
-const FIREBASE_APP_CHECK_SITE_KEY = '';
+// Certifica ante Firebase que las lecturas y escrituras vienen de este sitio
+// y no de un script externo repitiendo llamadas (el vector que agotó la
+// cuota diaria de Firestore del plan Spark).
+const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--WIq0PRCP9m';
 if (FIREBASE_APP_CHECK_SITE_KEY) {
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
