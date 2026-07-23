@@ -392,7 +392,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./js/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker, mountMediaLibrarySection } from "./js/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -492,6 +492,8 @@ function renderSection(section) {
 
   const grid = document.getElementById('adm-cards-grid');
   document.getElementById('img-bulk-toolbar').style.display = section === 'biblioteca' ? 'none' : '';
+
+  if (section !== 'biblioteca') unmountMediaLibrarySection();
 
   if (section === 'biblioteca') {
     grid.replaceChildren();

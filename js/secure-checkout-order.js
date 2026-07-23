@@ -378,6 +378,48 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, { maxAttempts: 2 });
   }
 
+  // Compara el draft actual contra un borrador pendiente ya guardado para
+  // decidir si retomarlo es realmente la misma compra (reintento tras un
+  // corte de red) o si la clienta cambió algo después de un intento
+  // fallido. Ante la duda, devuelve false: es más seguro tratarlo como
+  // "cambió" (dispara el camino de borrar y recrear en
+  // createOrderWithSparkTransaction) que finalizar datos viejos sin avisar.
+  function draftMatchesStoredOrder(draft, data) {
+    const storedItems = Array.isArray(data.items) ? data.items : [];
+    const draftLines = Array.isArray(draft.cartLines) ? draft.cartLines : [];
+    if (storedItems.length !== draftLines.length) return false;
+    const storedById = new Map(storedItems.map(item => [String(item.id), item]));
+    for (const line of draftLines) {
+      const stored = storedById.get(String(line.id));
+      if (!stored || Number(stored.qty) !== Number(line.qty)) return false;
+    }
+
+    const storedShipping = data.shipping || {};
+    const sameShippingSelection = draft.selectedCity === '__retiro__'
+      ? storedShipping.method === 'retiro'
+      : text(draft.selectedCity).toLocaleLowerCase('es') === text(storedShipping.city).toLocaleLowerCase('es');
+    if (!sameShippingSelection) return false;
+
+    if (storedShipping.method === 'encomienda' && text(draft.address) !== text(storedShipping.address)) return false;
+    if (storedShipping.method === 'delivery') {
+      const storedMapName = text(storedShipping.mapLocation?.name);
+      const draftMapName = text(draft.mapLocation?.name);
+      if (storedMapName !== draftMapName) return false;
+    }
+
+    return draft.paymentMethod === (data.payment?.method || '');
+  }
+
+  async function deleteStalePendingOrder(orderId) {
+    const orderRef = doc(db, 'orders', orderId);
+    await runTransaction(db, async transaction => {
+      const snap = await transaction.get(orderRef);
+      if (snap.exists() && snap.data()?.inventoryState === 'pending') {
+        transaction.delete(orderRef);
+      }
+    });
+  }
+
   async function createPendingOrder(draft) {
     const user = auth.currentUser;
     const uid = user.uid;
@@ -393,7 +435,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       if (existing.exists()) {
         const data = existing.data() || {};
         if (data.inventoryState === 'pending' || data.inventoryState === 'reserved') {
-          return { ...data, orderId, created: false };
+          // Reanudar solo es correcto si el draft actual sigue siendo el
+          // mismo que generó este borrador (reintento de la misma compra
+          // tras un corte de red). Si la clienta cambió el carrito,
+          // dirección o pago después de un intento fallido, resumir a
+          // ciegas finalizaría datos viejos sin que nadie lo note — las
+          // reglas de Firestore no permiten al cliente reescribir un
+          // pedido pendiente propio, así que la recuperación (borrar el
+          // borrador viejo y crear uno nuevo) se hace en submit().
+          if (draftMatchesStoredOrder(draft, data)) {
+            return { ...data, orderId, created: false };
+          }
+          throw appError('stale_draft_changed', 'Tu pedido cambió desde el último intento. Volvé a confirmar con los datos actuales.');
         }
         throw appError('order_state_invalid', 'El pedido existente no puede reanudarse.');
       }
@@ -579,7 +632,19 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function createOrderWithSparkTransaction(draft) {
-    const pending = await createPendingOrder(draft);
+    let pending;
+    try {
+      pending = await createPendingOrder(draft);
+    } catch (error) {
+      if (error?.code !== 'stale_draft_changed') throw error;
+      // El borrador pendiente de un intento anterior ya no coincide con lo
+      // que la clienta está por confirmar ahora — lo borramos (autorizado
+      // por sparkPendingOrderDeleteValid, ya que es su propio pedido
+      // pendiente) y creamos uno nuevo con los datos actuales, en vez de
+      // reanudar el viejo.
+      await deleteStalePendingOrder(`${auth.currentUser.uid}_${draft.requestId}`);
+      pending = await createPendingOrder(draft);
+    }
     return reserveOrderInventory(pending.orderId);
   }
 
@@ -633,7 +698,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       payment_unavailable: 'Ese método de pago ya no está disponible.',
       too_many_products: error?.message,
       invalid_cart: error?.message,
-      invalid_price: 'No pudimos comprobar el precio de uno de los productos.'
+      invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
+      quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales.',
+      stale_draft_changed: 'Tu pedido cambió desde el último intento. Confirmá de nuevo para continuar con los datos actuales.',
+      order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.'
     };
     if (messages[code]) return messages[code];
     if (code === 'permission-denied' || code === 'firestore/permission-denied') {

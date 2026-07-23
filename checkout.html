@@ -1105,6 +1105,12 @@ document.getElementById('btn-step4-next').onclick = async () => {
 document.getElementById('btn-step4-back').onclick = () => goToStep(2);
 
 // ---- BUILD CONFIRMATION ----
+function escapeHtml(value) {
+  const node = document.createElement('div');
+  node.textContent = String(value ?? '');
+  return node.innerHTML;
+}
+
 async function buildConfirmation() {
   cartItems = getCartLocal();
   const subtotal = cartTotal(cartItems);
@@ -1128,7 +1134,7 @@ async function buildConfirmation() {
     <div class="ck-summary-items">
       ${cartItems.map(i => `
         <div class="ck-summary-item">
-          <span class="ck-summary-item-name">${i.qty}x ${i.name}</span>
+          <span class="ck-summary-item-name">${i.qty}x ${escapeHtml(i.name)}</span>
           <span style="font-weight:700">${formatPrice(i.price * i.qty)}</span>
         </div>
       `).join('')}
@@ -1136,35 +1142,35 @@ async function buildConfirmation() {
     <div style="margin-top:16px">
       <div class="ck-summary-row">
         <span class="ck-summary-label">👤 Cliente</span>
-        <span class="ck-summary-val">${orderData.name}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.name)}</span>
       </div>
       <div class="ck-summary-row">
         <span class="ck-summary-label">📞 Teléfono</span>
-        <span class="ck-summary-val">${orderData.phone}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.phone)}</span>
       </div>
       ${orderData.email ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">📧 Email</span>
-        <span class="ck-summary-val">${orderData.email}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.email)}</span>
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">📍 Ciudad</span>
-        <span class="ck-summary-val">${orderData.city}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.city)}</span>
       </div>
       ${orderData.address ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">🏠 Dirección</span>
-        <span class="ck-summary-val">${orderData.address}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.address)}</span>
       </div>` : ''}
       ${orderData.mapLocation?.name ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">📍 Lugar</span>
-        <span class="ck-summary-val">${orderData.mapLocation.name}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.mapLocation.name)}</span>
       </div>` : ''}
       ${orderData.referencia ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">📌 Referencia</span>
-        <span class="ck-summary-val">${orderData.referencia}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.referencia)}</span>
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">🚚 Envío</span>
@@ -1177,7 +1183,7 @@ async function buildConfirmation() {
       ${orderData.notes ? `
       <div class="ck-summary-row">
         <span class="ck-summary-label">📝 Notas</span>
-        <span class="ck-summary-val">${orderData.notes}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.notes)}</span>
       </div>` : ''}
     </div>
     <div class="ck-summary-total">

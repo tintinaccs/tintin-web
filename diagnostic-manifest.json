@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T20:44:00.873Z",
-  "sourceFingerprint": "1a100504551c4087bd6444ed7b3c1f1d3d84465f4193834380349b4aaf3de228",
+  "generatedAt": "2026-07-23T21:18:44.873Z",
+  "sourceFingerprint": "1f4010c52b1f020e6c7a4656fab692163e591608e322752f6986c02aeb1791dd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 373,
     "textFiles": 339,
-    "totalBytes": 5044937,
+    "totalBytes": 5049796,
     "pages": 18,
     "modules": 204
   },
@@ -976,8 +976,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 34695,
-      "sha256": "5f7ab9040ab6b68f0f0949c846191d639cb0466122cc34a57d6f07d1eee312a9",
+      "bytes": 34786,
+      "sha256": "5f1877fa87d21b6d1a220e34414e68b4832bd1a43789845c6212a6eadc9ee179",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1019,7 +1019,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 737
+          "line": 739
         }
       ],
       "styles": [
@@ -1088,7 +1088,7 @@
         {
           "raw": "js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin-color-scheme.js",
-          "line": 737,
+          "line": 739,
           "exists": true
         },
         {
@@ -6999,8 +6999,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 83854,
-      "sha256": "6b49963f38928a9d642f0f52ae32e06ae9c50a044d1222eb75c85805faf375af",
+      "bytes": 84107,
+      "sha256": "2d4aa42332f172438bb75add6174035331e2bce2a392be9816fea0f72ba04523",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7047,17 +7047,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1761
+          "line": 1767
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 1762
+          "line": 1768
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1763
+          "line": 1769
         }
       ],
       "styles": [
@@ -7167,19 +7167,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1761,
+          "line": 1767,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 1762,
+          "line": 1768,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1763,
+          "line": 1769,
           "exists": true
         },
         {
@@ -8627,8 +8627,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13190,
-      "sha256": "ea416c3eba6f6ccd522e6b480c91dcfda57c1df54a12640845f86deaf4ded9a6",
+      "bytes": 13356,
+      "sha256": "e61b45cc7a31ed0b8682b8e2a0bda7c47af2e8efa021f6c9f65ee42c28ea0a29",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8695,7 +8695,7 @@
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 202
+          "line": 207
         }
       ],
       "styles": [
@@ -8993,7 +8993,7 @@
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 202,
+          "line": 207,
           "exists": true
         },
         {
@@ -13646,8 +13646,8 @@
     },
     {
       "path": "js/admin-app.js",
-      "bytes": 414463,
-      "sha256": "906ba5be657413b23deaed0d38629a19f4ae0e2234fe512441cbeaffc64efda0",
+      "bytes": 414601,
+      "sha256": "0f04202495030d159e3f87b7097e3d54694911274ad91b697f1989d8cb30181c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14097,8 +14097,8 @@
     },
     {
       "path": "js/admin-media-library-ui.js",
-      "bytes": 7322,
-      "sha256": "c93cd72377150423c566f51821b240f53a7cc32c3cdd4f8d9b68ea952ebf53dc",
+      "bytes": 7791,
+      "sha256": "cb2e31197e944f104639f710c34f4df20aa60ddc1335fae13ad7ea15dc876221",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16214,8 +16214,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 28763,
-      "sha256": "b5855acaccdadc4b19f914c195764a6cf0322280c751d8fad773e3f4343b7a16",
+      "bytes": 32505,
+      "sha256": "a728c9f62b91e6c23a4c3da112d5055191167f82d82040c47e74c649b6198874",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16259,7 +16259,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 610
+          "line": 675
         }
       ]
     },
@@ -18570,8 +18570,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 34695,
-      "sha256": "5f7ab9040ab6b68f0f0949c846191d639cb0466122cc34a57d6f07d1eee312a9"
+      "bytes": 34786,
+      "sha256": "5f1877fa87d21b6d1a220e34414e68b4832bd1a43789845c6212a6eadc9ee179"
     },
     {
       "path": "admin.html",
@@ -18780,8 +18780,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 83854,
-      "sha256": "6b49963f38928a9d642f0f52ae32e06ae9c50a044d1222eb75c85805faf375af"
+      "bytes": 84107,
+      "sha256": "2d4aa42332f172438bb75add6174035331e2bce2a392be9816fea0f72ba04523"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -19038,8 +19038,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 13190,
-      "sha256": "ea416c3eba6f6ccd522e6b480c91dcfda57c1df54a12640845f86deaf4ded9a6"
+      "bytes": 13356,
+      "sha256": "e61b45cc7a31ed0b8682b8e2a0bda7c47af2e8efa021f6c9f65ee42c28ea0a29"
     },
     {
       "path": "favicon-16x16.png",
@@ -19200,8 +19200,8 @@
     {
       "path": "js/admin-app.js",
       "extension": ".js",
-      "bytes": 414463,
-      "sha256": "906ba5be657413b23deaed0d38629a19f4ae0e2234fe512441cbeaffc64efda0"
+      "bytes": 414601,
+      "sha256": "0f04202495030d159e3f87b7097e3d54694911274ad91b697f1989d8cb30181c"
     },
     {
       "path": "js/admin-collections-phase4.js",
@@ -19248,8 +19248,8 @@
     {
       "path": "js/admin-media-library-ui.js",
       "extension": ".js",
-      "bytes": 7322,
-      "sha256": "c93cd72377150423c566f51821b240f53a7cc32c3cdd4f8d9b68ea952ebf53dc"
+      "bytes": 7791,
+      "sha256": "cb2e31197e944f104639f710c34f4df20aa60ddc1335fae13ad7ea15dc876221"
     },
     {
       "path": "js/admin-mobile-sidebar-fix.js",
@@ -19776,8 +19776,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 28763,
-      "sha256": "b5855acaccdadc4b19f914c195764a6cf0322280c751d8fad773e3f4343b7a16"
+      "bytes": 32505,
+      "sha256": "a728c9f62b91e6c23a4c3da112d5055191167f82d82040c47e74c649b6198874"
     },
     {
       "path": "js/security-utils.js",
@@ -23849,7 +23849,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1643,
+      "line": 1649,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -24287,12 +24287,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 1382,
+            "line": 1388,
             "operation": "collection"
           },
           {
             "file": "checkout.html",
-            "line": 1386,
+            "line": 1392,
             "operation": "collection"
           },
           {
@@ -24377,12 +24377,17 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 386,
+            "line": 414,
             "operation": "doc"
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 503,
+            "line": 428,
+            "operation": "doc"
+          },
+          {
+            "file": "js/secure-checkout-order.js",
+            "line": 556,
             "operation": "doc"
           },
           {
@@ -24527,12 +24532,12 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 389,
+            "line": 431,
             "operation": "doc"
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 515,
+            "line": 568,
             "operation": "doc"
           },
           {
@@ -24562,7 +24567,7 @@
           },
           {
             "file": "envios.html",
-            "line": 192,
+            "line": 197,
             "operation": "doc"
           },
           {
@@ -24677,7 +24682,7 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 387,
+            "line": 429,
             "operation": "doc"
           },
           {
@@ -24882,22 +24887,22 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 713,
+            "line": 715,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1404,
+            "line": 1410,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1507,
+            "line": 1513,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1744,
+            "line": 1750,
             "operation": "doc"
           },
           {
@@ -25017,7 +25022,7 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 388,
+            "line": 430,
             "operation": "doc"
           },
           {

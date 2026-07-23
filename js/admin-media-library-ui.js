@@ -36,6 +36,12 @@ function ensureStyles() {
   document.head.appendChild(style);
 }
 
+function escapeHtml(value) {
+  const node = document.createElement('div');
+  node.textContent = String(value ?? '');
+  return node.innerHTML;
+}
+
 function formatBytes(bytes) {
   if (!Number.isFinite(bytes)) return '';
   if (bytes < 1024) return `${bytes} B`;
@@ -67,7 +73,7 @@ function renderGrid(grid, items, query, { onSelect, onDelete }) {
 
     const meta = document.createElement('div');
     meta.className = 'tt-mlib-meta';
-    meta.innerHTML = `<strong>${(item.originalName || 'Sin nombre').replace(/</g, '&lt;')}</strong>${item.width || 0}×${item.height || 0} · ${formatBytes(item.bytes)}`;
+    meta.innerHTML = `<strong>${escapeHtml(item.originalName || 'Sin nombre')}</strong>${item.width || 0}×${item.height || 0} · ${formatBytes(item.bytes)}`;
 
     cell.append(img, meta);
     if (onSelect) cell.addEventListener('click', () => onSelect(item));
@@ -171,10 +177,20 @@ export function openMediaLibraryPicker() {
   });
 }
 
+let activeSectionUnsubscribe = null;
+
+/** Cierra el listener de Firestore del panel de biblioteca, si hay uno activo. */
+export function unmountMediaLibrarySection() {
+  activeSectionUnsubscribe?.();
+  activeSectionUnsubscribe = null;
+}
+
 /** Panel persistente de administración (buscar + borrar) para una sección del admin. */
 export function mountMediaLibrarySection(container) {
+  unmountMediaLibrarySection();
   container.replaceChildren();
   const wrap = document.createElement('div');
-  mountLibraryUI(wrap, { title: 'Biblioteca multimedia', showDelete: true, onSelect: null });
+  const { unsubscribe } = mountLibraryUI(wrap, { title: 'Biblioteca multimedia', showDelete: true, onSelect: null });
+  activeSectionUnsubscribe = unsubscribe;
   container.appendChild(wrap);
 }

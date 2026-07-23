@@ -3723,10 +3723,10 @@ function renderCorreosClientasTab() {
       const optIn = c.marketingOptIn === false ? 'No' : (c.marketingOptIn === true ? 'Sí' : 'No especificado');
       return `
         <tr class="adm-cliente-row">
-          <td data-label="Sel."><input type="checkbox" ${checked} ${disabledAttr} onchange="window.toggleClientSelected('${c.email}', this.checked)" /></td>
-          <td data-label="Nombre"><strong>${c.name || '—'}</strong></td>
-          <td data-label="Email" style="font-size:12px">${c.email || '—'}</td>
-          <td data-label="Teléfono" style="font-size:12px">${c.phone || '—'}</td>
+          <td data-label="Sel."><input type="checkbox" ${checked} ${disabledAttr} onchange="window.toggleClientSelected(${inlineArgumentAdmin(c.email)}, this.checked)" /></td>
+          <td data-label="Nombre"><strong>${escapeHtmlAdmin(c.name || '—')}</strong></td>
+          <td data-label="Email" style="font-size:12px">${escapeHtmlAdmin(c.email || '—')}</td>
+          <td data-label="Teléfono" style="font-size:12px">${escapeHtmlAdmin(c.phone || '—')}</td>
           <td data-label="Registro" style="font-size:12px">${c.createdAt ? formatDate(c.createdAt) : '—'}</td>
           <td data-label="Pedidos">${c.orderCount || 0}</td>
           <td data-label="Últ. compra" style="font-size:12px">${c.lastPurchase ? c.lastPurchase.toLocaleDateString('es-PY') : '—'}</td>
@@ -4279,8 +4279,8 @@ function renderShipList(type) {
   }
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
-      <input type="checkbox" class="ship-${type}-check" data-name="${c.name}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
-      <span style="font-weight:600;flex:1">${c.name}</span>
+      <input type="checkbox" class="ship-${type}-check" data-name="${escapeHtmlAdmin(c.name)}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
+      <span style="font-weight:600;flex:1">${escapeHtmlAdmin(c.name)}</span>
       <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
@@ -7047,8 +7047,8 @@ window.openOrderEdit = function(orderId) {
     oeMapWrap.style.display = 'flex';
     const mapUrl = `https://maps.google.com/?q=${oeMapLoc.lat},${oeMapLoc.lng}`;
     document.getElementById('oe-map-location-info').innerHTML =
-      (oeMapLoc.name ? `<strong>${oeMapLoc.name}</strong><br>` : '') +
-      `<a href="${mapUrl}" target="_blank" rel="noopener">Ver en Google Maps →</a>`;
+      (oeMapLoc.name ? `<strong>${escapeHtmlAdmin(oeMapLoc.name)}</strong><br>` : '') +
+      `<a href="${escapeHtmlAdmin(mapUrl)}" target="_blank" rel="noopener">Ver en Google Maps →</a>`;
   } else {
     oeMapWrap.style.display = 'none';
   }
