@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T03:04:03.956Z",
-  "sourceFingerprint": "54c85d9cb355f5c179ef292b4d2147ae9a163af0a563e4c75f5715eac4407368",
+  "generatedAt": "2026-07-23T14:43:59.723Z",
+  "sourceFingerprint": "3527165fe33aa15167374c9985817b4ebae20a3edab102d55a51765779673765",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 370,
-    "textFiles": 336,
-    "totalBytes": 5019456,
+    "files": 371,
+    "textFiles": 337,
+    "totalBytes": 5035927,
     "pages": 18,
-    "modules": 202
+    "modules": 203
   },
   "viewports": [
     {
@@ -14376,8 +14376,8 @@
     },
     {
       "path": "js/analytics.js",
-      "bytes": 2674,
-      "sha256": "d31c34f0bca3ff2d9a62c365df13306be76e94ad2edb0f4b0d916bff1b7da81e",
+      "bytes": 11614,
+      "sha256": "54dc11f68aacb9fee753401948799529a81a4c94fb55de8d253893979e2b2d6e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14387,29 +14387,29 @@
           "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 8
+          "line": 1
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 9
+          "line": 2
         },
         {
           "raw": "./privacy-consent.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/privacy-consent.js",
           "dynamic": false,
-          "line": 13
+          "line": 6
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 9
+          "line": 2
         },
         {
           "url": "https://www.googletagmanager.com/gtag/js",
-          "line": 68
+          "line": 150
         }
       ]
     },
@@ -14482,6 +14482,17 @@
       ]
     },
     {
+      "path": "js/cart-recovery.js",
+      "bytes": 5699,
+      "sha256": "3e86fa3ca33f64873c6e999b5d41d6f7d341ab60c08e95a6e6bb96a90a5d89f4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/cart-sync.js",
       "bytes": 35303,
       "sha256": "3bb3587e882f9b64e278e9e3dd3f37cca22de669b79adf51a45c5ab750e80f7c",
@@ -14545,8 +14556,8 @@
     },
     {
       "path": "js/checkout-email-bridge.js",
-      "bytes": 4684,
-      "sha256": "096a0a472a00d2188278b9fd9abb352ff5fe337f60e3417e26a9e0b553204267",
+      "bytes": 5418,
+      "sha256": "392766b325f92f5cfd14861cfe53ca91846055cb5007c2df102f8137ab793e52",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15795,13 +15806,20 @@
     },
     {
       "path": "js/privacy-consent.js",
-      "bytes": 7993,
-      "sha256": "68660140200178930aa22948eb381ea8a0fa13511da024d939a3fc5a9af90f14",
+      "bytes": 8050,
+      "sha256": "e8a8cdd7fa202fb75317ac2ad970dcaa9cb7312895a95e559484053f283f6e98",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./cart-recovery.js?v=tintin-20260722-level4-1",
+          "target": "js/cart-recovery.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
       "endpoints": []
     },
     {
@@ -16839,8 +16857,8 @@
     },
     {
       "path": "scripts/audit-canonical-viewports.mjs",
-      "bytes": 11976,
-      "sha256": "fd3686fa9a0639fb4ea93b5f35be1fc115ac7e54af9f49ab8c43ce7b5ed9f1db",
+      "bytes": 13008,
+      "sha256": "3ebbc59fc49127a91cc90287ef7e9ca6d7406a754a8175b15d8425d66b262795",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17797,8 +17815,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 15524,
-      "sha256": "d6955ec7c32e0d3d76a5fca66905124245a0d8b08879a0cd55342d7b12f6f7b9",
+      "bytes": 15533,
+      "sha256": "a89c414438e08e51ab9a902eab1d9025c860b763453469d4f72c46bd5c26396b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19214,8 +19232,8 @@
     {
       "path": "js/analytics.js",
       "extension": ".js",
-      "bytes": 2674,
-      "sha256": "d31c34f0bca3ff2d9a62c365df13306be76e94ad2edb0f4b0d916bff1b7da81e"
+      "bytes": 11614,
+      "sha256": "54dc11f68aacb9fee753401948799529a81a4c94fb55de8d253893979e2b2d6e"
     },
     {
       "path": "js/auth-nav.js",
@@ -19228,6 +19246,12 @@
       "extension": ".js",
       "bytes": 2471,
       "sha256": "8e77265a6a816fc570d96f0fbc28befa98954ac5a3c560ea211d554c7488f824"
+    },
+    {
+      "path": "js/cart-recovery.js",
+      "extension": ".js",
+      "bytes": 5699,
+      "sha256": "3e86fa3ca33f64873c6e999b5d41d6f7d341ab60c08e95a6e6bb96a90a5d89f4"
     },
     {
       "path": "js/cart-sync.js",
@@ -19244,8 +19268,8 @@
     {
       "path": "js/checkout-email-bridge.js",
       "extension": ".js",
-      "bytes": 4684,
-      "sha256": "096a0a472a00d2188278b9fd9abb352ff5fe337f60e3417e26a9e0b553204267"
+      "bytes": 5418,
+      "sha256": "392766b325f92f5cfd14861cfe53ca91846055cb5007c2df102f8137ab793e52"
     },
     {
       "path": "js/checkout-maintenance.js",
@@ -19586,8 +19610,8 @@
     {
       "path": "js/privacy-consent.js",
       "extension": ".js",
-      "bytes": 7993,
-      "sha256": "68660140200178930aa22948eb381ea8a0fa13511da024d939a3fc5a9af90f14"
+      "bytes": 8050,
+      "sha256": "e8a8cdd7fa202fb75317ac2ad970dcaa9cb7312895a95e559484053f283f6e98"
     },
     {
       "path": "js/product-benefits.js",
@@ -20060,8 +20084,8 @@
     {
       "path": "scripts/audit-canonical-viewports.mjs",
       "extension": ".mjs",
-      "bytes": 11976,
-      "sha256": "fd3686fa9a0639fb4ea93b5f35be1fc115ac7e54af9f49ab8c43ce7b5ed9f1db"
+      "bytes": 13008,
+      "sha256": "3ebbc59fc49127a91cc90287ef7e9ca6d7406a754a8175b15d8425d66b262795"
     },
     {
       "path": "scripts/audit-cart-phase7.js",
@@ -20342,8 +20366,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 15524,
-      "sha256": "d6955ec7c32e0d3d76a5fca66905124245a0d8b08879a0cd55342d7b12f6f7b9"
+      "bytes": 15533,
+      "sha256": "a89c414438e08e51ab9a902eab1d9025c860b763453469d4f72c46bd5c26396b"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -22302,7 +22326,7 @@
     },
     {
       "file": "js/privacy-consent.js",
-      "line": 94,
+      "line": 96,
       "raw": "privacidad.html",
       "target": "privacidad.html",
       "exists": true
@@ -24542,7 +24566,7 @@
           },
           {
             "file": "js/analytics.js",
-            "line": 40,
+            "line": 111,
             "operation": "doc"
           },
           {

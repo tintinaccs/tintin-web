@@ -68,6 +68,22 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
     return found ? { id: found.id, data: found.data() || {} } : null;
   }
 
+  function dispatchSafePurchase(order, shortId) {
+    const items = Array.isArray(order?.items) ? order.items : [];
+    const quantity = items.reduce((sum, item) => sum + Math.max(0, Number(item?.qty) || 0), 0);
+    const itemCount = items.filter(item => Number(item?.qty) > 0).length;
+    window.dispatchEvent(new CustomEvent('tintin:order-created', {
+      detail: {
+        value: Math.max(0, Number(order?.total) || 0),
+        quantity,
+        itemCount,
+        // Solo se usa localmente para evitar eventos repetidos. analytics.js
+        // elimina cualquier identificador antes de enviar parámetros externos.
+        dedupeKey: clean(shortId).slice(0, 60)
+      }
+    }));
+  }
+
   async function notifyAfterSuccess() {
     if (!successVisible()) return;
 
@@ -90,6 +106,8 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       }
 
       const order = found.data;
+      dispatchSafePurchase(order, shortId);
+
       if (order.notificationStatus && order.notificationStatus !== 'pending') {
         try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {}
         return;

@@ -212,11 +212,31 @@ function isTransientNavigationError(error) {
   return /Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(error?.message || String(error));
 }
 
+// admin.html, admin-images.html y perfil.html exigen sesión: sin usuario
+// autenticado (el caso siempre en este audit), Firebase Auth resuelve
+// onAuthStateChanged de forma asíncrona y recién ahí redirige a login.html.
+// Si esa redirección cae justo en medio de un page.evaluate(), Playwright
+// pierde el contexto ("Execution context was destroyed"). page.waitForURL
+// escucha eventos de navegación en vez de evaluar repetidamente, así que
+// sobrevive a la navegación y nos deja esperar a que se asiente antes de
+// tocar la página con prepare()/inspect().
+async function settleAuthRedirect(page, pageInfo, startUrl) {
+  if (!pageInfo.requiresAuth) return;
+  try {
+    await page.waitForURL(url => url.toString() !== startUrl, { timeout: 4000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
+  } catch {
+    // No hubo redirección dentro de la ventana de espera: seguimos con la
+    // página tal cual quedó (comportamiento previo).
+  }
+}
+
 async function navigateWithRetry(page, url, width, pageInfo) {
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      await settleAuthRedirect(page, pageInfo, page.url());
       await prepare(page, width, pageInfo);
       return;
     } catch (error) {
@@ -239,7 +259,7 @@ async function inspectWithRetry(page, width, pageInfo) {
     } catch (error) {
       lastError = error;
       if (!isTransientNavigationError(error) || attempt >= 3) break;
-      await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
+      await settleAuthRedirect(page, pageInfo, page.url());
       await page.waitForTimeout(400);
       await prepare(page, width, pageInfo);
     }
