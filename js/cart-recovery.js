@@ -1,3 +1,5 @@
+import { isAdminPage } from './admin-path.js?v=tintin-20260722-level4-1';
+
 const ACTIVITY_KEY = 'tt_cart_activity_v1';
 const SESSION_KEY = 'tt_cart_recovery_shown_v1';
 const RETURN_AFTER_MS = 30 * 60 * 1000;
@@ -177,6 +179,6 @@ function onCartUpdated(event) {
   if (projection !== lastProjection) remember(summary);
 }
 
-if (!/\/(?:admin|admin-images)\.html$/i.test(window.location.pathname || '')) {
+if (!isAdminPage()) {
   window.addEventListener('tt_cart_updated', onCartUpdated, { passive: true });
 }

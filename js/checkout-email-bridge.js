@@ -56,12 +56,16 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       }
     }
 
-    // Respaldo sin índice compuesto: obtiene pocos pedidos propios y compara el
-    // número corto en memoria. Las reglas siguen impidiendo leer pedidos ajenos.
+    // Respaldo sin índice compuesto (orderBy + where distinto exigiría uno
+    // que no está creado): obtiene los pedidos propios y compara el número
+    // corto en memoria. Sin orderBy, Firestore no garantiza el orden, así
+    // que un límite bajo podía dejar afuera el pedido recién creado en una
+    // clienta con muchos pedidos históricos — 20 → 100 reduce esa chance sin
+    // requerir el índice. Las reglas siguen impidiendo leer pedidos ajenos.
     const fallbackQuery = query(
       collection(db, 'orders'),
       where('userId', '==', user.uid),
-      limit(20)
+      limit(100)
     );
     const fallbackSnap = await getDocs(fallbackQuery);
     const found = fallbackSnap.docs.find(item => clean(item.data()?.shortId) === shortId);

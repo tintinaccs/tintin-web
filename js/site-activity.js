@@ -19,6 +19,7 @@ import {
   hasStatisticsConsent,
   onPrivacyConsentChange
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
+import { isAdminPage } from './admin-path.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true) {
   document.documentElement.dataset.ttActivityState = 'disabled-quota-protection';
@@ -34,7 +35,6 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
   const AGGREGATE_RECORDED_PREFIX = 'tt_aggregate_recorded_';
   const HEARTBEAT_MS = 60000;
-  const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
   let heartbeatTimer = 0;
   let activityEnabled = false;
   let analyticsWritable = false;
@@ -297,7 +297,7 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(hostname);
   const netlifyPreview = /^deploy-preview-/i.test(hostname);
   const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname);
-  const trackablePage = !ADMIN_PAGES.test(window.location.pathname);
+  const trackablePage = !isAdminPage();
   analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
 
   if (trackablePage && analyticsWritable) recordAggregateVisitOnce();

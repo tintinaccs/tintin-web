@@ -1,4 +1,5 @@
 import './cart-recovery.js?v=tintin-20260722-level4-1';
+import { isAdminPage } from './admin-path.js?v=tintin-20260722-level4-1';
 
 /**
  * Preferencias de privacidad del sitio.
@@ -13,11 +14,6 @@ const COOKIE_VERSION = 'v2';
 const LEGACY_CONSENT_KEY = 'tt_activity_consent_v1';
 const COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
 
-function isAdminPage() {
-  const path = location.pathname.replace(/\/+$/, '');
-  const lastSegment = path.split('/').filter(Boolean).pop() || '';
-  return /^admin(?:-[a-z0-9-]+)?(?:\.html)?$/i.test(lastSegment);
-}
 
 let memoryChoice = '';
 let preferenceOpener = null;

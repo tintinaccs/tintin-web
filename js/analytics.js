@@ -4,8 +4,8 @@ import {
   hasStatisticsConsent,
   onPrivacyConsentChange
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
+import { isAdminPage } from './admin-path.js?v=tintin-20260716-cloudinary-fix-1';
 
-const ADMIN_PATHS = /\/(?:admin|admin-images)\.html$/i;
 const MEASUREMENT_ID_RE = /^G-[A-Z0-9]{6,20}$/i;
 const CONFIG_TTL_MS = 5 * 60 * 1000;
 const MAX_QUEUE = 50;
@@ -33,7 +33,7 @@ let previousCart = null;
 let consentUnsubscribe = null;
 
 function isTrackablePage() {
-  return !ADMIN_PATHS.test(window.location.pathname || '');
+  return !isAdminPage();
 }
 
 function cleanText(value, maxLength = 100) {

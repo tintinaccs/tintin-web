@@ -5,6 +5,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
 
   const VERSION = 'tintin-20260718-profile-maintenance-1';
   let unsubscribeOrders = null;
+  let startingOrders = false;
   let retryTimer = 0;
 
   const escapeHtml = value => {
@@ -163,7 +164,15 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
 
   async function startRealtimeOrders(force = false) {
     if (unsubscribeOrders && !force) return;
+    // Sin esto, dos llamadas casi simultáneas (online + visibilitychange +
+    // pageshow disparan varias, todas con force:false) pasaban el chequeo de
+    // arriba a la vez, porque unsubscribeOrders recién se asigna después de
+    // dos await (imports dinámicos + esperar el estado de auth) — cada una
+    // terminaba abriendo su propio onSnapshot, y solo el último se guardaba
+    // para poder cerrarlo después.
+    if (startingOrders && !force) return;
     if (unsubscribeOrders) { unsubscribeOrders(); unsubscribeOrders = null; }
+    startingOrders = true;
     clearTimeout(retryTimer);
     const list = document.getElementById('perfil-orders-list');
     if (list) { list.setAttribute('aria-busy','true'); list.innerHTML = '<div class="tt-profile-state">Sincronizando pedidos…</div>'; }
@@ -190,6 +199,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     } catch (error) {
       console.warn('[profile-maintenance] runtime failed', error);
       renderOrdersError('No pudimos preparar la actualización de pedidos.');
+    } finally {
+      startingOrders = false;
     }
   }
 
