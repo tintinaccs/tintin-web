@@ -429,6 +429,7 @@ service cloud.firestore {
         ? get(sparkProductPath(productId)).data
         : null;
       return item is map &&
+        item.keys().hasOnly(['id', 'name', 'cat', 'price', 'qty', 'variant', 'imageUrl']) &&
         item.id is string && item.id.size() > 0 && item.id.size() <= 180 &&
         item.name is string && item.name.size() > 0 && item.name.size() <= 180 &&
         item.price is number && item.price >= 0 &&
@@ -519,11 +520,27 @@ service cloud.firestore {
         );
     }
 
+    function sparkMapLocationValid(mapLocation) {
+      return mapLocation == null ||
+        (
+          mapLocation is map &&
+          mapLocation.keys().hasOnly(['lat', 'lng', 'name', 'address']) &&
+          mapLocation.lat is number &&
+          mapLocation.lng is number &&
+          mapLocation.name is string &&
+          mapLocation.address is string
+        );
+    }
+
     function sparkShippingValid(data, settings) {
       let shipping = data.shipping;
       return shipping is map &&
+        shipping.keys().hasOnly(['method', 'city', 'rateIndex', 'address', 'referencia', 'zone', 'mapLocation']) &&
+        sparkMapLocationValid(shipping.mapLocation) &&
         shipping.method is string &&
         shipping.city is string &&
+        shipping.address is string &&
+        shipping.referencia is string &&
         (
           (
             shipping.method == 'retiro' &&
@@ -561,9 +578,21 @@ service cloud.firestore {
             request.time <= guardData.lastCheckoutAt + duration.value(5, 'm')
           )
         ) &&
+        data.keys().hasOnly([
+          'requestId', 'source', 'shortId', 'userId', 'userEmail', 'contactEmail',
+          'userName', 'userPhone', 'items', 'subtotal', 'shippingCost',
+          'shippingPending', 'total', 'storeWhatsapp', 'storeInstagram',
+          'shipping', 'payment', 'paymentStatus', 'status', 'notes',
+          'notificationStatus', 'inventoryState', 'inventoryRevision',
+          'inventoryUpdatedAt', 'inventoryUpdatedBy', 'createdAt', 'updatedAt'
+        ]) &&
         orderId == request.auth.uid + '_' + data.requestId &&
         data.userId == request.auth.uid &&
         data.userEmail.lower() == request.auth.token.email.lower() &&
+        data.contactEmail is string &&
+        data.userName is string && data.userName.size() >= 2 &&
+        data.userPhone is string &&
+        data.notes is string &&
         data.source == 'spark-checkout-v1' &&
         items is list && items.size() >= 1 && items.size() <= 4 &&
         sparkItemsUnique(items) &&
@@ -579,6 +608,7 @@ service cloud.firestore {
         data.shippingCost is number && data.shippingCost >= 0 &&
         data.total == data.subtotal + data.shippingCost &&
         sparkShippingValid(data, settings) &&
+        data.payment is map && data.payment.keys().hasOnly(['method', 'status']) &&
         (data.payment.method == 'efectivo' || data.payment.method == 'transferencia') &&
         settings.get('paymentMethods', {}).get(data.payment.method, true) != false &&
         data.payment.status == 'pendiente' &&
@@ -662,7 +692,13 @@ service cloud.firestore {
         resource.data.userId == request.auth.uid &&
         resource.data.source == 'spark-checkout-v1' &&
         resource.data.status == 'inventory_pending' &&
-        resource.data.inventoryState == 'pending';
+        resource.data.inventoryState == 'pending' &&
+        // Sin este mínimo, crear+borrar el mismo orderId en loop esquivaba
+        // el cooldown de checkoutGuards (que solo exige lastCheckoutOrderId
+        // == orderId, y el orderId no cambia entre reintentos): el guard
+        // nunca se tocaba, así que nunca se disparaba. 10s no afecta un
+        // reintento real (recién se dispara si el draft cambió).
+        request.time > resource.data.createdAt + duration.value(10, 's');
     }
 
 

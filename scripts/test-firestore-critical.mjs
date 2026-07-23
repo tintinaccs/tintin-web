@@ -6,6 +6,7 @@ import {
   assertSucceeds
 } from '@firebase/rules-unit-testing';
 import {
+  deleteDoc,
   doc,
   getDoc,
   increment,
@@ -145,6 +146,14 @@ async function checkoutFlow(options) {
   return reserveInventory(options);
 }
 
+async function createOrderWithOverrides(requestId, overrides) {
+  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  const orderId = `u1_${requestId}`;
+  await reserveGuard(requestId);
+  const base = orderPayload('u1', requestId, [testItem()], 'pending');
+  return setDoc(doc(db, 'orders', orderId), overrides(base));
+}
+
 try {
   await seedBase();
   await assertSucceeds(checkoutFlow({ requestId: 'req_exact_123456', decrement: 2 }));
@@ -164,6 +173,45 @@ try {
   await seedBase();
   await assertSucceeds(checkoutFlow({ requestId: 'req_first_123456', decrement: 2 }));
   await assertFails(reserveGuard('req_second_123456'));
+
+  await seedBase();
+  await assertFails(createOrderWithOverrides('req_inject_top_123456', base => ({
+    ...base,
+    fakeDiscountApplied: true
+  })));
+
+  await seedBase();
+  await assertFails(createOrderWithOverrides('req_inject_ship_123456', base => ({
+    ...base,
+    shipping: { ...base.shipping, internalNote: 'gratis' }
+  })));
+
+  await seedBase();
+  await assertFails(createOrderWithOverrides('req_inject_item_123456', base => ({
+    ...base,
+    items: [{ ...base.items[0], forcedDiscount: 0.5 }]
+  })));
+
+  await seedBase();
+  await assertFails(createOrderWithOverrides('req_inject_pay_123456', base => ({
+    ...base,
+    payment: { ...base.payment, alreadyConfirmed: true }
+  })));
+
+  await seedBase();
+  await assertFails(createOrderWithOverrides('req_inject_map_123456', base => ({
+    ...base,
+    shipping: { ...base.shipping, mapLocation: { ...base.shipping.mapLocation, unexpectedKey: 1 } }
+  })));
+
+  await seedBase();
+  await assertSucceeds(createOrderWithOverrides('req_shape_intact_123456', base => base));
+
+  await seedBase();
+  await createPendingOrder('req_selfdelete_123456');
+  await assertFails(deleteDoc(
+    doc(testEnv.authenticatedContext('u1', clientClaims).firestore(), 'orders', 'u1_req_selfdelete_123456')
+  ));
 
   await seedBase();
   const anonDb = testEnv.unauthenticatedContext().firestore();
@@ -336,7 +384,7 @@ try {
     assert.equal(restoredProduct.data().stock, 10);
   });
 
-  console.log('Reglas críticas: 22 ataques/regresiones verificados.');
+  console.log('Reglas críticas: 29 ataques/regresiones verificados.');
 } finally {
   await testEnv.cleanup();
 }

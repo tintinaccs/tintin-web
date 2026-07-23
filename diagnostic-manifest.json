@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T21:18:44.873Z",
-  "sourceFingerprint": "1f4010c52b1f020e6c7a4656fab692163e591608e322752f6986c02aeb1791dd",
+  "generatedAt": "2026-07-23T21:33:55.562Z",
+  "sourceFingerprint": "0f7af3d83e04846614485e961112d178cff44f8ee2bbe0cc76871d9324eecdbe",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 373,
     "textFiles": 339,
-    "totalBytes": 5049796,
+    "totalBytes": 5053317,
     "pages": 18,
     "modules": 204
   },
@@ -18227,8 +18227,8 @@
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
-      "bytes": 13893,
-      "sha256": "f7a4c6abe601c306044f1df0d1d22d47c4f04df59319e9e755448c12952af023",
+      "bytes": 15500,
+      "sha256": "4ffdf29be789cace62ea79cfddd91f56b8a991b77b8fac7e873401ed6c2f97b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18256,7 +18256,7 @@
           "raw": "firebase/firestore",
           "target": "scripts/firebase/firestore",
           "dynamic": false,
-          "line": 15
+          "line": 16
         }
       ],
       "endpoints": []
@@ -19116,8 +19116,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 44118,
-      "sha256": "f46081e75ed99b9f9616daeca5855514b5bd3a03a14a9fa38fea84af51785a0a"
+      "bytes": 46032,
+      "sha256": "0fa17eb872671d7a789a8df7c2c04eb84733a3b4d5c7a175fd09cf36dc8e1137"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -20532,8 +20532,8 @@
     {
       "path": "scripts/test-firestore-critical.mjs",
       "extension": ".mjs",
-      "bytes": 13893,
-      "sha256": "f7a4c6abe601c306044f1df0d1d22d47c4f04df59319e9e755448c12952af023"
+      "bytes": 15500,
+      "sha256": "4ffdf29be789cace62ea79cfddd91f56b8a991b77b8fac7e873401ed6c2f97b6"
     },
     {
       "path": "scripts/test-inventory-model.mjs",
