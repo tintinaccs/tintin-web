@@ -5699,7 +5699,10 @@ function loadImportar() {
           category:    item.category,
           price:       Math.max(0, Math.round(Number(item.price) || 0)),
           imageUrl:    item.imageUrl || '',
-          stock:       Number(item.stock) || 0,
+          // Igual que el formulario manual: sin stock especificado = null
+          // (ilimitado/no controlado), nunca 0 (agotado de verdad) por
+          // defecto silencioso.
+          stock:       item.stock == null || item.stock === '' ? null : (Number(item.stock) || 0),
           active:      item.active !== false,
           description: item.description || '',
           createdAt:   serverTimestamp(),
@@ -5710,7 +5713,7 @@ function loadImportar() {
       result.innerHTML = `<span style="color:green">${ok} productos importados correctamente</span>`;
       toast(`${ok} productos importados`);
     } catch(e) {
-      result.innerHTML = `<span style="color:#e57">Error: ${e.message}</span>`;
+      result.innerHTML = `<span style="color:#e57">Error: ${escapeHtmlAdmin(e.message)}</span>`;
     }
   };
 
@@ -5788,9 +5791,14 @@ function loadImportar() {
       cols.push(cell.trim());
       const handle = cols[iHandle] || '';
       if (!handle) continue;
+      const stockRaw = iStock >= 0 ? cols[iStock] : undefined;
+      // Igual que el formulario manual: columna ausente o vacía = null
+      // (ilimitado/no controlado), nunca 0 (agotado de verdad) por defecto
+      // silencioso.
       const title=cols[iTitle]||'',type=cols[iType]||'',tags=cols[iTags]||'',
             status=cols[iStatus]||'active',price=parsearPrecio(cols[iPrice]),
-            compare=parsearPrecio(cols[iCompare]),stock=parseInt(cols[iStock])||0,
+            compare=parsearPrecio(cols[iCompare]),
+            stock=(stockRaw === undefined || stockRaw === '') ? null : (parseInt(stockRaw) || 0),
             img=cols[iImg]||(iVariantImg>=0?cols[iVariantImg]:'')||(iImgUrl>=0?cols[iImgUrl]:'')||(iImage>=0?cols[iImage]:'')||(iFoto>=0?cols[iFoto]:'')||(iImagen>=0?cols[iImagen]:'')||'',
             imgPos=parseInt(cols[iImgPos])||99,
             desc=iDesc>=0?cols[iDesc]||'':'',
