@@ -22,7 +22,7 @@ export function loadPageMaintenance() {
   if (/\/perfil(?:\.html)?$/.test(path)) return load('profile-maintenance.js');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('about-maintenance.js');
   if (/\/contact(?:\.html)?$/.test(path)) return load('contact-maintenance.js');
-  if (/\/(?:terminos|privacidad|envios|cambios-devoluciones|preguntas-frecuentes)(?:\.html)?$/.test(path)) {
+  if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('legal-maintenance.js');
   }
   return Promise.resolve();

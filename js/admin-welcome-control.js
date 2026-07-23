@@ -272,7 +272,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   }
 
   async function boot(user) {
-    if (!user || user.email !== SUPER_ADMIN) return;
+    if (!user || String(user.email || '').toLowerCase() !== SUPER_ADMIN) return;
     injectStyles(); ensureNav(); ensureSection(); wireNavigation();
     try { await loadConfig(); render(); }
     catch (e) { console.error('[admin-welcome-control] No se pudo cargar configuración:', e); const section = document.getElementById('section-welcome'); if (section) section.innerHTML = '<div class="adm-empty">No se pudo cargar el módulo de bienvenida.</div>'; }

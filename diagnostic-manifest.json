@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T21:33:55.562Z",
-  "sourceFingerprint": "0f7af3d83e04846614485e961112d178cff44f8ee2bbe0cc76871d9324eecdbe",
+  "generatedAt": "2026-07-23T21:38:08.218Z",
+  "sourceFingerprint": "e6caf0832e03bdd73eccc0c05aa83ea785ffd290f1a52dcf7103afedb14d41b0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 373,
     "textFiles": 339,
-    "totalBytes": 5053317,
+    "totalBytes": 5052659,
     "pages": 18,
     "modules": 204
   },
@@ -976,8 +976,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 34786,
-      "sha256": "5f1877fa87d21b6d1a220e34414e68b4832bd1a43789845c6212a6eadc9ee179",
+      "bytes": 34865,
+      "sha256": "e69547b5ab7911894c9c1b0bb9fc8b0a52a5df1947da4adb06c54e3fe63f886b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14378,8 +14378,8 @@
     },
     {
       "path": "js/admin-welcome-control.js",
-      "bytes": 19348,
-      "sha256": "a998e4a121df11d4ef7e9d45662262c913f91f019252d8e8133972a6af746b76",
+      "bytes": 19376,
+      "sha256": "ae06d6c529da7fad48b43163d83f5082d93604c0cf107ee7508ff36b6afeeccf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15831,8 +15831,8 @@
     },
     {
       "path": "js/page-maintenance-loader.js",
-      "bytes": 1238,
-      "sha256": "9c3125af8f4dada8168c32e8f30d13813d2f6a0afc5251e1afdcc8567d54d3ad",
+      "bytes": 1189,
+      "sha256": "21d699730c39d958350ae1ad1da595c60d8a3c24c08f4866a2cd526b378cda6f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17879,8 +17879,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 15533,
-      "sha256": "a89c414438e08e51ab9a902eab1d9025c860b763453469d4f72c46bd5c26396b",
+      "bytes": 15561,
+      "sha256": "c2ddccbd3e8ba9dc0de905c1d34b9af3c246ec8c7101530f0b9a46e2e4172b80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18570,8 +18570,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 34786,
-      "sha256": "5f1877fa87d21b6d1a220e34414e68b4832bd1a43789845c6212a6eadc9ee179"
+      "bytes": 34865,
+      "sha256": "e69547b5ab7911894c9c1b0bb9fc8b0a52a5df1947da4adb06c54e3fe63f886b"
     },
     {
       "path": "admin.html",
@@ -19116,8 +19116,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 46032,
-      "sha256": "0fa17eb872671d7a789a8df7c2c04eb84733a3b4d5c7a175fd09cf36dc8e1137"
+      "bytes": 45288,
+      "sha256": "1b41d2e810178058ef66e26622107a5339f02e800bb234ce25415e37702c9144"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -19302,8 +19302,8 @@
     {
       "path": "js/admin-welcome-control.js",
       "extension": ".js",
-      "bytes": 19348,
-      "sha256": "a998e4a121df11d4ef7e9d45662262c913f91f019252d8e8133972a6af746b76"
+      "bytes": 19376,
+      "sha256": "ae06d6c529da7fad48b43163d83f5082d93604c0cf107ee7508ff36b6afeeccf"
     },
     {
       "path": "js/analytics.js",
@@ -19668,8 +19668,8 @@
     {
       "path": "js/page-maintenance-loader.js",
       "extension": ".js",
-      "bytes": 1238,
-      "sha256": "9c3125af8f4dada8168c32e8f30d13813d2f6a0afc5251e1afdcc8567d54d3ad"
+      "bytes": 1189,
+      "sha256": "21d699730c39d958350ae1ad1da595c60d8a3c24c08f4866a2cd526b378cda6f"
     },
     {
       "path": "js/payment-methods-core.js",
@@ -20442,8 +20442,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 15533,
-      "sha256": "a89c414438e08e51ab9a902eab1d9025c860b763453469d4f72c46bd5c26396b"
+      "bytes": 15561,
+      "sha256": "c2ddccbd3e8ba9dc0de905c1d34b9af3c246ec8c7101530f0b9a46e2e4172b80"
     },
     {
       "path": "scripts/audit-store-gate.js",

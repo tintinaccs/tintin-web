@@ -271,24 +271,6 @@ service cloud.firestore {
       ]);
     }
 
-    function checkoutGuardOnlyUpdate(userId) {
-      return isSignedIn() &&
-        request.auth.uid == userId &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-          'lastCheckoutAt', 'lastCheckoutOrderId', 'updatedAt'
-        ]) &&
-        request.resource.data.lastCheckoutAt == request.time &&
-        request.resource.data.updatedAt == request.time &&
-        request.resource.data.lastCheckoutOrderId is string &&
-        request.resource.data.lastCheckoutOrderId.size() >= 16 &&
-        request.resource.data.lastCheckoutOrderId.size() <= 260 &&
-        (
-          !('lastCheckoutAt' in resource.data) ||
-          request.time > resource.data.lastCheckoutAt + duration.value(90, 's')
-        );
-    }
-
-
     function checkoutGuardWriteValid(userId) {
       let data = request.resource.data;
       return isSignedIn() &&

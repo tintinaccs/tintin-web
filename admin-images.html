@@ -388,6 +388,7 @@
 
 <script type="module">
 import { auth, db } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
+import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js?v=tintin-20260716-cloudinary-fix-1";
@@ -399,7 +400,6 @@ import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySe
 // solo lo confundía: veía el panel entero pero cada guardado le fallaba por
 // permisos. Se alinea el acceso con el permiso real.
 const ALLOWED_ROLES = ['superadmin'];
-const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
 
 const SECTION_META = {
   hero:      { label: 'Inicio / Hero',            desc: 'Imagen de fondo del banner principal',            icon: '🏠' },
@@ -709,7 +709,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Check role
-  let allowed = user.email === SUPERADMIN_EMAIL;
+  let allowed = String(user.email || '').toLowerCase() === SUPERADMIN_EMAIL;
   if (!allowed) {
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));

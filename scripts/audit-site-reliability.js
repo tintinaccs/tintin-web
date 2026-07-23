@@ -154,7 +154,7 @@ check('Super Admin puede probar y reactivar la bienvenida en lotes seguros',
   welcomeRuntime.includes('config.previewEnabled') &&
   welcomeAdmin.includes('resetWelcomeForClients()') &&
   welcomeAdmin.includes('offset += 450') &&
-  welcomeAdmin.includes('user.email !== SUPER_ADMIN'));
+  welcomeAdmin.includes("String(user.email || '').toLowerCase() !== SUPER_ADMIN"));
 check('Las reglas aceptan solo geografía aproximada y campos conocidos',
   rules.includes('activityGeoIsValid(data)') &&
   rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
