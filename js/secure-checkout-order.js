@@ -327,7 +327,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   function renderQuote(quote) {
     setCartLocal(authoritativeCartFromQuote(quote));
-    const target = document.getElementById('ck-confirm-summary');
+    // Reemplaza solo el contenedor de ítems/totales (#ck-summary-quote,
+    // definido en checkout.html), no todo #ck-confirm-summary — de lo
+    // contrario se perdían nombre/teléfono/dirección/notas del resumen
+    // justo cuando se le pide a la clienta que lo revise de nuevo.
+    const target = document.getElementById('ck-summary-quote') || document.getElementById('ck-confirm-summary');
     if (!target) return;
     target.innerHTML = `
       <div class="ck-summary-items">${(quote.items || []).map(item => `

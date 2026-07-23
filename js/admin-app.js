@@ -235,7 +235,8 @@ const AUDIT_ACTION_LABELS = {
   editar_envio:           '🚚 Cambió ciudades de envío',
   editar_permiso:         '🔐 Cambió permiso de rol',
   cambiar_estado_tienda:  '🏬 Cambió estado de la tienda',
-  cambiar_acceso_tienda_cerrada: '🔑 Cambió accesos con tienda cerrada'
+  cambiar_acceso_tienda_cerrada: '🔑 Cambió accesos con tienda cerrada',
+  cambiar_header_dispositivo: '🖥️ Cambió header por dispositivo'
 };
 
 let _allAuditLogs = [];
@@ -3271,7 +3272,7 @@ function renderCorreosPruebaTab() {
   const cliSelect = document.getElementById('prueba-cliente-select');
   if (cliSelect) {
     cliSelect.innerHTML = '<option value="">Elegí una clienta…</option>' +
-      allClientUsers.map(c => `<option value="${c.email}">${c.name || c.email} (${c.email})</option>`).join('');
+      allClientUsers.map(c => `<option value="${escapeHtmlAdmin(c.email)}">${escapeHtmlAdmin(c.name || c.email)} (${escapeHtmlAdmin(c.email)})</option>`).join('');
   }
 
   const tplSelect = document.getElementById('prueba-template-select');
@@ -4841,8 +4842,16 @@ async function prodGuardar() {
       const oldProd = _allProducts.find(p => p._docId === docId);
       await updateDoc(doc(db, 'products', docId), data);
       const changes = [];
-      if (oldProd && Number(oldProd.stock || 0) !== Number(data.stock || 0)) {
-        changes.push(`Stock: ${oldProd.stock ?? 0} → ${data.stock}`);
+      if (oldProd) {
+        // Comparación directa (no Number(x || 0)): stock null (ilimitado) y
+        // stock 0 (agotado de verdad) son estados distintos a propósito en
+        // todo el resto del código — convertir ambos a 0 antes de comparar
+        // ocultaba justo ese cambio del historial de auditoría.
+        const oldStock = oldProd.stock ?? null;
+        const newStock = data.stock ?? null;
+        if (oldStock !== newStock) {
+          changes.push(`Stock: ${oldStock ?? 'ilimitado'} → ${newStock ?? 'ilimitado'}`);
+        }
       }
       if (oldProd && Number(oldProd.price || 0) !== Number(data.price || 0)) {
         changes.push(`Precio: ${oldProd.price ?? 0} → ${data.price}`);
@@ -5304,7 +5313,7 @@ function renderCollCurrentList() {
         ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border);flex-shrink:0">`
         : `<div style="width:44px;height:44px;background:#fce4ec;border-radius:6px;flex-shrink:0"></div>`}
       <div style="flex:1;min-width:0">
-        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name || '(sin nombre)'}</div>
+        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtmlAdmin(p.name || '(sin nombre)')}</div>
         <div style="font-size:11px;color:var(--adm-muted)">${fmt(p.price)} · ${p.stock != null ? p.stock + ' en stock' : 'stock no definido'}</div>
       </div>
       ${!inStockRow ? `<span style="font-size:10px;font-weight:800;background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:20px;flex-shrink:0">SIN STOCK</span>` : ''}
@@ -5393,10 +5402,10 @@ function renderCollPicker() {
         ? `<img src="${p.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">`
         : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;flex-shrink:0"></div>`}
       <div style="flex:1;min-width:0">
-        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name || '(sin nombre)'}</div>
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtmlAdmin(p.name || '(sin nombre)')}</div>
         <div style="font-size:11px;color:var(--adm-muted)">Gs. ${Number(p.price||0).toLocaleString('es-PY')} · ${p.stock != null && p.stock <= 0 ? 'Sin stock' : 'Con stock'}</div>
       </div>
-      <div style="font-size:11px;color:var(--adm-muted);flex-shrink:0">${currentColl}</div>
+      <div style="font-size:11px;color:var(--adm-muted);flex-shrink:0">${escapeHtmlAdmin(currentColl)}</div>
     </div>`;
   }).join('');
   updatePickerSelCount();
@@ -5890,7 +5899,7 @@ function loadImportar() {
         <td class="col-select"><input type="checkbox" class="csv-row-check" data-idx="${i}" onclick="toggleCsvRowSelect(this)"></td>
         <td style="color:var(--adm-muted);font-size:12px">${i + 1}</td>
         <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
-        <td style="font-weight:700;max-width:200px;word-break:break-word">${p.name}</td>
+        <td style="font-weight:700;max-width:200px;word-break:break-word">${escapeHtmlAdmin(p.name)}</td>
         <td>
           <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
                   onchange="csvProductos[${i}].category = this.value">
@@ -7092,7 +7101,7 @@ function renderOeItems() {
   el.innerHTML = items.map((it, idx) => `
     <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
       ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
-      <div style="flex:1;font-size:13px;font-weight:600">${it.name||'—'}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${it.variant}</div>` : ''}</div>
+      <div style="flex:1;font-size:13px;font-weight:600">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
       <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
         onchange="updateOeItemQty(${idx}, this.value)" oninput="updateOeItemQty(${idx}, this.value)">

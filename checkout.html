@@ -1129,15 +1129,39 @@ async function buildConfirmation() {
   };
 
   // Summary HTML
+  // El bloque de ítems/totales vive en su propio contenedor (ck-summary-quote)
+  // porque renderQuote() en secure-checkout-order.js lo reemplaza solo a él
+  // cuando cambia un precio entre la revisión y la confirmación — así los
+  // datos de la clienta (nombre, teléfono, dirección) no desaparecen del
+  // resumen justo cuando se le pide que lo revise de nuevo.
   const summaryEl = document.getElementById('ck-confirm-summary');
   summaryEl.innerHTML = `
-    <div class="ck-summary-items">
-      ${cartItems.map(i => `
-        <div class="ck-summary-item">
-          <span class="ck-summary-item-name">${i.qty}x ${escapeHtml(i.name)}</span>
-          <span style="font-weight:700">${formatPrice(i.price * i.qty)}</span>
-        </div>
-      `).join('')}
+    <div id="ck-summary-quote">
+      <div class="ck-summary-items">
+        ${cartItems.map(i => `
+          <div class="ck-summary-item">
+            <span class="ck-summary-item-name">${i.qty}x ${escapeHtml(i.name)}</span>
+            <span style="font-weight:700">${formatPrice(i.price * i.qty)}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="ck-summary-total">
+        <span>Subtotal</span>
+        <span class="ck-summary-total-val">${formatPrice(subtotal)}</span>
+      </div>
+      <div class="ck-summary-total">
+        <span>Costo de envío</span>
+        <span class="ck-summary-total-val">${shippingPending ? '📞 A confirmar' : formatPrice(orderData.shippingCost)}</span>
+      </div>
+      <div class="ck-summary-total" style="font-size:18px">
+        <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
+        <span class="ck-summary-total-val">${formatPrice(total)}</span>
+      </div>
+      ${shippingPending ? `
+      <div style="margin-top:10px;padding:10px 12px;background:#fef5f8;border-radius:10px;font-size:13px;color:#b84c72">
+        📞 Para tu ciudad todavía no cargamos un costo de envío fijo — un vendedor te va a
+        confirmar el precio por WhatsApp antes de coordinar el pago.
+      </div>` : ''}
     </div>
     <div style="margin-top:16px">
       <div class="ck-summary-row">
@@ -1186,23 +1210,6 @@ async function buildConfirmation() {
         <span class="ck-summary-val">${escapeHtml(orderData.notes)}</span>
       </div>` : ''}
     </div>
-    <div class="ck-summary-total">
-      <span>Subtotal</span>
-      <span class="ck-summary-total-val">${formatPrice(subtotal)}</span>
-    </div>
-    <div class="ck-summary-total">
-      <span>Costo de envío</span>
-      <span class="ck-summary-total-val">${shippingPending ? '📞 A confirmar' : formatPrice(orderData.shippingCost)}</span>
-    </div>
-    <div class="ck-summary-total" style="font-size:18px">
-      <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
-      <span class="ck-summary-total-val">${formatPrice(total)}</span>
-    </div>
-    ${shippingPending ? `
-    <div style="margin-top:10px;padding:10px 12px;background:#fef5f8;border-radius:10px;font-size:13px;color:#b84c72">
-      📞 Para tu ciudad todavía no cargamos un costo de envío fijo — un vendedor te va a
-      confirmar el precio por WhatsApp antes de coordinar el pago.
-    </div>` : ''}
   `;
 
   // Confirm button: save order then show success state
