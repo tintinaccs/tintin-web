@@ -4526,7 +4526,15 @@ function productRowHtml(p) {
           ? `<img src="${escapeHtmlAdmin(imageUrl)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
           : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
-      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}</td>
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}${
+        p.name && p.name.length > 180
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="Un nombre de más de 180 caracteres no coincide con lo que envía el checkout y bloquea la compra de este producto">⚠ NOMBRE MUY LARGO</span>'
+          : ''
+      }${
+        typeof p.price !== 'number' || !Number.isFinite(p.price)
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="El precio no es un número válido: las reglas de Firestore rechazan el checkout de este producto">⚠ PRECIO INVÁLIDO</span>'
+          : ''
+      }</td>
       <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${escapeHtmlAdmin(p.category||'—')}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${escapeHtmlAdmin(p.collection||'—')}</td>
       <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
@@ -4759,9 +4767,12 @@ async function prodGuardar() {
     errEl.style.display = '';
     return false;
   }
-  const name = document.getElementById('prod-name').value.trim();
+  // Recortado a 180 y forzado a número desde acá (no solo en checkout/
+  // importador) para que un producto cargado a mano nunca choque con la
+  // igualdad exacta que exige sparkItemValid() en firestore.rules.
+  const name = document.getElementById('prod-name').value.trim().slice(0, 180);
   const category = document.getElementById('prod-category').value;
-  const price = parseInt(document.getElementById('prod-price').value);
+  const price = parseInt(document.getElementById('prod-price').value, 10);
 
   if (!name || !category || !price) {
     errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
@@ -5684,9 +5695,9 @@ function loadImportar() {
       for (const item of items) {
         if (!item.name || !item.category || !item.price) continue;
         await addDoc(collection(db, 'products'), {
-          name:        item.name,
+          name:        String(item.name).trim().slice(0, 180),
           category:    item.category,
-          price:       Number(item.price),
+          price:       Math.max(0, Math.round(Number(item.price) || 0)),
           imageUrl:    item.imageUrl || '',
           stock:       Number(item.stock) || 0,
           active:      item.active !== false,
@@ -5913,9 +5924,9 @@ function loadImportar() {
       progressLbl.textContent=`Importando ${i+1} de ${list.length}: ${p.name}`;
       try {
         await addDoc(collection(db,'products'), {
-          name:        p.name,
+          name:        String(p.name || '').trim().slice(0, 180),
           category:    p.category,
-          price:       p.price,
+          price:       Math.max(0, Math.round(Number(p.price) || 0)),
           priceBefore: p.priceBefore||null,
           stock:       p.stock,
           imageUrl:    p.imageUrl,
