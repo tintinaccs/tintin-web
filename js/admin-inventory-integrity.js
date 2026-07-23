@@ -1,8 +1,12 @@
 import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import {
+  collection,
   doc,
+  getDocs,
+  query,
   runTransaction,
-  serverTimestamp
+  serverTimestamp,
+  where
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   computeInventoryDeltas,
@@ -179,8 +183,52 @@ async function deleteOrder(orderId) {
   };
 }
 
+// Un pedido queda en inventoryState='pending' (status='inventory_pending')
+// mientras corre createPendingOrder() → reserveOrderInventory() en el
+// checkout. Si la clienta cierra la pestaña justo entre esos dos pasos, el
+// borrador nunca reserva stock real (no hay riesgo de inventario) pero
+// queda huérfano en Firestore para siempre — nadie vuelve a referenciarlo
+// porque el requestId vivía solo en el sessionStorage de esa pestaña. Esta
+// limpieza los borra directamente (sin la reconciliación de stock de
+// deleteOrder(), porque un pedido 'pending' nunca llegó a descontar nada).
+async function cleanupStalePendingOrders(hoursOld = 2) {
+  if (actorEmail() !== SUPER_ADMIN_EMAIL) {
+    throw new Error('Solo Super Admin puede limpiar pedidos abandonados.');
+  }
+  const cutoffMs = Date.now() - Math.max(1, Number(hoursOld) || 2) * 60 * 60 * 1000;
+  const snapshot = await getDocs(query(collection(db, 'orders'), where('inventoryState', '==', 'pending')));
+
+  let removed = 0;
+  let skipped = 0;
+  for (const orderSnap of snapshot.docs) {
+    const data = orderSnap.data() || {};
+    const createdAtMs = typeof data.createdAt?.toMillis === 'function' ? data.createdAt.toMillis() : 0;
+    if (!createdAtMs || createdAtMs > cutoffMs) { skipped += 1; continue; }
+
+    try {
+      await runTransaction(db, async transaction => {
+        const fresh = await transaction.get(orderSnap.ref);
+        if (!fresh.exists()) return;
+        const freshData = fresh.data() || {};
+        // Re-chequeado dentro de la transacción: si en el momento de borrar
+        // ya avanzó a 'reserved' (la clienta volvió y confirmó su pedido
+        // real), no se toca — solo se limpian los que siguen abandonados.
+        if (freshData.inventoryState !== 'pending') return;
+        transaction.delete(orderSnap.ref);
+      }, { maxAttempts: 2 });
+      removed += 1;
+    } catch (error) {
+      console.warn('[admin-inventory-integrity] No se pudo limpiar', orderSnap.id, error);
+      skipped += 1;
+    }
+  }
+
+  return { checked: snapshot.docs.length, removed, skipped };
+}
+
 window.TintinInventoryIntegrity = Object.freeze({
   updateEditedOrder,
   transitionStatus,
-  deleteOrder
+  deleteOrder,
+  cleanupStalePendingOrders
 });

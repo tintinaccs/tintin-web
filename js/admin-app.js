@@ -2149,6 +2149,26 @@ document.getElementById('filter-status').onchange = applyOrderFilters;
 document.getElementById('filter-pay-status').onchange = applyOrderFilters;
 document.getElementById('order-search').oninput = applyOrderFilters;
 
+document.getElementById('btn-cleanup-stale-orders')?.addEventListener('click', async event => {
+  const button = event.currentTarget;
+  if (!confirm('¿Borrar los pedidos abandonados (más de 2 horas sin confirmarse, nunca descontaron stock)? Esta acción no se puede deshacer.')) return;
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = 'Limpiando…';
+  try {
+    const result = await window.TintinInventoryIntegrity.cleanupStalePendingOrders(2);
+    toast(result.removed
+      ? `Se limpiaron ${result.removed} pedido${result.removed === 1 ? '' : 's'} abandonado${result.removed === 1 ? '' : 's'}.`
+      : 'No había pedidos abandonados para limpiar.');
+    if (result.removed) loadOrders();
+  } catch (error) {
+    toast(error?.message || 'No se pudo limpiar los pedidos abandonados.');
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
 // Opciones de los <select> de la barra de acciones masivas — mismas fuentes
 // de verdad (ORDER_STATUS_LABELS/PAY_STATUS_LABELS) que el resto de la UI.
 document.getElementById('orders-bulk-status').insertAdjacentHTML('beforeend', orderStatusOptions(null));
