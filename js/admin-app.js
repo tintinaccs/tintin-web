@@ -52,10 +52,11 @@ let statisticsRangeDays = 7;
 let statisticsTrafficLoadToken = 0;
 let dashboardSessionUnsubscribe = null;
 let dashboardPresenceUnsubscribe = null;
+let dashboardAggregateUnsubscribe = null;
 let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
-let dashboardActivityState = { sessions: [], presence: [] };
+let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
 
 function escapeHtmlAdmin(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -1207,7 +1208,15 @@ function renderDashboardActivityMetrics() {
     })
     .sort((a, b) => activityTimestampMillis(b.lastSeen) - activityTimestampMillis(a.lastSeen));
 
-  if (sessionsEl) sessionsEl.textContent = dashboardActivityState.sessions.length;
+  // El total real (siteAggregate) cuenta a toda visita, no solo a quienes
+  // aceptaron estadísticas — se usa como fuente principal apenas llega el
+  // primer snapshot; dashboardActivityState.sessions.length queda de
+  // respaldo (sub-cuenta) mientras ese listener no resolvió todavía.
+  if (sessionsEl) {
+    sessionsEl.textContent = dashboardActivityState.totalVisits != null
+      ? dashboardActivityState.totalVisits
+      : dashboardActivityState.sessions.length;
+  }
   if (onlineEl) onlineEl.textContent = active.length;
   if (statusEl) {
     statusEl.textContent = `En vivo · ${new Intl.DateTimeFormat('es-PY', {
@@ -1222,14 +1231,37 @@ function renderDashboardActivityMetrics() {
 function stopDashboardActivityMetrics() {
   if (dashboardSessionUnsubscribe) dashboardSessionUnsubscribe();
   if (dashboardPresenceUnsubscribe) dashboardPresenceUnsubscribe();
+  if (dashboardAggregateUnsubscribe) dashboardAggregateUnsubscribe();
   dashboardSessionUnsubscribe = null;
   dashboardPresenceUnsubscribe = null;
+  dashboardAggregateUnsubscribe = null;
   window.clearInterval(dashboardActivityClock);
   window.clearInterval(dashboardPresenceRestart);
   dashboardActivityClock = 0;
   dashboardPresenceRestart = 0;
   dashboardActivityDay = '';
-  dashboardActivityState = { sessions: [], presence: [] };
+  dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
+}
+
+// Total real de visitas del día (siteAggregate) — a diferencia de
+// dashboardActivityState.sessions (siteTraffic), cuenta a CUALQUIER
+// visitante sin depender de que haya aceptado estadísticas en el banner de
+// cookies, porque no guarda identidad ni detalle por persona.
+function listenDashboardAggregate() {
+  const dayKey = paraguayDayKeyAdmin();
+  if (dashboardAggregateUnsubscribe) dashboardAggregateUnsubscribe();
+  dashboardAggregateUnsubscribe = onSnapshot(
+    doc(db, 'siteAggregate', dayKey),
+    snapshot => {
+      dashboardActivityState.totalVisits = snapshot.exists() ? Number(snapshot.data()?.totalVisits || 0) : 0;
+      renderDashboardActivityMetrics();
+    },
+    error => {
+      dashboardActivityState.totalVisits = null;
+      console.warn('Métrica agregada de visitas no disponible:', error);
+      renderDashboardActivityMetrics();
+    }
+  );
 }
 
 function listenDashboardSessions() {
@@ -1287,6 +1319,7 @@ function startDashboardActivityMetrics() {
   if (card) card.hidden = false;
   listenDashboardSessions();
   listenDashboardPresence();
+  listenDashboardAggregate();
   renderDashboardActivityMetrics();
 
   dashboardActivityClock = window.setInterval(() => {

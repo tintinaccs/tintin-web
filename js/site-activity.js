@@ -11,6 +11,7 @@ import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
 import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
+  increment,
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -31,6 +32,7 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
+  const AGGREGATE_RECORDED_PREFIX = 'tt_aggregate_recorded_';
   const HEARTBEAT_MS = 60000;
   const ADMIN_PAGES = /\/(?:admin|admin-images)\.html$/i;
   let heartbeatTimer = 0;
@@ -256,6 +258,29 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
     scheduleHeartbeat();
   }
 
+  // Conteo agregado de visitas del día (estilo Shopify "Live view"): un solo
+  // número compartido por día, sin visitorId, sin geografía, sin página
+  // visitada — no arma un historial de nadie, así que cuenta a TODAS las
+  // visitas sin pedir consentimiento (a diferencia de recordSessionOnce()/
+  // sendHeartbeat(), que sí identifican a la persona y quedan detrás del
+  // banner). Sigue respetando el interruptor general de la Fase de cuota y
+  // los mismos entornos excluidos (admin, localhost, previews).
+  async function recordAggregateVisitOnce() {
+    const dayKey = paraguayDayKey();
+    const recordedKey = AGGREGATE_RECORDED_PREFIX + dayKey;
+    if (storageGet(window.sessionStorage, recordedKey) === '1') return;
+    try {
+      await setDoc(doc(db, 'siteAggregate', dayKey), {
+        dayKey,
+        totalVisits: increment(1),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      storageSet(window.sessionStorage, recordedKey, '1');
+    } catch (error) {
+      console.warn('[SiteActivity] No se pudo registrar la visita agregada:', error?.code || error);
+    }
+  }
+
   function clearLocalAnalyticsIds() {
     const dayKey = paraguayDayKey();
     storageRemove(window.localStorage, VISITOR_KEY);
@@ -274,6 +299,8 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname);
   const trackablePage = !ADMIN_PAGES.test(window.location.pathname);
   analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
+
+  if (trackablePage && analyticsWritable) recordAggregateVisitOnce();
 
   if (trackablePage) {
     if (hasConsent() && analyticsWritable) startActivity();

@@ -8,6 +8,7 @@ import {
 import {
   doc,
   getDoc,
+  increment,
   runTransaction,
   serverTimestamp,
   setDoc
@@ -196,6 +197,26 @@ try {
     country: '', countryCode: '', geoSource: 'unavailable'
   }));
 
+  // siteAggregate: conteo anónimo sin consentimiento (a diferencia de
+  // sitePresence/siteTraffic) — cualquiera puede crear el doc del día en 1
+  // e incrementarlo de a uno, pero no saltar el conteo ni escribir campos
+  // fuera del esquema mínimo.
+  await assertSucceeds(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
+    dayKey: '2026-07-20', totalVisits: 1, updatedAt: serverTimestamp()
+  }));
+  await assertSucceeds(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
+    dayKey: '2026-07-20', totalVisits: increment(1), updatedAt: serverTimestamp()
+  }, { merge: true }));
+  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
+    dayKey: '2026-07-20', totalVisits: increment(5), updatedAt: serverTimestamp()
+  }, { merge: true }));
+  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-21'), {
+    dayKey: '2026-07-21', totalVisits: 3, updatedAt: serverTimestamp()
+  }));
+  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-22'), {
+    dayKey: '2026-07-22', totalVisits: 1, updatedAt: serverTimestamp(), visitorId: 'nope'
+  }));
+
   await seedBase();
   await testEnv.withSecurityRulesDisabled(async context => {
     const db = context.firestore();
@@ -315,7 +336,7 @@ try {
     assert.equal(restoredProduct.data().stock, 10);
   });
 
-  console.log('Reglas críticas: 11 ataques/regresiones verificados.');
+  console.log('Reglas críticas: 22 ataques/regresiones verificados.');
 } finally {
   await testEnv.cleanup();
 }
