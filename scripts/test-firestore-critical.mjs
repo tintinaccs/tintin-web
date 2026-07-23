@@ -166,14 +166,33 @@ try {
 
   await seedBase();
   const anonDb = testEnv.unauthenticatedContext().firestore();
+  // Reactivada tras el incidente de cuota (freno de 20s + App Check en
+  // producción): una escritura anónima bien formada YA debe poder crear su
+  // propio documento de presencia/tráfico. Lo que sigue debiendo fallar es
+  // (a) un payload mal formado y (b) reescribir el mismo doc antes de los 20s.
+  await assertSucceeds(setDoc(doc(anonDb, 'sitePresence', 'visitor_123456'), {
+    visitorId: 'visitor_123456', sessionId: 'session_123456', userId: '',
+    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
+    countryCode: '', geoSource: 'unavailable'
+  }));
   await assertFails(setDoc(doc(anonDb, 'sitePresence', 'visitor_123456'), {
     visitorId: 'visitor_123456', sessionId: 'session_123456', userId: '',
     page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
     countryCode: '', geoSource: 'unavailable'
   }));
-  await assertFails(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
+  await assertFails(setDoc(doc(anonDb, 'sitePresence', 'visitor_malformed'), {
+    visitorId: 'visitor_malformed', sessionId: 'short', userId: '',
+    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
+    countryCode: '', geoSource: 'unavailable'
+  }));
+  await assertSucceeds(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
     dayKey: '2026-07-20', sessionId: 'session_123456', visitorId: 'visitor_123456',
     userId: '', landingPage: '/', startedAt: serverTimestamp(), city: '', region: '',
+    country: '', countryCode: '', geoSource: 'unavailable'
+  }));
+  await assertFails(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
+    dayKey: '2026-07-20', sessionId: 'session_123456', visitorId: 'visitor_123456',
+    userId: '', landingPage: '/otra', startedAt: serverTimestamp(), city: '', region: '',
     country: '', countryCode: '', geoSource: 'unavailable'
   }));
 
