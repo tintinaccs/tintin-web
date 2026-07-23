@@ -612,6 +612,7 @@ service cloud.firestore {
         ? sparkOrderQtyForProduct(orderData, productId)
         : 0;
       return isSignedIn() &&
+        !isBlockedUser() &&
         orderData != null &&
         orderData.source == 'spark-checkout-v1' &&
         orderData.userId == request.auth.uid &&

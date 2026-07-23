@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T21:38:08.218Z",
-  "sourceFingerprint": "e6caf0832e03bdd73eccc0c05aa83ea785ffd290f1a52dcf7103afedb14d41b0",
+  "generatedAt": "2026-07-23T21:43:23.256Z",
+  "sourceFingerprint": "3f37f450f3c435c0f86b706ce259d1a1f5671c0e09c77fcc63dd831751cd5624",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 373,
     "textFiles": 339,
-    "totalBytes": 5052659,
+    "totalBytes": 5054076,
     "pages": 18,
     "modules": 204
   },
@@ -14435,8 +14435,8 @@
     },
     {
       "path": "js/analytics.js",
-      "bytes": 11614,
-      "sha256": "54dc11f68aacb9fee753401948799529a81a4c94fb55de8d253893979e2b2d6e",
+      "bytes": 12027,
+      "sha256": "482c42bf7337d6cc8d788b4b9492f7b15c4f5e48c37b5bda3786d4c1d09f3006",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14468,7 +14468,7 @@
         },
         {
           "url": "https://www.googletagmanager.com/gtag/js",
-          "line": 150
+          "line": 155
         }
       ]
     },
@@ -14542,8 +14542,8 @@
     },
     {
       "path": "js/cart-recovery.js",
-      "bytes": 5699,
-      "sha256": "3e86fa3ca33f64873c6e999b5d41d6f7d341ab60c08e95a6e6bb96a90a5d89f4",
+      "bytes": 6280,
+      "sha256": "22ddb2db42a4edb3411f9234d3dc31535fa7444b5e4544ec33baa324f3cf3e71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18227,8 +18227,8 @@
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
-      "bytes": 15500,
-      "sha256": "4ffdf29be789cace62ea79cfddd91f56b8a991b77b8fac7e873401ed6c2f97b6",
+      "bytes": 15895,
+      "sha256": "fa28f776f33ffec37b4dfa32c2030ea0dcd875036f7e6b3cb471b7e3c8017749",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19116,8 +19116,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 45288,
-      "sha256": "1b41d2e810178058ef66e26622107a5339f02e800bb234ce25415e37702c9144"
+      "bytes": 45316,
+      "sha256": "96a372f103dc2d48f1ebd6fd3340ffad64ef1c016d94f1afaa86e162bf8dbf17"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -19308,8 +19308,8 @@
     {
       "path": "js/analytics.js",
       "extension": ".js",
-      "bytes": 11614,
-      "sha256": "54dc11f68aacb9fee753401948799529a81a4c94fb55de8d253893979e2b2d6e"
+      "bytes": 12027,
+      "sha256": "482c42bf7337d6cc8d788b4b9492f7b15c4f5e48c37b5bda3786d4c1d09f3006"
     },
     {
       "path": "js/auth-nav.js",
@@ -19326,8 +19326,8 @@
     {
       "path": "js/cart-recovery.js",
       "extension": ".js",
-      "bytes": 5699,
-      "sha256": "3e86fa3ca33f64873c6e999b5d41d6f7d341ab60c08e95a6e6bb96a90a5d89f4"
+      "bytes": 6280,
+      "sha256": "22ddb2db42a4edb3411f9234d3dc31535fa7444b5e4544ec33baa324f3cf3e71"
     },
     {
       "path": "js/cart-sync.js",
@@ -20532,8 +20532,8 @@
     {
       "path": "scripts/test-firestore-critical.mjs",
       "extension": ".mjs",
-      "bytes": 15500,
-      "sha256": "4ffdf29be789cace62ea79cfddd91f56b8a991b77b8fac7e873401ed6c2f97b6"
+      "bytes": 15895,
+      "sha256": "fa28f776f33ffec37b4dfa32c2030ea0dcd875036f7e6b3cb471b7e3c8017749"
     },
     {
       "path": "scripts/test-inventory-model.mjs",
@@ -24647,7 +24647,7 @@
           },
           {
             "file": "js/analytics.js",
-            "line": 111,
+            "line": 116,
             "operation": "doc"
           },
           {

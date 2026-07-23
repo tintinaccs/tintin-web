@@ -214,6 +214,15 @@ try {
   ));
 
   await seedBase();
+  await createPendingOrder('req_blocked_stock_123456');
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await setDoc(doc(context.firestore(), 'users', 'u1'), {
+      email: clientClaims.email, role: 'client', blocked: true, name: 'Clienta Prueba'
+    });
+  });
+  await assertFails(reserveInventory({ requestId: 'req_blocked_stock_123456', decrement: 2 }));
+
+  await seedBase();
   const anonDb = testEnv.unauthenticatedContext().firestore();
   // Reactivada tras el incidente de cuota (freno de 20s + App Check en
   // producción): una escritura anónima bien formada YA debe poder crear su
@@ -384,7 +393,7 @@ try {
     assert.equal(restoredProduct.data().stock, 10);
   });
 
-  console.log('Reglas críticas: 29 ataques/regresiones verificados.');
+  console.log('Reglas críticas: 30 ataques/regresiones verificados.');
 } finally {
   await testEnv.cleanup();
 }

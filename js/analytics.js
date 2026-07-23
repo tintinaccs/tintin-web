@@ -11,7 +11,7 @@ const CONFIG_TTL_MS = 5 * 60 * 1000;
 const MAX_QUEUE = 50;
 const MAX_DEDUPE_KEYS = 200;
 const DEDUPE_PREFIX = 'tt_analytics_once_';
-const FORBIDDEN_PARAM = /(?:email|phone|telefono|nombre|name|address|direccion|document|cedula|password|token|user(?:id)?|order(?:id)?|session(?:id)?|visitor(?:id)?|ip|lat|lng|postal|referrer)/i;
+const FORBIDDEN_PARAM = /\b(?:email|phone|telefono|nombre|name|address|direccion|document|cedula|password|token|user(?:id)?|order(?:id)?|session(?:id)?|visitor(?:id)?|ip|lat|lng|postal|referrer)\b/i;
 const ALLOWED_EVENTS = new Set([
   'view_item',
   'view_item_list',
@@ -58,7 +58,12 @@ function sanitizeParams(params) {
 
   for (const [rawKey, rawValue] of Object.entries(params)) {
     const key = cleanText(rawKey, 40).replace(/[^a-z0-9_]/gi, '_').toLowerCase();
-    if (!key || FORBIDDEN_PARAM.test(key)) continue;
+    // Cualquier carácter no alfanumérico (incluidos espacios de ancho cero u
+    // otros caracteres de formato Unicode que cleanText() no recorta) se
+    // vuelve "_" en la línea de arriba — comparar contra la lista negra sin
+    // los "_" evita que insertar uno en medio de una palabra prohibida
+    // (ej. "em​ail" → "em_ail") esquive el filtro.
+    if (!key || FORBIDDEN_PARAM.test(key) || FORBIDDEN_PARAM.test(key.replace(/_/g, ''))) continue;
 
     if (typeof rawValue === 'number') {
       const numeric = safeNumber(rawValue, { min: 0 });

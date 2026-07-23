@@ -2,9 +2,17 @@ const ACTIVITY_KEY = 'tt_cart_activity_v1';
 const SESSION_KEY = 'tt_cart_recovery_shown_v1';
 const RETURN_AFTER_MS = 30 * 60 * 1000;
 const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+// Para una clienta logueada, el primer tt_cart_updated es el carrito local
+// (antes de que el listener de Firestore traiga el carrito ya fusionado
+// entre dispositivos); ese primer evento puede no ser el definitivo. En vez
+// de decidir solo con ese primero, seguimos mirando cualquier evento que
+// llegue dentro de esta ventana de "asentamiento" tras cargar la página —
+// ningún cambio real de la clienta ocurre tan rápido, así que no confundimos
+// una compra en curso con el carrito recuperado.
+const SETTLE_WINDOW_MS = 4000;
 
+const pageLoadedAt = Date.now();
 let initialActivity = readActivity();
-let firstSnapshotHandled = false;
 let lastProjection = '';
 
 function readActivity() {
@@ -154,12 +162,15 @@ function onCartUpdated(event) {
   const summary = summarize(event?.detail?.items);
   const projection = projectionFor(summary);
 
-  if (!firstSnapshotHandled) {
-    firstSnapshotHandled = true;
-    const age = initialActivity ? Date.now() - initialActivity.updatedAt : 0;
+  if (initialActivity && Date.now() - pageLoadedAt <= SETTLE_WINDOW_MS) {
+    const age = Date.now() - initialActivity.updatedAt;
     const validAge = age >= RETURN_AFTER_MS && age <= MAX_AGE_MS;
-    const sameSavedCart = initialActivity?.hadItems && initialActivity.projection === projection;
-    if (summary.quantity > 0 && validAge && sameSavedCart) announceRestored(summary);
+    const sameSavedCart = initialActivity.hadItems && initialActivity.projection === projection;
+    if (summary.quantity > 0 && validAge && sameSavedCart) {
+      announceRestored(summary);
+      initialActivity = null;
+    }
+  } else {
     initialActivity = null;
   }
 
