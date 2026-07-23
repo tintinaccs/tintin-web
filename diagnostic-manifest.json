@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T19:48:02.108Z",
-  "sourceFingerprint": "41dd43aec3fa50a619fc367cc41ba6565fd4bfe0f93b59232a399dd8cd2c786d",
+  "generatedAt": "2026-07-23T19:51:47.415Z",
+  "sourceFingerprint": "f1937448b86a992ff76516a706d460e188e29e97b05fb28bea393671d9800778",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 372,
-    "textFiles": 338,
-    "totalBytes": 5040416,
+    "files": 373,
+    "textFiles": 339,
+    "totalBytes": 5042589,
     "pages": 18,
     "modules": 204
   },
@@ -13427,6 +13427,52 @@
       ]
     },
     {
+      "path": "firebase-cloud-functions-inactive/create-order.js",
+      "bytes": 17307,
+      "sha256": "5faf21850ad5cd6063e213f6e53f155a70c533283aae60710985679390fcbc66",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/index.js",
+      "bytes": 12910,
+      "sha256": "014d6cea3f5b77335fb4c5c674ffd5f6be01e660b363df042fd5ed851096c614",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web/admin.html",
+          "line": 29
+        },
+        {
+          "url": "https://wa.me/$%7Bdigits%7D",
+          "line": 52
+        },
+        {
+          "url": "https://maps.google.com/",
+          "line": 93
+        }
+      ]
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/main.js",
+      "bytes": 233,
+      "sha256": "aa5fd6aa9449c12c5322afefd471748c0aeeb16d1295ce839d6107741e69794e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/cloudinary-delete.js",
       "bytes": 2685,
       "sha256": "c452da73ce26f8093abdb5bde0e69847fcf3cb5f5e67fa456019c8c9a96dd80b",
@@ -13585,52 +13631,6 @@
           "line": 6
         }
       ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/create-order.js",
-      "bytes": 17307,
-      "sha256": "5faf21850ad5cd6063e213f6e53f155a70c533283aae60710985679390fcbc66",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "functions/index.js",
-      "bytes": 12910,
-      "sha256": "014d6cea3f5b77335fb4c5c674ffd5f6be01e660b363df042fd5ed851096c614",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": [
-        {
-          "url": "https://tintinaccs.github.io/tintin-web/admin.html",
-          "line": 29
-        },
-        {
-          "url": "https://wa.me/$%7Bdigits%7D",
-          "line": 52
-        },
-        {
-          "url": "https://maps.google.com/",
-          "line": 93
-        }
-      ]
-    },
-    {
-      "path": "functions/main.js",
-      "bytes": 233,
-      "sha256": "aa5fd6aa9449c12c5322afefd471748c0aeeb16d1295ce839d6107741e69794e",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
       "endpoints": []
     },
     {
@@ -18516,8 +18516,8 @@
     {
       "path": "README.md",
       "extension": ".md",
-      "bytes": 4334,
-      "sha256": "ff0eceb57356fc2bc5a9ee5c88396268fecf5925b090f4e5b6dbd05b9d2183dc"
+      "bytes": 4546,
+      "sha256": "5952b980b243005e769c1d5d5785007b4921b482e699ee187b36d3fab4fe30df"
     },
     {
       "path": "SECURITY.md",
@@ -19042,6 +19042,42 @@
       "sha256": "f8660f47cf91630501b3fe2af7a35d91fb4b555ff782dbc4f29432376693b8ba"
     },
     {
+      "path": "firebase-cloud-functions-inactive/DEPLOY.md",
+      "extension": ".md",
+      "bytes": 3043,
+      "sha256": "8f9c80dcabe2864fa21f6cbf315335dd262717f673e8a021ad3b123a768d36b5"
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/README.md",
+      "extension": ".md",
+      "bytes": 1658,
+      "sha256": "d52aebccea33d81ea62b1cf969f28f9165a081bf6da5ca9c6d0b4cbeeec6238a"
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/create-order.js",
+      "extension": ".js",
+      "bytes": 17307,
+      "sha256": "5faf21850ad5cd6063e213f6e53f155a70c533283aae60710985679390fcbc66"
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/index.js",
+      "extension": ".js",
+      "bytes": 12910,
+      "sha256": "014d6cea3f5b77335fb4c5c674ffd5f6be01e660b363df042fd5ed851096c614"
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/main.js",
+      "extension": ".js",
+      "bytes": 233,
+      "sha256": "aa5fd6aa9449c12c5322afefd471748c0aeeb16d1295ce839d6107741e69794e"
+    },
+    {
+      "path": "firebase-cloud-functions-inactive/package.json",
+      "extension": ".json",
+      "bytes": 342,
+      "sha256": "adc15c1ff999c3b7bb77db5f03f7d8b51c27d7895630e84269cdc5ab55965f41"
+    },
+    {
       "path": "firebase.json",
       "extension": ".json",
       "bytes": 56,
@@ -19054,12 +19090,6 @@
       "sha256": "b4f9edff0868e9f2ce747d3dd210abbdfd6dccb3232d608b829630482e9d8180"
     },
     {
-      "path": "functions/DEPLOY.md",
-      "extension": ".md",
-      "bytes": 2800,
-      "sha256": "2521bf56f0a346dee92aae40185b810c5ee31aa195a18ce10060916c48d68497"
-    },
-    {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
       "extension": ".md",
       "bytes": 2725,
@@ -19068,8 +19098,8 @@
     {
       "path": "functions/EMAIL_SETUP.md",
       "extension": ".md",
-      "bytes": 55202,
-      "sha256": "823b069558153385c794996d02777536f322d68684d62d0e6e9b8dd4a9863609"
+      "bytes": 55262,
+      "sha256": "9b75537d5eb4c177e4ca0ef5c00fddfe86abe66f85ad202cffec178cd1d64e83"
     },
     {
       "path": "functions/FIREBASE_AUTH_EMAILS.md",
@@ -19124,30 +19154,6 @@
       "extension": ".js",
       "bytes": 1701,
       "sha256": "932e502e5ef306355bc295e4adedd323679196e609fbc54419f0e8acdcb7ef2f"
-    },
-    {
-      "path": "functions/create-order.js",
-      "extension": ".js",
-      "bytes": 17307,
-      "sha256": "5faf21850ad5cd6063e213f6e53f155a70c533283aae60710985679390fcbc66"
-    },
-    {
-      "path": "functions/index.js",
-      "extension": ".js",
-      "bytes": 12910,
-      "sha256": "014d6cea3f5b77335fb4c5c674ffd5f6be01e660b363df042fd5ed851096c614"
-    },
-    {
-      "path": "functions/main.js",
-      "extension": ".js",
-      "bytes": 233,
-      "sha256": "aa5fd6aa9449c12c5322afefd471748c0aeeb16d1295ce839d6107741e69794e"
-    },
-    {
-      "path": "functions/package.json",
-      "extension": ".json",
-      "bytes": 342,
-      "sha256": "adc15c1ff999c3b7bb77db5f03f7d8b51c27d7895630e84269cdc5ab55965f41"
     },
     {
       "path": "index.html",

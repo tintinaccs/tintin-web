@@ -9,7 +9,8 @@ Tienda online y panel administrativo de **Tintin Accesorios & Relojes**, despleg
 - Cloud Firestore para productos, colecciones, clientes, carrito, pedidos, configuración, auditoría y contenido.
 - Google Apps Script autenticado para correos operativos.
 - GitHub Actions para auditorías y despliegue atómico en GitHub Pages.
-- Adaptadores opcionales en `functions/`; no forman parte del despliegue de GitHub Pages salvo publicación independiente.
+- Cloudflare Pages Functions activas en `functions/api/` (Cloudinary, geocoding, correo, geo aproximada); no forman parte del despliegue de GitHub Pages, se publican solas en Cloudflare.
+- Cloud Functions de Firebase listas pero inactivas en `firebase-cloud-functions-inactive/` (requieren plan Blaze; hoy el proyecto corre en Spark).
 
 La configuración pública del SDK web de Firebase no es un secreto. La seguridad depende de Authentication, Firestore Rules, validaciones del servidor y App Check cuando esté habilitado. Las claves privadas, cuentas de servicio y secretos de pasarelas nunca deben entrar en el frontend.
 

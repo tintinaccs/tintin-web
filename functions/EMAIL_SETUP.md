@@ -6,8 +6,9 @@ de Firebase ni ninguna tarjeta de crédito — usa la cuota gratuita de tu propi
 cuenta de Gmail (100 correos/día, de sobra para una tienda).
 
 > Si en el futuro preferís usar Firebase Cloud Functions en vez de esto,
-> el código ya está listo en `functions/index.js` — ver `DEPLOY.md`. Pero
-> requiere activar el plan Blaze (pago por uso, con tarjeta cargada).
+> el código ya está listo en `firebase-cloud-functions-inactive/index.js`
+> — ver `firebase-cloud-functions-inactive/DEPLOY.md`. Pero requiere
+> activar el plan Blaze (pago por uso, con tarjeta cargada).
 
 **Cuenta que envía los correos: `tintinpedidos@gmail.com`.** El proyecto de
 Apps Script vive ahí (no en `tintinaccs@gmail.com`) porque `MailApp.sendEmail`

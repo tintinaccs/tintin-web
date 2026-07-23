@@ -3,10 +3,13 @@
 > ⚠️ **El sitio HOY NO usa este método** — requiere el plan Blaze de Firebase
 > (pago por uso, con tarjeta cargada). Como se decidió no cargar tarjeta, el
 > sitio usa en su lugar **Google Apps Script**, que es gratis y no la pide.
-> Ver `EMAIL_SETUP.md` para el método que está activo actualmente.
+> Ver `functions/EMAIL_SETUP.md` para el método que está activo actualmente.
 >
-> Este archivo (y `functions/index.js`) quedan listos por si en el futuro
-> se prefiere pasar a Cloud Functions.
+> Este archivo (y `index.js`, en esta misma carpeta) quedan listos por si en
+> el futuro se prefiere pasar a Cloud Functions. Se separaron de `functions/`
+> (donde viven las Cloudflare Pages Functions activas, `functions/api/*`)
+> para no mezclar dos plataformas de despliegue distintas en el mismo
+> directorio — ver `README.md` acá al lado.
 
 ## Qué hace
 - `notifyNewOrder`: cuando se crea un nuevo pedido en Firestore (`orders/{orderId}`),
