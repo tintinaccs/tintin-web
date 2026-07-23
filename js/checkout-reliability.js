@@ -9,6 +9,8 @@
      completos de Google Maps sin reemplazar la validación original del checkout.
    ============================================================= */
 
+import { apiUrl } from './function-origin.js?v=tintin-20260723-geo-proxy-1';
+
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheckoutReliabilityBooted) {
   // Este módulo se importa desde el shell compartido, pero no hace nada fuera
@@ -18,7 +20,6 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
 
   const RESUME_KEY = 'tt_checkout_resume_step';
   const ROOT = document.documentElement;
-  const DEFAULT_MAP_CENTER = { lat: -25.3007, lng: -57.6359 };
   let lastCartFingerprint = '';
   let checkoutMap = null;
   let mapSearchTimer = 0;
@@ -393,61 +394,18 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     return null;
   }
 
-  function normalizeNominatim(result) {
-    const name = result.namedetails?.name || result.name || String(result.display_name || '').split(',')[0] || 'Ubicación';
-    return {
-      lat: Number(result.lat),
-      lng: Number(result.lon),
-      name,
-      address: result.display_name || name,
-      source: 'OpenStreetMap',
-    };
-  }
-
-  function normalizePhoton(feature) {
-    const coordinates = feature?.geometry?.coordinates || [];
-    const properties = feature?.properties || {};
-    const name = properties.name || properties.street || properties.city || properties.locality || 'Ubicación';
-    const address = [
-      properties.street && properties.housenumber ? `${properties.street} ${properties.housenumber}` : properties.street,
-      properties.district,
-      properties.city || properties.locality,
-      properties.state,
-      properties.country,
-    ].filter(Boolean).join(', ');
-    return {
-      lat: Number(coordinates[1]),
-      lng: Number(coordinates[0]),
-      name,
-      address: address || name,
-      source: 'Búsqueda ampliada',
-    };
-  }
-
   async function searchPlaces(query) {
-    const encoded = encodeURIComponent(`${query}, Paraguay`);
-    const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encoded}&countrycodes=py&addressdetails=1&namedetails=1&limit=8&accept-language=es`;
-    const photonUrl = `https://photon.komoot.io/api/?q=${encoded}&limit=8&lang=es&lat=${DEFAULT_MAP_CENTER.lat}&lon=${DEFAULT_MAP_CENTER.lng}`;
-    const settled = await Promise.allSettled([
-      fetch(nominatimUrl, { headers: { Accept: 'application/json' } }).then(response => response.ok ? response.json() : []),
-      fetch(photonUrl, { headers: { Accept: 'application/json' } }).then(response => response.ok ? response.json() : { features: [] }),
-    ]);
-    const nominatim = settled[0].status === 'fulfilled' && Array.isArray(settled[0].value)
-      ? settled[0].value.map(normalizeNominatim)
-      : [];
-    const photon = settled[1].status === 'fulfilled' && Array.isArray(settled[1].value?.features)
-      ? settled[1].value.features.map(normalizePhoton)
-      : [];
-    const seen = new Set();
-    return [...nominatim, ...photon]
-      .filter(place => Number.isFinite(place.lat) && Number.isFinite(place.lng))
-      .filter(place => {
-        const key = `${place.lat.toFixed(4)},${place.lng.toFixed(4)}`;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
-      .slice(0, 10);
+    try {
+      const response = await fetch(`${apiUrl('geo-search')}?q=${encodeURIComponent(query)}`, {
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) return [];
+      const data = await response.json();
+      return Array.isArray(data?.places) ? data.places : [];
+    } catch (error) {
+      console.warn('[Checkout] No se pudo buscar direcciones:', error?.code || error);
+      return [];
+    }
   }
 
   async function applyMapPlace(place) {

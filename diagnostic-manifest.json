@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T14:43:59.723Z",
-  "sourceFingerprint": "3527165fe33aa15167374c9985817b4ebae20a3edab102d55a51765779673765",
+  "generatedAt": "2026-07-23T19:41:52.900Z",
+  "sourceFingerprint": "534c3ea4886aa8902832b0e2e345d5484fa0ca66f589f3765ced72c28cc43635",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 371,
-    "textFiles": 337,
-    "totalBytes": 5035927,
+    "files": 372,
+    "textFiles": 338,
+    "totalBytes": 5039335,
     "pages": 18,
-    "modules": 203
+    "modules": 204
   },
   "viewports": [
     {
@@ -13473,6 +13473,41 @@
       ]
     },
     {
+      "path": "functions/api/geo-search.js",
+      "bytes": 5130,
+      "sha256": "1988ecfdf83aa67f9ef8df882e5fa9bbcf2c32a8b6a542e595b667d08ecbf1e3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/cloudinary-security.js",
+          "target": "cloudflare/cloudinary-security.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.github.io/tintin-web/",
+          "line": 15
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search",
+          "line": 61
+        },
+        {
+          "url": "https://photon.komoot.io/api/",
+          "line": 71
+        },
+        {
+          "url": "https://geo-search.cache.internal/",
+          "line": 114
+        }
+      ]
+    },
+    {
       "path": "functions/api/order-email.js",
       "bytes": 18286,
       "sha256": "add9782615949eccaba40e2322cd20b92f160a6b588d22ebf6a162b5f5d63239",
@@ -14666,25 +14701,24 @@
     },
     {
       "path": "js/checkout-reliability.js",
-      "bytes": 29120,
-      "sha256": "2117710511129aef5a5721f052109597c758f457a6f9928f2e405fc2f34d3264",
+      "bytes": 27122,
+      "sha256": "16f8bc619e6bfbce06d38c6d3a2862db612c4fc17e51bdc92a3a6a94de645570",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./function-origin.js?v=tintin-20260723-geo-proxy-1",
+          "target": "js/function-origin.js",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
       "endpoints": [
         {
-          "url": "https://nominatim.openstreetmap.org/search",
-          "line": 429
-        },
-        {
-          "url": "https://photon.komoot.io/api/",
-          "line": 430
-        },
-        {
           "url": "https://www.google.com/maps/search/",
-          "line": 556
+          "line": 514
         }
       ]
     },
@@ -18356,8 +18390,8 @@
     {
       "path": ".github/workflows/audit-images-phase5.yml",
       "extension": ".yml",
-      "bytes": 3476,
-      "sha256": "38ef728b4f469eeea7b5cd671e1dfb35fd2eb1861902b6bb9f9e83e87991aca7"
+      "bytes": 3729,
+      "sha256": "da505bf151997f36b3bb355f3ef5d5528c1daef8f05ff20f3bccf82deb1f5775"
     },
     {
       "path": ".github/workflows/audit-secure-orders.yml",
@@ -18494,8 +18528,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 191,
-      "sha256": "b97d43d9531972e512587ff2b0f2dbbc20cdb630af98e2e4879eb14dc7fab7f6"
+      "bytes": 214,
+      "sha256": "33ff588fd0c29225c05573f22a54af6870a11adbfd4c0cdcd631fbbc2a33ae5a"
     },
     {
       "path": "about.html",
@@ -19068,6 +19102,12 @@
       "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1"
     },
     {
+      "path": "functions/api/geo-search.js",
+      "extension": ".js",
+      "bytes": 5130,
+      "sha256": "1988ecfdf83aa67f9ef8df882e5fa9bbcf2c32a8b6a542e595b667d08ecbf1e3"
+    },
+    {
       "path": "functions/api/order-email.js",
       "extension": ".js",
       "bytes": 18286,
@@ -19298,8 +19338,8 @@
     {
       "path": "js/checkout-reliability.js",
       "extension": ".js",
-      "bytes": 29120,
-      "sha256": "2117710511129aef5a5721f052109597c758f457a6f9928f2e405fc2f34d3264"
+      "bytes": 27122,
+      "sha256": "16f8bc619e6bfbce06d38c6d3a2862db612c4fc17e51bdc92a3a6a94de645570"
     },
     {
       "path": "js/collections-maintenance.js",
@@ -21892,7 +21932,7 @@
     },
     {
       "file": "js/checkout-reliability.js",
-      "line": 255,
+      "line": 256,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
