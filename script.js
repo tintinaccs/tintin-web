@@ -1694,6 +1694,56 @@ function initBackToTop() {
 }
 
 /* ──────────────────────────────────────
+   WHATSAPP FLOAT — ocultar si tapa contenido real
+────────────────────────────────────── */
+function initWaFloatVisibility() {
+  const wa = document.getElementById('wa-float');
+  if (!wa) return;
+  const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
+  const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
+  let ticking = false;
+  // El botón es position:fixed, así que cualquier enlace/botón del contenido
+  // normal puede terminar exactamente detrás de él según el scroll y el alto
+  // del viewport (tabla de contenidos de términos/privacidad, última fila de
+  // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
+  // reservar espacio para cada caso, se detecta el solape real y se oculta.
+  const check = () => {
+    ticking = false;
+    const r = wa.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return;
+    const collided = [...document.querySelectorAll('a,button')].some(node => {
+      if (node === wa || node.closest(EXCLUDE)) return false;
+      const style = getComputedStyle(node);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01) return false;
+      const nr = node.getBoundingClientRect();
+      if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
+      return overlapsRect(r, nr);
+    });
+    wa.classList.toggle('tt-wa-float-hidden', collided);
+    if (collided) wa.setAttribute('tabindex', '-1'); else wa.removeAttribute('tabindex');
+  };
+  const requestCheck = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
+  window.addEventListener('scroll', requestCheck, { passive: true });
+  window.addEventListener('resize', requestCheck);
+  // La tabla de contenidos de términos/privacidad y la grilla de productos
+  // se insertan después de este init (legal-maintenance.js, Firestore) —
+  // sin observar el DOM, el primer chequeo corre contra una página incompleta.
+  if (typeof MutationObserver === 'function') {
+    new MutationObserver(requestCheck).observe(document.body, { childList: true, subtree: true });
+  }
+  // Las imágenes de las tarjetas cambian de alto recién al terminar de
+  // decodificar, sin disparar ninguna mutación adicional del DOM.
+  document.addEventListener('load', requestCheck, true);
+  document.fonts?.ready?.then(requestCheck).catch(() => {});
+  requestCheck();
+  // Red de seguridad: alguna tarjeta puede reacomodarse en un reflow que no
+  // dispara ninguno de los eventos de arriba (p. ej. al terminar de decodificar
+  // una imagen ya insertada en el DOM).
+  setTimeout(requestCheck, 300);
+  setTimeout(requestCheck, 1200);
+}
+
+/* ──────────────────────────────────────
    FAQ ACCORDION
 ────────────────────────────────────── */
 function initFaqAccordion() {
@@ -1864,6 +1914,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   // FAQ accordion
   initFaqAccordion();
+  // WhatsApp float — ocultar cerca del footer
+  initWaFloatVisibility();
 });
 
 /* expose for inline onclick usage and module re-render */

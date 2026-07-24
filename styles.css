@@ -1906,10 +1906,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   justify-content: center;
   box-shadow: 0 4px 20px rgba(37,211,102,0.4);
   z-index: 900;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.18s ease;
   text-decoration: none;
   cursor: pointer;
   animation: ttn-wa-breathe 3.2s ease-in-out 2s infinite;
+}
+
+/* Se oculta cuando el footer entra en pantalla (o está por entrar, gracias
+   al rootMargin del IntersectionObserver en initWaFloatVisibility): sin
+   esto tapa enlaces del footer o la última fila de tarjetas en páginas
+   cortas o en alturas de viewport chicas. */
+.tt-wa-float.tt-wa-float-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.7);
 }
 
 @keyframes ttn-wa-breathe {
