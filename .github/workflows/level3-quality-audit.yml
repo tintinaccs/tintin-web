@@ -31,7 +31,7 @@ jobs:
         run: npm run audit:level3 > level3-quality-audit.log 2>&1
 
       - name: Install Playwright
-        run: npm install --no-save --package-lock=false playwright@1.54.1
+        run: npm install --no-save --package-lock=false playwright@1.61.1
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
