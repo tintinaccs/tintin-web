@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260722-order-delete-2"></script>
   <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Catálogo | TINTIN Accesorios &amp; Relojes</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -467,7 +467,7 @@ initSiteContent('catalogo');
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/collections-store.js?v=tintin-20260716-cloudinary-fix-1')
+import('./js/collections-store.js?v=tintin-20260720-read-budget-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 

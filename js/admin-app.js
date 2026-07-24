@@ -19,7 +19,7 @@ import {
 } from "./role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "./email-config.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
-import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260716-cloudinary-fix-1";
+import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260720-read-budget-1";
 import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
@@ -2894,7 +2894,7 @@ function templateContentPayload_(tpl) {
 function logStatusBadge_(status) {
   const map = { sent: 'badge-entregado', failed: 'badge-cancelado', partial: 'badge-preparando', pending: 'badge-pendiente' };
   const labels = { sent: 'Enviado', failed: 'Fallido', partial: 'Parcial', pending: 'Pendiente' };
-  return `<span class="adm-badge ${map[status] || 'badge-pendiente'}">${labels[status] || status || '—'}</span>`;
+  return `<span class="adm-badge ${map[status] || 'badge-pendiente'}">${escapeHtmlAdmin(labels[status] || status || '—')}</span>`;
 }
 
 function templateLabel_(key) {
@@ -3111,7 +3111,7 @@ function renderCorreosDashboard() {
       <tr>
         <td data-label="Fecha" style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
         <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
-        <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
+        <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
         <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       </tr>
     `).join('') : '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:24px">Sin envíos todavía</td></tr>';
@@ -3132,7 +3132,7 @@ function renderCorreosPedidosTab() {
     const enabled = !!(s.orderTypesEnabled && s.orderTypesEnabled[key]);
     const tplKey = (s.orderTypeTemplateMap && s.orderTypeTemplateMap[key]) || key;
     const lastLog = allEmailLogs.find(l => l.type === key);
-    const lastSent = lastLog ? `${formatDate(lastLog.sentAt)} · ${lastLog.recipient || ''}` : '—';
+    const lastSent = lastLog ? `${formatDate(lastLog.sentAt)} · ${escapeHtmlAdmin(lastLog.recipient || '')}` : '—';
     const tplOptionsHtml = options.map(t => `<option value="${t.key || t.id}" ${((t.key || t.id) === tplKey) ? 'selected' : ''}>${t.name}</option>`).join('');
     return `
       <tr>
@@ -3780,7 +3780,7 @@ function renderCorreosPromocionesTab() {
   const tplSelect = document.getElementById('promo-template-select');
   if (tplSelect) {
     const promoTemplates = allEmailTemplates.filter(t => (t.category === 'promo' || t.category === 'libre') && !t.archived && t.active !== false);
-    tplSelect.innerHTML = promoTemplates.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+    tplSelect.innerHTML = promoTemplates.map(t => `<option value="${t.id}">${escapeHtmlAdmin(t.name)}</option>`).join('');
   }
   document.getElementById('promo-gmail-lock-banner').style.display = gmailSender ? '' : 'none';
   ['promo-template-select', 'promo-add-email', 'promo-add-email-btn', 'promo-preview-btn', 'promo-open-confirm-btn'].forEach(id => {
@@ -3796,7 +3796,7 @@ function renderPromoChips_() {
   wrap.innerHTML = promoRecipients.map((r, i) => {
     const c = allClientUsers.find(x => x.email.toLowerCase() === r.email.toLowerCase());
     const blockedClass = c && c.blocked ? ' blocked' : '';
-    return `<span class="correos-chip${blockedClass}"><span>${r.name ? r.name + ' — ' : ''}${r.email}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button">✕</button></span>`;
+    return `<span class="correos-chip${blockedClass}"><span>${r.name ? escapeHtmlAdmin(r.name) + ' — ' : ''}${escapeHtmlAdmin(r.email)}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button">✕</button></span>`;
   }).join('');
   const countEl = document.getElementById('promo-recipients-count');
   if (countEl) countEl.textContent = `${promoRecipients.length} destinatarias`;
@@ -3878,7 +3878,7 @@ document.getElementById('promo-open-confirm-btn').onclick = async () => {
   }
 
   document.getElementById('promo-confirm-summary').innerHTML =
-    `Plantilla: <strong>${tpl.name}</strong><br>Destinatarias: <strong>${safeRecipients.length}</strong>` +
+    `Plantilla: <strong>${escapeHtmlAdmin(tpl.name)}</strong><br>Destinatarias: <strong>${safeRecipients.length}</strong>` +
     (excludedCount ? `<br><span style="color:#c0392b">${excludedCount} excluida(s) automáticamente (bloqueada o sin consentimiento)</span>` : '');
   document.getElementById('promo-confirm-input').value = '';
   sendBtn.disabled = true;
@@ -4019,9 +4019,9 @@ function renderCorreosHistorialTab() {
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
       <td data-label="Origen real/prueba">${categoryBadge_(l.category || 'pedido')}</td>
       <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
-      <td data-label="Destinatario" style="font-size:12px">${l.recipient || '—'}</td>
+      <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
       <td data-label="Estado">${logStatusBadge_(l.status)}</td>
-      <td data-label="Enviado por" style="font-size:12px">${l.sentBy || '—'}</td>
+      <td data-label="Enviado por" style="font-size:12px">${escapeHtmlAdmin(l.sentBy || '—')}</td>
       <td data-label="Automático/Manual" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
       <td data-label="Acciones">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -5898,7 +5898,7 @@ function loadImportar() {
       <tr>
         <td class="col-select"><input type="checkbox" class="csv-row-check" data-idx="${i}" onclick="toggleCsvRowSelect(this)"></td>
         <td style="color:var(--adm-muted);font-size:12px">${i + 1}</td>
-        <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
+        <td>${sanitizeImageUrl(p.imageUrl||'') ? `<img src="${sanitizeImageUrl(p.imageUrl||'')}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" onerror="this.style.display='none'" />` : '<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px"></div>'}</td>
         <td style="font-weight:700;max-width:200px;word-break:break-word">${escapeHtmlAdmin(p.name)}</td>
         <td>
           <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
@@ -7100,7 +7100,7 @@ function renderOeItems() {
   const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
   el.innerHTML = items.map((it, idx) => `
     <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
-      ${(it.imgUrl||it.imageUrl) ? `<img src="${it.imgUrl||it.imageUrl}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
+      ${sanitizeImageUrl(it.imgUrl||it.imageUrl||'') ? `<img src="${sanitizeImageUrl(it.imgUrl||it.imageUrl||'')}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       <div style="flex:1;font-size:13px;font-weight:600">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
       <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"

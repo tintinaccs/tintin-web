@@ -21,9 +21,14 @@ const rules          = read('firestore.rules');
 
 check(
   'Checkout usa un solo canal Resend',
-  checkout.includes('import { sendOrderNotification } from "./js/resend-order-notify.js?v=tintin-20260717-resend-1"') &&
+  // checkout.html ya no llama a sendOrderNotification directamente (ese
+  // camino murió con saveOrder(), el guardado inseguro legado que
+  // firestore.rules rechaza de todos modos) — checkout-email-bridge.js es
+  // ahora el único punto que dispara el correo tras el éxito del pedido.
+  !checkout.includes('resend-order-notify.js') &&
     !checkout.includes('email-notify.js') &&
-    (checkout.match(/sendOrderNotification\(/g) || []).length === 1,
+    (checkout.match(/sendOrderNotification\(/g) || []).length === 0 &&
+    (bridge.match(/sendOrderNotification\(/g) || []).length === 1,
   'El pedido no debe disparar dos proveedores de correo.'
 );
 check(
@@ -137,7 +142,7 @@ check(
 check(
   'emailLogs es inmutable y privado',
   /match \/emailLogs\/\{logId\}[\s\S]{0,400}allow read: if isSuperAdmin\(\)/.test(rules) &&
-    /match \/emailLogs\/\{logId\}[\s\S]{0,900}allow update, delete: if false;/.test(rules),
+    /match \/emailLogs\/\{logId\}[\s\S]{0,1800}allow update, delete: if false;/.test(rules),
   'Los registros no deben editarse ni exponerse.'
 );
 check(

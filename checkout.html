@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260722-order-delete-2"></script>
   <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow">
@@ -327,7 +327,6 @@ import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
-import { sendOrderNotification } from "./js/resend-order-notify.js?v=tintin-20260717-resend-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
@@ -1212,216 +1211,21 @@ async function buildConfirmation() {
     </div>
   `;
 
-  // Confirm button: save order then show success state
+  // Confirm button: fallback si el guardado seguro no llegó a cargar.
+  // secure-checkout-order.js intercepta este botón en fase de captura
+  // (stopImmediatePropagation) apenas carga, así que este onclick solo
+  // llega a ejecutarse si ese módulo no llegó a cargar (falla de red poco
+  // común). En ese caso no hay forma segura de guardar el pedido —el
+  // guardado directo desde acá ya no cumple el esquema que exige
+  // firestore.rules— así que se avisa y se corta en vez de reintentar
+  // un guardado que firestore.rules va a rechazar de todos modos.
   const confirmBtn = document.getElementById('ck-confirm-btn');
   if (confirmBtn) {
-    confirmBtn.onclick = async () => {
-      confirmBtn.disabled = true;
-      confirmBtn.innerHTML = '<span class="ck-spinner"></span> Guardando pedido…';
-      try {
-        await saveOrder(cartItems, subtotal, total);
-        // Build WA support link now that we have the order ID
-        const waMsg = buildWaMessage(cartItems, subtotal, total, payLabels, shipLabels);
-        const waSupport = document.getElementById('ck-wa-support');
-        if (waSupport) waSupport.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`;
-        // Transition to success state
-        document.getElementById('ck-review-head').style.display = 'none';
-        document.getElementById('ck-success-head').style.display = 'block';
-        confirmBtn.style.display = 'none';
-        document.getElementById('ck-post-confirm').style.display = 'block';
-        const orderNumEl = document.getElementById('ck-order-num');
-        if (orderNumEl) {
-          orderNumEl.style.display = 'block';
-          orderNumEl.textContent = window._lastOrderId ? `N° de pedido: ${window._lastOrderId}` : '';
-        }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } catch (e) {
-        if (e && e.message !== 'LOGIN_REQUIRED' && e.message !== 'BLOCKED_ACCOUNT' && e.message !== 'STORE_CLOSED') {
-          console.error('[checkout] Error al confirmar el pedido:', e);
-        }
-        showError(4, 'Hubo un error al guardar el pedido. Intentá de nuevo.');
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = '✓ Confirmar pedido';
-      }
+    confirmBtn.onclick = () => {
+      console.error('[checkout] El módulo seguro de pedidos no cargó a tiempo.');
+      showError(4, 'No se pudo cargar el checkout. Recargá la página e intentá de nuevo.');
     };
   }
-}
-
-function buildWaMessage(items, subtotal, total, payLabels, shipLabels) {
-  const itemLines = items.map(i => `• ${i.qty}x ${i.name} — ${formatPrice(i.price * i.qty)}`).join('\n');
-  const payText = { efectivo:'Efectivo (contra entrega)', transferencia:'Transferencia bancaria', tarjeta:'Tarjeta (simulación)' }[orderData.paymentMethod] || orderData.paymentMethod;
-  const shipText = shipLabels[orderData.shippingMethod] || orderData.shippingMethod;
-  const shippingPending = orderData.shippingCost == null;
-  const shipCostText = shippingPending ? 'A confirmar con un vendedor' : formatPrice(orderData.shippingCost);
-
-  const mapLine = orderData.mapLocation
-    ? `\n🗺️ *Ubicación:* ${orderData.mapLocation.name ? orderData.mapLocation.name + ' — ' : ''}https://maps.google.com/?q=${orderData.mapLocation.lat},${orderData.mapLocation.lng}`
-    : '';
-  return `🛍️ *NUEVO PEDIDO — TINTIN ACCESORIOS*${window._lastOrderId ? ` #${window._lastOrderId}` : ''}
-━━━━━━━━━━━━━━━━━━━━━━
-👤 *Cliente:* ${orderData.name}
-📞 *Tel:* ${orderData.phone}${orderData.email ? `\n📧 *Email:* ${orderData.email}` : ''}
-📍 *Ciudad:* ${orderData.city}${orderData.address ? `\n🏠 *Dirección:* ${orderData.address}` : ''}${orderData.referencia ? `\n📌 *Referencia:* ${orderData.referencia}` : ''}${mapLine}
-🚚 *Envío:* ${shipText} — ${shipCostText}
-━━━━━━━━━━━━━━━━━━━━━━
-🛒 *Productos:*
-${itemLines}
-━━━━━━━━━━━━━━━━━━━━━━
-💰 *Subtotal:* ${formatPrice(subtotal)}
-🚚 *Costo de envío:* ${shipCostText}
-💰 *TOTAL:* ${formatPrice(total)}${shippingPending ? ' + envío a confirmar' : ''}
-💳 *Método de pago:* ${payText}
-━━━━━━━━━━━━━━━━━━━━━━
-📝 *Notas:* ${orderData.notes || 'Sin notas'}`;
-}
-
-// Generated up front (not via a follow-up updateDoc) because customers can only
-// ever CREATE their order, never update it afterward — see firestore.rules.
-function generateShortId() {
-  const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // no O/I, avoids visual confusion
-  let s = '';
-  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return s;
-}
-
-// En una conexión lenta, el estado de auth puede seguir resolviendo cuando
-// la clienta llega a "Confirmar pedido" — esto espera al estado que ya se
-// venía siguiendo en vez de asumir currentUser; tiene timeout para no
-// quedarse colgado para siempre.
-function waitForAuthUser() {
-  if (currentUser) return Promise.resolve(currentUser);
-  return new Promise(resolve => {
-    const timer = setTimeout(() => { unsub(); resolve(currentUser); }, 8000);
-    const unsub = onAuthStateChanged(auth, user => {
-      if (user) { clearTimeout(timer); unsub(); resolve(user); }
-    });
-  });
-}
-
-// El Apps Script prueba el correo a la tienda y el correo a la clienta por
-// separado (ver functions/EMAIL_SETUP.md) y devuelve adminSent/customerSent
-// en vez de un único success — acá se traduce eso a los 3 estados que
-// entiende el admin. customerSent en null significa "ni se intentó" (ej.
-// reenvío manual, que nunca reintenta el correo a la clienta), no una falla.
-function notificationStatusFromResult(result) {
-  if (!result) return 'failed';
-  if (result.customerSent === null || result.customerSent === undefined) {
-    return result.adminSent ? 'sent' : 'failed';
-  }
-  if (result.adminSent && result.customerSent) return 'sent';
-  if (result.adminSent || result.customerSent) return 'partial';
-  return 'failed';
-}
-
-async function saveOrder(items, subtotal, total) {
-  currentUser = await waitForAuthUser();
-
-  // Fase F, última barrera antes de guardar: sin cuenta real, verificada y
-  // sin bloquear, no hay pedido — por más que alguien haya llegado hasta acá
-  // saltándose el modal (sesión vencida a mitad de checkout, por ejemplo).
-  if (!currentUser || currentUser.isAnonymous || !currentUser.emailVerified) {
-    showLoginRequiredModal(1);
-    goToStep(0);
-    throw new Error('LOGIN_REQUIRED');
-  }
-  if (currentUserProfile?.blocked) {
-    showBlockedOverlay();
-    throw new Error('BLOCKED_ACCOUNT');
-  }
-  if (storeClosedForCurrentUser_()) {
-    renderStoreClosedOverlay(storeCfg);
-    throw new Error('STORE_CLOSED');
-  }
-
-  // Fuerza un token fresco: si el correo se verificó hace instantes, el ID
-  // token que el navegador tiene cacheado todavía podría decir
-  // email_verified:false, y firestore.rules (que exige email_verified==true)
-  // rechazaría el pedido con un permission-denied confuso.
-  try { await currentUser.getIdToken(true); } catch {}
-
-  const shortId = generateShortId();
-  window._lastOrderId = shortId;
-
-  const orderDoc = {
-    shortId,
-    userId:      currentUser.uid,
-    userEmail:   currentUser.email.trim().toLowerCase(),
-    userName:    orderData.name,
-    userPhone:   orderData.phone,
-    items:       items.map(i => ({
-      id:       i.id,
-      name:     i.name,
-      cat:      i.cat || '',
-      price:    i.price,
-      qty:      i.qty,
-      variant:  i.variant || '',
-      imageUrl: i.imageUrl || i.imgUrl || ''
-    })),
-    subtotal,
-    shippingCost: orderData.shippingCost,
-    shippingPending: orderData.shippingCost == null,
-    total,
-    storeWhatsapp:  WA_NUMBER,
-    storeInstagram: STORE_INSTAGRAM,
-    shipping: {
-      method:      orderData.shippingMethod,
-      city:        orderData.city,
-      address:     orderData.address || '',
-      referencia:  orderData.referencia || '',
-      zone:        DELIVERY_CITIES.some(c => c.name === orderData.city) ? 'central' : 'interior',
-      mapLocation: orderData.mapLocation || null
-    },
-    payment: {
-      method: orderData.paymentMethod,
-      status: 'pendiente'
-    },
-    paymentStatus:      'pendiente',
-    status:             'pendiente',
-    notes:              orderData.notes || '',
-    notificationStatus: 'pending',
-    createdAt:          serverTimestamp(),
-    updatedAt:          serverTimestamp()
-  };
-
-  // Reintento único y transparente: en cuentas recién verificadas, el
-  // primer intento puede fallar porque el token forzado arriba todavía no
-  // llegó a reflejar email_verified:true del lado de Firestore (carrera
-  // entre el refresh de Auth y el canal ya abierto de Firestore) — antes
-  // esto obligaba a la clienta a tocar "Confirmar" una segunda vez. Ahora
-  // se reintenta solo, con un token recién forzado de nuevo, antes de
-  // mostrarle cualquier error.
-  let orderRef;
-  try {
-    orderRef = await addDoc(collection(db, 'orders'), orderDoc);
-  } catch (err) {
-    console.error('[checkout] Falló crear el pedido, reintentando una vez:', err);
-    try { await currentUser.getIdToken(true); } catch {}
-    orderRef = await addDoc(collection(db, 'orders'), orderDoc);
-  }
-
-  // Fire-and-forget: la orden ya quedó guardada arriba pase lo que pase acá.
-  // A diferencia de antes, ahora sí se registra el resultado real del envío
-  // en vez de dejar `notificationStatus` pegado en "pending" para siempre —
-  // firestore.rules permite a la dueña del pedido tocar únicamente ese campo
-  // del suyo. `serverTimestamp()` recién resuelve después de que Firestore
-  // confirma el commit, así que acá se manda la hora actual real.
-  sendOrderNotification(orderRef.id, { ...orderDoc, createdAt: new Date().toISOString() }, false)
-    .then(result => updateDoc(orderRef, {
-      notificationStatus: notificationStatusFromResult(result),
-      updatedAt: serverTimestamp()
-    }))
-    .catch(() => {});
-
-  // Update user stats if logged in with a real account (not a guest/anonymous session)
-  if (currentUser && !currentUser.isAnonymous) {
-    updateDoc(doc(db, 'users', currentUser.uid), {
-      purchaseCount: increment(1),
-      totalSpent:    increment(total)
-    }).catch(() => {});
-  }
-
-  // Clear cart
-  await clearCart();
 }
 
 // ---- MAP (Leaflet — only for delivery) ----

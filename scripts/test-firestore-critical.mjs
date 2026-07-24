@@ -12,7 +12,8 @@ import {
   increment,
   runTransaction,
   serverTimestamp,
-  setDoc
+  setDoc,
+  updateDoc
 } from 'firebase/firestore';
 
 const projectId = 'demo-tintin-critical';
@@ -223,6 +224,32 @@ try {
   await assertFails(reserveInventory({ requestId: 'req_blocked_stock_123456', decrement: 2 }));
 
   await seedBase();
+  await createPendingOrder('req_emaillog_123456');
+  const emailLogOwnerDb = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  const emailLogBase = {
+    category: 'pedido', type: 'pedido_nuevo', recipient: clientClaims.email,
+    status: 'sent', orderId: 'u1_req_emaillog_123456', isAutomatic: true,
+    duplicate: false, attempts: 1, sentBy: clientClaims.email, error: '',
+    sentAt: serverTimestamp()
+  };
+  await assertSucceeds(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_shape_ok'), emailLogBase));
+  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_inject_field'), {
+    ...emailLogBase, xss: '<img src=x onerror=alert(1)>'
+  }));
+  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_bad_status'), {
+    ...emailLogBase, status: '<script>alert(1)</script>'
+  }));
+  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_spoofed_sentby'), {
+    ...emailLogBase, sentBy: 'otra@example.com'
+  }));
+
+  await seedBase();
+  const selfProfileDb = testEnv.authenticatedContext('u1', clientClaims).firestore();
+  await assertFails(updateDoc(doc(selfProfileDb, 'users', 'u1'), { name: 12345 }));
+  await assertFails(updateDoc(doc(selfProfileDb, 'users', 'u1'), { phone: { evil: true } }));
+  await assertSucceeds(updateDoc(doc(selfProfileDb, 'users', 'u1'), { name: 'Nombre Válido' }));
+
+  await seedBase();
   const anonDb = testEnv.unauthenticatedContext().firestore();
   // Reactivada tras el incidente de cuota (freno de 20s + App Check en
   // producción): una escritura anónima bien formada YA debe poder crear su
@@ -393,7 +420,7 @@ try {
     assert.equal(restoredProduct.data().stock, 10);
   });
 
-  console.log('Reglas críticas: 30 ataques/regresiones verificados.');
+  console.log('Reglas críticas: 37 ataques/regresiones verificados.');
 } finally {
   await testEnv.cleanup();
 }

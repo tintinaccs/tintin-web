@@ -296,6 +296,13 @@ service cloud.firestore {
       ]);
     }
 
+    function userProfileFieldsValid() {
+      let data = request.resource.data;
+      return (!('name' in data) || (data.name is string && data.name.size() <= 120)) &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000));
+    }
+
     function userCreateValid(userId) {
       let data = request.resource.data;
       return isSignedIn() &&
@@ -325,7 +332,8 @@ service cloud.firestore {
         data.get('cancelledOrders', 0) == 0 &&
         (!('createdAt' in data) || data.createdAt == request.time) &&
         (!('updatedAt' in data) || data.updatedAt == request.time) &&
-        (!('lastLogin' in data) || data.lastLogin == request.time);
+        (!('lastLogin' in data) || data.lastLogin == request.time) &&
+        userProfileFieldsValid();
     }
 
     function cartItemValid(itemId) {
@@ -921,6 +929,7 @@ service cloud.firestore {
         (
           request.auth.uid == userId &&
           !isBlockedUser() &&
+          userProfileFieldsValid() &&
           (
             (
               isStoreOpenOrAllowed() &&
@@ -1159,10 +1168,23 @@ service cloud.firestore {
             (
               isSignedIn() &&
               !isBlockedUser() &&
+              request.resource.data.keys().hasOnly([
+                'category', 'type', 'recipient', 'status', 'orderId',
+                'isAutomatic', 'duplicate', 'attempts', 'sentBy', 'error', 'sentAt'
+              ]) &&
               request.resource.data.category == 'pedido' &&
               request.resource.data.type == 'pedido_nuevo' &&
               request.resource.data.orderId is string &&
               request.resource.data.sentBy == request.auth.token.email &&
+              request.resource.data.recipient is string &&
+              request.resource.data.recipient.size() <= 254 &&
+              request.resource.data.status in ['sent', 'failed', 'partial', 'pending'] &&
+              request.resource.data.isAutomatic is bool &&
+              request.resource.data.duplicate is bool &&
+              request.resource.data.attempts is number &&
+              request.resource.data.error is string &&
+              request.resource.data.error.size() <= 500 &&
+              request.resource.data.sentAt == request.time &&
               get(
                 /databases/$(database)/documents/orders/$(request.resource.data.orderId)
               ).data.userId == request.auth.uid
