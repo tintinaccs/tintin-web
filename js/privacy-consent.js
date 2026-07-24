@@ -171,7 +171,10 @@ function showInitialChoice() {
     if (isAdminPage()) document.getElementById('tt-privacy-consent')?.remove();
     return;
   }
-  renderConsent(false);
+  // En mobile el banner se ancla abajo, igual que el CTA del hero — un
+  // pequeño retraso deja que la clienta vea el hero completo antes de que
+  // aparezca, en vez de taparlo apenas carga la página.
+  window.setTimeout(() => renderConsent(false), 1500);
 }
 
 window.TintinActivityPrivacy = {

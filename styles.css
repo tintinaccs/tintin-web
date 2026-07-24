@@ -2071,11 +2071,18 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     width: calc(100vw - 24px);
     max-height: min(70vh, 580px);
     overflow: auto;
-    padding: 16px;
+    padding: 14px;
     border-radius: 20px;
   }
-  .tt-privacy-actions { display: grid; grid-template-columns: 1fr 1fr; }
-  .tt-privacy-link-btn { grid-column: 1 / -1; }
+  /* La etiqueta "Cookies y privacidad" es redundante con el ícono 🍪 y el
+     título de abajo — en mobile el banner ya compite por espacio vertical
+     con el CTA del hero (que también se ancla abajo), así que acá se
+     esconde para recuperar esas líneas sin perder información real. */
+  .tt-privacy-eyebrow { display: none; }
+  .tt-privacy-heading { padding-right: 20px; }
+  .tt-privacy-summary { margin: 8px 0 12px; }
+  .tt-privacy-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tt-privacy-link-btn { grid-column: 1 / -1; padding-block: 2px; }
   .tt-privacy-details-actions { align-items: stretch; flex-direction: column; }
   .tt-privacy-details-actions .tt-privacy-btn { width: 100%; }
 }
