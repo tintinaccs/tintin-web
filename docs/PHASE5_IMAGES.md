@@ -16,6 +16,7 @@
 - Quitar una personalización restaura los archivos responsive de escritorio, tablet y celular.
 - Los espacios antiguos de productos, colecciones e íconos no se muestran en Super Admin → Imágenes y no se borran de la base.
 - No se incorporó Firebase Storage ni se modificaron reglas: el panel continúa trabajando con URLs `http/https`.
+- Desde entonces se agregó un widget de carga (`js/image-upload-widget.js`) y una biblioteca multimedia (`js/admin-media-library-ui.js`, `js/media-library.js`) que suben el archivo a Cloudinary (firmado vía `functions/api/cloudinary-sign-upload.js`, borrado vía `functions/api/cloudinary-delete.js`) y guardan la URL resultante en los mismos campos de esta tabla — sigue sin ser Firebase Storage, pero ya no es solo "pegar una URL a mano".
 
 ## Prueba manual
 

@@ -7,7 +7,7 @@
 - Plan: Spark.
 - Pedidos y stock: transacción de Firestore protegida por reglas.
 - Cloud Functions: no se usan en producción.
-- Correos: Google Apps Script externo al repositorio.
+- Correos de pedido: Resend vía `functions/api/order-email.js` (Cloudflare Pages Functions). Correos de prueba/promoción/plantilla: Google Apps Script externo al repositorio.
 
 ## Nuevo importador
 
@@ -90,7 +90,7 @@ Al fusionar cambios en `main`, GitHub Pages actualiza los archivos HTML, CSS y J
 
 ## Google Apps Script
 
-Apps Script vive fuera de GitHub. La auditoría del repositorio confirma el puente y el archivo `apps-script/Phase3Security.gs`, pero no puede confirmar qué versión está publicada en la consola de Apps Script.
+Apps Script vive fuera de GitHub. Ya no procesa los correos de pedido (ese canal es Resend, ver arriba) — sigue activo para los correos de prueba, plantilla y promoción que dispara el panel (`js/email-notify.js`). La auditoría del repositorio confirma el puente y el archivo `apps-script/Phase3Security.gs`, pero no puede confirmar qué versión está publicada en la consola de Apps Script.
 
 Para cerrar esa comprobación manualmente, la implementación activa debe conservar la misma URL `/exec` y contener la versión segura de Fase 3.
 

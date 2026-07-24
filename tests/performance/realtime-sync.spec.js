@@ -28,7 +28,7 @@ test('[realtime] el catálogo se alimenta por onSnapshot (canal en vivo)', async
     const finish = ok => { if (!done) { done = true; resolve(ok); } };
     window.addEventListener('tintin:products-loaded', () => finish(true), { once: true });
     // Si ya resolvió antes de este punto, la grilla o su estado ya existen.
-    const grid = document.querySelector('.tt-products-grid, #products-grid, [data-products-grid]');
+    const grid = document.querySelector('.tt-products-grid, #products-grid, [data-products-grid], #cat-grid');
     if (grid && (grid.children.length > 0 || /vac|sin/i.test(grid.textContent))) finish(true);
     setTimeout(() => finish(false), 8000);
   }));
