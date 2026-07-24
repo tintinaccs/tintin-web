@@ -161,6 +161,16 @@ function errMsg(code) {
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
+// Único destino real de "from" hoy es checkout.html (ver checkout.html:729),
+// pero el valor llega desde la URL, así que un enlace armado por un tercero
+// podría poner cualquier cosa ahí. Solo se acepta un nombre de archivo .html
+// local (sin protocolo, sin "//", sin barras) — cualquier otra cosa cae al
+// destino por defecto en vez de redirigir a un sitio ajeno tras un login real.
+function safeLocalRedirect(value) {
+  const v = String(value || '');
+  return /^[a-zA-Z0-9_-]+\.html$/.test(v) ? v : '';
+}
+
 async function redirectByRole(role, email, options = {}) {
   const cfg = await getStoreAccessConfig();
   if (!isAccessAllowed(cfg, role, email)) {
@@ -169,7 +179,7 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
-  const from = new URLSearchParams(window.location.search).get('from');
+  const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   if (role === 'client' || !role) {
     window.location.href = options.welcomePending ? 'index.html?welcome=1' : (from || 'perfil.html');
   } else {

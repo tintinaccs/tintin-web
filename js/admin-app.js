@@ -737,8 +737,9 @@ onAuthStateChanged(auth, async user => {
 function setupUserInfo(user, role) {
   const avatarEl = document.getElementById('adm-avatar');
   if (avatarEl) {
-    if (user.photoURL) {
-      avatarEl.innerHTML = `<img src="${user.photoURL}" alt="" />`;
+    const avatarUrl = sanitizeImageUrl(user.photoURL || '');
+    if (avatarUrl) {
+      avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" />`;
     } else {
       avatarEl.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
     }

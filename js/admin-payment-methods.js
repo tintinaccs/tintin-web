@@ -167,11 +167,11 @@ function boot() {
           <span class="tt-payment-admin-badge${disabledClass}">${method.enabled ? 'ACTIVO' : 'DESACTIVADO'}</span>
         </div>
         <div class="tt-payment-admin-actions">
-          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="up" ${index === 0 ? 'disabled' : ''} aria-label="Mover arriba">↑</button>
-          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="down" ${index === methods.length - 1 ? 'disabled' : ''} aria-label="Mover abajo">↓</button>
-          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="toggle">${method.enabled ? 'Desactivar' : 'Activar'}</button>
-          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="edit">Editar</button>
-          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-payment-action="delete">Eliminar</button>
+          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="up" ${(!authorized || index === 0) ? 'disabled' : ''} aria-label="Mover arriba">↑</button>
+          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="down" ${(!authorized || index === methods.length - 1) ? 'disabled' : ''} aria-label="Mover abajo">↓</button>
+          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="toggle" ${authorized ? '' : 'disabled'}>${method.enabled ? 'Desactivar' : 'Activar'}</button>
+          <button type="button" class="adm-btn adm-btn-sm" data-payment-action="edit" ${authorized ? '' : 'disabled'}>Editar</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-payment-action="delete" ${authorized ? '' : 'disabled'}>Eliminar</button>
         </div>
       </div>
     `;
@@ -424,6 +424,11 @@ function boot() {
     authorized = String(user?.email || '').toLowerCase() === SUPER_ADMIN_EMAIL;
     document.getElementById('tt-payment-new').disabled = !authorized;
     if (!authorized) setStatus('Solo la cuenta Super Admin puede modificar estos datos.', 'error');
+    // El snapshot de settings puede haber pintado la lista antes de que
+    // resolviera el estado de auth (o al revés) — re-renderiza para que los
+    // botones de cada fila reflejen el valor real de `authorized` en vez de
+    // quedar pegados al primer render.
+    renderList();
   });
 
   onSnapshot(SETTINGS_REF, snapshot => {

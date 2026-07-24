@@ -412,6 +412,7 @@ onAuthStateChanged(auth, async user => {
       renderSavedLocation(null);
       toast('✅ Ubicación borrada');
     } catch (e) { toast('❌ Error al borrar'); }
+    finally { window.TintinReleaseProfileButton?.('btn-borrar-ubicacion'); }
   });
 
   // Orders
@@ -430,11 +431,13 @@ onAuthStateChanged(auth, async user => {
       }, { merge: true });
       toast('✅ Perfil actualizado');
     } catch(e) { toast('❌ Error al guardar'); }
+    finally { window.TintinReleaseProfileButton?.('btn-guardar-perfil'); }
   };
 
   // Logout
   document.getElementById('btn-logout').onclick = () =>
-    signOut(auth).then(() => { window.location.href = 'index.html'; });
+    signOut(auth).then(() => { window.location.href = 'index.html'; })
+      .catch(() => window.TintinReleaseProfileButton?.('btn-logout'));
 
 });
 

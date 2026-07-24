@@ -696,7 +696,14 @@ function initSearch() {
   });
 
   if (input && results) {
+    const SEARCH_RESULTS_LIMIT = 30;
+    let searchDebounceTimer = null;
     input.addEventListener('input', () => {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(runSearch, 200);
+    });
+
+    function runSearch() {
       const q = input.value.trim().toLowerCase();
       if (!q) {
         results.style.display = 'none';
@@ -710,7 +717,7 @@ function initSearch() {
         String(p.name || '').toLowerCase().includes(q) ||
         String(p.cat || p.category || '').toLowerCase().includes(q) ||
         String(p.desc || '').toLowerCase().includes(q)
-      );
+      ).slice(0, SEARCH_RESULTS_LIMIT);
 
       if (matches.length === 0) {
         results.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:0.9rem;">No encontramos productos con esa búsqueda.</div>';
@@ -719,7 +726,7 @@ function initSearch() {
           const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
           const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
           const thumb = imgUrl
-            ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+            ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" loading="lazy">`
             : '';
           return `
           <a class="tt-search-result-item" href="${productHref}" style="color:inherit!important;text-decoration:none;">
@@ -734,7 +741,7 @@ function initSearch() {
       }
 
       results.style.display = 'block';
-    });
+    }
   }
 }
 

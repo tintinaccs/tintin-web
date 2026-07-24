@@ -47,9 +47,9 @@ html body .ck-steps .ck-step .ck-step-num {
 
 html body .ck-steps .ck-step.active .ck-step-num,
 html body .ck-steps .ck-step.done .ck-step-num {
-  border-color: #AD3F67 !important;
-  background: #AD3F67 !important;
-  background-color: #AD3F67 !important;
+  border-color: var(--tt-accent, #AD3F67) !important;
+  background: var(--tt-accent, #AD3F67) !important;
+  background-color: var(--tt-accent, #AD3F67) !important;
   color: #FFFFFF !important;
   box-shadow: 0 0 0 4px #FDECF2, 0 5px 14px rgba(173, 63, 103, 0.18) !important;
 }

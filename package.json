@@ -57,9 +57,11 @@
     "audit:part2h": "node scripts/audit-final-sweep-part2h.js"
   },
   "devDependencies": {
-    "firebase-tools": "13.15.0",
     "@firebase/rules-unit-testing": "3.0.3",
-    "firebase": "10.12.0"
+    "@playwright/test": "^1.61.1",
+    "firebase": "10.12.0",
+    "firebase-tools": "13.15.0",
+    "playwright": "^1.61.1"
   },
   "private": true
 }

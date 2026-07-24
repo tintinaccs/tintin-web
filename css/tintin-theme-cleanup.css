@@ -28,9 +28,9 @@ html body:not(:has(.adm-main)) #tt-privacy-consent.tt-privacy-consent{
   box-shadow:0 18px 54px rgba(38,24,30,.18)!important;
 }
 html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary{
-  background:#AD3F67!important;
-  background-color:#AD3F67!important;
-  border:1px solid #AD3F67!important;
+  background:var(--tt-accent,#AD3F67)!important;
+  background-color:var(--tt-accent,#AD3F67)!important;
+  border:1px solid var(--tt-accent,#AD3F67)!important;
   color:#FFFFFF!important;
   opacity:1!important;
 }
@@ -38,8 +38,8 @@ html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary *{col
 html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border:1px solid #AD3F67!important;
-  color:#AD3F67!important;
+  border:1px solid var(--tt-accent,#AD3F67)!important;
+  color:var(--tt-accent,#AD3F67)!important;
   opacity:1!important;
 }
 

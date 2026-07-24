@@ -7,7 +7,7 @@
 
 /* ── 02 — BENEFICIOS RÁPIDOS ───────────────────────────────── */
 .tinben{
-  --acc: #AD3F67;
+  --acc: var(--tt-accent, #AD3F67);
   --bg: #fdf0f5;
   --fg: #2d2d2d;
   --card-bg: #ffffff;
@@ -120,10 +120,10 @@
 
 /* ── 05 — TU SELECCIÓN (LISTA RÁPIDA) ──────────────────────── */
 .tinsel{
-  --acc: #AD3F67;
+  --acc: var(--tt-accent, #AD3F67);
   --bg: #fdf0f5;
   --fg: #2d2d2d;
-  --pbtn: #AD3F67;
+  --pbtn: var(--tt-accent, #AD3F67);
   --pbtnT: #ffffff;
   --r: 16px;
   background: var(--bg);
@@ -295,7 +295,7 @@
   bottom:clamp(80px,10vw,110px); left:50%;
   transform:translateX(-50%) translateY(14px);
   opacity:0;
-  background:#fff; color:#AD3F67;
+  background:#fff; color:var(--acc, #AD3F67);
   border:1px solid rgba(212,120,154,.2);
   box-shadow:0 12px 40px rgba(0,0,0,.12);
   padding:11px 22px; border-radius:50px;
