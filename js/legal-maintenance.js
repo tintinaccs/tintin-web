@@ -1,6 +1,3 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
-import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
 const file = (location.pathname.split('/').pop() || '').toLowerCase();
 const supported = new Set(['terminos.html', 'privacidad.html']);
 
@@ -127,7 +124,16 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   const footer = document.querySelector('.tt-footer-bottom');
   if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 
-  onSnapshot(doc(db, 'settings', 'general'), snap => {
-    if (snap.exists()) updateContact(snap.data());
-  }, error => console.warn('[legal-maintenance] configuración pública no disponible', error));
+  // Nada de lo de arriba necesita datos remotos (solo reordena HTML ya
+  // presente), así que el SDK de Firebase —varios módulos desde gstatic.com,
+  // vía firebase.js— se carga recién acá, después de que el índice y el
+  // resto del contenido ya están en pantalla, en vez de bloquearlos.
+  Promise.all([
+    import('./firebase.js?v=tintin-20260716-cloudinary-fix-1'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
+  ]).then(([{ db }, { doc, onSnapshot }]) => {
+    onSnapshot(doc(db, 'settings', 'general'), snap => {
+      if (snap.exists()) updateContact(snap.data());
+    }, error => console.warn('[legal-maintenance] configuración pública no disponible', error));
+  });
 }

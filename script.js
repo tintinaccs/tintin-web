@@ -1735,12 +1735,17 @@ function initWaFloatVisibility() {
   // decodificar, sin disparar ninguna mutación adicional del DOM.
   document.addEventListener('load', requestCheck, true);
   document.fonts?.ready?.then(requestCheck).catch(() => {});
+  // Señal explícita de que ya llegaron datos reales de Firestore (grilla de
+  // productos), en vez de confiar solo en que el MutationObserver la note.
+  window.addEventListener('tintin:products-loaded', requestCheck);
+  window.addEventListener('tintin:products-error', requestCheck);
   requestCheck();
   // Red de seguridad: alguna tarjeta puede reacomodarse en un reflow que no
   // dispara ninguno de los eventos de arriba (p. ej. al terminar de decodificar
   // una imagen ya insertada en el DOM).
   setTimeout(requestCheck, 300);
   setTimeout(requestCheck, 1200);
+  setTimeout(requestCheck, 2500);
 }
 
 /* ──────────────────────────────────────
