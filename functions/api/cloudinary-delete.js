@@ -70,8 +70,15 @@ export async function onRequest(context) {
 
     const config = getCloudinaryConfig(env);
     const results = [];
+    // Cada borrado se reporta por separado: si el 2do de 4 falla, el
+    // llamador necesita saber que el 1ro sí se borró para no reintentar
+    // asumiendo que no pasó nada.
     for (const publicId of publicIds) {
-      results.push(await destroyAsset(publicId, config));
+      try {
+        results.push(await destroyAsset(publicId, config));
+      } catch (error) {
+        results.push({ publicId, result: 'error', error: error?.message || 'No se pudo borrar' });
+      }
     }
 
     return jsonResponse({ ok: true, results }, 200, origin, requestUrl);

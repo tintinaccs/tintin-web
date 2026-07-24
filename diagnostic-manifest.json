@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-24T13:44:13.995Z",
-  "sourceFingerprint": "0504c8291b08498651471fade6fceb00ed9256e90ba535262cf67f86221e64ad",
+  "generatedAt": "2026-07-24T14:05:14.229Z",
+  "sourceFingerprint": "b003873000db2adb8fd1b82891905ab844c07d06173f5544247059440c981ffc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 380,
-    "textFiles": 346,
-    "totalBytes": 5380454,
+    "files": 375,
+    "textFiles": 341,
+    "totalBytes": 5366764,
     "pages": 18,
     "modules": 205
   },
@@ -13474,8 +13474,8 @@
     },
     {
       "path": "functions/api/cloudinary-delete.js",
-      "bytes": 2685,
-      "sha256": "c452da73ce26f8093abdb5bde0e69847fcf3cb5f5e67fa456019c8c9a96dd80b",
+      "bytes": 3011,
+      "sha256": "3f57ccf37209667a22617092b9b742b24fcfd31696676d5520076f3f585ec8aa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19189,8 +19189,8 @@
     {
       "path": "functions/api/cloudinary-delete.js",
       "extension": ".js",
-      "bytes": 2685,
-      "sha256": "c452da73ce26f8093abdb5bde0e69847fcf3cb5f5e67fa456019c8c9a96dd80b"
+      "bytes": 3011,
+      "sha256": "3f57ccf37209667a22617092b9b742b24fcfd31696676d5520076f3f585ec8aa"
     },
     {
       "path": "functions/api/cloudinary-sign-upload.js",
@@ -20065,8 +20065,8 @@
     {
       "path": "manifest.json",
       "extension": ".json",
-      "bytes": 658,
-      "sha256": "75866b6d041679019271fbf91cd4abd1ef55b41a31897d5f6e0dc19efcf4d55c"
+      "bytes": 636,
+      "sha256": "56af9492efe113911fb16677ee1e616c2207b4c98620587d261237cf0d5d5e03"
     },
     {
       "path": "nosotros.html",
@@ -20605,44 +20605,14 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 108269,
-      "sha256": "ff69dbd3ef5e22120cafe890657dcfc467044719857944ba7ea946cf4e1f6459"
+      "bytes": 107520,
+      "sha256": "af99c0b28ff240bb9e4a405f56bd7a494e1007fe2f63eff9161e62d67834e0db"
     },
     {
       "path": "terminos.html",
       "extension": ".html",
       "bytes": 12496,
       "sha256": "ba5a569407d1b7f6de4cc1341c09469728f3afab8f3c3b86bca89fded258b076"
-    },
-    {
-      "path": "test-results/.last-run.json",
-      "extension": ".json",
-      "bytes": 145,
-      "sha256": "9c0b1f9da3d2cf66d1e907bd3b422537954cc577abfc6b485bddf275fced1a6b"
-    },
-    {
-      "path": "test-results/admin.performance--admin-a-5cfcd-evela-el-panel-gate-seguro--chromium-retry1/error-context.md",
-      "extension": ".md",
-      "bytes": 3271,
-      "sha256": "93f930c541e54e1914ab7e959c1bcc1119b34ac33c5c570fc0cf2775ec6c50be"
-    },
-    {
-      "path": "test-results/admin.performance--admin-a-5cfcd-evela-el-panel-gate-seguro--chromium/error-context.md",
-      "extension": ".md",
-      "bytes": 3271,
-      "sha256": "93f930c541e54e1914ab7e959c1bcc1119b34ac33c5c570fc0cf2775ec6c50be"
-    },
-    {
-      "path": "test-results/admin.performance--admin-l-e7d3b-e-admin-no-se-descarga-aquí-chromium-retry1/error-context.md",
-      "extension": ".md",
-      "bytes": 3279,
-      "sha256": "0e17a542149b67660e40b814e17248dc4d6180500108fa8f06c11c029d9b94cd"
-    },
-    {
-      "path": "test-results/admin.performance--admin-l-e7d3b-e-admin-no-se-descarga-aquí-chromium/error-context.md",
-      "extension": ".md",
-      "bytes": 3279,
-      "sha256": "0e17a542149b67660e40b814e17248dc4d6180500108fa8f06c11c029d9b94cd"
     },
     {
       "path": "tests/performance/README.md",
