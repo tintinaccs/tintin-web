@@ -159,7 +159,11 @@ async function inspectBase(page, width) {
           !node.closest('.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header') &&
           overlaps(wa,rect(node),2)
         );
-        if (collided) issues.push(`WhatsApp pisa ${collided.id ? '#' + collided.id : collided.className || collided.tagName}`);
+        if (collided) {
+          const cs = getComputedStyle(whatsapp);
+          const dbg = `waClass=${JSON.stringify(whatsapp.className)} op=${cs.opacity} vis=${cs.visibility} stats=${JSON.stringify(window.__ttWaFloatStats || null)}`;
+          issues.push(`WhatsApp pisa ${collided.id ? '#' + collided.id : collided.className || collided.tagName} [${dbg}]`);
+        }
       }
     } else {
       if (visible(tabbar)) issues.push('tabbar visible en desktop/tablet');

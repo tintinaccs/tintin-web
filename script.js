@@ -1714,10 +1714,16 @@ function initWaFloatVisibility() {
   // esos instantes intermedios).
   const UNHIDE_AFTER_MS = 350;
   let clearSince = 0;
+  // Introspección liviana para depurar en entornos donde no hay consola
+  // (auditorías CI, un teléfono real): expone cuántas veces corrió el chequeo
+  // y qué decidió, sin afectar el comportamiento.
+  const stats = { checks: 0, hides: 0, unhides: 0, zeroRect: 0 };
+  window.__ttWaFloatStats = stats;
   const check = () => {
     ticking = false;
+    stats.checks++;
     const r = wa.getBoundingClientRect();
-    if (r.width <= 0 || r.height <= 0) return;
+    if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
     const collided = [...document.querySelectorAll('a,button')].some(node => {
       if (node === wa || node.closest(EXCLUDE)) return false;
       const style = getComputedStyle(node);
@@ -1730,6 +1736,7 @@ function initWaFloatVisibility() {
     if (collided) {
       clearSince = 0;
       if (!hidden) {
+        stats.hides++;
         wa.classList.add('tt-wa-float-hidden');
         wa.setAttribute('tabindex', '-1');
       }
@@ -1739,6 +1746,7 @@ function initWaFloatVisibility() {
     if (!clearSince) { clearSince = Date.now(); return; }
     if (Date.now() - clearSince >= UNHIDE_AFTER_MS) {
       clearSince = 0;
+      stats.unhides++;
       wa.classList.remove('tt-wa-float-hidden');
       wa.removeAttribute('tabindex');
     }
