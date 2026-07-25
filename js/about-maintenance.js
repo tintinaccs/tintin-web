@@ -62,15 +62,16 @@
   }
 
   function improveImage() {
-    const wrapper = document.querySelector('[data-img-slot="about_foto"]');
-    const image = wrapper?.querySelector('img');
-    if (!wrapper || !image) return;
-    wrapper.setAttribute('role', 'img');
-    wrapper.setAttribute('aria-label', image.alt || 'Tintin Accesorios y Relojes');
-    image.addEventListener('load', () => wrapper.classList.remove('is-error'), { once: true });
-    image.addEventListener('error', () => {
-      wrapper.classList.add('is-error');
-      image.hidden = true;
+    document.querySelectorAll('[data-img-slot="about_foto"]').forEach(wrapper => {
+      const image = wrapper.querySelector('img');
+      if (!image) return;
+      wrapper.setAttribute('role', 'img');
+      wrapper.setAttribute('aria-label', image.alt || 'Tintin Accesorios y Relojes');
+      image.addEventListener('load', () => wrapper.classList.remove('is-error'), { once: true });
+      image.addEventListener('error', () => {
+        wrapper.classList.add('is-error');
+        image.hidden = true;
+      });
     });
   }
 

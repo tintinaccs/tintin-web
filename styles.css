@@ -2653,6 +2653,90 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 /* ═══════════════════════════════════════════════
+   IMAGEN "BLOB" — mancha orgánica redondeada
+═══════════════════════════════════════════════ */
+.tt-blob-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/5;
+  /* Como hijo de grid con align-items:center, sin un ancho explícito el
+     navegador puede derivar el ancho a partir del alto disponible (que en
+     esta fila lo define la columna de texto, mucho más alta) en vez de
+     tomar el ancho real de su columna del grid — el resultado es una
+     imagen mucho más ancha que su 1fr. width:100% fija qué dimensión manda:
+     el ancho de la columna, y aspect-ratio deriva el alto a partir de eso. */
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tt-blob-media .tt-blob-shape {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 63% 37% 54% 46% / 43% 47% 53% 57%;
+  box-shadow: 0 30px 60px -20px rgba(173,63,103,0.35);
+}
+
+.tt-blob-media .tt-blob-shape img,
+.tt-blob-media .tt-blob-shape .tt-img-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Segunda mancha, más chica y detrás, como acento decorativo — igual que la
+   silueta clara detrás de la firma en el diseño de referencia. */
+.tt-blob-media::before {
+  content: '';
+  position: absolute;
+  inset: 6% -8% -8% 6%;
+  background: var(--pink-pale);
+  border-radius: 46% 54% 63% 37% / 57% 43% 57% 43%;
+  z-index: -1;
+}
+
+@media (max-width: 640px) {
+  .tt-blob-media .tt-blob-shape {
+    border-radius: 32px;
+  }
+  .tt-blob-media::before {
+    inset: 4% -5% -5% 4%;
+    border-radius: 26px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   NUESTRA MISIÓN — bloque invertido bajo la historia
+═══════════════════════════════════════════════ */
+.tt-about-mission-section { background: var(--surface-soft, var(--pink-pale)); }
+
+.tt-about-mission-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.tt-about-mission-title {
+  font-family:Montserrat;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: var(--pink-dark);
+  margin-bottom: 20px;
+}
+
+.tt-about-mission-text {
+  font-size: 0.95rem;
+  color: var(--text-sec);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+/* ═══════════════════════════════════════════════
    CONTACT PAGE
 ═══════════════════════════════════════════════ */
 .tt-contact-section { background: var(--bg); }
@@ -3580,8 +3664,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .tt-footer { padding: 40px 0 0; }
 
-  .tt-about-grid { grid-template-columns: 1fr; }
+  .tt-about-grid { grid-template-columns: 1fr; gap: 32px; }
   .tt-about-img { aspect-ratio: 16/9; }
+  .tt-blob-media { aspect-ratio: 5/4; }
+  /* En mobile la imagen siempre va arriba, sin importar el orden del HTML
+     en cada bloque (texto-imagen o imagen-texto en desktop) — mismo
+     criterio que .tt-editorial. */
+  .tt-about-grid .tt-about-img { order: 0; }
+  .tt-about-grid .tt-about-content { order: 1; }
 
   .tt-contact-grid { grid-template-columns: 1fr; }
 
