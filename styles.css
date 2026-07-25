@@ -1912,14 +1912,19 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   animation: ttn-wa-breathe 3.2s ease-in-out 2s infinite;
 }
 
-/* Se oculta cuando el footer entra en pantalla (o está por entrar, gracias
-   al rootMargin del IntersectionObserver en initWaFloatVisibility): sin
-   esto tapa enlaces del footer o la última fila de tarjetas en páginas
-   cortas o en alturas de viewport chicas. */
+/* initWaFloatVisibility (script.js) aplica esta clase cuando el botón fijo
+   queda encima de un enlace o botón del contenido (índice de términos/
+   privacidad, última fila de tarjetas, footer en páginas cortas). El ocultado
+   es INSTANTÁNEO a propósito — sin transición: mientras dura un fade el botón
+   sigue tapando lo que tiene debajo, que es justo lo que se quiere evitar.
+   La reaparición sí hereda la transición suave de .tt-wa-float. */
 .tt-wa-float.tt-wa-float-hidden {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: scale(0.7);
+  transition: none;
+  animation: none;
 }
 
 @keyframes ttn-wa-breathe {
