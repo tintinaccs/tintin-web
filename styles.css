@@ -2664,9 +2664,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
      esta fila lo define la columna de texto, mucho más alta) en vez de
      tomar el ancho real de su columna del grid — el resultado es una
      imagen mucho más ancha que su 1fr. width:100% fija qué dimensión manda:
-     el ancho de la columna, y aspect-ratio deriva el alto a partir de eso. */
+     el ancho de la columna, y aspect-ratio deriva el alto a partir de eso.
+     min-width:0 evita que el contenido interno reviente esa misma columna.
+     overflow:visible (pisando el overflow:hidden de la regla base
+     .tt-about-img más arriba en este archivo) es a propósito: el acento
+     decorativo de ::before se dibuja un poco más grande que este
+     contenedor para asomar completo por los costados — quien recorta la
+     foto en sí es .tt-blob-shape, un nivel más adentro. */
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .tt-blob-media .tt-blob-shape {
