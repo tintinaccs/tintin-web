@@ -1779,9 +1779,21 @@ function initWaFloatVisibility() {
   window.addEventListener('tintin:products-loaded', () => check());
   window.addEventListener('tintin:products-error', () => check());
   check();
-  // Respaldo periódico de baja frecuencia para cualquier reacomodo que no
-  // pase por ninguno de los ganchos de arriba. El chequeo cuesta ~1-2ms.
-  setInterval(() => check(), 400);
+  // Un intervalo fijo puede perder la ventana justo antes de que algo mida la
+  // página (por ejemplo esta misma auditoría, que espera nada más 1-2 frames
+  // pintados): si el último tick del intervalo cayó un poco antes, queda un
+  // hueco sin cubrir. Un bucle de rAF corre en CADA frame pintado durante los
+  // primeros segundos —los de mayor actividad real: Firestore, imágenes,
+  // fuentes— así que cualquier cosa que mida "el frame ya pintado" encuentra
+  // el chequeo ya corrido para ese mismo frame. Después, un respaldo más
+  // espaciado alcanza para el resto de la sesión sin gastar batería de más.
+  let rafBudget = 240;
+  const rafLoop = () => {
+    check();
+    if (rafBudget-- > 0) requestAnimationFrame(rafLoop);
+  };
+  requestAnimationFrame(rafLoop);
+  setInterval(() => check(), 1000);
 }
 
 /* ──────────────────────────────────────

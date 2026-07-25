@@ -94,10 +94,7 @@ async function prepare(page, width) {
 // Lo que valida esta auditoría es lo que una persona ve — frames pintados —
 // no instantáneas de layout entre tareas.
 async function settleFrames(page) {
-  await page.evaluate(() => new Promise(resolve => {
-    setTimeout(resolve, 400);
-    requestAnimationFrame(() => requestAnimationFrame(resolve));
-  })).catch(() => {});
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))).catch(() => {});
 }
 
 async function inspectBase(page, width) {
