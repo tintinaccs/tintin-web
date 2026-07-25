@@ -1707,6 +1707,13 @@ function initWaFloatVisibility() {
   // del viewport (tabla de contenidos de términos/privacidad, última fila de
   // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
   // reservar espacio para cada caso, se detecta el solape real y se oculta.
+  // Histéresis: ocultar es inmediato (el botón está tapando algo AHORA),
+  // pero volver a mostrarlo espera a que el estado "sin colisión" persista —
+  // un re-render de la grilla desmonta y remonta nodos en milisegundos, y sin
+  // esta espera el botón parpadea (y queda visible sobre contenido durante
+  // esos instantes intermedios).
+  const UNHIDE_AFTER_MS = 350;
+  let clearSince = 0;
   const check = () => {
     ticking = false;
     const r = wa.getBoundingClientRect();
@@ -1719,33 +1726,54 @@ function initWaFloatVisibility() {
       if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
       return overlapsRect(r, nr);
     });
-    wa.classList.toggle('tt-wa-float-hidden', collided);
-    if (collided) wa.setAttribute('tabindex', '-1'); else wa.removeAttribute('tabindex');
+    const hidden = wa.classList.contains('tt-wa-float-hidden');
+    if (collided) {
+      clearSince = 0;
+      if (!hidden) {
+        wa.classList.add('tt-wa-float-hidden');
+        wa.setAttribute('tabindex', '-1');
+      }
+      return;
+    }
+    if (!hidden) return;
+    if (!clearSince) { clearSince = Date.now(); return; }
+    if (Date.now() - clearSince >= UNHIDE_AFTER_MS) {
+      clearSince = 0;
+      wa.classList.remove('tt-wa-float-hidden');
+      wa.removeAttribute('tabindex');
+    }
   };
+  // Scroll y resize disparan en ráfaga — ahí sí conviene coalescer con rAF.
   const requestCheck = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
   window.addEventListener('scroll', requestCheck, { passive: true });
   window.addEventListener('resize', requestCheck);
   // La tabla de contenidos de términos/privacidad y la grilla de productos
-  // se insertan después de este init (legal-maintenance.js, Firestore) —
-  // sin observar el DOM, el primer chequeo corre contra una página incompleta.
+  // se insertan después de este init (legal-maintenance.js, Firestore). El
+  // chequeo corre SINCRÓNICO dentro del propio callback del observer (que es
+  // un microtask pegado a la mutación): así el botón ya está oculto antes de
+  // que cualquier otra tarea pueda ver el estado intermedio con el solape.
   if (typeof MutationObserver === 'function') {
-    new MutationObserver(requestCheck).observe(document.body, { childList: true, subtree: true });
+    new MutationObserver(() => check()).observe(document.body, { childList: true, subtree: true });
   }
-  // Las imágenes de las tarjetas cambian de alto recién al terminar de
-  // decodificar, sin disparar ninguna mutación adicional del DOM.
-  document.addEventListener('load', requestCheck, true);
-  document.fonts?.ready?.then(requestCheck).catch(() => {});
-  // Señal explícita de que ya llegaron datos reales de Firestore (grilla de
-  // productos), en vez de confiar solo en que el MutationObserver la note.
-  window.addEventListener('tintin:products-loaded', requestCheck);
-  window.addEventListener('tintin:products-error', requestCheck);
-  requestCheck();
-  // Red de seguridad: alguna tarjeta puede reacomodarse en un reflow que no
-  // dispara ninguno de los eventos de arriba (p. ej. al terminar de decodificar
-  // una imagen ya insertada en el DOM).
-  setTimeout(requestCheck, 300);
-  setTimeout(requestCheck, 1200);
-  setTimeout(requestCheck, 2500);
+  // Los shifts de layout que NO tocan el DOM (una imagen que termina de
+  // decodificar, una fuente que llega, content-visibility que materializa una
+  // tarjeta) no disparan el MutationObserver. ResizeObserver corre dentro del
+  // frame de render, después del layout y antes del paint — es el gancho más
+  // temprano posible para esos casos.
+  if (typeof ResizeObserver === 'function') {
+    const ro = new ResizeObserver(() => check());
+    ro.observe(document.documentElement);
+    ro.observe(document.body);
+    document.querySelectorAll('main,.section,.tt-products-grid,#products-grid,#cat-grid,#colls-products-grid').forEach(node => ro.observe(node));
+  }
+  document.addEventListener('load', () => check(), true);
+  document.fonts?.ready?.then(() => check()).catch(() => {});
+  window.addEventListener('tintin:products-loaded', () => check());
+  window.addEventListener('tintin:products-error', () => check());
+  check();
+  // Respaldo periódico de baja frecuencia para cualquier reacomodo que no
+  // pase por ninguno de los ganchos de arriba. El chequeo cuesta ~1-2ms.
+  setInterval(() => check(), 400);
 }
 
 /* ──────────────────────────────────────

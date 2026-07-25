@@ -85,6 +85,19 @@ async function prepare(page, width) {
     return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && rect.width > 0 && rect.height > 0;
   }, expected, { timeout:4_000 }).catch(() => {});
   await page.waitForTimeout(180);
+  await settleFrames(page);
+}
+
+// Deja pasar dos frames de render antes de medir. Un evaluate puede forzar
+// layout a mitad de tarea y observar un estado intermedio que jamás se pinta
+// (los ResizeObserver/MutationObserver de la página todavía no corrieron).
+// Lo que valida esta auditoría es lo que una persona ve — frames pintados —
+// no instantáneas de layout entre tareas.
+async function settleFrames(page) {
+  await page.evaluate(() => new Promise(resolve => {
+    setTimeout(resolve, 400);
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  })).catch(() => {});
 }
 
 async function inspectBase(page, width) {
@@ -146,10 +159,7 @@ async function inspectBase(page, width) {
           !node.closest('.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header') &&
           overlaps(wa,rect(node),2)
         );
-        if (collided) {
-          const dbg = `class=${JSON.stringify(whatsapp.className)} href=${collided.getAttribute('href')} text=${JSON.stringify((collided.textContent||'').trim().slice(0,30))} waR=${JSON.stringify(wa)} colR=${JSON.stringify(rect(collided))}`;
-          issues.push(`WhatsApp pisa ${collided.id ? '#' + collided.id : collided.className || collided.tagName} [${dbg}]`);
-        }
+        if (collided) issues.push(`WhatsApp pisa ${collided.id ? '#' + collided.id : collided.className || collided.tagName}`);
       }
     } else {
       if (visible(tabbar)) issues.push('tabbar visible en desktop/tablet');
@@ -184,6 +194,7 @@ async function inspectBase(page, width) {
 async function inspectMobileBottom(page) {
   await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
   await page.waitForTimeout(140);
+  await settleFrames(page);
   return page.evaluate(() => {
     const issues = [];
     const tabbar = document.getElementById('tt-tabbar');
