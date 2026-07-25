@@ -273,6 +273,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     const settings = settingsSnap.data() || {};
     const selectedCity = text(document.getElementById('ck-city')?.value);
+    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
+    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
     const shipping = resolveShipping(settings, selectedCity, mapLocation());
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
@@ -299,6 +301,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       contactEmail: text(document.getElementById('ck-email')?.value).toLowerCase(),
       notes: text(document.getElementById('ck-notes')?.value).slice(0, 1000),
       selectedCity,
+      departamento: selectedDepartamento,
       address,
       referencia: text(document.getElementById('ck-referencia')?.value),
       mapLocation: shipping.mapLocation,
@@ -531,6 +534,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         shipping: {
           method: shipping.method,
           city: shipping.city,
+          departamento: draft.departamento || '',
           rateIndex: shipping.rateIndex,
           address: draft.address,
           referencia: draft.referencia,

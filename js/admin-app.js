@@ -25,6 +25,7 @@ import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cl
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 import { initSiteDiagnostics } from "./admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
+import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "./paraguay-locations.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
@@ -4269,6 +4270,18 @@ let shipEditing = { delivery: null, encomienda: null }; // índice en edición, 
 // Ciudades identificadas por nombre (no por índice, que cambia al borrar/reordenar).
 let _selectedShipCities = { delivery: new Set(), encomienda: new Set() };
 
+function departamentoOptionsHtml(selected) {
+  const options = ['<option value="">— Sin departamento —</option>'];
+  PARAGUAY_LOCATIONS.forEach(({ departamento }) => {
+    options.push(`<option value="${escapeHtmlAdmin(departamento)}" ${departamento === selected ? 'selected' : ''}>${escapeHtmlAdmin(departamento)}</option>`);
+  });
+  return options.join('');
+}
+['delivery', 'encomienda'].forEach(type => {
+  const sel = document.getElementById(`ship-${type}-departamento`);
+  if (sel) sel.innerHTML = departamentoOptionsHtml('');
+});
+
 function renderShipList(type) {
   const container = document.getElementById(`ship-${type}-list`);
   const list = shipCities[type];
@@ -4282,7 +4295,7 @@ function renderShipList(type) {
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
       <input type="checkbox" class="ship-${type}-check" data-name="${escapeHtmlAdmin(c.name)}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
-      <span style="font-weight:600;flex:1">${escapeHtmlAdmin(c.name)}</span>
+      <span style="font-weight:600;flex:1">${escapeHtmlAdmin(c.name)}${c.departamento ? ` <span style="font-weight:400;color:var(--adm-muted);font-size:11px">· ${escapeHtmlAdmin(c.departamento)}</span>` : ''}</span>
       <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
       <button type="button" class="adm-btn" data-ship-del="${type}:${i}" style="padding:4px 10px;font-size:11px;color:#c0392b">Eliminar</button>
@@ -4343,6 +4356,7 @@ async function saveShipCities() {
 
 function resetShipForm(type) {
   document.getElementById(`ship-${type}-name`).value = '';
+  document.getElementById(`ship-${type}-departamento`).value = '';
   document.getElementById(`ship-${type}-price`).value = '';
   document.getElementById(`ship-${type}-add`).textContent = 'Agregar';
   document.getElementById(`ship-${type}-cancel`).style.display = 'none';
@@ -4352,9 +4366,11 @@ function resetShipForm(type) {
 ['delivery', 'encomienda'].forEach(type => {
   document.getElementById(`ship-${type}-add`).onclick = async () => {
     const nameInput  = document.getElementById(`ship-${type}-name`);
+    const departamentoInput = document.getElementById(`ship-${type}-departamento`);
     const priceInput = document.getElementById(`ship-${type}-price`);
     const name = nameInput.value.trim();
     if (!name) { toast('Ingresá el nombre de la ciudad'); return; }
+    const departamento = departamentoInput.value || '';
     const priceRaw = priceInput.value.trim();
     const price = priceRaw === '' ? null : (parseInt(priceRaw) || 0);
     const idx = shipEditing[type];
@@ -4362,8 +4378,8 @@ function resetShipForm(type) {
     if (dupIdx !== -1) { toast('Esa ciudad ya está cargada'); return; }
 
     const prevList = shipCities[type].slice();
-    if (idx != null) shipCities[type][idx] = { name, price };
-    else shipCities[type].push({ name, price });
+    if (idx != null) shipCities[type][idx] = { name, departamento, price };
+    else shipCities[type].push({ name, departamento, price });
 
     try {
       await saveShipCities();
@@ -4385,6 +4401,7 @@ function resetShipForm(type) {
       const idx = parseInt(editBtn.dataset.shipEdit.split(':')[1]);
       const city = shipCities[type][idx];
       document.getElementById(`ship-${type}-name`).value  = city.name;
+      document.getElementById(`ship-${type}-departamento`).value = city.departamento || '';
       document.getElementById(`ship-${type}-price`).value = city.price ?? '';
       document.getElementById(`ship-${type}-add`).textContent = 'Guardar cambios';
       document.getElementById(`ship-${type}-cancel`).style.display = 'inline-block';
@@ -4433,6 +4450,51 @@ document.querySelectorAll('.ship-tab-btn').forEach(btn => {
     document.querySelectorAll('.ship-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.querySelectorAll('.ship-tab-panel').forEach(p => p.classList.toggle('active', p.id === `ship-panel-${type}`));
   };
+});
+
+// Carga masiva: los 18 departamentos y todas las ciudades de Paraguay de una
+// sola vez, igual que si se tipeara cada una a mano — mismo shipCities[type],
+// mismo saveShipCities(). Las ciudades de la lista de cobertura de FitoXpress
+// van a Delivery con su tarifa exacta; el resto de TODAS las ciudades del
+// país va a Encomienda (precio "Consultar", como cualquier ciudad manual sin
+// costo cargado). Nunca pisa una ciudad que ya exista (por nombre, sin
+// importar mayúsculas) en ninguna de las dos listas.
+document.getElementById('ship-import-paraguay')?.addEventListener('click', async () => {
+  const existing = new Set([...shipCities.delivery, ...shipCities.encomienda].map(c => c.name.toLowerCase()));
+  const deliveryByName = new Map(FITOXPRESS_DELIVERY_CITIES.map(c => [c.name.toLowerCase(), c.price]));
+
+  const newDelivery = [];
+  const newEncomienda = [];
+  PARAGUAY_LOCATIONS.forEach(({ departamento, ciudades }) => {
+    ciudades.forEach(name => {
+      if (existing.has(name.toLowerCase())) return;
+      if (deliveryByName.has(name.toLowerCase())) {
+        newDelivery.push({ name, departamento, price: deliveryByName.get(name.toLowerCase()) });
+      } else {
+        newEncomienda.push({ name, departamento, price: null });
+      }
+    });
+  });
+
+  if (!newDelivery.length && !newEncomienda.length) { toast('Ya están todas cargadas — no hay ciudades nuevas para agregar.'); return; }
+  const msg = `Se van a agregar ${newDelivery.length} ciudad(es) a Delivery y ${newEncomienda.length} a Encomienda (los 18 departamentos de Paraguay). Las ciudades que ya tenés cargadas no se tocan. ¿Continuar?`;
+  if (!confirm(msg)) return;
+
+  const prevDelivery = shipCities.delivery.slice();
+  const prevEncomienda = shipCities.encomienda.slice();
+  shipCities.delivery = [...shipCities.delivery, ...newDelivery];
+  shipCities.encomienda = [...shipCities.encomienda, ...newEncomienda];
+  try {
+    await saveShipCities();
+    renderShipList('delivery');
+    renderShipList('encomienda');
+    logAudit('editar_envio', 'envio', '', '', `Carga masiva de ciudades de Paraguay: ${newDelivery.length} delivery, ${newEncomienda.length} encomienda`, { bulk: true, delivery: newDelivery.length, encomienda: newEncomienda.length });
+    toast(`Listo — ${newDelivery.length + newEncomienda.length} ciudad(es) agregada(s)`);
+  } catch (e) {
+    shipCities.delivery = prevDelivery;
+    shipCities.encomienda = prevEncomienda;
+    toast('Error al cargar las ciudades: ' + e.message);
+  }
 });
 
 /* =============================================

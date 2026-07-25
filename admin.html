@@ -1412,6 +1412,14 @@
               <input type="number" class="adm-input" id="cfg-encomienda-cost" placeholder="25000" min="0" />
             </div>
           </div>
+          <div style="background:#f5f8ff;border:1px solid #d8e2f5;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px;font-size:12px;color:#3a5a8c;line-height:1.6">
+              Carga en un solo clic los 18 departamentos y todas las ciudades de Paraguay: las de la
+              lista de cobertura de FitoXpress quedan en Delivery con su tarifa exacta, y el resto de
+              todas las ciudades del país queda en Encomienda. No pisa ciudades que ya hayas cargado a mano.
+            </div>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" id="ship-import-paraguay" type="button" style="white-space:nowrap">🇵🇾 Cargar ciudades de Paraguay</button>
+          </div>
           <div class="ship-tabs">
             <button type="button" class="ship-tab-btn active" data-ship-tab="delivery">🚚 Delivery a domicilio</button>
             <button type="button" class="ship-tab-btn" data-ship-tab="encomienda">📦 Encomienda</button>
@@ -1422,6 +1430,10 @@
               <div style="flex:1;min-width:180px">
                 <label class="adm-label" style="display:block;margin-bottom:6px">Ciudad</label>
                 <input type="text" class="adm-input adm-pill-input" id="ship-delivery-name" placeholder="Nombre de la ciudad" />
+              </div>
+              <div style="width:200px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Departamento</label>
+                <select class="adm-input adm-pill-input" id="ship-delivery-departamento"></select>
               </div>
               <div style="width:180px">
                 <label class="adm-label" style="display:block;margin-bottom:6px">Costo del envío</label>
@@ -1443,6 +1455,10 @@
               <div style="flex:1;min-width:180px">
                 <label class="adm-label" style="display:block;margin-bottom:6px">Ciudad</label>
                 <input type="text" class="adm-input adm-pill-input" id="ship-encomienda-name" placeholder="Nombre de la ciudad" />
+              </div>
+              <div style="width:200px">
+                <label class="adm-label" style="display:block;margin-bottom:6px">Departamento</label>
+                <select class="adm-input adm-pill-input" id="ship-encomienda-departamento"></select>
               </div>
               <div style="width:180px">
                 <label class="adm-label" style="display:block;margin-bottom:6px">Costo del envío</label>

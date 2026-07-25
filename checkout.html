@@ -104,17 +104,21 @@
     </div>
     <div class="ck-panel-body">
       <div class="ck-field">
+        <label class="ck-label">Departamento *</label>
+        <select class="ck-select" id="ck-departamento">
+          <option value="">— Elegí tu departamento —</option>
+          <!-- filled by JS: solo departamentos con ciudades cargadas + Retiro en tienda -->
+        </select>
+      </div>
+      <div class="ck-field" id="ck-city-field" style="margin-top:16px">
         <label class="ck-label">Ciudad *</label>
-        <select class="ck-select" id="ck-city">
-          <option value="">— Seleccioná tu ciudad —</option>
-          <optgroup label="🏙️ Zona Central (Delivery a domicilio)" id="ck-city-delivery-group">
+        <select class="ck-select" id="ck-city" disabled>
+          <option value="">— Primero elegí tu departamento —</option>
+          <optgroup label="🚚 Delivery a domicilio" id="ck-city-delivery-group">
             <!-- filled by JS -->
           </optgroup>
-          <optgroup label="🌎 Interior del país (Encomienda)" id="ck-city-encomienda-group">
+          <optgroup label="📦 Encomienda" id="ck-city-encomienda-group">
             <!-- filled by JS -->
-          </optgroup>
-          <optgroup label="🏪 Retiro en tienda">
-            <option value="__retiro__">San Lorenzo (retiro en tienda)</option>
           </optgroup>
         </select>
       </div>
@@ -364,9 +368,9 @@ let DEFAULT_ENCOMIENDA_COST = 25000;
 // checkout y el panel de administración de ciudades queden consistentes.
 function normalizeCities(arr, defaultCost) {
   return (arr || []).map(c => {
-    if (typeof c === 'string') return { name: c, price: defaultCost };
+    if (typeof c === 'string') return { name: c, price: defaultCost, departamento: '' };
     const price = c.price === null ? null : (c.price ?? defaultCost);
-    return { name: c.name, price };
+    return { name: c.name, price, departamento: c.departamento || '' };
   });
 }
 
@@ -478,6 +482,7 @@ let authReady = false; // true recién cuando el primer onAuthStateChanged ya di
 const CHECKOUT_RESUME_KEY = 'tt_checkout_resume_step';
 let orderData = {
   city: '',
+  departamento: '',
   address: '',
   referencia: '',
   shippingMethod: '',
@@ -495,36 +500,116 @@ function cityCostLabel(price) {
   return price == null ? 'Consultar precio con un vendedor' : formatPrice(price);
 }
 
-// ---- POPULATE CITY SELECT ----
-// Se puede llamar más de una vez (settings/general se escucha en tiempo real),
-// así que primero limpia los optgroups y, si la ciudad ya elegida sigue
-// existiendo, la mantiene seleccionada.
-function populateCities() {
-  const currentVal = document.getElementById('ck-city').value;
-  const deliveryGroup = document.getElementById('ck-city-delivery-group');
-  const encomiendaGroup = document.getElementById('ck-city-encomienda-group');
-  deliveryGroup.innerHTML = '';
-  encomiendaGroup.innerHTML = '';
-  DELIVERY_CITIES.forEach(city => {
-    const opt = document.createElement('option');
-    opt.value = city.name;
-    opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
-    deliveryGroup.appendChild(opt);
-  });
-  ENCOMIENDA_CITIES.forEach(city => {
-    const opt = document.createElement('option');
-    opt.value = city.name;
-    opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
-    encomiendaGroup.appendChild(opt);
-  });
-  // Config changed live while a city was already selected — keep the
-  // selection if it still exists and refresh its price/label.
-  if (currentVal) {
-    const select = document.getElementById('ck-city');
-    select.value = currentVal;
-    if (select.value === currentVal) select.onchange();
-  }
+// ---- DEPARTAMENTO → CIUDAD EN CASCADA ----
+// El departamento de cada ciudad es un dato más de settings/general
+// (deliveryCities/encomiendaCities), cargado por Super Admin igual que el
+// nombre y el precio — acá solo se usa para agrupar. Ninguna ciudad ni
+// departamento se inventa: si Super Admin no cargó el departamento de una
+// ciudad vieja, esa ciudad queda en el grupo "Sin departamento" en vez de
+// desaparecer.
+const RETIRO_VALUE = '__retiro__';
+const SIN_DEPARTAMENTO = 'Sin departamento';
+
+function departamentosDisponibles() {
+  const set = new Set();
+  [...DELIVERY_CITIES, ...ENCOMIENDA_CITIES].forEach(c => set.add(c.departamento || SIN_DEPARTAMENTO));
+  return [...set].sort((a, b) => a.localeCompare(b, 'es'));
 }
+
+// Se puede llamar más de una vez (settings/general se escucha en tiempo real):
+// reconstruye el select de Departamento y, si ya había uno elegido, mantiene
+// la selección y vuelve a filtrar Ciudad con los datos frescos.
+function populateCities() {
+  const deptSelect = document.getElementById('ck-departamento');
+  const currentDept = deptSelect.value;
+  const currentCity = document.getElementById('ck-city').value;
+
+  deptSelect.querySelectorAll('option[data-dynamic]').forEach(o => o.remove());
+  departamentosDisponibles().forEach(dep => {
+    const opt = document.createElement('option');
+    opt.value = dep;
+    opt.textContent = dep;
+    opt.dataset.dynamic = '1';
+    deptSelect.appendChild(opt);
+  });
+  const retiroOpt = document.createElement('option');
+  retiroOpt.value = RETIRO_VALUE;
+  retiroOpt.textContent = '🏪 Retiro en tienda — San Lorenzo';
+  retiroOpt.dataset.dynamic = '1';
+  deptSelect.appendChild(retiroOpt);
+
+  if (currentDept) {
+    deptSelect.value = currentDept;
+    if (deptSelect.value === currentDept) {
+      populateCitiesForDepartamento(currentDept, currentCity);
+      return;
+    }
+  }
+  // El departamento elegido ya no existe (se borró la única ciudad que tenía
+  // cargada) — se resetea todo el paso en vez de dejarlo en un estado inválido.
+  deptSelect.value = '';
+  resetCitySelect();
+}
+
+function resetCitySelect() {
+  const select = document.getElementById('ck-city');
+  select.innerHTML = '<option value="">— Primero elegí tu departamento —</option>';
+  select.disabled = true;
+  select.value = '';
+  select.onchange();
+}
+
+function populateCitiesForDepartamento(dep, keepCityIfPresent) {
+  const select = document.getElementById('ck-city');
+  if (dep === RETIRO_VALUE) {
+    select.innerHTML = `<option value="${RETIRO_VALUE}" selected>San Lorenzo (retiro en tienda)</option>`;
+    select.disabled = true;
+    select.onchange();
+    return;
+  }
+  const inDept = c => (c.departamento || SIN_DEPARTAMENTO) === dep;
+  const delivery = DELIVERY_CITIES.filter(inDept);
+  const encomienda = ENCOMIENDA_CITIES.filter(inDept);
+
+  select.disabled = false;
+  select.innerHTML = '<option value="">— Seleccioná tu ciudad —</option>';
+  if (delivery.length) {
+    const group = document.createElement('optgroup');
+    group.label = '🚚 Delivery a domicilio';
+    group.id = 'ck-city-delivery-group';
+    delivery.forEach(city => {
+      const opt = document.createElement('option');
+      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+  if (encomienda.length) {
+    const group = document.createElement('optgroup');
+    group.label = '📦 Encomienda';
+    group.id = 'ck-city-encomienda-group';
+    encomienda.forEach(city => {
+      const opt = document.createElement('option');
+      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+
+  if (keepCityIfPresent) {
+    select.value = keepCityIfPresent;
+    if (select.value !== keepCityIfPresent) select.value = ''; // ya no existe con este filtro
+  }
+  select.onchange();
+}
+
+document.getElementById('ck-departamento').onchange = function() {
+  const dep = this.value;
+  if (!dep) { resetCitySelect(); return; }
+  populateCitiesForDepartamento(dep, null);
+};
 
 // ---- FIND CITY PRICE (null = ciudad sin precio cargado → "consultar") ----
 function getCityPrice(cityName) {
@@ -991,6 +1076,8 @@ document.getElementById('ck-city').onchange = function() {
 
 document.getElementById('btn-step2-next').onclick = () => {
   hideErrors();
+  const departamento = document.getElementById('ck-departamento').value;
+  if (!departamento) { showError(1, 'Elegí tu departamento.'); return; }
   const city = document.getElementById('ck-city').value;
   if (!city) { showError(1, 'Seleccioná tu ciudad.'); return; }
 
@@ -1024,6 +1111,7 @@ document.getElementById('btn-step2-next').onclick = () => {
   }
 
   orderData.city = city === '__retiro__' ? 'San Lorenzo (retiro)' : city;
+  orderData.departamento = departamento === RETIRO_VALUE ? '' : departamento;
   goToStep(2);
 
   // Pre-fill nombre/email/teléfono desde la cuenta — solo si el campo sigue
@@ -1185,7 +1273,7 @@ async function buildConfirmation() {
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">📍 Ciudad</span>
-        <span class="ck-summary-val">${escapeHtml(orderData.city)}</span>
+        <span class="ck-summary-val">${escapeHtml(orderData.city)}${orderData.departamento ? ` (${escapeHtml(orderData.departamento)})` : ''}</span>
       </div>
       ${orderData.address ? `
       <div class="ck-summary-row">
