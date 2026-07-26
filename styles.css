@@ -202,8 +202,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   padding: 0 24px;
 }
 
-.section { padding: 80px 0; }
-.section-sm { padding: 48px 0; }
+.section { padding: 48px 0; }
+.section-sm { padding: 32px 0; }
 .text-center { text-align: center; }
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -1236,7 +1236,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-trust-bar {
   background: var(--bg);
-  padding: 48px 0;
+  padding: 32px 0;
 }
 
 .tt-trust-grid {
@@ -2504,7 +2504,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-page-hero {
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-  padding: calc(var(--header-h) + 48px) 0 64px;
+  padding: calc(var(--header-h) + 40px) 0 40px;
   text-align: center;
 }
 
@@ -3372,7 +3372,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* Related Products */
 .tt-related-section {
   background: var(--card-bg);
-  padding: 64px 0;
+  padding: 44px 0;
 }
 
 .tt-related-header {
@@ -3629,7 +3629,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   html { overflow-x: hidden; max-width: 100%; }
   body { overflow-x: clip; max-width: 100%; }
   * { box-sizing: border-box; }
-  .section { padding: 56px 0; }
+  .section { padding: 36px 0; }
+  .section-sm { padding: 24px 0; }
+  .tt-trust-bar { padding: 24px 0; }
+  .tt-related-section { padding: 36px 0; }
 
   /* Hide desktop/tablet header on mobile — .tt-tabbar is the only
      persistent navigation in this range. Belt-and-suspenders: also strips
@@ -3725,7 +3728,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
-  .section { padding: 40px 0; }
+  .section { padding: 26px 0; }
+  .section-sm { padding: 18px 0; }
+  .tt-trust-bar { padding: 20px 0; }
+  .tt-related-section { padding: 30px 0; }
+  .tt-page-hero { padding: calc(var(--header-h) + 32px) 0 30px; }
 
   /* Mobile hero pequeño — mismo centrado horizontal y apoyo hacia abajo
      que el bloque de 768px de arriba, sólo ajusta min-height/padding/
