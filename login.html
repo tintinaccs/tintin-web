@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260722-order-delete-2"></script>
-  <script src="js/public-shell.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+  <script src="js/public-shell.js?v=tintin-20260726-login-session-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -100,8 +100,6 @@
 import { auth, db, provider } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -123,16 +121,6 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from 
 // "blocked=1" mientras se está completando el ingreso por enlace.
 const completingEmailLink = isEmailLinkUrl();
 let explicitLoginInProgress = completingEmailLink;
-
-// signInWithRedirect (mobile, ver más abajo) manda a la clienta a Google y
-// vuelve con una navegación de página completa — el resultado no llega por
-// el .then() de signInWithRedirect (esa promesa no resuelve nada útil antes
-// de irse), sino acá, leyendo getRedirectResult() una sola vez al cargar.
-// Se dispara ya mismo (no espera a nada) porque es una lectura local — no
-// hace ningún pedido de red — así que agrega apenas unos milisegundos antes
-// de decidir qué hacer en onAuthStateChanged.
-let googleRedirectHandled = false;
-const googleRedirectResultPromise = getRedirectResult(auth).catch(() => null);
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
 // js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
@@ -194,13 +182,15 @@ async function redirectByRole(role, email, options = {}) {
   }
   markSessionStart(); // arranca acá la ventana de ~30 min de sesión (session-guard.js la controla en el resto del sitio)
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
-  if (role === 'client' || !role) {
-    // Página principal siempre, ya con la cuenta logueada — no perfil.html
-    // (salvo que venga de un lugar puntual como checkout.html vía "from").
-    window.location.href = from || (options.welcomePending ? 'index.html?welcome=1' : 'index.html');
-  } else {
-    window.location.href = "admin.html";
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  // Única regla de destino del login: solo el correo oficial entra
+  // automáticamente al panel. Cualquier otra cuenta vuelve a la tienda,
+  // aunque tenga un rol interno y luego disponga de un acceso manual.
+  if (normalizedEmail === SUPER_ADMIN.toLowerCase()) {
+    window.location.replace('admin.html');
+    return;
   }
+  window.location.replace(from || (options.welcomePending ? 'index.html?welcome=1' : 'index.html'));
 }
 
 // Cuenta bloqueada (Fase E) — tintinaccs@gmail.com nunca puede estarlo.
@@ -274,34 +264,6 @@ onAuthStateChanged(auth, async user => {
   // realidad ya tiene sesión (o recién volvió de Google) eso se ve como un
   // flash del login antes de que la redirija. Solo se llama más abajo, en
   // la rama que de verdad se queda mostrando el formulario.
-  if (!googleRedirectHandled) {
-    googleRedirectHandled = true;
-    const redirectResult = await googleRedirectResultPromise;
-    if (redirectResult?.user) {
-      // Recién volvió de Google (signInWithRedirect) — mismo tratamiento
-      // que el éxito de signInWithPopup: crea/actualiza el perfil,
-      // chequea bloqueo y recién ahí redirige. No usa la rama de abajo
-      // (pensada para "ya tenía sesión de antes") porque esa se salta
-      // guardarUsuario() y no crea el perfil la primera vez.
-      explicitLoginInProgress = true;
-      showOverlay();
-      try {
-        const { role, blocked, welcomePending } = await guardarUsuario(redirectResult.user);
-        if (blocked) {
-          await signOut(auth);
-          hideLoginOverlay();
-          showBlockedModal();
-          return;
-        }
-        redirectByRole(role, redirectResult.user.email, { welcomePending });
-      } catch (e) {
-        explicitLoginInProgress = false;
-        hideLoginOverlay();
-        showError(errMsg(e.code));
-      }
-      return;
-    }
-  }
   if (!user) {
     if (!completingEmailLink) {
       hideLoginOverlay();
@@ -326,7 +288,7 @@ onAuthStateChanged(auth, async user => {
   }
   const role = await getUserRole(user.uid, user.email);
   const welcomePending = await pendingWelcomeFor(user.uid, role);
-  redirectByRole(role, user.email, { welcomePending });
+  await redirectByRole(role, user.email, { welcomePending });
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
@@ -340,33 +302,18 @@ onAuthStateChanged(auth, async user => {
 // (con el código que sea), la reacción de acá sea inmediata — sin ningún
 // timeout ni espera extra de nuestra parte — y que mientras tanto no se vea
 // como si la página se hubiera congelado.
-// El popup de Google es poco confiable en navegadores mobile — Safari en
-// iOS en particular lo bloquea seguido aunque la clienta no tenga ningún
-// bloqueador de ventanas activo, porque su heurística de "gesto real del
-// usuario" no siempre reconoce el click que dispara signInWithPopup ahí.
-// signInWithRedirect no abre ninguna ventana (navega la página entera a
-// Google y vuelve), así que no puede ser bloqueado — el resultado se
-// procesa arriba, en onAuthStateChanged + getRedirectResult().
-function isMobileLikeBrowser() {
-  return window.matchMedia?.('(pointer: coarse)')?.matches === true
-    || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
-}
+// Se usa popup también en mobile. El redirect completo de Firebase no es
+// fiable cuando la tienda vive en GitHub Pages y el helper de Auth vive en
+// firebaseapp.com: Safari y otros navegadores modernos bloquean el
+// almacenamiento entre esos dos dominios y la persona vuelve sin sesión.
+// El popup nace directamente de este click real y conserva la sesión en el
+// mismo origen de Tintin.
 
 let _googleLoginToken = 0;
 const loginConGoogle = async () => {
   hideMessages();
   explicitLoginInProgress = true;
   showOverlay();
-  if (isMobileLikeBrowser()) {
-    try {
-      await signInWithRedirect(auth, provider);
-    } catch (e) {
-      explicitLoginInProgress = false;
-      hideLoginOverlay();
-      showError(errMsg(e.code));
-    }
-    return;
-  }
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
   const slowHintTimer = setTimeout(() => {
     setOverlayText('Esperando que completes el inicio de sesión con Google…');
@@ -382,12 +329,17 @@ const loginConGoogle = async () => {
       showBlockedModal();
       return;
     }
-    redirectByRole(role, cred.user.email, { welcomePending });
+    await redirectByRole(role, cred.user.email, { welcomePending });
   } catch(e) {
     clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return;
     explicitLoginInProgress = false;
     hideLoginOverlay();
+    window.dispatchEvent(new CustomEvent(
+      e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'
+        ? 'tintin:login-cancelled'
+        : 'tintin:login-failed'
+    ));
     showError(errMsg(e.code));
   }
 };
@@ -464,7 +416,7 @@ async function finishEmailLinkLogin(user) {
   }
   const { role, welcomePending: savedWelcomePending } = await ensureUserDocForEmailLogin(user);
   const welcomePending = savedWelcomePending || await pendingWelcomeFor(user.uid, role);
-  redirectByRole(role, user.email, { welcomePending });
+  await redirectByRole(role, user.email, { welcomePending });
 }
 
 // Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos

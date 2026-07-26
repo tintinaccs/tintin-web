@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const css = read('css/loader-solid-background.css');
 const login = read('login.html');
+const authNav = read('js/auth-nav.js');
 
 const checks = [
   ['Login mantiene su contenedor propio', login.includes('class="login-page"')],
@@ -14,7 +15,10 @@ const checks = [
   ['Barra mobile oculta en Login', css.includes('body:has(.login-page) #tt-tabbar')],
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
-  ['Loader de Login sin animación de marca', css.includes('body:has(.login-page) #tt-loader-spin-wrap') && css.includes('animation: none !important')]
+  ['Loader de Login sin animación de marca', css.includes('body:has(.login-page) #tt-loader-spin-wrap') && css.includes('animation: none !important')],
+  ['Google no usa redirect cross-domain', login.includes('signInWithPopup') && !login.includes('signInWithRedirect') && !login.includes('getRedirectResult')],
+  ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
+  ['Auth compartido no compite con el Login', authNav.includes('if(IS_LOGIN_PAGE)return;') && !authNav.includes('redirectAuthenticatedLogin')]
 ];
 
 let failed = 0;
