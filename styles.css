@@ -2930,12 +2930,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* ═══════════════════════════════════════════════
    PRODUCT DETAIL PAGE
 ═══════════════════════════════════════════════ */
-.tt-product-page { background: var(--bg); padding: 48px 0 80px; }
+.tt-product-page { background: var(--bg); padding: 32px 0 44px; }
 
 .tt-product-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 48px;
   align-items: start;
 }
 
@@ -3158,41 +3158,43 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-qty-selector {
   display: flex;
   align-items: center;
-  border: 1.5px solid var(--border);
+  gap: 2px;
   border-radius: var(--radius-pill);
-  overflow: hidden;
-  background: var(--white);
+  background: var(--pink-pale);
+  padding: 3px;
 }
 
 .tt-qty-btn {
-  width: 44px;
-  height: 44px;
-  font-size: 1.2rem;
-  font-weight: 300;
+  width: 38px;
+  height: 38px;
+  font-size: 1.15rem;
+  font-weight: 500;
   color: var(--pink-dark);
-  background: none;
+  background: var(--white);
   border: none;
+  border-radius: 50%;
   cursor: pointer;
-  transition: background var(--transition);
+  transition: transform 0.15s ease, background var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
-.tt-qty-btn:hover { background: var(--pink-pale); }
-.tt-qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.tt-qty-btn:hover { background: var(--white); transform: translateY(-1px); }
+.tt-qty-btn:active { transform: scale(0.94); }
+.tt-qty-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
 .tt-qty-val {
-  min-width: 36px;
+  min-width: 40px;
   text-align: center;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 1rem;
   color: var(--text);
 }
 
-.tt-qty-stock {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
+/* "Solo X disponibles" — la clienta pidió que quede solo el selector de
+   cantidad, sin esta línea aparte debajo. */
+.tt-qty-stock { display: none; }
 
 /* Full-width action buttons */
 .tt-btn-primary-full {
@@ -3326,7 +3328,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .tt-product-wa-link {
@@ -3359,6 +3361,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
+/* Redundante a propósito junto con el gap de .tt-product-trust-badges: si
+   algo neutraliza el gap del contenedor, las dos tarjetas igual no quedan
+   pegadas — nunca deben tocarse. */
+.tt-trust-badge-item:not(:last-child) { margin-bottom: 10px; }
 
 .tt-trust-badge-icon { font-size: 1.1rem; }
 
@@ -3686,7 +3692,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
   .tt-colls-page-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
-  .tt-product-detail-grid { grid-template-columns: 1fr; }
+  .tt-product-detail-grid { grid-template-columns: 1fr; gap: 28px; }
   .tt-product-gallery { width: min(100%, 620px); margin: 0 auto; }
   .tt-product-trust-badges { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -3771,11 +3777,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-colls-page-grid { grid-template-columns: 1fr; }
   .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
-  .tt-product-detail-grid { gap: 32px; }
+  .tt-product-detail-grid { gap: 22px; }
   .tt-product-detail-name { font-size: 1.6rem; }
-  .tt-product-page { padding-top: 28px; }
+  .tt-product-page { padding: 20px 0 30px; }
   .tt-qty-wrap { flex-wrap: wrap; gap: 10px 12px; }
-  .tt-qty-stock { flex: 1 1 100%; }
   .tt-related-header { justify-content: space-between; text-align: left; margin-bottom: 26px; }
   .tt-related-refresh { width: 44px; height: 44px; flex-basis: 44px; }
   .tt-added-toast { width: calc(100vw - 32px); min-width: 0; bottom: 82px; }
@@ -3794,8 +3799,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 @media (max-width: 380px) {
-  .tt-related-grid { grid-template-columns: 1fr; }
-  .tt-related-section { padding: 48px 0; }
+  .tt-related-section { padding: 30px 0; }
   .tt-related-header .tt-section-title { font-size: clamp(1.45rem, 8vw, 2rem); }
   .tt-product-actions-panel .tt-btn { padding-inline: 14px; letter-spacing: 0.06em; }
   .tt-product-share { align-items: stretch; }
@@ -3994,19 +3998,25 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-share-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 12px;
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--border);
   background: var(--white);
   color: var(--text-sec);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 500;
   font-family:Montserrat;
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
   min-height: 44px;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tt-share-btn:hover {
   border-color: var(--pink-dark);
@@ -4023,6 +4033,23 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   background: var(--whatsapp-h);
   border-color: var(--whatsapp-h);
   color: var(--white) !important;
+}
+
+/* Angosto: las 3 acciones (Compartir/WhatsApp/Copiar enlace) con su texto
+   completo no entran en una sola fila en un teléfono típico — en vez de
+   partirse en dos filas con un botón suelto ocupando todo el ancho, se
+   vuelven botones circulares solo-ícono (con aria-label para lectores de
+   pantalla), como el tray de compartir de iOS: compactas, parejas, y
+   siempre en una sola fila sin importar el ancho. */
+@media (max-width: 460px) {
+  .tt-share-btn {
+    flex: 0 0 auto;
+    width: 44px;
+    padding: 0;
+    gap: 0;
+  }
+  .tt-share-btn-label { display: none; }
+  .tt-product-share { justify-content: flex-start; }
 }
 
 /* ══════════════════════════════════════════════════════════════

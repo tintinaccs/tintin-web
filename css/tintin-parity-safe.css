@@ -170,3 +170,39 @@ body:has(.adm-main) .adm-toggle input:checked + .adm-toggle-slider{
     text-align:left;
   }
 }
+
+/* Modal "Iniciá sesión para continuar" del checkout: el fondo completo
+   (#ck-login-required-overlay) es el scrim oscuro translúcido, no un
+   "modal" — pero antes llevaba role="dialog", así que la regla genérica
+   de :is(.tt-modal,.modal,.dialog,[role="dialog"]) de tintin-unified-
+   theme.css le pisaba el scrim con el color de "Modales — fondo" de
+   Apariencia (editable desde Super Admin), dejando un fondo pastel
+   translúcido en vez del scrim oscuro. El role="dialog" ahora vive en
+   la tarjeta (#ck-login-required-card), que sí debe verse siempre
+   blanca — nunca el color de tema, tampoco el scrim. */
+html body #ck-login-required-overlay{
+  background:rgba(30,10,18,.5)!important;
+  background-color:rgba(30,10,18,.5)!important;
+  background-image:none!important;
+}
+html body #ck-login-required-card{
+  background:#FFFFFF!important;
+  background-color:#FFFFFF!important;
+  background-image:none!important;
+  opacity:1!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  mix-blend-mode:normal!important;
+  isolation:isolate!important;
+}
+
+/* Botón "Finalizar compra" del carrito: queda agrupado junto a otros
+   botones "primarios" en la regla de tema de tintin-unified-theme.css
+   (línea ~185), que le pisa el color de texto con la variable editable
+   de Apariencia — si esa variable termina en un rosado oscuro (como el
+   fondo del propio botón), el texto queda casi ilegible. Este botón es
+   una acción crítica de compra: su texto va siempre blanco, sin
+   importar el tema. */
+html body .tt-cart-drawer .tt-cart-checkout-btn{
+  color:#FFFFFF!important;
+}

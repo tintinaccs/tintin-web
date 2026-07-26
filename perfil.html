@@ -186,7 +186,6 @@
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
         <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil">💾 Guardar cambios</button>
-        <button type="button" class="perfil-btn perfil-btn-danger" id="btn-logout">🚪 Cerrar sesión</button>
       </div>
     </div>
   </div>
@@ -248,8 +247,14 @@
         <a href="catalogo.html"  class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
         <a href="checkout.html"  class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
         <a href="index.html"     class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
-        <a href="admin.html"     class="perfil-btn perfil-btn-outline" id="link-admin-perfil" style="display:none">⚙️ Admin</a>
       </div>
+    </div>
+  </div>
+
+  <!-- Cerrar sesión: siempre al final, separada de "Guardar cambios" -->
+  <div class="perfil-card">
+    <div class="perfil-body" style="text-align:center">
+      <button type="button" class="perfil-btn perfil-btn-danger" id="btn-logout" style="width:100%;justify-content:center">🚪 Cerrar sesión</button>
     </div>
   </div>
 </div>
@@ -388,10 +393,6 @@ onAuthStateChanged(auth, async user => {
     badge.style.color      = ROLE_COLORS[role] || '#888';
     badge.style.border     = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
     document.getElementById('link-admin-panel').style.display = 'inline-flex';
-  }
-
-  if (user.email === SUPER_ADMIN || role === 'admin' || role === 'superadmin') {
-    document.getElementById('link-admin-perfil').style.display = 'inline-flex';
   }
 
   // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo)

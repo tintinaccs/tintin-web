@@ -1399,18 +1399,18 @@ function _renderProductDetail(product) {
     const waHref = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
     let html = `<span class="tt-share-label">Compartir</span>`;
     if (navigator.share) {
-      html += `<button type="button" class="tt-share-btn" data-share-action="native">
+      html += `<button type="button" class="tt-share-btn" data-share-action="native" aria-label="Compartir">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Compartir
+        <span class="tt-share-btn-label">Compartir</span>
       </button>`;
     }
-    html += `<a href="${waHref}" target="_blank" rel="noopener" class="tt-share-btn tt-share-btn-wa">
+    html += `<a href="${waHref}" target="_blank" rel="noopener" class="tt-share-btn tt-share-btn-wa" aria-label="WhatsApp">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.543 4.09 1.5 5.828L0 24l6.343-1.475A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.868 0-3.636-.498-5.17-1.37l-.371-.21-3.768.877.895-3.669-.231-.389C2.51 15.583 2 13.84 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      WhatsApp
+      <span class="tt-share-btn-label">WhatsApp</span>
     </a>`;
-    html += `<button type="button" class="tt-share-btn" data-share-action="copy">
+    html += `<button type="button" class="tt-share-btn" data-share-action="copy" aria-label="Copiar enlace">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-      Copiar enlace
+      <span class="tt-share-btn-label">Copiar enlace</span>
     </button>`;
     shareEl.innerHTML = html;
     if (!shareEl.dataset.ttBound) {

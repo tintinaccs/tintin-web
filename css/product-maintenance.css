@@ -171,16 +171,13 @@ body.tt-product-maintenance .tt-added-toast {
   font-size: 16px;
 }
 
+/* El indicador de sincronización en vivo ("Actualizando producto…" /
+   "Producto actualizado") queda oculto a propósito en esta página — el
+   estado sigue actualizándose igual por dentro (lo sigue usando el
+   watchdog de carga), solo no se muestra como texto flotante arriba de
+   la foto. */
 #tt-product-sync-state {
-  width: min(1180px, calc(100% - 40px));
-  min-height: 24px;
-  margin: 0 auto 10px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 7px;
-  color: var(--color-text-secondary, #7B6F72);
-  font: 700 11px/1.35 Montserrat;
+  display: none;
 }
 
 #tt-product-sync-state::before {
@@ -269,12 +266,6 @@ body.tt-product-maintenance .tt-footer-tagline {
 
   body.tt-product-maintenance .tt-related-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  #tt-product-sync-state {
-    width: calc(100% - 24px);
-    justify-content: center;
-    text-align: center;
   }
 }
 
