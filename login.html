@@ -195,7 +195,9 @@ async function redirectByRole(role, email, options = {}) {
   markSessionStart(); // arranca acá la ventana de ~30 min de sesión (session-guard.js la controla en el resto del sitio)
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   if (role === 'client' || !role) {
-    window.location.href = options.welcomePending ? 'index.html?welcome=1' : (from || 'perfil.html');
+    // Página principal siempre, ya con la cuenta logueada — no perfil.html
+    // (salvo que venga de un lugar puntual como checkout.html vía "from").
+    window.location.href = from || (options.welcomePending ? 'index.html?welcome=1' : 'index.html');
   } else {
     window.location.href = "admin.html";
   }

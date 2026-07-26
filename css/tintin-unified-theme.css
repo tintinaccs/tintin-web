@@ -124,7 +124,7 @@ body:has(.adm-main) .adm-btn-danger,body:has(.adm-main) .adm-btn-danger *{color:
 body:has(.adm-main) .adm-btn-outline,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save){background:var(--admin-color-background-surface)!important;border-color:var(--admin-color-brand)!important;color:var(--admin-color-button-outline-text)!important}
 body:has(.adm-main) .adm-btn-outline *,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save) *{color:var(--admin-color-button-outline-text)!important}
 
-.tt-cart-badge,.tt-card-badge,.tt-product-status,.tt-product-badge,.cat-filter-dot,.ck-step-num,.perfil-role-badge,[class*="badge"]:not([class*="adm-"]),[class*="status"]:not([class*="adm-"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important;border-color:var(--tt-accent-mid)!important}
+.tt-cart-badge,.tt-card-badge,.tt-product-status,.tt-product-badge,.cat-filter-dot,.ck-step-num,.perfil-role-badge,[class*="badge"]:not([class*="adm-"]):not([class*="trust-badge"]),[class*="status"]:not([class*="adm-"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important;border-color:var(--tt-accent-mid)!important}
 body:has(.adm-main) .adm-user-role-badge,body:has(.adm-main) .adm-nav-badge,body:has(.adm-main) .adm-section-badge{background:var(--admin-color-badge-background)!important;color:var(--admin-color-badge-text)!important;border-color:var(--admin-color-brand)!important}
 .ck-step.active .ck-step-num,.ck-step.active,.cat-filter-option.active,.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active{background:var(--tt-accent-soft)!important;color:var(--tt-accent)!important;border-color:var(--tt-accent-mid)!important}
 body:has(.adm-main) .adm-nav-item.active,body:has(.adm-main) .adm-mobile-tab.active,body:has(.adm-main) .adm-nav-item:hover,body:has(.adm-main) .adm-mobile-tab:hover{background:var(--admin-color-background-sidebar-active)!important;color:var(--admin-color-text-sidebar-active)!important}
@@ -259,7 +259,7 @@ body:not(:has(.adm-main)) :is(.indicator,.dot,.tt-indicator,.swiper-pagination-b
 
 body:not(:has(.adm-main)) :is(table,th,td){border-color:var(--color-table-border)!important}
 body:not(:has(.adm-main)) th{background:var(--color-table-header-background)!important;color:var(--color-table-header-text)!important}
-body:not(:has(.adm-main)) :is(.badge,[class*="-badge"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important}
+body:not(:has(.adm-main)) :is(.badge,[class*="-badge"]):not([class*="trust-badge"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important}
 body:not(:has(.adm-main)) :is(.chip,[class*="-chip"]){background:var(--color-chip-background)!important;color:var(--color-chip-text)!important}
 
 body:not(:has(.adm-main)) :is(.tt-modal,.modal,.dialog,[role="dialog"]){background:var(--color-modal-background)!important;border-color:var(--color-modal-border)!important}

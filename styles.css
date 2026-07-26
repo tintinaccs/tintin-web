@@ -3350,6 +3350,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  /* El panel que envuelve esto (.tt-product-info-panel) queda blanco puro vía
+     --color-background-surface con !important (product-maintenance.css) —
+     un sistema de variables totalmente aparte del --white de acá abajo (que
+     tintin-unified-theme.css reescribe a un tono rosado de su propio "surface").
+     Sin esto, el hueco entre las dos píldoras de abajo mostraba ese rosado en
+     vez del blanco del panel — se fuerza el mismo blanco literal para que no
+     se note la costura. */
+  background: #fff;
 }
 
 .tt-trust-badge-item {
@@ -3357,7 +3365,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: var(--card-bg);
+  background: #fff !important;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
