@@ -4,11 +4,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import {
-  initializeAuth, getAuth, GoogleAuthProvider,
-  browserLocalPersistence, browserSessionPersistence, inMemoryPersistence,
-  browserPopupRedirectResolver
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 const firebaseConfig = {
@@ -50,28 +46,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
 // no depende de IndexedDB para nada, así que no tiene ese riesgo.
 const db = getFirestore(app);
 
-// Mismo problema que el de Firestore de arriba, pero del lado de Auth: por
-// default Firebase intenta primero indexedDBLocalPersistence, y en
-// navegación privada (Safari/iOS en particular) IndexedDB puede quedar
-// medio abierta — no tira error, pero las escrituras que necesita el login
-// (la operación pendiente de signInWithRedirect, la sesión ya iniciada)
-// se pierden en silencio. Eso es lo que hace que, tras volver de elegir la
-// cuenta de Google (o de abrir el enlace de acceso por correo) en
-// navegación privada, la página vuelva a mostrar el formulario de login
-// como si nada hubiera pasado, sin ningún error visible. Se salta
-// indexedDBLocalPersistence del todo y se cae a localStorage o
-// sessionStorage (mismo origen, no depende de IndexedDB) — o memoria si
-// ninguno de los dos está disponible.
-let auth;
-try {
-  auth = initializeAuth(app, {
-    persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence],
-    popupRedirectResolver: browserPopupRedirectResolver
-  });
-} catch {
-  // Ya se había inicializado (ej. otro script cargó este mismo módulo antes)
-  auth = getAuth(app);
-}
+const auth = getAuth(app);
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
