@@ -576,7 +576,6 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   if (delivery.length) {
     const group = document.createElement('optgroup');
     group.label = '🚚 Delivery a domicilio';
-    group.id = 'ck-city-delivery-group';
     delivery.forEach(city => {
       const opt = document.createElement('option');
       opt.value = city.name;
@@ -588,7 +587,6 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   if (encomienda.length) {
     const group = document.createElement('optgroup');
     group.label = '📦 Encomienda';
-    group.id = 'ck-city-encomienda-group';
     encomienda.forEach(city => {
       const opt = document.createElement('option');
       opt.value = city.name;
