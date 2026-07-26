@@ -292,6 +292,11 @@ check(
   'Falta el breakpoint mobile de la base del panel.'
 );
 check(
+  'En mobile la navegación usa la barra inferior y libera el ancho del contenido',
+  /@media \(max-width: 540px\)[\s\S]*?\.adm-sidebar\s*\{\s*display:\s*none;[\s\S]*?\.adm-main\s*\{[\s\S]*?margin-left:\s*0;[\s\S]*?\.adm-mobile-tabs\s*\{[\s\S]*?display:\s*flex\s*!important;/.test(adminCss),
+  'La sidebar compacta no debe quitarle espacio al contenido en pantallas móviles.'
+);
+check(
   'El overlay de sidebar y la tabbar móvil tienen estilos definidos',
   /\.adm-overlay\s*\{/.test(adminCss) && /\.adm-mobile-tabs\s*\{/.test(adminCss),
   'Los elementos estructurales de navegación deben conservar sus estilos base.'

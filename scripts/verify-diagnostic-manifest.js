@@ -9,6 +9,13 @@ function sha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
 
+function canonicalTextBuffer(filePath) {
+  return Buffer.from(
+    fs.readFileSync(filePath, 'utf8').replace(/\r\n?/g, '\n'),
+    'utf8'
+  );
+}
+
 function fail(message) {
   console.error(`FAIL — ${message}`);
   process.exitCode = 1;
@@ -39,7 +46,7 @@ for (const page of manifest.pages) {
     continue;
   }
 
-  const buffer = fs.readFileSync(filePath);
+  const buffer = canonicalTextBuffer(filePath);
   const actualBytes = buffer.byteLength;
   const actualHash = sha256(buffer);
 

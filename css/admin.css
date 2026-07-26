@@ -1506,21 +1506,22 @@
 
     /* ── MOBILE: bottom tab bar, sidebar oculta ── */
     @media (max-width: 540px) {
-      :root { --sidebar-w: 78px; }
+      :root { --sidebar-w: 0px; }
 
       .adm-sidebar {
-        display: flex;
-        width: var(--sidebar-w);
+        display: none;
       }
 
       .adm-main {
-        margin-left: var(--sidebar-w);
+        margin-left: 0;
         min-width: 0;
-        padding-bottom: 0;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
       }
 
       .adm-mobile-tabs {
-        display: none !important;
+        display: flex !important;
+        height: calc(64px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
 
       .adm-content {
@@ -1555,6 +1556,13 @@
       .adm-nav-item {
         padding-inline: 5px;
         font-size: 7.5px;
+      }
+      .adm-card-head,
+      .adm-card-body {
+        padding: 14px;
+      }
+      #section-configuracion [style*="min-width:220px"] {
+        min-width: 0 !important;
       }
       .adm-stats { grid-template-columns: 1fr 1fr; }
     }
