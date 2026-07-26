@@ -184,9 +184,6 @@
         <label class="perfil-label">Dirección de entrega (opcional)</label>
         <input type="text" class="perfil-input" id="perfil-dir" placeholder="Ej: Av. España 1234, Asunción" />
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
-        <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil">💾 Guardar cambios</button>
-      </div>
     </div>
   </div>
 
@@ -251,9 +248,11 @@
     </div>
   </div>
 
-  <!-- Cerrar sesión: siempre al final, separada de "Guardar cambios" -->
+  <!-- Acciones de cuenta: siempre al final de la página, no mezcladas
+       con los campos de "Mis datos" de arriba. -->
   <div class="perfil-card">
-    <div class="perfil-body" style="text-align:center">
+    <div class="perfil-body" style="display:flex;flex-direction:column;gap:12px">
+      <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil" style="width:100%;justify-content:center">💾 Guardar cambios</button>
       <button type="button" class="perfil-btn perfil-btn-danger" id="btn-logout" style="width:100%;justify-content:center">🚪 Cerrar sesión</button>
     </div>
   </div>
