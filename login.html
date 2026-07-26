@@ -114,6 +114,7 @@ import {
   ensureUserDocForEmailLogin, checkBlockedEmailLogin, emailLinkErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
+import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
@@ -191,6 +192,7 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
+  markSessionStart(); // arranca acá la ventana de ~30 min de sesión (session-guard.js la controla en el resto del sitio)
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   if (role === 'client' || !role) {
     window.location.href = options.welcomePending ? 'index.html?welcome=1' : (from || 'perfil.html');
@@ -265,7 +267,11 @@ async function pendingWelcomeFor(uid, role) {
 // Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
 // un estado "correo sin verificar" — Google ya lo entrega verificado.
 onAuthStateChanged(auth, async user => {
-  window.ttPageReady && window.ttPageReady(); // ya sabemos si hay sesión o no — la página está lista
+  // OJO: ttPageReady() ya no se llama acá arriba a propósito — revela el
+  // formulario "Continuar con Google" de abajo, y si esta persona en
+  // realidad ya tiene sesión (o recién volvió de Google) eso se ve como un
+  // flash del login antes de que la redirija. Solo se llama más abajo, en
+  // la rama que de verdad se queda mostrando el formulario.
   if (!googleRedirectHandled) {
     googleRedirectHandled = true;
     const redirectResult = await googleRedirectResultPromise;
@@ -297,10 +303,14 @@ onAuthStateChanged(auth, async user => {
   if (!user) {
     if (!completingEmailLink) {
       hideLoginOverlay();
+      window.ttPageReady && window.ttPageReady(); // recién acá se sabe que se queda mostrando el formulario
       // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
       // detectar una cuenta bloqueada (Fase E).
-      if (new URLSearchParams(window.location.search).get('blocked') === '1') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('blocked') === '1') {
         showBlockedModal();
+      } else if (params.get('expired') === '1') {
+        showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar.');
       }
     }
     return;
