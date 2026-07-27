@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-27T16:23:54.919Z",
-  "sourceFingerprint": "0500446606d05735d8f582bc0eddef366511e1932c878bc5925e5247ab480328",
+  "generatedAt": "2026-07-27T17:58:29.885Z",
+  "sourceFingerprint": "8488936760683a9d15e50e4847e024742d3e9d151d6a3bae040480941ef48da5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 381,
     "textFiles": 347,
-    "totalBytes": 5419688,
+    "totalBytes": 5425249,
     "pages": 18,
     "modules": 210
   },
@@ -18219,8 +18219,8 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 4208,
-      "sha256": "ece8f16d43e9ca2eb9a2b4d60536c41d0497affd9cafec18173c060607319628",
+      "bytes": 4583,
+      "sha256": "48700940f37ac3396f7f22a47da9b12192b66e8c7d0c24e95be1429d1944a465",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18230,7 +18230,7 @@
           "raw": "./secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/secure-checkout-order.js",
           "dynamic": true,
-          "line": 94
+          "line": 99
         }
       ],
       "endpoints": []
@@ -18625,8 +18625,8 @@
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
-      "bytes": 17513,
-      "sha256": "1d9fa289007ad71f11c74b6dca51efa63b0b1d612a329dae0b1bfe06589c7f39",
+      "bytes": 19373,
+      "sha256": "bd24f76f784ed22fc228fd7b17ace49215d899e086cfee7bf659a9c8bb502952",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19520,8 +19520,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 46627,
-      "sha256": "9ff0c738764d2e50a6d1378980823db3cd65b5c50af056b1bb7876fadf0e1af4"
+      "bytes": 49953,
+      "sha256": "c6e00445e6f3a76c765ea4029aab16d9962fbb124ca273b9ad255d94f5c4e2fd"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -20870,8 +20870,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 4208,
-      "sha256": "ece8f16d43e9ca2eb9a2b4d60536c41d0497affd9cafec18173c060607319628"
+      "bytes": 4583,
+      "sha256": "48700940f37ac3396f7f22a47da9b12192b66e8c7d0c24e95be1429d1944a465"
     },
     {
       "path": "scripts/audit-security-phase8.js",
@@ -20978,8 +20978,8 @@
     {
       "path": "scripts/test-firestore-critical.mjs",
       "extension": ".mjs",
-      "bytes": 17513,
-      "sha256": "1d9fa289007ad71f11c74b6dca51efa63b0b1d612a329dae0b1bfe06589c7f39"
+      "bytes": 19373,
+      "sha256": "bd24f76f784ed22fc228fd7b17ace49215d899e086cfee7bf659a9c8bb502952"
     },
     {
       "path": "scripts/test-inventory-model.mjs",

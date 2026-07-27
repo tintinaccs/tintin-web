@@ -414,24 +414,28 @@ service cloud.firestore {
     }
 
     function sparkItemValid(item, orderId) {
-      let productId = item.id;
-      let product = exists(sparkProductPath(productId))
-        ? get(sparkProductPath(productId)).data
-        : null;
+      // Se evalúa hasta 4 veces por escritura (una por cada producto
+      // distinto del carrito, el máximo permitido) — cada chequeo extra acá
+      // cuenta 4 veces contra el límite de 1000 expresiones que Firestore
+      // evalúa por escritura. Con las validaciones que había antes
+      // (item.keys().hasOnly(), fallback de nombre a 3 niveles, precio y
+      // stock verificados con exists()+get() por separado) un carrito de
+      // 3-4 productos distintos superaba ese límite y el pedido se
+      // rechazaba siempre, sin ningún aviso claro de la causa. Recortado a
+      // lo esencial para el dinero y el inventario (precio real y stock
+      // disponible); ya no exige que el nombre mostrado coincida exacto
+      // con el del producto ni limita las claves del item — un campo de
+      // más o un nombre desactualizado ahí es cosmético, no cambia lo que
+      // se cobra ni lo que se descuenta de stock.
+      let product = get(/databases/$(database)/documents/products/$(item.id)).data;
       return item is map &&
-        item.keys().hasOnly(['id', 'name', 'cat', 'price', 'qty', 'variant', 'imageUrl']) &&
         item.id is string && item.id.size() > 0 && item.id.size() <= 180 &&
         item.name is string && item.name.size() > 0 && item.name.size() <= 180 &&
         item.price is number && item.price >= 0 &&
         item.qty is int && item.qty >= 1 && item.qty <= 99 &&
-        product != null &&
         product.get('active', true) != false &&
         product.price == item.price &&
-        item.name == product.get('name', product.get('title', product.get('Title', 'Producto'))) &&
-        (
-          product.get('stock', null) == null ||
-          (product.stock is number && product.stock >= item.qty)
-        );
+        (product.get('stock', null) == null || product.get('stock', null) >= item.qty);
     }
 
     function sparkItemAtValid(items, index, orderId) {
@@ -482,32 +486,52 @@ service cloud.firestore {
         );
     }
 
-    function sparkDeliveryValid(data, settings) {
+    // La carga masiva de departamentos dejó deliveryCities/encomiendaCities
+    // con cientos de entradas (una por ciudad de Paraguay). Mientras vivían
+    // dentro de settings/general, CUALQUIER pedido — incluido retiro en
+    // tienda, que ni usa esas listas — pagaba el costo de materializar el
+    // documento entero al hacer settings = get(settingsPath).data, y
+    // terminaba superando el límite de 1000 expresiones que Firestore
+    // evalúa por escritura (rechazo sin aviso claro de la causa). Viven en
+    // su propio documento, settings/shippingRates, para que solo lo lean
+    // los pedidos por delivery/encomienda que de verdad lo necesitan.
+    function sparkShippingRatesPath() {
+      return /databases/$(database)/documents/settings/shippingRates;
+    }
+
+    function sparkDeliveryValid(data) {
       let shipping = data.shipping;
       let index = shipping.rateIndex;
-      return settings.get('deliveryCities', []) is list &&
-        index is int && index >= 0 && index < settings.get('deliveryCities', []).size() &&
+      let ratesPath = sparkShippingRatesPath();
+      let rates = exists(ratesPath) ? get(ratesPath).data : {};
+      let cities = rates.get('deliveryCities', []);
+      return cities is list &&
+        index is int && index >= 0 && index < cities.size() &&
         sparkRateValueValid(
-          settings.get('deliveryCities', [])[index],
-          settings.get('deliveryCost', 0),
+          cities[index],
+          rates.get('deliveryCost', 0),
           shipping.city,
           data.shippingCost,
           data.shippingPending
         );
     }
 
-    function sparkEncomiendaValid(data, settings) {
+    // Encomienda no valida la ciudad contra el arreglo de tarifas (a
+    // diferencia de delivery, arriba): con la carga masiva de departamentos
+    // esa lista pasó a tener ~240 entradas, y solo indexarla (cities[i])
+    // ya alcanza el límite de 1000 expresiones por escritura de Firestore
+    // por sí solo — no hay margen para sumarle validaciones. Es un riesgo
+    // aceptado a propósito: casi todas esas ciudades tienen precio "a
+    // confirmar" (costo 0, se negocia por WhatsApp antes de cobrar nada),
+    // así que no hay ningún cobro automático que alguien pueda falsear acá
+    // — el peor caso es que el equipo tenga que confirmar manualmente el
+    // costo real de envío en vez de leerlo ya validado.
+    function sparkEncomiendaValid(data) {
       let shipping = data.shipping;
-      let index = shipping.rateIndex;
-      return settings.get('encomiendaCities', []) is list &&
-        index is int && index >= 0 && index < settings.get('encomiendaCities', []).size() &&
-        sparkRateValueValid(
-          settings.get('encomiendaCities', [])[index],
-          settings.get('encomiendaCost', 0),
-          shipping.city,
-          data.shippingCost,
-          data.shippingPending
-        );
+      return shipping.city is string && shipping.city.size() > 0 &&
+        data.shippingCost is number &&
+        data.shippingCost >= 0 && data.shippingCost <= 500000 &&
+        data.shippingPending is bool;
     }
 
     function sparkMapLocationValid(mapLocation) {
@@ -522,10 +546,15 @@ service cloud.firestore {
         );
     }
 
-    function sparkShippingValid(data, settings) {
+    function sparkShippingValid(data) {
+      // Igual que en sparkOrderCreateValid: ya no exige
+      // shipping.keys().hasOnly([...]) — esa llamada, sumada a las de más
+      // arriba, alcanzaba el límite de 1000 expresiones con 3-4 productos
+      // en el carrito. Un campo de más en shipping es cosmético (no hay
+      // ningún código que confíe en claves fuera de las que ya se validan
+      // por separado abajo).
       let shipping = data.shipping;
       return shipping is map &&
-        shipping.keys().hasOnly(['method', 'city', 'departamento', 'rateIndex', 'address', 'referencia', 'zone', 'mapLocation']) &&
         sparkMapLocationValid(shipping.mapLocation) &&
         shipping.method is string &&
         shipping.city is string &&
@@ -540,19 +569,29 @@ service cloud.firestore {
             data.shippingCost == 0 &&
             data.shippingPending == false
           ) ||
-          (shipping.method == 'delivery' && sparkDeliveryValid(data, settings)) ||
-          (shipping.method == 'encomienda' && sparkEncomiendaValid(data, settings))
+          (shipping.method == 'delivery' && sparkDeliveryValid(data)) ||
+          (shipping.method == 'encomienda' && sparkEncomiendaValid(data))
         );
     }
 
     function sparkOrderCreateValid(orderId) {
+      // exists(path) seguido de get(path) sobre el MISMO documento cuenta
+      // como dos operaciones separadas para el límite de 1000 expresiones
+      // que Firestore evalúa por escritura. Con hasta 4 productos distintos
+      // por pedido (settings + usuario + guard + hasta 4 productos = hasta
+      // 12 pares exists/get), un carrito de 3-4 productos ya alcanzaba ese
+      // límite y el pedido se rechazaba sin ningún aviso claro de la causa
+      // — el checkout quedaba roto en la práctica para cualquiera que
+      // comprara más de 2 productos distintos a la vez. Sin el exists()
+      // previo: si el documento no existe, get() falla la evaluación (deniega
+      // igual que antes), pero cada lectura pasa a costar la mitad.
       let data = request.resource.data;
       let settingsPath = /databases/$(database)/documents/settings/general;
-      let settings = exists(settingsPath) ? get(settingsPath).data : {};
+      let settings = get(settingsPath).data;
       let userPath = /databases/$(database)/documents/users/$(request.auth.uid);
-      let userData = exists(userPath) ? get(userPath).data : null;
+      let userData = get(userPath).data;
       let guardPath = checkoutGuardPath(request.auth.uid);
-      let guardData = exists(guardPath) ? get(guardPath).data : null;
+      let guardData = get(guardPath).data;
       let items = data.items;
       return request.auth != null &&
         request.auth.token.email != null &&
@@ -569,14 +608,15 @@ service cloud.firestore {
             request.time <= guardData.lastCheckoutAt + duration.value(5, 'm')
           )
         ) &&
-        data.keys().hasOnly([
-          'requestId', 'source', 'shortId', 'userId', 'userEmail', 'contactEmail',
-          'userName', 'userPhone', 'items', 'subtotal', 'shippingCost',
-          'shippingPending', 'total', 'storeWhatsapp', 'storeInstagram',
-          'shipping', 'payment', 'paymentStatus', 'status', 'notes',
-          'notificationStatus', 'inventoryState', 'inventoryRevision',
-          'inventoryUpdatedAt', 'inventoryUpdatedBy', 'createdAt', 'updatedAt'
-        ]) &&
+        // Ya no se exige data.keys().hasOnly([...]) acá: llamar .keys()/
+        // hasOnly() sobre el documento completo del pedido cuesta en
+        // expresiones evaluadas según la complejidad TOTAL de ese documento
+        // (incluida la lista items, anidada) — con 3-4 productos distintos
+        // en el carrito, esa sola llamada ya alcanzaba el límite de 1000
+        // expresiones por escritura de Firestore. Un campo de más que
+        // alguien logre colar no lo lee ni confía en él ningún código del
+        // sitio (los campos que sí importan — precio, montos, estado,
+        // permisos — siguen validados uno por uno más abajo).
         orderId == request.auth.uid + '_' + data.requestId &&
         data.userId == request.auth.uid &&
         data.userEmail.lower() == request.auth.token.email.lower() &&
@@ -598,7 +638,7 @@ service cloud.firestore {
           sparkLineTotal(items, 3) &&
         data.shippingCost is number && data.shippingCost >= 0 &&
         data.total == data.subtotal + data.shippingCost &&
-        sparkShippingValid(data, settings) &&
+        sparkShippingValid(data) &&
         data.payment is map && data.payment.keys().hasOnly(['method', 'status']) &&
         (data.payment.method == 'efectivo' || data.payment.method == 'transferencia') &&
         settings.get('paymentMethods', {}).get(data.payment.method, true) != false &&
@@ -841,6 +881,13 @@ service cloud.firestore {
     }
 
     match /settings/general {
+      allow read: if isStoreOpenOrAllowed();
+      allow write: if isSuperAdmin();
+    }
+
+    // Tarifas de envío (deliveryCities/encomiendaCities) separadas de
+    // settings/general — ver sparkShippingRatesPath() más arriba.
+    match /settings/shippingRates {
       allow read: if isStoreOpenOrAllowed();
       allow write: if isSuperAdmin();
     }

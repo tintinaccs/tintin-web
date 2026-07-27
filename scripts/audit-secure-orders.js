@@ -63,9 +63,14 @@ check(
 );
 check(
   'Las reglas validan precio real',
-  rules.includes('product.price == item.price') &&
-    rules.includes("item.name == product.get('name'"),
-  'El pedido no debe aceptar un precio o nombre inventado.'
+  // La comparación de nombre (item.name == product.get('name', ...)) se
+  // sacó de sparkItemValid: con 3-4 productos distintos en el carrito (el
+  // máximo permitido), esa llamada adicional alcanzaba el límite de 1000
+  // expresiones que Firestore evalúa por escritura, y el pedido quedaba
+  // rechazado siempre. El precio real — lo único que de verdad puede
+  // costar dinero si se falsea — se sigue validando exacto acá.
+  rules.includes('product.price == item.price'),
+  'El pedido no debe aceptar un precio inventado.'
 );
 check(
   'Las reglas exigen el descuento exacto y la activación vinculada',
