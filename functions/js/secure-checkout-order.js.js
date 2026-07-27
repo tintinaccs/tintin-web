@@ -3,15 +3,16 @@
 //
 // El checkout fuente todavía agrega shipping.departamento, pero las reglas
 // publicadas aceptan la ciudad completa (por ejemplo, "J. Augusto Saldívar
-// (Central)") y no admiten ese campo redundante. Cloudflare Pages ejecuta
-// esta función únicamente al servir /js/secure-checkout-order.js, obtiene el
-// asset estático original y elimina ese único campo antes de enviarlo al
-// navegador. No cambia precios, stock, datos personales ni permisos.
+// (Central)") y no admiten ese campo redundante. En Cloudflare Pages el
+// último sufijo .js identifica el archivo de implementación de la Function;
+// por eso este nombre doble .js.js expone exactamente la ruta pública
+// /js/secure-checkout-order.js que usa checkout.html.
 //
-// Cuando el archivo fuente y las reglas vuelvan a compartir exactamente el
+// La Function obtiene el asset estático original y elimina ese único campo
+// antes de enviarlo al navegador. No cambia precios, stock, datos personales
+// ni permisos. Cuando el archivo fuente y las reglas vuelvan a compartir el
 // mismo esquema, la sustitución no encontrará nada y devolverá el asset sin
-// cambios. El encabezado x-tintin-checkout-schema-fix permite comprobar qué
-// ocurrió sin exponer información sensible.
+// cambios.
 // =============================================================
 
 const DEPARTAMENTO_FIELD = /^\s*departamento:\s*draft\.departamento\s*\|\|\s*'',\s*$/m;
