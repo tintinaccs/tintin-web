@@ -60,9 +60,8 @@
       <div class="login-error" id="login-error"></div>
       <div class="login-success" id="login-success"></div>
 
-      <!-- OPCIÓN 1: Google. Sirve tanto para crear la cuenta la primera vez
-           como para iniciar sesión las siguientes — queda exactamente igual
-           que antes. -->
+      <!-- OPCIÓN 1: Google. Usa la misma pestaña en todos los dispositivos:
+           sale momentáneamente a Google y vuelve sola a Tintin. -->
       <button type="button" class="login-google" id="btn-google">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" alt="Google" />
         Continuar con Google
@@ -97,9 +96,10 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/firebase.js?v=tintin-20260716-cloudinary-fix-1";
+import { auth, db, provider } from "./js/firebase.js?v=tintin-20260727-google-redirect-1";
 import {
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -116,19 +116,18 @@ import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-sessio
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
-// que llegó por correo, el onAuthStateChanged de más abajo (que corre en
-// paralelo) no debe apagar el overlay de carga ni mostrar el error de
-// "blocked=1" mientras se está completando el ingreso por enlace.
+// que llegó por correo, el observador no debe redirigir ni revelar el
+// formulario mientras se completa ese ingreso.
 const completingEmailLink = isEmailLinkUrl();
-let explicitLoginInProgress = completingEmailLink;
+const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
+let googleRedirectWasRequested = false;
+try { googleRedirectWasRequested = window.sessionStorage.getItem(GOOGLE_REDIRECT_PENDING_KEY) === '1'; } catch {}
+let explicitLoginInProgress = completingEmailLink || googleRedirectWasRequested;
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
-// js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
-// cambiarle el texto durante el flujo interactivo de Google, en vez de
-// tener un segundo overlay propio compitiendo con el genérico.
+// js/page-loader.js — se mantiene visible antes de salir a Google y al
+// regresar, mientras se procesa la cuenta y se decide el destino.
 function showOverlay() { window.TintinLoader && window.TintinLoader.show(); }
-// Siempre vuelve el texto a "Cargando…" al ocultarlo — por si se reusa para
-// otra cosa más adelante en la misma carga de página.
 function hideLoginOverlay() {
   window.TintinLoader && window.TintinLoader.hide();
   setOverlayText('Cargando…');
@@ -152,12 +151,15 @@ function hideMessages() {
 
 function errMsg(code) {
   const msgs = {
-    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
-    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
-    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google. Podés permitir ventanas emergentes para este sitio e intentar de nuevo, o ingresar con tu correo más abajo — no necesita ninguna ventana.",
-    "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
-    "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
-    "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
+    "auth/network-request-failed": "Sin conexión — revisá tu internet e intentá de nuevo.",
+    "auth/too-many-requests": "Demasiados intentos. Esperá un momento e intentá de nuevo.",
+    "auth/user-disabled": "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
+    "auth/unauthorized-domain": "Este dominio todavía no está autorizado para ingresar con Google.",
+    "auth/operation-not-allowed": "El ingreso con Google no está habilitado en este momento.",
+    "auth/web-storage-unsupported": "Este navegador está bloqueando el almacenamiento necesario para iniciar sesión. Probá fuera del modo privado o ingresá con tu correo.",
+    "auth/account-exists-with-different-credential": "Ese correo ya está vinculado a otra forma de ingreso. Usá el acceso por correo más abajo.",
+    "auth/cancelled-popup-request": "El inicio de sesión fue cancelado. Intentá de nuevo.",
+    "auth/popup-closed-by-user": "El inicio de sesión fue cancelado. Intentá de nuevo."
   };
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
@@ -165,8 +167,7 @@ function errMsg(code) {
 // Único destino real de "from" hoy es checkout.html (ver checkout.html:729),
 // pero el valor llega desde la URL, así que un enlace armado por un tercero
 // podría poner cualquier cosa ahí. Solo se acepta un nombre de archivo .html
-// local (sin protocolo, sin "//", sin barras) — cualquier otra cosa cae al
-// destino por defecto en vez de redirigir a un sitio ajeno tras un login real.
+// local (sin protocolo, sin "//", sin barras).
 function safeLocalRedirect(value) {
   const v = String(value || '');
   return /^[a-zA-Z0-9_-]+\.html$/.test(v) ? v : '';
@@ -180,12 +181,9 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
-  markSessionStart(); // arranca acá la ventana de ~30 min de sesión (session-guard.js la controla en el resto del sitio)
+  markSessionStart();
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   const normalizedEmail = String(email || '').trim().toLowerCase();
-  // Única regla de destino del login: solo el correo oficial entra
-  // automáticamente al panel. Cualquier otra cuenta vuelve a la tienda,
-  // aunque tenga un rol interno y luego disponga de un acceso manual.
   if (normalizedEmail === SUPER_ADMIN.toLowerCase()) {
     window.location.replace('admin.html');
     return;
@@ -205,9 +203,7 @@ async function checkBlocked(uid, email) {
 }
 
 // Crea el perfil la primera vez que alguien entra con Google, o solo
-// actualiza lastLogin las siguientes veces — Google ya entrega nombre, foto
-// y correo verificado, así que no hace falta ningún formulario de registro
-// aparte ni un paso de verificación de correo.
+// actualiza lastLogin las siguientes veces.
 async function guardarUsuario(user) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
@@ -231,18 +227,17 @@ async function guardarUsuario(user) {
       lastLogin: serverTimestamp(),
     });
     return { role, blocked: false, isNew: true, welcomePending };
-  } else {
-    const data = snap.data();
-    // Ensure superadmin email always has correct role
-    if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
-      await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
-      return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false };
-    }
-    await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
-    const role = data.role || 'client';
-    const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
-    return { role, blocked: !!data.blocked, isNew: false, welcomePending };
   }
+
+  const data = snap.data();
+  if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
+    await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
+    return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false };
+  }
+  await setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true });
+  const role = data.role || 'client';
+  const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
+  return { role, blocked: !!data.blocked, isNew: false, welcomePending };
 }
 
 async function pendingWelcomeFor(uid, role) {
@@ -256,20 +251,29 @@ async function pendingWelcomeFor(uid, role) {
   }
 }
 
-// Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
-// un estado "correo sin verificar" — Google ya lo entrega verificado.
-onAuthStateChanged(auth, async user => {
-  // OJO: ttPageReady() ya no se llama acá arriba a propósito — revela el
-  // formulario "Continuar con Google" de abajo, y si esta persona en
-  // realidad ya tiene sesión (o recién volvió de Google) eso se ve como un
-  // flash del login antes de que la redirija. Solo se llama más abajo, en
-  // la rama que de verdad se queda mostrando el formulario.
+async function processGoogleUser(user) {
+  const { role, blocked, welcomePending } = await guardarUsuario(user);
+  if (blocked) {
+    await signOut(auth);
+    hideLoginOverlay();
+    showBlockedModal();
+    return;
+  }
+  await redirectByRole(role, user.email, { welcomePending });
+}
+
+// Firebase puede avisar que hay una sesión antes de que getRedirectResult()
+// termine de recuperar el resultado de Google. Se retiene ese aviso para no
+// procesar el mismo ingreso dos veces ni mostrar un flash del formulario.
+let authBootstrapComplete = false;
+let hasQueuedAuthState = false;
+let queuedAuthUser = null;
+
+async function handlePassiveAuthState(user) {
   if (!user) {
     if (!completingEmailLink) {
       hideLoginOverlay();
-      window.ttPageReady && window.ttPageReady(); // recién acá se sabe que se queda mostrando el formulario
-      // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
-      // detectar una cuenta bloqueada (Fase E).
+      window.ttPageReady && window.ttPageReady();
       const params = new URLSearchParams(window.location.search);
       if (params.get('blocked') === '1') {
         showBlockedModal();
@@ -289,77 +293,90 @@ onAuthStateChanged(auth, async user => {
   const role = await getUserRole(user.uid, user.email);
   const welcomePending = await pendingWelcomeFor(user.uid, role);
   await redirectByRole(role, user.email, { welcomePending });
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!authBootstrapComplete) {
+    hasQueuedAuthState = true;
+    queuedAuthUser = user;
+    return;
+  }
+  await handlePassiveAuthState(user);
 });
 
-// GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
-// para crear la cuenta la primera vez como para iniciar sesión después.
-//
-// Sobre la demora al cerrar la ventana emergente: Firebase Auth detecta que
-// la clienta cerró la ventana de Google recién cuando su propio sondeo
-// interno lo nota (algunos segundos, según el navegador) — no depende de
-// nuestro código ni de un setTimeout nuestro, y no hay una API pública para
-// acortarlo. Lo que sí controlamos es que, apenas signInWithPopup rechaza
-// (con el código que sea), la reacción de acá sea inmediata — sin ningún
-// timeout ni espera extra de nuestra parte — y que mientras tanto no se vea
-// como si la página se hubiera congelado.
-// Se usa popup también en mobile. El redirect completo de Firebase no es
-// fiable cuando la tienda vive en GitHub Pages y el helper de Auth vive en
-// firebaseapp.com: Safari y otros navegadores modernos bloquean el
-// almacenamiento entre esos dos dominios y la persona vuelve sin sesión.
-// El popup nace directamente de este click real y conserva la sesión en el
-// mismo origen de Tintin.
+async function finishAuthBootstrap() {
+  authBootstrapComplete = true;
+  if (!hasQueuedAuthState) return;
+  const user = queuedAuthUser;
+  hasQueuedAuthState = false;
+  queuedAuthUser = null;
+  await handlePassiveAuthState(user);
+}
 
-let _googleLoginToken = 0;
+// GOOGLE — siempre usa redirección en la MISMA pestaña. No abre ventanas
+// emergentes en celular ni en computadora. Google muestra su pantalla oficial
+// y devuelve automáticamente a login.html; al volver se recupera el resultado
+// con getRedirectResult() antes de dejar actuar al observador de sesión.
 const loginConGoogle = async () => {
   hideMessages();
   explicitLoginInProgress = true;
   showOverlay();
-  const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
-  const slowHintTimer = setTimeout(() => {
-    setOverlayText('Esperando que completes el inicio de sesión con Google…');
-  }, 1500);
+  setOverlayText('Abriendo el inicio de sesión de Google…');
+  const button = document.getElementById('btn-google');
+  button.disabled = true;
   try {
-    const cred = await signInWithPopup(auth, provider);
-    clearTimeout(slowHintTimer);
-    if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
-    const { role, blocked, welcomePending } = await guardarUsuario(cred.user);
-    if (blocked) {
-      await signOut(auth);
-      hideLoginOverlay();
-      showBlockedModal();
-      return;
-    }
-    await redirectByRole(role, cred.user.email, { welcomePending });
-  } catch(e) {
-    clearTimeout(slowHintTimer);
-    if (myAttempt !== _googleLoginToken) return;
+    try { window.sessionStorage.setItem(GOOGLE_REDIRECT_PENDING_KEY, '1'); } catch {}
+    await signInWithRedirect(auth, provider);
+  } catch (e) {
+    try { window.sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY); } catch {}
     explicitLoginInProgress = false;
+    button.disabled = false;
     hideLoginOverlay();
-    window.dispatchEvent(new CustomEvent(
-      e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'
-        ? 'tintin:login-cancelled'
-        : 'tintin:login-failed'
-    ));
+    window.dispatchEvent(new CustomEvent('tintin:login-failed'));
     showError(errMsg(e.code));
-    // El bloqueo de ventanas emergentes de Safari es una configuración del
-    // navegador que esta página no puede forzar a permitir — en vez de
-    // dejar a la persona reintentando el mismo botón, se la lleva directo
-    // a la alternativa que sí funciona ahí (correo con enlace de acceso,
-    // sin ventana ni redirección entre dominios).
-    if (e.code === 'auth/popup-blocked') {
-      const emailInput = document.getElementById('login-email-input');
-      emailInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      emailInput?.focus({ preventScroll: true });
-    }
   }
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
 
+async function completeGoogleRedirectIfPresent() {
+  if (completingEmailLink) {
+    await finishAuthBootstrap();
+    return;
+  }
+
+  if (googleRedirectWasRequested) {
+    showOverlay();
+    setOverlayText('Completando tu ingreso con Google…');
+  }
+
+  try {
+    const credential = await getRedirectResult(auth);
+    try { window.sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY); } catch {}
+    googleRedirectWasRequested = false;
+
+    if (credential?.user) {
+      explicitLoginInProgress = true;
+      showOverlay();
+      setOverlayText('Preparando tu cuenta…');
+      await processGoogleUser(credential.user);
+      return;
+    }
+
+    explicitLoginInProgress = false;
+    await finishAuthBootstrap();
+  } catch (e) {
+    try { window.sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY); } catch {}
+    googleRedirectWasRequested = false;
+    explicitLoginInProgress = false;
+    hideLoginOverlay();
+    window.ttPageReady && window.ttPageReady();
+    window.dispatchEvent(new CustomEvent('tintin:login-failed'));
+    showError(errMsg(e.code));
+    await finishAuthBootstrap();
+  }
+}
+
 // ======== OPCIÓN 2: INGRESAR CON CORREO (Firebase Email Link) ========
-// La clienta escribe su correo, le mandamos un enlace de acceso de un solo
-// uso, y solo entra si lo abre desde su propia bandeja de entrada — Firebase
-// genera y valida el enlace del lado de Google, acá no se guarda ningún
-// código a mano ni se implementa nada de criptografía propia.
 const RESEND_COOLDOWN_SECONDS = 60;
 let resendTimer = null;
 
@@ -384,9 +401,6 @@ function startResendCooldown() {
   }, 1000);
 }
 
-// La URL de vuelta conserva el mismo `from` que ya usa Google. Las cuentas
-// existentes regresan a ese destino; una cuenta nueva pasa primero por la
-// página principal para recibir la bienvenida y luego puede seguir navegando.
 function buildContinueUrl() {
   const from = new URLSearchParams(window.location.search).get('from');
   const base = window.location.origin + window.location.pathname;
@@ -429,9 +443,6 @@ async function finishEmailLinkLogin(user) {
   await redirectByRole(role, user.email, { welcomePending });
 }
 
-// Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos
-// parámetros que le agrega Firebase a nuestra continueUrl), se completa el
-// ingreso apenas carga la página — antes de que el usuario toque nada.
 async function tryCompleteEmailLink() {
   if (!completingEmailLink) return;
   showOverlay();
@@ -439,10 +450,8 @@ async function tryCompleteEmailLink() {
   let email = null;
   try { email = window.localStorage.getItem('tt_email_link_pending'); } catch {}
   if (!email) {
-    // Se abrió en otro dispositivo/navegador — no hay forma de saber con
-    // qué correo se pidió el enlace, así que se lo pedimos de nuevo en vez
-    // de fallar en silencio (mismo criterio que recomienda Firebase).
     hideLoginOverlay();
+    window.ttPageReady && window.ttPageReady();
     const input = document.getElementById('login-email-input');
     const sendBtn = document.getElementById('btn-send-email-link');
     input.value = '';
@@ -471,18 +480,24 @@ async function tryCompleteEmailLink() {
     await finishEmailLinkLogin(user);
   } catch (e) {
     hideLoginOverlay();
+    window.ttPageReady && window.ttPageReady();
     showError(emailLinkErrorMessage(e.code));
   }
 }
-tryCompleteEmailLink();
+
+async function bootstrapLogin() {
+  if (completingEmailLink) {
+    await finishAuthBootstrap();
+    await tryCompleteEmailLink();
+    return;
+  }
+  await completeGoogleRedirectIfPresent();
+}
+bootstrapLogin();
 
 // El navegador puede restaurar esta página desde su caché (bfcache) al
-// volver con el botón atrás — eso congela variables como
-// _googleLoginToken y cualquier mensaje de error que haya quedado en
-// pantalla de un intento previo, mucho más viejo de lo que parece. Mismo
-// criterio que ya usan checkout/catálogo/perfil/store-gate: si vuelve
-// desde bfcache, se recarga entera para arrancar con el código y el
-// estado actuales.
+// volver con el botón atrás. Se recarga entera para arrancar con el código
+// y el estado actuales.
 window.addEventListener('pageshow', event => {
   if (event.persisted) window.location.reload();
 });
