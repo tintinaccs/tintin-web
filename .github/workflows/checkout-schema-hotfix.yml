@@ -1,0 +1,29 @@
+name: Checkout schema compatibility
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  checkout-schema:
+    name: Checkout sin campos rechazados por Firestore
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate function syntax
+        run: node --check functions/js/secure-checkout-order.js
+
+      - name: Test checkout schema compatibility
+        run: node scripts/test-checkout-schema-hotfix.mjs
