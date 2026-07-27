@@ -4611,37 +4611,46 @@ window.testServerCreateOrder = async function() {
     toast('Solo Super Admin puede usar esta prueba.');
     return;
   }
-  const productId = String(window.prompt('ID del producto para la prueba (pedido real, retiro en tienda, efectivo):') || '').trim();
-  if (!productId) return;
-  const qty = Math.max(1, parseInt(window.prompt('Cantidad:', '1'), 10) || 1);
+  const wanted = Math.max(1, parseInt(window.prompt('¿Con cuántos productos distintos armamos el pedido de prueba? (justamente para confirmar que ya NO hay tope de 4)', '20'), 10) || 20);
+
+  // Toma productos reales activos y con stock (o sin control de stock) del
+  // catálogo ya cargado en el panel — evita tipear 20 IDs a mano. Ojo: esto
+  // crea un pedido REAL y descuenta stock REAL de cada producto elegido.
+  const candidates = (_allProducts || []).filter(p =>
+    p.active !== false && (p.stock == null || Number(p.stock) >= 1)
+  );
+  if (!candidates.length) { toast('No hay productos activos con stock para probar.'); return; }
+  const chosen = candidates.slice(0, wanted);
+  if (chosen.length < wanted) {
+    toast(`Solo hay ${chosen.length} producto(s) activo(s) con stock disponible — se usan esos.`);
+  }
+  if (!confirm(`Se va a crear un pedido REAL con ${chosen.length} producto(s) distinto(s) (1 unidad c/u, retiro en tienda, efectivo) y se va a descontar su stock real. ¿Continuar?`)) return;
 
   try {
-    const productSnap = await getDoc(doc(db, 'products', productId));
-    if (!productSnap.exists()) { toast('Producto no encontrado.'); return; }
-    const product = productSnap.data() || {};
-    const price = Number(product.price) || 0;
+    const cartLines = chosen.map(p => ({ id: p._docId, qty: 1, variants: [] }));
+    const subtotal = chosen.reduce((sum, p) => sum + (Number(p.price) || 0), 0);
     const requestId = `test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
 
     const draft = {
       requestId,
-      cartLines: [{ id: productId, qty, variants: [] }],
+      cartLines,
       name: auth.currentUser?.displayName || 'Prueba Super Admin',
       phone: '595981000000',
       contactEmail: auth.currentUser?.email || '',
-      notes: 'Pedido de prueba — Fase 4 createOrder (endpoint server-side)',
+      notes: `Pedido de prueba — Fase 4 createOrder (${chosen.length} productos, sin tope de 4)`,
       selectedCity: '__retiro__',
       departamento: '',
       address: '',
       referencia: '',
       mapLocation: null,
       paymentMethod: 'efectivo',
-      expectedSubtotal: price * qty,
+      expectedSubtotal: subtotal,
       expectedShippingCost: 0,
       expectedShippingPending: false,
-      expectedTotal: price * qty
+      expectedTotal: subtotal
     };
 
-    toast('Enviando pedido de prueba al servidor…');
+    toast(`Enviando pedido de prueba con ${chosen.length} producto(s) al servidor…`);
     const result = await createOrderViaServer(draft);
     console.log('[testServerCreateOrder]', result);
     alert(JSON.stringify(result, null, 2));
