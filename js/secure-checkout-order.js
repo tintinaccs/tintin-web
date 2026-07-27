@@ -172,6 +172,24 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       .filter(Boolean);
   }
 
+  // deliveryCities/encomiendaCities/deliveryCost/encomiendaCost viven en
+  // settings/shippingRates, separado de settings/general (ver
+  // sparkShippingRatesPath() en firestore.rules) — settings/general debe
+  // quedar liviano para no superar el límite de 1000 expresiones que
+  // Firestore evalúa por escritura. Si settings/shippingRates todavía no
+  // existe (recién migrado, ver js/admin-app.js), se usan los mismos
+  // campos si siguen presentes en settings/general como respaldo.
+  function mergeShippingRates(settings, shippingRatesSnap) {
+    const rates = shippingRatesSnap?.exists() ? shippingRatesSnap.data() || {} : {};
+    return {
+      ...settings,
+      deliveryCities: Array.isArray(rates.deliveryCities) ? rates.deliveryCities : settings.deliveryCities,
+      encomiendaCities: Array.isArray(rates.encomiendaCities) ? rates.encomiendaCities : settings.encomiendaCities,
+      deliveryCost: rates.deliveryCost != null ? rates.deliveryCost : settings.deliveryCost,
+      encomiendaCost: rates.encomiendaCost != null ? rates.encomiendaCost : settings.encomiendaCost
+    };
+  }
+
   function resolveShipping(settings, selectedCity, location) {
     if (selectedCity === '__retiro__') {
       return {
@@ -267,11 +285,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const items = getCartLocal();
     if (!items.length) throw appError('empty_cart', 'Tu carrito está vacío.');
 
-    const settingsSnap = await getDoc(doc(db, 'settings', 'general'));
+    const [settingsSnap, shippingRatesSnap] = await Promise.all([
+      getDoc(doc(db, 'settings', 'general')),
+      getDoc(doc(db, 'settings', 'shippingRates'))
+    ]);
     if (!settingsSnap.exists()) {
       throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
     }
-    const settings = settingsSnap.data() || {};
+    const settings = mergeShippingRates(settingsSnap.data() || {}, shippingRatesSnap);
     const selectedCity = text(document.getElementById('ck-city')?.value);
     const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
     const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
@@ -434,6 +455,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const orderId = `${uid}_${draft.requestId}`;
     const orderRef = doc(db, 'orders', orderId);
     const settingsRef = doc(db, 'settings', 'general');
+    const shippingRatesRef = doc(db, 'settings', 'shippingRates');
     const userRef = doc(db, 'users', uid);
     const productRefs = draft.cartLines.map(line => doc(db, 'products', line.id));
 
@@ -459,6 +481,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
 
       const settingsSnap = await transaction.get(settingsRef);
+      const shippingRatesSnap = await transaction.get(shippingRatesRef);
       const userSnap = await transaction.get(userRef);
       const productSnaps = [];
       for (const productRef of productRefs) productSnaps.push(await transaction.get(productRef));
@@ -466,7 +489,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       if (!settingsSnap.exists()) throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
       if (!userSnap.exists()) throw appError('profile_missing', 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.');
 
-      const settings = settingsSnap.data() || {};
+      const settings = mergeShippingRates(settingsSnap.data() || {}, shippingRatesSnap);
       const userData = userSnap.data() || {};
       if (email !== SUPER_ADMIN_EMAIL && settings.storeOpen !== true) throw appError('store_closed', 'La tienda está temporalmente cerrada.');
       if (email !== SUPER_ADMIN_EMAIL && userData.blocked === true) throw appError('blocked_account', 'Esta cuenta está bloqueada y no puede realizar pedidos.');

@@ -195,7 +195,9 @@ initSiteContent('envios');
       .join('');
   }
 
-  onSnapshot(doc(db, 'settings', 'general'), (snap) => {
+  // Ciudades y costos de envío viven en settings/shippingRates, separado de
+  // settings/general — ver sparkShippingRatesPath() en firestore.rules.
+  onSnapshot(doc(db, 'settings', 'shippingRates'), (snap) => {
     const cfg = snap.exists() ? snap.data() : {};
     renderList('envios-delivery-cities', normalize(cfg.deliveryCities, cfg.deliveryCost || 15000));
     renderList('envios-encomienda-cities', normalize(cfg.encomiendaCities, cfg.encomiendaCost || 25000));

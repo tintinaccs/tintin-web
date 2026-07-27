@@ -387,39 +387,55 @@ let ENCOMIENDA_CITIES = [];
 let WA_NUMBER = '595981299331';
 let STORE_INSTAGRAM = '';
 
-// Tiempo real: escucha settings/general en vivo, así un cambio de ciudades/
-// precios hecho en Super Admin se refleja acá sin necesidad de recargar la
-// página (si el cliente ya está en el paso de envío, se re-popula el select).
+// Tiempo real: escucha settings/general y settings/shippingRates en vivo,
+// así un cambio de ciudades/precios hecho en Super Admin se refleja acá sin
+// necesidad de recargar la página (si el cliente ya está en el paso de
+// envío, se re-popula el select).
 function subscribeStoreConfig() {
   return new Promise((resolveFirst) => {
-    let first = true;
+    let generalDone = false;
+    let ratesDone = false;
+    const maybeResolveFirst = () => { if (generalDone && ratesDone) resolveFirst(); };
+
     onSnapshot(doc(db, 'settings', 'general'), snap => {
       if (!snap.exists()) {
-        if (first) { first = false; resolveFirst(); }
+        if (!generalDone) { generalDone = true; maybeResolveFirst(); }
         return;
       }
       const cfg = snap.data();
-      if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
-      if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
-      DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
-      ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
       // admin.html guarda el número como `whatsappNumber`; `whatsapp` queda como alias legado.
       const waRaw = cfg.whatsappNumber || cfg.whatsapp;
       if (waRaw) WA_NUMBER = waRaw.replace(/\D/g, '');
       if (cfg.instagram) STORE_INSTAGRAM = cfg.instagram;
       applyPaymentMethods(cfg.paymentMethods);
       applyBankAccounts(cfg.bankAccounts);
-      populateCities();
       // settings/general contiene muchos datos del checkout. Para usar solo
       // su estado de apertura hay que convertirlo al mismo formato validado
       // que consume el control global; el objeto crudo no trae la marca
       // __storeConfigStatus y antes se interpretaba erróneamente como fallo.
       storeCfg = normalizeStoreAccessConfig(cfg, 'ok');
       reevaluateStoreGate_();
-      if (first) { first = false; resolveFirst(); }
+      if (!generalDone) { generalDone = true; maybeResolveFirst(); }
     }, e => {
       console.error('No se pudo escuchar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
-      if (first) { first = false; resolveFirst(); }
+      if (!generalDone) { generalDone = true; maybeResolveFirst(); }
+    });
+
+    // Ciudades y costos de envío viven en settings/shippingRates, separado de
+    // settings/general (ver sparkShippingRatesPath() en firestore.rules):
+    // settings/general debe quedar liviano para no superar el límite de 1000
+    // expresiones que Firestore evalúa al validar un pedido.
+    onSnapshot(doc(db, 'settings', 'shippingRates'), snap => {
+      const cfg = snap.exists() ? snap.data() : {};
+      if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
+      if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
+      DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
+      ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
+      populateCities();
+      if (!ratesDone) { ratesDone = true; maybeResolveFirst(); }
+    }, e => {
+      console.error('No se pudo escuchar las tarifas de envío desde Firestore, usando valores por defecto:', e);
+      if (!ratesDone) { ratesDone = true; maybeResolveFirst(); }
     });
   });
 }

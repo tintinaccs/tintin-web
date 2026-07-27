@@ -156,8 +156,8 @@ PAGES.forEach(({ file, id }) => {
 // Comprobaciones específicas
 // ---------------------------------------------------------------------------
 check(
-  '[envios.html] las ciudades de envío se leen de settings/general con estados de carga/vacío/error',
-  read('envios.html').includes("onSnapshot(doc(db, 'settings', 'general')") &&
+  '[envios.html] las ciudades de envío se leen de settings/shippingRates con estados de carga/vacío/error',
+  read('envios.html').includes("onSnapshot(doc(db, 'settings', 'shippingRates')") &&
     read('envios.html').includes('tt-city-price-loading') &&
     read('envios.html').includes('Todavía no cargamos ciudades') &&
     /\(err\) => \{[\s\S]{0,200}renderList\('envios-delivery-cities', \[\]\)/.test(read('envios.html')),

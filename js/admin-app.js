@@ -4347,7 +4347,10 @@ window.bulkDeleteShipCities = async function(type) {
 };
 
 async function saveShipCities() {
-  await setDoc(doc(db, 'settings', 'general'), {
+  // Vive en settings/shippingRates, no en settings/general — ver
+  // sparkShippingRatesPath() en firestore.rules y la migración automática
+  // más abajo (onSnapshot de settings/shippingRates).
+  await setDoc(doc(db, 'settings', 'shippingRates'), {
     deliveryCities:   shipCities.delivery,
     encomiendaCities: shipCities.encomienda,
     updatedAt: serverTimestamp()
@@ -4428,10 +4431,6 @@ function resetShipForm(type) {
 onSnapshot(doc(db, 'settings', 'general'), snap => {
   if (!snap.exists()) return;
   const d = snap.data();
-  shipCities.delivery   = Array.isArray(d.deliveryCities)   ? d.deliveryCities   : [];
-  shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
-  renderShipList('delivery');
-  renderShipList('encomienda');
 
   // "Abrir WhatsApp Business" en Mensajes — única fuente: whatsappNumber de
   // Configuración. No se toca acá ningún link de "escribirle a esta clienta"
@@ -4441,6 +4440,43 @@ onSnapshot(doc(db, 'settings', 'general'), snap => {
   if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
 
   if (d.waConfirmMessage) waConfirmMessageTemplate = d.waConfirmMessage;
+});
+
+// Ciudades de envío viven en settings/shippingRates, no en settings/general
+// (ver sparkShippingRatesPath() en firestore.rules) — settings/general debe
+// quedar liviano para que evaluarlo en cada pedido no choque con el límite
+// de 1000 expresiones que Firestore evalúa por escritura. Si el documento
+// nuevo todavía no existe pero settings/general conserva las listas viejas
+// (deploys anteriores a este cambio), se migran una única vez y se borran
+// de settings/general para que no vuelva a inflarse.
+onSnapshot(doc(db, 'settings', 'shippingRates'), async snap => {
+  const d = snap.exists() ? snap.data() : {};
+  if (Array.isArray(d.deliveryCities) || Array.isArray(d.encomiendaCities)) {
+    shipCities.delivery   = Array.isArray(d.deliveryCities)   ? d.deliveryCities   : [];
+    shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
+    renderShipList('delivery');
+    renderShipList('encomienda');
+    return;
+  }
+  try {
+    const legacySnap = await getDoc(doc(db, 'settings', 'general'));
+    const legacy = legacySnap.exists() ? legacySnap.data() : {};
+    if (!Array.isArray(legacy.deliveryCities) && !Array.isArray(legacy.encomiendaCities)) return;
+    await setDoc(doc(db, 'settings', 'shippingRates'), {
+      deliveryCities: legacy.deliveryCities || [],
+      encomiendaCities: legacy.encomiendaCities || [],
+      deliveryCost: legacy.deliveryCost || 0,
+      encomiendaCost: legacy.encomiendaCost || 0,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    await setDoc(doc(db, 'settings', 'general'), {
+      deliveryCities: deleteField(),
+      encomiendaCities: deleteField()
+    }, { merge: true });
+    console.log('[envios] Ciudades migradas de settings/general a settings/shippingRates.');
+  } catch (e) {
+    console.error('[envios] No se pudo migrar deliveryCities/encomiendaCities a settings/shippingRates:', e);
+  }
 });
 
 // Pestañas Delivery / Encomienda dentro de Envíos
