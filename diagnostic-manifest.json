@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-26T23:42:55.636Z",
-  "sourceFingerprint": "bd7d1265f01c8746a4a0160de91d2b20b46fc26415629dd4eb7e7778e11afe88",
+  "generatedAt": "2026-07-27T03:31:30.256Z",
+  "sourceFingerprint": "8e4ca782b6f9964ed5c22f28ac628a31e08ba28a1a51157561263a095ee9ec1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 377,
     "textFiles": 343,
-    "totalBytes": 5406784,
+    "totalBytes": 5407765,
     "pages": 18,
     "modules": 207
   },
@@ -10497,8 +10497,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 21460,
-      "sha256": "7d62161360c471b5154a3507bb555e1e9647e7d044c189c66295917c68988c42",
+      "bytes": 22048,
+      "sha256": "15f1515a1164e9215ad21fbb612205d7c0ded23f5257860d14b14f72a01f4e43",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10545,17 +10545,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 469
+          "line": 480
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 470
+          "line": 481
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 471
+          "line": 482
         }
       ],
       "styles": [
@@ -10649,19 +10649,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 469,
+          "line": 480,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 470,
+          "line": 481,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 471,
+          "line": 482,
           "exists": true
         },
         {
@@ -20178,8 +20178,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 21460,
-      "sha256": "7d62161360c471b5154a3507bb555e1e9647e7d044c189c66295917c68988c42"
+      "bytes": 22048,
+      "sha256": "15f1515a1164e9215ad21fbb612205d7c0ded23f5257860d14b14f72a01f4e43"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -20898,8 +20898,8 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 114076,
-      "sha256": "47cdc5ff0d76dd98dcc7073eb753727efc46794df6241c455b27349772313e16"
+      "bytes": 114469,
+      "sha256": "4a5ca419ae037f11db3403fee421348a05861d3a83ae10bf32fc3a62e982a780"
     },
     {
       "path": "terminos.html",
@@ -24214,7 +24214,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\r\n    admin.includes(",
+        "name": ") &&\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -24224,7 +24224,7 @@
         ]
       },
       {
-        "name": ") &&\r\n    orderStats.includes(",
+        "name": ") &&\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25434,8 +25434,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\r\n    admin.includes(",
-      ") &&\r\n    orderStats.includes("
+      ") &&\n    admin.includes(",
+      ") &&\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",

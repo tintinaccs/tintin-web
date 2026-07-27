@@ -465,6 +465,17 @@ async function tryCompleteEmailLink() {
   }
 }
 tryCompleteEmailLink();
+
+// El navegador puede restaurar esta página desde su caché (bfcache) al
+// volver con el botón atrás — eso congela variables como
+// _googleLoginToken y cualquier mensaje de error que haya quedado en
+// pantalla de un intento previo, mucho más viejo de lo que parece. Mismo
+// criterio que ya usan checkout/catálogo/perfil/store-gate: si vuelve
+// desde bfcache, se recarga entera para arrancar con el código y el
+// estado actuales.
+window.addEventListener('pageshow', event => {
+  if (event.persisted) window.location.reload();
+});
 </script>
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script src="script.js?v=tintin-20260716-cloudinary-fix-1" defer></script>

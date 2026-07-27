@@ -2089,6 +2089,13 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     padding: 14px;
     border-radius: 20px;
   }
+  /* Ese margen de 86px reserva el alto de la tabbar mobile — en login.html
+     la tabbar existe en el DOM pero queda oculta (display:none, ver
+     css/loader-solid-background.css), así que el banner quedaba flotando
+     de más ahí y tapaba el botón "Continuar con Google". */
+  body:has(.login-page) .tt-privacy-consent {
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  }
   /* La etiqueta "Cookies y privacidad" es redundante con el ícono 🍪 y el
      título de abajo — en mobile el banner ya compite por espacio vertical
      con el CTA del hero (que también se ancla abajo), así que acá se
