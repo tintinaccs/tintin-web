@@ -1,9 +1,13 @@
 # Este dominio de Cloudflare Pages (tintinaccesorios.pages.dev) solo existe
-# para correr las funciones /api/* (Cloudinary, email, geo) que el sitio
-# público en tintinaccs.github.io llama por atrás — ver js/function-origin.js.
-# _routes.json ya manda esas rutas exactas a Functions antes de llegar acá,
-# así que esta regla nunca las toca. Cualquier otra visita humana (alguien
-# que abre este dominio directo, por un enlace guardado o el historial del
-# navegador) se manda al sitio real, para que no queden dos versiones vivas
-# mostrando lo mismo y generando confusión sobre cuál es "la" tienda.
+# para correr las funciones /api/* (Cloudinary, email, geo) y el proxy de
+# autenticación /__/auth/* que el sitio llama por atrás — ver
+# js/function-origin.js y functions/__/auth/[[path]].js. _routes.json ya
+# manda esas rutas exactas a Functions antes de llegar acá, pero se repite
+# la excepción acá también (200 = servir tal cual, sin redirigir) por las
+# dudas, ya que un redirect ahí rompería tanto las funciones como el login.
+# Cualquier otra visita humana (alguien que abre este dominio directo, por
+# un enlace guardado o el historial del navegador) se manda al sitio real,
+# para que no queden dos versiones vivas mostrando lo mismo.
+/api/*      /api/:splat      200
+/__/auth/*  /__/auth/:splat  200
 /*  https://tintinaccs.github.io/tintin-web/:splat  301

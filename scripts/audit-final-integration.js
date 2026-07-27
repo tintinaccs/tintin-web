@@ -92,12 +92,17 @@ check(
   'manifest.json o sus recursos son inválidos.'
 );
 const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
-  .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`).sort();
+  .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
+// El proxy de autenticación (functions/__/auth/[[path]].js) no sigue la
+// convención de un archivo por endpoint en functions/api — es una sola
+// ruta comodín, así que se agrega a mano en vez de derivarla del listado
+// de archivos.
+const expectedRoutes = [...apiFunctions, '/__/auth/*'].sort();
 const routes = (JSON.parse(read('_routes.json')).include || []).slice().sort();
 check(
   '_routes incluye exactamente las funciones existentes',
-  JSON.stringify(apiFunctions) === JSON.stringify(routes),
-  `Funciones: ${apiFunctions.join(', ')} | Rutas: ${routes.join(', ')}`
+  JSON.stringify(expectedRoutes) === JSON.stringify(routes),
+  `Rutas esperadas: ${expectedRoutes.join(', ')} | Rutas: ${routes.join(', ')}`
 );
 check(
   'firebase.json solo despliega reglas',
