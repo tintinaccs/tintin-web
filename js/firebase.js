@@ -7,19 +7,16 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
-// authDomain vuelve a tintin-accesorios.firebaseapp.com. Se probó apuntarlo
-// a tintinaccesorios.pages.dev (vía functions/__/auth/[[path]].js) para que
-// el login no dependiera de almacenamiento entre dominios distintos, pero
-// eso rompió el sign-in por completo en producción con "Error 400:
-// redirect_uri_mismatch": el cliente OAuth de Google (Google Cloud Console
-// → APIs & Services → Credentials) solo tiene autorizado el redirect_uri
-// del authDomain original — agregar un dominio a Firebase Console →
-// Authorized domains NO registra su /__/auth/handler ahí, son dos listas
-// separadas, y esa segunda solo se edita manualmente desde Google Cloud
-// Console (no desde este código). Revertido para restablecer el login.
+// El dominio de autenticación es el mismo dominio público de la tienda.
+// functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
+// Firebase Auth. Esto permite que signInWithRedirect vuelva por la misma
+// pestaña y el mismo origen, sin depender de ventanas emergentes ni del
+// almacenamiento entre tintinaccesorios.pages.dev y firebaseapp.com.
+// La URI https://tintinaccesorios.pages.dev/__/auth/handler debe permanecer
+// autorizada en el cliente OAuth web del proyecto tintin-accesorios.
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
-  authDomain: "tintin-accesorios.firebaseapp.com",
+  authDomain: "tintinaccesorios.pages.dev",
   projectId: "tintin-accesorios",
   messagingSenderId: "207918562502",
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",
