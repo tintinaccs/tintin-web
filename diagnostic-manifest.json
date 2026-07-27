@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-27T16:08:27.912Z",
-  "sourceFingerprint": "80521c0f6df29987683f1fc8cc2e72a357760e99596ae7eaff49a2ae75c1ccc0",
+  "generatedAt": "2026-07-27T16:23:54.919Z",
+  "sourceFingerprint": "0500446606d05735d8f582bc0eddef366511e1932c878bc5925e5247ab480328",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 381,
     "textFiles": 347,
-    "totalBytes": 5418698,
+    "totalBytes": 5419688,
     "pages": 18,
     "modules": 210
   },
@@ -16127,8 +16127,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 28269,
-      "sha256": "a12c445654d4b9d68c32ec87497b958fd2740e97e94c24472f0313f1af448c4f",
+      "bytes": 29259,
+      "sha256": "30083e22364de5d7f3e360ffdb667889cbec583e73a47c8cd2ea2dd11b8a2b5e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16136,8 +16136,12 @@
       "imports": [],
       "endpoints": [
         {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 17
+        },
+        {
           "url": "https://res.cloudinary.com/",
-          "line": 14
+          "line": 34
         }
       ]
     },
@@ -20080,8 +20084,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 28269,
-      "sha256": "a12c445654d4b9d68c32ec87497b958fd2740e97e94c24472f0313f1af448c4f"
+      "bytes": 29259,
+      "sha256": "30083e22364de5d7f3e360ffdb667889cbec583e73a47c8cd2ea2dd11b8a2b5e"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -22774,56 +22778,56 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 26,
+      "line": 46,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 28,
+      "line": 48,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 31,
+      "line": 51,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 34,
+      "line": 54,
       "raw": "/admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 122,
+      "line": 142,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 382,
+      "line": 402,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 528,
+      "line": 548,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 534,
+      "line": 554,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true

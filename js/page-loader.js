@@ -1,6 +1,26 @@
 (function () {
   'use strict';
 
+  // El sitio real vive en tintinaccesorios.pages.dev — el único dominio
+  // donde el ingreso con Google por redirección (sin ventanas emergentes)
+  // puede funcionar en cualquier navegador, porque ahí la página y el
+  // authDomain de Firebase son el MISMO origen (ver js/firebase.js). Si
+  // alguien entra por el dominio viejo de GitHub Pages, se lo lleva a la
+  // misma página en pages.dev conservando ruta, parámetros y hash; sin
+  // esto, quien navegue por github.io queda atrapado en un bucle de login
+  // (Google acepta, pero la sesión queda guardada en el otro dominio y el
+  // navegador no permite leerla desde acá).
+  if (window.location.hostname === 'tintinaccs.github.io') {
+    try {
+      const strippedPath = window.location.pathname.replace(/^\/tintin-web\/?/, '/');
+      window.location.replace(
+        'https://tintinaccesorios.pages.dev' + strippedPath +
+        window.location.search + window.location.hash
+      );
+      return;
+    } catch {}
+  }
+
   if (window.TintinLoader) return;
 
   // Preconecta con Cloudinary (DNS + TLS) antes de que se descubra la
