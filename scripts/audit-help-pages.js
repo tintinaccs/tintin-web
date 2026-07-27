@@ -64,7 +64,7 @@ PAGES.forEach(({ file, id }) => {
 
   check(
     `${tag} canonical propio hacia el dominio canónico`,
-    html.includes(`<link rel="canonical" href="https://tintinaccs.github.io/tintin-web/${file}">`),
+    html.includes(`<link rel="canonical" href="https://tintinaccesorios.pages.dev/${file}">`),
     'El canonical debe apuntar a la propia URL en el dominio canónico publicado.'
   );
 
@@ -75,7 +75,7 @@ PAGES.forEach(({ file, id }) => {
       /property="og:url"/.test(html) &&
       /property="og:type"/.test(html) &&
       /name="twitter:card" content="summary_large_image"/.test(html) &&
-      html.includes('og:image" content="https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg"') &&
+      html.includes('og:image" content="https://tintinaccesorios.pages.dev/assets/og-cover.jpg"') &&
       exists('assets/og-cover.jpg'),
     'Las tarjetas sociales deben estar completas y la imagen debe existir en el repo.'
   );

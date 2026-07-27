@@ -7,9 +7,16 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
+// authDomain apunta al dominio propio del sitio (ya autorizado en Firebase
+// Console → Authentication → Settings → Authorized domains) en vez de
+// tintin-accesorios.firebaseapp.com. functions/__/auth/[[path]].js
+// reexpone ahí las mismas páginas de ayuda de Firebase Auth — así el login
+// deja de depender de que el navegador permita almacenamiento entre
+// dominios distintos, que es lo que a veces bloqueaba la ventana de
+// Google o perdía la sesión al volver.
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
-  authDomain: "tintin-accesorios.firebaseapp.com",
+  authDomain: "tintinaccesorios.pages.dev",
   projectId: "tintin-accesorios",
   messagingSenderId: "207918562502",
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",

@@ -112,7 +112,7 @@ check(
 );
 check(
   '[nosotros.html] consolida su canonical en about.html',
-  legacy.includes('<link rel="canonical" href="https://tintinaccs.github.io/tintin-web/about.html">'),
+  legacy.includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about.html">'),
   'El canonical debe apuntar a la página real, no a la ruta legacy.'
 );
 check(
@@ -130,7 +130,7 @@ check(
 check(
   '[nosotros.html] la página destino about.html existe y no crea bucle de canonical',
   exists('about.html') &&
-    read('about.html').includes('<link rel="canonical" href="https://tintinaccs.github.io/tintin-web/about.html">'),
+    read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about.html">'),
   'El destino debe existir y canonizarse en sí mismo (sin apuntar de vuelta a la ruta legacy).'
 );
 

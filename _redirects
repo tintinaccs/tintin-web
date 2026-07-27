@@ -1,13 +1,6 @@
-# Este dominio de Cloudflare Pages (tintinaccesorios.pages.dev) solo existe
-# para correr las funciones /api/* (Cloudinary, email, geo) y el proxy de
-# autenticación /__/auth/* que el sitio llama por atrás — ver
-# js/function-origin.js y functions/__/auth/[[path]].js. _routes.json ya
-# manda esas rutas exactas a Functions antes de llegar acá, pero se repite
-# la excepción acá también (200 = servir tal cual, sin redirigir) por las
-# dudas, ya que un redirect ahí rompería tanto las funciones como el login.
-# Cualquier otra visita humana (alguien que abre este dominio directo, por
-# un enlace guardado o el historial del navegador) se manda al sitio real,
-# para que no queden dos versiones vivas mostrando lo mismo.
-/api/*      /api/:splat      200
-/__/auth/*  /__/auth/:splat  200
-/*  https://tintinaccs.github.io/tintin-web/:splat  301
+# tintinaccesorios.pages.dev pasó a ser el dominio real del sitio (antes
+# solo corría las funciones /api/* de atrás). Ya no redirige a nadie —
+# sirve el sitio completo tal cual, incluida la ficha de autenticación de
+# Firebase por functions/__/auth/[[path]].js (ver js/firebase.js:
+# authDomain). _routes.json sigue mandando /api/* y /__/auth/* a sus
+# funciones antes de llegar a cualquier archivo estático.
