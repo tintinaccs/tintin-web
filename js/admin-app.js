@@ -4497,6 +4497,71 @@ document.getElementById('ship-import-paraguay')?.addEventListener('click', async
   }
 });
 
+// Corrección masiva: productos viejos guardados antes de que prodGuardar()
+// forzara price/priceBefore/stock a número (ver ese comentario más arriba)
+// pueden haber quedado con esos campos como texto. sparkOrderCreateValid()
+// en firestore.rules exige igualdad exacta de tipo entre el precio del
+// carrito (siempre número) y products/{id}.price — un precio en texto
+// rechaza CUALQUIER pedido de ese producto para siempre, sin relación con
+// ciudad, departamento ni tienda abierta/cerrada. Reutiliza el mismo patrón
+// que la carga masiva de ciudades: no toca productos que ya están bien.
+window.fixLegacyProductNumbers = async function() {
+  if (currentRole !== 'superadmin') {
+    toast('Solo Super Admin puede corregir esto.');
+    return;
+  }
+
+  const toNumberOrNull = value => {
+    if (value === null || value === undefined || value === '') return null;
+    const n = parseInt(value, 10);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const broken = _allProducts.filter(p => {
+    const priceBad = typeof p.price !== 'number' || !Number.isFinite(p.price);
+    const priceBeforeBad = p.priceBefore != null &&
+      (typeof p.priceBefore !== 'number' || !Number.isFinite(p.priceBefore));
+    const stockBad = p.stock != null &&
+      (typeof p.stock !== 'number' || !Number.isFinite(p.stock));
+    return priceBad || priceBeforeBad || stockBad;
+  });
+
+  if (!broken.length) {
+    toast('Ningún producto tiene precio, precio anterior o stock guardado como texto — no hay nada para corregir.');
+    return;
+  }
+
+  const msg = `Se van a corregir ${broken.length} producto(s) que tienen precio, precio anterior o stock guardados como texto en vez de número (por eso sus pedidos se rechazaban siempre). No cambia ningún valor visible, solo el tipo de dato. ¿Continuar?`;
+  if (!confirm(msg)) return;
+
+  const batch = writeBatch(db);
+  let skipped = 0;
+  broken.forEach(p => {
+    const patch = { updatedAt: serverTimestamp() };
+    if (typeof p.price !== 'number' || !Number.isFinite(p.price)) {
+      const price = toNumberOrNull(p.price);
+      if (price === null) { skipped += 1; return; }
+      patch.price = price;
+    }
+    if (p.priceBefore != null && (typeof p.priceBefore !== 'number' || !Number.isFinite(p.priceBefore))) {
+      patch.priceBefore = toNumberOrNull(p.priceBefore);
+    }
+    if (p.stock != null && (typeof p.stock !== 'number' || !Number.isFinite(p.stock))) {
+      patch.stock = toNumberOrNull(p.stock);
+    }
+    batch.update(doc(db, 'products', p._docId), patch);
+  });
+
+  try {
+    await batch.commit();
+    const fixed = broken.length - skipped;
+    logAudit('editar_producto', 'producto', '', '', `Corrección masiva de precio/stock guardados como texto: ${fixed} producto(s)${skipped ? `, ${skipped} sin precio válido para corregir` : ''}`, { bulk: true, fixed, skipped });
+    toast(`Listo — ${fixed} producto(s) corregido(s)${skipped ? `, ${skipped} necesitan revisión manual (sin precio numérico legible)` : ''}.`);
+  } catch (e) {
+    toast('Error al corregir productos: ' + e.message);
+  }
+};
+
 /* =============================================
    UNSAVED CHANGES GUARD — reusable for product & collection editors
    ============================================= */
