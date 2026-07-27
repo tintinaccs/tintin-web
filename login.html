@@ -154,7 +154,7 @@ function errMsg(code) {
   const msgs = {
     "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
     "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
-    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
+    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google. Podés permitir ventanas emergentes para este sitio e intentar de nuevo, o ingresar con tu correo más abajo — no necesita ninguna ventana.",
     "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
     "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
     "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
@@ -341,6 +341,16 @@ const loginConGoogle = async () => {
         : 'tintin:login-failed'
     ));
     showError(errMsg(e.code));
+    // El bloqueo de ventanas emergentes de Safari es una configuración del
+    // navegador que esta página no puede forzar a permitir — en vez de
+    // dejar a la persona reintentando el mismo botón, se la lleva directo
+    // a la alternativa que sí funciona ahí (correo con enlace de acceso,
+    // sin ventana ni redirección entre dominios).
+    if (e.code === 'auth/popup-blocked') {
+      const emailInput = document.getElementById('login-email-input');
+      emailInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      emailInput?.focus({ preventScroll: true });
+    }
   }
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
