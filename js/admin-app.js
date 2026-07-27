@@ -33,6 +33,7 @@ import {
 } from "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { createOrderViaServer } from "./admin-create-order-test.js?v=tintin-20260727-phase4-order-1";
 import './admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 
 // ---- GLOBALS ----
@@ -4595,6 +4596,58 @@ window.fixLegacyProductNumbers = async function() {
     toast(`Listo — ${fixed} producto(s) corregido(s)${skipped ? `, ${skipped} necesitan revisión manual (sin precio numérico legible)` : ''}.`);
   } catch (e) {
     toast('Error al corregir productos: ' + e.message);
+  }
+};
+
+// Prueba manual y aislada del nuevo endpoint server-side de pedidos (Fase
+// 4, apps-script/Phase4CreateOrder.gs) — NO toca checkout.html ni
+// js/secure-checkout-order.js. Crea un pedido real (retiro en tienda,
+// efectivo) con un producto real para confirmar que el Apps Script
+// funciona antes de migrar el checkout de verdad. Requiere que
+// Phase4CreateOrder.gs ya esté pegado en el proyecto y que doPost(e) en
+// Código.gs rutee action === 'createOrder' hacia phase4CreateOrder_.
+window.testServerCreateOrder = async function() {
+  if (currentRole !== 'superadmin') {
+    toast('Solo Super Admin puede usar esta prueba.');
+    return;
+  }
+  const productId = String(window.prompt('ID del producto para la prueba (pedido real, retiro en tienda, efectivo):') || '').trim();
+  if (!productId) return;
+  const qty = Math.max(1, parseInt(window.prompt('Cantidad:', '1'), 10) || 1);
+
+  try {
+    const productSnap = await getDoc(doc(db, 'products', productId));
+    if (!productSnap.exists()) { toast('Producto no encontrado.'); return; }
+    const product = productSnap.data() || {};
+    const price = Number(product.price) || 0;
+    const requestId = `test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
+
+    const draft = {
+      requestId,
+      cartLines: [{ id: productId, qty, variants: [] }],
+      name: auth.currentUser?.displayName || 'Prueba Super Admin',
+      phone: '595981000000',
+      contactEmail: auth.currentUser?.email || '',
+      notes: 'Pedido de prueba — Fase 4 createOrder (endpoint server-side)',
+      selectedCity: '__retiro__',
+      departamento: '',
+      address: '',
+      referencia: '',
+      mapLocation: null,
+      paymentMethod: 'efectivo',
+      expectedSubtotal: price * qty,
+      expectedShippingCost: 0,
+      expectedShippingPending: false,
+      expectedTotal: price * qty
+    };
+
+    toast('Enviando pedido de prueba al servidor…');
+    const result = await createOrderViaServer(draft);
+    console.log('[testServerCreateOrder]', result);
+    alert(JSON.stringify(result, null, 2));
+  } catch (e) {
+    console.error('[testServerCreateOrder]', e);
+    toast('Error: ' + e.message);
   }
 };
 
