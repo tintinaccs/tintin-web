@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-27T19:16:37.117Z",
-  "sourceFingerprint": "d0207b14cc724cfa614b23f35add777e77b123661687638a4e122b5769807eb4",
+  "generatedAt": "2026-07-27T19:27:35.464Z",
+  "sourceFingerprint": "bc4523d1ebaa4dcc87ee1c3d215d20cf4acbf536c64e27b3c3c3a8ea2224403c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5452750,
+    "totalBytes": 5454558,
     "pages": 18,
     "modules": 211
   },
@@ -7173,8 +7173,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 80442,
-      "sha256": "60e27407a8a51db1f9b55922ee32ed4afac2f0ab3def7a3430c184c6a3687505",
+      "bytes": 81490,
+      "sha256": "76eac1483dd1ffd1e8a3bd4dd855d96725423997e608d40602238fd0e2fdb9b4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7221,22 +7221,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1683
+          "line": 1706
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1684
+          "line": 1707
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 1685
+          "line": 1708
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1686
+          "line": 1709
         }
       ],
       "styles": [
@@ -7346,25 +7346,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1683,
+          "line": 1706,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1684,
+          "line": 1707,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 1685,
+          "line": 1708,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1686,
+          "line": 1709,
           "exists": true
         },
         {
@@ -8843,8 +8843,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13584,
-      "sha256": "81d83fcef6fb9107e2eb331a3e3391d24ce36b115da961d469d60add45792052",
+      "bytes": 14344,
+      "sha256": "db2935b36fb4aa4fad27c1eeaf928c0b2ff78f0f60f9f20d1f66b302cf70380d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8916,7 +8916,7 @@
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 210
+          "line": 230
         }
       ],
       "styles": [
@@ -9220,7 +9220,7 @@
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 210,
+          "line": 230,
           "exists": true
         },
         {
@@ -19236,8 +19236,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 80442,
-      "sha256": "60e27407a8a51db1f9b55922ee32ed4afac2f0ab3def7a3430c184c6a3687505"
+      "bytes": 81490,
+      "sha256": "76eac1483dd1ffd1e8a3bd4dd855d96725423997e608d40602238fd0e2fdb9b4"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -19494,8 +19494,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 13584,
-      "sha256": "81d83fcef6fb9107e2eb331a3e3391d24ce36b115da961d469d60add45792052"
+      "bytes": 14344,
+      "sha256": "db2935b36fb4aa4fad27c1eeaf928c0b2ff78f0f60f9f20d1f66b302cf70380d"
     },
     {
       "path": "favicon-16x16.png",
@@ -21555,28 +21555,28 @@
     },
     {
       "file": "checkout.html",
-      "line": 687,
+      "line": 710,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 828,
+      "line": 851,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 838,
+      "line": 861,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 871,
+      "line": 894,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -24313,11 +24313,11 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 838
+          "line": 861
         },
         {
           "file": "checkout.html",
-          "line": 871
+          "line": 894
         },
         {
           "file": "js/email-auth.js",
@@ -24362,7 +24362,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1565,
+      "line": 1588,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -24935,7 +24935,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 672,
+            "line": 695,
             "operation": "collection"
           },
           {
@@ -25075,17 +25075,22 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 400,
+            "line": 418,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 428,
+            "line": 451,
             "operation": "doc"
           },
           {
             "file": "envios.html",
-            "line": 200,
+            "line": 214,
+            "operation": "doc"
+          },
+          {
+            "file": "envios.html",
+            "line": 221,
             "operation": "doc"
           },
           {
@@ -25440,12 +25445,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1429,
+            "line": 1452,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1666,
+            "line": 1689,
             "operation": "doc"
           },
           {

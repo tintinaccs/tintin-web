@@ -196,11 +196,31 @@ initSiteContent('envios');
   }
 
   // Ciudades y costos de envío viven en settings/shippingRates, separado de
-  // settings/general — ver sparkShippingRatesPath() en firestore.rules.
-  onSnapshot(doc(db, 'settings', 'shippingRates'), (snap) => {
-    const cfg = snap.exists() ? snap.data() : {};
+  // settings/general — ver sparkShippingRatesPath() en firestore.rules. Se
+  // guarda un respaldo de settings/general por si shippingRates todavía no
+  // se migró (recién desplegado, Super Admin no abrió el panel todavía):
+  // sin esto la página mostraría "Todavía no cargamos ciudades" aunque los
+  // datos reales sigan ahí.
+  let fallbackCfg = {};
+  let realCfg = null;
+  function renderShipCfg() {
+    const cfg = realCfg && (Array.isArray(realCfg.deliveryCities) || Array.isArray(realCfg.encomiendaCities))
+      ? realCfg
+      : fallbackCfg;
     renderList('envios-delivery-cities', normalize(cfg.deliveryCities, cfg.deliveryCost || 15000));
     renderList('envios-encomienda-cities', normalize(cfg.encomiendaCities, cfg.encomiendaCost || 25000));
+  }
+
+  onSnapshot(doc(db, 'settings', 'general'), (snap) => {
+    fallbackCfg = snap.exists() ? snap.data() : {};
+    if (!realCfg) renderShipCfg();
+  }, (err) => {
+    console.error('No se pudo cargar el respaldo de ciudades de envío:', err);
+  });
+
+  onSnapshot(doc(db, 'settings', 'shippingRates'), (snap) => {
+    realCfg = snap.exists() ? snap.data() : {};
+    renderShipCfg();
   }, (err) => {
     console.error('No se pudieron cargar las ciudades de envío:', err);
     renderList('envios-delivery-cities', []);

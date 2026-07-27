@@ -391,6 +391,24 @@ let STORE_INSTAGRAM = '';
 // así un cambio de ciudades/precios hecho en Super Admin se refleja acá sin
 // necesidad de recargar la página (si el cliente ya está en el paso de
 // envío, se re-popula el select).
+// Respaldo mientras settings/shippingRates todavía no se migró (recién
+// desplegado y Super Admin no abrió el panel todavía) — sin esto, un
+// cliente real que entra antes de esa migración ve el selector de ciudad
+// vacío (settings/shippingRates no existe todavía). Se combina con
+// applyShippingRates_(), dando prioridad a shippingRates apenas tenga datos.
+let _shipRatesFallback = {};
+let _shipRatesReal = {};
+function applyShippingRates_() {
+  const src = (Array.isArray(_shipRatesReal.deliveryCities) || Array.isArray(_shipRatesReal.encomiendaCities))
+    ? _shipRatesReal
+    : _shipRatesFallback;
+  if (src.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = src.deliveryCost;
+  if (src.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = src.encomiendaCost;
+  DELIVERY_CITIES   = normalizeCities(src.deliveryCities,   DEFAULT_DELIVERY_COST);
+  ENCOMIENDA_CITIES = normalizeCities(src.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
+  populateCities();
+}
+
 function subscribeStoreConfig() {
   return new Promise((resolveFirst) => {
     let generalDone = false;
@@ -415,6 +433,11 @@ function subscribeStoreConfig() {
       // __storeConfigStatus y antes se interpretaba erróneamente como fallo.
       storeCfg = normalizeStoreAccessConfig(cfg, 'ok');
       reevaluateStoreGate_();
+      _shipRatesFallback = {
+        deliveryCities: cfg.deliveryCities, encomiendaCities: cfg.encomiendaCities,
+        deliveryCost: cfg.deliveryCost, encomiendaCost: cfg.encomiendaCost
+      };
+      applyShippingRates_();
       if (!generalDone) { generalDone = true; maybeResolveFirst(); }
     }, e => {
       console.error('No se pudo escuchar la configuración de la tienda desde Firestore, usando valores por defecto:', e);
@@ -427,11 +450,11 @@ function subscribeStoreConfig() {
     // expresiones que Firestore evalúa al validar un pedido.
     onSnapshot(doc(db, 'settings', 'shippingRates'), snap => {
       const cfg = snap.exists() ? snap.data() : {};
-      if (cfg.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = cfg.deliveryCost;
-      if (cfg.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = cfg.encomiendaCost;
-      DELIVERY_CITIES   = normalizeCities(cfg.deliveryCities,   DEFAULT_DELIVERY_COST);
-      ENCOMIENDA_CITIES = normalizeCities(cfg.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
-      populateCities();
+      _shipRatesReal = {
+        deliveryCities: cfg.deliveryCities, encomiendaCities: cfg.encomiendaCities,
+        deliveryCost: cfg.deliveryCost, encomiendaCost: cfg.encomiendaCost
+      };
+      applyShippingRates_();
       if (!ratesDone) { ratesDone = true; maybeResolveFirst(); }
     }, e => {
       console.error('No se pudo escuchar las tarifas de envío desde Firestore, usando valores por defecto:', e);
