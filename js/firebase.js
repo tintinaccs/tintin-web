@@ -7,16 +7,19 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
-// authDomain apunta al dominio propio del sitio (ya autorizado en Firebase
-// Console → Authentication → Settings → Authorized domains) en vez de
-// tintin-accesorios.firebaseapp.com. functions/__/auth/[[path]].js
-// reexpone ahí las mismas páginas de ayuda de Firebase Auth — así el login
-// deja de depender de que el navegador permita almacenamiento entre
-// dominios distintos, que es lo que a veces bloqueaba la ventana de
-// Google o perdía la sesión al volver.
+// authDomain vuelve a tintin-accesorios.firebaseapp.com. Se probó apuntarlo
+// a tintinaccesorios.pages.dev (vía functions/__/auth/[[path]].js) para que
+// el login no dependiera de almacenamiento entre dominios distintos, pero
+// eso rompió el sign-in por completo en producción con "Error 400:
+// redirect_uri_mismatch": el cliente OAuth de Google (Google Cloud Console
+// → APIs & Services → Credentials) solo tiene autorizado el redirect_uri
+// del authDomain original — agregar un dominio a Firebase Console →
+// Authorized domains NO registra su /__/auth/handler ahí, son dos listas
+// separadas, y esa segunda solo se edita manualmente desde Google Cloud
+// Console (no desde este código). Revertido para restablecer el login.
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
-  authDomain: "tintinaccesorios.pages.dev",
+  authDomain: "tintin-accesorios.firebaseapp.com",
   projectId: "tintin-accesorios",
   messagingSenderId: "207918562502",
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",
