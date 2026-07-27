@@ -18,8 +18,8 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "./role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "./email-config.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
-import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260720-read-budget-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260726-browser-fallback-1";
+import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";

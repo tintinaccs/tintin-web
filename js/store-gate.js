@@ -22,8 +22,9 @@ import {
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay,
   getStoreAccessConfig,
+  getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './store-gate-core.js?v=tintin-20260716-cloudinary-fix-1';
+} from './store-gate-core.js?v=tintin-20260726-browser-fallback-1';
 
 export {
   isAccessAllowed,
@@ -44,6 +45,7 @@ if (!window.TintinStoreGateRuntimeBooted) {
   let config = null;
   let lastPublishedState = '';
   let legacyUnsubscribe = null;
+  let restConfigResolved = false;
 
   function publishState(state) {
     if (state === lastPublishedState) return;
@@ -103,6 +105,7 @@ if (!window.TintinStoreGateRuntimeBooted) {
   }
 
   function startLegacyFallback(reason) {
+    if (restConfigResolved) return;
     if (legacyUnsubscribe) return;
 
     console.warn(
@@ -151,6 +154,23 @@ if (!window.TintinStoreGateRuntimeBooted) {
       startLegacyFallback('reglas anteriores');
     }
   );
+
+  // Respaldo en paralelo: evita el falso "sitio bloqueado" cuando la tienda
+  // está abierta pero el navegador impide el canal normal de Firebase.
+  window.setTimeout(() => {
+    if (config?.__storeConfigStatus === 'ok') return;
+    getStoreAccessConfigFromRest()
+      .then(restConfig => {
+        if (!restConfig) return;
+        restConfigResolved = true;
+        stopLegacyFallback();
+        config = restConfig;
+        evaluate();
+      })
+      .catch(error => {
+        console.warn('[store-gate] El respaldo REST tampoco pudo comprobar el estado:', error);
+      });
+  }, 900);
 
   async function refresh() {
     document.documentElement.classList.add('tt-store-gate-pending');

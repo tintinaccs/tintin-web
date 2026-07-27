@@ -501,7 +501,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     };
     if (messages[code]) return messages[code];
     if (code === 'permission-denied' || code === 'firestore/permission-denied') {
-      return 'Firebase rechazó el pedido. Publicá las reglas gratuitas del Paso 2 y volvé a intentar.';
+      return 'No pudimos registrar el pedido por un problema de permisos. Volvé a intentar; si continúa, escribinos por WhatsApp.';
     }
     if (code === 'unavailable' || code === 'firestore/unavailable') {
       return 'No pudimos conectar con Firebase. Revisá tu internet y volvé a intentar.';

@@ -11,6 +11,7 @@ import {
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { getPublicDocumentRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const STYLE_ID = 'tt-store-gate-style';
@@ -584,6 +585,12 @@ export function getDesiredStoreOverlay() {
   return desiredOverlay;
 }
 
+export async function getStoreAccessConfigFromRest() {
+  const document = await getPublicDocumentRest('settings/storeGate');
+  if (!document) return null;
+  return rememberConfig(normalizeStoreAccessConfig(document.data, 'ok'));
+}
+
 /**
  * Lectura puntual usada por login.html, admin.html y revalidaciones.
  * Si el documento falta o la lectura falla, nunca se asume "abierta".
@@ -591,18 +598,28 @@ export function getDesiredStoreOverlay() {
 export async function getStoreAccessConfig() {
   let primaryStatus = 'missing';
 
-  try {
-    const snap = await getDoc(STORE_GATE_REF);
-    if (snap.exists()) {
-      return rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'));
-    }
-  } catch (error) {
-    primaryStatus = 'error';
-    console.warn(
-      '[store-gate] settings/storeGate aún no está disponible; se prueba la configuración anterior durante la migración:',
-      error
-    );
-  }
+  // Ambos caminos arrancan juntos. El SDK conserva tiempo real y sesión;
+  // REST permite resolver el mismo documento público cuando un navegador,
+  // antivirus o red bloquea el canal interno de Firestore/reCAPTCHA.
+  const restAttempt = getStoreAccessConfigFromRest().catch(() => null);
+  const sdkAttempt = getDoc(STORE_GATE_REF)
+    .then(snap => snap.exists()
+      ? rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'))
+      : null)
+    .catch(error => {
+      primaryStatus = 'error';
+      console.warn(
+        '[store-gate] settings/storeGate aún no está disponible; se prueba la configuración anterior durante la migración:',
+        error
+      );
+      return null;
+    });
+
+  const firstConfig = await Promise.race([sdkAttempt, restAttempt]);
+  if (firstConfig) return firstConfig;
+
+  const [sdkConfig, restConfig] = await Promise.all([sdkAttempt, restAttempt]);
+  if (sdkConfig || restConfig) return sdkConfig || restConfig;
 
   // Compatibilidad de despliegue: permite publicar primero el JavaScript y
   // después las reglas sin abrir ni romper la tienda. Con las reglas finales,

@@ -25,6 +25,9 @@ const uiQuality = read('js/ui-quality.js');
 const pageAudit = read('js/page-audit-fix.js');
 const rules = read('firestore.rules');
 const checkout = read('checkout.html');
+const restFallback = read('js/firestore-rest-fallback.js');
+const productsStore = read('js/products-store.js');
+const collectionsStore = read('js/collections-store.js');
 
 check(
   'Bloqueo síncrono antes del body',
@@ -130,6 +133,35 @@ check(
   gateCore.includes("doc(db, 'settings', 'storeGate')") &&
     gateRuntime.includes("doc(db, 'settings', 'storeGate')"),
   'el gate debe usar settings/storeGate como fuente principal'
+);
+check(
+  'Comprobación temprana compatible sin falso cierre',
+  pageLoader.includes('function bootEarlyStoreGateFallback()') &&
+    pageLoader.includes("payload?.fields?.storeOpen?.booleanValue !== true") &&
+    pageLoader.includes("source: 'public-rest-fallback'"),
+  'solo storeOpen=true explícito puede retirar la espera si Firebase o reCAPTCHA tardan'
+);
+check(
+  'Estado abierto recuperable si el navegador bloquea el canal normal',
+  gateCore.includes('getStoreAccessConfigFromRest') &&
+    gateRuntime.includes('getStoreAccessConfigFromRest()') &&
+    gateRuntime.includes('restConfigResolved = true'),
+  'el mismo settings/storeGate público debe poder comprobarse sin mostrar un cierre falso'
+);
+check(
+  'Catálogo y colecciones tienen lectura pública compatible',
+  productsStore.includes("listPublicCollectionRest('products', 1000)") &&
+    collectionsStore.includes("listPublicCollectionRest('collections', 200)") &&
+    productsStore.includes('products:all-rest-fallback') &&
+    collectionsStore.includes('collections:public-rest-fallback'),
+  'bloquear reCAPTCHA o el canal de Firestore no debe vaciar las grillas públicas'
+);
+check(
+  'Respaldo REST es estrictamente de solo lectura',
+  restFallback.includes("method: 'GET'") &&
+    !/\b(?:POST|PUT|PATCH|DELETE)\b/.test(restFallback) &&
+    restFallback.includes('REQUEST_TIMEOUT_MS'),
+  'la recuperación no debe permitir escrituras ni quedar esperando indefinidamente'
 );
 check(
   'Sin apertura por error',

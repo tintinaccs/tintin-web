@@ -86,7 +86,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260722-order-delete-2';
+  const TT_CACHE_VERSION = 'tintin-20260726-browser-fallback-1';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -618,6 +618,39 @@
     });
   }
 
+  function bootEarlyStoreGateFallback() {
+    if (!storeGateRequired || typeof window.fetch !== 'function') return;
+
+    const controller = typeof AbortController === 'function'
+      ? new AbortController()
+      : null;
+    const timer = window.setTimeout(() => controller?.abort(), 7000);
+    const url =
+      'https://firestore.googleapis.com/v1/projects/tintin-accesorios/' +
+      'databases/(default)/documents/settings/storeGate' +
+      '?key=AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
+
+    window.fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-store',
+      credentials: 'omit',
+      ...(controller ? { signal: controller.signal } : {})
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(payload => {
+        // Solo un true explícito abre antes de Firebase. Si está cerrada,
+        // falta el documento o hay cualquier error, decide el guard completo
+        // con la sesión y los permisos del equipo.
+        if (payload?.fields?.storeOpen?.booleanValue !== true || gateResolved) return;
+        window.dispatchEvent(new CustomEvent('tintin:store-gate-state', {
+          detail: { state: 'allowed', source: 'public-rest-fallback' }
+        }));
+      })
+      .catch(() => {})
+      .finally(() => window.clearTimeout(timer));
+  }
+
   function importSibling(fileName, label, onError) {
     let url = 'js/' + fileName;
     try {
@@ -808,6 +841,7 @@
     window.setTimeout(() => {
       if (!gateResolved) showEmergencyStoreGate();
     }, STORE_GATE_TIMEOUT_MS);
+    bootEarlyStoreGateFallback();
   }
 
   bootStoreGate();
