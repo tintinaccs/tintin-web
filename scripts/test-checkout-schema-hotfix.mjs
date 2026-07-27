@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { onRequest } from '../functions/js/secure-checkout-order.js';
+import { onRequest } from '../functions/js/secure-checkout-order.js.js';
 
 const incompatibleSource = `
 const orderData = {
