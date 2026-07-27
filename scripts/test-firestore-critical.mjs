@@ -44,7 +44,7 @@ function orderPayload(uid, requestId, items, state = 'pending') {
     storeWhatsapp: '595981299331',
     storeInstagram: '',
     shipping: {
-      method: 'delivery', city: 'Asunción', rateIndex: 0,
+      method: 'delivery', city: 'Asunción', departamento: '', rateIndex: 0,
       address: '', referencia: '', zone: 'central',
       mapLocation: { lat: -25.29, lng: -57.58, name: 'Casa', address: '' }
     },
@@ -207,6 +207,13 @@ try {
 
   await seedBase();
   await assertSucceeds(createOrderWithOverrides('req_shape_intact_123456', base => base));
+
+  await seedBase();
+  await assertSucceeds(createOrderWithOverrides('req_no_departamento_123456', base => {
+    const shipping = { ...base.shipping };
+    delete shipping.departamento;
+    return { ...base, shipping };
+  }));
 
   await seedBase();
   await createPendingOrder('req_selfdelete_123456');
