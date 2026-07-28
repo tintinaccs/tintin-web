@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T11:09:14.447Z",
-  "sourceFingerprint": "c4406159e76d860824947a08975f8d05fc8dd1837ac7cbf195b4a7600d5d6d8a",
+  "generatedAt": "2026-07-28T11:12:47.660Z",
+  "sourceFingerprint": "6184be2c8f89db854ec732a57838a54e145d9821965ed891f2763572e8709dfd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5448067,
+    "totalBytes": 5448362,
     "pages": 18,
     "modules": 211
   },
@@ -16661,8 +16661,8 @@
     },
     {
       "path": "js/session-guard.js",
-      "bytes": 2177,
-      "sha256": "91c4535f66b9ff09e1f1814a792f070bd39188f8fbede5a7a8e688c53a2ccc1d",
+      "bytes": 2472,
+      "sha256": "d0e1d777048bba96fabd2f1b11fb544b7cbf42c70dfbe7878e5f2e68159391fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16672,19 +16672,25 @@
           "raw": "./firebase.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 12
+          "line": 14
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 15
+          "line": 17
+        },
+        {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 18
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 15
+          "line": 17
         }
       ]
     },
@@ -20280,8 +20286,8 @@
     {
       "path": "js/session-guard.js",
       "extension": ".js",
-      "bytes": 2177,
-      "sha256": "91c4535f66b9ff09e1f1814a792f070bd39188f8fbede5a7a8e688c53a2ccc1d"
+      "bytes": 2472,
+      "sha256": "d0e1d777048bba96fabd2f1b11fb544b7cbf42c70dfbe7878e5f2e68159391fe"
     },
     {
       "path": "js/site-activity.js",
@@ -23136,21 +23142,21 @@
     },
     {
       "file": "js/session-guard.js",
-      "line": 37,
+      "line": 40,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/session-guard.js",
-      "line": 37,
+      "line": 40,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/session-guard.js",
-      "line": 38,
+      "line": 41,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -24310,7 +24316,7 @@
       "references": [
         {
           "file": "js/session-guard.js",
-          "line": 38
+          "line": 41
         }
       ]
     },

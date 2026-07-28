@@ -4,15 +4,18 @@
 // Firebase Auth por sí solo mantiene la sesión activa indefinidamente
 // (renueva el token solo). Acá se agrega un límite propio: pasados ~30
 // minutos desde que la persona inició sesión, se cierra la sesión sola y
-// hay que volver a loguearse — sin importar el rol (Super Admin, admin,
-// agente, cliente). Se importa una sola vez desde cada página pública y
-// desde admin.html; marca el inicio real del login solo login.html
-// (markSessionStart), pero el chequeo corre en todas.
+// hay que volver a loguearse — para todos los roles excepto el Super
+// Admin (tintinaccs@gmail.com), que nunca se desloguea sola por esto (es
+// quien tiene que poder quedarse trabajando en el panel sin cortes). Se
+// importa una sola vez desde cada página pública y desde admin.html;
+// marca el inicio real del login solo login.html (markSessionStart),
+// pero el chequeo corre en todas.
 
 import { auth } from "./firebase.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
 
 const SESSION_DURATION_MS = 30 * 60 * 1000;
 const STORAGE_KEY = 'tt_session_started_at';
@@ -40,6 +43,7 @@ function goToExpiredLogin() {
 
 async function enforce(user) {
   if (!user) { clearSessionStart(); return; }
+  if (String(user.email || '').toLowerCase() === SUPER_ADMIN) { clearSessionStart(); return; }
   const startedAt = readSessionStart();
   if (startedAt === null) {
     // Sesión ya activa sin marca propia (login anterior a este cambio, u
