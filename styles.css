@@ -497,9 +497,9 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   right: 0;
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 8px;
-  width: min(240px, calc(100vw - 24px));
+  border-radius: 18px;
+  padding: 10px;
+  width: min(264px, calc(100vw - 24px));
   max-width: calc(100vw - 24px);
   box-shadow: var(--shadow-lg);
   opacity: 0;
@@ -519,16 +519,18 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-account-header {
-  padding: 10px 12px 6px;
-  font-size: 0.68rem;
+  padding: 10px 10px 12px;
+  font-size: 0.86rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.tt-account-header span { overflow: hidden; text-overflow: ellipsis; }
+.tt-account-panel-avatar { box-shadow: 0 4px 12px rgba(139,38,66,.16); }
 
 /* Scoped as ".tt-account-panel .tt-account-item" (not just ".tt-account-item")
    so this wins specificity over ".tt-header-actions button/a" — the account
@@ -541,11 +543,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   gap: 10px;
   width: 100%;
   height: auto;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+  border-radius: 12px;
   color: var(--text);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   background: none;
@@ -553,13 +555,13 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   text-align: left;
   font-family:Montserrat;
   white-space: nowrap;
-  transition: var(--transition);
+  transition: background-color .18s ease, color .18s ease;
   overflow: visible;
 }
 
 .tt-account-panel .tt-account-item:hover { background: var(--pink-pale); color: var(--pink-dark); }
 .tt-account-panel .tt-account-item.tt-account-logout { color: var(--rose); }
-.tt-account-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+.tt-account-divider { height: 1px; background: var(--border); margin: 8px 4px; }
 
 .tt-dropdown-card {
   display: flex;
@@ -866,22 +868,24 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
+  padding: 15px 16px;
+  border-radius: 18px;
   background: var(--bg);
   border: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
-  transition: background 0.2s;
+  box-shadow: 0 6px 18px rgba(139,38,66,.05);
+  transition: background-color .2s ease;
 }
 .tt-mobile-user-login:hover,
 .tt-mobile-user-profile:hover { background: var(--pink-pale); }
 
 .tt-mobile-user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: var(--pink-pale);
+  box-shadow: 0 4px 12px rgba(139,38,66,.14);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -915,8 +919,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: block;
   width: 100%;
   margin-top: 8px;
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  border-radius: 14px;
   background: none;
   border: 1px solid var(--border);
   color: var(--rose);
@@ -925,7 +929,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   font-weight: 600;
   text-align: center;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color .2s ease;
 }
 .tt-mobile-user-logout:hover { background: var(--pink-pale); }
 
