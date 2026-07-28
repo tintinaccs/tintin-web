@@ -241,9 +241,14 @@
     '@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}',
     '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}',
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
-    '#tt-loader-title{margin-top:16px;font-family:Montserrat;font-size:clamp(12px,2.6vw,15px);font-weight:800;letter-spacing:.1em;color:var(--pink-dark,#AD3F67);text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box;word-break:break-word}',
+    // color con !important: styles.css aplica "color:var(--tt-text)!important"
+    // a cualquier div (entre otras etiquetas) para el texto normal del sitio.
+    // Sin este !important esa regla le gana a esta por especificidad igual +
+    // orden de carga, y el título/subtítulo del loader terminan en gris
+    // oscuro en vez del rosa de marca que se ve acá.
+    '#tt-loader-title{margin-top:16px;font-family:Montserrat;font-size:clamp(12px,2.6vw,15px);font-weight:800;letter-spacing:.1em;color:var(--pink-dark,#AD3F67)!important;text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box;word-break:break-word}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-title{opacity:1;transition:opacity .3s ease .1s}',
-    '#tt-loader-subtitle{margin-top:6px;font-family:Montserrat;font-size:clamp(11px,2.2vw,13px);font-weight:600;color:#9e7a89;text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box}',
+    '#tt-loader-subtitle{margin-top:6px;font-family:Montserrat;font-size:clamp(11px,2.2vw,13px);font-weight:600;color:#9e7a89!important;text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-subtitle{opacity:1;transition:opacity .3s ease .15s}',
     '@media (max-width:600px){#tt-loader-title{font-size:clamp(11px,3.4vw,13px);letter-spacing:.06em;margin-top:14px}#tt-loader-subtitle{font-size:clamp(10px,2.8vw,12px)}}',
     '@media (prefers-reduced-motion:reduce){#tt-loader-title,#tt-loader-subtitle{transition:none}}',
