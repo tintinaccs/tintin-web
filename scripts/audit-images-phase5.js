@@ -141,10 +141,18 @@ check(
 
 check(
   'La red de seguridad del Hero espera a la imagen en camino antes de revelar a ciegas',
-  files.indexHtml.includes('imageStillLoading') &&
+  /var loaded = img && img\.complete && img\.naturalWidth > 0;/.test(files.indexHtml) &&
+    files.indexHtml.includes('if (loaded) { reveal(); return; }') &&
     files.indexHtml.includes('deadline') &&
     /var deadline = Date\.now\(\) \+ 4000;/.test(files.indexHtml),
-  'con red lenta, revelar a los 900ms sin mirar si la imagen ya cargó muestra el mismo parpadeo de fondo que se reportó'
+  // No basta con "hay un src y no terminó de cargar": si el chequeo cae en
+  // el instante justo antes de que images-phase5.js recién asigne el src
+  // (nunca llegó todavía, no que haya fallado), esa versión anterior
+  // revelaba igual sin esperar el tope de 4s — mismo parpadeo de fondo que
+  // se reportó, solo que en una ventana más angosta. Ahora solo revela
+  // cuando la imagen realmente terminó de cargar; si no, sigue reintentando
+  // hasta el tope sin importar si todavía no hay ningún src.
+  'con red lenta, revelar sin comprobar que la imagen realmente terminó de cargar muestra el mismo parpadeo de fondo que se reportó'
 );
 
 check(

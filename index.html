@@ -101,6 +101,15 @@
     // terminó de descargarse, espera un poco más en vez de revelar el fondo
     // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
     // nunca de una red que jamás responda.
+    //
+    // Si al llegar el tope no hay ninguna imagen realmente cargada (nunca
+    // llegó un src — Firestore/Cloudinary bloqueados o inalcanzables por
+    // completo — o llegó y falló), NO se revela: revelar la etiqueta de
+    // imagen sin foto real muestra el ícono de "imagen rota" + el alt
+    // completo como texto visible (tiene width/height fijos, así que el
+    // navegador sí le reserva ese cuadro), mucho peor que dejar el fondo
+    // oscuro de .tt-hero-media a la vista, que es lo que el propio diseño
+    // ya prevé como respaldo.
     (function () {
       var media = document.getElementById('tt-hero-media');
       var img = document.getElementById('tt-hero-img');
@@ -108,12 +117,17 @@
       var deadline = Date.now() + 4000;
       function reveal() { media.classList.remove('tt-hero-pending'); }
       function tick() {
-        var imageStillLoading = img && img.getAttribute('src') && !(img.complete && img.naturalWidth > 0);
-        if (imageStillLoading && Date.now() < deadline) {
+        var loaded = img && img.complete && img.naturalWidth > 0;
+        if (loaded) { reveal(); return; }
+        if (Date.now() < deadline) {
           window.setTimeout(tick, 150);
           return;
         }
-        reveal();
+        // Tope alcanzado sin imagen real (nunca llegó un src, llegó y
+        // falló, o sigue a medio descargar): se deja el fondo oscuro. Si
+        // images-phase5.js consigue la imagen más tarde igual,
+        // revealHeroWhenImageReady() en ese archivo saca la clase por su
+        // cuenta apenas esté lista.
       }
       window.setTimeout(tick, 900);
     })();
