@@ -2979,6 +2979,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border: 0;
   color: inherit;
   font-family: "Montserrat";
+  box-shadow: 0 20px 44px rgba(139,38,66,.12), 0 2px 8px rgba(139,38,66,.05);
 }
 .tt-gallery-main img {
   position: absolute;
@@ -3007,7 +3008,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   transition: border-color var(--transition);
 }
 
-.tt-gallery-thumb.active { border-color: var(--pink-dark); }
+.tt-gallery-thumb.active { border-color: var(--pink-dark); box-shadow: 0 0 0 3px rgba(173,63,103,.14); }
 
 .tt-gallery-thumb-img {
   width: 100%;
@@ -3231,12 +3232,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   text-transform: uppercase;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: var(--transition);
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 16px 34px rgba(139,38,66,.18), 0 2px 8px rgba(139,38,66,.07);
 }
 .tt-btn-primary-full:hover { background: var(--rose); border-color: var(--rose); transform: translateY(-1px); }
+.tt-btn-primary-full:active { transform: translateY(0); box-shadow: 0 6px 16px rgba(139,38,66,.16); }
 
 .tt-btn-outline-full {
   width: 100%;
@@ -3250,12 +3253,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   text-transform: uppercase;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: var(--transition);
+  transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 10px 24px rgba(139,38,66,.08);
 }
 .tt-btn-outline-full:hover { background: var(--pink-dark); color: var(--white); transform: translateY(-1px); }
+.tt-btn-outline-full:active { transform: translateY(0); }
 
 /* Added-to-cart toast */
 .tt-added-toast {

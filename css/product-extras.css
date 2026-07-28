@@ -210,11 +210,12 @@
 .tinsel-item-img img{ width:100%; height:100%; object-fit:cover; display:block; }
 .tinsel-item-info{ min-width:0; }
 .tinsel-item-name{
-  display:block;
+  display:-webkit-box;
+  -webkit-line-clamp:2; -webkit-box-orient:vertical;
   font-size:13px; font-weight:700; color:var(--fg);
+  line-height:1.3;
   margin:0 0 3px;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-  text-decoration:none;
+  overflow:hidden; text-decoration:none;
 }
 .tinsel-item-name:hover{
   color:var(--acc);
