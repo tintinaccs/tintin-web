@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T11:59:11.769Z",
-  "sourceFingerprint": "add6ad5475e18b078101743d0b4b43a9c16efd109e6738d5a96f2d32420995c2",
+  "generatedAt": "2026-07-28T13:49:58.978Z",
+  "sourceFingerprint": "08459749f34970a578937581ffa0ae89481026b5e7fa6c774b1dbace87d28306",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5449179,
+    "totalBytes": 5450397,
     "pages": 18,
     "modules": 211
   },
@@ -10529,8 +10529,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 20721,
-      "sha256": "0abbe6e23280bc8f33697ef7ef8ce8ddbc86fd9d423f205179741e6b45f5dd8c",
+      "bytes": 21939,
+      "sha256": "34888d9fc9c7b6c1854e00c62b7b3da66e2a1677f94b4c7fa58746b20f8ca8ea",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10577,17 +10577,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 505
+          "line": 522
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 506
+          "line": 523
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 507
+          "line": 524
         }
       ],
       "styles": [
@@ -10681,19 +10681,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 505,
+          "line": 522,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 506,
+          "line": 523,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 507,
+          "line": 524,
           "exists": true
         },
         {
@@ -20352,8 +20352,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 20721,
-      "sha256": "0abbe6e23280bc8f33697ef7ef8ce8ddbc86fd9d423f205179741e6b45f5dd8c"
+      "bytes": 21939,
+      "sha256": "34888d9fc9c7b6c1854e00c62b7b3da66e2a1677f94b4c7fa58746b20f8ca8ea"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -23302,21 +23302,21 @@
     },
     {
       "file": "login.html",
-      "line": 188,
+      "line": 192,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 191,
+      "line": 195,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 191,
+      "line": 195,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -24291,7 +24291,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 191
+          "line": 195
         }
       ]
     },
@@ -25538,17 +25538,17 @@
           },
           {
             "file": "login.html",
-            "line": 198,
+            "line": 202,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 208,
+            "line": 212,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 246,
+            "line": 250,
             "operation": "doc"
           },
           {

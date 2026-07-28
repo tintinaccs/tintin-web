@@ -174,7 +174,11 @@ function safeLocalRedirect(value) {
 }
 
 async function redirectByRole(role, email, options = {}) {
-  const cfg = await getStoreAccessConfig();
+  // storeConfigPromise: si quien llama ya arrancó esta lectura en paralelo
+  // con la del usuario (en vez de esperar una antes de empezar la otra), se
+  // reusa esa misma promesa en vez de arrancar una lectura nueva — ahorra
+  // una ida y vuelta completa a Firestore en el camino más lento del login.
+  const cfg = await (options.storeConfigPromise || getStoreAccessConfig());
   if (!isAccessAllowed(cfg, role, email)) {
     await signOut(auth);
     hideLoginOverlay();
@@ -252,6 +256,11 @@ async function pendingWelcomeFor(uid, role) {
 }
 
 async function processGoogleUser(user) {
+  // Arranca ya la lectura de settings/storeGate en paralelo con la del
+  // perfil (son independientes) — antes esperaba a tener el perfil resuelto
+  // para recién empezarla, sumando una ida y vuelta entera a Firestore al
+  // tiempo total del login.
+  const storeConfigPromise = getStoreAccessConfig();
   const { role, blocked, welcomePending } = await guardarUsuario(user);
   if (blocked) {
     await signOut(auth);
@@ -259,7 +268,7 @@ async function processGoogleUser(user) {
     showBlockedModal();
     return;
   }
-  await redirectByRole(role, user.email, { welcomePending });
+  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise });
 }
 
 // Firebase puede avisar que hay una sesión antes de que getRedirectResult()
@@ -284,6 +293,7 @@ async function handlePassiveAuthState(user) {
     return;
   }
   if (explicitLoginInProgress) return;
+  const storeConfigPromise = getStoreAccessConfig();
   if (await checkBlocked(user.uid, user.email)) {
     await signOut(auth);
     hideLoginOverlay();
@@ -292,7 +302,7 @@ async function handlePassiveAuthState(user) {
   }
   const role = await getUserRole(user.uid, user.email);
   const welcomePending = await pendingWelcomeFor(user.uid, role);
-  await redirectByRole(role, user.email, { welcomePending });
+  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise });
 }
 
 onAuthStateChanged(auth, async user => {
@@ -432,15 +442,22 @@ document.getElementById('btn-send-email-link').onclick = () => handleSendLink(fa
 document.getElementById('btn-resend-email-link').onclick = () => handleSendLink(true);
 
 async function finishEmailLinkLogin(user) {
+  // Arranca ya settings/storeGate en paralelo con el chequeo de bloqueo y el
+  // perfil (son independientes entre sí).
+  const storeConfigPromise = getStoreAccessConfig();
   if (await checkBlockedEmailLogin(user.uid, user.email)) {
     await signOut(auth);
     hideLoginOverlay();
     showBlockedModal();
     return;
   }
-  const { role, welcomePending: savedWelcomePending } = await ensureUserDocForEmailLogin(user);
-  const welcomePending = savedWelcomePending || await pendingWelcomeFor(user.uid, role);
-  await redirectByRole(role, user.email, { welcomePending });
+  const result = await ensureUserDocForEmailLogin(user);
+  // ensureUserDocForEmailLogin ya devuelve welcomePending resuelto salvo en
+  // el caso puntual de ascender a Super Admin — ahí sí hace falta volver a
+  // consultar. Usar "??" (no "||") evita releer el mismo documento cuando
+  // welcomePending ya vino en false (clienta que ya vio el tutorial).
+  const welcomePending = result.welcomePending ?? await pendingWelcomeFor(user.uid, result.role);
+  await redirectByRole(result.role, user.email, { welcomePending, storeConfigPromise });
 }
 
 async function tryCompleteEmailLink() {
