@@ -95,8 +95,8 @@ check(
 );
 
 check(
-  'Product.html mantiene cuatro relacionados de colecciones únicas',
-  files.productRelated.includes('const LIMIT = 4') &&
+  'Product.html mantiene tres relacionados de colecciones únicas',
+  files.productRelated.includes('const LIMIT = 3') &&
     files.productRelated.includes('new Set(state.visible.map(categoryKey))') &&
     files.productRelated.includes('String(product.id) === currentId') &&
     files.productRelated.includes('prefers-reduced-motion: reduce') &&

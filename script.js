@@ -830,7 +830,7 @@ function _onProductImgError(img) {
 }
 window._onProductImgError = _onProductImgError;
 
-function renderProductCardMarkup(p) {
+function renderProductCardMarkup(p, options = {}) {
   const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
   const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
   const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
@@ -843,9 +843,13 @@ function renderProductCardMarkup(p) {
   const hasVariants = p.variants && Object.keys(p.variants).some(key =>
     Array.isArray(p.variants[key]) && p.variants[key].length
   );
+  // El bloque "También te puede gustar" muestra tarjetas más angostas (3 por
+  // fila en todas las pantallas) — con esos textos completos los botones se
+  // partían en 3-4 líneas ilegibles, así que ahí van etiquetas cortas.
+  const primaryLabel = options.related ? 'Ver' : 'Ver producto';
   const secondaryAction = hasVariants
-    ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">Elegir opciones</a>`
-    : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">+ Carrito</button>`;
+    ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">${options.related ? 'Opciones' : 'Elegir opciones'}</a>`
+    : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
 
   return `
     <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
@@ -858,7 +862,7 @@ function renderProductCardMarkup(p) {
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
         <div class="tt-product-price">${formatPrice(p.price)}</div>
         <div class="tt-product-actions">
-          <a href="${productHref}" class="tt-btn tt-btn-sm">Ver producto</a>
+          <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
           ${secondaryAction}
         </div>
       </div>

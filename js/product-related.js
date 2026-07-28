@@ -1,4 +1,4 @@
-const LIMIT = 4;
+const LIMIT = 3;
 const AUTO_ROTATE_MS = 7600;
 const EXIT_MS = 220;
 const CATEGORY_FALLBACK = 'sin-coleccion';

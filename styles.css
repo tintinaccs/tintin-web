@@ -3484,7 +3484,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-related-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   align-items: stretch;
 }
@@ -3569,7 +3569,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-contact-grid { gap: 40px; }
   .tt-colls-page-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tt-related-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* ═══════════════════════════════════════════════
@@ -3730,7 +3730,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-product-detail-grid { grid-template-columns: 1fr; gap: 28px; }
   .tt-product-gallery { width: min(100%, 620px); margin: 0 auto; }
   .tt-product-trust-badges { grid-template-columns: 1fr; }
-  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tt-related-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tt-related-grid .tt-product-info { padding: 10px; }
+  .tt-related-grid .tt-product-actions { flex-direction: column; gap: 6px; }
+  .tt-related-grid .tt-product-actions .tt-btn {
+    width: 100%;
+    padding: 8px 6px;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+  }
 
   /* Mobile hero — bloque de contenido centrado horizontalmente y apoyado
      hacia abajo (no en el medio vertical del banner), con un margen
@@ -3810,7 +3818,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-watch-feature-content { padding: 32px 20px; }
 
   .tt-colls-page-grid { grid-template-columns: 1fr; }
-  .tt-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .tt-related-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 
   .tt-product-detail-grid { gap: 22px; }
   .tt-product-detail-name { font-size: 1.6rem; }

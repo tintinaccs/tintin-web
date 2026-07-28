@@ -264,14 +264,38 @@ body.tt-product-maintenance .tt-footer-tagline {
     align-items: stretch;
   }
 
+  /* 3 recomendaciones en una sola fila también en mobile — las tarjetas
+     quedan angostas, así que sus botones de acción pasan a apilarse en
+     vertical (ver regla de abajo) para no achicar el texto de más. */
   body.tt-product-maintenance .tt-related-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.tt-product-maintenance .tt-related-grid .tt-product-info {
+    padding: 10px;
+  }
+
+  body.tt-product-maintenance .tt-related-grid .tt-product-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  body.tt-product-maintenance .tt-related-grid .tt-product-actions .tt-btn {
+    width: 100%;
+    padding: 8px 6px;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
   }
 }
 
 @media (max-width: 480px) {
   body.tt-product-maintenance .tinben-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.tt-product-maintenance .tt-related-grid {
+    gap: 8px;
   }
 
   body.tt-product-maintenance .tinsel-item {
@@ -286,10 +310,6 @@ body.tt-product-maintenance .tt-footer-tagline {
 @media (max-width: 360px) {
   body.tt-product-maintenance .tt-product-detail-name {
     overflow-wrap: anywhere;
-  }
-
-  body.tt-product-maintenance .tt-related-grid {
-    gap: 8px;
   }
 
   body.tt-product-maintenance .tt-product-info-panel {
