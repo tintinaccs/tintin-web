@@ -173,6 +173,32 @@
     return PAGE_TITLES[file] || '';
   }
 
+  // login.html no puede mantener su propio saludo ("Hola de nuevo, .../
+  // genérico para cuentas nuevas") visible después de saltar a index.html —
+  // la navegación tira abajo ese loader entero. Lo deja guardado acá mismo
+  // (ver stashPostLoginGreeting en login.html) para que este, el loader de
+  // la página de destino, lo recoja y lo siga mostrando un instante — la
+  // única razón por la que el inicio (que normalmente no lleva título)
+  // llega a mostrar uno acá.
+  const POST_LOGIN_GREETING_KEY = 'tt_post_login_greeting';
+  const POST_LOGIN_GREETING_MAX_AGE_MS = 8000;
+
+  function consumePostLoginGreeting() {
+    try {
+      const raw = window.sessionStorage.getItem(POST_LOGIN_GREETING_KEY);
+      if (!raw) return null;
+      window.sessionStorage.removeItem(POST_LOGIN_GREETING_KEY);
+      const data = JSON.parse(raw);
+      if (!data || typeof data.title !== 'string' || !data.title.trim()) return null;
+      if (typeof data.ts !== 'number' || Date.now() - data.ts > POST_LOGIN_GREETING_MAX_AGE_MS) return null;
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  const postLoginGreeting = consumePostLoginGreeting();
+
   function isOldLogo(url) {
     return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url || ''));
   }
@@ -207,9 +233,11 @@
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}',
     '#tt-loader-logo{position:relative;z-index:1;width:clamp(180px,15vw,230px);max-width:72vw;height:auto;object-fit:contain;display:block;opacity:0;transform:scale(.96);filter:drop-shadow(0 8px 22px rgba(212,106,138,.18));user-select:none;pointer-events:none}',
-    '#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-breathe 2.6s ease-in-out .5s infinite}',
+    '#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-heartbeat 1.8s ease-in-out .5s infinite}',
     '@keyframes tt-logo-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}',
-    '@keyframes tt-logo-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}',
+    // Doble pulso (lub-dub) como un latido real, seguido de una pausa —
+    // no una respiración lenta y pareja. Debe notarse a simple vista.
+    '@keyframes tt-logo-heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.14)}28%{transform:scale(1.03)}42%{transform:scale(1.14)}58%{transform:scale(1)}}',
     '@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}',
     '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}',
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
@@ -318,9 +346,14 @@
     d.textContent = String(value == null ? '' : value);
     return d.innerHTML;
   }
-  const initialTitle = defaultPageTitle();
+  const initialTitle = postLoginGreeting ? postLoginGreeting.title : defaultPageTitle();
+  const initialSubtitle = postLoginGreeting && postLoginGreeting.subtitle ? postLoginGreeting.subtitle : '';
+  const showLoaderExtras = !isHomePage() || !!postLoginGreeting;
   const TITLE_HTML = initialTitle
     ? '<div id="tt-loader-title">' + escText(initialTitle) + '</div>'
+    : '';
+  const SUBTITLE_HTML = initialSubtitle
+    ? '<div id="tt-loader-subtitle">' + escText(initialSubtitle) + '</div>'
     : '';
   const loader = document.createElement('div');
   loader.id = 'tt-loader';
@@ -331,7 +364,7 @@
     '<div id="tt-loader-spin-wrap"><img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="220" height="220">' +
-    (isHomePage() ? '' : TITLE_HTML + DOTS_HTML) +
+    (showLoaderExtras ? TITLE_HTML + SUBTITLE_HTML + DOTS_HTML : '') +
     '</div>';
 
   const logo = loader.querySelector('#tt-loader-logo');
