@@ -23,6 +23,20 @@ import { createOrderViaServer } from './create-order-client.js?v=tintin-20260728
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
 
+  // El puente que dispara el correo de confirmación del pedido
+  // (checkout-email-bridge.js) se cargaba como efecto secundario de
+  // importar js/email-notify.js — pero desde la migración a Resend (PR
+  // #177) checkout.html dejó de importar ese archivo, así que el puente
+  // nunca se volvía a cargar y ningún correo de pedido se disparaba desde
+  // el checkout real. Este módulo ya se carga únicamente en checkout.html
+  // (ver js/cart-sync.js), así que alcanza con importarlo acá.
+  if (!window.TintinCheckoutEmailBridgeLoading) {
+    window.TintinCheckoutEmailBridgeLoading = true;
+    import('./checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+      console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
+    });
+  }
+
   const REQUEST_KEY = 'tt_spark_checkout_request_id';
   const DEFAULT_STORE_WHATSAPP = '595981299331';
   const CHECKOUT_COOLDOWN_MS = 90 * 1000;

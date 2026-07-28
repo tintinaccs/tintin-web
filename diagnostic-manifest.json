@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T11:12:47.660Z",
-  "sourceFingerprint": "6184be2c8f89db854ec732a57838a54e145d9821965ed891f2763572e8709dfd",
+  "generatedAt": "2026-07-28T11:59:11.769Z",
+  "sourceFingerprint": "add6ad5475e18b078101743d0b4b43a9c16efd109e6738d5a96f2d32420995c2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5448362,
+    "totalBytes": 5449179,
     "pages": 18,
     "modules": 211
   },
@@ -16593,8 +16593,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 23547,
-      "sha256": "45e04208f22d4bd0458ea4099c4acf17d225c36889edb1fe806e25177d5b8a22",
+      "bytes": 24364,
+      "sha256": "e3d30f24eeadfae9b3d1d80fe40fab8eaf299dff4d11e239d7cad3f6137ed3f4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16635,6 +16635,12 @@
           "target": "js/create-order-client.js",
           "dynamic": false,
           "line": 21
+        },
+        {
+          "raw": "./checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/checkout-email-bridge.js",
+          "dynamic": true,
+          "line": 35
         }
       ],
       "endpoints": [
@@ -16644,7 +16650,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 447
+          "line": 461
         }
       ]
     },
@@ -20274,8 +20280,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 23547,
-      "sha256": "45e04208f22d4bd0458ea4099c4acf17d225c36889edb1fe806e25177d5b8a22"
+      "bytes": 24364,
+      "sha256": "e3d30f24eeadfae9b3d1d80fe40fab8eaf299dff4d11e239d7cad3f6137ed3f4"
     },
     {
       "path": "js/security-utils.js",
@@ -24462,7 +24468,7 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 365,
+            "line": 379,
             "operation": "doc"
           },
           {
@@ -25192,12 +25198,12 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 277,
+            "line": 291,
             "operation": "doc"
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 278,
+            "line": 292,
             "operation": "doc"
           },
           {
