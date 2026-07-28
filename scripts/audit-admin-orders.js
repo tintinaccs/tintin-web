@@ -45,6 +45,7 @@ const perfil     = read('perfil.html');
 const orderStats = read('js/order-stats.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/secure-checkout-order.js');
+const phase4Order = read('apps-script/Phase4CreateOrder.gs');
 const inventoryIntegrity = read('js/admin-inventory-integrity.js');
 const deleteFix = read('js/admin-order-delete-fix.js');
 
@@ -196,10 +197,12 @@ check(
 // 4. INTEGRIDAD / CONSISTENCIA ENTRE SUPERFICIES
 // ===========================================================================
 check(
+  // El pedido lo crea el servidor (Apps Script) en una sola transacción de
+  // Firestore, no el navegador — ver apps-script/Phase4CreateOrder.gs.
   'El pedido se crea autocontenido con ítems, precios, subtotal y total',
-  /transaction\.set\(orderRef, orderData\)/.test(secureOrder) &&
-    /subtotal/.test(secureOrder) &&
-    /total/.test(secureOrder),
+  /phase4CreateWrite_\('orders\/' \+ orderId, orderData\)/.test(phase4Order) &&
+    /subtotal/.test(phase4Order) &&
+    /total/.test(phase4Order),
   'El pedido debe guardar su propia copia de líneas y montos para sobrevivir cambios de catálogo.'
 );
 check(

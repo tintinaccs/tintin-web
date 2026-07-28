@@ -8,6 +8,7 @@ const cart = read('js/cart-sync.js');
 const classic = read('script.js');
 const quality = read('js/ui-quality.js');
 const checkout = read('js/secure-checkout-order.js');
+const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
 
@@ -122,11 +123,15 @@ check(
 );
 
 check(
+  // Desde la Fase 4, el precio/stock real se vuelve a leer server-side
+  // (Apps Script) en vez de en una transacción de Firestore desde el
+  // navegador — ver apps-script/Phase4CreateOrder.gs.
   'Precio y stock siguen validados por el checkout seguro',
   checkout.includes('expectedSubtotal') &&
-    checkout.includes('transaction.get(productRef)') &&
-    checkout.includes("'quote_changed'") &&
-    checkout.includes("'insufficient_stock'"),
+    checkout.includes("code === 'quote_changed'") &&
+    checkout.includes("code === 'insufficient_stock'") &&
+    phase4.includes('phase4ParseMoney_(product.price)') &&
+    phase4.includes('phase4ParseStock_(product.stock)'),
   'La sincronización del carrito no reemplaza la validación del servidor'
 );
 

@@ -1,13 +1,12 @@
 /**
- * TINTIN — Prueba manual del endpoint server-side de pedidos (Fase 4).
+ * TINTIN — Cliente del endpoint server-side de pedidos (Fase 4).
  *
- * Solo la usa el botón "🧪 Probar pedido servidor" del panel Super Admin
- * (Productos). Llama a la acción `createOrder` del mismo Apps Script que ya
- * manda los correos (ver js/email-notify.js), que corre con
- * ScriptApp.getOAuthToken() y por eso no pasa por el límite de 1000
- * expresiones de firestore.rules ni por el tope de 4 productos distintos.
- * No toca checkout.html ni js/secure-checkout-order.js — es un endpoint
- * nuevo y separado hasta confirmar que funciona.
+ * Llama a la acción `createOrder` del mismo Apps Script que ya manda los
+ * correos (ver js/email-notify.js), autenticado con el idToken real de
+ * quien compra. El Apps Script corre con la identidad de su dueño
+ * (ScriptApp.getOAuthToken()) y por eso no pasa por el límite de 1000
+ * expresiones de firestore.rules ni por ningún tope de productos —
+ * ver apps-script/Phase4CreateOrder.gs para la validación completa.
  */
 import { EMAIL_WEBHOOK_URL } from './email-config.js?v=tintin-20260716-cloudinary-fix-1';
 import { auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';

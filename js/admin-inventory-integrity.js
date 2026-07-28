@@ -182,14 +182,17 @@ async function deleteOrder(orderId) {
   };
 }
 
-// Un pedido queda en inventoryState='pending' (status='inventory_pending')
-// mientras corre createPendingOrder() → reserveOrderInventory() en el
-// checkout. Si la clienta cierra la pestaña justo entre esos dos pasos, el
-// borrador nunca reserva stock real (no hay riesgo de inventario) pero
-// queda huérfano en Firestore para siempre — nadie vuelve a referenciarlo
-// porque el requestId vivía solo en el sessionStorage de esa pestaña. Esta
-// limpieza los borra directamente (sin la reconciliación de stock de
-// deleteOrder(), porque un pedido 'pending' nunca llegó a descontar nada).
+// Antes de la Fase 4 (creación de pedidos server-side), un pedido quedaba
+// en inventoryState='pending' (status='inventory_pending') mientras el
+// checkout hacía dos escrituras de cliente seguidas; si la clienta cerraba
+// la pestaña justo entre esas dos escrituras, el borrador quedaba huérfano
+// en Firestore para siempre — nadie volvía a referenciarlo porque el
+// requestId vivía solo en el sessionStorage de esa pestaña. El checkout
+// actual ya no genera este estado (el servidor crea el pedido directo como
+// 'reserved' en una sola transacción), pero esta limpieza queda para los
+// pedidos 'pending' que hayan quedado de antes de la migración — se borran
+// directo (sin la reconciliación de stock de deleteOrder(), porque un
+// pedido 'pending' nunca llegó a descontar nada).
 async function cleanupStalePendingOrders(hoursOld = 2) {
   if (actorEmail() !== SUPER_ADMIN_EMAIL) {
     throw new Error('Solo Super Admin puede limpiar pedidos abandonados.');

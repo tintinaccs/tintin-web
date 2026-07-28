@@ -321,7 +321,18 @@ function phase4CreateOrder_(payload, idToken) {
       return { ok: false, error: 'payment_unavailable' };
     }
 
-    var shipping = phase4ResolveShipping_(shippingRates, payload.selectedCity);
+    // Respaldo en settings/general por si settings/shippingRates todavía no
+    // se migró del todo (ver js/create-order-client.js y la migración
+    // automática en js/admin-app.js) — el mismo respaldo que ya usa
+    // mergeShippingRates() en js/secure-checkout-order.js, para que el
+    // cliente y el servidor calculen el mismo costo de envío siempre.
+    var shippingRatesMerged = {
+      deliveryCities: Array.isArray(shippingRates.deliveryCities) ? shippingRates.deliveryCities : settings.deliveryCities,
+      encomiendaCities: Array.isArray(shippingRates.encomiendaCities) ? shippingRates.encomiendaCities : settings.encomiendaCities,
+      deliveryCost: shippingRates.deliveryCost != null ? shippingRates.deliveryCost : settings.deliveryCost,
+      encomiendaCost: shippingRates.encomiendaCost != null ? shippingRates.encomiendaCost : settings.encomiendaCost
+    };
+    var shipping = phase4ResolveShipping_(shippingRatesMerged, payload.selectedCity);
     if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
     if (shipping.method === 'delivery' && (!mapLocation || !mapLocation.name)) {
       phase4Rollback_(transactionId);

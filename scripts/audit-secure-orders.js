@@ -12,86 +12,88 @@ function check(name, condition, problem) {
 }
 
 const frontend = read('js/secure-checkout-order.js');
+const serverClient = read('js/create-order-client.js');
 const cart = read('js/cart-sync.js');
 const rules = read('firestore.rules');
+const phase4 = read('apps-script/Phase4CreateOrder.gs');
 
 check(
   'No depende de Cloud Functions',
   !frontend.includes('httpsCallable') &&
     !frontend.includes('firebase-functions.js') &&
     frontend.includes('runTransaction'),
-  'El checkout gratuito debe usar transacciones de Firestore.'
+  'El turno de compra (checkoutGuards) debe seguir usando una transacción de Firestore.'
 );
 check(
-  'El pedido pendiente vuelve a leer productos y precios reales',
-  frontend.includes("doc(db, 'products', line.id)") &&
-    frontend.includes('const price = parseMoney(product.price)'),
-  'No debe confiar únicamente en precios guardados en el carrito.'
+  'El checkout crea el pedido a través del endpoint server-side, sin tope de productos',
+  frontend.includes('createOrderOnServer(draft)') &&
+    frontend.includes('createOrderViaServer') &&
+    !frontend.includes('MAX_DISTINCT_PRODUCTS'),
+  'El checkout ya no debe imponer un límite artificial de productos distintos en el navegador.'
 );
 check(
-  'La reserva final escribe stock y activa el pedido en una sola transacción',
-  frontend.includes('async function reserveOrderInventory(orderId)') &&
-    frontend.includes('transaction.update(productRefs[index]') &&
-    frontend.includes("status: 'pendiente'") &&
-    frontend.includes("inventoryState: 'reserved'"),
-  'El stock y la activación final deben confirmarse juntos.'
+  'El cliente del endpoint manda el idToken real, no un secreto público',
+  serverClient.includes("action: 'createOrder'") &&
+    serverClient.includes('idToken'),
+  'El servidor debe poder verificar quién hace el pedido.'
 );
 check(
-  'Reintentos reanudan pedidos pendientes sin duplicarlos',
-  frontend.includes('const existing = await transaction.get(orderRef)') &&
-    frontend.includes("data.inventoryState === 'pending'") &&
-    frontend.includes("data.inventoryState === 'reserved'"),
-  'La misma solicitud debe reanudar el pedido existente.'
+  'El servidor (Apps Script) vuelve a leer productos y precios reales',
+  phase4.includes("docs['products/' + productId]") &&
+    phase4.includes('phase4ParseMoney_(product.price)') &&
+    phase4.includes('phase4ParseStock_(product.stock)'),
+  'El servidor no debe confiar únicamente en precios guardados en el carrito.'
 );
 check(
-  'El plan gratuito limita productos diferentes',
-  frontend.includes('MAX_DISTINCT_PRODUCTS = 4') &&
-    rules.includes('items.size() <= 4'),
-  'El límite mantiene las reglas dentro del máximo de lecturas permitido.'
+  'El servidor crea el pedido y descuenta stock en una sola transacción, sin tope de ítems',
+  phase4.includes('phase4BeginTransaction_') &&
+    phase4.includes('phase4Commit_(writes, transactionId)') &&
+    !/cartLines\.length\s*>\s*4\b/.test(phase4),
+  'El pedido y el descuento de stock deben confirmarse juntos, sin un límite bajo de productos.'
+);
+check(
+  'Reintentos con el mismo pedido no lo duplican',
+  phase4.includes("docs['orders/' + orderId]") &&
+    phase4.includes("existingOrder.inventoryState === 'pending' || existingOrder.inventoryState === 'reserved'"),
+  'La misma solicitud (mismo requestId) debe devolver el pedido ya creado en vez de duplicarlo.'
+);
+check(
+  'El servidor exige tienda abierta, cuenta activa y turno de compra vigente',
+  phase4.includes("settings.storeOpen !== true") &&
+    phase4.includes("userData.blocked === true") &&
+    phase4.includes('checkout_guard_missing') &&
+    phase4.includes('checkout_guard_expired'),
+  'Una tienda cerrada, cuenta bloqueada o turno de compra vencido debe rechazar el pedido.'
 );
 check(
   'Cambios de precio requieren nueva confirmación',
-  frontend.includes("'quote_changed'") &&
-    frontend.includes("failure === 'quote_changed'"),
+  phase4.includes("error: 'quote_changed'") &&
+    frontend.includes("code === 'quote_changed'"),
   'No debe guardar silenciosamente un total distinto al mostrado.'
 );
 check(
   'Cambios de stock se explican al cliente',
-  frontend.includes("'insufficient_stock'") &&
-    frontend.includes("failure === 'insufficient_stock'"),
+  phase4.includes("error: 'insufficient_stock'") &&
+    frontend.includes("code === 'insufficient_stock'"),
   'El checkout debe ajustar el carrito cuando cambia el stock.'
 );
 check(
-  'Las reglas validan precio real',
-  // La comparación de nombre (item.name == product.get('name', ...)) se
-  // sacó de sparkItemValid: con 3-4 productos distintos en el carrito (el
-  // máximo permitido), esa llamada adicional alcanzaba el límite de 1000
-  // expresiones que Firestore evalúa por escritura, y el pedido quedaba
-  // rechazado siempre. El precio real — lo único que de verdad puede
-  // costar dinero si se falsea — se sigue validando exacto acá.
-  rules.includes('product.price == item.price'),
-  'El pedido no debe aceptar un precio inventado.'
+  'Las reglas de Firestore siguen limitando el pedido directo como red de seguridad',
+  // El checkout real ya no escribe pedidos directo a Firestore (ver arriba),
+  // pero las reglas se dejan intactas como defensa en profundidad: si algo
+  // alguna vez volviera a escribir directo (o alguien intentara un pedido
+  // manual desde la consola), sigue topeado en 4 productos por el límite de
+  // 1000 expresiones de Firestore — ver el comentario en sparkOrderCreateValid.
+  rules.includes('items.size() <= 4') &&
+    rules.includes('product.price == item.price'),
+  'Las reglas deben seguir validando cualquier escritura directa a orders/{orderId}.'
 );
 check(
-  'Las reglas exigen el descuento exacto y la activación vinculada',
-  rules.includes('sparkOrderQtyForProduct(orderData, productId)') &&
-    rules.includes('request.resource.data.stock == resource.data.stock - orderedQty') &&
-    rules.includes('productAfter.lastStockOrderId == orderId') &&
-    rules.includes('sparkInventoryReserveValid(orderId)'),
-  'El producto calcula la baja exacta y el pedido no se activa sin esa escritura.'
-);
-check(
-  'Las reglas validan subtotal y total',
-  rules.includes('data.subtotal ==') &&
-    rules.includes('data.total == data.subtotal + data.shippingCost'),
-  'Los totales deben derivarse de las líneas validadas.'
-);
-check(
-  'Las reglas validan tienda, cuenta y correo',
+  'Las reglas validan tienda, cuenta y correo para cualquier escritura directa',
   rules.includes("settings.get('storeOpen', false) == true") &&
     rules.includes("userData.get('blocked', false) != true") &&
     rules.includes('request.auth.token.email_verified == true'),
-  'Una tienda cerrada, cuenta bloqueada o correo no verificado debe fallar.'
+  'Una tienda cerrada, cuenta bloqueada o correo no verificado debe fallar también en las reglas.'
 );
 check(
   'El checkout seguro se carga solo donde corresponde',

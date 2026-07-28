@@ -33,7 +33,7 @@ import {
 } from "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "./color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import { createOrderViaServer } from "./admin-create-order-test.js?v=tintin-20260727-phase4-order-1";
+import { createOrderViaServer } from "./create-order-client.js?v=tintin-20260728-phase4-order-2";
 import './admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 
 // ---- GLOBALS ----

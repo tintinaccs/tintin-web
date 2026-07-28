@@ -18,12 +18,12 @@ import {
   normalizePhone,
   isValidPhone
 } from './phone-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { createOrderViaServer } from './create-order-client.js?v=tintin-20260728-phase4-order-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
 
   const REQUEST_KEY = 'tt_spark_checkout_request_id';
-  const MAX_DISTINCT_PRODUCTS = 4;
   const DEFAULT_STORE_WHATSAPP = '595981299331';
   const CHECKOUT_COOLDOWN_MS = 90 * 1000;
   let submitting = false;
@@ -55,12 +55,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         .replace(',', '.')
     );
     return Number.isFinite(parsed) ? Math.round(parsed) : NaN;
-  }
-
-  function parseStock(value) {
-    if (value === null || value === undefined || value === '') return null;
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : null;
   }
 
   function requestId() {
@@ -264,12 +258,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
 
     const result = [...byProduct.values()];
-    if (result.length > MAX_DISTINCT_PRODUCTS) {
-      throw appError(
-        'too_many_products',
-        `Para proteger el stock en el plan gratuito, cada pedido puede incluir hasta ${MAX_DISTINCT_PRODUCTS} productos diferentes. Dividí tu compra en dos pedidos.`
-      );
-    }
     if (result.some(item => item.qty > 99)) {
       throw appError('invalid_cart', 'La cantidad de uno de los productos es demasiado alta.');
     }
@@ -406,277 +394,30 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, { maxAttempts: 2 });
   }
 
-  // Compara el draft actual contra un borrador pendiente ya guardado para
-  // decidir si retomarlo es realmente la misma compra (reintento tras un
-  // corte de red) o si la clienta cambió algo después de un intento
-  // fallido. Ante la duda, devuelve false: es más seguro tratarlo como
-  // "cambió" (dispara el camino de borrar y recrear en
-  // createOrderWithSparkTransaction) que finalizar datos viejos sin avisar.
-  function draftMatchesStoredOrder(draft, data) {
-    const storedItems = Array.isArray(data.items) ? data.items : [];
-    const draftLines = Array.isArray(draft.cartLines) ? draft.cartLines : [];
-    if (storedItems.length !== draftLines.length) return false;
-    const storedById = new Map(storedItems.map(item => [String(item.id), item]));
-    for (const line of draftLines) {
-      const stored = storedById.get(String(line.id));
-      if (!stored || Number(stored.qty) !== Number(line.qty)) return false;
+  // El pedido se crea server-side (Apps Script, apps-script/Phase4CreateOrder.gs)
+  // en vez de con una transacción de Firestore desde el navegador: ese
+  // proceso corre con la identidad de su dueño (ScriptApp.getOAuthToken()),
+  // así que no pasa por el límite de 1000 expresiones de firestore.rules ni
+  // por ningún tope de productos distintos. El servidor vuelve a leer
+  // precio/stock real de cada producto, valida tienda/cuenta/envío/turno de
+  // compra (checkoutGuards) y crea el pedido ya con el stock descontado en
+  // una sola transacción — no hay estado "pendiente" intermedio que limpiar
+  // en un reintento: si el requestId ya generó un pedido, el servidor
+  // devuelve ese mismo pedido (created: false) en vez de duplicarlo.
+  async function createOrderOnServer(draft) {
+    const response = await createOrderViaServer(draft);
+    if (!response || typeof response !== 'object') {
+      throw appError('server_error', 'No pudimos confirmar el pedido. Intentá nuevamente.');
     }
-
-    const storedShipping = data.shipping || {};
-    const sameShippingSelection = draft.selectedCity === '__retiro__'
-      ? storedShipping.method === 'retiro'
-      : text(draft.selectedCity).toLocaleLowerCase('es') === text(storedShipping.city).toLocaleLowerCase('es');
-    if (!sameShippingSelection) return false;
-
-    if (storedShipping.method === 'encomienda' && text(draft.address) !== text(storedShipping.address)) return false;
-    if (storedShipping.method === 'delivery') {
-      const storedMapName = text(storedShipping.mapLocation?.name);
-      const draftMapName = text(draft.mapLocation?.name);
-      if (storedMapName !== draftMapName) return false;
-    }
-
-    return draft.paymentMethod === (data.payment?.method || '');
-  }
-
-  async function deleteStalePendingOrder(orderId) {
-    const orderRef = doc(db, 'orders', orderId);
-    await runTransaction(db, async transaction => {
-      const snap = await transaction.get(orderRef);
-      if (snap.exists() && snap.data()?.inventoryState === 'pending') {
-        transaction.delete(orderRef);
-      }
-    });
-  }
-
-  async function createPendingOrder(draft) {
-    const user = auth.currentUser;
-    const uid = user.uid;
-    const email = text(user.email).toLowerCase();
-    const orderId = `${uid}_${draft.requestId}`;
-    const orderRef = doc(db, 'orders', orderId);
-    const settingsRef = doc(db, 'settings', 'general');
-    const shippingRatesRef = doc(db, 'settings', 'shippingRates');
-    const userRef = doc(db, 'users', uid);
-    const productRefs = draft.cartLines.map(line => doc(db, 'products', line.id));
-
-    return runTransaction(db, async transaction => {
-      const existing = await transaction.get(orderRef);
-      if (existing.exists()) {
-        const data = existing.data() || {};
-        if (data.inventoryState === 'pending' || data.inventoryState === 'reserved') {
-          // Reanudar solo es correcto si el draft actual sigue siendo el
-          // mismo que generó este borrador (reintento de la misma compra
-          // tras un corte de red). Si la clienta cambió el carrito,
-          // dirección o pago después de un intento fallido, resumir a
-          // ciegas finalizaría datos viejos sin que nadie lo note — las
-          // reglas de Firestore no permiten al cliente reescribir un
-          // pedido pendiente propio, así que la recuperación (borrar el
-          // borrador viejo y crear uno nuevo) se hace en submit().
-          if (draftMatchesStoredOrder(draft, data)) {
-            return { ...data, orderId, created: false };
-          }
-          throw appError('stale_draft_changed', 'Tu pedido cambió desde el último intento. Volvé a confirmar con los datos actuales.');
-        }
-        throw appError('order_state_invalid', 'El pedido existente no puede reanudarse.');
-      }
-
-      const settingsSnap = await transaction.get(settingsRef);
-      const shippingRatesSnap = await transaction.get(shippingRatesRef);
-      const userSnap = await transaction.get(userRef);
-      const productSnaps = [];
-      for (const productRef of productRefs) productSnaps.push(await transaction.get(productRef));
-
-      if (!settingsSnap.exists()) throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
-      if (!userSnap.exists()) throw appError('profile_missing', 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.');
-
-      const settings = mergeShippingRates(settingsSnap.data() || {}, shippingRatesSnap);
-      const userData = userSnap.data() || {};
-      if (email !== SUPER_ADMIN_EMAIL && settings.storeOpen !== true) throw appError('store_closed', 'La tienda está temporalmente cerrada.');
-      if (email !== SUPER_ADMIN_EMAIL && userData.blocked === true) throw appError('blocked_account', 'Esta cuenta está bloqueada y no puede realizar pedidos.');
-      if ((settings.paymentMethods || {})[draft.paymentMethod] === false) throw appError('payment_unavailable', 'Ese método de pago ya no está disponible.');
-
-      const shipping = resolveShipping(settings, draft.selectedCity, draft.mapLocation);
-      const resolvedItems = [];
-      let subtotal = 0;
-
-      productSnaps.forEach((snapshot, index) => {
-        const requested = draft.cartLines[index];
-        if (!snapshot.exists()) throw appError('product_not_found', 'Uno de los productos ya no está disponible.', { productId: requested.id });
-        const product = snapshot.data() || {};
-        if (product.active === false) throw appError('product_inactive', 'Uno de los productos fue desactivado.', { productId: requested.id });
-        const price = parseMoney(product.price);
-        if (!Number.isFinite(price) || price < 0) throw appError('invalid_price', 'No pudimos comprobar el precio de uno de los productos.');
-        const stock = parseStock(product.stock);
-        if (stock !== null && requested.qty > stock) {
-          throw appError('insufficient_stock', 'Cambió el stock de uno de los productos.', {
-            productId: requested.id, available: stock, requested: requested.qty
-          });
-        }
-        const item = {
-          id: requested.id,
-          name: text(product.name || product.title || product.Title || 'Producto').slice(0, 180),
-          cat: text(product.category || product.collectionSlug || product.collection || product.cat || product.Type || product.type).slice(0, 120),
-          price,
-          qty: requested.qty,
-          variant: requested.variants.join(' / ').slice(0, 120),
-          imageUrl: text(product.imageUrl || product.image || product.img).slice(0, 900)
-        };
-        resolvedItems.push(item);
-        subtotal += price * requested.qty;
+    if (response.ok !== true) {
+      throw appError(response.error || 'server_error', undefined, {
+        quote: response.quote,
+        productId: response.productId,
+        available: response.available,
+        requested: response.requested
       });
-
-      const shippingCost = shipping.cost === null ? 0 : shipping.cost;
-      const total = subtotal + shippingCost;
-      const quote = { items: resolvedItems, subtotal, shippingCost, shippingPending: shipping.pending, total };
-      if (
-        draft.expectedSubtotal !== subtotal ||
-        draft.expectedShippingCost !== shippingCost ||
-        draft.expectedShippingPending !== shipping.pending ||
-        draft.expectedTotal !== total
-      ) {
-        throw appError('quote_changed', 'Cambió un precio o el costo de envío. Revisá el resumen actualizado.', { quote });
-      }
-
-      const shortId = draft.requestId.replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
-      const orderData = {
-        requestId: draft.requestId,
-        source: 'spark-checkout-v1',
-        shortId,
-        userId: uid,
-        userEmail: email,
-        contactEmail: draft.contactEmail || email,
-        userName: draft.name,
-        userPhone: draft.phone,
-        items: resolvedItems,
-        subtotal,
-        shippingCost,
-        shippingPending: shipping.pending,
-        total,
-        storeWhatsapp: text(settings.whatsappNumber || settings.whatsapp || DEFAULT_STORE_WHATSAPP).replace(/\D/g, ''),
-        storeInstagram: text(settings.instagram).slice(0, 120),
-        shipping: {
-          method: shipping.method,
-          city: shipping.city,
-          departamento: draft.departamento || '',
-          rateIndex: shipping.rateIndex,
-          address: draft.address,
-          referencia: draft.referencia,
-          zone: shipping.method === 'encomienda' ? 'interior' : 'central',
-          mapLocation: shipping.method === 'delivery' ? shipping.mapLocation : null
-        },
-        payment: { method: draft.paymentMethod, status: 'pendiente' },
-        paymentStatus: 'pendiente',
-        status: 'inventory_pending',
-        notes: draft.notes,
-        notificationStatus: 'pending',
-        inventoryState: 'pending',
-        inventoryRevision: 0,
-        inventoryUpdatedAt: serverTimestamp(),
-        inventoryUpdatedBy: email,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      };
-      transaction.set(orderRef, orderData);
-      return { ...orderData, orderId, created: true };
-    }, { maxAttempts: 2 });
-  }
-
-  async function reserveOrderInventory(orderId) {
-    const user = auth.currentUser;
-    const email = text(user.email).toLowerCase();
-    const orderRef = doc(db, 'orders', orderId);
-
-    const result = await runTransaction(db, async transaction => {
-      const orderSnap = await transaction.get(orderRef);
-      if (!orderSnap.exists()) throw appError('order_not_found', 'El pedido pendiente ya no existe.');
-      const order = orderSnap.data() || {};
-      if (order.inventoryState === 'reserved') return { ...order, orderId, success: true, created: false };
-      if (order.inventoryState !== 'pending' || order.status !== 'inventory_pending') {
-        throw appError('order_state_invalid', 'El pedido no puede reservar inventario.');
-      }
-
-      const items = Array.isArray(order.items) ? order.items : [];
-      const productRefs = items.map(item => doc(db, 'products', String(item.id)));
-      const productSnaps = [];
-      for (const productRef of productRefs) productSnaps.push(await transaction.get(productRef));
-
-      for (let index = 0; index < items.length; index += 1) {
-        const item = items[index];
-        const snapshot = productSnaps[index];
-        if (!snapshot.exists()) {
-          transaction.delete(orderRef);
-          return { failure: 'product_not_found', productId: item.id };
-        }
-        const product = snapshot.data() || {};
-        const stock = parseStock(product.stock);
-        if (product.active === false || parseMoney(product.price) !== Number(item.price)) {
-          transaction.delete(orderRef);
-          return { failure: 'quote_changed' };
-        }
-        if (stock !== null && Number(item.qty) > stock) {
-          transaction.delete(orderRef);
-          return { failure: 'insufficient_stock', productId: item.id, available: stock, requested: Number(item.qty) };
-        }
-      }
-
-      productSnaps.forEach((snapshot, index) => {
-        const stock = parseStock(snapshot.data()?.stock);
-        if (stock !== null) {
-          transaction.update(productRefs[index], {
-            stock: stock - Number(items[index].qty),
-            lastStockOrderId: orderId,
-            updatedAt: serverTimestamp()
-          });
-        }
-      });
-
-      transaction.update(orderRef, {
-        status: 'pendiente',
-        inventoryState: 'reserved',
-        inventoryRevision: 1,
-        inventoryUpdatedAt: serverTimestamp(),
-        inventoryUpdatedBy: email,
-        updatedAt: serverTimestamp()
-      });
-
-      return {
-        ...order,
-        orderId,
-        status: 'pendiente',
-        inventoryState: 'reserved',
-        inventoryRevision: 1,
-        success: true,
-        created: true
-      };
-    }, { maxAttempts: 2 });
-
-    if (result?.failure === 'insufficient_stock') {
-      throw appError('insufficient_stock', 'Cambió el stock de uno de los productos.', result);
     }
-    if (result?.failure === 'quote_changed') {
-      throw appError('quote_changed', 'Cambió un precio. Revisá el carrito y confirmá nuevamente.');
-    }
-    if (result?.failure === 'product_not_found') {
-      throw appError('product_not_found', 'Uno de los productos ya no está disponible.', result);
-    }
-    return result;
-  }
-
-  async function createOrderWithSparkTransaction(draft) {
-    let pending;
-    try {
-      pending = await createPendingOrder(draft);
-    } catch (error) {
-      if (error?.code !== 'stale_draft_changed') throw error;
-      // El borrador pendiente de un intento anterior ya no coincide con lo
-      // que la clienta está por confirmar ahora — lo borramos (autorizado
-      // por sparkPendingOrderDeleteValid, ya que es su propio pedido
-      // pendiente) y creamos uno nuevo con los datos actuales, en vez de
-      // reanudar el viejo.
-      await deleteStalePendingOrder(`${auth.currentUser.uid}_${draft.requestId}`);
-      pending = await createPendingOrder(draft);
-    }
-    return reserveOrderInventory(pending.orderId);
+    return { ...(response.order || {}), orderId: response.orderId };
   }
 
   function buildWhatsAppMessage(result) {
@@ -727,12 +468,22 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       blocked_account: 'Esta cuenta está bloqueada.',
       store_closed: 'La tienda está temporalmente cerrada.',
       payment_unavailable: 'Ese método de pago ya no está disponible.',
-      too_many_products: error?.message,
+      too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo.',
       invalid_cart: error?.message,
       invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
       quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales.',
-      stale_draft_changed: 'Tu pedido cambió desde el último intento. Confirmá de nuevo para continuar con los datos actuales.',
-      order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.'
+      order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.',
+      checkout_guard_missing: 'No pudimos confirmar tu turno de compra. Volvé a intentar.',
+      checkout_guard_expired: 'Pasó demasiado tiempo desde que confirmaste. Volvé a intentar.',
+      missing_id_token: 'Necesitás iniciar sesión con un correo verificado.',
+      invalid_id_token: 'Tu sesión expiró. Volvé a ingresar e intentá de nuevo.',
+      token_verify_failed: 'No pudimos verificar tu sesión. Volvé a intentar.',
+      email_not_verified: 'Necesitás verificar tu correo antes de comprar.',
+      server_error: 'No pudimos confirmar el pedido. Intentá nuevamente.',
+      transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
+      batch_get_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
+      commit_failed: 'No pudimos confirmar el pedido. Intentá nuevamente.',
+      create_order_failed: 'No pudimos confirmar el pedido. Intentá nuevamente.'
     };
     if (messages[code]) return messages[code];
     if (code === 'permission-denied' || code === 'firestore/permission-denied') {
@@ -754,7 +505,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     try {
       const draft = await buildDraft();
       await reserveCheckoutGuard(draft);
-      const result = await createOrderWithSparkTransaction(draft);
+      const result = await createOrderOnServer(draft);
       await clearCart();
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
       success(result);

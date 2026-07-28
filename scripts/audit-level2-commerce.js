@@ -23,6 +23,7 @@ function check(label, condition, detail = '') {
 
 const cart = read('js/cart-sync.js');
 const checkout = read('js/secure-checkout-order.js');
+const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const inventory = read('js/admin-inventory-integrity.js');
 const deleteFix = read('js/admin-order-delete-fix.js');
 const admin = read('js/admin-app.js');
@@ -65,10 +66,16 @@ check(
   checkout.includes('const orderId = `${uid}_${draft.requestId}`')
 );
 check(
-  'Reintentar reanuda el pedido existente',
-  checkout.includes('const existing = await transaction.get(orderRef)') &&
-    checkout.includes("data.inventoryState === 'pending'") &&
-    checkout.includes("data.inventoryState === 'reserved'")
+  // A partir de la Fase 4, el pedido se crea server-side (Apps Script,
+  // ScriptApp.getOAuthToken() en vez de reglas de Firestore) para no
+  // depender del límite de 1000 expresiones por escritura — ver
+  // apps-script/Phase4CreateOrder.gs. El mismo requestId ya no reanuda un
+  // pedido "pendiente" intermedio (ya no existe ese estado): el servidor
+  // detecta que el pedido ya existe y lo devuelve tal cual, sin duplicarlo.
+  'Reintentar con el mismo requestId no duplica el pedido (idempotencia server-side)',
+  phase4.includes("docs['orders/' + orderId]") &&
+    phase4.includes("existingOrder.inventoryState === 'pending' || existingOrder.inventoryState === 'reserved'") &&
+    checkout.includes('async function createOrderOnServer(draft)')
 );
 check(
   'La guarda de checkout permite reanudar el mismo pedido',
@@ -76,29 +83,30 @@ check(
     checkout.includes('!sameOrder')
 );
 check(
-  'El checkout vuelve a leer configuración, usuario y productos',
-  checkout.includes("const settingsRef = doc(db, 'settings', 'general')") &&
-    checkout.includes("const userRef = doc(db, 'users', uid)") &&
-    checkout.includes("draft.cartLines.map(line => doc(db, 'products', line.id))")
+  'El servidor vuelve a leer configuración, usuario y productos reales',
+  phase4.includes("'settings/general'") &&
+    phase4.includes("'users/' + uid") &&
+    phase4.includes("cartLines.map(function (line) { return 'products/' + phase4CleanText_(line.id, 180); })"),
+  'El servidor no debe confiar en lo que manda el navegador para tienda, cuenta o productos.'
 );
 check(
   'Cambios de precio o envío exigen nueva confirmación',
-  checkout.includes("throw appError('quote_changed'") &&
-    checkout.includes('draft.expectedSubtotal !== subtotal') &&
-    checkout.includes('draft.expectedTotal !== total')
+  phase4.includes("error: 'quote_changed'") &&
+    phase4.includes('Number(payload.expectedSubtotal) !== subtotal') &&
+    phase4.includes('Number(payload.expectedTotal) !== total'),
+  'El servidor no debe aceptar silenciosamente un total distinto al que confirmó la clienta.'
 );
 check(
   'El pedido guarda una fotografía histórica autocontenida',
-  checkout.includes('items: resolvedItems') && checkout.includes('subtotal,') &&
-    checkout.includes('shippingCost,') && checkout.includes('payment: { method: draft.paymentMethod') &&
-    checkout.includes('transaction.set(orderRef, orderData)')
+  phase4.includes('items: resolvedItems') && phase4.includes('subtotal: subtotal,') &&
+    phase4.includes('shippingCost: shippingCost,') && phase4.includes("payment: { method: paymentMethod, status: 'pendiente' }")
 );
 check(
-  'Reserva de inventario y activación ocurren en una transacción',
-  checkout.includes('async function reserveOrderInventory(orderId)') &&
-    checkout.includes('transaction.update(productRefs[index]') &&
-    checkout.includes("inventoryState: 'reserved'") &&
-    checkout.includes("status: 'pendiente'")
+  'Creación del pedido y descuento de stock ocurren en una sola transacción, sin tope bajo de ítems',
+  phase4.includes('phase4CreateWrite_(\'orders/\' + orderId, orderData)') &&
+    phase4.includes('phase4UpdateWrite_(\'products/\' + item.id') &&
+    phase4.includes('phase4Commit_(writes, transactionId)') &&
+    !/cartLines\.length\s*>\s*4\b/.test(phase4)
 );
 
 // Reglas e integridad

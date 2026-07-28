@@ -15,6 +15,7 @@ const collections = read('js/collections-store.js');
 const inventory = read('js/admin-inventory-integrity.js');
 const model = read('js/inventory-model.mjs');
 const deleteFix = read('js/admin-order-delete-fix.js');
+const phase4 = read('apps-script/Phase4CreateOrder.gs');
 
 const checks = [];
 function check(name, condition, detail) {
@@ -41,13 +42,19 @@ check(
   'site-activity.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
-  'Checkout separa borrador y reserva final sin perder atomicidad del stock',
-  checkout.includes('createPendingOrder(draft)') &&
-    checkout.includes('reserveOrderInventory(orderId)') &&
-    checkout.includes("status: 'inventory_pending'") &&
-    checkout.includes("inventoryState: 'pending'") &&
-    checkout.includes("inventoryState: 'reserved'"),
-  'El pedido pendiente debe existir antes de la transacción que reserva stock y lo activa.'
+  // Desde la Fase 4, la creación del pedido y el descuento de stock ya no
+  // pasan por un estado "pendiente" intermedio en el navegador: el
+  // servidor (Apps Script) lee stock/precio real y escribe el pedido ya
+  // "reservado" en UNA sola transacción de Firestore (beginTransaction/
+  // batchGet/commit), sin las reglas de por medio — ver
+  // apps-script/Phase4CreateOrder.gs.
+  'El servidor crea el pedido y descuenta stock sin perder atomicidad',
+  checkout.includes('async function createOrderOnServer(draft)') &&
+    phase4.includes('phase4BeginTransaction_()') &&
+    phase4.includes("inventoryState: 'reserved'") &&
+    phase4.includes("status: 'pendiente'") &&
+    phase4.includes('phase4Commit_(writes, transactionId)'),
+  'El pedido y el descuento de stock deben confirmarse juntos en una sola transacción.'
 );
 check(
   'La activación final exige que todos los productos queden marcados por el pedido',
@@ -119,9 +126,14 @@ check(
   'El catálogo público no debe permitir enumeraciones ilimitadas.'
 );
 check(
-  'Las transacciones críticas limitan sus reintentos internos',
-  (checkout.match(/maxAttempts: 2/g) || []).length >= 3,
-  'Guard, pedido pendiente y reserva de stock deben limitar los reintentos automáticos.'
+  // El guard anti-repetición sigue siendo una transacción de Firestore desde
+  // el navegador (única escritura que queda ahí) y limita sus reintentos. La
+  // creación del pedido ya no es una transacción de cliente que Firestore
+  // reintente sola: es una única llamada al servidor que responde éxito o
+  // error puntual, sin bucles de reintento automático que limitar.
+  'El guard de checkout limita sus reintentos internos',
+  (checkout.match(/maxAttempts: 2/g) || []).length >= 1,
+  'reserveCheckoutGuard debe limitar los reintentos automáticos de Firestore.'
 );
 
 const failed = checks.filter(item => !item.ok);
