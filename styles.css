@@ -2000,84 +2000,95 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-tabbar-btn svg { width: 20px; height: 20px; }
 
-/* Cookies y privacidad: tarjeta discreta, sin overlay ni bloqueo de navegación. */
+/* Cookies y privacidad: tarjeta discreta, sin overlay ni bloqueo de navegación.
+   Estilo más "Apple": tipografía calma (menos peso/mayúsculas gritadas),
+   más aire, sombra difusa y suave, logo real de Tintin en vez de un emoji. */
 .tt-privacy-consent {
   position: fixed;
   z-index: 2200;
-  right: max(18px, env(safe-area-inset-right, 0px));
-  bottom: max(18px, env(safe-area-inset-bottom, 0px));
-  width: min(430px, calc(100vw - 36px));
-  padding: 18px;
-  border: 1px solid rgba(173,63,103,.16);
-  border-radius: 22px;
+  right: max(20px, env(safe-area-inset-right, 0px));
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  width: min(400px, calc(100vw - 36px));
+  padding: 22px;
+  border: 1px solid rgba(173,63,103,.12);
+  border-radius: 26px;
   background: rgba(255,255,255,.98);
-  box-shadow: 0 18px 54px rgba(38,24,30,.16);
+  box-shadow: 0 24px 64px rgba(38,24,30,.14), 0 2px 8px rgba(38,24,30,.05);
   color: var(--text);
   font-family:Montserrat;
   box-sizing: border-box;
-  animation: ttPrivacyIn .28s cubic-bezier(.2,.8,.2,1) both;
+  animation: ttPrivacyIn .32s cubic-bezier(.22,.61,.36,1) both;
 }
 .tt-privacy-consent[hidden] { display: none !important; }
-.tt-privacy-heading { display: flex; align-items: center; gap: 11px; padding-right: 24px; }
+.tt-privacy-heading { display: flex; align-items: center; gap: 13px; padding-right: 24px; }
 .tt-privacy-icon {
   display: grid;
-  flex: 0 0 38px;
-  width: 38px;
-  height: 38px;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
   place-items: center;
-  border-radius: 13px;
-  background: var(--pink-pale);
-  font-size: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(173,63,103,.16), inset 0 0 0 1px rgba(173,63,103,.08);
+  overflow: hidden;
 }
+.tt-privacy-icon img { width: 26px; height: 26px; object-fit: contain; display: block; }
 .tt-privacy-eyebrow {
   color: var(--pink-dark);
   font-size: .62rem;
-  font-weight: 800;
-  letter-spacing: .12em;
+  font-weight: 700;
+  letter-spacing: .1em;
   text-transform: uppercase;
 }
-.tt-privacy-heading h2 { margin: 2px 0 0; color: var(--text); font: 700 1.03rem/1.25 var(--font-display); }
-.tt-privacy-summary { margin: 13px 0 15px; color: var(--text-sec); font-size: .77rem; line-height: 1.58; }
+.tt-privacy-heading h2 { margin: 3px 0 0; color: var(--text); font: 700 1rem/1.3 var(--font-display); letter-spacing: -.01em; }
+.tt-privacy-summary { margin: 14px 0 17px; color: var(--text-sec); font-size: .78rem; line-height: 1.62; }
 .tt-privacy-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .tt-privacy-btn,
 .tt-privacy-link-btn {
   min-height: 44px;
   border-radius: 999px;
-  padding: 9px 14px;
+  padding: 9px 16px;
   border: 0;
-  font: 800 .68rem/1.2 var(--font-body);
-  letter-spacing: .035em;
+  font: 700 .72rem/1.2 var(--font-body);
+  letter-spacing: .01em;
   cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease;
 }
-.tt-privacy-btn-primary { background: var(--pink-dark); color: #fff; box-shadow: 0 8px 20px rgba(173,63,103,.18); }
-.tt-privacy-btn-secondary { border: 1px solid rgba(173,63,103,.28); background: #fff; color: var(--text); }
-.tt-privacy-link-btn { padding-inline: 6px; background: transparent; color: var(--pink-dark); text-decoration: underline; text-underline-offset: 3px; }
+.tt-privacy-btn:active { transform: scale(.97); }
+.tt-privacy-btn-primary { background: var(--pink-dark); color: #fff; box-shadow: 0 10px 24px rgba(173,63,103,.22); }
+.tt-privacy-btn-primary:hover { opacity: .92; }
+.tt-privacy-btn-secondary { border: 1px solid rgba(173,63,103,.22); background: #fff; color: var(--text); }
+.tt-privacy-btn-secondary:hover { background: var(--pink-pale); }
+.tt-privacy-link-btn { padding-inline: 6px; background: transparent; color: var(--pink-dark); text-decoration: none; font-weight: 600; opacity: .85; }
+.tt-privacy-link-btn:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
 .tt-privacy-close {
   position: absolute;
-  top: 7px;
-  right: 7px;
+  top: 8px;
+  right: 8px;
   display: grid;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   border: 0;
   border-radius: 50%;
   background: transparent;
   color: var(--text-sec);
-  font-size: 20px;
+  font-size: 19px;
   cursor: pointer;
+  transition: background .15s ease;
 }
-.tt-privacy-details { margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--border); }
+.tt-privacy-close:hover { background: rgba(38,24,30,.05); }
+.tt-privacy-details { margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--border); }
 .tt-privacy-option { display: flex; min-height: 52px; align-items: center; justify-content: space-between; gap: 15px; }
 .tt-privacy-option + .tt-privacy-option { border-top: 1px solid rgba(38,24,30,.06); }
 .tt-privacy-option div { display: grid; gap: 2px; }
-.tt-privacy-option strong { color: var(--text); font-size: .76rem; }
-.tt-privacy-option span { color: var(--text-sec); font-size: .67rem; line-height: 1.4; }
+.tt-privacy-option strong { color: var(--text); font-size: .77rem; font-weight: 600; }
+.tt-privacy-option span { color: var(--text-sec); font-size: .68rem; line-height: 1.45; }
 .tt-privacy-option input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--pink-dark); }
-.tt-privacy-required { color: var(--pink-dark) !important; font-weight: 800; white-space: nowrap; }
-.tt-privacy-details-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 13px; }
-.tt-privacy-details-actions a { color: var(--pink-dark); font-size: .7rem; font-weight: 700; text-underline-offset: 3px; }
-@keyframes ttPrivacyIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.tt-privacy-required { color: var(--pink-dark) !important; font-weight: 700; font-size: .66rem; white-space: nowrap; }
+.tt-privacy-details-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+.tt-privacy-details-actions a { color: var(--pink-dark); font-size: .71rem; font-weight: 600; text-underline-offset: 3px; }
+@keyframes ttPrivacyIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
 
 @media (max-width: 768px) {
   .tt-privacy-consent {
@@ -2086,8 +2097,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     width: calc(100vw - 24px);
     max-height: min(70vh, 580px);
     overflow: auto;
-    padding: 14px;
-    border-radius: 20px;
+    padding: 18px;
+    border-radius: 22px;
   }
   /* Ese margen de 86px reserva el alto de la tabbar mobile — en login.html
      la tabbar existe en el DOM pero queda oculta (display:none, ver
@@ -2096,15 +2107,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   body:has(.login-page) .tt-privacy-consent {
     bottom: max(12px, env(safe-area-inset-bottom, 0px));
   }
-  /* La etiqueta "Cookies y privacidad" es redundante con el ícono 🍪 y el
+  /* La etiqueta "Cookies y privacidad" es redundante con el logo y el
      título de abajo — en mobile el banner ya compite por espacio vertical
      con el CTA del hero (que también se ancla abajo), así que acá se
      esconde para recuperar esas líneas sin perder información real. */
   .tt-privacy-eyebrow { display: none; }
   .tt-privacy-heading { padding-right: 20px; }
-  .tt-privacy-summary { margin: 8px 0 12px; }
-  .tt-privacy-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .tt-privacy-link-btn { grid-column: 1 / -1; padding-block: 2px; }
+  .tt-privacy-summary { margin: 10px 0 14px; }
+  .tt-privacy-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tt-privacy-link-btn { grid-column: 1 / -1; padding-block: 4px; }
   .tt-privacy-details-actions { align-items: stretch; flex-direction: column; }
   .tt-privacy-details-actions .tt-privacy-btn { width: 100%; }
 }

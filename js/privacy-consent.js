@@ -110,7 +110,7 @@ function renderConsent(customize = false, focusDetails = false) {
   banner.innerHTML = `
     ${preferences.decided ? '<button type="button" class="tt-privacy-close" aria-label="Cerrar preferencias">×</button>' : ''}
     <div class="tt-privacy-heading">
-      <span class="tt-privacy-icon" aria-hidden="true">🍪</span>
+      <span class="tt-privacy-icon" aria-hidden="true"><img src="assets-tintin/images/general/logo.png" alt="" width="26" height="26" loading="lazy" decoding="async"></span>
       <div>
         <div class="tt-privacy-eyebrow">Cookies y privacidad</div>
         <h2>Tu elección, sin interrumpirte</h2>
