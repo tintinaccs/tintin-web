@@ -40,7 +40,7 @@ html, body {
 
 /* ── BRAND SIDE ── */
 .login-brand {
-  background: linear-gradient(145deg, #b84c72 0%, #8b2642 50%, #6a1535 100%);
+  background: radial-gradient(130% 100% at 50% 0%, #c1547c 0%, #8b2642 48%, #601531 100%);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 60px 48px;
@@ -52,36 +52,25 @@ html, body {
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 .login-brand-logo {
-  font-family:Montserrat;
-  font-size: 42px; font-weight: 900;
-  letter-spacing: .18em;
-  color: #fff !important;
-  text-transform: uppercase;
-  margin-bottom: 4px;
+  width: clamp(76px, 8vw, 108px);
+  height: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 10px 22px rgba(0,0,0,.2));
+  margin-bottom: 22px;
   position: relative;
 }
 .login-brand-sub {
   font-size: 11px; font-weight: 600;
-  letter-spacing: .25em; color: rgba(255,255,255,.6) !important;
-  text-transform: uppercase; margin-bottom: 48px;
+  letter-spacing: .22em; color: rgba(255,255,255,.65) !important;
+  text-transform: uppercase; margin-bottom: 44px;
   position: relative;
 }
 .login-brand-tagline {
   font-family:Montserrat;
-  font-style: italic;
-  font-size: 26px; color: rgba(255,255,255,.9) !important;
-  text-align: center; line-height: 1.4;
+  font-style: italic; font-weight: 400;
+  font-size: 24px; color: rgba(255,255,255,.92) !important;
+  text-align: center; line-height: 1.45;
   position: relative; max-width: 320px;
 }
-.login-brand-dots {
-  display: flex; gap: 8px; margin-top: 48px;
-  position: relative;
-}
-.login-brand-dots span {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: rgba(255,255,255,.3);
-}
-.login-brand-dots span:first-child { background: #fff; }
 
 /* ── FORM SIDE ── */
 .login-form-side {
@@ -103,20 +92,23 @@ html, body {
   .login-mobile-logo { display: block; }
 }
 .login-mobile-logo-text {
-  font-size: 28px; font-weight: 900;
-  letter-spacing: .15em; color: var(--acc);
-  text-transform: uppercase;
+  display: block; margin: 0 auto;
+  width: 60px; height: 60px; padding: 13px;
+  border-radius: 50%; object-fit: contain;
+  background: var(--acc-pale);
+  box-shadow: 0 10px 26px rgba(139,38,66,.16), 0 2px 6px rgba(139,38,66,.08);
 }
 .login-mobile-logo-sub {
   font-size: 10px; font-weight: 600;
-  letter-spacing: .2em; color: var(--muted);
-  text-transform: uppercase; margin-top: 2px;
+  letter-spacing: .18em; color: var(--muted);
+  text-transform: uppercase; margin-top: 10px;
 }
 
 .login-box { width: 100%; max-width: 380px; text-align: center; }
 
 .login-heading {
-  font-size: 22px; font-weight: 800;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -.2px;
   color: var(--text); margin: 0 0 4px;
 }
 .login-heading-sub {
@@ -142,11 +134,11 @@ html, body {
   padding: 15px; border: 1.5px solid var(--border); border-radius: 50px;
   font-size: 14px; font-weight: 700; color: var(--text);
   cursor: pointer; background: #fff; font-family:Montserrat;
-  transition: all .2s;
-  box-shadow: 0 4px 16px rgba(184,76,114,.12);
+  transition: border-color .2s, background-color .2s, transform .2s, box-shadow .2s;
+  box-shadow: 0 14px 32px rgba(139,38,66,.1), 0 2px 6px rgba(139,38,66,.05);
 }
 .login-google:hover { border-color: var(--acc); background: var(--acc-pale); }
-.login-google:active { transform: translateY(1px); }
+.login-google:active { transform: translateY(1px); box-shadow: 0 6px 16px rgba(139,38,66,.1); }
 
 /* ERROR */
 .login-error {
@@ -184,22 +176,27 @@ html, body {
 }
 .login-email-input {
   width: 100%; padding: 14px 16px; border: 1.5px solid var(--border);
-  border-radius: 12px; font-size: 14px; font-family:Montserrat;
-  color: var(--text); background: #fff; transition: border .2s;
+  border-radius: 14px; font-size: 14px; font-family:Montserrat;
+  color: var(--text); background: #fff;
+  transition: border-color .2s, box-shadow .2s;
   margin-bottom: 12px;
 }
-.login-email-input:focus { outline: none; border-color: var(--acc); }
+.login-email-input:focus {
+  outline: none; border-color: var(--acc);
+  box-shadow: 0 0 0 4px rgba(173,63,103,.12);
+}
 
 .login-email-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; padding: 15px; border: none; border-radius: 50px;
   font-size: 14px; font-weight: 700; color: #fff;
   cursor: pointer; background: var(--acc); font-family:Montserrat;
-  transition: all .2s;
+  transition: background-color .2s, transform .2s, box-shadow .2s;
+  box-shadow: 0 14px 32px rgba(139,38,66,.18), 0 2px 6px rgba(139,38,66,.08);
 }
 .login-email-btn:hover:not(:disabled) { background: var(--acc-dark); }
-.login-email-btn:active:not(:disabled) { transform: translateY(1px); }
-.login-email-btn:disabled { opacity: .6; cursor: not-allowed; }
+.login-email-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 6px 16px rgba(139,38,66,.16); }
+.login-email-btn:disabled { opacity: .6; cursor: not-allowed; box-shadow: none; }
 
 .login-email-resend {
   display: block; width: 100%; text-align: center; margin-top: 12px;

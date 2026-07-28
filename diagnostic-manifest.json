@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T14:25:54.658Z",
-  "sourceFingerprint": "cb5696d97f85ca7b66dc10fe587b5c37aff11721c0fd044670e3ce2370b95538",
+  "generatedAt": "2026-07-28T14:41:02.960Z",
+  "sourceFingerprint": "ddc092b9115147793e2c1133941a0c24c9a631e8f8dc36ee17747d50cdc285df",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5456282,
+    "totalBytes": 5456785,
     "pages": 18,
     "modules": 211
   },
@@ -10529,8 +10529,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 22141,
-      "sha256": "706c0a83fc6551565032f4d819902337027691178c8b14451577cde612217113",
+      "bytes": 22345,
+      "sha256": "198fc58f461359466f00dcbd9156dd87ef37b4b04df3f6bd0394d14ea3bc976c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10539,7 +10539,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          56
+          53
         ]
       },
       "duplicateIds": [],
@@ -10551,7 +10551,7 @@
           "error": ""
         },
         {
-          "line": 98,
+          "line": 95,
           "module": true,
           "ok": true,
           "error": ""
@@ -10577,17 +10577,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 524
+          "line": 521
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 525
+          "line": 522
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 526
+          "line": 523
         }
       ],
       "styles": [
@@ -10640,11 +10640,27 @@
       "images": [
         {
           "tag": "img",
+          "raw": "assets-tintin/images/general/logo.png",
+          "target": "assets-tintin/images/general/logo.png",
+          "alt": "Tintin Accesorios &amp; Relojes",
+          "hasAlt": true,
+          "line": 38
+        },
+        {
+          "tag": "img",
+          "raw": "assets-tintin/images/general/logo.png",
+          "target": "assets-tintin/images/general/logo.png",
+          "alt": "Tintin Accesorios &amp; Relojes",
+          "hasAlt": true,
+          "line": 48
+        },
+        {
+          "tag": "img",
           "raw": "https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg",
           "target": null,
           "alt": "Google",
           "hasAlt": true,
-          "line": 66
+          "line": 63
         }
       ],
       "links": [
@@ -10656,7 +10672,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 91
+          "line": 88
         }
       ],
       "references": [
@@ -10681,19 +10697,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 524,
+          "line": 521,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 525,
+          "line": 522,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 526,
+          "line": 523,
           "exists": true
         },
         {
@@ -10751,9 +10767,21 @@
           "exists": true
         },
         {
+          "raw": "assets-tintin/images/general/logo.png",
+          "target": "assets-tintin/images/general/logo.png",
+          "line": 38,
+          "exists": true
+        },
+        {
+          "raw": "assets-tintin/images/general/logo.png",
+          "target": "assets-tintin/images/general/logo.png",
+          "line": 48,
+          "exists": true
+        },
+        {
           "raw": "index.html",
           "target": "index.html",
-          "line": 91,
+          "line": 88,
           "exists": true
         }
       ],
@@ -10775,7 +10803,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 65
+          "line": 62
         },
         {
           "id": "btn-send-email-link",
@@ -10789,7 +10817,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 79
+          "line": 76
         },
         {
           "id": "btn-resend-email-link",
@@ -10803,7 +10831,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 80
+          "line": 77
         }
       ],
       "controls": [
@@ -10813,7 +10841,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 78,
+          "line": 75,
           "labeled": true
         }
       ]
@@ -19356,8 +19384,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 7410,
-      "sha256": "9baca0c46afa53a814b84b0cd49c17deb6cfe65905f11ee22dba38f098845dfc"
+      "bytes": 7709,
+      "sha256": "3fa8f6a413cd77ee74f7ea09ab5cbca6a3ea1d3f6aaf303e200416072217455a"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -20352,8 +20380,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 22141,
-      "sha256": "706c0a83fc6551565032f4d819902337027691178c8b14451577cde612217113"
+      "bytes": 22345,
+      "sha256": "198fc58f461359466f00dcbd9156dd87ef37b4b04df3f6bd0394d14ea3bc976c"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -23414,7 +23442,21 @@
     },
     {
       "file": "login.html",
-      "line": 91,
+      "line": 88,
+      "raw": "index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 189,
+      "raw": "admin.html",
+      "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 192,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -23422,20 +23464,6 @@
     {
       "file": "login.html",
       "line": 192,
-      "raw": "admin.html",
-      "target": "admin.html",
-      "exists": true
-    },
-    {
-      "file": "login.html",
-      "line": 195,
-      "raw": "index.html",
-      "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "login.html",
-      "line": 195,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -24410,7 +24438,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 195
+          "line": 192
         }
       ]
     },
@@ -25657,17 +25685,17 @@
           },
           {
             "file": "login.html",
-            "line": 202,
+            "line": 199,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 212,
+            "line": 209,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 250,
+            "line": 247,
             "operation": "doc"
           },
           {
