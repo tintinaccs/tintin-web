@@ -207,9 +207,11 @@
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}',
     '#tt-loader-logo{position:relative;z-index:1;width:clamp(180px,15vw,230px);max-width:72vw;height:auto;object-fit:contain;display:block;opacity:0;transform:scale(.96);filter:drop-shadow(0 8px 22px rgba(212,106,138,.18));user-select:none;pointer-events:none}',
-    '#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-breathe 2.6s ease-in-out .5s infinite}',
+    '#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:tt-logo-in .5s cubic-bezier(.22,.61,.36,1) both,tt-logo-heartbeat 1.8s ease-in-out .5s infinite}',
     '@keyframes tt-logo-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}',
-    '@keyframes tt-logo-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}',
+    // Doble pulso (lub-dub) como un latido real, seguido de una pausa —
+    // no una respiración lenta y pareja. Debe notarse a simple vista.
+    '@keyframes tt-logo-heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.14)}28%{transform:scale(1.03)}42%{transform:scale(1.14)}58%{transform:scale(1)}}',
     '@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}',
     '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}',
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
