@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T15:56:39.907Z",
-  "sourceFingerprint": "cc92e55bcf157ef71bcf089bb9db3be4c91201e15a1062d76bc587bdecc6c236",
+  "generatedAt": "2026-07-28T16:23:56.978Z",
+  "sourceFingerprint": "56b6640b9f7c2a12ae72cb87313c72f601aa89fbacd96a80f5e00992ef77d65d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5459180,
+    "totalBytes": 5462499,
     "pages": 18,
     "modules": 211
   },
@@ -10529,8 +10529,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 22345,
-      "sha256": "745971f8d5a60ed58c4980d132c79418b19e405fecc1c7c8d24095636f7f3b74",
+      "bytes": 24130,
+      "sha256": "cd11ce2e603def04bfe63845eeefaa94de3ec8bdfb7437ba895fafc94bbc0625",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10577,17 +10577,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 521
+          "line": 562
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 522
+          "line": 563
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 523
+          "line": 564
         }
       ],
       "styles": [
@@ -10697,19 +10697,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 521,
+          "line": 562,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 522,
+          "line": 563,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 523,
+          "line": 564,
           "exists": true
         },
         {
@@ -16201,8 +16201,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 33645,
-      "sha256": "e91d1325d24385fe92a37d20d10afcbf1d7be0939c5693599c6ec33f230f42b3",
+      "bytes": 35179,
+      "sha256": "612ae461279f9dcef376174e8c178679db78f49b075024b5e14c91722cece042",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20188,8 +20188,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 33645,
-      "sha256": "e91d1325d24385fe92a37d20d10afcbf1d7be0939c5693599c6ec33f230f42b3"
+      "bytes": 35179,
+      "sha256": "612ae461279f9dcef376174e8c178679db78f49b075024b5e14c91722cece042"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -20380,8 +20380,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 22345,
-      "sha256": "745971f8d5a60ed58c4980d132c79418b19e405fecc1c7c8d24095636f7f3b74"
+      "bytes": 24130,
+      "sha256": "cd11ce2e603def04bfe63845eeefaa94de3ec8bdfb7437ba895fafc94bbc0625"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -23036,21 +23036,21 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 491,
+      "line": 522,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 637,
+      "line": 668,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 643,
+      "line": 674,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -23449,21 +23449,21 @@
     },
     {
       "file": "login.html",
-      "line": 189,
+      "line": 222,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 192,
+      "line": 229,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 192,
+      "line": 229,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -24438,7 +24438,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 192
+          "line": 229
         }
       ]
     },
@@ -25685,17 +25685,17 @@
           },
           {
             "file": "login.html",
-            "line": 199,
+            "line": 236,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 209,
+            "line": 246,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 247,
+            "line": 284,
             "operation": "doc"
           },
           {

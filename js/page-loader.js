@@ -173,6 +173,32 @@
     return PAGE_TITLES[file] || '';
   }
 
+  // login.html no puede mantener su propio saludo ("Hola de nuevo, .../
+  // genérico para cuentas nuevas") visible después de saltar a index.html —
+  // la navegación tira abajo ese loader entero. Lo deja guardado acá mismo
+  // (ver stashPostLoginGreeting en login.html) para que este, el loader de
+  // la página de destino, lo recoja y lo siga mostrando un instante — la
+  // única razón por la que el inicio (que normalmente no lleva título)
+  // llega a mostrar uno acá.
+  const POST_LOGIN_GREETING_KEY = 'tt_post_login_greeting';
+  const POST_LOGIN_GREETING_MAX_AGE_MS = 8000;
+
+  function consumePostLoginGreeting() {
+    try {
+      const raw = window.sessionStorage.getItem(POST_LOGIN_GREETING_KEY);
+      if (!raw) return null;
+      window.sessionStorage.removeItem(POST_LOGIN_GREETING_KEY);
+      const data = JSON.parse(raw);
+      if (!data || typeof data.title !== 'string' || !data.title.trim()) return null;
+      if (typeof data.ts !== 'number' || Date.now() - data.ts > POST_LOGIN_GREETING_MAX_AGE_MS) return null;
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  const postLoginGreeting = consumePostLoginGreeting();
+
   function isOldLogo(url) {
     return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url || ''));
   }
@@ -320,9 +346,14 @@
     d.textContent = String(value == null ? '' : value);
     return d.innerHTML;
   }
-  const initialTitle = defaultPageTitle();
+  const initialTitle = postLoginGreeting ? postLoginGreeting.title : defaultPageTitle();
+  const initialSubtitle = postLoginGreeting && postLoginGreeting.subtitle ? postLoginGreeting.subtitle : '';
+  const showLoaderExtras = !isHomePage() || !!postLoginGreeting;
   const TITLE_HTML = initialTitle
     ? '<div id="tt-loader-title">' + escText(initialTitle) + '</div>'
+    : '';
+  const SUBTITLE_HTML = initialSubtitle
+    ? '<div id="tt-loader-subtitle">' + escText(initialSubtitle) + '</div>'
     : '';
   const loader = document.createElement('div');
   loader.id = 'tt-loader';
@@ -333,7 +364,7 @@
     '<div id="tt-loader-spin-wrap"><img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="220" height="220">' +
-    (isHomePage() ? '' : TITLE_HTML + DOTS_HTML) +
+    (showLoaderExtras ? TITLE_HTML + SUBTITLE_HTML + DOTS_HTML : '') +
     '</div>';
 
   const logo = loader.querySelector('#tt-loader-logo');

@@ -131,6 +131,39 @@ function hideLoginOverlay() {
 }
 function setOverlayText(text, subtitle) { window.TintinLoader && window.TintinLoader.setText(text, subtitle); }
 
+// creationTime === lastSignInTime únicamente en el primer ingreso de una
+// cuenta — lo da Firebase Auth en el propio objeto user, sin ninguna lectura
+// extra a Firestore, así que el saludo correcto aparece al instante.
+function isFirstSignIn(user) {
+  const created = user?.metadata?.creationTime;
+  const lastSignIn = user?.metadata?.lastSignInTime;
+  return !!created && created === lastSignIn;
+}
+
+// Genérico a propósito: nada de "bienvenido"/"bienvenida" (no asumir género).
+const NEW_USER_GREETING_TITLE = '¡Qué bueno tenerte por acá!';
+const GREETING_SUBTITLE = 'Aguardá un momento…';
+
+function greetingFor(user) {
+  if (isFirstSignIn(user)) return { title: NEW_USER_GREETING_TITLE, subtitle: GREETING_SUBTITLE };
+  return { title: `Hola de nuevo, ${String(user.email || '')}!`, subtitle: GREETING_SUBTITLE };
+}
+
+const POST_LOGIN_GREETING_KEY = 'tt_post_login_greeting';
+
+// El loader de login.html no sobrevive la navegación a index.html — esto deja
+// el mismo saludo listo para que js/page-loader.js lo recoja ahí y lo siga
+// mostrando mientras esa página también carga, en vez de cortarse en seco.
+function stashPostLoginGreeting(greeting) {
+  try {
+    window.sessionStorage.setItem(POST_LOGIN_GREETING_KEY, JSON.stringify({
+      title: greeting.title,
+      subtitle: greeting.subtitle,
+      ts: Date.now()
+    }));
+  } catch {}
+}
+
 function showError(html) {
   hideMessages();
   const el = document.getElementById("login-error");
@@ -189,6 +222,10 @@ async function redirectByRole(role, email, options = {}) {
     window.location.replace('admin.html');
     return;
   }
+  // El loader de esta página desaparece con la navegación — sin esto, el
+  // saludo ("Hola de nuevo, ..."/genérico para cuentas nuevas) solo se
+  // alcanzaba a ver acá y nunca llegaba a mostrarse en index.html.
+  if (!from && options.greeting) stashPostLoginGreeting(options.greeting);
   window.location.replace(from || (options.welcomePending ? 'index.html?welcome=1' : 'index.html'));
 }
 
@@ -253,7 +290,8 @@ async function pendingWelcomeFor(uid, role) {
 }
 
 async function processGoogleUser(user) {
-  setOverlayText(`Hola de nuevo, ${String(user.email || '')}!`, 'Aguardá un momento…');
+  const greeting = greetingFor(user);
+  setOverlayText(greeting.title, greeting.subtitle);
   // Arranca ya la lectura de settings/storeGate en paralelo con la del
   // perfil (son independientes) — antes esperaba a tener el perfil resuelto
   // para recién empezarla, sumando una ida y vuelta entera a Firestore al
@@ -266,7 +304,7 @@ async function processGoogleUser(user) {
     showBlockedModal();
     return;
   }
-  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise });
+  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise, greeting });
 }
 
 // Firebase puede avisar que hay una sesión antes de que getRedirectResult()
@@ -291,6 +329,8 @@ async function handlePassiveAuthState(user) {
     return;
   }
   if (explicitLoginInProgress) return;
+  const greeting = greetingFor(user);
+  setOverlayText(greeting.title, greeting.subtitle);
   const storeConfigPromise = getStoreAccessConfig();
   if (await checkBlocked(user.uid, user.email)) {
     await signOut(auth);
@@ -300,7 +340,7 @@ async function handlePassiveAuthState(user) {
   }
   const role = await getUserRole(user.uid, user.email);
   const welcomePending = await pendingWelcomeFor(user.uid, role);
-  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise });
+  await redirectByRole(role, user.email, { welcomePending, storeConfigPromise, greeting });
 }
 
 onAuthStateChanged(auth, async user => {
@@ -440,7 +480,8 @@ document.getElementById('btn-send-email-link').onclick = () => handleSendLink(fa
 document.getElementById('btn-resend-email-link').onclick = () => handleSendLink(true);
 
 async function finishEmailLinkLogin(user) {
-  setOverlayText(`Hola de nuevo, ${String(user.email || '')}!`, 'Aguardá un momento…');
+  const greeting = greetingFor(user);
+  setOverlayText(greeting.title, greeting.subtitle);
   // Arranca ya settings/storeGate en paralelo con el chequeo de bloqueo y el
   // perfil (son independientes entre sí).
   const storeConfigPromise = getStoreAccessConfig();
@@ -456,7 +497,7 @@ async function finishEmailLinkLogin(user) {
   // consultar. Usar "??" (no "||") evita releer el mismo documento cuando
   // welcomePending ya vino en false (clienta que ya vio el tutorial).
   const welcomePending = result.welcomePending ?? await pendingWelcomeFor(user.uid, result.role);
-  await redirectByRole(result.role, user.email, { welcomePending, storeConfigPromise });
+  await redirectByRole(result.role, user.email, { welcomePending, storeConfigPromise, greeting });
 }
 
 async function tryCompleteEmailLink() {
