@@ -206,8 +206,16 @@ import {
     window.dispatchEvent(new CustomEvent('tintin:welcome:opened'));
   }
 
+  // Firebase puede disparar onAuthStateChanged más de una vez para la misma
+  // sesión (por ejemplo: una vez con el usuario restaurado de la sesión
+  // guardada, y otra vez tras revalidar el token). Sin esta protección, un
+  // segundo disparo mientras el mensaje ya estaba abierto volvía a llamar
+  // show(), que borra el overlay actual para crear uno nuevo desde el
+  // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
+  let handled = false;
   onAuthStateChanged(auth, async user => {
-    if (!user) return;
+    if (!user || handled) return;
+    handled = true;
     try {
       const previewRequested = previewMode() && user.email === SUPER_ADMIN;
       const role = await getUserRole(user.uid, user.email);
