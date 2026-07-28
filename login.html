@@ -132,7 +132,7 @@ function hideLoginOverlay() {
   window.TintinLoader && window.TintinLoader.hide();
   setOverlayText('Cargando…');
 }
-function setOverlayText(text) { window.TintinLoader && window.TintinLoader.setText(text); }
+function setOverlayText(text, subtitle) { window.TintinLoader && window.TintinLoader.setText(text, subtitle); }
 
 function showError(html) {
   hideMessages();
@@ -256,6 +256,7 @@ async function pendingWelcomeFor(uid, role) {
 }
 
 async function processGoogleUser(user) {
+  setOverlayText(`Hola de nuevo, ${String(user.email || '')}!`, 'Aguardá un momento…');
   // Arranca ya la lectura de settings/storeGate en paralelo con la del
   // perfil (son independientes) — antes esperaba a tener el perfil resuelto
   // para recién empezarla, sumando una ida y vuelta entera a Firestore al
@@ -442,6 +443,7 @@ document.getElementById('btn-send-email-link').onclick = () => handleSendLink(fa
 document.getElementById('btn-resend-email-link').onclick = () => handleSendLink(true);
 
 async function finishEmailLinkLogin(user) {
+  setOverlayText(`Hola de nuevo, ${String(user.email || '')}!`, 'Aguardá un momento…');
   // Arranca ya settings/storeGate en paralelo con el chequeo de bloqueo y el
   // perfil (son independientes entre sí).
   const storeConfigPromise = getStoreAccessConfig();

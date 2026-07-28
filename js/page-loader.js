@@ -142,6 +142,37 @@
     return current.endsWith('/index.html') || /\/$/.test(current);
   }
 
+  // Título fijo por página, en mayúsculas, mostrado entre el logo y los
+  // puntitos de carga en TODAS las páginas menos el inicio (que no lleva
+  // ninguno). Es estático a propósito (no depende de datos de Firestore ni
+  // de parámetros como ?cat=): cualquier búsqueda async agregaría justo la
+  // demora que este cambio busca evitar.
+  const PAGE_TITLES = {
+    'catalogo.html': 'CATÁLOGO',
+    'collections.html': 'COLECCIONES',
+    'product.html': 'PRODUCTO',
+    'about.html': 'NOSOTROS',
+    'nosotros.html': 'NOSOTROS',
+    'contact.html': 'CONTACTO',
+    'checkout.html': 'FINALIZAR COMPRA',
+    'perfil.html': 'MI PERFIL',
+    'login.html': 'INGRESAR',
+    'admin.html': 'PANEL DE ADMINISTRACIÓN',
+    'admin-images.html': 'BIBLIOTECA DE IMÁGENES',
+    'envios.html': 'ENVÍOS',
+    'cambios-devoluciones.html': 'CAMBIOS Y DEVOLUCIONES',
+    'preguntas-frecuentes.html': 'PREGUNTAS FRECUENTES',
+    'terminos.html': 'TÉRMINOS Y CONDICIONES',
+    'privacidad.html': 'PRIVACIDAD',
+    '404.html': 'PÁGINA NO ENCONTRADA'
+  };
+
+  function defaultPageTitle() {
+    if (isHomePage()) return '';
+    const file = currentPath().split('/').pop();
+    return PAGE_TITLES[file] || '';
+  }
+
   function isOldLogo(url) {
     return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url || ''));
   }
@@ -182,6 +213,12 @@
     '@media (max-width:600px){#tt-loader-logo{width:clamp(110px,30vw,150px)}}',
     '@media (min-width:601px) and (max-width:1120px){#tt-loader-logo{width:clamp(145px,20vw,190px)}}',
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-logo{animation:none;opacity:1;transform:none}}',
+    '#tt-loader-title{margin-top:16px;font-family:Montserrat;font-size:clamp(12px,2.6vw,15px);font-weight:800;letter-spacing:.1em;color:var(--pink-dark,#AD3F67);text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box;word-break:break-word}',
+    '#tt-loader-spin-wrap.tt-ready #tt-loader-title{opacity:1;transition:opacity .3s ease .1s}',
+    '#tt-loader-subtitle{margin-top:6px;font-family:Montserrat;font-size:clamp(11px,2.2vw,13px);font-weight:600;color:#9e7a89;text-align:center;opacity:0;max-width:86vw;padding:0 12px;box-sizing:border-box}',
+    '#tt-loader-spin-wrap.tt-ready #tt-loader-subtitle{opacity:1;transition:opacity .3s ease .15s}',
+    '@media (max-width:600px){#tt-loader-title{font-size:clamp(11px,3.4vw,13px);letter-spacing:.06em;margin-top:14px}#tt-loader-subtitle{font-size:clamp(10px,2.8vw,12px)}}',
+    '@media (prefers-reduced-motion:reduce){#tt-loader-title,#tt-loader-subtitle{transition:none}}',
     '.tt-loader-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;opacity:0}',
     '#tt-loader-spin-wrap.tt-ready .tt-loader-dots{opacity:1;transition:opacity .3s ease .15s}',
     '.tt-loader-dots span{width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#AD3F67);opacity:.35;animation:tt-loader-dot-bounce 1.1s ease-in-out infinite}',
@@ -276,6 +313,15 @@
 
   const DOTS_HTML =
     '<div class="tt-loader-dots"><span></span><span></span><span></span></div>';
+  function escText(value) {
+    const d = document.createElement('div');
+    d.textContent = String(value == null ? '' : value);
+    return d.innerHTML;
+  }
+  const initialTitle = defaultPageTitle();
+  const TITLE_HTML = initialTitle
+    ? '<div id="tt-loader-title">' + escText(initialTitle) + '</div>'
+    : '';
   const loader = document.createElement('div');
   loader.id = 'tt-loader';
   loader.setAttribute('aria-hidden', 'true');
@@ -285,7 +331,7 @@
     '<div id="tt-loader-spin-wrap"><img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="220" height="220">' +
-    (isHomePage() ? '' : DOTS_HTML) +
+    (isHomePage() ? '' : TITLE_HTML + DOTS_HTML) +
     '</div>';
 
   const logo = loader.querySelector('#tt-loader-logo');
@@ -395,7 +441,48 @@
     loader.classList.remove('tt-out');
   }
 
-  function setText() {}
+  // Reemplaza el título fijo de la página (si lo hay) por un mensaje de
+  // estado puntual — lo usa login.html mientras procesa el ingreso
+  // ("Hola de nuevo, correo@ejemplo.com!" + "Aguardá un momento…"). Pasar
+  // '' como título lo saca; el subtítulo es opcional y se sigue el mismo
+  // criterio. No fuerza mayúsculas por CSS — lo que se ve depende de cómo
+  // venga el texto (los títulos fijos de página ya vienen en mayúscula).
+  function setText(text, subtitle) {
+    const value = String(text == null ? '' : text).trim();
+    let titleEl = document.getElementById('tt-loader-title');
+    if (!value) {
+      if (titleEl) titleEl.remove();
+    } else {
+      if (!titleEl) {
+        const wrap = document.getElementById('tt-loader-spin-wrap');
+        if (wrap) {
+          titleEl = document.createElement('div');
+          titleEl.id = 'tt-loader-title';
+          const dots = wrap.querySelector('.tt-loader-dots');
+          if (dots) wrap.insertBefore(titleEl, dots);
+          else wrap.appendChild(titleEl);
+        }
+      }
+      if (titleEl) titleEl.textContent = value;
+    }
+
+    const subValue = String(subtitle == null ? '' : subtitle).trim();
+    let subEl = document.getElementById('tt-loader-subtitle');
+    if (!subValue) {
+      if (subEl) subEl.remove();
+      return;
+    }
+    if (!subEl) {
+      const wrap = document.getElementById('tt-loader-spin-wrap');
+      if (!wrap) return;
+      subEl = document.createElement('div');
+      subEl.id = 'tt-loader-subtitle';
+      const dots = wrap.querySelector('.tt-loader-dots');
+      if (dots) wrap.insertBefore(subEl, dots);
+      else wrap.appendChild(subEl);
+    }
+    subEl.textContent = subValue;
+  }
 
   function buildEmergencyLoginUrl() {
     const current =

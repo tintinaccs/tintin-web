@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-28T14:03:14.994Z",
-  "sourceFingerprint": "62dca7e1a7b198ac2c7ee3f05885ce934779dfe72e8223e1285cb5845498b1b8",
+  "generatedAt": "2026-07-28T14:10:45.445Z",
+  "sourceFingerprint": "bf36a31646dc5a92a0db514a495a0120770cb3187e8e95f336979bda171a1686",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5450904,
+    "totalBytes": 5455267,
     "pages": 18,
     "modules": 211
   },
@@ -10529,8 +10529,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 21939,
-      "sha256": "34888d9fc9c7b6c1854e00c62b7b3da66e2a1677f94b4c7fa58746b20f8ca8ea",
+      "bytes": 22141,
+      "sha256": "706c0a83fc6551565032f4d819902337027691178c8b14451577cde612217113",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10577,17 +10577,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 522
+          "line": 524
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 523
+          "line": 525
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 524
+          "line": 526
         }
       ],
       "styles": [
@@ -10681,19 +10681,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 522,
+          "line": 524,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "script.js",
-          "line": 523,
+          "line": 525,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 524,
+          "line": 526,
           "exists": true
         },
         {
@@ -16173,8 +16173,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 29259,
-      "sha256": "30083e22364de5d7f3e360ffdb667889cbec583e73a47c8cd2ea2dd11b8a2b5e",
+      "bytes": 33420,
+      "sha256": "90968b74d661515fd11d59a69ae28ae1f8a65ffc220984685fd8e1d8f23e7d45",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20160,8 +20160,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 29259,
-      "sha256": "30083e22364de5d7f3e360ffdb667889cbec583e73a47c8cd2ea2dd11b8a2b5e"
+      "bytes": 33420,
+      "sha256": "90968b74d661515fd11d59a69ae28ae1f8a65ffc220984685fd8e1d8f23e7d45"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -20352,8 +20352,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 21939,
-      "sha256": "34888d9fc9c7b6c1854e00c62b7b3da66e2a1677f94b4c7fa58746b20f8ca8ea"
+      "bytes": 22141,
+      "sha256": "706c0a83fc6551565032f4d819902337027691178c8b14451577cde612217113"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -22889,21 +22889,140 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 402,
+      "line": 151,
+      "raw": "catalogo.html",
+      "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 152,
+      "raw": "collections.html",
+      "target": "collections.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 153,
+      "raw": "product.html",
+      "target": "product.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 154,
+      "raw": "about.html",
+      "target": "about.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 155,
+      "raw": "nosotros.html",
+      "target": "nosotros.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 156,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 157,
+      "raw": "checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 158,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 159,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 160,
+      "raw": "admin.html",
+      "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 161,
+      "raw": "admin-images.html",
+      "target": "admin-images.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 162,
+      "raw": "envios.html",
+      "target": "envios.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 163,
+      "raw": "cambios-devoluciones.html",
+      "target": "cambios-devoluciones.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 164,
+      "raw": "preguntas-frecuentes.html",
+      "target": "preguntas-frecuentes.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 165,
+      "raw": "terminos.html",
+      "target": "terminos.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 166,
+      "raw": "privacidad.html",
+      "target": "privacidad.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 167,
+      "raw": "404.html",
+      "target": "404.html",
+      "exists": true
+    },
+    {
+      "file": "js/page-loader.js",
+      "line": 489,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 548,
+      "line": 635,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 554,
+      "line": 641,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
