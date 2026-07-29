@@ -98,6 +98,16 @@ check(
   /if \(raw === ''\) return null;/.test(adminApp),
   'Un stock vacío no debe confundirse con 0; debe quedar como null (ilimitado).'
 );
+check(
+  'Los cambios del Super Admin avisan inmediatamente al sincronizador de Google Sheets',
+  /SHEETS_PRODUCT_SYNC_URL/.test(adminApp) &&
+    /currentUser\.getIdToken\(\)/.test(adminApp) &&
+    /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
+    /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
+    /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
+    /window\.tintinPushProductsToSheets\(importedIds\)/.test(importJs),
+  'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
+);
 
 // ===========================================================================
 // 2. CRUD DE COLECCIONES

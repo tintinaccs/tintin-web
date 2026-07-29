@@ -59,6 +59,37 @@ let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
+const SHEETS_PRODUCT_SYNC_URL =
+  'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
+
+async function pushProductsToSheets(productIds) {
+  const ids = [...new Set((productIds || []).map(id => String(id || '').trim()).filter(Boolean))];
+  if (!ids.length || currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) return false;
+  try {
+    const idToken = await currentUser.getIdToken();
+    for (let i = 0; i < ids.length; i += 100) {
+      await fetch(SHEETS_PRODUCT_SYNC_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-store',
+        keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify({
+          action: 'syncProducts',
+          productIds: ids.slice(i, i + 100),
+          idToken,
+        }),
+      });
+    }
+    return true;
+  } catch (error) {
+    // El activador de un minuto sigue siendo el respaldo. El guardado real en
+    // Firestore no se revierte si solamente falla el aviso inmediato a Sheets.
+    console.warn('[Tintin Sync] El push inmediato a Google Sheets falló; queda activo el respaldo de un minuto.', error);
+    return false;
+  }
+}
+window.tintinPushProductsToSheets = pushProductsToSheets;
 
 function escapeHtmlAdmin(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -4573,6 +4604,7 @@ window.fixLegacyProductNumbers = async function() {
 
   const batch = writeBatch(db);
   let skipped = 0;
+  const fixedIds = [];
   broken.forEach(p => {
     const patch = { updatedAt: serverTimestamp() };
     if (typeof p.price !== 'number' || !Number.isFinite(p.price)) {
@@ -4587,10 +4619,12 @@ window.fixLegacyProductNumbers = async function() {
       patch.stock = toNumberOrNull(p.stock);
     }
     batch.update(doc(db, 'products', p._docId), patch);
+    fixedIds.push(p._docId);
   });
 
   try {
     await batch.commit();
+    await pushProductsToSheets(fixedIds);
     const fixed = broken.length - skipped;
     logAudit('editar_producto', 'producto', '', '', `Corrección masiva de precio/stock guardados como texto: ${fixed} producto(s)${skipped ? `, ${skipped} sin precio válido para corregir` : ''}`, { bulk: true, fixed, skipped });
     toast(`Listo — ${fixed} producto(s) corregido(s)${skipped ? `, ${skipped} necesitan revisión manual (sin precio numérico legible)` : ''}.`);
@@ -5067,6 +5101,7 @@ async function prodGuardar() {
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
       await updateDoc(doc(db, 'products', docId), data);
+      await pushProductsToSheets([docId]);
       const changes = [];
       if (oldProd) {
         // Comparación directa (no Number(x || 0)): stock null (ilimitado) y
@@ -5091,6 +5126,7 @@ async function prodGuardar() {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
       await setDoc(newRef, data);
+      await pushProductsToSheets([newRef.id]);
       logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
       toast('Producto creado');
     }
@@ -5111,6 +5147,7 @@ window.prodToggleActive = async (docId, currentlyActive) => {
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
   try {
     await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+    await pushProductsToSheets([docId]);
     const p = _allProducts.find(x => x._docId === docId);
     if (p) p.active = !currentlyActive;
     toast(currentlyActive ? 'Producto desactivado' : 'Producto activado');
@@ -5125,6 +5162,7 @@ async function prodEliminar(docId, name) {
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'products', docId));
+    await pushProductsToSheets([docId]);
     logAudit('eliminar_producto', 'producto', docId, name, 'Producto eliminado');
     toast('Producto eliminado');
     loadProductos();
@@ -5578,6 +5616,7 @@ window.collRemoveFromCollection = async function(docId) {
   if (!confirm(`¿Quitar "${p?.name || 'este producto'}" de la colección?`)) return;
   try {
     await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
+    await pushProductsToSheets([docId]);
     toast('Producto quitado de la colección');
   } catch (e) {
     toast('Error: ' + e.message);
@@ -5588,6 +5627,7 @@ window.collToggleActive = async function(docId, currentlyActive) {
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
   try {
     await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+    await pushProductsToSheets([docId]);
     const p = _allProducts.find(x => x._docId === docId);
     if (p) p.active = !currentlyActive;
     toast(currentlyActive ? 'Producto desactivado' : 'Producto activado');
@@ -5669,6 +5709,7 @@ async function batchUpdateChunked(ids, dataFn, collectionName = 'products') {
     ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, collectionName, id), dataFn(id)));
     await batch.commit();
   }
+  if (collectionName === 'products') await pushProductsToSheets(ids);
 }
 
 window.collPickerAddSelected = async function() {
@@ -5927,9 +5968,10 @@ function loadImportar() {
       const items = JSON.parse(raw);
       if (!Array.isArray(items)) throw new Error('Debe ser un array JSON');
       let ok = 0;
+      const importedIds = [];
       for (const item of items) {
         if (!item.name || !item.category || !item.price) continue;
-        await addDoc(collection(db, 'products'), {
+        const importedRef = await addDoc(collection(db, 'products'), {
           name:        String(item.name).trim().slice(0, 180),
           category:    item.category,
           price:       Math.max(0, Math.round(Number(item.price) || 0)),
@@ -5943,8 +5985,10 @@ function loadImportar() {
           createdAt:   serverTimestamp(),
           createdBy:   currentUser?.email || 'import',
         });
+        importedIds.push(importedRef.id);
         ok++;
       }
+      await pushProductsToSheets(importedIds);
       result.innerHTML = `<span style="color:green">${ok} productos importados correctamente</span>`;
       toast(`${ok} productos importados`);
     } catch(e) {
@@ -6160,13 +6204,14 @@ function loadImportar() {
     const btnSel=document.getElementById('btn-csv-importar-seleccionados');
     btn.disabled=true; btnSel.disabled=true; progress.style.display='block'; result.innerHTML='';
     let ok=0, errores=0;
+    const importedIds=[];
     for (let i=0; i<list.length; i++) {
       const p = list[i];
       const pct = Math.round(((i+1)/list.length)*100);
       progressBar.style.width=pct+'%';
       progressLbl.textContent=`Importando ${i+1} de ${list.length}: ${p.name}`;
       try {
-        await addDoc(collection(db,'products'), {
+        const importedRef = await addDoc(collection(db,'products'), {
           name:        String(p.name || '').trim().slice(0, 180),
           category:    p.category,
           price:       Math.max(0, Math.round(Number(p.price) || 0)),
@@ -6183,9 +6228,11 @@ function loadImportar() {
           createdBy:   currentUser?.email||'import',
           source:      'shopify-csv',
         });
+        importedIds.push(importedRef.id);
         ok++;
       } catch(e) { errores++; console.error('Error importando:', p.name, e); }
     }
+    await pushProductsToSheets(importedIds);
     btn.disabled=false; btnSel.disabled=false; progress.style.display='none';
     if (ok>0) {
       result.innerHTML=`<span style="color:green">${ok} productos importados correctamente${errores>0?` (${errores} con error)`:''}</span>`;
@@ -7137,6 +7184,7 @@ window.bulkDelete = async function() {
       ids0.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'products', id)));
       await batch.commit();
     }
+    await pushProductsToSheets(ids0);
     const ids = new Set(_selectedProducts);
     _allProducts = _allProducts.filter(p => !ids.has(p._docId));
     logAudit('eliminar_producto', 'producto', '', '', `${n} productos eliminados`, { bulk: true, count: n });
