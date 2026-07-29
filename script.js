@@ -1033,9 +1033,9 @@ function initProductPage() {
 }
 
 // Product detail page: state shared across re-renders. Firestore pushes a
-// fresh snapshot of the *entire* products collection on every single change
-// (any product, not just this one), and each delivery re-renders this page
-// so price/stock stay live. Event listeners on the static buttons below are
+// fresh snapshot del documento de este producto y cada entrega vuelve a
+// renderizar la ficha para que precio/stock permanezcan en vivo sin descargar
+// el catálogo completo. Event listeners on the static buttons below are
 // bound exactly once (guarded by dataset.ttBound) and always read the latest
 // values from here — never from a particular render's closure — so repeated
 // snapshots refresh the displayed data without ever stacking up duplicate
