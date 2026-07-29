@@ -277,7 +277,11 @@ if (!window.TintinAdminImportPhase9Booted) {
       const category = first(row, ['category', 'collection', 'categoría', 'categoria']) || categoryFromSignals(type, tags, title);
       const price = first(row, ['variant price', 'price', 'precio']);
       const stock = first(row, ['variant inventory qty', 'stock', 'inventory', 'inventario']);
-      const image = first(row, ['image src', 'variant image', 'imageurl', 'image url', 'image', 'foto', 'imagen']);
+      const image = first(row, [
+        'image src', 'variant image', 'imageurl', 'image url',
+        'imagen url', 'url imagen', 'url de imagen',
+        'image', 'foto', 'imagen',
+      ]);
       const description = first(row, ['body (html)', 'body html', 'description', 'descripción', 'descripcion']);
       const status = first(row, ['status', 'estado']) || 'active';
 
@@ -324,7 +328,7 @@ if (!window.TintinAdminImportPhase9Booted) {
     return [...grouped.values()].map(item => {
       const sourceKey = item._sourceKey;
       delete item._sourceKey;
-      return normalizeProduct(item, { source: 'shopify-csv', sourceKey });
+      return normalizeProduct(item, { source: 'catalog-csv', sourceKey });
     });
   }
 
@@ -526,7 +530,7 @@ if (!window.TintinAdminImportPhase9Booted) {
       }
       state.records = markDuplicates(records);
       state.fileName = file.name;
-      state.source = extension === 'csv' ? 'shopify-csv' : 'json';
+      state.source = extension === 'csv' ? 'catalog-csv' : 'json';
       renderPreview();
     } catch (error) {
       console.error('[phase9] parse failed:', error);
@@ -613,7 +617,7 @@ if (!window.TintinAdminImportPhase9Booted) {
   function hideLegacyImporters(section) {
     [...section.querySelectorAll('.adm-card')].forEach(card => {
       const title = lower(card.querySelector('.adm-card-title')?.textContent);
-      if (title.includes('importar csv de shopify') || title.includes('importar json manual')) {
+      if (title.includes('importar csv') || title.includes('importar catálogo csv') || title.includes('importar json manual')) {
         card.hidden = true;
         card.dataset.phase9LegacyImporter = 'disabled';
       }
@@ -665,7 +669,7 @@ if (!window.TintinAdminImportPhase9Booted) {
     drop.setAttribute('role', 'button');
     drop.setAttribute('aria-label', 'Seleccionar archivo CSV o JSON');
     drop.append(
-      node('strong', '', 'Arrastrá un CSV de Shopify o un JSON de productos'),
+      node('strong', '', 'Arrastrá un CSV de cualquier sistema o un JSON de productos'),
       node('span', '', 'Máximo 5 MB y 1.000 productos. Primero se muestra una vista previa; nada se guarda automáticamente.')
     );
     const input = document.createElement('input');

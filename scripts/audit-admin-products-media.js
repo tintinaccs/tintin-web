@@ -186,6 +186,12 @@ check(
   'safeUrl debe rechazar esquemas peligrosos en las imágenes importadas.'
 );
 check(
+  'El CSV admite la columna Imagen URL de cualquier proveedor',
+  /'imagen url', 'url imagen', 'url de imagen'/.test(importJs) &&
+    /source: 'catalog-csv'/.test(importJs),
+  'La importación no debe depender del encabezado ni del origen específico de Shopify.'
+);
+check(
   'La importación detecta duplicados por huella y por nombre::categoría',
   /function markDuplicates/.test(importJs) &&
     /importFingerprint/.test(importJs),
