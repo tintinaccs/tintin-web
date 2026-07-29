@@ -27,6 +27,11 @@ El Super Admin se reconoce por la cuenta oficial. Los demás roles operativos se
 ### 5. Integraciones externas
 
 - Google Apps Script procesa correos operativos autenticados.
+- Google Apps Script mantiene el espejo operativo de catálogo y clientas en
+  Google Sheets. Firestore sigue siendo la fuente de verdad: las ediciones de
+  `Catálogo web` usan el valor capturado por el evento `onEdit`, no una lectura
+  posterior de la celda, para que un refresco concurrente no restaure el stock
+  anterior.
 - `functions/` contiene adaptadores y documentación para funciones privadas opcionales.
 - Las pasarelas de pago deben validar webhooks en infraestructura privada; GitHub Pages no puede custodiar secretos.
 
@@ -84,6 +89,12 @@ El reintento no puede duplicar pedidos, correos, pagos ni movimientos de stock.
 Los errores técnicos se registran con contexto suficiente y los usuarios reciben mensajes entendibles. No se registran contraseñas, tokens, direcciones completas, documentos ni datos sensibles.
 
 Cada despliegue debe ser identificable por su versión o commit para relacionar errores con cambios concretos.
+
+La planilla de inventario muestra un indicador fijo con los estados
+`SINCRONIZANDO`, `SINCRONIZADO` y `NO SINCRONIZADO`. El indicador enlaza a
+`Historial sync`, donde se registran origen, hoja, celda, valores anterior y
+nuevo, resultado e identificador de cambio. El verde solo se establece después
+de confirmar la escritura o lectura correspondiente en Firestore.
 
 ## Integración y despliegue
 
