@@ -8,6 +8,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   query,
   where
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -20,8 +21,13 @@ import {
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
 
 const ALL_CACHE_KEY = 'products:cards';
-const ALL_CACHE_TTL = 10 * 60 * 1000;
+// El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
+// Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
+// de precio, stock o estado durante diez minutos en otros dispositivos.
+const ALL_CACHE_TTL = 60 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
+let publicProductsUnsubscribe = null;
+let publicProductsReady = null;
 
 function sanitizeProductImage(img) {
   return sanitizeImageUrl(img);
@@ -122,15 +128,58 @@ async function fetchAllProducts() {
   recordFirestoreRead('products:all', snapshot.size);
   const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
   const cards = products.map(compactProduct);
-  writeCached(ALL_CACHE_KEY, cards);
+  // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
+  // por App Check, red o un despliegue nunca debe dejar al navegador mostrando
+  // "0 productos" durante todo el TTL después de que Firestore se recupere.
+  // El resultado vacío sí se publica para esta carga, pero la próxima visita
+  // vuelve a consultar el servidor en lugar de confiar en ese vacío.
+  if (cards.length) writeCached(ALL_CACHE_KEY, cards);
   return publish(products, 'server');
+}
+
+function startPublicProductsRealtime() {
+  if (publicProductsReady) return publicProductsReady;
+
+  const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+  if (Array.isArray(cached) && cached.length) publish(cached, 'cache');
+
+  publicProductsReady = new Promise((resolve, reject) => {
+    publicProductsUnsubscribe = onSnapshot(
+      query(collection(db, 'products'), limit(1000)),
+      snapshot => {
+        const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
+        const cards = products.map(compactProduct);
+        recordFirestoreRead('products:realtime', snapshot.size);
+        if (cards.length) writeCached(ALL_CACHE_KEY, cards);
+        resolve(publish(products, 'realtime'));
+      },
+      async error => {
+        publicProductsUnsubscribe = null;
+        publicProductsReady = null;
+        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+        try {
+          resolve(await loadAllProducts({ force: true }));
+        } catch (fallbackError) {
+          reject(fallbackError);
+        }
+      }
+    );
+  });
+
+  window.addEventListener('pagehide', () => {
+    publicProductsUnsubscribe?.();
+    publicProductsUnsubscribe = null;
+    publicProductsReady = null;
+  }, { once: true });
+
+  return publicProductsReady;
 }
 
 export async function loadAllProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
     const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-    if (Array.isArray(cached)) return publish(cached, 'cache');
+    if (Array.isArray(cached) && cached.length) return publish(cached, 'cache');
   }
   const stale = readStaleCached(ALL_CACHE_KEY);
   if (!force && Array.isArray(stale) && stale.length) publish(stale, 'stale-cache');
@@ -195,7 +244,9 @@ export async function ensureProductsForSearch() {
 export async function ensureProductsForCurrentPage() {
   const path = location.pathname.toLowerCase();
   if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
-  if (/(^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path) || path.endsWith('/')) return loadAllProducts();
+  if (/(^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path) || path.endsWith('/')) {
+    return startPublicProductsRealtime();
+  }
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }
 
@@ -218,6 +269,7 @@ function attachSearchDemand() {
 window.TintinProductsStore = {
   loadAll: loadAllProducts,
   loadProductPage,
+  startRealtime: startPublicProductsRealtime,
   ensureSearch: ensureProductsForSearch,
   ensureCurrentPage: ensureProductsForCurrentPage,
   getReadBudget: () => window.TintinReadBudget || null

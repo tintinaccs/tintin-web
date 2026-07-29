@@ -29,7 +29,27 @@ check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d
 check('Autenticación pública y administrativa siguen activas', read('js/store-gate.js').includes('onAuthStateChanged') && read('js/admin-app.js').includes('onAuthStateChanged'), 'La sesión dejó de controlar el acceso.');
 check('Super Admin conserva acceso total', read('js/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"), 'El bypass total se perdió.');
 check('Panel Admin mantiene arranque protegido', read('admin.html').includes('js/admin-app.js') && read('js/admin-app.js').includes("role === 'superadmin' && user.email === SUPER_ADMIN"), 'El panel perdió su gate.');
-check('Productos se cargan bajo demanda y con caché', !products.includes('onSnapshot') && products.includes('loadAllProducts') && products.includes('loadProductPage') && products.includes('readCached') && products.includes('runSingleFlight'), 'Regresó el listener global de productos.');
+check(
+  'Catálogo público combina canal en vivo acotado y caché de respaldo',
+  products.includes('onSnapshot') &&
+    products.includes('startPublicProductsRealtime') &&
+    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(products) &&
+    products.includes('loadAllProducts') &&
+    products.includes('readCached') &&
+    products.includes('runSingleFlight'),
+  'El catálogo perdió el canal en vivo acotado o su respaldo de caché.'
+);
+check(
+  'Un catálogo vacío nunca queda cacheado como actualizado',
+  /if\s*\(cards\.length\)\s*writeCached\(ALL_CACHE_KEY,\s*cards\)/.test(products) &&
+    /Array\.isArray\(cached\)\s*&&\s*cached\.length/.test(products),
+  'Una lectura vacía puede dejar el catálogo en 0 productos durante todo el TTL.'
+);
+check(
+  'El catálogo público no oculta cambios de stock por más de un minuto',
+  /const\s+ALL_CACHE_TTL\s*=\s*60\s*\*\s*1000/.test(products),
+  'La caché pública puede conservar precio o stock obsoleto más de un minuto.'
+);
 check('La ficha lee un producto y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'Producto descarga demasiado.');
 check('Colecciones públicas usan caché y Admin tiempo real', collections.includes('loadCollections') && collections.includes('readCached') && collections.includes('startAdminListener') && collections.includes('onSnapshot'), 'Las estrategias pública y administrativa se mezclaron.');
 check('Pedidos Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin-app.js')), 'Pedidos perdió su listener limitado.');

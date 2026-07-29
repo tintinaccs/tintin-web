@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-29T12:19:45.239Z",
-  "sourceFingerprint": "a9f9290af3fedb307fe7b82df7fbcec6a6321cbe8139fc70762b074c415b8365",
+  "generatedAt": "2026-07-29T19:30:00.364Z",
+  "sourceFingerprint": "77b4d61d8d063f5f609bb57b191ddc25efeb2cfb6995739f02c659ae1cfefb01",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5464856,
+    "totalBytes": 5468186,
     "pages": 18,
     "modules": 211
   },
@@ -16333,8 +16333,8 @@
     },
     {
       "path": "js/products-store.js",
-      "bytes": 8740,
-      "sha256": "f633d5fb4653b1521509f5bcfc17ed66348bb215e25d69ec3b47ef89e477af55",
+      "bytes": 10854,
+      "sha256": "52d29739f8ef65b359d42920bd7e2e01cdd00d36f7ada595b93bd634401f1e26",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16362,13 +16362,13 @@
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "./firestore-read-cache.js?v=tintin-20260720-read-budget-1",
           "target": "js/firestore-read-cache.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         },
         {
           "raw": "./page-maintenance-loader.js?v=tintin-20260720-read-budget-1",
@@ -16380,7 +16380,7 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 13
+          "line": 14
         }
       ]
     },
@@ -17777,8 +17777,8 @@
     },
     {
       "path": "scripts/audit-firestore-read-budget.js",
-      "bytes": 5461,
-      "sha256": "71fc20b5dd73e10a9039d36387441db5669948657045fc87abac1ae519cba3f0",
+      "bytes": 5796,
+      "sha256": "6e2a6d84fe8189e9fc946849062ac14d1e6395fbc7e2f327ab90b9bd92e63f23",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17788,13 +17788,13 @@
           "raw": "./catalog-maintenance.js",
           "target": "scripts/catalog-maintenance.js",
           "dynamic": false,
-          "line": 32
+          "line": 40
         },
         {
           "raw": "./product-maintenance.js",
           "target": "scripts/product-maintenance.js",
           "dynamic": false,
-          "line": 32
+          "line": 40
         }
       ],
       "endpoints": []
@@ -18227,8 +18227,8 @@
     },
     {
       "path": "scripts/audit-performance-realtime.js",
-      "bytes": 7714,
-      "sha256": "1c8fe5e2802777120c927142ea3cbcb65df085c2474c2fe38b573696a2e9a060",
+      "bytes": 7878,
+      "sha256": "f0ec8f4a635929d6e424a5c7331abd2038a57a15cf542bd5c9bd6eb0020578f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18237,14 +18237,14 @@
       "endpoints": [
         {
           "url": "https://res.cloudinary.com/",
-          "line": 141
+          "line": 143
         }
       ]
     },
     {
       "path": "scripts/audit-performance-regressions.js",
-      "bytes": 7032,
-      "sha256": "4816d58ae916e48bf213e7be65dc5862c3633dccee9e81eec4ba6af72d238bde",
+      "bytes": 7749,
+      "sha256": "3d32c4ef46af69df4ad83016e3aadb85e5dbac91fa95fda0372de6d487dd8fb4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18254,13 +18254,13 @@
           "raw": "./resend-order-notify.js",
           "target": "scripts/resend-order-notify.js",
           "dynamic": false,
-          "line": 37
+          "line": 57
         },
         {
           "raw": "./store-gate-core.js",
           "target": "scripts/store-gate-core.js",
           "dynamic": false,
-          "line": 43
+          "line": 63
         }
       ],
       "endpoints": []
@@ -20248,8 +20248,8 @@
     {
       "path": "js/products-store.js",
       "extension": ".js",
-      "bytes": 8740,
-      "sha256": "f633d5fb4653b1521509f5bcfc17ed66348bb215e25d69ec3b47ef89e477af55"
+      "bytes": 10854,
+      "sha256": "52d29739f8ef65b359d42920bd7e2e01cdd00d36f7ada595b93bd634401f1e26"
     },
     {
       "path": "js/profile-maintenance.js",
@@ -20818,8 +20818,8 @@
     {
       "path": "scripts/audit-firestore-read-budget.js",
       "extension": ".js",
-      "bytes": 5461,
-      "sha256": "71fc20b5dd73e10a9039d36387441db5669948657045fc87abac1ae519cba3f0"
+      "bytes": 5796,
+      "sha256": "6e2a6d84fe8189e9fc946849062ac14d1e6395fbc7e2f327ab90b9bd92e63f23"
     },
     {
       "path": "scripts/audit-global-fit-part2f.mjs",
@@ -20938,14 +20938,14 @@
     {
       "path": "scripts/audit-performance-realtime.js",
       "extension": ".js",
-      "bytes": 7714,
-      "sha256": "1c8fe5e2802777120c927142ea3cbcb65df085c2474c2fe38b573696a2e9a060"
+      "bytes": 7878,
+      "sha256": "f0ec8f4a635929d6e424a5c7331abd2038a57a15cf542bd5c9bd6eb0020578f1"
     },
     {
       "path": "scripts/audit-performance-regressions.js",
       "extension": ".js",
-      "bytes": 7032,
-      "sha256": "4816d58ae916e48bf213e7be65dc5862c3633dccee9e81eec4ba6af72d238bde"
+      "bytes": 7749,
+      "sha256": "3d32c4ef46af69df4ad83016e3aadb85e5dbac91fa95fda0372de6d487dd8fb4"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -24415,7 +24415,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\n    admin.includes(",
+        "name": ") &&\r\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -24425,7 +24425,7 @@
         ]
       },
       {
-        "name": ") &&\n    orderStats.includes(",
+        "name": ") &&\r\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25049,17 +25049,22 @@
           },
           {
             "file": "js/products-store.js",
-            "line": 121,
+            "line": 127,
             "operation": "collection"
           },
           {
             "file": "js/products-store.js",
-            "line": 159,
+            "line": 148,
             "operation": "collection"
           },
           {
             "file": "js/products-store.js",
-            "line": 147,
+            "line": 208,
+            "operation": "collection"
+          },
+          {
+            "file": "js/products-store.js",
+            "line": 196,
             "operation": "doc"
           },
           {
@@ -25294,12 +25299,12 @@
           },
           {
             "file": "scripts/audit-performance-regressions.js",
-            "line": 41,
+            "line": 61,
             "operation": "doc"
           },
           {
             "file": "scripts/audit-performance-regressions.js",
-            "line": 43,
+            "line": 63,
             "operation": "doc"
           },
           {
@@ -25620,8 +25625,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\n    admin.includes(",
-      ") &&\n    orderStats.includes("
+      ") &&\r\n    admin.includes(",
+      ") &&\r\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",

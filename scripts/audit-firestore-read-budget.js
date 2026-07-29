@@ -19,7 +19,15 @@ const whatsapp = read('js/whatsapp.js');
 const paymentMethods = read('js/checkout-payment-methods.js');
 const readCache = read('js/firestore-read-cache.js');
 
-check('Productos no abre onSnapshot global', !products.includes('onSnapshot'), 'Cada visitante volvería a leer todos los productos.');
+check(
+  'Productos abre un solo listener acotado en páginas comerciales',
+  products.includes('onSnapshot') &&
+    products.includes('startPublicProductsRealtime') &&
+    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(products) &&
+    products.includes("window.addEventListener('pagehide'") &&
+    /(?:index\|catalogo\|collections)/.test(products),
+  'El canal en vivo debe estar acotado, limitado a páginas comerciales y cerrarse al salir.'
+);
 check('Catálogo usa caché TTL compacta', products.includes("ALL_CACHE_KEY = 'products:cards'") && products.includes('compactProduct') && products.includes('readCached(ALL_CACHE_KEY') && products.includes('writeCached(ALL_CACHE_KEY'), 'La caché debe guardar solo datos de tarjetas.');
 check('Solicitudes simultáneas se deduplican', products.includes("runSingleFlight('products:all'") && readCache.includes('const flights = new Map()'), 'Dos módulos no deben repetir la misma consulta.');
 check('Producto consulta su documento y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'La ficha no debe descargar el catálogo completo.');
