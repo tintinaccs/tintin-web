@@ -137,9 +137,19 @@
     return (window.location.pathname || '').toLowerCase();
   }
 
+  // Cloudflare Pages sirve URLs limpias (/catalogo, no /catalogo.html) —
+  // el nombre de archivo real solo aparece completo en desarrollo local.
+  // Sacar el ".html" acá, una sola vez, es lo que le permite a todo lo que
+  // sigue (isHomePage, PAGE_TITLES) funcionar igual con los dos formatos.
+  function currentFile() {
+    const file = currentPath().split('/').pop() || '';
+    return file.replace(/\.html$/, '');
+  }
+
   function isHomePage() {
-    const current = currentPath();
-    return current.endsWith('/index.html') || /\/$/.test(current);
+    if (/\/$/.test(currentPath())) return true;
+    const file = currentFile();
+    return file === '' || file === 'index';
   }
 
   // Título fijo por página, en mayúsculas, mostrado entre el logo y los
@@ -148,29 +158,28 @@
   // de parámetros como ?cat=): cualquier búsqueda async agregaría justo la
   // demora que este cambio busca evitar.
   const PAGE_TITLES = {
-    'catalogo.html': 'CATÁLOGO',
-    'collections.html': 'COLECCIONES',
-    'product.html': 'PRODUCTO',
-    'about.html': 'NOSOTROS',
-    'nosotros.html': 'NOSOTROS',
-    'contact.html': 'CONTACTO',
-    'checkout.html': 'FINALIZAR COMPRA',
-    'perfil.html': 'MI PERFIL',
-    'login.html': 'INGRESAR',
-    'admin.html': 'PANEL DE ADMINISTRACIÓN',
-    'admin-images.html': 'BIBLIOTECA DE IMÁGENES',
-    'envios.html': 'ENVÍOS',
-    'cambios-devoluciones.html': 'CAMBIOS Y DEVOLUCIONES',
-    'preguntas-frecuentes.html': 'PREGUNTAS FRECUENTES',
-    'terminos.html': 'TÉRMINOS Y CONDICIONES',
-    'privacidad.html': 'PRIVACIDAD',
-    '404.html': 'PÁGINA NO ENCONTRADA'
+    catalogo: 'CATÁLOGO',
+    collections: 'COLECCIONES',
+    product: 'PRODUCTO',
+    about: 'NOSOTROS',
+    nosotros: 'NOSOTROS',
+    contact: 'CONTACTO',
+    checkout: 'FINALIZAR COMPRA',
+    perfil: 'MI PERFIL',
+    login: 'INGRESAR',
+    admin: 'PANEL DE ADMINISTRACIÓN',
+    'admin-images': 'BIBLIOTECA DE IMÁGENES',
+    envios: 'ENVÍOS',
+    'cambios-devoluciones': 'CAMBIOS Y DEVOLUCIONES',
+    'preguntas-frecuentes': 'PREGUNTAS FRECUENTES',
+    terminos: 'TÉRMINOS Y CONDICIONES',
+    privacidad: 'PRIVACIDAD',
+    '404': 'PÁGINA NO ENCONTRADA'
   };
 
   function defaultPageTitle() {
     if (isHomePage()) return '';
-    const file = currentPath().split('/').pop();
-    return PAGE_TITLES[file] || '';
+    return PAGE_TITLES[currentFile()] || '';
   }
 
   // login.html no puede mantener su propio saludo ("Hola de nuevo, .../
