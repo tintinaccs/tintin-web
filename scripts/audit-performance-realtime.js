@@ -65,13 +65,15 @@ check(
 );
 
 check(
-  'El catálogo público no mantiene un listener sobre toda la colección',
-  !productsStore.includes('onSnapshot') &&
+  'El catálogo público mantiene un canal en vivo acotado con respaldo',
+  productsStore.includes('onSnapshot') &&
+    productsStore.includes('startPublicProductsRealtime') &&
+    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(productsStore) &&
     productsStore.includes('loadAllProducts') &&
     productsStore.includes('loadProductPage') &&
     productsStore.includes('readCached') &&
     productsStore.includes('runSingleFlight'),
-  'Productos debe usar lectura bajo demanda, caché TTL y una sola solicitud concurrente.'
+  'Productos debe usar un listener acotado en páginas comerciales y conservar la caché como respaldo.'
 );
 
 check(
