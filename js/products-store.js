@@ -28,6 +28,12 @@ const ALL_CACHE_TTL = 60 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
 let publicProductsUnsubscribe = null;
 let publicProductsReady = null;
+let publicProductUnsubscribe = null;
+let publicProductReady = null;
+let publicProductId = '';
+let publicProductRelated = [];
+let publicProductCategory = '';
+let publicProductCurrent = null;
 
 function sanitizeProductImage(img) {
   return sanitizeImageUrl(img);
@@ -216,25 +222,113 @@ async function fetchRelatedProducts(product) {
   }
 }
 
+function stopProductRealtime() {
+  publicProductUnsubscribe?.();
+  publicProductUnsubscribe = null;
+  publicProductReady = null;
+  publicProductId = '';
+  publicProductRelated = [];
+  publicProductCategory = '';
+  publicProductCurrent = null;
+}
+
+function startProductRealtime(id) {
+  const normalizedId = String(id || '').trim();
+  if (!normalizedId) return Promise.resolve(publish([], 'missing-id'));
+  if (publicProductReady && publicProductId === normalizedId) return publicProductReady;
+
+  stopProductRealtime();
+  publicProductId = normalizedId;
+
+  const cachedProduct = readCached(`product:${normalizedId}`, PRODUCT_CACHE_TTL);
+  if (cachedProduct) publish([cachedProduct], 'cache');
+
+  publicProductReady = new Promise((resolve, reject) => {
+    let settled = false;
+    const settle = value => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+
+    publicProductUnsubscribe = onSnapshot(
+      doc(db, 'products', normalizedId),
+      snapshot => {
+        recordFirestoreRead('products:single-realtime', 1);
+        if (!snapshot.exists()) {
+          settle(publish([], 'realtime-product-missing'));
+          return;
+        }
+
+        const product = mapProduct(snapshot.id, snapshot.data());
+        if (product.active === false || !product.name) {
+          publicProductCurrent = null;
+          settle(publish([], 'realtime-product-unavailable'));
+          return;
+        }
+
+        publicProductCurrent = product;
+        writeCached(`product:${normalizedId}`, product);
+        const current = publish(
+          [product, ...publicProductRelated.filter(item => item.id !== product.id)],
+          'realtime-product'
+        );
+        settle(current);
+
+        if (publicProductCategory === product.category && publicProductRelated.length) return;
+        publicProductCategory = product.category;
+        runSingleFlight(
+          `products:related:${product.category}`,
+          () => fetchRelatedProducts(product)
+        ).then(related => {
+          if (publicProductId !== normalizedId) return;
+          publicProductRelated = related;
+          const latestProduct = publicProductCurrent;
+          if (!latestProduct) return;
+          publish(
+            [latestProduct, ...related.filter(item => item.id !== latestProduct.id)],
+            'realtime-product-related'
+          );
+        }).catch(() => {
+          // La ficha principal ya está actualizada. Los relacionados son opcionales.
+        });
+      },
+      async error => {
+        publicProductUnsubscribe = null;
+        publicProductReady = null;
+        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+        try {
+          const product = await runSingleFlight(
+            `product:${normalizedId}`,
+            () => fetchSingleProduct(normalizedId)
+          );
+          if (product && product.active !== false && product.name) {
+            settle(publish([product], 'server-fallback'));
+          } else if (cachedProduct) {
+            settle(publish([cachedProduct], 'stale-cache'));
+          } else {
+            settle(publish([], 'server-fallback-missing'));
+          }
+        } catch (fallbackError) {
+          if (cachedProduct) settle(publish([cachedProduct], 'stale-cache'));
+          else reject(fallbackError);
+        }
+      }
+    );
+  });
+
+  window.addEventListener('pagehide', stopProductRealtime, { once: true });
+  return publicProductReady;
+}
+
 export async function loadProductPage(options = {}) {
   const id = String(options.id || new URLSearchParams(location.search).get('id') || '').trim();
   if (!id) {
     publish([], 'missing-id');
     return [];
   }
-  const cachedProduct = readCached(`product:${id}`, PRODUCT_CACHE_TTL);
-  let product = cachedProduct || null;
-  if (product) publish([product], 'cache');
-  if (!product || options.force === true) {
-    product = await runSingleFlight(`product:${id}`, () => fetchSingleProduct(id));
-  }
-  if (!product || product.active === false || !product.name) {
-    publish([], 'server');
-    return [];
-  }
-  publish([product], cachedProduct ? 'refresh' : 'server');
-  const related = await runSingleFlight(`products:related:${product.category}`, () => fetchRelatedProducts(product));
-  return publish([product, ...related.filter(item => item.id !== product.id)], 'server-related');
+  if (options.force === true) stopProductRealtime();
+  return startProductRealtime(id);
 }
 
 export async function ensureProductsForSearch() {

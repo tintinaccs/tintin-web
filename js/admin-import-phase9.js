@@ -556,8 +556,10 @@ if (!window.TintinAdminImportPhase9Booted) {
       for (let start = 0; start < ready.length; start += BATCH_SIZE) {
         const chunk = ready.slice(start, start + BATCH_SIZE);
         const batch = writeBatch(db);
+        const importedIds = [];
         chunk.forEach(record => {
           const reference = doc(collection(db, 'products'));
+          importedIds.push(reference.id);
           batch.set(reference, {
             ...record.product,
             createdAt: serverTimestamp(),
@@ -581,6 +583,9 @@ if (!window.TintinAdminImportPhase9Booted) {
           createdAt: serverTimestamp(),
         });
         await batch.commit();
+        if (typeof window.tintinPushProductsToSheets === 'function') {
+          await window.tintinPushProductsToSheets(importedIds);
+        }
         completed += chunk.length;
         state.ui.progressBar.style.width = `${Math.round((completed / ready.length) * 100)}%`;
         state.ui.progressText.textContent = `${completed} de ${ready.length} importados`;

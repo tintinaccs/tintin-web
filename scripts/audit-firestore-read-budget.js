@@ -31,7 +31,12 @@ check(
 check('Catálogo usa caché TTL compacta', products.includes("ALL_CACHE_KEY = 'products:cards'") && products.includes('compactProduct') && products.includes('readCached(ALL_CACHE_KEY') && products.includes('writeCached(ALL_CACHE_KEY'), 'La caché debe guardar solo datos de tarjetas.');
 check('Solicitudes simultáneas se deduplican', products.includes("runSingleFlight('products:all'") && readCache.includes('const flights = new Map()'), 'Dos módulos no deben repetir la misma consulta.');
 check('Producto consulta su documento y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'La ficha no debe descargar el catálogo completo.');
-check('Producto no usa la caché compacta como ficha completa', !/fullCache/.test(products) && products.includes("readCached(`product:${id}`"), 'La ficha necesita descripción y variantes completas.');
+check(
+  'Producto no usa la caché compacta como ficha completa',
+  !/fullCache/.test(products) &&
+    /readCached\(`product:\$\{(?:id|normalizedId)\}`/.test(products),
+  'La ficha necesita descripción y variantes completas.'
+);
 check('Páginas sin catálogo no cargan productos', /(?:index\|catalogo\|collections)/.test(products) && /return Array\.isArray\(window\.PRODUCTS\)/.test(products), 'Perfil, login, contacto, legales y checkout deben quedar sin lectura de productos.');
 check('La búsqueda carga productos solo al abrirse', products.includes("['btn-search', 'tabbar-search']") && products.includes('ensureProductsForSearch') && products.includes("control.addEventListener('click', load, { once: true })"), 'La lupa no debe consultar antes de usarse.');
 check('Colecciones públicas usan getDocs y caché', collections.includes('getDocs') && collections.includes('loadCollections') && collections.includes('CACHE_TTL'), 'El menú público no debe mantener un listener.');

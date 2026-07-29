@@ -79,9 +79,10 @@ check(
 check(
   'Producto lee el documento solicitado y limita relacionados',
   /getDoc\(doc\(db, 'products', id\)\)/.test(productsStore) &&
+    /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(productsStore) &&
     /where\('category', '==', product\.category\)/.test(productsStore) &&
     /limit\(12\)/.test(productsStore),
-  'La ficha no debe descargar el catálogo completo.'
+  'La ficha debe escuchar su documento en vivo sin descargar el catálogo completo.'
 );
 
 check(
