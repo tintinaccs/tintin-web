@@ -59,8 +59,7 @@ let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
-const SHEETS_PRODUCT_SYNC_URL =
-  'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
+const SHEETS_PRODUCT_SYNC_URL = '/api/sheets-product-sync';
 
 async function pushProductsToSheets(productIds) {
   const ids = [...new Set((productIds || []).map(id => String(id || '').trim()).filter(Boolean))];
@@ -70,15 +69,19 @@ async function pushProductsToSheets(productIds) {
     for (let i = 0; i < ids.length; i += 100) {
       await fetch(SHEETS_PRODUCT_SYNC_URL, {
         method: 'POST',
-        mode: 'no-cors',
         cache: 'no-store',
         keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'syncProducts',
           productIds: ids.slice(i, i + 100),
           idToken,
         }),
+      }).then(async response => {
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) {
+          throw new Error(result.error || `El sincronizador respondió ${response.status}.`);
+        }
       });
     }
     return true;
@@ -5996,7 +5999,7 @@ function loadImportar() {
     }
   };
 
-  // ── CSV DE SHOPIFY
+  // ── CSV UNIVERSAL (Shopify, Google Sheets, Excel u otros)
   const CAT_MAP = {
     'relojes':'relojes','reloj':'relojes','watches':'relojes',
     'bolsos':'bolsos','bags':'bolsos','bag':'bolsos','cartera':'bolsos',
@@ -6047,8 +6050,9 @@ function loadImportar() {
     const iHandle=col('handle'),iTitle=col('title'),iType=col('type'),iTags=col('tags'),
           iStatus=col('status'),iPrice=col('variant price'),iCompare=col('variant compare at price'),
           iStock=col('variant inventory qty'),iImg=col('image src'),iImgPos=col('image position'),
-          iVariantImg=col('variant image'),iImgUrl=col('imageurl'),iImage=col('image'),
-          iFoto=col('foto'),iImagen=col('imagen'),
+          iVariantImg=col('variant image'),iImgUrl=col('imageurl'),iImageUrl=col('image url'),
+          iImagenUrl=col('imagen url'),iUrlImagen=col('url imagen'),iUrlDeImagen=col('url de imagen'),
+          iImage=col('image'),iFoto=col('foto'),iImagen=col('imagen'),
           iOpt1N=col('option1 name'),iOpt1V=col('option1 value'),
           iOpt2N=col('option2 name'),iOpt2V=col('option2 value'),
           iOpt3N=col('option3 name'),iOpt3V=col('option3 value'),
@@ -6078,7 +6082,7 @@ function loadImportar() {
             status=cols[iStatus]||'active',price=parsearPrecio(cols[iPrice]),
             compare=parsearPrecio(cols[iCompare]),
             stock=(stockRaw === undefined || stockRaw === '') ? null : (parseInt(stockRaw) || 0),
-            img=cols[iImg]||(iVariantImg>=0?cols[iVariantImg]:'')||(iImgUrl>=0?cols[iImgUrl]:'')||(iImage>=0?cols[iImage]:'')||(iFoto>=0?cols[iFoto]:'')||(iImagen>=0?cols[iImagen]:'')||'',
+            img=cols[iImg]||(iVariantImg>=0?cols[iVariantImg]:'')||(iImgUrl>=0?cols[iImgUrl]:'')||(iImageUrl>=0?cols[iImageUrl]:'')||(iImagenUrl>=0?cols[iImagenUrl]:'')||(iUrlImagen>=0?cols[iUrlImagen]:'')||(iUrlDeImagen>=0?cols[iUrlDeImagen]:'')||(iImage>=0?cols[iImage]:'')||(iFoto>=0?cols[iFoto]:'')||(iImagen>=0?cols[iImagen]:'')||'',
             imgPos=parseInt(cols[iImgPos])||99,
             desc=iDesc>=0?cols[iDesc]||'':'',
             opt1n=iOpt1N>=0?cols[iOpt1N]||'':'', opt1v=iOpt1V>=0?cols[iOpt1V]||'':'',
@@ -6226,7 +6230,7 @@ function loadImportar() {
           oferta:      false,
           createdAt:   serverTimestamp(),
           createdBy:   currentUser?.email||'import',
-          source:      'shopify-csv',
+          source:      'catalog-csv',
         });
         importedIds.push(importedRef.id);
         ok++;
@@ -6236,7 +6240,7 @@ function loadImportar() {
     btn.disabled=false; btnSel.disabled=false; progress.style.display='none';
     if (ok>0) {
       result.innerHTML=`<span style="color:green">${ok} productos importados correctamente${errores>0?` (${errores} con error)`:''}</span>`;
-      toast(`${ok} productos importados de Shopify`);
+      toast(`${ok} productos importados del CSV`);
       const fullImport = list.length === csvProductos.length;
       if (fullImport) {
         csvProductos=[]; fileInput.value='';

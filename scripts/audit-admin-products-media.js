@@ -48,6 +48,7 @@ const imageProc   = read('js/image-processing.js');
 const imageUtils  = read('js/image-utils.js');
 const storefront  = read('script.js');
 const productsStore = read('js/products-store.js');
+const sheetsSyncFunction = read('functions/api/sheets-product-sync.js');
 
 // ===========================================================================
 // 1. CRUD DE PRODUCTOS
@@ -100,12 +101,14 @@ check(
 );
 check(
   'Los cambios del Super Admin avisan inmediatamente al sincronizador de Google Sheets',
-  /SHEETS_PRODUCT_SYNC_URL/.test(adminApp) &&
+  /SHEETS_PRODUCT_SYNC_URL = '\/api\/sheets-product-sync'/.test(adminApp) &&
     /currentUser\.getIdToken\(\)/.test(adminApp) &&
     /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
-    /window\.tintinPushProductsToSheets\(importedIds\)/.test(importJs),
+    /window\.tintinPushProductsToSheets\(importedIds\)/.test(importJs) &&
+    /APPS_SCRIPT_SYNC_URL/.test(sheetsSyncFunction) &&
+    /idToken: String\(payload\.idToken\)/.test(sheetsSyncFunction),
   'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
 );
 
@@ -184,6 +187,12 @@ check(
   /function safeUrl/.test(importJs) &&
     /\['http:', 'https:'\]\.includes\(parsed\.protocol\)/.test(importJs),
   'safeUrl debe rechazar esquemas peligrosos en las imágenes importadas.'
+);
+check(
+  'El CSV admite la columna Imagen URL de cualquier proveedor',
+  /'imagen url', 'url imagen', 'url de imagen'/.test(importJs) &&
+    /source: 'catalog-csv'/.test(importJs),
+  'La importación no debe depender del encabezado ni del origen específico de Shopify.'
 );
 check(
   'La importación detecta duplicados por huella y por nombre::categoría',

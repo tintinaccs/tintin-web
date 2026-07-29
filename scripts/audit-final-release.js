@@ -51,7 +51,7 @@ check(
 
 check(
   'La importación vieja queda oculta',
-  phase9.includes("title.includes('importar csv de shopify')") &&
+  phase9.includes("title.includes('importar csv')") &&
     phase9.includes("title.includes('importar json manual')") &&
     phase9.includes("dataset.phase9LegacyImporter = 'disabled'"),
   'Los flujos sin validación no deben seguir visibles'
@@ -62,7 +62,7 @@ check(
   phase9.includes("char === '\"' && next === '\"'") &&
     phase9.includes("char === '\\n' || char === '\\r'") &&
     phase9.includes('if (quoted) throw new Error'),
-  'No se puede dividir un CSV de Shopify solamente por líneas y comas'
+  'No se puede dividir un CSV solamente por líneas y comas'
 );
 
 check(
