@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-29T19:30:00.364Z",
-  "sourceFingerprint": "77b4d61d8d063f5f609bb57b191ddc25efeb2cfb6995739f02c659ae1cfefb01",
+  "generatedAt": "2026-07-29T20:37:01.557Z",
+  "sourceFingerprint": "273238d895d40f443a1d0c5be29b215364ac21f472f1f69b0412fa8d126c9842",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 383,
     "textFiles": 349,
-    "totalBytes": 5468186,
+    "totalBytes": 5472068,
     "pages": 18,
     "modules": 211
   },
@@ -16333,8 +16333,8 @@
     },
     {
       "path": "js/products-store.js",
-      "bytes": 10854,
-      "sha256": "52d29739f8ef65b359d42920bd7e2e01cdd00d36f7ada595b93bd634401f1e26",
+      "bytes": 13906,
+      "sha256": "de22836da774cfb2cb8d1502b71a494f0b364de3a8d2da6fd234f86ef729e974",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17016,8 +17016,8 @@
     },
     {
       "path": "script.js",
-      "bytes": 89781,
-      "sha256": "4a1ecbb49bfb98997eb087a7a01fc1ef2822c0a6afe1d327d733cd2a570e62e1",
+      "bytes": 89777,
+      "sha256": "252a59207fb17358be1c5f4b846931e356cae526f16afbd8add18871120b5a36",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17777,8 +17777,8 @@
     },
     {
       "path": "scripts/audit-firestore-read-budget.js",
-      "bytes": 5796,
-      "sha256": "6e2a6d84fe8189e9fc946849062ac14d1e6395fbc7e2f327ab90b9bd92e63f23",
+      "bytes": 5825,
+      "sha256": "ec7968a767533e9cc279408299c851aa43694e8f917906f7793105d605b22a6b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17788,13 +17788,13 @@
           "raw": "./catalog-maintenance.js",
           "target": "scripts/catalog-maintenance.js",
           "dynamic": false,
-          "line": 40
+          "line": 45
         },
         {
           "raw": "./product-maintenance.js",
           "target": "scripts/product-maintenance.js",
           "dynamic": false,
-          "line": 40
+          "line": 45
         }
       ],
       "endpoints": []
@@ -18227,8 +18227,8 @@
     },
     {
       "path": "scripts/audit-performance-realtime.js",
-      "bytes": 7878,
-      "sha256": "f0ec8f4a635929d6e424a5c7331abd2038a57a15cf542bd5c9bd6eb0020578f1",
+      "bytes": 7989,
+      "sha256": "af3c4dc9fd6c975c845685738244ed718e5802209a25d48dce10682eea11c72c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18237,7 +18237,7 @@
       "endpoints": [
         {
           "url": "https://res.cloudinary.com/",
-          "line": 143
+          "line": 144
         }
       ]
     },
@@ -19462,8 +19462,8 @@
     {
       "path": "docs/ARCHITECTURE.md",
       "extension": ".md",
-      "bytes": 3805,
-      "sha256": "39d50a03c995ff72e827690044fb548dcbe38f87e0d9f6cb19ada26c46c73469"
+      "bytes": 4499,
+      "sha256": "1c67e754312c52dd035e14ff0926ca6ccc83286d7b2b804f856769ccbab1f334"
     },
     {
       "path": "docs/BACKUP_RECOVERY.md",
@@ -20248,8 +20248,8 @@
     {
       "path": "js/products-store.js",
       "extension": ".js",
-      "bytes": 10854,
-      "sha256": "52d29739f8ef65b359d42920bd7e2e01cdd00d36f7ada595b93bd634401f1e26"
+      "bytes": 13906,
+      "sha256": "de22836da774cfb2cb8d1502b71a494f0b364de3a8d2da6fd234f86ef729e974"
     },
     {
       "path": "js/profile-maintenance.js",
@@ -20620,8 +20620,8 @@
     {
       "path": "script.js",
       "extension": ".js",
-      "bytes": 89781,
-      "sha256": "4a1ecbb49bfb98997eb087a7a01fc1ef2822c0a6afe1d327d733cd2a570e62e1"
+      "bytes": 89777,
+      "sha256": "252a59207fb17358be1c5f4b846931e356cae526f16afbd8add18871120b5a36"
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -20818,8 +20818,8 @@
     {
       "path": "scripts/audit-firestore-read-budget.js",
       "extension": ".js",
-      "bytes": 5796,
-      "sha256": "6e2a6d84fe8189e9fc946849062ac14d1e6395fbc7e2f327ab90b9bd92e63f23"
+      "bytes": 5825,
+      "sha256": "ec7968a767533e9cc279408299c851aa43694e8f917906f7793105d605b22a6b"
     },
     {
       "path": "scripts/audit-global-fit-part2f.mjs",
@@ -20938,8 +20938,8 @@
     {
       "path": "scripts/audit-performance-realtime.js",
       "extension": ".js",
-      "bytes": 7878,
-      "sha256": "f0ec8f4a635929d6e424a5c7331abd2038a57a15cf542bd5c9bd6eb0020578f1"
+      "bytes": 7989,
+      "sha256": "af3c4dc9fd6c975c845685738244ed718e5802209a25d48dce10682eea11c72c"
     },
     {
       "path": "scripts/audit-performance-regressions.js",
@@ -25049,22 +25049,27 @@
           },
           {
             "file": "js/products-store.js",
-            "line": 127,
+            "line": 133,
             "operation": "collection"
           },
           {
             "file": "js/products-store.js",
-            "line": 148,
+            "line": 154,
             "operation": "collection"
           },
           {
             "file": "js/products-store.js",
-            "line": 208,
+            "line": 214,
             "operation": "collection"
           },
           {
             "file": "js/products-store.js",
-            "line": 196,
+            "line": 202,
+            "operation": "doc"
+          },
+          {
+            "file": "js/products-store.js",
+            "line": 255,
             "operation": "doc"
           },
           {
