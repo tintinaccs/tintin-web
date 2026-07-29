@@ -59,8 +59,7 @@ let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
-const SHEETS_PRODUCT_SYNC_URL =
-  'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
+const SHEETS_PRODUCT_SYNC_URL = '/api/sheets-product-sync';
 
 async function pushProductsToSheets(productIds) {
   const ids = [...new Set((productIds || []).map(id => String(id || '').trim()).filter(Boolean))];
@@ -70,15 +69,19 @@ async function pushProductsToSheets(productIds) {
     for (let i = 0; i < ids.length; i += 100) {
       await fetch(SHEETS_PRODUCT_SYNC_URL, {
         method: 'POST',
-        mode: 'no-cors',
         cache: 'no-store',
         keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'syncProducts',
           productIds: ids.slice(i, i + 100),
           idToken,
         }),
+      }).then(async response => {
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) {
+          throw new Error(result.error || `El sincronizador respondió ${response.status}.`);
+        }
       });
     }
     return true;
