@@ -13,15 +13,37 @@ if (!client.includes(oldClientError)) throw new Error('No se encontró el error 
 client = client.replace(oldClientError, newClientError);
 fs.writeFileSync(clientPath, client);
 
+const phase3Path = 'apps-script/Phase3Security.gs';
+let phase3 = fs.readFileSync(phase3Path, 'utf8');
+const oldReadCatch = `  } catch (error) {
+    return { ok: false, error: 'firestore_read_failed', detail: String(error) };
+  }`;
+const newReadCatch = `  } catch (error) {
+    console.error('[Phase3Security] Lectura de Firestore fallida:', error);
+    return { ok: false, error: 'firestore_read_failed' };
+  }`;
+const oldWriteCatch = `  } catch (error) {
+    return { ok: false, error: 'notification_status_write_failed', detail: String(error) };
+  }`;
+const newWriteCatch = `  } catch (error) {
+    console.error('[Phase3Security] Escritura de notificationStatus fallida:', error);
+    return { ok: false, error: 'notification_status_write_failed' };
+  }`;
+if (!phase3.includes(oldReadCatch) || !phase3.includes(oldWriteCatch)) {
+  throw new Error('No se encontraron los detalles internos de Phase3Security');
+}
+phase3 = phase3.replace(oldReadCatch, newReadCatch).replace(oldWriteCatch, newWriteCatch);
+fs.writeFileSync(phase3Path, phase3);
+
 const auditPath = 'scripts/audit-phase6-security.js';
 let audit = fs.readFileSync(auditPath, 'utf8');
 audit = audit.replace(
   `const server = read('apps-script/Phase4CreateOrder.gs');\nconst pkg = read('package.json');`,
-  `const server = read('apps-script/Phase4CreateOrder.gs');\nconst orderClient = read('js/create-order-client.js');\nconst pkg = read('package.json');`
+  `const server = read('apps-script/Phase4CreateOrder.gs');\nconst phase3 = read('apps-script/Phase3Security.gs');\nconst orderClient = read('js/create-order-client.js');\nconst pkg = read('package.json');`
 );
 audit = audit.replace(
   `check(\n  'El endpoint no devuelve cuerpos internos de Firestore',\n  !server.includes('detail: response.getContentText()') &&\n    !server.includes('detail: String(error)'),\n  'Los detalles quedan solo en logs del servidor'\n);`,
-  `check(\n  'El endpoint no devuelve cuerpos internos de Firestore',\n  !server.includes('detail: response.getContentText()') &&\n    !server.includes('detail: String(error)'),\n  'Los detalles quedan solo en logs del servidor'\n);\ncheck(\n  'El cliente no propaga respuestas crudas del endpoint',\n  !orderClient.includes('raw: body.slice') &&\n    orderClient.includes("error: 'invalid_response', status: response.status"),\n  'La UI solo recibe un código estable y el estado HTTP'\n);`
+  `check(\n  'El endpoint no devuelve cuerpos internos de Firestore',\n  !server.includes('detail: response.getContentText()') &&\n    !server.includes('detail: String(error)') &&\n    !phase3.includes('detail: String(error)'),\n  'Los detalles quedan solo en logs del servidor'\n);\ncheck(\n  'El cliente no propaga respuestas crudas del endpoint',\n  !orderClient.includes('raw: body.slice') &&\n    orderClient.includes("error: 'invalid_response', status: response.status"),\n  'La UI solo recibe un código estable y el estado HTTP'\n);`
 );
 fs.writeFileSync(auditPath, audit);
-console.log('Cliente del endpoint endurecido.');
+console.log('Cliente y endpoint de correos endurecidos.');
