@@ -120,6 +120,16 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   setMetadata();
   enhanceStructure();
   updateContact();
+  document.body?.classList.add('tt-legal-runtime-ready');
+
+  const refreshLegalLayout = () => {
+    window.dispatchEvent(new CustomEvent('tintin:legal-layout-ready'));
+    window.TintinWaOverlapGuard?.refresh?.();
+    window.TintinWaOverlapGuard?.markReady?.();
+  };
+  window.addEventListener('tintin:wa-overlap-ready', refreshLegalLayout, { once: true });
+  refreshLegalLayout();
+  [0, 120, 400, 1000, 2500].forEach(delay => setTimeout(refreshLegalLayout, delay));
 
   const footer = document.querySelector('.tt-footer-bottom');
   if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;

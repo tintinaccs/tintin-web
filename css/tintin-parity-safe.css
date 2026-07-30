@@ -61,6 +61,28 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
     visibility:hidden!important;
     pointer-events:none!important;
   }
+
+  /* El runtime responsive comprueba primero que el flotante no cubra ningún
+     control. Hasta que esa comprobación inicial termina, permanece oculto para
+     que nunca aparezca encima de contenido durante el primer render. */
+  html:not(.tt-wa-overlap-ready) body:not(:has(.adm-main)) .tt-wa-float{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+    animation:none!important;
+    transition:none!important;
+  }
+
+  /* Términos y Privacidad ya incluyen un CTA de WhatsApp dentro del contenido
+     y otro en el footer. En mobile se omite únicamente el flotante para que el
+     índice legal siempre permanezca completamente pulsable. */
+  body.tt-legal-runtime-ready:not(:has(.adm-main)) .tt-wa-float{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+    animation:none!important;
+    transition:none!important;
+  }
 }
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){
