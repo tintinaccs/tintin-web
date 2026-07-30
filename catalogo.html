@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260730-appcheck-stable-4"></script>
-  <script src="js/public-shell.js?v=tintin-20260730-performance-phase5-1" defer></script>
+  <script src="js/public-shell.js?v=tintin-20260730-stock-visibility-1" defer></script>
   <title>Catálogo | TINTIN Accesorios &amp; Relojes</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -79,7 +79,15 @@
     .tt-card-name { font-size: 13px; font-weight: 700; line-height: 1.45; margin: 0 0 5px; color: #2b2b2b; }
     .tt-card-name a { color: inherit; text-decoration: none; }
     .tt-card-name a:hover { color: var(--acc); }
-    .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 12px; }
+    .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 8px; }
+    .tt-card-stock {
+      display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+      margin-bottom: 12px; font-size: 10px; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .tt-card-stock::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .tt-card-stock--in { color: #26824b; }
+    .tt-card-stock--out { color: #c52f3f; }
     .tt-card-btns { display: flex; gap: 8px; margin-top: auto; }
     .tt-card-btn {
       flex: 1; min-width: 0; min-height: 44px; padding: 9px 7px; border-radius: 50px; font-size: 11px; font-weight: 700;
@@ -646,9 +654,8 @@ function aplicarFiltros({ resetLimit = true, validatePrice = false } = {}) {
     lista.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999));
   }
 
-  // Out-of-stock products may appear when browsing a category or searching,
-  // but always sink to the end regardless of the chosen sort order.
-  lista = [...lista.filter(isInStockCat), ...lista.filter(p => !isInStockCat(p))];
+  // El stock no modifica el orden. Un producto agotado conserva exactamente
+  // su posición y vuelve a estar disponible en ese mismo lugar al reponerse.
 
   if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
   renderGrid(lista);
@@ -698,11 +705,14 @@ function renderGrid(lista) {
           ${catLabel ? `<div class="tt-card-cat">${escapeCatalogHtml(catLabel)}</div>` : ''}
           <h2 class="tt-card-name"><a href="${productHref}">${safeAlt}</a></h2>
           <div class="tt-card-price">${fmt(p.price)}</div>
+          <div class="tt-card-stock ${inStock ? 'tt-card-stock--in' : 'tt-card-stock--out'}">${inStock ? 'Disponible' : 'Agotado'}</div>
           <div class="tt-card-btns">
             <a class="tt-card-btn tt-card-btn-view" href="${productHref}">Ver producto</a>
-            ${hasVariants
-              ? `<a class="tt-card-btn tt-card-btn-cart" href="${productHref}">Elegir opciones</a>`
-              : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}"${inStock ? '' : ' disabled aria-disabled="true"'}>${inStock ? '+ Carrito' : 'Agotado'}</button>`}
+            ${!inStock
+              ? `<button type="button" class="tt-card-btn tt-card-btn-cart" disabled aria-disabled="true">Agotado</button>`
+              : hasVariants
+                ? `<a class="tt-card-btn tt-card-btn-cart" href="${productHref}">Elegir opciones</a>`
+                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}">+ Carrito</button>`}
           </div>
         </div>
       </article>`;

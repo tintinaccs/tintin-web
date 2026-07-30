@@ -31,12 +31,23 @@ check(
 );
 
 check(
-  'Productos agotados u ocultos no reaparecen por URL directa',
-  /installDetailGuard/.test(policy) &&
-    /_showProductNotFound/.test(policy) &&
-    /TintinCatalogPolicy\?\.isPurchasable/.test(products) &&
-    /function _renderProductDetail\(product\)[\s\S]{0,220}TintinCatalogPolicy/.test(storefront),
-  'La ficha directa debe usar la misma política que las listas públicas.'
+  'Los agotados permanecen visibles, pero no se pueden comprar',
+  /export function isCatalogVisible/.test(policy) &&
+    /return isCatalogVisible\(p\) && \(p\.stock == null \|\| p\.stock > 0\)/.test(policy) &&
+    /\.filter\(isCatalogVisible\)/.test(policy) &&
+    /TintinCatalogPolicy\?\.isCatalogVisible/.test(products) &&
+    /catalogPolicy\?\.isCatalogVisible/.test(storefront),
+  'Stock cero debe conservar la ficha y la tarjeta, mientras carrito y compra siguen bloqueados.'
+);
+
+check(
+  'El stock no altera la posición del producto en el catálogo',
+  /El stock no modifica el orden/.test(catalog) &&
+    !/lista = \[\.\.\.lista\.filter\(isInStockCat\)/.test(catalog) &&
+    /tt-card-stock--in/.test(catalog) &&
+    /Disponible/.test(catalog) &&
+    /disabled aria-disabled="true">Agotado/.test(catalog),
+  'Agotar o reponer stock no debe mandar la tarjeta al final ni ocultarla.'
 );
 
 check(

@@ -1,4 +1,4 @@
-import './page-maintenance-loader.js?v=tintin-20260720-read-budget-1';
+import './page-maintenance-loader.js?v=tintin-20260730-stock-visibility-1';
 import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
@@ -107,9 +107,9 @@ function normalizeList(list) {
     .map(product => window.TintinCatalogPolicy?.normalizeProduct
       ? window.TintinCatalogPolicy.normalizeProduct(product)
       : product)
-    .filter(product => window.TintinCatalogPolicy?.isPurchasable
-      ? window.TintinCatalogPolicy.isPurchasable(product)
-      : product.active !== false && Boolean(product.name) && !(product.stock != null && Number(product.stock) <= 0))
+    .filter(product => window.TintinCatalogPolicy?.isCatalogVisible
+      ? window.TintinCatalogPolicy.isCatalogVisible(product)
+      : product.active !== false && Boolean(product.name) && Number.isFinite(Number(product.price)) && Number(product.price) > 0)
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
@@ -315,7 +315,7 @@ async function fetchSingleProduct(id) {
   recordFirestoreRead('products:single', 1);
   if (!snapshot.exists()) return null;
   const product = mapProduct(snapshot.id, snapshot.data());
-  if (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product)) return null;
+  if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
   writeCached(`product:${id}`, product);
   return product;
 }
@@ -383,7 +383,7 @@ async function startProductRealtime(id) {
 
         const product = mapProduct(snapshot.id, snapshot.data());
         if (product.active === false || !product.name ||
-            (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product))) {
+            (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product))) {
           publicProductCurrent = null;
           settle(publish([], 'realtime-product-unavailable'));
           return;

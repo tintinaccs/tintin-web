@@ -89,7 +89,7 @@ function categoryIsVisible(product) {
   return visibleCollectionSlugs.has(product.category || product.cat || '');
 }
 
-export function isPurchasable(product) {
+export function isCatalogVisible(product) {
   const p = normalizeProduct(product);
   return Boolean(
     p.id &&
@@ -99,9 +99,14 @@ export function isPurchasable(product) {
     Number.isInteger(p.price) &&
     p.price > 0 &&
     p.price <= 1_000_000_000 &&
-    (p.stock == null || (Number.isInteger(p.stock) && p.stock > 0)) &&
+    (p.stock == null || Number.isInteger(p.stock)) &&
     categoryIsVisible(p)
   );
+}
+
+export function isPurchasable(product) {
+  const p = normalizeProduct(product);
+  return isCatalogVisible(p) && (p.stock == null || p.stock > 0);
 }
 
 export function hasVariants(product) {
@@ -161,7 +166,7 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
 function filterProducts(products) {
   return (Array.isArray(products) ? products : [])
     .map(normalizeProduct)
-    .filter(isPurchasable)
+    .filter(isCatalogVisible)
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
@@ -196,7 +201,7 @@ function installDetailGuard() {
   if (typeof original !== 'function' || original.__ttPhase7Guard) return false;
   function guarded(product) {
     const normalized = normalizeProduct(product);
-    if (!isPurchasable(normalized)) {
+    if (!isCatalogVisible(normalized)) {
       window._showProductNotFound?.();
       return undefined;
     }
@@ -236,6 +241,7 @@ window.addEventListener('pagehide', () => {
 window.TintinCatalogPolicy = {
   normalizeProduct,
   normalizeVariantOptions,
+  isCatalogVisible,
   isPurchasable,
   hasVariants,
   reconcileCart: reconcileCatalogCart,
