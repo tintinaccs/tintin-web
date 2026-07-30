@@ -2,35 +2,49 @@ name: Auditoría de seguridad Fase 6
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - 'firestore.rules'
       - '_headers'
+      - 'apps-script/Phase3Security.gs'
       - 'apps-script/Phase4CreateOrder.gs'
       - 'js/create-order-client.js'
-      - 'scripts/apply-phase6-fixes.mjs'
-      - 'scripts/fix-phase6-generated.mjs'
-      - 'scripts/apply-phase6-client-hardening.mjs'
-      - 'scripts/apply-phase6-csp-fix.mjs'
-      - 'scripts/apply-phase6-secret-scan-fix.mjs'
-      - 'scripts/test-firestore-critical.mjs'
+      - 'scripts/audit-admin-users-roles.js'
+      - 'scripts/audit-secure-orders.js'
+      - 'scripts/audit-store-gate.js'
       - 'scripts/audit-phase6-security.js'
+      - 'scripts/test-firestore-critical.mjs'
+      - 'package.json'
+      - '.github/workflows/audit-security-phase8.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'firestore.rules'
+      - '_headers'
+      - 'apps-script/Phase3Security.gs'
+      - 'apps-script/Phase4CreateOrder.gs'
+      - 'js/create-order-client.js'
+      - 'scripts/audit-admin-users-roles.js'
+      - 'scripts/audit-secure-orders.js'
+      - 'scripts/audit-store-gate.js'
+      - 'scripts/audit-phase6-security.js'
+      - 'scripts/test-firestore-critical.mjs'
       - 'package.json'
       - '.github/workflows/audit-security-phase8.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   audit:
-    name: Aplicar, atacar y auditar
+    name: Auditar reglas, endpoint y encabezados
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar rama fuente
+      - name: Descargar repositorio
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          fetch-depth: 0
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -38,47 +52,29 @@ jobs:
           node-version: '20'
           cache: npm
 
-      - name: Aplicar correcciones
-        run: |
-          node scripts/apply-phase6-fixes.mjs
-          node scripts/fix-phase6-generated.mjs
-          node scripts/apply-phase6-client-hardening.mjs
-          node scripts/apply-phase6-csp-fix.mjs
-          node scripts/apply-phase6-secret-scan-fix.mjs
+      - name: Instalar dependencias
+        run: npm ci
 
-      - name: Revisar sintaxis
+      - name: Revisar sintaxis de seguridad
         run: |
           node --check scripts/audit-phase6-security.js
           node --check scripts/test-firestore-critical.mjs
           node --check js/create-order-client.js
+          cp apps-script/Phase3Security.gs /tmp/Phase3Security.js
           cp apps-script/Phase4CreateOrder.gs /tmp/Phase4CreateOrder.js
+          node --check /tmp/Phase3Security.js
           node --check /tmp/Phase4CreateOrder.js
 
-      - name: Instalar dependencias
-        run: npm ci
-
-      - name: Auditar Fase 6
+      - name: Auditar invariantes de la Fase 6
         run: npm run audit:phase6
 
-      - name: Ejecutar ataques contra Firestore Rules
-        run: npm run test:rules-critical
+      - name: Ejecutar matriz adversarial de Firestore Rules
+        run: npm run test:rules-phase6
 
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
-      - name: Regenerar diagnóstico
-        run: npm run build:pages
-
-      - name: Consolidar código validado
+      - name: Verificar manifiesto reproducible
         run: |
-          rm -f scripts/apply-phase6-fixes.mjs
-          rm -f scripts/fix-phase6-generated.mjs
-          rm -f scripts/apply-phase6-client-hardening.mjs
-          rm -f scripts/apply-phase6-csp-fix.mjs
-          rm -f scripts/apply-phase6-secret-scan-fix.mjs
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --check
-          git commit -m "security: completar Firestore y seguridad de la Fase 6"
-          git push origin HEAD:${GITHUB_HEAD_REF}
+          npm run build:pages
+          git diff --exit-code -- diagnostic-manifest.json
