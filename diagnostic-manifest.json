@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-30T18:19:21.477Z",
-  "sourceFingerprint": "3965a055654ba458cf0b7b52850773fc1649377d4a98b51d4f8428ee236a3972",
+  "generatedAt": "2026-07-30T18:30:31.581Z",
+  "sourceFingerprint": "18252bf3f18d6c83ed0e6a5bc1ccc427f0b400be503f697eda48124b336e5f48",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 394,
-    "textFiles": 360,
-    "totalBytes": 5561755,
+    "files": 389,
+    "textFiles": 355,
+    "totalBytes": 5520716,
     "pages": 18,
-    "modules": 221
+    "modules": 216
   },
   "viewports": [
     {
@@ -17124,166 +17124,6 @@
       ]
     },
     {
-      "path": "scripts/apply-phase6-client-hardening.mjs",
-      "bytes": 6804,
-      "sha256": "fcd7218a779d1ff73756107ff6a3ccb262d488c627474eea5edaa4053c04a466",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/apply-phase6-csp-fix.mjs",
-      "bytes": 1551,
-      "sha256": "e671b4761ce686527f71f210102a7c8a8049f4f6d34a524ae6f83976b6ee068f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://*.googleapis.com/",
-          "line": 5
-        },
-        {
-          "url": "https://securetoken.google.com/",
-          "line": 5
-        },
-        {
-          "url": "https://www.google.com/",
-          "line": 5
-        },
-        {
-          "url": "https://www.gstatic.com/",
-          "line": 5
-        },
-        {
-          "url": "https://apis.google.com/",
-          "line": 5
-        },
-        {
-          "url": "https://res.cloudinary.com/",
-          "line": 5
-        },
-        {
-          "url": "https://api.imgbb.com/",
-          "line": 5
-        },
-        {
-          "url": "https://script.google.com/",
-          "line": 6
-        },
-        {
-          "url": "https://script.googleusercontent.com/",
-          "line": 6
-        },
-        {
-          "url": "https://*.googleusercontent.com/",
-          "line": 6
-        }
-      ]
-    },
-    {
-      "path": "scripts/apply-phase6-fixes.mjs",
-      "bytes": 27198,
-      "sha256": "467706c1961eb95eb02d2213d56f096b702e80594b4d6c56319e86c2eb3eb470",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 454
-        },
-        {
-          "raw": "@firebase/rules-unit-testing",
-          "target": "scripts/@firebase/rules-unit-testing",
-          "dynamic": false,
-          "line": 459
-        },
-        {
-          "raw": "firebase/firestore",
-          "target": "scripts/firebase/firestore",
-          "dynamic": false,
-          "line": 467
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/",
-          "line": 298
-        },
-        {
-          "url": "https://www.google.com/",
-          "line": 298
-        },
-        {
-          "url": "https://apis.google.com/",
-          "line": 298
-        },
-        {
-          "url": "https://*.googleapis.com/",
-          "line": 298
-        },
-        {
-          "url": "https://securetoken.google.com/",
-          "line": 298
-        },
-        {
-          "url": "https://res.cloudinary.com/",
-          "line": 298
-        },
-        {
-          "url": "https://api.imgbb.com/",
-          "line": 298
-        }
-      ]
-    },
-    {
-      "path": "scripts/apply-phase6-secret-scan-fix.mjs",
-      "bytes": 1175,
-      "sha256": "d71df118462ff2266af6253bc763fdb8a57cb50debad22f61ebcc4aaf6fcc34f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "scripts/audit-about-page.js",
       "bytes": 2103,
       "sha256": "743b44fa471501adfd725448fd790a50c803900b17c21b5c9f96a0d2688d84f1",
@@ -18840,24 +18680,6 @@
       "endpoints": []
     },
     {
-      "path": "scripts/fix-phase6-generated.mjs",
-      "bytes": 4749,
-      "sha256": "e959a40d17dcf4dd48299637bbd3606cedf70fab9ef31fcc517e70cd7a2dc028",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "scripts/fix-tintin-source.js",
       "bytes": 4284,
       "sha256": "5077367798557a3af5fadc628312d56f598ea1d8ffcbf9b842cc974094fcdc87",
@@ -19192,8 +19014,8 @@
     {
       "path": ".github/workflows/audit-security-phase8.yml",
       "extension": ".yml",
-      "bytes": 2682,
-      "sha256": "255fa9a05b0ef507e265cede4a85e1afe154d01781153c389cda5812cfc829cb"
+      "bytes": 3120,
+      "sha256": "7d6df77e55840505e80f65d4ada7301a211d731f0e1129b4f70197941a26ec97"
     },
     {
       "path": ".github/workflows/audit-typography.yml",
@@ -20912,30 +20734,6 @@
       "sha256": "bf798b7a8bae23a2532db7b59e2dbd9825feca5a5e257d2e1659c1946af3bfae"
     },
     {
-      "path": "scripts/apply-phase6-client-hardening.mjs",
-      "extension": ".mjs",
-      "bytes": 6804,
-      "sha256": "fcd7218a779d1ff73756107ff6a3ccb262d488c627474eea5edaa4053c04a466"
-    },
-    {
-      "path": "scripts/apply-phase6-csp-fix.mjs",
-      "extension": ".mjs",
-      "bytes": 1551,
-      "sha256": "e671b4761ce686527f71f210102a7c8a8049f4f6d34a524ae6f83976b6ee068f"
-    },
-    {
-      "path": "scripts/apply-phase6-fixes.mjs",
-      "extension": ".mjs",
-      "bytes": 27198,
-      "sha256": "467706c1961eb95eb02d2213d56f096b702e80594b4d6c56319e86c2eb3eb470"
-    },
-    {
-      "path": "scripts/apply-phase6-secret-scan-fix.mjs",
-      "extension": ".mjs",
-      "bytes": 1175,
-      "sha256": "d71df118462ff2266af6253bc763fdb8a57cb50debad22f61ebcc4aaf6fcc34f"
-    },
-    {
       "path": "scripts/audit-about-page.js",
       "extension": ".js",
       "bytes": 2103,
@@ -21372,12 +21170,6 @@
       "extension": ".mjs",
       "bytes": 3029,
       "sha256": "80a603e463076aa19b8dfb90602fb5cf7cc0220d930b71c19d3eb6dc91c97a93"
-    },
-    {
-      "path": "scripts/fix-phase6-generated.mjs",
-      "extension": ".mjs",
-      "bytes": 4749,
-      "sha256": "e959a40d17dcf4dd48299637bbd3606cedf70fab9ef31fcc517e70cd7a2dc028"
     },
     {
       "path": "scripts/fix-tintin-source.js",
