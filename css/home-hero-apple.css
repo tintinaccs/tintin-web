@@ -171,7 +171,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
 
 @media (max-width: 768px) {
   html body.tt-home-premium .tt-hero {
-    grid-template-rows: clamp(330px, 52svh, 480px) auto;
+    grid-template-rows: clamp(326px, 51svh, 472px) auto;
     padding-bottom: 18px;
   }
 
@@ -180,7 +180,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
     width: calc(100% - 24px);
     margin-top: 12px;
     padding:
-      clamp(22px, 6vw, 30px)
+      clamp(20px, 5vw, 26px)
       clamp(18px, 5.5vw, 28px)
       clamp(24px, 6vw, 32px) !important;
     border-radius: 28px;
@@ -200,14 +200,14 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
   }
 
   html body.tt-home-premium .tt-hero-actions .tt-btn {
-    min-height: 54px;
+    min-height: 52px;
     font-size: clamp(.76rem, 3.5vw, .9rem);
   }
 }
 
 @media (max-width: 380px) {
   html body.tt-home-premium .tt-hero {
-    grid-template-rows: clamp(300px, 54svh, 430px) auto;
+    grid-template-rows: clamp(290px, 51.5svh, 414px) auto;
   }
 
   html body.tt-home-premium .tt-hero-content,
