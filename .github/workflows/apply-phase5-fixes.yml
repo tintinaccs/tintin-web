@@ -53,6 +53,30 @@ jobs:
           set -o pipefail
           node scripts/apply-phase5-fixes.mjs 2>&1 | tee phase5-apply.log
 
+      - name: Conservar contrato de precarga tipográfica
+        if: steps.apply_changes.outcome == 'success'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          normal = '  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>\n'
+          italic = '  <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>\n'
+
+          for path in Path('.').glob('*.html'):
+              source = path.read_text()
+              if normal in source and italic not in source:
+                  path.write_text(source.replace(normal, normal + italic, 1))
+
+          audit_path = Path('scripts/audit-phase5-performance.js')
+          audit = audit_path.read_text()
+          old = "check('Solo Montserrat normal se precarga', italicPreloads.length === 0, italicPreloads.map(([file]) => file).join(', '));"
+          new = "check('Montserrat italic conserva el preload contractual', italicPreloads.length === html.filter(([, source]) => source.includes('montserrat-latin-wght-normal.woff2\\\" as=\\\"font\\\"')).length, html.filter(([file, source]) => source.includes('montserrat-latin-wght-normal.woff2\\\" as=\\\"font\\\"') && !source.includes('montserrat-latin-wght-italic.woff2\\\" as=\\\"font\\\"')).map(([file]) => file).join(', '));"
+          if old not in audit:
+              raise SystemExit('No se encontró el chequeo de preload generado')
+          audit_path.write_text(audit.replace(old, new))
+          PY
+          node --check scripts/audit-phase5-performance.js
+
       - name: Guardar diagnóstico de aplicación
         if: steps.apply_changes.outcome != 'success'
         run: |
