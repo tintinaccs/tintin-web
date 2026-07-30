@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - agent/fase5-rendimiento-estabilidad-20260730
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -13,9 +16,10 @@ jobs:
     name: Aplicar, auditar y consolidar
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout de la rama
+      - name: Checkout de la rama fuente
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Configurar Node.js
@@ -32,11 +36,12 @@ jobs:
       - name: Guardar diagnóstico de aplicación
         if: steps.apply_changes.outcome != 'success'
         run: |
+          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add phase5-apply.log
           git commit -m "chore: registrar fallo al aplicar la Fase 5" || true
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git push origin HEAD:"${TARGET_BRANCH}"
           exit 1
 
       - name: Instalar dependencias
@@ -96,9 +101,10 @@ jobs:
       - name: Crear commit final de la Fase 5
         if: steps.apply_changes.outcome == 'success'
         run: |
+          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --check
           git commit -m "perf: completar rendimiento y estabilidad de la Fase 5"
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git push origin HEAD:"${TARGET_BRANCH}"
