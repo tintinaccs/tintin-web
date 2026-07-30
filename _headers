@@ -1,0 +1,31 @@
+# Cloudflare Pages lee este archivo para agregar cabeceras HTTP a cada
+# respuesta. No existía ninguna cabecera de seguridad en producción antes
+# de este archivo (confirmado con curl -I contra tintinaccesorios.pages.dev).
+#
+# La CSP permite 'unsafe-inline' en script-src y style-src porque el sitio
+# usa <script> y style="" inline en varias páginas sin nonce/hash — quitarlo
+# hoy rompería la tienda. Migrar a CSP con nonces por página es trabajo
+# pendiente, no cubierto acá; mientras tanto esta cabecera igual bloquea la
+# carga de <script src> y fetch/XHR hacia dominios que no estén en la lista,
+# que es el vector más común de robo de datos vía XSS (skimmers de tarjetas,
+# exfiltración de tokens).
+#
+# Dominios permitidos y por qué:
+# - www.gstatic.com / www.google.com: SDK de Firebase y reCAPTCHA Enterprise
+#   (js/firebase.js).
+# - *.googleapis.com, securetoken.google.com: Firestore, Auth, App Check,
+#   Firebase Installations (todos bajo el mismo SDK de Firebase).
+# - res.cloudinary.com: imágenes de catálogo/hero (js/image-utils.js).
+# - api.imgbb.com: subida de imágenes desde el panel admin
+#   (js/admin-app.js), solo alcanzable con sesión de administrador.
+# - *.googleusercontent.com: foto de perfil de cuentas de Google al hacer
+#   login (Firebase Auth la sirve desde ahí en tiempo de ejecución).
+#
+# frame-ancestors 'none' reemplaza a X-Frame-Options y evita que el sitio
+# se pueda embeber en un iframe ajeno (clickjacking del checkout/login).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://securetoken.google.com https://res.cloudinary.com https://api.imgbb.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self), usb=(), interest-cohort=()
