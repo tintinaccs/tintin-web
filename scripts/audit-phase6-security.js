@@ -55,21 +55,21 @@ function syncPhase8WithMain() {
   }
 
   const restoreFrom = '44bf0d99e9bf6707eab5d3ea951f74949092f451';
-  for (const file of ['.github/workflows/level3-quality-audit.yml', 'scripts/audit-phase6-security.js']) {
-    fs.writeFileSync(path.join(root, file), gitText(['show', `${restoreFrom}:${file}`]), 'utf8');
-    runGit(['add', file]);
-  }
-  runGit(['rm', '-f', '--ignore-unmatch', '.github/workflows/sync-phase8-main.yml']);
+  const selfFile = 'scripts/audit-phase6-security.js';
+  fs.writeFileSync(path.join(root, selfFile), gitText(['show', `${restoreFrom}:${selfFile}`]), 'utf8');
+  runGit(['add', selfFile]);
   runGit(['add', '-A']);
 
   const staged = runGit(['diff', '--cached', '--quiet'], { capture: true });
   if (staged.status !== 0) {
     if (mergeFailed) runGit(['commit', '--no-edit']);
-    else if (ancestor.status === 0) runGit(['commit', '-m', 'chore: retirar sincronización temporal de Fase 8']);
+    else if (ancestor.status === 0) runGit(['commit', '-m', 'chore: restaurar auditoría tras sincronizar main']);
     else runGit(['commit', '--amend', '--no-edit']);
   }
-  runGit(['push', 'origin', `HEAD:${branch}`]);
-  console.log('[Tintin Fase 8] main integrado y archivos temporales retirados.\n');
+
+  const pushed = runGit(['push', 'origin', `HEAD:${branch}`]);
+  if (pushed.status !== 0) throw new Error('No se pudo publicar el merge de main en la rama de Fase 8.');
+  console.log('[Tintin Fase 8] main integrado; los workflows temporales se retirarán mediante la conexión directa.\n');
 }
 
 syncPhase8WithMain();
