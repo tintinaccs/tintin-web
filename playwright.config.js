@@ -6,7 +6,7 @@
  * Estas pruebas NO forman parte del CI de auditoría (que es estático y sin
  * dependencias). Se corren a demanda donde haya navegador + red:
  *
- *   PERF_BASE_URL="https://tintinaccs.github.io/tintin-web" npx playwright test tests/performance
+ *   PERF_BASE_URL="https://tintinaccesorios.pages.dev" npx playwright test tests/performance
  *
  * En entornos con Chromium preinstalado fuera de node_modules, exportá
  * PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH o usá el que Playwright descargue.
@@ -23,7 +23,7 @@ module.exports = defineConfig({
   retries: 1,
   reporter: [['list']],
   use: {
-    baseURL: process.env.PERF_BASE_URL || 'https://tintinaccs.github.io/tintin-web',
+    baseURL: process.env.PERF_BASE_URL || 'https://tintinaccesorios.pages.dev',
     launchOptions: executablePath ? { executablePath, args: ['--no-sandbox'] } : { args: ['--no-sandbox'] }
   },
   projects: [

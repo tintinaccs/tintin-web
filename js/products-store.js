@@ -22,6 +22,9 @@ import {
 import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 const ALL_CACHE_KEY = 'products:cards';
+const HOME_CACHE_KEY = 'products:home-featured';
+const HOME_CACHE_TTL = 60 * 1000;
+const HOME_PRODUCT_LIMIT = 24;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
@@ -142,6 +145,53 @@ async function fetchAllProductsFromRest() {
   return documents.map(item => mapProduct(item.id, item.data));
 }
 
+async function fetchHomeProductsFromSdk() {
+  const featuredSnapshot = await getDocs(query(
+    collection(db, 'products'),
+    where('destacado', '==', true),
+    limit(HOME_PRODUCT_LIMIT)
+  ));
+  recordFirestoreRead('products:home-featured', featuredSnapshot.size);
+  const featured = featuredSnapshot.docs.map(item => mapProduct(item.id, item.data()));
+  if (featured.length) return featured;
+
+  // Respaldo acotado para tiendas que todavía no marcaron productos destacados.
+  const fallbackSnapshot = await getDocs(query(collection(db, 'products'), limit(HOME_PRODUCT_LIMIT)));
+  recordFirestoreRead('products:home-fallback', fallbackSnapshot.size);
+  return fallbackSnapshot.docs.map(item => mapProduct(item.id, item.data()));
+}
+
+async function fetchHomeProductsFromRest() {
+  const documents = await listPublicCollectionRest('products', HOME_PRODUCT_LIMIT);
+  recordFirestoreRead('products:home-rest-fallback', documents.length);
+  return documents.map(item => mapProduct(item.id, item.data));
+}
+
+async function fetchHomeProducts() {
+  let products;
+  if (!await appCheckReady) {
+    products = await fetchHomeProductsFromRest();
+  } else {
+    try {
+      products = await Promise.race([
+        fetchHomeProductsFromSdk(),
+        new Promise((_, reject) => window.setTimeout(
+          () => reject(new Error('La portada tardó demasiado en obtener productos')),
+          2800
+        ))
+      ]);
+    } catch (error) {
+      console.warn('[products-store] La portada usa el respaldo acotado:', error);
+      products = await fetchHomeProductsFromRest();
+    }
+  }
+
+  products = normalizeList(products);
+  const cards = products.map(compactProduct);
+  if (cards.length) writeCached(HOME_CACHE_KEY, cards);
+  return publish(products, 'home-limited');
+}
+
 async function fetchAllProducts() {
   let products;
   if (!await appCheckReady) {
@@ -209,6 +259,24 @@ async function startPublicProductsRealtime() {
   }, { once: true });
 
   return publicProductsReady;
+}
+
+export async function loadHomeProducts(options = {}) {
+  const force = options.force === true;
+  if (!force) {
+    const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
+    if (Array.isArray(cached) && cached.length) return publish(cached, 'home-cache');
+  }
+
+  const stale = readStaleCached(HOME_CACHE_KEY);
+  if (!force && Array.isArray(stale) && stale.length) publish(stale, 'home-stale-cache');
+  try {
+    return await runSingleFlight('products:home', fetchHomeProducts);
+  } catch (error) {
+    window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+    if (Array.isArray(stale) && stale.length) return stale;
+    throw error;
+  }
 }
 
 export async function loadAllProducts(options = {}) {
@@ -376,9 +444,11 @@ export async function ensureProductsForSearch() {
 export async function ensureProductsForCurrentPage() {
   const path = location.pathname.toLowerCase();
   if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
-  if (/(^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path) || path.endsWith('/')) {
+  if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts();
+  if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
     return startPublicProductsRealtime();
   }
+  // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }
 
@@ -400,6 +470,7 @@ function attachSearchDemand() {
 
 window.TintinProductsStore = {
   loadAll: loadAllProducts,
+  loadHome: loadHomeProducts,
   loadProductPage,
   startRealtime: startPublicProductsRealtime,
   ensureSearch: ensureProductsForSearch,

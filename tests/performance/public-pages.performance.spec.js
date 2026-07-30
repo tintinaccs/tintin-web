@@ -1,33 +1,43 @@
 'use strict';
 
-/**
- * Rendimiento de las páginas públicas: el loader se cierra, las métricas de
- * Web Vitals están dentro de presupuesto y no hay desplazamiento horizontal.
- */
 const { test, expect } = require('@playwright/test');
-const { PUBLIC_PAGES, url, waitLoaderGone, collectVitals, BUDGETS } = require('./_helpers');
+const {
+  PUBLIC_PAGES, url, installVitalsObserver, waitLoaderGone,
+  probeInteraction, collectVitals, BUDGETS
+} = require('./_helpers');
 
 for (const pageName of PUBLIC_PAGES) {
-  test(`[público] ${pageName}: carga, cierra loader y respeta presupuestos`, async ({ page }) => {
+  test(`[público] ${pageName}: carga, estabilidad y Web Vitals`, async ({ page }) => {
+    await installVitalsObserver(page);
     await page.goto(url(pageName), { waitUntil: 'load', timeout: 45000 });
-
-    // 1) El loader SIEMPRE se retira (nunca infinito).
     await waitLoaderGone(page, BUDGETS.loaderMaxMs);
+
     const loaderGone = await page.evaluate(() => {
-      const l = document.getElementById('tt-loader');
-      return !l || getComputedStyle(l).display === 'none' || l.classList.contains('tt-out');
+      const loader = document.getElementById('tt-loader');
+      return !loader || getComputedStyle(loader).display === 'none' || loader.classList.contains('tt-out');
     });
     expect(loaderGone, 'el loader debe cerrarse antes del timeout de emergencia').toBeTruthy();
 
-    // 2) Sin desplazamiento horizontal.
     const overflowX = await page.evaluate(() =>
       document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflowX, `no debe haber scroll horizontal (${pageName})`).toBeLessThanOrEqual(2);
 
-    // 3) Web Vitals dentro de presupuesto (con tolerancia).
-    const v = await collectVitals(page);
-    console.log(`[${pageName}] FCP=${v.fcp} LCP=${v.lcp} CLS=${v.cls} reqs=${v.requests} transfer=${v.transferKB}KB`);
-    if (v.lcp != null) expect(v.lcp, 'LCP dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.lcpMs);
-    expect(v.cls, 'CLS dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.clsMax);
+    await probeInteraction(page);
+    const vitals = await collectVitals(page);
+    console.log(
+      `[${pageName}] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms CLS=${vitals.cls} ` +
+      `INP=${vitals.inp}ms reqs=${vitals.requests} duplicadas=${vitals.duplicateRequests} ` +
+      `transfer=${vitals.transferKB}KB firestore=${vitals.firestoreReads}`
+    );
+
+    if (vitals.dcl != null) expect(vitals.dcl, 'DOMContentLoaded dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.dclMs);
+    if (vitals.lcp != null) expect(vitals.lcp, 'LCP dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.lcpMs);
+    if (vitals.inp != null) expect(vitals.inp, 'INP de laboratorio dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.inpMs);
+    expect(vitals.cls, 'CLS dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.clsMax);
+    expect(vitals.transferKB, 'peso transferido dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.transferKB);
+    expect(vitals.duplicateRequests, 'sin cascadas de solicitudes duplicadas').toBeLessThanOrEqual(BUDGETS.duplicateRequests);
+    if (pageName === 'index.html') {
+      expect(vitals.firestoreReads, 'la portada no debe descargar todo el catálogo').toBeLessThanOrEqual(BUDGETS.homeFirestoreReads);
+    }
   });
 }

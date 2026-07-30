@@ -14,7 +14,7 @@ obligatorias y que la app se recupere ante red intermitente/offline.
 
 ```bash
 # Contra el despliegue real (recomendado: métricas con sentido):
-PERF_BASE_URL="https://tintinaccs.github.io/tintin-web" npx playwright test tests/performance
+PERF_BASE_URL="https://tintinaccesorios.pages.dev" npx playwright test tests/performance
 
 # Una sola suite:
 npx playwright test tests/performance/public-pages.performance.spec.js
