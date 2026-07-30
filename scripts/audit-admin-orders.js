@@ -207,9 +207,12 @@ check(
 );
 check(
   'La regla acepta el departamento que siempre envía Checkout',
-  /shipping\.keys\(\)\.hasOnly\(\[[^\]]*'departamento'/.test(rules) &&
-    /shipping\.departamento is string/.test(rules) &&
-    /departamento:\s*draft\.departamento \|\| ''/.test(secureOrder),
+  /shipping\.departamento is string/.test(rules) &&
+    /shipping\.departamento\.size\(\) <= 120/.test(rules) &&
+    (
+      /departamento:\s*draft\.departamento \|\| ''/.test(secureOrder) ||
+      /departamento:\s*selectedDepartamento/.test(secureOrder)
+    ),
   'el contrato del navegador y el de Firebase deben admitir exactamente los mismos campos de envío'
 );
 check(

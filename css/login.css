@@ -17,7 +17,7 @@ html, body {
   margin: 0;
   background: #fff7fa;
   color: var(--login-ink);
-  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Montserrat", sans-serif;
   overflow-x: clip;
 }
 
@@ -288,7 +288,7 @@ body.tt-public-shell-mounted .login-page {
   box-shadow: 0 2px 7px rgba(0,0,0,.06);
 }
 .login-google-g {
-  font: 800 19px/1 Arial, sans-serif;
+  font: 800 19px/1 "Montserrat", sans-serif;
   background: conic-gradient(from -35deg, #4285f4 0 25%, #34a853 0 42%, #fbbc05 0 66%, #ea4335 0 84%, #4285f4 0);
   -webkit-background-clip: text;
   background-clip: text;

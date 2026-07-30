@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-30T10:40:55.237Z",
-  "sourceFingerprint": "c34d8cd97c148483e994f064f69c6726cf9707835ea0271dc706ab6d686055eb",
+  "generatedAt": "2026-07-30T10:54:59.067Z",
+  "sourceFingerprint": "1b2e9d71522305bc9447685943d52088d12c9315671a4f93d963dbcc29ef6018",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 387,
     "textFiles": 353,
-    "totalBytes": 5521581,
+    "totalBytes": 5521609,
     "pages": 18,
     "modules": 214
   },
@@ -1510,8 +1510,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 154794,
-      "sha256": "186b5749812abfcd0b85114a748e652afcd04d5b51695520ec2472243b1abf02",
+      "bytes": 154798,
+      "sha256": "5c7cdafc27b33f020e039aad8746089516bfb41295936cc76b87b00263b78d95",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1582,7 +1582,7 @@
           "line": 22
         },
         {
-          "raw": "css/admin.css?v=tintin-20260726-mobile-fit-1",
+          "raw": "css/admin.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/admin.css",
           "line": 23
         },
@@ -1746,7 +1746,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin.css?v=tintin-20260726-mobile-fit-1",
+          "raw": "css/admin.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/admin.css",
           "line": 23,
           "exists": true
@@ -9377,8 +9377,8 @@
         "guest",
         "client"
       ],
-      "bytes": 40040,
-      "sha256": "f33e6f6a3d825212e9c00f85bf0dc0cfe44b7b348eacbdd9eab23db2cfc8268a",
+      "bytes": 40029,
+      "sha256": "e66d5d56c7ea70ecfaa746b7200fdd49a390ad567b7ccbaf0e7456cf16600103",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9512,7 +9512,7 @@
           "line": 64
         },
         {
-          "raw": "css/home-hero-apple.css?v=tintin-20260730-home-hero-apple-1",
+          "raw": "css/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/home-hero-apple.css",
           "line": 65
         }
@@ -10173,7 +10173,7 @@
           "exists": true
         },
         {
-          "raw": "css/home-hero-apple.css?v=tintin-20260730-home-hero-apple-1",
+          "raw": "css/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/home-hero-apple.css",
           "line": 65,
           "exists": true
@@ -10540,8 +10540,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 26025,
-      "sha256": "f02fa260020065d2d4c43a48b58b5f2ea0ec63553fef5093178f178f94918985",
+      "bytes": 26031,
+      "sha256": "d062a118c45955c462a0806aa32ecf0ac5caf5071d8b6a519215faba4f058ddc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10643,12 +10643,12 @@
           "line": 29
         },
         {
-          "raw": "css/login.css?v=tintin-20260729-apple-login-1",
+          "raw": "css/login.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login.css",
           "line": 30
         },
         {
-          "raw": "css/login-maintenance.css?v=tintin-20260729-apple-login-1",
+          "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
           "line": 31
         }
@@ -10752,13 +10752,13 @@
           "exists": true
         },
         {
-          "raw": "css/login.css?v=tintin-20260729-apple-login-1",
+          "raw": "css/login.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login.css",
           "line": 30,
           "exists": true
         },
         {
-          "raw": "css/login-maintenance.css?v=tintin-20260729-apple-login-1",
+          "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
           "line": 31,
           "exists": true
@@ -10844,8 +10844,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1539,
-      "sha256": "2dbb75d1d5e877aa798c4185a7cc3fc4fa7e5a41b6ceeb37690a4d2a83989ddb",
+      "bytes": 1534,
+      "sha256": "bb863a3086e45adf06ea7cb8f4c942dbccf70c727f55fd12e7b364c06a15d870",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17317,8 +17317,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 12497,
-      "sha256": "f811d2dcb35bb32c3ba2de7509b37ebab189a02bce07dc4ba86a35c1d258234c",
+      "bytes": 12565,
+      "sha256": "e29ccf34c9d3223514c7ef262bc46f35b7cd2cc7fcb8f03b3f84916fa9399c92",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17682,8 +17682,8 @@
     },
     {
       "path": "scripts/audit-diagnostic-findings.js",
-      "bytes": 8081,
-      "sha256": "172e1ff221807b350a12618627247910a21092bd8f870bd6268e2cbda318ae1c",
+      "bytes": 8075,
+      "sha256": "20d1e5069a1d2e947156916eea31bc275e3509acd6efb4c5ae69e1c6f9d7d5d4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19138,8 +19138,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 154794,
-      "sha256": "186b5749812abfcd0b85114a748e652afcd04d5b51695520ec2472243b1abf02"
+      "bytes": 154798,
+      "sha256": "5c7cdafc27b33f020e039aad8746089516bfb41295936cc76b87b00263b78d95"
     },
     {
       "path": "apple-touch-icon.png",
@@ -19456,8 +19456,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 14322,
-      "sha256": "160290fc408d8586ee87700104ad2adbada95e1acd352f798be37698ef445b9f"
+      "bytes": 14282,
+      "sha256": "267afdd79949f29c5037edf982f2ad506107b5d54b9febfe669fbca35736aae0"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -19690,8 +19690,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 49953,
-      "sha256": "c6e00445e6f3a76c765ea4029aab16d9962fbb124ca273b9ad255d94f5c4e2fd"
+      "bytes": 49965,
+      "sha256": "e472bf35833ad65361992027acb7bdd8c3a32db16e54528652e7e46ce5aee903"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -19780,8 +19780,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 40040,
-      "sha256": "f33e6f6a3d825212e9c00f85bf0dc0cfe44b7b348eacbdd9eab23db2cfc8268a"
+      "bytes": 40029,
+      "sha256": "e66d5d56c7ea70ecfaa746b7200fdd49a390ad567b7ccbaf0e7456cf16600103"
     },
     {
       "path": "js/about-maintenance.js",
@@ -20464,8 +20464,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 26025,
-      "sha256": "f02fa260020065d2d4c43a48b58b5f2ea0ec63553fef5093178f178f94918985"
+      "bytes": 26031,
+      "sha256": "d062a118c45955c462a0806aa32ecf0ac5caf5071d8b6a519215faba4f058ddc"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -20650,8 +20650,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1539,
-      "sha256": "2dbb75d1d5e877aa798c4185a7cc3fc4fa7e5a41b6ceeb37690a4d2a83989ddb"
+      "bytes": 1534,
+      "sha256": "bb863a3086e45adf06ea7cb8f4c942dbccf70c727f55fd12e7b364c06a15d870"
     },
     {
       "path": "package-lock.json",
@@ -20752,8 +20752,8 @@
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 12497,
-      "sha256": "f811d2dcb35bb32c3ba2de7509b37ebab189a02bce07dc4ba86a35c1d258234c"
+      "bytes": 12565,
+      "sha256": "e29ccf34c9d3223514c7ef262bc46f35b7cd2cc7fcb8f03b3f84916fa9399c92"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
@@ -20866,8 +20866,8 @@
     {
       "path": "scripts/audit-diagnostic-findings.js",
       "extension": ".js",
-      "bytes": 8081,
-      "sha256": "172e1ff221807b350a12618627247910a21092bd8f870bd6268e2cbda318ae1c"
+      "bytes": 8075,
+      "sha256": "20d1e5069a1d2e947156916eea31bc275e3509acd6efb4c5ae69e1c6f9d7d5d4"
     },
     {
       "path": "scripts/audit-diagnostics.js",
