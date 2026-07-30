@@ -128,14 +128,27 @@ jobs:
       - name: Consolidate generated changes in internal PR
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         run: |
-          if git diff --quiet; then
+          rm -f \
+            phase8-ui-audit.log \
+            phase8-final-audit.log \
+            phase8-ui-browser.log \
+            level3-quality-audit.log \
+            canonical-viewports.log \
+            phase5-performance.log
+          rm -rf artifacts/canonical-viewports
+
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo 'No generated changes are pending.'
             exit 0
           fi
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "feat: completar UI y UX de la Fase 8"
+
+          git fetch origin "${GITHUB_HEAD_REF}"
+          git rebase "origin/${GITHUB_HEAD_REF}"
           git push origin HEAD:${GITHUB_HEAD_REF}
 
       - name: Verify reproducible diagnostics
