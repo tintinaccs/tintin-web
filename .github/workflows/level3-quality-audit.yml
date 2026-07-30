@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
@@ -29,22 +29,10 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Aplicar consolidación de Fase 8
-        run: |
-          shopt -s nullglob
-          scripts=(scripts/apply-phase8-*.mjs)
-          if [ ${#scripts[@]} -eq 0 ]; then
-            echo 'La consolidación de Fase 8 ya fue aplicada.'
-          else
-            for script in "${scripts[@]}"; do
-              node "$script"
-            done
-          fi
-
       - name: Install dependencies
         run: npm ci
 
-      - name: Rebuild diagnostics
+      - name: Rebuild diagnostics in runner
         run: npm run build:pages
 
       - name: Audit Phase 8 UI/UX
@@ -94,12 +82,13 @@ jobs:
           PERF_BASE_URL: http://127.0.0.1:4173
         run: npx playwright test tests/performance/public-pages.performance.spec.js --project=chromium > phase5-performance.log 2>&1
 
-      - name: Upload Level 3 reports
+      - name: Upload Level 3 reports and generated manifest
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: level3-quality-reports
           path: |
+            diagnostic-manifest.json
             phase8-ui-audit.log
             phase8-final-audit.log
             phase8-ui-browser.log
@@ -125,8 +114,11 @@ jobs:
           test "${{ steps.canonical.outcome }}" = "success"
           test "${{ steps.phase5_performance.outcome }}" = "success"
 
-      - name: Consolidate generated changes in internal PR
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+      - name: Verify generated diagnostics
+        run: npm run verify:diagnostics
+
+      - name: Confirm workflow leaves repository clean
+        if: always()
         run: |
           rm -f \
             phase8-ui-audit.log \
@@ -136,22 +128,5 @@ jobs:
             canonical-viewports.log \
             phase5-performance.log
           rm -rf artifacts/canonical-viewports
-
-          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
-            echo 'No generated changes are pending.'
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "feat: completar UI y UX de la Fase 8"
-
-          git fetch origin "${GITHUB_HEAD_REF}"
-          git rebase "origin/${GITHUB_HEAD_REF}"
-          git push origin HEAD:${GITHUB_HEAD_REF}
-
-      - name: Verify reproducible diagnostics
-        run: |
-          npm run build:pages
-          git diff --exit-code -- diagnostic-manifest.json
+          git restore diagnostic-manifest.json
+          git diff --exit-code
