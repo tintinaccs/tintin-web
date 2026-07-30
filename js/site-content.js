@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   getPageSchema,
@@ -151,24 +151,38 @@ function applyPage(pageId, data, onlySectionId = null) {
 
 function startSubscription(key, pageId, callback) {
   if (subscriptions.has(key)) return subscriptions.get(key);
-  const unsubscribe = onSnapshot(
-    doc(db, 'site_content', pageId),
-    snapshot => {
-      const data = snapshot.exists() ? snapshot.data() || {} : {};
-      latestData.set(pageId, data);
-      callback(data, snapshot.exists());
-    },
-    error => {
-      console.warn(`[site-content] no se pudo leer ${pageId}:`, error);
-      document.documentElement.dataset.ttContentState = 'error';
-      window.dispatchEvent(new CustomEvent('tintin:content-phase6-error', {
-        detail: { pageId, error }
-      }));
-      // El HTML publicado queda visible como respaldo. Nunca se reemplaza por
-      // texto viejo de otra página ni por contenido local no confirmado.
-    }
-  );
+  let active = true;
+  let stopSnapshot = null;
+  const unsubscribe = () => {
+    active = false;
+    stopSnapshot?.();
+    subscriptions.delete(key);
+  };
   subscriptions.set(key, unsubscribe);
+
+  appCheckReady.then(ready => {
+    if (!ready || !active) {
+      document.documentElement.dataset.ttContentState = 'offline-safe';
+      return;
+    }
+    stopSnapshot = onSnapshot(
+      doc(db, 'site_content', pageId),
+      snapshot => {
+        const data = snapshot.exists() ? snapshot.data() || {} : {};
+        latestData.set(pageId, data);
+        callback(data, snapshot.exists());
+      },
+      error => {
+        console.warn(`[site-content] no se pudo leer ${pageId}:`, error);
+        document.documentElement.dataset.ttContentState = 'error';
+        window.dispatchEvent(new CustomEvent('tintin:content-phase6-error', {
+          detail: { pageId, error }
+        }));
+        // El HTML publicado queda visible como respaldo. Nunca se reemplaza por
+        // texto viejo de otra página ni por contenido local no confirmado.
+      }
+    );
+  });
   return unsubscribe;
 }
 

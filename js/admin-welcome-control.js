@@ -5,7 +5,7 @@
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';

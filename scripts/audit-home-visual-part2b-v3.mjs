@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const directory = path.dirname(fileURLToPath(import.meta.url));
 const sourcePath = path.join(directory, 'audit-home-visual-part2b.mjs');
 const runtimePath = path.join(directory, '.audit-home-part2b-runtime-v3.mjs');
-let source = fs.readFileSync(sourcePath, 'utf8');
+let source = fs.readFileSync(sourcePath, 'utf8').replace(/\r\n/g, '\n');
 
 const prepareOriginal = `    if (document.body) {
       document.body.classList.remove('tt-scroll-locked');
@@ -30,6 +30,8 @@ const prepareReplacement = `    if (document.body) {
       await new Promise(resolve => setTimeout(resolve, 45));
     }
     window.scrollTo(0, 0);
+    const consent = document.getElementById('tt-privacy-consent');
+    if (consent) consent.style.setProperty('display', 'none', 'important');
     document.querySelectorAll('.tt-home-motion').forEach(node => node.classList.add('is-visible'));
   });
   await page.waitForTimeout(250);`;

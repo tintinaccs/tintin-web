@@ -7,7 +7,7 @@
  *   código postal, navegador, nombre, correo ni referidor.
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
@@ -21,12 +21,20 @@ import {
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
 import { isAdminPage } from './admin-path.js?v=tintin-20260722-level4-1';
 
-if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true) {
+const appCheckAvailable = await appCheckReady;
+
+if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable) {
   document.documentElement.dataset.ttActivityState = 'disabled-quota-protection';
-  window.TintinSiteActivity = Object.freeze({ status: 'disabled-quota-protection' });
+  window.TintinSiteActivity = Object.freeze({
+    status: appCheckAvailable ? 'disabled-quota-protection' : 'disabled-app-check'
+  });
 }
 
-if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true) {
+if (
+  !window.TintinSiteActivityBooted &&
+  window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true &&
+  appCheckAvailable
+) {
   window.TintinSiteActivityBooted = true;
 
   const VISITOR_KEY = 'tt_activity_visitor_v2';

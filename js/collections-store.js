@@ -1,4 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import {
   collection,
   getDocs,
@@ -16,6 +16,7 @@ import {
   runSingleFlight,
   writeCached
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
@@ -80,11 +81,31 @@ function publishPublic(collections, source) {
 }
 
 async function fetchPublicCollections() {
-  const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
-  recordFirestoreRead('collections:public', snapshot.size);
-  const list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
+  let list;
+  if (!await appCheckReady) {
+    const documents = await listPublicCollectionRest('collections', 200);
+    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+    writeCached(CACHE_KEY, list);
+    return publishPublic(list, 'rest-fallback');
+  }
+  try {
+    const snapshot = await Promise.race([
+      getDocs(query(collection(db, 'collections'), limit(200))),
+      new Promise((_, reject) => window.setTimeout(
+        () => reject(new Error('Firestore SDK tardó demasiado')),
+        3500
+      ))
+    ]);
+    recordFirestoreRead('collections:public', snapshot.size);
+    list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
+  } catch (sdkError) {
+    console.warn('[collections-store] Se usa el respaldo compatible de colecciones:', sdkError);
+    const documents = await listPublicCollectionRest('collections', 200);
+    recordFirestoreRead('collections:public-rest-fallback', documents.length);
+    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+  }
   writeCached(CACHE_KEY, list);
-  return publishPublic(list, 'server');
+  return publishPublic(list, 'server-or-rest-fallback');
 }
 
 export async function loadCollections(options = {}) {

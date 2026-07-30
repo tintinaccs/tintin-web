@@ -7,7 +7,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
     if (document.querySelector('link[data-tt-login-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/login-maintenance.css?v=20260718-1', import.meta.url).href;
+    link.href = new URL('../css/login-maintenance.css?v=tintin-20260729-apple-login-1', import.meta.url).href;
     link.dataset.ttLoginMaintenance = '1';
     document.head.appendChild(link);
   }
@@ -52,7 +52,6 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
     setNetworkState();
     window.addEventListener('online', setNetworkState);
     window.addEventListener('offline', setNetworkState);
-    window.ttPageReady?.();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });

@@ -11,7 +11,7 @@
 // marca el inicio real del login solo login.html (markSessionStart),
 // pero el chequeo corre en todas.
 
-import { auth } from "./firebase.js?v=tintin-20260716-cloudinary-fix-1";
+import { auth } from "./firebase.js?v=tintin-20260730-appcheck-stable-2";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";

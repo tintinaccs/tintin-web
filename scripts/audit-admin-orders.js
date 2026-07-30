@@ -177,7 +177,7 @@ check(
   'El panel fuerza una versión nueva de los módulos corregidos',
   /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
     /admin-inventory-integrity\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
-    /TT_CACHE_VERSION = 'tintin-20260722-order-delete-2'/.test(read('js/page-loader.js')),
+    /TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-2'/.test(read('js/page-loader.js')),
   'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
 );
 check(
@@ -204,6 +204,15 @@ check(
     /subtotal/.test(phase4Order) &&
     /total/.test(phase4Order),
   'El pedido debe guardar su propia copia de líneas y montos para sobrevivir cambios de catálogo.'
+);
+check(
+  'La regla acepta el departamento que siempre envía Checkout',
+  /\(!\('departamento' in shipping\) \|\| shipping\.departamento is string\)/.test(rules) &&
+    (
+      /departamento:\s*draft\.departamento \|\| ''/.test(secureOrder) ||
+      /departamento:\s*selectedDepartamento/.test(secureOrder)
+    ),
+  'el contrato del navegador y el de Firebase deben admitir exactamente los mismos campos de envío'
 );
 check(
   'El perfil del cliente lee los datos guardados del pedido (no el producto en vivo)',

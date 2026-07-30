@@ -1,5 +1,5 @@
 import './page-maintenance-loader.js?v=tintin-20260720-read-budget-1';
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import {
@@ -19,6 +19,7 @@ import {
   runSingleFlight,
   writeCached
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
@@ -129,10 +130,38 @@ function publish(products, source) {
   return normalized;
 }
 
-async function fetchAllProducts() {
+async function fetchAllProductsFromSdk() {
   const snapshot = await getDocs(query(collection(db, 'products'), limit(1000)));
   recordFirestoreRead('products:all', snapshot.size);
-  const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
+  return snapshot.docs.map(item => mapProduct(item.id, item.data()));
+}
+
+async function fetchAllProductsFromRest() {
+  const documents = await listPublicCollectionRest('products', 1000);
+  recordFirestoreRead('products:all-rest-fallback', documents.length);
+  return documents.map(item => mapProduct(item.id, item.data));
+}
+
+async function fetchAllProducts() {
+  let products;
+  if (!await appCheckReady) {
+    products = normalizeList(await fetchAllProductsFromRest());
+    writeCached(ALL_CACHE_KEY, products.map(compactProduct));
+    return publish(products, 'rest-fallback');
+  }
+  try {
+    products = await Promise.race([
+      fetchAllProductsFromSdk(),
+      new Promise((_, reject) => window.setTimeout(
+        () => reject(new Error('Firestore SDK tardó demasiado')),
+        3500
+      ))
+    ]);
+  } catch (sdkError) {
+    console.warn('[products-store] Se usa el respaldo compatible del catálogo:', sdkError);
+    products = await fetchAllProductsFromRest();
+  }
+  products = normalizeList(products);
   const cards = products.map(compactProduct);
   // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
   // por App Check, red o un despliegue nunca debe dejar al navegador mostrando
@@ -140,11 +169,12 @@ async function fetchAllProducts() {
   // El resultado vacío sí se publica para esta carga, pero la próxima visita
   // vuelve a consultar el servidor en lugar de confiar en ese vacío.
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
-  return publish(products, 'server');
+  return publish(products, 'server-or-rest-fallback');
 }
 
-function startPublicProductsRealtime() {
+async function startPublicProductsRealtime() {
   if (publicProductsReady) return publicProductsReady;
+  if (!await appCheckReady) return loadAllProducts({ force: true });
 
   const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
   if (Array.isArray(cached) && cached.length) publish(cached, 'cache');
@@ -199,6 +229,7 @@ export async function loadAllProducts(options = {}) {
 }
 
 async function fetchSingleProduct(id) {
+  if (!await appCheckReady) return null;
   const snapshot = await getDoc(doc(db, 'products', id));
   recordFirestoreRead('products:single', 1);
   if (!snapshot.exists()) return null;
@@ -209,6 +240,7 @@ async function fetchSingleProduct(id) {
 
 async function fetchRelatedProducts(product) {
   if (!product?.category) return [];
+  if (!await appCheckReady) return [];
   try {
     const snapshot = await getDocs(query(
       collection(db, 'products'),
@@ -232,10 +264,16 @@ function stopProductRealtime() {
   publicProductCurrent = null;
 }
 
-function startProductRealtime(id) {
+async function startProductRealtime(id) {
   const normalizedId = String(id || '').trim();
   if (!normalizedId) return Promise.resolve(publish([], 'missing-id'));
   if (publicProductReady && publicProductId === normalizedId) return publicProductReady;
+
+  if (!await appCheckReady) {
+    const products = await loadAllProducts();
+    const product = products.find(item => String(item.id) === normalizedId);
+    return publish(product ? [product] : [], product ? 'rest-fallback' : 'rest-fallback-missing');
+  }
 
   stopProductRealtime();
   publicProductId = normalizedId;

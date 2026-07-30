@@ -178,7 +178,7 @@ export function initNavCollections(force = false) {
   if (started && !force) return Promise.resolve();
   started = true;
   renderLoading();
-  return import('./collections-store.js?v=tintin-20260720-read-budget-1')
+  return import('./collections-store.js?v=tintin-20260726-browser-fallback-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

@@ -5,7 +5,12 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
+import {
+  initializeAppCheck,
+  ReCaptchaV3Provider,
+  getToken as getAppCheckToken,
+  setTokenAutoRefreshEnabled
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
 // functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
@@ -32,15 +37,45 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 // y no de un script externo repitiendo llamadas (el vector que agotó la
 // cuota diaria de Firestore del plan Spark).
 const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--WIq0PRCP9m';
-if (FIREBASE_APP_CHECK_SITE_KEY) {
-  initializeAppCheck(app, {
+const TECHNICAL_CLOUDFLARE_HOST =
+  window.location.hostname === 'tintinaccesorios.pages.dev' ||
+  window.location.hostname.endsWith('.tintinaccesorios.pages.dev');
+const APP_BOOT_ABORTED =
+  window.TintinAbortAppBootstrap === true ||
+  TECHNICAL_CLOUDFLARE_HOST;
+let appCheck = null;
+let appCheckReady = Promise.resolve(false);
+if (FIREBASE_APP_CHECK_SITE_KEY && !APP_BOOT_ABORTED) {
+  appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
-    isTokenAutoRefreshEnabled: true
+    // Se activa después de obtener el primer token. Si la configuración del
+    // dominio falla, evita un refresco proactivo que repita errores cada pocos
+    // segundos sin posibilidad de recuperarse.
+    isTokenAutoRefreshEnabled: false
   });
-  window.TintinAppCheckStatus = 'enabled';
-} else {
+  window.TintinAppCheckStatus = 'checking';
+  appCheckReady = getAppCheckToken(appCheck, false)
+    .then(() => {
+      setTokenAutoRefreshEnabled(appCheck, true);
+      window.TintinAppCheckStatus = 'enabled';
+      window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
+        detail: { ready: true }
+      }));
+      return true;
+    })
+    .catch(error => {
+      window.TintinAppCheckStatus = 'error';
+      window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
+        detail: { ready: false, code: error?.code || 'appCheck/unknown' }
+      }));
+      return false;
+    });
+} else if (!APP_BOOT_ABORTED) {
   window.TintinAppCheckStatus = 'configuration-required';
+} else {
+  window.TintinAppCheckStatus = 'skipped-technical-host';
 }
+window.TintinAppCheckReady = appCheckReady;
 
 // Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
 // persistentLocalCache + persistentMultipleTabManager para que los listeners
@@ -59,4 +94,4 @@ auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
-export { db, auth, provider };
+export { db, auth, provider, appCheck, appCheckReady };

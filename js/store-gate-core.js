@@ -5,14 +5,16 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import {
   doc,
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { getPublicDocumentRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
+const DEGRADED_NOTICE_ID = 'tt-store-gate-network-notice';
 const STYLE_ID = 'tt-store-gate-style';
 const LOGIN_CONTROL_ID = 'tt-store-gate-login';
 const DIALOG_CLASS = 'tt-store-gate-dialog';
@@ -30,7 +32,9 @@ let repairScheduled = false;
 const lockedNodes = new Map();
 
 function isGateNode(node) {
-  return node?.id === OVERLAY_ID || node?.id === 'tt-loader';
+  return node?.id === OVERLAY_ID ||
+    node?.id === DEGRADED_NOTICE_ID ||
+    node?.id === 'tt-loader';
 }
 
 function injectGateStyle() {
@@ -167,6 +171,66 @@ function injectGateStyle() {
       color: #fff !important;
     }
 
+    html.tt-store-gate-degraded {
+      --tt-store-gate-degraded-offset: 14px;
+    }
+
+    #${DEGRADED_NOTICE_ID} {
+      position: fixed !important;
+      z-index: 2147482988 !important;
+      right: max(14px, env(safe-area-inset-right)) !important;
+      bottom: max(14px, env(safe-area-inset-bottom)) !important;
+      left: auto !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      width: min(calc(100vw - 28px), 470px) !important;
+      min-height: 48px !important;
+      padding: 10px 12px 10px 16px !important;
+      border: 1px solid rgba(173, 63, 103, .18) !important;
+      border-radius: 18px !important;
+      background: rgba(255, 255, 255, .96) !important;
+      color: #3a2d32 !important;
+      box-shadow: 0 14px 40px rgba(58, 20, 35, .16) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(1.15) !important;
+      backdrop-filter: blur(18px) saturate(1.15) !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      user-select: auto !important;
+      box-sizing: border-box !important;
+    }
+
+    #${DEGRADED_NOTICE_ID} .tt-store-gate-network-text {
+      min-width: 0 !important;
+      flex: 1 1 auto !important;
+      font: 600 12px/1.45 Montserrat, sans-serif !important;
+      text-align: left !important;
+    }
+
+    #${DEGRADED_NOTICE_ID} .tt-store-gate-network-retry {
+      flex: 0 0 auto !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      padding: 8px 12px !important;
+      border: 0 !important;
+      border-radius: 999px !important;
+      background: #ad3f67 !important;
+      color: #fff !important;
+      font: 800 12px/1 Montserrat, sans-serif !important;
+      cursor: pointer !important;
+      touch-action: manipulation !important;
+    }
+
+    html.tt-store-gate-degraded :is(
+      a[href*="checkout"],
+      .tt-cart-checkout-btn,
+      [data-checkout],
+      [data-action="checkout"]
+    ) {
+      cursor: not-allowed !important;
+    }
+
     @media (max-width: 600px) {
       #${OVERLAY_ID} {
         align-items: center !important;
@@ -191,6 +255,14 @@ function injectGateStyle() {
       #${OVERLAY_ID} .tt-store-gate-action {
         width: min(100%, 260px) !important;
         min-width: 0 !important;
+      }
+
+      #${DEGRADED_NOTICE_ID} {
+        right: max(12px, env(safe-area-inset-right)) !important;
+        bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+        left: max(12px, env(safe-area-inset-left)) !important;
+        width: auto !important;
+        border-radius: 16px !important;
       }
     }
 
@@ -553,7 +625,7 @@ export function renderStoreClosedOverlay(cfg = lastConfig) {
     return;
   }
   if (resolved.__storeConfigStatus !== 'ok') {
-    insertOverlay('unavailable', resolved);
+    renderStoreConfigUnavailableOverlay(resolved);
     return;
   }
   insertOverlay('closed', resolved);
@@ -561,14 +633,6 @@ export function renderStoreClosedOverlay(cfg = lastConfig) {
 
 export function renderStoreConfigUnavailableOverlay(cfg = lastConfig) {
   const resolved = rememberConfig(cfg || lastConfig);
-  if (isLoginPage()) {
-    showLoginClosedNotice('unavailable');
-    return;
-  }
-  insertOverlay('unavailable', resolved);
-}
-
-export function removeStoreClosedOverlay() {
   desiredOverlay = null;
   stopGuardObserver();
   document.getElementById(OVERLAY_ID)?.remove();
@@ -577,6 +641,41 @@ export function removeStoreClosedOverlay() {
     'tt-store-gate-pending',
     'tt-store-gate-blocked'
   );
+  document.documentElement.classList.add('tt-store-gate-degraded');
+
+  bodyReady(() => {
+    let notice = document.getElementById(DEGRADED_NOTICE_ID);
+    if (!notice) {
+      notice = document.createElement('aside');
+      notice.id = DEGRADED_NOTICE_ID;
+      notice.setAttribute('role', 'status');
+      notice.setAttribute('aria-live', 'polite');
+      notice.innerHTML = `
+        <span class="tt-store-gate-network-text">
+          Conexión inestable. Podés explorar la tienda; las compras se habilitan al reconectar.
+        </span>
+        <button type="button" class="tt-store-gate-network-retry" aria-label="Reintentar conexión">
+          Reintentar
+        </button>`;
+      notice
+        .querySelector('.tt-store-gate-network-retry')
+        ?.addEventListener('click', () => window.location.reload());
+      document.body.appendChild(notice);
+    }
+  });
+}
+
+export function removeStoreClosedOverlay() {
+  desiredOverlay = null;
+  stopGuardObserver();
+  document.getElementById(OVERLAY_ID)?.remove();
+  document.getElementById(DEGRADED_NOTICE_ID)?.remove();
+  restorePageContent();
+  document.documentElement.classList.remove(
+    'tt-store-gate-pending',
+    'tt-store-gate-blocked',
+    'tt-store-gate-degraded'
+  );
   delete document.documentElement.dataset.ttStoreGateNavigating;
 }
 
@@ -584,25 +683,48 @@ export function getDesiredStoreOverlay() {
   return desiredOverlay;
 }
 
+export async function getStoreAccessConfigFromRest() {
+  const document = await getPublicDocumentRest('settings/storeGate');
+  if (!document) return null;
+  return rememberConfig(normalizeStoreAccessConfig(document.data, 'ok'));
+}
+
 /**
  * Lectura puntual usada por login.html, admin.html y revalidaciones.
  * Si el documento falta o la lectura falla, nunca se asume "abierta".
  */
 export async function getStoreAccessConfig() {
+  // No se lanzan SDK y REST en paralelo si App Check no pudo certificar el
+  // origen. Así el arranque falla una sola vez, de forma cerrada y explícita,
+  // en lugar de producir una cascada de permission-denied.
+  if (!await appCheckReady) {
+    return rememberConfig(normalizeStoreAccessConfig({}, 'app-check-error'));
+  }
+
   let primaryStatus = 'missing';
 
-  try {
-    const snap = await getDoc(STORE_GATE_REF);
-    if (snap.exists()) {
-      return rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'));
-    }
-  } catch (error) {
-    primaryStatus = 'error';
-    console.warn(
-      '[store-gate] settings/storeGate aún no está disponible; se prueba la configuración anterior durante la migración:',
-      error
-    );
-  }
+  // Ambos caminos arrancan juntos. El SDK conserva tiempo real y sesión;
+  // REST permite resolver el mismo documento público cuando un navegador,
+  // antivirus o red bloquea el canal interno de Firestore/reCAPTCHA.
+  const restAttempt = getStoreAccessConfigFromRest().catch(() => null);
+  const sdkAttempt = getDoc(STORE_GATE_REF)
+    .then(snap => snap.exists()
+      ? rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'))
+      : null)
+    .catch(error => {
+      primaryStatus = 'error';
+      console.warn(
+        '[store-gate] settings/storeGate aún no está disponible; se prueba la configuración anterior durante la migración:',
+        error
+      );
+      return null;
+    });
+
+  const firstConfig = await Promise.race([sdkAttempt, restAttempt]);
+  if (firstConfig) return firstConfig;
+
+  const [sdkConfig, restConfig] = await Promise.all([sdkAttempt, restAttempt]);
+  if (sdkConfig || restConfig) return sdkConfig || restConfig;
 
   // Compatibilidad de despliegue: permite publicar primero el JavaScript y
   // después las reglas sin abrir ni romper la tienda. Con las reglas finales,
@@ -637,4 +759,27 @@ export function isAccessAllowed(cfg, role, email) {
 
   const access = cfg.maintenanceAccess || {};
   return access[role || 'guest'] === true;
+}
+
+if (!window.__TintinStoreGateDegradedGuardBound) {
+  window.__TintinStoreGateDegradedGuardBound = true;
+  window.addEventListener(
+    'click',
+    event => {
+      if (!document.documentElement.classList.contains('tt-store-gate-degraded')) return;
+      const control = event.target?.closest?.(
+        'a[href*="checkout"],.tt-cart-checkout-btn,[data-checkout],[data-action="checkout"]'
+      );
+      if (!control) return;
+      event.preventDefault();
+      event.stopImmediatePropagation?.();
+      event.stopPropagation?.();
+      renderStoreConfigUnavailableOverlay(lastConfig);
+      document
+        .getElementById(DEGRADED_NOTICE_ID)
+        ?.querySelector('.tt-store-gate-network-retry')
+        ?.focus({ preventScroll: true });
+    },
+    true
+  );
 }

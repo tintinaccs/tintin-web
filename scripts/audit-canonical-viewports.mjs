@@ -268,7 +268,12 @@ async function inspectWithRetry(page, width, pageInfo) {
 }
 
 await listen();
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH
+    ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
+    : {})
+});
 const failures = [];
 const report = [];
 

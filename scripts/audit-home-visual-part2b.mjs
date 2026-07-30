@@ -12,6 +12,9 @@ const output = path.join(root, 'artifacts', 'home-part2b');
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output, { recursive: true });
 
+const requestedViewports = new Set(
+  (process.env.TT_AUDIT_VIEWPORTS || '').split(',').map(value => value.trim()).filter(Boolean),
+);
 const viewports = [
   { name: 'm360', width: 360, height: 800 },
   { name: 'm390', width: 390, height: 844 },
@@ -26,7 +29,7 @@ const viewports = [
   { name: 'b769', width: 769, height: 1000 },
   { name: 'b1023', width: 1023, height: 800 },
   { name: 'b1025', width: 1025, height: 800 },
-];
+].filter(viewport => requestedViewports.size === 0 || requestedViewports.has(viewport.name));
 
 const sections = [
   ['hero', '#hero'],
@@ -199,7 +202,10 @@ async function audit(page, width, height) {
 }
 
 await listen();
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
+});
 const report = [];
 try {
   for (const viewport of viewports) {
