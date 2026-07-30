@@ -74,7 +74,17 @@ jobs:
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
+      - name: Regenerar manifiesto de diagnóstico
+        run: npm run build:pages
+
+      - name: Publicar manifiesto regenerado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase6-diagnostic-manifest
+          path: diagnostic-manifest.json
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Verificar manifiesto reproducible
-        run: |
-          npm run build:pages
-          git diff --exit-code -- diagnostic-manifest.json
+        run: git diff --exit-code -- diagnostic-manifest.json
