@@ -11,6 +11,7 @@ on:
       - 'scripts/fix-phase6-generated.mjs'
       - 'scripts/apply-phase6-client-hardening.mjs'
       - 'scripts/apply-phase6-csp-fix.mjs'
+      - 'scripts/apply-phase6-secret-scan-fix.mjs'
       - 'scripts/test-firestore-critical.mjs'
       - 'scripts/audit-phase6-security.js'
       - 'package.json'
@@ -43,6 +44,7 @@ jobs:
           node scripts/fix-phase6-generated.mjs
           node scripts/apply-phase6-client-hardening.mjs
           node scripts/apply-phase6-csp-fix.mjs
+          node scripts/apply-phase6-secret-scan-fix.mjs
 
       - name: Revisar sintaxis
         run: |
@@ -73,6 +75,7 @@ jobs:
           rm -f scripts/fix-phase6-generated.mjs
           rm -f scripts/apply-phase6-client-hardening.mjs
           rm -f scripts/apply-phase6-csp-fix.mjs
+          rm -f scripts/apply-phase6-secret-scan-fix.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
