@@ -53,7 +53,7 @@ jobs:
           set -o pipefail
           node scripts/apply-phase5-fixes.mjs 2>&1 | tee phase5-apply.log
 
-      - name: Conservar contrato de precarga tipográfica
+      - name: Conservar contratos auditados
         if: steps.apply_changes.outcome == 'success'
         run: |
           python3 - <<'PY'
@@ -74,8 +74,17 @@ jobs:
           if old not in audit:
               raise SystemExit('No se encontró el chequeo de preload generado')
           audit_path.write_text(audit.replace(old, new))
+
+          shell_audit_path = Path('scripts/audit-public-shell.js')
+          shell_audit = shell_audit_path.read_text()
+          old_version = "const VERSION = 'tintin-20260726-login-session-1';"
+          new_version = "const VERSION = 'tintin-20260730-performance-phase5-1';"
+          if old_version not in shell_audit:
+              raise SystemExit('No se encontró la versión anterior del public shell en su auditoría')
+          shell_audit_path.write_text(shell_audit.replace(old_version, new_version))
           PY
           node --check scripts/audit-phase5-performance.js
+          node --check scripts/audit-public-shell.js
 
       - name: Guardar diagnóstico de aplicación
         if: steps.apply_changes.outcome != 'success'
