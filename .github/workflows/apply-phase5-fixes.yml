@@ -146,12 +146,13 @@ jobs:
           test -f phase5-performance.log && cat phase5-performance.log || true
           echo "Resultado Playwright: ${{ steps.browser_metrics.outcome }}"
 
-      - name: Retirar archivos auxiliares
+      - name: Preparar commit sin modificar workflows
         if: steps.apply_changes.outcome == 'success'
         run: |
           rm -f scripts/apply-phase5-fixes.mjs
-          rm -f .github/workflows/apply-phase5-fixes.yml
           rm -f phase5-apply.log
+          rm -f phase5-performance.log
+          git checkout -- .github/workflows/level3-quality-audit.yml
 
       - name: Crear commit final de la Fase 5
         if: steps.apply_changes.outcome == 'success'
