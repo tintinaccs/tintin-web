@@ -110,7 +110,8 @@ function hasValidName(p) {
 }
 
 function isFeaturable(p) {
-  return p.active !== false && isInStock(p) && hasValidName(p);
+  if (window.TintinCatalogPolicy?.isPurchasable) return window.TintinCatalogPolicy.isPurchasable(p);
+  return p.active !== false && isInStock(p) && hasValidName(p) && Number.isFinite(Number(p.price)) && Number(p.price) > 0;
 }
 
 /**
@@ -304,18 +305,26 @@ function updateCartBadge() {
 // Firestore products have loaded (window.PRODUCTS unset).
 function syncCartWithCatalog() {
   const pool = window.PRODUCTS;
-  if (!pool || !pool.length) return getCart();
+  if (!Array.isArray(pool)) return getCart();
+  if (window.TintinCatalogPolicy?.reconcileCart) {
+    return window.TintinCatalogPolicy.reconcileCart(pool);
+  }
   const cart = getCart();
   const synced = cart
     .map(item => {
       const live = pool.find(p => String(p.id) === String(item.id));
-      if (!live || live.active === false) return null;
-      return { ...item, name: live.name, price: live.price, imageUrl: live.imageUrl || item.imageUrl };
+      if (!live || !isFeaturable(live)) return null;
+      const max = live.stock == null ? 99 : Math.max(0, Number(live.stock));
+      return {
+        ...item,
+        name: live.name,
+        price: live.price,
+        qty: Math.max(1, Math.min(max || 1, Number(item.qty) || 1)),
+        imageUrl: live.imageUrl || item.imageUrl
+      };
     })
     .filter(Boolean);
-  if (synced.length !== cart.length || synced.some((it, i) => it.price !== cart[i].price || it.name !== cart[i].name)) {
-    saveCart(synced);
-  }
+  if (JSON.stringify(synced) !== JSON.stringify(cart)) saveCart(synced);
   return synced;
 }
 
@@ -734,7 +743,7 @@ function initSearch() {
     });
 
     function runSearch() {
-      const q = input.value.trim().toLowerCase();
+      const q = input.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
       if (!q) {
         results.style.display = 'none';
         results.innerHTML = '';
@@ -743,10 +752,14 @@ function initSearch() {
 
       const productPool = window.PRODUCTS || [];
 
-      const matches = productPool.filter(p =>
-        String(p.name || '').toLowerCase().includes(q) ||
-        String(p.cat || p.category || '').toLowerCase().includes(q) ||
-        String(p.desc || '').toLowerCase().includes(q)
+      const searchable = value => String(value == null ? '' : value)
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const matches = productPool.filter(isFeaturable).filter(p =>
+        searchable(p.name).includes(q) ||
+        searchable(p.cat || p.category).includes(q) ||
+        searchable(p.desc || p.description).includes(q) ||
+        searchable((p.tags || []).join(' ')).includes(q) ||
+        searchable(JSON.stringify(p.variants || {})).includes(q)
       ).slice(0, SEARCH_RESULTS_LIMIT);
 
       if (matches.length === 0) {
@@ -1224,6 +1237,10 @@ function _updateProductMeta(product, mainImgUrl) {
 }
 
 function _renderProductDetail(product) {
+  if (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product)) {
+    _showProductNotFound();
+    return;
+  }
   const isSameProduct = _pdProduct && String(_pdProduct.id) === String(product.id);
   _pdProduct = product;
   if (!isSameProduct) _pdQty = 1; // fresh quantity only when it's actually a different product

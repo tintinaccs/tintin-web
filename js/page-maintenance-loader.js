@@ -1,3 +1,5 @@
+import './phase7-catalog-policy.js?v=tintin-20260730-phase7-catalog-1';
+
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }
