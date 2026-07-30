@@ -41,6 +41,23 @@ jobs:
         continue-on-error: true
         run: npm run audit:canonical-viewports > canonical-viewports.log 2>&1
 
+      - name: Start local site for Phase 5 metrics
+        run: |
+          python3 -m http.server 4173 > /tmp/tintin-phase5-http.log 2>&1 &
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-phase5-http.log
+          exit 1
+
+      - name: Measure Phase 5 Web Vitals
+        id: phase5_performance
+        continue-on-error: true
+        env:
+          PERF_BASE_URL: http://127.0.0.1:4173
+        run: npx playwright test tests/performance/public-pages.performance.spec.js --project=chromium > phase5-performance.log 2>&1
+
       - name: Upload Level 3 reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,6 +66,7 @@ jobs:
           path: |
             level3-quality-audit.log
             canonical-viewports.log
+            phase5-performance.log
             artifacts/canonical-viewports
           if-no-files-found: warn
           retention-days: 14
@@ -57,5 +75,7 @@ jobs:
         run: |
           cat level3-quality-audit.log
           cat canonical-viewports.log
+          cat phase5-performance.log
           test "${{ steps.level3.outcome }}" = "success"
           test "${{ steps.canonical.outcome }}" = "success"
+          test "${{ steps.phase5_performance.outcome }}" = "success"
