@@ -86,7 +86,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-3';
+  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-4';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo

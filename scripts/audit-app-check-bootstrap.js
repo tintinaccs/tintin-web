@@ -40,8 +40,11 @@ const checks = [
       !firebase.includes('APP_BOOT_ABORTED')
   ],
   [
-    'App Check obtiene un primer token antes del refresco automático',
+    'App Check Enterprise obtiene un primer token antes del refresco automático',
     firebase.includes("6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m") &&
+      firebase.includes('ReCaptchaEnterpriseProvider') &&
+      firebase.includes('new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY)') &&
+      !firebase.includes('ReCaptchaV3Provider') &&
       firebase.includes('isTokenAutoRefreshEnabled: false') &&
       firebase.includes('getAppCheckToken(appCheck, false)') &&
       firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
@@ -93,12 +96,12 @@ const checks = [
   [
     'Todos los consumidores usan una sola versión de Firebase',
     !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
-      allRuntime.includes('firebase.js?v=tintin-20260730-appcheck-stable-3')
+      allRuntime.includes('firebase.js?v=tintin-20260730-appcheck-stable-4')
   ],
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('page-loader.js?v=tintin-20260730-appcheck-stable-3')
+      read(file).includes('page-loader.js?v=tintin-20260730-appcheck-stable-4')
     )
   ],
   [

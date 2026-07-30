@@ -8,7 +8,7 @@
 // manda y valida el enlace — acá solo se completa el inicio de sesión y se
 // sincroniza el documento de Firestore.
 // =============================================
-import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-3";
+import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
