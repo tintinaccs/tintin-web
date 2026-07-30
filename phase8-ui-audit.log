@@ -1,0 +1,20 @@
+
+> audit:phase8-ui
+> node scripts/audit-phase8-ui-ux.js
+
+OK — El runtime de Fase 8 se carga una sola vez desde page-loader
+OK — La hoja de estilos de UI/UX se inyecta de forma versionada
+OK — Todas las páginas HTML usan la nueva versión de page-loader
+OK — Los controles reciben feedback visible para mouse, tacto y teclado
+OK — Las operaciones asíncronas exponen estado ocupado y se recuperan
+OK — Los formularios inválidos nunca quedan bloqueados
+OK — Existe una API segura para carga, error, vacío, éxito e información
+OK — Errores y estados normales usan roles y live regions apropiados
+OK — Los estados dinámicos existentes se mejoran sin reemplazar su contenido
+OK — Los estados visuales siguen la identidad de Tintin
+OK — Las animaciones usan duraciones y curva comunes
+OK — Movimiento reducido elimina desplazamientos y shimmer
+OK — Las imágenes fallidas muestran una explicación accesible
+OK — La Fase 8 tiene auditoría estática y prueba de navegador dedicadas
+
+Auditoría Fase 8: UI/UX correcta (14 comprobaciones).

@@ -57,7 +57,7 @@ test.describe('Fase 8 — UI/UX global', () => {
       state: 'error',
       role: 'alert',
       live: 'assertive',
-      actionClass: 'tt-state-action',
+      actionClass: 'tt-state-action tt-interactive-control',
       busy: 'true',
       busyData: '1',
       disabled: true,

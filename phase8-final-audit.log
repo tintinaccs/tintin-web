@@ -1,0 +1,1432 @@
+
+> audit:final
+> npm run audit:level1 && npm run audit:level2 && npm run audit:level3 && npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync && npm run audit:admin-foundation && npm run audit:products-media && npm run audit:admin-orders && npm run audit:users-roles && npm run audit:content-appearance && npm run audit:email-messaging && npm run audit:analytics-audit && npm run audit:help-pages && npm run audit:aux-pages && npm run audit:final-integration && npm run audit:performance && npm run audit:performance-regressions && npm run audit:page-loading && npm run audit:critical-healing && npm run audit:login-isolation && npm run audit:hero-background-controls && npm run audit:storegate-deadlock && npm run audit:app-check-bootstrap && npm run audit:part2h && npm run audit:phase5 && npm run audit:phase6 && npm run audit:phase7-catalog && npm run audit:phase8-ui
+
+
+> audit:level1
+> node scripts/audit-level1-foundation.js
+
+OK — Existe README.md
+OK — Existe SECURITY.md
+OK — Existe .env.example
+OK — Existe .gitignore
+OK — Existe docs/ARCHITECTURE.md
+OK — Existe docs/CHANGE_IMPACT_CHECKLIST.md
+OK — Existe docs/BACKUP_RECOVERY.md
+OK — Existe firestore.rules
+OK — Existe firebase.json
+OK — Existe .github/workflows/deploy-pages.yml
+OK — Existe .github/workflows/final-sweep-part2h-audit.yml
+OK — package.json no está excluido del control de versiones
+OK — package-lock.json no está excluido del control de versiones
+OK — Los archivos .env privados están excluidos
+OK — .env.example permanece versionable
+OK — Cuentas de servicio y claves privadas están excluidas
+OK — La matriz contempla 1920 × 1080
+OK — La matriz contempla 1440 × 900
+OK — La matriz contempla 1280 × 720
+OK — La matriz contempla 1024 × 768
+OK — La matriz contempla 768 × 1024
+OK — La matriz contempla 390 × 844
+OK — La matriz contempla 320 × 568
+OK — La matriz contempla el rol Invitado
+OK — La matriz contempla el rol Cliente
+OK — La matriz contempla el rol Viewer
+OK — La matriz contempla el rol Agente
+OK — La matriz contempla el rol Admin
+OK — La matriz contempla el rol Super Admin
+OK — La arquitectura declara al navegador como entorno no confiable
+OK — La definición de terminado exige auditorías verdes
+OK — Existe procedimiento de rotación de credenciales
+OK — Existe procedimiento de recuperación para datos masivos
+OK — Firestore mantiene denegación por defecto
+OK — El Super Admin oficial está protegido en reglas
+OK — Las cuentas bloqueadas se consideran en permisos
+OK — Firebase importa App Check
+OK — El estado de App Check nunca se presenta como activo sin configuración
+OK — App Check tiene una clave pública configurada
+OK — No se detectan secretos privados conocidos en código desplegable
+OK — El despliegue publica únicamente después de regenerar diagnósticos
+OK — Los despliegues no se pisan entre sí
+
+Nivel 1: base correcta con 0 advertencia(s) externa(s) documentada(s).
+
+> audit:level2
+> node scripts/audit-level2-commerce.js
+
+OK — La línea del carrito se identifica por producto y variante
+OK — Las cantidades del carrito se acotan a 1..99
+OK — El carrito remoto no pisa una mutación local pendiente
+OK — El propio carrito declara que sus precios son solo visuales
+OK — El checkout conserva un requestId estable por sesión
+OK — El pedido usa UID + requestId como identidad idempotente
+OK — Reintentar con el mismo requestId no duplica el pedido (idempotencia server-side)
+OK — La guarda de checkout permite reanudar el mismo pedido
+OK — El servidor vuelve a leer configuración, usuario y productos reales
+OK — Cambios de precio o envío exigen nueva confirmación
+OK — El pedido guarda una fotografía histórica autocontenida
+OK — Creación del pedido y descuento de stock ocurren en una sola transacción, sin tope bajo de ítems
+OK — Firestore valida cantidades, precio, subtotal y total
+OK — Firestore vuelve a vincular la reserva con el pedido
+OK — La eliminación libera inventario antes de borrar
+OK — Un reintento no puede liberar inventario dos veces
+OK — Los productos históricos faltantes no bloquean todo el borrado
+OK — El borrado masivo conserva fallos y solo sincroniza pedidos eliminados
+OK — Los estados de pedido y pago tienen una fuente administrativa única
+OK — La edición mantiene precios históricos y total derivado
+OK — La edición administrativa detecta cambios concurrentes
+OK — Cambiar estado y pago exige permiso y auditoría
+OK — El cliente de correo tiene timeout y reintentos acotados
+OK — Solo se reintentan fallos transitorios o resultados parciales
+OK — Una sesión vencida renueva el token una sola vez
+OK — El historial registra una sola vez el resultado final y la cantidad de intentos
+OK — El endpoint usa claves idempotentes estables para correos automáticos
+OK — El endpoint vuelve a leer el pedido y valida propiedad
+OK — El puente de checkout localiza el pedido por requestId y no por datos inventados
+OK — El contrato prohíbe descuentos decididos solo por el navegador
+OK — El contrato futuro de promociones exige coherencia en todas las superficies
+OK — La documentación antigua ya no afirma que eliminar nunca restaura stock
+
+Nivel 2: contratos comerciales, inventario, pedidos y correos correctos.
+
+> audit:level3
+> node scripts/audit-level3-quality.js
+
+OK — Viewport canónico desktop-large (1920×1080)
+OK — La auditoría de navegador incluye 1920×1080
+OK — El contrato documenta 1920 × 1080
+OK — Viewport canónico desktop (1440×900)
+OK — La auditoría de navegador incluye 1440×900
+OK — El contrato documenta 1440 × 900
+OK — Viewport canónico laptop (1280×720)
+OK — La auditoría de navegador incluye 1280×720
+OK — El contrato documenta 1280 × 720
+OK — Viewport canónico tablet-landscape (1024×768)
+OK — La auditoría de navegador incluye 1024×768
+OK — El contrato documenta 1024 × 768
+OK — Viewport canónico tablet-portrait (768×1024)
+OK — La auditoría de navegador incluye 768×1024
+OK — El contrato documenta 768 × 1024
+OK — Viewport canónico mobile (390×844)
+OK — La auditoría de navegador incluye 390×844
+OK — El contrato documenta 390 × 844
+OK — Viewport canónico mini-mobile (320×568)
+OK — La auditoría de navegador incluye 320×568
+OK — El contrato documenta 320 × 568
+OK — El manifiesto cubre todos los roles obligatorios
+OK — Todas las páginas del manifiesto se prueban en los viewports canónicos
+OK — La auditoría canónica detecta página vacía, overflow y navegación duplicada
+OK — La auditoría global cubre superficies compartidas y límites de breakpoint
+OK — El reintento responsive es automático y está limitado a dos intentos
+OK — El comando responsive usa el wrapper de reintento
+OK — Existe comando para los siete viewports canónicos
+OK — No existen IDs duplicados en las páginas inventariadas
+OK — Todas las páginas declaran viewport e idioma español
+OK — Existe página SEO index.html
+OK — index.html tiene title
+OK — index.html tiene description
+OK — index.html tiene canonical
+OK — index.html tiene Open Graph
+OK — Existe página SEO catalogo.html
+OK — catalogo.html tiene title
+OK — catalogo.html tiene description
+OK — catalogo.html tiene canonical
+OK — catalogo.html tiene Open Graph
+OK — Existe página SEO collections.html
+OK — collections.html tiene title
+OK — collections.html tiene description
+OK — collections.html tiene canonical
+OK — collections.html tiene Open Graph
+OK — Existe página SEO product.html
+OK — product.html tiene title
+OK — product.html tiene description
+OK — product.html tiene canonical
+OK — product.html tiene Open Graph
+OK — Existe página SEO about.html
+OK — about.html tiene title
+OK — about.html tiene description
+OK — about.html tiene canonical
+OK — about.html tiene Open Graph
+OK — Existe página SEO contact.html
+OK — contact.html tiene title
+OK — contact.html tiene description
+OK — contact.html tiene canonical
+OK — contact.html tiene Open Graph
+OK — Existe página SEO envios.html
+OK — envios.html tiene title
+OK — envios.html tiene description
+OK — envios.html tiene canonical
+OK — envios.html tiene Open Graph
+OK — Existe página SEO cambios-devoluciones.html
+OK — cambios-devoluciones.html tiene title
+OK — cambios-devoluciones.html tiene description
+OK — cambios-devoluciones.html tiene canonical
+OK — cambios-devoluciones.html tiene Open Graph
+OK — Existe página SEO preguntas-frecuentes.html
+OK — preguntas-frecuentes.html tiene title
+OK — preguntas-frecuentes.html tiene description
+OK — preguntas-frecuentes.html tiene canonical
+OK — preguntas-frecuentes.html tiene Open Graph
+OK — Existe página SEO terminos.html
+OK — terminos.html tiene title
+OK — terminos.html tiene description
+OK — terminos.html tiene canonical
+OK — terminos.html tiene Open Graph
+OK — Existe página SEO privacidad.html
+OK — privacidad.html tiene title
+OK — privacidad.html tiene description
+OK — privacidad.html tiene canonical
+OK — privacidad.html tiene Open Graph
+OK — admin.html está excluida en HTML
+OK — admin-images.html está excluida en HTML
+OK — login.html está excluida en HTML
+OK — checkout.html está excluida en HTML
+OK — perfil.html está excluida en HTML
+OK — 404.html está excluida en HTML
+OK — robots.txt excluye /admin.html
+OK — robots.txt excluye /admin-images.html
+OK — robots.txt excluye /login.html
+OK — robots.txt excluye /checkout.html
+OK — robots.txt excluye /perfil.html
+OK — robots.txt enlaza sitemap
+OK — sitemap incluye index.html
+OK — sitemap incluye catalogo.html
+OK — sitemap incluye collections.html
+OK — sitemap incluye about.html
+OK — sitemap incluye contact.html
+OK — sitemap incluye envios.html
+OK — sitemap incluye cambios-devoluciones.html
+OK — sitemap incluye preguntas-frecuentes.html
+OK — sitemap incluye terminos.html
+OK — sitemap incluye privacidad.html
+OK — Existe manifest PWA
+OK — js/home-maintenance.js contempla recuperación online
+OK — js/catalog-maintenance.js contempla recuperación online
+OK — js/collections-maintenance.js contempla recuperación online
+OK — js/product-maintenance.js contempla recuperación online
+OK — js/login-maintenance.js contempla recuperación online
+OK — js/profile-maintenance.js contempla recuperación online
+OK — js/checkout-maintenance.js contempla recuperación online
+OK — js/checkout-reliability.js contempla recuperación online
+OK — js/contact-maintenance.js contempla recuperación online
+OK — js/cart-sync.js contempla recuperación online
+OK — Las capas principales respetan movimiento reducido
+OK — El sistema define foco visible y tamaño táctil
+OK — Las páginas tienen exactamente un H1 cuando el manifiesto lo exige
+OK — La auditoría de rendimiento protege fuentes, loaders, caché, listeners e imágenes
+OK — Existe tripwire de regresión posterior a optimizaciones
+OK — La integración final verifica SEO, PWA y fuentes únicas
+OK — El contrato prohíbe loaders para ocultar esperas evitables
+OK — El contrato exige reintentos sin duplicar operaciones
+
+Nivel 3: responsive, estados, accesibilidad, rendimiento y SEO correctos.
+
+> audit:typography
+> node scripts/audit-typography.js
+
+Auditoría tipográfica correcta: 10125 comprobaciones, 18 páginas y 10 archivos WOFF2.
+Montserrat es la única familia configurada en el código controlado por la plataforma.
+
+> audit:colors
+> node scripts/audit-color-scheme.js
+
+PASS El catálogo global contiene todos los tokens esperados
+PASS El catálogo administrativo contiene todos los tokens esperados
+PASS No hay claves globales duplicadas
+PASS No hay variables globales duplicadas
+PASS No hay claves administrativas duplicadas
+PASS No hay variables administrativas duplicadas
+PASS Todos los tokens globales tienen respaldo CSS
+PASS Todos los tokens administrativos tienen respaldo CSS
+PASS Cada token global controla al menos un consumidor real
+PASS Cada token administrativo controla al menos un consumidor real
+PASS Apariencia conserva una sola sección integrada
+PASS Cada fila expone nombre, variable, muestra, valor y reset
+PASS El valor textual abre el mismo selector
+PASS El selector exige confirmar o cancelar
+PASS La vista previa es inmediata sin mutar el borrador
+PASS El selector admite HEX, RGB y HSL con validación
+PASS El selector permite tono, saturación y luminosidad
+PASS El cuentagotas se habilita solo si el navegador lo soporta
+PASS Existe comparación del color anterior y nuevo
+PASS Existen reset individual, por categoría y total
+PASS Existe deshacer el último cambio
+PASS Existe aviso real de cambios sin guardar
+PASS La publicación muestra impacto antes de guardar
+PASS El contraste se verifica antes de publicar, incluso por dispositivo
+PASS La vista previa usa sobrescrituras por dispositivo
+PASS El runtime público escucha Firestore en tiempo real
+PASS El runtime administrativo escucha Firestore en tiempo real
+PASS Los cambios publicados se aplican como variables CSS reales
+PASS El runtime conserva caché para evitar parpadeos
+PASS La primera pintura bloquea el contenido hasta resolver el esquema definitivo
+PASS El runtime libera la primera pintura al aplicar o fallar la lectura
+PASS Todas las páginas públicas cargan tokens, bindings y runtime
+PASS Todas las páginas públicas estabilizan el fondo antes del loader y del CSS
+PASS Las páginas administrativas cargan su esquema independiente
+
+Auditoría de esquema de colores completada: 153 tokens globales y 36 administrativos verificados.
+
+> audit:public-shell
+> node scripts/audit-public-shell.js
+
+Public shell audit passed: 15 public screens share one responsive header.
+
+> audit:tintin
+> node scripts/audit-tintin.js
+
+Tintin audit
+============
+HTML: 18
+CSS: 29
+JS: 191
+Issues: 91
+CRITICAL: 0
+WARN: 0
+INFO: 91
+
+[INFO] 404.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] about.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] admin-images.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] admin.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] cambios-devoluciones.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] catalogo.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] checkout.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] collections.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] contact.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/about-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/admin-color-tokens.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/admin.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/catalog-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/checkout-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/checkout.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/collections-page.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/color-tokens.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/home-fit.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/home-hero-apple.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/home-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/loader-solid-background.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/login-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/login.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/mobile-header-actions-solid.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/payment-methods.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/phase8-ui-ux.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/product-extras.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/product-maintenance.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/solid-ui-surfaces.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/system-special-states.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/tintin-parity-safe.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] css/ui-quality.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] envios.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] firebase-cloud-functions-inactive/index.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] functions/api/order-email.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] functions/api/test-email.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] index.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-app.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-collections-phase4.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-content-phase6.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-email-gate-sync.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-images-phase5.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-import-phase9.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-media-library-ui.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-payment-methods.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-store-control.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-unsaved-guard.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-users-phase8.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/admin-welcome-control.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/auth-nav.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/cart-recovery.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/cart-sync.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/checkout-payment-methods.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/checkout-reliability.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/collections-phase4.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/color-picker-widget.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/color-scheme-catalog.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/color-scheme-instant.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/contact-maintenance.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/edit-badge.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/header-account-mobile-fix.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/header-dropdown-fix.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/image-upload-widget.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/images.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/legal-maintenance.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/nav-collections.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/profile-maintenance.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/profile-order-stats-fix.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/public-shell.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/scroll-debug-overlay.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/secure-checkout-order.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/store-gate-core.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] js/welcome-tutorial-runtime.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] login.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] nosotros.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] perfil.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] preguntas-frecuentes.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] privacidad.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] product.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] script.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-catalog-page.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-collections-page.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-diagnostic-findings.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-hero-background-controls.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-home-page.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-loader-solid.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-product-page.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/audit-site-reliability.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] scripts/fix-tintin-source.js — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] styles.css — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+[INFO] terminos.html — Contiene colores hex directos; verificar que pasen por variables o sanitizador
+
+> audit:store-gate
+> node scripts/audit-store-gate.js
+
+✓ Bloqueo síncrono antes del body
+✓ Fallback si falla el módulo
+✓ El tope de espera da margen real a redes o equipos lentos
+✓ Runtime diferido hasta permitir acceso
+✓ Runtime público sin observadores globales duplicados
+✓ Loader se retira ante cierre o indisponibilidad
+✓ Indisponibilidad sin ventanas alternantes
+✓ Auth nav no duplica módulos globales
+✓ Sin observadores globales de interfaz
+✓ Guard del overlay observa solo hijos directos
+✓ Bypass limitado a localhost
+✓ Login y admin tienen guard propio
+✓ Antimanipulación visual
+✓ Botón de iniciar sesión identificable
+✓ Botón de iniciar sesión fuerza navegación en captura
+✓ URL de login conserva la carpeta del sitio
+✓ Overlay conserva interacción
+✓ Documento público mínimo
+✓ Comprobación temprana compatible sin falso cierre
+✓ Estado abierto recuperable si el navegador bloquea el canal normal
+✓ Catálogo y colecciones tienen lectura pública compatible
+✓ Respaldo REST es estrictamente de solo lectura
+✓ Sin apertura por error
+✓ Checkout comparte el formato validado del control global
+✓ Super Admin por correo real
+✓ Sincronización del panel
+✓ Sin cierre temporal al abrir el panel
+✓ Selección local protegida hasta guardar
+✓ Guardado disponible si falla solo storeGate
+✓ Guardado atómico del estado de tienda
+✓ Estado administrativo coherente con las reglas
+✓ Regla pública mínima
+✓ Configuración completa cerrada
+✓ Productos cerrados
+✓ Colecciones cerradas
+✓ Contenido cerrado
+✓ Carrito cerrado
+✓ Pedidos cerrados y exclusivos del servidor
+✓ Sin lectura pública vieja
+✓ Loader global en 404.html
+✓ Sin bypass en 404.html
+✓ Loader global en about.html
+✓ Sin bypass en about.html
+✓ Loader global en admin-images.html
+✓ Sin bypass en admin-images.html
+✓ Loader global en admin.html
+✓ Sin bypass en admin.html
+✓ Loader global en cambios-devoluciones.html
+✓ Sin bypass en cambios-devoluciones.html
+✓ Loader global en catalogo.html
+✓ Sin bypass en catalogo.html
+✓ Loader global en checkout.html
+✓ Sin bypass en checkout.html
+✓ Loader global en collections.html
+✓ Sin bypass en collections.html
+✓ Loader global en contact.html
+✓ Sin bypass en contact.html
+✓ Loader global en envios.html
+✓ Sin bypass en envios.html
+✓ Loader global en index.html
+✓ Sin bypass en index.html
+✓ Loader global en login.html
+✓ Sin bypass en login.html
+✓ Loader global en nosotros.html
+✓ Sin bypass en nosotros.html
+✓ Loader global en perfil.html
+✓ Sin bypass en perfil.html
+✓ Loader global en preguntas-frecuentes.html
+✓ Sin bypass en preguntas-frecuentes.html
+✓ Loader global en privacidad.html
+✓ Sin bypass en privacidad.html
+✓ Loader global en product.html
+✓ Sin bypass en product.html
+✓ Loader global en terminos.html
+✓ Sin bypass en terminos.html
+
+Resultado: 75/75 comprobaciones correctas.
+Paso 1: cierre total verificado a nivel de archivos.
+
+> audit:secure-orders
+> node scripts/audit-secure-orders.js
+
+OK — No depende de Cloud Functions
+OK — El checkout crea el pedido a través del endpoint server-side, sin tope de productos
+OK — El cliente del endpoint manda el idToken real, no un secreto público
+OK — El servidor (Apps Script) vuelve a leer productos y precios reales
+OK — El servidor crea el pedido y descuenta stock en una sola transacción, sin tope de ítems
+OK — Reintentos con el mismo pedido no lo duplican
+OK — El servidor exige tienda abierta, cuenta activa y turno de compra vigente
+OK — Cambios de precio requieren nueva confirmación
+OK — Cambios de stock se explican al cliente
+OK — Las reglas de Firestore bloquean todo pedido directo desde el navegador
+OK — El servidor valida tienda, cuenta y correo antes de crear el pedido
+OK — El checkout seguro se carga solo donde corresponde
+
+Auditoría de pedidos gratuitos completada correctamente.
+
+> audit:emails
+> node scripts/audit-email-phase3.js
+
+OK — El checkout envía la notificación de pedido por Resend (canal único)
+OK — El correo original exige sesión real
+OK — El puente se activa después del pedido Spark sin escribir el estado protegido
+OK — El pedido se localiza sin índice compuesto
+OK — Los reintentos del navegador no duplican el intento
+OK — Los interruptores públicos no exponen configuración privada
+OK — Super Admin inicia la sincronización de correos
+OK — Apps Script vuelve a leer el pedido real
+OK — Apps Script comprueba identidad y propiedad
+OK — El reenvío exige rol y permiso
+OK — La fase 3 sigue siendo compatible con Spark
+
+Auditoría de correos de la Fase 3 completada correctamente.
+
+> audit:collections
+> node scripts/audit-collections-phase4.js
+
+OK  Firestore sigue siendo la fuente de verdad
+OK  El menú elimina HTML estático antes de cargar
+OK  El menú falla de forma explícita
+OK  Los enlaces codifican el slug
+OK  Los nombres se insertan como texto
+OK  Portada, colecciones, catálogo y footer están sincronizados
+OK  Los renderers legados no pueden restaurar categorías viejas
+OK  El slug queda inmutable al editar
+OK  El importador fijo de 12 colecciones queda deshabilitado
+OK  El CSV usa colecciones reales
+OK  Las imágenes de colección se validan
+OK  La fase 4 se inicia globalmente
+OK  La página de colecciones no duplica el listener de Firestore
+OK  Los destacados de colecciones tienen un límite de rendimiento
+OK  Colecciones usa el carrito compartido y valida stock
+OK  La experiencia responsive conserva navegación y carga accesibles
+OK  Los filtros del catálogo se adaptan a la altura de cada pantalla
+OK  El comando de auditoría está publicado
+
+Auditoría Fase 4: todo correcto.
+
+> audit:images
+> node scripts/audit-images-phase5.js
+
+OK  Las URLs se validan en una utilidad compartida
+OK  Toda URL de Cloudinary recibe entrega automática f_auto,q_auto
+OK  El sitio preconecta con Cloudinary en todas las páginas
+OK  Hero, Editorial y Nosotros admiten subidas de hasta 4K con mayor calidad
+OK  settings/images contiene solamente espacios globales reales
+OK  Los parches de imagen aceptan solo claves conocidas
+OK  La caché local siempre queda saneada
+OK  Los guardados incluyen actualización y sincronización
+OK  Hero usa imágenes independientes para desktop, tablet y móvil
+OK  El Hero es Cloudinary exclusivo: sin respaldo estático empaquetado
+OK  El Hero se revela recién cuando la imagen real terminó de cargar, no solo cuando Firestore confirma la URL
+OK  La red de seguridad del Hero espera a la imagen en camino antes de revelar a ciegas
+OK  index.html no referencia ningún banner estático empaquetado para el Hero
+OK  Quitar una personalización restaura imágenes responsive
+OK  Cada slot admite imagen independiente por dispositivo
+OK  La cascada de dispositivo está centralizada
+OK  Logo, editoriales y Nosotros se actualizan globalmente
+OK  Ya no existe el campo de URL manual
+OK  El archivo se valida por su contenido real
+OK  El navegador conserva procesamiento, WebP y vista previa
+OK  La biblioteca usa Cloudinary mediante Cloudflare Pages Functions
+OK  Borrar una imagen usa la función protegida de Cloudinary
+OK  Reemplazar o quitar limpia solo imágenes sin uso
+OK  Borrar revisa settings, productos y colecciones
+OK  El API Secret existe únicamente en el runtime de Cloudflare
+OK  Cloudflare valida el ID token con Firebase Auth en el servidor
+OK  Las firmas usan Web Crypto y limitan los public IDs
+OK  El public ID no crea carpetas en Cloudinary (evita el bloqueo de Dynamic Folder Mode)
+OK  El borrado solo admite public IDs de Tintin
+OK  Las Pages Functions exportan handlers compatibles
+OK  La función geográfica no devuelve IP ni coordenadas
+OK  Las rutas de Functions están limitadas a tres endpoints
+OK  No quedan Netlify Functions activas
+OK  Firebase Storage no se inicializa ni se importa
+OK  El despliegue de Firebase queda en el plan Spark
+OK  El panel conserva la misma navegación y biblioteca
+OK  Las imágenes de productos se sanean al leer Firestore
+OK  La Fase 5 se inicia en todas las páginas y en el panel
+OK  La documentación define una sola fuente por tipo
+OK  Existe una guía completa de configuración online
+OK  El comando de auditoría está publicado
+OK  Confirmar y subir existe en todo widget, deshabilitado sin archivo y sin devoluciones silenciosas
+OK  El clic en confirmar siempre deja evidencia y usa el flujo real de subida
+OK  Los errores al guardar una imagen en un slot nunca se pierden en un toast que desaparece solo
+OK  El renderizado del hero y del resto de slots públicos deja evidencia de qué datos llegaron y si se aplicaron
+OK  Las operaciones de red del flujo de subida tienen timeout con mensaje claro
+OK  La lista de orígenes confiables incluye el dominio real de producción
+OK  Los errores de subida identifican si el rechazo vino de Cloudflare o de Cloudinary
+OK  Los archivos del flujo de subida se importan con versión de caché, no sin ella
+OK  admin.html (Productos/Colecciones) importa el mismo widget con versión de caché
+OK  La herramienta de versionado también cubre imports estáticos, no solo <script src>/<link href>
+
+Auditoría Fase 5: todo correcto.
+
+> audit:content
+> node scripts/audit-content-phase6.js
+
+OK — El esquema cubre las ocho páginas administrables
+OK — Firestore guarda valores y no selectores arbitrarios
+OK — El contenido público nunca inserta HTML de Firestore
+OK — Los saltos de línea se crean con nodos seguros
+OK — Los enlaces se validan antes de mostrarse
+OK — Los campos ausentes conservan el HTML publicado
+OK — El editor de Contenido existe realmente
+OK — El editor respeta permisos dinámicos
+OK — Guardar registra revisión y autor
+OK — Restaurar contenido original está implementado
+OK — Los cambios sin guardar están protegidos
+OK — Una actualización remota no pisa un formulario abierto
+OK — Los lápices detectan secciones agregadas después de cargar
+OK — La Fase 6 se inicia en el panel global
+OK — Las reglas ya protegen site_content
+OK — El comando de auditoría está disponible
+
+Auditoría Fase 6: todo correcto.
+
+> audit:cart
+> node scripts/audit-cart-phase7.js
+
+OK — El carrito usa un singleton para evitar listeners duplicados
+OK — La identidad del carrito separa invitada y cuenta
+OK — Las variantes crean líneas diferentes
+OK — El carrito escucha cambios remotos en tiempo real
+OK — Las escrituras remotas están serializadas y agrupadas
+OK — Una edición local pendiente no es pisada por otro snapshot
+OK — El carrito de invitada se combina al iniciar sesión
+OK — La migración anterior conserva cantidades sin duplicarlas
+OK — El código clásico solo redirige localStorage y no sessionStorage
+OK — Leer el carrito clásico no vuelve a escribir datos idénticos
+OK — El puente de Storage ignora escrituras idénticas y borrados vacíos
+OK — Los botones viejos se corrigen por línea y variante
+OK — El checkout limpia también el carrito remoto
+OK — Precio y stock siguen validados por el checkout seguro
+OK — El carrito se carga en todas las páginas públicas
+OK — Firestore mantiene el carrito privado por UID
+OK — Existe un comando de auditoría dedicado
+
+Auditoría Fase 7: todo correcto.
+
+> audit:security
+> node scripts/audit-security-phase8.js
+
+OK — El Super Admin se reconoce por el correo oficial
+OK — No se puede asignar superadmin desde el panel
+OK — Usuarios y auditoría se renderizan sin HTML de datos
+OK — Cambiar usuario y crear auditoría ocurren juntos
+OK — Bloquear elimina el poder operativo
+OK — La restauración masiva vuelve a Cliente
+OK — La eliminación aclara que solo borra la ficha Firestore
+OK — Los usuarios se actualizan en tiempo real
+OK — La Fase 8 se inicia solo en admin
+OK — Las reglas protegen usuarios y carrito por UID
+OK — La auditoría es de solo lectura para Super Admin
+OK — Existe el comando de auditoría dedicado
+
+Auditoría Fase 8: todo correcto.
+
+> audit:release
+> node scripts/audit-final-release.js
+
+OK — El proyecto Firebase final es tintin-accesorios
+OK — El despliegue Spark publica únicamente reglas
+OK — Firebase conserva la ruta correcta de reglas
+OK — Firebase no intenta desplegar Functions por accidente
+OK — La importación vieja queda oculta
+OK — El CSV soporta comillas escapadas y saltos de línea
+OK — Los archivos tienen límites de seguridad
+OK — Las colecciones reales validan cada producto
+OK — La importación no sobrescribe ni repite productos
+OK — Cada lote importado queda auditado
+OK — La copia operativa excluye datos de clientas
+OK — La Fase 9 arranca en el panel
+OK — Las reglas siguen protegiendo productos e importaciones
+OK — Las auditorías de todas las fases están presentes
+OK — Existe un comando final único
+
+Auditoría final: las nueve fases están integradas correctamente.
+
+> audit:integral
+> node scripts/audit-integral-platform.js
+
+OK  La portada no abre listeners duplicados de colecciones o imágenes
+OK  La portada usa alturas guiadas por contenido
+OK  El carrito serializa cambios y bloquea carreras entre pestañas
+OK  El carrito distingue producto y variante
+OK  El carrito respeta stock compartido y muestra aviso accesible
+OK  Firestore rechaza líneas del carrito superiores al stock
+OK  La compra final conserva validación transaccional
+OK  Product.html mantiene tres relacionados de colecciones únicas
+OK  Los bloques secundarios nunca superan cinco productos
+OK  Super Admin detecta cambios reales y cierre del navegador
+OK  El modal permite guardar, descartar o seguir editando
+OK  Los principales módulos editables están registrados
+OK  Las imágenes se guardan al instante, sin dejar un borrador sin confirmar que proteger
+
+Auditoría integral: todo correcto.
+
+> audit:diagnostics
+> node scripts/audit-diagnostics.js
+
+OK — El motor de orquestación no importa ni ejecuta escrituras él mismo (las páginas inspeccionadas sí ejecutan scripts, pero solo a través de los shims que bloquean escritura)
+OK — Las páginas se inspeccionan ejecutando scripts reales, pero el SDK de Firebase queda redirigido a shims de solo lectura
+OK — El shim de Firestore reexporta el SDK real y bloquea únicamente sus funciones de escritura
+OK — El shim de Auth reexporta el SDK real y bloquea únicamente sus funciones que cambian sesión, credenciales o disparan correos/popups reales
+OK — El shim histórico de Storage es completamente inerte y no importa el SDK eliminado
+OK — Existe una guardia de red independiente que bloquea llamadas de escritura de Firestore por la forma de la URL, sin depender de una lista de hosts
+OK — El historial aislado usa IndexedDB local y no permite resolución manual
+OK — Los ocho tipos de ejecución están disponibles
+OK — La interfaz ofrece gravedad completa, cobertura, filtros, búsqueda e historial
+OK — Los estados no revisado, no disponible y no reverificado son explícitos
+OK — Cada hallazgo incluye evidencia, reproducción, esperado, real y ubicación
+OK — La comparación histórica depende de volver a ejecutar la prueba real
+OK — Los falsos positivos visuales requieren dos mediciones iguales
+OK — La inspección responsive incluye siete resoluciones obligatorias
+OK — El diagnóstico de datos usa consultas limitadas y anonimiza IDs
+OK — El diagnóstico respeta las colecciones limitadas al documento de la cuenta
+OK — Los informes no guardan la identidad personal del Super Admin
+OK — El módulo declara claramente el modo de solo lectura
+OK — Existe un comando dedicado y forma parte de la auditoría final
+OK — El manifiesto es reproducible
+OK — El inventario incluye todas las páginas HTML visibles y ocultas del repositorio
+OK — El inventario no se incluye a sí mismo en su huella
+OK — El inventario registra páginas, módulos, archivos, componentes, roles y resoluciones
+OK — El inventario excluye capturas y reportes temporales de las pruebas
+
+Auditoría de Diagnóstico: módulo de solo lectura correctamente integrado.
+
+> audit:diagnostic-findings
+> node scripts/audit-diagnostic-findings.js
+
+OK — El inventario contiene las 18 rutas requeridas
+OK — El inventario contiene las siete resoluciones requeridas
+OK — El inventario contiene los seis roles requeridos
+OK — Las 18 huellas HTML coinciden con los archivos actuales
+OK — Las huellas de texto son independientes de CRLF o LF
+OK — No quedan lecturas directas sin límite detectadas
+OK — admin.html pesa menos de 200 KB
+OK — La aplicación administrativa fue extraída a un módulo cargado de forma diferida
+OK — El panel administrativo conserva exactamente un H1
+OK — Las escuchas en tiempo real de pedidos, usuarios y plantillas están limitadas
+OK — El listado de esquemas de apariencia también está limitado
+OK — Las lecturas públicas y escuchas administrativas restantes también están limitadas
+OK — Los esquemas públicos se leen por ID y solo Super Admin puede listarlos o administrarlos
+OK — El diagnóstico evalúa el recorte horizontal y vertical por separado
+OK — El diagnóstico excluye contenido oculto destinado a lectores de pantalla
+OK — Los enlaces de texto en línea y las etiquetas de checkbox se miden correctamente
+OK — siteTraffic se consulta en la subcolección diaria correcta
+OK — checkoutGuards se comprueba por cuenta propia y nunca mediante listado global
+OK — Las reglas mantienen siteTraffic privado para Super Admin
+OK — nosotros.html es un alias no indexable con canonical absoluto
+OK — nosotros.html no aparece en sitemap.xml
+OK — El manifiesto marca el alias nosotros como oculto y redirigido
+OK — El botón de checkout supera 4.5:1 contra texto blanco
+OK — Los controles táctiles independientes corregidos conservan su tamaño mínimo
+OK — Las exportaciones y tareas globales usan paginación acotada
+
+Auditoría de hallazgos: todas las correcciones verificables quedaron protegidas.
+
+> audit:postphase
+> node scripts/audit-postphase-security.js
+
+OK — Productos se normalizan como texto plano
+OK — Carrito local se limpia antes de renderizar
+OK — Descripción de producto no ejecuta HTML
+OK — Super Admin depende de Firebase Auth
+OK — Email del perfil es campo protegido
+OK — Creación de usuario obliga estadísticas en cero
+OK — Cliente no puede escribir notificationStatus
+OK — Secreto público eliminado
+OK — Apps Script escribe estado autorizado
+OK — Checkout ya no actualiza estado desde cliente
+
+Auditoría post-fases completada correctamente.
+
+> audit:reliability
+> node scripts/audit-site-reliability.js
+
+OK — El menú de cuenta arranca también en el runtime público
+OK — La capa visual oculta el panel según el contenedor y permite abrirlo
+OK — El click de cuenta no se duplica con el manejador antiguo
+OK — Los dropdowns del header son blancos en desktop, tablet y mobile
+OK — La actividad cuenta una sola sesión por pestaña y día
+OK — La presencia usa latidos espaciados y solo mientras la página es visible
+OK — Cookies y estadísticas comparten una sola elección revocable
+OK — La tarjeta de privacidad no bloquea ni cubre toda la página
+OK — La actividad propia y Google Analytics esperan el permiso opcional
+OK — La ubicación aproximada se obtiene sin guardar IP ni coordenadas
+OK — GitHub Pages usa el servicio geográfico de Cloudflare
+OK — Los previews de Cloudflare no escriben estadísticas
+OK — Las reglas limitan la escritura de sesiones y presencia
+OK — Solamente Super Admin puede leer las métricas
+OK — El dashboard muestra sesiones de hoy y personas en línea
+OK — El dashboard recibe sesiones y presencia en tiempo real
+OK — El centro estadístico general está reservado a Super Admin
+OK — Pedidos, usuarios, auditoría y correos se actualizan sin F5
+OK — Las estadísticas combinan pedidos, usuarios, catálogo, visitas y páginas
+OK — La primera sesión de una clienta llega a inicio con bienvenida pendiente
+OK — Bienvenida pública y Super Admin usan una sola configuración
+OK — Super Admin puede probar y reactivar la bienvenida en lotes seguros
+OK — Las reglas aceptan solo geografía aproximada y campos conocidos
+OK — El rosa principal cumple contraste AA sobre blanco
+OK — Los renderers principales escapan texto almacenado
+OK — El reveal es irreversible, liviano y procesa solo nodos agregados
+OK — Las imágenes dinámicas reciben carga diferida y prioridad automática
+OK — Todas las páginas declaran el tipo de sus botones estáticos
+OK — Todos los controles de la barra móvil tienen nombre accesible
+OK — La portada usa la forma correcta TU ESTILO incluso con contenido histórico
+OK — El loader de la portada espera a que la foto del hero cargue antes de ocultarse
+OK — El loader pasa de un punto a otro sin un cross-fade visible
+OK — La colección Bolsos conserva su portada real después de sincronizar
+OK — Buscador, carrito, menú y colecciones comunican apertura y cierre
+OK — Las recargas asíncronas no reinsertan productos agotados o sin nombre
+OK — El repositorio no contiene marcas explícitas de autoría externa
+OK — Los recursos críticos usan una sola versión de caché
+OK — El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)
+
+Auditoría de confiabilidad completada correctamente.
+
+> audit:admin-sync
+> node scripts/audit-admin-public-sync.js
+
+OK — Configuración general se guarda en settings/general
+OK — Estado de tienda se guarda atómicamente en general y storeGate
+OK — headerDesktopTabletEnabled coincide entre Admin y público
+OK — headerMobileEnabled coincide entre Admin y público
+OK — Header se actualiza en vivo con defaults seguros
+OK — Desktop/tablet y mobile usan rangos separados
+OK — page-loader monta el header en todos los arranques
+OK — El público consume whatsappNumber
+OK — El Admin guarda whatsappNumber
+OK — El público consume contactEmail
+OK — El Admin guarda contactEmail
+OK — El público consume instagram
+OK — El Admin guarda instagram
+OK — El público consume storeAddress
+OK — El Admin guarda storeAddress
+OK — Configuración pública usa un listener compartido
+OK — Páginas con configuración propia evitan el listener global duplicado
+OK — Marcas de contacto reales siguen presentes
+OK — La marca tt-contact-email existe en páginas públicas
+OK — La marca tt-contact-addr existe en páginas públicas
+OK — El shell evita headers duplicados
+OK — Checkout mantiene configuración de envío en vivo
+OK — Checkout aplica paymentMethods
+OK — Checkout aplica bankAccounts
+OK — Checkout aplica deliveryCities
+OK — Checkout aplica encomiendaCities
+OK — Selector de moneda no muestra una opción sin implementar
+
+Sincronización Admin ↔ público verificada (27 comprobaciones).
+
+> audit:admin-foundation
+> node scripts/audit-admin-foundation.js
+
+Inventario de secciones (fuente: admin.html):
+  Sidebar (15): dashboard, estadisticas, usuarios, pedidos, productos, colecciones, contenido, importar, mensajes, auditoria, diagnostico, correos, configuracion, permisos, apariencia
+  Tabs móvil (15): dashboard, estadisticas, usuarios, pedidos, productos, colecciones, contenido, importar, mensajes, auditoria, diagnostico, correos, configuracion, permisos, apariencia
+  Paneles section-* (15): dashboard, estadisticas, usuarios, pedidos, productos, colecciones, mensajes, auditoria, diagnostico, correos, configuracion, permisos, apariencia, importar, contenido
+
+OK — El guard usa onAuthStateChanged como puerta de entrada
+OK — Sin sesión se redirige a login.html
+OK — Un rol de cliente/sin rol se saca del panel a perfil.html
+OK — Las cuentas bloqueadas se expulsan con aviso
+OK — El Super Admin nunca queda bloqueado ni pierde acceso
+OK — Un error inesperado en el init termina en el destino seguro (login)
+OK — La tienda cerrada tapa el panel sin cerrar la sesión del Super Admin
+OK — El chrome del panel arranca oculto por CSS hasta resolver el auth
+OK — El panel se revela solo con html.adm-auth-ready
+OK — adm-auth-ready se agrega únicamente al final del camino exitoso
+OK — Se detectaron secciones reales en el sidebar
+OK — Todo botón del sidebar tiene su panel section-* correspondiente
+OK — Todo panel section-* tiene su botón en el sidebar
+OK — El sidebar de escritorio y las tabs móviles ofrecen las mismas secciones
+OK — No hay ids duplicados en admin.html
+OK — switchSection limpia la navegación con una consulta en vivo
+OK — switchSection oculta las secciones con una consulta en vivo
+OK — La sección dinámica de bienvenida se agrega junto a su botón y tab
+OK — switchSection valida el permiso antes de abrir una sección sensible
+OK — Roles y Permisos exige el email exacto del Super Admin
+OK — Cada data-section sensible declara su permiso en SECTION_PERMISSION
+OK — Existe deep-link por URL/hash que pasa por switchSection
+OK — El deep-link solo acepta secciones que existen de verdad
+OK — switchSection marca aria-current="page" en la sección activa
+OK — Los contenedores de navegación tienen aria-label
+OK — El Dashboard inicial arranca con aria-current="page"
+OK — El modal order-edit-overlay declara role="dialog" y aria-modal
+OK — El modal tpl-edit-overlay declara role="dialog" y aria-modal
+OK — El modal tpl-preview-overlay declara role="dialog" y aria-modal
+OK — El modal promo-confirm-overlay declara role="dialog" y aria-modal
+OK — El modal de cambios sin guardar existe y es accesible
+OK — El guard de cambios sin guardar cierra con Escape y devuelve el foco
+OK — Hay un manejo compartido de accesibilidad para los overlays operativos
+OK — El helper de overlays bloquea el scroll de fondo mientras hay uno abierto
+OK — El helper de overlays devuelve el foco al cerrar
+OK — admin.css define el rango tablet (sidebar compacta)
+OK — admin.css define el rango mobile
+OK — En mobile la navegación usa la barra inferior y libera el ancho del contenido
+OK — El overlay de sidebar y la tabbar móvil tienen estilos definidos
+
+Auditoría de base del Super Admin completada correctamente.
+
+> audit:products-media
+> node scripts/audit-admin-products-media.js
+
+OK — Guardar producto valida permiso de crear y de editar por separado
+OK — Guardar producto valida nombre, categoría y precio obligatorios
+OK — Guardar producto previene el doble guardado deshabilitando el botón
+OK — Eliminar producto pide confirmación y valida permiso
+OK — Crear/editar/eliminar producto se registran en Auditoría
+OK — El listado de productos usa un listener en tiempo real con guardia anti-duplicado
+OK — El render de productos escapa nombre e imagen (anti-XSS)
+OK — El stock vacío se guarda como null (no controlado), distinto de 0 (agotado)
+OK — Los cambios del Super Admin avisan inmediatamente al sincronizador de Google Sheets
+OK — Guardar colección valida permiso y previene slug duplicado
+OK — Renombrar una colección reasigna sus productos por lotes antes de borrar la vieja
+OK — Eliminar una colección con productos fuerza reasignación (sin orfandad)
+OK — El CRUD de colección individual se registra en Auditoría
+OK — Existe la etiqueta de auditoría "crear_coleccion"
+OK — La tienda escapa nombre, categoría, badge y variante del producto
+OK — La tienda oculta productos inactivos, agotados y sin nombre
+OK — El carrito descarta productos borrados, desactivados, agotados o inválidos y refresca sus datos
+OK — La importación limita tamaño de archivo y cantidad de filas
+OK — La importación y la exportación están reservadas al Super Admin
+OK — La importación bloquea URLs que no sean http(s)
+OK — El CSV admite la columna Imagen URL de cualquier proveedor
+OK — La importación detecta duplicados por huella y por nombre::categoría
+OK — La importación valida que la colección exista antes de escribir
+OK — La importación confirma, escribe por lotes y registra en Auditoría sin sobrescribir
+OK — La importación reporta progreso real por lote
+OK — La exportación de productos existe y respeta el permiso de exportar
+OK — La subida a Cloudinary se firma del lado servidor (sin secreto en el cliente)
+OK — La biblioteca limpia imágenes huérfanas comprobando uso real antes de borrar
+OK — Cada operación de red de la biblioteca tiene timeout
+OK — Una subida parcial se limpia de Cloudinary si falla antes de guardar
+OK — La validación de imagen usa magic bytes, no solo la extensión
+OK — El procesamiento redimensiona y re-codifica (WebP con fallback)
+OK — El render sanitiza la URL de imagen y rechaza esquemas peligrosos
+OK — ImgBB (módulo Contenido) usa la clave del usuario, no una compartida embebida
+OK — No hay tokens/keys de Cloudinary embebidos en el cliente
+OK — products-store normaliza campos antiguos (priceBefore, oferta, badge)
+
+Auditoría de productos/colecciones/imágenes completada correctamente (36 comprobaciones).
+
+> audit:admin-orders
+> node scripts/audit-admin-orders.js
+
+OK — Editar el pedido completo exige permiso manageOrdersFull + editarCompleto
+OK — La edición valida nombre y teléfono del cliente
+OK — La edición rechaza cantidades menores a 1
+OK — La edición rechaza totales negativos
+OK — La cantidad por ítem se clampa a un mínimo de 1
+OK — El pedido no puede quedar sin productos
+OK — El recálculo preserva el precio histórico de cada ítem
+OK — La edición previene el doble guardado deshabilitando el botón
+OK — La edición registra el cambio en Auditoría
+OK — Al abrir el editor se guarda la marca de tiempo base del pedido
+OK — Guardar comprueba que nadie más haya escrito el pedido (fail-open)
+OK — El editor también avisa si el pedido fue eliminado mientras se editaba
+OK — Cambiar estado de pedido: permiso + auditoría + recuperación
+OK — Cambiar estado de pago: permiso + auditoría + recuperación
+OK — Eliminar pedido: permiso + confirmación destructiva + auditoría
+OK — Eliminar pedido libera inventario antes de borrar y no depende de reglas nuevas
+OK — La eliminación individual informa el motivo real y expone el resultado al sincronizador
+OK — La eliminación masiva conserva los fallos y recalcula solo cuentas afectadas
+OK — El panel fuerza una versión nueva de los módulos corregidos
+OK — Las acciones masivas de pedidos exigen el permiso accionesMasivas
+OK — El reenvío de correo tiene cooldown anti-spam y permiso
+OK — El pedido se crea autocontenido con ítems, precios, subtotal y total
+OK — La regla acepta el departamento que siempre envía Checkout
+OK — El perfil del cliente lee los datos guardados del pedido (no el producto en vivo)
+OK — Las estadísticas nunca suman totales negativos
+OK — Las reglas exigen cantidad entera entre 1 y 99
+OK — Las reglas exigen precio no negativo
+OK — Las reglas derivan subtotal y total de las líneas validadas
+OK — Las reglas acotan la cantidad de ítems distintos (1..4)
+
+Auditoría de pedidos completada correctamente (29 comprobaciones).
+
+> audit:users-roles
+> node scripts/audit-admin-users-roles.js
+
+OK — El Super Admin se identifica por el correo oficial de Firebase Auth
+OK — Un rol inválido o un documento faltante caen a "client" (default seguro)
+OK — setUserRole nunca permite asignar "superadmin"
+OK — El Super Admin tiene todos los permisos del techo fijo
+OK — Solo admin/agent/viewer son columnas editables (no superadmin ni client)
+OK — Los defaults de la matriz derivan del techo fijo (nunca amplían)
+OK — Si falta el documento o falla la lectura, se usan los defaults (fail-safe)
+OK — canDo, sin caché, cae al techo fijo de roles.js (nunca abre de más)
+OK — canDo niega acciones no implementadas o de roles no editables
+OK — Guardar la matriz reemplaza el documento completo (merge:false)
+OK — Una matriz defectuosa NUNCA bloquea al Super Admin real
+OK — Bloquear valida (con guarda dura) que no sea el Super Admin
+OK — Eliminar usuario protege la ficha del Super Admin y valida el permiso
+OK — Cambiar rol bloquea al Super Admin, valida permiso y limita a roles reales
+OK — Las acciones masivas de usuarios excluyen al Super Admin (guarda dura)
+OK — Bloquear degrada el rol a client y guarda el rol previo para restaurar
+OK — Cada acción de usuario queda registrada en Auditoría
+OK — La tabla de usuarios escapa nombre, email y avatar (anti-XSS)
+OK — El módulo Fase 8 protege al Super Admin en bloquear/eliminar/masivas
+OK — El módulo Fase 8 solo maneja roles reales (sin superadmin)
+OK — Las reglas impiden eliminar la ficha del Super Admin
+OK — Las reglas impiden asignar superadmin y protegen la cuenta oficial
+OK — Solo el Super Admin puede escribir la matriz de permisos
+OK — La ficha de un usuario solo la lee su dueño o el Super Admin
+OK — El registro de auditoría es de solo lectura para el Super Admin
+OK — Los permisos dinámicos se cargan ANTES de armar la UI del panel
+OK — El acceso al panel se decide por rol real (client/sin rol fuera)
+
+Auditoría de usuarios/roles/permisos completada correctamente (27 comprobaciones).
+
+> audit:content-appearance
+> node scripts/audit-admin-content-appearance.js
+
+OK — El contenido editable es un conjunto FIJO de páginas (sin agregar/borrar)
+OK — Los campos de contenido tienen un tope de longitud
+OK — El sitio público aplica el contenido por selector real (cambio real)
+OK — El contenido público se pinta con nodos de texto, nunca con HTML de Firestore
+OK — Los enlaces editables se sanean antes de asignar el href
+OK — El editor de contenido escribe en la colección protegida site_content
+OK — El apply global solo aplica valores que sean un color estricto (HEX/rgb/hsl)
+OK — El validador de color rechaza url(), CSS arbitrario y valores largos
+OK — La primera pintura (caché) también valida el color antes de aplicarlo
+OK — Los colores se aplican como custom properties (valor puro), no como CSS libre
+OK — La importación de esquemas valida cada color y descarta los inválidos
+OK — Cada token del catálogo tiene una variable CSS real (consumidor)
+OK — La vista previa es inmediata y no muta el borrador guardado
+OK — Apariencia tiene guardia de cambios sin guardar
+OK — La apariencia soporta overrides por dispositivo (breakpoints)
+OK — El esquema global se sincroniza en tiempo real (onSnapshot)
+OK — Ante un error de lectura del esquema se conserva lo último aplicado
+OK — Guardar apariencia escribe en la colección de esquemas
+OK — Solo el Super Admin escribe settings/appearance
+OK — Solo el Super Admin crea/edita/borra esquemas de color
+OK — El contenido del sitio está acotado por rol/permiso (no libre)
+
+Auditoría de contenido/apariencia completada correctamente (21 comprobaciones).
+
+> audit:email-messaging
+> node scripts/audit-admin-email-messaging.js
+
+OK — Checkout usa un solo canal Resend
+OK — El canal Resend llama al endpoint de Cloudflare con Bearer token
+OK — El fallback de host para /api NO se reinventa por archivo (bug ya visto)
+OK — El puente del checkout, si se carga, usa el MISMO canal Resend
+OK — No hay claves de Resend en frontend
+OK — La clave se lee solo del entorno servidor
+OK — El servidor vuelve a leer el pedido real
+OK — Reenvío reservado al Super Admin
+OK — Propiedad del pedido validada
+OK — Acciones del endpoint están en lista blanca
+OK — Remitente y reply-to son fijos
+OK — La prueba se envía por Resend vía /api/test-email
+OK — El interceptor de prueba anula el envío viejo (Apps Script) del panel
+OK — El correo de prueba tiene cooldown anti-doble-clic (120s)
+OK — Endpoint de prueba exige Super Admin
+OK — Promociones no migradas siguen desactivadas
+OK — Los envíos se registran con resultado real
+OK — emailLogs es inmutable y privado
+OK — WhatsApp usa una sola configuración pública compartida
+OK — Número de WhatsApp se normaliza
+OK — Mensajes de WhatsApp se codifican
+OK — Redes sociales se validan antes de insertarse
+
+Auditoría de correos y mensajes completada correctamente (22 comprobaciones).
+
+> audit:analytics-audit
+> node scripts/audit-admin-analytics-audit.js
+
+OK — Hay una bandera de disponibilidad por cada fuente (pedidos/usuarios/productos/tráfico/presencia)
+OK — Visitantes y sesiones muestran "—" (no "0") si el tráfico no está disponible
+OK — La conversión exige pedidos Y tráfico disponibles y un denominador real
+OK — El indicador "En línea" muestra "—" (no "0") si la presencia no está disponible
+OK — Productos activos y stock bajo muestran "—" (no "0") si productos no está disponible
+OK — Usuarios bloqueados muestra "—" (no "0") si usuarios no está disponible
+OK — No quedó ningún indicador de estadísticas mostrando el conteo crudo sin bandera
+OK — El tráfico marca su disponibilidad al cargar y la retira al fallar
+OK — La presencia y los productos marcan disponibilidad y re-renderizan al fallar
+OK — Las estadísticas agrupan por día en la zona horaria de Paraguay
+OK — La analítica del sitio también usa la zona horaria de Paraguay
+OK — Los pedidos cancelados/rechazados quedan fuera de la facturación
+OK — El ticket promedio divide entre pedidos válidos con guardia de cero
+OK — El gasto por usuaria excluye cancelados y nunca es negativo
+OK — La analítica solo maneja geo aproximada (ciudad/región/país), nunca IP ni GPS
+OK — El servicio de geo nunca devuelve IP, coordenadas ni código postal
+OK — Las reglas fijan los campos permitidos de presencia (sin IP/GPS/postal)
+OK — Las reglas fijan los campos permitidos de las sesiones de tráfico
+OK — La analítica es consentida y con identificadores que rotan por día
+OK — La sesión se registra una sola vez por pestaña y día
+OK — El heartbeat de presencia se detiene al ocultar la pestaña o al salir
+OK — Las páginas de administración no se rastrean como visitas del sitio
+OK — Los listeners del panel se liberan al salir de la página
+OK — Cada registro de auditoría guarda actor, acción, objetivo, fecha y si fue masivo
+OK — La auditoría es inmutable en las reglas (no se edita ni se borra)
+OK — La tabla de auditoría diferencia cargando, error y vacío
+OK — Sobre la selección de auditoría solo se puede exportar (nunca modificar)
+OK — Solo el Super Admin lee la presencia y el tráfico
+OK — El diagnóstico del sitio se inicia solo para el Super Admin real
+OK — El historial de tráfico se lee paginado y con tope de seguridad
+OK — La recalculación global de estadísticas corta si supera el límite seguro
+
+Auditoría de estadísticas/auditoría/diagnóstico completada correctamente (31 comprobaciones).
+
+> audit:help-pages
+> node scripts/audit-help-pages.js
+
+OK — [envios.html] idioma, viewport, título y descripción
+OK — [envios.html] canonical propio hacia el dominio canónico
+OK — [envios.html] Open Graph y Twitter completos con imagen existente
+OK — [envios.html] theme-color, favicon y manifest
+OK — [envios.html] contenido editable desde el Super Admin (selector + init + esquema)
+OK — [envios.html] esquema de color: primera pintura + motor en vivo
+OK — [envios.html] scripts compartidos (shell, loader, contacto, analítica)
+OK — [envios.html] footer con contacto sincronizable y copyright vigente
+OK — [envios.html] el footer enlaza a las páginas hermanas de información
+OK — [envios.html] sin manejadores de eventos inline (onclick=...)
+OK — [envios.html] todos los enlaces internos .html resuelven
+OK — [cambios-devoluciones.html] idioma, viewport, título y descripción
+OK — [cambios-devoluciones.html] canonical propio hacia el dominio canónico
+OK — [cambios-devoluciones.html] Open Graph y Twitter completos con imagen existente
+OK — [cambios-devoluciones.html] theme-color, favicon y manifest
+OK — [cambios-devoluciones.html] contenido editable desde el Super Admin (selector + init + esquema)
+OK — [cambios-devoluciones.html] esquema de color: primera pintura + motor en vivo
+OK — [cambios-devoluciones.html] scripts compartidos (shell, loader, contacto, analítica)
+OK — [cambios-devoluciones.html] footer con contacto sincronizable y copyright vigente
+OK — [cambios-devoluciones.html] el footer enlaza a las páginas hermanas de información
+OK — [cambios-devoluciones.html] sin manejadores de eventos inline (onclick=...)
+OK — [cambios-devoluciones.html] todos los enlaces internos .html resuelven
+OK — [preguntas-frecuentes.html] idioma, viewport, título y descripción
+OK — [preguntas-frecuentes.html] canonical propio hacia el dominio canónico
+OK — [preguntas-frecuentes.html] Open Graph y Twitter completos con imagen existente
+OK — [preguntas-frecuentes.html] theme-color, favicon y manifest
+OK — [preguntas-frecuentes.html] contenido editable desde el Super Admin (selector + init + esquema)
+OK — [preguntas-frecuentes.html] esquema de color: primera pintura + motor en vivo
+OK — [preguntas-frecuentes.html] scripts compartidos (shell, loader, contacto, analítica)
+OK — [preguntas-frecuentes.html] footer con contacto sincronizable y copyright vigente
+OK — [preguntas-frecuentes.html] el footer enlaza a las páginas hermanas de información
+OK — [preguntas-frecuentes.html] sin manejadores de eventos inline (onclick=...)
+OK — [preguntas-frecuentes.html] todos los enlaces internos .html resuelven
+OK — [envios.html] las ciudades de envío se leen de settings/shippingRates con estados de carga/vacío/error
+OK — [preguntas-frecuentes.html] cada par pregunta/respuesta es editable por selector
+OK — El esquema de contenido reconoce las tres páginas de ayuda
+
+Auditoría de páginas de ayuda completada correctamente (36 comprobaciones).
+
+> audit:aux-pages
+> node scripts/audit-aux-pages.js
+
+OK — [404.html] idioma, viewport, título y descripción
+OK — [404.html] es NO indexable (robots noindex)
+OK — [404.html] mantiene el tema del sitio (primera pintura + motor en vivo)
+OK — [404.html] contacto y analítica compartidos
+OK — [404.html] ofrece recuperación: inicio, catálogo y categorías
+OK — [404.html] incluye ayuda por WhatsApp
+OK — [404.html] tiene un encabezado principal y sin manejadores inline
+OK — [404.html] todos los enlaces internos resuelven
+OK — [nosotros.html] redirige a about.html (meta refresh)
+OK — [nosotros.html] es no indexable pero sigue el enlace (noindex, follow)
+OK — [nosotros.html] consolida su canonical en about.html
+OK — [nosotros.html] tiene un enlace visible de respaldo hacia about.html
+OK — [nosotros.html] sigue siendo un stub mínimo (no duplica el contenido real)
+OK — [nosotros.html] la página destino about.html existe y no crea bucle de canonical
+OK — Ninguna página pública enlaza a la ruta legacy nosotros.html
+
+Auditoría de páginas auxiliares completada correctamente (15 comprobaciones).
+
+> audit:final-integration
+> node scripts/audit-final-integration.js
+
+OK — Firebase se inicializa únicamente en js/firebase.js
+OK — El control de tienda reutiliza store-gate-core
+OK — Configuración general pública tiene una sola suscripción compartida
+OK — Tienda cerrada consume settings/storeGate
+OK — Apariencia consume colorSchemes y settings/appearance
+OK — Contenido consume site_content
+OK — robots bloquea páginas privadas y declara sitemap
+OK — sitemap incluye las páginas públicas
+OK — sitemap no expone páginas privadas
+OK — manifest es válido y sus iconos existen
+OK — _routes incluye exactamente las funciones existentes
+OK — firebase.json solo despliega reglas
+OK — No queda tintin-code-sh
+OK — No quedan PNG obsoletos del header
+OK — No quedan plantillas Liquid
+OK — Todos los scripts de package.json existen
+OK — Todos los scripts de CI existen
+
+Auditoría final completada (17 comprobaciones).
+
+> audit:performance
+> node scripts/audit-performance-realtime.js
+
+OK   — Tipografía sin FOIT
+OK   — El loader tiene salida garantizada
+OK   — El catálogo público mantiene un canal en vivo acotado con respaldo
+OK   — Producto lee el documento solicitado y limita relacionados
+OK   — Colecciones públicas usan caché y la suscripción en vivo queda reservada al Admin
+OK   — Existe caché compartida con TTL y single-flight
+OK   — Los listeners de pedidos y usuarios del panel tienen límite
+OK   — Los timers del dashboard se limpian
+OK   — El heartbeat se detiene al ocultar o cerrar la pestaña
+OK   — Las imágenes usan decoding async y lazy salvo prioridad
+OK   — El bundle Admin no se carga en páginas públicas
+OK   — Cloudinary tiene preconnect y dns-prefetch
+OK   — Las respuestas obsoletas de estadísticas están protegidas
+OK   — Firebase se inicializa en una sola fuente
+OK   — Solo scripts imprescindibles bloquean el head público
+OK   — Presupuesto CSS del inicio
+OK   — Presupuesto JS directo del inicio
+OK   — Solo se precarga Montserrat latino
+
+Advertencias: 0 | Fallos críticos: 0
+
+Auditoría de rendimiento y sincronización completada.
+
+> audit:performance-regressions
+> node scripts/audit-performance-regressions.js
+
+OK — Montserrat mantiene swap sin FOIT
+OK — La primera pintura sigue protegida
+OK — El loader conserva salida de emergencia
+OK — Autenticación pública y administrativa siguen activas
+OK — Super Admin conserva acceso total
+OK — Panel Admin mantiene arranque protegido
+OK — Catálogo público combina canal en vivo acotado y caché de respaldo
+OK — Un catálogo vacío nunca queda cacheado como actualizado
+OK — El catálogo público no oculta cambios de stock por más de un minuto
+OK — La ficha lee un producto y limita relacionados
+OK — Colecciones públicas usan caché y Admin tiempo real
+OK — Pedidos Admin siguen en vivo y acotados
+OK — Usuarios Admin siguen en vivo y acotados
+OK — Checkout conserva Resend
+OK — Checkout protege reintentos después de agotar cuota
+OK — Clientas no consultan permisos administrativos
+OK — Perfil conserva cálculo desde pedidos
+OK — Contacto usa configuración pública compartida
+OK — Header y navegación siguen montándose
+OK — Tienda cerrada conserva storeGate
+OK — Correos siguen por servidor con Resend
+OK — Imágenes conservan lazy y async
+OK — Auditoría sigue inmutable
+OK — Respuestas obsoletas siguen protegidas
+OK — Bundle Admin fuera de páginas públicas
+OK — No existe Service Worker con caché vieja
+OK — La interfaz respeta reducción de movimiento
+OK — El presupuesto de estilos no cuenta dos veces un archivo preparado
+
+Tripwire de regresiones: sin fallos (28 comprobaciones).
+
+> audit:page-loading
+> node scripts/audit-page-loading.js
+
+AUDITORÍA DE CARGA DE PÁGINAS: OK · 18 HTML · referencias locales · imports relativos · loaders · IDs · Producto reconocido.
+
+> audit:critical-healing
+> node scripts/audit-critical-healing.js && node scripts/test-inventory-model.mjs
+
+OK — La analítica pública reactivada exige freno de frecuencia, no escritura libre
+OK — La actividad pública arranca sola en cada página (ya no depende de un interruptor apagado)
+OK — El servidor crea el pedido y descuenta stock sin perder atomicidad
+OK — La activación final exige que todos los productos queden marcados por el pedido
+OK — Cada baja de stock está ligada al producto y cantidad exacta
+OK — Checkout reserva el guard anti-pedidos repetidos antes del pedido
+OK — Las reglas exigen el guard de checkout y el intervalo mínimo
+OK — El panel reconcilia inventario de forma transaccional
+OK — Cancelar dos veces no devuelve stock dos veces
+OK — Eliminar un pedido activo libera stock antes de hacerlo desaparecer
+OK — La eliminación masiva no recalcula toda la base ni oculta fallos parciales
+OK — Las consultas públicas tienen límites explícitos
+OK — El guard de checkout limita sus reintentos internos
+
+Auditoría crítica completada (13 comprobaciones).
+Inventario: 12 escenarios críticos verificados.
+
+> audit:login-isolation
+> node scripts/audit-login-isolation.js
+
+✓ Login mantiene su contenedor propio
+✓ Header público oculto en Login
+✓ Barra mobile oculta en Login
+✓ Carrito y búsqueda ocultos en Login
+✓ Login no reserva espacio del shell
+✓ Loader de Login sin animación de marca
+✓ Google usa popup como camino principal
+✓ Popup bloqueado cambia automáticamente de camino
+✓ Retorno de Google se completa una sola vez y sin bucle
+✓ Solo el correo oficial entra automáticamente al panel
+✓ Auth compartido no compite con el Login
+
+Resultado: 11/11 comprobaciones correctas.
+
+> audit:hero-background-controls
+> node scripts/audit-hero-background-controls.js
+
+✓ Hero con respaldo sólido
+✓ Ajuste independiente en desktop
+✓ Ajuste independiente en tablet
+✓ Ajuste independiente en mobile
+✓ Botón secundario del hero siempre legible
+✓ Consentimiento de privacidad sólido
+✓ Botón Tienda conserva color de marca
+
+Resultado: 7/7 comprobaciones correctas.
+
+> audit:storegate-deadlock
+> node scripts/audit-storegate-deadlock.js
+
+✓ Ausencia de storeGate no bloquea toda la tienda
+✓ storeGate sigue siendo la fuente pública mínima
+✓ settings/general no queda expuesto públicamente
+✓ El runtime consulta settings/storeGate
+✓ El panel guarda general y storeGate atómicamente
+✓ No se restaura el fallback legado inseguro
+
+Resultado: 6/6 comprobaciones correctas.
+
+> audit:app-check-bootstrap
+> node scripts/audit-app-check-bootstrap.js
+
+OK — GitHub Pages redirige al origen público antes de inicializar la aplicación
+OK — El origen público nunca se trata como host técnico
+OK — App Check Enterprise obtiene un primer token antes del refresco automático
+OK — El estado público solo marca App Check activo después del token
+OK — El control de tienda espera la certificación del origen
+OK — Una falla transitoria usa un solo modo consulta, nunca otra ventana modal
+OK — El modo consulta bloquea únicamente el paso crítico de compra
+OK — La presencia no escribe sin App Check
+OK — Los lectores públicos no encadenan errores si App Check falla
+OK — Todos los consumidores usan una sola versión de Firebase
+OK — Todas las páginas fuerzan el loader corregido
+OK — La portada no precarga dos veces la hoja principal
+
+Auditoría de arranque App Check completada correctamente.
+
+> audit:part2h
+> node scripts/audit-final-sweep-part2h.js
+
+OK — Las 18 rutas del producto permanecen presentes
+OK — El smoke test recorre las 18 rutas
+OK — La geometría conserva las 7 pantallas oficiales
+OK — La geometría conserva los límites responsive críticos
+OK — El diagnóstico final representa las 18 páginas
+OK — El diagnóstico final conserva los 6 roles
+OK — Parte 2A: auditorías y workflow presentes
+OK — Parte 2A: workflow conectado a sus auditorías
+OK — Parte 2B: auditorías y workflow presentes
+OK — Parte 2B: workflow conectado a sus auditorías
+OK — Parte 2C: auditorías y workflow presentes
+OK — Parte 2C: workflow conectado a sus auditorías
+OK — Parte 2D: auditorías y workflow presentes
+OK — Parte 2D: workflow conectado a sus auditorías
+OK — Parte 2E: auditorías y workflow presentes
+OK — Parte 2E: workflow conectado a sus auditorías
+OK — Parte 2F: auditorías y workflow presentes
+OK — Parte 2F: workflow conectado a sus auditorías
+OK — Parte 2G: auditorías y workflow presentes
+OK — Parte 2G: workflow conectado a sus auditorías
+OK — Las imágenes sin origen estático declaran su carga dinámica
+OK — El manifiesto final no contiene referencias locales faltantes
+OK — La Parte 2H está conectada a la auditoría final
+OK — La protección continua de la Parte 2H está activa
+
+Barrido final 2H completado (24 comprobaciones).
+
+> audit:phase5
+> node scripts/audit-phase5-performance.js
+
+OK   — La portada usa una consulta acotada sin listener masivo
+OK   — Páginas informativas no importan products-store al iniciar
+OK   — Checkout reliability se limita a Checkout
+OK   — El shell reconoce URLs limpias de Cloudflare
+OK   — Public shell tiene cache bust nuevo en todos los HTML
+OK   — script.js optimizado por Cloudinary tiene cache bust nuevo
+OK   — Montserrat italic conserva el preload contractual
+OK   — La medición apunta al origen canónico de Cloudflare
+OK   — Web Vitals incluye DCL, INP, transferencias, duplicados y lecturas
+
+Fase 5: invariantes de rendimiento protegidas.
+
+> audit:phase6
+> node scripts/audit-phase6-security.js
+
+OK — Los pedidos no se crean desde el SDK del navegador
+OK — El cliente no reserva stock por reglas heredadas
+OK — Solo Super Admin elimina pedidos
+OK — Viewer no puede crear productos
+OK — El rol superadmin no es asignable a otra cuenta
+OK — El endpoint valida 'action', 'idToken', 'requestId', 'cartLines'
+OK — El endpoint valida phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])
+OK — El endpoint valida phase4HasOnlyKeys_(payload.mapLocation, ['lat', 'lng', 'name', 'address'])
+OK — El endpoint valida phase4EmailValid_(contactEmail)
+OK — El endpoint valida phase4ExpectedMoneyValid_(payload.expectedTotal)
+OK — El endpoint no devuelve cuerpos internos de Firestore
+OK — El cliente no propaga respuestas crudas del endpoint
+OK — Encabezado presente: Content-Security-Policy:
+OK — Encabezado presente: Strict-Transport-Security:
+OK — Encabezado presente: Permissions-Policy:
+OK — Encabezado presente: Referrer-Policy:
+OK — Encabezado presente: X-Content-Type-Options:
+OK — Encabezado presente: X-Frame-Options: DENY
+OK — Encabezado presente: frame-ancestors 'none'
+OK — Encabezado presente: Cross-Origin-Opener-Policy: same-origin-allow-popups
+OK — La CSP permite el endpoint server-side de pedidos
+OK — HTML no se almacena como versión inmutable
+OK — CSS y JavaScript versionados conservan caché inmutable
+OK — No hay claves privadas o service accounts en el repositorio
+OK — La Fase 6 forma parte de audit:final
+
+Auditoría Fase 6: todo correcto.
+
+> audit:phase7-catalog
+> node scripts/audit-phase7-catalog.js
+
+OK — Existe una política única de producto comprable
+OK — Productos agotados u ocultos no reaparecen por URL directa
+OK — Las colecciones ocultas también ocultan sus productos
+OK — La caché conserva descripción, tags, variantes e imágenes
+OK — La búsqueda global y la del catálogo incluyen tags y variantes
+OK — La búsqueda pública excluye productos no comprables
+OK — Las variantes se eligen en la ficha antes de agregar
+OK — El carrito se reconcilia con precio, stock, variante y visibilidad reales
+OK — El Admin valida límites numéricos y categorías existentes
+OK — El Admin acepta valores de variante separados por coma y elimina variantes antiguas
+OK — Los tags se normalizan y tienen límites
+OK — La sincronización con Sheets sigue autenticada y acotada
+OK — La política se carga antes de products-store
+OK — La Fase 7 forma parte de audit:final
+
+Auditoría Fase 7: todo correcto (14 comprobaciones).
+
+> audit:phase8-ui
+> node scripts/audit-phase8-ui-ux.js
+
+OK — El runtime de Fase 8 se carga una sola vez desde page-loader
+OK — La hoja de estilos de UI/UX se inyecta de forma versionada
+OK — Todas las páginas HTML usan la nueva versión de page-loader
+OK — Los controles reciben feedback visible para mouse, tacto y teclado
+OK — Las operaciones asíncronas exponen estado ocupado y se recuperan
+OK — Los formularios inválidos nunca quedan bloqueados
+OK — Existe una API segura para carga, error, vacío, éxito e información
+OK — Errores y estados normales usan roles y live regions apropiados
+OK — Los estados dinámicos existentes se mejoran sin reemplazar su contenido
+OK — Los estados visuales siguen la identidad de Tintin
+OK — Las animaciones usan duraciones y curva comunes
+OK — Movimiento reducido elimina desplazamientos y shimmer
+OK — Las imágenes fallidas muestran una explicación accesible
+OK — La Fase 8 tiene auditoría estática y prueba de navegador dedicadas
+
+Auditoría Fase 8: UI/UX correcta (14 comprobaciones).

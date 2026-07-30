@@ -1,0 +1,27 @@
+
+Running 11 tests using 1 worker
+
+[index.html] DCL=355ms LCP=396ms CLS=0.056 INP=24ms reqs=112 duplicadas=1 transfer=2904KB firestore=24
+  ✓   1 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] index.html: carga, estabilidad y Web Vitals (1.8s)
+[catalogo.html] DCL=174ms LCP=348ms CLS=0 INP=32ms reqs=137 duplicadas=1 transfer=5526KB firestore=397
+  ✓   2 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] catalogo.html: carga, estabilidad y Web Vitals (1.9s)
+[collections.html] DCL=161ms LCP=416ms CLS=0.001 INP=16ms reqs=111 duplicadas=1 transfer=2045KB firestore=397
+  ✓   3 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] collections.html: carga, estabilidad y Web Vitals (1.5s)
+[product.html] DCL=219ms LCP=288ms CLS=0.076 INP=24ms reqs=86 duplicadas=1 transfer=1460KB firestore=0
+  ✓   4 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] product.html: carga, estabilidad y Web Vitals (1.4s)
+[contact.html] DCL=177ms LCP=296ms CLS=0 INP=40ms reqs=80 duplicadas=1 transfer=1429KB firestore=0
+  ✓   5 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] contact.html: carga, estabilidad y Web Vitals (1.3s)
+[about.html] DCL=213ms LCP=668ms CLS=0 INP=40ms reqs=82 duplicadas=1 transfer=1438KB firestore=0
+  ✓   6 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] about.html: carga, estabilidad y Web Vitals (1.3s)
+[envios.html] DCL=146ms LCP=428ms CLS=0 INP=32ms reqs=80 duplicadas=1 transfer=1429KB firestore=0
+  ✓   7 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] envios.html: carga, estabilidad y Web Vitals (1.3s)
+[cambios-devoluciones.html] DCL=149ms LCP=420ms CLS=0 INP=24ms reqs=81 duplicadas=1 transfer=1429KB firestore=0
+  ✓   8 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] cambios-devoluciones.html: carga, estabilidad y Web Vitals (1.3s)
+[preguntas-frecuentes.html] DCL=156ms LCP=292ms CLS=0 INP=40ms reqs=81 duplicadas=1 transfer=1429KB firestore=0
+  ✓   9 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] preguntas-frecuentes.html: carga, estabilidad y Web Vitals (1.3s)
+[terminos.html] DCL=137ms LCP=260ms CLS=0 INP=40ms reqs=78 duplicadas=1 transfer=1377KB firestore=0
+  ✓  10 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] terminos.html: carga, estabilidad y Web Vitals (1.4s)
+[privacidad.html] DCL=149ms LCP=264ms CLS=0 INP=48ms reqs=76 duplicadas=1 transfer=1377KB firestore=0
+  ✓  11 [chromium] › tests/performance/public-pages.performance.spec.js:10:3 › [público] privacidad.html: carga, estabilidad y Web Vitals (1.3s)
+
+  11 passed (16.7s)

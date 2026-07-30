@@ -1,0 +1,132 @@
+
+> audit:level3
+> node scripts/audit-level3-quality.js
+
+OK — Viewport canónico desktop-large (1920×1080)
+OK — La auditoría de navegador incluye 1920×1080
+OK — El contrato documenta 1920 × 1080
+OK — Viewport canónico desktop (1440×900)
+OK — La auditoría de navegador incluye 1440×900
+OK — El contrato documenta 1440 × 900
+OK — Viewport canónico laptop (1280×720)
+OK — La auditoría de navegador incluye 1280×720
+OK — El contrato documenta 1280 × 720
+OK — Viewport canónico tablet-landscape (1024×768)
+OK — La auditoría de navegador incluye 1024×768
+OK — El contrato documenta 1024 × 768
+OK — Viewport canónico tablet-portrait (768×1024)
+OK — La auditoría de navegador incluye 768×1024
+OK — El contrato documenta 768 × 1024
+OK — Viewport canónico mobile (390×844)
+OK — La auditoría de navegador incluye 390×844
+OK — El contrato documenta 390 × 844
+OK — Viewport canónico mini-mobile (320×568)
+OK — La auditoría de navegador incluye 320×568
+OK — El contrato documenta 320 × 568
+OK — El manifiesto cubre todos los roles obligatorios
+OK — Todas las páginas del manifiesto se prueban en los viewports canónicos
+OK — La auditoría canónica detecta página vacía, overflow y navegación duplicada
+OK — La auditoría global cubre superficies compartidas y límites de breakpoint
+OK — El reintento responsive es automático y está limitado a dos intentos
+OK — El comando responsive usa el wrapper de reintento
+OK — Existe comando para los siete viewports canónicos
+OK — No existen IDs duplicados en las páginas inventariadas
+OK — Todas las páginas declaran viewport e idioma español
+OK — Existe página SEO index.html
+OK — index.html tiene title
+OK — index.html tiene description
+OK — index.html tiene canonical
+OK — index.html tiene Open Graph
+OK — Existe página SEO catalogo.html
+OK — catalogo.html tiene title
+OK — catalogo.html tiene description
+OK — catalogo.html tiene canonical
+OK — catalogo.html tiene Open Graph
+OK — Existe página SEO collections.html
+OK — collections.html tiene title
+OK — collections.html tiene description
+OK — collections.html tiene canonical
+OK — collections.html tiene Open Graph
+OK — Existe página SEO product.html
+OK — product.html tiene title
+OK — product.html tiene description
+OK — product.html tiene canonical
+OK — product.html tiene Open Graph
+OK — Existe página SEO about.html
+OK — about.html tiene title
+OK — about.html tiene description
+OK — about.html tiene canonical
+OK — about.html tiene Open Graph
+OK — Existe página SEO contact.html
+OK — contact.html tiene title
+OK — contact.html tiene description
+OK — contact.html tiene canonical
+OK — contact.html tiene Open Graph
+OK — Existe página SEO envios.html
+OK — envios.html tiene title
+OK — envios.html tiene description
+OK — envios.html tiene canonical
+OK — envios.html tiene Open Graph
+OK — Existe página SEO cambios-devoluciones.html
+OK — cambios-devoluciones.html tiene title
+OK — cambios-devoluciones.html tiene description
+OK — cambios-devoluciones.html tiene canonical
+OK — cambios-devoluciones.html tiene Open Graph
+OK — Existe página SEO preguntas-frecuentes.html
+OK — preguntas-frecuentes.html tiene title
+OK — preguntas-frecuentes.html tiene description
+OK — preguntas-frecuentes.html tiene canonical
+OK — preguntas-frecuentes.html tiene Open Graph
+OK — Existe página SEO terminos.html
+OK — terminos.html tiene title
+OK — terminos.html tiene description
+OK — terminos.html tiene canonical
+OK — terminos.html tiene Open Graph
+OK — Existe página SEO privacidad.html
+OK — privacidad.html tiene title
+OK — privacidad.html tiene description
+OK — privacidad.html tiene canonical
+OK — privacidad.html tiene Open Graph
+OK — admin.html está excluida en HTML
+OK — admin-images.html está excluida en HTML
+OK — login.html está excluida en HTML
+OK — checkout.html está excluida en HTML
+OK — perfil.html está excluida en HTML
+OK — 404.html está excluida en HTML
+OK — robots.txt excluye /admin.html
+OK — robots.txt excluye /admin-images.html
+OK — robots.txt excluye /login.html
+OK — robots.txt excluye /checkout.html
+OK — robots.txt excluye /perfil.html
+OK — robots.txt enlaza sitemap
+OK — sitemap incluye index.html
+OK — sitemap incluye catalogo.html
+OK — sitemap incluye collections.html
+OK — sitemap incluye about.html
+OK — sitemap incluye contact.html
+OK — sitemap incluye envios.html
+OK — sitemap incluye cambios-devoluciones.html
+OK — sitemap incluye preguntas-frecuentes.html
+OK — sitemap incluye terminos.html
+OK — sitemap incluye privacidad.html
+OK — Existe manifest PWA
+OK — js/home-maintenance.js contempla recuperación online
+OK — js/catalog-maintenance.js contempla recuperación online
+OK — js/collections-maintenance.js contempla recuperación online
+OK — js/product-maintenance.js contempla recuperación online
+OK — js/login-maintenance.js contempla recuperación online
+OK — js/profile-maintenance.js contempla recuperación online
+OK — js/checkout-maintenance.js contempla recuperación online
+OK — js/checkout-reliability.js contempla recuperación online
+OK — js/contact-maintenance.js contempla recuperación online
+OK — js/cart-sync.js contempla recuperación online
+OK — Las capas principales respetan movimiento reducido
+OK — El sistema define foco visible y tamaño táctil
+OK — Las páginas tienen exactamente un H1 cuando el manifiesto lo exige
+OK — La auditoría de rendimiento protege fuentes, loaders, caché, listeners e imágenes
+OK — Existe tripwire de regresión posterior a optimizaciones
+OK — La integración final verifica SEO, PWA y fuentes únicas
+OK — El contrato prohíbe loaders para ocultar esperas evitables
+OK — El contrato exige reintentos sin duplicar operaciones
+
+Nivel 3: responsive, estados, accesibilidad, rendimiento y SEO correctos.
