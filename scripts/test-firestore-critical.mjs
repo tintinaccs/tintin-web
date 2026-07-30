@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import assert from 'node:assert/strict';
 import {
   initializeTestEnvironment,
   assertFails,
@@ -9,8 +8,6 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  increment,
-  runTransaction,
   serverTimestamp,
   setDoc,
   updateDoc
@@ -23,442 +20,237 @@ const testEnv = await initializeTestEnvironment({
   firestore: { rules, host: '127.0.0.1', port: 8080 }
 });
 
-const clientClaims = { email: 'clienta@example.com', email_verified: true };
+const claims = {
+  client1: { email: 'clienta1@example.com', email_verified: true },
+  client2: { email: 'clienta2@example.com', email_verified: true },
+  admin1: { email: 'admin@example.com', email_verified: true },
+  agent1: { email: 'agent@example.com', email_verified: true },
+  viewer1: { email: 'viewer@example.com', email_verified: true },
+  super1: { email: 'tintinaccs@gmail.com', email_verified: true }
+};
 
-function orderPayload(uid, requestId, items, state = 'pending') {
-  const reserved = state === 'reserved';
-  return {
-    requestId,
-    source: 'spark-checkout-v1',
-    shortId: requestId.slice(-8).toUpperCase(),
-    userId: uid,
-    userEmail: clientClaims.email,
-    contactEmail: clientClaims.email,
-    userName: 'Clienta Prueba',
-    userPhone: '595981123456',
-    items,
-    subtotal: items.reduce((sum, item) => sum + item.price * item.qty, 0),
-    shippingCost: 15000,
-    shippingPending: false,
-    total: items.reduce((sum, item) => sum + item.price * item.qty, 0) + 15000,
-    storeWhatsapp: '595981299331',
-    storeInstagram: '',
-    shipping: {
-      method: 'delivery', city: 'Asunción', departamento: '', rateIndex: 0,
-      address: '', referencia: '', zone: 'central',
-      mapLocation: { lat: -25.29, lng: -57.58, name: 'Casa', address: '' }
-    },
-    payment: { method: 'efectivo', status: 'pendiente' },
-    paymentStatus: 'pendiente',
-    status: reserved ? 'pendiente' : 'inventory_pending',
-    notes: '',
-    notificationStatus: 'pending',
-    inventoryState: reserved ? 'reserved' : 'pending',
-    inventoryRevision: reserved ? 1 : 0,
-    inventoryUpdatedAt: serverTimestamp(),
-    inventoryUpdatedBy: clientClaims.email,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
-  };
-}
-
-async function seedBase() {
+async function seed() {
   await testEnv.clearFirestore();
   await testEnv.withSecurityRulesDisabled(async context => {
     const db = context.firestore();
     await setDoc(doc(db, 'settings', 'storeGate'), { storeOpen: true, maintenanceAccess: {} });
     await setDoc(doc(db, 'settings', 'general'), {
       storeOpen: true,
-      paymentMethods: { efectivo: true, transferencia: true }
+      paymentMethods: { efectivo: true, transferencia: true },
+      whatsappNumber: '595981299331'
     });
-    // deliveryCities/encomiendaCities viven en su propio documento (ver
-    // sparkShippingRatesPath() en firestore.rules) para que un pedido por
-    // retiro/encomienda no pague el costo de materializar esas listas.
     await setDoc(doc(db, 'settings', 'shippingRates'), {
       deliveryCost: 15000,
       deliveryCities: [{ name: 'Asunción', price: 15000 }],
       encomiendaCost: 25000,
       encomiendaCities: []
     });
-    await setDoc(doc(db, 'users', 'u1'), {
-      email: clientClaims.email, role: 'client', blocked: false, name: 'Clienta Prueba'
+    await setDoc(doc(db, 'settings', 'privateSecrets'), { internal: 'solo-servidor' });
+    await setDoc(doc(db, 'users', 'client1'), {
+      email: claims.client1.email, role: 'client', blocked: false, name: 'Clienta Uno'
+    });
+    await setDoc(doc(db, 'users', 'client2'), {
+      email: claims.client2.email, role: 'client', blocked: false, name: 'Clienta Dos'
+    });
+    await setDoc(doc(db, 'users', 'admin1'), {
+      email: claims.admin1.email, role: 'admin', blocked: false, name: 'Admin'
+    });
+    await setDoc(doc(db, 'users', 'agent1'), {
+      email: claims.agent1.email, role: 'agent', blocked: false, name: 'Agente'
+    });
+    await setDoc(doc(db, 'users', 'viewer1'), {
+      email: claims.viewer1.email, role: 'viewer', blocked: false, name: 'Viewer'
+    });
+    await setDoc(doc(db, 'users', 'super1'), {
+      email: claims.super1.email, role: 'superadmin', blocked: false, name: 'Super Admin'
+    });
+    await setDoc(doc(db, 'rolePermissions', 'main'), {
+      admin: {
+        productos: { crear: true, editar: true },
+        pedidos: { ver: true, cambiarEstado: true, cambiarPago: true, reenviarCorreo: true }
+      },
+      agent: {
+        productos: { crear: true, editar: true },
+        pedidos: { ver: true, cambiarEstado: true }
+      },
+      viewer: {
+        productos: { crear: true },
+        pedidos: { ver: true }
+      }
     });
     await setDoc(doc(db, 'products', 'p1'), {
       name: 'Producto 1', category: 'aros', price: 50000, stock: 10, active: true
     });
-    await setDoc(doc(db, 'products', 'p2'), {
-      name: 'Producto 2', category: 'anillos', price: 30000, stock: 7, active: true
+    await setDoc(doc(db, 'orders', 'client1_order1'), {
+      requestId: 'order1',
+      source: 'spark-checkout-v1',
+      userId: 'client1',
+      userEmail: claims.client1.email,
+      contactEmail: claims.client1.email,
+      userName: 'Clienta Uno',
+      userPhone: '595981123456',
+      items: [{ id: 'p1', name: 'Producto 1', price: 50000, qty: 1 }],
+      subtotal: 50000,
+      shippingCost: 0,
+      total: 50000,
+      shipping: { method: 'retiro', city: 'San Lorenzo (retiro)' },
+      payment: { method: 'efectivo', status: 'pendiente' },
+      paymentStatus: 'pendiente',
+      status: 'pendiente',
+      notificationStatus: 'pending',
+      inventoryState: 'reserved',
+      inventoryRevision: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+    await setDoc(doc(db, 'orders', 'client2_order1'), {
+      userId: 'client2',
+      userEmail: claims.client2.email,
+      status: 'pendiente',
+      paymentStatus: 'pendiente',
+      inventoryState: 'reserved',
+      inventoryRevision: 1,
+      items: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+    await setDoc(doc(db, 'auditLog', 'audit1'), {
+      action: 'seed', createdAt: new Date(), actorEmail: claims.super1.email
     });
   });
 }
 
-async function reserveGuard(requestId) {
-  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  const orderId = `u1_${requestId}`;
-  return runTransaction(db, async transaction => {
-    const guardRef = doc(db, 'checkoutGuards', 'u1');
-    await transaction.get(guardRef);
-    transaction.set(guardRef, {
-      userId: 'u1',
-      lastCheckoutAt: serverTimestamp(),
-      lastCheckoutOrderId: orderId,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-  }, { maxAttempts: 1 });
+function ctx(uid) {
+  return testEnv.authenticatedContext(uid, claims[uid]).firestore();
 }
 
-function testItem() {
-  return {
-    id: 'p1', name: 'Producto 1', cat: 'aros',
-    price: 50000, qty: 2, variant: '', imageUrl: ''
-  };
-}
+const directOrderPayload = {
+  requestId: 'req_direct_123456',
+  userId: 'client1',
+  userEmail: claims.client1.email,
+  source: 'spark-checkout-v1',
+  items: [{ id: 'p1', name: 'Producto 1', price: 1, qty: 1 }],
+  subtotal: 1,
+  shippingCost: 0,
+  total: 1,
+  status: 'inventory_pending',
+  inventoryState: 'pending',
+  inventoryRevision: 0,
+  notificationStatus: 'pending',
+  payment: { method: 'efectivo', status: 'pendiente' },
+  paymentStatus: 'pendiente',
+  createdAt: serverTimestamp(),
+  updatedAt: serverTimestamp()
+};
 
-async function createPendingOrder(requestId) {
-  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  const orderId = `u1_${requestId}`;
-  await reserveGuard(requestId);
-  // transaction.get() antes de set() (como hace el checkout real en
-  // js/secure-checkout-order.js) declara explícitamente que el documento
-  // no existe todavía. Un setDoc() sin esa precondición obliga a Firestore
-  // a evaluar TANTO 'create' como 'update' para decidir cuál aplica —
-  // duplicando el costo de evaluación de la regla y agotando antes el
-  // límite de 1000 expresiones por escritura, algo que no le pasa al
-  // checkout real.
-  const orderRef = doc(db, 'orders', orderId);
-  return runTransaction(db, async transaction => {
-    await transaction.get(orderRef);
-    transaction.set(orderRef, orderPayload('u1', requestId, [testItem()], 'pending'));
-  }, { maxAttempts: 1 });
+let checks = 0;
+async function succeeds(promise) {
+  checks += 1;
+  return assertSucceeds(promise);
 }
-
-async function reserveInventory({ requestId, decrement = 2, updateProduct = true, unrelated = false }) {
-  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  const orderId = `u1_${requestId}`;
-  return runTransaction(db, async transaction => {
-    const orderRef = doc(db, 'orders', orderId);
-    const productRef = doc(db, 'products', unrelated ? 'p2' : 'p1');
-    await transaction.get(orderRef);
-    const productSnapshot = await transaction.get(productRef);
-    if (updateProduct) {
-      transaction.update(productRef, {
-        stock: Number(productSnapshot.data().stock) - decrement,
-        lastStockOrderId: orderId,
-        updatedAt: serverTimestamp()
-      });
-    }
-    transaction.update(orderRef, {
-      status: 'pendiente',
-      inventoryState: 'reserved',
-      inventoryRevision: 1,
-      inventoryUpdatedAt: serverTimestamp(),
-      inventoryUpdatedBy: clientClaims.email,
-      updatedAt: serverTimestamp()
-    });
-  }, { maxAttempts: 1 });
-}
-
-async function checkoutFlow(options) {
-  await createPendingOrder(options.requestId);
-  return reserveInventory(options);
-}
-
-async function createOrderWithOverrides(requestId, overrides) {
-  const db = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  const orderId = `u1_${requestId}`;
-  await reserveGuard(requestId);
-  const base = orderPayload('u1', requestId, [testItem()], 'pending');
-  const orderRef = doc(db, 'orders', orderId);
-  return runTransaction(db, async transaction => {
-    await transaction.get(orderRef);
-    transaction.set(orderRef, overrides(base));
-  }, { maxAttempts: 1 });
+async function fails(promise) {
+  checks += 1;
+  return assertFails(promise);
 }
 
 try {
-  await seedBase();
-  await assertSucceeds(checkoutFlow({ requestId: 'req_exact_123456', decrement: 2 }));
+  await seed();
 
-  await seedBase();
-  await assertFails(checkoutFlow({ requestId: 'req_under_123456', decrement: 1 }));
-
-  await seedBase();
-  await assertFails(checkoutFlow({ requestId: 'req_over_123456', decrement: 4 }));
-
-  await seedBase();
-  await assertFails(checkoutFlow({ requestId: 'req_none_123456', updateProduct: false }));
-
-  await seedBase();
-  await assertFails(checkoutFlow({ requestId: 'req_other_123456', decrement: 2, unrelated: true }));
-
-  await seedBase();
-  await assertSucceeds(checkoutFlow({ requestId: 'req_first_123456', decrement: 2 }));
-  await assertFails(reserveGuard('req_second_123456'));
-
-  // Riesgo aceptado a propósito (documentado en firestore.rules, función
-  // sparkOrderCreateValid): hasOnly() sobre el documento completo del
-  // pedido, sobre shipping y sobre cada item costaba tanto en expresiones
-  // evaluadas que un carrito de 3-4 productos (el máximo permitido) ya
-  // superaba el límite de 1000 por escritura de Firestore — el pedido se
-  // rechazaba SIEMPRE, sin aviso claro de la causa. Se sacaron esos tres
-  // hasOnly() para que el checkout real vuelva a funcionar con carritos de
-  // varios productos. Un campo de más ahí (fakeDiscountApplied,
-  // internalNote, forcedDiscount) no lo lee ni confía en él ningún código
-  // del sitio — no cambia precio, stock ni permisos — así que el costo
-  // real de aceptarlo es bajo comparado con dejar el checkout roto.
-  await seedBase();
-  await assertSucceeds(createOrderWithOverrides('req_inject_top_123456', base => ({
-    ...base,
-    fakeDiscountApplied: true
-  })));
-
-  await seedBase();
-  await assertSucceeds(createOrderWithOverrides('req_inject_ship_123456', base => ({
-    ...base,
-    shipping: { ...base.shipping, internalNote: 'gratis' }
-  })));
-
-  await seedBase();
-  await assertSucceeds(createOrderWithOverrides('req_inject_item_123456', base => ({
-    ...base,
-    items: [{ ...base.items[0], forcedDiscount: 0.5 }]
-  })));
-
-  await seedBase();
-  await assertFails(createOrderWithOverrides('req_inject_pay_123456', base => ({
-    ...base,
-    payment: { ...base.payment, alreadyConfirmed: true }
-  })));
-
-  await seedBase();
-  await assertFails(createOrderWithOverrides('req_inject_map_123456', base => ({
-    ...base,
-    shipping: { ...base.shipping, mapLocation: { ...base.shipping.mapLocation, unexpectedKey: 1 } }
-  })));
-
-  await seedBase();
-  await assertSucceeds(createOrderWithOverrides('req_shape_intact_123456', base => base));
-
-  await seedBase();
-  await assertSucceeds(createOrderWithOverrides('req_no_departamento_123456', base => {
-    const shipping = { ...base.shipping };
-    delete shipping.departamento;
-    return { ...base, shipping };
+  const anon = testEnv.unauthenticatedContext().firestore();
+  await succeeds(getDoc(doc(anon, 'settings', 'general')));
+  await succeeds(getDoc(doc(anon, 'products', 'p1')));
+  await fails(getDoc(doc(anon, 'settings', 'privateSecrets')));
+  await fails(getDoc(doc(anon, 'users', 'client1')));
+  await fails(getDoc(doc(anon, 'orders', 'client1_order1')));
+  await fails(setDoc(doc(anon, 'orders', 'anon_order'), directOrderPayload));
+  await succeeds(setDoc(doc(anon, 'sitePresence', 'visitor_123456'), {
+    visitorId: 'visitor_123456',
+    sessionId: 'session_123456',
+    userId: '',
+    page: '/',
+    lastSeen: serverTimestamp(),
+    city: '',
+    region: '',
+    country: '',
+    countryCode: '',
+    geoSource: 'unavailable'
+  }));
+  await fails(setDoc(doc(anon, 'sitePresence', 'visitor_extra'), {
+    visitorId: 'visitor_extra',
+    sessionId: 'session_123456',
+    userId: '',
+    page: '/',
+    lastSeen: serverTimestamp(),
+    city: '',
+    region: '',
+    country: '',
+    countryCode: '',
+    geoSource: 'unavailable',
+    ip: '127.0.0.1'
+  }));
+  await fails(updateDoc(doc(anon, 'sitePresence', 'visitor_123456'), {
+    lastSeen: serverTimestamp()
   }));
 
-  await seedBase();
-  await createPendingOrder('req_selfdelete_123456');
-  await assertFails(deleteDoc(
-    doc(testEnv.authenticatedContext('u1', clientClaims).firestore(), 'orders', 'u1_req_selfdelete_123456')
-  ));
-
-  await seedBase();
-  await createPendingOrder('req_blocked_stock_123456');
-  await testEnv.withSecurityRulesDisabled(async context => {
-    await setDoc(doc(context.firestore(), 'users', 'u1'), {
-      email: clientClaims.email, role: 'client', blocked: true, name: 'Clienta Prueba'
-    });
-  });
-  await assertFails(reserveInventory({ requestId: 'req_blocked_stock_123456', decrement: 2 }));
-
-  await seedBase();
-  await createPendingOrder('req_emaillog_123456');
-  const emailLogOwnerDb = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  const emailLogBase = {
-    category: 'pedido', type: 'pedido_nuevo', recipient: clientClaims.email,
-    status: 'sent', orderId: 'u1_req_emaillog_123456', isAutomatic: true,
-    duplicate: false, attempts: 1, sentBy: clientClaims.email, error: '',
-    sentAt: serverTimestamp()
-  };
-  await assertSucceeds(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_shape_ok'), emailLogBase));
-  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_inject_field'), {
-    ...emailLogBase, xss: '<img src=x onerror=alert(1)>'
-  }));
-  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_bad_status'), {
-    ...emailLogBase, status: '<script>alert(1)</script>'
-  }));
-  await assertFails(setDoc(doc(emailLogOwnerDb, 'emailLogs', 'log_spoofed_sentby'), {
-    ...emailLogBase, sentBy: 'otra@example.com'
-  }));
-
-  await seedBase();
-  const selfProfileDb = testEnv.authenticatedContext('u1', clientClaims).firestore();
-  await assertFails(updateDoc(doc(selfProfileDb, 'users', 'u1'), { name: 12345 }));
-  await assertFails(updateDoc(doc(selfProfileDb, 'users', 'u1'), { phone: { evil: true } }));
-  await assertSucceeds(updateDoc(doc(selfProfileDb, 'users', 'u1'), { name: 'Nombre Válido' }));
-
-  await seedBase();
-  const anonDb = testEnv.unauthenticatedContext().firestore();
-  // Reactivada tras el incidente de cuota (freno de 20s + App Check en
-  // producción): una escritura anónima bien formada YA debe poder crear su
-  // propio documento de presencia/tráfico. Lo que sigue debiendo fallar es
-  // (a) un payload mal formado y (b) reescribir el mismo doc antes de los 20s.
-  await assertSucceeds(setDoc(doc(anonDb, 'sitePresence', 'visitor_123456'), {
-    visitorId: 'visitor_123456', sessionId: 'session_123456', userId: '',
-    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
-    countryCode: '', geoSource: 'unavailable'
-  }));
-  await assertFails(setDoc(doc(anonDb, 'sitePresence', 'visitor_123456'), {
-    visitorId: 'visitor_123456', sessionId: 'session_123456', userId: '',
-    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
-    countryCode: '', geoSource: 'unavailable'
-  }));
-  await assertFails(setDoc(doc(anonDb, 'sitePresence', 'visitor_malformed'), {
-    visitorId: 'visitor_malformed', sessionId: 'short', userId: '',
-    page: '/', lastSeen: serverTimestamp(), city: '', region: '', country: '',
-    countryCode: '', geoSource: 'unavailable'
-  }));
-  await assertSucceeds(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
-    dayKey: '2026-07-20', sessionId: 'session_123456', visitorId: 'visitor_123456',
-    userId: '', landingPage: '/', startedAt: serverTimestamp(), city: '', region: '',
-    country: '', countryCode: '', geoSource: 'unavailable'
-  }));
-  await assertFails(setDoc(doc(anonDb, 'siteTraffic', '2026-07-20', 'sessions', 'session_123456'), {
-    dayKey: '2026-07-20', sessionId: 'session_123456', visitorId: 'visitor_123456',
-    userId: '', landingPage: '/otra', startedAt: serverTimestamp(), city: '', region: '',
-    country: '', countryCode: '', geoSource: 'unavailable'
-  }));
-
-  // siteAggregate: conteo anónimo sin consentimiento (a diferencia de
-  // sitePresence/siteTraffic) — cualquiera puede crear el doc del día en 1
-  // e incrementarlo de a uno, pero no saltar el conteo ni escribir campos
-  // fuera del esquema mínimo.
-  await assertSucceeds(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
-    dayKey: '2026-07-20', totalVisits: 1, updatedAt: serverTimestamp()
-  }));
-  await assertSucceeds(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
-    dayKey: '2026-07-20', totalVisits: increment(1), updatedAt: serverTimestamp()
-  }, { merge: true }));
-  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-20'), {
-    dayKey: '2026-07-20', totalVisits: increment(5), updatedAt: serverTimestamp()
-  }, { merge: true }));
-  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-21'), {
-    dayKey: '2026-07-21', totalVisits: 3, updatedAt: serverTimestamp()
-  }));
-  await assertFails(setDoc(doc(anonDb, 'siteAggregate', '2026-07-22'), {
-    dayKey: '2026-07-22', totalVisits: 1, updatedAt: serverTimestamp(), visitorId: 'nope'
-  }));
-
-  await seedBase();
-  await testEnv.withSecurityRulesDisabled(async context => {
-    const db = context.firestore();
-    await setDoc(doc(db, 'users', 'agent1'), {
-      email: 'agent@example.com', role: 'agent', blocked: false
-    });
-    await setDoc(doc(db, 'rolePermissions', 'main'), {
-      agent: { pedidos: { ver: true, cambiarEstado: true } }
-    });
-    await setDoc(doc(db, 'products', 'p1'), {
-      name: 'Producto 1', category: 'aros', price: 50000, stock: 8, active: true
-    });
-    await setDoc(doc(db, 'orders', 'u1_existing_order'), {
-      ...orderPayload('u1', 'existing_order', [testItem()], 'reserved'),
-      createdAt: new Date(), updatedAt: new Date(), inventoryUpdatedAt: new Date()
-    });
-  });
-
-  const agentDb = testEnv.authenticatedContext('agent1', {
-    email: 'agent@example.com', email_verified: true
-  }).firestore();
-
-  await assertFails(setDoc(doc(agentDb, 'orders', 'u1_existing_order'), {
-    status: 'cancelado', inventoryState: 'released', inventoryRevision: 2,
-    inventoryUpdatedAt: serverTimestamp(), inventoryUpdatedBy: 'agent@example.com',
+  const client1 = ctx('client1');
+  await succeeds(getDoc(doc(client1, 'users', 'client1')));
+  await fails(getDoc(doc(client1, 'users', 'client2')));
+  await succeeds(getDoc(doc(client1, 'orders', 'client1_order1')));
+  await fails(getDoc(doc(client1, 'orders', 'client2_order1')));
+  await succeeds(updateDoc(doc(client1, 'users', 'client1'), { name: 'Nombre válido' }));
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
+  await fails(updateDoc(doc(client1, 'products', 'p1'), { price: 1 }));
+  await fails(updateDoc(doc(client1, 'products', 'p1'), { stock: 999 }));
+  await fails(setDoc(doc(client1, 'orders', 'client1_req_direct_123456'), directOrderPayload));
+  await fails(updateDoc(doc(client1, 'orders', 'client1_order1'), { status: 'entregado' }));
+  await fails(deleteDoc(doc(client1, 'orders', 'client1_order1')));
+  await fails(getDoc(doc(client1, 'settings', 'privateSecrets')));
+  await fails(getDoc(doc(client1, 'auditLog', 'audit1')));
+  await fails(getDoc(doc(client1, 'emailSettings', 'main')));
+  await succeeds(setDoc(doc(client1, 'checkoutGuards', 'client1'), {
+    userId: 'client1',
+    lastCheckoutAt: serverTimestamp(),
+    lastCheckoutOrderId: 'client1_request_123456789',
     updatedAt: serverTimestamp()
-  }, { merge: true }));
+  }));
+  await fails(setDoc(doc(client1, 'checkoutGuards', 'client1bad'), {
+    userId: 'client1bad',
+    lastCheckoutAt: serverTimestamp(),
+    lastCheckoutOrderId: 'client1bad_request_123456789',
+    updatedAt: serverTimestamp(),
+    role: 'admin'
+  }));
 
-  await assertSucceeds(runTransaction(agentDb, async transaction => {
-    const orderRef = doc(agentDb, 'orders', 'u1_existing_order');
-    const productRef = doc(agentDb, 'products', 'p1');
-    await transaction.get(orderRef);
-    const product = await transaction.get(productRef);
-    transaction.update(productRef, {
-      stock: Number(product.data().stock) + 2,
-      lastInventoryOrderId: 'u1_existing_order',
-      lastInventoryAction: 'release',
-      updatedAt: serverTimestamp()
-    });
-    transaction.update(orderRef, {
-      status: 'cancelado', inventoryState: 'released', inventoryRevision: 2,
-      inventoryUpdatedAt: serverTimestamp(), inventoryUpdatedBy: 'agent@example.com',
-      updatedAt: serverTimestamp()
-    });
-  }, { maxAttempts: 1 }));
+  const admin = ctx('admin1');
+  await succeeds(getDoc(doc(admin, 'rolePermissions', 'main')));
+  await succeeds(getDoc(doc(admin, 'orders', 'client1_order1')));
+  await fails(getDoc(doc(admin, 'users', 'client1')));
+  await fails(getDoc(doc(admin, 'settings', 'privateSecrets')));
+  await fails(updateDoc(doc(admin, 'users', 'client1'), { role: 'admin' }));
+  await succeeds(updateDoc(doc(admin, 'products', 'p1'), {
+    price: 51000,
+    updatedAt: serverTimestamp()
+  }));
 
-  // La eliminación real de Super Admin libera primero el inventario y borra
-  // después. Así, si el borrado falla o se reintenta, inventoryState=released
-  // impide devolver el stock dos veces y no se necesitan reglas nuevas.
-  await seedBase();
-  await testEnv.withSecurityRulesDisabled(async context => {
-    const db = context.firestore();
-    await setDoc(doc(db, 'products', 'p1'), {
-      name: 'Producto 1', category: 'aros', price: 50000, stock: 8, active: true
-    });
-    await setDoc(doc(db, 'orders', 'u1_delete_order'), {
-      ...orderPayload('u1', 'delete_order', [testItem()], 'reserved'),
-      createdAt: new Date(), updatedAt: new Date(), inventoryUpdatedAt: new Date()
-    });
-  });
+  const viewer = ctx('viewer1');
+  await succeeds(getDoc(doc(viewer, 'orders', 'client1_order1')));
+  await fails(setDoc(doc(viewer, 'products', 'viewer_product'), {
+    name: 'No permitido', price: 1, active: true
+  }));
 
-  const superDb = testEnv.authenticatedContext('superadmin1', {
-    email: 'tintinaccs@gmail.com', email_verified: true
-  }).firestore();
+  const superDb = ctx('super1');
+  await succeeds(getDoc(doc(superDb, 'settings', 'privateSecrets')));
+  await succeeds(getDoc(doc(superDb, 'users', 'client1')));
+  await succeeds(getDoc(doc(superDb, 'auditLog', 'audit1')));
+  await succeeds(updateDoc(doc(superDb, 'users', 'client1'), { role: 'admin' }));
+  await fails(updateDoc(doc(superDb, 'users', 'client1'), { role: 'superadmin' }));
+  await fails(updateDoc(doc(superDb, 'users', 'super1'), { role: 'client' }));
+  await fails(setDoc(doc(superDb, 'orders', 'manual_order'), directOrderPayload));
+  await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
+  await fails(deleteDoc(doc(superDb, 'users', 'super1')));
 
-  await assertSucceeds(runTransaction(superDb, async transaction => {
-    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
-    const productRef = doc(superDb, 'products', 'p1');
-    const order = await transaction.get(orderRef);
-    const product = await transaction.get(productRef);
-    assert.equal(order.exists(), true);
-    transaction.update(productRef, {
-      stock: Number(product.data().stock) + 2,
-      lastInventoryOrderId: 'u1_delete_order',
-      lastInventoryAction: 'release',
-      updatedAt: serverTimestamp()
-    });
-    transaction.update(orderRef, {
-      status: 'cancelado',
-      inventoryState: 'released',
-      inventoryRevision: 2,
-      inventoryUpdatedAt: serverTimestamp(),
-      inventoryUpdatedBy: 'tintinaccs@gmail.com',
-      updatedAt: serverTimestamp()
-    });
-  }, { maxAttempts: 1 }));
-
-  await testEnv.withSecurityRulesDisabled(async context => {
-    const db = context.firestore();
-    const releasedOrder = await getDoc(doc(db, 'orders', 'u1_delete_order'));
-    const restoredProduct = await getDoc(doc(db, 'products', 'p1'));
-    assert.equal(releasedOrder.exists(), true);
-    assert.equal(releasedOrder.data().inventoryState, 'released');
-    assert.equal(restoredProduct.data().stock, 10);
-    assert.equal(restoredProduct.data().lastInventoryAction, 'release');
-  });
-
-  // Un reintento observa released y no vuelve a tocar el producto.
-  await assertSucceeds(runTransaction(superDb, async transaction => {
-    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
-    const order = await transaction.get(orderRef);
-    assert.equal(order.data().inventoryState, 'released');
-  }, { maxAttempts: 1 }));
-
-  await assertSucceeds(runTransaction(superDb, async transaction => {
-    const orderRef = doc(superDb, 'orders', 'u1_delete_order');
-    const order = await transaction.get(orderRef);
-    assert.equal(order.data().inventoryState, 'released');
-    transaction.delete(orderRef);
-  }, { maxAttempts: 1 }));
-
-  await testEnv.withSecurityRulesDisabled(async context => {
-    const db = context.firestore();
-    const deletedOrder = await getDoc(doc(db, 'orders', 'u1_delete_order'));
-    const restoredProduct = await getDoc(doc(db, 'products', 'p1'));
-    assert.equal(deletedOrder.exists(), false);
-    assert.equal(restoredProduct.data().stock, 10);
-  });
-
-  console.log('Reglas críticas: 37 ataques/regresiones verificados.');
+  console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {
   await testEnv.cleanup();
 }

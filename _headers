@@ -1,59 +1,23 @@
-# Cloudflare Pages lee este archivo para agregar cabeceras HTTP a cada
-# respuesta. No existía ninguna cabecera de seguridad en producción antes
-# de este archivo (confirmado con curl -I contra tintinaccesorios.pages.dev).
-#
-# La CSP permite 'unsafe-inline' en script-src y style-src porque el sitio
-# usa <script> y style="" inline en varias páginas sin nonce/hash — quitarlo
-# hoy rompería la tienda. Migrar a CSP con nonces por página es trabajo
-# pendiente, no cubierto acá; mientras tanto esta cabecera igual bloquea la
-# carga de <script src> y fetch/XHR hacia dominios que no estén en la lista,
-# que es el vector más común de robo de datos vía XSS (skimmers de tarjetas,
-# exfiltración de tokens).
-#
-# Dominios permitidos y por qué:
-# - www.gstatic.com / www.google.com: SDK de Firebase y reCAPTCHA Enterprise
-#   (js/firebase.js). reCAPTCHA Enterprise necesita los tres: script-src para
-#   cargar su JS, connect-src porque ese JS hace sus propios fetch() contra
-#   www.google.com/recaptcha/enterprise/..., y frame-src porque renderiza un
-#   iframe de desafío desde el mismo origen. Confirmado con la consola real
-#   del preview: sin www.google.com en connect-src, App Check falla con
-#   appCheck/recaptcha-error; faltaba también en frame-src.
-# - *.googleapis.com, securetoken.google.com: Firestore, Auth, App Check,
-#   Firebase Installations (todos bajo el mismo SDK de Firebase).
-# - api.imgbb.com: subida de imágenes desde el panel admin
-#   (js/admin-app.js), solo alcanzable con sesión de administrador.
-# - apis.google.com: detectado con Lighthouse real contra producción
-#   (errors-in-console) — el flujo de reCAPTCHA Enterprise carga
-#   "https://apis.google.com/js/api.js" (gapi loader) y sin este dominio
-#   en script-src/connect-src el navegador lo bloquea silenciosamente.
-#
-# img-src queda en "https:" amplio (no acotado a Cloudinary) porque las URLs
-# de imagen de producto son datos que carga el admin en Firestore, no algo
-# fijo en el código — no hay forma de enumerarlas de antemano, y la consola
-# real mostró 142 imágenes bloqueadas al restringirlo a un dominio fijo.
-# Sigue bloqueando "javascript:"/"http:" no cifrado y cualquier exfiltración
-# vía script (script-src/connect-src siguen acotados), que es lo que de
-# verdad importa contra XSS.
-#
-# frame-ancestors 'none' reemplaza a X-Frame-Options y evita que el sitio
-# se pueda embeber en un iframe ajeno (clickjacking del checkout/login).
+# TINTIN — seguridad y caché para Cloudflare Pages
+# La CSP conserva unsafe-inline mientras el HTML siga usando scripts/estilos
+# inline. frame-ancestors y X-Frame-Options bloquean clickjacking.
+
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://securetoken.google.com https://www.google.com https://www.gstatic.com https://apis.google.com https://res.cloudinary.com https://api.imgbb.com; frame-src 'self' https://www.google.com https://www.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://securetoken.google.com https://www.google.com https://www.gstatic.com https://apis.google.com https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com https://res.cloudinary.com https://api.imgbb.com; frame-src 'self' https://www.google.com https://www.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'; worker-src 'self' blob:; upgrade-insecure-requests
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self), usb=(), interest-cohort=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  X-Permitted-Cross-Domain-Policies: none
 
-# Todo el sitio venía saliendo con Cache-Control: max-age=0, must-revalidate
-# (confirmado con curl -I en producción) — el navegador revalida por HTTP
-# CADA archivo en CADA visita, incluso CSS/JS que nunca cambiaron. El sitio
-# ya usa cache-busting por query string en cada <link>/<script> (?v=tintin-
-# ...), que es exactamente el patrón pensado para poder cachear "para
-# siempre": cuando el contenido cambia, cambia la URL completa (ruta+query),
-# así que cachear agresivo nunca sirve un archivo viejo por error. Se deja
-# fuera de esta regla a imágenes/HTML porque esos NO siguen ese mismo
-# patrón de versión en la URL en todo el repo — cachearlos igual de agresivo
-# sí podría servir contenido viejo tras una actualización.
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 

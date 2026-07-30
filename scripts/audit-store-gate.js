@@ -266,11 +266,10 @@ check(
   'el carrito remoto debe quedar bloqueado'
 );
 check(
-  'Pedidos cerrados mediante el validador Spark',
-  rules.includes('allow create: if sparkOrderCreateValid(orderId);') &&
-    rules.includes("settings.get('storeOpen', false) == true") &&
-    rules.includes("userData.get('blocked', false) != true"),
-  'el validador seguro debe rechazar tienda cerrada y cuentas bloqueadas'
+  'Pedidos cerrados y exclusivos del servidor',
+  rules.includes('allow create: if false;') &&
+    !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+  'Firestore debe rechazar cualquier creación directa; el servidor valida tienda y cuenta'
 );
 check(
   'Sin lectura pública vieja',

@@ -999,9 +999,11 @@ service cloud.firestore {
             !isSuperAdminAccount(resource.data)
           ) &&
           (
-            !('role' in request.resource.data) ||
-            request.resource.data.role != 'superadmin' ||
-            request.auth.token.email == "tintinaccs@gmail.com"
+            !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
+            (
+              !isSuperAdminAccount(resource.data) &&
+              request.resource.data.role in ['client', 'admin', 'agent', 'viewer']
+            )
           )
         )
       );
@@ -1042,11 +1044,13 @@ service cloud.firestore {
       allow create: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
-          (isAdmin() || isAgent() || isViewer()) &&
+          (isAdmin() || isAgent()) &&
           currentRolePermAllows('productos', 'crear')
         );
 
-      allow update: if sparkStockUpdateValid(productId);
+      // El checkout actual reserva stock desde Apps Script con OAuth del
+      // propietario. El navegador ya no puede descontar inventario usando la
+      // ruta heredada sparkStockUpdateValid().
       allow update: if adminInventoryStockUpdateValid(productId);
       allow update: if isSuperAdmin() ||
         (
@@ -1116,7 +1120,10 @@ service cloud.firestore {
        ============================================================ */
 
     match /orders/{orderId} {
-      allow create: if sparkOrderCreateValid(orderId);
+      // Los pedidos se crean exclusivamente en apps-script/Phase4CreateOrder.gs.
+      // Ese proceso verifica el idToken, vuelve a leer precio/stock y usa una
+      // transacción privilegiada. Ningún SDK del navegador puede crear pedidos.
+      allow create: if false;
 
       allow read: if isSuperAdmin() ||
         (
@@ -1130,8 +1137,7 @@ service cloud.firestore {
           )
         );
 
-      allow update: if sparkInventoryReserveValid(orderId) ||
-        isSuperAdmin() ||
+      allow update: if isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (hasRole('admin') || hasRole('agent')) &&
@@ -1158,7 +1164,7 @@ service cloud.firestore {
           )
         );
 
-      allow delete: if isSuperAdmin() || sparkPendingOrderDeleteValid();
+      allow delete: if isSuperAdmin();
     }
 
     /* ============================================================

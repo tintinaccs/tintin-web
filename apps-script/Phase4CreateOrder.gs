@@ -83,7 +83,8 @@ function phase4BatchGet_(relativePaths, transactionId) {
   });
   var code = response.getResponseCode();
   if (code < 200 || code >= 300) {
-    return { ok: false, error: 'batch_get_failed', status: code, detail: response.getContentText() };
+    console.error('[Phase4CreateOrder] batchGet falló. HTTP ' + code);
+    return { ok: false, error: 'batch_get_failed', status: code };
   }
   var rows = JSON.parse(response.getContentText() || '[]');
   var byPath = {};
@@ -143,7 +144,8 @@ function phase4Commit_(writes, transactionId) {
   });
   var code = response.getResponseCode();
   if (code < 200 || code >= 300) {
-    return { ok: false, error: 'commit_failed', status: code, detail: response.getContentText() };
+    console.error('[Phase4CreateOrder] commit falló. HTTP ' + code);
+    return { ok: false, error: 'commit_failed', status: code };
   }
   return { ok: true };
 }
@@ -155,6 +157,29 @@ function phase4CleanText_(value, maxLength) {
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, maxLength || 500);
+}
+
+function phase4HasOnlyKeys_(value, allowed) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  var keys = Object.keys(value);
+  for (var i = 0; i < keys.length; i++) {
+    if (allowed.indexOf(keys[i]) === -1) return false;
+  }
+  return true;
+}
+
+function phase4EmailValid_(value) {
+  return typeof value === 'string' &&
+    value.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function phase4ExpectedMoneyValid_(value) {
+  return typeof value === 'number' &&
+    isFinite(value) &&
+    Number.isInteger(value) &&
+    value >= 0 &&
+    value <= 1000000000;
 }
 
 function phase4ParseMoney_(value) {
@@ -233,6 +258,15 @@ function phase4CreateOrder_(payload, idToken) {
   var isSuperAdmin = phase3EmailMatches_(email, SUPER_ADMIN_EMAIL);
 
   payload = payload && typeof payload === 'object' ? payload : {};
+  if (!phase4HasOnlyKeys_(payload, [
+    'action', 'idToken', 'requestId', 'cartLines', 'name', 'phone',
+    'contactEmail', 'notes', 'selectedCity', 'departamento', 'address',
+    'referencia', 'mapLocation', 'paymentMethod', 'expectedSubtotal',
+    'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
+  ])) {
+    return { ok: false, error: 'invalid_payload' };
+  }
+
   var requestId = phase4CleanText_(payload.requestId, 100);
   if (!requestId || !/^[A-Za-z0-9_-]{12,100}$/.test(requestId)) {
     return { ok: false, error: 'invalid_request_id' };
@@ -243,9 +277,28 @@ function phase4CreateOrder_(payload, idToken) {
   if (!cartLines.length) return { ok: false, error: 'empty_cart' };
   if (cartLines.length > PHASE4_MAX_ITEMS_) return { ok: false, error: 'too_many_products' };
   for (var i = 0; i < cartLines.length; i++) {
-    var rawQty = Number(cartLines[i] && cartLines[i].qty);
-    var rawId = phase4CleanText_(cartLines[i] && cartLines[i].id, 180);
-    if (!rawId || !isFinite(rawQty) || rawQty < 1 || rawQty > 99) return { ok: false, error: 'invalid_cart' };
+    var rawLine = cartLines[i];
+    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) {
+      return { ok: false, error: 'invalid_cart' };
+    }
+    var rawQty = Number(rawLine && rawLine.qty);
+    var rawId = phase4CleanText_(rawLine && rawLine.id, 180);
+    var rawVariants = Array.isArray(rawLine && rawLine.variants)
+      ? rawLine.variants
+      : (rawLine && rawLine.variant ? [rawLine.variant] : []);
+    if (
+      !rawId ||
+      !isFinite(rawQty) ||
+      !Number.isInteger(rawQty) ||
+      rawQty < 1 ||
+      rawQty > 99 ||
+      rawVariants.length > 10 ||
+      rawVariants.some(function (variant) {
+        return typeof variant !== 'string' || variant.length > 120;
+      })
+    ) {
+      return { ok: false, error: 'invalid_cart' };
+    }
   }
 
   var name = phase4CleanText_(payload.name, 120);
@@ -257,17 +310,43 @@ function phase4CreateOrder_(payload, idToken) {
   var phone = phase4CleanText_(payload.phone, 40);
   var contactEmail = phase4CleanText_(payload.contactEmail, 254).toLowerCase() || email;
   var notes = phase4CleanText_(payload.notes, 1000);
+  var selectedCity = phase4CleanText_(payload.selectedCity, 120);
   var departamento = phase4CleanText_(payload.departamento, 80);
   var address = phase4CleanText_(payload.address, 300);
   var referencia = phase4CleanText_(payload.referencia, 300);
-  var mapLocation = payload.mapLocation && typeof payload.mapLocation === 'object'
-    ? {
-        lat: Number(payload.mapLocation.lat),
-        lng: Number(payload.mapLocation.lng),
-        name: phase4CleanText_(payload.mapLocation.name, 120),
-        address: phase4CleanText_(payload.mapLocation.address, 240)
-      }
-    : null;
+
+  if (!/^\d{8,20}$/.test(phone)) return { ok: false, error: 'phone_invalid' };
+  if (!phase4EmailValid_(contactEmail)) return { ok: false, error: 'email_invalid' };
+  if (!selectedCity) return { ok: false, error: 'shipping_invalid' };
+  if (
+    !phase4ExpectedMoneyValid_(payload.expectedSubtotal) ||
+    !phase4ExpectedMoneyValid_(payload.expectedShippingCost) ||
+    typeof payload.expectedShippingPending !== 'boolean' ||
+    !phase4ExpectedMoneyValid_(payload.expectedTotal)
+  ) {
+    return { ok: false, error: 'invalid_quote' };
+  }
+
+  var mapLocation = null;
+  if (payload.mapLocation !== null && payload.mapLocation !== undefined) {
+    if (!phase4HasOnlyKeys_(payload.mapLocation, ['lat', 'lng', 'name', 'address'])) {
+      return { ok: false, error: 'map_invalid' };
+    }
+    var latitude = Number(payload.mapLocation.lat);
+    var longitude = Number(payload.mapLocation.lng);
+    if (
+      !isFinite(latitude) || latitude < -90 || latitude > 90 ||
+      !isFinite(longitude) || longitude < -180 || longitude > 180
+    ) {
+      return { ok: false, error: 'map_invalid' };
+    }
+    mapLocation = {
+      lat: latitude,
+      lng: longitude,
+      name: phase4CleanText_(payload.mapLocation.name, 120),
+      address: phase4CleanText_(payload.mapLocation.address, 240)
+    };
+  }
 
   var tx = phase4BeginTransaction_();
   if (!tx.ok) return tx;
@@ -332,7 +411,7 @@ function phase4CreateOrder_(payload, idToken) {
       deliveryCost: shippingRates.deliveryCost != null ? shippingRates.deliveryCost : settings.deliveryCost,
       encomiendaCost: shippingRates.encomiendaCost != null ? shippingRates.encomiendaCost : settings.encomiendaCost
     };
-    var shipping = phase4ResolveShipping_(shippingRatesMerged, payload.selectedCity);
+    var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity);
     if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
     if (shipping.method === 'delivery' && (!mapLocation || !mapLocation.name)) {
       phase4Rollback_(transactionId);
@@ -447,6 +526,7 @@ function phase4CreateOrder_(payload, idToken) {
     return { ok: true, orderId: orderId, order: orderData, created: true };
   } catch (error) {
     phase4Rollback_(transactionId);
-    return { ok: false, error: 'create_order_failed', detail: String(error) };
+    console.error('[Phase4CreateOrder] Error inesperado:', error);
+    return { ok: false, error: 'create_order_failed' };
   }
 }

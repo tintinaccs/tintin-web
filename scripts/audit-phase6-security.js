@@ -1,6 +1,4 @@
-import fs from 'node:fs';
-
-const audit = String.raw`'use strict';
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
@@ -10,6 +8,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const rules = read('firestore.rules');
 const headers = read('_headers');
 const server = read('apps-script/Phase4CreateOrder.gs');
+const phase3 = read('apps-script/Phase3Security.gs');
+const orderClient = read('js/create-order-client.js');
 const pkg = read('package.json');
 
 let failures = 0;
@@ -61,8 +61,15 @@ check(
 check(
   'El endpoint no devuelve cuerpos internos de Firestore',
   !server.includes('detail: response.getContentText()') &&
-    !server.includes('detail: String(error)'),
+    !server.includes('detail: String(error)') &&
+    !phase3.includes('detail: String(error)'),
   'Los detalles quedan solo en logs del servidor'
+);
+check(
+  'El cliente no propaga respuestas crudas del endpoint',
+  !orderClient.includes('raw: body.slice') &&
+    orderClient.includes("error: 'invalid_response', status: response.status"),
+  'La UI solo recibe un código estable y el estado HTTP'
 );
 
 [
@@ -75,6 +82,12 @@ check(
   "frame-ancestors 'none'",
   'Cross-Origin-Opener-Policy: same-origin-allow-popups'
 ].forEach(header => check('Encabezado presente: ' + header, headers.includes(header)));
+check(
+  'La CSP permite el endpoint server-side de pedidos',
+  headers.includes('https://script.google.com') &&
+    headers.includes('https://script.googleusercontent.com'),
+  'Apps Script y su redirección deben estar en connect-src'
+);
 
 check(
   'HTML no se almacena como versión inmutable',
@@ -126,7 +139,3 @@ if (failures) {
   process.exit(1);
 }
 console.log('\nAuditoría Fase 6: todo correcto.');
-`;
-
-fs.writeFileSync('scripts/audit-phase6-security.js', audit);
-console.log('Auditoría Fase 6 regenerada con escapes literales.');
