@@ -39,3 +39,25 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self), usb=(), interest-cohort=()
+
+# Todo el sitio venía saliendo con Cache-Control: max-age=0, must-revalidate
+# (confirmado con curl -I en producción) — el navegador revalida por HTTP
+# CADA archivo en CADA visita, incluso CSS/JS que nunca cambiaron. El sitio
+# ya usa cache-busting por query string en cada <link>/<script> (?v=tintin-
+# ...), que es exactamente el patrón pensado para poder cachear "para
+# siempre": cuando el contenido cambia, cambia la URL completa (ruta+query),
+# así que cachear agresivo nunca sirve un archivo viejo por error. Se deja
+# fuera de esta regla a imágenes/HTML porque esos NO siguen ese mismo
+# patrón de versión en la URL en todo el repo — cachearlos igual de agresivo
+# sí podría servir contenido viejo tras una actualización.
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mjs
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets-tintin/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
