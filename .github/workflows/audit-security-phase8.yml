@@ -7,6 +7,7 @@ on:
       - '_headers'
       - 'apps-script/Phase4CreateOrder.gs'
       - 'scripts/apply-phase6-fixes.mjs'
+      - 'scripts/fix-phase6-generated.mjs'
       - 'scripts/test-firestore-critical.mjs'
       - 'scripts/audit-phase6-security.js'
       - 'package.json'
@@ -34,7 +35,9 @@ jobs:
           cache: npm
 
       - name: Aplicar correcciones
-        run: node scripts/apply-phase6-fixes.mjs
+        run: |
+          node scripts/apply-phase6-fixes.mjs
+          node scripts/fix-phase6-generated.mjs
 
       - name: Revisar sintaxis
         run: |
@@ -61,6 +64,7 @@ jobs:
       - name: Consolidar código validado
         run: |
           rm -f scripts/apply-phase6-fixes.mjs
+          rm -f scripts/fix-phase6-generated.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
