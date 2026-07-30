@@ -162,9 +162,12 @@ async function inspect(page, width, pageInfo) {
     };
 
     const rootWidth = Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0);
-    if (rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);
+    // Las páginas de redirección (meta refresh 0s, ej. nosotros.html → about.html)
+    // pueden navegar a mitad de esta medición: no tiene sentido exigirles el
+    // mismo ancho exacto que a una página real que sí se queda a la vista.
+    if (!pageInfo.redirectsTo && rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);
 
-    const visibleBodyChildren = [...document.body.children].filter(visible);
+    const visibleBodyChildren = [...(document.body?.children || [])].filter(visible);
     if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) {
       issues.push('la página quedó visualmente vacía');
     }
