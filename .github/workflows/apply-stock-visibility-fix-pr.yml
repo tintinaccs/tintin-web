@@ -1,0 +1,59 @@
+name: Aplicar corrección de stock visible desde PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && !contains(github.event.pull_request.head.label, '[stock-fix-applied]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Ejecutar parche preparado
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          workflow = Path('.github/workflows/apply-stock-visibility-fix.yml').read_text(encoding='utf-8')
+          marker = "python3 <<'PY'\n"
+          if marker not in workflow:
+              raise SystemExit('No se encontró el parche preparado')
+          code = workflow.split(marker, 1)[1].split('\n          PY', 1)[0]
+          code = '\n'.join(line[10:] if line.startswith('          ') else line for line in code.splitlines())
+          exec(compile(code, 'stock-visibility-fix.py', 'exec'))
+          PY
+
+      - name: Instalar dependencias y validar
+        run: |
+          npm ci --ignore-scripts
+          node --check js/phase7-catalog-policy.js
+          node --check js/products-store.js
+          node --check script.js
+          npm run audit:phase7-catalog
+
+      - name: Guardar cambios en la rama
+        shell: bash
+        run: |
+          rm -f .github/workflows/apply-stock-visibility-fix.yml
+          rm -f .github/workflows/apply-stock-visibility-fix-pr.yml
+          rm -f maintenance/trigger-stock-visible-fix.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: mantener agotados visibles y en su posición [stock-fix-applied]"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
