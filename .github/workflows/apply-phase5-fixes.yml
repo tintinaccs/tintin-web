@@ -25,18 +25,34 @@ jobs:
           cache: npm
 
       - name: Aplicar cambios de rendimiento
-        run: node scripts/apply-phase5-fixes.mjs
+        id: apply_changes
+        continue-on-error: true
+        run: node scripts/apply-phase5-fixes.mjs 2>&1 | tee phase5-apply.log
+
+      - name: Guardar diagnóstico de aplicación
+        if: steps.apply_changes.outcome != 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add phase5-apply.log
+          git commit -m "chore: registrar fallo al aplicar la Fase 5" || true
+          git push origin HEAD:${GITHUB_REF_NAME}
+          exit 1
 
       - name: Instalar dependencias
+        if: steps.apply_changes.outcome == 'success'
         run: npm ci
 
       - name: Regenerar y verificar diagnóstico
+        if: steps.apply_changes.outcome == 'success'
         run: npm run build:pages
 
       - name: Auditar invariantes de la Fase 5
+        if: steps.apply_changes.outcome == 'success'
         run: npm run audit:phase5
 
       - name: Auditar rendimiento, lecturas y regresiones
+        if: steps.apply_changes.outcome == 'success'
         run: |
           npm run audit:performance
           node scripts/audit-firestore-read-budget.js
@@ -44,12 +60,15 @@ jobs:
           npm run audit:page-loading
 
       - name: Ejecutar auditoría integral
+        if: steps.apply_changes.outcome == 'success'
         run: npm run audit:final
 
       - name: Instalar Chromium
+        if: steps.apply_changes.outcome == 'success'
         run: npx playwright install --with-deps chromium
 
       - name: Medir Web Vitals en navegador real
+        if: steps.apply_changes.outcome == 'success'
         id: browser_metrics
         continue-on-error: true
         env:
@@ -63,17 +82,19 @@ jobs:
           npx playwright test tests/performance/public-pages.performance.spec.js --project=chromium | tee phase5-performance.log
 
       - name: Mostrar resultado de navegador
-        if: always()
+        if: steps.apply_changes.outcome == 'success' && always()
         run: |
           test -f phase5-performance.log && cat phase5-performance.log || true
           echo "Resultado Playwright: ${{ steps.browser_metrics.outcome }}"
 
       - name: Retirar archivos auxiliares
+        if: steps.apply_changes.outcome == 'success'
         run: |
           rm -f scripts/apply-phase5-fixes.mjs
           rm -f .github/workflows/apply-phase5-fixes.yml
 
       - name: Crear commit final de la Fase 5
+        if: steps.apply_changes.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
