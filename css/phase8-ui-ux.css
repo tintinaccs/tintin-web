@@ -278,6 +278,42 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
+/* En el catálogo móvil las tarjetas reservaban 340px de ancho por
+   contain-intrinsic-size aunque cada pista real fuera mucho menor. Eso
+   ampliaba el scrollWidth raíz sin que la tarjeta visible pareciera salir. */
+@media (max-width: 480px) {
+  body.tt-catalog-maintenance .cat-wrap,
+  body.tt-catalog-maintenance .cat-layout,
+  body.tt-catalog-maintenance .cat-main,
+  body.tt-catalog-maintenance .cat-grid {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.tt-catalog-maintenance .cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.tt-catalog-maintenance .cat-grid > .tt-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  body.tt-catalog-maintenance .tt-card-img-wrap,
+  body.tt-catalog-maintenance .tt-card-info,
+  body.tt-catalog-maintenance .cat-top,
+  body.tt-catalog-maintenance .cat-controls,
+  body.tt-catalog-maintenance .cat-tabs-mobile {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --tt-motion-instant: 1ms;
