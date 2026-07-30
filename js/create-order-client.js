@@ -25,6 +25,7 @@ export async function createOrderViaServer(draft) {
   try {
     return JSON.parse(body);
   } catch {
-    return { ok: false, error: 'invalid_response', status: response.status, raw: body.slice(0, 500) };
+    console.error('[create-order-client] El endpoint devolvió una respuesta no válida. HTTP', response.status);
+    return { ok: false, error: 'invalid_response', status: response.status };
   }
 }

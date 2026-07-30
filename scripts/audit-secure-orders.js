@@ -78,22 +78,22 @@ check(
   'El checkout debe ajustar el carrito cuando cambia el stock.'
 );
 check(
-  'Las reglas de Firestore siguen limitando el pedido directo como red de seguridad',
+  'Las reglas de Firestore bloquean todo pedido directo desde el navegador',
   // El checkout real ya no escribe pedidos directo a Firestore (ver arriba),
   // pero las reglas se dejan intactas como defensa en profundidad: si algo
   // alguna vez volviera a escribir directo (o alguien intentara un pedido
   // manual desde la consola), sigue topeado en 4 productos por el límite de
   // 1000 expresiones de Firestore — ver el comentario en sparkOrderCreateValid.
-  rules.includes('items.size() <= 4') &&
-    rules.includes('product.price == item.price'),
-  'Las reglas deben seguir validando cualquier escritura directa a orders/{orderId}.'
+  rules.includes('allow create: if false;') &&
+    !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+  'Toda creación debe pasar por el endpoint server-side, que opera con credenciales del servidor.'
 );
 check(
-  'Las reglas validan tienda, cuenta y correo para cualquier escritura directa',
-  rules.includes("settings.get('storeOpen', false) == true") &&
-    rules.includes("userData.get('blocked', false) != true") &&
-    rules.includes('request.auth.token.email_verified == true'),
-  'Una tienda cerrada, cuenta bloqueada o correo no verificado debe fallar también en las reglas.'
+  'El servidor valida tienda, cuenta y correo antes de crear el pedido',
+  phase4.includes("settings.storeOpen !== true") &&
+    phase4.includes("userData.blocked === true") &&
+    phase4.includes('!auth.emailVerified'),
+  'El endpoint debe rechazar tienda cerrada, cuenta bloqueada o correo no verificado.'
 );
 check(
   'El checkout seguro se carga solo donde corresponde',

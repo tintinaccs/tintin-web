@@ -182,9 +182,10 @@ check(
   'Ni el propio Super Admin debe poder borrar su ficha desde el cliente.'
 );
 check(
-  'Las reglas impiden escribir role:"superadmin" salvo la cuenta oficial',
-  /request\.resource\.data\.role != 'superadmin' \|\|\s*\n\s*request\.auth\.token\.email == "tintinaccs@gmail\.com"/.test(rules),
-  'Nadie debe poder elevar a "superadmin" a otra cuenta desde el panel.'
+  'Las reglas impiden asignar superadmin y protegen la cuenta oficial',
+  rules.includes("request.resource.data.role in ['client', 'admin', 'agent', 'viewer']") &&
+    rules.includes('!isSuperAdminAccount(resource.data)'),
+  'Solo se admiten roles editables y la cuenta oficial no puede degradarse.'
 );
 check(
   'Solo el Super Admin puede escribir la matriz de permisos',

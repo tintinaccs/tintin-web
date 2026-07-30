@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-30T16:53:15.600Z",
-  "sourceFingerprint": "d02e446a12da9ac92abea49fb12c96324a8298a8316398938cc5d9c6eff705b7",
+  "generatedAt": "2026-07-30T18:30:31.581Z",
+  "sourceFingerprint": "18252bf3f18d6c83ed0e6a5bc1ccc427f0b400be503f697eda48124b336e5f48",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 390,
-    "textFiles": 356,
-    "totalBytes": 5551148,
+    "files": 389,
+    "textFiles": 355,
+    "totalBytes": 5520716,
     "pages": 18,
     "modules": 216
   },
@@ -15370,8 +15370,8 @@
     },
     {
       "path": "js/create-order-client.js",
-      "bytes": 1257,
-      "sha256": "b3a26d784aebf56b138927829d72c7943d4bb83e76c8359a4e44daa1d8edf56d",
+      "bytes": 1346,
+      "sha256": "872307ab7308eea54d9e934b06539901b83cde175249adb75dfa0d85edb39306",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17124,47 +17124,6 @@
       ]
     },
     {
-      "path": "scripts/apply-phase5-fixes.mjs",
-      "bytes": 24433,
-      "sha256": "39136e60ea3fa3ce3418e31288d7948012d5daad59287e235895afa3388a2faf",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": "scripts/node:fs",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "node:path",
-          "target": "scripts/node:path",
-          "dynamic": false,
-          "line": 2
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/",
-          "line": 337
-        },
-        {
-          "url": "https://tintinaccs.github.io/tintin-web",
-          "line": 527
-        },
-        {
-          "url": "http://127.0.0.1:4173/index.html",
-          "line": 552
-        },
-        {
-          "url": "http://127.0.0.1:4173/",
-          "line": 562
-        }
-      ]
-    },
-    {
       "path": "scripts/audit-about-page.js",
       "bytes": 2103,
       "sha256": "743b44fa471501adfd725448fd790a50c803900b17c21b5c9f96a0d2688d84f1",
@@ -17387,8 +17346,8 @@
     },
     {
       "path": "scripts/audit-admin-users-roles.js",
-      "bytes": 11563,
-      "sha256": "a1cfbb4b263d5c71805bd5b1327a363db9f7f4dee2f65eb681f770c9657ee772",
+      "bytes": 11585,
+      "sha256": "7be7fda670ed84cb22a6c127a1d36c3bcf18070c86457b3b9e13560c95e7787e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18385,6 +18344,26 @@
       ]
     },
     {
+      "path": "scripts/audit-phase6-security.js",
+      "bytes": 5213,
+      "sha256": "7bf67cd4073a854e2144cbad3efa67e56ac32b03cf063162c7e0fed613c6d4c2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://script.google.com/",
+          "line": 87
+        },
+        {
+          "url": "https://script.googleusercontent.com/",
+          "line": 88
+        }
+      ]
+    },
+    {
       "path": "scripts/audit-postphase-security.js",
       "bytes": 2264,
       "sha256": "538842d02b13baa6a84a83eed0d613b905b32bc3198709e930ca4726460a8731",
@@ -18430,8 +18409,8 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 4963,
-      "sha256": "6945bfd3a53ba16cb3e55db6661878cb1a12b805d8774d8ea7a25ce6e7763e61",
+      "bytes": 4930,
+      "sha256": "3ad9d6e7776c8ff332d03d5c9e6e7aec84ceb64b84adceeb368336b4fc8aa105",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18506,8 +18485,8 @@
     },
     {
       "path": "scripts/audit-store-gate.js",
-      "bytes": 13257,
-      "sha256": "9e53463e5564317643ee891d7cbd126914ee291eb154a4004e5cc3cc615f8cd5",
+      "bytes": 13193,
+      "sha256": "cad2e4c13a08d558cf825467923a2c9581c6171b3d696c0f0a8abd8da4ff00f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18836,8 +18815,8 @@
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
-      "bytes": 19373,
-      "sha256": "bd24f76f784ed22fc228fd7b17ace49215d899e086cfee7bf659a9c8bb502952",
+      "bytes": 9413,
+      "sha256": "0e9ae26d28bdac18a0f4128b9a74530655d72a9c881f93cf1e3e6fd743634a07",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18850,22 +18829,16 @@
           "line": 1
         },
         {
-          "raw": "node:assert/strict",
-          "target": "scripts/node:assert/strict",
-          "dynamic": false,
-          "line": 2
-        },
-        {
           "raw": "@firebase/rules-unit-testing",
           "target": "scripts/@firebase/rules-unit-testing",
           "dynamic": false,
-          "line": 7
+          "line": 6
         },
         {
           "raw": "firebase/firestore",
           "target": "scripts/firebase/firestore",
           "dynamic": false,
-          "line": 17
+          "line": 14
         }
       ],
       "endpoints": []
@@ -18997,12 +18970,6 @@
       "sha256": "6f1c127ac670e91fd08468f0f31bdd456be6aa92662a667d9c2d28c835dd57a4"
     },
     {
-      "path": ".github/workflows/apply-phase5-fixes.yml",
-      "extension": ".yml",
-      "bytes": 6811,
-      "sha256": "29def12424fed1c81274c88022f37d06eeaa824bb541c750e64b0933e2cd0174"
-    },
-    {
       "path": ".github/workflows/audit-cart-phase7.yml",
       "extension": ".yml",
       "bytes": 802,
@@ -19047,8 +19014,8 @@
     {
       "path": ".github/workflows/audit-security-phase8.yml",
       "extension": ".yml",
-      "bytes": 848,
-      "sha256": "2017b498c513febed83f32c10246278956bf3454170490a1a12fc8a1881338f4"
+      "bytes": 3120,
+      "sha256": "7d6df77e55840505e80f65d4ada7301a211d731f0e1129b4f70197941a26ec97"
     },
     {
       "path": ".github/workflows/audit-typography.yml",
@@ -19209,14 +19176,14 @@
     {
       "path": "apps-script/Phase3Security.gs",
       "extension": ".gs",
-      "bytes": 10964,
-      "sha256": "758c2571d7738e88c0d169d134d12eb8058c6af04c55b81b375d92614b1c4087"
+      "bytes": 11081,
+      "sha256": "65927513439effb2ff28c9f91628170d3d0a74d4396590172d460cb255768810"
     },
     {
       "path": "apps-script/Phase4CreateOrder.gs",
       "extension": ".gs",
-      "bytes": 20164,
-      "sha256": "222e0d5d1e19fe78b5eac4e9327d30e293840de23767489042d5bc360adcf60a"
+      "bytes": 22829,
+      "sha256": "c10bc25e7625ed8dea954b265a882a08211f8228e7696cedc0bf9b1a5f067f82"
     },
     {
       "path": "assets-tintin/fonts/OFL-1.1.txt",
@@ -19749,8 +19716,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 49953,
-      "sha256": "c6e00445e6f3a76c765ea4029aab16d9962fbb124ca273b9ad255d94f5c4e2fd"
+      "bytes": 50303,
+      "sha256": "c43d2c5962e6f51be2877e7173265299d94009099593b05a0080a0afd3754292"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -20103,8 +20070,8 @@
     {
       "path": "js/create-order-client.js",
       "extension": ".js",
-      "bytes": 1257,
-      "sha256": "b3a26d784aebf56b138927829d72c7943d4bb83e76c8359a4e44daa1d8edf56d"
+      "bytes": 1346,
+      "sha256": "872307ab7308eea54d9e934b06539901b83cde175249adb75dfa0d85edb39306"
     },
     {
       "path": "js/diagnostic-core.js",
@@ -20721,8 +20688,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 5423,
-      "sha256": "eb6bd3664e45653e1baee37355bb2ae0ddf240b4017a37518b7ffb0dca140da9"
+      "bytes": 5564,
+      "sha256": "4f2dd4c19a69bbe52409891e52b3446c009027bc74d9c9997bfc9d4166276393"
     },
     {
       "path": "perfil.html",
@@ -20765,12 +20732,6 @@
       "extension": ".js",
       "bytes": 91197,
       "sha256": "bf798b7a8bae23a2532db7b59e2dbd9825feca5a5e257d2e1659c1946af3bfae"
-    },
-    {
-      "path": "scripts/apply-phase5-fixes.mjs",
-      "extension": ".mjs",
-      "bytes": 24433,
-      "sha256": "39136e60ea3fa3ce3418e31288d7948012d5daad59287e235895afa3388a2faf"
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -20835,8 +20796,8 @@
     {
       "path": "scripts/audit-admin-users-roles.js",
       "extension": ".js",
-      "bytes": 11563,
-      "sha256": "a1cfbb4b263d5c71805bd5b1327a363db9f7f4dee2f65eb681f770c9657ee772"
+      "bytes": 11585,
+      "sha256": "7be7fda670ed84cb22a6c127a1d36c3bcf18070c86457b3b9e13560c95e7787e"
     },
     {
       "path": "scripts/audit-admin-visual-part2f-v3.mjs",
@@ -21109,6 +21070,12 @@
       "sha256": "6f764db047f4298ba97cafcadae0ffcd878f9e45cfca0c66de491ff71ae54a8f"
     },
     {
+      "path": "scripts/audit-phase6-security.js",
+      "extension": ".js",
+      "bytes": 5213,
+      "sha256": "7bf67cd4073a854e2144cbad3efa67e56ac32b03cf063162c7e0fed613c6d4c2"
+    },
+    {
       "path": "scripts/audit-postphase-security.js",
       "extension": ".js",
       "bytes": 2264,
@@ -21135,8 +21102,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 4963,
-      "sha256": "6945bfd3a53ba16cb3e55db6661878cb1a12b805d8774d8ea7a25ce6e7763e61"
+      "bytes": 4930,
+      "sha256": "3ad9d6e7776c8ff332d03d5c9e6e7aec84ceb64b84adceeb368336b4fc8aa105"
     },
     {
       "path": "scripts/audit-security-phase8.js",
@@ -21153,8 +21120,8 @@
     {
       "path": "scripts/audit-store-gate.js",
       "extension": ".js",
-      "bytes": 13257,
-      "sha256": "9e53463e5564317643ee891d7cbd126914ee291eb154a4004e5cc3cc615f8cd5"
+      "bytes": 13193,
+      "sha256": "cad2e4c13a08d558cf825467923a2c9581c6171b3d696c0f0a8abd8da4ff00f9"
     },
     {
       "path": "scripts/audit-storegate-deadlock.js",
@@ -21243,8 +21210,8 @@
     {
       "path": "scripts/test-firestore-critical.mjs",
       "extension": ".mjs",
-      "bytes": 19373,
-      "sha256": "bd24f76f784ed22fc228fd7b17ace49215d899e086cfee7bf659a9c8bb502952"
+      "bytes": 9413,
+      "sha256": "0e9ae26d28bdac18a0f4128b9a74530655d72a9c881f93cf1e3e6fd743634a07"
     },
     {
       "path": "scripts/test-inventory-model.mjs",
