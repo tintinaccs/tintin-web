@@ -33,14 +33,44 @@ function escapeHtml(value) {
 
 const escapeAttribute = escapeHtml;
 
-function sanitizeClassicImageUrl(value) {
+const CLOUDINARY_IMG_HOST = 'res.cloudinary.com';
+const CLOUDINARY_UPLOAD_MARKER = '/upload/';
+const CLOUDINARY_TT_TRANSFORM_RE = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
+
+/**
+ * Pide a Cloudinary una copia redimensionada/comprimida de la imagen en vez
+ * de la original: mismo archivo subido, sin tocar nada en Cloudinary, solo
+ * se reescribe la URL de entrega. c_limit no agranda imagenes que ya sean
+ * mas chicas que el ancho pedido. Es idempotente: si la URL ya trae una
+ * transformacion puesta por esta misma funcion, la reemplaza en vez de
+ * apilarla (permite pedir, por ejemplo, la miniatura de una imagen que ya
+ * se pidio grande para la vista principal).
+ */
+function withCloudinaryWidth(href, width) {
+  if (!width) return href;
+  try {
+    const url = new URL(href);
+    if (url.hostname !== CLOUDINARY_IMG_HOST) return href;
+    const idx = url.pathname.indexOf(CLOUDINARY_UPLOAD_MARKER);
+    if (idx === -1) return href;
+    const insertAt = idx + CLOUDINARY_UPLOAD_MARKER.length;
+    const before = url.pathname.slice(0, insertAt);
+    const after = url.pathname.slice(insertAt).replace(CLOUDINARY_TT_TRANSFORM_RE, '');
+    url.pathname = `${before}f_auto,q_auto,c_limit,w_${width},dpr_auto/${after}`;
+    return url.href;
+  } catch {
+    return href;
+  }
+}
+
+function sanitizeClassicImageUrl(value, width) {
   const raw = String(value || '').trim();
   if (!raw || /['"<>\u0000-\u001f\u007f]/.test(raw) || raw.length > 2048) return '';
   try {
     const url = new URL(raw, window.location.href);
     if (!['https:', 'http:'].includes(url.protocol)) return '';
     if (location.protocol === 'https:' && url.protocol === 'http:' && url.origin !== location.origin) return '';
-    return url.href;
+    return width ? withCloudinaryWidth(url.href, width) : url.href;
   } catch { return ''; }
 }
 
@@ -312,7 +342,7 @@ function renderCart() {
   }
 
   body.innerHTML = cart.map(item => {
-    const imgUrl = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id));
+    const imgUrl = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 160);
     const safeId = escapeAttribute(item.id);
     const safeName = escapeHtml(item.name);
     const safeVariant = escapeHtml(item.variant || '');
@@ -723,7 +753,7 @@ function initSearch() {
         results.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:0.9rem;">No encontramos productos con esa búsqueda.</div>';
       } else {
         results.innerHTML = matches.map(p => {
-          const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+          const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 160);
           const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
           const thumb = imgUrl
             ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" loading="lazy">`
@@ -833,7 +863,7 @@ window._onProductImgError = _onProductImgError;
 function renderProductCardMarkup(p, options = {}) {
   const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
   const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
-  const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+  const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
   const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
@@ -895,7 +925,7 @@ function renderLookCombo() {
   currentCombo = pickRandom(productPool, 3);
 
   grid.innerHTML = currentCombo.map(p => {
-    const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id));
+    const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
     const safeId = escapeAttribute(p.id);
     const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imgContent = imgUrl
@@ -1257,9 +1287,9 @@ function _renderProductDetail(product) {
   }
 
   // Gallery
-  const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '');
+  const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
   const extraImages = Array.isArray(product.imagesExtra)
-    ? product.imagesExtra.map(sanitizeClassicImageUrl).filter(Boolean)
+    ? product.imagesExtra.map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean)
     : [];
   const allImages = [...new Set(mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages)];
   if (!isSameProduct) _pdGalleryIndex = 0;
@@ -1288,7 +1318,7 @@ function _renderProductDetail(product) {
     thumbsEl.style.display = allImages.length > 1 ? '' : 'none';
     thumbsEl.innerHTML = allImages.length > 1 ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
-        <img src="${escapeAttribute(url)}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
+        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
     `).join('') : '';
     if (!thumbsEl.dataset.ttBound) {
@@ -1465,7 +1495,7 @@ function _renderProductDetail(product) {
       const main = p.imageUrl || p.image || getProductImage(p.id) || '';
       const extra = Array.isArray(p.imagesExtra) ? p.imagesExtra : [];
       const images = [...new Set(main ? [main, ...extra] : extra)]
-        .map(sanitizeClassicImageUrl)
+        .map(url => sanitizeClassicImageUrl(url, 1600))
         .filter(Boolean);
       if (images.length > 0) _openLightbox(images, Math.min(_pdGalleryIndex, images.length - 1));
     });
