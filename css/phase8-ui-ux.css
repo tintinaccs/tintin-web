@@ -253,19 +253,28 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
-/* Colecciones pasaba a dos columnas apenas después de 480px. Ese único píxel
-   todavía no deja ancho útil para dos tarjetas completas, por eso se mantiene
-   una columna hasta 560px y se acotan sus superficies internas. */
+/* A 481px Colecciones debe conservar sus dos columnas. El desborde provenía
+   de la reserva de 360px usada por content-visibility para tarjetas fuera de
+   pantalla, no de la cantidad de columnas. En este rango se usa el tamaño real. */
 @media (min-width: 481px) and (max-width: 560px) {
   .tt-collections-page .tt-colls-page-grid {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .tt-collections-page .tt-coll-page-card,
-  .tt-collections-page .tt-coll-page-img,
-  .tt-collections-page .tt-coll-page-body {
+  .tt-collections-page .tt-coll-page-card {
+    width: 100%;
     min-width: 0;
     max-width: 100%;
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  .tt-collections-page .tt-coll-page-img,
+  .tt-collections-page .tt-coll-page-body {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
