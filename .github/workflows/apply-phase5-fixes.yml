@@ -1,5 +1,6 @@
 name: Aplicar correcciones Fase 5
 
+# Este cambio mínimo fuerza un nuevo evento synchronize de la PR de trabajo.
 on:
   push:
     branches:
