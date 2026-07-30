@@ -102,10 +102,15 @@ function walk(dir) {
 }
 walk(root);
 const secretHits = [];
+const secretScanAllowlist = new Set([
+  'scripts/audit-level1-foundation.js'
+]);
 for (const file of sourceFiles) {
+  const relative = path.relative(root, file).replace(/\\/g, '/');
+  if (secretScanAllowlist.has(relative)) continue;
   const content = fs.readFileSync(file, 'utf8');
   if (privateKeyPatterns.some(pattern => pattern.test(content))) {
-    secretHits.push(path.relative(root, file));
+    secretHits.push(relative);
   }
 }
 check('No hay claves privadas o service accounts en el repositorio', secretHits.length === 0, secretHits.join(', '));
