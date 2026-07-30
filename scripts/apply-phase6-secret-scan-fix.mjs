@@ -19,7 +19,12 @@ for (const file of sourceFiles) {
     secretHits.push(relative);
   }
 }`;
-if (!source.includes(oldBlock)) throw new Error('No se encontró el bloque de escaneo de secretos');
-source = source.replace(oldBlock, newBlock);
-fs.writeFileSync(path, source);
-console.log('Escaneo de secretos ajustado para evitar fixtures de auditoría.');
+if (source.includes(oldBlock)) {
+  source = source.replace(oldBlock, newBlock);
+  fs.writeFileSync(path, source);
+  console.log('Escaneo de secretos ajustado para evitar fixtures de auditoría.');
+} else if (source.includes("const secretScanAllowlist = new Set([")) {
+  console.log('Escaneo de secretos ya estaba ajustado.');
+} else {
+  throw new Error('No se encontró una versión reconocible del escaneo de secretos');
+}
