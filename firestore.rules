@@ -558,8 +558,7 @@ service cloud.firestore {
         sparkMapLocationValid(shipping.mapLocation) &&
         shipping.method is string &&
         shipping.city is string &&
-        shipping.departamento is string &&
-        shipping.departamento.size() <= 120 &&
+        (!('departamento' in shipping) || shipping.departamento is string) &&
         shipping.address is string &&
         shipping.referencia is string &&
         (

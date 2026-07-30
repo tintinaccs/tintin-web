@@ -207,8 +207,7 @@ check(
 );
 check(
   'La regla acepta el departamento que siempre envía Checkout',
-  /shipping\.departamento is string/.test(rules) &&
-    /shipping\.departamento\.size\(\) <= 120/.test(rules) &&
+  /\(!\('departamento' in shipping\) \|\| shipping\.departamento is string\)/.test(rules) &&
     (
       /departamento:\s*draft\.departamento \|\| ''/.test(secureOrder) ||
       /departamento:\s*selectedDepartamento/.test(secureOrder)
