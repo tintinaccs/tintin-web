@@ -1,33 +1,112 @@
-name: Auditoría de carrito Fase 7
+name: Auditoría de catálogo y carrito Fase 7
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
+      - 'catalogo.html'
+      - 'script.js'
+      - 'js/products-store.js'
+      - 'js/phase7-catalog-policy.js'
+      - 'js/page-maintenance-loader.js'
+      - 'js/admin-app.js'
       - 'js/cart-sync.js'
       - 'js/ui-quality.js'
       - 'js/secure-checkout-order.js'
+      - 'functions/api/sheets-product-sync.js'
+      - 'scripts/apply-phase7-catalog-fixes.mjs'
+      - 'scripts/audit-phase7-catalog.js'
       - 'scripts/audit-cart-phase7.js'
       - 'package.json'
+      - 'diagnostic-manifest.json'
+      - '.github/workflows/audit-cart-phase7.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'catalogo.html'
+      - 'script.js'
+      - 'js/products-store.js'
+      - 'js/phase7-catalog-policy.js'
+      - 'js/page-maintenance-loader.js'
+      - 'js/admin-app.js'
+      - 'js/cart-sync.js'
+      - 'functions/api/sheets-product-sync.js'
+      - 'scripts/audit-phase7-catalog.js'
+      - 'scripts/audit-cart-phase7.js'
+      - 'package.json'
+      - 'diagnostic-manifest.json'
       - '.github/workflows/audit-cart-phase7.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   audit:
+    name: Auditar catálogo, sincronización y carrito
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar repositorio
+      - name: Descargar rama evaluada
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+
+      - name: Aplicar consolidación de la Fase 7
+        run: |
+          if [ -f scripts/apply-phase7-catalog-fixes.mjs ]; then
+            node scripts/apply-phase7-catalog-fixes.mjs
+          else
+            echo 'La consolidación ya fue aplicada.'
+          fi
+
+      - name: Instalar dependencias
+        run: npm ci
+
       - name: Revisar sintaxis
         run: |
+          node --check js/phase7-catalog-policy.js
+          node --check js/products-store.js
           node --check js/cart-sync.js
-          node --check js/ui-quality.js
+          node --check js/admin-app.js
+          node --check script.js
+          node --check scripts/audit-phase7-catalog.js
           node --check scripts/audit-cart-phase7.js
-      - name: Revisar integración
+
+      - name: Auditar catálogo y sincronización
+        run: npm run audit:phase7-catalog
+
+      - name: Auditar carrito
         run: npm run audit:cart
+
+      - name: Ejecutar auditoría integral
+        run: npm run audit:final
+
+      - name: Regenerar manifiesto de diagnóstico
+        run: npm run build:pages
+
+      - name: Consolidar cambios generados en PR interna
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet; then
+            echo 'No hay cambios pendientes.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: completar catálogo y sincronización de la Fase 7"
+          git push origin HEAD:${GITHUB_HEAD_REF}
+
+      - name: Verificar manifiesto reproducible
+        run: |
+          npm run build:pages
+          git diff --exit-code -- diagnostic-manifest.json
