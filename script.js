@@ -1237,7 +1237,11 @@ function _updateProductMeta(product, mainImgUrl) {
 }
 
 function _renderProductDetail(product) {
-  if (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product)) {
+  const catalogPolicy = window.TintinCatalogPolicy;
+  const isVisible = catalogPolicy?.isCatalogVisible
+    ? catalogPolicy.isCatalogVisible(product)
+    : !(catalogPolicy?.isPurchasable && !catalogPolicy.isPurchasable(product));
+  if (!isVisible) {
     _showProductNotFound();
     return;
   }

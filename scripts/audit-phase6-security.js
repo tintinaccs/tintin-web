@@ -2,77 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { spawnSync, execFileSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-
-function runGit(args, options = {}) {
-  return spawnSync('git', args, {
-    cwd: root,
-    encoding: 'utf8',
-    stdio: options.capture ? 'pipe' : 'inherit',
-    ...options,
-  });
-}
-
-function gitText(args) {
-  return execFileSync('git', args, { cwd: root, encoding: 'utf8' });
-}
-
-function syncPhase8WithMain() {
-  const branch = 'agent/fase8-ui-ux-20260730';
-  if (process.env.GITHUB_ACTIONS !== 'true' || process.env.GITHUB_HEAD_REF !== branch) return;
-
-  console.log('\n[Tintin Fase 8] Integrando main actualizado antes de auditar…');
-  runGit(['config', 'user.name', 'github-actions[bot]']);
-  runGit(['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com']);
-  runGit(['fetch', 'origin', 'main']);
-
-  const ancestor = runGit(['merge-base', '--is-ancestor', 'origin/main', 'HEAD'], { capture: true });
-  let mergeFailed = false;
-  if (ancestor.status !== 0) {
-    const merge = runGit(['merge', 'origin/main', '--no-edit']);
-    mergeFailed = merge.status !== 0;
-  }
-
-  if (mergeFailed) {
-    const conflicts = gitText(['diff', '--name-only', '--diff-filter=U']).trim().split(/\r?\n/).filter(Boolean);
-    const expected = new Set(['catalogo.html', 'product.html']);
-    const unexpected = conflicts.filter(file => !expected.has(file));
-    if (unexpected.length) throw new Error(`Conflictos no previstos: ${unexpected.join(', ')}`);
-
-    for (const file of conflicts) {
-      runGit(['checkout', '--theirs', '--', file]);
-      const full = path.join(root, file);
-      let text = fs.readFileSync(full, 'utf8');
-      text = text.replace(
-        'js/page-loader.js?v=tintin-20260730-appcheck-stable-4',
-        'js/page-loader.js?v=tintin-20260730-phase8-ui-1'
-      );
-      fs.writeFileSync(full, text, 'utf8');
-      runGit(['add', file]);
-    }
-  }
-
-  const restoreFrom = '44bf0d99e9bf6707eab5d3ea951f74949092f451';
-  const selfFile = 'scripts/audit-phase6-security.js';
-  fs.writeFileSync(path.join(root, selfFile), gitText(['show', `${restoreFrom}:${selfFile}`]), 'utf8');
-  runGit(['add', selfFile]);
-  runGit(['add', '-A']);
-
-  const staged = runGit(['diff', '--cached', '--quiet'], { capture: true });
-  if (staged.status !== 0) {
-    if (mergeFailed) runGit(['commit', '--no-edit']);
-    else if (ancestor.status === 0) runGit(['commit', '-m', 'chore: restaurar auditoría tras sincronizar main']);
-    else runGit(['commit', '--amend', '--no-edit']);
-  }
-
-  const pushed = runGit(['push', 'origin', `HEAD:${branch}`]);
-  if (pushed.status !== 0) throw new Error('No se pudo publicar el merge de main en la rama de Fase 8.');
-  console.log('[Tintin Fase 8] main integrado; los workflows temporales se retirarán mediante la conexión directa.\n');
-}
-
-syncPhase8WithMain();
 
 const rules = read('firestore.rules');
 const headers = read('_headers');
