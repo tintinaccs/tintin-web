@@ -1,4 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import {
   collection,
   getDocs,
@@ -82,6 +82,12 @@ function publishPublic(collections, source) {
 
 async function fetchPublicCollections() {
   let list;
+  if (!await appCheckReady) {
+    const documents = await listPublicCollectionRest('collections', 200);
+    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+    writeCached(CACHE_KEY, list);
+    return publishPublic(list, 'rest-fallback');
+  }
   try {
     const snapshot = await Promise.race([
       getDocs(query(collection(db, 'collections'), limit(200))),

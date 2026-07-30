@@ -7,7 +7,7 @@
      reales de Firestore, incluidas las ocultas para gestión interna.
    ============================================================= */
 
-import { auth } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { onAllCollectionsUpdate } from './collections-store.js?v=tintin-20260726-browser-fallback-1';
 

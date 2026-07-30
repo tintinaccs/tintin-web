@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import {
   doc,
   getDoc,
@@ -306,6 +306,10 @@ export async function loadImages(options = {}) {
   if (!_cache) {
     _cache = fromLocalStorage();
   }
+  if (!await appCheckReady) {
+    scheduleHeroDisplayVariables(_cache || {});
+    return { ...(_cache || {}) };
+  }
   if (!force && _cache && Object.keys(_cache).length && _listenerStarted) {
     scheduleHeroDisplayVariables(_cache);
     return { ..._cache };
@@ -389,14 +393,17 @@ export function onImagesUpdate(callback, onError) {
 
   if (!_listenerStarted) {
     _listenerStarted = true;
-    onSnapshot(
-      doc(db, FIRESTORE_DOC),
-      snap => publish(snap.exists() ? snap.data() : {}),
-      error => {
-        console.warn('[images] realtime listener failed:', error);
-        publishError(error);
-      }
-    );
+    appCheckReady.then(ready => {
+      if (!ready) return;
+      onSnapshot(
+        doc(db, FIRESTORE_DOC),
+        snap => publish(snap.exists() ? snap.data() : {}),
+        error => {
+          console.warn('[images] realtime listener failed:', error);
+          publishError(error);
+        }
+      );
+    });
   }
 
   return () => {

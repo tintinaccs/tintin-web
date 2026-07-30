@@ -16,7 +16,9 @@ const checks = [
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login sin animación de marca', css.includes('body:has(.login-page) #tt-loader-spin-wrap') && css.includes('animation: none !important')],
-  ['Google usa redirección en la misma pestaña y no popup', login.includes('signInWithRedirect') && login.includes('getRedirectResult') && !login.includes('signInWithPopup')],
+  ['Google usa popup como camino principal', login.includes('const cred = await signInWithPopup(auth, provider)')],
+  ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
+  ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
   ['Auth compartido no compite con el Login', authNav.includes('if(IS_LOGIN_PAGE)return;') && !authNav.includes('redirectAuthenticatedLogin')]
 ];

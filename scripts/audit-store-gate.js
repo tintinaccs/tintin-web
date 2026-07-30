@@ -37,8 +37,9 @@ check(
 check(
   'Fallback si falla el módulo',
   pageLoader.includes('showEmergencyStoreGate') &&
-    pageLoader.includes('STORE_GATE_TIMEOUT_MS'),
-  'debe quedar bloqueado incluso si el módulo o Firebase no responden'
+    pageLoader.includes('STORE_GATE_TIMEOUT_MS') &&
+    pageLoader.includes("state: 'degraded', source: 'startup-timeout'"),
+  'debe liberar un modo consulta estable si el módulo o Firebase no responden'
 );
 check(
   'El tope de espera da margen real a redes o equipos lentos',
@@ -48,7 +49,7 @@ check(
 );
 check(
   'Runtime diferido hasta permitir acceso',
-  pageLoader.includes("if (state === 'allowed')") &&
+  pageLoader.includes("if (state === 'allowed' || state === 'degraded')") &&
     pageLoader.includes('function bootPublicRuntime()') &&
     pageLoader.includes('function bootPageRuntime()') &&
     pageLoader.includes('if (!storeGateRequired) bootPageRuntime();'),
@@ -64,8 +65,17 @@ check(
 check(
   'Loader se retira ante cierre o indisponibilidad',
   pageLoader.includes("const state = event?.detail?.state || 'unavailable'") &&
+    pageLoader.includes("state === 'allowed' || state === 'degraded'") &&
     pageLoader.includes('contentReady = true;\n        logoReady = true;\n        hideNow();'),
   'el aviso final no puede quedar tapado esperando page-ready'
+);
+check(
+  'Indisponibilidad sin ventanas alternantes',
+  gateRuntime.includes("publishState('degraded')") &&
+    gateCore.includes("classList.add('tt-store-gate-degraded')") &&
+    gateCore.includes('tt-store-gate-network-notice') &&
+    gateCore.includes('__TintinStoreGateDegradedGuardBound'),
+  'una falla de red debe conservar la página visible y bloquear solo el checkout'
 );
 check(
   'Auth nav no duplica módulos globales',

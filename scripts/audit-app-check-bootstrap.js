@@ -1,0 +1,117 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const root = path.resolve(__dirname, '..');
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
+const moduleFiles = fs.readdirSync(path.join(root, 'js'))
+  .filter(file => file.endsWith('.js'))
+  .map(file => `js/${file}`);
+
+const loader = read('js/page-loader.js');
+const firebase = read('js/firebase.js');
+const storeGate = read('js/store-gate-core.js');
+const storeGateRuntime = read('js/store-gate.js');
+const activity = read('js/site-activity.js');
+const analytics = read('js/analytics.js');
+const images = read('js/images.js');
+const publicSettings = read('js/public-settings-store.js');
+const products = read('js/products-store.js');
+const collections = read('js/collections-store.js');
+const siteContent = read('js/site-content.js');
+const index = read('index.html');
+const allRuntime = [...htmlFiles, ...moduleFiles].map(read).join('\n');
+
+const checks = [
+  [
+    'El dominio técnico redirige antes de inicializar la aplicación',
+    loader.indexOf('technicalCloudflareHost') < loader.indexOf('const documentElement') &&
+      loader.includes("'https://tintinaccs.github.io'") &&
+      loader.includes('window.TintinAbortAppBootstrap = true') &&
+      loader.includes('window.location.replace(destination.href)')
+  ],
+  [
+    'Las rutas /api de Cloudflare nunca se redirigen',
+    loader.includes("!window.location.pathname.startsWith('/api/')")
+  ],
+  [
+    'App Check obtiene un primer token antes del refresco automático',
+    firebase.includes('isTokenAutoRefreshEnabled: false') &&
+      firebase.includes('getAppCheckToken(appCheck, false)') &&
+      firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
+  ],
+  [
+    'El estado público solo marca App Check activo después del token',
+    firebase.indexOf("window.TintinAppCheckStatus = 'enabled'") >
+      firebase.indexOf('getAppCheckToken(appCheck, false)')
+  ],
+  [
+    'El control de tienda espera la certificación del origen',
+    storeGate.includes('if (!await appCheckReady)') &&
+      storeGate.indexOf('if (!await appCheckReady)') < storeGate.indexOf("let primaryStatus = 'missing'") &&
+      storeGateRuntime.includes('const appCheckAvailable = await appCheckReady') &&
+      storeGateRuntime.indexOf('const appCheckAvailable = await appCheckReady') <
+        storeGateRuntime.indexOf('onSnapshot(')
+  ],
+  [
+    'Una falla transitoria usa un solo modo consulta, nunca otra ventana modal',
+    storeGateRuntime.includes("publishState('degraded')") &&
+      loader.includes("state === 'allowed' || state === 'degraded'") &&
+      storeGate.includes("classList.add('tt-store-gate-degraded')") &&
+      storeGate.includes('tt-store-gate-network-notice') &&
+      loader.includes('__TintinEmergencyDegradedGuardBound')
+  ],
+  [
+    'El modo consulta bloquea únicamente el paso crítico de compra',
+    storeGate.includes('a[href*="checkout"]') &&
+      storeGate.includes('.tt-cart-checkout-btn') &&
+      storeGate.includes('__TintinStoreGateDegradedGuardBound')
+  ],
+  [
+    'La presencia no escribe sin App Check',
+    activity.includes('const appCheckAvailable = await appCheckReady') &&
+      (
+        activity.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true &&\n  appCheckAvailable') ||
+        activity.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable')
+      )
+  ],
+  [
+    'Los lectores públicos no encadenan errores si App Check falla',
+    analytics.includes('if (!await appCheckReady)') &&
+      images.includes('if (!await appCheckReady)') &&
+      publicSettings.includes('appCheckReady.then(ready =>') &&
+      products.includes('if (!await appCheckReady)') &&
+      collections.includes('if (!await appCheckReady)') &&
+      siteContent.includes('appCheckReady.then(ready =>')
+  ],
+  [
+    'Todos los consumidores usan una sola versión de Firebase',
+    !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
+      allRuntime.includes('firebase.js?v=tintin-20260730-appcheck-stable-2')
+  ],
+  [
+    'Todas las páginas fuerzan el loader corregido',
+    htmlFiles.every(file =>
+      read(file).includes('page-loader.js?v=tintin-20260730-appcheck-stable-2')
+    )
+  ],
+  [
+    'La portada no precarga dos veces la hoja principal',
+    !/<link[^>]+rel=["']preload["'][^>]+href=["']styles\.css/i.test(index)
+  ]
+];
+
+let failures = 0;
+for (const [label, ok] of checks) {
+  console.log(`${ok ? 'OK' : 'FALTA'} — ${label}`);
+  if (!ok) failures += 1;
+}
+
+if (failures) {
+  console.error(`\nAuditoría de arranque App Check: ${failures} fallo(s).`);
+  process.exit(1);
+}
+
+console.log('\nAuditoría de arranque App Check completada correctamente.');

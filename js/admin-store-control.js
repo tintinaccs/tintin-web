@@ -12,7 +12,7 @@
    completos dejan de ser públicos.
    ============================================================= */
 
-import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   onAuthStateChanged

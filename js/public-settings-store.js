@@ -1,4 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { readStaleCached, recordFirestoreRead, writeCached } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
 
@@ -6,6 +6,7 @@ const CACHE_KEY = 'settings:general';
 const subscribers = new Set();
 let current = readStaleCached(CACHE_KEY);
 let unsubscribe = null;
+let startPending = false;
 let lastError = null;
 
 function publish(data, meta) {
@@ -20,19 +21,27 @@ function publish(data, meta) {
 }
 
 function start() {
-  if (unsubscribe) return;
-  unsubscribe = onSnapshot(doc(db, 'settings', 'general'), snapshot => {
-    recordFirestoreRead('settings:general', 1);
-    lastError = null;
-    const data = snapshot.exists() ? snapshot.data() || {} : {};
-    writeCached(CACHE_KEY, data);
-    publish(data, { source: 'server', exists: snapshot.exists() });
-  }, error => {
-    lastError = error;
-    subscribers.forEach(callback => {
-      try {
-        callback(current || {}, { source: current ? 'stale-cache' : 'error', error });
-      } catch {}
+  if (unsubscribe || startPending) return;
+  startPending = true;
+  appCheckReady.then(ready => {
+    startPending = false;
+    if (!ready) {
+      publish(current || {}, { source: current ? 'stale-cache' : 'offline-safe' });
+      return;
+    }
+    unsubscribe = onSnapshot(doc(db, 'settings', 'general'), snapshot => {
+      recordFirestoreRead('settings:general', 1);
+      lastError = null;
+      const data = snapshot.exists() ? snapshot.data() || {} : {};
+      writeCached(CACHE_KEY, data);
+      publish(data, { source: 'server', exists: snapshot.exists() });
+    }, error => {
+      lastError = error;
+      subscribers.forEach(callback => {
+        try {
+          callback(current || {}, { source: current ? 'stale-cache' : 'error', error });
+        } catch {}
+      });
     });
   });
 }

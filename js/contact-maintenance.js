@@ -1,4 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const file = (location.pathname.split('/').pop() || '').toLowerCase();
@@ -192,7 +192,14 @@ if (file === 'contact.html' && !window.TintinContactMaintenanceBooted) {
 
   injectCss(); setMeta(); ensureAccessibility(); networkState(); bindForm(); updatePublicContact();
   window.addEventListener('online', networkState); window.addEventListener('offline', networkState);
-  onSnapshot(doc(db, 'settings', 'general'), snap => { if (snap.exists()) updatePublicContact(snap.data()); }, error => console.warn('[contact-maintenance] configuración no disponible', error));
+  appCheckReady.then(ready => {
+    if (!ready) return;
+    onSnapshot(
+      doc(db, 'settings', 'general'),
+      snap => { if (snap.exists()) updatePublicContact(snap.data()); },
+      error => console.warn('[contact-maintenance] configuración no disponible', error)
+    );
+  });
   const footer = document.querySelector('.tt-footer-bottom');
   if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 }

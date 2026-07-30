@@ -23,6 +23,36 @@
 
   if (window.TintinLoader) return;
 
+  // Cloudflare Pages aloja únicamente las funciones /api/* de este proyecto.
+  // La tienda pública y sus rutas canónicas viven en GitHub Pages. Evitar que
+  // el dominio técnico pinte la app también impide iniciar Firebase/App Check
+  // desde un origen que no es la superficie pública.
+  const technicalCloudflareHost =
+    window.location.hostname === 'tintinaccesorios.pages.dev' ||
+    window.location.hostname.endsWith('.tintinaccesorios.pages.dev');
+  if (technicalCloudflareHost && !window.location.pathname.startsWith('/api/')) {
+    window.TintinAbortAppBootstrap = true;
+    const routeMap = new Set([
+      '404', 'about', 'admin-images', 'admin', 'cambios-devoluciones',
+      'catalogo', 'checkout', 'collections', 'contact', 'envios', 'index',
+      'login', 'nosotros', 'perfil', 'preguntas-frecuentes', 'privacidad',
+      'product', 'terminos'
+    ]);
+    const sourcePath = window.location.pathname || '/';
+    const segments = sourcePath.split('/');
+    const lastSegment = segments[segments.length - 1];
+    if (routeMap.has(lastSegment)) segments[segments.length - 1] = `${lastSegment}.html`;
+    const normalizedPath = segments.join('/') || '/';
+    const destination = new URL(
+      `/tintin-web${normalizedPath}`,
+      'https://tintinaccs.github.io'
+    );
+    destination.search = window.location.search;
+    destination.hash = window.location.hash;
+    window.location.replace(destination.href);
+    return;
+  }
+
   // Preconecta con Cloudinary (DNS + TLS) antes de que se descubra la
   // primera imagen real — recorta el primer byte de cualquier foto servida
   // desde ahí (hero, editorial, Nosotros, logo, productos, colecciones) en
@@ -86,7 +116,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260726-browser-fallback-1';
+  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-2';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -575,6 +605,45 @@
     gateEmergencyShown = true;
     waitForBody(() => {
       if (gateResolved) return;
+      documentElement.classList.remove('tt-store-gate-pending', 'tt-store-gate-blocked');
+      documentElement.classList.add('tt-store-gate-degraded');
+
+      let notice = document.getElementById('tt-store-gate-network-notice');
+      if (!notice) {
+        notice = document.createElement('aside');
+        notice.id = 'tt-store-gate-network-notice';
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+        notice.style.cssText =
+          'position:fixed;z-index:2147482988;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 28px),470px);min-height:48px;padding:10px 12px 10px 16px;border:1px solid rgba(173,63,103,.18);border-radius:18px;background:rgba(255,255,255,.96);color:#3a2d32;box-shadow:0 14px 40px rgba(58,20,35,.16);box-sizing:border-box;visibility:visible;pointer-events:auto';
+        notice.innerHTML =
+          '<span style="min-width:0;flex:1;font:600 12px/1.45 Montserrat,sans-serif">Conexión inestable. Podés explorar la tienda; las compras se habilitan al reconectar.</span>' +
+          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#ad3f67;color:#fff;font:800 12px/1 Montserrat,sans-serif;cursor:pointer">Reintentar</button>';
+        notice.querySelector('button')?.addEventListener('click', () => window.location.reload());
+        document.body.appendChild(notice);
+      }
+      if (!window.__TintinEmergencyDegradedGuardBound) {
+        window.__TintinEmergencyDegradedGuardBound = true;
+        window.addEventListener('click', event => {
+          if (!documentElement.classList.contains('tt-store-gate-degraded')) return;
+          const control = event.target?.closest?.(
+            'a[href*="checkout"],.tt-cart-checkout-btn,[data-checkout],[data-action="checkout"]'
+          );
+          if (!control) return;
+          event.preventDefault();
+          event.stopImmediatePropagation?.();
+          event.stopPropagation?.();
+          document.getElementById('tt-store-gate-network-notice')
+            ?.querySelector('button')
+            ?.focus({ preventScroll: true });
+        }, true);
+      }
+
+      window.dispatchEvent(new CustomEvent('tintin:store-gate-state', {
+        detail: { state: 'degraded', source: 'startup-timeout' }
+      }));
+      return;
+
       documentElement.classList.remove('tt-store-gate-pending');
       documentElement.classList.add('tt-store-gate-blocked');
       lockEmergencySiblings();
@@ -819,7 +888,7 @@
         const state = event?.detail?.state || 'unavailable';
         gateResolved = true;
 
-        if (state === 'allowed') {
+        if (state === 'allowed' || state === 'degraded') {
           // Destapar primero la página. El runtime público liviano arranca en
           // una tarea posterior y no puede retener el loader mientras carga.
           if (contentReady) tryHideElegant();

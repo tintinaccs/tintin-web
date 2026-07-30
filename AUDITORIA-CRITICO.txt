@@ -120,8 +120,11 @@ SOLUCIÓN:
 [RESUELTO 2026-07-23] Se agregó presenceUpdateNotTooFrequent() en
 firestore.rules (un mismo documento de sitePresence ya no puede
 reescribirse más rápido que cada 20s) Y se activó Firebase App Check
-(reCAPTCHA v3) en js/firebase.js, registrado para los dominios
-tintinaccs.github.io, tintinaccesorios.pages.dev y localhost. App Check
+(reCAPTCHA v3) en js/firebase.js. La tienda pública usa
+tintinaccs.github.io; tintinaccesorios.pages.dev queda reservado a /api/*
+y redirige las páginas antes de iniciar Firebase. El desarrollo local usa
+tokens de depuración privados: localhost no debe autorizarse como dominio
+reCAPTCHA de producción. App Check
 cubre exactamente el hueco que las reglas solas no podían: ahora un
 script no puede crear documentos nuevos (visitorId distinto en cada
 request) sin pasar primero la verificación, además de servir de defensa

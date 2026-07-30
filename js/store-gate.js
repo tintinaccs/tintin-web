@@ -7,7 +7,7 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './store-gate-core.js?v=tintin-20260726-browser-fallback-1';
+} from './store-gate-core.js?v=tintin-20260730-appcheck-stable-2';
 
 export {
   isAccessAllowed,
@@ -37,6 +37,7 @@ export {
 if (!window.TintinStoreGateRuntimeBooted) {
   window.TintinStoreGateRuntimeBooted = true;
   document.documentElement.classList.add('tt-store-gate-pending');
+  const appCheckAvailable = await appCheckReady;
 
   const storeGateRef = doc(db, 'settings', 'storeGate');
   const legacyGeneralRef = doc(db, 'settings', 'general');
@@ -71,7 +72,7 @@ if (!window.TintinStoreGateRuntimeBooted) {
 
     if (config.__storeConfigStatus !== 'ok') {
       renderStoreConfigUnavailableOverlay(config);
-      publishState('unavailable');
+      publishState('degraded');
       return;
     }
 
@@ -88,6 +89,11 @@ if (!window.TintinStoreGateRuntimeBooted) {
     }
 
     email = user.email || '';
+    if (!appCheckAvailable) {
+      role = '__unresolved__';
+      evaluate();
+      return;
+    }
     try {
       role = await getUserRole(user.uid, user.email);
     } catch (error) {
@@ -134,43 +140,45 @@ if (!window.TintinStoreGateRuntimeBooted) {
     );
   }
 
-  onSnapshot(
-    storeGateRef,
-    snapshot => {
-      if (!snapshot.exists()) {
-        startLegacyFallback('documento todavía no creado');
-        return;
-      }
+  if (appCheckAvailable) {
+    onSnapshot(
+      storeGateRef,
+      snapshot => {
+        if (!snapshot.exists()) {
+          startLegacyFallback('documento todavía no creado');
+          return;
+        }
 
-      stopLegacyFallback();
-      config = normalizeStoreAccessConfig(snapshot.data(), 'ok');
-      evaluate();
-    },
-    error => {
-      console.warn(
-        '[store-gate] settings/storeGate todavía no se puede leer:',
-        error
-      );
-      startLegacyFallback('reglas anteriores');
-    }
-  );
-
-  // Respaldo en paralelo: evita el falso "sitio bloqueado" cuando la tienda
-  // está abierta pero el navegador impide el canal normal de Firebase.
-  window.setTimeout(() => {
-    if (config?.__storeConfigStatus === 'ok') return;
-    getStoreAccessConfigFromRest()
-      .then(restConfig => {
-        if (!restConfig) return;
-        restConfigResolved = true;
         stopLegacyFallback();
-        config = restConfig;
+        config = normalizeStoreAccessConfig(snapshot.data(), 'ok');
         evaluate();
-      })
-      .catch(error => {
-        console.warn('[store-gate] El respaldo REST tampoco pudo comprobar el estado:', error);
-      });
-  }, 900);
+      },
+      error => {
+        console.warn('[store-gate] settings/storeGate todavía no se puede leer:', error);
+        startLegacyFallback('reglas anteriores');
+      }
+    );
+
+    // Respaldo en paralelo: evita el falso bloqueo cuando la tienda está
+    // abierta pero el navegador no puede mantener el canal normal de Firebase.
+    window.setTimeout(() => {
+      if (config?.__storeConfigStatus === 'ok') return;
+      getStoreAccessConfigFromRest()
+        .then(restConfig => {
+          if (!restConfig) return;
+          restConfigResolved = true;
+          stopLegacyFallback();
+          config = restConfig;
+          evaluate();
+        })
+        .catch(() => {});
+    }, 900);
+  } else {
+    // Sin certificación válida no se inicia ninguna lectura de Firestore.
+    // Se emite un único estado estable y la página queda en modo consulta.
+    config = normalizeStoreAccessConfig({}, 'app-check-error');
+    evaluate();
+  }
 
   async function refresh() {
     document.documentElement.classList.add('tt-store-gate-pending');
