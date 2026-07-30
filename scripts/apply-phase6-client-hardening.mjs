@@ -84,4 +84,15 @@ secureAudit = secureAudit
   .replace('Una tienda cerrada, cuenta bloqueada o correo no verificado debe fallar también en las reglas.', 'El endpoint debe rechazar tienda cerrada, cuenta bloqueada o correo no verificado.');
 fs.writeFileSync(secureAuditPath, secureAudit);
 
+const rolesAuditPath = 'scripts/audit-admin-users-roles.js';
+let rolesAudit = fs.readFileSync(rolesAuditPath, 'utf8');
+const oldRoleRule = `/request\\.resource\\.data\\.role != 'superadmin' \\|\\|\\s*\\n\\s*request\\.auth\\.token\\.email == "tintinaccs@gmail\\.com"/.test(rules),`;
+const newRoleRule = `rules.includes("request.resource.data.role in ['client', 'admin', 'agent', 'viewer']") &&\n    rules.includes('!isSuperAdminAccount(resource.data)'),`;
+if (!rolesAudit.includes(oldRoleRule)) throw new Error('No se encontró el contrato viejo de rol superadmin');
+rolesAudit = rolesAudit
+  .replace('Las reglas impiden escribir role:"superadmin" salvo la cuenta oficial', 'Las reglas impiden asignar superadmin y protegen la cuenta oficial')
+  .replace(oldRoleRule, newRoleRule)
+  .replace('Nadie debe poder elevar a "superadmin" a otra cuenta desde el panel.', 'Solo se admiten roles editables y la cuenta oficial no puede degradarse.');
+fs.writeFileSync(rolesAuditPath, rolesAudit);
+
 console.log('Cliente, endpoint y contratos de seguridad endurecidos.');
