@@ -22,6 +22,10 @@
 #   Firebase Installations (todos bajo el mismo SDK de Firebase).
 # - api.imgbb.com: subida de imágenes desde el panel admin
 #   (js/admin-app.js), solo alcanzable con sesión de administrador.
+# - apis.google.com: detectado con Lighthouse real contra producción
+#   (errors-in-console) — el flujo de reCAPTCHA Enterprise carga
+#   "https://apis.google.com/js/api.js" (gapi loader) y sin este dominio
+#   en script-src/connect-src el navegador lo bloquea silenciosamente.
 #
 # img-src queda en "https:" amplio (no acotado a Cloudinary) porque las URLs
 # de imagen de producto son datos que carga el admin en Firestore, no algo
@@ -34,7 +38,7 @@
 # frame-ancestors 'none' reemplaza a X-Frame-Options y evita que el sitio
 # se pueda embeber en un iframe ajeno (clickjacking del checkout/login).
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://securetoken.google.com https://www.google.com https://www.gstatic.com https://res.cloudinary.com https://api.imgbb.com; frame-src 'self' https://www.google.com https://www.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://securetoken.google.com https://www.google.com https://www.gstatic.com https://apis.google.com https://res.cloudinary.com https://api.imgbb.com; frame-src 'self' https://www.google.com https://www.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
