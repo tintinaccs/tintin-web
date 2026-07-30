@@ -314,6 +314,67 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
+/* Inicio monta además paneles fijos del shell. En mobile esos paneles y las
+   grillas remotas deben usar el ancho físico del viewport, nunca un ancho
+   mínimo heredado del drawer desktop o del contenido todavía no cargado. */
+@media (max-width: 768px) {
+  html:has(body.tt-home-premium),
+  body.tt-home-premium,
+  body.tt-home-premium main,
+  body.tt-home-premium .tt-hero,
+  body.tt-home-premium .tt-hero-media,
+  body.tt-home-premium .tt-hero-media picture,
+  body.tt-home-premium .tt-trust-bar,
+  body.tt-home-premium .tt-collections-section,
+  body.tt-home-premium .tt-look-section,
+  body.tt-home-premium .tt-products-section,
+  body.tt-home-premium .tt-reviews-section,
+  body.tt-home-premium .tt-footer {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+  }
+
+  body.tt-home-premium :is(
+    .tt-trust-grid,
+    .tt-collections-grid,
+    #look-grid,
+    #products-grid,
+    .tt-reviews-grid
+  ) {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.tt-home-premium :is(
+    .tt-trust-grid,
+    .tt-collections-grid,
+    #look-grid,
+    #products-grid,
+    .tt-reviews-grid
+  ) > *,
+  body.tt-home-premium .tt-home-runtime-state,
+  body.tt-home-premium .tt-home-runtime-state-inner {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.tt-home-premium :is(
+    .tt-mobile-menu,
+    .tt-search-panel,
+    .tt-search-results,
+    .tt-cart-drawer,
+    .tt-collections-sheet
+  ) {
+    width: 100vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --tt-motion-instant: 1ms;
