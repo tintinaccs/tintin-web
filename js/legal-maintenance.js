@@ -129,7 +129,7 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   // vía firebase.js— se carga recién acá, después de que el índice y el
   // resto del contenido ya están en pantalla, en vez de bloquearlos.
   Promise.all([
-    import('./firebase.js?v=tintin-20260730-appcheck-stable-2'),
+    import('./firebase.js?v=tintin-20260730-appcheck-stable-3'),
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
   ]).then(([{ db }, { doc, onSnapshot }]) => {
     onSnapshot(doc(db, 'settings', 'general'), snap => {

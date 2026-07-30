@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   getPageSchema,

@@ -1,4 +1,4 @@
-import { db, auth } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { db, auth } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,

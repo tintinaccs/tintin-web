@@ -36,16 +36,10 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 // Certifica ante Firebase que las lecturas y escrituras vienen de este sitio
 // y no de un script externo repitiendo llamadas (el vector que agotó la
 // cuota diaria de Firestore del plan Spark).
-const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--WIq0PRCP9m';
-const TECHNICAL_CLOUDFLARE_HOST =
-  window.location.hostname === 'tintinaccesorios.pages.dev' ||
-  window.location.hostname.endsWith('.tintinaccesorios.pages.dev');
-const APP_BOOT_ABORTED =
-  window.TintinAbortAppBootstrap === true ||
-  TECHNICAL_CLOUDFLARE_HOST;
+const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m';
 let appCheck = null;
 let appCheckReady = Promise.resolve(false);
-if (FIREBASE_APP_CHECK_SITE_KEY && !APP_BOOT_ABORTED) {
+if (FIREBASE_APP_CHECK_SITE_KEY) {
   appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
     // Se activa después de obtener el primer token. Si la configuración del
@@ -70,10 +64,8 @@ if (FIREBASE_APP_CHECK_SITE_KEY && !APP_BOOT_ABORTED) {
       }));
       return false;
     });
-} else if (!APP_BOOT_ABORTED) {
-  window.TintinAppCheckStatus = 'configuration-required';
 } else {
-  window.TintinAppCheckStatus = 'skipped-technical-host';
+  window.TintinAppCheckStatus = 'configuration-required';
 }
 window.TintinAppCheckReady = appCheckReady;
 

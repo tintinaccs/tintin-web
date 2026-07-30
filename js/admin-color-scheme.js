@@ -7,7 +7,7 @@
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { db } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap } from './color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1';
 

@@ -26,19 +26,23 @@ const allRuntime = [...htmlFiles, ...moduleFiles].map(read).join('\n');
 
 const checks = [
   [
-    'El dominio técnico redirige antes de inicializar la aplicación',
-    loader.indexOf('technicalCloudflareHost') < loader.indexOf('const documentElement') &&
-      loader.includes("'https://tintinaccs.github.io'") &&
-      loader.includes('window.TintinAbortAppBootstrap = true') &&
-      loader.includes('window.location.replace(destination.href)')
+    'GitHub Pages redirige al origen público antes de inicializar la aplicación',
+    loader.indexOf("window.location.hostname === 'tintinaccs.github.io'") <
+      loader.indexOf('if (window.TintinLoader) return') &&
+      loader.includes("'https://tintinaccesorios.pages.dev'") &&
+      loader.includes('window.location.replace(')
   ],
   [
-    'Las rutas /api de Cloudflare nunca se redirigen',
-    loader.includes("!window.location.pathname.startsWith('/api/')")
+    'El origen público nunca se trata como host técnico',
+    !loader.includes('technicalCloudflareHost') &&
+      !loader.includes('window.TintinAbortAppBootstrap') &&
+      !firebase.includes('TECHNICAL_CLOUDFLARE_HOST') &&
+      !firebase.includes('APP_BOOT_ABORTED')
   ],
   [
     'App Check obtiene un primer token antes del refresco automático',
-    firebase.includes('isTokenAutoRefreshEnabled: false') &&
+    firebase.includes("6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m") &&
+      firebase.includes('isTokenAutoRefreshEnabled: false') &&
       firebase.includes('getAppCheckToken(appCheck, false)') &&
       firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
   ],
@@ -89,12 +93,12 @@ const checks = [
   [
     'Todos los consumidores usan una sola versión de Firebase',
     !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
-      allRuntime.includes('firebase.js?v=tintin-20260730-appcheck-stable-2')
+      allRuntime.includes('firebase.js?v=tintin-20260730-appcheck-stable-3')
   ],
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('page-loader.js?v=tintin-20260730-appcheck-stable-2')
+      read(file).includes('page-loader.js?v=tintin-20260730-appcheck-stable-3')
     )
   ],
   [

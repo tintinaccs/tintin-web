@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260730-appcheck-stable-2"></script>
+  <script src="js/page-loader.js?v=tintin-20260730-appcheck-stable-3"></script>
   <script src="js/public-shell.js?v=tintin-20260726-login-session-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow">
@@ -19,7 +19,7 @@
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
-  <link rel="canonical" href="https://tintinaccs.github.io/tintin-web/login.html" />
+  <link rel="canonical" href="https://tintinaccesorios.pages.dev/login.html" />
   <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
@@ -94,7 +94,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/firebase.js?v=tintin-20260730-appcheck-stable-2";
+import { auth, db, provider } from "./js/firebase.js?v=tintin-20260730-appcheck-stable-3";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -112,7 +112,7 @@ import {
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-2";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-3";
 
 // Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
 // que llegó por correo, el onAuthStateChanged de más abajo (que corre en
