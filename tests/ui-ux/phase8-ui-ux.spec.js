@@ -1,4 +1,6 @@
-import { test, expect } from '@playwright/test';
+'use strict';
+
+const { test, expect } = require('@playwright/test');
 
 test.describe('Fase 8 — UI/UX global', () => {
   test.beforeEach(async ({ page }) => {
