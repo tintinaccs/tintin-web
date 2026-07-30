@@ -70,6 +70,9 @@ export function mapProduct(id, d) {
     active: d.active !== false,
     oferta: !!d.oferta,
     destacado: !!d.destacado,
+    tags: Array.isArray(d.tags)
+      ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
+      : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999
   };
@@ -84,7 +87,12 @@ function compactProduct(product) {
     price: product.price,
     priceBefore: product.priceBefore,
     badge: product.badge,
+    desc: product.desc,
+    description: product.description,
     imageUrl: product.imageUrl,
+    imagesExtra: product.imagesExtra,
+    tags: product.tags,
+    variants: product.variants,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,
@@ -96,7 +104,12 @@ function compactProduct(product) {
 function normalizeList(list) {
   return list
     .filter(Boolean)
-    .filter(p => p.active !== false && Boolean(p.name))
+    .map(product => window.TintinCatalogPolicy?.normalizeProduct
+      ? window.TintinCatalogPolicy.normalizeProduct(product)
+      : product)
+    .filter(product => window.TintinCatalogPolicy?.isPurchasable
+      ? window.TintinCatalogPolicy.isPurchasable(product)
+      : product.active !== false && Boolean(product.name) && !(product.stock != null && Number(product.stock) <= 0))
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
@@ -302,6 +315,7 @@ async function fetchSingleProduct(id) {
   recordFirestoreRead('products:single', 1);
   if (!snapshot.exists()) return null;
   const product = mapProduct(snapshot.id, snapshot.data());
+  if (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product)) return null;
   writeCached(`product:${id}`, product);
   return product;
 }
@@ -316,7 +330,8 @@ async function fetchRelatedProducts(product) {
       limit(12)
     ));
     recordFirestoreRead('products:related', snapshot.size);
-    return snapshot.docs.map(item => compactProduct(mapProduct(item.id, item.data())));
+    return normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())))
+      .map(compactProduct);
   } catch {
     return [];
   }
@@ -367,7 +382,8 @@ async function startProductRealtime(id) {
         }
 
         const product = mapProduct(snapshot.id, snapshot.data());
-        if (product.active === false || !product.name) {
+        if (product.active === false || !product.name ||
+            (window.TintinCatalogPolicy?.isPurchasable && !window.TintinCatalogPolicy.isPurchasable(product))) {
           publicProductCurrent = null;
           settle(publish([], 'realtime-product-unavailable'));
           return;

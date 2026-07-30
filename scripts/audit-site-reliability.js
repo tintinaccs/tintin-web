@@ -40,6 +40,7 @@ const publicShell = read('js/public-shell.js');
 const contentSchema = read('js/content-schema.js');
 const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
+const phase7CatalogPolicy = read('js/phase7-catalog-policy.js');
 const loadImagesInit = read('js/load-images-init.js');
 const collectionsPhase4 = read('js/collections-phase4.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
@@ -212,7 +213,10 @@ check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
   main.includes("menu.setAttribute('aria-hidden', 'false')"));
 check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
-  productsStore.includes('.filter(p => p.active !== false && Boolean(p.name))') &&
+  productsStore.includes('window.TintinCatalogPolicy?.isPurchasable') &&
+  phase7CatalogPolicy.includes('export function isPurchasable') &&
+  phase7CatalogPolicy.includes('p.active !== false') &&
+  phase7CatalogPolicy.includes('p.stock == null ||') &&
   productsStore.includes('featuredProducts.slice(0, 5)') &&
   loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
   main.includes('window.isFeaturable = isFeaturable'));
