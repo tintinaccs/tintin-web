@@ -1,34 +1,69 @@
-name: Auditoría de seguridad Fase 8
+name: Auditoría de seguridad Fase 6
 
 on:
   pull_request:
     paths:
-      - 'js/admin-users-phase8.js'
-      - 'js/ui-quality.js'
-      - 'js/roles.js'
       - 'firestore.rules'
-      - 'scripts/audit-security-phase8.js'
+      - '_headers'
+      - 'apps-script/Phase4CreateOrder.gs'
+      - 'scripts/apply-phase6-fixes.mjs'
+      - 'scripts/test-firestore-critical.mjs'
+      - 'scripts/audit-phase6-security.js'
       - 'package.json'
       - '.github/workflows/audit-security-phase8.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   audit:
+    name: Aplicar, atacar y auditar
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar repositorio
+      - name: Descargar rama fuente
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+
+      - name: Aplicar correcciones
+        run: node scripts/apply-phase6-fixes.mjs
+
       - name: Revisar sintaxis
         run: |
-          node --check js/admin-users-phase8.js
-          node --check js/ui-quality.js
-          node --check scripts/audit-security-phase8.js
-      - name: Revisar integración
-        run: npm run audit:security
+          node --check scripts/audit-phase6-security.js
+          node --check scripts/test-firestore-critical.mjs
+          cp apps-script/Phase4CreateOrder.gs /tmp/Phase4CreateOrder.js
+          node --check /tmp/Phase4CreateOrder.js
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Auditar Fase 6
+        run: npm run audit:phase6
+
+      - name: Ejecutar ataques contra Firestore Rules
+        run: npm run test:rules-critical
+
+      - name: Ejecutar auditoría integral
+        run: npm run audit:final
+
+      - name: Regenerar diagnóstico
+        run: npm run build:pages
+
+      - name: Consolidar código validado
+        run: |
+          rm -f scripts/apply-phase6-fixes.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "security: completar Firestore y seguridad de la Fase 6"
+          git push origin HEAD:${GITHUB_HEAD_REF}
