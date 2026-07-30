@@ -23,22 +23,28 @@
 
   if (window.TintinLoader) return;
 
-  // Preconecta con Cloudinary (DNS + TLS) antes de que se descubra la
-  // primera imagen real — recorta el primer byte de cualquier foto servida
-  // desde ahí (hero, editorial, Nosotros, logo, productos, colecciones) en
-  // TODAS las páginas, sin depender de que cada HTML lo declare por separado.
-  if (document.head && !document.getElementById('tt-cloudinary-preconnect')) {
+  // Preconecta (DNS + TLS) con los orígenes que están en el camino crítico
+  // de CUALQUIER página antes de que el HTML los descubra por sí solo:
+  // Cloudinary (hero, editorial, productos, colecciones), el SDK de
+  // Firestore (gstatic) y el propio backend de Firestore — los dos últimos
+  // se piden apenas carga firebase.js, mucho antes que cualquier imagen.
+  [
+    { id: 'tt-cloudinary-preconnect', href: 'https://res.cloudinary.com' },
+    { id: 'tt-gstatic-preconnect', href: 'https://www.gstatic.com' },
+    { id: 'tt-firestore-preconnect', href: 'https://firestore.googleapis.com' },
+  ].forEach(function (origin) {
+    if (!document.head || document.getElementById(origin.id)) return;
     const preconnect = document.createElement('link');
-    preconnect.id = 'tt-cloudinary-preconnect';
+    preconnect.id = origin.id;
     preconnect.rel = 'preconnect';
-    preconnect.href = 'https://res.cloudinary.com';
+    preconnect.href = origin.href;
     preconnect.crossOrigin = 'anonymous';
     document.head.appendChild(preconnect);
     const dnsPrefetch = document.createElement('link');
     dnsPrefetch.rel = 'dns-prefetch';
-    dnsPrefetch.href = 'https://res.cloudinary.com';
+    dnsPrefetch.href = origin.href;
     document.head.appendChild(dnsPrefetch);
-  }
+  });
 
   const documentElement = document.documentElement;
   const path = (window.location.pathname || '').toLowerCase();
@@ -86,7 +92,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260722-order-delete-2';
+  const TT_CACHE_VERSION = 'tintin-20260730-perf-preconnect-1';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo

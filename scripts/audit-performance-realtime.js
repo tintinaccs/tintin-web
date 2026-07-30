@@ -141,7 +141,7 @@ check(
 
 check(
   'Cloudinary tiene preconnect y dns-prefetch',
-  read('js/page-loader.js').includes("preconnect.href = 'https://res.cloudinary.com'") &&
+  read('js/page-loader.js').includes("href: 'https://res.cloudinary.com'") &&
     read('js/page-loader.js').includes("dnsPrefetch.rel = 'dns-prefetch'"),
   'La conexión al CDN debe adelantarse.'
 );
