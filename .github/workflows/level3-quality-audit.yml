@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - agent/fase8-ui-ux-20260730
   pull_request:
     branches:
       - main
@@ -15,7 +16,7 @@ permissions:
 jobs:
   sync_phase8_main:
     name: Integrar main actualizado en Fase 8
-    if: github.event_name == 'pull_request' && github.head_ref == 'agent/fase8-ui-ux-20260730'
+    if: (github.event_name == 'pull_request' && github.head_ref == 'agent/fase8-ui-ux-20260730') || (github.event_name == 'push' && github.ref_name == 'agent/fase8-ui-ux-20260730')
     runs-on: ubuntu-latest
     steps:
       - name: Descargar rama de Fase 8
@@ -66,7 +67,7 @@ jobs:
             done
           fi
 
-          git show HEAD^:.github/workflows/level3-quality-audit.yml > .github/workflows/level3-quality-audit.yml
+          git show 44bf0d99e9bf6707eab5d3ea951f74949092f451:.github/workflows/level3-quality-audit.yml > .github/workflows/level3-quality-audit.yml
           git rm -f .github/workflows/sync-phase8-main.yml
           git add -A
 
@@ -79,7 +80,7 @@ jobs:
 
   quality:
     name: Responsive, accesibilidad, rendimiento, SEO y UI/UX
-    if: github.event_name != 'pull_request' || github.head_ref != 'agent/fase8-ui-ux-20260730'
+    if: github.ref_name != 'agent/fase8-ui-ux-20260730' && github.head_ref != 'agent/fase8-ui-ux-20260730'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
