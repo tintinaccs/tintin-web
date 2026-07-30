@@ -15,9 +15,10 @@ on:
       - 'js/ui-quality.js'
       - 'js/secure-checkout-order.js'
       - 'functions/api/sheets-product-sync.js'
-      - 'scripts/apply-phase7-catalog-fixes.mjs'
+      - 'scripts/apply-phase7-*.mjs'
       - 'scripts/audit-phase7-catalog.js'
       - 'scripts/audit-cart-phase7.js'
+      - 'scripts/audit-site-reliability.js'
       - 'package.json'
       - 'diagnostic-manifest.json'
       - '.github/workflows/audit-cart-phase7.yml'
@@ -35,6 +36,7 @@ on:
       - 'functions/api/sheets-product-sync.js'
       - 'scripts/audit-phase7-catalog.js'
       - 'scripts/audit-cart-phase7.js'
+      - 'scripts/audit-site-reliability.js'
       - 'package.json'
       - 'diagnostic-manifest.json'
       - '.github/workflows/audit-cart-phase7.yml'
@@ -62,10 +64,14 @@ jobs:
 
       - name: Aplicar consolidación de la Fase 7
         run: |
-          if [ -f scripts/apply-phase7-catalog-fixes.mjs ]; then
-            node scripts/apply-phase7-catalog-fixes.mjs
-          else
+          shopt -s nullglob
+          scripts=(scripts/apply-phase7-*.mjs)
+          if [ ${#scripts[@]} -eq 0 ]; then
             echo 'La consolidación ya fue aplicada.'
+          else
+            for script in "${scripts[@]}"; do
+              node "$script"
+            done
           fi
 
       - name: Instalar dependencias
@@ -80,6 +86,7 @@ jobs:
           node --check script.js
           node --check scripts/audit-phase7-catalog.js
           node --check scripts/audit-cart-phase7.js
+          node --check scripts/audit-site-reliability.js
 
       - name: Auditar catálogo y sincronización
         run: npm run audit:phase7-catalog
