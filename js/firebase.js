@@ -7,7 +7,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   initializeAppCheck,
-  ReCaptchaV3Provider,
+  ReCaptchaEnterpriseProvider,
   getToken as getAppCheckToken,
   setTokenAutoRefreshEnabled
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
@@ -30,7 +30,7 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Clave pública de reCAPTCHA v3 creada desde Firebase Console → App Check.
+// Clave pública de reCAPTCHA Enterprise registrada en Firebase App Check.
 // Al cargarla y activar Enforcement en Firestore, las llamadas que no provengan
 // de la web legítima quedan rechazadas antes de consumir la API normalmente.
 // Certifica ante Firebase que las lecturas y escrituras vienen de este sitio
@@ -41,7 +41,7 @@ let appCheck = null;
 let appCheckReady = Promise.resolve(false);
 if (FIREBASE_APP_CHECK_SITE_KEY) {
   appCheck = initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
+    provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
     // Se activa después de obtener el primer token. Si la configuración del
     // dominio falla, evita un refresco proactivo que repita errores cada pocos
     // segundos sin posibilidad de recuperarse.

@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
+import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getUserRole, SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';

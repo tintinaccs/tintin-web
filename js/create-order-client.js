@@ -9,7 +9,7 @@
  * ver apps-script/Phase4CreateOrder.gs para la validación completa.
  */
 import { EMAIL_WEBHOOK_URL } from './email-config.js?v=tintin-20260716-cloudinary-fix-1';
-import { auth } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
+import { auth } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 
 export async function createOrderViaServer(draft) {
   const idToken = await auth.currentUser?.getIdToken(true);

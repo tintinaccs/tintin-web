@@ -1,4 +1,4 @@
-import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   collection,
   getDocs,

@@ -6,7 +6,7 @@
    categorías reales y escrituras por lotes auditadas.
    ============================================================= */
 
-import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,
