@@ -23,36 +23,6 @@
 
   if (window.TintinLoader) return;
 
-  // Cloudflare Pages aloja únicamente las funciones /api/* de este proyecto.
-  // La tienda pública y sus rutas canónicas viven en GitHub Pages. Evitar que
-  // el dominio técnico pinte la app también impide iniciar Firebase/App Check
-  // desde un origen que no es la superficie pública.
-  const technicalCloudflareHost =
-    window.location.hostname === 'tintinaccesorios.pages.dev' ||
-    window.location.hostname.endsWith('.tintinaccesorios.pages.dev');
-  if (technicalCloudflareHost && !window.location.pathname.startsWith('/api/')) {
-    window.TintinAbortAppBootstrap = true;
-    const routeMap = new Set([
-      '404', 'about', 'admin-images', 'admin', 'cambios-devoluciones',
-      'catalogo', 'checkout', 'collections', 'contact', 'envios', 'index',
-      'login', 'nosotros', 'perfil', 'preguntas-frecuentes', 'privacidad',
-      'product', 'terminos'
-    ]);
-    const sourcePath = window.location.pathname || '/';
-    const segments = sourcePath.split('/');
-    const lastSegment = segments[segments.length - 1];
-    if (routeMap.has(lastSegment)) segments[segments.length - 1] = `${lastSegment}.html`;
-    const normalizedPath = segments.join('/') || '/';
-    const destination = new URL(
-      `/tintin-web${normalizedPath}`,
-      'https://tintinaccs.github.io'
-    );
-    destination.search = window.location.search;
-    destination.hash = window.location.hash;
-    window.location.replace(destination.href);
-    return;
-  }
-
   // Preconecta con Cloudinary (DNS + TLS) antes de que se descubra la
   // primera imagen real — recorta el primer byte de cualquier foto servida
   // desde ahí (hero, editorial, Nosotros, logo, productos, colecciones) en
@@ -116,7 +86,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-2';
+  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-3';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo

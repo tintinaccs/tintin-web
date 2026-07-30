@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import {
   collection,
   query,

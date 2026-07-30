@@ -77,7 +77,7 @@
 
   (async function () {
     try {
-      var fbMod = await import('./firebase.js?v=tintin-20260730-appcheck-stable-2');
+      var fbMod = await import('./firebase.js?v=tintin-20260730-appcheck-stable-3');
       var fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       fs.onSnapshot(fs.doc(fbMod.db, 'settings', 'general'), function (snap) {
         var mode = normalize(snap.exists() ? snap.data() : {});

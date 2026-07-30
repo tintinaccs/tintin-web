@@ -7,7 +7,7 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './store-gate-core.js?v=tintin-20260730-appcheck-stable-2';
+} from './store-gate-core.js?v=tintin-20260730-appcheck-stable-3';
 
 export {
   isAccessAllowed,

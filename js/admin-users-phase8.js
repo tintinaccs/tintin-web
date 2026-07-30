@@ -9,7 +9,7 @@
    - listeners en tiempo real
    ============================================================= */
 
-import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-2';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,
