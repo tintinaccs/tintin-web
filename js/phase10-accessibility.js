@@ -3,6 +3,8 @@
    ============================================================= */
 
 const DIALOG_SELECTOR = 'dialog[open],[role="dialog"][aria-modal="true"]';
+const CONTROL_SELECTOR = 'button,a[href],[role="button"],input[type="button"],input[type="submit"]';
+const FIELD_SELECTOR = 'input,select,textarea';
 const FOCUSABLE_SELECTOR = [
   'a[href]:not([tabindex="-1"])',
   'button:not([disabled]):not([tabindex="-1"])',
@@ -37,8 +39,12 @@ function injectStyles() {
 
 function isVisible(element) {
   if (!(element instanceof HTMLElement) || element.hidden || element.inert) return false;
+  if (element.closest('[hidden],[inert],[aria-hidden="true"]')) return false;
   const style = getComputedStyle(element);
-  return style.display !== 'none' && style.visibility !== 'hidden' && element.getClientRects().length > 0;
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0' || style.pointerEvents === 'none') return false;
+  const rect = element.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return false;
+  return rect.bottom > 0 && rect.right > 0 && rect.top < window.innerHeight && rect.left < window.innerWidth;
 }
 
 function focusables(root) {
@@ -61,8 +67,19 @@ function ensureSkipLink() {
   link.className = 'tt-skip-link';
   link.href = '#' + main.id;
   link.textContent = 'Saltar al contenido principal';
-  link.addEventListener('click', () => requestAnimationFrame(() => main.focus({ preventScroll: true })));
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    main.focus({ preventScroll: true });
+    main.scrollIntoView({ block: 'start' });
+  });
   document.body?.insertBefore(link, document.body.firstChild);
+}
+
+function bindSkipLinkRecovery() {
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Tab') ensureSkipLink();
+  }, true);
+  window.addEventListener('pageshow', ensureSkipLink);
 }
 
 function hasAccessibleName(control) {
@@ -151,23 +168,30 @@ function activateDialog(dialog) {
   activeDialog = dialog;
   labelDialog(dialog);
   requestAnimationFrame(() => {
+    if (activeDialog !== dialog || !isVisible(dialog)) return;
     const target = focusables(dialog)[0] || dialog;
     target.focus({ preventScroll: true });
   });
 }
 
 function releaseDialogIfNeeded() {
-  if (!activeDialog) return;
-  if (activeDialog.isConnected && isVisible(activeDialog)) return;
+  if (!activeDialog) return false;
+  if (activeDialog.isConnected && isVisible(activeDialog)) return false;
   activeDialog = null;
   const target = returnFocus;
   returnFocus = null;
-  if (target?.isConnected && !target.inert) requestAnimationFrame(() => target.focus({ preventScroll: true }));
+  if (target?.isConnected && !target.inert) {
+    target.focus({ preventScroll: true });
+    requestAnimationFrame(() => {
+      if (document.activeElement !== target && target.isConnected && !activeDialog) target.focus({ preventScroll: true });
+    });
+  }
+  return true;
 }
 
 function scanDialogs() {
-  releaseDialogIfNeeded();
-  if (activeDialog) return;
+  const released = releaseDialogIfNeeded();
+  if (released || activeDialog) return;
   const dialogs = Array.from(document.querySelectorAll(DIALOG_SELECTOR)).filter(isVisible);
   if (dialogs.length) activateDialog(dialogs.at(-1));
 }
@@ -249,8 +273,13 @@ function updateConnectivity() {
 
 function enhance(root = document) {
   ensureSkipLink();
-  root.querySelectorAll?.('button,a[href],[role="button"],input[type="button"],input[type="submit"]').forEach(enhanceControl);
-  root.querySelectorAll?.('input,select,textarea').forEach(enhanceField);
+  if (root instanceof HTMLElement && root.matches(CONTROL_SELECTOR)) enhanceControl(root);
+  root.querySelectorAll?.(CONTROL_SELECTOR).forEach(enhanceControl);
+  if (root instanceof HTMLElement && root.matches(FIELD_SELECTOR)) enhanceField(root);
+  root.querySelectorAll?.(FIELD_SELECTOR).forEach(enhanceField);
+  if (root instanceof HTMLElement && root.matches('[role="alert"],[aria-live]') && !root.hasAttribute('aria-atomic')) {
+    root.setAttribute('aria-atomic', 'true');
+  }
   root.querySelectorAll?.('[role="alert"],[aria-live]').forEach(region => {
     if (region instanceof HTMLElement && !region.hasAttribute('aria-atomic')) region.setAttribute('aria-atomic', 'true');
   });
@@ -266,18 +295,33 @@ function bindInvalidFeedback() {
     field.setAttribute('aria-invalid', 'true');
     const label = cleanText(field.getAttribute('aria-label') || field.getAttribute('name') || 'Campo');
     window.TintinUX?.announce?.(label + ': revisá este dato antes de continuar.', { assertive: true });
-    requestAnimationFrame(() => field.focus({ preventScroll: false }));
+    const focusField = () => {
+      if (field.isConnected && !field.inert && !activeDialog) field.focus({ preventScroll: false });
+    };
+    queueMicrotask(focusField);
+    requestAnimationFrame(focusField);
+    window.setTimeout(focusField, 0);
   }, true);
 }
 
 function observe() {
   const observer = new MutationObserver(records => {
-    records.forEach(record => record.addedNodes.forEach(node => {
-      if (node instanceof HTMLElement) enhance(node);
-    }));
+    let structureChanged = false;
+    records.forEach(record => {
+      if (record.type === 'childList') structureChanged = true;
+      record.addedNodes.forEach(node => {
+        if (node instanceof HTMLElement) enhance(node);
+      });
+    });
+    if (structureChanged && !document.getElementById('tt-skip-link')) queueMicrotask(ensureSkipLink);
     scheduleDialogScan();
   });
-  observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['open', 'hidden', 'class', 'aria-hidden'] });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['open', 'hidden', 'class', 'style', 'aria-hidden', 'aria-modal']
+  });
   window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
 }
 
@@ -285,6 +329,7 @@ function boot() {
   if (window.TintinAccessibility?.booted) return;
   injectStyles();
   enhance();
+  bindSkipLinkRecovery();
   bindDialogFocus();
   bindInvalidFeedback();
   observe();
