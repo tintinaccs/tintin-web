@@ -52,7 +52,7 @@ check(
 );
 check(
   '[404.html] es NO indexable (robots noindex)',
-  /<meta name="robots" content="noindex">/.test(notFound),
+  /<meta\s+name="robots"\s+content="[^"]*\bnoindex\b[^"]*">/i.test(notFound),
   'Una página de error nunca debe indexarse en buscadores.'
 );
 check(

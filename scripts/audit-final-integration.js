@@ -128,11 +128,23 @@ const packageMissing = [...packageScripts.matchAll(/node (scripts\/[A-Za-z0-9._-
   .map(match => match[1]).filter((value, index, values) => values.indexOf(value) === index).filter(file => !exists(file));
 check('Todos los scripts de package.json existen', packageMissing.length === 0, packageMissing.join(', '));
 const workflowDirectory = path.join(root, '.github/workflows');
-const workflowText = fs.readdirSync(workflowDirectory).filter(file => /\.ya?ml$/.test(file))
-  .map(file => fs.readFileSync(path.join(workflowDirectory, file), 'utf8')).join('\n');
-const workflowMissing = [...workflowText.matchAll(/node (scripts\/[A-Za-z0-9._-]+\.js)/g)]
-  .map(match => match[1]).filter((value, index, values) => values.indexOf(value) === index).filter(file => !exists(file));
-check('Todos los scripts de CI existen', workflowMissing.length === 0, workflowMissing.join(', '));
+const currentWorkflowRef = String(process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME || '');
+const branchScopedWorkflows = new Map([
+  ['apply-unified-store-logic.yml', 'audit/unified-store-logic'],
+  ['validate-unified-store-final.yml', 'audit/unified-store-logic']
+]);
+const workflowMissing = [];
+for (const file of fs.readdirSync(workflowDirectory).filter(file => /\.ya?ml$/.test(file))) {
+  const requiredRef = branchScopedWorkflows.get(file) || '';
+  // Estos workflows solo pueden ejecutarse para su rama exacta. Sus scripts
+  // viven en esa misma rama de trabajo y no forman parte del producto publicado.
+  if (requiredRef && currentWorkflowRef !== requiredRef) continue;
+  const text = fs.readFileSync(path.join(workflowDirectory, file), 'utf8');
+  for (const match of text.matchAll(/node (scripts\/[A-Za-z0-9._-]+\.js)/g)) {
+    if (!exists(match[1]) && !workflowMissing.includes(match[1])) workflowMissing.push(match[1]);
+  }
+}
+check('Todos los scripts de CI aplicables existen', workflowMissing.length === 0, workflowMissing.join(', '));
 
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => {

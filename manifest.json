@@ -1,14 +1,20 @@
 {
+  "id": "/",
   "name": "Tintin Accesorios & Relojes",
   "short_name": "Tintin",
   "description": "Accesorios y relojes femeninos en Paraguay — anillos, aros, pulseras, collares y más.",
-  "start_url": "index.html",
-  "scope": "./",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#FFF6FA",
   "theme_color": "#AD3F67",
   "lang": "es-PY",
+  "dir": "ltr",
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
   "icons": [
     {
       "src": "favicon-192x192.png",
