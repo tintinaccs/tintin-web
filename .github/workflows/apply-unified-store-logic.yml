@@ -34,7 +34,13 @@ jobs:
             node scripts/apply-unified-store-logic.mjs
             rm scripts/apply-unified-store-logic.mjs
           else
-            echo "La corrección ya fue aplicada."
+            echo "La corrección central ya fue aplicada."
+          fi
+          if [ -f scripts/apply-unified-store-surfaces.mjs ]; then
+            node scripts/apply-unified-store-surfaces.mjs
+            rm scripts/apply-unified-store-surfaces.mjs
+          else
+            echo "Las superficies públicas ya fueron alineadas."
           fi
           rm -f maintenance/unified-store-audit-trigger.txt
 
@@ -44,9 +50,12 @@ jobs:
           node --check js/products-store.js
           node --check js/phase7-catalog-policy.js
           node --check js/catalog-stock-priority.js
+          node --check script.js
           node scripts/audit-unified-store-logic.js
+          node scripts/audit-unified-store-surfaces.js
           node scripts/audit-phase7-catalog.js
           node scripts/audit-catalog-page.js
+          node scripts/audit-collections-page.js
           node scripts/audit-product-page.js
 
       - name: Guardar corrección en la rama
