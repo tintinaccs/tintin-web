@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T14:08:44.788Z",
-  "sourceFingerprint": "ff3b4086c727aedccef44fc945a4bd6ab7290d4891eb5d1c2008ba009f2ac292",
+  "generatedAt": "2026-07-31T14:18:48.766Z",
+  "sourceFingerprint": "7fc8bff69b62418358ce57c2fe8c51ea15d5402947c8065d2ad40ec3697d8501",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 414,
     "textFiles": 380,
-    "totalBytes": 5670965,
+    "totalBytes": 5671476,
     "pages": 18,
     "modules": 232
   },
@@ -18915,8 +18915,8 @@
     },
     {
       "path": "scripts/production-smoke-phase12.mjs",
-      "bytes": 5778,
-      "sha256": "ec0321cca433ec6b2da1c36ca03add595b2feca1da2689cee5ec9f5278221b63",
+      "bytes": 6289,
+      "sha256": "f831d30d0de76d10674687b841f2e625cfde787c80e392bb2224670981c5c5cb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21627,8 +21627,8 @@
     {
       "path": "scripts/production-smoke-phase12.mjs",
       "extension": ".mjs",
-      "bytes": 5778,
-      "sha256": "ec0321cca433ec6b2da1c36ca03add595b2feca1da2689cee5ec9f5278221b63"
+      "bytes": 6289,
+      "sha256": "f831d30d0de76d10674687b841f2e625cfde787c80e392bb2224670981c5c5cb"
     },
     {
       "path": "scripts/run-responsive-audit-with-retry.mjs",
