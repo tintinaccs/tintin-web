@@ -91,8 +91,8 @@ check(
 
 check(
   'La búsqueda pública excluye productos no comprables',
-  /productPool\.filter\(isFeaturable\)/.test(storefront) &&
-    /window\.TintinCatalogPolicy\?\.isPurchasable/.test(storefront),
+  /window\.TintinCatalogPolicy\?\.isCatalogVisible/.test(storefront) &&
+    /orderedPool\.filter\(p =>/.test(storefront),
   'Resultados globales no deben enlazar productos agotados, ocultos o inválidos.'
 );
 
