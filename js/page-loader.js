@@ -146,11 +146,11 @@
   const CSS = [
     'html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
     'body.tt-scroll-locked{position:fixed!important;left:0!important;right:0!important;width:100%!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
-    'html.tt-store-gate-pending,html.tt-store-gate-blocked{background:#FFF6FA!important}',
+    'html.tt-store-gate-pending,html.tt-store-gate-blocked{background:#FFADD1!important}',
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFF6FA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
+    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFADD1;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:0;transform:translateY(5px) scale(.985);clip-path:inset(0 0 100% 0);filter:drop-shadow(0 8px 20px rgba(202,1,105,.14));user-select:none;pointer-events:none}',

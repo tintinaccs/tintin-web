@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T17:43:02.660Z",
-  "sourceFingerprint": "58cb9727049855a766681ae383b1860392f4444b82580cf5e41df83a61630d95",
+  "generatedAt": "2026-07-31T17:58:57.379Z",
+  "sourceFingerprint": "9b7a5bf754c6f9204c4126322ad9d55954c3ec3170a6c85ffe5d4471fcf5a323",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 419,
     "textFiles": 384,
-    "totalBytes": 5689108,
+    "totalBytes": 5689388,
     "pages": 18,
     "modules": 235
   },
@@ -16274,7 +16274,7 @@
     {
       "path": "js/page-loader.js",
       "bytes": 29776,
-      "sha256": "923de2fea3f88433790fb042fdaaade9149583abcd5ca856ffec73fe1ff597c4",
+      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18361,8 +18361,8 @@
     },
     {
       "path": "scripts/audit-loader-solid.js",
-      "bytes": 1752,
-      "sha256": "d25793e67d3ebc36bada6127c8304346ede290080c2da0ba690dcd2b20ceae9d",
+      "bytes": 2051,
+      "sha256": "41a34dc24d044dbe792d2d9dc01af7eceb76063a927a882ed9069bc135e42f3f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19843,8 +19843,8 @@
     {
       "path": "css/color-tokens.css",
       "extension": ".css",
-      "bytes": 5993,
-      "sha256": "9946e1f80c6f377298580698dbce584e32649f3c0c0b24abc73ed35a63579fe2"
+      "bytes": 5989,
+      "sha256": "d13038d6b8e85e3eae280a1cab2fe6a1ad4897fb87bd820e227e26a586696a41"
     },
     {
       "path": "css/global-fit.css",
@@ -19873,8 +19873,8 @@
     {
       "path": "css/loader-solid-background.css",
       "extension": ".css",
-      "bytes": 2297,
-      "sha256": "a84af9e57976246bb7d2f48a3e960b5b7d7cd8309f4c7d935c8842e061b49504"
+      "bytes": 2282,
+      "sha256": "dec9923d534734e905e5f9958553f197a6d19550d624c9876511d4b3f5954cb1"
     },
     {
       "path": "css/login-maintenance.css",
@@ -20756,7 +20756,7 @@
       "path": "js/page-loader.js",
       "extension": ".js",
       "bytes": 29776,
-      "sha256": "923de2fea3f88433790fb042fdaaade9149583abcd5ca856ffec73fe1ff597c4"
+      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -21499,8 +21499,8 @@
     {
       "path": "scripts/audit-loader-solid.js",
       "extension": ".js",
-      "bytes": 1752,
-      "sha256": "d25793e67d3ebc36bada6127c8304346ede290080c2da0ba690dcd2b20ceae9d"
+      "bytes": 2051,
+      "sha256": "41a34dc24d044dbe792d2d9dc01af7eceb76063a927a882ed9069bc135e42f3f"
     },
     {
       "path": "scripts/audit-login-isolation.js",
