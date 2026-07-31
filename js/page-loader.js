@@ -86,7 +86,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260730-appcheck-stable-4';
+  const TT_CACHE_VERSION = 'tintin-20260730-phase8-ui-1';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -810,6 +810,19 @@
     }
   }
 
+  function bootPhase8UiUx() {
+    if (!document.getElementById('tt-phase8-ui-ux-css')) {
+      const link = document.createElement('link');
+      link.id = 'tt-phase8-ui-ux-css';
+      link.rel = 'stylesheet';
+      link.href = resolveAsset('css/phase8-ui-ux.css');
+      document.head.appendChild(link);
+    }
+    if (!window.TintinUX?.booted) {
+      importSibling('phase8-ui-ux.js', 'Phase 8 UI/UX');
+    }
+  }
+
   function bootPageRuntime() {
     if (runtimeBooted) return;
     runtimeBooted = true;
@@ -822,6 +835,7 @@
     bootScrollReveal();
     bootImagePerformance();
     bootSiteActivity();
+    bootPhase8UiUx();
   }
 
   function bootPublicRuntime() {
@@ -846,6 +860,7 @@
     bootCartSyncPublic();
     bootThemeColorSanitizerPublic();
     bootPageAuditFixPublic();
+    bootPhase8UiUx();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
     documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
