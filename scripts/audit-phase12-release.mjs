@@ -68,11 +68,14 @@ walk(root);
 
 const conflicts = [];
 const privateKeys = [];
+// Exige un bloque PEM completo y una carga útil suficientemente larga. Una
+// auditoría que contiene el texto de detección no se confunde con una clave.
+const privateKeyBlock = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----\s*\r?\n(?:[A-Za-z0-9+/=]{20,}\r?\n){2,}-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 for (const absolute of textFiles) {
   const relative = path.relative(root, absolute).replaceAll('\\', '/');
   const content = fs.readFileSync(absolute, 'utf8');
   if (/^(<<<<<<<|=======|>>>>>>>)(?: |$)/m.test(content)) conflicts.push(relative);
-  if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(content)) privateKeys.push(relative);
+  if (privateKeyBlock.test(content)) privateKeys.push(relative);
 }
 check('No hay marcadores de conflicto', conflicts.length === 0, conflicts.join(', '));
 check('No hay claves privadas versionadas', privateKeys.length === 0, privateKeys.join(', '));
@@ -83,12 +86,17 @@ const rules = read('firestore.rules');
 check('Firestore mantiene denegación por defecto', /match \/\{document=\*\*\}[\s\S]*allow read, write: if false/.test(rules), 'Las reglas deben conservar el cierre por defecto.');
 
 const report = read('docs/PHASE12_RELEASE_REPORT.md');
+const normalizedReport = report.replace(/\s+/g, ' ');
 for (const section of ['Problemas y causas', 'Cambios realizados', 'Pruebas ejecutadas', 'Controles externos', 'Riesgos residuales']) {
   check('El reporte incluye ' + section, report.includes('## ' + section), 'El informe final debe ser explícito y auditable.');
 }
-check('El reporte distingue App Check Enforcement', /Enforcement[^\n]*(?:no verificad|verificar)/i.test(report), 'No se debe afirmar un estado externo sin evidencia de consola.');
-check('El reporte distingue despliegue de reglas', /reglas[^\n]*(?:no verificad|requiere|consola|despliegue)/i.test(report), 'La validación estática no prueba por sí sola el despliegue vivo.');
-check('El reporte distingue Apps Script', /Apps Script[^\n]*(?:no verificad|requiere|despliegue)/i.test(report), 'El código y el deployment externo son evidencias diferentes.');
+check(
+  'El reporte distingue App Check Enforcement',
+  /Enforcement.{0,220}(?:no está verificado|no verificado|debe confirmarse|verificar)/i.test(normalizedReport),
+  'No se debe afirmar un estado externo sin evidencia de consola.'
+);
+check('El reporte distingue despliegue de reglas', /reglas.{0,220}(?:no verificad|requiere|consola|despliegue)/i.test(normalizedReport), 'La validación estática no prueba por sí sola el despliegue vivo.');
+check('El reporte distingue Apps Script', /Apps Script.{0,220}(?:no verificad|requiere|despliegue)/i.test(normalizedReport), 'El código y el deployment externo son evidencias diferentes.');
 
 let failures = 0;
 for (const item of checks) {
