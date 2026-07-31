@@ -61,7 +61,7 @@
     "test:rules-phase6": "npm run test:rules-critical",
     "audit:phase7-catalog": "node scripts/audit-phase7-catalog.js",
     "audit:phase8-ui": "node scripts/audit-phase8-ui-ux.js",
-    "test:phase8-ui": "playwright test tests/ui-ux --project=chromium",
+    "test:phase8-ui": "playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium",
     "test:phase9-import": "node --test tests/import/phase9-import-normalization.test.mjs",
     "audit:phase10": "node scripts/audit-phase10-accessibility.js",
     "test:phase10-a11y": "playwright test tests/ui-ux/phase10-accessibility.spec.js --project=chromium",
