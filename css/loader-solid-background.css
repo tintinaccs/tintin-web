@@ -41,6 +41,54 @@ html body #tt-loader > * {
   z-index: 1;
 }
 
+/* La marca visible se toma directamente del PNG oficial. Esta URL propia
+   evita reutilizar en caché el SVG generado que se retiró del repositorio. */
+html body #tt-loader-spin-wrap::before {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: var(--tt-loader-brand-width);
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  background-image: url("../assets-tintin/images/general/logo.png?v=tintin-20260731-loader-official-instant-2");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  pointer-events: none;
+}
+
+/* El elemento anterior queda fuera de la composición. Ya no puede mostrar
+   el SVG viejo ni ejecutar el revelado de arriba hacia abajo. */
+html body #tt-loader-logo,
+html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
+  display: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+/* El PNG oficial ya contiene la identidad completa de Tintin; no se duplica
+   una segunda línea de marca debajo del archivo. */
+html body #tt-loader-brand-subtitle {
+  display: none !important;
+  visibility: hidden !important;
+  animation: none !important;
+}
+
+/* El spinner sigue girando, pero aparece en su tamaño final sin una segunda
+   animación de entrada que altere la composición del loader. */
+html body #tt-loader .tt-loader-spinner,
+html body #tt-loader-spin-wrap.tt-ready .tt-loader-spinner {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: tt-loader-spinner-shell 3s linear infinite !important;
+}
+
 /* Login funciona como pantalla independiente. El shell público puede montarse
    técnicamente mientras cargan los scripts, pero jamás debe verse ni reservar
    espacio alrededor del formulario. */
@@ -62,12 +110,18 @@ html body:has(.login-page).tt-public-shell-mounted {
   padding-bottom: 0 !important;
 }
 
-/* Durante autenticación, Login usa solo la superficie sólida del loader. No
-   muestra la secuencia de marca encima de su propio diseño. */
-html body:has(.login-page) #tt-loader-spin-wrap {
-  display: none !important;
-  visibility: hidden !important;
-  animation: none !important;
+/* La pantalla normal de Login usa el mismo loader oficial que el resto del
+   sitio. Esta regla final anula únicamente la excepción visual antigua; el
+   estado interno tt-auth-silent-transition conserva su comportamiento. */
+html:has(.login-page) body #tt-loader {
+  background: #FFADD1 !important;
+  background-color: #FFADD1 !important;
+}
+
+html:has(.login-page) body #tt-loader-spin-wrap {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 html body:has(.login-page) .login-page {
