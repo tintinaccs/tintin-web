@@ -305,3 +305,12 @@ function boot() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
 else boot();
+
+
+// Fase 10 se monta sobre la instancia única y ya estabilizada de Fase 8.
+if (!window.__TintinPhase10ImportStarted) {
+  window.__TintinPhase10ImportStarted = true;
+  import('./phase10-accessibility.js?v=tintin-20260731-phase10-a11y-1').catch(error => {
+    console.error('[phase10-accessibility] No se pudo iniciar la capa accesible:', error);
+  });
+}
