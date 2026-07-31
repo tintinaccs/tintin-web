@@ -2,14 +2,19 @@
 
 const { test, expect } = require('@playwright/test');
 
-async function openHome(page) {
+async function openAccessiblePage(page) {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
-  await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+  // La home hidrata contenido editorial de forma asíncrona y puede reemplazar
+  // nodos de prueba que se inyecten durante ese arranque. Esta suite valida la
+  // capa global de accesibilidad sobre una página pública estable que carga el
+  // mismo runtime compartido.
+  await page.goto('/about.html', { waitUntil: 'load' });
+  await page.waitForFunction(() => window.TintinAccessibility?.booted === true);
   await page.waitForFunction(() => document.documentElement.classList.contains('tt-phase10-a11y-ready'));
 }
 
 test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ page }) => {
-  await openHome(page);
+  await openAccessiblePage(page);
   await page.keyboard.press('Tab');
   const skip = page.locator('#tt-skip-link');
   await expect(skip).toBeFocused();
@@ -19,7 +24,7 @@ test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ pa
 });
 
 test('un control role button responde a Enter y Espacio', async ({ page }) => {
-  await openHome(page);
+  await openAccessiblePage(page);
   await page.evaluate(() => {
     const control = document.createElement('div');
     control.id = 'tt-test-role-button';
@@ -37,7 +42,7 @@ test('un control role button responde a Enter y Espacio', async ({ page }) => {
 });
 
 test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
-  await openHome(page);
+  await openAccessiblePage(page);
   await page.evaluate(() => {
     const trigger = document.createElement('button');
     trigger.id = 'tt-test-trigger';
@@ -62,7 +67,7 @@ test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
 });
 
 test('un campo inválido recibe foco y aria-invalid', async ({ page }) => {
-  await openHome(page);
+  await openAccessiblePage(page);
   await page.evaluate(() => {
     const form = document.createElement('form');
     form.innerHTML = '<label for="tt-required">Dato requerido</label><input id="tt-required" required><button type="submit">Enviar</button>';
@@ -76,7 +81,7 @@ test('un campo inválido recibe foco y aria-invalid', async ({ page }) => {
 });
 
 test('la pérdida de conexión informa sin abrir un modal', async ({ page }) => {
-  await openHome(page);
+  await openAccessiblePage(page);
   await page.evaluate(() => {
     Object.defineProperty(navigator, 'onLine', { configurable: true, get: () => false });
     window.dispatchEvent(new Event('offline'));
