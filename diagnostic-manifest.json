@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T11:10:39.971Z",
-  "sourceFingerprint": "3febdd9ac8f4ca493632db2a61e5a1189ccf0bb8c539cefd6dd532d0bd744f3e",
+  "generatedAt": "2026-07-31T11:18:30.922Z",
+  "sourceFingerprint": "33f28827e78f59db59083eed78e208f3fd8b6e568cd503c2e241c36a361abcaf",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 403,
-    "textFiles": 369,
-    "totalBytes": 5619426,
+    "files": 404,
+    "textFiles": 370,
+    "totalBytes": 5622902,
     "pages": 18,
-    "modules": 227
+    "modules": 228
   },
   "viewports": [
     {
@@ -17216,6 +17216,42 @@
       ]
     },
     {
+      "path": "scripts/apply-phase7-phase10-sync-main.mjs",
+      "bytes": 3476,
+      "sha256": "327afe58e235bc9a78c919a2f1d893db595449e1eae70d177a418055bfe827fa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-about-page.js",
       "bytes": 2103,
       "sha256": "743b44fa471501adfd725448fd790a50c803900b17c21b5c9f96a0d2688d84f1",
@@ -20964,6 +21000,12 @@
       "extension": ".js",
       "bytes": 92181,
       "sha256": "50152e52c7e1c704cd1dc805da471a9cc9d279a2011e47dce2bdff9d4668c051"
+    },
+    {
+      "path": "scripts/apply-phase7-phase10-sync-main.mjs",
+      "extension": ".mjs",
+      "bytes": 3476,
+      "sha256": "327afe58e235bc9a78c919a2f1d893db595449e1eae70d177a418055bfe827fa"
     },
     {
       "path": "scripts/audit-about-page.js",
