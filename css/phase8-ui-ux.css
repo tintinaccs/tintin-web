@@ -278,10 +278,10 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
-/* En el catálogo móvil las tarjetas reservaban 340px de ancho por
-   contain-intrinsic-size aunque cada pista real fuera mucho menor. Eso
-   ampliaba el scrollWidth raíz sin que la tarjeta visible pareciera salir. */
-@media (max-width: 480px) {
+/* En el catálogo de dos columnas las tarjetas reservaban 340px de ancho por
+   contain-intrinsic-size aunque cada pista real fuera mucho menor. El rango
+   llega hasta 820px porque a 481px y 769px todavía existen pistas angostas. */
+@media (max-width: 820px) {
   body.tt-catalog-maintenance .cat-wrap,
   body.tt-catalog-maintenance .cat-layout,
   body.tt-catalog-maintenance .cat-main,
