@@ -36,6 +36,7 @@ jobs:
           else
             echo "La corrección ya fue aplicada."
           fi
+          rm -f maintenance/unified-store-audit-trigger.txt
 
       - name: Validar sintaxis y contratos
         run: |
