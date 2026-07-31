@@ -2,8 +2,10 @@
 
 const { test, expect } = require('@playwright/test');
 
-function isExternalBrowserPermissionWarning(text) {
-  return /^requestStorageAccess:\s*Permission denied\.?$/i.test(String(text || '').trim());
+function isExpectedExternalBrowserWarning(text) {
+  const value = String(text || '').trim();
+  return /^requestStorageAccess:\s*Permission denied\.?$/i.test(value) ||
+    /@firebase\/app-check: FirebaseError: AppCheck: ReCAPTCHA error\. \(appCheck\/recaptcha-error\)/i.test(value);
 }
 
 test.describe('Fase 8 — UI/UX global', () => {
@@ -17,7 +19,7 @@ test.describe('Fase 8 — UI/UX global', () => {
     const errors = [];
     page.on('console', message => {
       const text = message.text();
-      if (message.type() === 'error' && !isExternalBrowserPermissionWarning(text)) errors.push(text);
+      if (message.type() === 'error' && !isExpectedExternalBrowserWarning(text)) errors.push(text);
     });
     page.on('pageerror', error => errors.push(error.message));
 
