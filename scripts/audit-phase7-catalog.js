@@ -15,6 +15,7 @@ const policy = read('js/phase7-catalog-policy.js');
 const products = read('js/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
+const stockPriority = read('js/catalog-stock-priority.js');
 const admin = read('js/admin-app.js');
 const sheets = read('functions/api/sheets-product-sync.js');
 const loader = read('js/page-maintenance-loader.js');
@@ -41,13 +42,20 @@ check(
 );
 
 check(
-  'El stock no altera la posición del producto en el catálogo',
-  /El stock no modifica el orden/.test(catalog) &&
-    !/lista = \[\.\.\.lista\.filter\(isInStockCat\)/.test(catalog) &&
+  'Los agotados van al final y las reposiciones vuelven al inicio en tiempo real',
+  /function trackStockTransitions/.test(stockPriority) &&
+    /previousStockById/.test(stockPriority) &&
+    /restockedPriorityIds/.test(stockPriority) &&
+    /previousStockById\.get\(id\) === false && inStock/.test(stockPriority) &&
+    /const available = list\.filter\(isInStock\)/.test(stockPriority) &&
+    /const exhausted = list\.filter\(product => !isInStock\(product\)\)/.test(stockPriority) &&
+    /return \[\.\.\.available, \.\.\.exhausted\]/.test(stockPriority) &&
+    /renderGridWithStockPriority/.test(stockPriority) &&
+    /tintin:products-loaded/.test(stockPriority) &&
+    /catalog-stock-priority\.js/.test(loader) &&
     /tt-card-stock--in/.test(catalog) &&
-    /Disponible/.test(catalog) &&
     /disabled aria-disabled="true">Agotado/.test(catalog),
-  'Agotar o reponer stock no debe mandar la tarjeta al final ni ocultarla.'
+  'El listener debe bajar agotados al final y promover cada reposición al primer lugar sin recargar.'
 );
 
 check(
