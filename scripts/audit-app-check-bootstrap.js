@@ -85,6 +85,15 @@ const checks = [
       )
   ],
   [
+    'La presencia corta los reintentos ante rechazos permanentes',
+    activity.includes('PERMANENT_WRITE_ERROR_CODES') &&
+      activity.includes('stopAfterPermanentWriteError') &&
+      activity.includes("stopAfterPermanentWriteError(error, 'actualizar la presencia')") &&
+      activity.includes('analyticsWritable = false') &&
+      activity.includes('stopActivity();') &&
+      activity.includes('permanentWriteErrorCode')
+  ],
+  [
     'Los lectores públicos no encadenan errores si App Check falla',
     analytics.includes('if (!await appCheckReady)') &&
       images.includes('if (!await appCheckReady)') &&
