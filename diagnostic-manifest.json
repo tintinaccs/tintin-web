@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T17:18:34.674Z",
-  "sourceFingerprint": "0ae735fa131f727b1f659804835fc2461959951f553e11f23a5c620f32b81a18",
+  "generatedAt": "2026-07-31T17:43:02.660Z",
+  "sourceFingerprint": "58cb9727049855a766681ae383b1860392f4444b82580cf5e41df83a61630d95",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 421,
-    "textFiles": 386,
-    "totalBytes": 5692582,
+    "files": 419,
+    "textFiles": 384,
+    "totalBytes": 5689108,
     "pages": 18,
-    "modules": 236
+    "modules": 235
   },
   "viewports": [
     {
@@ -16274,7 +16274,7 @@
     {
       "path": "js/page-loader.js",
       "bytes": 29776,
-      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8",
+      "sha256": "923de2fea3f88433790fb042fdaaade9149583abcd5ca856ffec73fe1ff597c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16480,8 +16480,8 @@
     },
     {
       "path": "js/products-store.js",
-      "bytes": 19662,
-      "sha256": "ffb4d7c8684a024f5e581200ab4dfbaaeee1867b0655261d6f4e5969b6cb7b6f",
+      "bytes": 19656,
+      "sha256": "e4a3ea15d51d6d88405a46c407db1e11bc45cf6cf23935d0c1b708a85087db81",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17185,8 +17185,8 @@
     },
     {
       "path": "script.js",
-      "bytes": 92550,
-      "sha256": "986b9da4e10009e259ca5471b43d9ead4fc705c0cca1eabd5ebb5011d0e5171c",
+      "bytes": 93194,
+      "sha256": "e8801996fc33ff988d579450aceae7afad4dd0e275e6bd0f1f6060267b9c9f71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17202,13 +17202,13 @@
           "raw": "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/cart-sync.js",
           "dynamic": true,
-          "line": 1000
+          "line": 1011
         },
         {
           "raw": "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/cart-sync.js",
           "dynamic": true,
-          "line": 1614
+          "line": 1625
         }
       ],
       "endpoints": [
@@ -17222,51 +17222,33 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 1191
+          "line": 1202
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1204
+          "line": 1215
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1204
+          "line": 1215
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1205
+          "line": 1216
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1230
+          "line": 1241
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1334
+          "line": 1345
         },
         {
           "url": "https://wa.me/",
-          "line": 1459
+          "line": 1470
         }
       ]
-    },
-    {
-      "path": "scripts/apply-unified-store-surfaces.mjs",
-      "bytes": 3997,
-      "sha256": "e6d9b64a43934ecb04d0b49750d2e89299ecd9412c935a30b5954bc4c0ac42db",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": []
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -18567,8 +18549,8 @@
     },
     {
       "path": "scripts/audit-phase7-catalog.js",
-      "bytes": 7041,
-      "sha256": "0c59c89e60e45966539902d63fba3e437f46c7374f31a26568bbccacc0738a46",
+      "bytes": 7034,
+      "sha256": "5d3caae387cd87866d77ab5d873fb52d20d54cd18601f2e7223dbda4b0eb5e3d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20774,7 +20756,7 @@
       "path": "js/page-loader.js",
       "extension": ".js",
       "bytes": 29776,
-      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8"
+      "sha256": "923de2fea3f88433790fb042fdaaade9149583abcd5ca856ffec73fe1ff597c4"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -20851,8 +20833,8 @@
     {
       "path": "js/products-store.js",
       "extension": ".js",
-      "bytes": 19662,
-      "sha256": "ffb4d7c8684a024f5e581200ab4dfbaaeee1867b0655261d6f4e5969b6cb7b6f"
+      "bytes": 19656,
+      "sha256": "e4a3ea15d51d6d88405a46c407db1e11bc45cf6cf23935d0c1b708a85087db81"
     },
     {
       "path": "js/profile-maintenance.js",
@@ -21161,12 +21143,6 @@
       "sha256": "35437abd6212bd1ca4a7e3cb94fd5ba5687ae80cb4ea46bc1c538e666b2638b3"
     },
     {
-      "path": "maintenance/unified-store-audit-trigger.txt",
-      "extension": ".txt",
-      "bytes": 108,
-      "sha256": "3170237d6167e6742180b9e0640351395340af5c940e31df1a7de3dc0313a9aa"
-    },
-    {
       "path": "manifest.json",
       "extension": ".json",
       "bytes": 720,
@@ -21229,14 +21205,8 @@
     {
       "path": "script.js",
       "extension": ".js",
-      "bytes": 92550,
-      "sha256": "986b9da4e10009e259ca5471b43d9ead4fc705c0cca1eabd5ebb5011d0e5171c"
-    },
-    {
-      "path": "scripts/apply-unified-store-surfaces.mjs",
-      "extension": ".mjs",
-      "bytes": 3997,
-      "sha256": "e6d9b64a43934ecb04d0b49750d2e89299ecd9412c935a30b5954bc4c0ac42db"
+      "bytes": 93194,
+      "sha256": "e8801996fc33ff988d579450aceae7afad4dd0e275e6bd0f1f6060267b9c9f71"
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -21601,8 +21571,8 @@
     {
       "path": "scripts/audit-phase7-catalog.js",
       "extension": ".js",
-      "bytes": 7041,
-      "sha256": "0c59c89e60e45966539902d63fba3e437f46c7374f31a26568bbccacc0738a46"
+      "bytes": 7034,
+      "sha256": "5d3caae387cd87866d77ab5d873fb52d20d54cd18601f2e7223dbda4b0eb5e3d"
     },
     {
       "path": "scripts/audit-phase8-ui-ux.js",
@@ -24370,42 +24340,42 @@
     },
     {
       "file": "script.js",
-      "line": 770,
+      "line": 778,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "script.js",
-      "line": 884,
+      "line": 893,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "script.js",
-      "line": 945,
+      "line": 956,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "script.js",
-      "line": 1188,
+      "line": 1199,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "script.js",
-      "line": 1226,
+      "line": 1237,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "script.js",
-      "line": 1582,
+      "line": 1593,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -25022,19 +24992,19 @@
         },
         {
           "file": "script.js",
-          "line": 770
+          "line": 778
         },
         {
           "file": "script.js",
-          "line": 884
+          "line": 893
         },
         {
           "file": "script.js",
-          "line": 945
+          "line": 956
         },
         {
           "file": "script.js",
-          "line": 1211
+          "line": 1222
         }
       ]
     }

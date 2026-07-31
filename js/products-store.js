@@ -134,7 +134,7 @@ function publish(products, source) {
     detail: { products: normalized, source }
   }));
   if (typeof window.renderProductsGrid === 'function') {
-    if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', featuredProducts);
+    if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', normalized);
     if (document.getElementById('products-grid')) window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
