@@ -240,7 +240,7 @@ html.tt-phase8-ux-ready .perfil-card {
 
 /* En el primer píxel del rango tablet, las pistas 1fr conservaban el mínimo
    intrínseco de las tarjetas y podían ensanchar la grilla más que el viewport. */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) {
   body.tt-home-premium #look-grid {
     width: 100%;
     min-width: 0;
