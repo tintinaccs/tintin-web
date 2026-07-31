@@ -47,7 +47,7 @@ jobs:
       - name: Regenerar manifiesto diagnóstico
         shell: bash
         run: |
-          npm run diagnostic:manifest
+          npm run build:diagnostics
           mkdir -p artifacts
           cp diagnostic-manifest.json artifacts/diagnostic-manifest.json
 
