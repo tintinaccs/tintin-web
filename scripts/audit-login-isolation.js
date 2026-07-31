@@ -6,6 +6,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const css = read('css/loader-solid-background.css');
+const solidUiSurfaces = read('css/solid-ui-surfaces.css');
 const login = read('login.html');
 const authNav = read('js/auth-nav.js');
 
@@ -15,7 +16,7 @@ const checks = [
   ['Barra mobile oculta en Login', css.includes('body:has(.login-page) #tt-tabbar')],
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
-  ['Loader de Login sin animación de marca', css.includes('body:has(.login-page) #tt-loader-spin-wrap') && css.includes('animation: none !important')],
+  ['Loader de Login sin animación de marca', solidUiSurfaces.includes('html:has(.login-page) #tt-loader-spin-wrap') && solidUiSurfaces.includes('display: none !important') && solidUiSurfaces.includes('visibility: hidden !important')],
   ['Google usa popup como camino principal', login.includes('const cred = await signInWithPopup(auth, provider)')],
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
