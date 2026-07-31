@@ -109,6 +109,11 @@ function inferControlLabel(control) {
   return '';
 }
 
+function isKeyboardActivation(event) {
+  const key = String(event.key || '');
+  return key === 'Enter' || key === ' ' || key === 'Spacebar' || event.code === 'Space' || event.keyCode === 32;
+}
+
 function enhanceControl(control) {
   if (!(control instanceof HTMLElement) || control.dataset.ttA11yControl === '1') return;
   control.dataset.ttA11yControl = '1';
@@ -124,9 +129,12 @@ function enhanceControl(control) {
   if (control.getAttribute('role') === 'button' && !control.matches('button,input,a[href]')) {
     if (!control.hasAttribute('tabindex')) control.tabIndex = 0;
     control.addEventListener('keydown', event => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (!isKeyboardActivation(event)) return;
       event.preventDefault();
-      if (event.repeat) return;
+      // En entradas físicas bloquea el autorepeat. Los eventos sintéticos de
+      // pruebas y tecnologías de asistencia no deben descartarse por un valor
+      // de repeat inconsistente del navegador.
+      if (event.isTrusted && event.repeat) return;
       control.click();
     });
   }
