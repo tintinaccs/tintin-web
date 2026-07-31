@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T14:18:48.766Z",
-  "sourceFingerprint": "7fc8bff69b62418358ce57c2fe8c51ea15d5402947c8065d2ad40ec3697d8501",
+  "generatedAt": "2026-07-31T16:02:15.924Z",
+  "sourceFingerprint": "6c24bf26ff535bd1df23fbd144b568acb737899f5855a3a207d4b692ac8b43c0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 414,
+    "files": 415,
     "textFiles": 380,
-    "totalBytes": 5671476,
+    "totalBytes": 5671652,
     "pages": 18,
     "modules": 232
   },
@@ -16255,8 +16255,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 40087,
-      "sha256": "88cb7cbce2c60d1671c4582a311a3a9933dde88cd2a5adcdfb3c7d6ffa9203ae",
+      "bytes": 29776,
+      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16265,15 +16265,15 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 17
+          "line": 10
         },
         {
           "url": "https://res.cloudinary.com/",
-          "line": 34
+          "line": 25
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/tintin-accesorios/",
-          "line": 668
+          "line": 499
         }
       ]
     },
@@ -16354,8 +16354,8 @@
     },
     {
       "path": "js/phase8-ui-ux.js",
-      "bytes": 12063,
-      "sha256": "29542dea4db75e13acc6765e39e6a8f6d77630b5cfaad9b38af5d9dd60520b3e",
+      "bytes": 13297,
+      "sha256": "cd350e5cf0bf2176300b4d616a3eabcf8604f873a53423d1c74a53a2bb60e097",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16365,7 +16365,7 @@
           "raw": "./phase10-accessibility.js?v=tintin-20260731-phase10-a11y-1",
           "target": "js/phase10-accessibility.js",
           "dynamic": true,
-          "line": 316
+          "line": 359
         }
       ],
       "endpoints": []
@@ -17410,8 +17410,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 12539,
-      "sha256": "c3dfc48014ab6069189b683c9a4650d1f96e953cb2c8dca316de7c376c6305e9",
+      "bytes": 12541,
+      "sha256": "a5c1cabe989e1a943c2de6f10c91b4ec78822429490e94faced818279b88b3cc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18537,8 +18537,8 @@
     },
     {
       "path": "scripts/audit-phase8-ui-ux.js",
-      "bytes": 6367,
-      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4",
+      "bytes": 6369,
+      "sha256": "4d92b4e5881a2b94b52e96e3d52dd6dd008b663f77e95d37ed95481d201a2cd9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18650,8 +18650,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 15859,
-      "sha256": "6182d96a966b1db5e23d3cf5c6a32e3b05b9539219479f9c1e4b9e85941d5aad",
+      "bytes": 15861,
+      "sha256": "72dd7e5407b13ca8c0cc976f56b884a8e59566a54f4c4458e54100789d5fe760",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19413,8 +19413,8 @@
     {
       "path": ".github/workflows/phase11-seo-production.yml",
       "extension": ".yml",
-      "bytes": 1399,
-      "sha256": "8a61913700881b07f2c16a71abb3c9e5bfa2e81b4937135c7c675bb46c1945ed"
+      "bytes": 1504,
+      "sha256": "3bf668c998e5470da88d3f3fbc2e456207f171f9cdbff38afba54ea0580eb5f2"
     },
     {
       "path": ".github/workflows/phase12-final-release.yml",
@@ -19645,6 +19645,12 @@
       "sha256": "e5ab2faf07d15a8d64eca46fef2c116834e39c0ff7e994cb9184b63025535770"
     },
     {
+      "path": "assets-tintin/images/general/tintin-loader-brand.svg",
+      "extension": ".svg",
+      "bytes": 6916,
+      "sha256": "952e428c556821b8ffd8c00e68f4186ebfe1bd80a8d9633963f8f455c3850fc9"
+    },
+    {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
       "extension": ".webp",
       "bytes": 474396,
@@ -19857,8 +19863,8 @@
     {
       "path": "css/phase8-ui-ux.css",
       "extension": ".css",
-      "bytes": 11756,
-      "sha256": "37d1eb732ce67df3b5fa57c4229edeb37e255ec6c50566ab393fdfe731f65d39"
+      "bytes": 13982,
+      "sha256": "a5d084121fd33826f25ce01bb9fd6f971d95746c77987b8e946ffcc47d19600c"
     },
     {
       "path": "css/product-extras.css",
@@ -20685,8 +20691,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 40087,
-      "sha256": "88cb7cbce2c60d1671c4582a311a3a9933dde88cd2a5adcdfb3c7d6ffa9203ae"
+      "bytes": 29776,
+      "sha256": "1cd01b31c69b297dabb68712dc16fd10004e7fb00625464b2df45b1d0deae5a8"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -20721,8 +20727,8 @@
     {
       "path": "js/phase8-ui-ux.js",
       "extension": ".js",
-      "bytes": 12063,
-      "sha256": "29542dea4db75e13acc6765e39e6a8f6d77630b5cfaad9b38af5d9dd60520b3e"
+      "bytes": 13297,
+      "sha256": "cd350e5cf0bf2176300b4d616a3eabcf8604f873a53423d1c74a53a2bb60e097"
     },
     {
       "path": "js/phone-utils.js",
@@ -21183,8 +21189,8 @@
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 12539,
-      "sha256": "c3dfc48014ab6069189b683c9a4650d1f96e953cb2c8dca316de7c376c6305e9"
+      "bytes": 12541,
+      "sha256": "a5c1cabe989e1a943c2de6f10c91b4ec78822429490e94faced818279b88b3cc"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
@@ -21507,8 +21513,8 @@
     {
       "path": "scripts/audit-phase8-ui-ux.js",
       "extension": ".js",
-      "bytes": 6367,
-      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4"
+      "bytes": 6369,
+      "sha256": "4d92b4e5881a2b94b52e96e3d52dd6dd008b663f77e95d37ed95481d201a2cd9"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -21555,8 +21561,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 15859,
-      "sha256": "6182d96a966b1db5e23d3cf5c6a32e3b05b9539219479f9c1e4b9e85941d5aad"
+      "bytes": 15861,
+      "sha256": "72dd7e5407b13ca8c0cc976f56b884a8e59566a54f4c4458e54100789d5fe760"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -23481,49 +23487,42 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 46,
+      "line": 38,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 48,
+      "line": 40,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 51,
+      "line": 43,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 54,
+      "line": 46,
       "raw": "/admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 536,
-      "raw": "index.html",
-      "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "js/page-loader.js",
-      "line": 754,
+      "line": 586,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 760,
+      "line": 592,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
