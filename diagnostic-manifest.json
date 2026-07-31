@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T12:19:21.479Z",
-  "sourceFingerprint": "5cca013155716f18868e9f8e1ac9487d4105eb7c7d4001dbfb2f63b3e9bcc8c2",
+  "generatedAt": "2026-07-31T14:18:48.766Z",
+  "sourceFingerprint": "7fc8bff69b62418358ce57c2fe8c51ea15d5402947c8065d2ad40ec3697d8501",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 410,
-    "textFiles": 376,
-    "totalBytes": 5645032,
+    "files": 414,
+    "textFiles": 380,
+    "totalBytes": 5671476,
     "pages": 18,
-    "modules": 230
+    "modules": 232
   },
   "viewports": [
     {
@@ -16325,8 +16325,8 @@
     },
     {
       "path": "js/phase10-accessibility.js",
-      "bytes": 12163,
-      "sha256": "1eb83719bf466df57bf04322b0e651fdbf23c04304222fa7bc11c7fdafb0a16f",
+      "bytes": 14310,
+      "sha256": "7ea472b17e0d280e789f61b0fde2b32fdbd670873d00534080af3009487c3e71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16429,14 +16429,19 @@
     },
     {
       "path": "js/product-related.js",
-      "bytes": 14008,
-      "sha256": "81414cfe0f0fd01d2fbce45953d4dd536dd751cf4b5e8278ef78466754a0969a",
+      "bytes": 15870,
+      "sha256": "35c533c512ea95c036d3d766e96e545c6f15ee0e94f04a5cc42aaac330a35291",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "line": 3
+        }
+      ]
     },
     {
       "path": "js/product-selection.js",
@@ -18421,8 +18426,8 @@
     },
     {
       "path": "scripts/audit-phase10-accessibility.js",
-      "bytes": 4385,
-      "sha256": "c0a0740cd92da42733b1f9bfa1c8c8e28da6e5aec68f67a5298dcf2bffeb8e98",
+      "bytes": 4587,
+      "sha256": "95b41d498570ec0796f9523f4ab3d83ad72d03e9ada446dd846cbad706f63b62",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18445,6 +18450,36 @@
           "line": 5
         }
       ]
+    },
+    {
+      "path": "scripts/audit-phase12-release.mjs",
+      "bytes": 6329,
+      "sha256": "b9675ce5b3f108381d98cb43a5aa08f8645554ea7eae2e964d83535be8aa5819",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/audit-phase5-performance.js",
@@ -18502,8 +18537,8 @@
     },
     {
       "path": "scripts/audit-phase8-ui-ux.js",
-      "bytes": 6276,
-      "sha256": "56b8873456621702328434ddb311faf2f9ae5dac7371a713644dc4a70822aed3",
+      "bytes": 6367,
+      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18879,6 +18914,35 @@
       "endpoints": []
     },
     {
+      "path": "scripts/production-smoke-phase12.mjs",
+      "bytes": 6289,
+      "sha256": "f831d30d0de76d10674687b841f2e625cfde787c80e392bb2224670981c5c5cb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 4
+        }
+      ]
+    },
+    {
       "path": "scripts/run-responsive-audit-with-retry.mjs",
       "bytes": 1201,
       "sha256": "1e0ad0df4a9d172422b3ccf22d673f3f8531e2e2629bba7af605db1e98826722",
@@ -19186,8 +19250,8 @@
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
-      "bytes": 3941,
-      "sha256": "dbe00840aa41bcd003b411053db6249567e1ef52f465fe691a5251f7e281377f",
+      "bytes": 5393,
+      "sha256": "9690abbbf78bed951519b826f7878dc3f88e352e9b75baabc50bb93f611dd188",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19197,8 +19261,8 @@
     },
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
-      "bytes": 3656,
-      "sha256": "e81f9cce541e7c15398408ab5a362045cfd5cd1cf5cf8eab48faf23259fcfcf7",
+      "bytes": 4009,
+      "sha256": "a37ed771155a3220c0af945a124b35e5a1498426cce9f5345a1fbbec76fe02bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19351,6 +19415,12 @@
       "extension": ".yml",
       "bytes": 1399,
       "sha256": "8a61913700881b07f2c16a71abb3c9e5bfa2e81b4937135c7c675bb46c1945ed"
+    },
+    {
+      "path": ".github/workflows/phase12-final-release.yml",
+      "extension": ".yml",
+      "bytes": 3647,
+      "sha256": "55021debc8c41d1510e761103d422086da15874dd4bffac087be12f0bd22bc00"
     },
     {
       "path": ".github/workflows/system-special-part2g-audit.yml",
@@ -19879,6 +19949,12 @@
       "extension": ".md",
       "bytes": 589,
       "sha256": "113a331ded00ea5a315f582eb6a3c83941d9451173d351ba02c0b7d22d279817"
+    },
+    {
+      "path": "docs/PHASE12_RELEASE_REPORT.md",
+      "extension": ".md",
+      "bytes": 4051,
+      "sha256": "0dec215c9d0cfcf120ae9af94ff55168cf9728886f40839f9502a9d8884ba9a6"
     },
     {
       "path": "docs/PHASE5_IMAGES.md",
@@ -20633,8 +20709,8 @@
     {
       "path": "js/phase10-accessibility.js",
       "extension": ".js",
-      "bytes": 12163,
-      "sha256": "1eb83719bf466df57bf04322b0e651fdbf23c04304222fa7bc11c7fdafb0a16f"
+      "bytes": 14310,
+      "sha256": "7ea472b17e0d280e789f61b0fde2b32fdbd670873d00534080af3009487c3e71"
     },
     {
       "path": "js/phase7-catalog-policy.js",
@@ -20675,8 +20751,8 @@
     {
       "path": "js/product-related.js",
       "extension": ".js",
-      "bytes": 14008,
-      "sha256": "81414cfe0f0fd01d2fbce45953d4dd536dd751cf4b5e8278ef78466754a0969a"
+      "bytes": 15870,
+      "sha256": "35c533c512ea95c036d3d766e96e545c6f15ee0e94f04a5cc42aaac330a35291"
     },
     {
       "path": "js/product-selection.js",
@@ -21017,8 +21093,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6388,
-      "sha256": "b40770b5ae195dfc05403f3d886ad81007c6b4abf90d5bfc51af5d2a3f69c8f4"
+      "bytes": 6409,
+      "sha256": "4f91f2642c6bf9693baa6e5c52bf3ef7761a6d8fcbe111f43bf1bb5d283b58a2"
     },
     {
       "path": "perfil.html",
@@ -21395,14 +21471,20 @@
     {
       "path": "scripts/audit-phase10-accessibility.js",
       "extension": ".js",
-      "bytes": 4385,
-      "sha256": "c0a0740cd92da42733b1f9bfa1c8c8e28da6e5aec68f67a5298dcf2bffeb8e98"
+      "bytes": 4587,
+      "sha256": "95b41d498570ec0796f9523f4ab3d83ad72d03e9ada446dd846cbad706f63b62"
     },
     {
       "path": "scripts/audit-phase11-seo.js",
       "extension": ".js",
       "bytes": 6526,
       "sha256": "f149306a6e6fef48352f4ffa66f732604b5ecee21a8575f277976d2dc2cbac20"
+    },
+    {
+      "path": "scripts/audit-phase12-release.mjs",
+      "extension": ".mjs",
+      "bytes": 6329,
+      "sha256": "b9675ce5b3f108381d98cb43a5aa08f8645554ea7eae2e964d83535be8aa5819"
     },
     {
       "path": "scripts/audit-phase5-performance.js",
@@ -21425,8 +21507,8 @@
     {
       "path": "scripts/audit-phase8-ui-ux.js",
       "extension": ".js",
-      "bytes": 6276,
-      "sha256": "56b8873456621702328434ddb311faf2f9ae5dac7371a713644dc4a70822aed3"
+      "bytes": 6367,
+      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -21541,6 +21623,12 @@
       "extension": ".js",
       "bytes": 2281,
       "sha256": "b133ec585dc7d275ae5a89205cdd668a7c07061550020a52969f26fb29a69728"
+    },
+    {
+      "path": "scripts/production-smoke-phase12.mjs",
+      "extension": ".mjs",
+      "bytes": 6289,
+      "sha256": "f831d30d0de76d10674687b841f2e625cfde787c80e392bb2224670981c5c5cb"
     },
     {
       "path": "scripts/run-responsive-audit-with-retry.mjs",
@@ -21659,14 +21747,14 @@
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
       "extension": ".js",
-      "bytes": 3941,
-      "sha256": "dbe00840aa41bcd003b411053db6249567e1ef52f465fe691a5251f7e281377f"
+      "bytes": 5393,
+      "sha256": "9690abbbf78bed951519b826f7878dc3f88e352e9b75baabc50bb93f611dd188"
     },
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
       "extension": ".js",
-      "bytes": 3656,
-      "sha256": "e81f9cce541e7c15398408ab5a362045cfd5cd1cf5cf8eab48faf23259fcfcf7"
+      "bytes": 4009,
+      "sha256": "a37ed771155a3220c0af945a124b35e5a1498426cce9f5345a1fbbec76fe02bf"
     }
   ],
   "sitemapRoutes": [
@@ -23456,7 +23544,7 @@
     },
     {
       "file": "js/product-related.js",
-      "line": 194,
+      "line": 241,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -24821,7 +24909,7 @@
         },
         {
           "file": "js/product-related.js",
-          "line": 194
+          "line": 241
         },
         {
           "file": "js/product-selection.js",
