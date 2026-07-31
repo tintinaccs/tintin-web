@@ -33,6 +33,24 @@ function escapeHtml(value) {
 
 const escapeAttribute = escapeHtml;
 
+// script.js es un script clásico (no type="module"), así que no puede hacer
+// `import` de js/image-utils.js — por eso withCloudinaryAutoDelivery se
+// duplica acá en vez de importarse. Mismo comportamiento que la versión
+// canónica: inserta f_auto,q_auto en URLs de res.cloudinary.com.
+function withCloudinaryAutoDelivery(href) {
+  try {
+    const url = new URL(href);
+    if (url.hostname !== 'res.cloudinary.com') return href;
+    const idx = url.pathname.indexOf('/upload/');
+    if (idx === -1 || url.pathname.includes('/upload/f_auto')) return href;
+    const insertAt = idx + '/upload/'.length;
+    url.pathname = `${url.pathname.slice(0, insertAt)}f_auto,q_auto/${url.pathname.slice(insertAt)}`;
+    return url.href;
+  } catch {
+    return href;
+  }
+}
+
 function sanitizeClassicImageUrl(value) {
   const raw = String(value || '').trim();
   if (!raw || /['"<>\u0000-\u001f\u007f]/.test(raw) || raw.length > 2048) return '';
@@ -40,7 +58,7 @@ function sanitizeClassicImageUrl(value) {
     const url = new URL(raw, window.location.href);
     if (!['https:', 'http:'].includes(url.protocol)) return '';
     if (location.protocol === 'https:' && url.protocol === 'http:' && url.origin !== location.origin) return '';
-    return url.href;
+    return withCloudinaryAutoDelivery(url.href);
   } catch { return ''; }
 }
 
