@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-    return !html.includes('js/page-loader.js') || html.includes('js/page-loader.js?v=tintin-20260730-phase8-ui-1');
+    return !html.includes('js/page-loader.js') || html.includes('js/page-loader.js?v=tintin-20260731-phase10-a11y-1');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );
@@ -147,7 +147,7 @@ check(
 check(
   'La Fase 8 tiene auditoría estática y prueba de navegador dedicadas',
   packageJson.scripts['audit:phase8-ui'] === 'node scripts/audit-phase8-ui-ux.js' &&
-    packageJson.scripts['test:phase8-ui'] === 'playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium' &&
+    packageJson.scripts['test:phase8-ui'] === 'playwright test tests/ui-ux --project=chromium' &&
     packageJson.scripts['audit:final'].includes('audit:phase8-ui'),
   'La capa UI/UX debe quedar protegida contra regresiones.'
 );
