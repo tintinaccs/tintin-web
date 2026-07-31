@@ -16,6 +16,7 @@ function check(condition, message) {
 const loaderRuntime = read('js/page-loader.js');
 const colorTokens = read('css/color-tokens.css');
 const solidCss = read('css/loader-solid-background.css');
+const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
 check(
   /#tt-loader\{[^}]*background:#FFADD1/i.test(loaderRuntime),
@@ -41,11 +42,31 @@ check(
   !/#FFF6FA/i.test(solidCss),
   'La protección universal del loader no puede volver a usar el fondo anterior #FFF6FA.'
 );
+check(
+  /<image\b[^>]*(?:href|xlink:href)=["']logo\.png["']/i.test(loaderBrand),
+  'El recurso del loader debe reutilizar directamente assets-tintin/images/general/logo.png.'
+);
+check(
+  !/<path\b/i.test(loaderBrand),
+  'El recurso del loader no puede volver a contener un dibujo vectorial reinterpretado.'
+);
+check(
+  /#tt-loader-logo[\s\S]*clip-path:\s*none\s*!important/i.test(solidCss),
+  'El logo oficial debe mostrarse completo; falta anular clip-path.'
+);
+check(
+  /#tt-loader-logo[\s\S]*animation:\s*none\s*!important/i.test(solidCss),
+  'El logo oficial no puede volver a cargarse de arriba hacia abajo.'
+);
+check(
+  !/body:has\(\.login-page\)\s+#tt-loader-spin-wrap\s*\{[\s\S]*display:\s*none/i.test(solidCss),
+  'Login no puede ocultar la identidad oficial del loader global.'
+);
 
 if (failures.length) {
-  console.error(`Auditoría de fondo del loader fallida: ${failures.length} problema(s).`);
+  console.error(`Auditoría del loader fallida: ${failures.length} problema(s).`);
   failures.forEach((failure, index) => console.error(`${index + 1}. ${failure}`));
   process.exit(1);
 }
 
-console.log(`Auditoría de fondo del loader correcta: contenedor y capa de respaldo usan ${OFFICIAL_LOADER_BACKGROUND}.`);
+console.log(`Auditoría del loader correcta: fondo ${OFFICIAL_LOADER_BACKGROUND}, logo oficial completo y sin revelado vertical.`);
