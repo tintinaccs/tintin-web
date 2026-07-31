@@ -65,6 +65,8 @@ function resolve(file) {
   throw new Error(`Conflicto no previsto al integrar main: ${file}`);
 }
 
+git(['config', 'user.name', 'github-actions[bot]']);
+git(['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com']);
 git(['fetch', 'origin', 'main'], { stdio: 'inherit' });
 let mergeFailed = false;
 try {
