@@ -60,21 +60,14 @@ html body #tt-loader-spin-wrap::before {
   pointer-events: none;
 }
 
-/* El <img> queda únicamente como respaldo semántico. No participa en la
-   composición visual ni puede ejecutar el revelado vertical anterior. */
+/* El elemento anterior queda fuera de la composición. Ya no puede mostrar
+   el SVG viejo ni ejecutar el revelado de arriba hacia abajo. */
 html body #tt-loader-logo,
 html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  margin: -1px !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important;
-  white-space: nowrap !important;
-  opacity: 0 !important;
+  display: none !important;
+  opacity: 1 !important;
   transform: none !important;
+  clip-path: none !important;
   animation: none !important;
   filter: none !important;
 }
