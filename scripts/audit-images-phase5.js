@@ -62,7 +62,7 @@ check(
 check(
   'El sitio preconecta con Cloudinary en todas las páginas',
   files.loader.includes("rel = 'preconnect'") &&
-    files.loader.includes("href = 'https://res.cloudinary.com'") &&
+    files.loader.includes("href: 'https://res.cloudinary.com'") &&
     files.loader.includes("rel = 'dns-prefetch'"),
   'sin preconectar, la primera imagen de Cloudinary de cada página paga DNS+TLS completos antes de empezar a descargarse'
 );

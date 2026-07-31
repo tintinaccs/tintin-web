@@ -54,10 +54,32 @@ html body #tt-loader-spin-wrap::before {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 1;
-  transform: none;
-  animation: none;
+  opacity: 0;
+  transform: scale(1.09);
   pointer-events: none;
+}
+
+/* Entrada elegida por el equipo: fade + escala (no es el revelado vertical
+   que se sacó antes). Corre una sola vez apenas el logo está listo, dura
+   600ms y no bloquea el "instantáneo": el logo sigue apareciendo enseguida,
+   solo con un pequeño acabado en vez de aparecer seco. */
+html body #tt-loader-spin-wrap.tt-ready::before {
+  animation: tt-logo-fade-scale-in .6s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@keyframes tt-logo-fade-scale-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #tt-loader-spin-wrap::before {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
 }
 
 /* El elemento anterior queda fuera de la composición. Ya no puede mostrar
@@ -72,21 +94,13 @@ html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
   filter: none !important;
 }
 
-/* El PNG oficial ya contiene la identidad completa de Tintin; no se duplica
-   una segunda línea de marca debajo del archivo. */
+/* Debajo del ícono va la palabra Tintin y, debajo de esa, la sección a la
+   que se está entrando (Página Principal, Catálogo - X, Producto - X, etc.).
+   Nunca deben quedar ocultas; la animación de entrada (igual a la del logo)
+   la define page-loader.js. */
+html body #tt-loader-wordmark,
 html body #tt-loader-brand-subtitle {
-  display: none !important;
-  visibility: hidden !important;
-  animation: none !important;
-}
-
-/* El spinner sigue girando, pero aparece en su tamaño final sin una segunda
-   animación de entrada que altere la composición del loader. */
-html body #tt-loader .tt-loader-spinner,
-html body #tt-loader-spin-wrap.tt-ready .tt-loader-spinner {
-  opacity: 1 !important;
-  transform: none !important;
-  animation: tt-loader-spinner-shell 3s linear infinite !important;
+  visibility: visible !important;
 }
 
 /* Login funciona como pantalla independiente. El shell público puede montarse

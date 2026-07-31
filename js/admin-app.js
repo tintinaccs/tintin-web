@@ -2680,7 +2680,7 @@ document.getElementById('btn-save-config').onclick = async () => {
 // (emailSettings/emailTemplates/emailLogs/emailCampaigns) — ver
 // firestore.rules y functions/EMAIL_SETUP.md.
 
-const EMAIL_SENDER_ADDRESS = 'tintinpedidos@gmail.com'; // fijo por Apps Script — informativo, no editable
+const EMAIL_SENDER_ADDRESS = 'pedidos@tintinaccs.com'; // fijo por Apps Script — informativo, no editable
 const TEST_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PROMO_BATCH_SIZE = 20;
 
@@ -2848,13 +2848,11 @@ function defaultEmailSettings_() {
   };
 }
 
-// tintinpedidos@gmail.com (o cualquier @gmail.com) es una cuenta de Gmail
-// común, no un dominio propio de la tienda — MailApp la usa para enviar
-// desde Apps Script (ver functions/EMAIL_SETUP.md). Con ese remitente,
-// mandar campañas/promos masivas arriesga que Google marque la cuenta como
-// spam o la suspenda; los correos transaccionales de pedidos (uno por vez,
-// generados por una acción real de la clienta) son un uso legítimo y no se
-// tocan.
+// Detecta un remitente @gmail.com para aplicarle la protección anti-spam
+// pensada para una cuenta de Gmail común (alto riesgo de que Google la
+// marque como spam o la suspenda ante un envío masivo). El remitente actual,
+// pedidos@tintinaccs.com, es un dominio propio y ya no cae acá — la función
+// queda por si en el futuro se vuelve a usar una cuenta @gmail.com común.
 function isGmailSender_(senderEmail) {
   return /@gmail\.com\s*$/i.test(String(senderEmail || '').trim());
 }

@@ -6,6 +6,13 @@ const childProcess = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'diagnostic-manifest.json');
 const EXCLUDED_DIRS = new Set(['.git', 'artifacts', 'node_modules', 'public']);
+
+// Cualquier carpeta punto salvo .github es herramienta/sesión local (editor,
+// CLI asistida, etc.): no está versionada y no es contenido del sitio, así
+// que nunca debe aparecer en el inventario.
+function isToolingDir(name) {
+  return name.startsWith('.') && name !== '.github';
+}
 const EXCLUDED_FILES = new Set(['firebase-debug.log', 'firestore-debug.log', 'ui-debug.log']);
 const TEXT_EXTENSIONS = new Set([
   '.html', '.js', '.mjs', '.css', '.json', '.xml', '.txt', '.md', '.rules',
@@ -23,6 +30,7 @@ function walk(directory, prefix = '') {
   const files = [];
   for (const entry of entries) {
     if (EXCLUDED_DIRS.has(entry.name) || EXCLUDED_FILES.has(entry.name)) continue;
+    if (entry.isDirectory() && isToolingDir(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relative = path.posix.join(prefix, entry.name);
     if (entry.isDirectory()) files.push(...walk(absolute, relative));

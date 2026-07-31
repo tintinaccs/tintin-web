@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260731-phase10-a11y-1"></script>
+  <script src="js/page-loader.js?v=tintin-20260731-loader-context-labels-1"></script>
   <script src="js/public-shell.js?v=tintin-20260731-phase8-stock-shell-1" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Explorá el catálogo de Tintin: relojes, aros, collares, pulseras, anillos y accesorios femeninos con envíos a todo Paraguay.">
@@ -471,6 +471,8 @@ initSiteContent('catalogo');
 </script>
 <script type="module" src="js/edit-badge.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">
+import { sanitizeImageUrl } from './js/image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+
 // Import dinámico (no estático): si falla la red/CDN al traer
 // collections-store.js, un import estático tira abajo TODO este módulo —
 // incluido el polling/fallback de productos más abajo, que es justo lo que
@@ -494,13 +496,7 @@ function escapeCatalogHtml(value) {
 }
 
 function safeCatalogImageUrl(value) {
-  if (!value) return '';
-  try {
-    const url = new URL(String(value), location.href);
-    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
-  } catch (_) {
-    return '';
-  }
+  return sanitizeImageUrl(value);
 }
 
 function normalizeSearch(value) {

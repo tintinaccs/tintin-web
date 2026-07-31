@@ -46,11 +46,31 @@ if (!window.TintinCollectionsPhase4Booted) {
     }
   }
 
+  // Las tarjetas de colección se muestran a ~183x244px (2x retina ~370x490).
+  // Una foto propia subida por Super Admin puede venir de cdn.shopify.com en
+  // su resolución original (llegó a pesar >350 KB por imagen). Shopify sirve
+  // cualquier archivo de ese CDN redimensionado on-the-fly agregando
+  // ?width=N a la URL — no toca el archivo subido, solo pide una variante
+  // más liviana en el momento de mostrarla. Si el host no es de Shopify, o
+  // ya trae un parámetro de tamaño, se deja la URL intacta.
+  function withShopifyCardWidth(href) {
+    if (!href) return href;
+    try {
+      const url = new URL(href);
+      if (!/(^|\.)cdn\.shopify\.com$/.test(url.hostname)) return href;
+      if (url.searchParams.has('width')) return href;
+      url.searchParams.set('width', '700');
+      return url.href;
+    } catch {
+      return href;
+    }
+  }
+
   function imageCandidates(collection) {
     const slug = clean(collection?.slug);
     const file = SLUG_FILE_MAP[slug] || slug;
     return [...new Set([
-      safeUrl(collection?.image),
+      withShopifyCardWidth(safeUrl(collection?.image)),
       safeUrl(`${COLL_IMG_BASE}col-${file}.webp`),
       safeUrl(COLL_PLACEHOLDER)
     ].filter(Boolean))];

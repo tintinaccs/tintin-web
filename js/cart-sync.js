@@ -296,12 +296,34 @@ function createRuntime() {
     return queued;
   }
 
+  // Empareja cada fila del DOM con su item real por id (+ variante cuando la
+  // fila la expone), nunca por posición: script.js (carrito) y checkout.html
+  // renderizan sus propias filas con la lista "cruda" del carrito, mientras
+  // que acá se lee currentLocalCart() (ya pasada por enforceStockLimits, que
+  // puede recortar/eliminar líneas). Si esas dos listas difieren en longitud
+  // u orden — por ejemplo, el stock de un producto cae a 0 justo entre un
+  // render y el siguiente — emparejar por índice le asigna el lineId
+  // equivocado a la fila visible, y un click en "eliminar" borra el producto
+  // que no era.
+  function matchItemForRow(row, items, usedLineIds) {
+    const id = row.dataset.id;
+    if (id == null) return null;
+    const variant = row.querySelector('[data-cart-variant]')?.dataset.cartVariant ?? '';
+    return items.find(entry =>
+      !usedLineIds.has(entry.lineId) &&
+      String(entry.id) === String(id) &&
+      String(entry.variant || '') === String(variant)
+    ) || items.find(entry => !usedLineIds.has(entry.lineId) && String(entry.id) === String(id)) || null;
+  }
+
   function enhanceCartRows() {
     const items = currentLocalCart();
+    const usedLineIds = new Set();
     const drawerRows = [...document.querySelectorAll('.tt-cart-item')];
-    drawerRows.forEach((row, index) => {
-      const item = items[index];
+    drawerRows.forEach(row => {
+      const item = matchItemForRow(row, items, usedLineIds);
       if (!item) return;
+      usedLineIds.add(item.lineId);
       row.dataset.lineId = item.lineId;
       const qtyButtons = row.querySelectorAll('.tt-cart-qty-btn');
       if (qtyButtons[0]) qtyButtons[0].dataset.cartAction = 'minus';
@@ -320,10 +342,12 @@ function createRuntime() {
       if (remove) remove.dataset.cartAction = 'remove';
     });
 
+    const usedCheckoutLineIds = new Set();
     const checkoutRows = [...document.querySelectorAll('.ck-item')];
-    checkoutRows.forEach((row, index) => {
-      const item = items[index];
+    checkoutRows.forEach(row => {
+      const item = matchItemForRow(row, items, usedCheckoutLineIds);
       if (!item) return;
+      usedCheckoutLineIds.add(item.lineId);
       row.dataset.lineId = item.lineId;
       row.querySelectorAll('[data-action]').forEach(button => {
         button.dataset.cartAction = button.dataset.action;
