@@ -62,6 +62,7 @@ jobs:
       - name: Servir el árbol exacto de la PR
         shell: bash
         run: |
+          mkdir -p artifacts
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/tintin-phase12-http.log 2>&1 &
           echo $! > /tmp/tintin-phase12-http.pid
           for attempt in {1..20}; do
@@ -74,19 +75,28 @@ jobs:
           exit 1
 
       - name: Flujos UI de la Fase 8 en Chromium
+        shell: bash
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
-        run: npm run test:phase8-ui
+        run: |
+          set -o pipefail
+          npm run test:phase8-ui 2>&1 | tee artifacts/phase8-ui.log
 
       - name: Accesibilidad de la Fase 10 en Chromium
+        shell: bash
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
-        run: npm run test:phase10-a11y
+        run: |
+          set -o pipefail
+          npm run test:phase10-a11y 2>&1 | tee artifacts/phase10-accessibility.log
 
       - name: SEO dinámico de la Fase 11 en Chromium
+        shell: bash
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
-        run: npm run test:phase11-seo
+        run: |
+          set -o pipefail
+          npm run test:phase11-seo 2>&1 | tee artifacts/phase11-seo.log
 
       - name: Matriz responsive canónica
         run: npm run audit:canonical-viewports
@@ -96,9 +106,7 @@ jobs:
 
       - name: Registrar auditoría completa de herramientas
         shell: bash
-        run: |
-          mkdir -p artifacts
-          npm audit --json > artifacts/npm-audit-full.json || true
+        run: npm audit --json > artifacts/npm-audit-full.json || true
 
       - name: Smoke real de producción
         run: node scripts/production-smoke-phase12.mjs
