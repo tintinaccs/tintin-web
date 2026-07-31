@@ -47,6 +47,7 @@ test('un control role button responde a Enter y Espacio', async ({ page }) => {
   await control.focus();
   await page.keyboard.press('Enter');
   await expect(control).toHaveAttribute('data-clicks', '1');
+  await page.waitForTimeout(120);
   await page.keyboard.press('Space');
   await expect(control).toHaveAttribute('data-clicks', '2');
 });
