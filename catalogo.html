@@ -646,17 +646,13 @@ function aplicarFiltros({ resetLimit = true, validatePrice = false } = {}) {
   }
 
   const sort = document.getElementById('cat-sort').value;
-  if (sort === 'precio-asc')  lista.sort((a, b) => Number(a.price) - Number(b.price));
-  if (sort === 'precio-desc') lista.sort((a, b) => Number(b.price) - Number(a.price));
-  if (sort === 'nombre')      lista.sort((a, b) => nameSorter.compare(a.name || '', b.name || ''));
-  if (sort === 'stock')       lista.sort((a, b) => Number(b.stock ?? 0) - Number(a.stock ?? 0));
-  if (sort === 'default' && catActual !== 'todos') {
-    // Manual order set from Super Admin → Colecciones → Gestionar productos
-    lista.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999));
-  }
-
-  // El stock no modifica el orden. Un producto agotado conserva exactamente
-  // su posición y vuelve a estar disponible en ese mismo lugar al reponerse.
+  lista = window.TintinCatalogMerchandising?.sortCatalogProducts
+    ? window.TintinCatalogMerchandising.sortCatalogProducts(lista, { mode: sort })
+    : lista.sort((a, b) => {
+        const aAvailable = isInStockCat(a) ? 0 : 1;
+        const bAvailable = isInStockCat(b) ? 0 : 1;
+        return aAvailable - bAvailable || nameSorter.compare(a.name || '', b.name || '');
+      });
 
   if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
   renderGrid(lista);
@@ -689,12 +685,15 @@ function renderGrid(lista) {
       ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true">✨</div>`
       : `<div class="cat-card-placeholder" aria-hidden="true">✨</div>`;
     const inStock = isInStockCat(p);
+    const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
     const hasVariants = window.TintinCatalogPolicy?.hasVariants
       ? window.TintinCatalogPolicy.hasVariants(p)
       : Boolean(p.variants && Object.values(p.variants).some(values => Array.isArray(values) && values.length));
     const badgeHtml = !inStock
       ? `<span class="tt-card-badge tt-card-badge--out">AGOTADO</span>`
-      : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
+      : isNew
+        ? `<span class="tt-card-badge">NUEVO</span>`
+        : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
     const catLabel = p.category || p.cat || '';
     return `
       <article class="tt-card">

@@ -157,7 +157,7 @@ check(
 check(
   'La tienda escapa nombre, categoría, badge y variante del producto',
   /escapeHtml\(p\.name\)/.test(storefront) &&
-    /escapeHtml\(p\.badge\)/.test(storefront),
+    /escapeHtml\(displayBadge\)/.test(storefront),
   'script.js debe escapar los campos de producto que renderiza.'
 );
 check(

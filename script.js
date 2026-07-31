@@ -754,7 +754,15 @@ function initSearch() {
 
       const searchable = value => String(value == null ? '' : value)
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const matches = productPool.filter(isFeaturable).filter(p =>
+      const visiblePool = productPool.filter(p =>
+        window.TintinCatalogPolicy?.isCatalogVisible
+          ? window.TintinCatalogPolicy.isCatalogVisible(p)
+          : p.active !== false && hasValidName(p) && Number(p.price) > 0
+      );
+      const orderedPool = window.TintinCatalogMerchandising?.sortCatalogProducts
+        ? window.TintinCatalogMerchandising.sortCatalogProducts(visiblePool)
+        : visiblePool;
+      const matches = orderedPool.filter(p =>
         searchable(p.name).includes(q) ||
         searchable(p.cat || p.category).includes(q) ||
         searchable(p.desc || p.description).includes(q) ||
@@ -776,7 +784,7 @@ function initSearch() {
             <div class="tt-search-result-thumb">${thumb}</div>
             <div class="tt-search-result-info">
               <div class="tt-search-result-name">${escapeHtml(p.name)}</div>
-              <div class="tt-search-result-price">${formatPrice(p.price)}</div>
+              <div class="tt-search-result-price">${formatPrice(p.price)}${isInStock(p) ? '' : ' · Agotado'}</div>
             </div>
           </a>
         `;
@@ -874,8 +882,11 @@ function _onProductImgError(img) {
 window._onProductImgError = _onProductImgError;
 
 function renderProductCardMarkup(p, options = {}) {
-  const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
-  const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
+  const inStock = isInStock(p);
+  const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
+  const displayBadge = !inStock ? 'Agotado' : (isNew ? 'Nuevo' : p.badge);
+  const badgeClass = displayBadge === 'Nuevo' ? 'nuevo' : '';
+  const badgeHTML = displayBadge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(displayBadge)}</span>` : '';
   const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
@@ -890,9 +901,11 @@ function renderProductCardMarkup(p, options = {}) {
   // fila en todas las pantallas) — con esos textos completos los botones se
   // partían en 3-4 líneas ilegibles, así que ahí van etiquetas cortas.
   const primaryLabel = options.related ? 'Ver' : 'Ver producto';
-  const secondaryAction = hasVariants
-    ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">${options.related ? 'Opciones' : 'Elegir opciones'}</a>`
-    : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
+  const secondaryAction = !inStock
+    ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
+    : hasVariants
+      ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">${options.related ? 'Opciones' : 'Elegir opciones'}</a>`
+      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
 
   return `
     <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
