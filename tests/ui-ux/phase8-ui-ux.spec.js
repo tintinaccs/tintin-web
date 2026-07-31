@@ -2,6 +2,12 @@
 
 const { test, expect } = require('@playwright/test');
 
+function isExpectedExternalBrowserWarning(text) {
+  const value = String(text || '').trim();
+  return /^requestStorageAccess:\s*Permission denied\.?$/i.test(value) ||
+    /@firebase\/app-check: FirebaseError: AppCheck: ReCAPTCHA error\. \(appCheck\/recaptcha-error\)/i.test(value);
+}
+
 test.describe('Fase 8 — UI/UX global', () => {
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
@@ -12,7 +18,8 @@ test.describe('Fase 8 — UI/UX global', () => {
   test('carga una sola capa global y expone estados accesibles', async ({ page }) => {
     const errors = [];
     page.on('console', message => {
-      if (message.type() === 'error') errors.push(message.text());
+      const text = message.text();
+      if (message.type() === 'error' && !isExpectedExternalBrowserWarning(text)) errors.push(text);
     });
     page.on('pageerror', error => errors.push(error.message));
 

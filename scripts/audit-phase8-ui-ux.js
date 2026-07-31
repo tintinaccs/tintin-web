@@ -30,7 +30,7 @@ check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
     /resolveAsset\('css\/phase8-ui-ux\.css'\)/.test(loader) &&
-    /tintin-20260730-phase8-ui-1/.test(loader),
+    /tintin-20260731-loader-brand-1/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );
 
@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-    return !html.includes('js/page-loader.js') || html.includes('js/page-loader.js?v=tintin-20260730-phase8-ui-1');
+    return !html.includes('js/page-loader.js') || html.includes('js/page-loader.js?v=tintin-20260731-phase10-a11y-1');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );
@@ -149,7 +149,7 @@ check(
   packageJson.scripts['audit:phase8-ui'] === 'node scripts/audit-phase8-ui-ux.js' &&
     packageJson.scripts['test:phase8-ui'] === 'playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium' &&
     packageJson.scripts['audit:final'].includes('audit:phase8-ui'),
-  'La capa UI/UX debe quedar protegida contra regresiones.'
+  'La capa UI/UX debe quedar protegida contra regresiones sin ejecutar por duplicado las pruebas de accesibilidad de la Fase 10.'
 );
 
 const failed = checks.filter(item => !item.ok);

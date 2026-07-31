@@ -25,7 +25,7 @@
     "prepare:hosting": "node scripts/prepare-hosting.js",
     "audit:diagnostics": "node scripts/audit-diagnostics.js",
     "audit:diagnostic-findings": "node scripts/audit-diagnostic-findings.js",
-    "audit:final": "npm run audit:level1 && npm run audit:level2 && npm run audit:level3 && npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run test:phase9-import && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync && npm run audit:admin-foundation && npm run audit:products-media && npm run audit:admin-orders && npm run audit:users-roles && npm run audit:content-appearance && npm run audit:email-messaging && npm run audit:analytics-audit && npm run audit:help-pages && npm run audit:aux-pages && npm run audit:final-integration && npm run audit:performance && npm run audit:performance-regressions && npm run audit:page-loading && npm run audit:critical-healing && npm run audit:login-isolation && npm run audit:hero-background-controls && npm run audit:storegate-deadlock && npm run audit:app-check-bootstrap && npm run audit:part2h && npm run audit:phase5 && npm run audit:phase6 && npm run audit:phase7-catalog && npm run audit:phase8-ui",
+    "audit:final": "npm run audit:level1 && npm run audit:level2 && npm run audit:level3 && npm run audit:typography && npm run audit:colors && npm run audit:public-shell && npm run audit:tintin && npm run audit:store-gate && npm run audit:secure-orders && npm run audit:emails && npm run audit:collections && npm run audit:images && npm run audit:content && npm run audit:cart && npm run audit:security && npm run test:phase9-import && npm run audit:release && npm run audit:integral && npm run audit:diagnostics && npm run audit:diagnostic-findings && npm run audit:postphase && npm run audit:reliability && npm run audit:admin-sync && npm run audit:admin-foundation && npm run audit:products-media && npm run audit:admin-orders && npm run audit:users-roles && npm run audit:content-appearance && npm run audit:email-messaging && npm run audit:analytics-audit && npm run audit:help-pages && npm run audit:aux-pages && npm run audit:final-integration && npm run audit:performance && npm run audit:performance-regressions && npm run audit:page-loading && npm run audit:critical-healing && npm run audit:login-isolation && npm run audit:hero-background-controls && npm run audit:storegate-deadlock && npm run audit:app-check-bootstrap && npm run audit:part2h && npm run audit:phase5 && npm run audit:phase6 && npm run audit:phase7-catalog && npm run audit:phase8-ui && npm run audit:phase10 && npm run audit:phase11",
     "deploy:rules": "firebase deploy --only firestore:rules --project tintin-accesorios",
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/audit-deep.js",
@@ -62,7 +62,12 @@
     "audit:phase7-catalog": "node scripts/audit-phase7-catalog.js",
     "audit:phase8-ui": "node scripts/audit-phase8-ui-ux.js",
     "test:phase8-ui": "playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium",
-    "test:phase9-import": "node --test tests/import/phase9-import-normalization.test.mjs"
+    "test:phase9-import": "node --test tests/import/phase9-import-normalization.test.mjs",
+    "audit:phase10": "node scripts/audit-phase10-accessibility.js",
+    "test:phase10-a11y": "playwright test tests/ui-ux/phase10-accessibility.spec.js --project=chromium",
+    "audit:phase11": "node scripts/audit-phase11-seo.js",
+    "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
+    "monitor:production": "node scripts/audit-production-health.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "3.0.3",

@@ -65,6 +65,29 @@ function buttonLabel(button) {
   );
 }
 
+function createButtonSpinner(button) {
+  if (!(button instanceof HTMLElement)) return null;
+  const existing = button.querySelector?.(':scope > .tt-button-spinner');
+  if (existing) return existing;
+
+  // Los botones reales aceptan contenido interno. En controles reemplazados
+  // como <input>, el estado aria-busy y el texto siguen funcionando aunque no
+  // se pueda insertar el elemento visual.
+  if (
+    button instanceof HTMLInputElement ||
+    button instanceof HTMLTextAreaElement ||
+    button instanceof HTMLSelectElement
+  ) {
+    return null;
+  }
+
+  const spinner = document.createElement('span');
+  spinner.className = 'tt-button-spinner';
+  spinner.setAttribute('aria-hidden', 'true');
+  button.prepend(spinner);
+  return spinner;
+}
+
 export function setButtonBusy(button, busy = true, options = {}) {
   if (!(button instanceof HTMLElement)) return;
   const current = busyButtons.get(button);
@@ -75,7 +98,15 @@ export function setButtonBusy(button, busy = true, options = {}) {
     button.removeAttribute('aria-busy');
     button.removeAttribute('data-tt-busy');
     button.classList.remove('tt-is-busy');
+    button.querySelector?.(':scope > .tt-button-spinner')?.remove();
     if (!previousDisabled && 'disabled' in button) button.disabled = false;
+
+    if (current?.hadAriaLabel) {
+      button.setAttribute('aria-label', current.previousAriaLabel || '');
+    } else if (current) {
+      button.removeAttribute('aria-label');
+    }
+
     busyButtons.delete(button);
     return;
   }
@@ -83,17 +114,29 @@ export function setButtonBusy(button, busy = true, options = {}) {
   if (current) return;
   const previousDisabled = 'disabled' in button && button.disabled === true;
   const label = cleanText(options.label || button.dataset.ttBusyLabel || 'Procesando…', 80);
+  const hadAriaLabel = button.hasAttribute('aria-label');
+  const previousAriaLabel = button.getAttribute('aria-label') || '';
+  const baseLabel = buttonLabel(button);
+
   button.setAttribute('aria-busy', 'true');
   button.setAttribute('data-tt-busy', '1');
   button.classList.add('tt-is-busy');
   if ('disabled' in button) button.disabled = true;
-  if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', `${buttonLabel(button)}. ${label}`);
+  button.setAttribute('aria-label', `${baseLabel}. ${label}`);
 
+  const spinner = createButtonSpinner(button);
   const timer = window.setTimeout(() => {
     setButtonBusy(button, false);
     announce('La operación está tardando más de lo esperado. Podés volver a intentarlo.');
   }, Math.max(1500, Number(options.timeout) || BUSY_TIMEOUT_MS));
-  busyButtons.set(button, { previousDisabled, timer });
+
+  busyButtons.set(button, {
+    previousDisabled,
+    timer,
+    spinner,
+    hadAriaLabel,
+    previousAriaLabel
+  });
 }
 
 function resolveFormSubmitter(form, event) {
@@ -308,3 +351,12 @@ function boot() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
 else boot();
+
+
+// Fase 10 se monta sobre la instancia única y ya estabilizada de Fase 8.
+if (!window.__TintinPhase10ImportStarted) {
+  window.__TintinPhase10ImportStarted = true;
+  import('./phase10-accessibility.js?v=tintin-20260731-phase10-a11y-1').catch(error => {
+    console.error('[phase10-accessibility] No se pudo iniciar la capa accesible:', error);
+  });
+}

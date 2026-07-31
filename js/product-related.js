@@ -1,3 +1,50 @@
+/* Canonical y Open Graph de cada producto siempre apuntan al dominio público.
+ * El observador corrige también cambios posteriores hechos por el render en vivo. */
+const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product.html';
+const ttCanonicalProduct = document.getElementById('link-canonical');
+const ttOpenGraphProductUrl = document.getElementById('meta-og-url');
+let ttSyncingProductSeo = false;
+
+function ttProductIdForSeo() {
+  for (const candidate of [
+    ttCanonicalProduct?.getAttribute('href'),
+    ttOpenGraphProductUrl?.getAttribute('content'),
+    window.location.href,
+  ]) {
+    try {
+      const id = new URL(candidate || '', window.location.href).searchParams.get('id');
+      if (id) return id;
+    } catch {}
+  }
+  return '';
+}
+
+function ttSyncPublicProductSeo() {
+  if (ttSyncingProductSeo) return;
+  ttSyncingProductSeo = true;
+  try {
+    const url = new URL(TT_PUBLIC_PRODUCT_URL);
+    const id = ttProductIdForSeo();
+    if (id) url.searchParams.set('id', id);
+    const href = url.href;
+    if (ttCanonicalProduct?.getAttribute('href') !== href) {
+      ttCanonicalProduct?.setAttribute('href', href);
+    }
+    if (ttOpenGraphProductUrl?.getAttribute('content') !== href) {
+      ttOpenGraphProductUrl?.setAttribute('content', href);
+    }
+  } finally {
+    ttSyncingProductSeo = false;
+  }
+}
+
+ttSyncPublicProductSeo();
+const ttProductSeoObserver = new MutationObserver(ttSyncPublicProductSeo);
+if (ttCanonicalProduct) ttProductSeoObserver.observe(ttCanonicalProduct, { attributes: true, attributeFilter: ['href'] });
+if (ttOpenGraphProductUrl) ttProductSeoObserver.observe(ttOpenGraphProductUrl, { attributes: true, attributeFilter: ['content'] });
+window.addEventListener('pagehide', () => ttProductSeoObserver.disconnect(), { once: true });
+window.TintinProductSeoCanonical = { sync: ttSyncPublicProductSeo };
+
 const LIMIT = 3;
 const AUTO_ROTATE_MS = 7600;
 const EXIT_MS = 220;
