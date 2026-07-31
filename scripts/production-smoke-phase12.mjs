@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const publicOrigin = new URL(origin).origin;
 const timeoutMs = Number(process.env.TINTIN_PHASE12_TIMEOUT_MS || 20000);
 const attempts = 3;
 const results = [];
@@ -65,6 +66,19 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function assertManifestUrlIsLocal(value, fieldName) {
+  const raw = String(value || '').trim();
+  assert(raw, `El ${fieldName} del manifest está vacío.`);
+  let resolved;
+  try {
+    resolved = new URL(raw, origin + '/');
+  } catch {
+    throw new Error(`El ${fieldName} del manifest no es una URL válida.`);
+  }
+  assert(resolved.origin === publicOrigin, `El ${fieldName} del manifest apunta a otro origen.`);
+  return resolved;
+}
+
 let failure = null;
 try {
   for (const page of indexablePages) {
@@ -98,7 +112,8 @@ try {
   const manifestData = JSON.parse(manifest.body);
   assert(manifestData.name && manifestData.short_name, 'El manifest no identifica la aplicación.');
   assert(Array.isArray(manifestData.icons) && manifestData.icons.length >= 2, 'El manifest no contiene iconos suficientes.');
-  assert(String(manifestData.start_url || '').startsWith('/'), 'El start_url del manifest no es local al origen.');
+  assertManifestUrlIsLocal(manifestData.start_url, 'start_url');
+  if (manifestData.scope) assertManifestUrlIsLocal(manifestData.scope, 'scope');
 
   const homeResult = results.find(item => item.relative === '/index.html');
   for (const header of ['content-security-policy', 'strict-transport-security', 'x-content-type-options', 'x-frame-options', 'referrer-policy']) {
