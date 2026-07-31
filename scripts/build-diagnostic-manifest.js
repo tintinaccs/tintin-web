@@ -105,7 +105,7 @@ if (
 function normalizeLocalReference(fromFile, raw) {
   const value = String(raw || '').trim();
   if (!value || value.startsWith('#') || value.includes('${')) return null;
-  if (/^(?:https?:|mailto:|tel:|javascript:|data:|blob:|\/\/)/i.test(value)) return null;
+  if (/^(?:node:|https?:|mailto:|tel:|javascript:|data:|blob:|\/\/)/i.test(value)) return null;
   const clean = value.split('#')[0].split('?')[0].replace(/^\//, '');
   if (!clean) return null;
   const normalized = path.posix.normalize(path.posix.join(path.posix.dirname(fromFile), clean));

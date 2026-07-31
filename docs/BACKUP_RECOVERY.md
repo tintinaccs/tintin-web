@@ -95,3 +95,14 @@ Una recuperación termina cuando:
 - las auditorías están verdes;
 - producción fue comprobada;
 - el incidente y la prevención quedaron documentados.
+
+## Validación de copias operativas Tintin
+
+Antes de aceptar una copia para importar productos, el panel verifica de forma obligatoria:
+
+- formato exacto `tintin-operational-backup`;
+- proyecto Firebase `tintin-accesorios`;
+- versión de esquema compatible;
+- presencia de `data.products` como lista.
+
+Una copia de otro proyecto, con versión futura o estructura incompleta se rechaza antes de preparar escrituras. El stock vacío se conserva como ilimitado; no se convierte en cero.
