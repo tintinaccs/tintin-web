@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T14:06:11.377Z",
-  "sourceFingerprint": "14ede386f3fef6102a7a1e76f1972eafdf484fbe00fc83300ecdab5e50504bbd",
+  "generatedAt": "2026-07-31T14:08:44.788Z",
+  "sourceFingerprint": "ff3b4086c727aedccef44fc945a4bd6ab7290d4891eb5d1c2008ba009f2ac292",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 415,
-    "textFiles": 381,
-    "totalBytes": 5671032,
+    "files": 414,
+    "textFiles": 380,
+    "totalBytes": 5670965,
     "pages": 18,
-    "modules": 233
+    "modules": 232
   },
   "viewports": [
     {
@@ -16429,14 +16429,19 @@
     },
     {
       "path": "js/product-related.js",
-      "bytes": 14008,
-      "sha256": "81414cfe0f0fd01d2fbce45953d4dd536dd751cf4b5e8278ef78466754a0969a",
+      "bytes": 15870,
+      "sha256": "35c533c512ea95c036d3d766e96e545c6f15ee0e94f04a5cc42aaac330a35291",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "line": 3
+        }
+      ]
     },
     {
       "path": "js/product-selection.js",
@@ -16448,22 +16453,6 @@
       },
       "imports": [],
       "endpoints": []
-    },
-    {
-      "path": "js/product-seo-canonical.js",
-      "bytes": 1929,
-      "sha256": "99196f5f4c971e4e81c3d7cf618382357e854ab6a53ea4e303360d3c280976c7",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/product.html",
-          "line": 8
-        }
-      ]
     },
     {
       "path": "js/products-store.js",
@@ -20762,20 +20751,14 @@
     {
       "path": "js/product-related.js",
       "extension": ".js",
-      "bytes": 14008,
-      "sha256": "81414cfe0f0fd01d2fbce45953d4dd536dd751cf4b5e8278ef78466754a0969a"
+      "bytes": 15870,
+      "sha256": "35c533c512ea95c036d3d766e96e545c6f15ee0e94f04a5cc42aaac330a35291"
     },
     {
       "path": "js/product-selection.js",
       "extension": ".js",
       "bytes": 6548,
       "sha256": "cd1782d24d12135633b07cefa26aef96e188819f68c535b299bc5fa0ff8289f8"
-    },
-    {
-      "path": "js/product-seo-canonical.js",
-      "extension": ".js",
-      "bytes": 1929,
-      "sha256": "99196f5f4c971e4e81c3d7cf618382357e854ab6a53ea4e303360d3c280976c7"
     },
     {
       "path": "js/products-store.js",
@@ -23561,7 +23544,7 @@
     },
     {
       "file": "js/product-related.js",
-      "line": 194,
+      "line": 241,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -24926,7 +24909,7 @@
         },
         {
           "file": "js/product-related.js",
-          "line": 194
+          "line": 241
         },
         {
           "file": "js/product-selection.js",
