@@ -541,7 +541,7 @@ function goToCheckout() {
 
 function directWAProduct(product, variant = '') {
   if (!product) return;
-  const productUrl = new URL('product.html', window.location.href);
+  const productUrl = new URL('/product.html', 'https://tintinaccesorios.pages.dev');
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const variantLine = variant ? `\n  Variante: ${variant}` : '';
@@ -1183,6 +1183,8 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
     ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
   const available = !(stock !== null && stock <= 0);
+  const canonicalProductUrl = new URL('/product.html', 'https://tintinaccesorios.pages.dev');
+  canonicalProductUrl.searchParams.set('id', String(product.id));
   const data = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
@@ -1191,9 +1193,10 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
     description: description || undefined,
     sku: String(product.id),
     category: product.category || product.cat || undefined,
+    brand: { '@type': 'Brand', name: 'Tintin' },
     offers: {
       '@type': 'Offer',
-      url: window.location.href,
+      url: canonicalProductUrl.href,
       priceCurrency: 'PYG',
       price: product.price != null ? Number(product.price) : undefined,
       availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
@@ -1222,7 +1225,7 @@ function _updateProductMeta(product, mainImgUrl) {
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const url = productUrl.href;
-  const image = mainImgUrl || 'https://tintinaccs.github.io/tintin-web/assets/og-cover.jpg';
+  const image = mainImgUrl || 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg';
 
   document.title = title;
   setMeta('meta-description', 'content', description);
