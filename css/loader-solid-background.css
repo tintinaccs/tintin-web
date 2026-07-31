@@ -41,17 +41,42 @@ html body #tt-loader > * {
   z-index: 1;
 }
 
-/* El logo oficial debe verse completo desde el primer frame. Se anula
-   explícitamente el revelado vertical y cualquier transformación visual. */
+/* La marca visible se toma directamente del PNG oficial. Esta URL propia
+   evita reutilizar en caché el SVG generado que se retiró del repositorio. */
+html body #tt-loader-spin-wrap::before {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: var(--tt-loader-brand-width);
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  background-image: url("../assets-tintin/images/general/logo.png?v=tintin-20260731-loader-official-instant-2");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  pointer-events: none;
+}
+
+/* El <img> queda únicamente como respaldo semántico. No participa en la
+   composición visual ni puede ejecutar el revelado vertical anterior. */
 html body #tt-loader-logo,
 html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
-  opacity: 1 !important;
-  visibility: visible !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
   transform: none !important;
-  clip-path: none !important;
   animation: none !important;
   filter: none !important;
-  object-fit: contain !important;
 }
 
 /* El PNG oficial ya contiene la identidad completa de Tintin; no se duplica
@@ -73,7 +98,7 @@ html body #tt-loader-spin-wrap.tt-ready .tt-loader-spinner {
 
 /* Login funciona como pantalla independiente. El shell público puede montarse
    técnicamente mientras cargan los scripts, pero jamás debe verse ni reservar
-   espacio alrededor del formulario. */
+   espacio alrededor del formulario. La carga global conserva la marca oficial. */
 html body:has(.login-page) #tt-header-desktop-tablet,
 html body:has(.login-page) #search-panel,
 html body:has(.login-page) #mobile-menu,
