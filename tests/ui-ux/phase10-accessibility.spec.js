@@ -30,24 +30,37 @@ test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ pa
   await expect(page.locator('main,[role="main"]').first()).toBeFocused();
 });
 
-test('un control role button responde a Enter y Espacio', async ({ page }) => {
+test('controles role button responden a Enter y Espacio', async ({ page }) => {
   await openAccessiblePage(page);
   await page.evaluate(() => {
-    const control = document.createElement('div');
-    control.id = 'tt-test-role-button';
-    control.setAttribute('role', 'button');
-    control.textContent = 'Acción de prueba';
-    control.dataset.clicks = '0';
-    control.addEventListener('click', () => { control.dataset.clicks = String(Number(control.dataset.clicks) + 1); });
-    document.body.appendChild(control);
-    window.TintinAccessibility.enhance(control);
+    [
+      ['tt-test-role-button-enter', 'Acción Enter'],
+      ['tt-test-role-button-space', 'Acción Espacio']
+    ].forEach(([id, label]) => {
+      const control = document.createElement('div');
+      control.id = id;
+      control.setAttribute('role', 'button');
+      control.textContent = label;
+      control.dataset.clicks = '0';
+      control.addEventListener('click', () => {
+        control.dataset.clicks = String(Number(control.dataset.clicks) + 1);
+      });
+      document.body.appendChild(control);
+      window.TintinAccessibility.enhance(control);
+    });
   });
-  const control = page.locator('#tt-test-role-button');
-  await expect(control).toHaveAttribute('tabindex', '0');
-  await control.press('Enter');
-  await expect(control).toHaveAttribute('data-clicks', '1');
-  await control.press('Space');
-  await expect(control).toHaveAttribute('data-clicks', '2');
+
+  const enterControl = page.locator('#tt-test-role-button-enter');
+  const spaceControl = page.locator('#tt-test-role-button-space');
+
+  await expect(enterControl).toHaveAttribute('tabindex', '0');
+  await expect(spaceControl).toHaveAttribute('tabindex', '0');
+
+  await enterControl.press('Enter');
+  await expect(enterControl).toHaveAttribute('data-clicks', '1');
+
+  await spaceControl.press('Space');
+  await expect(spaceControl).toHaveAttribute('data-clicks', '1');
 });
 
 test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
