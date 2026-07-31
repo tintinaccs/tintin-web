@@ -14,6 +14,8 @@
   --tt-state-muted: var(--tt-text-muted, #666);
   --tt-danger: #a12645;
   --tt-success: #287a55;
+  --tt-loader-strong: #ca0169;
+  --tt-loader-soft: rgba(202, 1, 105, .22);
 }
 
 [data-tt-interactive="1"] {
@@ -39,28 +41,56 @@
 [data-tt-busy="1"],
 .tt-is-busy {
   position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: .58em;
   cursor: progress !important;
   pointer-events: none !important;
-  opacity: .78;
+  opacity: .84;
 }
 
-[data-tt-busy="1"]::after,
-.tt-is-busy::after {
-  content: "";
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-inline-start: .55em;
+.tt-button-spinner {
+  --tt-button-spinner-size: 20px;
+  --tt-button-spinner-border: 3px;
+  width: var(--tt-button-spinner-size);
+  height: var(--tt-button-spinner-size);
+  display: grid;
   flex: 0 0 auto;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  vertical-align: -.15em;
-  animation: tt-phase8-spin .7s linear infinite;
+  animation: tt-double-spinner-shell 3s infinite;
 }
 
-@keyframes tt-phase8-spin {
-  to { transform: rotate(360deg); }
+.tt-button-spinner::before,
+.tt-button-spinner::after {
+  content: "";
+  grid-area: 1 / 1;
+  border: var(--tt-button-spinner-border) solid;
+  border-radius: 50%;
+  border-color:
+    var(--tt-loader-strong)
+    var(--tt-loader-strong)
+    transparent
+    transparent;
+  box-sizing: border-box;
+  mix-blend-mode: multiply;
+  animation: tt-double-spinner-ring 1s infinite linear;
+}
+
+.tt-button-spinner::after {
+  border-color:
+    transparent
+    transparent
+    var(--tt-loader-soft)
+    var(--tt-loader-soft);
+  animation-direction: reverse;
+}
+
+@keyframes tt-double-spinner-shell {
+  100% { transform: rotate(1turn); }
+}
+
+@keyframes tt-double-spinner-ring {
+  100% { transform: rotate(1turn); }
 }
 
 .tt-ux-live-region {
@@ -108,14 +138,42 @@
   line-height: 1;
 }
 
-.tt-state-loading .tt-state-icon::before {
-  content: "";
-  width: 22px;
-  height: 22px;
-  border: 3px solid color-mix(in srgb, var(--color-brand-primary, #ad3f67) 28%, transparent);
-  border-top-color: var(--color-brand-primary, #ad3f67);
+.tt-state-loading .tt-state-icon {
+  --tt-state-spinner-size: 46px;
+  --tt-state-spinner-border: 8px;
+  width: var(--tt-state-spinner-size);
+  height: var(--tt-state-spinner-size);
+  display: grid;
   border-radius: 50%;
-  animation: tt-phase8-spin .8s linear infinite;
+  background: transparent;
+  animation: tt-double-spinner-shell 3s infinite;
+}
+
+.tt-state-loading .tt-state-icon::before,
+.tt-state-loading .tt-state-icon::after {
+  content: "";
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border: var(--tt-state-spinner-border) solid;
+  border-radius: 50%;
+  border-color:
+    var(--tt-loader-strong)
+    var(--tt-loader-strong)
+    transparent
+    transparent;
+  box-sizing: border-box;
+  mix-blend-mode: multiply;
+  animation: tt-double-spinner-ring 1s infinite linear;
+}
+
+.tt-state-loading .tt-state-icon::after {
+  border-color:
+    transparent
+    transparent
+    var(--tt-loader-soft)
+    var(--tt-loader-soft);
+  animation-direction: reverse;
 }
 
 .tt-state-error .tt-state-icon {
@@ -227,7 +285,29 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
+@media (min-width: 601px) and (max-width: 1024px) {
+  .tt-button-spinner {
+    --tt-button-spinner-size: 18px;
+    --tt-button-spinner-border: 3px;
+  }
+
+  .tt-state-loading .tt-state-icon {
+    --tt-state-spinner-size: 40px;
+    --tt-state-spinner-border: 7px;
+  }
+}
+
 @media (max-width: 600px) {
+  [data-tt-busy="1"],
+  .tt-is-busy {
+    gap: .48em;
+  }
+
+  .tt-button-spinner {
+    --tt-button-spinner-size: 15px;
+    --tt-button-spinner-border: 2.5px;
+  }
+
   .tt-state-surface {
     width: 100%;
     min-height: 132px;
@@ -235,7 +315,24 @@ html.tt-phase8-ux-ready .perfil-card {
     border-radius: 16px;
   }
 
+  .tt-state-loading .tt-state-icon {
+    --tt-state-spinner-size: 32px;
+    --tt-state-spinner-border: 5px;
+  }
+
   .tt-state-action { width: min(100%, 280px); }
+}
+
+@media (max-width: 360px) {
+  .tt-button-spinner {
+    --tt-button-spinner-size: 13px;
+    --tt-button-spinner-border: 2px;
+  }
+
+  .tt-state-loading .tt-state-icon {
+    --tt-state-spinner-size: 28px;
+    --tt-state-spinner-border: 4px;
+  }
 }
 
 /* En el primer píxel del rango tablet, las pistas 1fr conservaban el mínimo
@@ -375,7 +472,6 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
-
 /* El drawer mobile no usa 100vw: ese valor incluye la barra vertical en
    Chromium y puede superar innerWidth. El porcentaje se resuelve contra el
    viewport útil y los hijos flexibles pueden encogerse sin filtrarse. */
@@ -431,10 +527,13 @@ html.tt-phase8-ux-ready .perfil-card {
     transform: none !important;
   }
 
-  [data-tt-busy="1"]::after,
-  .tt-is-busy::after,
-  .tt-state-loading .tt-state-icon::before {
-    animation-duration: 1.4s !important;
+  .tt-button-spinner,
+  .tt-button-spinner::before,
+  .tt-button-spinner::after,
+  .tt-state-loading .tt-state-icon,
+  .tt-state-loading .tt-state-icon::before,
+  .tt-state-loading .tt-state-icon::after {
+    animation-duration: 1.6s !important;
   }
 
   .tt-skeleton::after,
