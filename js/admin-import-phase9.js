@@ -167,7 +167,7 @@ if (!window.TintinAdminImportPhase9Booted) {
     const rawImage = raw?.imageUrl ?? raw?.image ?? '';
     const imageUrl = safeUrl(rawImage);
     const price = Math.round(Math.max(0, numberValue(raw?.price)));
-    const stock = integerValue(raw?.stock);
+    const stock = raw?.stock == null ? null : integerValue(raw.stock);
     const sourceKey = cleanText(meta.sourceKey || raw?.importFingerprint || raw?.id || `${name}-${category}`, 300);
     const source = cleanText(meta.source || raw?.source || 'json', 80) || 'json';
 
@@ -291,7 +291,7 @@ if (!window.TintinAdminImportPhase9Booted) {
           category,
           price,
           priceBefore: first(row, ['variant compare at price', 'compare at price', 'pricebefore', 'precio anterior']),
-          stock: 0,
+          stock: null,
           imageUrl: image,
           imagesExtra: [],
           description,
@@ -303,7 +303,11 @@ if (!window.TintinAdminImportPhase9Booted) {
       }
 
       const product = grouped.get(groupKey);
-      product.stock += integerValue(stock);
+      // Una columna de stock ausente en TODAS las filas de este producto debe
+      // dejarlo sin control de inventario (null = ilimitado, igual que en el
+      // resto del sitio), no en 0 (agotado). Si al menos una fila trae un
+      // valor reconocible, sí se acumula como stock real de las variantes.
+      if (stock !== '') product.stock = (product.stock ?? 0) + integerValue(stock);
       if (!product.price && numberValue(price)) product.price = price;
       if (!product.imageUrl && image) product.imageUrl = image;
       else if (image && image !== product.imageUrl && !product.imagesExtra.includes(image)) product.imagesExtra.push(image);
@@ -489,7 +493,7 @@ if (!window.TintinAdminImportPhase9Booted) {
       });
       categoryCell.appendChild(select);
       const priceCell = node('td', '', `Gs. ${Number(record.product.price || 0).toLocaleString('es-PY')}`);
-      const stockCell = node('td', '', String(record.product.stock));
+      const stockCell = node('td', '', record.product.stock == null ? 'Ilimitado' : String(record.product.stock));
       const status = statusLabel(record);
       const statusCell = document.createElement('td');
       statusCell.appendChild(node('span', `phase9-status is-${status.className}`, status.text));
