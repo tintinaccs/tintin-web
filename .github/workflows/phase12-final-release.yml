@@ -59,11 +59,14 @@ jobs:
       - name: Smoke de las 18 páginas
         run: npm run test:pages
 
-      - name: Flujos UI, accesibilidad y SEO en Chromium
-        run: |
-          npm run test:phase8-ui
-          npm run test:phase10-a11y
-          npm run test:phase11-seo
+      - name: Flujos UI de la Fase 8 en Chromium
+        run: npm run test:phase8-ui
+
+      - name: Accesibilidad de la Fase 10 en Chromium
+        run: npm run test:phase10-a11y
+
+      - name: SEO dinámico de la Fase 11 en Chromium
+        run: npm run test:phase11-seo
 
       - name: Matriz responsive canónica
         run: npm run audit:canonical-viewports
