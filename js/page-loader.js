@@ -254,29 +254,37 @@
   };
 
   const PAGE_BRAND_LABELS = {
-    'index.html': 'Página Principal',
+    index: 'Página Principal',
     '': 'Página Principal',
-    'contact.html': 'Contacto',
-    'login.html': 'Iniciar Sesión',
-    'about.html': 'Quiénes Somos',
-    'nosotros.html': 'Quiénes Somos',
-    'perfil.html': 'Mi Perfil',
-    'collections.html': 'Colecciones',
-    'checkout.html': 'Finalizar Compra',
-    'envios.html': 'Envíos',
-    'cambios-devoluciones.html': 'Cambios y Devoluciones',
-    'preguntas-frecuentes.html': 'Preguntas Frecuentes',
-    'terminos.html': 'Términos y Condiciones',
-    'privacidad.html': 'Privacidad',
-    'admin.html': 'Panel Admin',
-    'admin-images.html': 'Gestión de Imágenes',
-    '404.html': 'Página no Encontrada'
+    contact: 'Contacto',
+    login: 'Iniciar Sesión',
+    about: 'Quiénes Somos',
+    nosotros: 'Quiénes Somos',
+    perfil: 'Mi Perfil',
+    collections: 'Colecciones',
+    checkout: 'Finalizar Compra',
+    envios: 'Envíos',
+    'cambios-devoluciones': 'Cambios y Devoluciones',
+    'preguntas-frecuentes': 'Preguntas Frecuentes',
+    terminos: 'Términos y Condiciones',
+    privacidad: 'Privacidad',
+    admin: 'Panel Admin',
+    'admin-images': 'Gestión de Imágenes',
+    404: 'Página no Encontrada'
   };
 
-  function computeBrandLabel() {
-    const file = currentPath().split('/').pop() || 'index.html';
+  function currentPageFile() {
+    // Cloudflare Pages sirve URLs limpias (/contact, /about, sin
+    // ".html"), pero en local o con enlaces directos puede llegar con la
+    // extensión igual — hay que aceptar ambas formas por igual.
+    const last = currentPath().split('/').pop() || '';
+    return last.replace(/\.html$/, '');
+  }
 
-    if (file === 'catalogo.html') {
+  function computeBrandLabel() {
+    const file = currentPageFile() || 'index';
+
+    if (file === 'catalogo') {
       let cat = '';
       try {
         cat = (new URLSearchParams(window.location.search).get('cat') || '')
@@ -290,7 +298,7 @@
         : 'Catálogo Principal';
     }
 
-    if (file === 'product.html') {
+    if (file === 'product') {
       const stashed = consumeNextLoaderLabel();
       return stashed ? 'Producto - ' + stashed : 'Producto';
     }
