@@ -129,7 +129,8 @@ check(
 const firebase = read('js/firebase.js');
 check(
   'Firebase importa App Check',
-  firebase.includes('initializeAppCheck') && firebase.includes('ReCaptchaV3Provider')
+  firebase.includes('initializeAppCheck') &&
+    (firebase.includes('ReCaptchaV3Provider') || firebase.includes('ReCaptchaEnterpriseProvider'))
 );
 check(
   'El estado de App Check nunca se presenta como activo sin configuración',

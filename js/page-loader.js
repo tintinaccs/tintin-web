@@ -92,7 +92,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260730-perf-preconnect-1';
+  const TT_CACHE_VERSION = 'tintin-20260731-merge-perf-a11y-1';
   const MIN_SHOW_MS = 520;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -581,6 +581,45 @@
     gateEmergencyShown = true;
     waitForBody(() => {
       if (gateResolved) return;
+      documentElement.classList.remove('tt-store-gate-pending', 'tt-store-gate-blocked');
+      documentElement.classList.add('tt-store-gate-degraded');
+
+      let notice = document.getElementById('tt-store-gate-network-notice');
+      if (!notice) {
+        notice = document.createElement('aside');
+        notice.id = 'tt-store-gate-network-notice';
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+        notice.style.cssText =
+          'position:fixed;z-index:2147482988;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 28px),470px);min-height:48px;padding:10px 12px 10px 16px;border:1px solid rgba(173,63,103,.18);border-radius:18px;background:rgba(255,255,255,.96);color:#3a2d32;box-shadow:0 14px 40px rgba(58,20,35,.16);box-sizing:border-box;visibility:visible;pointer-events:auto';
+        notice.innerHTML =
+          '<span style="min-width:0;flex:1;font:600 12px/1.45 Montserrat,sans-serif">Conexión inestable. Podés explorar la tienda; las compras se habilitan al reconectar.</span>' +
+          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#ad3f67;color:#fff;font:800 12px/1 Montserrat,sans-serif;cursor:pointer">Reintentar</button>';
+        notice.querySelector('button')?.addEventListener('click', () => window.location.reload());
+        document.body.appendChild(notice);
+      }
+      if (!window.__TintinEmergencyDegradedGuardBound) {
+        window.__TintinEmergencyDegradedGuardBound = true;
+        window.addEventListener('click', event => {
+          if (!documentElement.classList.contains('tt-store-gate-degraded')) return;
+          const control = event.target?.closest?.(
+            'a[href*="checkout"],.tt-cart-checkout-btn,[data-checkout],[data-action="checkout"]'
+          );
+          if (!control) return;
+          event.preventDefault();
+          event.stopImmediatePropagation?.();
+          event.stopPropagation?.();
+          document.getElementById('tt-store-gate-network-notice')
+            ?.querySelector('button')
+            ?.focus({ preventScroll: true });
+        }, true);
+      }
+
+      window.dispatchEvent(new CustomEvent('tintin:store-gate-state', {
+        detail: { state: 'degraded', source: 'startup-timeout' }
+      }));
+      return;
+
       documentElement.classList.remove('tt-store-gate-pending');
       documentElement.classList.add('tt-store-gate-blocked');
       lockEmergencySiblings();
@@ -622,6 +661,39 @@
       logoReady = true;
       hideNow();
     });
+  }
+
+  function bootEarlyStoreGateFallback() {
+    if (!storeGateRequired || typeof window.fetch !== 'function') return;
+
+    const controller = typeof AbortController === 'function'
+      ? new AbortController()
+      : null;
+    const timer = window.setTimeout(() => controller?.abort(), 7000);
+    const url =
+      'https://firestore.googleapis.com/v1/projects/tintin-accesorios/' +
+      'databases/(default)/documents/settings/storeGate' +
+      '?key=AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
+
+    window.fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-store',
+      credentials: 'omit',
+      ...(controller ? { signal: controller.signal } : {})
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(payload => {
+        // Solo un true explícito abre antes de Firebase. Si está cerrada,
+        // falta el documento o hay cualquier error, decide el guard completo
+        // con la sesión y los permisos del equipo.
+        if (payload?.fields?.storeOpen?.booleanValue !== true || gateResolved) return;
+        window.dispatchEvent(new CustomEvent('tintin:store-gate-state', {
+          detail: { state: 'allowed', source: 'public-rest-fallback' }
+        }));
+      })
+      .catch(() => {})
+      .finally(() => window.clearTimeout(timer));
   }
 
   function importSibling(fileName, label, onError) {
@@ -744,6 +816,19 @@
     }
   }
 
+  function bootPhase8UiUx() {
+    if (!document.getElementById('tt-phase8-ui-ux-css')) {
+      const link = document.createElement('link');
+      link.id = 'tt-phase8-ui-ux-css';
+      link.rel = 'stylesheet';
+      link.href = resolveAsset('css/phase8-ui-ux.css');
+      document.head.appendChild(link);
+    }
+    if (!window.TintinUX?.booted) {
+      importSibling('phase8-ui-ux.js', 'Phase 8 UI/UX');
+    }
+  }
+
   function bootPageRuntime() {
     if (runtimeBooted) return;
     runtimeBooted = true;
@@ -756,6 +841,7 @@
     bootScrollReveal();
     bootImagePerformance();
     bootSiteActivity();
+    bootPhase8UiUx();
   }
 
   function bootPublicRuntime() {
@@ -780,6 +866,7 @@
     bootCartSyncPublic();
     bootThemeColorSanitizerPublic();
     bootPageAuditFixPublic();
+    bootPhase8UiUx();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
     documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
@@ -792,7 +879,7 @@
         const state = event?.detail?.state || 'unavailable';
         gateResolved = true;
 
-        if (state === 'allowed') {
+        if (state === 'allowed' || state === 'degraded') {
           // Destapar primero la página. El runtime público liviano arranca en
           // una tarea posterior y no puede retener el loader mientras carga.
           if (contentReady) tryHideElegant();
@@ -814,6 +901,7 @@
     window.setTimeout(() => {
       if (!gateResolved) showEmergencyStoreGate();
     }, STORE_GATE_TIMEOUT_MS);
+    bootEarlyStoreGateFallback();
   }
 
   bootStoreGate();

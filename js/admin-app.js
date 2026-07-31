@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js?v=tintin-20260716-cloudinary-fix-1";
+import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -18,8 +18,8 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "./role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "./email-config.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260716-cloudinary-fix-1";
-import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260720-read-budget-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
+import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
@@ -5034,10 +5034,27 @@ async function prodGuardar() {
   // igualdad exacta que exige sparkItemValid() en firestore.rules.
   const name = document.getElementById('prod-name').value.trim().slice(0, 180);
   const category = document.getElementById('prod-category').value;
-  const price = parseInt(document.getElementById('prod-price').value, 10);
+  const price = Number(document.getElementById('prod-price').value);
+  const stockRaw = document.getElementById('prod-stock').value.trim();
+  const stockValue = stockRaw === '' ? null : Number(stockRaw);
+  const priceBeforeRaw = document.getElementById('prod-price-before').value.trim();
+  const priceBeforeValue = priceBeforeRaw === '' ? null : Number(priceBeforeRaw);
+  const categoryExists = _allCollections.some(collection => collection.slug === category);
 
-  if (!name || !category || !price) {
-    errEl.textContent = 'Nombre, categoría y precio son obligatorios.';
+  if (!name || !category || !categoryExists || !Number.isInteger(price) || price <= 0 || price > 1000000000) {
+    errEl.textContent = !categoryExists && category
+      ? 'La colección elegida ya no existe. Actualizá la lista y seleccioná otra.'
+      : 'Nombre, colección y un precio entero mayor a cero son obligatorios.';
+    errEl.style.display = '';
+    return false;
+  }
+  if (stockValue != null && (!Number.isInteger(stockValue) || stockValue < 0 || stockValue > 1000000)) {
+    errEl.textContent = 'El stock debe ser un número entero entre 0 y 1.000.000, o quedar vacío si no se controla.';
+    errEl.style.display = '';
+    return false;
+  }
+  if (priceBeforeValue != null && (!Number.isInteger(priceBeforeValue) || priceBeforeValue <= price || priceBeforeValue > 1000000000)) {
+    errEl.textContent = 'El precio anterior debe ser un entero mayor al precio actual, o quedar vacío.';
     errEl.style.display = '';
     return false;
   }
@@ -5055,18 +5072,30 @@ async function prodGuardar() {
       const idx = line.indexOf(':');
       if (idx < 0) return;
       const key = line.slice(0, idx).trim();
-      const val = line.slice(idx + 1).trim();
-      if (!key || !val) return;
+      const values = line.slice(idx + 1).split(',').map(value => value.trim()).filter(Boolean);
+      if (!key || !values.length || key.length > 60) return;
       if (!vObj[key]) vObj[key] = [];
-      if (!vObj[key].includes(val)) vObj[key].push(val);
+      values.forEach(value => {
+        const safeValue = value.slice(0, 120);
+        if (safeValue && !vObj[key].includes(safeValue) && vObj[key].length < 50) vObj[key].push(safeValue);
+      });
     });
-    if (Object.keys(vObj).length) variantsParsed = vObj;
+    if (Object.keys(vObj).length > 20) {
+      errEl.textContent = 'Un producto puede tener hasta 20 grupos de variantes.';
+      errEl.style.display = '';
+      btn.textContent = 'Guardar producto'; btn.disabled = false;
+      return false;
+    }
+    if (Object.keys(vObj).length) {
+      variantsParsed = vObj;
+      document.getElementById('prod-variants-text').value = Object.entries(vObj)
+        .flatMap(([key, values]) => values.map(value => `${key}: ${value}`)).join('\n');
+    }
   }
 
   const tagsRaw = document.getElementById('prod-tags').value.trim();
-  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-  const priceBefore = parseInt(document.getElementById('prod-price-before').value) || null;
+  const tags = [...new Set(tagsRaw ? tagsRaw.split(',').map(tag => tag.trim().slice(0, 60)).filter(Boolean) : [])].slice(0, 30);
+  document.getElementById('prod-tags').value = tags.join(', ');
   const badge = document.getElementById('prod-badge').value || null;
 
   const collection_ = document.getElementById('prod-collection').value.trim() || null;
@@ -5076,16 +5105,11 @@ async function prodGuardar() {
     category,
     collection: collection_,
     price,
-    priceBefore,
+    priceBefore: priceBeforeValue,
     // Vacío = stock no controlado/ilimitado (el storefront ya lo trata así,
     // ver script.js) — no lo confundimos con "0" (agotado de verdad), que
     // solo se guarda si la vendedora lo escribe a propósito.
-    stock: (() => {
-      const raw = document.getElementById('prod-stock').value.trim();
-      if (raw === '') return null;
-      const n = parseInt(raw);
-      return Number.isNaN(n) ? null : n;
-    })(),
+    stock: stockValue,
     imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
     description: document.getElementById('prod-description').value.trim() || '',
     tags,
@@ -5093,7 +5117,7 @@ async function prodGuardar() {
     active: document.getElementById('prod-active').checked,
     oferta: document.getElementById('prod-oferta').checked,
     destacado: document.getElementById('prod-destacado').checked,
-    ...(variantsParsed ? { variants: variantsParsed } : {}),
+    ...(variantsParsed ? { variants: variantsParsed } : (_isEdit ? { variants: deleteField() } : {})),
     updatedAt: serverTimestamp(),
   };
 

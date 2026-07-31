@@ -7,7 +7,7 @@
  *   código postal, navegador, nombre, correo ni referidor.
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { apiUrl } from './function-origin.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
@@ -21,12 +21,20 @@ import {
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
 import { isAdminPage } from './admin-path.js?v=tintin-20260722-level4-1';
 
-if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true) {
+const appCheckAvailable = await appCheckReady;
+
+if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable) {
   document.documentElement.dataset.ttActivityState = 'disabled-quota-protection';
-  window.TintinSiteActivity = Object.freeze({ status: 'disabled-quota-protection' });
+  window.TintinSiteActivity = Object.freeze({
+    status: appCheckAvailable ? 'disabled-quota-protection' : 'disabled-app-check'
+  });
 }
 
-if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true) {
+if (
+  !window.TintinSiteActivityBooted &&
+  window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true &&
+  appCheckAvailable
+) {
   window.TintinSiteActivityBooted = true;
 
   const VISITOR_KEY = 'tt_activity_visitor_v2';
@@ -35,6 +43,11 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
   const AGGREGATE_RECORDED_PREFIX = 'tt_aggregate_recorded_';
   const HEARTBEAT_MS = 60000;
+  const PERMANENT_WRITE_ERROR_CODES = new Set([
+    'permission-denied',
+    'unauthenticated',
+    'failed-precondition'
+  ]);
   let heartbeatTimer = 0;
   let activityEnabled = false;
   let analyticsWritable = false;
@@ -43,6 +56,24 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   let visitorId = '';
   let sessionId = '';
   let geoPromise = null;
+  let permanentWriteErrorCode = '';
+
+  function firestoreErrorCode(error) {
+    return String(error?.code || '').replace(/^firestore\//, '');
+  }
+
+  function stopAfterPermanentWriteError(error, operation) {
+    const code = firestoreErrorCode(error);
+    if (!PERMANENT_WRITE_ERROR_CODES.has(code)) return false;
+    if (permanentWriteErrorCode) return true;
+    permanentWriteErrorCode = code;
+    analyticsWritable = false;
+    stopActivity();
+    document.documentElement.dataset.ttActivityState = `blocked-${code}`;
+    window.TintinSiteActivity = Object.freeze({ status: `blocked-${code}` });
+    console.warn(`[SiteActivity] Analítica desactivada: Firestore rechazó ${operation} (${code}).`);
+    return true;
+  }
 
   function randomId(prefix) {
     try {
@@ -184,14 +215,14 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   }
 
   async function recordSessionOnce() {
-    if (!activityEnabled || !hasConsent()) return;
+    if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
     const dayKey = refreshIdentity();
     const recordedKey = SESSION_RECORDED_PREFIX + dayKey;
     if (storageGet(window.sessionStorage, recordedKey) === sessionId) return;
 
     try {
       const geo = await getGeo();
-      if (!activityEnabled || !hasConsent()) return;
+      if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
       await setDoc(doc(db, 'siteTraffic', dayKey, 'sessions', sessionId), {
         dayKey,
         sessionId,
@@ -203,16 +234,18 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
       });
       storageSet(window.sessionStorage, recordedKey, sessionId);
     } catch (error) {
-      console.warn('[SiteActivity] No se pudo registrar la sesión:', error?.code || error);
+      if (!stopAfterPermanentWriteError(error, 'registrar la sesión')) {
+        console.warn('[SiteActivity] No se pudo registrar la sesión:', error?.code || error);
+      }
     }
   }
 
   async function sendHeartbeat() {
-    if (!activityEnabled || !hasConsent() || document.visibilityState === 'hidden') return;
+    if (!analyticsWritable || !activityEnabled || !hasConsent() || document.visibilityState === 'hidden') return;
     refreshIdentity();
     try {
       const geo = await getGeo();
-      if (!activityEnabled || !hasConsent()) return;
+      if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
       await setDoc(doc(db, 'sitePresence', visitorId), {
         visitorId,
         sessionId,
@@ -222,13 +255,15 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
         lastSeen: serverTimestamp()
       }, { merge: true });
     } catch (error) {
-      console.warn('[SiteActivity] No se pudo actualizar la presencia:', error?.code || error);
+      if (!stopAfterPermanentWriteError(error, 'actualizar la presencia')) {
+        console.warn('[SiteActivity] No se pudo actualizar la presencia:', error?.code || error);
+      }
     }
   }
 
   function scheduleHeartbeat() {
     window.clearInterval(heartbeatTimer);
-    if (!activityEnabled || !hasConsent()) return;
+    if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
     sendHeartbeat();
     heartbeatTimer = window.setInterval(sendHeartbeat, HEARTBEAT_MS);
   }
@@ -243,14 +278,14 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
     if (listenersBound) return;
     listenersBound = true;
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && activityEnabled) scheduleHeartbeat();
+      if (document.visibilityState === 'visible' && activityEnabled && analyticsWritable) scheduleHeartbeat();
       else window.clearInterval(heartbeatTimer);
     });
     window.addEventListener('pagehide', () => window.clearInterval(heartbeatTimer));
   }
 
   function startActivity() {
-    if (!analyticsWritable) return;
+    if (!analyticsWritable || permanentWriteErrorCode) return;
     activityEnabled = true;
     refreshIdentity();
     bindLifecycleOnce();
@@ -266,6 +301,7 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   // banner). Sigue respetando el interruptor general de la Fase de cuota y
   // los mismos entornos excluidos (admin, localhost, previews).
   async function recordAggregateVisitOnce() {
+    if (!analyticsWritable || permanentWriteErrorCode) return;
     const dayKey = paraguayDayKey();
     const recordedKey = AGGREGATE_RECORDED_PREFIX + dayKey;
     if (storageGet(window.sessionStorage, recordedKey) === '1') return;
@@ -277,7 +313,9 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
       }, { merge: true });
       storageSet(window.sessionStorage, recordedKey, '1');
     } catch (error) {
-      console.warn('[SiteActivity] No se pudo registrar la visita agregada:', error?.code || error);
+      if (!stopAfterPermanentWriteError(error, 'registrar la visita agregada')) {
+        console.warn('[SiteActivity] No se pudo registrar la visita agregada:', error?.code || error);
+      }
     }
   }
 
@@ -305,7 +343,7 @@ if (!window.TintinSiteActivityBooted && window.TINTIN_ENABLE_PUBLIC_ACTIVITY ===
   if (trackablePage) {
     if (hasConsent() && analyticsWritable) startActivity();
     onPrivacyConsentChange(preferences => {
-      if (preferences.statistics && analyticsWritable) startActivity();
+      if (preferences.statistics && analyticsWritable && !permanentWriteErrorCode) startActivity();
       else {
         stopActivity();
         clearLocalAnalyticsIds();

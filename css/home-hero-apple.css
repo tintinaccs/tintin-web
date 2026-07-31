@@ -1,0 +1,260 @@
+/* =============================================================
+   TINTIN — Hero editorial inspirado en una app de Apple
+
+   Desktop conserva la fotografía a pantalla completa y presenta el contenido
+   como una superficie legible. Tablet y mobile separan físicamente fotografía
+   y contenido: la imagen queda limpia arriba y la tarjeta de acciones abajo.
+   ============================================================= */
+
+html body.tt-home-premium .tt-hero-content {
+  border: 1px solid color-mix(in srgb, #ffffff 58%, transparent);
+  border-radius: clamp(24px, 2.4vw, 34px);
+  background: color-mix(in srgb, #ffffff 82%, transparent);
+  box-shadow:
+    0 24px 70px rgba(79, 24, 46, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  color: #2b2024 !important;
+  text-shadow: none !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.18);
+  backdrop-filter: blur(22px) saturate(1.18);
+}
+
+html body.tt-home-premium .tt-hero-content :is(
+  .tt-hero-eyebrow,
+  .tt-hero-title,
+  .tt-hero-subtitle
+) {
+  color: #2b2024 !important;
+  text-shadow: none !important;
+}
+
+html body.tt-home-premium .tt-hero-title {
+  text-wrap: balance;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-btn {
+  min-height: 52px;
+  border-radius: 999px;
+  box-shadow: none;
+  transition:
+    transform 180ms cubic-bezier(.2, .75, .25, 1),
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Desktop: mantiene la composición que ya funcionaba, pero la lectura queda
+   protegida dentro de una tarjeta ligera y coherente con el resto del hero. */
+@media (min-width: 1024px) {
+  html body.tt-home-premium .tt-hero {
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(620px, 82svh, 880px);
+    padding: clamp(28px, 4vw, 64px);
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    width: min(660px, 50vw);
+    max-width: 660px;
+    margin: 0;
+    padding: clamp(28px, 3.2vw, 48px);
+  }
+
+  html body.tt-home-premium .tt-hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(77, 24, 43, .22), transparent 68%),
+      linear-gradient(0deg, rgba(77, 24, 43, .18), transparent 58%) !important;
+  }
+}
+
+/* Tablet y mobile: la fotografía y el contenido dejan de compartir espacio.
+   Esto impide que cualquier texto tape productos, incluso si cambia la foto
+   desde el panel de administración. */
+@media (max-width: 1023px) {
+  html body.tt-home-premium .tt-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: clamp(350px, 52svh, 520px) auto;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 0 clamp(16px, 3vw, 28px);
+    background:
+      linear-gradient(180deg, #f9c9d9 0%, #fff6fa 100%) !important;
+    overflow: hidden;
+  }
+
+  html body.tt-home-premium .tt-hero-media {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 0 0 clamp(24px, 5vw, 42px) clamp(24px, 5vw, 42px);
+    box-shadow: 0 18px 42px rgba(104, 33, 60, .14);
+  }
+
+  html body.tt-home-premium .tt-hero-overlay {
+    display: none !important;
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    position: relative;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start !important;
+    justify-self: center !important;
+    width: min(calc(100% - clamp(24px, 5vw, 48px)), 680px);
+    max-width: 680px !important;
+    margin: clamp(14px, 2.8vw, 24px) auto 0;
+    padding: clamp(24px, 4.2vw, 38px) !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(255, 255, 255, .94);
+    border-color: rgba(255, 255, 255, .96);
+    -webkit-backdrop-filter: blur(18px) saturate(1.12);
+    backdrop-filter: blur(18px) saturate(1.12);
+  }
+
+  html body.tt-home-premium .tt-hero-eyebrow {
+    justify-content: center;
+    margin-bottom: 12px;
+    color: #a0335b !important;
+    font-size: clamp(.68rem, 1.5vw, .78rem);
+    letter-spacing: .24em;
+  }
+
+  html body.tt-home-premium .tt-hero-title {
+    width: 100%;
+    margin: 0 0 clamp(20px, 3vw, 28px);
+    color: #2b2024 !important;
+    font-size: clamp(2rem, 5.4vw, 3.15rem) !important;
+    line-height: 1.02;
+    letter-spacing: -.035em;
+    text-align: center;
+  }
+
+  html body.tt-home-premium .tt-hero-subtitle {
+    width: 100%;
+    text-align: center;
+  }
+
+  html body.tt-home-premium .tt-hero-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    justify-content: center;
+  }
+
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    justify-content: center;
+    padding-inline: clamp(16px, 3vw, 28px);
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-rows: clamp(326px, 51svh, 472px) auto;
+    padding-bottom: 18px;
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    width: calc(100% - 24px);
+    margin-top: 12px;
+    padding:
+      clamp(20px, 5vw, 26px)
+      clamp(18px, 5.5vw, 28px)
+      clamp(24px, 6vw, 32px) !important;
+    border-radius: 28px;
+    box-shadow:
+      0 18px 46px rgba(79, 24, 46, .14),
+      inset 0 1px 0 rgba(255, 255, 255, .9);
+  }
+
+  html body.tt-home-premium .tt-hero-title {
+    font-size: clamp(1.9rem, 8.8vw, 2.8rem) !important;
+    line-height: .98;
+  }
+
+  html body.tt-home-premium .tt-hero-actions {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    min-height: 52px;
+    font-size: clamp(.76rem, 3.5vw, .9rem);
+  }
+}
+
+@media (max-width: 380px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-rows: clamp(290px, 51.5svh, 414px) auto;
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    width: calc(100% - 20px);
+    padding: 20px 16px 24px !important;
+    border-radius: 24px;
+  }
+
+  html body.tt-home-premium .tt-hero-eyebrow {
+    font-size: .64rem;
+    letter-spacing: .18em;
+  }
+
+  html body.tt-home-premium .tt-hero-title {
+    font-size: clamp(1.72rem, 9vw, 2.15rem) !important;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1023px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+    grid-template-rows: minmax(420px, 100svh);
+    padding: 0;
+  }
+
+  html body.tt-home-premium .tt-hero-media {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: 0 28px 28px 0;
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center !important;
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 22px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -12,7 +12,7 @@
   if (window.TintinPublicShellBooted) return;
   window.TintinPublicShellBooted = true;
 
-  const VERSION = 'tintin-20260726-login-session-1';
+  const VERSION = 'tintin-20260731-phase8-stock-shell-1';
   const SCRIPT_URL = document.currentScript?.src || new URL('js/public-shell.js', location.href).href;
   const ICONS = {
     bolsos: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
@@ -187,13 +187,14 @@
   }
 
   function currentPage() {
-    const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    if (!file || file === 'index.html') return 'home';
-    if (file === 'about.html') return 'about';
-    if (file === 'contact.html') return 'contact';
-    if (['catalogo.html', 'collections.html', 'product.html'].includes(file)) return 'shop';
-    if (file === 'checkout.html') return 'cart';
-    if (['login.html', 'perfil.html'].includes(file)) return 'account';
+    const parts = (location.pathname || '').split('/').filter(Boolean);
+    const file = (parts.pop() || 'index').toLowerCase().replace(/\.html$/, '');
+    if (!file || file === 'index' || file === 'tintin-web') return 'home';
+    if (file === 'about' || file === 'nosotros') return 'about';
+    if (file === 'contact') return 'contact';
+    if (['catalogo', 'collections', 'product'].includes(file)) return 'shop';
+    if (file === 'checkout') return 'cart';
+    if (['login', 'perfil'].includes(file)) return 'account';
     return 'other';
   }
 
@@ -235,17 +236,77 @@
     return import(versioned('./home-maintenance.js'));
   }
 
+  let productsRuntimePromise = null;
+
+  function loadProductsRuntime({ forSearch = false } = {}) {
+    if (!productsRuntimePromise) {
+      productsRuntimePromise = import(versioned('./products-store.js')).catch(error => {
+        productsRuntimePromise = null;
+        throw error;
+      });
+    }
+    return productsRuntimePromise.then(module => {
+      if (!forSearch) return module;
+      const ensureSearch = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch;
+      return typeof ensureSearch === 'function' ? ensureSearch() : module;
+    });
+  }
+
+  function attachProductsDemand() {
+    const load = () => loadProductsRuntime({ forSearch: true }).then(() => {
+      const input = document.getElementById('search-input');
+      if (input?.value) input.dispatchEvent(new Event('input', { bubbles: true }));
+    }).catch(error => {
+      console.warn('[PublicShell] No se pudo cargar el catálogo para la búsqueda.', error);
+    });
+
+    ['btn-search', 'tabbar-search'].forEach(id => {
+      const control = document.getElementById(id);
+      if (!control) return;
+      control.addEventListener('pointerenter', load, { once: true, passive: true });
+      control.addEventListener('focus', load, { once: true });
+      control.addEventListener('click', load, { once: true });
+    });
+  }
+
+  function scheduleNonCritical(task) {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(task, { timeout: 1400 });
+      return;
+    }
+    window.setTimeout(task, 450);
+  }
+
+  function reportRuntimeFailures(results) {
+    const failed = results.filter(result => result.status === 'rejected');
+    if (failed.length) {
+      console.warn('[PublicShell] Algunos datos en vivo no pudieron cargarse.', failed.map(item => item.reason));
+    }
+  }
+
   function loadSharedRuntime() {
-    Promise.allSettled([
+    const page = currentPage();
+    const critical = [
       import(versioned('./auth-nav.js')),
-      import(versioned('./nav-collections.js')),
-      import(versioned('./products-store.js')),
       import(versioned('./cart-sync.js')),
-      import(versioned('./checkout-reliability.js')),
-      loadHomeMaintenance(),
-    ]).then(results => {
-      const failed = results.filter(result => result.status === 'rejected');
-      if (failed.length) console.warn('[PublicShell] Algunos datos en vivo no pudieron cargarse.', failed.map(item => item.reason));
+    ];
+
+    // Inicio y tienda necesitan productos para su primera vista. En páginas
+    // informativas el catálogo se importa únicamente cuando se abre Buscar.
+    if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
+    if (page === 'cart') critical.push(import(versioned('./checkout-reliability.js')));
+
+    Promise.allSettled(critical).then(reportRuntimeFailures);
+    attachProductsDemand();
+
+    // Las colecciones del menú ya tienen contenido estático utilizable; su
+    // sincronización y el mantenimiento visual del inicio pueden esperar al
+    // primer periodo ocioso sin retrasar LCP/INP.
+    scheduleNonCritical(() => {
+      Promise.allSettled([
+        import(versioned('./nav-collections.js')),
+        loadHomeMaintenance(),
+      ]).then(reportRuntimeFailures);
     });
   }
 

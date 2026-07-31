@@ -8,7 +8,7 @@
 // manda y valida el enlace — acá solo se completa el inicio de sesión y se
 // sincroniza el documento de Firestore.
 // =============================================
-import { auth, db } from "./firebase.js?v=tintin-20260716-cloudinary-fix-1";
+import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -106,7 +106,10 @@ export async function ensureUserDocForEmailLogin(user) {
     await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
     return { role: 'superadmin', blocked: false, isNew: false };
   }
-  await setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
+  // Son marcas informativas y no conceden acceso. Se guardan sin bloquear la
+  // navegación de una cuenta cuyo perfil ya fue leído y validado.
+  setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
+    .catch(error => console.warn('[email-auth] No se pudo actualizar lastLogin:', error));
   const role = data.role || 'client';
   const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
   return { role, blocked: !!data.blocked, isNew: false, welcomePending };

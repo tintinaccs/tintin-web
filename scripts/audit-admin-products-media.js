@@ -48,6 +48,7 @@ const imageProc   = read('js/image-processing.js');
 const imageUtils  = read('js/image-utils.js');
 const storefront  = read('script.js');
 const productsStore = read('js/products-store.js');
+const phase7Policy = read('js/phase7-catalog-policy.js');
 const sheetsSyncFunction = read('functions/api/sheets-product-sync.js');
 
 // ===========================================================================
@@ -61,8 +62,10 @@ check(
 );
 check(
   'Guardar producto valida nombre, categoría y precio obligatorios',
-  /if \(!name \|\| !category \|\| !price\)/.test(adminApp),
-  'Nombre, categoría y precio deben ser obligatorios antes de escribir en Firestore.'
+  /categoryExists = _allCollections\.some/.test(adminApp) &&
+    /!Number\.isInteger\(price\) \|\| price <= 0/.test(adminApp) &&
+    /price > 1000000000/.test(adminApp),
+  'Nombre, una colección existente y un precio entero positivo deben ser obligatorios antes de escribir en Firestore.'
 );
 check(
   'Guardar producto previene el doble guardado deshabilitando el botón',
@@ -96,8 +99,10 @@ check(
 );
 check(
   'El stock vacío se guarda como null (no controlado), distinto de 0 (agotado)',
-  /if \(raw === ''\) return null;/.test(adminApp),
-  'Un stock vacío no debe confundirse con 0; debe quedar como null (ilimitado).'
+  /stockRaw === '' \? null : Number\(stockRaw\)/.test(adminApp) &&
+    /stock: stockValue/.test(adminApp) &&
+    /stockValue < 0 \|\| stockValue > 1000000/.test(adminApp),
+  'Un stock vacío debe quedar como null y un stock informado debe ser un entero acotado, incluido 0 como agotado.'
 );
 check(
   'Los cambios del Super Admin avisan inmediatamente al sincronizador de Google Sheets',
@@ -161,10 +166,12 @@ check(
   'isVisible debe combinar activo + en stock + nombre válido.'
 );
 check(
-  'El carrito descarta productos borrados o desactivados y refresca precio/nombre',
+  'El carrito descarta productos borrados, desactivados, agotados o inválidos y refresca sus datos',
   /function syncCartWithCatalog/.test(storefront) &&
-    /if \(!live \|\| live\.active === false\) return null;/.test(storefront),
-  'syncCartWithCatalog debe quitar del carrito lo que ya no existe o quedó inactivo.'
+    /TintinCatalogPolicy\?\.reconcileCart/.test(storefront) &&
+    /export function reconcileCatalogCart/.test(phase7Policy) &&
+    /variantIsValid/.test(phase7Policy),
+  'syncCartWithCatalog debe delegar en la política que valida existencia, visibilidad, stock, precio y variante.'
 );
 
 // ===========================================================================

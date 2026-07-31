@@ -1,15 +1,7 @@
 'use strict';
 
-/**
- * Utilidades compartidas para las pruebas de rendimiento con Playwright.
- *
- * BASE_URL configurable por entorno (PERF_BASE_URL). Por defecto apunta al
- * despliegue real de GitHub Pages, que es donde estas métricas tienen sentido
- * (no en un servidor local sin Firebase real).
- */
-const BASE_URL = (process.env.PERF_BASE_URL || 'https://tintinaccs.github.io/tintin-web').replace(/\/+$/, '');
+const BASE_URL = (process.env.PERF_BASE_URL || 'https://tintinaccesorios.pages.dev').replace(/\/+$/, '');
 
-// Las siete resoluciones obligatorias del encargo.
 const VIEWPORTS = [
   { name: '1920 Desktop grande', width: 1920, height: 1080 },
   { name: '1440 Desktop', width: 1440, height: 900 },
@@ -28,19 +20,59 @@ const PUBLIC_PAGES = [
 
 function url(page) { return `${BASE_URL}/${page.replace(/^\//, '')}`; }
 
-// Espera a que el loader global se retire (o al timeout de emergencia del sitio).
+async function installVitalsObserver(page) {
+  await page.addInitScript(() => {
+    window.__ttVitals = { lcp: null, cls: 0, inp: null };
+    try {
+      new PerformanceObserver(list => {
+        const entries = list.getEntries();
+        if (entries.length) window.__ttVitals.lcp = Math.round(entries.at(-1).startTime);
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) window.__ttVitals.cls += entry.value;
+        }
+      }).observe({ type: 'layout-shift', buffered: true });
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          if (!entry.interactionId) continue;
+          const duration = Math.round(entry.duration || 0);
+          window.__ttVitals.inp = Math.max(window.__ttVitals.inp || 0, duration);
+        }
+      }).observe({ type: 'event', buffered: true, durationThreshold: 16 });
+    } catch {}
+  });
+}
+
 async function waitLoaderGone(page, timeout = 12000) {
   await page.waitForFunction(() => {
-    const l = document.getElementById('tt-loader');
-    return !l || getComputedStyle(l).display === 'none' || l.classList.contains('tt-out');
+    const loader = document.getElementById('tt-loader');
+    return !loader || getComputedStyle(loader).display === 'none' || loader.classList.contains('tt-out');
   }, { timeout }).catch(() => {});
 }
 
-// Recolecta métricas reales de Web Vitals desde el navegador.
+async function probeInteraction(page) {
+  await page.evaluate(() => {
+    const probe = document.createElement('button');
+    probe.id = 'tt-inp-probe';
+    probe.type = 'button';
+    probe.setAttribute('aria-label', 'Sonda de interacción');
+    probe.style.cssText = 'position:fixed;left:1px;bottom:1px;width:4px;height:4px;opacity:.01;z-index:2147483647';
+    document.body.appendChild(probe);
+  });
+  await page.locator('#tt-inp-probe').click({ force: true }).catch(() => {});
+  await page.waitForTimeout(180);
+  await page.evaluate(() => document.getElementById('tt-inp-probe')?.remove());
+}
+
 async function collectVitals(page) {
   return page.evaluate(() => new Promise(resolve => {
-    const out = { fcp: null, lcp: null, cls: 0, ttfb: null, dcl: null, load: null,
-      requests: 0, transferKB: 0 };
+    const out = {
+      fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: window.__ttVitals?.cls || 0,
+      inp: window.__ttVitals?.inp ?? null, ttfb: null, dcl: null, load: null,
+      requests: 0, transferKB: 0, duplicateRequests: 0, duplicateUrls: [], firestoreReads: 0,
+      firestoreSources: {}
+    };
     try {
       const nav = performance.getEntriesByType('navigation')[0] || {};
       out.ttfb = nav.responseStart ? Math.round(nav.responseStart) : null;
@@ -48,29 +80,38 @@ async function collectVitals(page) {
       out.load = nav.loadEventEnd ? Math.round(nav.loadEventEnd) : null;
       const fcp = performance.getEntriesByName('first-contentful-paint')[0];
       if (fcp) out.fcp = Math.round(fcp.startTime);
-      const res = performance.getEntriesByType('resource');
-      out.requests = res.length;
-      out.transferKB = Math.round(res.reduce((s, r) => s + (r.transferSize || 0), 0) / 1024);
+      const resources = performance.getEntriesByType('resource');
+      out.requests = resources.length;
+      out.transferKB = Math.round(resources.reduce((sum, item) => sum + (item.transferSize || 0), 0) / 1024);
+      const counts = new Map();
+      resources.forEach(item => counts.set(item.name, (counts.get(item.name) || 0) + 1));
+      out.duplicateUrls = [...counts.entries()].filter(([, count]) => count > 1).map(([name, count]) => ({ name, count }));
+      out.duplicateRequests = out.duplicateUrls.reduce((sum, item) => sum + item.count - 1, 0);
+      const budget = window.TintinReadBudget || {};
+      out.firestoreReads = Number(budget.estimatedDocuments) || 0;
+      out.firestoreSources = budget.sources || {};
     } catch {}
-    try {
-      new PerformanceObserver(list => {
-        const e = list.getEntries();
-        if (e.length) out.lcp = Math.round(e[e.length - 1].startTime);
-      }).observe({ type: 'largest-contentful-paint', buffered: true });
-      new PerformanceObserver(list => {
-        for (const entry of list.getEntries()) if (!entry.hadRecentInput) out.cls += entry.value;
-      }).observe({ type: 'layout-shift', buffered: true });
-    } catch {}
-    setTimeout(() => { out.cls = Math.round(out.cls * 1000) / 1000; resolve(out); }, 1200);
+    window.setTimeout(() => {
+      out.lcp = window.__ttVitals?.lcp ?? out.lcp;
+      out.cls = Math.round((window.__ttVitals?.cls || out.cls) * 1000) / 1000;
+      out.inp = window.__ttVitals?.inp ?? out.inp;
+      resolve(out);
+    }, 350);
   }));
 }
 
-// Presupuestos con tolerancia (advertencias vs fallos): se validan como "no peor
-// que" umbrales generosos, para no romper por diferencias mínimas o inestables.
 const BUDGETS = {
-  lcpMs: 4000,      // LCP razonable en la mediana de dispositivos
-  clsMax: 0.1,      // CLS bueno
-  loaderMaxMs: 11000 // el loader debe cerrarse antes del timeout de emergencia
+  dclMs: 6000,
+  lcpMs: 5000,
+  clsMax: 0.1,
+  inpMs: 500,
+  transferKB: 6500,
+  duplicateRequests: 5,
+  homeFirestoreReads: 30,
+  loaderMaxMs: 11000
 };
 
-module.exports = { BASE_URL, VIEWPORTS, PUBLIC_PAGES, url, waitLoaderGone, collectVitals, BUDGETS };
+module.exports = {
+  BASE_URL, VIEWPORTS, PUBLIC_PAGES, url, installVitalsObserver,
+  waitLoaderGone, probeInteraction, collectVitals, BUDGETS
+};

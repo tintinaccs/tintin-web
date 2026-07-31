@@ -72,7 +72,8 @@ function phase3FetchDocument_(relativePath, idToken) {
       data: phase3DecodeFields_(body.fields || {})
     };
   } catch (error) {
-    return { ok: false, error: 'firestore_read_failed', detail: String(error) };
+    console.error('[Phase3Security] Lectura de Firestore fallida:', error);
+    return { ok: false, error: 'firestore_read_failed' };
   }
 }
 
@@ -292,6 +293,7 @@ function phase3UpdateOrderNotificationStatus_(orderId, status) {
       ? { ok: true }
       : { ok: false, error: 'notification_status_write_failed', status: code };
   } catch (error) {
-    return { ok: false, error: 'notification_status_write_failed', detail: String(error) };
+    console.error('[Phase3Security] Escritura de notificationStatus fallida:', error);
+    return { ok: false, error: 'notification_status_write_failed' };
   }
 }

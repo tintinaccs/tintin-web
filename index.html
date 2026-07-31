@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260730-perf-preconnect-1"></script>
-  <script src="js/public-shell.js?v=tintin-20260726-login-session-1" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260731-phase10-a11y-1"></script>
+  <script src="js/public-shell.js?v=tintin-20260731-phase8-stock-shell-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. page-loader.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -46,7 +46,6 @@
   <meta name="twitter:description" content="Tienda de accesorios femeninos en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más. Envíos a todo el país.">
   <meta name="twitter:image" content="https://tintinaccesorios.pages.dev/assets/og-cover.jpg">
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/index.html">
-  <link rel="preload" href="styles.css?v=tintin-20260716-cloudinary-fix-1" as="style">
   <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
@@ -63,6 +62,7 @@
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/images.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/home-fit.css?v=tintin-20260716-cloudinary-fix-1">
+  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
 <body class="tt-home-premium">
 
@@ -569,7 +569,7 @@
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
 })();
 </script>
-<script src="script.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+<script src="script.js?v=tintin-20260730-performance-phase5-2" defer></script>
 <script type="module" src="js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>

@@ -25,6 +25,9 @@ const uiQuality = read('js/ui-quality.js');
 const pageAudit = read('js/page-audit-fix.js');
 const rules = read('firestore.rules');
 const checkout = read('checkout.html');
+const restFallback = read('js/firestore-rest-fallback.js');
+const productsStore = read('js/products-store.js');
+const collectionsStore = read('js/collections-store.js');
 
 check(
   'Bloqueo síncrono antes del body',
@@ -34,8 +37,9 @@ check(
 check(
   'Fallback si falla el módulo',
   pageLoader.includes('showEmergencyStoreGate') &&
-    pageLoader.includes('STORE_GATE_TIMEOUT_MS'),
-  'debe quedar bloqueado incluso si el módulo o Firebase no responden'
+    pageLoader.includes('STORE_GATE_TIMEOUT_MS') &&
+    pageLoader.includes("state: 'degraded', source: 'startup-timeout'"),
+  'debe liberar un modo consulta estable si el módulo o Firebase no responden'
 );
 check(
   'El tope de espera da margen real a redes o equipos lentos',
@@ -45,7 +49,7 @@ check(
 );
 check(
   'Runtime diferido hasta permitir acceso',
-  pageLoader.includes("if (state === 'allowed')") &&
+  pageLoader.includes("if (state === 'allowed' || state === 'degraded')") &&
     pageLoader.includes('function bootPublicRuntime()') &&
     pageLoader.includes('function bootPageRuntime()') &&
     pageLoader.includes('if (!storeGateRequired) bootPageRuntime();'),
@@ -61,8 +65,17 @@ check(
 check(
   'Loader se retira ante cierre o indisponibilidad',
   pageLoader.includes("const state = event?.detail?.state || 'unavailable'") &&
+    pageLoader.includes("state === 'allowed' || state === 'degraded'") &&
     pageLoader.includes('contentReady = true;\n        logoReady = true;\n        hideNow();'),
   'el aviso final no puede quedar tapado esperando page-ready'
+);
+check(
+  'Indisponibilidad sin ventanas alternantes',
+  gateRuntime.includes("publishState('degraded')") &&
+    gateCore.includes("classList.add('tt-store-gate-degraded')") &&
+    gateCore.includes('tt-store-gate-network-notice') &&
+    gateCore.includes('__TintinStoreGateDegradedGuardBound'),
+  'una falla de red debe conservar la página visible y bloquear solo el checkout'
 );
 check(
   'Auth nav no duplica módulos globales',
@@ -130,6 +143,35 @@ check(
   gateCore.includes("doc(db, 'settings', 'storeGate')") &&
     gateRuntime.includes("doc(db, 'settings', 'storeGate')"),
   'el gate debe usar settings/storeGate como fuente principal'
+);
+check(
+  'Comprobación temprana compatible sin falso cierre',
+  pageLoader.includes('function bootEarlyStoreGateFallback()') &&
+    pageLoader.includes("payload?.fields?.storeOpen?.booleanValue !== true") &&
+    pageLoader.includes("source: 'public-rest-fallback'"),
+  'solo storeOpen=true explícito puede retirar la espera si Firebase o reCAPTCHA tardan'
+);
+check(
+  'Estado abierto recuperable si el navegador bloquea el canal normal',
+  gateCore.includes('getStoreAccessConfigFromRest') &&
+    gateRuntime.includes('getStoreAccessConfigFromRest()') &&
+    gateRuntime.includes('restConfigResolved = true'),
+  'el mismo settings/storeGate público debe poder comprobarse sin mostrar un cierre falso'
+);
+check(
+  'Catálogo y colecciones tienen lectura pública compatible',
+  productsStore.includes("listPublicCollectionRest('products', 1000)") &&
+    collectionsStore.includes("listPublicCollectionRest('collections', 200)") &&
+    productsStore.includes('products:all-rest-fallback') &&
+    collectionsStore.includes('collections:public-rest-fallback'),
+  'bloquear reCAPTCHA o el canal de Firestore no debe vaciar las grillas públicas'
+);
+check(
+  'Respaldo REST es estrictamente de solo lectura',
+  restFallback.includes("method: 'GET'") &&
+    !/\b(?:POST|PUT|PATCH|DELETE)\b/.test(restFallback) &&
+    restFallback.includes('REQUEST_TIMEOUT_MS'),
+  'la recuperación no debe permitir escrituras ni quedar esperando indefinidamente'
 );
 check(
   'Sin apertura por error',
@@ -224,11 +266,10 @@ check(
   'el carrito remoto debe quedar bloqueado'
 );
 check(
-  'Pedidos cerrados mediante el validador Spark',
-  rules.includes('allow create: if sparkOrderCreateValid(orderId);') &&
-    rules.includes("settings.get('storeOpen', false) == true") &&
-    rules.includes("userData.get('blocked', false) != true"),
-  'el validador seguro debe rechazar tienda cerrada y cuentas bloqueadas'
+  'Pedidos cerrados y exclusivos del servidor',
+  rules.includes('allow create: if false;') &&
+    !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+  'Firestore debe rechazar cualquier creación directa; el servidor valida tienda y cuenta'
 );
 check(
   'Sin lectura pública vieja',

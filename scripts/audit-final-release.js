@@ -10,6 +10,8 @@ const pkg = JSON.parse(read('package.json'));
 const firebaseRc = JSON.parse(read('.firebaserc'));
 const firebaseJson = JSON.parse(read('firebase.json'));
 const phase9 = read('js/admin-import-phase9.js');
+const normalization = read('js/import-normalization.mjs');
+const normalizationTests = read('tests/import/phase9-import-normalization.test.mjs');
 const quality = read('js/ui-quality.js');
 const rules = read('firestore.rules');
 
@@ -58,11 +60,52 @@ check(
 );
 
 check(
-  'El CSV soporta comillas escapadas y saltos de línea',
-  phase9.includes("char === '\"' && next === '\"'") &&
-    phase9.includes("char === '\\n' || char === '\\r'") &&
-    phase9.includes('if (quoted) throw new Error'),
-  'No se puede dividir un CSV solamente por líneas y comas'
+  'El CSV detecta coma, punto y coma o tabulador y conserva campos citados',
+  phase9.includes('parseDelimitedRows(textValue)') &&
+    normalization.includes("const candidates = [',', ';', '\\t']") &&
+    normalization.includes("char === '\"' && next === '\"'") &&
+    normalization.includes("char === '\\n' || char === '\\r'") &&
+    normalizationTests.includes('detecta coma, punto y coma o tabulador'),
+  'El importador debe aceptar exportaciones CSV regionales sin romper comillas o saltos de línea'
+);
+
+check(
+  'Los precios localizados se normalizan sin confundir miles y decimales',
+  phase9.includes('parseLocalizedNumber(value)') &&
+    normalization.includes('export function parseLocalizedNumber') &&
+    normalizationTests.includes("parseLocalizedNumber('100.000'), 100000") &&
+    normalizationTests.includes("parseLocalizedNumber('1.234,56'), 1234.56") &&
+    normalizationTests.includes("parseLocalizedNumber('1,234.56'), 1234.56"),
+  'Los precios paraguayos e internacionales deben producir el mismo número estable'
+);
+
+check(
+  'El stock vacío queda ilimitado y los valores inválidos se rechazan',
+  phase9.includes('parseOptionalStock(raw?.stock)') &&
+    phase9.includes("record.product.stock == null ? 'Sin límite'") &&
+    normalization.includes('export function parseOptionalStock') &&
+    normalizationTests.includes("parseOptionalStock('Sin límite'), null") &&
+    normalizationTests.includes("Number.isNaN(parseOptionalStock('-1'))"),
+  'Un stock vacío no debe convertirse silenciosamente en agotado'
+);
+
+check(
+  'Las copias operativas validan formato, proyecto y versión antes de importar',
+  phase9.includes('validateOperationalBackupEnvelope(parsed') &&
+    normalization.includes("value.format !== format") &&
+    normalization.includes("value.projectId !== projectId") &&
+    normalization.includes("value.schemaVersion !== schemaVersion") &&
+    normalizationTests.includes('valida proyecto, formato y versión'),
+  'No se debe importar una copia de otro proyecto o esquema incompatible'
+);
+
+check(
+  'Una falla secundaria de Sheets no invalida productos ya confirmados en Firestore',
+  phase9.includes('await batch.commit();') &&
+    phase9.includes('sheetsSyncFailures += importedIds.length') &&
+    phase9.includes('Firestore quedó confirmado; Sheets se reintentará por separado') &&
+    phase9.indexOf('completed += chunk.length') < phase9.indexOf('window.tintinPushProductsToSheets(importedIds)'),
+  'La interfaz debe distinguir el commit principal de una sincronización secundaria'
 );
 
 check(
@@ -141,8 +184,10 @@ check(
 check(
   'Existe un comando final único',
   pkg.scripts?.['audit:final']?.includes('audit:secure-orders') &&
-    pkg.scripts['audit:final'].includes('audit:release'),
-  'La revisión final debe ejecutarse con npm run audit:final'
+    pkg.scripts['audit:final'].includes('test:phase9-import') &&
+    pkg.scripts['audit:final'].includes('audit:release') &&
+    pkg.scripts?.['test:phase9-import'] === 'node --test tests/import/phase9-import-normalization.test.mjs',
+  'La revisión final debe ejecutar las pruebas de importación dentro de npm run audit:final'
 );
 
 if (failures) {

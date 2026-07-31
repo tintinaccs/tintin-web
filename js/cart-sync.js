@@ -14,7 +14,7 @@
 // - Precio/nombre/imagen son solo datos visuales; checkout vuelve a validarlos.
 // =============================================================
 
-import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
@@ -670,7 +670,15 @@ function createRuntime() {
     lastRemoteProjection = '[]';
     setStatus('loading');
     dispatchCartUpdated();
-    subscribeToRemote(currentUser, generation);
+    appCheckReady.then(ready => {
+      if (generation !== authGeneration || currentUser?.uid !== user.uid) return;
+      if (!ready) {
+        setStatus('offline');
+        readyResolve?.();
+        return;
+      }
+      subscribeToRemote(currentUser, generation);
+    });
   }
 
   function migrateLegacyGuestCart() {

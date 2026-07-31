@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,
@@ -501,7 +501,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     };
     if (messages[code]) return messages[code];
     if (code === 'permission-denied' || code === 'firestore/permission-denied') {
-      return 'Firebase rechazó el pedido. Publicá las reglas gratuitas del Paso 2 y volvé a intentar.';
+      return 'No pudimos registrar el pedido por un problema de permisos. Volvé a intentar; si continúa, escribinos por WhatsApp.';
     }
     if (code === 'unavailable' || code === 'firestore/unavailable') {
       return 'No pudimos conectar con Firebase. Revisá tu internet y volvé a intentar.';

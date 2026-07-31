@@ -120,6 +120,16 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   setMetadata();
   enhanceStructure();
   updateContact();
+  document.body?.classList.add('tt-legal-runtime-ready');
+
+  const refreshLegalLayout = () => {
+    window.dispatchEvent(new CustomEvent('tintin:legal-layout-ready'));
+    window.TintinWaOverlapGuard?.refresh?.();
+    window.TintinWaOverlapGuard?.markReady?.();
+  };
+  window.addEventListener('tintin:wa-overlap-ready', refreshLegalLayout, { once: true });
+  refreshLegalLayout();
+  [0, 120, 400, 1000, 2500].forEach(delay => setTimeout(refreshLegalLayout, delay));
 
   const footer = document.querySelector('.tt-footer-bottom');
   if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
@@ -129,7 +139,7 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   // vía firebase.js— se carga recién acá, después de que el índice y el
   // resto del contenido ya están en pantalla, en vez de bloquearlos.
   Promise.all([
-    import('./firebase.js?v=tintin-20260716-cloudinary-fix-1'),
+    import('./firebase.js?v=tintin-20260730-appcheck-stable-4'),
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
   ]).then(([{ db }, { doc, onSnapshot }]) => {
     onSnapshot(doc(db, 'settings', 'general'), snap => {

@@ -7,7 +7,7 @@
  * terminó la primera resolución del esquema para que el loader no revele una
  * página con un fondo cacheado y lo cambie un instante después.
  */
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1';
 
@@ -137,17 +137,23 @@ function subscribeToScheme(schemeId) {
   );
 }
 
-onSnapshot(
-  doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
-  snapshot => {
-    const config = snapshot.exists() ? snapshot.data() : {};
-    subscribeToScheme(config.activeGlobalSchemeId || DEFAULT_SCHEME_ID);
-  },
-  error => {
-    console.warn('[color-scheme] settings/appearance no disponible; se usa el esquema por defecto:', error);
-    subscribeToScheme(DEFAULT_SCHEME_ID);
+appCheckReady.then(ready => {
+  if (!ready) {
+    markColorSchemeReady('offline-safe');
+    return;
   }
-);
+  onSnapshot(
+    doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
+    snapshot => {
+      const config = snapshot.exists() ? snapshot.data() : {};
+      subscribeToScheme(config.activeGlobalSchemeId || DEFAULT_SCHEME_ID);
+    },
+    error => {
+      console.warn('[color-scheme] settings/appearance no disponible; se usa el esquema por defecto:', error);
+      subscribeToScheme(DEFAULT_SCHEME_ID);
+    }
+  );
+});
 
 let resizeTimer = null;
 window.addEventListener('resize', () => {

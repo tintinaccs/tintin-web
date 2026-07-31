@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   doc,
   getDoc,

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260730-perf-preconnect-1"></script>
-  <script src="js/public-shell.js?v=tintin-20260726-login-session-1" defer></script>
+  <script src="js/page-loader.js?v=tintin-20260731-phase10-a11y-1"></script>
+  <script src="js/public-shell.js?v=tintin-20260731-phase8-stock-shell-1" defer></script>
   <title>Catálogo | TINTIN Accesorios &amp; Relojes</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -79,7 +79,15 @@
     .tt-card-name { font-size: 13px; font-weight: 700; line-height: 1.45; margin: 0 0 5px; color: #2b2b2b; }
     .tt-card-name a { color: inherit; text-decoration: none; }
     .tt-card-name a:hover { color: var(--acc); }
-    .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 12px; }
+    .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 8px; }
+    .tt-card-stock {
+      display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+      margin-bottom: 12px; font-size: 10px; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .tt-card-stock::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .tt-card-stock--in { color: #26824b; }
+    .tt-card-stock--out { color: #c52f3f; }
     .tt-card-btns { display: flex; gap: 8px; margin-top: auto; }
     .tt-card-btn {
       flex: 1; min-width: 0; min-height: 44px; padding: 9px 7px; border-radius: 50px; font-size: 11px; font-weight: 700;
@@ -455,7 +463,7 @@
 <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-wa-float" id="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
-<script src="script.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+<script src="script.js?v=tintin-20260730-performance-phase5-2" defer></script>
 <script type="module">
 import { initSiteContent } from './js/site-content.js?v=tintin-20260716-cloudinary-fix-1';
 initSiteContent('catalogo');
@@ -619,7 +627,9 @@ function aplicarFiltros({ resetLimit = true, validatePrice = false } = {}) {
   if (q) lista = lista.filter(p =>
     normalizeSearch(p.name).includes(q) ||
     normalizeSearch(p.category || p.cat).includes(q) ||
-    normalizeSearch(p.desc || p.description).includes(q)
+    normalizeSearch(p.desc || p.description).includes(q) ||
+    normalizeSearch((p.tags || []).join(' ')).includes(q) ||
+    normalizeSearch(JSON.stringify(p.variants || {})).includes(q)
   );
 
   const range = readPriceRange(validatePrice);
@@ -640,9 +650,8 @@ function aplicarFiltros({ resetLimit = true, validatePrice = false } = {}) {
     lista.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999));
   }
 
-  // Out-of-stock products may appear when browsing a category or searching,
-  // but always sink to the end regardless of the chosen sort order.
-  lista = [...lista.filter(isInStockCat), ...lista.filter(p => !isInStockCat(p))];
+  // El stock no modifica el orden. Un producto agotado conserva exactamente
+  // su posición y vuelve a estar disponible en ese mismo lugar al reponerse.
 
   if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
   renderGrid(lista);
@@ -675,6 +684,9 @@ function renderGrid(lista) {
       ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true">✨</div>`
       : `<div class="cat-card-placeholder" aria-hidden="true">✨</div>`;
     const inStock = isInStockCat(p);
+    const hasVariants = window.TintinCatalogPolicy?.hasVariants
+      ? window.TintinCatalogPolicy.hasVariants(p)
+      : Boolean(p.variants && Object.values(p.variants).some(values => Array.isArray(values) && values.length));
     const badgeHtml = !inStock
       ? `<span class="tt-card-badge tt-card-badge--out">AGOTADO</span>`
       : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
@@ -689,9 +701,14 @@ function renderGrid(lista) {
           ${catLabel ? `<div class="tt-card-cat">${escapeCatalogHtml(catLabel)}</div>` : ''}
           <h2 class="tt-card-name"><a href="${productHref}">${safeAlt}</a></h2>
           <div class="tt-card-price">${fmt(p.price)}</div>
+          <div class="tt-card-stock ${inStock ? 'tt-card-stock--in' : 'tt-card-stock--out'}">${inStock ? 'Disponible' : 'Agotado'}</div>
           <div class="tt-card-btns">
             <a class="tt-card-btn tt-card-btn-view" href="${productHref}">Ver producto</a>
-            <button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}"${inStock ? '' : ' disabled aria-disabled="true"'}>${inStock ? '+ Carrito' : 'Agotado'}</button>
+            ${!inStock
+              ? `<button type="button" class="tt-card-btn tt-card-btn-cart" disabled aria-disabled="true">Agotado</button>`
+              : hasVariants
+                ? `<a class="tt-card-btn tt-card-btn-cart" href="${productHref}">Elegir opciones</a>`
+                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}">+ Carrito</button>`}
           </div>
         </div>
       </article>`;

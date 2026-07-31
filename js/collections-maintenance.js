@@ -74,6 +74,9 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
 
   function releasePage() {
     body?.classList.add('tt-collections-runtime-ready');
+    window.dispatchEvent(new CustomEvent('tintin:collections-layout-ready'));
+    window.TintinWaOverlapGuard?.refresh?.();
+    window.TintinWaOverlapGuard?.markReady?.();
     window.ttPageReady?.();
     requestAnimationFrame(() => window.TintinLoader?.hide?.());
   }

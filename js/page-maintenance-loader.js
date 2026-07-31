@@ -1,3 +1,6 @@
+import './phase7-catalog-policy.js?v=tintin-20260730-stock-visibility-1';
+import './catalog-stock-priority.js?v=tintin-20260731-stock-priority-1';
+
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }

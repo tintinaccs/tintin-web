@@ -40,6 +40,8 @@ const publicShell = read('js/public-shell.js');
 const contentSchema = read('js/content-schema.js');
 const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
+const phase7CatalogPolicy = read('js/phase7-catalog-policy.js');
+const catalog = read('catalogo.html');
 const loadImagesInit = read('js/load-images-init.js');
 const collectionsPhase4 = read('js/collections-phase4.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
@@ -96,9 +98,6 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
-  // El fallback de host vive en js/function-origin.js (compartido con
-  // media-library.js, resend-order-notify.js y admin-email-gate-sync.js)
-  // en vez de reimplementarse acá — así ningún llamador nuevo lo olvida.
   activity.includes("import { apiUrl } from './function-origin.js") &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
   functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
@@ -211,8 +210,14 @@ check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   main.includes("panel.setAttribute('aria-hidden', 'false')") &&
   main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
   main.includes("menu.setAttribute('aria-hidden', 'false')"));
-check('Las recargas asíncronas no reinsertan productos agotados o sin nombre',
-  productsStore.includes('.filter(p => p.active !== false && Boolean(p.name))') &&
+check('Las recargas asíncronas conservan agotados visibles y bloquean su compra',
+  productsStore.includes('window.TintinCatalogPolicy?.isCatalogVisible') &&
+  phase7CatalogPolicy.includes('export function isCatalogVisible') &&
+  phase7CatalogPolicy.includes('export function isPurchasable') &&
+  phase7CatalogPolicy.includes('return isCatalogVisible(p) && (p.stock == null || p.stock > 0)') &&
+  phase7CatalogPolicy.includes('p.active !== false') &&
+  catalog.includes("inStock ? 'Disponible' : 'Agotado'") &&
+  catalog.includes('disabled aria-disabled="true">Agotado</button>') &&
   productsStore.includes('featuredProducts.slice(0, 5)') &&
   loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
   main.includes('window.isFeaturable = isFeaturable'));
@@ -248,7 +253,7 @@ for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260730-perf-preconnect-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260731-merge-perf-a11y-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',

@@ -5,7 +5,12 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+  getToken as getAppCheckToken,
+  setTokenAutoRefreshEnabled
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
 // functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
@@ -25,22 +30,44 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Clave pública de reCAPTCHA v3 creada desde Firebase Console → App Check.
+// Clave pública de reCAPTCHA Enterprise registrada en Firebase App Check.
 // Al cargarla y activar Enforcement en Firestore, las llamadas que no provengan
 // de la web legítima quedan rechazadas antes de consumir la API normalmente.
 // Certifica ante Firebase que las lecturas y escrituras vienen de este sitio
 // y no de un script externo repitiendo llamadas (el vector que agotó la
 // cuota diaria de Firestore del plan Spark).
-const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--WIq0PRCP9m';
+const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m';
+let appCheck = null;
+let appCheckReady = Promise.resolve(false);
 if (FIREBASE_APP_CHECK_SITE_KEY) {
-  initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(FIREBASE_APP_CHECK_SITE_KEY),
-    isTokenAutoRefreshEnabled: true
+  appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
+    // Se activa después de obtener el primer token. Si la configuración del
+    // dominio falla, evita un refresco proactivo que repita errores cada pocos
+    // segundos sin posibilidad de recuperarse.
+    isTokenAutoRefreshEnabled: false
   });
-  window.TintinAppCheckStatus = 'enabled';
+  window.TintinAppCheckStatus = 'checking';
+  appCheckReady = getAppCheckToken(appCheck, false)
+    .then(() => {
+      setTokenAutoRefreshEnabled(appCheck, true);
+      window.TintinAppCheckStatus = 'enabled';
+      window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
+        detail: { ready: true }
+      }));
+      return true;
+    })
+    .catch(error => {
+      window.TintinAppCheckStatus = 'error';
+      window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
+        detail: { ready: false, code: error?.code || 'appCheck/unknown' }
+      }));
+      return false;
+    });
 } else {
   window.TintinAppCheckStatus = 'configuration-required';
 }
+window.TintinAppCheckReady = appCheckReady;
 
 // Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
 // persistentLocalCache + persistentMultipleTabManager para que los listeners
@@ -59,4 +86,4 @@ auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
-export { db, auth, provider };
+export { db, auth, provider, appCheck, appCheckReady };

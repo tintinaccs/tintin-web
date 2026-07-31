@@ -1,5 +1,5 @@
-import './page-maintenance-loader.js?v=tintin-20260720-read-budget-1';
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import './page-maintenance-loader.js?v=tintin-20260730-stock-visibility-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import {
@@ -19,8 +19,12 @@ import {
   runSingleFlight,
   writeCached
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 const ALL_CACHE_KEY = 'products:cards';
+const HOME_CACHE_KEY = 'products:home-featured';
+const HOME_CACHE_TTL = 60 * 1000;
+const HOME_PRODUCT_LIMIT = 24;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
@@ -66,6 +70,9 @@ export function mapProduct(id, d) {
     active: d.active !== false,
     oferta: !!d.oferta,
     destacado: !!d.destacado,
+    tags: Array.isArray(d.tags)
+      ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
+      : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999
   };
@@ -80,7 +87,12 @@ function compactProduct(product) {
     price: product.price,
     priceBefore: product.priceBefore,
     badge: product.badge,
+    desc: product.desc,
+    description: product.description,
     imageUrl: product.imageUrl,
+    imagesExtra: product.imagesExtra,
+    tags: product.tags,
+    variants: product.variants,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,
@@ -92,7 +104,12 @@ function compactProduct(product) {
 function normalizeList(list) {
   return list
     .filter(Boolean)
-    .filter(p => p.active !== false && Boolean(p.name))
+    .map(product => window.TintinCatalogPolicy?.normalizeProduct
+      ? window.TintinCatalogPolicy.normalizeProduct(product)
+      : product)
+    .filter(product => window.TintinCatalogPolicy?.isCatalogVisible
+      ? window.TintinCatalogPolicy.isCatalogVisible(product)
+      : product.active !== false && Boolean(product.name) && Number.isFinite(Number(product.price)) && Number(product.price) > 0)
     .sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
@@ -129,10 +146,85 @@ function publish(products, source) {
   return normalized;
 }
 
-async function fetchAllProducts() {
+async function fetchAllProductsFromSdk() {
   const snapshot = await getDocs(query(collection(db, 'products'), limit(1000)));
   recordFirestoreRead('products:all', snapshot.size);
-  const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
+  return snapshot.docs.map(item => mapProduct(item.id, item.data()));
+}
+
+async function fetchAllProductsFromRest() {
+  const documents = await listPublicCollectionRest('products', 1000);
+  recordFirestoreRead('products:all-rest-fallback', documents.length);
+  return documents.map(item => mapProduct(item.id, item.data));
+}
+
+async function fetchHomeProductsFromSdk() {
+  const featuredSnapshot = await getDocs(query(
+    collection(db, 'products'),
+    where('destacado', '==', true),
+    limit(HOME_PRODUCT_LIMIT)
+  ));
+  recordFirestoreRead('products:home-featured', featuredSnapshot.size);
+  const featured = featuredSnapshot.docs.map(item => mapProduct(item.id, item.data()));
+  if (featured.length) return featured;
+
+  // Respaldo acotado para tiendas que todavía no marcaron productos destacados.
+  const fallbackSnapshot = await getDocs(query(collection(db, 'products'), limit(HOME_PRODUCT_LIMIT)));
+  recordFirestoreRead('products:home-fallback', fallbackSnapshot.size);
+  return fallbackSnapshot.docs.map(item => mapProduct(item.id, item.data()));
+}
+
+async function fetchHomeProductsFromRest() {
+  const documents = await listPublicCollectionRest('products', HOME_PRODUCT_LIMIT);
+  recordFirestoreRead('products:home-rest-fallback', documents.length);
+  return documents.map(item => mapProduct(item.id, item.data));
+}
+
+async function fetchHomeProducts() {
+  let products;
+  if (!await appCheckReady) {
+    products = await fetchHomeProductsFromRest();
+  } else {
+    try {
+      products = await Promise.race([
+        fetchHomeProductsFromSdk(),
+        new Promise((_, reject) => window.setTimeout(
+          () => reject(new Error('La portada tardó demasiado en obtener productos')),
+          2800
+        ))
+      ]);
+    } catch (error) {
+      console.warn('[products-store] La portada usa el respaldo acotado:', error);
+      products = await fetchHomeProductsFromRest();
+    }
+  }
+
+  products = normalizeList(products);
+  const cards = products.map(compactProduct);
+  if (cards.length) writeCached(HOME_CACHE_KEY, cards);
+  return publish(products, 'home-limited');
+}
+
+async function fetchAllProducts() {
+  let products;
+  if (!await appCheckReady) {
+    products = normalizeList(await fetchAllProductsFromRest());
+    writeCached(ALL_CACHE_KEY, products.map(compactProduct));
+    return publish(products, 'rest-fallback');
+  }
+  try {
+    products = await Promise.race([
+      fetchAllProductsFromSdk(),
+      new Promise((_, reject) => window.setTimeout(
+        () => reject(new Error('Firestore SDK tardó demasiado')),
+        3500
+      ))
+    ]);
+  } catch (sdkError) {
+    console.warn('[products-store] Se usa el respaldo compatible del catálogo:', sdkError);
+    products = await fetchAllProductsFromRest();
+  }
+  products = normalizeList(products);
   const cards = products.map(compactProduct);
   // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
   // por App Check, red o un despliegue nunca debe dejar al navegador mostrando
@@ -140,11 +232,12 @@ async function fetchAllProducts() {
   // El resultado vacío sí se publica para esta carga, pero la próxima visita
   // vuelve a consultar el servidor en lugar de confiar en ese vacío.
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
-  return publish(products, 'server');
+  return publish(products, 'server-or-rest-fallback');
 }
 
-function startPublicProductsRealtime() {
+async function startPublicProductsRealtime() {
   if (publicProductsReady) return publicProductsReady;
+  if (!await appCheckReady) return loadAllProducts({ force: true });
 
   const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
   if (Array.isArray(cached) && cached.length) publish(cached, 'cache');
@@ -181,6 +274,24 @@ function startPublicProductsRealtime() {
   return publicProductsReady;
 }
 
+export async function loadHomeProducts(options = {}) {
+  const force = options.force === true;
+  if (!force) {
+    const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
+    if (Array.isArray(cached) && cached.length) return publish(cached, 'home-cache');
+  }
+
+  const stale = readStaleCached(HOME_CACHE_KEY);
+  if (!force && Array.isArray(stale) && stale.length) publish(stale, 'home-stale-cache');
+  try {
+    return await runSingleFlight('products:home', fetchHomeProducts);
+  } catch (error) {
+    window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+    if (Array.isArray(stale) && stale.length) return stale;
+    throw error;
+  }
+}
+
 export async function loadAllProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
@@ -199,16 +310,19 @@ export async function loadAllProducts(options = {}) {
 }
 
 async function fetchSingleProduct(id) {
+  if (!await appCheckReady) return null;
   const snapshot = await getDoc(doc(db, 'products', id));
   recordFirestoreRead('products:single', 1);
   if (!snapshot.exists()) return null;
   const product = mapProduct(snapshot.id, snapshot.data());
+  if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
   writeCached(`product:${id}`, product);
   return product;
 }
 
 async function fetchRelatedProducts(product) {
   if (!product?.category) return [];
+  if (!await appCheckReady) return [];
   try {
     const snapshot = await getDocs(query(
       collection(db, 'products'),
@@ -216,7 +330,8 @@ async function fetchRelatedProducts(product) {
       limit(12)
     ));
     recordFirestoreRead('products:related', snapshot.size);
-    return snapshot.docs.map(item => compactProduct(mapProduct(item.id, item.data())));
+    return normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())))
+      .map(compactProduct);
   } catch {
     return [];
   }
@@ -232,10 +347,16 @@ function stopProductRealtime() {
   publicProductCurrent = null;
 }
 
-function startProductRealtime(id) {
+async function startProductRealtime(id) {
   const normalizedId = String(id || '').trim();
   if (!normalizedId) return Promise.resolve(publish([], 'missing-id'));
   if (publicProductReady && publicProductId === normalizedId) return publicProductReady;
+
+  if (!await appCheckReady) {
+    const products = await loadAllProducts();
+    const product = products.find(item => String(item.id) === normalizedId);
+    return publish(product ? [product] : [], product ? 'rest-fallback' : 'rest-fallback-missing');
+  }
 
   stopProductRealtime();
   publicProductId = normalizedId;
@@ -261,7 +382,8 @@ function startProductRealtime(id) {
         }
 
         const product = mapProduct(snapshot.id, snapshot.data());
-        if (product.active === false || !product.name) {
+        if (product.active === false || !product.name ||
+            (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product))) {
           publicProductCurrent = null;
           settle(publish([], 'realtime-product-unavailable'));
           return;
@@ -338,9 +460,11 @@ export async function ensureProductsForSearch() {
 export async function ensureProductsForCurrentPage() {
   const path = location.pathname.toLowerCase();
   if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
-  if (/(^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path) || path.endsWith('/')) {
+  if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts();
+  if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
     return startPublicProductsRealtime();
   }
+  // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }
 
@@ -362,6 +486,7 @@ function attachSearchDemand() {
 
 window.TintinProductsStore = {
   loadAll: loadAllProducts,
+  loadHome: loadHomeProducts,
   loadProductPage,
   startRealtime: startPublicProductsRealtime,
   ensureSearch: ensureProductsForSearch,

@@ -1,4 +1,4 @@
-import { db } from './firebase.js?v=tintin-20260716-cloudinary-fix-1';
+import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   hasStatisticsConsent,
@@ -112,6 +112,10 @@ async function loadMeasurementId({ force = false } = {}) {
   const now = Date.now();
   if (!force && configCache.expiresAt > now) return configCache.value;
   if (configPromise) return configPromise;
+  if (!await appCheckReady) {
+    configCache = { value: '', expiresAt: Date.now() + 30_000 };
+    return '';
+  }
 
   configPromise = getDoc(doc(db, 'settings', 'general'))
     .then(snapshot => {
