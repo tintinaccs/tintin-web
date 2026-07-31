@@ -44,6 +44,13 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Regenerar manifiesto diagnóstico
+        shell: bash
+        run: |
+          npm run diagnostic:manifest
+          mkdir -p artifacts
+          cp diagnostic-manifest.json artifacts/diagnostic-manifest.json
+
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
 
