@@ -3,13 +3,13 @@
 
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FFADD1 !important;
+  background-color: #FFADD1 !important;
 }
 
 html body #tt-loader {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FFADD1 !important;
+  background-color: #FFADD1 !important;
   background-image: none !important;
   background-blend-mode: normal !important;
   backdrop-filter: none !important;
@@ -29,8 +29,8 @@ html body #tt-loader::before {
   inset: 0;
   z-index: 0;
   display: block;
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FFADD1 !important;
+  background-color: #FFADD1 !important;
   background-image: none !important;
   opacity: 1 !important;
   pointer-events: none;
@@ -63,7 +63,7 @@ html body:has(.login-page).tt-public-shell-mounted {
 }
 
 /* Durante autenticación, Login usa solo la superficie sólida del loader. No
-   vuelve a mostrar logo, puntos ni animaciones encima de su propio diseño. */
+   muestra la secuencia de marca encima de su propio diseño. */
 html body:has(.login-page) #tt-loader-spin-wrap {
   display: none !important;
   visibility: hidden !important;
