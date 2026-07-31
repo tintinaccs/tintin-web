@@ -12,7 +12,7 @@ async function openAccessiblePage(page) {
   // diálogos propios de la página. Esos componentes tienen sus auditorías
   // dedicadas; aquí se comprueba el contrato reutilizable de la Fase 10.
   await page.evaluate(() => {
-    document.head.innerHTML = '<meta charset="utf-8"><style>body{margin:0;padding:24px}main,section,button,input,a{display:block;margin:8px}</style>';
+    document.head.innerHTML = '<meta charset="utf-8"><style>body{margin:0;padding:24px}main,section,button,input,a,[role="button"]{display:block;margin:8px}</style>';
     document.body.innerHTML = '<main id="contenido-principal" tabindex="-1"><h1>Prueba de accesibilidad</h1></main>';
     window.TintinAccessibility.enhance(document);
     window.TintinAccessibility.scanDialogs();
@@ -32,7 +32,7 @@ test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ pa
 
 test('un control role button responde a Enter y Espacio', async ({ page }) => {
   await openAccessiblePage(page);
-  const clicks = await page.evaluate(() => {
+  await page.evaluate(() => {
     const control = document.createElement('div');
     control.id = 'tt-test-role-button';
     control.setAttribute('role', 'button');
@@ -41,13 +41,14 @@ test('un control role button responde a Enter y Espacio', async ({ page }) => {
     control.addEventListener('click', () => { control.dataset.clicks = String(Number(control.dataset.clicks) + 1); });
     document.body.appendChild(control);
     window.TintinAccessibility.enhance(control);
-    control.focus();
-    control.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    control.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
-    return Number(control.dataset.clicks);
   });
-  expect(clicks).toBe(2);
-  await expect(page.locator('#tt-test-role-button')).toHaveAttribute('tabindex', '0');
+  const control = page.locator('#tt-test-role-button');
+  await expect(control).toHaveAttribute('tabindex', '0');
+  await control.focus();
+  await page.keyboard.press('Enter');
+  await expect(control).toHaveAttribute('data-clicks', '1');
+  await page.keyboard.press('Space');
+  await expect(control).toHaveAttribute('data-clicks', '2');
 });
 
 test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
