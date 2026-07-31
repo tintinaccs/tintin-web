@@ -1,0 +1,196 @@
+name: Aplicar prioridad de stock en catálogo
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Aplicar orden dinámico por stock
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              file = Path(path)
+              text = file.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: se esperaba 1 coincidencia y se encontraron {count}')
+              file.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace_once(
+              'catalogo.html',
+              """let visibleProductLimit = PRODUCT_BATCH_SIZE;
+
+// Normalize any category spelling/alias → canonical internal slug
+""",
+              """let visibleProductLimit = PRODUCT_BATCH_SIZE;
+let previousStockById = new Map();
+let restockedPriorityIds = [];
+
+// Normalize any category spelling/alias → canonical internal slug
+"""
+          )
+
+          replace_once(
+              'catalogo.html',
+              """function isInStockCat(p) {
+  return !(p.stock != null && Number(p.stock) <= 0);
+}
+
+function readPriceRange(showError = false) {
+""",
+              """function isInStockCat(p) {
+  return !(p.stock != null && Number(p.stock) <= 0);
+}
+
+function trackStockTransitions(products, { initial = false } = {}) {
+  const list = Array.isArray(products) ? products : [];
+  const nextStockById = new Map();
+  const liveIds = new Set();
+  const restockedNow = [];
+
+  list.forEach(product => {
+    const id = String(product?.id ?? '');
+    if (!id) return;
+    const inStock = isInStockCat(product);
+    liveIds.add(id);
+    nextStockById.set(id, inStock);
+    if (!initial && previousStockById.get(id) === false && inStock) {
+      restockedNow.push(id);
+    }
+  });
+
+  const promoted = new Set(restockedNow);
+  restockedPriorityIds = [
+    ...restockedNow,
+    ...restockedPriorityIds.filter(id =>
+      !promoted.has(id) && liveIds.has(id) && nextStockById.get(id) === true
+    ),
+  ];
+  previousStockById = nextStockById;
+}
+
+function readPriceRange(showError = false) {
+"""
+          )
+
+          replace_once(
+              'catalogo.html',
+              """  // El stock no modifica el orden. Un producto agotado conserva exactamente
+  // su posición y vuelve a estar disponible en ese mismo lugar al reponerse.
+
+  if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
+""",
+              """  // Los disponibles siempre van primero y los agotados al final. Cuando un
+  // producto pasa de agotado a disponible en el listener en tiempo real, se
+  // promueve al primer lugar; las siguientes reposiciones se ordenan igual.
+  const priorityById = new Map(restockedPriorityIds.map((id, index) => [id, index]));
+  const disponibles = lista.filter(isInStockCat);
+  disponibles.sort((a, b) => {
+    const aPriority = priorityById.get(String(a.id));
+    const bPriority = priorityById.get(String(b.id));
+    if (aPriority == null && bPriority == null) return 0;
+    if (aPriority == null) return 1;
+    if (bPriority == null) return -1;
+    return aPriority - bPriority;
+  });
+  const agotados = lista.filter(p => !isInStockCat(p));
+  lista = [...disponibles, ...agotados];
+
+  if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
+"""
+          )
+
+          replace_once(
+              'catalogo.html',
+              """function init(products) {
+  todos = products;
+""",
+              """function init(products) {
+  trackStockTransitions(products, { initial: true });
+  todos = products;
+"""
+          )
+
+          replace_once(
+              'catalogo.html',
+              """  } else {
+    todos = products;
+    actualizarContadores();
+    aplicarFiltros({ resetLimit: false });
+  }
+""",
+              """  } else {
+    trackStockTransitions(products);
+    todos = products;
+    actualizarContadores();
+    aplicarFiltros({ resetLimit: false });
+  }
+"""
+          )
+
+          replace_once(
+              'scripts/audit-phase7-catalog.js',
+              """check(
+  'El stock no altera la posición del producto en el catálogo',
+  /El stock no modifica el orden/.test(catalog) &&
+    !/lista = \\[\\.\\.\\.lista\\.filter\\(isInStockCat\\)/.test(catalog) &&
+    /tt-card-stock--in/.test(catalog) &&
+    /Disponible/.test(catalog) &&
+    /disabled aria-disabled=\"true\">Agotado/.test(catalog),
+  'Agotar o reponer stock no debe mandar la tarjeta al final ni ocultarla.'
+);
+""",
+              """check(
+  'Los agotados van al final y las reposiciones vuelven al inicio en tiempo real',
+  /function trackStockTransitions/.test(catalog) &&
+    /previousStockById/.test(catalog) &&
+    /restockedPriorityIds/.test(catalog) &&
+    /const disponibles = lista\\.filter\\(isInStockCat\\)/.test(catalog) &&
+    /const agotados = lista\\.filter\\(p => !isInStockCat\\(p\\)\\)/.test(catalog) &&
+    /lista = \\[\\.\\.\\.disponibles, \\.\\.\\.agotados\\]/.test(catalog) &&
+    /trackStockTransitions\\(products\\)/.test(catalog) &&
+    /aplicarFiltros\\(\\{ resetLimit: false \\}\\)/.test(catalog) &&
+    /tt-card-stock--in/.test(catalog) &&
+    /disabled aria-disabled=\"true\">Agotado/.test(catalog),
+  'El listener debe bajar agotados al final y promover cada reposición al primer lugar sin recargar.'
+);
+"""
+          )
+          PY
+
+      - name: Instalar dependencias y validar
+        run: |
+          npm ci --ignore-scripts
+          npm run audit:phase7-catalog
+
+      - name: Guardar cambios en la rama
+        shell: bash
+        run: |
+          rm -f .github/workflows/apply-catalog-stock-priority.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: ordenar disponibles primero y agotados al final en tiempo real"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
