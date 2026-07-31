@@ -12,6 +12,7 @@ function check(name, condition, problem) {
 }
 
 const policy = read('js/phase7-catalog-policy.js');
+const merchandising = read('js/catalog-merchandising-policy.js');
 const products = read('js/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
@@ -43,19 +44,22 @@ check(
 
 check(
   'Los agotados van al final y las reposiciones vuelven al inicio en tiempo real',
-  /function trackStockTransitions/.test(stockPriority) &&
-    /previousStockById/.test(stockPriority) &&
-    /restockedPriorityIds/.test(stockPriority) &&
-    /previousStockById\.get\(id\) === false && inStock/.test(stockPriority) &&
-    /const available = list\.filter\(isInStock\)/.test(stockPriority) &&
-    /const exhausted = list\.filter\(product => !isInStock\(product\)\)/.test(stockPriority) &&
-    /return \[\.\.\.available, \.\.\.exhausted\]/.test(stockPriority) &&
-    /renderGridWithStockPriority/.test(stockPriority) &&
-    /tintin:products-loaded/.test(stockPriority) &&
+  /export function sortCatalogProducts/.test(merchandising) &&
+    /productActivityAtMillis/.test(merchandising) &&
+    /catalogActivityAt/.test(merchandising) &&
+    /restockedAt/.test(merchandising) &&
+    /updatedAt/.test(merchandising) &&
+    /const available = \[\]/.test(merchandising) &&
+    /const exhausted = \[\]/.test(merchandising) &&
+    /return \[\.\.\.available, \.\.\.exhausted\]/.test(merchandising) &&
+    /sortCatalogProducts\(normalized\)/.test(products) &&
+    /TintinCatalogMerchandising\?\.sortCatalogProducts/.test(catalog) &&
+    /Compatibilidad: la prioridad ya no vive en memoria/.test(stockPriority) &&
+    !/previousStockById|restockedPriorityIds|trackStockTransitions/.test(stockPriority) &&
     /catalog-stock-priority\.js/.test(loader) &&
     /tt-card-stock--in/.test(catalog) &&
     /disabled aria-disabled="true">Agotado/.test(catalog),
-  'El listener debe bajar agotados al final y promover cada reposición al primer lugar sin recargar.'
+  'La fuente debe separar disponibles y agotados y promover por timestamps persistentes, sin depender de memoria temporal del navegador.'
 );
 
 check(
@@ -87,8 +91,8 @@ check(
 
 check(
   'La búsqueda pública excluye productos no comprables',
-  /productPool\.filter\(isFeaturable\)/.test(storefront) &&
-    /window\.TintinCatalogPolicy\?\.isPurchasable/.test(storefront),
+  /window\.TintinCatalogPolicy\?\.isCatalogVisible/.test(storefront) &&
+    /orderedPool\.filter\(p =>/.test(storefront),
   'Resultados globales no deben enlazar productos agotados, ocultos o inválidos.'
 );
 

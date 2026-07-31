@@ -30,7 +30,7 @@ check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
     /resolveAsset\('css\/phase8-ui-ux\.css'\)/.test(loader) &&
-    /tintin-20260731-merge-perf-a11y-1/.test(loader),
+    /tintin-20260731-merge-perf-brand-1/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );
 
@@ -147,9 +147,9 @@ check(
 check(
   'La Fase 8 tiene auditoría estática y prueba de navegador dedicadas',
   packageJson.scripts['audit:phase8-ui'] === 'node scripts/audit-phase8-ui-ux.js' &&
-    packageJson.scripts['test:phase8-ui'] === 'playwright test tests/ui-ux --project=chromium' &&
+    packageJson.scripts['test:phase8-ui'] === 'playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium' &&
     packageJson.scripts['audit:final'].includes('audit:phase8-ui'),
-  'La capa UI/UX debe quedar protegida contra regresiones.'
+  'La capa UI/UX debe quedar protegida contra regresiones sin ejecutar por duplicado las pruebas de accesibilidad de la Fase 10.'
 );
 
 const failed = checks.filter(item => !item.ok);
