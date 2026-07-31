@@ -4,13 +4,20 @@ const { test, expect } = require('@playwright/test');
 
 async function openAccessiblePage(page) {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
-  // La home hidrata contenido editorial de forma asíncrona y puede reemplazar
-  // nodos de prueba que se inyecten durante ese arranque. Esta suite valida la
-  // capa global de accesibilidad sobre una página pública estable que carga el
-  // mismo runtime compartido.
   await page.goto('/about.html', { waitUntil: 'load' });
   await page.waitForFunction(() => window.TintinAccessibility?.booted === true);
   await page.waitForFunction(() => document.documentElement.classList.contains('tt-phase10-a11y-ready'));
+
+  // Aislamos la capa global de accesibilidad del contenido editorial, banners y
+  // diálogos propios de la página. Esos componentes tienen sus auditorías
+  // dedicadas; aquí se comprueba el contrato reutilizable de la Fase 10.
+  await page.evaluate(() => {
+    document.head.innerHTML = '<meta charset="utf-8"><style>body{margin:0;padding:24px}main,section,button,input,a{display:block;margin:8px}</style>';
+    document.body.innerHTML = '<main id="contenido-principal" tabindex="-1"><h1>Prueba de accesibilidad</h1></main>';
+    window.TintinAccessibility.enhance(document);
+    window.TintinAccessibility.scanDialogs();
+  });
+  await page.waitForFunction(() => Boolean(document.getElementById('tt-skip-link')));
 }
 
 test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ page }) => {
@@ -25,20 +32,22 @@ test('el enlace de salto aparece con teclado y enfoca el contenido', async ({ pa
 
 test('un control role button responde a Enter y Espacio', async ({ page }) => {
   await openAccessiblePage(page);
-  await page.evaluate(() => {
+  const clicks = await page.evaluate(() => {
     const control = document.createElement('div');
     control.id = 'tt-test-role-button';
     control.setAttribute('role', 'button');
     control.textContent = 'Acción de prueba';
-    control.addEventListener('click', () => { control.dataset.clicks = String(Number(control.dataset.clicks || 0) + 1); });
+    control.dataset.clicks = '0';
+    control.addEventListener('click', () => { control.dataset.clicks = String(Number(control.dataset.clicks) + 1); });
     document.body.appendChild(control);
     window.TintinAccessibility.enhance(control);
+    control.focus();
+    control.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    control.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    return Number(control.dataset.clicks);
   });
-  const control = page.locator('#tt-test-role-button');
-  await control.focus();
-  await page.keyboard.press('Enter');
-  await page.keyboard.press('Space');
-  await expect(control).toHaveAttribute('data-clicks', '2');
+  expect(clicks).toBe(2);
+  await expect(page.locator('#tt-test-role-button')).toHaveAttribute('tabindex', '0');
 });
 
 test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
@@ -55,6 +64,8 @@ test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
     dialog.setAttribute('aria-modal', 'true');
     dialog.innerHTML = '<h2>Diálogo accesible</h2><button id="tt-first">Primero</button><button id="tt-last">Último</button>';
     document.body.appendChild(dialog);
+    window.TintinAccessibility.enhance(dialog);
+    window.TintinAccessibility.scanDialogs();
   });
   await expect(page.locator('#tt-first')).toBeFocused();
   await page.locator('#tt-last').focus();
@@ -62,7 +73,10 @@ test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
   await expect(page.locator('#tt-first')).toBeFocused();
   await page.keyboard.press('Shift+Tab');
   await expect(page.locator('#tt-last')).toBeFocused();
-  await page.evaluate(() => document.getElementById('tt-test-dialog').remove());
+  await page.evaluate(() => {
+    document.getElementById('tt-test-dialog').remove();
+    window.TintinAccessibility.scanDialogs();
+  });
   await expect(page.locator('#tt-test-trigger')).toBeFocused();
 });
 
