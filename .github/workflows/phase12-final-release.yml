@@ -47,8 +47,11 @@ jobs:
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Auditoría integral de las doce fases
+      - name: Auditoría integral de las fases anteriores
         run: npm run audit:final
+
+      - name: Cierre estático de la Fase 12
+        run: node scripts/audit-phase12-release.mjs
 
       - name: Reglas críticas de Firestore en emulador
         run: npm run test:rules-critical
@@ -75,7 +78,7 @@ jobs:
           npm audit --json > artifacts/npm-audit-full.json || true
 
       - name: Smoke real de producción
-        run: npm run smoke:production:phase12
+        run: node scripts/production-smoke-phase12.mjs
 
       - name: Guardar evidencias
         if: always()
