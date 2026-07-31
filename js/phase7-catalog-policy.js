@@ -5,6 +5,7 @@
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
 import { loadCollections } from './collections-store.js?v=tintin-20260726-browser-fallback-1';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
 
 const CART_KEY = 'tt_cart';
 let visibleCollectionSlugs = null;
@@ -79,6 +80,10 @@ export function normalizeProduct(product) {
     desc: description,
     price: Number.isFinite(price) ? Math.round(price) : NaN,
     stock: stock == null ? null : (Number.isFinite(stock) ? Math.floor(stock) : NaN),
+    createdAt: timestampToMillis(p.createdAt ?? p.created_at ?? p.importedAt),
+    updatedAt: timestampToMillis(p.updatedAt ?? p.updated_at ?? p.modifiedAt),
+    restockedAt: timestampToMillis(p.restockedAt),
+    catalogActivityAt: timestampToMillis(p.catalogActivityAt),
     tags: unique(Array.isArray(p.tags) ? p.tags : String(p.tags || '').split(','), 30, 60),
     variants: normalizeVariantOptions(p.variants),
   };
@@ -164,10 +169,11 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
 }
 
 function filterProducts(products) {
-  return (Array.isArray(products) ? products : [])
-    .map(normalizeProduct)
-    .filter(isCatalogVisible)
-    .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return sortCatalogProducts(
+    (Array.isArray(products) ? products : [])
+      .map(normalizeProduct)
+      .filter(isCatalogVisible)
+  );
 }
 
 function publishFiltered(products, source = 'phase7-policy') {
@@ -244,6 +250,9 @@ window.TintinCatalogPolicy = {
   isCatalogVisible,
   isPurchasable,
   hasVariants,
+  isNewProduct,
+  productActivityAtMillis,
+  sortProducts: sortCatalogProducts,
   reconcileCart: reconcileCatalogCart,
   getVisibleCollections: () => visibleCollectionSlugs ? [...visibleCollectionSlugs] : null,
 };

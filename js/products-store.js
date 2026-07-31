@@ -20,6 +20,7 @@ import {
   writeCached
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
+import { sortCatalogProducts, timestampToMillis } from './catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
@@ -74,7 +75,11 @@ export function mapProduct(id, d) {
       ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
       : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
-    collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999
+    collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
+    createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
+    updatedAt: timestampToMillis(d.updatedAt ?? d.updated_at ?? d.modifiedAt),
+    restockedAt: timestampToMillis(d.restockedAt),
+    catalogActivityAt: timestampToMillis(d.catalogActivityAt)
   };
 }
 
@@ -97,20 +102,24 @@ function compactProduct(product) {
     active: product.active,
     oferta: product.oferta,
     destacado: product.destacado,
-    collectionOrder: product.collectionOrder
+    collectionOrder: product.collectionOrder,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+    restockedAt: product.restockedAt,
+    catalogActivityAt: product.catalogActivityAt
   };
 }
 
 function normalizeList(list) {
-  return list
+  const normalized = list
     .filter(Boolean)
     .map(product => window.TintinCatalogPolicy?.normalizeProduct
       ? window.TintinCatalogPolicy.normalizeProduct(product)
       : product)
     .filter(product => window.TintinCatalogPolicy?.isCatalogVisible
       ? window.TintinCatalogPolicy.isCatalogVisible(product)
-      : product.active !== false && Boolean(product.name) && Number.isFinite(Number(product.price)) && Number(product.price) > 0)
-    .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+      : product.active !== false && Boolean(product.name) && Number.isFinite(Number(product.price)) && Number(product.price) > 0);
+  return sortCatalogProducts(normalized);
 }
 
 function publish(products, source) {

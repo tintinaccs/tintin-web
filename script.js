@@ -874,8 +874,10 @@ function _onProductImgError(img) {
 window._onProductImgError = _onProductImgError;
 
 function renderProductCardMarkup(p, options = {}) {
-  const badgeClass = p.badge === 'Nuevo' ? 'nuevo' : '';
-  const badgeHTML = p.badge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(p.badge)}</span>` : '';
+  const isNew = Boolean(window.TintinCatalogMerchandising?.isNewProduct?.(p));
+  const displayBadge = isNew ? 'Nuevo' : p.badge;
+  const badgeClass = displayBadge === 'Nuevo' ? 'nuevo' : '';
+  const badgeHTML = displayBadge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(displayBadge)}</span>` : '';
   const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
