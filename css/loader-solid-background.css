@@ -72,11 +72,15 @@ html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
   filter: none !important;
 }
 
-/* El PNG oficial ya contiene la identidad completa de Tintin; no se duplica
-   una segunda línea de marca debajo del archivo. */
+/* Debajo del ícono va la palabra Tintin y, debajo de esa, la sección a la
+   que se está entrando (Página Principal, Catálogo - X, Producto - X, etc.).
+   Ambas deben verse desde el primer frame, igual que el logo: sin fade ni
+   desplazamiento de entrada. */
+html body #tt-loader-wordmark,
 html body #tt-loader-brand-subtitle {
-  display: none !important;
-  visibility: hidden !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
   animation: none !important;
 }
 

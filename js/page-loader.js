@@ -83,7 +83,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260731-merge-perf-brand-1';
+  const TT_CACHE_VERSION = 'tintin-20260731-loader-context-labels-1';
   const MIN_SHOW_MS = 900;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -157,6 +157,148 @@
   }
 
   const postLoginGreeting = consumePostLoginGreeting();
+
+  const NEXT_LOADER_LABEL_KEY = 'tt_next_loader_label';
+  const NEXT_LOADER_LABEL_MAX_AGE_MS = 8000;
+
+  function stashNextLoaderLabel(name) {
+    try {
+      window.sessionStorage.setItem(
+        NEXT_LOADER_LABEL_KEY,
+        JSON.stringify({ name: name, ts: Date.now() })
+      );
+    } catch {}
+  }
+
+  function consumeNextLoaderLabel() {
+    try {
+      const raw = window.sessionStorage.getItem(NEXT_LOADER_LABEL_KEY);
+      if (!raw) return '';
+      window.sessionStorage.removeItem(NEXT_LOADER_LABEL_KEY);
+      const data = JSON.parse(raw);
+      if (!data || typeof data.name !== 'string' || !data.name.trim()) return '';
+      if (
+        typeof data.ts !== 'number' ||
+        Date.now() - data.ts > NEXT_LOADER_LABEL_MAX_AGE_MS
+      ) {
+        return '';
+      }
+      return data.name.trim();
+    } catch {
+      return '';
+    }
+  }
+
+  // Cualquier tarjeta o link que lleve a product.html guarda el nombre del
+  // producto justo antes de navegar, porque el id de la URL no es legible
+  // y el loader de la página siguiente no tiene los datos del catálogo.
+  document.addEventListener(
+    'click',
+    function (event) {
+      const anchor = event.target && event.target.closest && event.target.closest('a[href]');
+      if (!anchor) return;
+      let url;
+      try {
+        url = new URL(anchor.href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.pathname.split('/').pop() !== 'product.html') return;
+      const card = anchor.closest('.tt-product-card, .tt-card, .tt-look-card');
+      let name = '';
+      if (card) {
+        const nameEl = card.querySelector(
+          '.tt-product-name, .tt-card-name, .tt-look-card-name'
+        );
+        if (nameEl) name = nameEl.textContent;
+      }
+      if (!name) {
+        const label = anchor.getAttribute('aria-label') || '';
+        const match = label.match(/^Ver\s+(.+)$/i);
+        name = match ? match[1] : anchor.textContent;
+      }
+      name = String(name || '').trim();
+      if (name) stashNextLoaderLabel(name);
+    },
+    true
+  );
+
+  const CATALOG_CATEGORY_LABELS = {
+    relojes: 'Relojes',
+    bolsos: 'Bolsos',
+    collares: 'Collares',
+    aros: 'Aros',
+    pulseras: 'Pulseras',
+    anillos: 'Anillos',
+    tobilleras: 'Tobilleras',
+    brazaletes: 'Brazaletes',
+    earcuff: 'Ear Cuffs',
+    armcuff: 'Arm Cuffs',
+    gafas: 'Gafas',
+    joyeros: 'Joyeros'
+  };
+
+  const CATALOG_CATEGORY_ALIASES = {
+    bags: 'bolsos', bag: 'bolsos', bolso: 'bolsos',
+    reloj: 'relojes', watch: 'relojes', watches: 'relojes',
+    arete: 'aros', aretes: 'aros', earring: 'aros', earrings: 'aros',
+    collar: 'collares', necklace: 'collares', cadena: 'collares', cadenas: 'collares',
+    pulsera: 'pulseras', bracelet: 'pulseras',
+    anillo: 'anillos', ring: 'anillos',
+    tobillera: 'tobilleras', ankle: 'tobilleras',
+    brazalete: 'brazaletes',
+    'ear cuff': 'earcuff', earcuffs: 'earcuff',
+    'arm cuff': 'armcuff', armcuffs: 'armcuff',
+    lente: 'gafas', lentes: 'gafas', sunglasses: 'gafas',
+    joyero: 'joyeros', 'jewelry box': 'joyeros'
+  };
+
+  const PAGE_BRAND_LABELS = {
+    'index.html': 'Página Principal',
+    '': 'Página Principal',
+    'contact.html': 'Contacto',
+    'login.html': 'Iniciar Sesión',
+    'about.html': 'Quiénes Somos',
+    'nosotros.html': 'Quiénes Somos',
+    'perfil.html': 'Mi Perfil',
+    'collections.html': 'Colecciones',
+    'checkout.html': 'Finalizar Compra',
+    'envios.html': 'Envíos',
+    'cambios-devoluciones.html': 'Cambios y Devoluciones',
+    'preguntas-frecuentes.html': 'Preguntas Frecuentes',
+    'terminos.html': 'Términos y Condiciones',
+    'privacidad.html': 'Privacidad',
+    'admin.html': 'Panel Admin',
+    'admin-images.html': 'Gestión de Imágenes',
+    '404.html': 'Página no Encontrada'
+  };
+
+  function computeBrandLabel() {
+    const file = currentPath().split('/').pop() || 'index.html';
+
+    if (file === 'catalogo.html') {
+      let cat = '';
+      try {
+        cat = (new URLSearchParams(window.location.search).get('cat') || '')
+          .toLowerCase()
+          .trim();
+      } catch {}
+      cat = CATALOG_CATEGORY_ALIASES[cat] || cat;
+      if (!cat || cat === 'todos') return 'Catálogo Principal';
+      return CATALOG_CATEGORY_LABELS[cat]
+        ? 'Catálogo - ' + CATALOG_CATEGORY_LABELS[cat]
+        : 'Catálogo Principal';
+    }
+
+    if (file === 'product.html') {
+      const stashed = consumeNextLoaderLabel();
+      return stashed ? 'Producto - ' + stashed : 'Producto';
+    }
+
+    return PAGE_BRAND_LABELS[file] || 'accesorios & relojes';
+  }
+
+  const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
     'assets-tintin/images/general/tintin-loader-brand.svg'
   );
@@ -173,9 +315,12 @@
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:drop-shadow(0 8px 20px rgba(202,1,105,.14));user-select:none;pointer-events:none}',
-    '#tt-loader-brand-subtitle{margin-top:clamp(10px,1.4vw,15px);color:#CA0169!important;font-family:Montserrat;font-size:clamp(14px,1.45vw,17px);font-weight:500;line-height:1.1;letter-spacing:.055em;text-align:center;opacity:0;transform:translateY(4px);white-space:nowrap}',
-    '#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle{animation:tt-loader-copy-in .36s ease .62s both}',
-    '@keyframes tt-loader-copy-in{to{opacity:1;transform:translateY(0)}}',
+    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(6px,1vw,10px);font-family:Montserrat;font-weight:800;font-size:clamp(19px,2.5vw,27px);line-height:1;letter-spacing:.01em;color:#CA0169!important;white-space:nowrap;opacity:1}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:"";position:absolute;top:-.24em;width:.15em;height:.24em;background:#CA0169;border-radius:.15em .15em 0 0}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i::before{left:50%;transform:rotate(-45deg);transform-origin:0 100%}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i::after{right:50%;transform:rotate(45deg);transform-origin:100% 100%}',
+    '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#CA0169!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:1;transform:none;white-space:normal}',
     '.tt-loader-spinner{width:var(--tt-loader-spinner-size);height:var(--tt-loader-spinner-size);display:grid;margin-top:clamp(24px,2.8vw,34px);opacity:0;transform:scale(.92);animation:tt-loader-spinner-shell 3s infinite}',
     '#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:tt-loader-spinner-in .28s ease .78s both,tt-loader-spinner-shell 3s .78s infinite}',
     '.tt-loader-spinner::before,.tt-loader-spinner::after{content:"";grid-area:1/1;border:var(--tt-loader-spinner-border) solid;border-radius:50%;border-color:#CA0169 #CA0169 transparent transparent;mix-blend-mode:multiply;animation:tt-loader-spinner-ring 1s infinite linear;box-sizing:border-box}',
@@ -304,7 +449,10 @@
     '<img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="882" height="431">' +
-    '<div id="tt-loader-brand-subtitle">accesorios &amp; relojes</div>' +
+    '<div id="tt-loader-wordmark" aria-hidden="true">T<span class="tt-loader-wordmark-i">ı</span>nt<span class="tt-loader-wordmark-i">ı</span>n</div>' +
+    '<div id="tt-loader-brand-subtitle">' +
+    escText(BRAND_LABEL) +
+    '</div>' +
     '<div class="tt-loader-spinner" aria-hidden="true"></div>' +
     '<div id="tt-loader-status">' +
     TITLE_HTML +
