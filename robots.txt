@@ -1,8 +1,15 @@
 User-agent: *
+Allow: /
 Disallow: /admin.html
 Disallow: /admin-images.html
-Disallow: /login.html
 Disallow: /checkout.html
+Disallow: /login.html
 Disallow: /perfil.html
+Disallow: /404.html
+Disallow: /nosotros.html
+Disallow: /functions/
+Disallow: /scripts/
+Disallow: /maintenance/
+Disallow: /firebase-cloud-functions-inactive/
 
 Sitemap: https://tintinaccesorios.pages.dev/sitemap.xml
