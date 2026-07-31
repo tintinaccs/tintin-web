@@ -44,11 +44,9 @@ test('un control role button responde a Enter y Espacio', async ({ page }) => {
   });
   const control = page.locator('#tt-test-role-button');
   await expect(control).toHaveAttribute('tabindex', '0');
-  await control.focus();
-  await page.keyboard.press('Enter');
+  await control.press('Enter');
   await expect(control).toHaveAttribute('data-clicks', '1');
-  await page.waitForTimeout(120);
-  await page.keyboard.press('Space');
+  await control.press('Space');
   await expect(control).toHaveAttribute('data-clicks', '2');
 });
 
