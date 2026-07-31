@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T19:12:05.358Z",
-  "sourceFingerprint": "80670a11360d1759af330c095b8692a9bd1efe96c7d05d6dcdf98af886c5e2a2",
+  "generatedAt": "2026-07-31T19:40:50.097Z",
+  "sourceFingerprint": "c3b002ac87db70c16d964b3f1dc20540a5c29f0b0841356601d3a5f0375f533e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 417,
     "textFiles": 384,
-    "totalBytes": 5105362,
+    "totalBytes": 5105855,
     "pages": 18,
     "modules": 235
   },
@@ -16273,8 +16273,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 35900,
-      "sha256": "02ec0d0117ff7e26dbb5417f88ed4e1ce1f6e83d8bb57ea58df73d700c99456e",
+      "bytes": 36202,
+      "sha256": "c479b814d380b510bf8a6149051e8d7404d0cf15aa1a75adb6c732187df69081",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16299,7 +16299,7 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/tintin-accesorios/",
-          "line": 664
+          "line": 665
         }
       ]
     },
@@ -19869,8 +19869,8 @@
     {
       "path": "css/loader-solid-background.css",
       "extension": ".css",
-      "bytes": 4321,
-      "sha256": "c2001a4a079a0e8fee4569a3fc3d713fad55211e5e05763c8e79eaa0594b9afb"
+      "bytes": 4512,
+      "sha256": "962bb77216d36435e97886ddf8c77d9de37cdfbddecae71551dad03dbd06d82f"
     },
     {
       "path": "css/login-maintenance.css",
@@ -20751,8 +20751,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 35900,
-      "sha256": "02ec0d0117ff7e26dbb5417f88ed4e1ce1f6e83d8bb57ea58df73d700c99456e"
+      "bytes": 36202,
+      "sha256": "c479b814d380b510bf8a6149051e8d7404d0cf15aa1a75adb6c732187df69081"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -23727,14 +23727,14 @@
     },
     {
       "file": "js/page-loader.js",
-      "line": 751,
+      "line": 752,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/page-loader.js",
-      "line": 757,
+      "line": 758,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
