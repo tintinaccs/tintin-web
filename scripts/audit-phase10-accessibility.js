@@ -19,7 +19,15 @@ const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 check('La Fase 10 se inicia desde el runtime compartido', /phase10-accessibility\.js/.test(loader) && /TintinPhase10ImportStarted/.test(loader), 'Debe cargarse una sola vez en todas las páginas que usan page-loader.');
 check('Todas las páginas usan la versión de caché de Fase 10', htmlFiles.every(file => !read(file).includes('js/page-loader.js') || read(file).includes('js/page-loader.js?v=tintin-20260731-phase10-a11y-1')), 'No debe quedar una página con el loader anterior.');
 check('Existe enlace para saltar al contenido', /ensureSkipLink/.test(runtime) && /Saltar al contenido principal/.test(runtime) && /tt-skip-link/.test(css), 'La navegación por teclado debe poder evitar cabeceras repetidas.');
-check('Los controles personalizados funcionan con teclado', /getAttribute\('role'\) === 'button'/.test(runtime) && /event\.key !== 'Enter'/.test(runtime) && /control\.click\(\)/.test(runtime), 'Un role=button debe responder a Enter y Espacio.');
+check(
+  'Los controles personalizados funcionan con teclado',
+  /getAttribute\('role'\) === 'button'/.test(runtime) &&
+    /isKeyboardActivation/.test(runtime) &&
+    /key === 'Enter'/.test(runtime) &&
+    /(?:key === ' '|event\.code === 'Space'|key === 'Spacebar')/.test(runtime) &&
+    /control\.click\(\)/.test(runtime),
+  'Un role=button debe responder a Enter y Espacio.'
+);
 check('Los diálogos atrapan y restauran el foco', /FOCUSABLE_SELECTOR/.test(runtime) && /event\.key !== 'Tab'/.test(runtime) && /returnFocus/.test(runtime) && /focusin/.test(runtime), 'Ningún modal debe dejar que el foco escape o perder el punto de retorno.');
 check('Los formularios anuncian errores sin bloquearse', /bindInvalidFeedback/.test(runtime) && /aria-invalid/.test(runtime) && /revisá este dato/.test(runtime), 'El primer campo inválido debe recibir foco y un aviso accesible.');
 check('El estado sin conexión es informativo y recuperable', /tt-connectivity-status/.test(runtime) && /window\.addEventListener\('offline'/.test(runtime) && /Reintentar/.test(runtime) && !/aria-modal[^\n]+tt-connectivity/.test(runtime), 'La pérdida temporal de red no debe crear un bloqueo permanente.');
