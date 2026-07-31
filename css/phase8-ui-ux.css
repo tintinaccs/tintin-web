@@ -375,6 +375,43 @@ html.tt-phase8-ux-ready .perfil-card {
   }
 }
 
+
+/* El drawer mobile no usa 100vw: ese valor incluye la barra vertical en
+   Chromium y puede superar innerWidth. El porcentaje se resuelve contra el
+   viewport útil y los hijos flexibles pueden encogerse sin filtrarse. */
+@media (max-width: 768px) {
+  body.tt-home-premium .tt-cart-drawer {
+    width: min(400px, 100%) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    left: auto !important;
+    right: 0 !important;
+  }
+
+  body.tt-home-premium :is(
+    .tt-cart-header,
+    .tt-cart-body,
+    .tt-cart-footer,
+    .tt-cart-item,
+    .tt-cart-item-info,
+    .tt-cart-total-row
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.tt-home-premium :is(
+    .tt-cart-item-name,
+    .tt-cart-empty-text,
+    .tt-cart-goto-btn
+  ) {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --tt-motion-instant: 1ms;
