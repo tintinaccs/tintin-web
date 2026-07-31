@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T13:57:16.360Z",
-  "sourceFingerprint": "4310c4378a71cb25110bfd31b450cbeff96578c4fcfe9876031c0dfa66f53169",
+  "generatedAt": "2026-07-31T14:06:11.377Z",
+  "sourceFingerprint": "14ede386f3fef6102a7a1e76f1972eafdf484fbe00fc83300ecdab5e50504bbd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 414,
-    "textFiles": 380,
-    "totalBytes": 5669103,
+    "files": 415,
+    "textFiles": 381,
+    "totalBytes": 5671032,
     "pages": 18,
-    "modules": 232
+    "modules": 233
   },
   "viewports": [
     {
@@ -16450,6 +16450,22 @@
       "endpoints": []
     },
     {
+      "path": "js/product-seo-canonical.js",
+      "bytes": 1929,
+      "sha256": "99196f5f4c971e4e81c3d7cf618382357e854ab6a53ea4e303360d3c280976c7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "line": 8
+        }
+      ]
+    },
+    {
       "path": "js/products-store.js",
       "bytes": 19110,
       "sha256": "59306b1cd974637ef2e717316de1803fe79d3c942fb545baf686c9a477999bfc",
@@ -20754,6 +20770,12 @@
       "extension": ".js",
       "bytes": 6548,
       "sha256": "cd1782d24d12135633b07cefa26aef96e188819f68c535b299bc5fa0ff8289f8"
+    },
+    {
+      "path": "js/product-seo-canonical.js",
+      "extension": ".js",
+      "bytes": 1929,
+      "sha256": "99196f5f4c971e4e81c3d7cf618382357e854ab6a53ea4e303360d3c280976c7"
     },
     {
       "path": "js/products-store.js",
