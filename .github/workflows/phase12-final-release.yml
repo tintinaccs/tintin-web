@@ -59,13 +59,33 @@ jobs:
       - name: Smoke de las 18 páginas
         run: npm run test:pages
 
+      - name: Servir el árbol exacto de la PR
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/tintin-phase12-http.log 2>&1 &
+          echo $! > /tmp/tintin-phase12-http.pid
+          for attempt in {1..20}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-phase12-http.log || true
+          exit 1
+
       - name: Flujos UI de la Fase 8 en Chromium
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
         run: npm run test:phase8-ui
 
       - name: Accesibilidad de la Fase 10 en Chromium
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
         run: npm run test:phase10-a11y
 
       - name: SEO dinámico de la Fase 11 en Chromium
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
         run: npm run test:phase11-seo
 
       - name: Matriz responsive canónica
@@ -92,5 +112,6 @@ jobs:
             artifacts/**
             playwright-report/**
             test-results/**
+            /tmp/tintin-phase12-http.log
           if-no-files-found: warn
           retention-days: 30
