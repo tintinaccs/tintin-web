@@ -7,12 +7,15 @@
    ============================================================= */
 
 const BUSY_TIMEOUT_MS = 12_000;
+// aria-busy describe actividad, no convierte por sí solo un contenedor
+// estructural en una tarjeta de estado. Incluirlo acá achicaba grillas completas
+// (por ejemplo #cat-grid) al ancho máximo de .tt-state-surface durante cada
+// actualización en tiempo real.
 const STATE_SELECTOR = [
   '[data-tt-state]',
   '.tt-loading', '.tt-loading-state', '.loading-state',
   '.tt-error', '.tt-error-state', '.error-state',
-  '.tt-empty', '.tt-empty-state', '.empty-state',
-  '[aria-busy="true"]'
+  '.tt-empty', '.tt-empty-state', '.empty-state'
 ].join(',');
 
 const busyButtons = new WeakMap();
