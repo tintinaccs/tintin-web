@@ -1,0 +1,48 @@
+name: Aplicar estabilidad del catálogo
+
+on:
+  push:
+    branches:
+      - fix/catalog-layout-and-activity-errors
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    if: ${{ !contains(github.event.head_commit.message, '[runtime-stability-applied]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Aplicar corrección
+        run: python3 scripts/apply-runtime-stability-fix.py
+
+      - name: Validar
+        run: |
+          npm ci --ignore-scripts
+          node --check js/phase8-ui-ux.js
+          node --check js/site-activity.js
+          npm run audit:phase8-ui
+          npm run audit:app-check-bootstrap
+
+      - name: Guardar cambios
+        shell: bash
+        run: |
+          rm -f .github/workflows/apply-catalog-layout-activity-fix.yml
+          rm -f .github/workflows/apply-runtime-stability-push.yml
+          rm -f scripts/apply-runtime-stability-fix.py
+          rm -f maintenance/trigger-runtime-stability.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: estabilizar layout del catálogo y cortar heartbeats rechazados [runtime-stability-applied]"
+          git push origin HEAD:${{ github.ref_name }}
