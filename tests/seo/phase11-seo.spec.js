@@ -30,9 +30,18 @@ test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', asy
   expect(data.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
-test('superficies privadas y auxiliares permanecen noindex', async ({ page }) => {
-  for (const file of ['admin.html', 'admin-images.html', 'checkout.html', 'login.html', 'perfil.html', '404.html']) {
-    await page.goto('/' + file, { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow, noarchive');
+test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
+  // Las etiquetas robots forman parte del HTML inicial. Se verifican sin
+  // JavaScript para que las redirecciones legítimas de autenticación de una
+  // página privada no interrumpan la navegación hacia la siguiente superficie.
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+  const page = await context.newPage();
+  try {
+    for (const file of ['admin.html', 'admin-images.html', 'checkout.html', 'login.html', 'perfil.html', '404.html']) {
+      await page.goto('/' + file, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow, noarchive');
+    }
+  } finally {
+    await context.close();
   }
 });
