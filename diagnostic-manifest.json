@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T12:19:21.479Z",
-  "sourceFingerprint": "5cca013155716f18868e9f8e1ac9487d4105eb7c7d4001dbfb2f63b3e9bcc8c2",
+  "generatedAt": "2026-07-31T13:19:53.090Z",
+  "sourceFingerprint": "7558e200ac0c09e3593f213e0194f09a56947265eaade764203fe4a9829ea40a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 410,
-    "textFiles": 376,
-    "totalBytes": 5645032,
+    "files": 414,
+    "textFiles": 380,
+    "totalBytes": 5668068,
     "pages": 18,
-    "modules": 230
+    "modules": 232
   },
   "viewports": [
     {
@@ -16325,8 +16325,8 @@
     },
     {
       "path": "js/phase10-accessibility.js",
-      "bytes": 12163,
-      "sha256": "1eb83719bf466df57bf04322b0e651fdbf23c04304222fa7bc11c7fdafb0a16f",
+      "bytes": 13903,
+      "sha256": "2d5a4730114dc1574af3076075dc7b5941d6cb58dc7a058d68e53dc0666af467",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18421,8 +18421,8 @@
     },
     {
       "path": "scripts/audit-phase10-accessibility.js",
-      "bytes": 4385,
-      "sha256": "c0a0740cd92da42733b1f9bfa1c8c8e28da6e5aec68f67a5298dcf2bffeb8e98",
+      "bytes": 4452,
+      "sha256": "71ac43484195d0e8d329b0fee9cd2449009cb45952f0b10b8051d6a5cffc60d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18445,6 +18445,36 @@
           "line": 5
         }
       ]
+    },
+    {
+      "path": "scripts/audit-phase12-release.mjs",
+      "bytes": 6329,
+      "sha256": "b9675ce5b3f108381d98cb43a5aa08f8645554ea7eae2e964d83535be8aa5819",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/audit-phase5-performance.js",
@@ -18502,8 +18532,8 @@
     },
     {
       "path": "scripts/audit-phase8-ui-ux.js",
-      "bytes": 6276,
-      "sha256": "56b8873456621702328434ddb311faf2f9ae5dac7371a713644dc4a70822aed3",
+      "bytes": 6367,
+      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18879,6 +18909,35 @@
       "endpoints": []
     },
     {
+      "path": "scripts/production-smoke-phase12.mjs",
+      "bytes": 5778,
+      "sha256": "ec0321cca433ec6b2da1c36ca03add595b2feca1da2689cee5ec9f5278221b63",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 4
+        }
+      ]
+    },
+    {
       "path": "scripts/run-responsive-audit-with-retry.mjs",
       "bytes": 1201,
       "sha256": "1e0ad0df4a9d172422b3ccf22d673f3f8531e2e2629bba7af605db1e98826722",
@@ -19186,8 +19245,8 @@
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
-      "bytes": 3941,
-      "sha256": "dbe00840aa41bcd003b411053db6249567e1ef52f465fe691a5251f7e281377f",
+      "bytes": 5122,
+      "sha256": "d134b965a0ab8011d0b6c9a49905f8943cb2c2d8f74edd0f425d78f59ff2a983",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19197,8 +19256,8 @@
     },
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
-      "bytes": 3656,
-      "sha256": "e81f9cce541e7c15398408ab5a362045cfd5cd1cf5cf8eab48faf23259fcfcf7",
+      "bytes": 4009,
+      "sha256": "a37ed771155a3220c0af945a124b35e5a1498426cce9f5345a1fbbec76fe02bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19351,6 +19410,12 @@
       "extension": ".yml",
       "bytes": 1399,
       "sha256": "8a61913700881b07f2c16a71abb3c9e5bfa2e81b4937135c7c675bb46c1945ed"
+    },
+    {
+      "path": ".github/workflows/phase12-final-release.yml",
+      "extension": ".yml",
+      "bytes": 3425,
+      "sha256": "0b0e2ac5c6b9917885232350593919874881fd6a79614184b77802663915a03d"
     },
     {
       "path": ".github/workflows/system-special-part2g-audit.yml",
@@ -19879,6 +19944,12 @@
       "extension": ".md",
       "bytes": 589,
       "sha256": "113a331ded00ea5a315f582eb6a3c83941d9451173d351ba02c0b7d22d279817"
+    },
+    {
+      "path": "docs/PHASE12_RELEASE_REPORT.md",
+      "extension": ".md",
+      "bytes": 4051,
+      "sha256": "0dec215c9d0cfcf120ae9af94ff55168cf9728886f40839f9502a9d8884ba9a6"
     },
     {
       "path": "docs/PHASE5_IMAGES.md",
@@ -20633,8 +20704,8 @@
     {
       "path": "js/phase10-accessibility.js",
       "extension": ".js",
-      "bytes": 12163,
-      "sha256": "1eb83719bf466df57bf04322b0e651fdbf23c04304222fa7bc11c7fdafb0a16f"
+      "bytes": 13903,
+      "sha256": "2d5a4730114dc1574af3076075dc7b5941d6cb58dc7a058d68e53dc0666af467"
     },
     {
       "path": "js/phase7-catalog-policy.js",
@@ -21017,8 +21088,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6388,
-      "sha256": "b40770b5ae195dfc05403f3d886ad81007c6b4abf90d5bfc51af5d2a3f69c8f4"
+      "bytes": 6409,
+      "sha256": "4f91f2642c6bf9693baa6e5c52bf3ef7761a6d8fcbe111f43bf1bb5d283b58a2"
     },
     {
       "path": "perfil.html",
@@ -21395,14 +21466,20 @@
     {
       "path": "scripts/audit-phase10-accessibility.js",
       "extension": ".js",
-      "bytes": 4385,
-      "sha256": "c0a0740cd92da42733b1f9bfa1c8c8e28da6e5aec68f67a5298dcf2bffeb8e98"
+      "bytes": 4452,
+      "sha256": "71ac43484195d0e8d329b0fee9cd2449009cb45952f0b10b8051d6a5cffc60d9"
     },
     {
       "path": "scripts/audit-phase11-seo.js",
       "extension": ".js",
       "bytes": 6526,
       "sha256": "f149306a6e6fef48352f4ffa66f732604b5ecee21a8575f277976d2dc2cbac20"
+    },
+    {
+      "path": "scripts/audit-phase12-release.mjs",
+      "extension": ".mjs",
+      "bytes": 6329,
+      "sha256": "b9675ce5b3f108381d98cb43a5aa08f8645554ea7eae2e964d83535be8aa5819"
     },
     {
       "path": "scripts/audit-phase5-performance.js",
@@ -21425,8 +21502,8 @@
     {
       "path": "scripts/audit-phase8-ui-ux.js",
       "extension": ".js",
-      "bytes": 6276,
-      "sha256": "56b8873456621702328434ddb311faf2f9ae5dac7371a713644dc4a70822aed3"
+      "bytes": 6367,
+      "sha256": "ec0c0c194298b731950cca8a3af7da0851e65abc267b65841e458af5fdca66a4"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -21541,6 +21618,12 @@
       "extension": ".js",
       "bytes": 2281,
       "sha256": "b133ec585dc7d275ae5a89205cdd668a7c07061550020a52969f26fb29a69728"
+    },
+    {
+      "path": "scripts/production-smoke-phase12.mjs",
+      "extension": ".mjs",
+      "bytes": 5778,
+      "sha256": "ec0321cca433ec6b2da1c36ca03add595b2feca1da2689cee5ec9f5278221b63"
     },
     {
       "path": "scripts/run-responsive-audit-with-retry.mjs",
@@ -21659,14 +21742,14 @@
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
       "extension": ".js",
-      "bytes": 3941,
-      "sha256": "dbe00840aa41bcd003b411053db6249567e1ef52f465fe691a5251f7e281377f"
+      "bytes": 5122,
+      "sha256": "d134b965a0ab8011d0b6c9a49905f8943cb2c2d8f74edd0f425d78f59ff2a983"
     },
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
       "extension": ".js",
-      "bytes": 3656,
-      "sha256": "e81f9cce541e7c15398408ab5a362045cfd5cd1cf5cf8eab48faf23259fcfcf7"
+      "bytes": 4009,
+      "sha256": "a37ed771155a3220c0af945a124b35e5a1498426cce9f5345a1fbbec76fe02bf"
     }
   ],
   "sitemapRoutes": [
