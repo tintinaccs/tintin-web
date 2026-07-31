@@ -14,13 +14,14 @@ if (start < 0 || end < 0) throw new Error('No se encontró el bloque de validaci
 const replacement = `const workflowDirectory = path.join(root, '.github/workflows');
 const currentWorkflowRef = String(process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME || '');
 const branchScopedWorkflows = new Map([
-  ['apply-unified-store-logic.yml', 'audit/unified-store-logic']
+  ['apply-unified-store-logic.yml', 'audit/unified-store-logic'],
+  ['validate-unified-store-final.yml', 'audit/unified-store-logic']
 ]);
 const workflowMissing = [];
 for (const file of fs.readdirSync(workflowDirectory).filter(file => /\\.ya?ml$/.test(file))) {
   const requiredRef = branchScopedWorkflows.get(file) || '';
-  // Este workflow solo puede ejecutarse para su rama exacta. Sus scripts viven
-  // en esa misma rama de trabajo y no forman parte del producto publicado.
+  // Estos workflows solo pueden ejecutarse para su rama exacta. Sus scripts
+  // viven en esa misma rama de trabajo y no forman parte del producto publicado.
   if (requiredRef && currentWorkflowRef !== requiredRef) continue;
   const text = fs.readFileSync(path.join(workflowDirectory, file), 'utf8');
   for (const match of text.matchAll(/node (scripts\\/[A-Za-z0-9._-]+\\.js)/g)) {
