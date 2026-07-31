@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T04:17:46.877Z",
-  "sourceFingerprint": "59daaee36b3103c858655d96da2b6dfbf26e80b38d793fbcf9e3f7f1fd58ea6a",
+  "generatedAt": "2026-07-31T04:42:22.407Z",
+  "sourceFingerprint": "83016e7051d3d9dda635af02956440fc7827c3ec91f42a2869bcec708b6ac9b1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 395,
-    "textFiles": 361,
-    "totalBytes": 5578975,
+    "files": 397,
+    "textFiles": 363,
+    "totalBytes": 5590791,
     "pages": 18,
-    "modules": 221
+    "modules": 223
   },
   "viewports": [
     {
@@ -14357,8 +14357,8 @@
     },
     {
       "path": "js/admin-import-phase9.js",
-      "bytes": 33971,
-      "sha256": "bb5db541373bf029098a42ec919aa08d0ff6465ebfaba85853b6e2ea5cc0f387",
+      "bytes": 33619,
+      "sha256": "a43550f699528028a05749eec4574110b0cef0c89b2f02a157cda4da0ba3c609",
       "syntax": {
         "ok": true,
         "error": ""
@@ -14393,6 +14393,12 @@
           "target": "js/firestore-pagination.js",
           "dynamic": false,
           "line": 18
+        },
+        {
+          "raw": "./import-normalization.mjs?v=tintin-20260731-phase9-import-1",
+          "target": "js/import-normalization.mjs",
+          "dynamic": false,
+          "line": 24
         }
       ],
       "endpoints": [
@@ -16007,6 +16013,17 @@
       ]
     },
     {
+      "path": "js/import-normalization.mjs",
+      "bytes": 5452,
+      "sha256": "82454f2c49c4bc4d78b803817c079daff30b29e8a56f55f48f203396ac48c60b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/inventory-model.mjs",
       "bytes": 2373,
       "sha256": "25420171e255c9f05c647a7b4ace9ef1a5182862c565e788432ad9e251c20c7b",
@@ -17185,25 +17202,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17236,25 +17253,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17406,25 +17423,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17499,25 +17516,25 @@
         },
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 5
         }
@@ -17620,25 +17637,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17797,25 +17814,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17857,8 +17874,8 @@
     },
     {
       "path": "scripts/audit-final-release.js",
-      "bytes": 5269,
-      "sha256": "5096bbe030283dcb3160b9d286946e82790836df7d8bd74dce2b16c9fb92f80c",
+      "bytes": 7868,
+      "sha256": "13b12d97adc3a0e32956702f58c02ce98b3215aed36a183248f69f36d1e97b48",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17912,25 +17929,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -17969,25 +17986,25 @@
         },
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 5
         }
@@ -18047,19 +18064,19 @@
       "imports": [
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 3
         }
@@ -18083,25 +18100,25 @@
         },
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 5
         }
@@ -18164,25 +18181,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -18585,25 +18602,25 @@
       "imports": [
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
@@ -18649,8 +18666,8 @@
     },
     {
       "path": "scripts/build-diagnostic-manifest.js",
-      "bytes": 23739,
-      "sha256": "4c59f0aa62feec2718f993aebdce978c2098b15baf43d69cd1761107892db759",
+      "bytes": 23745,
+      "sha256": "923daf3ddf306c24d89e2fe8bece31ee907571a58fac95c2f5ed1710125856fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18669,19 +18686,19 @@
       "imports": [
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 3
         }
@@ -18699,19 +18716,19 @@
       "imports": [
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 3
         }
@@ -18729,19 +18746,19 @@
       "imports": [
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 3
         }
@@ -18781,19 +18798,19 @@
       "imports": [
         {
           "raw": "node:child_process",
-          "target": "scripts/node:child_process",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 3
         }
@@ -18817,25 +18834,25 @@
         },
         {
           "raw": "node:http",
-          "target": "scripts/node:http",
+          "target": null,
           "dynamic": false,
           "line": 2
         },
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 3
         },
         {
           "raw": "node:path",
-          "target": "scripts/node:path",
+          "target": null,
           "dynamic": false,
           "line": 4
         },
         {
           "raw": "node:url",
-          "target": "scripts/node:url",
+          "target": null,
           "dynamic": false,
           "line": 5
         }
@@ -18864,7 +18881,7 @@
       "imports": [
         {
           "raw": "node:assert/strict",
-          "target": "scripts/node:assert/strict",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
@@ -18893,7 +18910,7 @@
       "imports": [
         {
           "raw": "node:fs",
-          "target": "scripts/node:fs",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
@@ -18923,7 +18940,7 @@
       "imports": [
         {
           "raw": "node:assert/strict",
-          "target": "scripts/node:assert/strict",
+          "target": null,
           "dynamic": false,
           "line": 1
         },
@@ -18945,6 +18962,36 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/import/phase9-import-normalization.test.mjs",
+      "bytes": 2520,
+      "sha256": "afe01f259f40b8d37d378f7fff516f9aa68ab9f7f3dbeae9c23fc3f63559f25f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/import-normalization.mjs",
+          "target": "js/import-normalization.mjs",
+          "dynamic": false,
+          "line": 9
+        }
+      ],
       "endpoints": []
     },
     {
@@ -19124,8 +19171,8 @@
     {
       "path": ".github/workflows/final-release-phase9.yml",
       "extension": ".yml",
-      "bytes": 2034,
-      "sha256": "8c4db5a9650885a1330a90242ff2d4c9dcb2eaa1c05d7385ac78d1e96f691c54"
+      "bytes": 2417,
+      "sha256": "baa8ec0c1727858dd1790c1ca948df41d8be949cf1fe5173510235e3ed09d61f"
     },
     {
       "path": ".github/workflows/final-sweep-part2h-audit.yml",
@@ -19652,8 +19699,8 @@
     {
       "path": "docs/BACKUP_RECOVERY.md",
       "extension": ".md",
-      "bytes": 3995,
-      "sha256": "591b373ccc7fd15bdbc790f950a8fbde5b4b34b38eb97459b987592afa35df8d"
+      "bytes": 4480,
+      "sha256": "be9d46ff8c74c6c9aa147e6899c14fea1742b5a957e4af97cb360681b9bf30a6"
     },
     {
       "path": "docs/CHANGE_IMPACT_CHECKLIST.md",
@@ -19694,8 +19741,8 @@
     {
       "path": "docs/PHASE9_FINAL_RELEASE.md",
       "extension": ".md",
-      "bytes": 3700,
-      "sha256": "c765ea4a591d5146d5de83fbcf45bc116d47098df1c5cc3c7ef5c8142cb5e749"
+      "bytes": 4302,
+      "sha256": "bd6adad767a1e9cc718bdd81abe9275da01bce905e532bbc6c9480af15abef7a"
     },
     {
       "path": "docs/QUALITY_CONTRACTS.md",
@@ -19940,8 +19987,8 @@
     {
       "path": "js/admin-import-phase9.js",
       "extension": ".js",
-      "bytes": 33971,
-      "sha256": "bb5db541373bf029098a42ec919aa08d0ff6465ebfaba85853b6e2ea5cc0f387"
+      "bytes": 33619,
+      "sha256": "a43550f699528028a05749eec4574110b0cef0c89b2f02a157cda4da0ba3c609"
     },
     {
       "path": "js/admin-inventory-integrity.js",
@@ -20320,6 +20367,12 @@
       "extension": ".js",
       "bytes": 21128,
       "sha256": "277e631a27a4664a37a8c6a74aa9df0fce80f2b092f02b2ceb4f06dd7a3dc16d"
+    },
+    {
+      "path": "js/import-normalization.mjs",
+      "extension": ".mjs",
+      "bytes": 5452,
+      "sha256": "82454f2c49c4bc4d78b803817c079daff30b29e8a56f55f48f203396ac48c60b"
     },
     {
       "path": "js/inventory-model.mjs",
@@ -20786,8 +20839,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 5845,
-      "sha256": "4bcf0171c88846276688178e5844999a71b3f5af4112143fe071929933e90164"
+      "bytes": 5966,
+      "sha256": "ef7624454bee4ecedd28e1da045ca726709ff9868e486e4dc48060daccdf5fbe"
     },
     {
       "path": "perfil.html",
@@ -21020,8 +21073,8 @@
     {
       "path": "scripts/audit-final-release.js",
       "extension": ".js",
-      "bytes": 5269,
-      "sha256": "5096bbe030283dcb3160b9d286946e82790836df7d8bd74dce2b16c9fb92f80c"
+      "bytes": 7868,
+      "sha256": "13b12d97adc3a0e32956702f58c02ce98b3215aed36a183248f69f36d1e97b48"
     },
     {
       "path": "scripts/audit-final-sweep-part2h.js",
@@ -21260,8 +21313,8 @@
     {
       "path": "scripts/build-diagnostic-manifest.js",
       "extension": ".js",
-      "bytes": 23739,
-      "sha256": "4c59f0aa62feec2718f993aebdce978c2098b15baf43d69cd1761107892db759"
+      "bytes": 23745,
+      "sha256": "923daf3ddf306c24d89e2fe8bece31ee907571a58fac95c2f5ed1710125856fe"
     },
     {
       "path": "scripts/enforce-account-flow-part2d.mjs",
@@ -21352,6 +21405,12 @@
       "extension": ".html",
       "bytes": 12573,
       "sha256": "b843398ee74b08ecea2eb1f0422f67817ade873bf260d646304f5bce0a3eb06e"
+    },
+    {
+      "path": "tests/import/phase9-import-normalization.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2520,
+      "sha256": "afe01f259f40b8d37d378f7fff516f9aa68ab9f7f3dbeae9c23fc3f63559f25f"
     },
     {
       "path": "tests/performance/README.md",
@@ -24623,7 +24682,7 @@
           },
           {
             "file": "js/admin-import-phase9.js",
-            "line": 576,
+            "line": 543,
             "operation": "collection"
           },
           {
@@ -24638,7 +24697,7 @@
           },
           {
             "file": "scripts/audit-final-release.js",
-            "line": 95,
+            "line": 138,
             "operation": "collection"
           },
           {
@@ -24723,7 +24782,7 @@
           },
           {
             "file": "js/admin-import-phase9.js",
-            "line": 503,
+            "line": 469,
             "operation": "collection"
           },
           {
@@ -24748,7 +24807,7 @@
           },
           {
             "file": "scripts/audit-final-release.js",
-            "line": 78,
+            "line": 121,
             "operation": "collection"
           }
         ]
@@ -25203,12 +25262,12 @@
           },
           {
             "file": "js/admin-import-phase9.js",
-            "line": 504,
+            "line": 470,
             "operation": "collection"
           },
           {
             "file": "js/admin-import-phase9.js",
-            "line": 565,
+            "line": 532,
             "operation": "collection"
           },
           {
@@ -25258,7 +25317,7 @@
           },
           {
             "file": "scripts/audit-final-release.js",
-            "line": 89,
+            "line": 132,
             "operation": "collection"
           }
         ]

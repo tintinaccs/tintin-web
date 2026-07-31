@@ -16,6 +16,12 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 import { getDocsPaginated } from './firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1';
+import {
+  parseDelimitedRows,
+  parseLocalizedNumber,
+  parseOptionalStock,
+  validateOperationalBackupEnvelope,
+} from './import-normalization.mjs?v=tintin-20260731-phase9-import-1';
 
 if (!window.TintinAdminImportPhase9Booted) {
   window.TintinAdminImportPhase9Booted = true;
@@ -100,18 +106,8 @@ if (!window.TintinAdminImportPhase9Booted) {
   }
 
   function numberValue(value) {
-    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
-    const raw = text(value).trim().replace(/\s/g, '');
-    if (!raw) return 0;
-    const normalized = raw.includes(',') && raw.includes('.')
-      ? raw.replace(/\./g, '').replace(',', '.')
-      : raw.replace(/,/g, '');
-    const number = Number(normalized);
-    return Number.isFinite(number) ? number : 0;
-  }
-
-  function integerValue(value) {
-    return Math.max(0, Math.floor(numberValue(value)));
+    const parsed = parseLocalizedNumber(value);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   function sanitizeTags(value) {
@@ -167,7 +163,8 @@ if (!window.TintinAdminImportPhase9Booted) {
     const rawImage = raw?.imageUrl ?? raw?.image ?? '';
     const imageUrl = safeUrl(rawImage);
     const price = Math.round(Math.max(0, numberValue(raw?.price)));
-    const stock = integerValue(raw?.stock);
+    const parsedStock = parseOptionalStock(raw?.stock);
+    const stock = Number.isNaN(parsedStock) ? 0 : parsedStock;
     const sourceKey = cleanText(meta.sourceKey || raw?.importFingerprint || raw?.id || `${name}-${category}`, 300);
     const source = cleanText(meta.source || raw?.source || 'json', 80) || 'json';
 
@@ -196,6 +193,7 @@ if (!window.TintinAdminImportPhase9Booted) {
     if (!product.category) errors.push('Falta la colección');
     if (!currentCategorySlugs().has(product.category)) errors.push('La colección no existe');
     if (!(product.price > 0)) errors.push('El precio debe ser mayor que cero');
+    if (Number.isNaN(parsedStock)) errors.push('El stock debe ser un entero mayor o igual a cero, o quedar vacío para usar stock ilimitado');
     if (rawImage && imageUrl === null) errors.push('La URL de imagen no es segura');
     if (product.priceBefore != null && product.priceBefore <= product.price) {
       warnings.push('El precio anterior no es mayor al precio actual');
@@ -206,43 +204,7 @@ if (!window.TintinAdminImportPhase9Booted) {
   }
 
   function parseCsv(textValue) {
-    const rows = [];
-    let row = [];
-    let cell = '';
-    let quoted = false;
-    const input = text(textValue).replace(/^\uFEFF/, '');
-
-    for (let index = 0; index < input.length; index += 1) {
-      const char = input[index];
-      const next = input[index + 1];
-      if (quoted) {
-        if (char === '"' && next === '"') {
-          cell += '"';
-          index += 1;
-        } else if (char === '"') {
-          quoted = false;
-        } else {
-          cell += char;
-        }
-      } else if (char === '"') {
-        quoted = true;
-      } else if (char === ',') {
-        row.push(cell);
-        cell = '';
-      } else if (char === '\n' || char === '\r') {
-        if (char === '\r' && next === '\n') index += 1;
-        row.push(cell);
-        cell = '';
-        if (row.some(value => text(value).trim())) rows.push(row);
-        row = [];
-      } else {
-        cell += char;
-      }
-    }
-    row.push(cell);
-    if (row.some(value => text(value).trim())) rows.push(row);
-    if (quoted) throw new Error('El CSV termina dentro de un campo entre comillas.');
-    return rows;
+    return parseDelimitedRows(textValue);
   }
 
   function csvObjects(textValue) {
@@ -291,7 +253,8 @@ if (!window.TintinAdminImportPhase9Booted) {
           category,
           price,
           priceBefore: first(row, ['variant compare at price', 'compare at price', 'pricebefore', 'precio anterior']),
-          stock: 0,
+          stock: null,
+          _stockInvalid: false,
           imageUrl: image,
           imagesExtra: [],
           description,
@@ -303,7 +266,9 @@ if (!window.TintinAdminImportPhase9Booted) {
       }
 
       const product = grouped.get(groupKey);
-      product.stock += integerValue(stock);
+      const parsedStock = parseOptionalStock(stock);
+      if (Number.isNaN(parsedStock)) product._stockInvalid = true;
+      else if (parsedStock != null) product.stock = (product.stock ?? 0) + parsedStock;
       if (!product.price && numberValue(price)) product.price = price;
       if (!product.imageUrl && image) product.imageUrl = image;
       else if (image && image !== product.imageUrl && !product.imagesExtra.includes(image)) product.imagesExtra.push(image);
@@ -327,7 +292,9 @@ if (!window.TintinAdminImportPhase9Booted) {
 
     return [...grouped.values()].map(item => {
       const sourceKey = item._sourceKey;
+      if (item._stockInvalid) item.stock = '__stock_invalido__';
       delete item._sourceKey;
+      delete item._stockInvalid;
       return normalizeProduct(item, { source: 'catalog-csv', sourceKey });
     });
   }
@@ -336,10 +303,9 @@ if (!window.TintinAdminImportPhase9Booted) {
     const parsed = JSON.parse(textValue);
     const list = Array.isArray(parsed)
       ? parsed
-      : (Array.isArray(parsed?.data?.products) ? parsed.data.products : null);
-    if (!list) throw new Error('El JSON debe ser un array de productos o una copia Tintin con data.products.');
+      : validateOperationalBackupEnvelope(parsed, { projectId: PROJECT_ID, schemaVersion: 1 });
     return list.map((item, index) => normalizeProduct(item, {
-      source: parsed?.format === 'tintin-operational-backup' ? 'tintin-backup' : 'json',
+      source: Array.isArray(parsed) ? 'json' : 'tintin-backup',
       sourceKey: item?.id || item?.importFingerprint || `${item?.name || 'producto'}-${index + 1}`,
     }));
   }
@@ -489,7 +455,7 @@ if (!window.TintinAdminImportPhase9Booted) {
       });
       categoryCell.appendChild(select);
       const priceCell = node('td', '', `Gs. ${Number(record.product.price || 0).toLocaleString('es-PY')}`);
-      const stockCell = node('td', '', String(record.product.stock));
+      const stockCell = node('td', '', record.product.stock == null ? 'Sin límite' : String(record.product.stock));
       const status = statusLabel(record);
       const statusCell = document.createElement('td');
       statusCell.appendChild(node('span', `phase9-status is-${status.className}`, status.text));
@@ -555,6 +521,7 @@ if (!window.TintinAdminImportPhase9Booted) {
     state.ui.importButton.textContent = 'Importando…';
     state.ui.progress.hidden = false;
     let completed = 0;
+    let sheetsSyncFailures = 0;
 
     try {
       for (let start = 0; start < ready.length; start += BATCH_SIZE) {
@@ -587,14 +554,23 @@ if (!window.TintinAdminImportPhase9Booted) {
           createdAt: serverTimestamp(),
         });
         await batch.commit();
-        if (typeof window.tintinPushProductsToSheets === 'function') {
-          await window.tintinPushProductsToSheets(importedIds);
-        }
         completed += chunk.length;
         state.ui.progressBar.style.width = `${Math.round((completed / ready.length) * 100)}%`;
         state.ui.progressText.textContent = `${completed} de ${ready.length} importados`;
+        if (typeof window.tintinPushProductsToSheets === 'function') {
+          try {
+            await window.tintinPushProductsToSheets(importedIds);
+          } catch (syncError) {
+            sheetsSyncFailures += importedIds.length;
+            console.warn('[phase9] Firestore quedó confirmado; Sheets se reintentará por separado.', syncError);
+          }
+        }
       }
-      toast(`${completed} productos importados sin sobrescribir existentes`);
+      if (sheetsSyncFailures) {
+        toast(`${completed} productos importados en Firestore. ${sheetsSyncFailures} quedan pendientes de sincronizar con Sheets.`, true);
+      } else {
+        toast(`${completed} productos importados sin sobrescribir existentes`);
+      }
       await refreshReferenceData();
       markDuplicates(state.records);
       renderPreview();

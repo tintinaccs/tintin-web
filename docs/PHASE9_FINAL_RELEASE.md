@@ -97,3 +97,15 @@ Para cerrar esa comprobación manualmente, la implementación activa debe conser
 ## Estado de cierre
 
 Las nueve fases quedan cubiertas por `npm run audit:final` y por GitHub Actions. La revisión automática valida código, integración y compilación de reglas; las pruebas con datos reales y el Apps Script publicado deben confirmarse desde las cuentas de producción.
+
+## Endurecimiento final de importación
+
+El cierre definitivo incorpora un normalizador aislado y probado para:
+
+- precios con separadores paraguayos e internacionales;
+- stock ilimitado representado como `null`;
+- CSV separados por coma, punto y coma o tabulador;
+- campos citados, comillas escapadas y saltos de línea;
+- validación del formato, proyecto y versión de cada copia operativa.
+
+El commit principal ocurre en Firestore. La sincronización con Sheets es secundaria: una falla externa queda informada como pendiente, pero no presenta como revertidos productos que ya fueron confirmados.
