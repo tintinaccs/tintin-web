@@ -101,6 +101,13 @@ check(
 );
 
 check(
+  'Las grillas ocupadas no se convierten en superficies angostas de estado',
+  /aria-busy describe actividad/.test(runtime) &&
+    !/const STATE_SELECTOR = \[[\s\S]*?\[aria-busy/.test(runtime),
+  'aria-busy puede marcar una grilla durante una actualización, pero no debe imponerle el ancho de .tt-state-surface.'
+);
+
+check(
   'Los estados visuales siguen la identidad de Tintin',
   /--color-brand-primary/.test(styles) &&
     /--tt-page-bg/.test(styles) &&
