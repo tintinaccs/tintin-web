@@ -68,7 +68,7 @@
           <span class="login-google-icon">
             <span class="login-google-g" aria-hidden="true">G</span>
           </span>
-          <span>Continuar con Google</span>
+          <span id="btn-google-label">Continuar con Google</span>
         </button>
 
         <div class="login-divider"><span>o usá tu correo</span></div>
@@ -403,24 +403,30 @@ const loginConGoogle = async () => {
   hideMessages();
   explicitLoginInProgress = true;
   const googleButton = document.getElementById('btn-google');
-  const googleButtonLabel = googleButton.querySelector('span:last-child');
+  // OJO: no usar `querySelector('span:last-child')` acá — dentro del botón
+  // el primer span que matchea :last-child en orden de documento es el ícono
+  // interno (.login-google-g, el que tiene el degradé de colores de Google),
+  // no el texto del botón. Eso pisaba la "G" con "Abriendo Google…"/"Entrando…"
+  // y como ese span mide 30x30px el texto largo se veía partido letra por
+  // letra y superpuesto con "Continuar con Google". El id evita ambigüedad.
+  const googleButtonLabel = document.getElementById('btn-google-label');
   googleButton.disabled = true;
   document.body.classList.add('tt-login-busy');
   googleButtonLabel.textContent = 'Abriendo Google…';
-  // El propio botón confirma el toque; no se cubre la página con una pantalla
-  // de carga mientras Google abre y completa el acceso.
+  // La pantalla de carga de marca cubre la página de entrada (no recién a los
+  // 1.5s) y se mantiene así durante todo el flujo: el formulario de login no
+  // debe volver a mostrarse una vez que la persona eligió continuar con
+  // Google, hasta llegar a su perfil o hasta que el intento se cancele/falle.
+  showOverlay();
+  setOverlayText('Esperando que completes el inicio de sesión con Google…');
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
-  const slowHintTimer = setTimeout(() => {
-    setOverlayText('Esperando que completes el inicio de sesión con Google…');
-  }, 1500);
   try {
     const cred = await signInWithPopup(auth, provider);
-    clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
     googleButtonLabel.textContent = 'Entrando…';
+    setOverlayText('Redireccionando a tu cuenta…');
     await finishGoogleLogin(cred.user);
   } catch(e) {
-    clearTimeout(slowHintTimer);
     if (myAttempt !== _googleLoginToken) return;
 
     if (e.code === 'auth/popup-blocked') {
