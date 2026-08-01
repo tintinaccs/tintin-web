@@ -131,6 +131,7 @@ function sameJson(a, b) {
   try { return JSON.stringify(a) === JSON.stringify(b); } catch { return false; }
 }
 
+let reconcilingCart = false;
 export function reconcileCatalogCart(products = window.PRODUCTS || []) {
   const catalog = new Map(products.filter(isPurchasable).map(raw => {
     const product = normalizeProduct(raw);
@@ -161,9 +162,25 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
     };
   }).filter(Boolean);
 
-  if (!sameJson(current, next)) {
-    localStorage.setItem(CART_KEY, JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent('tt_cart_updated', { detail: { source: 'phase7-catalog-policy' } }));
+  // cart-sync.js intercepta este mismo localStorage.setItem/getItem con su
+  // propio modelo de carrito (lineId, etc.), de forma normal e independiente
+  // de esta política. Cuando ambos sistemas normalizan el mismo cambio de
+  // forma distinta, cada uno ve al otro como "todavía desactualizado" y se
+  // vuelven a disparar entre sí sin parar — el click de "Agregar al
+  // carrito" terminaba en "Maximum call stack size exceeded" y la página
+  // quedaba rota. reconcilingCart corta la reentrada: mientras este mismo
+  // reconcile sigue en curso (el dispatch de abajo es síncrono y puede
+  // volver a llamar a esta función antes de terminar), la llamada anidada
+  // devuelve el cart calculado sin volver a escribir ni a disparar el
+  // evento, así el ciclo no tiene forma de repetirse indefinidamente.
+  if (!sameJson(current, next) && !reconcilingCart) {
+    reconcilingCart = true;
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(next));
+      window.dispatchEvent(new CustomEvent('tt_cart_updated', { detail: { source: 'phase7-catalog-policy' } }));
+    } finally {
+      reconcilingCart = false;
+    }
   }
   return next;
 }

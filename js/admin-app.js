@@ -21,6 +21,7 @@ import { EMAIL_WEBHOOK_URL } from "./email-config.js?v=tintin-20260716-cloudinar
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeVariantData } from "./security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
@@ -279,6 +280,8 @@ let _allAuditLogs = [];
 let _selectedAuditLogs = new Set();
 let _auditUnsubscribe = null;
 
+let _auditSlowTimer = null;
+let _auditReady = false;
 function loadAuditLog() {
   const tbody = document.getElementById('audit-tbody');
   if (_auditUnsubscribe) {
@@ -286,17 +289,32 @@ function loadAuditLog() {
     return;
   }
   tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  _auditReady = false;
+  clearTimeout(_auditSlowTimer);
+  _auditSlowTimer = setTimeout(() => {
+    if (_auditReady) return;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#7a5a63;padding:24px">La carga está tardando más de lo esperado. Verificá tu conexión. <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaAuditoria()">Reintentar</button></td></tr>`;
+  }, 12000);
   _auditUnsubscribe = onSnapshot(
     query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)),
     snapshot => {
+      clearTimeout(_auditSlowTimer);
+      _auditReady = true;
       _allAuditLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
       renderAuditLogTable();
     },
     error => {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(error.message)}</td></tr>`;
+      clearTimeout(_auditSlowTimer);
+      _auditReady = false;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(error.message)} <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaAuditoria()">Reintentar</button></td></tr>`;
     }
   );
 }
+window.reintentarCargaAuditoria = function() {
+  clearTimeout(_auditSlowTimer);
+  if (_auditUnsubscribe) { _auditUnsubscribe(); _auditUnsubscribe = null; }
+  loadAuditLog();
+};
 
 // La auditoría es de solo lectura (nunca se edita ni se borra un log) — la
 // única acción posible sobre la selección es exportarla, nunca modificarla.
@@ -4745,28 +4763,60 @@ let _productosUnsub = null;
 
 // Live listener: any create/edit/delete/activate/deactivate — from this session
 // or another admin's — updates the table immediately, no manual refresh needed.
+let _productosSlowTimer = null;
 function loadProductos() {
   document.getElementById('prod-loading').style.display = '';
+  document.getElementById('prod-loading').innerHTML = 'Cargando productos…';
   document.getElementById('prod-table-wrap').style.display = 'none';
   document.getElementById('prod-empty').style.display = 'none';
   if (_productosUnsub) return; // listener already active, just re-show current data
+  // Con conexión lenta o inestable (típico en tablet/mobile con wifi débil)
+  // onSnapshot puede tardar mucho en resolver, o nunca resolver, sin avisar —
+  // el spinner giraba indefinidamente sin ninguna pista de qué pasaba. A los
+  // 12s (mismo umbral que BUSY_TIMEOUT_MS en phase8-ui-ux.js) se avisa y se
+  // ofrece reintentar en vez de dejar la pantalla colgada en silencio.
+  clearTimeout(_productosSlowTimer);
+  _productosSlowTimer = setTimeout(() => {
+    if (adminRealtimeReady.products) return;
+    document.getElementById('prod-loading').innerHTML =
+      'La carga de productos está tardando más de lo esperado. Verificá tu conexión. ' +
+      '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaProductos()">Reintentar</button>';
+  }, 12000);
   _productosUnsub = onSnapshot(
     query(collection(db, 'products'), orderBy('name')),
     snap => {
-      _allProducts = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+      clearTimeout(_productosSlowTimer);
+      // A diferencia de la tienda pública (products-store.js), esto no
+      // pasaba por sanitizeVariantData — un variants malformado (por
+      // ejemplo un array con una entrada null, algo que ninguna pantalla
+      // del propio admin puede producir pero que un editor externo directo
+      // sobre Firestore sí podría dejar) rompía el formulario entero al
+      // abrir justo ese producto.
+      _allProducts = snap.docs.map(d => {
+        const data = d.data();
+        return { _docId: d.id, ...data, variants: sanitizeVariantData(data.variants || null) };
+      });
       adminRealtimeReady.products = true;
       applyProductFilters();
       renderGeneralStatistics();
     },
     e => {
+      clearTimeout(_productosSlowTimer);
       adminRealtimeReady.products = false;
-      document.getElementById('prod-loading').textContent = 'Error al cargar productos.';
+      document.getElementById('prod-loading').innerHTML =
+        'Error al cargar productos. ' +
+        '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaProductos()">Reintentar</button>';
       // Los indicadores de productos activos/stock bajo muestran "—" (no "0").
       renderGeneralStatistics();
       console.error(e);
     }
   );
 }
+window.reintentarCargaProductos = function() {
+  clearTimeout(_productosSlowTimer);
+  if (_productosUnsub) { _productosUnsub(); _productosUnsub = null; }
+  loadProductos();
+};
 
 function productRowHtml(p) {
   const isSelected = _selectedProducts.has(p._docId);
@@ -4983,7 +5033,11 @@ function _prodEditarNow(docId) {
   document.getElementById('prod-stock').value = p.stock ?? '';
   document.getElementById('prod-imageUrl').value = p.imageUrl || '';
   mountFormImageWidget('prod-image-widget', 'prod-imageUrl', {
-    value: p.imageUrl || '',
+    // Si imageUrl no es texto (dato corrupto/legado), el widget asume que
+    // sí lo es y llama src.replace(...) sobre el valor crudo — eso rompía
+    // el formulario entero al abrir justo ese producto. sanitizeImageUrl
+    // siempre devuelve un string (vacío si no es una URL válida).
+    value: sanitizeImageUrl(p.imageUrl || ''),
     label: 'Imagen principal',
     hint: 'Se muestra en la grilla y la ficha del producto',
   });
@@ -4995,7 +5049,13 @@ function _prodEditarNow(docId) {
   let variantsText = '';
   if (p.variants) {
     if (Array.isArray(p.variants)) {
-      variantsText = p.variants.map(v => Object.entries(v).filter(([k]) => k !== 'price' && k !== 'sku' && k !== 'imageUrl').map(([k,val]) => `${k}: ${val}`).join(', ')).join('\n');
+      // Una entrada nula o no-objeto en el array (dato corrupto/legado)
+      // tiraba Object.entries(null) y rompía el formulario entero al abrir
+      // ese producto puntual — se filtra antes de leer sus entries.
+      variantsText = p.variants
+        .filter(v => v && typeof v === 'object')
+        .map(v => Object.entries(v).filter(([k]) => k !== 'price' && k !== 'sku' && k !== 'imageUrl').map(([k,val]) => `${k}: ${val}`).join(', '))
+        .join('\n');
     } else if (typeof p.variants === 'object') {
       variantsText = Object.entries(p.variants).flatMap(([k, vals]) => Array.isArray(vals) ? vals.map(v => `${k}: ${v}`) : [`${k}: ${vals}`]).join('\n');
     }
@@ -5228,14 +5288,27 @@ function collSlugify(s) {
 // silently drop out of an orderBy('order') query in Firestore — every
 // collection doc is fetched unconditionally, then sorted client-side
 // (normalizeCollectionDoc gives every doc a safe default order).
+let _collectionsSlowTimer = null;
+let _collectionsReady = false;
 function loadColecciones() {
   document.getElementById('coll-loading').style.display = '';
+  document.getElementById('coll-loading').innerHTML = 'Cargando colecciones…';
   document.getElementById('coll-grid-wrap').style.display = 'none';
   document.getElementById('coll-empty').style.display = 'none';
   if (_collectionsUnsub) { renderColeccionesGrid(applyCollFilter(_allCollections)); return; }
+  _collectionsReady = false;
+  clearTimeout(_collectionsSlowTimer);
+  _collectionsSlowTimer = setTimeout(() => {
+    if (_collectionsReady) return;
+    document.getElementById('coll-loading').innerHTML =
+      'La carga de colecciones está tardando más de lo esperado. Verificá tu conexión. ' +
+      '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
+  }, 12000);
   _collectionsUnsub = onSnapshot(
     collection(db, 'collections'),
     snap => {
+      clearTimeout(_collectionsSlowTimer);
+      _collectionsReady = true;
       _allCollections = snap.docs
         .map(d => normalizeCollectionDoc(d.id, d.data()))
         .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
@@ -5244,12 +5317,21 @@ function loadColecciones() {
       renderGeneralStatistics();
     },
     e => {
-      document.getElementById('coll-loading').textContent = 'Error al cargar colecciones: ' + e.message;
+      clearTimeout(_collectionsSlowTimer);
+      _collectionsReady = false;
+      document.getElementById('coll-loading').innerHTML =
+        'Error al cargar colecciones: ' + escapeHtmlAdmin(e.message) + ' ' +
+        '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
       console.error('[colecciones] listener failed:', e);
       toast('No se pudieron cargar las colecciones: ' + e.message);
     }
   );
 }
+window.reintentarCargaColecciones = function() {
+  clearTimeout(_collectionsSlowTimer);
+  if (_collectionsUnsub) { _collectionsUnsub(); _collectionsUnsub = null; }
+  loadColecciones();
+};
 
 // Any collection created in Super Admin → Colecciones automatically becomes
 // an assignable option in Productos (new/edit form, filter, bulk-assign).
