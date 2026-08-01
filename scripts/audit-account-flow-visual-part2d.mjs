@@ -115,7 +115,10 @@ async function controlMetrics(page, selector) {
       return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 1 && rect.height > 1;
     })
     .map(node => {
-      const rect = node.getBoundingClientRect();
+      const directRect = node.getBoundingClientRect();
+      const isChoice = node.matches('input[type="checkbox"],input[type="radio"]');
+      const hitArea = isChoice ? node.closest('label') : null;
+      const rect = hitArea?.getBoundingClientRect() || directRect;
       return {
         id: node.id || '', cls: String(node.className || '').slice(0, 90),
         width: Math.round(rect.width), height: Math.round(rect.height),

@@ -239,8 +239,8 @@ body.tt-catalog-maintenance .tt-footer-tagline {
   body.tt-catalog-maintenance .cat-wrap { padding-inline: 10px; }
   body.tt-catalog-maintenance .cat-grid { gap: 8px; }
   body.tt-catalog-maintenance .tt-card-info { padding: 9px; }
-  body.tt-catalog-maintenance .tt-card-name { font-size: 11px; }
-  body.tt-catalog-maintenance .tt-card-price { font-size: 12px; }
+  body.tt-catalog-maintenance .tt-card-name { font-size: 12.5px; line-height: 1.35; }
+  body.tt-catalog-maintenance .tt-card-price { font-size: 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -404,6 +404,58 @@ function statusBadge(status) {
 // deactivación/activación de secciones NO usa NodeList estáticas — se hace con
 // querySelectorAll en vivo dentro de switchSection para incluir las secciones
 // que otros módulos agregan después (p. ej. "Mensaje de bienvenida").
+const mobileTabs = document.getElementById('adm-mobile-tabs');
+const mobileMoreToggle = document.getElementById('adm-mobile-more-toggle');
+const mobileMoreSheet = document.getElementById('adm-mobile-more-sheet');
+const mobileMoreBackdrop = document.getElementById('adm-mobile-more-backdrop');
+const mobileMoreClose = document.getElementById('adm-mobile-more-close');
+const mobileMoreGrid = document.getElementById('adm-mobile-more-grid');
+
+function moveSecondaryMobileTab(node) {
+  if (!(node instanceof Element) || !node.matches('.adm-mobile-tab')) return;
+  if (node.hasAttribute('data-mobile-primary') || node === mobileMoreToggle) return;
+  mobileMoreGrid?.appendChild(node);
+}
+
+if (mobileTabs && mobileMoreGrid) {
+  [...mobileTabs.querySelectorAll('.adm-mobile-tab')].forEach(moveSecondaryMobileTab);
+  new MutationObserver(records => {
+    records.flatMap(record => [...record.addedNodes]).forEach(moveSecondaryMobileTab);
+  }).observe(mobileTabs, { childList: true });
+}
+
+function setMobileMore(open, restoreFocus = false) {
+  if (!mobileMoreToggle || !mobileMoreSheet || !mobileMoreBackdrop) return;
+  mobileMoreSheet.hidden = !open;
+  mobileMoreBackdrop.hidden = !open;
+  mobileMoreToggle.setAttribute('aria-expanded', String(open));
+  document.body.classList.toggle('adm-mobile-more-open', open);
+  if (open) {
+    mobileMoreClose?.focus({ preventScroll: true });
+  } else if (restoreFocus) {
+    mobileMoreToggle.focus({ preventScroll: true });
+  }
+}
+
+function closeMobileMore(restoreFocus = false) {
+  setMobileMore(false, restoreFocus);
+}
+
+mobileMoreToggle?.addEventListener('click', () => {
+  setMobileMore(mobileMoreToggle.getAttribute('aria-expanded') !== 'true');
+});
+mobileMoreClose?.addEventListener('click', () => closeMobileMore(true));
+mobileMoreBackdrop?.addEventListener('click', () => closeMobileMore(true));
+mobileMoreGrid?.addEventListener('click', event => {
+  if (event.target.closest('.adm-mobile-tab')) closeMobileMore();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && mobileMoreToggle?.getAttribute('aria-expanded') === 'true') {
+    event.preventDefault();
+    closeMobileMore(true);
+  }
+});
+
 const navItems = document.querySelectorAll('[data-section]');
 const topbarTitle = document.getElementById('adm-topbar-title');
 
@@ -500,6 +552,9 @@ function switchSection(target) {
     // está abierta — antes solo cambiaba la clase visual .active.
     b.setAttribute('aria-current', 'page');
   });
+  const activeInMore = !!mobileMoreGrid?.querySelector(`[data-section="${target}"]`);
+  mobileMoreToggle?.classList.toggle('active', activeInMore);
+  closeMobileMore();
   document.querySelectorAll('.adm-section').forEach(s => s.classList.remove('active'));
   const targetSection = document.getElementById(`section-${target}`);
   if (targetSection) targetSection.classList.add('active');

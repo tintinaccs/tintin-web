@@ -30,6 +30,9 @@
 .tt-collections-page .tt-products-section {
   content-visibility: visible !important;
   contain-intrinsic-size: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .tt-collections-page .tt-page-hero {
