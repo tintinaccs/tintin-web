@@ -64,14 +64,19 @@
         <div class="login-error" id="login-error"></div>
         <div class="login-success" id="login-success"></div>
 
-        <div id="login-google-section">
+        <div id="login-google-section" class="login-google-section">
           <button type="button" class="login-google" id="btn-google">
             <span class="login-google-icon">
               <span class="login-google-g" aria-hidden="true">G</span>
             </span>
             <span id="btn-google-label">Continuar con Google</span>
           </button>
+          <div class="login-google-nudge-arrow" id="login-google-nudge-arrow" style="display:none" aria-hidden="true">
+            <div class="login-google-nudge-point"></div>
+            <div class="login-google-nudge-bubble">Esta cuenta ya usa Google — entrá por acá 👆</div>
+          </div>
         </div>
+        <div class="login-google-nudge-backdrop" id="login-google-nudge-backdrop" style="display:none" role="button" tabindex="0" aria-label="Cerrar aviso"></div>
 
         <div class="login-divider" id="login-divider-section"><span>o usá tu correo</span></div>
 
@@ -593,8 +598,32 @@ function showEmailStep() {
   document.getElementById('login-email-block').style.display = '';
 }
 
+// Cuando el correo ya tiene una cuenta de Google, en vez del error de
+// siempre se resalta el botón de Google (con una burbuja + flecha que
+// apunta hacia él) y se apaga el resto de la caja — así queda clarísimo
+// cuál es el único camino real para esa cuenta. Cualquier click (en
+// cualquier tamaño de pantalla) lo cierra y vuelve al estado normal.
+function showGoogleNudge() {
+  document.getElementById('login-google-section').classList.add('login-google-nudge-active');
+  document.getElementById('login-google-nudge-arrow').style.display = 'flex';
+  document.getElementById('login-google-nudge-backdrop').style.display = 'block';
+}
+
+function hideGoogleNudge() {
+  document.getElementById('login-google-section').classList.remove('login-google-nudge-active');
+  document.getElementById('login-google-nudge-arrow').style.display = 'none';
+  document.getElementById('login-google-nudge-backdrop').style.display = 'none';
+}
+
+const googleNudgeBackdrop = document.getElementById('login-google-nudge-backdrop');
+googleNudgeBackdrop.addEventListener('click', hideGoogleNudge);
+googleNudgeBackdrop.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideGoogleNudge(); }
+});
+
 async function sendOtp(email) {
   hideMessages();
+  hideGoogleNudge();
   const activeBtn = document.getElementById(otpEmail === email && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
   activeBtn.disabled = true;
   try {
@@ -604,7 +633,11 @@ async function sendOtp(email) {
     showOtpStep();
     startOtpResendCooldown();
   } catch (e) {
-    showError(otpErrorMessage(e.code));
+    if (e.code === 'google_account_exists') {
+      showGoogleNudge();
+    } else {
+      showError(otpErrorMessage(e.code));
+    }
   } finally {
     activeBtn.disabled = false;
   }

@@ -127,6 +127,7 @@ export function otpErrorMessage(code) {
     'too_many_attempts': 'Demasiados intentos con este código. Pedí uno nuevo.',
     'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',
     'resend_not_configured': 'El envío de correos no está disponible en este momento. Probá con "Continuar con Google".',
+    'google_account_exists': 'Esta cuenta ya usa Google. Iniciá sesión con el botón de Google.',
   };
   return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
 }

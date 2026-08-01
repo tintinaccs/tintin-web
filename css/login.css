@@ -220,6 +220,75 @@ body.tt-public-shell-mounted .login-page {
   padding: 0;
   text-align: left;
   background: transparent !important;
+  position: relative;
+}
+
+.login-google-section { position: relative; }
+
+.login-google-nudge-backdrop {
+  display: none;
+  position: absolute;
+  inset: -14px;
+  z-index: 15;
+  border-radius: 20px;
+  background: rgba(46, 20, 30, .5);
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
+  cursor: pointer;
+  animation: login-nudge-fade-in .25s ease both;
+}
+
+.login-google-section.login-google-nudge-active {
+  position: relative;
+  z-index: 16;
+}
+.login-google-section.login-google-nudge-active .login-google {
+  box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 14px 34px rgba(80,31,49,.32);
+}
+
+.login-google-nudge-arrow {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 10px;
+  animation: login-nudge-bounce 1.6s ease-in-out infinite;
+}
+
+.login-google-nudge-point {
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  margin-bottom: -8px;
+  box-shadow: -3px -3px 8px rgba(80,31,49,.1);
+}
+
+.login-google-nudge-bubble {
+  max-width: 260px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--login-wine);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(80,31,49,.22);
+}
+
+@keyframes login-nudge-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes login-nudge-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-google-nudge-arrow { animation: none; }
 }
 
 .login-eyebrow {

@@ -1,12 +1,14 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse
+  preflightResponse,
+  SUPERADMIN_EMAIL
 } from '../../cloudflare/cloudinary-security.js';
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
   decodeFirestoreFields,
+  lookupUserProvidersByEmail,
   fsString,
   fsInteger,
   fsTimestamp
@@ -47,17 +49,38 @@ function generateCode() {
 }
 
 async function sendCodeEmail(apiKey, email, code) {
+  // Tabla en vez de flex/grid para las 6 cifras: Outlook de escritorio
+  // renderiza con el motor de Word y no soporta flexbox/grid de forma
+  // confiable — una tabla con <td> es lo único que se ve igual en todos
+  // los clientes de correo. La fuente declara Montserrat primero (se ve
+  // así en los pocos clientes que sí la cargan) con una pila web-safe de
+  // respaldo (Helvetica/Arial) para el resto, en vez de forzar Montserrat
+  // sola y dejar que el cliente caiga en su serif genérica.
+  const digitCells = code
+    .split('')
+    .map(digit => `<td style="width:40px;height:52px;border:1.5px solid #f1c4d4;border-radius:10px;background:#fff6fa;font-size:26px;font-weight:800;color:#ad3f67;text-align:center;vertical-align:middle">${digit}</td>`)
+    .join('<td style="width:8px"></td>');
+
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
-  <div style="max-width:480px;margin:0 auto;padding:28px 16px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;padding:32px;text-align:center">
-      <div style="font-size:15px;color:#7b6f72;margin-bottom:18px">Tu código de acceso a Tintin Accesorios</div>
-      <div style="font-size:38px;font-weight:800;letter-spacing:.15em;color:#ad3f67;margin:10px 0 18px">${code}</div>
-      <div style="font-size:13px;color:#7b6f72;line-height:1.6">
-        Vence en 5 minutos. Si no pediste este código, ignorá este correo — nadie puede entrar a tu cuenta sin él.
+<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:460px;margin:0 auto;padding:32px 16px">
+    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:20px 24px;text-align:center">
+        <div style="font-size:20px;font-weight:800;letter-spacing:.16em;color:#ffffff">TINTIN</div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:4px">Accesorios &amp; Relojes</div>
+      </div>
+      <div style="padding:32px 28px;text-align:center">
+        <p style="margin:0 0 22px;font-size:14px;color:#5e5357;line-height:1.6">Usá este código para entrar a tu cuenta:</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 22px">
+          <tr>${digitCells}</tr>
+        </table>
+        <p style="margin:0;font-size:12.5px;color:#8a7d81;line-height:1.65">
+          Vence en 5 minutos. Si no pediste este código, podés ignorar este correo — nadie puede entrar a tu cuenta sin él.
+        </p>
       </div>
     </div>
+    <p style="margin:18px 0 0;text-align:center;font-size:11px;color:#b6a7ac">Tintin Accesorios &amp; Relojes</p>
   </div>
 </body>
 </html>`;
@@ -110,6 +133,18 @@ export async function onRequest(context) {
     const email = clean(body.email, 254).toLowerCase();
     if (!emailIsValid(email)) {
       return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
+    }
+
+    // El correo normal no es un segundo camino hacia una cuenta que ya usa
+    // Google — evita confusión ("¿por qué mi cuenta cambió?") y el riesgo
+    // de que alguien intente entrar así a una cuenta ajena si adivina el
+    // código. Excepción: el Super Admin siempre puede usar cualquiera de
+    // los dos métodos, a pedido explícito.
+    if (email !== SUPERADMIN_EMAIL.toLowerCase()) {
+      const { exists, providers } = await lookupUserProvidersByEmail(env, email);
+      if (exists && providers.includes('google.com')) {
+        return jsonResponse({ success: false, error: 'google_account_exists' }, 409, origin, requestUrl);
+      }
     }
 
     const path = docPath(email);

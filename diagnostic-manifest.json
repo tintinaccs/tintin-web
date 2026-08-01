@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T14:17:55.659Z",
-  "sourceFingerprint": "05952d375a442549f3839b0158a26b5163b7edeabb081002e36f4afbe02579c0",
+  "generatedAt": "2026-08-01T14:27:24.054Z",
+  "sourceFingerprint": "ba894deba13dc9a675955b36014d324678280bb69a73b51d4797b53aa7677998",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 422,
     "textFiles": 389,
-    "totalBytes": 5385005,
+    "totalBytes": 5391501,
     "pages": 18,
     "modules": 240
   },
@@ -10574,8 +10574,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 30036,
-      "sha256": "0f9708ebc0d56b9b0bfb10cb9cb525fffe06d4b2a8fa19280ddc861fed031b12",
+      "bytes": 31872,
+      "sha256": "dc59a419a126c164ce24b86620e26800c7eec8b8e981ee91149b652286e3ce6f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10596,13 +10596,13 @@
           "error": ""
         },
         {
-          "line": 115,
+          "line": 120,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 23,
+      "ids": 25,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -10622,17 +10622,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 656
+          "line": 689
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 657
+          "line": 690
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 658
+          "line": 691
         }
       ],
       "styles": [
@@ -10697,7 +10697,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 106
+          "line": 111
         }
       ],
       "references": [
@@ -10722,19 +10722,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 656,
+          "line": 689,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 657,
+          "line": 690,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 658,
+          "line": 691,
           "exists": true
         },
         {
@@ -10800,7 +10800,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 106,
+          "line": 111,
           "exists": true
         }
       ],
@@ -10836,7 +10836,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 81
+          "line": 86
         },
         {
           "id": "btn-verify-otp",
@@ -10850,7 +10850,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 87
+          "line": 92
         },
         {
           "id": "btn-resend-otp",
@@ -10864,7 +10864,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 88
+          "line": 93
         },
         {
           "id": "btn-change-email",
@@ -10878,7 +10878,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 89
+          "line": 94
         },
         {
           "id": "btn-save-profile",
@@ -10892,7 +10892,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 100
+          "line": 105
         }
       ],
       "controls": [
@@ -10902,7 +10902,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 80,
+          "line": 85,
           "labeled": true
         },
         {
@@ -10911,7 +10911,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 86,
+          "line": 91,
           "labeled": true
         },
         {
@@ -10920,7 +10920,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 94,
+          "line": 99,
           "labeled": true
         },
         {
@@ -10929,7 +10929,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 97,
+          "line": 102,
           "labeled": true
         },
         {
@@ -10938,7 +10938,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 98,
+          "line": 103,
           "labeled": true
         }
       ]
@@ -13830,8 +13830,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-lite.js",
-      "bytes": 10553,
-      "sha256": "d79f9f659fa5ee1d4a65bd1688bfdb9352045a4cbdbc0a28e3a060aed5af5db3",
+      "bytes": 11396,
+      "sha256": "d550bfe76cbc87acd8d4873088de12953677657d9dc23c66f23eef7654def201",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13852,19 +13852,19 @@
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 146
+          "line": 145
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:signUp",
-          "line": 157
+          "line": 172
         },
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 175
+          "line": 190
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
-          "line": 178
+          "line": 193
         }
       ]
     },
@@ -13978,8 +13978,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 5588,
-      "sha256": "6641caf8621853a14ba95a5ef3413b628a723d996095c67569fa5b1b9e6ef7aa",
+      "bytes": 7760,
+      "sha256": "1f56176cd495da166fcb60b30c460215e903503b8210857d7107c6b675c6dc46",
       "syntax": {
         "ok": true,
         "error": ""
@@ -13989,19 +13989,19 @@
           "raw": "../../cloudflare/cloudinary-security.js",
           "target": "cloudflare/cloudinary-security.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../cloudflare/firebase-admin-lite.js",
           "target": "cloudflare/firebase-admin-lite.js",
           "dynamic": false,
-          "line": 13
+          "line": 15
         }
       ],
       "endpoints": [
         {
           "url": "https://api.resend.com/emails",
-          "line": 66
+          "line": 89
         }
       ]
     },
@@ -15796,8 +15796,8 @@
     },
     {
       "path": "js/email-auth.js",
-      "bytes": 5988,
-      "sha256": "159dff8b7e56fdbf973793014a4ce5879d1b039b5087638c26a77547ea8b15a5",
+      "bytes": 6088,
+      "sha256": "667ae6a0fc0074b811fc7098e5cfbed129f251392cece53047ed3c07fa61d7be",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18869,7 +18869,7 @@
       },
       "imports": [
         {
-          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\n  ",
+          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\r\n  ",
           "target": "scripts/\\.\\/phase7-catalog-policy\\.js/.test(loader),",
           "dynamic": false,
           "line": 151
@@ -19999,8 +19999,8 @@
     {
       "path": "assets-tintin/images/general/tintin-loader-brand.svg",
       "extension": ".svg",
-      "bytes": 355,
-      "sha256": "dad0568c87d897a526bce7ec633094220411ac1d36e66cc49c5671c87eafb736"
+      "bytes": 359,
+      "sha256": "1c833c14929a9dabaa0eb2bafca8c1c5ab5234d07f7ae740f26e1a5b6bc87119"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
@@ -20089,8 +20089,8 @@
     {
       "path": "cloudflare/firebase-admin-lite.js",
       "extension": ".js",
-      "bytes": 10553,
-      "sha256": "d79f9f659fa5ee1d4a65bd1688bfdb9352045a4cbdbc0a28e3a060aed5af5db3"
+      "bytes": 11396,
+      "sha256": "d550bfe76cbc87acd8d4873088de12953677657d9dc23c66f23eef7654def201"
     },
     {
       "path": "collections.html",
@@ -20191,8 +20191,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 14550,
-      "sha256": "bbcb3eec3f0f7501b68b6482a83eb688c404e0615ef254f906f2c4ab18350844"
+      "bytes": 16091,
+      "sha256": "af420e2c0358c44802a3207bb78e97024e2f0803f499b5eec01f58164bd1cd24"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -20515,8 +20515,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 5588,
-      "sha256": "6641caf8621853a14ba95a5ef3413b628a723d996095c67569fa5b1b9e6ef7aa"
+      "bytes": 7760,
+      "sha256": "1f56176cd495da166fcb60b30c460215e903503b8210857d7107c6b675c6dc46"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -20887,8 +20887,8 @@
     {
       "path": "js/email-auth.js",
       "extension": ".js",
-      "bytes": 5988,
-      "sha256": "159dff8b7e56fdbf973793014a4ce5879d1b039b5087638c26a77547ea8b15a5"
+      "bytes": 6088,
+      "sha256": "667ae6a0fc0074b811fc7098e5cfbed129f251392cece53047ed3c07fa61d7be"
     },
     {
       "path": "js/email-config.js",
@@ -21283,8 +21283,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 30036,
-      "sha256": "0f9708ebc0d56b9b0bfb10cb9cb525fffe06d4b2a8fa19280ddc861fed031b12"
+      "bytes": 31872,
+      "sha256": "dc59a419a126c164ce24b86620e26800c7eec8b8e981ee91149b652286e3ce6f"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -24243,28 +24243,28 @@
     },
     {
       "file": "login.html",
-      "line": 106,
+      "line": 111,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 233,
+      "line": 238,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 236,
+      "line": 241,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 236,
+      "line": 241,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -25246,7 +25246,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 236
+          "line": 241
         }
       ]
     },
@@ -25341,7 +25341,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\n    admin.includes(",
+        "name": ") &&\r\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25351,7 +25351,7 @@
         ]
       },
       {
-        "name": ") &&\n    orderStats.includes(",
+        "name": ") &&\r\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -26505,17 +26505,17 @@
           },
           {
             "file": "login.html",
-            "line": 244,
+            "line": 249,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 294,
+            "line": 299,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 446,
+            "line": 451,
             "operation": "doc"
           },
           {
@@ -26566,8 +26566,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\n    admin.includes(",
-      ") &&\n    orderStats.includes("
+      ") &&\r\n    admin.includes(",
+      ") &&\r\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",
