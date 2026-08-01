@@ -12,7 +12,7 @@ const loader = read('js/page-maintenance-loader.js');
 
 const checks = [
   ['Google', html.includes('id="btn-google"')],
-  ['correo', html.includes('id="login-email-input"') && html.includes('id="btn-send-email-link"')],
+  ['correo', html.includes('id="login-email-input"') && html.includes('id="btn-send-otp"')],
   ['errores y éxito', html.includes('id="login-error"') && html.includes('id="login-success"')],
   ['runtime cargado por página', /login[\s\S]*load\('login-maintenance\.js'\)/.test(loader)],
   ['redirección interna', runtime.includes('target.origin !== location.origin')],

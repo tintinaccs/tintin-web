@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T12:34:06.202Z",
-  "sourceFingerprint": "c977993f4449db92ac0fc65b65229a7cffcf497f1c2817de35986a5f4f894703",
+  "generatedAt": "2026-08-01T13:41:50.554Z",
+  "sourceFingerprint": "ddee8f8a36c144a49f606cc4565c65178581f27d69a5063e88502bdf35253c4f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 418,
-    "textFiles": 385,
-    "totalBytes": 5346587,
+    "files": 421,
+    "textFiles": 388,
+    "totalBytes": 5367516,
     "pages": 18,
-    "modules": 236
+    "modules": 239
   },
   "viewports": [
     {
@@ -7173,8 +7173,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 81724,
-      "sha256": "5f1deda4760e1daf78b9e300293ed430bc52bf92730902ea7a4fcacfaef1ddb8",
+      "bytes": 79488,
+      "sha256": "788b7db2364d71b24a64964ffeb2b7312e40f80abb8dda15e78223eb684d5097",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7221,22 +7221,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1710
+          "line": 1672
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1711
+          "line": 1673
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 1712
+          "line": 1674
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1713
+          "line": 1675
         }
       ],
       "styles": [
@@ -7346,25 +7346,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1710,
+          "line": 1672,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1711,
+          "line": 1673,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 1712,
+          "line": 1674,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1713,
+          "line": 1675,
           "exists": true
         },
         {
@@ -10540,8 +10540,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 26670,
-      "sha256": "57706b4bf32c80489c376c20bbe5b6892b464150dfd90d80e292d40b7886638c",
+      "bytes": 30036,
+      "sha256": "0f9708ebc0d56b9b0bfb10cb9cb525fffe06d4b2a8fa19280ddc861fed031b12",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10562,13 +10562,13 @@
           "error": ""
         },
         {
-          "line": 95,
+          "line": 115,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 11,
+      "ids": 23,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -10588,17 +10588,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 585
+          "line": 656
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 586
+          "line": 657
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 587
+          "line": 658
         }
       ],
       "styles": [
@@ -10663,7 +10663,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 86
+          "line": 106
         }
       ],
       "references": [
@@ -10688,19 +10688,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 585,
+          "line": 656,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 586,
+          "line": 657,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 587,
+          "line": 658,
           "exists": true
         },
         {
@@ -10766,7 +10766,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 86,
+          "line": 106,
           "exists": true
         }
       ],
@@ -10788,35 +10788,77 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 67
+          "line": 68
         },
         {
-          "id": "btn-send-email-link",
+          "id": "btn-send-otp",
           "classes": [
             "login-email-btn"
           ],
           "type": "button",
-          "text": "Recibir enlace de acceso",
+          "text": "Enviar código",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 79
+          "line": 81
         },
         {
-          "id": "btn-resend-email-link",
+          "id": "btn-verify-otp",
+          "classes": [
+            "login-email-btn"
+          ],
+          "type": "button",
+          "text": "Confirmar código",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 87
+        },
+        {
+          "id": "btn-resend-otp",
           "classes": [
             "login-email-resend"
           ],
           "type": "button",
-          "text": "Reenviar enlace",
+          "text": "Reenviar código",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 80
+          "line": 88
+        },
+        {
+          "id": "btn-change-email",
+          "classes": [
+            "login-email-resend"
+          ],
+          "type": "button",
+          "text": "Cambiar correo",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 89
+        },
+        {
+          "id": "btn-save-profile",
+          "classes": [
+            "login-email-btn"
+          ],
+          "type": "button",
+          "text": "Continuar",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 100
         }
       ],
       "controls": [
@@ -10826,7 +10868,43 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 78,
+          "line": 80,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "login-otp-input",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 86,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "login-profile-name",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 94,
+          "labeled": true
+        },
+        {
+          "tag": "select",
+          "id": "login-profile-country",
+          "name": "",
+          "type": "",
+          "ariaLabel": "",
+          "line": 97,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "login-profile-phone",
+          "name": "",
+          "type": "tel",
+          "ariaLabel": "",
+          "line": 98,
           "labeled": true
         }
       ]
@@ -13717,6 +13795,46 @@
       ]
     },
     {
+      "path": "cloudflare/firebase-admin-lite.js",
+      "bytes": 10546,
+      "sha256": "f7373296df97145dcaa337668241759c2bcbd73b890bb1938af8918951bab2cb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://oauth2.googleapis.com/token",
+          "line": 94
+        },
+        {
+          "url": "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit",
+          "line": 132
+        },
+        {
+          "url": "https://www.googleapis.com/auth/identitytoolkit",
+          "line": 144
+        },
+        {
+          "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
+          "line": 146
+        },
+        {
+          "url": "https://identitytoolkit.googleapis.com/v1/accounts",
+          "line": 157
+        },
+        {
+          "url": "https://www.googleapis.com/auth/datastore",
+          "line": 175
+        },
+        {
+          "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
+          "line": 178
+        }
+      ]
+    },
+    {
       "path": "firebase-cloud-functions-inactive/create-order.js",
       "bytes": 17307,
       "sha256": "5faf21850ad5cd6063e213f6e53f155a70c533283aae60710985679390fcbc66",
@@ -13823,6 +13941,59 @@
           "line": 52
         }
       ]
+    },
+    {
+      "path": "functions/api/email-otp-send.js",
+      "bytes": 5588,
+      "sha256": "6641caf8621853a14ba95a5ef3413b628a723d996095c67569fa5b1b9e6ef7aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/cloudinary-security.js",
+          "target": "cloudflare/cloudinary-security.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-lite.js",
+          "target": "cloudflare/firebase-admin-lite.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.resend.com/emails",
+          "line": 66
+        }
+      ]
+    },
+    {
+      "path": "functions/api/email-otp-verify.js",
+      "bytes": 3587,
+      "sha256": "6cc466f7c9a03292aca97fbee45cb2b12777ce1e9c125c640352c6b8133f668c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/cloudinary-security.js",
+          "target": "cloudflare/cloudinary-security.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-lite.js",
+          "target": "cloudflare/firebase-admin-lite.js",
+          "dynamic": false,
+          "line": 14
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "functions/api/geo-search.js",
@@ -15591,8 +15762,8 @@
     },
     {
       "path": "js/email-auth.js",
-      "bytes": 6937,
-      "sha256": "9729d1cf77f0d8bcf28f5e57ef835f7fcaa4b244560a73277c71d81e29a21efd",
+      "bytes": 5988,
+      "sha256": "159dff8b7e56fdbf973793014a4ce5879d1b039b5087638c26a77547ea8b15a5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15602,35 +15773,35 @@
           "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 17
+          "line": 18
         },
         {
           "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/roles.js",
           "dynamic": false,
-          "line": 18
+          "line": 19
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 14
+          "line": 15
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 17
+          "line": 18
         }
       ]
     },
@@ -18448,8 +18619,8 @@
     },
     {
       "path": "scripts/audit-login-page.js",
-      "bytes": 1709,
-      "sha256": "f70c7124d21ce33ed28cc001371884fe19d98f3c703131b15f33c41c356dce17",
+      "bytes": 1702,
+      "sha256": "44a71b891c693f65e613241807a51bad34c4594f539cb6affb39c9b58c433113",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19608,8 +19779,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 264,
-      "sha256": "7e62b94b43649d930905d70458301385c45e831cbf6d098465891d66d0a62943"
+      "bytes": 320,
+      "sha256": "9953cffd436d53dbff7ce634d333bb6a6bc895acd620a175b32e30a8796c4076"
     },
     {
       "path": "about.html",
@@ -19830,14 +20001,20 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 81724,
-      "sha256": "5f1deda4760e1daf78b9e300293ed430bc52bf92730902ea7a4fcacfaef1ddb8"
+      "bytes": 79488,
+      "sha256": "788b7db2364d71b24a64964ffeb2b7312e40f80abb8dda15e78223eb684d5097"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
       "extension": ".js",
       "bytes": 5341,
       "sha256": "256007c7ccef8cdcd5e0c0f55eedf76113279c80d9ea542ceeeb47b0fd83bddd"
+    },
+    {
+      "path": "cloudflare/firebase-admin-lite.js",
+      "extension": ".js",
+      "bytes": 10546,
+      "sha256": "f7373296df97145dcaa337668241759c2bcbd73b890bb1938af8918951bab2cb"
     },
     {
       "path": "collections.html",
@@ -19938,8 +20115,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 14282,
-      "sha256": "267afdd79949f29c5037edf982f2ad506107b5d54b9febfe669fbca35736aae0"
+      "bytes": 14550,
+      "sha256": "bbcb3eec3f0f7501b68b6482a83eb688c404e0615ef254f906f2c4ab18350844"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -20226,8 +20403,8 @@
     {
       "path": "functions/FIREBASE_AUTH_EMAILS.md",
       "extension": ".md",
-      "bytes": 4593,
-      "sha256": "30a21163271c08043f846300ac88ccd802c85513e42ff2d041991b2de2499d52"
+      "bytes": 5303,
+      "sha256": "b9877cdef34d77d1ad5039e9958eba42598c25ea69a3b57829e33ac1379b1db9"
     },
     {
       "path": "functions/ORDER_VALIDATION_SETUP.md",
@@ -20258,6 +20435,18 @@
       "extension": ".js",
       "bytes": 1969,
       "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1"
+    },
+    {
+      "path": "functions/api/email-otp-send.js",
+      "extension": ".js",
+      "bytes": 5588,
+      "sha256": "6641caf8621853a14ba95a5ef3413b628a723d996095c67569fa5b1b9e6ef7aa"
+    },
+    {
+      "path": "functions/api/email-otp-verify.js",
+      "extension": ".js",
+      "bytes": 3587,
+      "sha256": "6cc466f7c9a03292aca97fbee45cb2b12777ce1e9c125c640352c6b8133f668c"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -20622,8 +20811,8 @@
     {
       "path": "js/email-auth.js",
       "extension": ".js",
-      "bytes": 6937,
-      "sha256": "9729d1cf77f0d8bcf28f5e57ef835f7fcaa4b244560a73277c71d81e29a21efd"
+      "bytes": 5988,
+      "sha256": "159dff8b7e56fdbf973793014a4ce5879d1b039b5087638c26a77547ea8b15a5"
     },
     {
       "path": "js/email-config.js",
@@ -21018,8 +21207,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 26670,
-      "sha256": "57706b4bf32c80489c376c20bbe5b6892b464150dfd90d80e292d40b7886638c"
+      "bytes": 30036,
+      "sha256": "0f9708ebc0d56b9b0bfb10cb9cb525fffe06d4b2a8fa19280ddc861fed031b12"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -21570,8 +21759,8 @@
     {
       "path": "scripts/audit-login-page.js",
       "extension": ".js",
-      "bytes": 1709,
-      "sha256": "f70c7124d21ce33ed28cc001371884fe19d98f3c703131b15f33c41c356dce17"
+      "bytes": 1702,
+      "sha256": "44a71b891c693f65e613241807a51bad34c4594f539cb6affb39c9b58c433113"
     },
     {
       "path": "scripts/audit-page-loading.js",
@@ -22341,28 +22530,21 @@
     },
     {
       "file": "checkout.html",
-      "line": 714,
+      "line": 713,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 855,
+      "line": 854,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 865,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "checkout.html",
-      "line": 898,
+      "line": 864,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -23544,13 +23726,6 @@
       "exists": true
     },
     {
-      "file": "js/email-auth.js",
-      "line": 29,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
       "file": "js/email-notify.js",
       "line": 231,
       "raw": "/checkout.html",
@@ -23986,28 +24161,28 @@
     },
     {
       "file": "login.html",
-      "line": 86,
+      "line": 106,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 217,
+      "line": 233,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 220,
+      "line": 236,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 220,
+      "line": 236,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -24989,7 +25164,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 220
+          "line": 236
         }
       ]
     },
@@ -25029,15 +25204,7 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 865
-        },
-        {
-          "file": "checkout.html",
-          "line": 898
-        },
-        {
-          "file": "js/email-auth.js",
-          "line": 29
+          "line": 864
         }
       ]
     },
@@ -25078,7 +25245,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1592,
+      "line": 1554,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -25636,7 +25803,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 699,
+            "line": 698,
             "operation": "collection"
           },
           {
@@ -25771,12 +25938,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 417,
+            "line": 416,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 450,
+            "line": 449,
             "operation": "doc"
           },
           {
@@ -26126,12 +26293,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1456,
+            "line": 1418,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1693,
+            "line": 1655,
             "operation": "doc"
           },
           {
@@ -26206,12 +26373,12 @@
           },
           {
             "file": "js/email-auth.js",
-            "line": 79,
+            "line": 67,
             "operation": "doc"
           },
           {
             "file": "js/email-auth.js",
-            "line": 122,
+            "line": 110,
             "operation": "doc"
           },
           {
@@ -26256,12 +26423,17 @@
           },
           {
             "file": "login.html",
-            "line": 228,
+            "line": 244,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 351,
+            "line": 294,
+            "operation": "doc"
+          },
+          {
+            "file": "login.html",
+            "line": 446,
             "operation": "doc"
           },
           {

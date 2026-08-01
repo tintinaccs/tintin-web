@@ -386,6 +386,23 @@ body.tt-public-shell-mounted .login-page {
 }
 .login-email-resend:disabled { color: var(--login-muted) !important; cursor: default; }
 
+.login-otp-input {
+  text-align: center;
+  letter-spacing: .5em;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.login-phone-row {
+  display: flex;
+  gap: 10px;
+}
+.login-phone-country {
+  flex: 0 0 108px;
+  padding: 0 8px;
+}
+.login-phone-number { flex: 1; min-width: 0; }
+
 .login-hint {
   max-width: 360px;
   margin: 17px auto 0;

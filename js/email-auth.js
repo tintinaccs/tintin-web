@@ -1,69 +1,57 @@
-// =============================================
-// TINTIN ACCESORIOS — Login por correo (Firebase Email Link / enlace mágico)
+// =============================================================
+// TINTIN ACCESORIOS — Login por correo (código de 6 dígitos)
 // Comparte lógica entre login.html y checkout.html — mismo criterio de
 // creación/actualización de usuario y de cuenta bloqueada que ya usa el
 // login con Google (ver login.html → guardarUsuario/checkBlocked), para que
 // los dos métodos terminen exactamente en el mismo lugar con los mismos
-// permisos. No depende de ningún backend propio: Firebase Auth genera,
-// manda y valida el enlace — acá solo se completa el inicio de sesión y se
-// sincroniza el documento de Firestore.
-// =============================================
+// permisos. El código se genera, guarda y valida en un backend propio
+// (functions/api/email-otp-send.js / email-otp-verify.js, Cloudflare Pages
+// Functions) — Firebase Auth solo entra al final, para firmar la sesión real
+// con el Custom Token que devuelve la verificación.
+// =============================================================
 import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
-  sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink
+  signInWithCustomToken
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
 
-const STORAGE_EMAIL_KEY = 'tt_email_link_pending';
-
 export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
 }
 
-/**
- * Manda el enlace de acceso al correo escrito. `continueUrl` tiene que ser
- * una URL absoluta de este mismo sitio (Firebase vuelve ahí después de
- * validar el enlace) — normalmente `login.html?from=...`, para reusar
- * exactamente el mismo camino de regreso que ya usa Google.
- */
-export async function sendLoginEmailLink(email, continueUrl) {
-  await sendSignInLinkToEmail(auth, email, { url: continueUrl, handleCodeInApp: true });
-  // Se guarda el email tipeado para completar el inicio de sesión sin
-  // volver a pedirlo cuando abra el enlace en ESTE MISMO navegador —
-  // Firebase lo exige como paso de seguridad extra (confirma que quien abre
-  // el enlace es quien lo pidió). Si lo abre en otro dispositivo/navegador
-  // no vamos a tener este dato, así que se le vuelve a preguntar el email
-  // en completeEmailLinkSignIn.
-  try { window.localStorage.setItem(STORAGE_EMAIL_KEY, email); } catch {}
-}
-
-/** ¿La URL actual es un enlace de acceso válido de Firebase? */
-export function isEmailLinkUrl() {
-  return isSignInWithEmailLink(auth, window.location.href);
-}
-
-/**
- * Completa el inicio de sesión a partir del enlace ya abierto. Si no se le
- * pasa un email explícito, usa el que quedó guardado en este navegador al
- * pedir el enlace. Firebase mismo rechaza el enlace si venció o ya se usó
- * — de eso no hay que ocuparse acá, solo de traducir el error.
- * @param {string} [emailOverride] - úsalo si el email guardado no está disponible (otro dispositivo)
- */
-export async function completeEmailLinkSignIn(emailOverride) {
-  let storedEmail = emailOverride;
-  if (!storedEmail) {
-    try { storedEmail = window.localStorage.getItem(STORAGE_EMAIL_KEY); } catch {}
-  }
-  if (!storedEmail) {
-    const err = new Error('Falta confirmar el email para completar el ingreso.');
-    err.code = 'tintin/missing-email-for-link';
+async function postJson(path, body) {
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !data.success) {
+    const err = new Error(data?.error || 'request_failed');
+    err.code = data?.error || 'request_failed';
+    err.retryAfterSeconds = data?.retryAfterSeconds;
+    err.attemptsRemaining = data?.attemptsRemaining;
     throw err;
   }
-  const cred = await signInWithEmailLink(auth, storedEmail, window.location.href);
-  try { window.localStorage.removeItem(STORAGE_EMAIL_KEY); } catch {}
+  return data;
+}
+
+/** Pide que se mande un código de 6 dígitos al correo (vence en 5 minutos). */
+export async function requestOtpCode(email) {
+  await postJson('/api/email-otp-send', { email });
+}
+
+/**
+ * Verifica el código contra el backend y, si es correcto, firma la sesión
+ * real de Firebase Auth con el Custom Token que devuelve — recién ahí existe
+ * un usuario autenticado de verdad, nunca antes.
+ */
+export async function verifyOtpCode(email, code) {
+  const data = await postJson('/api/email-otp-verify', { email, code });
+  const cred = await signInWithCustomToken(auth, data.customToken);
   return cred.user;
 }
 
@@ -82,12 +70,12 @@ export async function ensureUserDocForEmailLogin(user) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
     await setDoc(ref, {
-      name: user.displayName || '',
+      name: '',
       email: user.email,
       phone: '',
-      photoURL: user.photoURL || '',
+      photoURL: '',
       role,
-      provider: 'emailLink',
+      provider: 'emailOtp',
       onboardingCompleted: !welcomePending,
       welcomeTutorialSeen: !welcomePending,
       welcomeTutorialPending: welcomePending,
@@ -126,18 +114,19 @@ export async function checkBlockedEmailLogin(uid, email) {
   }
 }
 
-/** Traduce los códigos de error de Firebase Auth a mensajes en español para la clienta. */
-export function emailLinkErrorMessage(code) {
+/** Traduce los códigos de error del login por correo a mensajes en español. */
+export function otpErrorMessage(code) {
   const msgs = {
-    'auth/invalid-email': 'Ese correo no tiene un formato válido.',
-    'auth/missing-email': 'Escribí tu correo antes de continuar.',
-    'auth/user-disabled': 'Esta cuenta fue deshabilitada. Escribinos por WhatsApp.',
-    'auth/network-request-failed': 'Sin conexión — revisá tu internet e intentá de nuevo.',
-    'auth/too-many-requests': 'Demasiados intentos. Esperá un momento e intentá de nuevo.',
-    'auth/invalid-action-code': 'Este enlace ya venció o no es válido. Pedí uno nuevo.',
-    'auth/expired-action-code': 'Este enlace ya venció. Pedí uno nuevo.',
-    'auth/operation-not-allowed': 'El ingreso por correo no está disponible en este momento. Probá con "Continuar con Google" o escribinos por WhatsApp.',
-    'tintin/missing-email-for-link': 'Abrí el enlace desde el mismo navegador donde lo pediste, o escribí tu correo para confirmar.',
+    'invalid_email': 'Escribí un correo con formato válido (ej: tu@email.com).',
+    'invalid_code_format': 'El código tiene que tener 6 dígitos.',
+    'cooldown_active': 'Esperá unos segundos antes de pedir otro código.',
+    'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o usá Google.',
+    'code_not_found': 'Ese código no es válido. Pedí uno nuevo.',
+    'code_expired': 'Ese código venció. Pedí uno nuevo.',
+    'code_mismatch': 'Código incorrecto. Revisá los 6 dígitos e intentá de nuevo.',
+    'too_many_attempts': 'Demasiados intentos con este código. Pedí uno nuevo.',
+    'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',
+    'resend_not_configured': 'El envío de correos no está disponible en este momento. Probá con "Continuar con Google".',
   };
   return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
 }

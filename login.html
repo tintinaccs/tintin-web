@@ -64,23 +64,43 @@
         <div class="login-error" id="login-error"></div>
         <div class="login-success" id="login-success"></div>
 
-        <button type="button" class="login-google" id="btn-google">
-          <span class="login-google-icon">
-            <span class="login-google-g" aria-hidden="true">G</span>
-          </span>
-          <span id="btn-google-label">Continuar con Google</span>
-        </button>
+        <div id="login-google-section">
+          <button type="button" class="login-google" id="btn-google">
+            <span class="login-google-icon">
+              <span class="login-google-g" aria-hidden="true">G</span>
+            </span>
+            <span id="btn-google-label">Continuar con Google</span>
+          </button>
+        </div>
 
-        <div class="login-divider"><span>o usá tu correo</span></div>
+        <div class="login-divider" id="login-divider-section"><span>o usá tu correo</span></div>
 
         <div class="login-email-block" id="login-email-block">
           <label class="login-email-label" for="login-email-input">Correo electrónico</label>
           <input type="email" class="login-email-input" id="login-email-input" placeholder="tu@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
-          <button type="button" class="login-email-btn" id="btn-send-email-link">Recibir enlace de acceso</button>
-          <button type="button" class="login-email-resend" id="btn-resend-email-link" style="display:none">Reenviar enlace</button>
+          <button type="button" class="login-email-btn" id="btn-send-otp">Enviar código</button>
         </div>
 
-        <p class="login-hint">Sin contraseñas: Google o un enlace privado enviado a tu correo.</p>
+        <div class="login-email-block" id="login-otp-block" style="display:none">
+          <label class="login-email-label" for="login-otp-input">Código de 6 dígitos</label>
+          <input type="text" class="login-email-input login-otp-input" id="login-otp-input" placeholder="000000" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" />
+          <button type="button" class="login-email-btn" id="btn-verify-otp">Confirmar código</button>
+          <button type="button" class="login-email-resend" id="btn-resend-otp">Reenviar código</button>
+          <button type="button" class="login-email-resend" id="btn-change-email">Cambiar correo</button>
+        </div>
+
+        <div class="login-email-block" id="login-profile-block" style="display:none">
+          <label class="login-email-label" for="login-profile-name">Nombre completo</label>
+          <input type="text" class="login-email-input" id="login-profile-name" placeholder="Tu nombre" autocomplete="name" />
+          <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
+          <div class="login-phone-row">
+            <select class="login-email-input login-phone-country" id="login-profile-country"></select>
+            <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" />
+          </div>
+          <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
+        </div>
+
+        <p class="login-hint" id="login-hint">Sin contraseñas: Google o un código de acceso enviado a tu correo.</p>
 
         <div class="login-back" id="login-back-link">
           <a href="index.html" aria-label="Volver a la tienda">
@@ -106,18 +126,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
-  isValidEmailFormat, sendLoginEmailLink, isEmailLinkUrl, completeEmailLinkSignIn,
-  ensureUserDocForEmailLogin, emailLinkErrorMessage
+  isValidEmailFormat, requestOtpCode, verifyOtpCode,
+  ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 
-// Se calcula ANTES de cualquier await — si esta URL es el enlace de acceso
-// que llegó por correo, el onAuthStateChanged de más abajo (que corre en
-// paralelo) no debe apagar el overlay de carga ni mostrar el error de
-// "blocked=1" mientras se está completando el ingreso por enlace.
-const completingEmailLink = isEmailLinkUrl();
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
 function hasGoogleRedirectPending() {
@@ -147,7 +163,7 @@ const googleRedirectResultPromise = googleRedirectWasExpected
       .catch(error => ({ result: null, error }))
   : Promise.resolve({ result: null, error: null });
 let googleRedirectHandlingPromise = null;
-let explicitLoginInProgress = completingEmailLink || googleRedirectWasExpected;
+let explicitLoginInProgress = googleRedirectWasExpected;
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
 // js/page-loader.js — acá solo se reusa su API para mostrarlo/ocultarlo/
@@ -263,6 +279,70 @@ async function guardarUsuario(user) {
   }
 }
 
+function populateCountrySelect(selectEl) {
+  selectEl.innerHTML = COUNTRIES.map(c => `<option value="${c.code}">${c.flag} +${c.dial}</option>`).join('');
+  selectEl.value = DEFAULT_COUNTRY.code;
+}
+
+// Google no entrega teléfono nunca, y el login por correo no entrega ni
+// nombre ni teléfono — sin este paso, esas cuentas quedarían sin forma de
+// identificar a la persona. Se exige acá, una sola vez, para TODAS las
+// cuentas (clientas y roles internos por igual) y también retroactivamente:
+// a alguien que ya tenía cuenta sin teléfono se le va a pedir la próxima vez
+// que entre, no solo a cuentas nuevas.
+async function ensureProfileComplete(user) {
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  if (String(data.name || '').trim() && String(data.phone || '').trim()) return;
+
+  hideLoginOverlay();
+  window.ttPageReady && window.ttPageReady();
+
+  document.getElementById('login-heading').textContent = 'Un dato más';
+  document.getElementById('login-heading-sub').textContent = 'Completá tu nombre y teléfono para terminar de crear tu cuenta.';
+  document.getElementById('login-google-section').style.display = 'none';
+  document.getElementById('login-divider-section').style.display = 'none';
+  document.getElementById('login-email-block').style.display = 'none';
+  document.getElementById('login-otp-block').style.display = 'none';
+  document.getElementById('login-hint').style.display = 'none';
+  const profileBlock = document.getElementById('login-profile-block');
+  profileBlock.style.display = '';
+
+  const nameInput = document.getElementById('login-profile-name');
+  const phoneInput = document.getElementById('login-profile-phone');
+  const countrySelect = document.getElementById('login-profile-country');
+  populateCountrySelect(countrySelect);
+  nameInput.value = data.name || '';
+
+  await new Promise(resolve => {
+    document.getElementById('btn-save-profile').onclick = async () => {
+      hideMessages();
+      const name = nameInput.value.trim();
+      const country = findCountryByCode(countrySelect.value);
+      const phoneRaw = phoneInput.value.trim();
+      if (!name) { showError('Ingresá tu nombre completo.'); return; }
+      if (!phoneRaw || !isValidPhone(phoneRaw, country)) {
+        showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
+        return;
+      }
+      const btn = document.getElementById('btn-save-profile');
+      btn.disabled = true;
+      try {
+        const { value: normalizedPhone } = normalizePhone(phoneRaw, country);
+        await setDoc(ref, { name, phone: normalizedPhone, updatedAt: serverTimestamp() }, { merge: true });
+        profileBlock.style.display = 'none';
+        showOverlay();
+        setOverlayText('Redireccionando a tu cuenta…');
+        resolve();
+      } catch (e) {
+        btn.disabled = false;
+        showError('No pudimos guardar tus datos. Probá de nuevo.');
+      }
+    };
+  });
+}
+
 async function finishGoogleLogin(user) {
   // Perfil y estado de la tienda son controles independientes; se resuelven
   // en paralelo para conservar ambos sin sumar sus tiempos de espera.
@@ -277,6 +357,23 @@ async function finishGoogleLogin(user) {
     showBlockedModal();
     return;
   }
+  await ensureProfileComplete(user);
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+}
+
+async function finishOtpLogin(user) {
+  const [profile, storeAccessConfig] = await Promise.all([
+    ensureUserDocForEmailLogin(user),
+    getStoreAccessConfig()
+  ]);
+  const { role, blocked, welcomePending } = profile;
+  if (blocked) {
+    await signOut(auth);
+    hideLoginOverlay();
+    showBlockedModal();
+    return;
+  }
+  await ensureProfileComplete(user);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
 }
 
@@ -328,17 +425,15 @@ onAuthStateChanged(auth, async user => {
   if (await googleRedirectHandlingPromise) return;
 
   if (!user) {
-    if (!completingEmailLink) {
-      hideLoginOverlay();
-      window.ttPageReady && window.ttPageReady(); // recién acá se sabe que se queda mostrando el formulario
-      // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
-      // detectar una cuenta bloqueada (Fase E).
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('blocked') === '1') {
-        showBlockedModal();
-      } else if (params.get('expired') === '1') {
-        showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar.');
-      }
+    hideLoginOverlay();
+    window.ttPageReady && window.ttPageReady(); // recién acá se sabe que se queda mostrando el formulario
+    // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
+    // detectar una cuenta bloqueada (Fase E).
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('blocked') === '1') {
+      showBlockedModal();
+    } else if (params.get('expired') === '1') {
+      showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar.');
     }
     return;
   }
@@ -379,6 +474,7 @@ onAuthStateChanged(auth, async user => {
     role === 'client' &&
     !profileData.welcomeTutorialSeen &&
     profileData.onboardingCompleted !== true;
+  await ensureProfileComplete(user);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
 });
 
@@ -456,131 +552,106 @@ const loginConGoogle = async () => {
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
 
-// ======== OPCIÓN 2: INGRESAR CON CORREO (Firebase Email Link) ========
-// La clienta escribe su correo, le mandamos un enlace de acceso de un solo
-// uso, y solo entra si lo abre desde su propia bandeja de entrada — Firebase
-// genera y valida el enlace del lado de Google, acá no se guarda ningún
-// código a mano ni se implementa nada de criptografía propia.
-const RESEND_COOLDOWN_SECONDS = 60;
-let resendTimer = null;
+// ======== OPCIÓN 2: INGRESAR CON CORREO (código de 6 dígitos) ========
+// La clienta escribe su correo, le mandamos un código de 6 dígitos que
+// vence en 5 minutos, y solo entra si lo escribe correctamente — el código
+// se genera, guarda y valida en functions/api/email-otp-send.js /
+// email-otp-verify.js (backend propio en Cloudflare), nunca en el navegador.
+const OTP_RESEND_COOLDOWN_SECONDS = 45;
+let otpResendTimer = null;
+let otpEmail = '';
 
-function startResendCooldown() {
-  const resendBtn = document.getElementById('btn-resend-email-link');
-  const sendBtn = document.getElementById('btn-send-email-link');
-  sendBtn.style.display = 'none';
-  resendBtn.style.display = '';
-  let remaining = RESEND_COOLDOWN_SECONDS;
+function startOtpResendCooldown() {
+  const resendBtn = document.getElementById('btn-resend-otp');
+  let remaining = OTP_RESEND_COOLDOWN_SECONDS;
   resendBtn.disabled = true;
-  resendBtn.textContent = `Podés reenviarlo en ${remaining}s`;
-  clearInterval(resendTimer);
-  resendTimer = setInterval(() => {
+  resendBtn.textContent = `Reenviar código (${remaining}s)`;
+  clearInterval(otpResendTimer);
+  otpResendTimer = setInterval(() => {
     remaining--;
     if (remaining <= 0) {
-      clearInterval(resendTimer);
+      clearInterval(otpResendTimer);
       resendBtn.disabled = false;
-      resendBtn.textContent = 'Reenviar enlace';
+      resendBtn.textContent = 'Reenviar código';
     } else {
-      resendBtn.textContent = `Podés reenviarlo en ${remaining}s`;
+      resendBtn.textContent = `Reenviar código (${remaining}s)`;
     }
   }, 1000);
 }
 
-// La URL de vuelta conserva el mismo `from` que ya usa Google. Las cuentas
-// existentes regresan a ese destino; una cuenta nueva pasa primero por la
-// página principal para recibir la bienvenida y luego puede seguir navegando.
-function buildContinueUrl() {
-  const from = new URLSearchParams(window.location.search).get('from');
-  const base = window.location.origin + window.location.pathname;
-  return from ? `${base}?from=${encodeURIComponent(from)}` : base;
+function showOtpStep() {
+  document.getElementById('login-email-block').style.display = 'none';
+  document.getElementById('login-otp-block').style.display = '';
+  const otpInput = document.getElementById('login-otp-input');
+  otpInput.value = '';
+  otpInput.focus();
 }
 
-async function handleSendLink(isResend) {
-  const input = document.getElementById('login-email-input');
-  const email = input.value.trim();
+function showEmailStep() {
+  clearInterval(otpResendTimer);
+  document.getElementById('login-otp-block').style.display = 'none';
+  document.getElementById('login-email-block').style.display = '';
+}
+
+async function sendOtp(email) {
+  hideMessages();
+  const activeBtn = document.getElementById(otpEmail === email && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
+  activeBtn.disabled = true;
+  try {
+    await requestOtpCode(email);
+    otpEmail = email;
+    showSuccess(`Te mandamos un código de 6 dígitos a ${email}. Vence en 5 minutos.`);
+    showOtpStep();
+    startOtpResendCooldown();
+  } catch (e) {
+    showError(otpErrorMessage(e.code));
+  } finally {
+    activeBtn.disabled = false;
+  }
+}
+
+document.getElementById('btn-send-otp').onclick = () => {
+  const email = document.getElementById('login-email-input').value.trim();
   if (!isValidEmailFormat(email)) {
     showError('Escribí un correo con formato válido (ej: tu@email.com).');
     return;
   }
-  const btn = isResend ? document.getElementById('btn-resend-email-link') : document.getElementById('btn-send-email-link');
-  btn.disabled = true;
+  sendOtp(email);
+};
+
+document.getElementById('btn-resend-otp').onclick = () => sendOtp(otpEmail);
+document.getElementById('btn-change-email').onclick = () => { hideMessages(); showEmailStep(); };
+
+document.getElementById('login-otp-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-verify-otp').click();
+});
+document.getElementById('login-email-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-send-otp').click();
+});
+
+document.getElementById('btn-verify-otp').onclick = async () => {
   hideMessages();
-  try {
-    await sendLoginEmailLink(email, buildContinueUrl());
-    input.disabled = true;
-    showSuccess('Te enviamos un enlace de acceso a tu correo. Revisá tu bandeja de entrada o spam y abrilo desde este mismo dispositivo.');
-    startResendCooldown();
-  } catch (e) {
-    btn.disabled = false;
-    showError(emailLinkErrorMessage(e.code));
-  }
-}
-
-document.getElementById('btn-send-email-link').onclick = () => handleSendLink(false);
-document.getElementById('btn-resend-email-link').onclick = () => handleSendLink(true);
-
-async function finishEmailLinkLogin(user) {
-  const [profile, storeAccessConfig] = await Promise.all([
-    ensureUserDocForEmailLogin(user),
-    getStoreAccessConfig()
-  ]);
-  if (profile.blocked) {
-    await signOut(auth);
-    hideLoginOverlay();
-    showBlockedModal();
+  const code = document.getElementById('login-otp-input').value.trim();
+  if (!/^\d{6}$/.test(code)) {
+    showError('El código tiene que tener 6 dígitos.');
     return;
   }
-  await redirectByRole(profile.role, user.email, {
-    welcomePending: !!profile.welcomePending,
-    storeAccessConfig
-  });
-}
-
-// Si esta URL ES el enlace de acceso que Firebase mandó por correo (mismos
-// parámetros que le agrega Firebase a nuestra continueUrl), se completa el
-// ingreso apenas carga la página — antes de que el usuario toque nada.
-async function tryCompleteEmailLink() {
-  if (!completingEmailLink) return;
+  const btn = document.getElementById('btn-verify-otp');
+  btn.disabled = true;
+  explicitLoginInProgress = true;
   showOverlay();
-  setOverlayText('Confirmando tu correo…');
-  let email = null;
-  try { email = window.localStorage.getItem('tt_email_link_pending'); } catch {}
-  if (!email) {
-    // Se abrió en otro dispositivo/navegador — no hay forma de saber con
-    // qué correo se pidió el enlace, así que se lo pedimos de nuevo en vez
-    // de fallar en silencio (mismo criterio que recomienda Firebase).
-    hideLoginOverlay();
-    const input = document.getElementById('login-email-input');
-    const sendBtn = document.getElementById('btn-send-email-link');
-    input.value = '';
-    input.placeholder = 'Confirmá el correo con el que pediste el enlace';
-    sendBtn.textContent = 'Confirmar e ingresar';
-    sendBtn.onclick = async () => {
-      const typed = input.value.trim();
-      if (!isValidEmailFormat(typed)) { showError('Escribí el correo con el que pediste el enlace.'); return; }
-      sendBtn.disabled = true;
-      showOverlay();
-      setOverlayText('Confirmando tu correo…');
-      try {
-        const user = await completeEmailLinkSignIn(typed);
-        await finishEmailLinkLogin(user);
-      } catch (e) {
-        hideLoginOverlay();
-        sendBtn.disabled = false;
-        showError(emailLinkErrorMessage(e.code));
-      }
-    };
-    showError('Confirmá tu correo para completar el ingreso — abriste el enlace en un navegador distinto al que usaste para pedirlo.');
-    return;
-  }
+  setOverlayText('Verificando tu código…');
   try {
-    const user = await completeEmailLinkSignIn(email);
-    await finishEmailLinkLogin(user);
+    const user = await verifyOtpCode(otpEmail, code);
+    setOverlayText('Redireccionando a tu cuenta…');
+    await finishOtpLogin(user);
   } catch (e) {
+    explicitLoginInProgress = false;
+    btn.disabled = false;
     hideLoginOverlay();
-    showError(emailLinkErrorMessage(e.code));
+    showError(otpErrorMessage(e.code));
   }
-}
-tryCompleteEmailLink();
+};
 </script>
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script src="script.js?v=tintin-20260730-performance-phase5-2" defer></script>
