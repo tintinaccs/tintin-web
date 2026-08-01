@@ -3814,7 +3814,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-reviews-grid { grid-template-columns: 1fr; }
 
   .tt-footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .tt-footer { padding: 40px 0 0; }
+  .tt-footer { padding: 40px 0 calc(32px + env(safe-area-inset-bottom)); }
 
   .tt-about-grid { grid-template-columns: 1fr; gap: 32px; }
   .tt-about-img { aspect-ratio: 16/9; }
