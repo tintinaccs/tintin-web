@@ -16,7 +16,7 @@ function isToolingDir(name) {
 const EXCLUDED_FILES = new Set(['firebase-debug.log', 'firestore-debug.log', 'ui-debug.log']);
 const TEXT_EXTENSIONS = new Set([
   '.html', '.js', '.mjs', '.css', '.json', '.xml', '.txt', '.md', '.rules',
-  '.gs', '.yml', '.yaml', '.toml'
+  '.gs', '.yml', '.yaml', '.toml', '.svg'
 ]);
 const PUBLIC_EXTENSIONS = new Set([
   '.html', '.js', '.mjs', '.css', '.json', '.xml', '.txt', '.md', '.rules',
@@ -46,7 +46,7 @@ function walk(directory, prefix = '') {
 }
 
 function read(relative) {
-  return fs.readFileSync(path.join(ROOT, relative), 'utf8');
+  return canonicalBuffer(relative).toString('utf8');
 }
 
 function canonicalBuffer(relative) {
