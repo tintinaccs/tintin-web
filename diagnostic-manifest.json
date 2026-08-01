@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T14:16:27.407Z",
-  "sourceFingerprint": "6a39dd9af8d2ef93c29b51542d7941d409ffe8752b8c9c8e9d210ceb09cc341c",
+  "generatedAt": "2026-08-01T14:17:55.659Z",
+  "sourceFingerprint": "05952d375a442549f3839b0158a26b5163b7edeabb081002e36f4afbe02579c0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 422,
     "textFiles": 389,
-    "totalBytes": 5385009,
+    "totalBytes": 5385005,
     "pages": 18,
     "modules": 240
   },
@@ -18869,7 +18869,7 @@
       },
       "imports": [
         {
-          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\r\n  ",
+          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\n  ",
           "target": "scripts/\\.\\/phase7-catalog-policy\\.js/.test(loader),",
           "dynamic": false,
           "line": 151
@@ -19999,8 +19999,8 @@
     {
       "path": "assets-tintin/images/general/tintin-loader-brand.svg",
       "extension": ".svg",
-      "bytes": 359,
-      "sha256": "1c833c14929a9dabaa0eb2bafca8c1c5ab5234d07f7ae740f26e1a5b6bc87119"
+      "bytes": 355,
+      "sha256": "dad0568c87d897a526bce7ec633094220411ac1d36e66cc49c5671c87eafb736"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
@@ -25341,7 +25341,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\r\n    admin.includes(",
+        "name": ") &&\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25351,7 +25351,7 @@
         ]
       },
       {
-        "name": ") &&\r\n    orderStats.includes(",
+        "name": ") &&\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -26566,8 +26566,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\r\n    admin.includes(",
-      ") &&\r\n    orderStats.includes("
+      ") &&\n    admin.includes(",
+      ") &&\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",
