@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-14';
+const VERSION = 'tintin-20260801-unified-surfaces-15';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',
@@ -25,6 +25,7 @@ for (const page of PUBLIC_PAGES) {
   const shellScripts = html.match(/<script\b[^>]*src=["']js\/public-shell\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const controllerScripts = html.match(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const classicScripts = html.match(/<script\b[^>]*src=["']script\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const loaderScripts = html.match(/<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar public-shell.js exactamente una vez`);
   check(shellScripts[0]?.includes(`?v=${VERSION}`), `${page}: public-shell.js no usa la version actual`);
@@ -33,12 +34,18 @@ for (const page of PUBLIC_PAGES) {
   check(controllerScripts[0]?.includes(`?v=${VERSION}`), `${page}: ui-navigation-controller.js no usa la version actual`);
   check(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^>]*\bdefer\b/i.test(html), `${page}: ui-navigation-controller.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
+  check(loaderScripts.length === 1, `${page}: debe cargar page-loader.js exactamente una vez`);
+  check(loaderScripts[0]?.includes(`?v=${VERSION}`), `${page}: page-loader.js no usa la version actual`);
   check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
   check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de header duplicado`);
   for (const id of SHELL_IDS) {
     check(!new RegExp(`<[^>]+id=["']${id}["']`, 'i').test(html), `${page}: conserva HTML local duplicado para #${id}`);
   }
 }
+
+check(read('js/page-audit-fix.js').includes(`var VERSION='${VERSION}'`), 'page-audit-fix.js puede degradar los CSS a una version obsoleta');
+check(read('js/page-loader.js').includes(`const TT_CACHE_VERSION = '${VERSION}'`), 'page-loader.js importa runtimes con una version obsoleta');
+check(read('js/ui-quality.js').includes(`var TT_CACHE_VERSION='${VERSION}'`), 'ui-quality.js importa page-audit-fix.js con una version obsoleta');
 
 const shell = read('js/public-shell.js');
 for (const id of SHELL_IDS) {

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-14';
+const VERSION = 'tintin-20260801-unified-surfaces-15';
 const PUBLIC_PAGES = [
   '404.html',
   'about.html',
@@ -106,6 +106,13 @@ function centralizeRuntime(html) {
   return out;
 }
 
+function versionRuntimeLoader(html) {
+  return html.replace(
+    /(<script\b[^>]*src=["']js\/page-loader\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
+    `$1?v=${VERSION}$2`
+  );
+}
+
 function normalizeWhitespace(html) {
   return html
     .replace(/\n{4,}/g, '\n\n\n')
@@ -123,6 +130,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensureStyles(html);
   html = ensureShellScript(html);
   html = centralizeRuntime(html);
+  html = versionRuntimeLoader(html);
   html = normalizeWhitespace(html);
 
   if (html !== before) {
