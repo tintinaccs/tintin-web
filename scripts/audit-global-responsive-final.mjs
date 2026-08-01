@@ -290,7 +290,7 @@ async function inspectSharedSurfaces(page,width) {
   } else {
     issues.push(...await checkSurface(page,'#btn-tienda','#tt-tienda-dropdown-panel','Tienda desktop'));
     issues.push(...await checkSurface(page,'#btn-search','#search-panel','Buscar desktop'));
-    issues.push(...await checkSurface(page,'#btn-cuenta','#account-panel','Cuenta desktop'));
+    issues.push(...await checkSurface(page,'#btn-cuenta','#account-drawer','Cuenta desktop'));
     issues.push(...await checkSurface(page,'#btn-cart','#cart-drawer','Carrito desktop'));
   }
   return issues;

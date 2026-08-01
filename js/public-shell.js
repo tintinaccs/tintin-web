@@ -12,7 +12,7 @@
   if (window.TintinPublicShellBooted) return;
   window.TintinPublicShellBooted = true;
 
-  const VERSION = 'tintin-20260801-unified-surfaces-12';
+  const VERSION = 'tintin-20260801-unified-surfaces-14';
   const SCRIPT_URL = document.currentScript?.src || new URL('js/public-shell.js', location.href).href;
   const ICONS = {
     bolsos: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
@@ -137,15 +137,15 @@
             <span>TIENDA</span>
             <svg class="tt-tablet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="tt-tablet-cats" id="tablet-cats">
-            <button type="button" class="tt-tablet-cats-back" id="btn-tablet-cats-back">← Volver</button>
-            <h2 class="tt-tablet-cats-title">Colecciones</h2>
-            <div class="tt-tablet-cats-grid" data-collections-nav="tablet">${tabletCategories}</div>
-            <a href="catalogo.html" class="tt-tablet-ver-todo">Ver todo el catálogo →</a>
-          </div>
           <a href="about.html" data-shell-route="about">NOSOTROS</a>
           <a href="contact.html" data-shell-route="contact">CONTACTO</a>
         </nav>
+        <div class="tt-tablet-cats" id="tablet-cats">
+          <button type="button" class="tt-tablet-cats-back" id="btn-tablet-cats-back">← Volver</button>
+          <h2 class="tt-tablet-cats-title">Colecciones</h2>
+          <div class="tt-tablet-cats-grid" data-collections-nav="tablet">${tabletCategories}</div>
+          <a href="catalogo.html" class="tt-tablet-ver-todo">Ver todo el catálogo →</a>
+        </div>
         <button type="button" class="tt-tablet-account-entry" data-nav-action="account" aria-expanded="false" aria-controls="account-drawer">Mi cuenta</button>
       </div>`;
   }

@@ -41,9 +41,26 @@ try {
     await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
     await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
     await page.waitForTimeout(550);
-    await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
+    await page.evaluate(() => {
+      document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
+      try { window.TintinLoader?.hide?.(); } catch {}
+      document.getElementById('tt-loader')?.remove();
+    });
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
+      const solidWhite = node => ['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(getComputedStyle(node).backgroundColor);
+      const hitTarget = node => {
+        const rect = node.getBoundingClientRect();
+        const top = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        return top === node || node.contains(top);
+      };
+      const activeNavigation = innerWidth < 768 ? document.getElementById('tt-tabbar') : innerWidth <= 1024 ? document.getElementById('tt-header-tablet') : document.getElementById('tt-header-desktop-tablet');
+      const activeControls = [...activeNavigation.querySelectorAll('a,button')].filter(visible);
+      const blockedControls = activeControls.filter(control => !hitTarget(control)).map(control => ({
+        id:control.id,
+        label:control.getAttribute('aria-label') || control.textContent.trim().slice(0,40),
+        top:(() => { const rect = control.getBoundingClientRect(); const node = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2); return node?.id || node?.className || node?.tagName || 'none'; })(),
+      }));
       const ids = [...document.querySelectorAll('[id]')].map(node => node.id);
       const duplicates = ids.filter((id,index) => ids.indexOf(id) !== index);
       return {
@@ -57,6 +74,11 @@ try {
         activeMobile:document.querySelector('#tt-tabbar [aria-current="page"]')?.getAttribute('aria-label') || '',
         haloReady:document.getElementById('tt-tabbar')?.classList.contains('tt-mobile-nav-ready') || false,
         pillWidth:document.querySelector('.tt-desktop-active-pill')?.getBoundingClientRect().width || 0,
+        solidDesktop:solidWhite(document.getElementById('tt-header-desktop-tablet')),
+        solidTablet:solidWhite(document.getElementById('tt-header-tablet')),
+        solidMobile:solidWhite(document.getElementById('tt-tabbar')),
+        activeControlsClickable:blockedControls.length === 0,
+        blockedControls,
         diagnostics:['tt-header-desktop-tablet','tt-header-tablet','tt-tabbar'].map(id => { const node=document.getElementById(id),style=getComputedStyle(node),rect=node.getBoundingClientRect(); return {id,display:style.display,visibility:style.visibility,opacity:style.opacity,width:rect.width,height:rect.height}; }),
         rootClasses:document.documentElement.className,
       };
@@ -64,6 +86,8 @@ try {
     const expected = width < 768 ? [false,false,true] : width <= 1024 ? [false,true,false] : [true,false,false];
     check([state.desktop,state.tablet,state.mobile].filter(Boolean).length === 1, `${width}px no tiene exactamente una navegación visible (${JSON.stringify(state)})`);
     check(state.desktop === expected[0] && state.tablet === expected[1] && state.mobile === expected[2], `${width}px muestra el dispositivo incorrecto (${JSON.stringify(state)})`);
+    check(width < 768 ? state.solidMobile : width <= 1024 ? state.solidTablet : state.solidDesktop, `${width}px conserva un fondo transparente en la navegación activa (${JSON.stringify(state)})`);
+    check(state.activeControlsClickable, `${width}px tiene controles visibles cubiertos o no clicables (${JSON.stringify(state)})`);
     check(state.duplicates.length === 0, `${width}px contiene IDs duplicados: ${state.duplicates.join(', ')}`);
     check(state.overflow <= 1, `${width}px desborda horizontalmente ${state.overflow}px`);
     if (width < 768) { check(state.activeMobile === 'Inicio', `${width}px no marca Inicio en mobile`); check(state.haloReady, `${width}px no posicionó el halo mobile`); }
@@ -71,7 +95,7 @@ try {
     else { check(state.activeDesktop.includes('INICIO'), `${width}px no marca Inicio en desktop`); check(state.pillWidth > 20, `${width}px no calculó el pill desktop`); }
   }
 
-  for (const width of [768,820,1023]) {
+  for (const width of [768,820,1023,1024]) {
     await page.setViewportSize({ width,height:900 });
     await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
     await page.waitForTimeout(450);
@@ -79,6 +103,21 @@ try {
     await page.click('#btn-menu-tablet');
     check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'false', `${width}px no abre el menú tablet`);
     check(await page.locator('#btn-menu-tablet').getAttribute('aria-expanded') === 'true', `${width}px no actualiza aria-expanded tablet`);
+    const tabletMenuState = await page.evaluate(() => {
+      const menu = document.getElementById('tt-tablet-menu');
+      const style = getComputedStyle(menu);
+      return {
+        background:style.backgroundColor,
+        pointer:style.pointerEvents,
+        links:[...menu.querySelectorAll('a[href]')].filter(link => getComputedStyle(link).pointerEvents !== 'none').length,
+      };
+    });
+    check(['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(tabletMenuState.background), `${width}px menú tablet no tiene fondo blanco sólido (${JSON.stringify(tabletMenuState)})`);
+    check(tabletMenuState.pointer === 'auto' && tabletMenuState.links > 0, `${width}px menú tablet no es interactivo (${JSON.stringify(tabletMenuState)})`);
+    await page.click('#btn-tablet-tienda');
+    check(await page.locator('#tt-tablet-menu').evaluate(node => node.classList.contains('tt-tablet-shop-view')), `${width}px no abre el submenú Tienda tablet`);
+    check(await page.locator('#tablet-cats').evaluate(node => getComputedStyle(node).pointerEvents === 'auto' && node.querySelectorAll('a[href]').length > 0), `${width}px categorías tablet no son clicables`);
+    await page.click('#btn-tablet-cats-back');
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => document.querySelector('#tt-tablet-menu')?.getAttribute('aria-hidden') === 'true', null, { timeout:1800 });
     check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'true', `${width}px Escape no cierra el menú tablet`);
@@ -91,10 +130,20 @@ try {
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#btn-tienda');
   check(await page.locator('#tt-tienda-dropdown-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre el dropdown Tienda');
+  check(await page.locator('#tt-tienda-dropdown-panel').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && [...node.querySelectorAll('a[href]')].every(link => getComputedStyle(link).pointerEvents !== 'none')), 'Desktop dropdown Tienda no es sólido o clicable');
   await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true');
+  await page.click('#btn-cuenta');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false');
+  check(await page.locator('#account-drawer').evaluate(node => {
+    const panel = node.querySelector('#account-panel');
+    const controls = [...panel.querySelectorAll('a,button')];
+    return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
+  }), 'Desktop Cuenta muestra controles bloqueados o fondo no sólido');
+  await page.click('#btn-account-close');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true');
   const rapidState = await page.evaluate(async () => {
     const controller = window.TintinSurfaceController;
     await Promise.allSettled([
@@ -120,16 +169,24 @@ try {
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#tabbar-tienda');
   check(await page.locator('#collections-sheet').getAttribute('aria-hidden') === 'false', 'Mobile no abre colecciones');
+  check(await page.locator('#collections-sheet').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile colecciones no es sólido o clicable');
   await page.keyboard.press('Escape');
   await page.click('#tabbar-search');
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Mobile no abre Buscar');
+  check(await page.locator('#search-panel').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Buscar no es sólido o clicable');
   await page.keyboard.press('Escape');
   await page.click('#tabbar-cart');
   check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
+  check(await page.locator('#cart-drawer').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Carrito no es sólido o clicable');
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true');
   await page.click('#tabbar-cuenta');
   check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
+  check(await page.locator('#account-drawer').evaluate(node => {
+    const panel = node.querySelector('#account-panel');
+    const controls = [...panel.querySelectorAll('a,button')];
+    return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
+  }), 'Mobile Cuenta muestra controles bloqueados o fondo no sólido');
   await page.keyboard.press('Escape');
 
   for (const route of routes) {
@@ -137,9 +194,21 @@ try {
       await page.setViewportSize({ width,height:820 });
       await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded' });
       await page.waitForTimeout(240);
-      await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
+      await page.evaluate(() => {
+        document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
+        try { window.TintinLoader?.hide?.(); } catch {}
+        document.getElementById('tt-loader')?.remove();
+      });
       const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
       check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
+      const loginSurface = await page.evaluate(() => !!document.querySelector('.login-page'));
+      if (loginSurface) continue;
+      const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
+      const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
+      await page.click(trigger);
+      check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:1800 });
     }
   }
   check(!runtimeErrors.some(message => /SyntaxError|ReferenceError|TypeError/i.test(message)), `Errores runtime: ${runtimeErrors.join(' | ')}`);

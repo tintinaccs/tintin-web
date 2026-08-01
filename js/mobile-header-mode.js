@@ -6,11 +6,10 @@
    ancho — no hay superposición ni "gana el otro" porque son elementos
    físicamente distintos en el HTML y sus rangos nunca se cruzan:
 
-     headerDesktopTabletEnabled (default true) — controla #tt-header-desktop-tablet
-       (el único header superior que existe en el sitio), en su rango
-       nativo, >=769px.
+     headerDesktopTabletEnabled (default true) — controla los headers
+       superiores físicamente separados de desktop y tablet, en >=768px.
      headerMobileEnabled (default true) — controla .tt-tabbar, la barra de
-       navegación inferior de mobile, en <=768px. El nombre del campo en
+       navegación inferior de mobile, en <=767px. El nombre del campo en
        Firestore se mantiene igual por compatibilidad con datos ya
        guardados, pero ya NO controla ningún header superior de mobile —
        ese elemento no existe en el sitio.
@@ -55,8 +54,8 @@
     // visibility/pointer-events además de display: un elemento apagado no
     // puede ni ocupar espacio ni recibir clics.
     st.textContent =
-      '@media (min-width:769px){html.tt-desktop-tablet-header-off #tt-header-desktop-tablet{display:none!important;visibility:hidden!important;pointer-events:none!important}}' +
-      '@media (max-width:768px){html.tt-mobile-navigation-off .tt-tabbar{display:none!important;visibility:hidden!important;pointer-events:none!important}}';
+      '@media (min-width:768px){html.tt-desktop-tablet-header-off #tt-header-desktop-tablet,html.tt-desktop-tablet-header-off #tt-header-tablet{display:none!important;visibility:hidden!important;pointer-events:none!important}}' +
+      '@media (max-width:767px){html.tt-mobile-navigation-off .tt-tabbar{display:none!important;visibility:hidden!important;pointer-events:none!important}}';
     document.head.appendChild(st);
   }
   injectStyle();

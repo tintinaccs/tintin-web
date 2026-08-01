@@ -731,12 +731,14 @@
   }
 
   function bootHeaderDropdownFix() {
+    if (window.TintinSurfaceController) return;
     if (!window.TintinHeaderDropdownFixBooted) {
       importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
     }
   }
 
   function bootHeaderAccountFix() {
+    if (window.TintinSurfaceController) return;
     if (!window.TintinAccountMobileFixBooted) {
       importSibling('header-account-mobile-fix.js', 'Header Account Fix');
     }

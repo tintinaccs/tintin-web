@@ -35,6 +35,7 @@ function accountDropdown(){
  ['pagehide','beforeunload','hashchange','popstate'].forEach(function(evt){addEventListener(evt,function(){setAccount(false)})});
 }
 ready(function(){
+ if(window.TintinSurfaceController)return;
  injectStyles();
  accountDropdown();
  cleanTabbarAvatar();

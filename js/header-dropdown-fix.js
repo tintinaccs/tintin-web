@@ -75,6 +75,7 @@
   }
 
   ready(function () {
+    if (window.TintinSurfaceController) return;
     injectStyles();
 
     const desktopWrap = document.getElementById('tienda-dropdown');

@@ -7,10 +7,10 @@
     visibility: visible !important;
     pointer-events: auto !important;
     height: 88px;
-    background: rgba(255,255,255,.97) !important;
+    background: #fff !important;
     border-bottom: 2px solid #f5bad0 !important;
     box-shadow: 0 8px 28px rgba(126,30,65,.055) !important;
-    backdrop-filter: blur(16px);
+    backdrop-filter: none;
   }
 
   .tt-header-desktop .tt-header-inner {

@@ -20,18 +20,21 @@
     const st = document.createElement('style');
     st.id = 'tt-header-scroll-hide-style';
     st.textContent = `
-      @media (min-width: 769px) {
-        #tt-header-desktop-tablet {
+      @media (min-width: 768px) {
+        #tt-header-desktop-tablet,
+        #tt-header-tablet {
           transition: transform .34s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, background .28s ease, border-color .28s ease !important;
           will-change: transform;
         }
-        #tt-header-desktop-tablet.tt-header-hidden-desktop {
+        #tt-header-desktop-tablet.tt-header-hidden-desktop,
+        #tt-header-tablet.tt-header-hidden-desktop {
           transform: translateY(calc(-100% - 12px)) !important;
           pointer-events: none;
         }
       }
       @media (prefers-reduced-motion: reduce) {
-        #tt-header-desktop-tablet {
+        #tt-header-desktop-tablet,
+        #tt-header-tablet {
           transition: none !important;
         }
       }
@@ -40,8 +43,11 @@
   }
 
   ready(function () {
-    const header = document.getElementById('tt-header-desktop-tablet');
-    if (!header) return;
+    const headers = [
+      document.getElementById('tt-header-desktop-tablet'),
+      document.getElementById('tt-header-tablet')
+    ].filter(Boolean);
+    if (!headers.length) return;
     injectStyles();
 
     let lastY = window.scrollY || document.documentElement.scrollTop || 0;
@@ -54,11 +60,12 @@
       // none!important} a <=768px) — si no, a exactamente 768px este script
       // trata el header mobile de home (reutiliza el mismo #tt-header) como
       // "desktop" y le agrega pointer-events:none al hacer scroll.
-      return window.matchMedia ? window.matchMedia('(min-width: 769px)').matches : window.innerWidth >= 769;
+      return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
     }
 
     function shouldKeepVisible() {
       return !!(
+        (window.TintinSurfaceController?.surface || 'none') !== 'none' ||
         document.getElementById('tienda-dropdown')?.classList.contains('open') ||
         document.getElementById('account-dropdown')?.classList.contains('open') ||
         document.getElementById('search-panel')?.classList.contains('open') ||
@@ -69,11 +76,11 @@
     }
 
     function showHeader() {
-      header.classList.remove('tt-header-hidden-desktop');
+      headers.forEach(header => header.classList.remove('tt-header-hidden-desktop'));
     }
 
     function hideHeader() {
-      header.classList.add('tt-header-hidden-desktop');
+      headers.forEach(header => header.classList.add('tt-header-hidden-desktop'));
     }
 
     function onScroll() {

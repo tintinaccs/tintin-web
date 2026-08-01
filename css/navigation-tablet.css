@@ -9,10 +9,10 @@
     inset: 0 0 auto;
     z-index: var(--z-header,900);
     height: 84px;
-    background: rgba(255,255,255,.98);
+    background: #fff;
     border-bottom: 2px solid #eebed0;
     box-shadow: 0 8px 28px rgba(126,30,65,.055);
-    backdrop-filter: blur(16px);
+    backdrop-filter: none;
   }
   .tt-tablet-header-inner {
     position: relative;
@@ -66,7 +66,7 @@
     z-index: 1900;
     flex-direction: column;
     padding: max(24px,env(safe-area-inset-top)) clamp(28px,6vw,70px) max(28px,env(safe-area-inset-bottom));
-    background: rgba(255,250,252,.995);
+    background: #fff;
     overflow-y: auto;
     visibility: hidden;
     pointer-events: none;
