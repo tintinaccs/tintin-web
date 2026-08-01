@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T22:03:57.289Z",
-  "sourceFingerprint": "bbb42b5a949c6d878f0fc33399daab766567e2762c3b8dbd2c82cdd4b6dfae44",
+  "generatedAt": "2026-08-01T22:17:10.378Z",
+  "sourceFingerprint": "9549219d1c7edb2eb626bf605304c8aa06441cc3783793fd18846fa6eb532ad2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 440,
     "textFiles": 408,
-    "totalBytes": 5485174,
+    "totalBytes": 5485138,
     "pages": 18,
     "modules": 253
   },
@@ -1062,8 +1062,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 34973,
-      "sha256": "b13c565f7baf48701fde165b4da64941b9ed7446db59b979c1c5f956e55b62c8",
+      "bytes": 34969,
+      "sha256": "cf794b21ca4eaf4592beb33ac821e9516af5beb438f285a7db62db01d62a767a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1093,7 +1093,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 7
         },
@@ -1165,7 +1165,7 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
@@ -1532,8 +1532,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 155788,
-      "sha256": "3a41e70c0f161e1577f7fcb65230ebb7bab7b6faa72defe1987b51f0ee66134d",
+      "bytes": 155784,
+      "sha256": "6298ffa14563c7e360832543dee5eb7c3a5f3b49fae11999514fe651078d9eb6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1557,7 +1557,7 @@
       "ids": 454,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 7
         },
@@ -1714,7 +1714,7 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 7,
           "exists": true
@@ -11080,8 +11080,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1533,
-      "sha256": "172cf3737b5fa81793388e13163f28458662a6f439b32b0e5dd7018975b505c8",
+      "bytes": 1531,
+      "sha256": "6eb5d0a4e0247d8696fd1e1d31ca2d58dc7becb2a00772a848e17a430a6dae68",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11098,7 +11098,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 20
         }
@@ -11130,7 +11130,7 @@
       ],
       "references": [
         {
-          "raw": "js/page-loader.js?v=tintin-20260731-loader-context-labels-1",
+          "raw": "js/page-loader.js?v=tintin-20260801-unified-surfaces-15",
           "target": "js/page-loader.js",
           "line": 20,
           "exists": true
@@ -17913,8 +17913,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 12550,
-      "sha256": "b08638da436138962addec7c1792407271502fccbd5f8d618e9d72f118105ca0",
+      "bytes": 12547,
+      "sha256": "d76a88f4ccc27c8f343c317090854eea2706c3e3df6d81fb5c02aaf9f7528f6a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18012,8 +18012,8 @@
     },
     {
       "path": "scripts/audit-app-check-bootstrap.js",
-      "bytes": 5629,
-      "sha256": "22c5c821f09a39c343fc772cf6a15c5a8de8919c39f699dfae70cb37a657b0d1",
+      "bytes": 5625,
+      "sha256": "62d6442a804c4065c5885476dc90908c2bec01886b9feca9d1046102e8a43656",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19024,8 +19024,8 @@
     },
     {
       "path": "scripts/audit-phase10-accessibility.js",
-      "bytes": 4596,
-      "sha256": "3bf69f21ed6fdc7971ccb470c0a1d817b26ead5b35b6f0239e2d632c0f856429",
+      "bytes": 4592,
+      "sha256": "cd7c96f41eb39a4124c3bfa0d95164bbe7f103c107499d4deccbb97825c58c4a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19135,8 +19135,8 @@
     },
     {
       "path": "scripts/audit-phase8-ui-ux.js",
-      "bytes": 6387,
-      "sha256": "3052473ebf2c20f16978f8aef54a2e0056dd34a949903ff5d9b30833b652d65e",
+      "bytes": 6376,
+      "sha256": "fe95af025a541605caeeae7509e90eeb193b26ccdcc901f3997c175d478b5a53",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19348,8 +19348,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 16081,
-      "sha256": "b7289bbf021b70af62cd49cd6621b691cb0edf0a0c44f555355bd9259a5865e0",
+      "bytes": 16077,
+      "sha256": "de45d2a22241324d2edd30e74b40cb9096abb199463e51ec6aa5c9025e5a86fd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20306,14 +20306,14 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 34973,
-      "sha256": "b13c565f7baf48701fde165b4da64941b9ed7446db59b979c1c5f956e55b62c8"
+      "bytes": 34969,
+      "sha256": "cf794b21ca4eaf4592beb33ac821e9516af5beb438f285a7db62db01d62a767a"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 155788,
-      "sha256": "3a41e70c0f161e1577f7fcb65230ebb7bab7b6faa72defe1987b51f0ee66134d"
+      "bytes": 155784,
+      "sha256": "6298ffa14563c7e360832543dee5eb7c3a5f3b49fae11999514fe651078d9eb6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -21974,8 +21974,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1533,
-      "sha256": "172cf3737b5fa81793388e13163f28458662a6f439b32b0e5dd7018975b505c8"
+      "bytes": 1531,
+      "sha256": "6eb5d0a4e0247d8696fd1e1d31ca2d58dc7becb2a00772a848e17a430a6dae68"
     },
     {
       "path": "package-lock.json",
@@ -22076,8 +22076,8 @@
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 12550,
-      "sha256": "b08638da436138962addec7c1792407271502fccbd5f8d618e9d72f118105ca0"
+      "bytes": 12547,
+      "sha256": "d76a88f4ccc27c8f343c317090854eea2706c3e3df6d81fb5c02aaf9f7528f6a"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
@@ -22106,8 +22106,8 @@
     {
       "path": "scripts/audit-app-check-bootstrap.js",
       "extension": ".js",
-      "bytes": 5629,
-      "sha256": "22c5c821f09a39c343fc772cf6a15c5a8de8919c39f699dfae70cb37a657b0d1"
+      "bytes": 5625,
+      "sha256": "62d6442a804c4065c5885476dc90908c2bec01886b9feca9d1046102e8a43656"
     },
     {
       "path": "scripts/audit-aux-pages.js",
@@ -22382,8 +22382,8 @@
     {
       "path": "scripts/audit-phase10-accessibility.js",
       "extension": ".js",
-      "bytes": 4596,
-      "sha256": "3bf69f21ed6fdc7971ccb470c0a1d817b26ead5b35b6f0239e2d632c0f856429"
+      "bytes": 4592,
+      "sha256": "cd7c96f41eb39a4124c3bfa0d95164bbe7f103c107499d4deccbb97825c58c4a"
     },
     {
       "path": "scripts/audit-phase11-seo.js",
@@ -22418,8 +22418,8 @@
     {
       "path": "scripts/audit-phase8-ui-ux.js",
       "extension": ".js",
-      "bytes": 6387,
-      "sha256": "3052473ebf2c20f16978f8aef54a2e0056dd34a949903ff5d9b30833b652d65e"
+      "bytes": 6376,
+      "sha256": "fe95af025a541605caeeae7509e90eeb193b26ccdcc901f3997c175d478b5a53"
     },
     {
       "path": "scripts/audit-postphase-security.js",
@@ -22484,8 +22484,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 16081,
-      "sha256": "b7289bbf021b70af62cd49cd6621b691cb0edf0a0c44f555355bd9259a5865e0"
+      "bytes": 16077,
+      "sha256": "de45d2a22241324d2edd30e74b40cb9096abb199463e51ec6aa5c9025e5a86fd"
     },
     {
       "path": "scripts/audit-store-gate.js",
