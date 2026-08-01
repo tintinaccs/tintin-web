@@ -8,7 +8,10 @@
   const navigateSafely = navigate => {
     if (!reduced.matches && typeof document.startViewTransition === 'function') {
       try {
-        document.startViewTransition(() => navigate());
+        const transition = document.startViewTransition(() => navigate());
+        transition.ready?.catch(() => {});
+        transition.finished?.catch(() => {});
+        transition.updateCallbackDone?.catch(() => {});
         return;
       } catch {}
     }

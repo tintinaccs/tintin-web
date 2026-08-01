@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T20:17:35.154Z",
-  "sourceFingerprint": "d864d32dae7a8bc04ca8ea751e596b2713f9c467ae4bbffee629e013296c3c54",
+  "generatedAt": "2026-08-01T20:27:27.384Z",
+  "sourceFingerprint": "e3eb075db2849f16d277216678c0af553b907f1ec7f6297617be8974cb403e96",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 440,
     "textFiles": 408,
-    "totalBytes": 5476268,
+    "totalBytes": 5476920,
     "pages": 18,
     "modules": 253
   },
@@ -16639,8 +16639,8 @@
     },
     {
       "path": "js/navigation-shared.js",
-      "bytes": 1471,
-      "sha256": "3978c86b4e23b9db0253333a44a0f13c13177ddbe2f0d1a8aac46c623a2f9f3f",
+      "bytes": 1635,
+      "sha256": "a98d7144c70bc89815eaed18c45e04f7c1fad2febde044b2d84b2d179cfb8cca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17102,7 +17102,7 @@
     {
       "path": "js/public-shell.js",
       "bytes": 26085,
-      "sha256": "0b7859ab7d7a0c0b222fd90b0844389c8ebcb929e8b6b8a15d06f2f3b5f992b1",
+      "sha256": "34c7b985359944fc1cd6f67f97252441d7ac1726f9a453edb82e4b1337ba20b7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19532,8 +19532,8 @@
     },
     {
       "path": "scripts/audit-unified-navigation.js",
-      "bytes": 2918,
-      "sha256": "8209c46eecff92094353b42ede3fe38312b68061896856eed58f717399138d1d",
+      "bytes": 3059,
+      "sha256": "4263a5a9ffd2df85ca27e2923c00e62f3afccce0da96ad0a56a2a76aeac24148",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19747,8 +19747,8 @@
     },
     {
       "path": "scripts/smoke-all-pages.mjs",
-      "bytes": 15628,
-      "sha256": "6d2d5e6a8ecc4e59dcb09bf3a60d32a7d3f343dfda05b5307954f3e84101c048",
+      "bytes": 15975,
+      "sha256": "ed83a50d7d355faf9610334764c51c9056e1eb85417af97b79ee1fcb77357677",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21542,8 +21542,8 @@
     {
       "path": "js/navigation-shared.js",
       "extension": ".js",
-      "bytes": 1471,
-      "sha256": "3978c86b4e23b9db0253333a44a0f13c13177ddbe2f0d1a8aac46c623a2f9f3f"
+      "bytes": 1635,
+      "sha256": "a98d7144c70bc89815eaed18c45e04f7c1fad2febde044b2d84b2d179cfb8cca"
     },
     {
       "path": "js/navigation-tablet.js",
@@ -21675,7 +21675,7 @@
       "path": "js/public-shell.js",
       "extension": ".js",
       "bytes": 26085,
-      "sha256": "0b7859ab7d7a0c0b222fd90b0844389c8ebcb929e8b6b8a15d06f2f3b5f992b1"
+      "sha256": "34c7b985359944fc1cd6f67f97252441d7ac1726f9a453edb82e4b1337ba20b7"
     },
     {
       "path": "js/resend-order-notify.js",
@@ -22526,8 +22526,8 @@
     {
       "path": "scripts/audit-unified-navigation.js",
       "extension": ".js",
-      "bytes": 2918,
-      "sha256": "8209c46eecff92094353b42ede3fe38312b68061896856eed58f717399138d1d"
+      "bytes": 3059,
+      "sha256": "4263a5a9ffd2df85ca27e2923c00e62f3afccce0da96ad0a56a2a76aeac24148"
     },
     {
       "path": "scripts/audit-unified-store-logic.js",
@@ -22592,8 +22592,8 @@
     {
       "path": "scripts/smoke-all-pages.mjs",
       "extension": ".mjs",
-      "bytes": 15628,
-      "sha256": "6d2d5e6a8ecc4e59dcb09bf3a60d32a7d3f343dfda05b5307954f3e84101c048"
+      "bytes": 15975,
+      "sha256": "ed83a50d7d355faf9610334764c51c9056e1eb85417af97b79ee1fcb77357677"
     },
     {
       "path": "scripts/sync-public-shell.js",
