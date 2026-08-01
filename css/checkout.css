@@ -45,7 +45,8 @@
       gap: 6px;
       text-transform: uppercase;
       letter-spacing: .06em;
-      min-height: 32px;
+      min-height: 44px;
+      padding-block: 6px;
       width: fit-content;
     }
     .ck-header-back:hover { color: var(--acc); }
@@ -636,6 +637,7 @@
     .ck-checkbox-row {
       display: flex; align-items: flex-start; gap: 8px;
       margin-top: 10px; font-size: 11.5px; color: var(--text-muted);
+      min-height: 44px; padding-block: 6px;
       cursor: pointer; line-height: 1.4;
     }
     .ck-checkbox-row input { margin-top: 2px; flex-shrink: 0; }

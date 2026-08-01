@@ -1874,6 +1874,43 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 20px;
 }
 
+.tt-footer-accordion-toggle {
+  display: contents;
+  color: inherit;
+  font: inherit;
+}
+
+@media (max-width: 480px) {
+  .tt-footer-col-title {
+    margin: 0;
+  }
+  .tt-footer-accordion-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .tt-footer-accordion-icon {
+    font-size: 18px;
+    line-height: 1;
+    transition: transform .18s ease;
+  }
+  .tt-footer-accordion-toggle[aria-expanded="true"] .tt-footer-accordion-icon {
+    transform: rotate(45deg);
+  }
+  .tt-footer-col > ul {
+    padding-top: 8px;
+  }
+}
+
 .tt-footer-col ul li { margin-bottom: 10px; }
 .tt-footer-col ul li a {
   display: inline-flex;

@@ -74,11 +74,10 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- El Hero no tiene imagen de respaldo empaquetada: Cloudinary (subida
-       desde Super Admin → Imágenes) es la única fuente permitida. Queda
-       oculto (ver .tt-hero-pending en styles.css) hasta que images-phase5.js
-       confirme esa URL real — nunca se ve ninguna otra imagen, ni siquiera
-       un instante. -->
+  <!-- Cloudinary (subida desde Super Admin → Imágenes) sigue siendo la fuente
+       editorial principal. Mientras llega o si la red falla, el contenedor
+       conserva una imagen local responsive para que el hero nunca quede vacío;
+       la imagen administrada la cubre apenas images-phase5.js la confirma. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
       <img

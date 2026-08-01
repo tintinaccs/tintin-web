@@ -56,6 +56,7 @@
     "audit:global-responsive-geometry": "node scripts/run-responsive-audit-with-retry.mjs",
     "audit:canonical-viewports": "node scripts/audit-canonical-viewports.mjs",
     "audit:desktop-fixes": "node scripts/audit-desktop-fixes.mjs",
+    "audit:mobile-fixes": "node scripts/audit-mobile-fixes.mjs",
     "audit:part2h": "node scripts/audit-final-sweep-part2h.js",
     "audit:phase5": "node scripts/audit-phase5-performance.js",
     "audit:phase6": "node scripts/audit-phase6-security.js",

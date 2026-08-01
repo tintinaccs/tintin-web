@@ -253,4 +253,4 @@ window.setTimeout(() => {
   completeCollectionsLoading();
   if (!collectionsReady) window.ttPageReady && window.ttPageReady();
   if (!productsReady) showFeaturedError();
-}, 5000);
+}, 2800);
