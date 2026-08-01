@@ -116,7 +116,7 @@ async function prepare(page, width, pageInfo) {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement;
     const body = document.body;
-    ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked']
+    ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked', 'tt-color-scheme-pending']
       .forEach(name => root.classList.remove(name));
     root.style.removeProperty('overflow');
     root.style.removeProperty('overscroll-behavior');
@@ -137,7 +137,7 @@ async function prepare(page, width, pageInfo) {
   });
 
   if (expectsPublicShell(pageInfo)) {
-    const expected = width <= 768 ? '#tt-tabbar' : '#tt-header-desktop-tablet';
+    const expected = width < 768 ? '#tt-tabbar' : width < 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
     await page.waitForFunction(selector => {
       const node = document.querySelector(selector);
       if (!node) return false;
@@ -174,13 +174,18 @@ async function inspect(page, width, pageInfo) {
 
     if (shellExpected) {
       const shellHeader = document.getElementById('tt-header-desktop-tablet');
+      const shellTablet = document.getElementById('tt-header-tablet');
       const shellTabbar = document.getElementById('tt-tabbar');
-      if (width <= 768) {
+      if (width < 768) {
         if (visible(shellHeader)) issues.push('header desktop visible en mobile');
+        if (visible(shellTablet)) issues.push('header tablet visible en mobile');
         if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
+      } else if (width < 1024) {
+        if (visible(shellHeader) || visible(shellTabbar)) issues.push('navegación ajena visible en tablet');
+        if (!visible(shellTablet)) issues.push('header tablet oculto');
       } else {
-        if (visible(shellTabbar)) issues.push('tabbar mobile visible en desktop/tablet');
-        if (!visible(shellHeader)) issues.push('header desktop/tablet oculto');
+        if (visible(shellTablet) || visible(shellTabbar)) issues.push('navegación ajena visible en desktop');
+        if (!visible(shellHeader)) issues.push('header desktop oculto');
       }
     }
 

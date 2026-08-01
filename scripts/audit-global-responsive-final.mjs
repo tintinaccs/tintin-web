@@ -59,7 +59,7 @@ async function prepare(page, width) {
   await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement, body = document.body;
-    ['tt-initializing','tt-store-gate-pending','tt-store-gate-blocked','tt-scroll-locked'].forEach(name => root.classList.remove(name));
+    ['tt-initializing','tt-store-gate-pending','tt-store-gate-blocked','tt-scroll-locked','tt-color-scheme-pending'].forEach(name => root.classList.remove(name));
     root.style.removeProperty('overflow');
     root.style.removeProperty('overscroll-behavior');
     root.style.removeProperty('touch-action');
@@ -77,7 +77,7 @@ async function prepare(page, width) {
     window.scrollTo(0,0);
   });
 
-  const expected = width <= 768 ? '#tt-tabbar' : '#tt-header-desktop-tablet';
+  const expected = width < 768 ? '#tt-tabbar' : width < 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
   await page.waitForFunction(selector => {
     const node = document.querySelector(selector);
     if (!node) return false;
@@ -108,8 +108,10 @@ async function inspectBase(page, width) {
     };
     const rect = node => { const r = node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
     const overlaps = (a,b,tolerance=1) => a.left < b.right - tolerance && a.right > b.left + tolerance && a.top < b.bottom - tolerance && a.bottom > b.top + tolerance;
-    const mobile = width <= 768;
+    const mobile = width < 768;
+    const tablet = width >= 768 && width < 1024;
     const header = document.getElementById('tt-header-desktop-tablet');
+    const tabletHeader = document.getElementById('tt-header-tablet');
     const tabbar = document.getElementById('tt-tabbar');
     const footer = document.querySelector('.tt-footer');
     const privacy = document.querySelector('.tt-privacy-consent');
@@ -128,6 +130,7 @@ async function inspectBase(page, width) {
 
     if (mobile) {
       if (visible(header)) issues.push('header desktop visible en mobile');
+      if (visible(tabletHeader)) issues.push('header tablet visible en mobile');
       if (!visible(tabbar)) {
         issues.push('tabbar mobile ausente');
       } else {
@@ -163,13 +166,20 @@ async function inspectBase(page, width) {
         }
       }
     } else {
-      if (visible(tabbar)) issues.push('tabbar visible en desktop/tablet');
-      if (!visible(header)) {
-        issues.push('header desktop/tablet ausente');
+      const activeHeader = tablet ? tabletHeader : header;
+      if (visible(tabbar)) issues.push('tabbar visible fuera de mobile');
+      if (tablet && visible(header)) issues.push('header desktop visible en tablet');
+      if (!tablet && visible(tabletHeader)) issues.push('header tablet visible en desktop');
+      if (!visible(activeHeader)) {
+        issues.push(`header ${tablet ? 'tablet' : 'desktop'} ausente`);
       } else {
-        const h = rect(header);
+        const h = rect(activeHeader);
         if (h.left < -1 || h.right > width + 1 || Math.abs(h.top) > 1) issues.push('header fuera de pantalla');
-        const zones = [
+        const zones = tablet ? [
+          ['menú',document.getElementById('btn-menu-tablet')],
+          ['logo',document.querySelector('#tt-header-tablet .tt-tablet-logo-link')],
+          ['acciones',document.querySelector('#tt-header-tablet .tt-tablet-actions')],
+        ] : [
           ['logo',document.querySelector('#tt-header-desktop-tablet .tt-logo-link')],
           ['nav',document.getElementById('tt-nav-desktop-tablet')],
           ['acciones',document.querySelector('#tt-header-desktop-tablet .tt-header-actions')],
@@ -227,7 +237,7 @@ async function inspectMobileBottom(page) {
 async function resetSurfaces(page) {
   await page.keyboard.press('Escape').catch(() => {});
   await page.evaluate(() => {
-    ['tt-tienda-dropdown-panel','search-panel','account-panel','cart-drawer','collections-sheet','tt-mobile-menu'].forEach(id => document.getElementById(id)?.classList.remove('open'));
+    ['tt-tienda-dropdown-panel','search-panel','account-panel','cart-drawer','collections-sheet','tt-tablet-menu'].forEach(id => document.getElementById(id)?.classList.remove('open'));
     document.querySelectorAll('.tt-nav-dropdown.open').forEach(node => node.classList.remove('open'));
     document.querySelectorAll('[aria-expanded="true"]').forEach(node => node.setAttribute('aria-expanded','false'));
   });
@@ -266,18 +276,23 @@ async function checkSurface(page,trigger,surface,label) {
 }
 
 async function inspectSharedSurfaces(page,width) {
-  if (width <= 768) return [
+  if (width < 768) return [
     ...await checkSurface(page,'#tabbar-tienda','#collections-sheet','Tienda mobile'),
     ...await checkSurface(page,'#tabbar-search','#search-panel','Buscar mobile'),
     ...await checkSurface(page,'#tabbar-cart','#cart-drawer','Carrito mobile'),
   ];
 
   const issues = [];
-  if (width <= 1024) issues.push(...await checkSurface(page,'.tt-menu-toggle','.tt-mobile-menu','Menú tablet'));
-  else issues.push(...await checkSurface(page,'#btn-tienda','#tt-tienda-dropdown-panel','Tienda desktop'));
-  issues.push(...await checkSurface(page,'#btn-search','#search-panel','Buscar desktop/tablet'));
-  issues.push(...await checkSurface(page,'#btn-cuenta','#account-panel','Cuenta desktop/tablet'));
-  issues.push(...await checkSurface(page,'#btn-cart','#cart-drawer','Carrito desktop/tablet'));
+  if (width < 1024) {
+    issues.push(...await checkSurface(page,'#btn-menu-tablet','#tt-tablet-menu','Menú tablet'));
+    issues.push(...await checkSurface(page,'#btn-search-tablet','#search-panel','Buscar tablet'));
+    issues.push(...await checkSurface(page,'#btn-cart-tablet','#cart-drawer','Carrito tablet'));
+  } else {
+    issues.push(...await checkSurface(page,'#btn-tienda','#tt-tienda-dropdown-panel','Tienda desktop'));
+    issues.push(...await checkSurface(page,'#btn-search','#search-panel','Buscar desktop'));
+    issues.push(...await checkSurface(page,'#btn-cuenta','#account-panel','Cuenta desktop'));
+    issues.push(...await checkSurface(page,'#btn-cart','#cart-drawer','Carrito desktop'));
+  }
   return issues;
 }
 
