@@ -465,17 +465,29 @@ function subscribeStoreConfig() {
 // → Métodos de pago. PagoPark no forma parte de esto — no está integrado,
 // así que nunca se ofrece como opción seleccionable real (ver nota fija
 // "Próximamente" en el HTML), sin importar lo que diga ese toggle.
+let efectivoAdminOn = true;
+let transferenciaAdminOn = true;
+
 function applyPaymentMethods(paymentMethods) {
   const pm = paymentMethods || {};
-  const efectivoOn = pm.efectivo !== false;
-  const transferenciaOn = pm.transferencia !== false;
+  efectivoAdminOn = pm.efectivo !== false;
+  transferenciaAdminOn = pm.transferencia !== false;
+  refreshPaymentOptions();
+}
 
+// Se recalcula tanto cuando cambian los toggles de Super Admin como cuando
+// cambia el método de envío elegido (ver ck-city onchange). Por encomienda
+// no hay ningún repartidor propio de Tintin que reciba el efectivo al
+// entregar — el paquete lo maneja la transportadora — así que esa opción
+// no corresponde ahí aunque Super Admin la tenga habilitada en general.
+function refreshPaymentOptions() {
   // Si Super Admin apaga los dos métodos a propósito (por ejemplo, para
   // pausar cobros temporalmente), el checkout debe respetar eso de verdad:
   // se muestra el aviso "No hay métodos de pago disponibles" (con el link
   // de WhatsApp como alternativa) en vez de forzar ambos a mostrarse igual.
-  const showEfectivo = efectivoOn;
-  const showTransferencia = transferenciaOn;
+  const isEncomienda = orderData.shippingMethod === 'encomienda';
+  const showEfectivo = efectivoAdminOn && !isEncomienda;
+  const showTransferencia = transferenciaAdminOn;
 
   const efectivoEl = document.getElementById('pay-option-efectivo');
   const transferenciaEl = document.getElementById('pay-option-transferencia');
@@ -545,11 +557,15 @@ function cityCostLabel(price) {
 // ciudad vieja, esa ciudad queda en el grupo "Sin departamento" en vez de
 // desaparecer.
 const RETIRO_VALUE = '__retiro__';
-const SIN_DEPARTAMENTO = 'Sin departamento';
+// Departamento real donde cae toda ciudad sin uno cargado en Super Admin —
+// hoy son, de hecho, todas ciudades del Gran Asunción/Central. Ya no existe
+// un "Sin departamento" separado: se agrupan en el departamento real que les
+// corresponde en vez de un cajón aparte.
+const DEPARTAMENTO_POR_DEFECTO = 'Central';
 
 function departamentosDisponibles() {
   const set = new Set();
-  [...DELIVERY_CITIES, ...ENCOMIENDA_CITIES].forEach(c => set.add(c.departamento || SIN_DEPARTAMENTO));
+  [...DELIVERY_CITIES, ...ENCOMIENDA_CITIES].forEach(c => set.add(c.departamento || DEPARTAMENTO_POR_DEFECTO));
   return [...set].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
@@ -569,11 +585,6 @@ function populateCities() {
     opt.dataset.dynamic = '1';
     deptSelect.appendChild(opt);
   });
-  const retiroOpt = document.createElement('option');
-  retiroOpt.value = RETIRO_VALUE;
-  retiroOpt.textContent = '🏪 Retiro en tienda — San Lorenzo';
-  retiroOpt.dataset.dynamic = '1';
-  deptSelect.appendChild(retiroOpt);
 
   if (currentDept) {
     deptSelect.value = currentDept;
@@ -598,18 +609,21 @@ function resetCitySelect() {
 
 function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   const select = document.getElementById('ck-city');
-  if (dep === RETIRO_VALUE) {
-    select.innerHTML = `<option value="${RETIRO_VALUE}" selected>San Lorenzo (retiro en tienda)</option>`;
-    select.disabled = true;
-    select.onchange();
-    return;
-  }
-  const inDept = c => (c.departamento || SIN_DEPARTAMENTO) === dep;
+  const inDept = c => (c.departamento || DEPARTAMENTO_POR_DEFECTO) === dep;
   const delivery = DELIVERY_CITIES.filter(inDept);
   const encomienda = ENCOMIENDA_CITIES.filter(inDept);
 
   select.disabled = false;
   select.innerHTML = '<option value="">— Seleccioná tu ciudad —</option>';
+  // El retiro en tienda es una ciudad más (la única sin costo de envío),
+  // no un departamento aparte — solo existe en Central, que es donde está
+  // San Lorenzo, y va arriba de todo el resto de las opciones de esa zona.
+  if (dep === 'Central') {
+    const retiroOpt = document.createElement('option');
+    retiroOpt.value = RETIRO_VALUE;
+    retiroOpt.textContent = '🏪 Retiro en tienda — San Lorenzo';
+    select.appendChild(retiroOpt);
+  }
   if (delivery.length) {
     const group = document.createElement('optgroup');
     group.label = '🚚 Delivery a domicilio';
@@ -1071,6 +1085,7 @@ document.getElementById('ck-city').onchange = function() {
     reminderTextEl.innerHTML = '<strong>Recordatorio de envío</strong>Los pedidos por encomienda se envían en 24 a 48 hs, según el día de despacho y la transportadora asignada. Pagar hoy no significa que el pedido llegue hoy — el envío por encomienda tiene su propio tiempo de trámite y traslado.';
     reminderEl.classList.add('show');
   }
+  refreshPaymentOptions();
 };
 
 document.getElementById('btn-step2-next').onclick = () => {
@@ -1109,8 +1124,8 @@ document.getElementById('btn-step2-next').onclick = () => {
     orderData.referencia = document.getElementById('ck-referencia').value.trim();
   }
 
-  orderData.city = city === '__retiro__' ? 'San Lorenzo (retiro)' : city;
-  orderData.departamento = departamento === RETIRO_VALUE ? '' : departamento;
+  orderData.city = city === RETIRO_VALUE ? 'San Lorenzo (retiro)' : city;
+  orderData.departamento = departamento;
   goToStep(2);
 
   // Pre-fill nombre/email/teléfono desde la cuenta — solo si el campo sigue
