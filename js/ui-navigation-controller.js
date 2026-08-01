@@ -49,7 +49,7 @@
 
     getBreakpoint() {
       if (innerWidth < 768) return 'mobile';
-      if (innerWidth < 1024) return 'tablet';
+      if (innerWidth <= 1024) return 'tablet';
       return 'desktop';
     }
 

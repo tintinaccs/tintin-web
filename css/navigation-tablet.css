@@ -1,8 +1,8 @@
-/* TINTIN tablet navigation — isolated to 768–1023px. */
+/* TINTIN tablet navigation — isolated to 768–1024px. */
 .tt-header-tablet,
 .tt-tablet-menu { display: none !important; }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .tt-header-tablet {
     display: block !important;
     position: fixed;

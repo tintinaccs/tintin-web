@@ -30,8 +30,8 @@ check(controller.includes("tt-surface-locked"), 'falta bloqueo de scroll central
 check(controller.includes('this.cancelAnimations()'), 'falta cancelación de animaciones ante interacciones rápidas');
 check(styles.includes('@media (prefers-reduced-motion: reduce)'), 'falta reduced-motion');
 check(styles.includes('@media (max-width: 767px)'), 'falta contrato mobile <= 767px');
-check(styles.includes('@media (min-width: 768px) and (max-width: 1023px)'), 'falta contrato tablet 768-1023px');
-check(controller.includes("if (innerWidth < 768)") && controller.includes("if (innerWidth < 1024)"), 'faltan los límites exactos mobile/tablet/desktop');
+check(styles.includes('@media (min-width: 768px) and (max-width: 1024px)'), 'falta contrato tablet 768-1024px');
+check(controller.includes("if (innerWidth < 768)") && controller.includes("if (innerWidth <= 1024)"), 'faltan los límites exactos mobile/tablet/desktop');
 check(collections.includes('buildTabletCard') && collections.includes('createCollectionImage(collection)'), 'tablet no consume las imágenes reales compartidas de categorías');
 check(navigation.includes('document.startViewTransition') && navigation.includes('location.assign'), 'navegación no tiene View Transition con fallback');
 

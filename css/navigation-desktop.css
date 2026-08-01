@@ -1,7 +1,7 @@
-/* TINTIN desktop navigation — isolated to >=1024px. */
+/* TINTIN desktop navigation — isolated to >=1025px. */
 .tt-header-desktop { display: none !important; }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .tt-header-desktop {
     display: block !important;
     visibility: visible !important;
