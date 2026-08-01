@@ -37,6 +37,7 @@ const scrollReveal = read('js/scroll-reveal-global.js');
 const imagePerformance = read('js/image-performance.js');
 const home = read('index.html');
 const publicShell = read('js/public-shell.js');
+const surfaceController = read('js/ui-navigation-controller.js');
 const contentSchema = read('js/content-schema.js');
 const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
@@ -203,13 +204,16 @@ check('La colección Bolsos conserva su portada real después de sincronizar',
   collectionsPhase4.includes('col-${file}.webp') &&
   collectionsPhase4.includes('label.textContent = (clean(collection.name) || clean(collection.slug)).toUpperCase()'));
 check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
-  publicShell.includes('id="search-panel" role="search"') &&
+  publicShell.includes('id="search-panel" role="dialog"') &&
   publicShell.includes('id="cart-drawer" role="dialog"') &&
   publicShell.includes('id="collections-sheet" role="dialog"') &&
-  main.includes("drawer.setAttribute('aria-hidden', 'false')") &&
-  main.includes("panel.setAttribute('aria-hidden', 'false')") &&
-  main.includes("sheet.setAttribute('aria-hidden', 'false')") &&
-  main.includes("menu.setAttribute('aria-hidden', 'false')"));
+  publicShell.includes('id="tt-tablet-menu" role="dialog"') &&
+  surfaceController.includes("config.element.setAttribute('aria-hidden', 'false')") &&
+  surfaceController.includes("config.element.setAttribute('aria-hidden', 'true')") &&
+  main.includes("register('search'") &&
+  main.includes("register('cart'") &&
+  main.includes("register('mobile-shop'") &&
+  main.includes("register('tablet-menu'"));
 check('Las recargas asíncronas conservan agotados visibles y bloquean su compra',
   productsStore.includes('window.TintinCatalogPolicy?.isCatalogVisible') &&
   phase7CatalogPolicy.includes('export function isCatalogVisible') &&
