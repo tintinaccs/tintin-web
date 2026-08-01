@@ -201,7 +201,7 @@ function isCollectionPage() {
 }
 
 function attachDemandLoading() {
-  ['btn-tienda', 'btn-mobile-tienda', 'tabbar-tienda', 'btn-menu'].forEach(id => {
+  ['btn-tienda', 'btn-tablet-tienda', 'tabbar-tienda', 'btn-menu-tablet'].forEach(id => {
     const control = document.getElementById(id);
     if (!control) return;
     control.addEventListener('pointerenter', () => initNavCollections(), { once: true, passive: true });

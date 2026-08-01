@@ -198,7 +198,7 @@ try {
     }
   }
 
-  for (const width of [390, 768]) {
+  for (const width of [390]) {
     const page = await context.newPage();
     try {
       await page.setViewportSize({ width, height: 900 });
@@ -246,6 +246,34 @@ try {
       console.log(`OK — Header mobile ${width}px · Tienda · Buscar · Carrito · Cuenta · fondos blancos`);
     } catch (error) {
       failures.push(`Header mobile ${width}px: ${error.message || String(error)}.`);
+    } finally {
+      await page.close();
+    }
+  }
+
+  for (const width of [768, 820, 1023]) {
+    const page = await context.newPage();
+    try {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
+      await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+      await page.waitForSelector('#tt-header-tablet #btn-menu-tablet', { state: 'attached', timeout: 10_000 });
+      await page.waitForTimeout(350);
+      const state = await page.evaluate(() => {
+        const visible = node => !!node && getComputedStyle(node).display !== 'none' && node.getBoundingClientRect().width > 0;
+        const required = ['tt-header-tablet','btn-menu-tablet','btn-search-tablet','btn-cuenta-tablet','btn-cart-tablet','tt-tablet-menu'];
+        return {
+          missing: required.filter(id => !document.getElementById(id)),
+          tabletVisible: visible(document.getElementById('tt-header-tablet')),
+          desktopVisible: visible(document.getElementById('tt-header-desktop-tablet')),
+          mobileVisible: visible(document.getElementById('tt-tabbar')),
+        };
+      });
+      if (state.missing.length) failures.push(`Header tablet ${width}px: faltan ${state.missing.join(', ')}.`);
+      if (!state.tabletVisible || state.desktopVisible || state.mobileVisible) failures.push(`Header tablet ${width}px: aislamiento responsive incorrecto.`);
+      console.log(`OK — Header tablet ${width}px · menú · Buscar · Cuenta · Carrito`);
+    } catch (error) {
+      failures.push(`Header tablet ${width}px: ${error.message || String(error)}.`);
     } finally {
       await page.close();
     }

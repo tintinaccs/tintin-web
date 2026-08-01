@@ -47,7 +47,7 @@ const accountBtnDefaults=new Map();
 document.addEventListener('click',event=>{
  const googleButton=event.target.closest?.('#btn-google');
  if(googleButton)beginSilentAuthTransition();
- const logoutButton=event.target.closest?.('#account-logout-btn,#mobile-user-logout-btn,#btn-logout');
+ const logoutButton=event.target.closest?.('#account-logout-btn,#tablet-user-logout-btn,#btn-logout');
  if(logoutButton){
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -69,21 +69,21 @@ onAuthStateChanged(auth,async user=>{
  renderAccountButtonPhoto(user);
  renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);
- renderMobileUserPanel(user,role);
+ renderTabletUserPanel(user,role);
 });
 
 function renderAccountButtonPhoto(user){
- const btn=document.getElementById('btn-cuenta');
- if(!btn)return;
- if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
- if(user&&user.photoURL){
-  const name=user.displayName||user.email||'Mi cuenta';
-  const img=document.createElement('img');
-  img.className='tt-account-avatar-btn';img.src=user.photoURL;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
-  img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
-  img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
-  btn.innerHTML='';btn.appendChild(img);
- }else btn.innerHTML=accountBtnDefaults.get(btn);
+ document.querySelectorAll('[data-auth-account-button]').forEach(btn=>{
+  if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
+  if(user&&user.photoURL){
+   const name=user.displayName||user.email||'Mi cuenta';
+   const img=document.createElement('img');
+   img.className='tt-account-avatar-btn';img.src=user.photoURL;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
+   img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
+   img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
+   btn.innerHTML='';btn.appendChild(img);
+  }else btn.innerHTML=accountBtnDefaults.get(btn);
+ });
 }
 
 function renderMobileTabbarPhoto(user){
@@ -111,16 +111,16 @@ function renderAccountPanel(user,role='client'){
 }
 
 function wireLogout(panel){const btn=panel.querySelector('#account-logout-btn');if(btn)btn.onclick=doLogout;}
-function wireMobileLogout(panel){const btn=panel.querySelector('#mobile-user-logout-btn');if(btn)btn.onclick=doLogout;}
+function wireTabletLogout(panel){const btn=panel.querySelector('#tablet-user-logout-btn');if(btn)btn.onclick=doLogout;}
 
-function renderMobileUserPanel(user,role='client'){
- const panel=document.getElementById('tt-mobile-user');
+function renderTabletUserPanel(user,role='client'){
+ const panel=document.getElementById('tt-tablet-user');
  if(!panel)return;
- if(!user){panel.innerHTML=`<a href="login.html" class="tt-mobile-user-login"><div class="tt-mobile-user-avatar">${PERSON_ICON}</div><div><div class="tt-mobile-user-name">Iniciar sesión</div><div class="tt-mobile-user-sub">Ingresá con Google, es gratis!</div></div></a>`;return;}
+ if(!user){panel.innerHTML=`<a href="login.html" class="tt-tablet-user-login"><div class="tt-tablet-user-avatar">${PERSON_ICON}</div><div><div class="tt-tablet-user-name">Iniciar sesión</div><div class="tt-tablet-user-sub">Ingresá con Google, es gratis!</div></div></a>`;return;}
  const name=user.displayName||user.email||'Mi perfil';
  const firstName=escapeHtmlNav(name.split(' ')[0]);
- const avatar=user.photoURL?`<img class="tt-mobile-user-photo" src="${user.photoURL}" alt="${firstName}" referrerpolicy="no-referrer" width="40" height="40">`:PERSON_ICON;
- const adminMobile=hasAdminAccess(user,role)?`<a href="admin.html" class="tt-mobile-user-action tt-mobile-user-admin" data-internal-admin-link="true"><span class="tt-mobile-user-admin-icon">${ADMIN_ICON}</span><span>${escapeHtmlNav(roleLabel(role))}</span></a>`:'';
- panel.innerHTML=`<div class="tt-mobile-user-profile tt-mobile-user-profile-static"><div class="tt-mobile-user-avatar">${avatar}</div><div><div class="tt-mobile-user-name">${firstName}</div><div class="tt-mobile-user-sub">Cuenta activa</div></div></div><div class="tt-mobile-user-actions">${adminMobile}<a href="perfil.html" class="tt-mobile-user-action">${PERSON_ICON}<span>Mi cuenta</span></a><a href="perfil.html#mis-pedidos" class="tt-mobile-user-action">${ORDER_ICON}<span>Mis pedidos</span></a><button type="button" class="tt-mobile-user-logout" id="mobile-user-logout-btn">Cerrar sesión</button></div>`;
- wireMobileLogout(panel);
+ const avatar=user.photoURL?`<img class="tt-tablet-user-photo" src="${user.photoURL}" alt="${firstName}" referrerpolicy="no-referrer" width="42" height="42">`:PERSON_ICON;
+ const adminTablet=hasAdminAccess(user,role)?`<a href="admin.html" class="tt-tablet-user-action tt-tablet-user-admin" data-internal-admin-link="true">${ADMIN_ICON}<span>${escapeHtmlNav(roleLabel(role))}</span></a>`:'';
+ panel.innerHTML=`<div class="tt-tablet-user-login"><div class="tt-tablet-user-avatar">${avatar}</div><div><div class="tt-tablet-user-name">${firstName}</div><div class="tt-tablet-user-sub">Cuenta activa</div></div></div><div class="tt-tablet-user-actions">${adminTablet}<a href="perfil.html" class="tt-tablet-user-action">${PERSON_ICON}<span>Mi cuenta</span></a><a href="perfil.html#mis-pedidos" class="tt-tablet-user-action">${ORDER_ICON}<span>Mis pedidos</span></a><button type="button" class="tt-tablet-user-logout" id="tablet-user-logout-btn">Cerrar sesión</button></div>`;
+ wireTabletLogout(panel);
 }

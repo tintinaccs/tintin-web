@@ -292,7 +292,7 @@ function getCartCount() {
 function updateCartBadge() {
   const count = getCartCount();
   const text = count > 99 ? '99+' : String(count);
-  ['cart-badge', 'cart-badge-mobile'].forEach(id => {
+  ['cart-badge', 'cart-badge-tablet', 'cart-badge-mobile'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = text;
@@ -492,7 +492,7 @@ function openCart(trigger = document.activeElement) {
     drawer.setAttribute('aria-hidden', 'false');
   }
   if (overlay) overlay.classList.add('open');
-  ['btn-cart', 'tabbar-cart'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'true'));
+  document.querySelectorAll('[data-nav-action="cart"],#tabbar-cart').forEach(control => control.setAttribute('aria-expanded', 'true'));
   lockScroll('cart');
   setActiveTab(document.getElementById('tabbar-cart'));
 }
@@ -506,7 +506,7 @@ function closeCart() {
     drawer.setAttribute('aria-hidden', 'true');
   }
   if (overlay) overlay.classList.remove('open');
-  ['btn-cart', 'tabbar-cart'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'false'));
+  document.querySelectorAll('[data-nav-action="cart"],#tabbar-cart').forEach(control => control.setAttribute('aria-expanded', 'false'));
   unlockScroll('cart');
   restoreDefaultActiveTab();
   if (wasOpen && _lastCartTrigger?.isConnected) _lastCartTrigger.focus({ preventScroll: true });
@@ -554,15 +554,15 @@ function directWAProduct(product, variant = '') {
    HEADER SCROLL EFFECT
 ────────────────────────────────────── */
 function initHeaderScroll() {
-  const header = document.getElementById('tt-header-desktop-tablet');
-  if (!header) return;
+  const headers = document.querySelectorAll('[data-header-device="desktop"],[data-header-device="tablet"]');
+  if (!headers.length) return;
   const hasFullBleedHomeHero = document.body?.classList.contains('tt-public-shell-home');
 
   function onScroll() {
     if (!hasFullBleedHomeHero || window.scrollY > 80) {
-      header.classList.add('scrolled');
+      headers.forEach(header => header.classList.add('scrolled'));
     } else {
-      header.classList.remove('scrolled');
+      headers.forEach(header => header.classList.remove('scrolled'));
     }
   }
 
@@ -688,7 +688,7 @@ function initSearch() {
     if (trigger instanceof HTMLElement) lastSearchTrigger = trigger;
     panel.classList.add('open');
     panel.setAttribute('aria-hidden', 'false');
-    ['btn-search', 'tabbar-search'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'true'));
+    document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => control.setAttribute('aria-expanded', 'true'));
     if (input) input.focus();
     setActiveTab(tabbarSearch);
   }
@@ -697,7 +697,7 @@ function initSearch() {
     const wasOpen = panel.classList.contains('open');
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden', 'true');
-    ['btn-search', 'tabbar-search'].forEach(id => document.getElementById(id)?.setAttribute('aria-expanded', 'false'));
+    document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => control.setAttribute('aria-expanded', 'false'));
     if (input) input.value = '';
     if (results) {
       results.style.display = 'none';
@@ -709,8 +709,7 @@ function initSearch() {
 
   // btn-search vive en el header Desktop/Tablet, tabbar-search es el
   // acceso mobile — ambos abren el mismo panel de búsqueda global.
-  const btnSearch = document.getElementById('btn-search');
-  if (btnSearch) btnSearch.addEventListener('click', e => openSearch(e.currentTarget));
+  document.querySelectorAll('[data-nav-action="search"]').forEach(control => control.addEventListener('click', e => openSearch(e.currentTarget)));
   if (tabbarSearch) tabbarSearch.addEventListener('click', e => openSearch(e.currentTarget));
   if (btnClose) btnClose.addEventListener('click', closeSearch);
 
@@ -807,8 +806,7 @@ function initCartEvents() {
 
   // btn-cart vive en el header Desktop/Tablet, tabbar-cart es el acceso
   // mobile — ambos abren el mismo drawer de carrito global.
-  const btnCart = document.getElementById('btn-cart');
-  if (btnCart) btnCart.addEventListener('click', e => openCart(e.currentTarget));
+  document.querySelectorAll('[data-nav-action="cart"]').forEach(control => control.addEventListener('click', e => openCart(e.currentTarget)));
   if (tabbarCart) tabbarCart.addEventListener('click', e => openCart(e.currentTarget));
   if (btnClose) btnClose.addEventListener('click', closeCart);
   if (overlay) overlay.addEventListener('click', closeCart);

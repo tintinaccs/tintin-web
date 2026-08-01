@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260731-phase8-stock-shell-1';
+const VERSION = 'tintin-20260801-responsive-navigation-1';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',
@@ -13,7 +13,7 @@ const PUBLIC_PAGES = [
   'privacidad.html', 'product.html', 'terminos.html',
 ];
 const SHELL_IDS = [
-  'tt-header-desktop-tablet', 'search-panel', 'mobile-menu', 'tt-tabbar',
+  'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'tt-tablet-menu', 'tt-tabbar',
   'cart-overlay', 'cart-drawer', 'collections-sheet', 'sheet-backdrop',
 ];
 const failures = [];
@@ -41,7 +41,7 @@ for (const id of SHELL_IDS) {
   check(shell.includes(`id="${id}"`), `public-shell.js: falta #${id}`);
 }
 [
-  'btn-menu', 'btn-tienda', 'btn-search', 'btn-cuenta', 'btn-cart',
+  'btn-menu-tablet', 'btn-tablet-tienda', 'btn-tienda', 'btn-search', 'btn-search-tablet', 'btn-cuenta', 'btn-cuenta-tablet', 'btn-cart', 'btn-cart-tablet',
   'tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta',
 ].forEach(id => check(shell.includes(`id="${id}"`), `public-shell.js: falta el control #${id}`));
 check(shell.includes("import(versioned('./auth-nav.js'))"), 'public-shell.js: falta cuenta compartida');
@@ -49,13 +49,18 @@ check(shell.includes("import(versioned('./nav-collections.js'))"), 'public-shell
 check(shell.includes("import(versioned('./products-store.js'))"), 'public-shell.js: faltan productos en vivo para buscar/carrito');
 check(shell.includes("import(versioned('./cart-sync.js'))"), 'public-shell.js: falta sincronizacion del carrito');
 
-const styles = read('styles.css');
-check(/@media \(min-width: 769px\)[\s\S]*?\.tt-tabbar\s*\{[\s\S]*?display:\s*none\s*!important/i.test(styles), 'styles.css: la barra mobile no esta aislada de desktop/tablet');
-check(/@media \(max-width: 768px\)[\s\S]*?\.tt-header\s*\{[\s\S]*?display:\s*none\s*!important/i.test(styles), 'styles.css: el header desktop/tablet no esta aislado de mobile');
-check(/@media \(max-width: 768px\)[\s\S]*?\.tt-tabbar\s*\{\s*display:\s*flex/i.test(styles), 'styles.css: la barra mobile no se habilita en su rango');
+const desktopStyles = read('css/navigation-desktop.css');
+const tabletStyles = read('css/navigation-tablet.css');
+const mobileStyles = read('css/navigation-mobile.css');
+check(/@media \(min-width: 1024px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1024px');
+check(/@media \(min-width: 768px\) and \(max-width: 1023px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1023px');
+check(/@media \(max-width: 767px\)/.test(mobileStyles), 'mobile: falta el rango exacto <=767px');
+check(shell.includes("import(versioned('./navigation-desktop.js'))"), 'public-shell.js: falta controlador desktop aislado');
+check(shell.includes("import(versioned('./navigation-tablet.js'))"), 'public-shell.js: falta controlador tablet aislado');
+check(shell.includes("import(versioned('./navigation-mobile.js'))"), 'public-shell.js: falta controlador mobile aislado');
 
 const scrollRuntime = read('js/header-scroll-hide.js');
-check(scrollRuntime.includes('@media (min-width: 769px)'), 'header-scroll-hide.js: la animacion del header no cubre desktop/tablet');
+check(scrollRuntime.includes('@media (min-width: 769px)'), 'header-scroll-hide.js: la animacion del header no cubre desktop');
 check(scrollRuntime.includes('requestAnimationFrame(onScroll)'), 'header-scroll-hide.js: el scroll no esta sincronizado con frames');
 
 const pageAudit = read('js/page-audit-fix.js');
@@ -67,4 +72,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Public shell audit passed: ${PUBLIC_PAGES.length} public screens share one responsive header.`);
+console.log(`Public shell audit passed: ${PUBLIC_PAGES.length} screens share three isolated responsive navigations.`);

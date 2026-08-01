@@ -12,7 +12,7 @@
   if (window.TintinPublicShellBooted) return;
   window.TintinPublicShellBooted = true;
 
-  const VERSION = 'tintin-20260731-phase8-stock-shell-1';
+  const VERSION = 'tintin-20260801-responsive-navigation-1';
   const SCRIPT_URL = document.currentScript?.src || new URL('js/public-shell.js', location.href).href;
   const ICONS = {
     bolsos: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
@@ -53,9 +53,9 @@
       <div class="tt-dropdown-label">${label.toUpperCase()}</div>
     </a>`).join('');
 
-  const mobileCategories = CATEGORIES.map(([slug, label, background]) => `
-    <a href="catalogo.html?cat=${slug}" class="tt-mobile-cat-card">
-      <div class="tt-mobile-cat-img" style="background:${background}">${svg(slug, 28, '#FFFFFF')}</div>
+  const tabletCategories = CATEGORIES.map(([slug, label, background]) => `
+    <a href="catalogo.html?cat=${slug}" class="tt-tablet-cat-card">
+      <div class="tt-tablet-cat-img" style="background:${background}">${svg(slug, 28, '#FFFFFF')}</div>
       <span>${label}</span>
     </a>`).join('');
 
@@ -65,42 +65,55 @@
 
   function topShell() {
     return `
-      <header class="tt-header tt-header-desktop-tablet" id="tt-header-desktop-tablet" data-header-device="desktop-tablet">
+      <header class="tt-header tt-header-desktop" id="tt-header-desktop-tablet" data-header-device="desktop">
         <div class="tt-header-inner">
-          <button type="button" class="tt-menu-toggle" id="btn-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
-
           <a href="index.html" class="tt-logo-link" aria-label="Tintin, ir al inicio">
             <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=${VERSION}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
           </a>
 
-          <nav class="tt-nav tt-nav-desktop-tablet" id="tt-nav-desktop-tablet" aria-label="Navegación principal">
-            <a href="index.html" data-shell-route="home">INICIO</a>
+          <nav class="tt-nav tt-nav-desktop" id="tt-nav-desktop-tablet" aria-label="Navegación principal">
+            <span class="tt-desktop-active-pill" aria-hidden="true"></span>
+            <a href="index.html" data-shell-route="home" data-desktop-nav-item>INICIO</a>
             <div class="tt-nav-dropdown" id="tienda-dropdown">
-              <button type="button" id="btn-tienda" aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">TIENDA ▾</button>
+              <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">TIENDA <span aria-hidden="true">▾</span></button>
               <div class="tt-dropdown" id="tt-tienda-dropdown-panel">
                 <div class="tt-dropdown-grid" data-collections-nav="desktop">${desktopCategories}</div>
               </div>
             </div>
-            <a href="about.html" data-shell-route="about">NOSOTROS</a>
-            <a href="contact.html" data-shell-route="contact">CONTACTO</a>
+            <a href="about.html" data-shell-route="about" data-desktop-nav-item>NOSOTROS</a>
+            <a href="contact.html" data-shell-route="contact" data-desktop-nav-item>CONTACTO</a>
           </nav>
 
           <div class="tt-header-actions">
-            <button type="button" id="btn-search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
+            <button type="button" id="btn-search" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </button>
             <div class="tt-nav-dropdown" id="account-dropdown">
-              <button type="button" id="btn-cuenta" title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-haspopup="true" aria-controls="account-panel">
+              <button type="button" id="btn-cuenta" data-auth-account-button title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-haspopup="true" aria-controls="account-panel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </button>
               <div class="tt-account-panel" id="account-panel"></div>
             </div>
-            <button type="button" id="btn-cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer" style="position:relative">
+            <button type="button" id="btn-cart" data-nav-action="cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer" style="position:relative">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
               <span class="tt-cart-badge hidden" id="cart-badge">0</span>
             </button>
+          </div>
+        </div>
+      </header>
+
+      <header class="tt-header-tablet" id="tt-header-tablet" data-header-device="tablet">
+        <div class="tt-tablet-header-inner">
+          <button type="button" class="tt-tablet-menu-toggle" id="btn-menu-tablet" aria-label="Abrir menú" aria-expanded="false" aria-controls="tt-tablet-menu">
+            <span class="tt-tablet-menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <a href="index.html" class="tt-tablet-logo-link" aria-label="Tintin, ir al inicio">
+            <img loading="eager" decoding="async" fetchpriority="high" src="assets-tintin/images/general/logo.png?v=${VERSION}" alt="TINTIN Accesorios &amp; Relojes" class="tt-tablet-logo-img">
+          </a>
+          <div class="tt-tablet-actions">
+            <button type="button" id="btn-search-tablet" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+            <a href="login.html" id="btn-cuenta-tablet" data-auth-link="cuenta" data-auth-account-button data-shell-route="account" title="Mi cuenta" aria-label="Mi cuenta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+            <button type="button" id="btn-cart-tablet" data-nav-action="cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="tt-cart-badge hidden" id="cart-badge-tablet">0</span></button>
           </div>
         </div>
       </header>
@@ -112,32 +125,32 @@
         <div class="tt-search-results" id="search-results" style="display:none"></div>
       </div>
 
-      <div class="tt-mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación" aria-hidden="true">
-        <div class="tt-mobile-menu-header">
-          <a href="index.html" class="tt-logo-link" aria-label="Tintin, ir al inicio">
-            <img loading="eager" decoding="async" src="assets-tintin/images/general/logo.png?v=${VERSION}" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+      <div class="tt-tablet-menu" id="tt-tablet-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación tablet" aria-hidden="true">
+        <div class="tt-tablet-menu-header">
+          <a href="index.html" class="tt-tablet-menu-logo" aria-label="Tintin, ir al inicio">
+            <img loading="eager" decoding="async" src="assets-tintin/images/general/logo.png?v=${VERSION}" alt="TINTIN" class="tt-tablet-menu-logo-img">
           </a>
-          <button type="button" class="tt-mobile-close" id="btn-mobile-close" aria-label="Cerrar menú">
+          <button type="button" class="tt-tablet-menu-close" id="btn-tablet-close" aria-label="Cerrar menú">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
-        <nav class="tt-mobile-nav" aria-label="Navegación tablet">
+        <nav class="tt-tablet-nav" aria-label="Navegación tablet">
           <a href="index.html" data-shell-route="home">INICIO</a>
-          <button type="button" id="btn-mobile-tienda" class="tt-mobile-tienda-btn" aria-expanded="false" aria-controls="mobile-cats">
+          <button type="button" id="btn-tablet-tienda" class="tt-tablet-tienda-btn" aria-expanded="false" aria-controls="tablet-cats">
             <span>TIENDA</span>
-            <svg class="tt-mobile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="tt-tablet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="tt-mobile-cats" id="mobile-cats">
-            <div class="tt-mobile-cats-grid" data-collections-nav="mobile">${mobileCategories}</div>
-            <a href="catalogo.html" class="tt-mobile-ver-todo">Ver todo el catálogo →</a>
+          <div class="tt-tablet-cats" id="tablet-cats">
+            <div class="tt-tablet-cats-grid" data-collections-nav="tablet">${tabletCategories}</div>
+            <a href="catalogo.html" class="tt-tablet-ver-todo">Ver todo el catálogo →</a>
           </div>
           <a href="about.html" data-shell-route="about">NOSOTROS</a>
           <a href="contact.html" data-shell-route="contact">CONTACTO</a>
         </nav>
-        <div class="tt-mobile-user" id="tt-mobile-user">
-          <a href="login.html" class="tt-mobile-user-login">
+        <div class="tt-tablet-user" id="tt-tablet-user">
+          <a href="login.html" data-auth-link="cuenta" class="tt-tablet-user-login">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <div><div class="tt-mobile-user-name">Iniciar sesión</div><div class="tt-mobile-user-sub">Ingresá con Google, ¡es gratis!</div></div>
+            <div><div class="tt-tablet-user-name">Iniciar sesión</div><div class="tt-tablet-user-sub">Ingresá con Google, ¡es gratis!</div></div>
           </a>
         </div>
       </div>`;
@@ -146,6 +159,8 @@
   function bottomShell() {
     return `
       <nav class="tt-tabbar" id="tt-tabbar" aria-label="Navegación mobile">
+        <span class="tt-mobile-nav-halo" aria-hidden="true"></span>
+        <span class="tt-mobile-nav-indicator" aria-hidden="true"></span>
         <a href="index.html" class="tt-tabbar-btn" aria-label="Inicio" data-shell-tab="home">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span>
         </a>
@@ -181,7 +196,7 @@
 
   function removeLegacyShell() {
     [
-      'tt-header-desktop-tablet', 'search-panel', 'mobile-menu', 'tt-tabbar',
+      'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'mobile-menu', 'tt-tablet-menu', 'tt-tabbar',
       'cart-overlay', 'cart-drawer', 'collections-sheet', 'sheet-backdrop',
     ].forEach(id => document.getElementById(id)?.remove());
   }
@@ -212,12 +227,12 @@
     if (page === 'shop') tienda?.setAttribute('aria-current', 'page');
     else tienda?.removeAttribute('aria-current');
 
-    const mobileTienda = document.getElementById('btn-mobile-tienda');
+    const mobileTienda = document.getElementById('btn-tablet-tienda');
     mobileTienda?.classList.toggle('active', page === 'shop');
     if (page === 'shop') mobileTienda?.setAttribute('aria-current', 'page');
     else mobileTienda?.removeAttribute('aria-current');
 
-    [['btn-cart', 'cart'], ['btn-cuenta', 'account']].forEach(([id, route]) => {
+    [['btn-cart', 'cart'], ['btn-cart-tablet', 'cart'], ['btn-cuenta', 'account'], ['btn-cuenta-tablet', 'account']].forEach(([id, route]) => {
       const control = document.getElementById(id);
       const active = page === route;
       control?.classList.toggle('active', active);
@@ -237,6 +252,22 @@
     const url = new URL(file, SCRIPT_URL);
     url.searchParams.set('v', VERSION);
     return url.href;
+  }
+
+  function ensureNavigationAssets() {
+    [
+      ['tt-navigation-desktop-css', '../css/navigation-desktop.css'],
+      ['tt-navigation-tablet-css', '../css/navigation-tablet.css'],
+      ['tt-navigation-mobile-css', '../css/navigation-mobile.css'],
+      ['tt-navigation-shared-css', '../css/navigation-shared.css'],
+    ].forEach(([id, file]) => {
+      if (document.getElementById(id)) return;
+      const link = document.createElement('link');
+      link.id = id;
+      link.rel = 'stylesheet';
+      link.href = versioned(file);
+      document.head.appendChild(link);
+    });
   }
 
   function loadHomeMaintenance() {
@@ -275,8 +306,7 @@
       console.warn('[PublicShell] No se pudo cargar el catálogo para la búsqueda.', error);
     });
 
-    ['btn-search', 'tabbar-search'].forEach(id => {
-      const control = document.getElementById(id);
+    document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => {
       if (!control) return;
       control.addEventListener('pointerenter', load, { once: true, passive: true });
       control.addEventListener('focus', load, { once: true });
@@ -313,6 +343,13 @@
 
     Promise.allSettled(critical).then(reportRuntimeFailures);
     attachProductsDemand();
+
+    Promise.allSettled([
+      import(versioned('./navigation-desktop.js')),
+      import(versioned('./navigation-tablet.js')),
+      import(versioned('./navigation-mobile.js')),
+      import(versioned('./navigation-shared.js')),
+    ]).then(reportRuntimeFailures);
 
     // Las colecciones del menú ya tienen contenido estático utilizable; su
     // sincronización y el mantenimiento visual del inicio pueden esperar al
@@ -365,6 +402,7 @@
 
   function mount() {
     if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return;
+    ensureNavigationAssets();
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', topShell());
     document.body.insertAdjacentHTML('beforeend', bottomShell());
