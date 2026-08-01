@@ -1634,6 +1634,13 @@ subscribeStoreConfig().then(() => {
 renderCart();
 // Re-sync cart once real Firestore products arrive (in case they load after this page renders)
 window.addEventListener('tintin:products-loaded', () => renderCart(), { once: true });
+// cart-sync.js dispara este evento cuando termina de migrar/traer el carrito
+// real de una cuenta recién logueada (ej. el carrito de invitada se mueve a
+// la cuenta al loguearse) — sin este listener, ese cambio llegaba después
+// del render inicial y el botón "Continuar con el envío" quedaba con el
+// estado viejo (a veces deshabilitado con productos ya en el carrito) hasta
+// que alguna otra interacción (+/-) forzaba un renderCart() nuevo.
+window.addEventListener('tt_cart_updated', () => renderCart());
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
