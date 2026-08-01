@@ -209,11 +209,26 @@
 
     const tienda = document.getElementById('btn-tienda');
     tienda?.classList.toggle('active', page === 'shop');
+    if (page === 'shop') tienda?.setAttribute('aria-current', 'page');
+    else tienda?.removeAttribute('aria-current');
+
+    const mobileTienda = document.getElementById('btn-mobile-tienda');
+    mobileTienda?.classList.toggle('active', page === 'shop');
+    if (page === 'shop') mobileTienda?.setAttribute('aria-current', 'page');
+    else mobileTienda?.removeAttribute('aria-current');
+
+    [['btn-cart', 'cart'], ['btn-cuenta', 'account']].forEach(([id, route]) => {
+      const control = document.getElementById(id);
+      const active = page === route;
+      control?.classList.toggle('active', active);
+      if (active) control?.setAttribute('aria-current', 'page');
+      else control?.removeAttribute('aria-current');
+    });
 
     document.querySelectorAll('[data-shell-tab]').forEach(control => {
       const active = control.dataset.shellTab === page;
       control.classList.toggle('active', active);
-      if (active && control.tagName === 'A') control.setAttribute('aria-current', 'page');
+      if (active) control.setAttribute('aria-current', 'page');
       else control.removeAttribute('aria-current');
     });
   }

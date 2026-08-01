@@ -28,6 +28,7 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
     if (!section) return null;
     node = document.createElement('div');
     node.id = 'tt-collections-sync-state';
+    node.dataset.ttOperationalStatus = 'collections';
     node.setAttribute('role', 'status');
     node.setAttribute('aria-live', 'polite');
     node.dataset.state = navigator.onLine === false ? 'offline' : 'loading';

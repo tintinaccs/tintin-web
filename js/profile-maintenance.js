@@ -106,6 +106,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     if (!node) {
       node = document.createElement('div');
       node.id = 'tt-profile-network';
+      node.dataset.ttOperationalStatus = 'profile';
       node.setAttribute('role', 'status');
       node.setAttribute('aria-live', 'polite');
       document.querySelector('.perfil-wrap')?.insertAdjacentElement('beforebegin', node);

@@ -41,6 +41,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     if (!top) return null;
     node = document.createElement('div');
     node.id = 'tt-catalog-sync-state';
+    node.dataset.ttOperationalStatus = 'catalog';
     node.dataset.state = navigator.onLine === false ? 'offline' : 'loading';
     node.setAttribute('role', 'status');
     node.setAttribute('aria-live', 'polite');
