@@ -40,15 +40,21 @@ const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m';
 let appCheck = null;
 let appCheckReady = Promise.resolve(false);
 if (FIREBASE_APP_CHECK_SITE_KEY) {
-  appCheck = initializeAppCheck(app, {
-    provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
-    // Se activa después de obtener el primer token. Si la configuración del
-    // dominio falla, evita un refresco proactivo que repita errores cada pocos
-    // segundos sin posibilidad de recuperarse.
-    isTokenAutoRefreshEnabled: false
-  });
   window.TintinAppCheckStatus = 'checking';
-  appCheckReady = getAppCheckToken(appCheck, false)
+  const appCheckDomReady = document.body
+    ? Promise.resolve()
+    : new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+  appCheckReady = appCheckDomReady
+    .then(() => {
+      appCheck = initializeAppCheck(app, {
+        provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
+        // Se activa después de obtener el primer token. Si la configuración del
+        // dominio falla, evita un refresco proactivo que repita errores cada pocos
+        // segundos sin posibilidad de recuperarse.
+        isTokenAutoRefreshEnabled: false
+      });
+      return getAppCheckToken(appCheck, false);
+    })
     .then(() => {
       setTokenAutoRefreshEnabled(appCheck, true);
       window.TintinAppCheckStatus = 'enabled';

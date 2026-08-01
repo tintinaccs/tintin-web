@@ -1871,15 +1871,30 @@ function initWaFloatVisibility() {
    FAQ ACCORDION
 ────────────────────────────────────── */
 function initFaqAccordion() {
-  document.querySelectorAll('.tt-faq-item').forEach(item => {
+  document.querySelectorAll('.tt-faq-item').forEach((item, index) => {
     const q = item.querySelector('.tt-faq-q');
+    const answer = item.querySelector('.tt-faq-a');
     if (!q) return;
     q.setAttribute('role', 'button');
     q.setAttribute('tabindex', '0');
+    q.setAttribute('aria-expanded', 'false');
+    if (answer) {
+      if (!answer.id) answer.id = `tt-faq-answer-${index + 1}`;
+      q.setAttribute('aria-controls', answer.id);
+      answer.setAttribute('aria-hidden', 'true');
+    }
     const toggle = () => {
       const isOpen = item.classList.contains('tt-faq-open');
-      document.querySelectorAll('.tt-faq-item.tt-faq-open').forEach(i => i.classList.remove('tt-faq-open'));
-      if (!isOpen) item.classList.add('tt-faq-open');
+      document.querySelectorAll('.tt-faq-item').forEach(i => {
+        i.classList.remove('tt-faq-open');
+        i.querySelector('.tt-faq-q')?.setAttribute('aria-expanded', 'false');
+        i.querySelector('.tt-faq-a')?.setAttribute('aria-hidden', 'true');
+      });
+      if (!isOpen) {
+        item.classList.add('tt-faq-open');
+        q.setAttribute('aria-expanded', 'true');
+        answer?.setAttribute('aria-hidden', 'false');
+      }
     };
     q.addEventListener('click', toggle);
     q.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });

@@ -423,6 +423,10 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
     return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
   }
+  if (pageId === 'index' && sectionId === 'editorial_bag' && key === 'title') {
+    if (/tod+o+xd/i.test(text)) return 'EL COMPLEMENTO\nQUE LO CAMBIA TODO';
+    return text.replace(/complementoque/gi, 'COMPLEMENTO\nQUE');
+  }
   return value;
 }
 

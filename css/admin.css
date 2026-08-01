@@ -281,6 +281,8 @@
       text-transform: uppercase;
       letter-spacing: .06em;
       color: var(--adm-accent);
+      flex: 0 0 auto;
+      white-space: nowrap;
     }
     .adm-card-body { padding: 22px; }
 
@@ -813,6 +815,24 @@
     }
     .adm-table tr:last-child td { border-bottom: none; }
     .adm-table tr:hover td { background: #fef5f8; }
+
+    /* Las tablas densas conservan columnas legibles en desktop. El contenedor
+       ya ofrece scroll horizontal, por lo que no es necesario partir montos,
+       identificadores ni nombres en fragmentos de una o dos palabras. */
+    .adm-table-pedidos { min-width: 1240px; }
+    .adm-table-pedidos td:nth-child(2),
+    .adm-table-pedidos td:nth-child(5),
+    .adm-table-pedidos td:nth-child(9) { white-space: nowrap; }
+    #prod-table-wrap > table { min-width: 980px; }
+    #prod-list-card > .adm-card-head {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    #prod-list-card > .adm-card-head > div:last-child {
+      flex: 1 1 720px;
+      justify-content: flex-end;
+    }
 
     /* ======== BADGES ======== */
     .adm-badge {

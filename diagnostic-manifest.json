@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T11:05:04.285Z",
-  "sourceFingerprint": "419e8f6ae2fb06d129d320b0faa46ac7e0689981644d2301ba6f858e8ebcbeb2",
+  "generatedAt": "2026-08-01T11:46:09.986Z",
+  "sourceFingerprint": "9a474ba3aa13ddb72b8936a9f72aba95c00ab91d8f14cbdf512eca0b53f96f90",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 417,
-    "textFiles": 384,
-    "totalBytes": 5113273,
+    "files": 418,
+    "textFiles": 385,
+    "totalBytes": 5338155,
     "pages": 18,
-    "modules": 235
+    "modules": 236
   },
   "viewports": [
     {
@@ -6549,8 +6549,8 @@
         "guest",
         "client"
       ],
-      "bytes": 48277,
-      "sha256": "2c26223d6f29752f24f2437022f5db1c3ed65c46c7b93427c9761451d03f18da",
+      "bytes": 48273,
+      "sha256": "a77d18c2b96519517cb77eec8d211a5157f10e2255cfee789705ced8ea580be2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7173,8 +7173,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 81518,
-      "sha256": "cf49e5e32a6bed908222dbb6c5eb21eef0581f47c7c4f1a8716087c8a75bbf2f",
+      "bytes": 81724,
+      "sha256": "5f1deda4760e1daf78b9e300293ed430bc52bf92730902ea7a4fcacfaef1ddb8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7221,22 +7221,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1705
+          "line": 1710
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1706
+          "line": 1711
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 1707
+          "line": 1712
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1708
+          "line": 1713
         }
       ],
       "styles": [
@@ -7346,25 +7346,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1705,
+          "line": 1710,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1706,
+          "line": 1711,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 1707,
+          "line": 1712,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1708,
+          "line": 1713,
           "exists": true
         },
         {
@@ -14976,8 +14976,8 @@
     },
     {
       "path": "js/catalog-maintenance.js",
-      "bytes": 9809,
-      "sha256": "1b273a810ba901e5315e5e5bce82b571b168ecae1a44c47f5da65b628ae2c095",
+      "bytes": 9799,
+      "sha256": "9be18b47918fba88228a7bdf21d84cb33acf867778b1a5478f1adb85d75691a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15160,8 +15160,8 @@
     },
     {
       "path": "js/collections-page.js",
-      "bytes": 9886,
-      "sha256": "c69158342d2cad1bc68d5d4c044aa4ff7edec5cea66943df1ea4cc9d2afb1a4b",
+      "bytes": 9892,
+      "sha256": "deec95e1369eb79918b7fcbe60cc5dfb2219d0705317e1ebba4adecc89770f4d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15394,8 +15394,8 @@
     },
     {
       "path": "js/content-schema.js",
-      "bytes": 27109,
-      "sha256": "d9e57960bab393c9f4dbb621d836392ce69237adb35d3060d5f60ffd8d284c8c",
+      "bytes": 27335,
+      "sha256": "b3566bf37edd8794d3a3cbac2a9f378582c963e2af63e62b708ee69517f7a273",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15687,8 +15687,8 @@
     },
     {
       "path": "js/firebase.js",
-      "bytes": 4222,
-      "sha256": "6e746ebcefb8108b8e2c1dd217d5c5ccb4ad973922d3b570338663a9640eb332",
+      "bytes": 4473,
+      "sha256": "0c9e3efa97b7ff107ce1825a3ca3bb58f4ad25cd8738269a72c8ab8e3372459c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17155,8 +17155,8 @@
     },
     {
       "path": "js/whatsapp.js",
-      "bytes": 2901,
-      "sha256": "27f2b35159247d40d7935ec24ef39854740ca5c5856795942e6361ac636c770b",
+      "bytes": 3242,
+      "sha256": "1f3f9cbf11e7ecf48d73c3ac5a22b60171f1b1e36918f5d549466f374ac0c433",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17169,7 +17169,16 @@
           "line": 1
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://instagram.com/",
+          "line": 40
+        },
+        {
+          "url": "https://tiktok.com/@",
+          "line": 56
+        }
+      ]
     },
     {
       "path": "playwright.config.js",
@@ -17193,8 +17202,8 @@
     },
     {
       "path": "script.js",
-      "bytes": 93194,
-      "sha256": "e8801996fc33ff988d579450aceae7afad4dd0e275e6bd0f1f6060267b9c9f71",
+      "bytes": 93770,
+      "sha256": "7c8ada797612f107f249ee4ce0af6d197aedd0fc7bf76d533c6a58f63252abd8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17809,6 +17818,48 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/audit-desktop-fixes.mjs",
+      "bytes": 5337,
+      "sha256": "b4603709fcf56a81f3f71b218bf82ce886364f533ff5544c613f3fc1fbe7279d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:http",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
       "endpoints": []
     },
     {
@@ -18565,7 +18616,7 @@
       },
       "imports": [
         {
-          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\n  ",
+          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\r\n  ",
           "target": "scripts/\\.\\/phase7-catalog-policy\\.js/.test(loader),",
           "dynamic": false,
           "line": 151
@@ -19695,8 +19746,8 @@
     {
       "path": "assets-tintin/images/general/tintin-loader-brand.svg",
       "extension": ".svg",
-      "bytes": 355,
-      "sha256": "dad0568c87d897a526bce7ec633094220411ac1d36e66cc49c5671c87eafb736"
+      "bytes": 359,
+      "sha256": "1c833c14929a9dabaa0eb2bafca8c1c5ab5234d07f7ae740f26e1a5b6bc87119"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
@@ -19719,20 +19770,20 @@
     {
       "path": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
       "extension": ".webp",
-      "bytes": 10264,
-      "sha256": "899c28435c734db35a38e9c0fbdc071567a03b29c97b75077ac675c05949ae6e"
+      "bytes": 76556,
+      "sha256": "ec23496acbb68adfdb5a51c7946837858d8f34edfe136c10f8c4c5d003dabf38"
     },
     {
       "path": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
       "extension": ".webp",
-      "bytes": 5050,
-      "sha256": "292a0992c77e08eacc9ce353fb15e3846cdeee2e917b19f9f0e9cdf0f6753a1c"
+      "bytes": 81724,
+      "sha256": "246a0377ac6e894a9fc1b54c79a14ef64b86210658f74644b9088f49a7aabe7d"
     },
     {
       "path": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
       "extension": ".webp",
-      "bytes": 6694,
-      "sha256": "9ee199021ffb4141998a3249895def7d74e7511d1b350df91fe6859e27463bbe"
+      "bytes": 80852,
+      "sha256": "189e91fca88236bd95dcd451470947e1871d3b32ff9c0e83df4862e30a7452ce"
     },
     {
       "path": "assets-tintin/images/nosotros/foto-principal/foto-principal-desktop.webp",
@@ -19767,14 +19818,14 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 48277,
-      "sha256": "2c26223d6f29752f24f2437022f5db1c3ed65c46c7b93427c9761451d03f18da"
+      "bytes": 48273,
+      "sha256": "a77d18c2b96519517cb77eec8d211a5157f10e2255cfee789705ced8ea580be2"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 81518,
-      "sha256": "cf49e5e32a6bed908222dbb6c5eb21eef0581f47c7c4f1a8716087c8a75bbf2f"
+      "bytes": 81724,
+      "sha256": "5f1deda4760e1daf78b9e300293ed430bc52bf92730902ea7a4fcacfaef1ddb8"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -19809,8 +19860,8 @@
     {
       "path": "css/admin.css",
       "extension": ".css",
-      "bytes": 72625,
-      "sha256": "9453ff30c0f4487c972e4ead3c7fad1364a945993f302616e3f12ee5ec84874d"
+      "bytes": 73381,
+      "sha256": "65c8515c11e543a52490c04037cef09d9acbbe3cf39d3d44fffffcf509b6fdca"
     },
     {
       "path": "css/catalog-maintenance.css",
@@ -19827,8 +19878,8 @@
     {
       "path": "css/checkout.css",
       "extension": ".css",
-      "bytes": 20031,
-      "sha256": "97222b71d807ec2484d7bfa3490d84407469a41c291184183f8b93b23ac12c73"
+      "bytes": 20033,
+      "sha256": "f03205540fb25b9514ba4cd899798e807cd3102e641f299b409a623c7cab9336"
     },
     {
       "path": "css/collections-page.css",
@@ -20397,8 +20448,8 @@
     {
       "path": "js/catalog-maintenance.js",
       "extension": ".js",
-      "bytes": 9809,
-      "sha256": "1b273a810ba901e5315e5e5bce82b571b168ecae1a44c47f5da65b628ae2c095"
+      "bytes": 9799,
+      "sha256": "9be18b47918fba88228a7bdf21d84cb33acf867778b1a5478f1adb85d75691a4"
     },
     {
       "path": "js/catalog-merchandising-policy.js",
@@ -20457,8 +20508,8 @@
     {
       "path": "js/collections-page.js",
       "extension": ".js",
-      "bytes": 9886,
-      "sha256": "c69158342d2cad1bc68d5d4c044aa4ff7edec5cea66943df1ea4cc9d2afb1a4b"
+      "bytes": 9892,
+      "sha256": "deec95e1369eb79918b7fcbe60cc5dfb2219d0705317e1ebba4adecc89770f4d"
     },
     {
       "path": "js/collections-phase4.js",
@@ -20511,8 +20562,8 @@
     {
       "path": "js/content-schema.js",
       "extension": ".js",
-      "bytes": 27109,
-      "sha256": "d9e57960bab393c9f4dbb621d836392ce69237adb35d3060d5f60ffd8d284c8c"
+      "bytes": 27335,
+      "sha256": "b3566bf37edd8794d3a3cbac2a9f378582c963e2af63e62b708ee69517f7a273"
     },
     {
       "path": "js/create-order-client.js",
@@ -20583,8 +20634,8 @@
     {
       "path": "js/firebase.js",
       "extension": ".js",
-      "bytes": 4222,
-      "sha256": "6e746ebcefb8108b8e2c1dd217d5c5ccb4ad973922d3b570338663a9640eb332"
+      "bytes": 4473,
+      "sha256": "0c9e3efa97b7ff107ce1825a3ca3bb58f4ad25cd8738269a72c8ab8e3372459c"
     },
     {
       "path": "js/firestore-pagination.js",
@@ -20955,8 +21006,8 @@
     {
       "path": "js/whatsapp.js",
       "extension": ".js",
-      "bytes": 2901,
-      "sha256": "27f2b35159247d40d7935ec24ef39854740ca5c5856795942e6361ac636c770b"
+      "bytes": 3242,
+      "sha256": "1f3f9cbf11e7ecf48d73c3ac5a22b60171f1b1e36918f5d549466f374ac0c433"
     },
     {
       "path": "login.html",
@@ -21159,8 +21210,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6409,
-      "sha256": "4f91f2642c6bf9693baa6e5c52bf3ef7761a6d8fcbe111f43bf1bb5d283b58a2"
+      "bytes": 6476,
+      "sha256": "759c2461bbe183e136bab75bcbcb6425a6b4e42e5f8b35a891c160e61b9368ce"
     },
     {
       "path": "perfil.html",
@@ -21201,8 +21252,8 @@
     {
       "path": "script.js",
       "extension": ".js",
-      "bytes": 93194,
-      "sha256": "e8801996fc33ff988d579450aceae7afad4dd0e275e6bd0f1f6060267b9c9f71"
+      "bytes": 93770,
+      "sha256": "7c8ada797612f107f249ee4ce0af6d197aedd0fc7bf76d533c6a58f63252abd8"
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -21359,6 +21410,12 @@
       "extension": ".js",
       "bytes": 15113,
       "sha256": "f4e8f3265fb551a30ee580afe6d2fd5a4ab87f207a9f22ea398378068e0a58c1"
+    },
+    {
+      "path": "scripts/audit-desktop-fixes.mjs",
+      "extension": ".mjs",
+      "bytes": 5337,
+      "sha256": "b4603709fcf56a81f3f71b218bf82ce886364f533ff5544c613f3fc1fbe7279d"
     },
     {
       "path": "scripts/audit-diagnostic-findings.js",
@@ -22278,28 +22335,28 @@
     },
     {
       "file": "checkout.html",
-      "line": 709,
+      "line": 714,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 850,
+      "line": 855,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 860,
+      "line": 865,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 893,
+      "line": 898,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -23874,49 +23931,49 @@
     },
     {
       "file": "js/whatsapp.js",
-      "line": 82,
+      "line": 90,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 84,
+      "line": 92,
       "raw": "contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 85,
+      "line": 93,
       "raw": "terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 86,
+      "line": 94,
       "raw": "privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 87,
+      "line": 95,
       "raw": "envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 88,
+      "line": 96,
       "raw": "cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "js/whatsapp.js",
-      "line": 89,
+      "line": 97,
       "raw": "preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
@@ -24966,11 +25023,11 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 860
+          "line": 865
         },
         {
           "file": "checkout.html",
-          "line": 893
+          "line": 898
         },
         {
           "file": "js/email-auth.js",
@@ -25015,7 +25072,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1587,
+      "line": 1592,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -25029,7 +25086,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\n    admin.includes(",
+        "name": ") &&\r\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25039,7 +25096,7 @@
         ]
       },
       {
-        "name": ") &&\n    orderStats.includes(",
+        "name": ") &&\r\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25573,7 +25630,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 694,
+            "line": 699,
             "operation": "collection"
           },
           {
@@ -26063,12 +26120,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1451,
+            "line": 1456,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1688,
+            "line": 1693,
             "operation": "doc"
           },
           {
@@ -26249,8 +26306,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\n    admin.includes(",
-      ") &&\n    orderStats.includes("
+      ") &&\r\n    admin.includes(",
+      ") &&\r\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",

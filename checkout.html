@@ -678,6 +678,11 @@ async function renderCart() {
 
   const container = document.getElementById('ck-items');
   const subtotalEl = document.getElementById('ck-subtotal-val');
+  const nextButton = document.getElementById('btn-step1-next');
+  if (nextButton) {
+    nextButton.disabled = !cartItems.length;
+    nextButton.setAttribute('aria-disabled', String(!cartItems.length));
+  }
 
   if (!cartItems.length) {
     // Load real products — try cache first, then Firestore
