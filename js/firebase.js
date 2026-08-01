@@ -48,7 +48,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
     isTokenAutoRefreshEnabled: false
   });
   window.TintinAppCheckStatus = 'checking';
-  appCheckReady = getAppCheckToken(appCheck, false)
+  const appCheckTokenSettled = getAppCheckToken(appCheck, false)
     .then(() => {
       setTokenAutoRefreshEnabled(appCheck, true);
       window.TintinAppCheckStatus = 'enabled';
@@ -64,6 +64,21 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
       }));
       return false;
     });
+  // Si reCAPTCHA/App Check nunca resuelve (script bloqueado, red lenta o
+  // caída justo en el momento de la verificación — más común en wifi de
+  // tablet/mobile que en una conexión de escritorio estable), la promesa de
+  // arriba se queda colgada para siempre, y con ella CADA función del sitio
+  // que hace `await appCheckReady` antes de leer Firestore (carrito,
+  // productos, colecciones, imágenes, analytics, admin...), sin ningún
+  // error visible — la pantalla queda girando indefinidamente. Después de
+  // 8s se sigue como si App Check no estuviera disponible (el mismo camino
+  // que ya existe para cuando falla de verdad), para que cada módulo use su
+  // fallback normal en vez de trabarse. Si el token real llega más tarde
+  // igual dispara sus efectos (estado, evento) normalmente.
+  const appCheckTimeout = new Promise(resolve => {
+    setTimeout(() => resolve(false), 8000);
+  });
+  appCheckReady = Promise.race([appCheckTokenSettled, appCheckTimeout]);
 } else {
   window.TintinAppCheckStatus = 'configuration-required';
 }
