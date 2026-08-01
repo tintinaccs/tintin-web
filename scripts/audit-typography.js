@@ -11,6 +11,18 @@ const EXCLUDED_DIRECTORIES = new Set(['.git', 'node_modules']);
 const EXCLUDED_FILES = new Set([
   path.normalize('scripts/audit-typography.js'),
 ]);
+// Los correos transaccionales (functions/api/*.js) no son páginas del sitio:
+// se renderizan en clientes de correo que casi nunca cargan @font-face
+// (Gmail web lo recorta, Outlook de escritorio prácticamente nunca lo
+// soporta), así que forzar "Montserrat" sin alternativa ahí deja el texto
+// en la fuente serif genérica del cliente en vez de una sans-serif prolija.
+// Se exceptúan solo del chequeo de familia tipográfica — el resto de las
+// reglas (sin fuentes externas, sin @font-face, sin iconos de fuente) sigue
+// aplicando igual.
+const EMAIL_TEMPLATE_FILES = new Set([
+  path.normalize('functions/api/order-email.js'),
+  path.normalize('functions/api/email-otp-send.js'),
+]);
 const REQUIRED_FONT_FILES = [
   'montserrat-cyrillic-ext-wght-normal.woff2',
   'montserrat-cyrillic-wght-normal.woff2',
@@ -187,22 +199,25 @@ for (const token of requiredTokens) {
 for (const file of walk(ROOT)) {
   const name = relative(file);
   const source = fs.readFileSync(file, 'utf8');
+  const isEmailTemplate = EMAIL_TEMPLATE_FILES.has(path.normalize(name));
 
-  for (const match of source.matchAll(/font-family\s*:\s*(?:(['"])([^'"]+)\1|([^;}\r\n>"']+))/gi)) {
-    const rawValue = match[2] || match[3] || '';
-    const value = normalizeFontValue(rawValue);
-    check(value === 'Montserrat', `${name}: font-family no permitido: ${rawValue.trim()}`);
-  }
+  if (!isEmailTemplate) {
+    for (const match of source.matchAll(/font-family\s*:\s*(?:(['"])([^'"]+)\1|([^;}\r\n>"']+))/gi)) {
+      const rawValue = match[2] || match[3] || '';
+      const value = normalizeFontValue(rawValue);
+      check(value === 'Montserrat', `${name}: font-family no permitido: ${rawValue.trim()}`);
+    }
 
-  for (const match of source.matchAll(/(?:^|[;{])\s*font\s*:\s*([^;}\r\n}]+)/gim)) {
-    const value = match[1].trim();
-    const usesMontserrat = /\bMontserrat\b/i.test(value);
-    const inheritsMontserrat = /^inherit$/i.test(value);
-    const usesMontserratToken = /var\(--(?:font-heading|font-body|font-display|font|serif|adm-font)\)/i.test(value);
-    check(
-      usesMontserrat || inheritsMontserrat || usesMontserratToken,
-      `${name}: shorthand font sin Montserrat: ${value}`
-    );
+    for (const match of source.matchAll(/(?:^|[;{])\s*font\s*:\s*([^;}\r\n}]+)/gim)) {
+      const value = match[1].trim();
+      const usesMontserrat = /\bMontserrat\b/i.test(value);
+      const inheritsMontserrat = /^inherit$/i.test(value);
+      const usesMontserratToken = /var\(--(?:font-heading|font-body|font-display|font|serif|adm-font)\)/i.test(value);
+      check(
+        usesMontserrat || inheritsMontserrat || usesMontserratToken,
+        `${name}: shorthand font sin Montserrat: ${value}`
+      );
+    }
   }
 
   for (const match of source.matchAll(/@font-face\s*\{([\s\S]*?)\}/gi)) {
@@ -217,9 +232,11 @@ for (const file of walk(ROOT)) {
     check(!/\b(?:font-serif|font-sans|font-mono)\b/i.test(source), `${name}: conserva una clase utilitaria tipográfica.`);
     check(!/\btitle_font_family\b/i.test(source), `${name}: conserva un selector de familia tipográfica.`);
 
-    for (const term of FORBIDDEN_FONT_TERMS) {
-      const termPattern = new RegExp(`(^|[^a-z0-9_-])${escapeRegex(term)}([^a-z0-9_-]|$)`, 'i');
-      check(!termPattern.test(source), `${name}: todavía menciona la fuente no permitida "${term}".`);
+    if (!isEmailTemplate) {
+      for (const term of FORBIDDEN_FONT_TERMS) {
+        const termPattern = new RegExp(`(^|[^a-z0-9_-])${escapeRegex(term)}([^a-z0-9_-]|$)`, 'i');
+        check(!termPattern.test(source), `${name}: todavía menciona la fuente no permitida "${term}".`);
+      }
     }
   }
 }

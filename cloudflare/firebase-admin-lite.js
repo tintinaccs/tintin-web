@@ -154,7 +154,7 @@ export async function findOrCreateUserByEmail(env, email) {
     return { uid: existing.localId, isNewUser: false };
   }
 
-  const createResp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts', {
+  const createResp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp', {
     method: 'POST',
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ email, emailVerified: true })
