@@ -81,7 +81,8 @@ check(
   canonicalAudit.includes('la página quedó visualmente vacía') &&
     canonicalAudit.includes('overflow horizontal raíz') &&
     canonicalAudit.includes('header desktop visible en mobile') &&
-    canonicalAudit.includes('tabbar mobile visible en desktop/tablet')
+    canonicalAudit.includes('navegación ajena visible en tablet') &&
+    canonicalAudit.includes('navegación ajena visible en desktop')
 );
 check(
   'La auditoría global cubre superficies compartidas y límites de breakpoint',
