@@ -472,6 +472,50 @@ body.tt-public-shell-mounted .login-page {
 }
 .login-phone-number { flex: 1; min-width: 0; }
 
+.login-profile-confirmation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 13px 15px;
+  border: 1px solid rgba(125,23,58,.14);
+  border-radius: 17px;
+  background: rgba(253,239,245,.72);
+}
+.login-profile-confirmation-label {
+  color: var(--login-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.login-profile-confirmation-value {
+  grid-column: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--login-ink);
+  font-size: 14px;
+  font-weight: 750;
+}
+.login-profile-change {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--login-wine);
+  font: 750 12px/1 "Montserrat", sans-serif;
+  cursor: pointer;
+}
+.login-profile-change:hover { text-decoration: underline; }
+.login-profile-change:focus-visible {
+  outline: 3px solid rgba(173,63,103,.24);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
 .login-hint {
   max-width: 360px;
   margin: 17px auto 0;
