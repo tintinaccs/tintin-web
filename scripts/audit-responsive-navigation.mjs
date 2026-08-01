@@ -61,13 +61,13 @@ try {
         rootClasses:document.documentElement.className,
       };
     });
-    const expected = width < 768 ? [false,false,true] : width < 1024 ? [false,true,false] : [true,false,false];
+    const expected = width < 768 ? [false,false,true] : width <= 1024 ? [false,true,false] : [true,false,false];
     check([state.desktop,state.tablet,state.mobile].filter(Boolean).length === 1, `${width}px no tiene exactamente una navegación visible (${JSON.stringify(state)})`);
     check(state.desktop === expected[0] && state.tablet === expected[1] && state.mobile === expected[2], `${width}px muestra el dispositivo incorrecto (${JSON.stringify(state)})`);
     check(state.duplicates.length === 0, `${width}px contiene IDs duplicados: ${state.duplicates.join(', ')}`);
     check(state.overflow <= 1, `${width}px desborda horizontalmente ${state.overflow}px`);
     if (width < 768) { check(state.activeMobile === 'Inicio', `${width}px no marca Inicio en mobile`); check(state.haloReady, `${width}px no posicionó el halo mobile`); }
-    else if (width < 1024) check(state.activeTablet.includes('INICIO'), `${width}px no marca Inicio en tablet`);
+    else if (width <= 1024) check(state.activeTablet.includes('INICIO'), `${width}px no marca Inicio en tablet`);
     else { check(state.activeDesktop.includes('INICIO'), `${width}px no marca Inicio en desktop`); check(state.pillWidth > 20, `${width}px no calculó el pill desktop`); }
   }
 

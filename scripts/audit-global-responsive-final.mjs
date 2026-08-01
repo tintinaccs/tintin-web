@@ -77,7 +77,7 @@ async function prepare(page, width) {
     window.scrollTo(0,0);
   });
 
-  const expected = width < 768 ? '#tt-tabbar' : width < 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
+  const expected = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
   await page.waitForFunction(selector => {
     const node = document.querySelector(selector);
     if (!node) return false;
@@ -109,7 +109,7 @@ async function inspectBase(page, width) {
     const rect = node => { const r = node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
     const overlaps = (a,b,tolerance=1) => a.left < b.right - tolerance && a.right > b.left + tolerance && a.top < b.bottom - tolerance && a.bottom > b.top + tolerance;
     const mobile = width < 768;
-    const tablet = width >= 768 && width < 1024;
+    const tablet = width >= 768 && width <= 1024;
     const header = document.getElementById('tt-header-desktop-tablet');
     const tabletHeader = document.getElementById('tt-header-tablet');
     const tabbar = document.getElementById('tt-tabbar');
@@ -283,7 +283,7 @@ async function inspectSharedSurfaces(page,width) {
   ];
 
   const issues = [];
-  if (width < 1024) {
+  if (width <= 1024) {
     issues.push(...await checkSurface(page,'#btn-menu-tablet','#tt-tablet-menu','Menú tablet'));
     issues.push(...await checkSurface(page,'#btn-search-tablet','#search-panel','Buscar tablet'));
     issues.push(...await checkSurface(page,'#btn-cart-tablet','#cart-drawer','Carrito tablet'));

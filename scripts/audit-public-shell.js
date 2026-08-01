@@ -60,8 +60,8 @@ check(surfaceController.includes('this.lockScroll()'), 'surface-controller.js: f
 const desktopStyles = read('css/navigation-desktop.css');
 const tabletStyles = read('css/navigation-tablet.css');
 const mobileStyles = read('css/navigation-mobile.css');
-check(/@media \(min-width: 1024px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1024px');
-check(/@media \(min-width: 768px\) and \(max-width: 1023px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1023px');
+check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1025px');
+check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1024px');
 check(/@media \(max-width: 767px\)/.test(mobileStyles), 'mobile: falta el rango exacto <=767px');
 check(shell.includes("import(versioned('./navigation-desktop.js'))"), 'public-shell.js: falta controlador desktop aislado');
 check(shell.includes("import(versioned('./navigation-tablet.js'))"), 'public-shell.js: falta controlador tablet aislado');

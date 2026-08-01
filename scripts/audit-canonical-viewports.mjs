@@ -137,7 +137,7 @@ async function prepare(page, width, pageInfo) {
   });
 
   if (expectsPublicShell(pageInfo)) {
-    const expected = width < 768 ? '#tt-tabbar' : width < 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
+    const expected = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
     await page.waitForFunction(selector => {
       const node = document.querySelector(selector);
       if (!node) return false;
@@ -180,7 +180,7 @@ async function inspect(page, width, pageInfo) {
         if (visible(shellHeader)) issues.push('header desktop visible en mobile');
         if (visible(shellTablet)) issues.push('header tablet visible en mobile');
         if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
-      } else if (width < 1024) {
+      } else if (width <= 1024) {
         if (visible(shellHeader) || visible(shellTabbar)) issues.push('navegación ajena visible en tablet');
         if (!visible(shellTablet)) issues.push('header tablet oculto');
       } else {

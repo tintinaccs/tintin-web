@@ -185,7 +185,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
 .tt-tablet-cats-back,
 .tt-tablet-cats-title { display: none; }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   body.tt-public-shell-mounted:not(:has(.login-page)):not(:has(.adm-main)) { padding-top: 84px !important; }
   .tt-cart-drawer,.tt-account-drawer { width: min(68vw, 620px); }
   .tt-search-panel {
@@ -260,7 +260,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1120px) {
+@media (min-width: 1025px) and (max-width: 1120px) {
   .tt-header-desktop .tt-header-inner {
     grid-template-columns: 126px minmax(0, 1fr) 146px !important;
     gap: 10px !important;

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T19:37:26.530Z",
-  "sourceFingerprint": "336d1775aab102aeed563d64cd113a40a468f321fd636a3b1a0b3ed0e2b132d8",
+  "generatedAt": "2026-08-01T20:05:09.677Z",
+  "sourceFingerprint": "3f33265afaf2428d00c6146eca1afb1e71256c0ec3b40610034837e68fda31aa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 440,
     "textFiles": 407,
-    "totalBytes": 5476235,
+    "totalBytes": 5476248,
     "pages": 18,
     "modules": 253
   },
@@ -17102,7 +17102,7 @@
     {
       "path": "js/public-shell.js",
       "bytes": 26085,
-      "sha256": "d5cca45890608e67c58b46884fbb04dd5e10a81d9f4054069d11704e8439a256",
+      "sha256": "0b7859ab7d7a0c0b222fd90b0844389c8ebcb929e8b6b8a15d06f2f3b5f992b1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17527,8 +17527,8 @@
     },
     {
       "path": "js/ui-navigation-controller.js",
-      "bytes": 11617,
-      "sha256": "c14991ecc5656704ff08ba7a24e29302c62a9e9ee9d0e72792efabaf0216baf5",
+      "bytes": 11618,
+      "sha256": "2b382e7174237cadacdac5e98b89972ecf88525886960708f2a1743201967389",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18044,8 +18044,8 @@
     },
     {
       "path": "scripts/audit-canonical-viewports.mjs",
-      "bytes": 13854,
-      "sha256": "4ea3f72637f1697fcdc6fdba8894affa9f31ae2e926d04c5d41a22596ed642d3",
+      "bytes": 13856,
+      "sha256": "0af6dc2ac0358cd256c5df1779340813a58016d0e3dd9d3a536ea686ae6c5bbf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18556,8 +18556,8 @@
     },
     {
       "path": "scripts/audit-global-responsive-final.mjs",
-      "bytes": 20386,
-      "sha256": "63993b6b46a48e0a80bc5a61194298d4f8dcbf19ecbb8a5cb94dd0aaf9c5fd00",
+      "bytes": 20389,
+      "sha256": "d533a339eab426842c780a85c6edc4f7f3d1ca1257dea4ceb4a4be0887180827",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19125,7 +19125,7 @@
       },
       "imports": [
         {
-          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\n  ",
+          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\r\n  ",
           "target": "scripts/\\.\\/phase7-catalog-policy\\.js/.test(loader),",
           "dynamic": false,
           "line": 151
@@ -19267,7 +19267,7 @@
     {
       "path": "scripts/audit-public-shell.js",
       "bytes": 5503,
-      "sha256": "fa5a71828bbaf69090a551bbb368c29b5ca88e17f79b1f27fc5373d751cc9f42",
+      "sha256": "2f9e5c7244ddf81c10285e8ef9ef80c96374a08be984069633a3f493e2122166",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19277,8 +19277,8 @@
     },
     {
       "path": "scripts/audit-responsive-navigation.mjs",
-      "bytes": 10794,
-      "sha256": "505c3bc3f860d12e0ea942b385aa1765ac789ccfadbcedd3e0105b4eac54ff30",
+      "bytes": 10796,
+      "sha256": "4b628078495a83fab49c410597a1fe1455a041cd0292d0b9abc1a4aa42259269",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19532,8 +19532,8 @@
     },
     {
       "path": "scripts/audit-unified-navigation.js",
-      "bytes": 2917,
-      "sha256": "8e3ffffcfd54f16a0265a9421debd8f989ddb13f4543a90e5ebced3f945dd377",
+      "bytes": 2918,
+      "sha256": "8209c46eecff92094353b42ede3fe38312b68061896856eed58f717399138d1d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20438,8 +20438,8 @@
     {
       "path": "assets-tintin/images/general/tintin-loader-brand.svg",
       "extension": ".svg",
-      "bytes": 355,
-      "sha256": "dad0568c87d897a526bce7ec633094220411ac1d36e66cc49c5671c87eafb736"
+      "bytes": 359,
+      "sha256": "1c833c14929a9dabaa0eb2bafca8c1c5ab5234d07f7ae740f26e1a5b6bc87119"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
@@ -20649,7 +20649,7 @@
       "path": "css/navigation-desktop.css",
       "extension": ".css",
       "bytes": 2987,
-      "sha256": "acc8f038dd8fc8676e3ed59653cd6e8ced0190896d484a41d0ba30e07a8f76bd"
+      "sha256": "012851eb2ed48e0ff070ebdab99a72fa326f8425295c3418cb58d4a061a265f2"
     },
     {
       "path": "css/navigation-mobile.css",
@@ -20667,7 +20667,7 @@
       "path": "css/navigation-tablet.css",
       "extension": ".css",
       "bytes": 5879,
-      "sha256": "08d5d1f947fde0022b44439771137e4222e4b72efe78d31bb5e4754df8d2a2ab"
+      "sha256": "0f2ceaa8d26e17550c9ca1fdf674945902cedf661be5a1fed6db616ec2077cdc"
     },
     {
       "path": "css/payment-methods.css",
@@ -20709,7 +20709,7 @@
       "path": "css/surface-controller.css",
       "extension": ".css",
       "bytes": 10422,
-      "sha256": "c7a1b522a742be3a79c23b9eb0e797e61d4e481c6dba38e7a6661fbdd6a860cc"
+      "sha256": "87921a14c3ef5db564befe704830d4be352ad942a80946deb9005d3e8a61b79b"
     },
     {
       "path": "css/system-special-states.css",
@@ -21675,7 +21675,7 @@
       "path": "js/public-shell.js",
       "extension": ".js",
       "bytes": 26085,
-      "sha256": "d5cca45890608e67c58b46884fbb04dd5e10a81d9f4054069d11704e8439a256"
+      "sha256": "0b7859ab7d7a0c0b222fd90b0844389c8ebcb929e8b6b8a15d06f2f3b5f992b1"
     },
     {
       "path": "js/resend-order-notify.js",
@@ -21758,8 +21758,8 @@
     {
       "path": "js/ui-navigation-controller.js",
       "extension": ".js",
-      "bytes": 11617,
-      "sha256": "c14991ecc5656704ff08ba7a24e29302c62a9e9ee9d0e72792efabaf0216baf5"
+      "bytes": 11618,
+      "sha256": "2b382e7174237cadacdac5e98b89972ecf88525886960708f2a1743201967389"
     },
     {
       "path": "js/ui-quality.js",
@@ -22118,8 +22118,8 @@
     {
       "path": "scripts/audit-canonical-viewports.mjs",
       "extension": ".mjs",
-      "bytes": 13854,
-      "sha256": "4ea3f72637f1697fcdc6fdba8894affa9f31ae2e926d04c5d41a22596ed642d3"
+      "bytes": 13856,
+      "sha256": "0af6dc2ac0358cd256c5df1779340813a58016d0e3dd9d3a536ea686ae6c5bbf"
     },
     {
       "path": "scripts/audit-cart-phase7.js",
@@ -22250,8 +22250,8 @@
     {
       "path": "scripts/audit-global-responsive-final.mjs",
       "extension": ".mjs",
-      "bytes": 20386,
-      "sha256": "63993b6b46a48e0a80bc5a61194298d4f8dcbf19ecbb8a5cb94dd0aaf9c5fd00"
+      "bytes": 20389,
+      "sha256": "d533a339eab426842c780a85c6edc4f7f3d1ca1257dea4ceb4a4be0887180827"
     },
     {
       "path": "scripts/audit-help-pages.js",
@@ -22461,13 +22461,13 @@
       "path": "scripts/audit-public-shell.js",
       "extension": ".js",
       "bytes": 5503,
-      "sha256": "fa5a71828bbaf69090a551bbb368c29b5ca88e17f79b1f27fc5373d751cc9f42"
+      "sha256": "2f9e5c7244ddf81c10285e8ef9ef80c96374a08be984069633a3f493e2122166"
     },
     {
       "path": "scripts/audit-responsive-navigation.mjs",
       "extension": ".mjs",
-      "bytes": 10794,
-      "sha256": "505c3bc3f860d12e0ea942b385aa1765ac789ccfadbcedd3e0105b4eac54ff30"
+      "bytes": 10796,
+      "sha256": "4b628078495a83fab49c410597a1fe1455a041cd0292d0b9abc1a4aa42259269"
     },
     {
       "path": "scripts/audit-secure-orders.js",
@@ -22526,8 +22526,8 @@
     {
       "path": "scripts/audit-unified-navigation.js",
       "extension": ".js",
-      "bytes": 2917,
-      "sha256": "8e3ffffcfd54f16a0265a9421debd8f989ddb13f4543a90e5ebced3f945dd377"
+      "bytes": 2918,
+      "sha256": "8209c46eecff92094353b42ede3fe38312b68061896856eed58f717399138d1d"
     },
     {
       "path": "scripts/audit-unified-store-logic.js",
@@ -25832,7 +25832,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\n    admin.includes(",
+        "name": ") &&\r\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25842,7 +25842,7 @@
         ]
       },
       {
-        "name": ") &&\n    orderStats.includes(",
+        "name": ") &&\r\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -27057,8 +27057,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\n    admin.includes(",
-      ") &&\n    orderStats.includes("
+      ") &&\r\n    admin.includes(",
+      ") &&\r\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",
