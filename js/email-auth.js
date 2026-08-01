@@ -136,6 +136,7 @@ export function emailLinkErrorMessage(code) {
     'auth/too-many-requests': 'Demasiados intentos. Esperá un momento e intentá de nuevo.',
     'auth/invalid-action-code': 'Este enlace ya venció o no es válido. Pedí uno nuevo.',
     'auth/expired-action-code': 'Este enlace ya venció. Pedí uno nuevo.',
+    'auth/operation-not-allowed': 'El ingreso por correo no está disponible en este momento. Probá con "Continuar con Google" o escribinos por WhatsApp.',
     'tintin/missing-email-for-link': 'Abrí el enlace desde el mismo navegador donde lo pediste, o escribí tu correo para confirmar.',
   };
   return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
