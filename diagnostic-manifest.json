@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T15:12:52.878Z",
-  "sourceFingerprint": "0425ca6b63693251a68c44c0385741c916afff7c600a9a9060708f27247c8333",
+  "generatedAt": "2026-08-01T15:30:35.998Z",
+  "sourceFingerprint": "7f4d1bcefbbc125192fbb266019baf3474e0cdd8e352c8fba197f088e643fc2b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 423,
-    "textFiles": 390,
-    "totalBytes": 5401738,
+    "files": 424,
+    "textFiles": 391,
+    "totalBytes": 5404520,
     "pages": 18,
-    "modules": 241
+    "modules": 242
   },
   "viewports": [
     {
@@ -18951,6 +18951,17 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-public-operational-contract.js",
+      "bytes": 2690,
+      "sha256": "3b5e68507a91fb72a0bc2b31aa56f491d29c09d7302fadf016d7ce49c45dcacd",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-public-operational-visibility.mjs",
       "bytes": 5057,
       "sha256": "5e4d5018f937391877326a85d5cff2d911b9c6cb161bccfcf27c9c7d921766e0",
@@ -21528,8 +21539,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6687,
-      "sha256": "be6cc68fc4635c3e1847821ad7fab02ef681ee6b4cfa58d04947956148ff65c8"
+      "bytes": 6779,
+      "sha256": "208639e9bccef3b22d6456d83aba552169108e952b3fcd66574c399393a0b85c"
     },
     {
       "path": "perfil.html",
@@ -21980,6 +21991,12 @@
       "extension": ".js",
       "bytes": 3063,
       "sha256": "2e8c62190b3bb59e0b910cab436485565be966867ae81b3212a576a215cdb8fe"
+    },
+    {
+      "path": "scripts/audit-public-operational-contract.js",
+      "extension": ".js",
+      "bytes": 2690,
+      "sha256": "3b5e68507a91fb72a0bc2b31aa56f491d29c09d7302fadf016d7ce49c45dcacd"
     },
     {
       "path": "scripts/audit-public-operational-visibility.mjs",
