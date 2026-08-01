@@ -19,6 +19,19 @@
   background-image: none !important;
 }
 
+/* La reserva genérica de content-visibility para <section> (ver
+   ui-quality.css) asume 620px de alto. Estas dos secciones son mucho más
+   altas de verdad (grilla de colecciones + destacados), así que al hacer
+   scroll la página "saltaba" varios cientos de px de golpe cuando cada
+   una pasaba de reservada a renderizada. Se desactiva la reserva acá,
+   igual que ya se hizo antes para las tarjetas angostas (ver
+   phase8-ui-ux.css). */
+.tt-collections-page .tt-colls-page-section,
+.tt-collections-page .tt-products-section {
+  content-visibility: visible !important;
+  contain-intrinsic-size: none !important;
+}
+
 .tt-collections-page .tt-page-hero {
   border-bottom: 1px solid var(--color-border-primary, #F1E4E7);
 }
