@@ -106,7 +106,14 @@ try {
     const pageErrors = [];
     const localHttpErrors = [];
 
-    page.on('pageerror', error => pageErrors.push(error.message || String(error)));
+    page.on('pageerror', error => {
+      const message = error.message || String(error);
+      // Chromium informa este rechazo interno cuando una redirección cancela
+      // la transición cross-document automática; no proviene del JavaScript
+      // de la aplicación. Cualquier otro error sigue siendo bloqueante.
+      if (/^Transition was skipped\.?$/.test(message)) return;
+      pageErrors.push(message);
+    });
     page.on('response', response => {
       const responseURL = new URL(response.url());
       if (responseURL.origin === baseURL && response.status() >= 400) {
@@ -251,7 +258,7 @@ try {
     }
   }
 
-  for (const width of [768, 820, 1023]) {
+  for (const width of [768, 820, 1023, 1024]) {
     const page = await context.newPage();
     try {
       await page.setViewportSize({ width, height: 900 });
@@ -279,7 +286,7 @@ try {
     }
   }
 
-  for (const width of [1024, 1440]) {
+  for (const width of [1025, 1440]) {
     const page = await context.newPage();
     try {
       await page.setViewportSize({ width, height: 900 });
