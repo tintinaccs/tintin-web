@@ -156,7 +156,7 @@ const touchAssertions = [
   ['admin-images.html', /\.adm-hamburger\s*\{[\s\S]*?min-(?:width|height):\s*44px/],
   ['admin-images.html', /\.adm-nav-btn\s*\{[\s\S]*?min-height:\s*44px/],
   ['admin-images.html', /\.adm-mobile-tab\s*\{[\s\S]*?min-height:\s*44px/],
-  ['css/checkout.css', /\.ck-header-back\s*\{[\s\S]*?min-height:\s*32px/],
+  ['css/checkout.css', /\.ck-header-back\s*\{[\s\S]*?min-height:\s*44px/],
   ['css/login.css', /\.login-email-resend\s*\{[\s\S]*?min-height:\s*32px/],
   ['perfil.html', /\.perfil-back\s*\{[\s\S]*?min-height:\s*32px/],
   ['perfil.html', /\.perfil-btn\s*\{[\s\S]*?min-height:\s*44px/]
