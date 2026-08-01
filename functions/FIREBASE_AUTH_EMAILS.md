@@ -18,9 +18,12 @@ Ambos caminos terminan en el mismo lugar: `guardarUsuario()` /
 `ensureUserDocForEmailLogin()` crean o actualizan `users/{uid}` con el mismo
 criterio (primera vez arma el perfil, las siguientes solo tocan
 `lastLogin`), y `redirectByRole()` decide el destino según el rol. Antes de
-redirigir, `ensureProfileComplete()` exige nombre y teléfono si falta
-alguno de los dos — aplica a **todas** las cuentas (clientas y roles
-internos) y también retroactivamente a cuentas viejas sin esos datos.
+redirigir, `ensureProfileComplete()` pide **solamente los campos ausentes**:
+una cuenta completa entra directo, el nombre provisto por Google se confirma
+y puede corregirse, y cada escritura se vuelve a validar en una transacción
+para no pisar datos existentes. El superadmin está excluido del onboarding.
+Los perfiles quedan en `users/{uid}`, la fuente que alimenta la pestaña
+`Clientas` de Google Sheets mediante la sincronización ya instalada.
 
 ## Cómo funciona el código de 6 dígitos
 
@@ -72,10 +75,11 @@ la cuenta existente por dirección de correo.
    más abajo el bloque de correo ("Correo electrónico" + "Enviar código").
 2. **Google**: clic, elegí una cuenta — debería mostrar la pantalla de
    carga de marca durante todo el proceso (nunca vuelve a mostrarse el
-   formulario), y si falta nombre o teléfono, pedirlos antes de redirigir.
+   formulario). Si Google ya entrega el nombre, se confirma y solo se pide
+   teléfono; si el perfil ya está completo, no aparece ningún paso adicional.
 3. **Correo**: escribí un correo válido, "Enviar código" — llega un correo
    con 6 dígitos en segundos. Escribilo en el sitio y "Confirmar código" —
-   debería completar el ingreso (pidiendo nombre/teléfono si falta) sin
+   debería completar el ingreso (pidiendo solo cada dato faltante) sin
    volver a mostrar el formulario de login.
 4. Probá "Reenviar código" (cooldown de 45s) y un código vencido/incorrecto
    (mensaje claro, sin trabarse).

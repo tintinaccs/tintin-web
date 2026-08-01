@@ -95,12 +95,21 @@
         </div>
 
         <div class="login-email-block" id="login-profile-block" style="display:none">
-          <label class="login-email-label" for="login-profile-name">Nombre completo</label>
-          <input type="text" class="login-email-input" id="login-profile-name" placeholder="Tu nombre" autocomplete="name" />
-          <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
-          <div class="login-phone-row">
-            <select class="login-email-input login-phone-country" id="login-profile-country"></select>
-            <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" />
+          <div id="login-profile-name-confirmation" class="login-profile-confirmation" style="display:none">
+            <span class="login-profile-confirmation-label">Nombre detectado</span>
+            <span id="login-profile-confirmation-value" class="login-profile-confirmation-value"></span>
+            <button type="button" id="btn-change-profile-name" class="login-profile-change">Cambiar</button>
+          </div>
+          <div id="login-profile-name-field">
+            <label class="login-email-label" for="login-profile-name">Nombre completo</label>
+            <input type="text" class="login-email-input" id="login-profile-name" placeholder="Tu nombre" autocomplete="name" maxlength="120" />
+          </div>
+          <div id="login-profile-phone-field">
+            <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
+            <div class="login-phone-row">
+              <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="País del teléfono"></select>
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" maxlength="40" />
+            </div>
           </div>
           <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
         </div>
@@ -127,7 +136,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  doc, setDoc, getDoc, serverTimestamp
+  doc, setDoc, getDoc, runTransaction, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
@@ -138,6 +147,7 @@ import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidP
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
+import { getProfileCompletionPlan, buildMissingProfilePatch } from "./js/profile-onboarding.mjs?v=tintin-20260801-profile-onboarding-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -289,23 +299,34 @@ function populateCountrySelect(selectEl) {
   selectEl.value = DEFAULT_COUNTRY.code;
 }
 
-// Google no entrega teléfono nunca, y el login por correo no entrega ni
-// nombre ni teléfono — sin este paso, esas cuentas quedarían sin forma de
-// identificar a la persona. Se exige acá, una sola vez, para TODAS las
-// cuentas (clientas y roles internos por igual) y también retroactivamente:
-// a alguien que ya tenía cuenta sin teléfono se le va a pedir la próxima vez
-// que entre, no solo a cuentas nuevas.
-async function ensureProfileComplete(user) {
+// Solo solicita los campos que realmente faltan. El superadmin queda fuera
+// del onboarding y una cuenta completa pasa directo, sin volver a escribir
+// datos que ya existen. El nombre entregado por Google se confirma antes de
+// guardarse y siempre puede corregirse de forma explícita.
+async function ensureProfileComplete(user, role) {
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
   const data = snap.exists() ? snap.data() : {};
-  if (String(data.name || '').trim() && String(data.phone || '').trim()) return;
+  const plan = getProfileCompletionPlan({
+    profile: data,
+    user,
+    role,
+    superAdminEmail: SUPER_ADMIN,
+  });
+  if (plan.skip) return;
 
   hideLoginOverlay();
   window.ttPageReady && window.ttPageReady();
 
   document.getElementById('login-heading').textContent = 'Un dato más';
-  document.getElementById('login-heading-sub').textContent = 'Completá tu nombre y teléfono para terminar de crear tu cuenta.';
+  const missingDescription = plan.needsName && plan.needsPhone
+    ? (plan.suggestedName
+        ? 'Confirmá tu nombre y completá tu teléfono para terminar.'
+        : 'Completá tu nombre y teléfono para terminar de crear tu cuenta.')
+    : plan.needsName
+      ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar.' : 'Completá tu nombre para continuar.')
+      : 'Completá tu teléfono para continuar.';
+  document.getElementById('login-heading-sub').textContent = missingDescription;
   document.getElementById('login-google-section').style.display = 'none';
   document.getElementById('login-divider-section').style.display = 'none';
   document.getElementById('login-email-block').style.display = 'none';
@@ -315,10 +336,34 @@ async function ensureProfileComplete(user) {
   profileBlock.style.display = '';
 
   const nameInput = document.getElementById('login-profile-name');
+  const nameField = document.getElementById('login-profile-name-field');
+  const nameConfirmation = document.getElementById('login-profile-name-confirmation');
+  const nameConfirmationValue = document.getElementById('login-profile-confirmation-value');
+  const changeNameButton = document.getElementById('btn-change-profile-name');
   const phoneInput = document.getElementById('login-profile-phone');
+  const phoneField = document.getElementById('login-profile-phone-field');
   const countrySelect = document.getElementById('login-profile-country');
   populateCountrySelect(countrySelect);
-  nameInput.value = data.name || '';
+  nameInput.value = plan.suggestedName;
+  phoneInput.value = '';
+  phoneField.style.display = plan.needsPhone ? '' : 'none';
+
+  let explicitNameChange = false;
+  if (plan.needsName && plan.suggestedName) {
+    nameConfirmationValue.textContent = plan.suggestedName;
+    nameConfirmation.style.display = '';
+    nameField.style.display = 'none';
+    changeNameButton.onclick = () => {
+      explicitNameChange = true;
+      nameConfirmation.style.display = 'none';
+      nameField.style.display = '';
+      nameInput.focus();
+      nameInput.select();
+    };
+  } else {
+    nameConfirmation.style.display = 'none';
+    nameField.style.display = plan.needsName ? '' : 'none';
+  }
 
   await new Promise(resolve => {
     document.getElementById('btn-save-profile').onclick = async () => {
@@ -326,16 +371,28 @@ async function ensureProfileComplete(user) {
       const name = nameInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
       const phoneRaw = phoneInput.value.trim();
-      if (!name) { showError('Ingresá tu nombre completo.'); return; }
-      if (!phoneRaw || !isValidPhone(phoneRaw, country)) {
+      if (plan.needsName && !name) { showError('Ingresá tu nombre completo.'); return; }
+      if (plan.needsPhone && (!phoneRaw || !isValidPhone(phoneRaw, country))) {
         showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
         return;
       }
       const btn = document.getElementById('btn-save-profile');
       btn.disabled = true;
       try {
-        const { value: normalizedPhone } = normalizePhone(phoneRaw, country);
-        await setDoc(ref, { name, phone: normalizedPhone, updatedAt: serverTimestamp() }, { merge: true });
+        const normalizedPhone = plan.needsPhone ? normalizePhone(phoneRaw, country).value : '';
+        await runTransaction(db, async transaction => {
+          const currentSnap = await transaction.get(ref);
+          const currentProfile = currentSnap.exists() ? currentSnap.data() : {};
+          const patch = buildMissingProfilePatch({
+            currentProfile,
+            submittedName: name,
+            submittedPhone: normalizedPhone,
+            explicitNameChange,
+          });
+          if (Object.keys(patch).length) {
+            transaction.set(ref, { ...patch, updatedAt: serverTimestamp() }, { merge: true });
+          }
+        });
         profileBlock.style.display = 'none';
         showOverlay();
         setOverlayText('Redireccionando a tu cuenta…');
@@ -362,7 +419,7 @@ async function finishGoogleLogin(user) {
     showBlockedModal();
     return;
   }
-  await ensureProfileComplete(user);
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
 }
 
@@ -378,7 +435,7 @@ async function finishOtpLogin(user) {
     showBlockedModal();
     return;
   }
-  await ensureProfileComplete(user);
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
 }
 
@@ -479,7 +536,7 @@ onAuthStateChanged(auth, async user => {
     role === 'client' &&
     !profileData.welcomeTutorialSeen &&
     profileData.onboardingCompleted !== true;
-  await ensureProfileComplete(user);
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
 });
 
