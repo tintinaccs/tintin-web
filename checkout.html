@@ -331,7 +331,6 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { isValidEmailFormat, sendLoginEmailLink, emailLinkErrorMessage } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   isAccessAllowed,
@@ -861,14 +860,8 @@ function showLoginRequiredModal(targetStep) {
       <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:none;background:#f5eef1;color:#555;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
       <div style="font-size:36px;margin-bottom:14px">🔐</div>
       <div id="ck-login-required-title" style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Iniciá sesión para continuar</div>
-      <p id="ck-login-required-message" style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
-      <a id="ck-login-required-login" class="ck-btn" style="text-decoration:none;margin-top:0" href="login.html?from=${from}">Continuar con Google</a>
-      <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#999;font-size:11px;font-weight:600">
-        <div style="flex:1;height:1px;background:var(--border)"></div>o ingresá con tu correo<div style="flex:1;height:1px;background:var(--border)"></div>
-      </div>
-      <input type="email" class="ck-input" id="ck-login-required-email" placeholder="tu@email.com" autocomplete="email" style="margin-bottom:10px" />
-      <button type="button" class="ck-btn" id="ck-login-required-send-link" style="margin-top:0">Enviar enlace de acceso</button>
-      <div id="ck-login-required-email-msg" style="font-size:12px;margin-top:12px;text-align:left"></div>
+      <p id="ck-login-required-message" style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con un código que te mandamos a tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
+      <a id="ck-login-required-login" class="ck-btn" style="text-decoration:none;margin-top:0" href="login.html?from=${from}">Iniciar sesión</a>
     </div>`;
   document.body.appendChild(ov);
   document.body.style.overflow = 'hidden';
@@ -876,37 +869,6 @@ function showLoginRequiredModal(targetStep) {
   ov.addEventListener('click', (e) => { if (e.target === ov) closeLoginRequiredModal(); });
   ov.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLoginRequiredModal(); });
   requestAnimationFrame(() => document.getElementById('ck-login-required-close')?.focus());
-
-  // Mismo mecanismo que "Continuar con Google": vuelve a login.html con el
-  // mismo `from`, que a su vez redirige de vuelta acá (CHECKOUT_RESUME_KEY
-  // ya guardado arriba) — el enlace de acceso solo reemplaza CÓMO se
-  // autentica, no A DÓNDE vuelve.
-  document.getElementById('ck-login-required-send-link').onclick = async () => {
-    const input = document.getElementById('ck-login-required-email');
-    const msg = document.getElementById('ck-login-required-email-msg');
-    const btn = document.getElementById('ck-login-required-send-link');
-    const email = input.value.trim();
-    if (!isValidEmailFormat(email)) {
-      msg.style.color = '#c62828';
-      msg.textContent = 'Escribí un correo con formato válido (ej: tu@email.com).';
-      return;
-    }
-    btn.disabled = true;
-    msg.style.color = '#666';
-    msg.textContent = '';
-    try {
-      const continueUrl = window.location.origin + window.location.pathname.replace(/checkout\.html$/, '') + 'login.html?from=' + from;
-      await sendLoginEmailLink(email, continueUrl);
-      input.disabled = true;
-      btn.style.display = 'none';
-      msg.style.color = '#2e7d32';
-      msg.textContent = 'Te enviamos un enlace de acceso a tu correo. Abrilo desde este mismo dispositivo — tu carrito te va a estar esperando acá.';
-    } catch (e) {
-      btn.disabled = false;
-      msg.style.color = '#c62828';
-      msg.textContent = emailLinkErrorMessage(e.code);
-    }
-  };
 }
 
 function closeLoginRequiredModal() {

@@ -90,6 +90,10 @@ try {
   if (footerPanelId) check(!(await page.locator(`#${footerPanelId}`).isHidden()), 'El panel del footer sigue oculto');
 
   await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => {
+    const hero = document.querySelector('.tt-hero-media');
+    return hero && getComputedStyle(hero).backgroundImage.includes('editorial-relojes-mobile.webp');
+  }, null, { timeout: 5000 });
   const heroBackground = await page.locator('.tt-hero-media').evaluate(node => getComputedStyle(node).backgroundImage);
   check(heroBackground.includes('editorial-relojes-mobile.webp'), 'El hero móvil no usa el respaldo responsive');
   check(!runtimeErrors.some(message => /appendChild|mobileMoreGrid/i.test(message)),

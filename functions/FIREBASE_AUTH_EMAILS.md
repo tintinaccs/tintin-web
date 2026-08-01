@@ -1,66 +1,91 @@
-# Tintin — Autenticación: solo Google
+# Tintin — Autenticación: Google + código de acceso por correo
 
-Desde este cambio, el sitio **ya no tiene login/registro con email y
-contraseña**. La única forma de entrar (y de crear una cuenta) es el botón
-**"Continuar con Google"** en `login.html`, usando `signInWithPopup` +
-`GoogleAuthProvider` de Firebase Authentication.
+`login.html` ofrece dos formas de entrar (y de crear cuenta), ambas sin
+contraseña:
 
-## Qué se eliminó
+1. **"Continuar con Google"** — `signInWithPopup` + `GoogleAuthProvider`
+   (con `signInWithRedirect` como respaldo si el navegador bloquea el
+   popup). Google entrega el correo ya verificado.
+2. **Código de 6 dígitos por correo** — la clienta escribe su correo,
+   recibe un código de un solo uso que vence en 5 minutos, y lo escribe en
+   el sitio para entrar. Backend propio en Cloudflare Pages Functions
+   (`functions/api/email-otp-send.js` / `email-otp-verify.js`) — **no** usa
+   el proveedor "Email link (passwordless sign-in)" de Firebase Auth (ese
+   solo manda enlaces, no códigos; quedó habilitado en el proyecto pero sin
+   uso real, no hace falta deshabilitarlo).
 
-- Las pestañas "Ingresar" / "Registrarse" / "Recuperar" de `login.html` (y
-  todo el código de `sendPasswordResetEmail`, `sendEmailVerification`,
-  `verifyPasswordResetCode`, `confirmPasswordReset`, `applyActionCode`).
-- La colección `emailProviders/{email}` en `firestore.rules` (existía solo
-  para diferenciar cuentas de Google vs. cuentas con contraseña al recuperar
-  contraseña — ya no hace falta).
-- Toda lógica de "correo verificado / correo sin verificar": Google entrega
-  el email ya verificado, así que ese estado intermedio no existe más.
+Ambos caminos terminan en el mismo lugar: `guardarUsuario()` /
+`ensureUserDocForEmailLogin()` crean o actualizan `users/{uid}` con el mismo
+criterio (primera vez arma el perfil, las siguientes solo tocan
+`lastLogin`), y `redirectByRole()` decide el destino según el rol. Antes de
+redirigir, `ensureProfileComplete()` exige nombre y teléfono si falta
+alguno de los dos — aplica a **todas** las cuentas (clientas y roles
+internos) y también retroactivamente a cuentas viejas sin esos datos.
 
-**Esto significa que Firebase Authentication ya NO envía ningún correo**
-(ni de verificación ni de restablecimiento de contraseña). Por lo tanto:
+## Cómo funciona el código de 6 dígitos
 
-- La sección **Authentication → Templates** de la consola de Firebase ya no
-  necesita ninguna configuración para este sitio — podés ignorarla.
-- El paso de **"Personalizar URL de acción"** (Customize action URL) ya no
-  aplica.
+- **Envío** (`functions/api/email-otp-send.js`): genera el código al azar,
+  lo guarda **hasheado** (nunca en texto plano) en Firestore
+  (`emailOtpCodes/{correo}`) con vencimiento real de 5 minutos, cooldown de
+  reenvío de 45s y tope de 8 códigos por correo por día. Lo manda por
+  **Resend** desde `noreply@tintinaccs.com` (mismo dominio ya verificado
+  que usa `pedidos@tintinaccs.com` para los correos de pedidos — no
+  requirió ningún paso nuevo de DNS).
+- **Verificación** (`functions/api/email-otp-verify.js`): compara el código
+  (hasheado también del lado del pedido), con tope de 5 intentos antes de
+  invalidarlo. Si es correcto, busca o crea la cuenta de Firebase Auth con
+  ese correo (ya verificado) y firma un **Custom Token** que el navegador
+  usa con `signInWithCustomToken` — recién ahí existe una sesión real.
+- **Nunca requirió el plan Blaze de Firebase**: todo corre en Cloudflare
+  Pages Functions (gratis, mismo lugar que ya usa `order-email.js`) usando
+  Web Crypto para firmar JWTs — ver `cloudflare/firebase-admin-lite.js`.
+  La única pieza nueva de configuración fue la variable secreta
+  `FIREBASE_SERVICE_ACCOUNT_KEY` en Cloudflare Pages (Settings →
+  Environment variables), con el `.json` completo de una cuenta de
+  servicio generada en Firebase Console → Configuración del proyecto →
+  Cuentas de servicio → Generar nueva clave privada.
+- La colección `emailOtpCodes` no tiene ninguna regla de cliente que la
+  permita en `firestore.rules` (cae en el "deny all" del final) — el único
+  camino que la toca es la credencial de servicio del lado del servidor.
 
-## Qué sigue vivo
+## Qué NO hace falta tocar
 
-- `js/firebase.js` sigue teniendo `auth.languageCode = "es";` — no hace
-  daño dejarlo (afecta, por ejemplo, textos que Google pueda mostrar), pero
-  no es indispensable para el flujo de Google.
-- El **nombre público del proyecto** en Firebase (Configuración del
-  proyecto → General → "Nombre público del proyecto") sigue siendo lo que
-  ve la clienta en la pantalla de consentimiento de Google al iniciar
-  sesión — conviene que diga `Tintin Accesorios` y no el ID técnico del
-  proyecto.
+- **Authentication → Templates** de Firebase: no se usa para esto, el
+  correo del código lo arma y manda Resend directamente.
+- **Dominios autorizados** de Firebase Auth: `tintinaccesorios.pages.dev`
+  ya es el `authDomain` configurado en `js/firebase.js`.
 - El correo de **reporte de pedidos** (a `tintinaccs@gmail.com` y al
-  cliente) sigue funcionando igual que siempre, sin relación con esto — es
-  un mecanismo aparte (Google Apps Script), ver `functions/EMAIL_SETUP.md`.
+  cliente) es un mecanismo aparte (`functions/api/order-email.js`, también
+  Resend) sin relación con esto.
 
 ## Cuentas viejas con contraseña
 
-Si existía alguna cuenta creada antes con email/contraseña (no con Google),
-esa cuenta deja de poder ingresar: no hay ningún flujo de "recuperar
-contraseña" ni de login con contraseña. Para volver a comprar/ver su
-perfil, esa clienta tiene que entrar con el botón de Google usando el mismo
-correo — Firebase crea una cuenta de Google nueva con ese email si no
-existía una, y el sitio arma su perfil (`users/{uid}`) igual que a
-cualquier clienta nueva.
+Si existía alguna cuenta creada antes con email/contraseña (flujo viejo, ya
+eliminado), esa cuenta no puede entrar con contraseña — no hay pantalla de
+"olvidé mi contraseña". Para volver a entrar, esa clienta usa Google o el
+código por correo con el mismo email; Firebase asocia el inicio de sesión a
+la cuenta existente por dirección de correo.
 
 ## Cómo probarlo
 
-1. Entrá a `login.html` sin sesión iniciada — debería verse un único botón
-   "Continuar con Google", sin pestañas ni formularios.
-2. Hacé clic, elegí una cuenta de Google — debería crear el perfil (primera
-   vez) o solo actualizar `lastLogin` (siguientes veces) y redirigir según
-   el rol (cliente → `perfil.html` o `from`, staff → `admin.html`).
-3. Cerrá la ventana emergente de Google antes de elegir cuenta — el loader
+1. Entrá a `login.html` sin sesión iniciada — se ve "Continuar con Google" y
+   más abajo el bloque de correo ("Correo electrónico" + "Enviar código").
+2. **Google**: clic, elegí una cuenta — debería mostrar la pantalla de
+   carga de marca durante todo el proceso (nunca vuelve a mostrarse el
+   formulario), y si falta nombre o teléfono, pedirlos antes de redirigir.
+3. **Correo**: escribí un correo válido, "Enviar código" — llega un correo
+   con 6 dígitos en segundos. Escribilo en el sitio y "Confirmar código" —
+   debería completar el ingreso (pidiendo nombre/teléfono si falta) sin
+   volver a mostrar el formulario de login.
+4. Probá "Reenviar código" (cooldown de 45s) y un código vencido/incorrecto
+   (mensaje claro, sin trabarse).
+5. Cerrá la ventana emergente de Google antes de elegir cuenta — el loader
    rosa debería desaparecer rápido con un mensaje de error, sin quedar
    colgado.
-4. Con una cuenta marcada como bloqueada (Fase E), debería cerrar sesión
-   sola y mostrar el mensaje de cuenta bloqueada, sin dejar entrar.
-5. Desde `checkout.html`, sin sesión, avanzar de Carrito a Envío debería
-   abrir el modal "Necesitás una cuenta para continuar" con un solo botón
-   "Continuar con Google" que lleva a `login.html?from=checkout.html`, y
-   volver directo al paso de Envío después de loguearse.
+6. Con una cuenta marcada como bloqueada (Fase E), debería cerrar sesión
+   sola y mostrar el mensaje de cuenta bloqueada, sin dejar entrar — para
+   los dos métodos.
+7. Desde `checkout.html`, sin sesión, avanzar de Carrito a Envío debería
+   abrir el modal "Necesitás una cuenta para continuar" con un botón
+   "Iniciar sesión" que lleva a `login.html?from=checkout.html` (ahí elige
+   Google o código), y volver directo al paso de Envío después de loguearse.

@@ -280,6 +280,8 @@ let _allAuditLogs = [];
 let _selectedAuditLogs = new Set();
 let _auditUnsubscribe = null;
 
+let _auditSlowTimer = null;
+let _auditReady = false;
 function loadAuditLog() {
   const tbody = document.getElementById('audit-tbody');
   if (_auditUnsubscribe) {
@@ -287,17 +289,32 @@ function loadAuditLog() {
     return;
   }
   tbody.innerHTML = '<tr><td colspan="5" class="adm-loading"><span class="adm-spinner"></span> Cargando...</td></tr>';
+  _auditReady = false;
+  clearTimeout(_auditSlowTimer);
+  _auditSlowTimer = setTimeout(() => {
+    if (_auditReady) return;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#7a5a63;padding:24px">La carga está tardando más de lo esperado. Verificá tu conexión. <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaAuditoria()">Reintentar</button></td></tr>`;
+  }, 12000);
   _auditUnsubscribe = onSnapshot(
     query(collection(db, 'auditLog'), orderBy('createdAt', 'desc'), limit(200)),
     snapshot => {
+      clearTimeout(_auditSlowTimer);
+      _auditReady = true;
       _allAuditLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
       renderAuditLogTable();
     },
     error => {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(error.message)}</td></tr>`;
+      clearTimeout(_auditSlowTimer);
+      _auditReady = false;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#c62828;padding:24px">Error al cargar la auditoría: ${escapeHtmlAdmin(error.message)} <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaAuditoria()">Reintentar</button></td></tr>`;
     }
   );
 }
+window.reintentarCargaAuditoria = function() {
+  clearTimeout(_auditSlowTimer);
+  if (_auditUnsubscribe) { _auditUnsubscribe(); _auditUnsubscribe = null; }
+  loadAuditLog();
+};
 
 // La auditoría es de solo lectura (nunca se edita ni se borra un log) — la
 // única acción posible sobre la selección es exportarla, nunca modificarla.
@@ -5326,14 +5343,27 @@ function collSlugify(s) {
 // silently drop out of an orderBy('order') query in Firestore — every
 // collection doc is fetched unconditionally, then sorted client-side
 // (normalizeCollectionDoc gives every doc a safe default order).
+let _collectionsSlowTimer = null;
+let _collectionsReady = false;
 function loadColecciones() {
   document.getElementById('coll-loading').style.display = '';
+  document.getElementById('coll-loading').innerHTML = 'Cargando colecciones…';
   document.getElementById('coll-grid-wrap').style.display = 'none';
   document.getElementById('coll-empty').style.display = 'none';
   if (_collectionsUnsub) { renderColeccionesGrid(applyCollFilter(_allCollections)); return; }
+  _collectionsReady = false;
+  clearTimeout(_collectionsSlowTimer);
+  _collectionsSlowTimer = setTimeout(() => {
+    if (_collectionsReady) return;
+    document.getElementById('coll-loading').innerHTML =
+      'La carga de colecciones está tardando más de lo esperado. Verificá tu conexión. ' +
+      '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
+  }, 12000);
   _collectionsUnsub = onSnapshot(
     collection(db, 'collections'),
     snap => {
+      clearTimeout(_collectionsSlowTimer);
+      _collectionsReady = true;
       _allCollections = snap.docs
         .map(d => normalizeCollectionDoc(d.id, d.data()))
         .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
@@ -5342,12 +5372,21 @@ function loadColecciones() {
       renderGeneralStatistics();
     },
     e => {
-      document.getElementById('coll-loading').textContent = 'Error al cargar colecciones: ' + e.message;
+      clearTimeout(_collectionsSlowTimer);
+      _collectionsReady = false;
+      document.getElementById('coll-loading').innerHTML =
+        'Error al cargar colecciones: ' + escapeHtmlAdmin(e.message) + ' ' +
+        '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
       console.error('[colecciones] listener failed:', e);
       toast('No se pudieron cargar las colecciones: ' + e.message);
     }
   );
 }
+window.reintentarCargaColecciones = function() {
+  clearTimeout(_collectionsSlowTimer);
+  if (_collectionsUnsub) { _collectionsUnsub(); _collectionsUnsub = null; }
+  loadColecciones();
+};
 
 // Any collection created in Super Admin → Colecciones automatically becomes
 // an assignable option in Productos (new/edit form, filter, bulk-assign).
