@@ -139,6 +139,21 @@ export async function createFirebaseCustomToken(env, uid, extraClaims = {}) {
   );
 }
 
+/** Busca una cuenta por email y devuelve sus proveedores vinculados (ej. 'google.com'), sin crear nada. */
+export async function lookupUserProvidersByEmail(env, email) {
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ email: [email] })
+  });
+  const data = await response.json().catch(() => ({}));
+  const user = Array.isArray(data.users) ? data.users[0] : null;
+  if (!user) return { exists: false, providers: [] };
+  const providers = (user.providerUserInfo || []).map(p => p.providerId).filter(Boolean);
+  return { exists: true, providers };
+}
+
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
