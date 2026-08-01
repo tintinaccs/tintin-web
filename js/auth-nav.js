@@ -4,9 +4,6 @@ import { auth } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
 
-const PERSON_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-const ADMIN_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`;
-const ORDER_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l2 4v16H4V6l2-4z"/><path d="M4 6h16"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>`;
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 let silentLogoutStarted = false;
@@ -62,14 +59,12 @@ onAuthStateChanged(auth,async user=>{
  // login.html es el único dueño del alta, bloqueo y destino posterior al
  // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;
- document.querySelectorAll("#tabbar-cuenta,[data-auth-link='cuenta']").forEach(el=>{el.href=user?'perfil.html':'login.html';});
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
  publishStaffVisibility(user,role);
  renderAccountButtonPhoto(user);
  renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);
- renderTabletUserPanel(user,role);
 });
 
 function renderAccountButtonPhoto(user){
@@ -90,7 +85,6 @@ function renderMobileTabbarPhoto(user){
  const tab=document.getElementById('tabbar-cuenta');
  if(!tab)return;
  if(!tab.dataset.ttDefaultHtml)tab.dataset.ttDefaultHtml=tab.innerHTML;
- tab.href=user?'perfil.html':'login.html';
  if(user&&user.photoURL){
   const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
   tab.innerHTML=`<img class="tt-tabbar-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
@@ -102,7 +96,7 @@ function renderMobileTabbarPhoto(user){
 function renderAccountPanel(user,role='client'){
  const panel=document.getElementById('account-panel');
  if(!panel)return;
- if(!user){panel.innerHTML=`<a class="tt-account-item" href="login.html">Ingresar con Google</a>`;return;}
+ if(!user){panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="login.html">Iniciar sesión</a><a class="tt-account-item" href="login.html">Crear una cuenta</a>`;return;}
  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
  const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
@@ -111,16 +105,3 @@ function renderAccountPanel(user,role='client'){
 }
 
 function wireLogout(panel){const btn=panel.querySelector('#account-logout-btn');if(btn)btn.onclick=doLogout;}
-function wireTabletLogout(panel){const btn=panel.querySelector('#tablet-user-logout-btn');if(btn)btn.onclick=doLogout;}
-
-function renderTabletUserPanel(user,role='client'){
- const panel=document.getElementById('tt-tablet-user');
- if(!panel)return;
- if(!user){panel.innerHTML=`<a href="login.html" class="tt-tablet-user-login"><div class="tt-tablet-user-avatar">${PERSON_ICON}</div><div><div class="tt-tablet-user-name">Iniciar sesión</div><div class="tt-tablet-user-sub">Ingresá con Google, es gratis!</div></div></a>`;return;}
- const name=user.displayName||user.email||'Mi perfil';
- const firstName=escapeHtmlNav(name.split(' ')[0]);
- const avatar=user.photoURL?`<img class="tt-tablet-user-photo" src="${user.photoURL}" alt="${firstName}" referrerpolicy="no-referrer" width="42" height="42">`:PERSON_ICON;
- const adminTablet=hasAdminAccess(user,role)?`<a href="admin.html" class="tt-tablet-user-action tt-tablet-user-admin" data-internal-admin-link="true">${ADMIN_ICON}<span>${escapeHtmlNav(roleLabel(role))}</span></a>`:'';
- panel.innerHTML=`<div class="tt-tablet-user-login"><div class="tt-tablet-user-avatar">${avatar}</div><div><div class="tt-tablet-user-name">${firstName}</div><div class="tt-tablet-user-sub">Cuenta activa</div></div></div><div class="tt-tablet-user-actions">${adminTablet}<a href="perfil.html" class="tt-tablet-user-action">${PERSON_ICON}<span>Mi cuenta</span></a><a href="perfil.html#mis-pedidos" class="tt-tablet-user-action">${ORDER_ICON}<span>Mis pedidos</span></a><button type="button" class="tt-tablet-user-logout" id="tablet-user-logout-btn">Cerrar sesión</button></div>`;
- wireTabletLogout(panel);
-}

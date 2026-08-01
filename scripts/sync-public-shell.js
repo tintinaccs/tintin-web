@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260726-login-session-1';
+const VERSION = 'tintin-20260801-unified-surfaces-9';
 const PUBLIC_PAGES = [
   '404.html',
   'about.html',
@@ -31,8 +31,11 @@ const SHELL_IDS = [
   'tt-tabbar',
   'cart-overlay',
   'cart-drawer',
+  'account-drawer',
   'collections-sheet',
   'sheet-backdrop',
+  'tt-shared-backdrop',
+  'tt-shared-morph',
 ];
 
 function escapeRegex(value) {
@@ -82,10 +85,12 @@ function ensureStyles(html) {
 }
 
 function ensureShellScript(html) {
-  let out = html.replace(/\s*<script\b[^>]*src=["']js\/public-shell\.js[^"']*["'][^>]*><\/script>/gi, '');
+  let out = html
+    .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
+    .replace(/\s*<script\b[^>]*src=["']js\/public-shell\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/page-loader.js');
-  return out.replace(loader, `$1\n  <script src="js/public-shell.js?v=${VERSION}" defer></script>`);
+  return out.replace(loader, `$1\n  <script src="js/ui-navigation-controller.js?v=${VERSION}" defer></script>\n  <script src="js/public-shell.js?v=${VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {
@@ -95,6 +100,8 @@ function centralizeRuntime(html) {
   );
   if (!/<script\b[^>]*src=["']script\.js(?:\?|["'])/i.test(out)) {
     out = out.replace('</body>', `<script src="script.js?v=${VERSION}" defer></script>\n</body>`);
+  } else {
+    out = out.replace(/(<script\b[^>]*src=["']script\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
   }
   return out;
 }

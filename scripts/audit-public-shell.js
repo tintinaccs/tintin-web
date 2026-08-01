@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-responsive-navigation-1';
+const VERSION = 'tintin-20260801-unified-surfaces-9';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',
@@ -14,7 +14,7 @@ const PUBLIC_PAGES = [
 ];
 const SHELL_IDS = [
   'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'tt-tablet-menu', 'tt-tabbar',
-  'cart-overlay', 'cart-drawer', 'collections-sheet', 'sheet-backdrop',
+  'cart-drawer', 'account-drawer', 'collections-sheet', 'tt-shared-backdrop', 'tt-shared-morph',
 ];
 const failures = [];
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -23,11 +23,15 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 for (const page of PUBLIC_PAGES) {
   const html = read(page);
   const shellScripts = html.match(/<script\b[^>]*src=["']js\/public-shell\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const controllerScripts = html.match(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const classicScripts = html.match(/<script\b[^>]*src=["']script\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar public-shell.js exactamente una vez`);
   check(shellScripts[0]?.includes(`?v=${VERSION}`), `${page}: public-shell.js no usa la version actual`);
   check(/<script\b[^>]*src=["']js\/public-shell\.js[^>]*\bdefer\b/i.test(html), `${page}: public-shell.js debe ser defer`);
+  check(controllerScripts.length === 1, `${page}: debe cargar ui-navigation-controller.js exactamente una vez`);
+  check(controllerScripts[0]?.includes(`?v=${VERSION}`), `${page}: ui-navigation-controller.js no usa la version actual`);
+  check(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^>]*\bdefer\b/i.test(html), `${page}: ui-navigation-controller.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
   check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
   check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de header duplicado`);
@@ -48,6 +52,10 @@ check(shell.includes("import(versioned('./auth-nav.js'))"), 'public-shell.js: fa
 check(shell.includes("import(versioned('./nav-collections.js'))"), 'public-shell.js: faltan colecciones compartidas');
 check(shell.includes("import(versioned('./products-store.js'))"), 'public-shell.js: faltan productos en vivo para buscar/carrito');
 check(shell.includes("import(versioned('./cart-sync.js'))"), 'public-shell.js: falta sincronizacion del carrito');
+const surfaceController = read('js/ui-navigation-controller.js');
+check(surfaceController.includes("this.state = 'idle'"), 'surface-controller.js: falta estado idle');
+check(surfaceController.includes("this.surface = 'none'"), 'surface-controller.js: falta superficie none');
+check(surfaceController.includes('this.lockScroll()'), 'surface-controller.js: falta bloqueo de scroll compartido');
 
 const desktopStyles = read('css/navigation-desktop.css');
 const tabletStyles = read('css/navigation-tablet.css');

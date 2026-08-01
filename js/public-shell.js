@@ -12,7 +12,7 @@
   if (window.TintinPublicShellBooted) return;
   window.TintinPublicShellBooted = true;
 
-  const VERSION = 'tintin-20260801-responsive-navigation-1';
+  const VERSION = 'tintin-20260801-unified-surfaces-9';
   const SCRIPT_URL = document.currentScript?.src || new URL('js/public-shell.js', location.href).href;
   const ICONS = {
     bolsos: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
@@ -76,7 +76,7 @@
             <a href="index.html" data-shell-route="home" data-desktop-nav-item>INICIO</a>
             <div class="tt-nav-dropdown" id="tienda-dropdown">
               <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">TIENDA <span aria-hidden="true">▾</span></button>
-              <div class="tt-dropdown" id="tt-tienda-dropdown-panel">
+              <div class="tt-dropdown" id="tt-tienda-dropdown-panel" role="dialog" aria-label="Categorías de la tienda" aria-hidden="true">
                 <div class="tt-dropdown-grid" data-collections-nav="desktop">${desktopCategories}</div>
               </div>
             </div>
@@ -88,12 +88,9 @@
             <button type="button" id="btn-search" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </button>
-            <div class="tt-nav-dropdown" id="account-dropdown">
-              <button type="button" id="btn-cuenta" data-auth-account-button title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-haspopup="true" aria-controls="account-panel">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </button>
-              <div class="tt-account-panel" id="account-panel"></div>
-            </div>
+            <button type="button" id="btn-cuenta" data-nav-action="account" data-auth-account-button title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-controls="account-drawer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </button>
             <button type="button" id="btn-cart" data-nav-action="cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer" style="position:relative">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
               <span class="tt-cart-badge hidden" id="cart-badge">0</span>
@@ -112,13 +109,13 @@
           </a>
           <div class="tt-tablet-actions">
             <button type="button" id="btn-search-tablet" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <a href="login.html" id="btn-cuenta-tablet" data-auth-link="cuenta" data-auth-account-button data-shell-route="account" title="Mi cuenta" aria-label="Mi cuenta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+            <button type="button" id="btn-cuenta-tablet" data-nav-action="account" data-auth-account-button data-shell-route="account" title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-controls="account-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
             <button type="button" id="btn-cart-tablet" data-nav-action="cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="tt-cart-badge hidden" id="cart-badge-tablet">0</span></button>
           </div>
         </div>
       </header>
 
-      <div class="tt-search-panel" id="search-panel" role="search" aria-label="Buscar productos" aria-hidden="true">
+      <div class="tt-search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar productos" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="search" class="tt-search-input" id="search-input" aria-label="Buscar productos" autocomplete="off" placeholder="¿Qué estás buscando? Ej: reloj, collar, bag…">
         <button type="button" class="tt-search-close" id="btn-search-close" aria-label="Cerrar búsqueda">✕</button>
@@ -141,18 +138,15 @@
             <svg class="tt-tablet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="tt-tablet-cats" id="tablet-cats">
+            <button type="button" class="tt-tablet-cats-back" id="btn-tablet-cats-back">← Volver</button>
+            <h2 class="tt-tablet-cats-title">Colecciones</h2>
             <div class="tt-tablet-cats-grid" data-collections-nav="tablet">${tabletCategories}</div>
             <a href="catalogo.html" class="tt-tablet-ver-todo">Ver todo el catálogo →</a>
           </div>
           <a href="about.html" data-shell-route="about">NOSOTROS</a>
           <a href="contact.html" data-shell-route="contact">CONTACTO</a>
         </nav>
-        <div class="tt-tablet-user" id="tt-tablet-user">
-          <a href="login.html" data-auth-link="cuenta" class="tt-tablet-user-login">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <div><div class="tt-tablet-user-name">Iniciar sesión</div><div class="tt-tablet-user-sub">Ingresá con Google, ¡es gratis!</div></div>
-          </a>
-        </div>
+        <button type="button" class="tt-tablet-account-entry" data-nav-action="account" aria-expanded="false" aria-controls="account-drawer">Mi cuenta</button>
       </div>`;
   }
 
@@ -173,16 +167,20 @@
         <button type="button" class="tt-tabbar-btn" id="tabbar-cart" style="position:relative" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer" data-shell-tab="cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="tt-cart-badge hidden" id="cart-badge-mobile">0</span><span>Carrito</span>
         </button>
-        <a href="login.html" id="tabbar-cuenta" class="tt-tabbar-btn" aria-label="Cuenta" data-shell-tab="account">
+        <button type="button" id="tabbar-cuenta" class="tt-tabbar-btn" aria-label="Cuenta" aria-expanded="false" aria-controls="account-drawer" data-nav-action="account" data-shell-tab="account">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Cuenta</span>
-        </a>
+        </button>
       </nav>
 
-      <div class="tt-cart-overlay" id="cart-overlay"></div>
       <div class="tt-cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras" aria-hidden="true">
         <div class="tt-cart-header"><h2 class="tt-cart-title">MI CARRITO</h2><button type="button" class="tt-cart-close" id="btn-cart-close" aria-label="Cerrar carrito">✕</button></div>
         <div class="tt-cart-body" id="cart-body"></div>
         <div class="tt-cart-footer" id="cart-footer" style="display:none"><div class="tt-cart-total-row"><span class="tt-cart-total-label">TOTAL</span><span class="tt-cart-total-value" id="cart-total">Gs. 0</span></div></div>
+      </div>
+
+      <div class="tt-account-drawer" id="account-drawer" role="dialog" aria-modal="true" aria-label="Mi cuenta" aria-hidden="true">
+        <div class="tt-account-drawer-header"><h2>MI CUENTA</h2><button type="button" id="btn-account-close" aria-label="Cerrar cuenta">✕</button></div>
+        <div class="tt-account-panel" id="account-panel"></div>
       </div>
 
       <div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Colecciones" aria-hidden="true">
@@ -191,13 +189,15 @@
         <div class="tt-sheet-grid" data-collections-nav="sheet">${sheetCategories}</div>
         <div class="tt-sheet-footer"><a href="catalogo.html" class="tt-btn" style="display:block;text-align:center;text-decoration:none">Ver todas las colecciones</a></div>
       </div>
-      <div class="tt-sheet-backdrop" id="sheet-backdrop"></div>`;
+      <div class="tt-shared-backdrop" id="tt-shared-backdrop" hidden></div>
+      <div class="tt-shared-morph" id="tt-shared-morph" aria-hidden="true"></div>`;
   }
 
   function removeLegacyShell() {
     [
       'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'mobile-menu', 'tt-tablet-menu', 'tt-tabbar',
-      'cart-overlay', 'cart-drawer', 'collections-sheet', 'sheet-backdrop',
+      'cart-overlay', 'cart-drawer', 'account-drawer', 'collections-sheet', 'sheet-backdrop',
+      'tt-shared-backdrop', 'tt-shared-morph',
     ].forEach(id => document.getElementById(id)?.remove());
   }
 
@@ -260,6 +260,7 @@
       ['tt-navigation-tablet-css', '../css/navigation-tablet.css'],
       ['tt-navigation-mobile-css', '../css/navigation-mobile.css'],
       ['tt-navigation-shared-css', '../css/navigation-shared.css'],
+      ['tt-surface-controller-css', '../css/surface-controller.css'],
     ].forEach(([id, file]) => {
       if (document.getElementById(id)) return;
       const link = document.createElement('link');

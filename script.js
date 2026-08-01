@@ -396,78 +396,11 @@ function renderCart() {
 }
 
 /* ──────────────────────────────────────
-   SCROLL LOCK — tracks which panels are open
-   so closing one panel doesn't unlock scroll
-   while another is still open.
-   document.scrollingElement is <html>, not <body> — locking only
-   body.style.overflow left the real page scrollable behind an open
-   panel. html.style.overflow=hidden plus pinning body with position:
-   fixed (the standard cross-browser technique, already used by the
-   page loader and the welcome tutorial) actually stops it.
+   SHARED SURFACE CONTROLLER
+   One state machine owns shop, search, cart, account, backdrop, focus and
+   scroll locking across desktop, tablet and mobile.
 ────────────────────────────────────── */
-const _scrollLockPanels = new Set();
-let _scrollLockY = 0;
-let _scrollLockPrevBodyStyle = null;
-
-function lockScroll(panelId) {
-  const wasEmpty = _scrollLockPanels.size === 0;
-  _scrollLockPanels.add(panelId);
-  if (!wasEmpty) return;
-  _scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
-  document.documentElement.style.overflow = 'hidden';
-  if (document.body) {
-    _scrollLockPrevBodyStyle = {
-      position: document.body.style.position,
-      top: document.body.style.top,
-      left: document.body.style.left,
-      right: document.body.style.right,
-      width: document.body.style.width,
-      overflow: document.body.style.overflow,
-      touchAction: document.body.style.touchAction,
-    };
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${_scrollLockY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-  }
-}
-
-function unlockScroll(panelId) {
-  _scrollLockPanels.delete(panelId);
-  if (_scrollLockPanels.size > 0) return;
-  document.documentElement.style.overflow = '';
-  if (document.body) {
-    if (_scrollLockPrevBodyStyle) {
-      document.body.style.position = _scrollLockPrevBodyStyle.position;
-      document.body.style.top = _scrollLockPrevBodyStyle.top;
-      document.body.style.left = _scrollLockPrevBodyStyle.left;
-      document.body.style.right = _scrollLockPrevBodyStyle.right;
-      document.body.style.width = _scrollLockPrevBodyStyle.width;
-      document.body.style.overflow = _scrollLockPrevBodyStyle.overflow;
-      document.body.style.touchAction = _scrollLockPrevBodyStyle.touchAction;
-    } else {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-    }
-  }
-  window.scrollTo(0, _scrollLockY || 0);
-}
-
-/* ──────────────────────────────────────
-   TABBAR ACTIVE STATE — highlights whichever tab corresponds to what's
-   currently open (Tienda dropup, Carrito, Búsqueda), reverting to
-   whatever this page itself marks active by default once everything
-   closes again.
-────────────────────────────────────── */
-const _tabbarDefaultBtn = document.querySelector('.tt-tabbar .tt-tabbar-btn.active');
+let surfaceController = window.TintinSurfaceController;
 
 function setActiveTab(btn) {
   document.querySelectorAll('.tt-tabbar .tt-tabbar-btn').forEach(b => b.classList.remove('active'));
@@ -475,41 +408,58 @@ function setActiveTab(btn) {
 }
 
 function restoreDefaultActiveTab() {
-  setActiveTab(_tabbarDefaultBtn);
+  setActiveTab(document.querySelector('.tt-tabbar .tt-tabbar-btn[aria-current="page"]'));
 }
 
-/* ──────────────────────────────────────
-   CART DRAWER OPEN/CLOSE
-────────────────────────────────────── */
-let _lastCartTrigger = null;
+function initSurfaceController() {
+  surfaceController = window.TintinSurfaceController;
+  if (!surfaceController) {
+    window.addEventListener('tintin:surface-controller-ready', initSurfaceController, { once: true });
+    return;
+  }
+  if (document.documentElement.dataset.ttSurfacesReady === '1') return;
+  document.documentElement.dataset.ttSurfacesReady = '1';
+  surfaceController.connect({
+    backdrop: document.getElementById('tt-shared-backdrop'),
+    morphLayer: document.getElementById('tt-shared-morph'),
+  });
+
+  const register = (name, id, triggerSelector, initialFocus, hooks = {}) => {
+    const element = document.getElementById(id);
+    if (!element) return;
+    surfaceController.register(name, { element, triggerSelector, initialFocus, ...hooks });
+  };
+  register('desktop-shop', 'tt-tienda-dropdown-panel', '#btn-tienda', '.tt-dropdown-card');
+  register('tablet-menu', 'tt-tablet-menu', '#btn-menu-tablet', '#btn-tablet-close');
+  register('mobile-shop', 'collections-sheet', '#tabbar-tienda', '#btn-close-sheet');
+  register('search', 'search-panel', '[data-nav-action="search"],#tabbar-search', '#search-input', {
+    afterClose: () => {
+      const input = document.getElementById('search-input');
+      const results = document.getElementById('search-results');
+      if (input) input.value = '';
+      if (results) { results.hidden = false; results.style.display = 'none'; results.replaceChildren(); }
+    },
+  });
+  register('cart', 'cart-drawer', '[data-nav-action="cart"],#tabbar-cart', '#btn-cart-close', { beforeOpen: renderCart });
+  register('account', 'account-drawer', '[data-nav-action="account"]', '#btn-account-close');
+
+  addEventListener('tintin:surface-change', event => {
+    const surface = event.detail?.surface;
+    if (surface === 'mobile-shop') setActiveTab(document.getElementById('tabbar-tienda'));
+    else if (surface === 'search') setActiveTab(document.getElementById('tabbar-search'));
+    else if (surface === 'cart') setActiveTab(document.getElementById('tabbar-cart'));
+    else if (surface === 'account') setActiveTab(document.getElementById('tabbar-cuenta'));
+    else if (surface === 'none') restoreDefaultActiveTab();
+  });
+}
 
 function openCart(trigger = document.activeElement) {
-  const drawer = document.getElementById('cart-drawer');
-  const overlay = document.getElementById('cart-overlay');
-  if (trigger instanceof HTMLElement) _lastCartTrigger = trigger;
-  if (drawer) {
-    drawer.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-  }
-  if (overlay) overlay.classList.add('open');
-  document.querySelectorAll('[data-nav-action="cart"],#tabbar-cart').forEach(control => control.setAttribute('aria-expanded', 'true'));
-  lockScroll('cart');
-  setActiveTab(document.getElementById('tabbar-cart'));
+  return surfaceController?.open('cart', trigger);
 }
 
 function closeCart() {
-  const drawer = document.getElementById('cart-drawer');
-  const overlay = document.getElementById('cart-overlay');
-  const wasOpen = drawer?.classList.contains('open') === true;
-  if (drawer) {
-    drawer.classList.remove('open');
-    drawer.setAttribute('aria-hidden', 'true');
-  }
-  if (overlay) overlay.classList.remove('open');
-  document.querySelectorAll('[data-nav-action="cart"],#tabbar-cart').forEach(control => control.setAttribute('aria-expanded', 'false'));
-  unlockScroll('cart');
-  restoreDefaultActiveTab();
-  if (wasOpen && _lastCartTrigger?.isConnected) _lastCartTrigger.focus({ preventScroll: true });
+  if (surfaceController?.surface === 'cart') return surfaceController.close('cart-api');
+  return false;
 }
 
 /* ──────────────────────────────────────
@@ -573,149 +523,31 @@ function initHeaderScroll() {
 /* ──────────────────────────────────────
    TIENDA DROPDOWN
 ────────────────────────────────────── */
-function initDropdown() {
-  const dropdown = document.getElementById('tienda-dropdown');
-  const btn = document.getElementById('btn-tienda');
-  if (!dropdown || !btn) return;
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove('open');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') dropdown.classList.remove('open');
-  });
-}
-
-/* ──────────────────────────────────────
-   ACCOUNT DROPDOWN (user icon) — same open/close pattern as Tienda above,
-   kept separate since its content is built dynamically by js/auth-nav.js
-   depending on login state, not fixed markup.
-────────────────────────────────────── */
-function initAccountDropdown() {
-  const dropdown = document.getElementById('account-dropdown');
-  const btn = document.getElementById('btn-cuenta');
-  if (!dropdown || !btn) return;
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove('open');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') dropdown.classList.remove('open');
-  });
-}
-
-/* ──────────────────────────────────────
-   MOBILE MENU
-────────────────────────────────────── */
-function initMobileMenu() {
-  const menu = document.getElementById('mobile-menu');
-  const btnClose = document.getElementById('btn-mobile-close');
-  const btnTienda = document.getElementById('btn-mobile-tienda');
-  const mobileCats = document.getElementById('mobile-cats');
-
-  if (!menu) return;
-
-  function openMenu() {
-    menu.classList.add('open');
-    menu.setAttribute('aria-hidden', 'false');
-    btnMenu?.setAttribute('aria-expanded', 'true');
-    lockScroll('mobile-menu');
-    btnClose?.focus({ preventScroll: true });
-  }
-
-  function closeMenu() {
-    const hadFocusInside = menu.contains(document.activeElement);
-    menu.classList.remove('open');
-    menu.setAttribute('aria-hidden', 'true');
-    btnMenu?.setAttribute('aria-expanded', 'false');
-    unlockScroll('mobile-menu');
-    if (hadFocusInside) btnMenu?.focus({ preventScroll: true });
-  }
-
-  // btn-menu vive en el header Desktop/Tablet (hace de hamburguesa en su
-  // rango tablet, 769-1024px) — es el único disparador de este menú lateral
-  // global (INICIO/TIENDA/NOSOTROS/CONTACTO + cuenta). En mobile real
-  // (<=768px) no hay header superior, así que este menú queda accesible
-  // solo desde tablet — en mobile, Tienda abre el bottom sheet de
-  // colecciones en su lugar (ver initCollectionsSheet).
-  const btnMenu = document.getElementById('btn-menu');
-  if (btnMenu) btnMenu.addEventListener('click', openMenu);
-  if (btnClose) btnClose.addEventListener('click', closeMenu);
-
-  if (btnTienda && mobileCats) {
-    btnTienda.addEventListener('click', () => {
-      const isOpen = mobileCats.classList.contains('open');
-      mobileCats.classList.toggle('open', !isOpen);
-      btnTienda.setAttribute('aria-expanded', String(!isOpen));
-    });
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
-  });
-}
-
 /* ──────────────────────────────────────
    SEARCH PANEL
 ────────────────────────────────────── */
 function initSearch() {
   const panel = document.getElementById('search-panel');
   const input = document.getElementById('search-input');
-  const btnClose = document.getElementById('btn-search-close');
   const results = document.getElementById('search-results');
-  const tabbarSearch = document.getElementById('tabbar-search');
-  let lastSearchTrigger = null;
+  if (!panel || !input || !results) return;
 
-  if (!panel) return;
+  const renderState = (kind, message) => {
+    results.style.display = 'block';
+    results.dataset.searchState = kind;
+    results.innerHTML = `<div class="tt-search-state" role="${kind === 'error' ? 'alert' : 'status'}">${escapeHtml(message)}</div>`;
+  };
+  let searchAbort = null;
+  let searchDebounceTimer = 0;
 
-  function openSearch(trigger = document.activeElement) {
-    if (trigger instanceof HTMLElement) lastSearchTrigger = trigger;
-    panel.classList.add('open');
-    panel.setAttribute('aria-hidden', 'false');
-    document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => control.setAttribute('aria-expanded', 'true'));
-    if (input) input.focus();
-    setActiveTab(tabbarSearch);
-  }
-
-  function closeSearch() {
-    const wasOpen = panel.classList.contains('open');
-    panel.classList.remove('open');
-    panel.setAttribute('aria-hidden', 'true');
-    document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => control.setAttribute('aria-expanded', 'false'));
-    if (input) input.value = '';
-    if (results) {
-      results.style.display = 'none';
-      results.innerHTML = '';
+  addEventListener('tintin:surface-change', event => {
+    if (event.detail?.surface === 'search' && event.detail?.state === 'opening' && !input.value.trim()) {
+      renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
     }
-    restoreDefaultActiveTab();
-    if (wasOpen && lastSearchTrigger?.isConnected) lastSearchTrigger.focus({ preventScroll: true });
-  }
-
-  // btn-search vive en el header Desktop/Tablet, tabbar-search es el
-  // acceso mobile — ambos abren el mismo panel de búsqueda global.
-  document.querySelectorAll('[data-nav-action="search"]').forEach(control => control.addEventListener('click', e => openSearch(e.currentTarget)));
-  if (tabbarSearch) tabbarSearch.addEventListener('click', e => openSearch(e.currentTarget));
-  if (btnClose) btnClose.addEventListener('click', closeSearch);
+  });
 
   document.addEventListener('keydown', (e) => {
-    if (!panel.classList.contains('open')) return;
-    if (e.key === 'Escape') { closeSearch(); return; }
+    if (surfaceController?.surface !== 'search') return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       const items = results.querySelectorAll('.tt-search-result-item');
@@ -733,23 +565,30 @@ function initSearch() {
     }
   });
 
-  if (input && results) {
-    const SEARCH_RESULTS_LIMIT = 30;
-    let searchDebounceTimer = null;
-    input.addEventListener('input', () => {
-      clearTimeout(searchDebounceTimer);
-      searchDebounceTimer = setTimeout(runSearch, 200);
-    });
+  const SEARCH_RESULTS_LIMIT = 30;
+  input.addEventListener('input', () => {
+    searchAbort?.abort();
+    searchAbort = new AbortController();
+    clearTimeout(searchDebounceTimer);
+    if (!input.value.trim()) { renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.'); return; }
+    renderState('searching', 'Buscando productos…');
+    const signal = searchAbort.signal;
+    searchDebounceTimer = setTimeout(() => { if (!signal.aborted) runSearch(signal); }, 180);
+  });
 
-    function runSearch() {
+    function runSearch(signal) {
+      if (signal?.aborted) return;
       const q = input.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
       if (!q) {
-        results.style.display = 'none';
-        results.innerHTML = '';
+        renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
         return;
       }
 
-      const productPool = window.PRODUCTS || [];
+      if (!Array.isArray(window.PRODUCTS)) {
+        renderState('searching', 'Cargando el catálogo para buscar…');
+        return;
+      }
+      const productPool = window.PRODUCTS;
 
       const searchable = value => String(value == null ? '' : value)
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -770,8 +609,9 @@ function initSearch() {
       ).slice(0, SEARCH_RESULTS_LIMIT);
 
       if (matches.length === 0) {
-        results.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:0.9rem;">No encontramos productos con esa búsqueda.</div>';
+        renderState('empty', 'No encontramos productos con esa búsqueda.');
       } else {
+        results.dataset.searchState = 'results';
         results.innerHTML = matches.map(p => {
           const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 160);
           const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
@@ -792,30 +632,22 @@ function initSearch() {
 
       results.style.display = 'block';
     }
-  }
+
+  addEventListener('tintin:products-loaded', () => {
+    if (surfaceController?.surface === 'search' && input.value.trim()) runSearch(searchAbort?.signal);
+  });
+  addEventListener('tintin:products-error', () => {
+    if (surfaceController?.surface === 'search') renderState('error', 'No pudimos cargar el catálogo. Revisá tu conexión e intentá nuevamente.');
+  });
+  panel.addEventListener('click', event => {
+    if (event.target.closest('.tt-search-result-item')) surfaceController?.close('search-result', { restoreFocus: false });
+  });
 }
 
 /* ──────────────────────────────────────
    CART EVENTS
 ────────────────────────────────────── */
 function initCartEvents() {
-  const tabbarCart = document.getElementById('tabbar-cart');
-  const btnClose = document.getElementById('btn-cart-close');
-  const overlay = document.getElementById('cart-overlay');
-  const btnWA = document.getElementById('btn-cart-wa');
-
-  // btn-cart vive en el header Desktop/Tablet, tabbar-cart es el acceso
-  // mobile — ambos abren el mismo drawer de carrito global.
-  document.querySelectorAll('[data-nav-action="cart"]').forEach(control => control.addEventListener('click', e => openCart(e.currentTarget)));
-  if (tabbarCart) tabbarCart.addEventListener('click', e => openCart(e.currentTarget));
-  if (btnClose) btnClose.addEventListener('click', closeCart);
-  if (overlay) overlay.addEventListener('click', closeCart);
-  // btnWA (btn-cart-wa) is now rendered dynamically as a link in renderCart()
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeCart();
-  });
-
   // Delegated click for "add to cart" buttons
   document.addEventListener('click', (e) => {
     const cartAction = e.target.closest('[data-cart-action]');
@@ -1932,62 +1764,14 @@ function initContactForm() {
 }
 
 /* ──────────────────────────────────────
-   COLLECTIONS BOTTOM SHEET
-────────────────────────────────────── */
-function initCollectionsSheet() {
-  const sheet = document.getElementById('collections-sheet');
-  const backdrop = document.getElementById('sheet-backdrop');
-  if (!sheet) return;
-  function openSheet() {
-    sheet.classList.add('open');
-    sheet.setAttribute('aria-hidden', 'false');
-    tabbarTienda?.setAttribute('aria-expanded', 'true');
-    if (backdrop) backdrop.classList.add('open');
-    lockScroll('collections-sheet');
-    setActiveTab(tabbarTienda);
-  }
-  function closeSheet() {
-    const wasOpen = sheet.classList.contains('open');
-    sheet.classList.remove('open');
-    sheet.setAttribute('aria-hidden', 'true');
-    tabbarTienda?.setAttribute('aria-expanded', 'false');
-    if (backdrop) backdrop.classList.remove('open');
-    unlockScroll('collections-sheet');
-    restoreDefaultActiveTab();
-    if (wasOpen) tabbarTienda?.focus({ preventScroll: true });
-  }
-  // tabbar-tienda abre/cierra este sheet (dropup con todas las colecciones,
-  // sincronizado en vivo por js/nav-collections.js) — tocarlo de nuevo con
-  // el sheet ya abierto lo cierra.
-  const tabbarTienda = document.getElementById('tabbar-tienda');
-  if (tabbarTienda) {
-    tabbarTienda.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (sheet.classList.contains('open')) closeSheet();
-      else openSheet();
-    });
-  }
-
-  const closeBtn = document.getElementById('btn-close-sheet');
-  if (closeBtn) closeBtn.addEventListener('click', closeSheet);
-  if (backdrop) backdrop.addEventListener('click', closeSheet);
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
-  });
-}
-
-/* ──────────────────────────────────────
    MAIN INIT
 ────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   // Core functionality on all pages
   initHeaderScroll();
-  initDropdown();
-  initAccountDropdown();
-  initMobileMenu();
+  initSurfaceController();
   initSearch();
   initCartEvents();
-  initCollectionsSheet();
   updateCartBadge();
   renderCart();
 

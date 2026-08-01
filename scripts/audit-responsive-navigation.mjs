@@ -80,6 +80,7 @@ try {
     check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'false', `${width}px no abre el menú tablet`);
     check(await page.locator('#btn-menu-tablet').getAttribute('aria-expanded') === 'true', `${width}px no actualiza aria-expanded tablet`);
     await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.querySelector('#tt-tablet-menu')?.getAttribute('aria-hidden') === 'true', null, { timeout:1800 });
     check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'true', `${width}px Escape no cierra el menú tablet`);
     check(await page.evaluate(() => document.activeElement?.id === 'btn-menu-tablet'), `${width}px no devuelve foco al botón tablet`);
   }
@@ -89,10 +90,29 @@ try {
   await page.waitForTimeout(500);
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#btn-tienda');
-  check(await page.locator('#tienda-dropdown').evaluate(node => node.classList.contains('open')), 'Desktop no abre el dropdown Tienda');
-  await page.click('#btn-search');
+  check(await page.locator('#tt-tienda-dropdown-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre el dropdown Tienda');
+  await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true');
+  const rapidState = await page.evaluate(async () => {
+    const controller = window.TintinSurfaceController;
+    await Promise.allSettled([
+      controller.open('cart', document.getElementById('btn-cart')),
+      controller.open('search', document.getElementById('btn-search')),
+    ]);
+    return {
+      surface: controller.surface,
+      state: controller.state,
+      backdrops: document.querySelectorAll('#tt-shared-backdrop.open').length,
+      cartHidden: document.getElementById('cart-drawer')?.getAttribute('aria-hidden'),
+      searchHidden: document.getElementById('search-panel')?.getAttribute('aria-hidden'),
+    };
+  });
+  check(rapidState.surface === 'search' && rapidState.state === 'open', `Cambio rápido deja estado incorrecto (${JSON.stringify(rapidState)})`);
+  check(rapidState.backdrops === 1 && rapidState.cartHidden === 'true' && rapidState.searchHidden === 'false', `Cambio rápido deja superficies solapadas (${JSON.stringify(rapidState)})`);
+  await page.setViewportSize({ width:820,height:900 });
+  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none');
 
   await page.setViewportSize({ width:390,height:844 });
   await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
@@ -100,12 +120,16 @@ try {
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#tabbar-tienda');
   check(await page.locator('#collections-sheet').getAttribute('aria-hidden') === 'false', 'Mobile no abre colecciones');
-  await page.click('#tabbar-tienda');
+  await page.keyboard.press('Escape');
   await page.click('#tabbar-search');
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Mobile no abre Buscar');
   await page.keyboard.press('Escape');
   await page.click('#tabbar-cart');
   check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.click('#tabbar-cuenta');
+  check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
   await page.keyboard.press('Escape');
 
   for (const route of routes) {

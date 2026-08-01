@@ -1,14 +1,9 @@
-/* Shared only: safe page-to-page transition. Device layout lives elsewhere. */
-body::after {
-  content:'';
-  position:fixed;
-  inset:0;
-  z-index:2147482000;
-  background:#fff7fa;
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:opacity 130ms ease,visibility 130ms;
+/* Shared only: progressive page transition. Device layout lives elsewhere. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: tt-page-out var(--motion-fast,160ms) ease both; }
+::view-transition-new(root) { animation: tt-page-in var(--motion-normal,280ms) var(--ease-tintin,ease) both; }
+@keyframes tt-page-out { to { opacity: 0; transform: translateY(-4px); } }
+@keyframes tt-page-in { from { opacity: 0; transform: translateY(7px); } }
+@media (prefers-reduced-motion:reduce) {
+  ::view-transition-old(root),::view-transition-new(root){animation:none!important}
 }
-body.tt-page-leaving::after { opacity:.72; visibility:visible; }
-@media (prefers-reduced-motion:reduce) { body::after { transition:none; } }
