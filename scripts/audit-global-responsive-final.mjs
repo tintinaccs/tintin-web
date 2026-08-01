@@ -206,6 +206,13 @@ async function inspectMobileBottom(page) {
   await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
   await page.waitForTimeout(140);
   await settleFrames(page);
+  // El footer usa content-visibility. Al entrar en pantalla puede sustituir su
+  // tamaño intrínseco y aumentar scrollHeight después del primer desplazamiento.
+  // Reubicar una vez en el fondo real evita medir una posición intermedia como
+  // si fuese un solapamiento con la navegación fija.
+  await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
+  await page.waitForTimeout(80);
+  await settleFrames(page);
   return page.evaluate(() => {
     const issues = [];
     const tabbar = document.getElementById('tt-tabbar');
