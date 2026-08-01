@@ -85,13 +85,13 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   function guardCatalogSurface() {
     if (!grid) return;
     const signature = currentSignature();
+    if (hasRealCards()) {
+      clearTimeout(loadingTimer);
+      setSync(navigator.onLine === false ? 'offline' : 'synced');
+      setReady();
+    }
     if (signature && signature !== lastGridSignature) {
       lastGridSignature = signature;
-      if (hasRealCards()) {
-        clearTimeout(loadingTimer);
-        setSync(navigator.onLine === false ? 'offline' : 'synced');
-        setReady();
-      }
     }
 
     if (!grid.children.length) {

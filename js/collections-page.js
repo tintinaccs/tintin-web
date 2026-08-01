@@ -158,7 +158,9 @@ function completeCollectionsLoading() {
       collectionsStatus.textContent = 'No se pudieron cargar las colecciones.';
     } else {
       const amount = collectionsGrid.querySelectorAll('.tt-coll-page-card').length;
-      collectionsStatus.textContent = `${amount} colección${amount === 1 ? '' : 'es'} cargada${amount === 1 ? '' : 's'}.`;
+      collectionsStatus.textContent = amount === 1
+        ? '1 colección cargada.'
+        : `${amount} colecciones cargadas.`;
     }
   }
   enhanceCollectionCards();

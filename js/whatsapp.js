@@ -1,9 +1,17 @@
 import { onPublicSettings } from './public-settings-store.js?v=tintin-20260720-read-budget-1';
 
-function safeUrl(value) {
+function safeUrl(value, handleBase = '') {
+  let candidate = String(value || '').trim();
+  if (!candidate) return '';
+  if (candidate.startsWith('@') && handleBase) {
+    candidate = `${handleBase}${candidate.slice(1)}`;
+  } else if (!/^https?:\/\//i.test(candidate)) {
+    return '';
+  }
   try {
-    const url = new URL(String(value || ''), location.href);
-    return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
+    const url = new URL(candidate);
+    if (!['https:', 'http:'].includes(url.protocol)) return '';
+    return url.protocol === 'https:' ? url.href : '';
   } catch {
     return '';
   }
@@ -30,7 +38,7 @@ function applyEmail(email) {
 }
 
 function applyInstagram(value) {
-  const url = safeUrl(value);
+  const url = safeUrl(value, 'https://instagram.com/');
   if (!url) return;
   document.querySelectorAll('a[href*="instagram.com"]').forEach(anchor => {
     anchor.href = url;
@@ -46,7 +54,8 @@ function applyAddress(address) {
 }
 
 function ensureSocialLink(list, className, label, value) {
-  const url = safeUrl(value);
+  const handleBase = className === 'tt-contact-tt' ? 'https://tiktok.com/@' : '';
+  const url = safeUrl(value, handleBase);
   const existing = list.querySelector(`.${className}`)?.closest('li');
   if (!url) {
     existing?.remove();
