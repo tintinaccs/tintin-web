@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-10';
+const VERSION = 'tintin-20260801-unified-surfaces-14';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',
@@ -63,12 +63,16 @@ const mobileStyles = read('css/navigation-mobile.css');
 check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1025px');
 check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1024px');
 check(/@media \(max-width: 767px\)/.test(mobileStyles), 'mobile: falta el rango exacto <=767px');
+check(desktopStyles.includes('background: #fff !important'), 'desktop: el header no tiene fondo blanco sólido');
+check(tabletStyles.includes('background: #fff;'), 'tablet: el header no tiene fondo blanco sólido');
+check(mobileStyles.includes('background:#fff !important'), 'mobile: la tabbar no tiene fondo blanco sólido');
 check(shell.includes("import(versioned('./navigation-desktop.js'))"), 'public-shell.js: falta controlador desktop aislado');
 check(shell.includes("import(versioned('./navigation-tablet.js'))"), 'public-shell.js: falta controlador tablet aislado');
 check(shell.includes("import(versioned('./navigation-mobile.js'))"), 'public-shell.js: falta controlador mobile aislado');
 
 const scrollRuntime = read('js/header-scroll-hide.js');
-check(scrollRuntime.includes('@media (min-width: 769px)'), 'header-scroll-hide.js: la animacion del header no cubre desktop');
+check(scrollRuntime.includes('@media (min-width: 768px)'), 'header-scroll-hide.js: la animacion no cubre tablet y desktop');
+check(scrollRuntime.includes("document.getElementById('tt-header-tablet')"), 'header-scroll-hide.js: falta el header tablet separado');
 check(scrollRuntime.includes('requestAnimationFrame(onScroll)'), 'header-scroll-hide.js: el scroll no esta sincronizado con frames');
 
 const pageAudit = read('js/page-audit-fix.js');

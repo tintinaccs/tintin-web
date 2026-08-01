@@ -59,8 +59,11 @@ check(
 );
 check(
   'Desktop/tablet y mobile usan rangos separados',
-  headerMode.includes('min-width:769px') && headerMode.includes('#tt-header-desktop-tablet') &&
-    headerMode.includes('max-width:768px') && headerMode.includes('.tt-tabbar'),
+  headerMode.includes('min-width:768px') &&
+    headerMode.includes('#tt-header-desktop-tablet') &&
+    headerMode.includes('#tt-header-tablet') &&
+    headerMode.includes('max-width:767px') &&
+    headerMode.includes('.tt-tabbar'),
   'Las dos navegaciones podrían solaparse.'
 );
 check(
