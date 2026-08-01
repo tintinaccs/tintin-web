@@ -203,16 +203,19 @@ async function inspectBase(page, width) {
 }
 
 async function inspectMobileBottom(page) {
-  await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
-  await page.waitForTimeout(140);
-  await settleFrames(page);
   // El footer usa content-visibility. Al entrar en pantalla puede sustituir su
-  // tamaño intrínseco y aumentar scrollHeight después del primer desplazamiento.
-  // Reubicar una vez en el fondo real evita medir una posición intermedia como
-  // si fuese un solapamiento con la navegación fija.
-  await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
-  await page.waitForTimeout(80);
-  await settleFrames(page);
+  // tamaño intrínseco y aumentar scrollHeight más de una vez. Converger hasta
+  // el fondo real evita medir una posición intermedia como si fuese un
+  // solapamiento con la navegación fija, sin relajar el umbral de seguridad.
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
+    await page.waitForTimeout(140);
+    await settleFrames(page);
+    const remaining = await page.evaluate(() => Math.max(0,
+      document.documentElement.scrollHeight - innerHeight - scrollY
+    ));
+    if (remaining <= 2) break;
+  }
   return page.evaluate(() => {
     const issues = [];
     const tabbar = document.getElementById('tt-tabbar');
