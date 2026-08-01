@@ -93,6 +93,20 @@ function buildDesktopCard(collection) {
   return link;
 }
 
+function buildTabletCard(collection) {
+  const link = document.createElement('a');
+  const imageWrap = document.createElement('div');
+  const label = document.createElement('span');
+  link.href = catalogHref(collection.slug);
+  link.className = 'tt-tablet-cat-card';
+  link.dataset.phase4CollectionNode = '1';
+  imageWrap.className = 'tt-tablet-cat-img';
+  imageWrap.appendChild(createCollectionImage(collection));
+  label.textContent = text(collection.name) || text(collection.slug);
+  link.append(imageWrap, label);
+  return link;
+}
+
 function buildMobileNode(container, collection) {
   const link = document.createElement('a');
   link.href = catalogHref(collection.slug);
@@ -183,6 +197,7 @@ export function initNavCollections(force = false) {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {
         document.querySelectorAll('[data-collections-nav="desktop"]').forEach(container => renderInto(container, collections, buildDesktopCard));
+        document.querySelectorAll('[data-collections-nav="tablet"]').forEach(container => renderInto(container, collections, buildTabletCard));
         document.querySelectorAll('[data-collections-nav="mobile"]').forEach(container => renderInto(container, collections, collection => buildMobileNode(container, collection)));
         document.querySelectorAll('[data-collections-nav="sheet"]').forEach(container => renderInto(container, collections, buildSheetItem));
       }, renderError);
