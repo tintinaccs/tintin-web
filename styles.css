@@ -411,6 +411,10 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-nav > a,
 .tt-nav-dropdown > button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family:Montserrat;
   font-size: 0.72rem;
   font-weight: 600;

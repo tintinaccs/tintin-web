@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T15:31:29.724Z",
-  "sourceFingerprint": "9463e987f349fb2d240169b808dc6b4e318ea8e268779b31fdcfb1e2bd05f793",
+  "generatedAt": "2026-08-01T16:27:54.189Z",
+  "sourceFingerprint": "f35f43a6ce349013bf33f10fc54a631c21e33fb7aad2707c3f586aff03fe7e0b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 424,
-    "textFiles": 391,
-    "totalBytes": 5404516,
+    "files": 425,
+    "textFiles": 392,
+    "totalBytes": 5412091,
     "pages": 18,
-    "modules": 242
+    "modules": 243
   },
   "viewports": [
     {
@@ -16173,8 +16173,8 @@
     },
     {
       "path": "js/images-phase5.js",
-      "bytes": 14182,
-      "sha256": "016174a33fb25da39c7c293e1fa3d4dc011f3156527764ee4ed4de267121d27c",
+      "bytes": 14343,
+      "sha256": "da1cb7f7d659acc032a3932e2725bdd1835e9212a3e919dcd878263ba51faac1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18425,8 +18425,8 @@
     },
     {
       "path": "scripts/audit-home-visual-part2b.mjs",
-      "bytes": 12542,
-      "sha256": "d99bb6e67eee4686add8138469f085d4a2e2feaea4eaa8e016b8725cbff6f049",
+      "bytes": 13357,
+      "sha256": "103f7f7effd0af0b8b16eda459aa3a18113750256981c74adab5b19c27fe8715",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19167,6 +19167,48 @@
           "line": 54
         }
       ]
+    },
+    {
+      "path": "scripts/audit-tablet-fixes.mjs",
+      "bytes": 5820,
+      "sha256": "10ad9adf336cbdf0037bf5156c4e4447c1eedd7ae345cf21c8d17a11781a33e2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:http",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/audit-tintin.js",
@@ -20231,8 +20273,8 @@
     {
       "path": "css/home-maintenance.css",
       "extension": ".css",
-      "bytes": 9678,
-      "sha256": "a40e77462131c088d55973c4f82d6388cf7645272fdb5713b5c96c9aeb523a02"
+      "bytes": 10298,
+      "sha256": "cf3687cce872dd56976a9b5788a62bd5ce7b5d730f88c7cbcb53d3b232c4c105"
     },
     {
       "path": "css/loader-solid-background.css",
@@ -21053,8 +21095,8 @@
     {
       "path": "js/images-phase5.js",
       "extension": ".js",
-      "bytes": 14182,
-      "sha256": "016174a33fb25da39c7c293e1fa3d4dc011f3156527764ee4ed4de267121d27c"
+      "bytes": 14343,
+      "sha256": "da1cb7f7d659acc032a3932e2725bdd1835e9212a3e919dcd878263ba51faac1"
     },
     {
       "path": "js/images.js",
@@ -21539,8 +21581,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6779,
-      "sha256": "208639e9bccef3b22d6456d83aba552169108e952b3fcd66574c399393a0b85c"
+      "bytes": 6844,
+      "sha256": "d13773b3bb5ff29b72dbe8202b336d34278124ba0547d0364669286042789cf5"
     },
     {
       "path": "perfil.html",
@@ -21833,8 +21875,8 @@
     {
       "path": "scripts/audit-home-visual-part2b.mjs",
       "extension": ".mjs",
-      "bytes": 12542,
-      "sha256": "d99bb6e67eee4686add8138469f085d4a2e2feaea4eaa8e016b8725cbff6f049"
+      "bytes": 13357,
+      "sha256": "103f7f7effd0af0b8b16eda459aa3a18113750256981c74adab5b19c27fe8715"
     },
     {
       "path": "scripts/audit-images-phase5.js",
@@ -22047,6 +22089,12 @@
       "sha256": "d89045551db289223f75e3f022fe60915736cef7ad51f5f8c103763695f47086"
     },
     {
+      "path": "scripts/audit-tablet-fixes.mjs",
+      "extension": ".mjs",
+      "bytes": 5820,
+      "sha256": "10ad9adf336cbdf0037bf5156c4e4447c1eedd7ae345cf21c8d17a11781a33e2"
+    },
+    {
       "path": "scripts/audit-tintin.js",
       "extension": ".js",
       "bytes": 12559,
@@ -22163,8 +22211,8 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 119878,
-      "sha256": "4f638be97cb3814e8f484d214b6020c5e7e0bc986e40688366866817235630b1"
+      "bytes": 119972,
+      "sha256": "222f2514a847025f3d6cf13ed58bd624250b46a14278fec0cb41a665a85aab32"
     },
     {
       "path": "terminos.html",

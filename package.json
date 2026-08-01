@@ -57,6 +57,7 @@
     "audit:canonical-viewports": "node scripts/audit-canonical-viewports.mjs",
     "audit:desktop-fixes": "node scripts/audit-desktop-fixes.mjs",
     "audit:mobile-fixes": "node scripts/audit-mobile-fixes.mjs",
+    "audit:tablet-fixes": "node scripts/audit-tablet-fixes.mjs",
     "audit:public-operational-visibility": "node scripts/audit-public-operational-visibility.mjs",
     "audit:public-operational-contract": "node scripts/audit-public-operational-contract.js",
     "audit:part2h": "node scripts/audit-final-sweep-part2h.js",

@@ -149,6 +149,18 @@ async function audit(page, width, height) {
       });
     }
 
+    const heroMedia = hero?.querySelector('.tt-hero-media');
+    const heroPicture = heroMedia?.querySelector('picture');
+    const heroImage = heroMedia?.querySelector('.tt-hero-img');
+    if (visible(heroMedia) && !visible(heroImage)) {
+      const mediaBackground = getComputedStyle(heroMedia).backgroundImage;
+      const pictureBackground = heroPicture ? getComputedStyle(heroPicture).backgroundColor : 'transparent';
+      const pictureCoversFallback = pictureBackground !== 'transparent'
+        && !/rgba?\([^)]*,\s*0(?:\.0+)?\s*\)$/.test(pictureBackground);
+      if (!mediaBackground || mediaBackground === 'none') issues.push('hero: no hay imagen administrada ni fallback local');
+      if (pictureCoversFallback) issues.push(`hero: el fondo de picture cubre el fallback (${pictureBackground})`);
+    }
+
     const trustItems = [...document.querySelectorAll('.tt-trust-item')].filter(visible);
     if (trustItems.length !== 4) issues.push(`trust: se esperaban 4 tarjetas y hay ${trustItems.length}`);
     if (trustItems.length) {

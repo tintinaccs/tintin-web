@@ -164,7 +164,7 @@ if (!window.TintinImagesPhase5Booted) {
         transform:scale(var(--tt-hero-scale-desktop,1));
         transform-origin:var(--tt-hero-pos-desktop,center center);
       }
-      @media(max-width:1023px){#tt-hero-img{
+      @media(max-width:1120px){#tt-hero-img{
         object-fit:var(--tt-hero-fit-tablet,cover)!important;
         object-position:var(--tt-hero-pos-tablet,center center)!important;
         transform:scale(var(--tt-hero-scale-tablet,1));
@@ -207,17 +207,19 @@ if (!window.TintinImagesPhase5Booted) {
     console.debug('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
 
     let mobileSource = picture.querySelector('source[media*="767"]');
-    let tabletSource = picture.querySelector('source[media*="1023"]');
+    let tabletSource = picture.querySelector('source[data-tt-hero-device="tablet"],source[media*="1023"],source[media*="1120"]');
     if (!mobileSource) {
       mobileSource = document.createElement('source');
       mobileSource.media = '(max-width: 767px)';
+      mobileSource.dataset.ttHeroDevice = 'mobile';
       picture.insertBefore(mobileSource, picture.firstChild);
     }
     if (!tabletSource) {
       tabletSource = document.createElement('source');
-      tabletSource.media = '(max-width: 1023px)';
+      tabletSource.dataset.ttHeroDevice = 'tablet';
       picture.insertBefore(tabletSource, image);
     }
+    tabletSource.media = '(max-width: 1120px)';
     if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
     if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
     if (desktop) image.src = desktop; else image.removeAttribute('src');
@@ -245,7 +247,7 @@ if (!window.TintinImagesPhase5Booted) {
 
   function currentDevice() {
     if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
-    if (window.matchMedia('(max-width: 1023px)').matches) return 'tablet';
+    if (window.matchMedia('(max-width: 1120px)').matches) return 'tablet';
     return 'desktop';
   }
 
