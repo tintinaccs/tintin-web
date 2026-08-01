@@ -10,6 +10,7 @@ function safeUrl(value, handleBase = '') {
   }
   try {
     const url = new URL(candidate);
+    if (!['https:', 'http:'].includes(url.protocol)) return '';
     return url.protocol === 'https:' ? url.href : '';
   } catch {
     return '';
