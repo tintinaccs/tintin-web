@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T17:03:07.581Z",
-  "sourceFingerprint": "dd0acbf8f2ec9c666e7f665aad27e387cc49f830b1e8ff9b624ccaf38a590504",
+  "generatedAt": "2026-08-01T17:13:28.097Z",
+  "sourceFingerprint": "899a67439de29b050709ff2337599f0dfd75a14647235d7033fdb321ea3b30f3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 434,
     "textFiles": 401,
-    "totalBytes": 5447307,
+    "totalBytes": 5447377,
     "pages": 18,
     "modules": 248
   },
@@ -18280,8 +18280,8 @@
     },
     {
       "path": "scripts/audit-firestore-read-budget.js",
-      "bytes": 5825,
-      "sha256": "ec7968a767533e9cc279408299c851aa43694e8f917906f7793105d605b22a6b",
+      "bytes": 5832,
+      "sha256": "5b2d4e2b85b1df23aed16988077df3e1a86feb54e1485b3ca67766495e4f0729",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18664,8 +18664,8 @@
     },
     {
       "path": "scripts/audit-level3-quality.js",
-      "bytes": 9442,
-      "sha256": "8e4cf1f70f62889af84f04ab14cf712f063d307248e2eca849e451587a09f1b0",
+      "bytes": 9509,
+      "sha256": "8aec01c6994d4b522a8b0e9532e7febc96eb88c1fbd08c9b3b2f5d14894a26f0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18913,7 +18913,7 @@
       },
       "imports": [
         {
-          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\r\n  ",
+          "raw": "\\.\\/phase7-catalog-policy\\.js/.test(loader),\n  ",
           "target": "scripts/\\.\\/phase7-catalog-policy\\.js/.test(loader),",
           "dynamic": false,
           "line": 151
@@ -20185,8 +20185,8 @@
     {
       "path": "assets-tintin/images/general/tintin-loader-brand.svg",
       "extension": ".svg",
-      "bytes": 359,
-      "sha256": "1c833c14929a9dabaa0eb2bafca8c1c5ab5234d07f7ae740f26e1a5b6bc87119"
+      "bytes": 355,
+      "sha256": "dad0568c87d897a526bce7ec633094220411ac1d36e66cc49c5671c87eafb736"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
@@ -21967,8 +21967,8 @@
     {
       "path": "scripts/audit-firestore-read-budget.js",
       "extension": ".js",
-      "bytes": 5825,
-      "sha256": "ec7968a767533e9cc279408299c851aa43694e8f917906f7793105d605b22a6b"
+      "bytes": 5832,
+      "sha256": "5b2d4e2b85b1df23aed16988077df3e1a86feb54e1485b3ca67766495e4f0729"
     },
     {
       "path": "scripts/audit-global-fit-part2f.mjs",
@@ -22051,8 +22051,8 @@
     {
       "path": "scripts/audit-level3-quality.js",
       "extension": ".js",
-      "bytes": 9442,
-      "sha256": "8e4cf1f70f62889af84f04ab14cf712f063d307248e2eca849e451587a09f1b0"
+      "bytes": 9509,
+      "sha256": "8aec01c6994d4b522a8b0e9532e7febc96eb88c1fbd08c9b3b2f5d14894a26f0"
     },
     {
       "path": "scripts/audit-loader-solid.js",
@@ -25613,7 +25613,7 @@
   "firestore": {
     "collectionsUsed": [
       {
-        "name": ") &&\r\n    admin.includes(",
+        "name": ") &&\n    admin.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -25623,7 +25623,7 @@
         ]
       },
       {
-        "name": ") &&\r\n    orderStats.includes(",
+        "name": ") &&\n    orderStats.includes(",
         "references": [
           {
             "file": "scripts/audit-admin-analytics-audit.js",
@@ -26838,8 +26838,8 @@
     ],
     "unboundedReads": [],
     "usedWithoutExplicitRule": [
-      ") &&\r\n    admin.includes(",
-      ") &&\r\n    orderStats.includes("
+      ") &&\n    admin.includes(",
+      ") &&\n    orderStats.includes("
     ],
     "rulesWithoutDetectedClientUse": [
       "cart",
