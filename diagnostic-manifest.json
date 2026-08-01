@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T17:13:28.097Z",
-  "sourceFingerprint": "899a67439de29b050709ff2337599f0dfd75a14647235d7033fdb321ea3b30f3",
+  "generatedAt": "2026-08-01T18:32:39.843Z",
+  "sourceFingerprint": "73666236b0e77cf606c2d8cd5970fa19aee0c28179db409b4d8b0b2a521cc02b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 434,
-    "textFiles": 401,
-    "totalBytes": 5447377,
+    "files": 437,
+    "textFiles": 404,
+    "totalBytes": 5456948,
     "pages": 18,
-    "modules": 248
+    "modules": 251
   },
   "viewports": [
     {
@@ -10574,8 +10574,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 31875,
-      "sha256": "ef4f78eaccd1534482d633cff57d607b90c6859d571a9fab6991affda12012e0",
+      "bytes": 34551,
+      "sha256": "c302690be1f0dc859b5e735342e8bdabe881f7f94427c13db180df02133e4c8c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10596,13 +10596,13 @@
           "error": ""
         },
         {
-          "line": 120,
+          "line": 129,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 25,
+      "ids": 30,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -10622,17 +10622,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 689
+          "line": 746
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 690
+          "line": 747
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 691
+          "line": 748
         }
       ],
       "styles": [
@@ -10697,7 +10697,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 111
+          "line": 120
         }
       ],
       "references": [
@@ -10722,19 +10722,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 689,
+          "line": 746,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260730-performance-phase5-2",
           "target": "script.js",
-          "line": 690,
+          "line": 747,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 691,
+          "line": 748,
           "exists": true
         },
         {
@@ -10800,7 +10800,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 111,
+          "line": 120,
           "exists": true
         }
       ],
@@ -10881,6 +10881,20 @@
           "line": 94
         },
         {
+          "id": "btn-change-profile-name",
+          "classes": [
+            "login-profile-change"
+          ],
+          "type": "button",
+          "text": "Cambiar",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 101
+        },
+        {
           "id": "btn-save-profile",
           "classes": [
             "login-email-btn"
@@ -10892,7 +10906,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 105
+          "line": 114
         }
       ],
       "controls": [
@@ -10920,7 +10934,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 99,
+          "line": 105,
           "labeled": true
         },
         {
@@ -10928,8 +10942,8 @@
           "id": "login-profile-country",
           "name": "",
           "type": "",
-          "ariaLabel": "",
-          "line": 102,
+          "ariaLabel": "País del teléfono",
+          "line": 110,
           "labeled": true
         },
         {
@@ -10938,7 +10952,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 103,
+          "line": 111,
           "labeled": true
         }
       ]
@@ -16840,6 +16854,17 @@
       ]
     },
     {
+      "path": "js/profile-onboarding.mjs",
+      "bytes": 1549,
+      "sha256": "92400395613b7f29a18d05a5f8cd003a47fd09f0ffc253afdd032359884b23f2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/profile-order-stats-fix.js",
       "bytes": 4742,
       "sha256": "fbf7baa1c3ba9b683bff469f7d71cd18d09efc406349d4f4c0a6b7e3aa8c4a51",
@@ -18707,6 +18732,17 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-login-profile-onboarding.js",
+      "bytes": 1140,
+      "sha256": "9f0ef01c0937a1da5de9e8cda6dc8d2d2f7650dea0646af2be778b73c4017699",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-mobile-fixes.mjs",
       "bytes": 6154,
       "sha256": "728127c14ab5bd561f93c651b218b4e81943725d080247a2bdafdaa7f82a0b6e",
@@ -19700,6 +19736,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/login/profile-onboarding.test.mjs",
+      "bytes": 2695,
+      "sha256": "bae36a96f38a0a1f085842b1c8517104497c24d4f6f6ba7f8d35899ba4728dc5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/profile-onboarding.mjs",
+          "target": "js/profile-onboarding.mjs",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/performance/_helpers.js",
       "bytes": 4933,
       "sha256": "3f328451032ae7effced2f583c8606db767560b73c967df958ef0585be6b15bc",
@@ -20377,8 +20443,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 16091,
-      "sha256": "af420e2c0358c44802a3207bb78e97024e2f0803f499b5eec01f58164bd1cd24"
+      "bytes": 17123,
+      "sha256": "f6a125aa6bada46dca9fce86962dac0b6db74d0f54ab271306116815cac125a0"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -20689,8 +20755,8 @@
     {
       "path": "functions/FIREBASE_AUTH_EMAILS.md",
       "extension": ".md",
-      "bytes": 5303,
-      "sha256": "b9877cdef34d77d1ad5039e9958eba42598c25ea69a3b57829e33ac1379b1db9"
+      "bytes": 5619,
+      "sha256": "d2eca0b659ce4711b2846397f49c35361429aa99a72b6cf78eaa65fe6ba8aaf6"
     },
     {
       "path": "functions/ORDER_VALIDATION_SETUP.md",
@@ -21395,6 +21461,12 @@
       "sha256": "74b4dfe9dc986e330781cecf0bc6be32d21229faa27a95eb311c8c3419ef5bb6"
     },
     {
+      "path": "js/profile-onboarding.mjs",
+      "extension": ".mjs",
+      "bytes": 1549,
+      "sha256": "92400395613b7f29a18d05a5f8cd003a47fd09f0ffc253afdd032359884b23f2"
+    },
+    {
       "path": "js/profile-order-stats-fix.js",
       "extension": ".js",
       "bytes": 4742,
@@ -21517,8 +21589,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 31875,
-      "sha256": "ef4f78eaccd1534482d633cff57d607b90c6859d571a9fab6991affda12012e0"
+      "bytes": 34551,
+      "sha256": "c302690be1f0dc859b5e735342e8bdabe881f7f94427c13db180df02133e4c8c"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -21715,8 +21787,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 6927,
-      "sha256": "d4d7ca248864f2be79b3c1c1b6f7c459e241127b5da5fa42e2a111ca216e12d6"
+      "bytes": 7090,
+      "sha256": "8201e34d853b7caa241a5595fb32504181f932a5e48902ec7b0fd1736e1a65c2"
     },
     {
       "path": "perfil.html",
@@ -22073,6 +22145,12 @@
       "sha256": "44a71b891c693f65e613241807a51bad34c4594f539cb6affb39c9b58c433113"
     },
     {
+      "path": "scripts/audit-login-profile-onboarding.js",
+      "extension": ".js",
+      "bytes": 1140,
+      "sha256": "9f0ef01c0937a1da5de9e8cda6dc8d2d2f7650dea0646af2be778b73c4017699"
+    },
+    {
       "path": "scripts/audit-mobile-fixes.mjs",
       "extension": ".mjs",
       "bytes": 6154,
@@ -22365,6 +22443,12 @@
       "extension": ".mjs",
       "bytes": 2520,
       "sha256": "afe01f259f40b8d37d378f7fff516f9aa68ab9f7f3dbeae9c23fc3f63559f25f"
+    },
+    {
+      "path": "tests/login/profile-onboarding.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2695,
+      "sha256": "bae36a96f38a0a1f085842b1c8517104497c24d4f6f6ba7f8d35899ba4728dc5"
     },
     {
       "path": "tests/performance/README.md",
@@ -24515,28 +24599,28 @@
     },
     {
       "file": "login.html",
-      "line": 111,
+      "line": 120,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 238,
+      "line": 248,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 241,
+      "line": 251,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 241,
+      "line": 251,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -25518,7 +25602,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 241
+          "line": 251
         }
       ]
     },
@@ -26777,17 +26861,17 @@
           },
           {
             "file": "login.html",
-            "line": 249,
+            "line": 259,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 299,
+            "line": 307,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 451,
+            "line": 508,
             "operation": "doc"
           },
           {
