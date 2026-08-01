@@ -419,11 +419,27 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   color: var(--text-title);
   padding: 8px 14px;
   border-radius: var(--radius-pill);
-  transition: color var(--transition), background var(--transition), border-color var(--transition);
+  position: relative;
+  transition: color var(--transition), background var(--transition), border-color var(--transition), transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease;
   white-space: nowrap;
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.18);
   cursor: pointer;
+}
+
+.tt-nav > a::after,
+.tt-nav > .tt-nav-dropdown > button::after {
+  content: '';
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .22s cubic-bezier(.2,.8,.2,1);
 }
 
 .tt-nav > a:hover,
@@ -433,7 +449,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   color: var(--text-title);
   background: rgba(255,255,255,0.28);
   border-color: rgba(255,255,255,0.36);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(64,22,39,.12);
 }
+
+.tt-nav > a.active::after,
+.tt-nav > .tt-nav-dropdown > button.active::after { transform: scaleX(1); }
 
 .tt-header.scrolled .tt-nav > a,
 .tt-header.scrolled .tt-nav-dropdown > button {
@@ -635,6 +656,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   color: var(--text-title);
 }
 
+.tt-header-actions button.active,
+.tt-header-actions a.active {
+  background: rgba(255,255,255,.24);
+  color: var(--text-title);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.34), 0 8px 20px rgba(64,22,39,.12);
+  transform: translateY(-1px);
+}
+
 .tt-header.scrolled .tt-header-actions button,
 .tt-header.scrolled .tt-header-actions a {
   color: var(--text);
@@ -644,6 +673,13 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-header.scrolled .tt-header-actions a:hover {
   background: var(--pink-pale);
   color: var(--pink-dark);
+}
+
+.tt-header.scrolled .tt-header-actions button.active,
+.tt-header.scrolled .tt-header-actions a.active {
+  background: var(--pink-pale);
+  color: var(--pink-dark);
+  box-shadow: 0 0 0 2px rgba(212,120,154,.2), 0 8px 20px rgba(64,22,39,.1);
 }
 
 /* #btn-cuenta vive dentro de .tt-nav-dropdown (el mismo wrapper que el botón
@@ -782,6 +818,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-mobile-nav a:hover,
 .tt-mobile-nav button:hover { color: var(--pink-dark); }
+
+.tt-mobile-nav a.active,
+.tt-mobile-nav button.active {
+  color: var(--pink-dark);
+  padding-inline: 14px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--pink-pale), transparent);
+  box-shadow: inset 3px 0 0 var(--pink-dark);
+}
 
 /* Mobile tienda toggle button */
 .tt-mobile-tienda-btn {
@@ -2031,6 +2076,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   background: none;
   border: none;
   text-decoration: none;
+  position: relative;
+}
+
+.tt-tabbar-btn::after {
+  content: '';
+  position: absolute;
+  left: 28%;
+  right: 28%;
+  bottom: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--pink-dark);
+  transform: scaleX(0);
+  transition: transform .2s cubic-bezier(.2,.8,.2,1);
 }
 
 .tt-tabbar-btn:hover,
@@ -2038,6 +2097,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   background: var(--pink-pale);
   color: var(--pink-dark);
 }
+
+.tt-tabbar-btn.active::after { transform: scaleX(1); }
 
 .tt-tabbar-btn svg { width: 20px; height: 20px; }
 
@@ -4236,6 +4297,47 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 /* Mini mobile: el ancho se resuelve en el propio componente, sin ocultar
    desbordes del documento. */
+/* Los estados de sincronización son telemetría operativa. Permanecen en el DOM
+   y siguen actualizándose, pero el público y las cuentas cliente no los ven.
+   auth-nav habilita la clase únicamente para roles con acceso al panel. */
+:where(
+  [data-tt-operational-status],
+  .tt-cart-sync-status,
+  #tt-catalog-sync-state,
+  #tt-collections-sync-state,
+  #tt-product-sync-state,
+  #tt-checkout-sync-state,
+  #tt-profile-network
+) {
+  display: none !important;
+}
+
+html.tt-staff-session :where(
+  [data-tt-operational-status],
+  .tt-cart-sync-status,
+  #tt-catalog-sync-state,
+  #tt-collections-sync-state,
+  #tt-product-sync-state,
+  #tt-checkout-sync-state,
+  #tt-profile-network
+) {
+  display: flex !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-nav > a,
+  .tt-nav-dropdown > button,
+  .tt-nav > a::after,
+  .tt-nav > .tt-nav-dropdown > button::after,
+  .tt-header-actions button,
+  .tt-header-actions a,
+  .tt-tabbar-btn::after { transition: none !important; }
+  .tt-nav > a.active,
+  .tt-nav-dropdown > button.active,
+  .tt-header-actions button.active,
+  .tt-header-actions a.active { transform: none !important; }
+}
+
 @media (max-width: 360px) {
   .tt-hero-actions {
     width: 100%;

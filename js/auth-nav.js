@@ -33,6 +33,11 @@ function doLogout(){
   });
 }
 function hasAdminAccess(user,role){if(!user)return false;if(user.email===SUPER_ADMIN)return true;return can(role,'viewDashboard')===true;}
+function publishStaffVisibility(user,role){
+ const staff=hasAdminAccess(user,role);
+ document.documentElement.classList.toggle('tt-staff-session',staff);
+ window.dispatchEvent(new CustomEvent('tintin:staff-visibility-ready',{detail:{staff}}));
+}
 function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
 
 const accountBtnDefaults=new Map();
@@ -60,6 +65,7 @@ onAuthStateChanged(auth,async user=>{
  document.querySelectorAll("#tabbar-cuenta,[data-auth-link='cuenta']").forEach(el=>{el.href=user?'perfil.html':'login.html';});
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
+ publishStaffVisibility(user,role);
  renderAccountButtonPhoto(user);
  renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);

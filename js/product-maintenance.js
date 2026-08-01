@@ -66,6 +66,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (!page) return null;
     node = document.createElement('div');
     node.id = 'tt-product-sync-state';
+    node.dataset.ttOperationalStatus = 'product';
     node.setAttribute('role', 'status');
     node.setAttribute('aria-live', 'polite');
     node.dataset.state = navigator.onLine === false ? 'offline' : 'loading';

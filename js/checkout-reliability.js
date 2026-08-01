@@ -291,6 +291,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     if (!anchor) return null;
     node = document.createElement('div');
     node.id = 'tt-checkout-sync-state';
+    node.dataset.ttOperationalStatus = 'checkout';
     node.setAttribute('role', 'status');
     node.setAttribute('aria-live', 'polite');
     node.dataset.state = navigator.onLine === false ? 'offline' : 'loading';

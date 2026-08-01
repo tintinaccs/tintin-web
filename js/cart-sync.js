@@ -259,6 +259,7 @@ function createRuntime() {
     if (!header || header.querySelector('.tt-cart-sync-status')) return;
     const node = document.createElement('div');
     node.className = 'tt-cart-sync-status';
+    node.dataset.ttOperationalStatus = 'cart';
     node.style.cssText = 'margin-left:auto;margin-right:8px;font-size:10px;line-height:1.3;color:#9a6074;text-align:right;max-width:150px';
     header.insertBefore(node, header.querySelector('.tt-cart-close'));
     updateSyncIndicator();
