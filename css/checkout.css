@@ -156,6 +156,15 @@
     .ck-panel-body { padding: 24px; }
 
     /* ---- CART ITEMS ---- */
+    /* #ck-items llega vacío en el HTML: lo rellena el módulo del checkout, que
+       primero resuelve Firebase. Al poblarse empujaba hacia abajo el subtotal,
+       el botón "Continuar" y la barra de confianza — justo cuando la clienta
+       va a tocar el botón. Reservar el alto de una fila (64px de imagen + 28
+       de padding) absorbe ese salto. Solo aplica mientras está vacío: apenas
+       se renderiza algo (productos o el aviso de carrito vacío) manda el
+       contenido real, así que no deja hueco de más. */
+    #ck-items:empty { min-height: 92px; }
+
     .ck-item {
       display: flex;
       align-items: center;
