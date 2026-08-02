@@ -341,6 +341,7 @@ import {
 } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
   return {
@@ -1534,23 +1535,16 @@ function initMapSearch() {
 }
 
 // Named places, addresses, streets, barrios — matches by name/text.
+// Pasa por el proxy /api/geo-search (Cloudflare) en vez de llamar a Nominatim
+// directo desde el navegador: ese proxy ya identifica la app con un
+// User-Agent válido y cachea resultados en el edge, como exige la política
+// de uso de Nominatim (mismo mecanismo que usa el autocompletado de
+// dirección en js/checkout-reliability.js).
 async function searchNominatim(query) {
-  const { south, west, north, east } = DELIVERY_BBOX;
-  // viewbox without bounded=1 is a soft bias (closer to the delivery zone
-  // ranks higher) — it doesn't exclude valid results from elsewhere in Paraguay.
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}` +
-    `&countrycodes=py&addressdetails=1&namedetails=1&limit=6&accept-language=es` +
-    `&viewbox=${west},${north},${east},${south}`;
-  const res = await fetch(url);
-  const places = await res.json();
-  return places.map(p => {
-    const name = p.namedetails?.name || p.display_name.split(',')[0].trim();
-    // Address = display_name without the leading name segment, when we have one
-    const address = p.namedetails?.name
-      ? p.display_name.replace(new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ',\\s*'), '')
-      : p.display_name;
-    return { lat: +p.lat, lon: +p.lon, name, address };
-  });
+  const res = await fetch(`${apiUrl('geo-search')}?q=${encodeURIComponent(query)}`);
+  if (!res.ok) return [];
+  const { places } = await res.json();
+  return (places || []).map(p => ({ lat: p.lat, lon: p.lng, name: p.name, address: p.address }));
 }
 
 // Category search ("farmacia", "estación de servicio"...) — everything tagged
