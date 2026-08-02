@@ -58,6 +58,7 @@
     "audit:app-check-bootstrap": "node scripts/audit-app-check-bootstrap.js",
     "audit:global-responsive-geometry": "node scripts/run-responsive-audit-with-retry.mjs",
     "audit:canonical-viewports": "node scripts/audit-canonical-viewports.mjs",
+    "audit:css-cascade": "node scripts/audit-css-cascade.mjs",
     "audit:desktop-fixes": "node scripts/audit-desktop-fixes.mjs",
     "audit:mobile-fixes": "node scripts/audit-mobile-fixes.mjs",
     "audit:tablet-fixes": "node scripts/audit-tablet-fixes.mjs",

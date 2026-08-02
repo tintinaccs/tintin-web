@@ -14,7 +14,6 @@ function check(condition, message) {
 }
 
 const loaderRuntime = read('js/page-loader.js');
-const colorTokens = read('css/color-tokens.css');
 const solidCss = read('css/loader-solid-background.css');
 const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
@@ -22,10 +21,30 @@ check(
   /#tt-loader\{[^}]*background:#FFADD1/i.test(loaderRuntime),
   `js/page-loader.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
 );
-check(
-  /@import\s+url\(["']\.\/loader-solid-background\.css\?v=[^"']+["']\)/i.test(colorTokens),
-  'css/color-tokens.css debe cargar la protección universal del loader.'
-);
+// Antes esto se cargaba con un @import dentro de color-tokens.css y la
+// comprobación miraba esa única línea. Ahora va como <link> en cada página
+// (los @import encadenados bloqueaban el render en serie), así que se verifica
+// lo que de verdad importa: que TODA página que usa los tokens cargue también
+// la protección del loader, y antes de ellos para conservar la cascada.
+const pagesWithTokens = fs.readdirSync(ROOT)
+  .filter(name => name.endsWith('.html'))
+  .map(name => ({ name, source: read(name) }))
+  .filter(page => page.source.includes('css/color-tokens.css'));
+
+check(pagesWithTokens.length > 0, 'No se encontró ninguna página que cargue css/color-tokens.css.');
+
+pagesWithTokens.forEach(({ name, source }) => {
+  const loaderAt = source.indexOf('css/loader-solid-background.css');
+  const tokensAt = source.indexOf('css/color-tokens.css');
+  check(
+    loaderAt !== -1,
+    `${name} debe cargar css/loader-solid-background.css (protección universal del loader).`
+  );
+  check(
+    loaderAt !== -1 && loaderAt < tokensAt,
+    `${name} debe cargar css/loader-solid-background.css antes de css/color-tokens.css.`
+  );
+});
 check(
   /html body #tt-loader\s*\{[^}]*background:\s*#FFADD1\s*!important[^}]*background-color:\s*#FFADD1\s*!important/is.test(solidCss),
   `El contenedor del loader debe forzar fondo y background-color sólidos en ${OFFICIAL_LOADER_BACKGROUND}.`

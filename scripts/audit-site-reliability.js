@@ -13,7 +13,6 @@ function check(label, ok) {
 }
 
 const loader = read('js/page-loader.js');
-const loaderSolid = read('css/loader-solid-background.css');
 const solidSurfaces = read('css/solid-ui-surfaces.css');
 const parity = read('css/tintin-parity-safe.css');
 const accountFix = read('js/header-account-mobile-fix.js');
@@ -70,8 +69,24 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
     'html body .tt-mobile-cats-grid,',
     'html body .tt-mobile-user {'
   ].every(selector => solidSurfaces.includes(selector)) &&
-  /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces) &&
-  loaderSolid.includes('tintin-20260721-header-surfaces-complete-1'));
+  /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces));
+
+// Antes, css/loader-solid-background.css traía estas dos hojas con @import y
+// acá se comprobaba su cadena de versión. Los @import encadenados bloqueaban
+// el render en serie, así que ahora van como <link> en cada página. Se
+// verifica lo que de verdad garantiza el fondo blanco: que toda página que
+// carga el loader cargue también las superficies sólidas, y ANTES que él,
+// para conservar el orden de cascada que tenía el @import.
+check('Las superficies sólidas del header se cargan antes del loader en cada página',
+  htmlFiles
+    .map(name => ({ name, source: read(name) }))
+    .filter(page => page.source.includes('css/loader-solid-background.css'))
+    .every(({ source }) => {
+      const loaderAt = source.indexOf('css/loader-solid-background.css');
+      const surfacesAt = source.indexOf('css/solid-ui-surfaces.css');
+      const headerAt = source.indexOf('css/mobile-header-actions-solid.css');
+      return surfacesAt !== -1 && headerAt !== -1 && surfacesAt < loaderAt && headerAt < loaderAt;
+    }));
 
 check('La actividad cuenta una sola sesión por pestaña y día',
   activity.includes('SESSION_RECORDED_PREFIX') &&
