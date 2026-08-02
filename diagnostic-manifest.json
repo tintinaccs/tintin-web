@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-02T21:02:01.756Z",
-  "sourceFingerprint": "418dbff58ab8df35dc2ec5bb98368a1d2a7397a52ab488abee3bc9a5c85637ce",
+  "generatedAt": "2026-08-02T21:23:59.122Z",
+  "sourceFingerprint": "74417f2f8b65348ec34008adcfc877f1bff5124b006aed7d952874b2cd6a4139",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 442,
-    "textFiles": 410,
-    "totalBytes": 5129681,
+    "files": 443,
+    "textFiles": 411,
+    "totalBytes": 5139675,
     "pages": 18,
-    "modules": 254
+    "modules": 255
   },
   "viewports": [
     {
@@ -19982,6 +19982,48 @@
       "endpoints": []
     },
     {
+      "path": "scripts/audit-perf-metrics.mjs",
+      "bytes": 9416,
+      "sha256": "876551f4902063f5a3a2717183b189fe1cc96f1027efc69b67a1fd260c70e3cf",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 17
+        },
+        {
+          "raw": "node:http",
+          "target": null,
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 19
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-performance-realtime.js",
       "bytes": 7977,
       "sha256": "dac93cdb469eee1cffc17df23a6aa207f17c8eb2a466674500bb2a3cf2f8faa0",
@@ -21575,8 +21617,8 @@
     {
       "path": "css/checkout.css",
       "extension": ".css",
-      "bytes": 20103,
-      "sha256": "15671d7b2bd728b80127d6acefe6e99644f843f1c4b903610f34870cb507632a"
+      "bytes": 20681,
+      "sha256": "87079df56bf7735a5ed25c4d28dd9518bdcd7222f55a5e79ce083655695c99d9"
     },
     {
       "path": "css/collections-page.css",
@@ -23377,6 +23419,12 @@
       "extension": ".js",
       "bytes": 4017,
       "sha256": "b28d2cc2688d7c81ac016d3167ac3e6a3842fcd6f257ec04ca3c187979ea4d68"
+    },
+    {
+      "path": "scripts/audit-perf-metrics.mjs",
+      "extension": ".mjs",
+      "bytes": 9416,
+      "sha256": "876551f4902063f5a3a2717183b189fe1cc96f1027efc69b67a1fd260c70e3cf"
     },
     {
       "path": "scripts/audit-performance-realtime.js",
