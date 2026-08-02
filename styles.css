@@ -3794,7 +3794,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   #tt-nav-desktop-tablet.tt-nav { display: none !important; }
 
   .tt-tabbar { display: flex; }
-  .tt-wa-float { bottom: 88px; right: 16px; width: 48px; height: 48px; }
+  /* El tabbar se despega del borde con max(16px, env(safe-area-inset-bottom)),
+     así que en un teléfono con home indicator sube ~18px. Este botón tiene que
+     subir lo mismo o el tabbar (z-index 970 contra 900) le tapa la base. La
+     forma max()/calc() deja 88px exactos cuando no hay safe-area — igual que
+     antes — y solo crece cuando el tabbar crece. */
+  .tt-wa-float {
+    bottom: max(88px, calc(72px + env(safe-area-inset-bottom, 0px)));
+    right: 16px; width: 48px; height: 48px;
+  }
 
   .tt-trust-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
@@ -4033,8 +4041,16 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 /* Stacked above .tt-wa-float (bottom:88px, 48px tall, z-index:900 → top
    edge at 136px) with the same ~12px gap desktop uses between the two
-   floats, so they no longer sit on the same spot and fight over z-index. */
-@media (max-width: 768px) { .tt-back-to-top { bottom: 148px; right: 16px; } }
+   floats, so they no longer sit on the same spot and fight over z-index.
+   Lleva el mismo desplazamiento por safe-area que .tt-wa-float: si solo
+   subiera el de WhatsApp, en un teléfono con home indicator este quedaría
+   pisado por él. Con safe-area 0 sigue dando 148px exactos. */
+@media (max-width: 768px) {
+  .tt-back-to-top {
+    bottom: max(148px, calc(132px + env(safe-area-inset-bottom, 0px)));
+    right: 16px;
+  }
+}
 
 /* ══════════════════════════════════════════════════════════════
    LIGHTBOX
