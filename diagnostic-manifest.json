@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-01T23:10:53.379Z",
-  "sourceFingerprint": "db7fa735316047f448a16be0579fed3d5174e232358ea0e00c57c761334b7291",
+  "generatedAt": "2026-08-02T01:04:16.384Z",
+  "sourceFingerprint": "1e209f493b4db40a7f4b6e2182bf3f1326c1b98de7357b12847d637e2d798062",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 440,
     "textFiles": 408,
-    "totalBytes": 5485721,
+    "totalBytes": 5106219,
     "pages": 18,
     "modules": 253
   },
@@ -7251,8 +7251,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 81008,
-      "sha256": "b131ab562116af554f70356593251b62ccb17ef1be5c0e4d73dc5d6a439afd8c",
+      "bytes": 80746,
+      "sha256": "d94275a880990dbf5357c1ee00160fdf1171352ad46816a7b3f0e3f69e6cb03b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7304,22 +7304,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1695
+          "line": 1689
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1696
+          "line": 1690
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1697
+          "line": 1691
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1698
+          "line": 1692
         }
       ],
       "styles": [
@@ -7435,25 +7435,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1695,
+          "line": 1689,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1696,
+          "line": 1690,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1697,
+          "line": 1691,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1698,
+          "line": 1692,
           "exists": true
         },
         {
@@ -20444,8 +20444,8 @@
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
       "extension": ".webp",
-      "bytes": 474396,
-      "sha256": "9528ec198cf7240421e6831e1ad4d269d4664475b4cb01fd411e5a3783810498"
+      "bytes": 95156,
+      "sha256": "6d3f92f4b01b0c5f3adc4cc870ddc6c97c7ff13a97298553d37b921115403984"
     },
     {
       "path": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
@@ -20516,8 +20516,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 81008,
-      "sha256": "b131ab562116af554f70356593251b62ccb17ef1be5c0e4d73dc5d6a439afd8c"
+      "bytes": 80746,
+      "sha256": "d94275a880990dbf5357c1ee00160fdf1171352ad46816a7b3f0e3f69e6cb03b"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -23159,21 +23159,21 @@
     },
     {
       "file": "checkout.html",
-      "line": 728,
+      "line": 729,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 869,
+      "line": 870,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 879,
+      "line": 880,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -25777,7 +25777,7 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 879
+          "line": 880
         }
       ]
     },
@@ -25818,7 +25818,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1570,
+      "line": 1564,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -26376,7 +26376,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 713,
+            "line": 714,
             "operation": "collection"
           },
           {
@@ -26511,12 +26511,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 417,
+            "line": 418,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 450,
+            "line": 451,
             "operation": "doc"
           },
           {
@@ -26866,12 +26866,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1434,
+            "line": 1435,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1678,
+            "line": 1672,
             "operation": "doc"
           },
           {
