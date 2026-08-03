@@ -8,12 +8,16 @@
   font-weight: 800;
 }
 
-/* Texto oscuro sobre el rosa de marca daba 2.30:1. En blanco da 5.70:1. */
-.tt-interactive-control,
+/* Texto oscuro sobre el rosa de marca daba 2.30:1. En blanco da 5.70:1.
+   Acotado a controles con fondo de marca real (inline o los IDs conocidos):
+   .tt-interactive-control solo no alcanza porque se agrega a TODOS los
+   botones del sitio, incluidos los de fondo claro (ahí el blanco los
+   volvía invisibles). */
 button.tt-inline-theme-cleaned,
+[style*="background"].tt-interactive-control,
 #btn-send-otp,
 #btn-verify-otp {
-  color: #fff;
+  color: #fff !important;
 }
 
 .tt-interactive-control svg,

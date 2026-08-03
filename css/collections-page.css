@@ -264,7 +264,7 @@
   border-top: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
-.tt-collections-page .tt-footer a,
+.tt-collections-page .tt-footer a:not(.tt-footer-wa),
 .tt-collections-page .tt-footer-col-title,
 .tt-collections-page .tt-footer-bottom,
 .tt-collections-page .tt-footer-tagline {

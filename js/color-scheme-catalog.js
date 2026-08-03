@@ -59,7 +59,7 @@ export const GLOBAL_TOKENS = [
   { key: 'text-secondary', cssVar: '--color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#7B6F72' },
   { key: 'text-tertiary', cssVar: '--color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#948890' },
   { key: 'text-muted', cssVar: '--color-text-muted', label: 'Texto tenue', category: 'tipografia', default: '#7B6F72' },
-  { key: 'text-disabled', cssVar: '--color-text-disabled', label: 'Texto deshabilitado', category: 'tipografia', default: '#B7ADB0' },
+  { key: 'text-disabled', cssVar: '--color-text-disabled', label: 'Texto deshabilitado', category: 'tipografia', default: '#6B6367' },
   { key: 'text-inverse', cssVar: '--color-text-inverse', label: 'Texto invertido (sobre fondos oscuros/de color)', category: 'tipografia', default: '#FFFFFF' },
   { key: 'text-title', cssVar: '--color-text-title', label: 'Títulos', category: 'tipografia', default: '#2B2B2B' },
   { key: 'text-subtitle', cssVar: '--color-text-subtitle', label: 'Subtítulos', category: 'tipografia', default: '#7B6F72' },
@@ -77,7 +77,7 @@ export const GLOBAL_TOKENS = [
   { key: 'btn-primary-active', cssVar: '--color-button-primary-active', label: 'Botón principal — active', category: 'botones', default: '#711F35' },
   { key: 'btn-primary-focus', cssVar: '--color-button-primary-focus-ring', label: 'Botón principal — anillo de focus', category: 'botones', default: 'rgba(173,63,103,0.24)' },
   { key: 'btn-primary-disabled-bg', cssVar: '--color-button-primary-disabled-background', label: 'Botón principal — fondo disabled', category: 'botones', default: '#F1E4E7' },
-  { key: 'btn-primary-disabled-text', cssVar: '--color-button-primary-disabled-text', label: 'Botón principal — texto disabled', category: 'botones', default: '#B7ADB0' },
+  { key: 'btn-primary-disabled-text', cssVar: '--color-button-primary-disabled-text', label: 'Botón principal — texto disabled', category: 'botones', default: '#6B6367' },
 
   { key: 'btn-secondary-bg', cssVar: '--color-button-secondary-background', label: 'Botón secundario — fondo', category: 'botones', default: '#FFFFFF' },
   { key: 'btn-secondary-text', cssVar: '--color-button-secondary-text', label: 'Botón secundario — texto', category: 'botones', default: '#AD3F67' },
@@ -86,7 +86,7 @@ export const GLOBAL_TOKENS = [
   { key: 'btn-secondary-active', cssVar: '--color-button-secondary-active', label: 'Botón secundario — active', category: 'botones', default: '#FDECF2' },
   { key: 'btn-secondary-focus', cssVar: '--color-button-secondary-focus-ring', label: 'Botón secundario — anillo de focus', category: 'botones', default: 'rgba(173,63,103,0.24)' },
   { key: 'btn-secondary-disabled-bg', cssVar: '--color-button-secondary-disabled-background', label: 'Botón secundario — fondo disabled', category: 'botones', default: '#F1E4E7' },
-  { key: 'btn-secondary-disabled-text', cssVar: '--color-button-secondary-disabled-text', label: 'Botón secundario — texto disabled', category: 'botones', default: '#B7ADB0' },
+  { key: 'btn-secondary-disabled-text', cssVar: '--color-button-secondary-disabled-text', label: 'Botón secundario — texto disabled', category: 'botones', default: '#6B6367' },
 
   { key: 'btn-success-bg', cssVar: '--color-button-success-background', label: 'Botón de éxito — fondo', category: 'botones', default: '#e0f5e6' },
   { key: 'btn-success-text', cssVar: '--color-button-success-text', label: 'Botón de éxito — texto', category: 'botones', default: '#166534' },
@@ -103,7 +103,7 @@ export const GLOBAL_TOKENS = [
   { key: 'btn-whatsapp-text', cssVar: '--color-button-whatsapp-text', label: 'Botón de WhatsApp — texto', category: 'botones', default: '#FFFFFF' },
   { key: 'btn-whatsapp-hover', cssVar: '--color-button-whatsapp-hover', label: 'Botón de WhatsApp — hover', category: 'botones', default: '#0a6835' },
   { key: 'btn-icon-text', cssVar: '--color-button-icon-text', label: 'Botones de íconos — color', category: 'botones', default: '#7B6F72' },
-  { key: 'btn-icon-disabled', cssVar: '--color-button-icon-disabled-text', label: 'Botones de íconos — deshabilitado', category: 'botones', default: '#B7ADB0' },
+  { key: 'btn-icon-disabled', cssVar: '--color-button-icon-disabled-text', label: 'Botones de íconos — deshabilitado', category: 'botones', default: '#6B6367' },
   { key: 'btn-floating-bg', cssVar: '--color-button-floating-background', label: 'Botones flotantes — fondo', category: 'botones', default: '#AD3F67' },
   { key: 'btn-floating-text', cssVar: '--color-button-floating-text', label: 'Botones flotantes — texto', category: 'botones', default: '#FFFFFF' },
   { key: 'btn-sticky-bg', cssVar: '--color-button-sticky-background', label: 'Botones sticky — fondo', category: 'botones', default: '#AD3F67' },
@@ -142,7 +142,7 @@ export const GLOBAL_TOKENS = [
   { key: 'state-hover', cssVar: '--color-state-hover', label: 'Hover (genérico)', category: 'estados', default: '#FFF9FC' },
   { key: 'state-focus', cssVar: '--color-state-focus', label: 'Focus (genérico)', category: 'estados', default: 'rgba(173,63,103,0.24)' },
   { key: 'state-active', cssVar: '--color-state-active', label: 'Active (genérico)', category: 'estados', default: '#FDECF2' },
-  { key: 'state-disabled', cssVar: '--color-state-disabled', label: 'Disabled (genérico)', category: 'estados', default: '#B7ADB0' },
+  { key: 'state-disabled', cssVar: '--color-state-disabled', label: 'Disabled (genérico)', category: 'estados', default: '#6B6367' },
 
   // Formularios
   { key: 'field-bg', cssVar: '--color-field-background', label: 'Campos — fondo', category: 'formularios', default: '#FFFFFF' },
@@ -192,7 +192,7 @@ export const GLOBAL_TOKENS = [
   // Avanzado
   { key: 'icon-primary', cssVar: '--color-icon-primary', label: 'Íconos principales', category: 'avanzado', default: '#7B6F72' },
   { key: 'icon-secondary', cssVar: '--color-icon-secondary', label: 'Íconos secundarios', category: 'avanzado', default: '#AD3F67' },
-  { key: 'icon-disabled', cssVar: '--color-icon-disabled', label: 'Íconos deshabilitados', category: 'avanzado', default: '#B7ADB0' },
+  { key: 'icon-disabled', cssVar: '--color-icon-disabled', label: 'Íconos deshabilitados', category: 'avanzado', default: '#6B6367' },
   { key: 'scrollbar-thumb', cssVar: '--color-scrollbar-thumb', label: 'Scrollbar — control', category: 'avanzado', default: '#EA7EA3' },
   { key: 'scrollbar-track', cssVar: '--color-scrollbar-track', label: 'Scrollbar — riel', category: 'avanzado', default: '#FDF0F5' },
   { key: 'switch-on-bg', cssVar: '--color-switch-on-background', label: 'Switch — encendido', category: 'avanzado', default: '#AD3F67' },
