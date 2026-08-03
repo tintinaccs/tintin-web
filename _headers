@@ -24,8 +24,23 @@
 /css/login-maintenance.css
   Cache-Control: no-cache, no-store, must-revalidate
 
+/css/tintin-responsive-brand-surfaces.css
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/css/tintin-responsive-brand-polish.css
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /*.js
   Cache-Control: public, max-age=31536000, immutable
+
+/js/ui-quality.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/js/header-account-mobile-fix.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/js/brand-reveal-extension.js
+  Cache-Control: no-cache, no-store, must-revalidate
 
 /*.mjs
   Cache-Control: public, max-age=31536000, immutable
