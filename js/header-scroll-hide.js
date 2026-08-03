@@ -79,6 +79,11 @@
       headers.forEach(header => header.classList.remove('tt-header-hidden-desktop'));
     }
 
+    function marcarCompacto(y) {
+      const compacto = y > 24;
+      headers.forEach(header => header.classList.toggle('tt-header-compact', compacto));
+    }
+
     function hideHeader() {
       headers.forEach(header => header.classList.add('tt-header-hidden-desktop'));
     }
@@ -86,6 +91,7 @@
     function onScroll() {
       ticking = false;
       const y = window.scrollY || document.documentElement.scrollTop || 0;
+      marcarCompacto(y);
 
       if (!isDesktopTablet()) {
         showHeader();
