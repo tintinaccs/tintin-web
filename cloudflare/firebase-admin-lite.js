@@ -148,7 +148,17 @@ export async function createFirebaseCustomToken(env, uid, extraClaims = {}) {
   );
 }
 
-/** Busca una cuenta por email y devuelve sus proveedores vinculados (ej. 'google.com'), sin crear nada. */
+/**
+ * Busca una cuenta por email y devuelve sus proveedores vinculados
+ * (ej. 'google.com'), sin crear nada.
+ *
+ * Si la consulta falla, lanza. Antes devolvía `{exists:false}` ante cualquier
+ * error, y como de esta respuesta depende el bloqueo "esta cuenta es de
+ * Google, no mandes un código por correo", un fallo de la consulta dejaba
+ * pasar el envío como si la cuenta no existiera. Un control de identidad
+ * tiene que fallar cerrado: quien llama decide qué mostrar, pero no puede
+ * confundir "no existe" con "no pude averiguarlo".
+ */
 export async function lookupUserProvidersByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
   const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
@@ -157,6 +167,9 @@ export async function lookupUserProvidersByEmail(env, email) {
     body: JSON.stringify({ email: [email] })
   });
   const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error('No se pudo verificar el metodo de la cuenta: ' + (data?.error?.message || response.status));
+  }
   const user = Array.isArray(data.users) ? data.users[0] : null;
   if (!user) return { exists: false, providers: [] };
   const providers = (user.providerUserInfo || []).map(p => p.providerId).filter(Boolean);

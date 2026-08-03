@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T15:39:47.123Z",
-  "sourceFingerprint": "d9eab9e33593db42368e5cfda15330afece97516d46d873e72abedc222f4d91c",
+  "generatedAt": "2026-08-03T15:43:42.832Z",
+  "sourceFingerprint": "bc8f44358510ceaa44978401f411a196fdd41299ee6fb4717eca321a037f9ea3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 451,
     "textFiles": 419,
-    "totalBytes": 5220868,
+    "totalBytes": 5221872,
     "pages": 18,
     "modules": 262
   },
@@ -15380,8 +15380,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-lite.js",
-      "bytes": 12535,
-      "sha256": "bafdf8b1c2702fa8e90aa70ee62416b103f1d28244237e5d2740e0964cf09a87",
+      "bytes": 13117,
+      "sha256": "48c5aedb59e9213a2f49f49223aa3818c08d5ed23c299f6b646eee35d177a225",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15398,23 +15398,23 @@
         },
         {
           "url": "https://www.googleapis.com/auth/identitytoolkit",
-          "line": 153
+          "line": 163
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 154
+          "line": 164
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:signUp",
-          "line": 188
+          "line": 201
         },
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 217
+          "line": 230
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
-          "line": 220
+          "line": 233
         }
       ]
     },
@@ -15528,8 +15528,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 8187,
-      "sha256": "148b2c2275d015f39aa1ce32e4ec8d1c3f39fe7b534c3e63f715a874557902f9",
+      "bytes": 8609,
+      "sha256": "57b6b12b616b5f12bfd836230ddff535841a5a751b8e793c07b20390d0f248b2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22180,8 +22180,8 @@
     {
       "path": "cloudflare/firebase-admin-lite.js",
       "extension": ".js",
-      "bytes": 12535,
-      "sha256": "bafdf8b1c2702fa8e90aa70ee62416b103f1d28244237e5d2740e0964cf09a87"
+      "bytes": 13117,
+      "sha256": "48c5aedb59e9213a2f49f49223aa3818c08d5ed23c299f6b646eee35d177a225"
     },
     {
       "path": "collections.html",
@@ -22660,8 +22660,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 8187,
-      "sha256": "148b2c2275d015f39aa1ce32e4ec8d1c3f39fe7b534c3e63f715a874557902f9"
+      "bytes": 8609,
+      "sha256": "57b6b12b616b5f12bfd836230ddff535841a5a751b8e793c07b20390d0f248b2"
     },
     {
       "path": "functions/api/email-otp-verify.js",
