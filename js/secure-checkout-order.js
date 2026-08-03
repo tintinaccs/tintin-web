@@ -347,6 +347,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       address,
       referencia: text(document.getElementById('ck-referencia')?.value),
       mapLocation: shipping.mapLocation,
+      // Se llevan al borrador para que el mensaje de WhatsApp pueda contar
+      // cómo se entrega el pedido, no sólo qué se compró.
+      shippingMethod: shipping.method,
+      encomiendaMode: shipping.encomiendaMode || '',
       paymentMethod,
       expectedSubtotal: Math.round(localSubtotal),
       expectedShippingCost: Math.round(localShippingCost),
@@ -453,17 +457,76 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return { ...(response.order || {}), orderId: response.orderId };
   }
 
-  function buildWhatsAppMessage(result) {
+  const SHIPPING_LABELS = {
+    retiro: 'Retiro en tienda (San Lorenzo)',
+    delivery: 'Delivery a domicilio',
+    encomienda: 'Encomienda al interior',
+  };
+  const ENCOMIENDA_LABELS = {
+    agencia: 'retiro en agencia',
+    puerta: 'entrega en puerta',
+  };
+  const PAYMENT_LABELS = {
+    efectivo: 'Efectivo contra entrega',
+    transferencia: 'Transferencia bancaria',
+    tarjeta: 'Tarjeta',
+  };
+
+  function shippingSummary(draft) {
+    const method = text(draft?.shippingMethod);
+    const base = SHIPPING_LABELS[method] || method || 'A coordinar';
+    const mode = ENCOMIENDA_LABELS[text(draft?.encomiendaMode)];
+    return mode ? `${base} — ${mode}` : base;
+  }
+
+  /**
+   * Mensaje de WhatsApp con TODO el pedido.
+   *
+   * Antes sólo llevaba los productos y los totales: al abrir WhatsApp había
+   * que volver a escribir a dónde iba, cómo pagaba y quién era. Ahora el
+   * mensaje se basta solo, que es el punto de mandarlo desde acá.
+   */
+  function buildWhatsAppMessage(result, draft) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
     const shippingText = result.shippingPending
       ? 'A confirmar'
       : formatPrice(result.shippingCost || 0);
-    return `🛍️ *PEDIDO TINTIN #${result.shortId}*\n\n${itemLines}\n\n💰 Subtotal: ${formatPrice(result.subtotal || 0)}\n🚚 Envío: ${shippingText}\n💰 Total: ${formatPrice(result.total || 0)}${result.shippingPending ? ' + envío' : ''}`;
+
+    const lines = [
+      `🛍️ *PEDIDO TINTIN #${result.shortId}*`,
+      '',
+      itemLines,
+      '',
+      `💰 Subtotal: ${formatPrice(result.subtotal || 0)}`,
+      `🚚 Envío: ${shippingText}`,
+      `💰 Total: ${formatPrice(result.total || 0)}${result.shippingPending ? ' + envío' : ''}`,
+      '',
+      `📦 Entrega: ${shippingSummary(draft)}`,
+    ];
+
+    const city = text(draft?.selectedCity);
+    if (city && city !== '__retiro__') lines.push(`📍 Ciudad: ${city}`);
+
+    const address = text(draft?.address);
+    if (address) lines.push(`🏠 Dirección: ${address}`);
+
+    const locationName = text(draft?.mapLocation?.name);
+    if (locationName) lines.push(`🗺️ Ubicación: ${locationName}`);
+
+    const payment = text(draft?.paymentMethod);
+    if (payment) lines.push(`💳 Pago: ${PAYMENT_LABELS[payment] || payment}`);
+
+    const name = text(draft?.name);
+    if (name) lines.push('', `👤 ${name}`);
+    const phone = text(draft?.phone);
+    if (phone) lines.push(`📱 ${phone}`);
+
+    return lines.join('\n');
   }
 
-  function success(result) {
+  function success(result, draft) {
     window._lastOrderId = result.shortId;
     document.getElementById('ck-review-head')?.style.setProperty('display', 'none');
     document.getElementById('ck-success-head')?.style.setProperty('display', 'block');
@@ -477,7 +540,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const whatsapp = document.getElementById('ck-wa-support');
     if (whatsapp) {
       const phone = text(result.storeWhatsapp || DEFAULT_STORE_WHATSAPP).replace(/\D/g, '');
-      whatsapp.href = `https://wa.me/${phone}?text=${encodeURIComponent(buildWhatsAppMessage(result))}`;
+      whatsapp.href = `https://wa.me/${phone}?text=${encodeURIComponent(buildWhatsAppMessage(result, draft))}`;
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -541,7 +604,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const result = await createOrderOnServer(draft);
       await clearCart();
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
-      success(result);
+      success(result, draft);
     } catch (error) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
