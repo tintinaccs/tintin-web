@@ -11,13 +11,6 @@
   <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios."><meta name="theme-color" content="#AD3F67">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <!-- El SDK de Firebase se descargaba ENCADENADO: el navegador tenía que
-       bajar y parsear firebase-auth.js para recién descubrir que necesitaba
-       firebase-app.js, y así. Medido, eso eran 4 viajes en serie y el SDK no
-       estaba listo hasta ~620ms (y ~8s en una conexión mala). Con
-       modulepreload los cuatro arrancan juntos apenas se parsea el <head>.
-       crossorigin es obligatorio: los módulos se piden en modo CORS y sin él
-       la precarga no se reutiliza y se descargaría dos veces. -->
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
