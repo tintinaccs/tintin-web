@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T16:55:33.884Z",
-  "sourceFingerprint": "2f3c394f86f467dafb7591c22e84066d70f2c507dc7a45e592430213f87b1170",
+  "generatedAt": "2026-08-03T16:57:53.263Z",
+  "sourceFingerprint": "54fe966098b5a94a4a1318f6bebf545b493c05a42937271321e50b7160c32627",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 458,
     "textFiles": 426,
-    "totalBytes": 5270886,
+    "totalBytes": 5271837,
     "pages": 18,
     "modules": 268
   },
@@ -18556,8 +18556,8 @@
     },
     {
       "path": "js/profile-gate.js",
-      "bytes": 4447,
-      "sha256": "4b040309c0512a69f701f7978e9cbff99a6d3f9bdb3ea3393e61627dc6ce4183",
+      "bytes": 5398,
+      "sha256": "9e85d9f7e8a62121d8c63a2d9d86e8884b6c5c133e817963a8a1fd6d15d02953",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23701,8 +23701,8 @@
     {
       "path": "js/profile-gate.js",
       "extension": ".js",
-      "bytes": 4447,
-      "sha256": "4b040309c0512a69f701f7978e9cbff99a6d3f9bdb3ea3393e61627dc6ce4183"
+      "bytes": 5398,
+      "sha256": "9e85d9f7e8a62121d8c63a2d9d86e8884b6c5c133e817963a8a1fd6d15d02953"
     },
     {
       "path": "js/profile-maintenance.js",
@@ -26578,7 +26578,21 @@
     },
     {
       "file": "js/profile-gate.js",
-      "line": 70,
+      "line": 51,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/profile-gate.js",
+      "line": 90,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/profile-gate.js",
+      "line": 93,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -27912,7 +27926,7 @@
         },
         {
           "file": "js/profile-gate.js",
-          "line": 70
+          "line": 93
         }
       ]
     },
@@ -29116,7 +29130,7 @@
           },
           {
             "file": "js/profile-gate.js",
-            "line": 85,
+            "line": 108,
             "operation": "doc"
           },
           {
