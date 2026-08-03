@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T15:59:31.523Z",
-  "sourceFingerprint": "67e44e41acb0c9a746ff29902700b8567c165dfd8e8e7328ac3c524e5b35a3a1",
+  "generatedAt": "2026-08-03T16:20:53.629Z",
+  "sourceFingerprint": "80feece43d623bf71edbcfcca9c0a23cace9a31fc5f18c85dadf871018624617",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 453,
-    "textFiles": 421,
-    "totalBytes": 5232794,
+    "files": 454,
+    "textFiles": 422,
+    "totalBytes": 5239365,
     "pages": 18,
-    "modules": 263
+    "modules": 264
   },
   "viewports": [
     {
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 38971,
-      "sha256": "b977e99832d9fd112109d23b8f47665bccd985ad6033c2e3549e81af64b0ed19",
+      "bytes": 39767,
+      "sha256": "718a03862a57d0d4c811f01b2ae7d5d21f0dd5740562c9ffc4f3a1b2cad9ab1f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 801
+          "line": 816
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 802
+          "line": 817
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 803
+          "line": 818
         }
       ],
       "styles": [
@@ -11741,19 +11741,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 801,
+          "line": 816,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 802,
+          "line": 817,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 803,
+          "line": 818,
           "exists": true
         },
         {
@@ -18457,6 +18457,57 @@
       ]
     },
     {
+      "path": "js/profile-gate.js",
+      "bytes": 4447,
+      "sha256": "4b040309c0512a69f701f7978e9cbff99a6d3f9bdb3ea3393e61627dc6ce4183",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 23
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 24
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 25
+        },
+        {
+          "raw": "./profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2",
+          "target": "js/profile-onboarding.mjs",
+          "dynamic": false,
+          "line": 26
+        },
+        {
+          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 27
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 24
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 25
+        }
+      ]
+    },
+    {
       "path": "js/profile-maintenance.js",
       "bytes": 14582,
       "sha256": "74b4dfe9dc986e330781cecf0bc6be32d21229faa27a95eb311c8c3419ef5bb6",
@@ -18778,8 +18829,8 @@
     },
     {
       "path": "js/session-guard.js",
-      "bytes": 2473,
-      "sha256": "8faee3f0b8c801551772c4c4549aeaf83f325659eace3ae1e9b1ad09ed8ebe3b",
+      "bytes": 2862,
+      "sha256": "37987217ccb5e8bcc7178d1131a71d94f95773ce2dbefff8bb6a13bef6035762",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18802,6 +18853,12 @@
           "target": "js/roles.js",
           "dynamic": false,
           "line": 18
+        },
+        {
+          "raw": "./profile-gate.js?v=tintin-20260803-profile-gate-1",
+          "target": "js/profile-gate.js",
+          "dynamic": false,
+          "line": 19
         }
       ],
       "endpoints": [
@@ -23472,6 +23529,12 @@
       "sha256": "e4a3ea15d51d6d88405a46c407db1e11bc45cf6cf23935d0c1b708a85087db81"
     },
     {
+      "path": "js/profile-gate.js",
+      "extension": ".js",
+      "bytes": 4447,
+      "sha256": "4b040309c0512a69f701f7978e9cbff99a6d3f9bdb3ea3393e61627dc6ce4183"
+    },
+    {
       "path": "js/profile-maintenance.js",
       "extension": ".js",
       "bytes": 14582,
@@ -23546,8 +23609,8 @@
     {
       "path": "js/session-guard.js",
       "extension": ".js",
-      "bytes": 2473,
-      "sha256": "8faee3f0b8c801551772c4c4549aeaf83f325659eace3ae1e9b1ad09ed8ebe3b"
+      "bytes": 2862,
+      "sha256": "37987217ccb5e8bcc7178d1131a71d94f95773ce2dbefff8bb6a13bef6035762"
     },
     {
       "path": "js/site-activity.js",
@@ -23618,8 +23681,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 38971,
-      "sha256": "b977e99832d9fd112109d23b8f47665bccd985ad6033c2e3549e81af64b0ed19"
+      "bytes": 39767,
+      "sha256": "718a03862a57d0d4c811f01b2ae7d5d21f0dd5740562c9ffc4f3a1b2cad9ab1f"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -24500,8 +24563,8 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 120060,
-      "sha256": "a11b65ad3a07feb20dd1b796c755294af317eb79f3caeb29a627257f998cd1ba"
+      "bytes": 120999,
+      "sha256": "f21b6e02d39d15d5c6922c3ef37768ee09c5dde3eb1a062220ad461437a0b8ff"
     },
     {
       "path": "terminos.html",
@@ -26332,6 +26395,13 @@
       "exists": true
     },
     {
+      "file": "js/profile-gate.js",
+      "line": 70,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
       "file": "js/profile-maintenance.js",
       "line": 84,
       "raw": "perfil.html",
@@ -26459,21 +26529,21 @@
     },
     {
       "file": "js/session-guard.js",
-      "line": 40,
+      "line": 41,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/session-guard.js",
-      "line": 40,
+      "line": 41,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/session-guard.js",
-      "line": 41,
+      "line": 42,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -26613,21 +26683,28 @@
     },
     {
       "file": "login.html",
-      "line": 263,
+      "line": 264,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 266,
+      "line": 267,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 266,
+      "line": 267,
+      "raw": "index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 335,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -27609,7 +27686,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 266
+          "line": 267
         }
       ]
     },
@@ -27640,7 +27717,7 @@
       "references": [
         {
           "file": "js/session-guard.js",
-          "line": 41
+          "line": 42
         }
       ]
     },
@@ -27650,6 +27727,10 @@
         {
           "file": "checkout.html",
           "line": 895
+        },
+        {
+          "file": "js/profile-gate.js",
+          "line": 70
         }
       ]
     },
@@ -28837,6 +28918,11 @@
             "operation": "doc"
           },
           {
+            "file": "js/profile-gate.js",
+            "line": 85,
+            "operation": "doc"
+          },
+          {
             "file": "js/roles.js",
             "line": 177,
             "operation": "doc"
@@ -28868,12 +28954,12 @@
           },
           {
             "file": "login.html",
-            "line": 290,
+            "line": 291,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 536,
+            "line": 551,
             "operation": "doc"
           },
           {
