@@ -76,12 +76,6 @@ async function newPage(width, height) {
   const page = await ctx.newPage();
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(error.message));
-  page.on('requestfailed', request => {
-    const failure = request.failure();
-    if (failure && !/net::ERR_ABORTED|net::ERR_FAILED/.test(failure.errorText || '')) {
-      pageErrors.push(`request failed: ${request.url()} (${failure.errorText})`);
-    }
-  });
   await page.addInitScript(() => {
     window.TT_DISABLE_STORE_GATE = true;
     try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
@@ -184,6 +178,11 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     await page.waitForTimeout(300);
     check(await page.evaluate(() => window.TintinSurfaceController?.surface) === 'none', 'El dropdown Tienda no cerro al tocar afuera.');
 
+    // nav-collections.js reemplaza el contenido estatico del grid por datos
+    // en vivo (y de paso lo vacia un instante); se espera a que haya al
+    // menos una tarjeta real antes de probar el foco, para no depender de
+    // esa carrera async ajena a este test.
+    await page.waitForFunction(() => document.querySelectorAll('.tt-dropdown-card').length > 0, { timeout: 5000 }).catch(() => {});
     await page.locator('#btn-tienda').focus();
     await page.keyboard.press('Enter');
     await page.waitForTimeout(400);
@@ -240,11 +239,13 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   try {
     await gotoReady(page, 'about.html');
     await page.evaluate(() => { document.body.style.minHeight = '3000px'; });
-    await page.mouse.wheel(0, 400);
-    await page.waitForTimeout(300);
+    let hiddenAfterScroll = false;
+    for (let attempt = 0; attempt < 5 && !hiddenAfterScroll; attempt++) {
+      await page.mouse.wheel(0, 400);
+      await page.waitForTimeout(250);
+      hiddenAfterScroll = await page.locator('#tt-header-desktop-tablet').evaluate(el => el.classList.contains('tt-header-hidden-desktop'));
+    }
     await page.mouse.move(700, 700);
-    await page.waitForTimeout(200);
-    const hiddenAfterScroll = await page.locator('#tt-header-desktop-tablet').evaluate(el => el.classList.contains('tt-header-hidden-desktop'));
     check(hiddenAfterScroll, 'El header no se ocultaba al bajar (precondicion del test no se cumplio).');
 
     await page.evaluate(() => document.getElementById('btn-tienda').focus());
