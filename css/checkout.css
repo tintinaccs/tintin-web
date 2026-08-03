@@ -96,7 +96,7 @@
       color: var(--text-muted);
       position: relative;
       z-index: 1;
-      transition: all .3s;
+      transition:transform .3s,opacity .3s,background-color .3s,border-color .3s,color .3s,box-shadow .3s;
     }
     .ck-step.active .ck-step-num {
       background: var(--acc);
@@ -225,7 +225,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all .15s;
+      transition:transform .15s,opacity .15s,background-color .15s,border-color .15s,color .15s,box-shadow .15s;
       line-height: 1;
     }
     .ck-qty-btn:hover { background: var(--acc); color: #fff; border-color: var(--acc); }
@@ -315,7 +315,7 @@
       letter-spacing: .08em;
       cursor: pointer;
       font-family:Montserrat;
-      transition: all .2s;
+      transition:transform .2s,opacity .2s,background-color .2s,border-color .2s,color .2s,box-shadow .2s;
       margin-top: 10px;
     }
     .ck-btn-back:hover { border-color: var(--acc); color: var(--acc); }
@@ -411,7 +411,7 @@
       border-radius: var(--radius-sm);
       cursor: pointer;
       margin-bottom: 12px;
-      transition: all .2s;
+      transition:transform .2s,opacity .2s,background-color .2s,border-color .2s,color .2s,box-shadow .2s;
     }
     .ck-pay-label:hover { border-color: var(--acc); background: var(--acc-pale); }
     .ck-pay-option:checked + .ck-pay-label {

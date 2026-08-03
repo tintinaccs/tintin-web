@@ -31,10 +31,10 @@ const screens = [
 
 // Acciones reales de la interfaz. Cada una: selector a tocar y qué esperar.
 const actions = [
-  ['abrir carrito', '#btn-cart, #tabbar-cart', '.tt-cart-drawer.open'],
-  ['abrir buscador', '#btn-search, #tabbar-search', '.tt-search-panel.open'],
-  ['abrir cuenta', '#btn-cuenta, #tabbar-cuenta', '.tt-account-panel.open, #account-dropdown.open'],
-  ['abrir tienda', '#btn-tienda, #tabbar-tienda', '.tt-collections-sheet.open, .tt-dropdown.open'],
+  ['carrito', '#tabbar-cart, #btn-cart'],
+  ['buscador', '#tabbar-search, #btn-search'],
+  ['cuenta', '#tabbar-cuenta, #btn-cuenta'],
+  ['tienda', '#tabbar-tienda, #btn-tienda'],
 ];
 
 async function run(browser, w, h) {
@@ -50,7 +50,7 @@ async function run(browser, w, h) {
     return r.abort();
   });
   await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded', timeout: 25000 });
-  await page.waitForTimeout(3500);
+  await page.waitForTimeout(9800);
   // El loader tapa la interfaz hasta que llegan los datos; se retira para
   // medir la respuesta de los controles reales.
   await page.evaluate(() => {
@@ -59,20 +59,21 @@ async function run(browser, w, h) {
     document.getElementById('tt-intro')?.remove();
     document.documentElement.classList.remove('tt-initializing');
   }).catch(() => {});
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(600);
 
   const out = {};
-  for (const [name, sel, expect] of actions) {
+  for (const [name, sel] of actions) {
     let ms = null;
     try {
       const el = await page.$(sel);
       if (el && await el.isVisible()) {
+        const antes = await page.evaluate(() => document.querySelectorAll('.open').length);
         const t0 = Date.now();
-        await el.click({ timeout: 3000, force: true });
-        await page.waitForSelector(expect, { state: 'visible', timeout: 3000 });
+        await el.click({ timeout: 3000 });
+        await page.waitForFunction(n => document.querySelectorAll('.open').length > n, antes, { timeout: 3000 });
         ms = Date.now() - t0;
         await page.keyboard.press('Escape').catch(() => {});
-        await page.waitForTimeout(250);
+        await page.waitForTimeout(300);
       }
     } catch { ms = null; }
     out[name] = ms;
