@@ -27,7 +27,7 @@ test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
   assert.equal(plan.needsAddress, false);
 });
 
-test('una cuenta completa entra directo sin pedir ni escribir datos', () => {
+test('una cuenta completa entra directo sin volver a abrir el onboarding', () => {
   const plan = getProfileCompletionPlan({
     profile: COMPLETE,
     user: { email: 'juan@hotmail.com', displayName: 'Otro nombre' },
@@ -35,30 +35,29 @@ test('una cuenta completa entra directo sin pedir ni escribir datos', () => {
     superAdminEmail,
   });
   assert.equal(plan.skip, true);
-  assert.deepEqual(buildMissingProfilePatch({
-    currentProfile: COMPLETE,
-    submittedFirstName: 'Otro',
-    submittedLastName: 'Nombre',
-    submittedPhone: '+595971000000',
-    submittedAddress: { address: 'Otra dirección', name: 'Otra', lat: 1, lng: 1 },
-  }), {});
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsAddress, false);
 });
 
-test('si falta solo el teléfono conserva el nombre existente', () => {
+test('si falta solo el teléfono conserva el nombre y muestra la ubicación ya guardada', () => {
+  const profile = { name: 'Juan Pérez', phone: '', ...ADDRESS };
   const plan = getProfileCompletionPlan({
-    profile: { name: 'Juan Pérez', phone: '', ...ADDRESS },
+    profile,
     user: { email: 'juan@hotmail.com' },
     role: 'agent',
     superAdminEmail,
   });
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, true);
-  assert.equal(plan.needsAddress, false);
+  assert.equal(plan.needsAddress, true);
+  assert.equal(plan.addressAlreadySaved, true);
   assert.deepEqual(buildMissingProfilePatch({
-    currentProfile: { name: 'Juan Pérez', phone: '', ...ADDRESS },
+    currentProfile: profile,
     submittedFirstName: 'Nombre',
     submittedLastName: 'Accidental',
     submittedPhone: '+595981123456',
+    submittedAddress: ADDRESS.savedLocation,
   }), { phone: '+595981123456' });
 });
 
@@ -111,6 +110,8 @@ test('un perfil viejo con un solo nombre vuelve a pedir el apellido', () => {
   });
   assert.equal(plan.needsName, true);
   assert.equal(plan.suggestedFirstName, 'Juan');
+  assert.equal(plan.needsAddress, true);
+  assert.equal(plan.addressAlreadySaved, true);
 });
 
 test('falta la ubicación aunque el nombre y el teléfono estén completos', () => {
@@ -124,6 +125,7 @@ test('falta la ubicación aunque el nombre y el teléfono estén completos', () 
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, false);
   assert.equal(plan.needsAddress, true);
+  assert.equal(plan.addressAlreadySaved, false);
 });
 
 test('una transacción concurrente no vuelve a pisar campos ya completados', () => {
@@ -132,6 +134,7 @@ test('una transacción concurrente no vuelve a pisar campos ya completados', () 
     submittedFirstName: 'Nombre',
     submittedLastName: 'Viejo',
     submittedPhone: '+595982222222',
+    submittedAddress: ADDRESS.savedLocation,
   }), {});
 });
 
@@ -141,6 +144,7 @@ test('un cambio de nombre solo se aplica cuando fue explícito', () => {
     submittedFirstName: 'Juan',
     submittedLastName: 'Pérez',
     submittedPhone: '+595981123456',
+    submittedAddress: ADDRESS.savedLocation,
     explicitNameChange: true,
   }), {
     firstName: 'Juan',
@@ -160,6 +164,21 @@ test('la ubicación se guarda en el mismo formato que usa el checkout', () => {
   });
 });
 
+test('una ubicación existente solo cambia cuando la persona mueve o reemplaza el punto', () => {
+  assert.deepEqual(buildMissingProfilePatch({
+    currentProfile: COMPLETE,
+    submittedAddress: ADDRESS.savedLocation,
+  }), {});
+
+  assert.deepEqual(buildMissingProfilePatch({
+    currentProfile: COMPLETE,
+    submittedAddress: { lat: -25.31, lng: -57.61, name: 'Trabajo', address: 'Centro, Asunción' },
+  }), {
+    savedLocation: { lat: -25.31, lng: -57.61, name: 'Trabajo', address: 'Centro, Asunción' },
+    address: 'Centro, Asunción',
+  });
+});
+
 test('una ubicación sin coordenadas no se guarda', () => {
   assert.deepEqual(buildMissingProfilePatch({
     currentProfile: {},
@@ -167,7 +186,7 @@ test('una ubicación sin coordenadas no se guarda', () => {
   }), {});
 });
 
-test('una ubicación guardada desde el checkout no se vuelve a pedir', () => {
+test('una ubicación guardada desde checkout no abre el onboarding por sí sola', () => {
   const plan = getProfileCompletionPlan({
     profile: { name: 'Juan Pérez', phone: '+595981123456', savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' } },
     user: { email: 'juan@hotmail.com' },
