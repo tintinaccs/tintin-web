@@ -15,13 +15,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#AD3F67">
-  <!-- El SDK de Firebase se descargaba ENCADENADO: el navegador tenía que
-       bajar y parsear firebase-auth.js para recién descubrir que necesitaba
-       firebase-app.js, y así. Medido, eso eran 4 viajes en serie y el SDK no
-       estaba listo hasta ~620ms (y ~8s en una conexión mala). Con
-       modulepreload los cuatro arrancan juntos apenas se parsea el <head>.
-       crossorigin es obligatorio: los módulos se piden en modo CORS y sin él
-       la precarga no se reutiliza y se descargaría dos veces. -->
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
