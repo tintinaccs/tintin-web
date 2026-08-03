@@ -16,12 +16,17 @@ import {
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
 } from "./user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { apiUrl } from "./function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
 export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
 }
 
-async function postJson(path, body) {
+async function postJson(name, body) {
+  // apiUrl() y no una ruta relativa: el sitio también se publica en GitHub
+  // Pages, donde las funciones /api/* no existen y un fetch relativo da 404
+  // (ver js/function-origin.js).
+  const path = apiUrl(name);
   let response;
   try {
     response = await fetch(path, {
@@ -57,7 +62,7 @@ async function postJson(path, body) {
 
 /** Pide que se mande un código de 6 dígitos al correo (vence en 5 minutos). */
 export async function requestOtpCode(email) {
-  await postJson('/api/email-otp-send', { email });
+  await postJson('email-otp-send', { email });
 }
 
 /**
@@ -66,7 +71,7 @@ export async function requestOtpCode(email) {
  * un usuario autenticado de verdad, nunca antes.
  */
 export async function verifyOtpCode(email, code) {
-  const data = await postJson('/api/email-otp-verify', { email, code });
+  const data = await postJson('email-otp-verify', { email, code });
   const cred = await signInWithCustomToken(auth, data.customToken);
   return cred.user;
 }

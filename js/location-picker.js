@@ -11,19 +11,49 @@
 // checkout sigue mostrando el mapa para ajustar el punto exacto sobre la
 // dirección que ya quedó guardada.
 
+import { apiUrl } from "./function-origin.js?v=tintin-20260716-cloudinary-fix-1";
+
 const DEBOUNCE_MS = 350;
 const MIN_QUERY_LENGTH = 3;
+
+/**
+ * Coordenada realmente utilizable.
+ *
+ * No alcanza con Number.isFinite(Number(v)): Number(null) y Number('') dan 0,
+ * así que un resultado sin coordenadas se colaba como el punto (0, 0) —
+ * en el Golfo de Guinea, a medio mundo de la zona de reparto.
+ */
+function isUsableCoord(value) {
+  if (value == null || value === '') return false;
+  return Number.isFinite(Number(value));
+}
+
+/**
+ * URL del endpoint de búsqueda.
+ *
+ * Una ruta relativa no sirve: el sitio también se publica en GitHub Pages,
+ * donde las funciones /api/* no existen y un fetch relativo da 404 (ver
+ * js/function-origin.js). Fuera del navegador —los tests— se usa la ruta
+ * relativa, que es lo que esperan los stubs de fetch.
+ */
+function geoSearchUrl(query) {
+  const base = typeof window === 'undefined' ? '/api/geo-search' : apiUrl('geo-search');
+  return `${base}?q=${encodeURIComponent(query)}`;
+}
 
 /** Consulta el proxy de búsqueda de direcciones. Devuelve [] ante cualquier fallo. */
 export async function searchPlaces(query, { signal } = {}) {
   const q = String(query || '').trim();
   if (q.length < MIN_QUERY_LENGTH) return [];
   try {
-    const response = await fetch(`/api/geo-search?q=${encodeURIComponent(q)}`, { signal });
+    const response = await fetch(geoSearchUrl(q), { signal });
     if (!response.ok) throw new Error(`geo-search ${response.status}`);
     const data = await response.json();
-    const results = Array.isArray(data?.results) ? data.results : [];
-    return results.filter(r => Number.isFinite(Number(r.lat)) && Number.isFinite(Number(r.lng)));
+    // El endpoint devuelve `places` (ver functions/api/geo-search.js), con la
+    // forma {lat, lng, name, address} — la misma que consume el mapa del
+    // checkout.
+    const places = Array.isArray(data?.places) ? data.places : [];
+    return places.filter(p => isUsableCoord(p.lat) && isUsableCoord(p.lng));
   } catch (error) {
     if (error?.name === 'AbortError') return [];
     console.error('[location-picker] No se pudo buscar la dirección:', error);

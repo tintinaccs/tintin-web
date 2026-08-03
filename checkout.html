@@ -354,6 +354,7 @@ import {
   removeStoreClosedOverlay
 } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { searchPlaces } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
@@ -1549,16 +1550,21 @@ function initMapSearch() {
 }
 
 // Named places, addresses, streets, barrios — matches by name/text.
-// Pasa por el proxy /api/geo-search (Cloudflare) en vez de llamar a Nominatim
-// directo desde el navegador: ese proxy ya identifica la app con un
-// User-Agent válido y cachea resultados en el edge, como exige la política
-// de uso de Nominatim (mismo mecanismo que usa el autocompletado de
-// dirección en js/checkout-reliability.js).
+// La llamada al proxy /api/geo-search vive en js/location-picker.js, el mismo
+// módulo que usa el buscador de dirección del alta de cuenta y del perfil: un
+// solo lugar que sabe cómo se llama a ese endpoint y qué forma tiene su
+// respuesta. Acá sólo se traduce `lng` a `lon`, que es como lo nombra el
+// resto del código del mapa.
+//
+// Un fallo de la búsqueda no rompe el checkout: se devuelve vacío y siguen
+// estando el buscador por categoría y el click manual sobre el mapa.
 async function searchNominatim(query) {
-  const res = await fetch(`${apiUrl('geo-search')}?q=${encodeURIComponent(query)}`);
-  if (!res.ok) return [];
-  const { places } = await res.json();
-  return (places || []).map(p => ({ lat: p.lat, lon: p.lng, name: p.name, address: p.address }));
+  try {
+    const places = await searchPlaces(query);
+    return places.map(p => ({ lat: Number(p.lat), lon: Number(p.lng), name: p.name, address: p.address }));
+  } catch {
+    return [];
+  }
 }
 
 // Category search ("farmacia", "estación de servicio"...) — everything tagged
