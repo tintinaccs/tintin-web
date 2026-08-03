@@ -46,22 +46,6 @@
 
 <div class="login-page">
   <div class="login-shell" role="main" aria-labelledby="login-heading">
-    <section class="login-brand" aria-label="Tintin Accesorios y Relojes">
-      <div class="login-brand-glow" aria-hidden="true"></div>
-      <div class="login-brand-content">
-        <div class="login-brand-kicker">Tu espacio Tintin</div>
-        <div class="login-brand-logo">TINTIN</div>
-        <div class="login-brand-sub">Accesorios &amp; Relojes</div>
-        <div class="login-brand-tagline">Todo lo que te encanta, en un solo lugar.</div>
-        <div class="login-brand-benefits" aria-label="Beneficios de tu cuenta">
-          <span>Pedidos en un toque</span>
-          <span>Favoritos siempre contigo</span>
-        </div>
-        <div class="login-brand-dots" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
-    </section>
 
     <section class="login-form-side">
       <div class="login-mobile-logo" aria-label="Tintin Accesorios y Relojes">
@@ -97,6 +81,10 @@
           <label class="login-email-label" for="login-email-input">Correo electrónico</label>
           <input type="email" class="login-email-input" id="login-email-input" placeholder="tu@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
           <button type="button" class="login-email-btn" id="btn-send-otp">Enviar código</button>
+          <div class="login-google-nudge-arrow" id="login-email-nudge-arrow" style="display:none" aria-hidden="true">
+            <div class="login-google-nudge-point"></div>
+            <div class="login-google-nudge-bubble">Esta cuenta se creó con tu correo — entrá por acá 👆</div>
+          </div>
         </div>
 
         <div class="login-email-block" id="login-otp-block" style="display:none">
@@ -298,6 +286,13 @@ async function guardarUsuario(user) {
       await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
       return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false };
     }
+    // Esta cuenta se creó con el login por correo (código de 6 dígitos):
+    // Google no es un segundo camino hacia ella, aunque Firebase Auth haya
+    // dejado entrar el intento (mismo criterio que el caso inverso en
+    // email-otp-send.js). No se toca el documento ni se avanza el login.
+    if (data.provider === 'emailOtp') {
+      return { emailOnlyAccount: true };
+    }
     // lastLogin es informativo: nunca decide permisos ni el destino.
     setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true })
       .catch(error => console.warn('[login] No se pudo actualizar lastLogin:', error));
@@ -425,6 +420,16 @@ async function finishGoogleLogin(user) {
     guardarUsuario(user),
     getStoreAccessConfig()
   ]);
+  if (profile.emailOnlyAccount) {
+    await signOut(auth);
+    explicitLoginInProgress = false;
+    document.getElementById('btn-google').disabled = false;
+    document.body.classList.remove('tt-login-busy');
+    document.getElementById('btn-google-label').textContent = 'Continuar con Google';
+    hideLoginOverlay();
+    showAccountNudge('email');
+    return;
+  }
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
     await signOut(auth);
@@ -668,28 +673,42 @@ function showEmailStep() {
   document.getElementById('login-email-block').style.display = '';
 }
 
-// Cuando el correo ya tiene una cuenta de Google, en vez del error de
-// siempre se resalta el botón de Google (con una burbuja + flecha que
-// apunta hacia él) y se apaga el resto de la caja — así queda clarísimo
-// cuál es el único camino real para esa cuenta. Cualquier click (en
-// cualquier tamaño de pantalla) lo cierra y vuelve al estado normal.
-function showGoogleNudge() {
-  document.getElementById('login-google-section').classList.add('login-google-nudge-active');
-  document.getElementById('login-google-nudge-arrow').style.display = 'flex';
+// Cuando una cuenta ya está atada a un método (Google o correo) y se
+// intenta entrar por el otro, en vez del error de siempre se resalta el
+// camino correcto (con una burbuja + flecha que apunta hacia él) y se apaga
+// el resto de la caja — así queda clarísimo cuál es el único camino real
+// para esa cuenta. Un click en cualquier parte, o simplemente scrollear,
+// lo cierra y vuelve al estado normal.
+const NUDGE_TARGETS = {
+  google: { sectionId: 'login-google-section', arrowId: 'login-google-nudge-arrow' },
+  email: { sectionId: 'login-email-block', arrowId: 'login-email-nudge-arrow' },
+};
+
+function showAccountNudge(kind) {
+  const target = NUDGE_TARGETS[kind];
+  document.getElementById(target.sectionId).classList.add('login-nudge-active');
+  document.getElementById(target.arrowId).style.display = 'flex';
   document.getElementById('login-google-nudge-backdrop').style.display = 'block';
 }
+function showGoogleNudge() { showAccountNudge('google'); }
 
-function hideGoogleNudge() {
-  document.getElementById('login-google-section').classList.remove('login-google-nudge-active');
-  document.getElementById('login-google-nudge-arrow').style.display = 'none';
+function hideAccountNudge() {
+  for (const target of Object.values(NUDGE_TARGETS)) {
+    document.getElementById(target.sectionId).classList.remove('login-nudge-active');
+    document.getElementById(target.arrowId).style.display = 'none';
+  }
   document.getElementById('login-google-nudge-backdrop').style.display = 'none';
 }
+function hideGoogleNudge() { hideAccountNudge(); }
 
 const googleNudgeBackdrop = document.getElementById('login-google-nudge-backdrop');
-googleNudgeBackdrop.addEventListener('click', hideGoogleNudge);
+googleNudgeBackdrop.addEventListener('click', hideAccountNudge);
 googleNudgeBackdrop.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideGoogleNudge(); }
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideAccountNudge(); }
 });
+window.addEventListener('scroll', () => {
+  if (googleNudgeBackdrop.style.display !== 'none') hideAccountNudge();
+}, { passive: true });
 
 async function sendOtp(email) {
   hideMessages();
