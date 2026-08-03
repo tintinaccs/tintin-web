@@ -102,8 +102,10 @@
             <button type="button" id="btn-change-profile-name" class="login-profile-change">Cambiar</button>
           </div>
           <div id="login-profile-name-field">
-            <label class="login-email-label" for="login-profile-name">Nombre completo</label>
-            <input type="text" class="login-email-input" id="login-profile-name" placeholder="Tu nombre" autocomplete="name" maxlength="120" />
+            <label class="login-email-label" for="login-profile-first-name">Nombre</label>
+            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" />
+            <label class="login-email-label" for="login-profile-last-name">Apellido</label>
+            <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" />
           </div>
           <div id="login-profile-phone-field">
             <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
@@ -111,6 +113,14 @@
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="País del teléfono"></select>
               <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" maxlength="40" />
             </div>
+          </div>
+          <div id="login-profile-address-field">
+            <label class="login-email-label" for="login-profile-address">Dirección de entrega</label>
+            <div class="login-address-search">
+              <input type="text" class="login-email-input" id="login-profile-address" placeholder="Buscá tu calle, barrio o punto de referencia…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="login-profile-address-results" />
+              <ul class="login-address-results" id="login-profile-address-results" role="listbox" hidden></ul>
+            </div>
+            <p class="login-address-selected" id="login-profile-address-selected" hidden></p>
           </div>
           <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
         </div>
@@ -150,7 +160,8 @@ import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tin
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { getProfileCompletionPlan, buildMissingProfilePatch } from "./js/profile-onboarding.mjs?v=tintin-20260801-profile-onboarding-1";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
+import { attachLocationPicker } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -289,15 +300,17 @@ async function ensureProfileComplete(user, role) {
   hideLoginOverlay();
   window.ttPageReady && window.ttPageReady();
 
-  document.getElementById('login-heading').textContent = 'Un dato más';
-  const missingDescription = plan.needsName && plan.needsPhone
+  const missingCount = [plan.needsName, plan.needsPhone, plan.needsAddress].filter(Boolean).length;
+  document.getElementById('login-heading').textContent = missingCount > 1 ? 'Últimos datos' : 'Un dato más';
+  document.getElementById('login-heading-sub').textContent = missingCount > 1
     ? (plan.suggestedName
-        ? 'Confirmá tu nombre y completá tu teléfono para terminar.'
-        : 'Completá tu nombre y teléfono para terminar de crear tu cuenta.')
+        ? 'Confirmá tus datos y completá lo que falta para terminar.'
+        : 'Completá estos datos para terminar de crear tu cuenta.')
     : plan.needsName
-      ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar.' : 'Completá tu nombre para continuar.')
-      : 'Completá tu teléfono para continuar.';
-  document.getElementById('login-heading-sub').textContent = missingDescription;
+      ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar.' : 'Completá tu nombre y apellido para continuar.')
+      : plan.needsPhone
+        ? 'Completá tu teléfono para continuar.'
+        : 'Elegí tu dirección de entrega para continuar.';
   document.getElementById('login-google-section').style.display = 'none';
   document.getElementById('login-divider-section').style.display = 'none';
   document.getElementById('login-email-block').style.display = 'none';
@@ -306,7 +319,8 @@ async function ensureProfileComplete(user, role) {
   const profileBlock = document.getElementById('login-profile-block');
   profileBlock.style.display = '';
 
-  const nameInput = document.getElementById('login-profile-name');
+  const firstNameInput = document.getElementById('login-profile-first-name');
+  const lastNameInput = document.getElementById('login-profile-last-name');
   const nameField = document.getElementById('login-profile-name-field');
   const nameConfirmation = document.getElementById('login-profile-name-confirmation');
   const nameConfirmationValue = document.getElementById('login-profile-confirmation-value');
@@ -314,13 +328,32 @@ async function ensureProfileComplete(user, role) {
   const phoneInput = document.getElementById('login-profile-phone');
   const phoneField = document.getElementById('login-profile-phone-field');
   const countrySelect = document.getElementById('login-profile-country');
+  const addressField = document.getElementById('login-profile-address-field');
   populateCountrySelect(countrySelect);
-  nameInput.value = plan.suggestedName;
+  firstNameInput.value = plan.suggestedFirstName;
+  lastNameInput.value = plan.suggestedLastName;
   phoneInput.value = '';
   phoneField.style.display = plan.needsPhone ? '' : 'none';
+  addressField.style.display = plan.needsAddress ? '' : 'none';
+
+  // Mismo backend de direcciones que el mapa del checkout (/api/geo-search),
+  // así lo que se elige acá el checkout lo reutiliza tal cual.
+  const addressPicker = plan.needsAddress
+    ? attachLocationPicker({
+        input: document.getElementById('login-profile-address'),
+        resultsList: document.getElementById('login-profile-address-results'),
+        selectedLabel: document.getElementById('login-profile-address-selected'),
+        onChange: () => hideMessages(),
+        onError: message => showError(message),
+      })
+    : null;
 
   let explicitNameChange = false;
-  if (plan.needsName && plan.suggestedName) {
+  // La confirmación rápida sólo aplica cuando lo sugerido ya es un nombre
+  // completo válido: si Google mandó una inicial o sólo el nombre, no hay
+  // nada que confirmar y se muestran los campos directamente.
+  const canConfirmSuggestedName = Boolean(plan.suggestedFirstName && plan.suggestedLastName);
+  if (plan.needsName && canConfirmSuggestedName) {
     nameConfirmationValue.textContent = plan.suggestedName;
     nameConfirmation.style.display = '';
     nameField.style.display = 'none';
@@ -328,8 +361,8 @@ async function ensureProfileComplete(user, role) {
       explicitNameChange = true;
       nameConfirmation.style.display = 'none';
       nameField.style.display = '';
-      nameInput.focus();
-      nameInput.select();
+      firstNameInput.focus();
+      firstNameInput.select();
     };
   } else {
     nameConfirmation.style.display = 'none';
@@ -339,12 +372,23 @@ async function ensureProfileComplete(user, role) {
   await new Promise(resolve => {
     document.getElementById('btn-save-profile').onclick = async () => {
       hideMessages();
-      const name = nameInput.value.trim();
+      const firstName = firstNameInput.value.trim();
+      const lastName = lastNameInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
       const phoneRaw = phoneInput.value.trim();
-      if (plan.needsName && !name) { showError('Ingresá tu nombre completo.'); return; }
+      const place = addressPicker?.getSelected() || null;
+      if (plan.needsName) {
+        if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
+        if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
+      }
       if (plan.needsPhone && (!phoneRaw || !isValidPhone(phoneRaw, country))) {
         showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
+        phoneInput.focus();
+        return;
+      }
+      if (plan.needsAddress && !place) {
+        showError('Buscá tu dirección y elegí una de las sugerencias para poder entregarte el pedido.');
+        document.getElementById('login-profile-address').focus();
         return;
       }
       const btn = document.getElementById('btn-save-profile');
@@ -356,8 +400,10 @@ async function ensureProfileComplete(user, role) {
           const currentProfile = currentSnap.exists() ? currentSnap.data() : {};
           const patch = buildMissingProfilePatch({
             currentProfile,
-            submittedName: name,
+            submittedFirstName: firstName,
+            submittedLastName: lastName,
             submittedPhone: normalizedPhone,
+            submittedAddress: place,
             explicitNameChange,
           });
           if (Object.keys(patch).length) {
