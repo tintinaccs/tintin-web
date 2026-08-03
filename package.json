@@ -76,7 +76,8 @@
     "test:phase10-a11y": "playwright test tests/ui-ux/phase10-accessibility.spec.js --project=chromium",
     "audit:phase11": "node scripts/audit-phase11-seo.js",
     "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
-    "monitor:production": "node scripts/audit-production-health.mjs"
+    "monitor:production": "node scripts/audit-production-health.mjs",
+    "audit:headers": "node scripts/audit-headers.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "3.0.3",
