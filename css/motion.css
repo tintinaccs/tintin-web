@@ -142,3 +142,40 @@
     transform: none;
   }
 }
+
+/* Header compacto al bajar. Solo transform y sombra: la altura no cambia,
+   asi que el contenido de abajo no se mueve. */
+.tt-header,
+.tt-header-tablet {
+  transition:
+    transform var(--mo-panel) var(--mo-enter),
+    box-shadow var(--mo-panel) var(--mo-enter);
+}
+
+.tt-header.tt-header-compact,
+.tt-header-tablet.tt-header-compact {
+  box-shadow: 0 6px 24px rgba(38, 24, 30, .07);
+}
+
+.tt-header .tt-logo-img,
+.tt-header-tablet .tt-logo-img {
+  transform-origin: left center;
+  transition: transform var(--mo-panel) var(--mo-enter);
+}
+
+.tt-header-compact .tt-logo-img {
+  transform: scale(.92);
+}
+
+/* Indicador del tabbar: lo posiciona JS con translateX. Sin transicion salta
+   de pestana a pestana. */
+.tt-mobile-nav-indicator,
+.tt-mobile-nav-halo {
+  transition: transform var(--mo-panel) var(--mo-enter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-header-compact .tt-logo-img { transform: none; }
+  .tt-mobile-nav-indicator,
+  .tt-mobile-nav-halo { transition: none; }
+}

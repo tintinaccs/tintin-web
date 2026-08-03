@@ -285,7 +285,20 @@ if (!window.TintinImagesPhase5Booted) {
 
       image.dataset.ttLogoPhase5Src = src;
       image.dataset.ttImagePhase5 = '1';
-      image.src = src;
+      // Cambiar el src de un <img> ya cargado lo deja en blanco hasta que baja
+      // el nuevo: en el logo del loader eso se ve como un parpadeo. Se
+      // decodifica primero y recien ahi se cambia.
+      const enPantalla = image.currentSrc && image.complete && image.naturalWidth > 0;
+      if (enPantalla && image.currentSrc !== src) {
+        const previa = new Image();
+        previa.decoding = 'async';
+        previa.src = src;
+        const cambiar = () => { image.src = src; };
+        if (previa.decode) previa.decode().then(cambiar).catch(cambiar);
+        else { previa.onload = cambiar; previa.onerror = cambiar; }
+      } else {
+        image.src = src;
+      }
       if (!image.dataset.ttLogoPhase5ErrorBound) {
         image.dataset.ttLogoPhase5ErrorBound = '1';
         image.addEventListener('error', () => {
