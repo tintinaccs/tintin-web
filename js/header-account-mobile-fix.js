@@ -8,19 +8,23 @@ function ready(fn){
  else fn();
 }
 
-/* Esta hoja se carga desde un módulo global para que la misma identidad visual
+/* Estas hojas se cargan desde un módulo global para que la misma identidad
    llegue a cuenta, carrito, buscador, colecciones, checkout, perfil y modales
-   sin tener que repetir un <link> en cada HTML. */
+   sin repetir un <link> en cada HTML. El orden importa: polish va al final. */
 function loadResponsiveBrandStyles(){
- if(document.getElementById('tt-responsive-brand-surfaces-css'))return;
- var link=document.createElement('link');
- link.id='tt-responsive-brand-surfaces-css';
- link.rel='stylesheet';
- link.href=new URL(
-  'css/tintin-responsive-brand-surfaces.css?v=tintin-20260803-brand-surfaces-1',
-  window.location.href
- ).href;
- document.head.appendChild(link);
+ var files=[
+  ['tt-responsive-brand-surfaces-css','css/tintin-responsive-brand-surfaces.css?v=tintin-20260803-brand-surfaces-1'],
+  ['tt-responsive-brand-polish-css','css/tintin-responsive-brand-polish.css?v=tintin-20260803-brand-polish-1']
+ ];
+ files.forEach(function(entry){
+  var id=entry[0],href=entry[1];
+  if(document.getElementById(id))return;
+  var link=document.createElement('link');
+  link.id=id;
+  link.rel='stylesheet';
+  link.href=new URL(href,window.location.href).href;
+  document.head.appendChild(link);
+ });
 }
 
 function injectLegacyStyles(){
@@ -71,8 +75,6 @@ function accountDropdown(){
  });
 }
 
-/* La capa visual sí se carga siempre. El controlador antiguo solo se instala
-   cuando la página no tiene el SurfaceController unificado. */
 loadResponsiveBrandStyles();
 
 ready(function(){
