@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/location-picker.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
   <style>
     /* Alias variables para que los estilos de perfil funcionen con styles.css */
@@ -206,6 +207,31 @@
     <div class="perfil-body">
       <div class="perfil-section-title">📍 Mi ubicación guardada</div>
       <div id="perfil-location-content"></div>
+      <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cambiar-ubicacion" style="margin-top:12px">📍 Elegir ubicación</button>
+      <div id="perfil-location-editor" hidden>
+        <label class="perfil-label" for="perfil-location-search">Buscá tu dirección</label>
+        <div class="tt-address-search">
+          <input type="text" class="perfil-input" id="perfil-location-search" placeholder="Calle, barrio o punto de referencia…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="perfil-location-results" />
+          <ul class="tt-address-results" id="perfil-location-results" role="listbox" hidden></ul>
+        </div>
+        <p class="tt-address-selected" id="perfil-location-selected" hidden></p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <button type="button" class="perfil-btn" id="btn-guardar-ubicacion">Guardar ubicación</button>
+          <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cancelar-ubicacion">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Datos de la cuenta -->
+  <div class="perfil-card">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Datos de la cuenta</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.9">
+        Método de acceso: <strong id="perfil-metodo">—</strong><br />
+        Miembro desde: <strong id="perfil-alta">—</strong><br />
+        Último ingreso: <strong id="perfil-ultimo-ingreso">—</strong>
+      </div>
     </div>
   </div>
 
@@ -290,6 +316,9 @@ import {
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { syncCartToFirestore } from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachLocationPicker } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
+import { toSavedLocation } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
+import { getRegisteredMethod, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -336,9 +365,19 @@ function renderSavedLocation(loc) {
   } else {
     el.innerHTML = `
       <div style="font-size:13px;color:var(--text-muted);line-height:1.6">
-        Todavía no guardaste una ubicación. La próxima vez que hagas un pedido con envío a domicilio, marcá tu ubicación en el mapa del checkout y activá la casilla "Guardar esta ubicación en mi perfil" — así se completa sola la próxima vez.
+        Todavía no guardaste una ubicación. Elegila acá y se completa sola la próxima vez que compres con envío a domicilio — también podés marcarla en el mapa del checkout.
       </div>`;
   }
+  // El botón vive en el markup estático (un solo id): sólo cambia su texto.
+  const changeButton = document.getElementById('btn-cambiar-ubicacion');
+  if (changeButton) changeButton.textContent = loc ? '✏️ Cambiar ubicación' : '📍 Elegir ubicación';
+}
+
+/** Fecha legible a partir de un Timestamp de Firestore (o nada). */
+function formatProfileDate(value) {
+  const date = value?.toDate?.() || (value ? new Date(value) : null);
+  if (!date || Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleDateString('es-PY', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
 function statusBadge(status) {
@@ -417,17 +456,68 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
   }
 
-  // Ubicación guardada (se completa sola al elegir delivery en el checkout)
+  // Datos de la cuenta — se guardan desde el alta (js/user-profile-store.js).
+  document.getElementById('perfil-metodo').textContent =
+    getRegisteredMethod(userData) === AUTH_METHOD.EMAIL ? 'Código por correo' : 'Google';
+  document.getElementById('perfil-alta').textContent = formatProfileDate(userData?.createdAt);
+  document.getElementById('perfil-ultimo-ingreso').textContent = formatProfileDate(userData?.lastLogin);
+
+  // Ubicación guardada — el mismo campo `savedLocation` que usa el checkout.
   renderSavedLocation(userData?.savedLocation);
+
+  const locationEditor = document.getElementById('perfil-location-editor');
+  const locationPicker = attachLocationPicker({
+    input: document.getElementById('perfil-location-search'),
+    resultsList: document.getElementById('perfil-location-results'),
+    selectedLabel: document.getElementById('perfil-location-selected'),
+    onError: message => toast(`❌ ${message}`),
+  });
+
+  const closeLocationEditor = () => {
+    locationEditor.hidden = true;
+    document.getElementById('perfil-location-search').value = '';
+    locationPicker.setSelected(null);
+  };
+
+  document.getElementById('btn-cambiar-ubicacion').onclick = () => {
+    locationEditor.hidden = false;
+    document.getElementById('perfil-location-search').focus();
+    window.TintinReleaseProfileButton?.('btn-cambiar-ubicacion');
+  };
+
   document.getElementById('perfil-location-content').addEventListener('click', async (e) => {
     if (e.target.id !== 'btn-borrar-ubicacion') return;
     try {
       await setDoc(ref, { savedLocation: null }, { merge: true });
       renderSavedLocation(null);
+      closeLocationEditor();
       toast('✅ Ubicación borrada');
     } catch (e) { toast('❌ Error al borrar'); }
     finally { window.TintinReleaseProfileButton?.('btn-borrar-ubicacion'); }
   });
+
+  document.getElementById('btn-cancelar-ubicacion').onclick = closeLocationEditor;
+
+  document.getElementById('btn-guardar-ubicacion').onclick = async () => {
+    const savedLocation = toSavedLocation(locationPicker.getSelected() || {});
+    if (!savedLocation) {
+      toast('❌ Elegí una de las sugerencias para guardar la ubicación');
+      window.TintinReleaseProfileButton?.('btn-guardar-ubicacion');
+      return;
+    }
+    try {
+      await setDoc(ref, {
+        savedLocation,
+        address: savedLocation.address || savedLocation.name,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+      document.getElementById('perfil-dir').value = savedLocation.address || savedLocation.name;
+      renderSavedLocation(savedLocation);
+      closeLocationEditor();
+      toast('✅ Ubicación guardada');
+    } catch (e) { toast('❌ Error al guardar la ubicación'); }
+    finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
+  };
 
   // Orders
   document.getElementById('perfil-orders-card').style.display = 'block';

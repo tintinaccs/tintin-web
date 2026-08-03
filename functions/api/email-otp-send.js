@@ -141,8 +141,16 @@ export async function onRequest(context) {
     // código. Excepción: el Super Admin siempre puede usar cualquiera de
     // los dos métodos, a pedido explícito.
     if (email !== SUPERADMIN_EMAIL.toLowerCase()) {
-      const { exists, providers } = await lookupUserProvidersByEmail(env, email);
-      if (exists && providers.includes('google.com')) {
+      let account;
+      try {
+        account = await lookupUserProvidersByEmail(env, email);
+      } catch (error) {
+        // Sin poder confirmar el método de la cuenta no se manda el código:
+        // hacerlo igual sería justamente saltear este control.
+        console.error('[email-otp-send] No se pudo verificar el metodo de la cuenta:', error?.message || error);
+        return jsonResponse({ success: false, error: 'storage_unavailable' }, 503, origin, requestUrl);
+      }
+      if (account.exists && account.providers.includes('google.com')) {
         return jsonResponse({ success: false, error: 'google_account_exists' }, 409, origin, requestUrl);
       }
     }
@@ -186,6 +194,16 @@ export async function onRequest(context) {
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {
-    return jsonResponse({ success: false, error: clean(error?.message || error, 300) }, 400, origin, requestUrl);
+    // Mismo criterio que email-otp-verify: el detalle interno va a los logs,
+    // nunca al cliente como código de error (no lo sabe traducir y expone
+    // información del servidor).
+    console.error('[email-otp-send] Error inesperado:', error?.message || error);
+    const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
+    return jsonResponse(
+      { success: false, error: badRequest ? 'invalid_request' : 'server_error' },
+      badRequest ? 400 : 500,
+      origin,
+      requestUrl
+    );
   }
 }

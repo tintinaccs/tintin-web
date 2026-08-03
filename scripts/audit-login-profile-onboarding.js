@@ -11,7 +11,10 @@ const checks = [
   ['el nombre del proveedor se confirma antes de editar', login.includes('login-profile-name-confirmation')],
   ['el teléfono se puede solicitar independientemente', login.includes("phoneField.style.display = plan.needsPhone ? '' : 'none'")],
   ['el superadmin se excluye por rol o correo', moduleSource.includes("role).toLowerCase() === 'superadmin'")],
-  ['solo se completa un teléfono ausente', moduleSource.includes('if (!currentPhone && phone)')],
+  ['solo se completa un teléfono ausente', moduleSource.includes('if (!currentPhone && clean(submittedPhone))')],
+  ['el nombre y el apellido se validan por separado', moduleSource.includes('export function isValidNamePart')],
+  ['los nombres genéricos no se guardan como reales', moduleSource.includes('PLACEHOLDER_NAMES')],
+  ['la ubicación exige coordenadas, no solo texto', moduleSource.includes('export function hasUsableAddress')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);

@@ -77,13 +77,20 @@ async function signJwt(header, payload, privateKeyPem) {
 
 // Reutilizable dentro del mismo isolate de Worker (mejor esfuerzo — si el
 // isolate se recicla, simplemente se pide uno nuevo, no rompe nada).
-let cachedAccessToken = null;
-let cachedAccessTokenExpiry = 0;
+//
+// La caché va indexada POR SCOPE: un token pedido para `datastore` no sirve
+// para llamar a Identity Toolkit (Google responde 403 por scope insuficiente).
+// Cachear un solo token sin distinguir el scope hacía que, dentro de un mismo
+// request, el token de Firestore (que se pide primero, al leer el código OTP)
+// se reutilizara para `accounts:lookup` y el login fallara siempre.
+const accessTokenCache = new Map();
 
 /** Access token OAuth2 de la cuenta de servicio, para llamar APIs de Google admin. */
 export async function getGoogleAccessToken(env, scopes) {
   const now = Math.floor(Date.now() / 1000);
-  if (cachedAccessToken && cachedAccessTokenExpiry - 30 > now) return cachedAccessToken;
+  const scopeKey = [...scopes].sort().join(' ');
+  const cached = accessTokenCache.get(scopeKey);
+  if (cached && cached.expiry - 30 > now) return cached.token;
 
   const sa = parseServiceAccount(env);
   const assertion = await signJwt(
@@ -110,9 +117,11 @@ export async function getGoogleAccessToken(env, scopes) {
   if (!response.ok || !data.access_token) {
     throw new Error('No se pudo autenticar la cuenta de servicio de Firebase: ' + (data.error_description || data.error || response.status));
   }
-  cachedAccessToken = data.access_token;
-  cachedAccessTokenExpiry = now + Number(data.expires_in || 3600);
-  return cachedAccessToken;
+  accessTokenCache.set(scopeKey, {
+    token: data.access_token,
+    expiry: now + Number(data.expires_in || 3600)
+  });
+  return data.access_token;
 }
 
 /**
@@ -139,7 +148,17 @@ export async function createFirebaseCustomToken(env, uid, extraClaims = {}) {
   );
 }
 
-/** Busca una cuenta por email y devuelve sus proveedores vinculados (ej. 'google.com'), sin crear nada. */
+/**
+ * Busca una cuenta por email y devuelve sus proveedores vinculados
+ * (ej. 'google.com'), sin crear nada.
+ *
+ * Si la consulta falla, lanza. Antes devolvía `{exists:false}` ante cualquier
+ * error, y como de esta respuesta depende el bloqueo "esta cuenta es de
+ * Google, no mandes un código por correo", un fallo de la consulta dejaba
+ * pasar el envío como si la cuenta no existiera. Un control de identidad
+ * tiene que fallar cerrado: quien llama decide qué mostrar, pero no puede
+ * confundir "no existe" con "no pude averiguarlo".
+ */
 export async function lookupUserProvidersByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
   const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
@@ -148,6 +167,9 @@ export async function lookupUserProvidersByEmail(env, email) {
     body: JSON.stringify({ email: [email] })
   });
   const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error('No se pudo verificar el metodo de la cuenta: ' + (data?.error?.message || response.status));
+  }
   const user = Array.isArray(data.users) ? data.users[0] : null;
   if (!user) return { exists: false, providers: [] };
   const providers = (user.providerUserInfo || []).map(p => p.providerId).filter(Boolean);
