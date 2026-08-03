@@ -10,11 +10,12 @@ function ready(fn){
 
 /* Estas hojas se cargan desde un módulo global para que la misma identidad
    llegue a cuenta, carrito, buscador, colecciones, checkout, perfil y modales
-   sin repetir un <link> en cada HTML. El orden importa: polish va al final. */
+   sin repetir un <link> en cada HTML. El orden importa: safety va al final. */
 function loadResponsiveBrandStyles(){
  var files=[
   ['tt-responsive-brand-surfaces-css','css/tintin-responsive-brand-surfaces.css?v=tintin-20260803-brand-surfaces-1'],
-  ['tt-responsive-brand-polish-css','css/tintin-responsive-brand-polish.css?v=tintin-20260803-brand-polish-1']
+  ['tt-responsive-brand-polish-css','css/tintin-responsive-brand-polish.css?v=tintin-20260803-brand-polish-1'],
+  ['tt-responsive-brand-safety-css','css/tintin-responsive-brand-safety.css?v=tintin-20260803-brand-safety-1']
  ];
  files.forEach(function(entry){
   var id=entry[0],href=entry[1];
