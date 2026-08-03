@@ -7,7 +7,24 @@ body:has(.login-page) {
   --login-accent: var(--tt-accent, #ad3f67);
   --login-soft: var(--tt-accent-soft, #f9e8ef);
   --login-border: var(--tt-border, #edcbd7);
+  --header-h: 0px;
+  padding-top: 0 !important;
   color: var(--login-text);
+}
+
+/* Login es una pantalla independiente. El shell público puede montarse para
+   reutilizar servicios, pero ninguno de sus headers o menús debe mostrarse
+   en desktop, tablet ni mobile. Esta especificidad supera el display:block
+   !important del breakpoint tablet sin alterar la navegación de la tienda. */
+body:has(.login-page) :is(
+  #tt-header-desktop-tablet,
+  #tt-header-tablet,
+  #tt-tablet-menu,
+  .tt-tabbar
+) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 body:has(.login-page) .login-box,
