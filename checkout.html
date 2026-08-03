@@ -183,8 +183,16 @@
           <div>📍 Marcá tu ubicación exacta en el mapa <strong>(obligatorio)</strong></div>
           <div class="ck-map-tip-steps">1) Buscala arriba&nbsp; o &nbsp;2) tocá el mapa para marcar el punto</div>
         </div>
-        <div class="ck-saved-location-hint" id="ck-saved-location-hint">
-          📍 Usamos tu ubicación guardada. <button type="button" id="ck-saved-location-change">Marcar otra</button>
+        <!-- Confirmación de un toque para quien ya tiene ubicación guardada:
+             se la muestra sobre el mapa y elige seguir con esa o marcar otra. -->
+        <div class="ck-saved-confirm" id="ck-saved-location-hint" style="display:none">
+          <div class="ck-saved-confirm-title" id="ck-saved-confirm-title">¿Te lo llevamos acá?</div>
+          <div class="ck-saved-confirm-name" id="ck-saved-confirm-name"></div>
+          <div class="ck-saved-confirm-detail" id="ck-saved-confirm-detail"></div>
+          <div class="ck-saved-confirm-actions">
+            <button type="button" class="ck-saved-confirm-yes" id="ck-saved-location-confirm">Sí, es acá</button>
+            <button type="button" class="ck-saved-confirm-no" id="ck-saved-location-change">Marcar otra</button>
+          </div>
         </div>
         <div class="ck-map-search-wrap">
           <input type="text" class="ck-input" id="ck-map-search" placeholder="Buscar local, calle o punto de referencia…" autocomplete="off" />
@@ -374,6 +382,7 @@ import {
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/checkout-saved-location.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
@@ -1242,15 +1251,9 @@ document.getElementById('btn-step2-next').onclick = () => {
 
 document.getElementById('btn-step2-back').onclick = () => goToStep(0);
 
-document.getElementById('ck-saved-location-change').onclick = () => {
-  hideSavedLocationHint();
-  orderData.mapLocation = null;
-  document.getElementById('ck-location-name').value = '';
-  const coordsEl = document.getElementById('ck-map-coords');
-  coordsEl.classList.add('ck-map-coords-missing');
-  coordsEl.textContent = '⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar';
-  document.getElementById('ck-map-search')?.focus();
-};
+// "Marcar otra" lo maneja attachSavedLocationConfirm (ver
+// maybeApplySavedLocation): tenerlo también acá dejaba dos handlers haciendo
+// lo mismo sobre el mismo botón.
 
 // ---- STEP 3: DATOS ----
 
@@ -1479,7 +1482,10 @@ function saveMapLocation(lat, lng, place) {
 }
 
 function hideSavedLocationHint() {
-  document.getElementById('ck-saved-location-hint')?.classList.remove('show');
+  // Tocó el mapa o arrastró el pin: ya eligió a mano, no hay nada que
+  // confirmar.
+  const card = document.getElementById('ck-saved-location-hint');
+  if (card) card.style.display = 'none';
 }
 
 function placeMarker(lat, lng, place) {
@@ -1509,14 +1515,39 @@ function placeMarker(lat, lng, place) {
 // marcó ninguna en este checkout, se precarga sola — así no hay que buscarla
 // de nuevo cada vez. Se puede cambiar en cualquier momento tocando el mapa,
 // buscando otra, o con el botón "Marcar otra" del aviso.
+let _savedLocationConfirm = null;
+
 function maybeApplySavedLocation() {
   if (orderData.mapLocation) return;
   if (!_mapInstance) return;
   const saved = currentUserProfile?.savedLocation;
-  if (!saved || typeof saved.lat !== 'number' || typeof saved.lng !== 'number' || !saved.name) return;
+  if (!isConfirmableLocation(saved)) return;
+
+  // Se precarga en el mapa para que se vea dónde es, y se pide confirmarla de
+  // un toque en vez de darla por buena en silencio (la gente se muda, o el
+  // pedido va a otra dirección).
   _mapInstance.setView([saved.lat, saved.lng], 16);
   placeMarker(saved.lat, saved.lng, { name: saved.name, address: saved.address });
-  document.getElementById('ck-saved-location-hint')?.classList.add('show');
+
+  if (_savedLocationConfirm) return;
+  _savedLocationConfirm = attachSavedLocationConfirm({
+    card: document.getElementById('ck-saved-location-hint'),
+    titleEl: document.getElementById('ck-saved-confirm-title'),
+    nameEl: document.getElementById('ck-saved-confirm-name'),
+    detailEl: document.getElementById('ck-saved-confirm-detail'),
+    confirmButton: document.getElementById('ck-saved-location-confirm'),
+    changeButton: document.getElementById('ck-saved-location-change'),
+  }, saved, {
+    onChange: () => {
+      // Empieza de cero: sin punto marcado y con el buscador enfocado.
+      orderData.mapLocation = null;
+      const coordsEl = document.getElementById('ck-map-coords');
+      coordsEl.classList.add('ck-map-coords-missing');
+      coordsEl.textContent = '⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar';
+      document.getElementById('ck-location-name').value = '';
+      document.getElementById('ck-map-search')?.focus();
+    },
+  });
 }
 
 // "Guardar esta ubicación en mi perfil" — no bloquea el avance del checkout

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T17:24:42.082Z",
-  "sourceFingerprint": "c81d5e69329d1ec22e08c94320f64152cd29d754484c2b2928753441221be094",
+  "generatedAt": "2026-08-03T17:33:43.978Z",
+  "sourceFingerprint": "e1e27a0c370d4682979c8d7d2ff233d9d985a01957b59d8da6e5c9e25975308a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 460,
-    "textFiles": 428,
-    "totalBytes": 5291047,
+    "files": 462,
+    "textFiles": 430,
+    "totalBytes": 5298866,
     "pages": 18,
-    "modules": 270
+    "modules": 272
   },
   "viewports": [
     {
@@ -7735,8 +7735,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 86245,
-      "sha256": "19a39ea92d1da860bf8b5e5a11ad9870e33ca2898139a04797c9e35df7271352",
+      "bytes": 87920,
+      "sha256": "f7ed7687f79c200ec4ff54dc9f415cb883f6519000d3a8d7e36a7f5fb7a0e180",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7757,13 +7757,13 @@
           "error": ""
         },
         {
-          "line": 353,
+          "line": 361,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 68,
+      "ids": 72,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -7788,22 +7788,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1787
+          "line": 1818
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1788
+          "line": 1819
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1789
+          "line": 1820
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1790
+          "line": 1821
         }
       ],
       "styles": [
@@ -7913,7 +7913,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 338
+          "line": 346
         },
         {
           "raw": "index.html",
@@ -7923,7 +7923,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 343
+          "line": 351
         }
       ],
       "references": [
@@ -7954,25 +7954,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1787,
+          "line": 1818,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1788,
+          "line": 1819,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1789,
+          "line": 1820,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1790,
+          "line": 1821,
           "exists": true
         },
         {
@@ -8080,7 +8080,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 343,
+          "line": 351,
           "exists": true
         }
       ],
@@ -8102,17 +8102,17 @@
         {
           "id": "panel-2",
           "classes": "ck-panel",
-          "line": 212
+          "line": 220
         },
         {
           "id": "panel-3",
           "classes": "ck-panel",
-          "line": 245
+          "line": 253
         },
         {
           "id": "panel-4",
           "classes": "ck-panel",
-          "line": 295
+          "line": 303
         }
       ],
       "buttons": [
@@ -8159,8 +8159,24 @@
           "line": 159
         },
         {
+          "id": "ck-saved-location-confirm",
+          "classes": [
+            "ck-saved-confirm-yes"
+          ],
+          "type": "button",
+          "text": "Sí, es acá",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 193
+        },
+        {
           "id": "ck-saved-location-change",
-          "classes": [],
+          "classes": [
+            "ck-saved-confirm-no"
+          ],
           "type": "button",
           "text": "Marcar otra",
           "ariaLabel": "",
@@ -8168,7 +8184,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 187
+          "line": 194
         },
         {
           "id": "btn-step2-next",
@@ -8182,7 +8198,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 206
+          "line": 214
         },
         {
           "id": "btn-step2-back",
@@ -8196,7 +8212,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 207
+          "line": 215
         },
         {
           "id": "btn-step3-next",
@@ -8210,7 +8226,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 239
+          "line": 247
         },
         {
           "id": "btn-step3-back",
@@ -8224,7 +8240,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 240
+          "line": 248
         },
         {
           "id": "btn-step4-next",
@@ -8238,7 +8254,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 289
+          "line": 297
         },
         {
           "id": "btn-step4-back",
@@ -8252,7 +8268,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 290
+          "line": 298
         },
         {
           "id": "ck-confirm-btn",
@@ -8266,7 +8282,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 312
+          "line": 320
         }
       ],
       "controls": [
@@ -8312,7 +8328,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 190,
+          "line": 198,
           "labeled": true
         },
         {
@@ -8321,7 +8337,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 197,
+          "line": 205,
           "labeled": true
         },
         {
@@ -8330,7 +8346,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 199,
+          "line": 207,
           "labeled": true
         },
         {
@@ -8339,7 +8355,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 220,
+          "line": 228,
           "labeled": true
         },
         {
@@ -8348,7 +8364,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 225,
+          "line": 233,
           "labeled": true
         },
         {
@@ -8357,7 +8373,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 226,
+          "line": 234,
           "labeled": true
         },
         {
@@ -8366,7 +8382,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 231,
+          "line": 239,
           "labeled": true
         },
         {
@@ -8375,7 +8391,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 235,
+          "line": 243,
           "labeled": true
         },
         {
@@ -8384,7 +8400,7 @@
           "name": "ck-pay",
           "type": "radio",
           "ariaLabel": "",
-          "line": 254,
+          "line": 262,
           "labeled": true
         },
         {
@@ -8393,7 +8409,7 @@
           "name": "ck-pay",
           "type": "radio",
           "ariaLabel": "",
-          "line": 266,
+          "line": 274,
           "labeled": true
         }
       ]
@@ -17096,6 +17112,17 @@
       ]
     },
     {
+      "path": "js/checkout-saved-location.js",
+      "bytes": 2995,
+      "sha256": "6c6e375e1152a2fdc004176578b4d2f30bac0f7e78f39d8657328867cd5be793",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/collections-maintenance.js",
       "bytes": 7804,
       "sha256": "c8c85937226d122003c02d31516d2390cccb9fd85d3a5a6fedb8151ceafd043b",
@@ -21934,6 +21961,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/saved-location.test.mjs",
+      "bytes": 1893,
+      "sha256": "9a2daebc80c937ed09dee17c521e87101fb9eff05f06e6708430ea3a2da60592",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/checkout-saved-location.js",
+          "target": "js/checkout-saved-location.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "bytes": 2520,
       "sha256": "afe01f259f40b8d37d378f7fff516f9aa68ab9f7f3dbeae9c23fc3f63559f25f",
@@ -22617,8 +22674,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 86245,
-      "sha256": "19a39ea92d1da860bf8b5e5a11ad9870e33ca2898139a04797c9e35df7271352"
+      "bytes": 87920,
+      "sha256": "f7ed7687f79c200ec4ff54dc9f415cb883f6519000d3a8d7e36a7f5fb7a0e180"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -22677,8 +22734,8 @@
     {
       "path": "css/checkout.css",
       "extension": ".css",
-      "bytes": 22359,
-      "sha256": "0ce092e8da9f1af5c444de326c8fbbb619df675097473a6348b1033982e836a2"
+      "bytes": 23615,
+      "sha256": "f0d665e5f07d3b1d52dc0ce7fc2397b52e08865d379b3d34d21757b4eb997930"
     },
     {
       "path": "css/collections-page.css",
@@ -23375,6 +23432,12 @@
       "extension": ".js",
       "bytes": 27173,
       "sha256": "822fd1205516da5a30074f46d6162dece4c4b51a76596b2b02bbb91d5d843dc5"
+    },
+    {
+      "path": "js/checkout-saved-location.js",
+      "extension": ".js",
+      "bytes": 2995,
+      "sha256": "6c6e375e1152a2fdc004176578b4d2f30bac0f7e78f39d8657328867cd5be793"
     },
     {
       "path": "js/collections-maintenance.js",
@@ -24865,6 +24928,12 @@
       "sha256": "08bfe7c94d56ac7bc29fdae7dbb42ff1c7a30f0427aec2ad1b4ee895ff06095b"
     },
     {
+      "path": "tests/checkout/saved-location.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1893,
+      "sha256": "9a2daebc80c937ed09dee17c521e87101fb9eff05f06e6708430ea3a2da60592"
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "extension": ".mjs",
       "bytes": 2520,
@@ -25385,28 +25454,28 @@
     },
     {
       "file": "checkout.html",
-      "line": 343,
+      "line": 351,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 765,
+      "line": 774,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 906,
+      "line": 915,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 916,
+      "line": 925,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -27985,11 +28054,11 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 327
+          "line": 335
         },
         {
           "file": "checkout.html",
-          "line": 328
+          "line": 336
         }
       ]
     },
@@ -28038,7 +28107,7 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 916
+          "line": 925
         },
         {
           "file": "js/profile-gate.js",
@@ -28083,7 +28152,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1662,
+      "line": 1693,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -28656,7 +28725,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 750,
+            "line": 759,
             "operation": "collection"
           },
           {
@@ -28791,12 +28860,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 452,
+            "line": 461,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 485,
+            "line": 494,
             "operation": "doc"
           },
           {
@@ -29146,12 +29215,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1528,
+            "line": 1559,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1770,
+            "line": 1801,
             "operation": "doc"
           },
           {

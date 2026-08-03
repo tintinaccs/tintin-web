@@ -621,21 +621,6 @@
 
     /* Aviso "usando tu ubicación guardada" — aparece solo si el perfil ya
        tiene una ubicación con nombre guardada y se precargó sola. */
-    .ck-saved-location-hint {
-      display: none;
-      background: #e8f5e9;
-      color: #2e7d32;
-      padding: 8px 14px;
-      font-size: 11px;
-      font-weight: 600;
-      border-bottom: 1px solid var(--border);
-    }
-    .ck-saved-location-hint.show { display: block; }
-    .ck-saved-location-hint button {
-      background: none; border: none; padding: 0; margin-left: 4px;
-      color: #2e7d32; font-weight: 800; text-decoration: underline;
-      cursor: pointer; font-size: 11px; font-family:Montserrat;
-    }
 
     /* Nombre obligatorio de la ubicación + guardar en el perfil */
     .ck-map-name-wrap { background: #fff; padding: 12px 14px 14px; }
@@ -774,4 +759,80 @@
   color: #6b5259;
   font-size: 13px;
   line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------
+   "¿Te lo llevamos acá?" — confirmación de la ubicación guardada.
+   Se muestra sobre el mapa, con el punto ya marcado, para que se
+   vea dónde es y no haya que buscarla de nuevo en cada compra.
+   --------------------------------------------------------------- */
+.ck-saved-confirm {
+  padding: 14px;
+  border-bottom: 1px solid var(--border, #f0d8e0);
+  background: #fdf6f9;
+}
+
+.ck-saved-confirm-title {
+  color: var(--text, #2b2b2b);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ck-saved-confirm-name {
+  margin-top: 4px;
+  color: var(--text, #2b2b2b);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ck-saved-confirm-detail {
+  margin-top: 2px;
+  /* Contraste ≥ 4.5:1 sobre el fondo rosado. */
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.ck-saved-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ck-saved-confirm-yes,
+.ck-saved-confirm-no {
+  flex: 1 1 140px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 50px;
+  font: 800 12px/1 "Montserrat", sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.ck-saved-confirm-yes {
+  border: none;
+  background: var(--color-brand-primary, #ad3f67);
+  color: #fff;
+}
+
+.ck-saved-confirm-yes:hover { background: var(--color-brand-primary-hover, #8b2642); }
+
+.ck-saved-confirm-no {
+  border: 1.5px solid var(--color-brand-primary, #ad3f67);
+  background: transparent;
+  color: var(--color-brand-primary, #ad3f67);
+}
+
+.ck-saved-confirm-no:hover {
+  background: var(--color-brand-primary, #ad3f67);
+  color: #fff;
+}
+
+.ck-saved-confirm-yes:focus-visible,
+.ck-saved-confirm-no:focus-visible {
+  outline: 3px solid rgba(173, 63, 103, .45);
+  outline-offset: 2px;
 }
