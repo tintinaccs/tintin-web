@@ -11,7 +11,7 @@ import {
 } from '../../js/profile-onboarding.mjs';
 
 const superAdminEmail = 'tintinaccs@gmail.com';
-const ADDRESS = { address: 'Av. España 1234, Asunción', addressLat: -25.29, addressLng: -57.63 };
+const ADDRESS = { savedLocation: { lat: -25.29, lng: -57.63, name: 'Av. España 1234', address: 'Av. España 1234, Asunción' }, address: 'Av. España 1234, Asunción' };
 const COMPLETE = { name: 'Juan Pérez', phone: '+595981123456', ...ADDRESS };
 
 test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
@@ -40,7 +40,7 @@ test('una cuenta completa entra directo sin pedir ni escribir datos', () => {
     submittedFirstName: 'Otro',
     submittedLastName: 'Nombre',
     submittedPhone: '+595971000000',
-    submittedAddress: { address: 'Otra dirección', addressLat: 1, addressLng: 1 },
+    submittedAddress: { address: 'Otra dirección', name: 'Otra', lat: 1, lng: 1 },
   }), {});
 });
 
@@ -150,15 +150,13 @@ test('un cambio de nombre solo se aplica cuando fue explícito', () => {
   });
 });
 
-test('la ubicación se guarda con texto y coordenadas', () => {
+test('la ubicación se guarda en el mismo formato que usa el checkout', () => {
   assert.deepEqual(buildMissingProfilePatch({
     currentProfile: { name: 'Juan Pérez', phone: '+595981123456' },
     submittedAddress: { address: 'Av. España 1234', addressLat: -25.29, addressLng: -57.63, addressName: 'Casa' },
   }), {
+    savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa', address: 'Av. España 1234' },
     address: 'Av. España 1234',
-    addressLat: -25.29,
-    addressLng: -57.63,
-    addressName: 'Casa',
   });
 });
 
@@ -167,6 +165,17 @@ test('una ubicación sin coordenadas no se guarda', () => {
     currentProfile: {},
     submittedAddress: { address: 'Escrito a mano, sin marcar en el mapa' },
   }), {});
+});
+
+test('una ubicación guardada desde el checkout no se vuelve a pedir', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { name: 'Juan Pérez', phone: '+595981123456', savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' } },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.needsAddress, false);
+  assert.equal(plan.skip, true);
 });
 
 test('un nombre inválido nunca se guarda', () => {
@@ -212,9 +221,9 @@ test('readProfileName prefiere los campos separados y si no parte `name`', () =>
   assert.deepEqual(readProfileName({}), { firstName: '', lastName: '' });
 });
 
-test('hasUsableAddress exige texto y coordenadas reales', () => {
+test('hasUsableAddress exige nombre y coordenadas reales', () => {
   assert.equal(hasUsableAddress(ADDRESS), true);
   assert.equal(hasUsableAddress({ address: 'Solo texto' }), false);
-  assert.equal(hasUsableAddress({ address: 'Cero', addressLat: 0, addressLng: 0 }), false);
-  assert.equal(hasUsableAddress({ addressLat: -25.29, addressLng: -57.63 }), false);
+  assert.equal(hasUsableAddress({ savedLocation: { lat: 0, lng: 0, name: 'Cero' } }), false);
+  assert.equal(hasUsableAddress({ savedLocation: { lat: -25.29, lng: -57.63 } }), false);
 });

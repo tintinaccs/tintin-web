@@ -72,12 +72,31 @@ export function readProfileName(profile = {}) {
   return splitFullName(profile.name);
 }
 
-/** ¿Hay una ubicación utilizable para el checkout (texto + coordenadas)? */
+/**
+ * ¿Hay una ubicación que el checkout pueda reutilizar?
+ *
+ * El formato es el que el checkout ya venía guardando desde "Guardar esta
+ * ubicación en mi perfil": `savedLocation {lat, lng, name, address}`. El alta
+ * de la cuenta escribe exactamente ese campo, así que una ubicación cargada
+ * en cualquiera de los dos lados sirve en el otro y no se vuelve a pedir.
+ * `maybeApplySavedLocation()` del checkout además exige `name`.
+ */
 export function hasUsableAddress(profile = {}) {
-  const label = clean(profile.address || profile.addressLabel);
-  const lat = Number(profile.addressLat);
-  const lng = Number(profile.addressLng);
-  return Boolean(label) && Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  const saved = profile.savedLocation;
+  if (!saved || !clean(saved.name)) return false;
+  const lat = Number(saved.lat);
+  const lng = Number(saved.lng);
+  return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+}
+
+/** Convierte un resultado del buscador al formato `savedLocation`. */
+export function toSavedLocation(place = {}) {
+  const lat = Number(place.addressLat ?? place.lat);
+  const lng = Number(place.addressLng ?? place.lng);
+  const name = clean(place.addressName || place.name);
+  const address = clean(place.address);
+  if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
 /**
@@ -152,11 +171,16 @@ export function buildMissingProfilePatch({
 
   if (!currentPhone && clean(submittedPhone)) patch.phone = clean(submittedPhone);
 
-  if (submittedAddress && !hasUsableAddress(currentProfile) && hasUsableAddress(submittedAddress)) {
-    patch.address = clean(submittedAddress.address || submittedAddress.addressLabel);
-    patch.addressLat = Number(submittedAddress.addressLat);
-    patch.addressLng = Number(submittedAddress.addressLng);
-    if (clean(submittedAddress.addressName)) patch.addressName = clean(submittedAddress.addressName);
+  if (submittedAddress && !hasUsableAddress(currentProfile)) {
+    const savedLocation = toSavedLocation(submittedAddress);
+    if (savedLocation) {
+      patch.savedLocation = savedLocation;
+      // `address` es el texto suelto que el checkout usa para prellenar el
+      // campo "Dirección de entrega" y que perfil.html muestra.
+      if (!clean(currentProfile.address)) {
+        patch.address = savedLocation.address || savedLocation.name;
+      }
+    }
   }
 
   return patch;
