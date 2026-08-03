@@ -1172,7 +1172,7 @@ function _renderProductDetail(product) {
     if (selectedImage) {
       galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
     } else {
-      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
       galleryMain.style.display = 'flex';
       galleryMain.style.alignItems = 'center';
       galleryMain.style.justifyContent = 'center';
@@ -1301,7 +1301,7 @@ function _renderProductDetail(product) {
     let html = `<span class="tt-share-label">Compartir</span>`;
     if (navigator.share) {
       html += `<button type="button" class="tt-share-btn" data-share-action="native" aria-label="Compartir">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         <span class="tt-share-btn-label">Compartir</span>
       </button>`;
     }
@@ -1310,7 +1310,7 @@ function _renderProductDetail(product) {
       <span class="tt-share-btn-label">WhatsApp</span>
     </a>`;
     html += `<button type="button" class="tt-share-btn" data-share-action="copy" aria-label="Copiar enlace">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
       <span class="tt-share-btn-label">Copiar enlace</span>
     </button>`;
     shareEl.innerHTML = html;
@@ -1517,7 +1517,7 @@ function _openLightbox(images, startIdx) {
     lb.setAttribute('aria-label', 'Imagen ampliada');
     lb.innerHTML = `
       <button type="button" class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <button type="button" class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
       <img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false">
@@ -1586,7 +1586,7 @@ function initBackToTop() {
   const btn = document.createElement('button');
   btn.className = 'tt-back-to-top';
   btn.setAttribute('aria-label', 'Volver al inicio');
-  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
+  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
   document.body.appendChild(btn);
   window.addEventListener('scroll', () => {
     btn.classList.toggle('visible', window.scrollY > 320);
