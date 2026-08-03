@@ -265,11 +265,11 @@ async function auditCheckout(page, vp) {
 
 async function auditLogin(page, vp) {
   await loadStatic(page, 'login.html');
-  const brandVisible = await page.locator('.login-brand').isVisible().catch(() => false);
+  // Fase G: una sola tarjeta centrada en todas las resoluciones — ya no
+  // existe una columna de marca separada, así que el wordmark chico vive
+  // siempre arriba de la tarjeta, en mobile, tablet y desktop por igual.
   const mobileLogoVisible = await page.locator('.login-mobile-logo').isVisible().catch(() => false);
-  if (vp.width <= 768 && brandVisible) addFailure('login', vp.name, 'default', 'La columna de marca desktop aparece en mobile.');
-  if (vp.width <= 768 && !mobileLogoVisible) addFailure('login', vp.name, 'default', 'Falta el logo mobile.');
-  if (vp.width > 768 && !brandVisible) addFailure('login', vp.name, 'default', 'Falta la columna de marca en tablet/desktop.');
+  if (!mobileLogoVisible) addFailure('login', vp.name, 'default', 'Falta el logo de la tarjeta.');
 
   const formBox = await page.locator('.login-box').boundingBox().catch(() => null);
   if (!formBox || formBox.x < -2 || formBox.x + formBox.width > vp.width + 2) {
@@ -281,7 +281,7 @@ async function auditLogin(page, vp) {
   const geo = await visibleGeometry(page);
   if (geo.scrollWidth > vp.width + 3 || geo.bad.length) addFailure('login', vp.name, 'default', 'Hay desborde horizontal visible.', geo);
 
-  report.push({ page: 'login', viewport: vp, brandVisible, mobileLogoVisible, geometry: geo });
+  report.push({ page: 'login', viewport: vp, mobileLogoVisible, geometry: geo });
   if (official.some(item => item.name === vp.name)) {
     await page.screenshot({ path: path.join(outDir, `${vp.name}-login.png`), fullPage: true });
   }
