@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T16:20:53.629Z",
-  "sourceFingerprint": "80feece43d623bf71edbcfcca9c0a23cace9a31fc5f18c85dadf871018624617",
+  "generatedAt": "2026-08-03T16:34:43.549Z",
+  "sourceFingerprint": "ec8af749f8cd405e75d85549fe48d7e9d3c931bfe67c95c372def607806828e5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 454,
-    "textFiles": 422,
-    "totalBytes": 5239365,
+    "files": 455,
+    "textFiles": 423,
+    "totalBytes": 5251742,
     "pages": 18,
-    "modules": 264
+    "modules": 265
   },
   "viewports": [
     {
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 39767,
-      "sha256": "718a03862a57d0d4c811f01b2ae7d5d21f0dd5740562c9ffc4f3a1b2cad9ab1f",
+      "bytes": 42313,
+      "sha256": "3b32ca29fc7c8c7ee0d74ea4e89d081f352c0ae94b2e784d4f1a6a7b92b00a75",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11552,7 +11552,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          59
+          60
         ]
       },
       "duplicateIds": [],
@@ -11564,13 +11564,13 @@
           "error": ""
         },
         {
-          "line": 141,
+          "line": 149,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 36,
+      "ids": 39,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 816
+          "line": 865
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 817
+          "line": 866
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 818
+          "line": 867
         }
       ],
       "styles": [
@@ -11680,24 +11680,29 @@
           "line": 40
         },
         {
+          "raw": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+          "target": null,
+          "line": 41
+        },
+        {
           "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/location-picker.css",
-          "line": 41
+          "line": 42
         },
         {
           "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
-          "line": 42
+          "line": 43
         },
         {
           "raw": "css/motion.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/motion.css",
-          "line": 43
+          "line": 44
         },
         {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 44
+          "line": 45
         }
       ],
       "images": [],
@@ -11710,7 +11715,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 132
+          "line": 140
         }
       ],
       "references": [
@@ -11741,19 +11746,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 816,
+          "line": 865,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 817,
+          "line": 866,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 818,
+          "line": 867,
           "exists": true
         },
         {
@@ -11843,31 +11848,31 @@
         {
           "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/location-picker.css",
-          "line": 41,
+          "line": 42,
           "exists": true
         },
         {
           "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
-          "line": 42,
+          "line": 43,
           "exists": true
         },
         {
           "raw": "css/motion.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/motion.css",
-          "line": 43,
+          "line": 44,
           "exists": true
         },
         {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 44,
+          "line": 45,
           "exists": true
         },
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 132,
+          "line": 140,
           "exists": true
         }
       ],
@@ -11889,7 +11894,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 66
+          "line": 67
         },
         {
           "id": "btn-send-otp",
@@ -11903,7 +11908,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 84
+          "line": 85
         },
         {
           "id": "btn-verify-otp",
@@ -11917,7 +11922,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 94
+          "line": 95
         },
         {
           "id": "btn-resend-otp",
@@ -11931,7 +11936,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 95
+          "line": 96
         },
         {
           "id": "btn-change-email",
@@ -11945,7 +11950,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 96
+          "line": 97
         },
         {
           "id": "btn-change-profile-name",
@@ -11959,7 +11964,21 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 103
+          "line": 104
+        },
+        {
+          "id": "login-profile-locate",
+          "classes": [
+            "tt-map-locate"
+          ],
+          "type": "button",
+          "text": "📍 Usar mi ubicación actual",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 127
         },
         {
           "id": "btn-save-profile",
@@ -11973,7 +11992,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 126
+          "line": 134
         }
       ],
       "controls": [
@@ -11983,7 +12002,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 83,
+          "line": 84,
           "labeled": true
         },
         {
@@ -11992,7 +12011,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 93,
+          "line": 94,
           "labeled": true
         },
         {
@@ -12001,7 +12020,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 107,
+          "line": 108,
           "labeled": true
         },
         {
@@ -12010,7 +12029,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 109,
+          "line": 110,
           "labeled": true
         },
         {
@@ -12019,7 +12038,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "País del teléfono",
-          "line": 114,
+          "line": 115,
           "labeled": true
         },
         {
@@ -12028,7 +12047,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 115,
+          "line": 116,
           "labeled": true
         },
         {
@@ -12037,7 +12056,16 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 121,
+          "line": 124,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "login-profile-address-name",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 131,
           "labeled": true
         }
       ]
@@ -17954,6 +17982,37 @@
       "endpoints": []
     },
     {
+      "path": "js/location-map.js",
+      "bytes": 7803,
+      "sha256": "2bc13ee5cd2cb33755cdde1e8fabd5fc980bc7e4f8c0ca562bca1a3fc1195843",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./location-picker.js?v=tintin-20260803-location-picker-1",
+          "target": "js/location-picker.js",
+          "dynamic": false,
+          "line": 17
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+          "line": 19
+        },
+        {
+          "url": "https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+          "line": 69
+        },
+        {
+          "url": "https://www.openstreetmap.org/copyright",
+          "line": 70
+        }
+      ]
+    },
+    {
       "path": "js/location-picker.js",
       "bytes": 7469,
       "sha256": "3b0a8ecaa504543a91be03417d69847804d46e588bfc996f29372d421b24080e",
@@ -22469,8 +22528,8 @@
     {
       "path": "css/location-picker.css",
       "extension": ".css",
-      "bytes": 1399,
-      "sha256": "8b3981fcd6b81cbe3809f00b2e021ac3efb474ff0c8b22ed122d6f8e589679f9"
+      "bytes": 3427,
+      "sha256": "db8467f1c879ddfc4e86db423d3afd13af6ad011ad9e8aa8705b117e85938568"
     },
     {
       "path": "css/login-maintenance.css",
@@ -23373,6 +23432,12 @@
       "sha256": "fab89d79619820d5449f9902fa166003cbc3e1457974ca8dec70dacbd7217b12"
     },
     {
+      "path": "js/location-map.js",
+      "extension": ".js",
+      "bytes": 7803,
+      "sha256": "2bc13ee5cd2cb33755cdde1e8fabd5fc980bc7e4f8c0ca562bca1a3fc1195843"
+    },
+    {
       "path": "js/location-picker.js",
       "extension": ".js",
       "bytes": 7469,
@@ -23681,8 +23746,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 39767,
-      "sha256": "718a03862a57d0d4c811f01b2ae7d5d21f0dd5740562c9ffc4f3a1b2cad9ab1f"
+      "bytes": 42313,
+      "sha256": "3b32ca29fc7c8c7ee0d74ea4e89d081f352c0ae94b2e784d4f1a6a7b92b00a75"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -26676,35 +26741,35 @@
     },
     {
       "file": "login.html",
-      "line": 132,
+      "line": 140,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 264,
+      "line": 272,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 267,
+      "line": 275,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 267,
+      "line": 275,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 335,
+      "line": 343,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -27686,7 +27751,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 267
+          "line": 275
         }
       ]
     },
@@ -28954,12 +29019,12 @@
           },
           {
             "file": "login.html",
-            "line": 291,
+            "line": 299,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 551,
+            "line": 600,
             "operation": "doc"
           },
           {
