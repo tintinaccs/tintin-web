@@ -386,3 +386,10 @@
     transition-duration: .01ms !important;
   }
 }
+
+/* El contador reserva su lugar antes de tener el dato: ocupa el alto pero no
+   se dibuja, para que al llegar los productos la tarjeta no crezca de golpe
+   (era la fuente del salto de layout que medía el presupuesto de CLS). */
+.tt-collections-page .tt-coll-page-count.is-pending {
+  visibility: hidden;
+}
