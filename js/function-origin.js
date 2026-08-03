@@ -12,6 +12,12 @@
 const CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
 export function functionOrigin() {
+  // Fuera del navegador —los tests— no hay `window`, y leerlo directamente
+  // lanzaba ReferenceError: cualquier módulo que use apiUrl() se volvía
+  // imposible de probar sin un DOM. Se devuelve la ruta relativa, que es lo
+  // que esperan los stubs de fetch.
+  if (typeof window === 'undefined') return '';
+
   const configured = String(window.TINTIN_FUNCTION_ORIGIN || '').trim().replace(/\/$/, '');
   if (configured) return configured;
 
