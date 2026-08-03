@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/login.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/location-picker.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
@@ -117,11 +118,18 @@
           </div>
           <div id="login-profile-address-field">
             <label class="login-email-label" for="login-profile-address">Dirección de entrega</label>
-            <div class="tt-address-search">
-              <input type="text" class="login-email-input" id="login-profile-address" placeholder="Buscá tu calle, barrio o punto de referencia…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="login-profile-address-results" />
-              <ul class="tt-address-results" id="login-profile-address-results" role="listbox" hidden></ul>
+            <div class="tt-map-block">
+              <p class="tt-map-tip">Buscala acá o tocá el mapa para marcar el punto exacto.</p>
+              <div class="tt-map-search">
+                <input type="text" class="login-email-input" id="login-profile-address" placeholder="Buscá tu calle, barrio o un negocio cerca…" autocomplete="off" spellcheck="false" />
+                <div class="tt-map-results" id="login-profile-address-results" role="listbox"></div>
+              </div>
+              <button type="button" class="tt-map-locate" id="login-profile-locate">📍 Usar mi ubicación actual</button>
+              <div class="tt-map-canvas" id="login-profile-map"></div>
+              <p class="tt-map-coords tt-map-coords-missing" id="login-profile-address-selected">Todavía no marcaste tu ubicación</p>
+              <label class="login-email-label" for="login-profile-address-name">Nombre de esta ubicación</label>
+              <input type="text" class="login-email-input" id="login-profile-address-name" placeholder="Ej: Mi casa, Mi trabajo" maxlength="60" />
             </div>
-            <p class="tt-address-selected" id="login-profile-address-selected" hidden></p>
           </div>
           <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
         </div>
@@ -163,7 +171,7 @@ import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudi
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
-import { attachLocationPicker } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
+import { createLocationMap } from "./js/location-map.js?v=tintin-20260803-location-map-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -352,17 +360,52 @@ async function ensureProfileComplete(user, role) {
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
 
-  // Mismo backend de direcciones que el mapa del checkout (/api/geo-search),
-  // así lo que se elige acá el checkout lo reutiliza tal cual.
-  const addressPicker = plan.needsAddress
-    ? attachLocationPicker({
-        input: document.getElementById('login-profile-address'),
-        resultsList: document.getElementById('login-profile-address-results'),
-        selectedLabel: document.getElementById('login-profile-address-selected'),
-        onChange: () => hideMessages(),
+  // El mismo componente de mapa que usa el checkout (js/location-map.js): se
+  // busca o se toca el mapa, y el punto queda con sus coordenadas exactas.
+  const addressNameInput = document.getElementById('login-profile-address-name');
+  const addressStatus = document.getElementById('login-profile-address-selected');
+  let addressMap = null;
+
+  const renderAddressStatus = place => {
+    if (place) {
+      addressStatus.classList.remove('tt-map-coords-missing');
+      addressStatus.textContent = place.name
+        ? `📍 ${place.name} — podés arrastrar el pin para ajustar`
+        : `📍 ${place.lat.toFixed(5)}, ${place.lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+      // El nombre del lugar buscado se ofrece como nombre de la ubicación,
+      // pero sin pisar lo que la persona haya escrito.
+      if (place.name && !addressNameInput.value.trim()) addressNameInput.value = place.name;
+    } else {
+      addressStatus.classList.add('tt-map-coords-missing');
+      addressStatus.textContent = 'Todavía no marcaste tu ubicación';
+    }
+  };
+
+  if (plan.needsAddress) {
+    try {
+      addressMap = await createLocationMap({
+        mapEl: document.getElementById('login-profile-map'),
+        searchInput: document.getElementById('login-profile-address'),
+        resultsEl: document.getElementById('login-profile-address-results'),
+        onChange: place => { hideMessages(); renderAddressStatus(place); },
         onError: message => showError(message),
-      })
-    : null;
+      });
+    } catch {
+      showError('No pudimos cargar el mapa. Revisá tu conexión y recargá la página.');
+    }
+
+    document.getElementById('login-profile-locate').onclick = () => {
+      if (!navigator.geolocation) {
+        showError('Tu navegador no permite compartir la ubicación. Buscala o tocá el mapa.');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        position => addressMap?.setLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        () => showError('No pudimos obtener tu ubicación. Buscala o tocá el mapa para marcarla.'),
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    };
+  }
 
   let explicitNameChange = false;
   // La confirmación rápida sólo aplica cuando lo sugerido ya es un nombre
@@ -392,7 +435,8 @@ async function ensureProfileComplete(user, role) {
       const lastName = lastNameInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
       const phoneRaw = phoneInput.value.trim();
-      const place = addressPicker?.getSelected() || null;
+      const point = addressMap?.getLocation() || null;
+      const locationName = addressNameInput.value.trim();
       if (plan.needsName) {
         if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
         if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
@@ -402,9 +446,14 @@ async function ensureProfileComplete(user, role) {
         phoneInput.focus();
         return;
       }
-      if (plan.needsAddress && !place) {
-        showError('Buscá tu dirección y elegí una de las sugerencias para poder entregarte el pedido.');
+      if (plan.needsAddress && !point) {
+        showError('Marcá tu ubicación en el mapa —buscala o tocá el punto— para poder entregarte el pedido.');
         document.getElementById('login-profile-address').focus();
+        return;
+      }
+      if (plan.needsAddress && !locationName) {
+        showError('Poné un nombre a esta ubicación (ej: Mi casa) para reconocerla después.');
+        addressNameInput.focus();
         return;
       }
       const btn = document.getElementById('btn-save-profile');
@@ -419,7 +468,7 @@ async function ensureProfileComplete(user, role) {
             submittedFirstName: firstName,
             submittedLastName: lastName,
             submittedPhone: normalizedPhone,
-            submittedAddress: place,
+            submittedAddress: point ? { ...point, name: locationName } : null,
             explicitNameChange,
           });
           if (Object.keys(patch).length) {

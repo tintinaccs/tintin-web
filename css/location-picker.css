@@ -62,3 +62,102 @@
 }
 
 .tt-address-selected[hidden] { display: none; }
+
+/* ---------------------------------------------------------------
+   Mapa de ubicación (js/location-map.js) — el mismo componente que
+   usa el checkout, embebido en el alta de la cuenta.
+   --------------------------------------------------------------- */
+.tt-map-block {
+  margin: 0 0 12px;
+}
+
+.tt-map-tip {
+  margin: 0 0 8px;
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.tt-map-search {
+  position: relative;
+}
+
+.tt-map-results {
+  display: none;
+  position: absolute;
+  z-index: 500; /* por encima de los controles de Leaflet (400) */
+  top: calc(100% - 8px);
+  left: 0;
+  right: 0;
+  max-height: 216px;
+  padding: 6px;
+  overflow-y: auto;
+  border: 1px solid rgba(125,23,58,.14);
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(84,17,42,.16);
+}
+
+.tt-map-results.show { display: block; }
+
+.tt-map-result {
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.tt-map-result:hover { background: rgba(173,63,103,.09); }
+
+.tt-map-result-name {
+  color: var(--login-ink, #2b2b2b);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.tt-map-result-addr {
+  margin-top: 2px;
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.tt-map-result-empty {
+  color: #6b5259;
+  font-size: 13px;
+  cursor: default;
+}
+
+.tt-map-result-empty:hover { background: none; }
+
+.tt-map-locate {
+  width: 100%;
+  min-height: 44px;
+  margin: 0 0 10px;
+  padding: 0 16px;
+  border: 1px solid rgba(125,23,58,.18);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--color-brand-primary, #ad3f67);
+  font: 650 13.5px/1 "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+.tt-map-locate:hover { background: rgba(173,63,103,.07); }
+
+.tt-map-canvas {
+  height: 260px;
+  margin: 0 0 8px;
+  border: 1px solid rgba(125,23,58,.14);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.tt-map-coords {
+  margin: 0 0 12px;
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+/* Contraste ≥ 4.5:1 sobre blanco para el aviso de "falta marcar". */
+.tt-map-coords-missing { color: #9a2c2c; }
