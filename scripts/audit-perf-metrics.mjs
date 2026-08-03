@@ -30,6 +30,14 @@ fs.mkdirSync(outDir, { recursive: true });
 // conservador y deja ver el costo de encadenar descargas.
 const LATENCY_MS = 60;
 const RUNS = 3; // se reporta la mediana, para que un pico no ensucie el número
+// Espejo local del SDK de Firebase (ver mirror-firebase-sdk.sh). Si no existe,
+// los pedidos a gstatic se cortan y la medición excluye el camino de Firebase.
+const MIRROR_DIR = path.join(root, 'artifacts', 'fbmirror');
+const MIRROR = fs.existsSync(MIRROR_DIR) ? MIRROR_DIR : '';
+// Latencia aparte para el SDK de Firebase: permite simular una conexión mala
+// hacia el tercero sin tocar la del sitio propio, que es el escenario donde
+// la tienda se degradaba (FB_LATENCY=2000 node scripts/audit-perf-metrics.mjs ...).
+const FB_LATENCY = Number(process.env.FB_LATENCY || LATENCY_MS);
 
 const routes = [
   ['inicio', '/index.html'],
@@ -64,15 +72,23 @@ async function measure(browser, route) {
   page.on('pageerror', () => {});
   page.on('dialog', d => d.dismiss().catch(() => {}));
 
-  // Los hosts de terceros (Firebase, Cloudinary, unpkg) se cortan al instante
-  // en vez de dejarlos esperar. No es para "hacer trampa": su latencia no se
-  // puede reproducir de forma estable acá y contaminaría la comparación con
-  // ruido de red ajeno. Cortarlos deja a la vista el camino crítico PROPIO
-  // del sitio, que es lo único que estos cambios pueden mejorar. Igual queda
-  // registrado cuántos recursos externos pide cada página.
-  await page.route('**/*', route => {
+  // El SDK de Firebase se sirve desde un espejo local (artifacts/fbmirror,
+  // poblado con scripts/mirror-firebase-sdk.sh) con la MISMA latencia
+  // simulada que el resto. Sin esto no se puede medir el costo real de tener
+  // Firebase en el camino crítico, que es justamente lo que se quiere
+  // optimizar. El resto de los terceros se corta al instante: su latencia no
+  // se puede reproducir de forma estable y solo agregaría ruido ajeno.
+  await page.route('**/*', async route => {
     const url = route.request().url();
     if (url.startsWith(baseURL) || url.startsWith('data:') || url.startsWith('blob:')) return route.continue();
+    const sdk = url.match(/gstatic\.com\/firebasejs\/[\d.]+\/(firebase-[a-z-]+\.js)$/);
+    if (sdk && MIRROR) {
+      const file = path.join(MIRROR, sdk[1]);
+      if (fs.existsSync(file)) {
+        await new Promise(r => setTimeout(r, FB_LATENCY));
+        return route.fulfill({ status: 200, contentType: 'text/javascript; charset=utf-8', body: fs.readFileSync(file) });
+      }
+    }
     return route.abort();
   });
 
