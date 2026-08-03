@@ -1,0 +1,99 @@
+/* Seguridad final de la capa visual: respeta overlays y tarjetas internas. */
+
+/* Cuando .modal/.adm-modal contienen una tarjeta, son overlays y no deben
+   convertirse en una superficie blanca completa. */
+.modal:has(> .modal-content),
+.modal:has(> .tt-modal-content),
+.modal:has(> .ck-modal-content),
+.adm-modal:has(> .adm-modal-content) {
+  border: 0 !important;
+  background: rgba(47, 10, 29, .42) !important;
+  color: inherit !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+:is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content) {
+  border: 1px solid var(--tt-brand-border, #efbdd2) !important;
+  border-radius: clamp(20px, 2.5vw, 30px) !important;
+  background: #fff !important;
+  color: var(--tt-brand-copy, #84264f) !important;
+  box-shadow: 0 24px 68px rgba(122, 0, 61, .2) !important;
+}
+
+:is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
+:is(h1,h2,h3,h4,label,strong) {
+  color: var(--tt-brand-copy, #84264f) !important;
+}
+
+:is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
+:is(p,small,.muted) {
+  color: var(--tt-brand-muted, #a75a7b) !important;
+}
+
+/* Contenedores reales que existen en perfil y checkout. */
+:is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+  width: min(100%, 1560px) !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(16px, 4vw, 78px) !important;
+}
+
+/* Evita doble margen cuando un contenedor fit está anidado en otro. */
+:is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+  padding-inline: 0 !important;
+}
+
+/* Cabeceras internas en rosa con contraste real. */
+:is(
+  .perfil-card-header,
+  .perfil-section-header,
+  .ck-panel-head,
+  .ck-summary-head,
+  .modal-header,
+  .adm-modal-header
+) {
+  border-bottom-color: transparent !important;
+  background: linear-gradient(135deg, #d81779, #9b0051) !important;
+  color: #fff !important;
+}
+
+:is(
+  .perfil-card-header,
+  .perfil-section-header,
+  .ck-panel-head,
+  .ck-summary-head,
+  .modal-header,
+  .adm-modal-header
+) :is(h1,h2,h3,h4,span,strong,p) {
+  color: #fff !important;
+}
+
+@media (min-width: 768px) and (max-width: 1099px) {
+  :is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+    padding-inline: clamp(26px, 4.5vw, 54px) !important;
+  }
+
+  :is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+    padding-inline: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  :is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+    width: 100% !important;
+    padding-inline: clamp(14px, 4vw, 22px) !important;
+  }
+
+  :is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+    padding-inline: 0 !important;
+  }
+
+  :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content) {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    border-radius: 22px !important;
+  }
+}
