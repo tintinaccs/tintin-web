@@ -1,0 +1,98 @@
+/* Ajustes finales cargados después de tintin-responsive-brand-surfaces.css. */
+
+/* Wordmark correcto: TINTIN completo, con corazones por encima de las I. */
+.tt-account-drawer-header h2 {
+  position: relative;
+}
+
+.tt-account-drawer-header h2::before {
+  content: "TINTIN" !important;
+  position: relative;
+  display: block;
+  width: max-content;
+  margin-bottom: 8px;
+  color: #fff !important;
+  font-size: clamp(1.04rem, 2.2vw, 1.34rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .08em;
+}
+
+.tt-account-drawer-header h2::after {
+  content: "♥  ♥";
+  position: absolute;
+  left: .61em;
+  top: -.56em;
+  color: #fff;
+  font-size: .42em;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 2.18em;
+  pointer-events: none;
+  text-shadow: 0 3px 8px rgba(75,0,36,.2);
+}
+
+/* El título y la marca deben conservarse legibles aun con nombres largos. */
+.tt-account-drawer-header h2,
+.tt-account-drawer .tt-account-header span {
+  text-wrap: balance;
+}
+
+/* Superficies modales con cabecera de marca cuando ya existe un header. */
+:is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) {
+  border-bottom-color: transparent !important;
+  background: linear-gradient(135deg, #d81779, #9b0051) !important;
+  color: #fff !important;
+}
+
+:is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) :is(h1,h2,h3,span,strong) {
+  color: #fff !important;
+}
+
+:is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) button {
+  border-color: rgba(255,255,255,.7) !important;
+  background: rgba(255,255,255,.15) !important;
+  color: #fff !important;
+}
+
+/* Mantener márgenes fluidos en las pantallas largas. */
+:is(.perfil-main, .perfil-page, .ck-body, .tt-page-content, main.tt-main) {
+  width: min(100%, 1560px);
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 78px);
+}
+
+/* Los elementos ya revelados nunca vuelven al estado invisible. */
+html.tt-reveal-ready .tt-auto-reveal.tt-visible,
+html.tt-reveal-ready .tt-auto-reveal.tt-reveal-settled {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  will-change: auto !important;
+}
+
+@media (min-width: 768px) and (max-width: 1099px) {
+  :is(.perfil-main, .perfil-page, .ck-body, .tt-page-content, main.tt-main) {
+    padding-inline: clamp(26px, 4.5vw, 54px);
+  }
+}
+
+@media (max-width: 767px) {
+  :is(.perfil-main, .perfil-page, .ck-body, .tt-page-content, main.tt-main) {
+    width: 100%;
+    padding-inline: clamp(14px, 4vw, 22px);
+  }
+
+  .tt-account-drawer-header h2::after {
+    left: .58em;
+    letter-spacing: 2.12em;
+  }
+}
+
+@media (max-width: 380px) {
+  .tt-account-drawer-header h2::after {
+    left: .55em;
+    top: -.54em;
+    letter-spacing: 2.02em;
+  }
+}
