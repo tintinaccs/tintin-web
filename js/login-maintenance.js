@@ -23,6 +23,11 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
       '../css/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1',
       'ttLoginFluid'
     );
+    ensureStyle(
+      'link[data-tt-login-onboarding-flow]',
+      '../css/login-onboarding-flow.css?v=tintin-20260803-onboarding-flow-1',
+      'ttLoginOnboardingFlow'
+    );
   }
 
   function normalizeLocation() {
