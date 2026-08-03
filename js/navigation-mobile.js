@@ -6,7 +6,10 @@
 
   const items = [...nav.querySelectorAll('.tt-tabbar-btn')];
   const locate = item => {
-    if (!item) return;
+    if (!item) {
+      nav.classList.remove('tt-mobile-nav-ready');
+      return;
+    }
     const navRect = nav.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
     const width = Math.min(58, Math.max(48, itemRect.width - 8));
@@ -14,7 +17,9 @@
     nav.style.setProperty('--tt-mobile-x', `${itemRect.left - navRect.left + (itemRect.width - width) / 2}px`);
     nav.classList.add('tt-mobile-nav-ready');
   };
-  const current = () => items.find(item => item.classList.contains('active')) || items[0];
+  // Sin fallback a items[0]: en paginas auxiliares ningun tab es la ruta
+  // activa y el halo/indicador movil no debe marcar "Inicio" igual.
+  const current = () => items.find(item => item.classList.contains('active')) || null;
   const sync = () => locate(current());
   const observer = new MutationObserver(sync);
   items.forEach(item => observer.observe(item, { attributes:true, attributeFilter:['class','aria-expanded','aria-current'] }));

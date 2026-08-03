@@ -182,7 +182,12 @@
       if (token !== this.operation) return false;
       config.element.classList.remove('tt-surface-preparing');
       this.state = 'open';
-      this.focusFirst(config);
+      // Los modales (busqueda, carrito, cuenta, menu tablet/mobile-shop)
+      // siempre reciben el foco al abrir, como cualquier dialogo accesible.
+      // Un disclosure no modal (el dropdown Tienda desktop) solo lo recibe
+      // si se abrio con teclado — con mouse, el boton se queda como esta y
+      // el contenido igual es alcanzable con Tab, sin robar el foco.
+      if (config.modal || (this.trigger?.matches?.(':focus-visible'))) this.focusFirst(config);
       config.afterOpen?.({ trigger: this.trigger, controller: this });
       this.emit();
       return true;
@@ -234,6 +239,18 @@
         return;
       }
       const trigger = target?.closest('#btn-tienda,#btn-menu-tablet,#tabbar-tienda,[data-nav-action="search"],#tabbar-search,[data-nav-action="cart"],#tabbar-cart,[data-nav-action="account"]');
+      // Los modales se cierran al tocar afuera via el backdrop (que cubre la
+      // pagina). Un disclosure no modal no tiene backdrop, asi que necesita
+      // su propio chequeo de "click afuera del panel y de su disparador" —
+      // pero solo cuando el click no es otro disparador conocido, para no
+      // pisar el cambio directo de una superficie a otra (ver open()).
+      if (!trigger && this.surface !== 'none') {
+        const openConfig = this.registry.get(this.surface);
+        if (openConfig && !openConfig.modal && target && !openConfig.element.contains(target)) {
+          this.close('outside');
+        }
+        return;
+      }
       if (!trigger) return;
       const surface = trigger.id === 'btn-tienda' ? 'desktop-shop'
         : trigger.id === 'btn-menu-tablet' ? 'tablet-menu'

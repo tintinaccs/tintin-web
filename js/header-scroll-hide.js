@@ -63,6 +63,11 @@
       return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
     }
 
+    function focusIsInsideHeader() {
+      const active = document.activeElement;
+      return !!active && headers.some(header => header.contains(active));
+    }
+
     function shouldKeepVisible() {
       return !!(
         (window.TintinSurfaceController?.surface || 'none') !== 'none' ||
@@ -71,7 +76,8 @@
         document.getElementById('search-panel')?.classList.contains('open') ||
         document.body?.classList.contains('tt-cart-open') ||
         document.documentElement.classList.contains('tt-scroll-locked') ||
-        document.documentElement.classList.contains('tt-welcome-scroll-locked')
+        document.documentElement.classList.contains('tt-welcome-scroll-locked') ||
+        focusIsInsideHeader()
       );
     }
 

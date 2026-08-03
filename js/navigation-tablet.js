@@ -35,9 +35,10 @@
 
   shopButton?.addEventListener('click', showCategories);
   backButton?.addEventListener('click', () => showMain());
-  menu.addEventListener('click', event => {
-    if (event.target.closest('a[href]')) controller.close('navigate', { restoreFocus: false });
-  });
+  // El cierre al navegar ya lo hace el controlador central (onClick, fase de
+  // captura sobre [data-tt-surface] a[href]) — un segundo close() aca
+  // duplicaba la operacion y podia abortar la primera limpieza a mitad de
+  // camino (token de la primera invocacion invalidado por la segunda).
   addEventListener('tintin:surface-change', event => {
     if (event.detail?.surface === 'tablet-menu' && event.detail?.state === 'opening') setOrigin();
     if (event.detail?.surface === 'none') showMain({ focus: false });
