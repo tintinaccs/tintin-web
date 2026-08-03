@@ -77,7 +77,8 @@
     "audit:phase11": "node scripts/audit-phase11-seo.js",
     "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
     "monitor:production": "node scripts/audit-production-health.mjs",
-    "audit:headers": "node scripts/audit-headers.mjs"
+    "audit:headers": "node scripts/audit-headers.mjs",
+    "audit:contraste": "node scripts/audit-contraste.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "3.0.3",
