@@ -2,20 +2,23 @@
 body:has(.login-page) {
   --login-page-bg: var(--tt-page-bg, #fff8fb);
   --login-surface: var(--tt-surface, #fff);
-  --login-text: var(--tt-text, #352b2f);
-  --login-muted: var(--tt-text-muted, #75666c);
-  --login-accent: var(--tt-accent, #ad3f67);
-  --login-soft: var(--tt-accent-soft, #f9e8ef);
-  --login-border: var(--tt-border, #edcbd7);
+  --login-brand: #CA0169;
+  --login-brand-deep: #A00055;
+  --login-copy: #8A2756;
+  --login-muted: #A85B7C;
+  --login-soft: #FFF0F7;
+  --login-border: #F1BDD4;
   --header-h: 0px;
+  min-height: 100dvh;
   padding-top: 0 !important;
-  color: var(--login-text);
+  background: var(--login-page-bg);
+  color: var(--login-copy);
+  overflow-x: clip;
 }
 
 /* Login es una pantalla independiente. El shell público puede montarse para
    reutilizar servicios, pero ninguno de sus headers o menús debe mostrarse
-   en desktop, tablet ni mobile. Esta especificidad supera el display:block
-   !important del breakpoint tablet sin alterar la navegación de la tienda. */
+   en desktop, tablet ni mobile. */
 body:has(.login-page) :is(
   #tt-header-desktop-tablet,
   #tt-header-tablet,
@@ -27,16 +30,365 @@ body:has(.login-page) :is(
   pointer-events: none !important;
 }
 
-body:has(.login-page) .login-box,
-body:has(.login-page) .login-email-block {
-  background-color: var(--login-surface);
+/* =============================================================
+   LAYOUT FLUIDO POR DISPOSITIVO
+   ============================================================= */
+body:has(.login-page) .login-page {
+  min-height: 100dvh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding:
+    max(18px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(18px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left)) !important;
+  overflow-x: clip !important;
+  overflow-y: visible !important;
 }
 
-body:has(.login-page) :is(button, a, input):focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--login-accent) 32%, transparent) !important;
+body:has(.login-page) .login-shell {
+  width: min(100%, 760px) !important;
+  max-width: none !important;
+  margin: 0 auto;
+  border: 1px solid rgba(202, 1, 105, .10);
+  border-radius: clamp(24px, 3vw, 38px);
+  background: rgba(255, 255, 255, .96) !important;
+  box-shadow: 0 26px 70px rgba(160, 0, 85, .13), inset 0 1px 0 rgba(255,255,255,.92);
+}
+
+body:has(.login-page) .login-form-side {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(30px, 5vw, 58px) clamp(22px, 6vw, 68px) clamp(34px, 5vw, 62px) !important;
+}
+
+body:has(.login-page) .login-box {
+  width: min(100%, 620px) !important;
+  max-width: none !important;
+  margin-inline: auto;
+  background: transparent !important;
+}
+
+body:has(.login-page).login-setup-open .login-shell {
+  width: min(100%, 1240px) !important;
+}
+
+body:has(.login-page).login-setup-open .login-box {
+  width: 100% !important;
+}
+
+body:has(.login-page) .login-email-block {
+  width: 100%;
+  background: transparent !important;
+}
+
+/* =============================================================
+   MARCA DEL LOGIN — mismo lenguaje visual del loader
+   ============================================================= */
+body:has(.login-page) .login-mobile-logo {
+  position: relative;
+  display: grid !important;
+  justify-items: center;
+  width: 100%;
+  margin: 0 0 clamp(18px, 3vw, 28px);
+  padding-top: clamp(78px, 11vw, 112px);
+  background-image: url("../assets-tintin/images/general/logo.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: auto clamp(72px, 10vw, 104px);
+  text-align: center;
+  animation: tt-login-brand-reveal .64s cubic-bezier(.16,1,.3,1) both;
+}
+
+body:has(.login-page) .login-mobile-logo-text {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  color: var(--login-brand) !important;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(24px, 3.2vw, 34px);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: .075em;
+  text-shadow: 0 7px 18px rgba(202,1,105,.10);
+}
+
+/* Corazones sobre las dos I, como el wordmark de la pantalla de carga. */
+body:has(.login-page) .login-mobile-logo-text::before,
+body:has(.login-page) .login-mobile-logo-text::after {
+  content: "♥";
+  position: absolute;
+  top: -.55em;
+  color: var(--login-brand) !important;
+  font-size: .34em;
+  line-height: 1;
+  transform: translateX(-50%) rotate(-2deg);
+  transform-origin: center bottom;
+}
+body:has(.login-page) .login-mobile-logo-text::before { left: 24.5%; }
+body:has(.login-page) .login-mobile-logo-text::after { left: 73.8%; }
+
+body:has(.login-page) .login-mobile-logo-sub {
+  display: none !important;
+}
+
+/* En el ingreso inicial el logo reemplaza “Tu cuenta Tintin” y “Qué lindo
+   verte”. En el alta sí se conserva el título dinámico “Últimos datos”. */
+body:has(.login-page):not(.login-setup-open) .login-eyebrow,
+body:has(.login-page):not(.login-setup-open) .login-heading,
+body:has(.login-page).login-setup-open .login-eyebrow {
+  display: none !important;
+}
+
+body:has(.login-page).login-setup-open .login-heading {
+  display: block !important;
+  margin: 2px 0 0;
+  color: var(--login-brand) !important;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 820;
+  letter-spacing: -.035em;
+  text-align: center;
+}
+
+body:has(.login-page) .login-heading-sub {
+  max-width: 620px;
+  margin: 10px auto clamp(24px, 4vw, 36px) !important;
+  color: var(--login-muted) !important;
+  font-size: clamp(13px, 1.7vw, 16px);
+  font-weight: 600;
+  line-height: 1.55;
+  text-align: center;
+}
+
+/* =============================================================
+   COLOR Y LEGIBILIDAD — nunca negro puro dentro del login
+   ============================================================= */
+body:has(.login-page) :is(
+  .login-email-label,
+  .login-profile-confirmation-label,
+  .login-profile-confirmation-value,
+  .login-hint,
+  .login-back a,
+  .login-divider,
+  .tt-map-tip,
+  .tt-map-coords,
+  .login-phone-help,
+  .login-profile-change
+) {
+  color: var(--login-copy) !important;
+}
+
+body:has(.login-page) :is(
+  .login-email-input,
+  .login-email-input option,
+  .login-google,
+  .login-google > span:last-child
+) {
+  color: var(--login-brand-deep) !important;
+}
+
+body:has(.login-page) .login-email-input::placeholder {
+  color: #BE7898 !important;
+  opacity: 1;
+}
+
+body:has(.login-page) .login-email-input,
+body:has(.login-page) .login-google,
+body:has(.login-page) .tt-map-locate {
+  border-color: var(--login-border) !important;
+  background: #fff !important;
+}
+
+body:has(.login-page) :is(.login-email-input, .login-google, .tt-map-locate):focus-visible {
+  outline: 3px solid rgba(202, 1, 105, .20) !important;
+  outline-offset: 2px;
+}
+
+body:has(.login-page) :is(button, a, input, select):focus-visible {
+  outline: 3px solid rgba(202, 1, 105, .24) !important;
   outline-offset: 3px;
 }
 
+body:has(.login-page) .login-email-btn {
+  background: linear-gradient(135deg, #D20A72, #A00055) !important;
+  color: #fff !important;
+  box-shadow: 0 13px 28px rgba(160, 0, 85, .24);
+}
+
+body:has(.login-page) .login-divider::before,
+body:has(.login-page) .login-divider::after {
+  background: rgba(202, 1, 105, .16) !important;
+}
+
+body:has(.login-page) .tt-map-canvas {
+  width: 100%;
+  min-height: clamp(280px, 38vh, 470px);
+  border-color: var(--login-border) !important;
+  border-radius: clamp(18px, 2.4vw, 26px);
+  overflow: hidden;
+}
+
+body:has(.login-page) .login-error {
+  color: #B22653 !important;
+  border-color: #F0A8BF !important;
+  background: #FFF0F4 !important;
+}
+
+body:has(.login-page) .login-success {
+  color: #8D2854 !important;
+  border-color: #EDB5CB !important;
+  background: #FFF3F8 !important;
+}
+
+/* =============================================================
+   DESKTOP — formulario amplio y alta en dos columnas
+   ============================================================= */
+@media (min-width: 1100px) {
+  body:has(.login-page) .login-page {
+    padding:
+      max(48px, env(safe-area-inset-top))
+      max(clamp(56px, 5vw, 104px), env(safe-area-inset-right))
+      max(48px, env(safe-area-inset-bottom))
+      max(clamp(56px, 5vw, 104px), env(safe-area-inset-left)) !important;
+  }
+
+  body:has(.login-page) .login-shell {
+    width: min(100%, 900px) !important;
+  }
+
+  body:has(.login-page).login-setup-open .login-shell {
+    width: min(100%, 1320px) !important;
+  }
+
+  body:has(.login-page).login-setup-open .login-form-side {
+    padding: clamp(42px, 4vw, 68px) clamp(46px, 5vw, 82px) clamp(48px, 4vw, 72px) !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-block {
+    display: grid !important;
+    grid-template-columns: minmax(300px, .78fr) minmax(430px, 1.22fr);
+    grid-template-areas:
+      "confirm address"
+      "name address"
+      "phone address"
+      "save save";
+    align-items: start;
+    column-gap: clamp(30px, 4vw, 58px);
+    row-gap: 18px;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-confirmation { grid-area: confirm; }
+  body:has(.login-page).login-setup-open #login-profile-name-field { grid-area: name; }
+  body:has(.login-page).login-setup-open #login-profile-phone-field { grid-area: phone; }
+  body:has(.login-page).login-setup-open #login-profile-address-field { grid-area: address; }
+  body:has(.login-page).login-setup-open #btn-save-profile {
+    grid-area: save;
+    width: min(100%, 420px);
+    justify-self: center;
+    margin-top: 10px;
+  }
+}
+
+/* =============================================================
+   TABLET — ancho útil completo sin tarjeta angosta
+   ============================================================= */
+@media (min-width: 600px) and (max-width: 1099px) {
+  body:has(.login-page) .login-page {
+    place-items: start center;
+    padding:
+      max(30px, env(safe-area-inset-top))
+      max(clamp(28px, 4vw, 48px), env(safe-area-inset-right))
+      max(34px, env(safe-area-inset-bottom))
+      max(clamp(28px, 4vw, 48px), env(safe-area-inset-left)) !important;
+  }
+
+  body:has(.login-page) .login-shell,
+  body:has(.login-page).login-setup-open .login-shell {
+    width: 100% !important;
+  }
+
+  body:has(.login-page) .login-box {
+    width: min(100%, 720px) !important;
+  }
+
+  body:has(.login-page).login-setup-open .login-box {
+    width: 100% !important;
+  }
+
+  body:has(.login-page) .login-form-side {
+    padding: clamp(36px, 5vw, 58px) clamp(30px, 6vw, 64px) clamp(42px, 5vw, 62px) !important;
+  }
+}
+
+/* =============================================================
+   MOBILE — superficie tipo app, márgenes pequeños pero respirables
+   ============================================================= */
+@media (max-width: 599px) {
+  body:has(.login-page) .login-page {
+    place-items: start stretch;
+    padding:
+      max(12px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(18px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left)) !important;
+    background: linear-gradient(180deg, #FFF8FC 0%, #FFF0F7 100%) !important;
+  }
+
+  body:has(.login-page) .login-shell,
+  body:has(.login-page).login-setup-open .login-shell {
+    width: 100% !important;
+    border-radius: 24px;
+    box-shadow: 0 16px 42px rgba(160, 0, 85, .10);
+  }
+
+  body:has(.login-page) .login-form-side,
+  body:has(.login-page).login-setup-open .login-form-side {
+    padding: 26px clamp(16px, 5vw, 24px) 34px !important;
+  }
+
+  body:has(.login-page) .login-box,
+  body:has(.login-page).login-setup-open .login-box {
+    width: 100% !important;
+  }
+
+  body:has(.login-page) .login-mobile-logo {
+    margin-bottom: 16px;
+    padding-top: 76px;
+    background-size: auto 70px;
+  }
+
+  body:has(.login-page) .login-mobile-logo-text {
+    font-size: clamp(23px, 8vw, 29px);
+  }
+
+  body:has(.login-page) .login-heading-sub {
+    margin-bottom: 24px !important;
+    font-size: 13px;
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    min-height: clamp(250px, 42vh, 350px);
+  }
+}
+
+@media (max-width: 420px) {
+  body:has(.login-page) .login-phone-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  body:has(.login-page) .login-phone-country {
+    width: 100%;
+    flex-basis: auto;
+  }
+  body:has(.login-page).login-setup-open .login-heading {
+    font-size: clamp(27px, 9vw, 35px);
+  }
+}
+
+/* Estados y movimiento. El reveal global ya es irreversible: cuando un
+   elemento entra al viewport queda marcado como visible y se desobserva. */
 body:has(.login-page).tt-login-busy :is(#btn-google, #btn-send-email-link, #btn-resend-email-link) {
   pointer-events: none;
 }
@@ -56,21 +408,11 @@ body:has(.login-page).tt-login-offline .login-box::before {
   text-align: center;
 }
 
-@media (min-width: 1440px) {
-  body:has(.login-page) .login-box { width: min(460px, 100%); }
+@keyframes tt-login-brand-reveal {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(.97); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
-@media (min-width: 1025px) and (max-width: 1439px) {
-  body:has(.login-page) .login-box { width: min(440px, 100%); }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-  body:has(.login-page) .login-box { width: min(430px, 100%); }
-}
-@media (max-width: 768px) {
-  body:has(.login-page) .login-box { width: min(100%, 480px); }
-}
-@media (max-width: 420px) {
-  body:has(.login-page) .login-heading { font-size: clamp(29px, 9vw, 36px); }
-}
+
 @media (prefers-reduced-motion: reduce) {
   body:has(.login-page) *,
   body:has(.login-page) *::before,
