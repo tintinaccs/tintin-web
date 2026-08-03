@@ -131,17 +131,28 @@ function enhanceCollectionCards() {
       image.dataset.collectionHref = link.href;
     }
 
-    if (body && productsReady) {
+    // El contador se crea SIEMPRE, incluso antes de que lleguen los productos:
+    // si se insertara recién al tenerlos, cada tarjeta crecería de golpe unos
+    // 30px y empujaría todo lo de abajo. Ese salto es el que medía el
+    // presupuesto de CLS. Mientras no hay dato ocupa su lugar sin dibujarse
+    // (.is-pending → visibility:hidden), así el alto de la tarjeta no cambia.
+    if (body) {
       let count = body.querySelector('.tt-coll-page-count');
       if (!count) {
         count = document.createElement('span');
-        count.className = 'tt-coll-page-count';
+        count.className = 'tt-coll-page-count is-pending';
+        count.textContent = '\u00a0';
+        count.setAttribute('aria-hidden', 'true');
         const description = body.querySelector('.tt-coll-page-desc');
         body.insertBefore(count, description || link || null);
       }
-      const amount = productCountFor(card.dataset.slug);
-      count.textContent = `${amount} producto${amount === 1 ? '' : 's'}`;
-      count.setAttribute('aria-label', `${amount} producto${amount === 1 ? '' : 's'} en esta colección`);
+      if (productsReady) {
+        const amount = productCountFor(card.dataset.slug);
+        count.classList.remove('is-pending');
+        count.textContent = `${amount} producto${amount === 1 ? '' : 's'}`;
+        count.removeAttribute('aria-hidden');
+        count.setAttribute('aria-label', `${amount} producto${amount === 1 ? '' : 's'} en esta colección`);
+      }
     }
   });
 }
