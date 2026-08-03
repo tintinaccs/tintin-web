@@ -158,6 +158,7 @@ import {
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { clearProfileGateCache } from "./js/profile-gate.js?v=tintin-20260803-profile-gate-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
@@ -319,6 +320,20 @@ async function ensureProfileComplete(user, role) {
   document.getElementById('login-hint').style.display = 'none';
   const profileBlock = document.getElementById('login-profile-block');
   profileBlock.style.display = '';
+
+  // Salida para quien no quiera completar el alta ahora: se cierra la sesión
+  // y sigue navegando como visitante. Sin esto quedaría encerrada — el
+  // guardia de js/profile-gate.js la traería de vuelta acá desde cualquier
+  // página, porque su perfil sigue incompleto.
+  const backLink = document.getElementById('login-back-link').querySelector('a');
+  backLink.textContent = '← Seguir sin crear mi cuenta';
+  backLink.setAttribute('aria-label', 'Salir sin completar la cuenta y volver a la tienda');
+  backLink.onclick = async event => {
+    event.preventDefault();
+    clearProfileGateCache();
+    try { await signOut(auth); } catch {}
+    window.location.replace('index.html');
+  };
 
   const firstNameInput = document.getElementById('login-profile-first-name');
   const lastNameInput = document.getElementById('login-profile-last-name');
