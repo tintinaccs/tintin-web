@@ -69,5 +69,8 @@
 /*.mjs
   Cache-Control: public, max-age=31536000, immutable
 
+/js/profile-onboarding.mjs
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /assets-tintin/fonts/*
   Cache-Control: public, max-age=31536000, immutable
