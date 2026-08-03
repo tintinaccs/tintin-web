@@ -14,9 +14,8 @@ import {
   signInWithCustomToken
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  doc, getDoc, setDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
+  ensureUserProfile, isBlockedAccount, AUTH_METHOD
+} from "./user-profile-store.js?v=tintin-20260803-profile-store-1";
 
 export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
@@ -57,62 +56,17 @@ export async function verifyOtpCode(email, code) {
 }
 
 /**
- * Crea o actualiza users/{uid} para un login por correo — mismo criterio
- * que guardarUsuario() de login.html (Google): la primera vez crea el
- * perfil como 'client' (o 'superadmin' si es literalmente
- * tintinaccs@gmail.com), las veces siguientes SOLO toca
- * lastLogin/updatedAt — nunca pisa role, blocked, name ni ningún dato ya
- * guardado por otro proveedor (Google incluido, si la cuenta ya existía).
+ * Crea o actualiza users/{uid} para un login por correo. La lógica vive en
+ * js/user-profile-store.js, compartida con el login de Google — acá sólo se
+ * fija el método de acceso.
  */
 export async function ensureUserDocForEmailLogin(user) {
-  const ref = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
-    const welcomePending = role === 'client';
-    await setDoc(ref, {
-      name: '',
-      email: user.email,
-      phone: '',
-      photoURL: '',
-      role,
-      provider: 'emailOtp',
-      onboardingCompleted: !welcomePending,
-      welcomeTutorialSeen: !welcomePending,
-      welcomeTutorialPending: welcomePending,
-      welcomeTutorialVersion: 'home-welcome-v4-unified',
-      blocked: false,
-      purchaseCount: 0,
-      totalSpent: 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-      lastLogin: serverTimestamp(),
-    });
-    return { role, blocked: false, isNew: true, welcomePending };
-  }
-  const data = snap.data();
-  if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
-    await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
-    return { role: 'superadmin', blocked: false, isNew: false };
-  }
-  // Son marcas informativas y no conceden acceso. Se guardan sin bloquear la
-  // navegación de una cuenta cuyo perfil ya fue leído y validado.
-  setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
-    .catch(error => console.warn('[email-auth] No se pudo actualizar lastLogin:', error));
-  const role = data.role || 'client';
-  const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
-  return { role, blocked: !!data.blocked, isNew: false, welcomePending };
+  return ensureUserProfile(db, user, AUTH_METHOD.EMAIL);
 }
 
 /** Mismo chequeo de cuenta bloqueada que usa el login con Google (Fase E). */
 export async function checkBlockedEmailLogin(uid, email) {
-  if (email === SUPER_ADMIN) return false;
-  try {
-    const snap = await getDoc(doc(db, 'users', uid));
-    return snap.exists() && snap.data().blocked === true;
-  } catch {
-    return false;
-  }
+  return isBlockedAccount(db, uid, email);
 }
 
 /** Traduce los códigos de error del login por correo a mensajes en español. */

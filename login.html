@@ -145,6 +145,8 @@ import {
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
@@ -253,53 +255,14 @@ async function redirectByRole(role, email, options = {}) {
 }
 
 // Crea el perfil la primera vez que alguien entra con Google, o solo
-// actualiza lastLogin las siguientes veces — Google ya entrega nombre, foto
-// y correo verificado, así que no hace falta ningún formulario de registro
-// aparte ni un paso de verificación de correo.
+// actualiza lastLogin las siguientes veces. La lógica vive en
+// js/user-profile-store.js, compartida con el login por correo — acá sólo se
+// fija el método. Si la cuenta se había creado por correo, devuelve
+// `wrongMethod` y el login no avanza.
 async function guardarUsuario(user) {
-  const ref  = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
-    const welcomePending = role === 'client';
-    await setDoc(ref, {
-      name: user.displayName || "",
-      email: user.email,
-      phone: "",
-      photoURL: user.photoURL || "",
-      role,
-      onboardingCompleted: !welcomePending,
-      welcomeTutorialSeen: !welcomePending,
-      welcomeTutorialPending: welcomePending,
-      welcomeTutorialVersion: 'home-welcome-v4-unified',
-      blocked: false,
-      purchaseCount: 0,
-      totalSpent: 0,
-      createdAt: serverTimestamp(),
-      lastLogin: serverTimestamp(),
-    });
-    return { role, blocked: false, isNew: true, welcomePending };
-  } else {
-    const data = snap.data();
-    // Ensure superadmin email always has correct role
-    if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
-      await setDoc(ref, { role: 'superadmin', lastLogin: serverTimestamp() }, { merge: true });
-      return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false };
-    }
-    // Esta cuenta se creó con el login por correo (código de 6 dígitos):
-    // Google no es un segundo camino hacia ella, aunque Firebase Auth haya
-    // dejado entrar el intento (mismo criterio que el caso inverso en
-    // email-otp-send.js). No se toca el documento ni se avanza el login.
-    if (data.provider === 'emailOtp') {
-      return { emailOnlyAccount: true };
-    }
-    // lastLogin es informativo: nunca decide permisos ni el destino.
-    setDoc(ref, { lastLogin: serverTimestamp() }, { merge: true })
-      .catch(error => console.warn('[login] No se pudo actualizar lastLogin:', error));
-    const role = data.role || 'client';
-    const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
-    return { role, blocked: !!data.blocked, isNew: false, welcomePending };
-  }
+  const result = await ensureUserProfile(db, user, AUTH_METHOD.GOOGLE);
+  if (result.wrongMethod === AUTH_METHOD.EMAIL) return { emailOnlyAccount: true };
+  return result;
 }
 
 function populateCountrySelect(selectEl) {
@@ -746,6 +709,19 @@ document.getElementById('btn-change-email').onclick = () => { hideMessages(); sh
 
 document.getElementById('login-otp-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-verify-otp').click();
+});
+
+// Reglas del campo del código en un solo lugar (js/otp-code-input.js): sólo
+// dígitos al teclear, y al pegar desde el correo se extraen los números del
+// texto ("Tu código es: 12 34 56." → "123456").
+attachOtpCodeInput(document.getElementById('login-otp-input'), {
+  length: 6,
+  onInput: () => hideMessages(),
+  onInvalidPaste: digits => {
+    showError(digits.length
+      ? `Lo que pegaste tiene ${digits.length} de los 6 dígitos. Copiá el código completo del correo.`
+      : 'Lo que pegaste no tiene ningún número. Copiá el código de 6 dígitos del correo.');
+  },
 });
 document.getElementById('login-email-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-send-otp').click();
