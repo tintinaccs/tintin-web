@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T17:12:30.638Z",
-  "sourceFingerprint": "65a90f62ae91ae2edb615c4459601f7f5be8ee1a93a193a80b8ab0fa351dc88f",
+  "generatedAt": "2026-08-03T17:16:47.038Z",
+  "sourceFingerprint": "875e88cb5125750ad1a99e8ec2b7581ce073c22558215e6fb18ec87500a578c2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 458,
     "textFiles": 426,
-    "totalBytes": 5275780,
+    "totalBytes": 5277060,
     "pages": 18,
     "modules": 268
   },
@@ -7735,8 +7735,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 82306,
-      "sha256": "d6bad2172930fef00b205920fa87a41958a869b1c4c624bab3547b9eddeedf92",
+      "bytes": 82304,
+      "sha256": "c8f990989c31c95ec847aad30796bc7b466ed17c563bbd0ba3d468b344500e3b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 46170,
-      "sha256": "4c708d5778677184fef8a28834f47eb6d812c17fe760d37f99d76c4168e6b885",
+      "bytes": 46414,
+      "sha256": "f1c2999d7aecb75fea738a343e0336eefd61f2ab6f0e40a210373e236011d05f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 944
+          "line": 948
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 945
+          "line": 949
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 946
+          "line": 950
         }
       ],
       "styles": [
@@ -11756,19 +11756,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 944,
+          "line": 948,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 945,
+          "line": 949,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 946,
+          "line": 950,
           "exists": true
         },
         {
@@ -12248,8 +12248,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 29578,
-      "sha256": "44f2092687d97da222f7c4ef46d1d230b2f45b629631f20d81203d29c9413006",
+      "bytes": 29576,
+      "sha256": "faaf76f5d9c8d925b9517703e3bd21b3b074a2bc9d9926dda654203887139b6c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18413,8 +18413,8 @@
     },
     {
       "path": "js/phone-reservation.js",
-      "bytes": 3206,
-      "sha256": "7110537cf22c28caa35f9782af191949d3a0bdd49f72aaf68de28ef5a6b5504c",
+      "bytes": 3204,
+      "sha256": "32660ae6e3b77f81cdf03689743c0baa01fd56a2b964fe31f391860c7c9922f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18427,7 +18427,7 @@
           "line": 20
         },
         {
-          "raw": "./phone-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "./phone-utils.js?v=tintin-20260803-phone-unique-1",
           "target": "js/phone-utils.js",
           "dynamic": false,
           "line": 21
@@ -18888,8 +18888,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 24392,
-      "sha256": "64ee5b4dd6c6ea52203c6a1b5142a020344e1f2adddb344a8f4531d840a1b86e",
+      "bytes": 24390,
+      "sha256": "397e93bb6dc937131f9ba8b944eae7986c251842811c6d498b44ab8d44107676",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18920,7 +18920,7 @@
           "line": 15
         },
         {
-          "raw": "./phone-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "./phone-utils.js?v=tintin-20260803-phone-unique-1",
           "target": "js/phone-utils.js",
           "dynamic": false,
           "line": 20
@@ -22548,8 +22548,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 82306,
-      "sha256": "d6bad2172930fef00b205920fa87a41958a869b1c4c624bab3547b9eddeedf92"
+      "bytes": 82304,
+      "sha256": "c8f990989c31c95ec847aad30796bc7b466ed17c563bbd0ba3d468b344500e3b"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -22674,8 +22674,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 14590,
-      "sha256": "561385265b5689e642194563f3d1ab7abb0b7ab75ae08076d5d053c93a627320"
+      "bytes": 15634,
+      "sha256": "bf0b574259ff20fa08df7df377896870c6ccff1c9b51d1a05fc069bca2be870a"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -23688,8 +23688,8 @@
     {
       "path": "js/phone-reservation.js",
       "extension": ".js",
-      "bytes": 3206,
-      "sha256": "7110537cf22c28caa35f9782af191949d3a0bdd49f72aaf68de28ef5a6b5504c"
+      "bytes": 3204,
+      "sha256": "32660ae6e3b77f81cdf03689743c0baa01fd56a2b964fe31f391860c7c9922f8"
     },
     {
       "path": "js/phone-utils.js",
@@ -23802,8 +23802,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 24392,
-      "sha256": "64ee5b4dd6c6ea52203c6a1b5142a020344e1f2adddb344a8f4531d840a1b86e"
+      "bytes": 24390,
+      "sha256": "397e93bb6dc937131f9ba8b944eae7986c251842811c6d498b44ab8d44107676"
     },
     {
       "path": "js/security-utils.js",
@@ -23886,8 +23886,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 46170,
-      "sha256": "4c708d5778677184fef8a28834f47eb6d812c17fe760d37f99d76c4168e6b885"
+      "bytes": 46414,
+      "sha256": "f1c2999d7aecb75fea738a343e0336eefd61f2ab6f0e40a210373e236011d05f"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -24090,8 +24090,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 29578,
-      "sha256": "44f2092687d97da222f7c4ef46d1d230b2f45b629631f20d81203d29c9413006"
+      "bytes": 29576,
+      "sha256": "faaf76f5d9c8d925b9517703e3bd21b3b074a2bc9d9926dda654203887139b6c"
     },
     {
       "path": "playwright.config.js",
@@ -26935,7 +26935,7 @@
     },
     {
       "file": "login.html",
-      "line": 384,
+      "line": 387,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -29205,7 +29205,7 @@
           },
           {
             "file": "login.html",
-            "line": 679,
+            "line": 683,
             "operation": "doc"
           },
           {

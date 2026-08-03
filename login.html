@@ -183,7 +183,7 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/phone-utils.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
@@ -349,6 +349,9 @@ async function ensureProfileComplete(user, role) {
   document.getElementById('login-hint').style.display = 'none';
   const profileBlock = document.getElementById('login-profile-block');
   profileBlock.style.display = '';
+  // El alta lleva un mapa adentro: la tarjeta se ensancha para que no quede
+  // apretada (ver --login-shell-width en css/login.css).
+  document.body.classList.add('login-setup-open');
 
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
@@ -545,6 +548,7 @@ async function ensureProfileComplete(user, role) {
           }
         });
         profileBlock.style.display = 'none';
+        document.body.classList.remove('login-setup-open');
         showOverlay();
         setOverlayText('Redireccionando a tu cuenta…');
         resolve();

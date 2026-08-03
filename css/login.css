@@ -80,7 +80,10 @@ body.tt-public-shell-mounted .login-page {
    diseno en desktop, tablet y movil, con fondo solido para que el contraste
    del texto no dependa de que se transparente lo que quede detras. */
 .login-shell {
-  width: min(440px, 100%);
+  /* Ancho por breakpoint. El login simple (Google + correo) se lee mejor
+     angosto; el alta de la cuenta lleva un mapa adentro y necesita más aire,
+     por eso body.login-setup-open lo ensancha. */
+  width: min(var(--login-shell-width, 440px), 100%);
   position: relative;
   border: 1px solid rgba(125, 23, 58, .09);
   border-radius: 32px;
@@ -94,8 +97,40 @@ body.tt-public-shell-mounted .login-page {
   display: grid;
   align-content: center;
   justify-items: center;
-  padding: clamp(40px, 7vw, 64px) clamp(28px, 7vw, 56px);
+  /* Los márgenes laterales crecen con la pantalla en vez de quedar clavados:
+     en móvil el contenido necesita todo el ancho disponible, en desktop un
+     respiro mayor a los lados. */
+  padding: var(--login-pad-y, 40px) var(--login-pad-x, 22px);
   background: transparent !important;
+}
+
+/* Móvil: márgenes chicos, para que los campos y el mapa aprovechen el ancho. */
+:root {
+  --login-shell-width: 440px;
+  --login-pad-x: 22px;
+  --login-pad-y: 40px;
+}
+
+body.login-setup-open { --login-shell-width: 560px; }
+
+/* Tablet */
+@media (min-width: 600px) {
+  :root {
+    --login-shell-width: 480px;
+    --login-pad-x: 40px;
+    --login-pad-y: 52px;
+  }
+  body.login-setup-open { --login-shell-width: 640px; }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  :root {
+    --login-shell-width: 500px;
+    --login-pad-x: 56px;
+    --login-pad-y: 60px;
+  }
+  body.login-setup-open { --login-shell-width: 680px; }
 }
 
 .login-mobile-logo {
