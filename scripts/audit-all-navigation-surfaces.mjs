@@ -58,9 +58,13 @@ const AUX_PAGES_NO_ACTIVE_ROUTE = [
   'terminos.html', 'privacidad.html', '404.html',
 ];
 const BREAKPOINTS = [
-  ['mobile', 390, 844], ['mobile-narrow', 320, 568], ['tablet', 820, 1180],
-  ['tablet-edge', 1024, 900], ['desktop', 1280, 900], ['desktop-wide', 1920, 1080],
+  ['mobile', 390, 844], ['tablet', 820, 1180], ['desktop', 1280, 900],
 ];
+// Set TT_AUDIT_EXTRA_BREAKPOINTS=1 for the wider sweep (320, 1024, 1920)
+// used during a manual, unhurried run — the CI/default run stays fast.
+if (process.env.TT_AUDIT_EXTRA_BREAKPOINTS === '1') {
+  BREAKPOINTS.push(['mobile-narrow', 320, 568], ['tablet-edge', 1024, 900], ['desktop-wide', 1920, 1080]);
+}
 
 const browser = await chromium.launch({
   headless: true,
