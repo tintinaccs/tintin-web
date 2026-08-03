@@ -2074,7 +2074,7 @@ function renderOrdersTable(orders) {
               <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${escapeHtmlAdmin(o.userName || '—')}</div>
               <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${escapeHtmlAdmin(o.userEmail || '—')}</div>
               <div class="adm-detail-row"><span class="adm-detail-label">Teléfono:</span> ${escapeHtmlAdmin(o.userPhone || '—')}</div>
-              <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${escapeHtmlAdmin(o.shipping?.method || o.shippingMethod || '—')} — ${escapeHtmlAdmin(o.shipping?.city || o.city || '')}</div>
+              <div class="adm-detail-row"><span class="adm-detail-label">Envío:</span> ${escapeHtmlAdmin(o.shipping?.method || o.shippingMethod || '—')}${o.shipping?.encomiendaMode ? ` (${o.shipping.encomiendaMode === 'agencia' ? 'retiro en agencia' : 'entrega en puerta'})` : ''} — ${escapeHtmlAdmin(o.shipping?.city || o.city || '')}</div>
               ${o.shipping?.address || o.address ? `<div class="adm-detail-row"><span class="adm-detail-label">Dirección:</span> ${escapeHtmlAdmin(o.shipping?.address || o.address)}</div>` : ''}
               ${o.shipping?.referencia || o.referencia ? `<div class="adm-detail-row"><span class="adm-detail-label">Referencia:</span> ${escapeHtmlAdmin(o.shipping?.referencia || o.referencia)}</div>` : ''}
               <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>

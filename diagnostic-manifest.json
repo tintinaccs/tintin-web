@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T17:16:47.038Z",
-  "sourceFingerprint": "875e88cb5125750ad1a99e8ec2b7581ce073c22558215e6fb18ec87500a578c2",
+  "generatedAt": "2026-08-03T17:33:43.978Z",
+  "sourceFingerprint": "e1e27a0c370d4682979c8d7d2ff233d9d985a01957b59d8da6e5c9e25975308a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 458,
-    "textFiles": 426,
-    "totalBytes": 5277060,
+    "files": 462,
+    "textFiles": 430,
+    "totalBytes": 5298866,
     "pages": 18,
-    "modules": 268
+    "modules": 272
   },
   "viewports": [
     {
@@ -7735,8 +7735,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 82304,
-      "sha256": "c8f990989c31c95ec847aad30796bc7b466ed17c563bbd0ba3d468b344500e3b",
+      "bytes": 87920,
+      "sha256": "f7ed7687f79c200ec4ff54dc9f415cb883f6519000d3a8d7e36a7f5fb7a0e180",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7757,13 +7757,13 @@
           "error": ""
         },
         {
-          "line": 335,
+          "line": 361,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 64,
+      "ids": 72,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -7788,22 +7788,22 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1709
+          "line": 1818
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1710
+          "line": 1819
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1711
+          "line": 1820
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1712
+          "line": 1821
         }
       ],
       "styles": [
@@ -7913,7 +7913,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 320
+          "line": 346
         },
         {
           "raw": "index.html",
@@ -7923,7 +7923,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 325
+          "line": 351
         }
       ],
       "references": [
@@ -7954,25 +7954,25 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 1709,
+          "line": 1818,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 1710,
+          "line": 1819,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 1711,
+          "line": 1820,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 1712,
+          "line": 1821,
           "exists": true
         },
         {
@@ -8080,7 +8080,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 325,
+          "line": 351,
           "exists": true
         }
       ],
@@ -8102,17 +8102,17 @@
         {
           "id": "panel-2",
           "classes": "ck-panel",
-          "line": 194
+          "line": 220
         },
         {
           "id": "panel-3",
           "classes": "ck-panel",
-          "line": 227
+          "line": 253
         },
         {
           "id": "panel-4",
           "classes": "ck-panel",
-          "line": 277
+          "line": 303
         }
       ],
       "buttons": [
@@ -8131,8 +8131,52 @@
           "line": 95
         },
         {
+          "id": "ck-enc-agencia",
+          "classes": [
+            "ck-enc-mode"
+          ],
+          "type": "button",
+          "text": "🏢 Retiro en agencia Lo pasás a buscar por la transportadora",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 154
+        },
+        {
+          "id": "ck-enc-puerta",
+          "classes": [
+            "ck-enc-mode"
+          ],
+          "type": "button",
+          "text": "🏠 Entrega en puerta Te lo llevan a tu dirección",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 159
+        },
+        {
+          "id": "ck-saved-location-confirm",
+          "classes": [
+            "ck-saved-confirm-yes"
+          ],
+          "type": "button",
+          "text": "Sí, es acá",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 193
+        },
+        {
           "id": "ck-saved-location-change",
-          "classes": [],
+          "classes": [
+            "ck-saved-confirm-no"
+          ],
           "type": "button",
           "text": "Marcar otra",
           "ariaLabel": "",
@@ -8140,7 +8184,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 169
+          "line": 194
         },
         {
           "id": "btn-step2-next",
@@ -8154,7 +8198,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 188
+          "line": 214
         },
         {
           "id": "btn-step2-back",
@@ -8168,7 +8212,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 189
+          "line": 215
         },
         {
           "id": "btn-step3-next",
@@ -8182,7 +8226,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 221
+          "line": 247
         },
         {
           "id": "btn-step3-back",
@@ -8196,7 +8240,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 222
+          "line": 248
         },
         {
           "id": "btn-step4-next",
@@ -8210,7 +8254,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 271
+          "line": 297
         },
         {
           "id": "btn-step4-back",
@@ -8224,7 +8268,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 272
+          "line": 298
         },
         {
           "id": "ck-confirm-btn",
@@ -8238,7 +8282,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 294
+          "line": 320
         }
       ],
       "controls": [
@@ -8266,7 +8310,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 152,
+          "line": 170,
           "labeled": true
         },
         {
@@ -8275,7 +8319,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 157,
+          "line": 175,
           "labeled": true
         },
         {
@@ -8284,7 +8328,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 172,
+          "line": 198,
           "labeled": true
         },
         {
@@ -8293,7 +8337,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 179,
+          "line": 205,
           "labeled": true
         },
         {
@@ -8302,7 +8346,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 181,
+          "line": 207,
           "labeled": true
         },
         {
@@ -8311,7 +8355,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 202,
+          "line": 228,
           "labeled": true
         },
         {
@@ -8320,7 +8364,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 207,
+          "line": 233,
           "labeled": true
         },
         {
@@ -8329,7 +8373,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 208,
+          "line": 234,
           "labeled": true
         },
         {
@@ -8338,7 +8382,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 213,
+          "line": 239,
           "labeled": true
         },
         {
@@ -8347,7 +8391,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 217,
+          "line": 243,
           "labeled": true
         },
         {
@@ -8356,7 +8400,7 @@
           "name": "ck-pay",
           "type": "radio",
           "ariaLabel": "",
-          "line": 236,
+          "line": 262,
           "labeled": true
         },
         {
@@ -8365,7 +8409,7 @@
           "name": "ck-pay",
           "type": "radio",
           "ariaLabel": "",
-          "line": 248,
+          "line": 274,
           "labeled": true
         }
       ]
@@ -15764,8 +15808,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 19480,
-      "sha256": "cac8d8e017e4d4c2d27e4fcaeee4cf32befda94d598ff96f9e78868d8162eb3f",
+      "bytes": 19912,
+      "sha256": "8fbaf312604eadd44df10987f688b93ccedd2154773333dc0d02b39db0f2ad2c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15793,11 +15837,11 @@
         },
         {
           "url": "https://maps.google.com/",
-          "line": 235
+          "line": 245
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 308
+          "line": 318
         }
       ]
     },
@@ -15889,8 +15933,8 @@
     },
     {
       "path": "js/admin-app.js",
-      "bytes": 438005,
-      "sha256": "4d649132d439457e10f7d87f0dcfde1715077d882a789986e07530ce201b5454",
+      "bytes": 438133,
+      "sha256": "696e56a1c3a3acf97823e0249991fef49f925f5aad6b77eb48ae4e2141efb636",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16959,6 +17003,17 @@
       ]
     },
     {
+      "path": "js/checkout-encomienda.js",
+      "bytes": 4126,
+      "sha256": "6a5744ea4d642fa7f9cd494e8b0f2de390b5be1085714c62b2890da87c9bd7ed",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/checkout-maintenance.js",
       "bytes": 5009,
       "sha256": "bad18ed79f0ace24915c5c750fae07e5b5316605b97df7aae50dc78f531dee61",
@@ -17055,6 +17110,17 @@
           "line": 515
         }
       ]
+    },
+    {
+      "path": "js/checkout-saved-location.js",
+      "bytes": 2995,
+      "sha256": "6c6e375e1152a2fdc004176578b4d2f30bac0f7e78f39d8657328867cd5be793",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
     },
     {
       "path": "js/collections-maintenance.js",
@@ -18888,8 +18954,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 24390,
-      "sha256": "397e93bb6dc937131f9ba8b944eae7986c251842811c6d498b44ab8d44107676",
+      "bytes": 25340,
+      "sha256": "eaf59b29cfcdd13f27b14841a5cfd38007475267a49ebb23e8fe8f37b9f09dad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18945,7 +19011,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 461
+          "line": 480
         }
       ]
     },
@@ -21865,6 +21931,66 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/encomienda.test.mjs",
+      "bytes": 2720,
+      "sha256": "08bfe7c94d56ac7bc29fdae7dbb42ff1c7a30f0427aec2ad1b4ee895ff06095b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/checkout-encomienda.js",
+          "target": "js/checkout-encomienda.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/checkout/saved-location.test.mjs",
+      "bytes": 1893,
+      "sha256": "9a2daebc80c937ed09dee17c521e87101fb9eff05f06e6708430ea3a2da60592",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/checkout-saved-location.js",
+          "target": "js/checkout-saved-location.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "bytes": 2520,
       "sha256": "afe01f259f40b8d37d378f7fff516f9aa68ab9f7f3dbeae9c23fc3f63559f25f",
@@ -22548,8 +22674,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 82304,
-      "sha256": "c8f990989c31c95ec847aad30796bc7b466ed17c563bbd0ba3d468b344500e3b"
+      "bytes": 87920,
+      "sha256": "f7ed7687f79c200ec4ff54dc9f415cb883f6519000d3a8d7e36a7f5fb7a0e180"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -22608,8 +22734,8 @@
     {
       "path": "css/checkout.css",
       "extension": ".css",
-      "bytes": 20669,
-      "sha256": "dbbb0daeb321f636ba720ada0dcb06bfb53a726eae5d5ea95e6363f040926ff9"
+      "bytes": 23615,
+      "sha256": "f0d665e5f07d3b1d52dc0ce7fc2397b52e08865d379b3d34d21757b4eb997930"
     },
     {
       "path": "css/collections-page.css",
@@ -23064,8 +23190,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 19480,
-      "sha256": "cac8d8e017e4d4c2d27e4fcaeee4cf32befda94d598ff96f9e78868d8162eb3f"
+      "bytes": 19912,
+      "sha256": "8fbaf312604eadd44df10987f688b93ccedd2154773333dc0d02b39db0f2ad2c"
     },
     {
       "path": "functions/api/sheets-product-sync.js",
@@ -23106,8 +23232,8 @@
     {
       "path": "js/admin-app.js",
       "extension": ".js",
-      "bytes": 438005,
-      "sha256": "4d649132d439457e10f7d87f0dcfde1715077d882a789986e07530ce201b5454"
+      "bytes": 438133,
+      "sha256": "696e56a1c3a3acf97823e0249991fef49f925f5aad6b77eb48ae4e2141efb636"
     },
     {
       "path": "js/admin-collections-phase4.js",
@@ -23272,6 +23398,12 @@
       "sha256": "58474295eecd6c1006364abeb5970253da83a2fc2b4e0c13b9e7e308ffa518e6"
     },
     {
+      "path": "js/checkout-encomienda.js",
+      "extension": ".js",
+      "bytes": 4126,
+      "sha256": "6a5744ea4d642fa7f9cd494e8b0f2de390b5be1085714c62b2890da87c9bd7ed"
+    },
+    {
       "path": "js/checkout-maintenance.js",
       "extension": ".js",
       "bytes": 5009,
@@ -23300,6 +23432,12 @@
       "extension": ".js",
       "bytes": 27173,
       "sha256": "822fd1205516da5a30074f46d6162dece4c4b51a76596b2b02bbb91d5d843dc5"
+    },
+    {
+      "path": "js/checkout-saved-location.js",
+      "extension": ".js",
+      "bytes": 2995,
+      "sha256": "6c6e375e1152a2fdc004176578b4d2f30bac0f7e78f39d8657328867cd5be793"
     },
     {
       "path": "js/collections-maintenance.js",
@@ -23802,8 +23940,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 24390,
-      "sha256": "397e93bb6dc937131f9ba8b944eae7986c251842811c6d498b44ab8d44107676"
+      "bytes": 25340,
+      "sha256": "eaf59b29cfcdd13f27b14841a5cfd38007475267a49ebb23e8fe8f37b9f09dad"
     },
     {
       "path": "js/security-utils.js",
@@ -24784,6 +24922,18 @@
       "sha256": "029111a1ad889209377030aa7470ef95db730530d9cf4c27a3fe65fe938849bb"
     },
     {
+      "path": "tests/checkout/encomienda.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2720,
+      "sha256": "08bfe7c94d56ac7bc29fdae7dbb42ff1c7a30f0427aec2ad1b4ee895ff06095b"
+    },
+    {
+      "path": "tests/checkout/saved-location.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1893,
+      "sha256": "9a2daebc80c937ed09dee17c521e87101fb9eff05f06e6708430ea3a2da60592"
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "extension": ".mjs",
       "bytes": 2520,
@@ -25304,28 +25454,28 @@
     },
     {
       "file": "checkout.html",
-      "line": 325,
+      "line": 351,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 744,
+      "line": 774,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 885,
+      "line": 915,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "checkout.html",
-      "line": 895,
+      "line": 925,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -27904,11 +28054,11 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 309
+          "line": 335
         },
         {
           "file": "checkout.html",
-          "line": 310
+          "line": 336
         }
       ]
     },
@@ -27957,7 +28107,7 @@
       "references": [
         {
           "file": "checkout.html",
-          "line": 895
+          "line": 925
         },
         {
           "file": "js/profile-gate.js",
@@ -28002,7 +28152,7 @@
   "apiCalls": [
     {
       "file": "checkout.html",
-      "line": 1584,
+      "line": 1693,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -28090,7 +28240,7 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 379,
+            "line": 398,
             "operation": "doc"
           },
           {
@@ -28575,7 +28725,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 729,
+            "line": 759,
             "operation": "collection"
           },
           {
@@ -28710,12 +28860,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 433,
+            "line": 461,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 466,
+            "line": 494,
             "operation": "doc"
           },
           {
@@ -28855,12 +29005,12 @@
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 291,
+            "line": 310,
             "operation": "doc"
           },
           {
             "file": "js/secure-checkout-order.js",
-            "line": 292,
+            "line": 311,
             "operation": "doc"
           },
           {
@@ -29065,12 +29215,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1450,
+            "line": 1559,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1692,
+            "line": 1801,
             "operation": "doc"
           },
           {

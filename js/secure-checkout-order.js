@@ -198,6 +198,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     };
   }
 
+  // 'agencia' | 'puerta' | '' — lo elige la clienta en el paso de envío y sólo
+  // aplica a encomienda. Sin este dato no se sabe si el pedido se despacha a
+  // una agencia o se lleva a una puerta, que es justamente lo que hay que
+  // coordinar después.
+  function encomiendaMode() {
+    const puerta = document.getElementById('ck-enc-puerta');
+    const agencia = document.getElementById('ck-enc-agencia');
+    if (puerta?.classList.contains('is-active')) return 'puerta';
+    if (agencia?.classList.contains('is-active')) return 'agencia';
+    return '';
+  }
+
   function resolveShipping(settings, selectedCity, location) {
     if (selectedCity === '__retiro__') {
       return {
@@ -227,13 +239,20 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const encomienda = normalizeCities(settings.encomiendaCities, settings.encomiendaCost)
       .find(city => city.name.toLocaleLowerCase('es') === wanted);
     if (encomienda) {
+      const mode = encomiendaMode();
+      if (!mode) {
+        throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+      }
       return {
         method: 'encomienda',
+        // Entrega en puerta necesita el punto exacto igual que el delivery;
+        // el retiro en agencia no tiene dirección que guardar.
+        encomiendaMode: mode,
         city: encomienda.name,
         cost: encomienda.price,
         pending: encomienda.price === null,
         rateIndex: encomienda.sourceIndex,
-        mapLocation: null
+        mapLocation: mode === 'puerta' ? location : null
       };
     }
 

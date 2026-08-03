@@ -128,11 +128,21 @@ function fmtDate(value) {
 
 function shippingLabel(order) {
   const method = clean(order?.shipping?.method, 40);
-  return {
+  const base = {
     delivery: 'Delivery (Zona Central)',
     encomienda: 'Encomienda (Interior)',
     retiro: 'Retiro en San Lorenzo'
   }[method] || method || 'A coordinar';
+
+  // En encomienda hay que saber si se despacha a una agencia o si se lleva a
+  // la puerta: son dos operaciones distintas y sin ese dato no se puede
+  // coordinar el pedido.
+  if (method === 'encomienda') {
+    const mode = clean(order?.shipping?.encomiendaMode, 20);
+    if (mode === 'agencia') return `${base} — retiro en agencia`;
+    if (mode === 'puerta') return `${base} — entrega en puerta`;
+  }
+  return base;
 }
 
 function paymentLabel(order) {
