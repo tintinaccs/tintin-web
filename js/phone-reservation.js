@@ -1,21 +1,16 @@
 // =============================================================
 // TINTIN ACCESORIOS — Un teléfono, una cuenta
 // =============================================================
-// La unicidad la garantiza Firestore, no este archivo: el id del documento
-// en `phoneReservations` es el número normalizado, y las reglas sólo
-// permiten `create` (nunca `update`). Crear un documento que ya existe es un
-// update, y las reglas lo rechazan. Por eso dos personas registrando el
-// mismo número al mismo tiempo no pueden pasar las dos: la segunda escritura
-// falla del lado del servidor, no por una comprobación de acá que se pueda
-// saltear.
+// La unicidad la garantiza Firestore: el perfil sólo puede guardar un número
+// cuando existe una reserva con esa misma clave y pertenece a la misma cuenta.
 //
-// Este módulo no lee la reserva antes de escribirla, a propósito: leerla
-// permitiría averiguar si un número tiene cuenta, y las reglas tampoco lo
-// permiten. Se intenta crear y se interpreta el fallo.
-//
-// Ojo con el alcance: esto evita cuentas duplicadas y ordena los datos, pero
-// NO frena bots — quien automatiza inventa un número distinto cada vez. Eso
-// se corta con App Check y con el límite de altas por IP, no acá.
+// Importante: Firestore devuelve `permission-denied` tanto cuando el número ya
+// está reservado por otra cuenta como cuando la reserva ya existe para la MISMA
+// cuenta (por ejemplo, después de un intento anterior que alcanzó a reservar el
+// número pero no terminó de guardar el perfil). Por eso este módulo no debe
+// convertir automáticamente cualquier `permission-denied` en “número ocupado”.
+// La escritura posterior del perfil vuelve a validar el dueño de la reserva y
+// mantiene la unicidad del lado del servidor.
 
 import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { phoneKey } from "./phone-utils.js?v=tintin-20260803-phone-unique-1";
@@ -30,8 +25,11 @@ export class PhoneAlreadyRegisteredError extends Error {
 /**
  * Reserva el número para esta cuenta.
  *
- * @throws {PhoneAlreadyRegisteredError} si el número ya está en otra cuenta.
- * @returns {Promise<string>} la clave reservada, para poder liberarla después.
+ * Si Firestore rechaza el create con `permission-denied`, se devuelve la clave
+ * y se deja que la escritura del perfil compruebe si la reserva ya era de esta
+ * misma cuenta. Así un reintento válido no queda bloqueado falsamente.
+ *
+ * @returns {Promise<string>} la clave de la reserva.
  */
 export async function reservePhone(db, uid, rawPhone, country) {
   const key = phoneKey(rawPhone, country);
@@ -44,20 +42,20 @@ export async function reservePhone(db, uid, rawPhone, country) {
     });
     return key;
   } catch (error) {
-    // `permission-denied` acá significa, en la práctica, que el documento ya
-    // existe: el payload lo arma este módulo y cumple las reglas, así que la
-    // única condición que puede fallar es la de que el número esté libre.
-    if (error?.code === 'permission-denied') throw new PhoneAlreadyRegisteredError();
+    if (error?.code === 'permission-denied') {
+      // Puede ser una reserva propia dejada por un intento anterior. No se
+      // anuncia como duplicado todavía: las reglas de `users/{uid}` validan
+      // después que la reserva pertenezca realmente a esta misma cuenta.
+      console.info('[phone-reservation] La reserva ya existía o Firestore la rechazó; se validará al guardar el perfil.');
+      return key;
+    }
     throw error;
   }
 }
 
 /**
  * Libera un número. Se usa al cambiar de teléfono: el viejo queda disponible
- * para quien lo herede, que es lo que pasa en la vida real con los números.
- *
- * No lanza si falla: quedarse con una reserva huérfana es molesto pero no
- * rompe nada, y no vale la pena frenar por eso un cambio de datos.
+ * para quien lo herede.
  */
 export async function releasePhone(db, key) {
   if (!key) return;
