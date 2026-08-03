@@ -1,24 +1,23 @@
 // =============================================================
-// TINTIN ACCESORIOS — Perfil incompleto: no se navega hasta completarlo
+// TINTIN ACCESORIOS — Sin perfil completo no se compra
 // =============================================================
-// Una cuenta recién creada no sirve para vender: sin nombre, apellido,
-// teléfono y ubicación no se puede armar un pedido ni entregarlo. Antes se
-// podía cerrar el formulario del alta y seguir navegando logueada con el
-// perfil vacío, y el dato recién se pedía al llegar al checkout.
+// Un pedido sin nombre, teléfono y ubicación no se puede entregar. Este
+// guardia exige el perfil completo antes de dejar avanzar en el checkout, y
+// manda a terminarlo devolviendo después a donde estaba.
 //
-// Este guardia corre en todas las páginas públicas (lo dispara
-// js/session-guard.js, que ya se cargaba en todas) y manda a completar el
-// perfil antes de mostrar nada. Escribir /catalogo.html a mano tampoco
-// esquiva el paso.
+// Corre SÓLO en el checkout (GUARDED_PAGES), no en todo el sitio. Mirar
+// productos no necesita una dirección de entrega, y pedirla en la entrada
+// espantaba clientas sin frenar a nadie que quisiera ensuciar la base: quien
+// automatiza no navega, llena el formulario con datos inventados y sigue.
+// Lo protegido no cambió — sigue sin poder comprar sin cuenta completa, sin
+// teléfono único y sin ubicación con coordenadas.
 //
 // Alcance: sólo cuentas con rol `client`. El personal (admin, agente,
 // viewer) y el Super Admin entran igual — bloquearles el panel por no tener
-// una dirección de entrega cargada no tendría sentido y los dejaría afuera
-// de su propia herramienta.
+// una dirección de entrega cargada no tendría sentido.
 //
-// Quien no quiera completarlo tiene salida: el botón "Volver a la tienda"
-// del alta cierra la sesión, así puede seguir mirando el catálogo como
-// visitante. Lo que no existe es navegar logueada a medias.
+// Quien no quiera completarlo tiene salida: el modal del alta cierra la
+// sesión y la devuelve a la tienda, donde puede seguir mirando.
 
 import { auth, db } from "./firebase.js?v=tintin-20260730-appcheck-stable-4";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -63,15 +62,31 @@ function isLoginPage() {
 }
 
 /**
- * Páginas donde el guardia no corre.
+ * Páginas donde SÍ corre el guardia.
  *
- * - login: es justamente donde se completa el perfil.
- * - admin*: son del personal, que queda fuera del alcance igual, pero se
- *   listan para no gastar una lectura de Firestore en cada carga.
+ * Es una lista corta a propósito: el perfil completo hace falta para
+ * entregar un pedido, no para mirar productos. Pedirlo en la entrada
+ * espantaba clientas —una llega desde Instagram a mirar aros y se choca con
+ * un formulario que le pide marcar su casa en un mapa— sin frenar a nadie
+ * que quisiera ensuciar la base: quien automatiza no navega, llena el
+ * formulario con datos inventados y sigue igual.
+ *
+ * En el checkout la exigencia sí tiene sentido: sin nombre, teléfono y
+ * ubicación no hay pedido que se pueda entregar. Y no se pierde nada de lo
+ * que protegía antes — sigue sin poder comprar sin cuenta completa, sin
+ * teléfono único y sin ubicación con coordenadas.
  */
+const GUARDED_PAGES = ['checkout'];
+
+function isGuardedPage() {
+  return GUARDED_PAGES.includes(currentPageName());
+}
+
+/** El guardia no corre acá: login es donde se completa, admin es del personal. */
 function isExemptPage() {
   const page = currentPageName();
-  return page === 'login' || page.startsWith('admin');
+  if (page === 'login' || page.startsWith('admin')) return true;
+  return !isGuardedPage();
 }
 
 let redirecting = false;

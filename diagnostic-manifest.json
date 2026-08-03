@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T20:53:51.004Z",
-  "sourceFingerprint": "0d1ba81d9762d684c0a3fa6cd04178c0082b7ec4ffdfb126bec6602ecb6c4dd5",
+  "generatedAt": "2026-08-03T20:59:52.665Z",
+  "sourceFingerprint": "0545cb41029b4ab7ffc47d7867fb20229b57c56d44fab2522c8f59bf580f5534",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 469,
     "textFiles": 437,
-    "totalBytes": 5359724,
+    "totalBytes": 5360451,
     "pages": 18,
     "modules": 274
   },
@@ -18686,8 +18686,8 @@
     },
     {
       "path": "js/profile-gate.js",
-      "bytes": 5398,
-      "sha256": "9e85d9f7e8a62121d8c63a2d9d86e8884b6c5c133e817963a8a1fd6d15d02953",
+      "bytes": 6125,
+      "sha256": "3c7be2a9bbb3c31101c0b6a2e89caf05852602280f4a7addc728cde67bae73ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18697,41 +18697,41 @@
           "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/firebase.js",
           "dynamic": false,
-          "line": 23
+          "line": 22
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 24
+          "line": 23
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 25
+          "line": 24
         },
         {
           "raw": "./profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2",
           "target": "js/profile-onboarding.mjs",
           "dynamic": false,
-          "line": 26
+          "line": 25
         },
         {
           "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/roles.js",
           "dynamic": false,
-          "line": 27
+          "line": 26
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 24
+          "line": 23
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 25
+          "line": 24
         }
       ]
     },
@@ -23945,8 +23945,8 @@
     {
       "path": "js/profile-gate.js",
       "extension": ".js",
-      "bytes": 5398,
-      "sha256": "9e85d9f7e8a62121d8c63a2d9d86e8884b6c5c133e817963a8a1fd6d15d02953"
+      "bytes": 6125,
+      "sha256": "3c7be2a9bbb3c31101c0b6a2e89caf05852602280f4a7addc728cde67bae73ed"
     },
     {
       "path": "js/profile-maintenance.js",
@@ -26834,21 +26834,21 @@
     },
     {
       "file": "js/profile-gate.js",
-      "line": 51,
+      "line": 50,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/profile-gate.js",
-      "line": 90,
+      "line": 105,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/profile-gate.js",
-      "line": 93,
+      "line": 108,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -28182,7 +28182,7 @@
         },
         {
           "file": "js/profile-gate.js",
-          "line": 93
+          "line": 108
         }
       ]
     },
@@ -29386,7 +29386,7 @@
           },
           {
             "file": "js/profile-gate.js",
-            "line": 108,
+            "line": 123,
             "operation": "doc"
           },
           {
