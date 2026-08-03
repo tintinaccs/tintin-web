@@ -96,7 +96,7 @@ export function attachLocationPicker({ input, resultsList, selectedLabel, onChan
     if (!list.length) { closeList(); return; }
     resultsList.replaceChildren(...list.map((place, index) => {
       const li = document.createElement('li');
-      li.className = 'login-address-result';
+      li.className = 'tt-address-result';
       li.setAttribute('role', 'option');
       li.setAttribute('aria-selected', 'false');
       li.id = `${resultsList.id}-opt-${index}`;

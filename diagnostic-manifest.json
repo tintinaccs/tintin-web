@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T15:46:43.260Z",
-  "sourceFingerprint": "efdc997738366455ee63059c6875d7806033f1d9a81d2c725e9ecd297e6b61f4",
+  "generatedAt": "2026-08-03T15:55:55.152Z",
+  "sourceFingerprint": "c301631becf2bbe0a7cc97caad4bdf4b838511726cb295ad497dbb5c8bad5709",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 451,
-    "textFiles": 419,
-    "totalBytes": 5223262,
+    "files": 452,
+    "textFiles": 420,
+    "totalBytes": 5228071,
     "pages": 18,
     "modules": 262
   },
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 38888,
-      "sha256": "6c17c2b6e85dcaab6c61feb80a17ac778726bd84ca704d943d8a547eb2037bf6",
+      "bytes": 38971,
+      "sha256": "b977e99832d9fd112109d23b8f47665bccd985ad6033c2e3549e81af64b0ed19",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11552,7 +11552,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          58
+          59
         ]
       },
       "duplicateIds": [],
@@ -11564,7 +11564,7 @@
           "error": ""
         },
         {
-          "line": 140,
+          "line": 141,
           "module": true,
           "ok": true,
           "error": ""
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 800
+          "line": 801
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 801
+          "line": 802
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 802
+          "line": 803
         }
       ],
       "styles": [
@@ -11680,19 +11680,24 @@
           "line": 40
         },
         {
+          "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
+          "target": "css/location-picker.css",
+          "line": 41
+        },
+        {
           "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
-          "line": 41
+          "line": 42
         },
         {
           "raw": "css/motion.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/motion.css",
-          "line": 42
+          "line": 43
         },
         {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 43
+          "line": 44
         }
       ],
       "images": [],
@@ -11705,7 +11710,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 131
+          "line": 132
         }
       ],
       "references": [
@@ -11736,19 +11741,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 800,
+          "line": 801,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 801,
+          "line": 802,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 802,
+          "line": 803,
           "exists": true
         },
         {
@@ -11836,27 +11841,33 @@
           "exists": true
         },
         {
+          "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
+          "target": "css/location-picker.css",
+          "line": 41,
+          "exists": true
+        },
+        {
           "raw": "css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/login-maintenance.css",
-          "line": 41,
+          "line": 42,
           "exists": true
         },
         {
           "raw": "css/motion.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/motion.css",
-          "line": 42,
+          "line": 43,
           "exists": true
         },
         {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 43,
+          "line": 44,
           "exists": true
         },
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 131,
+          "line": 132,
           "exists": true
         }
       ],
@@ -11878,7 +11889,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 65
+          "line": 66
         },
         {
           "id": "btn-send-otp",
@@ -11892,7 +11903,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 83
+          "line": 84
         },
         {
           "id": "btn-verify-otp",
@@ -11906,7 +11917,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 93
+          "line": 94
         },
         {
           "id": "btn-resend-otp",
@@ -11920,7 +11931,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 94
+          "line": 95
         },
         {
           "id": "btn-change-email",
@@ -11934,7 +11945,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 95
+          "line": 96
         },
         {
           "id": "btn-change-profile-name",
@@ -11948,7 +11959,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 102
+          "line": 103
         },
         {
           "id": "btn-save-profile",
@@ -11962,7 +11973,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 125
+          "line": 126
         }
       ],
       "controls": [
@@ -11972,7 +11983,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 82,
+          "line": 83,
           "labeled": true
         },
         {
@@ -11981,7 +11992,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 92,
+          "line": 93,
           "labeled": true
         },
         {
@@ -11990,7 +12001,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 106,
+          "line": 107,
           "labeled": true
         },
         {
@@ -11999,7 +12010,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 108,
+          "line": 109,
           "labeled": true
         },
         {
@@ -12008,7 +12019,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "País del teléfono",
-          "line": 113,
+          "line": 114,
           "labeled": true
         },
         {
@@ -12017,7 +12028,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 114,
+          "line": 115,
           "labeled": true
         },
         {
@@ -12026,7 +12037,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 120,
+          "line": 121,
           "labeled": true
         }
       ]
@@ -12164,8 +12175,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 23502,
-      "sha256": "fd3e991a0c862a8c97d5eac4d047e7d29bfab235790497fe5773f6975c4b0121",
+      "bytes": 28268,
+      "sha256": "aa46c7a370c267e2ef8e1b8f0d9bb0081090c40eba42164da994ef6584451934",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12174,7 +12185,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          183
+          184
         ]
       },
       "duplicateIds": [],
@@ -12186,13 +12197,13 @@
           "error": ""
         },
         {
-          "line": 281,
+          "line": 307,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 18,
+      "ids": 28,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -12217,27 +12228,27 @@
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 279
+          "line": 305
         },
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 513
+          "line": 603
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 514
+          "line": 604
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 515
+          "line": 605
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 516
+          "line": 606
         }
       ],
       "styles": [
@@ -12307,9 +12318,14 @@
           "line": 39
         },
         {
+          "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
+          "target": "css/location-picker.css",
+          "line": 40
+        },
+        {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 40
+          "line": 41
         }
       ],
       "images": [],
@@ -12322,7 +12338,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 176
+          "line": 177
         },
         {
           "raw": "admin.html",
@@ -12332,7 +12348,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 233
+          "line": 259
         },
         {
           "raw": "https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8",
@@ -12342,7 +12358,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 242
+          "line": 268
         },
         {
           "raw": "catalogo.html",
@@ -12352,7 +12368,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 258
+          "line": 284
         },
         {
           "raw": "checkout.html",
@@ -12362,7 +12378,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 259
+          "line": 285
         },
         {
           "raw": "index.html",
@@ -12372,7 +12388,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 260
+          "line": 286
         }
       ],
       "references": [
@@ -12403,31 +12419,31 @@
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 279,
+          "line": 305,
           "exists": true
         },
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 513,
+          "line": 603,
           "exists": true
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 514,
+          "line": 604,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 515,
+          "line": 605,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 516,
+          "line": 606,
           "exists": true
         },
         {
@@ -12509,39 +12525,45 @@
           "exists": true
         },
         {
+          "raw": "css/location-picker.css?v=tintin-20260716-cloudinary-fix-1",
+          "target": "css/location-picker.css",
+          "line": 40,
+          "exists": true
+        },
+        {
           "raw": "css/contraste.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/contraste.css",
-          "line": 40,
+          "line": 41,
           "exists": true
         },
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 176,
+          "line": 177,
           "exists": true
         },
         {
           "raw": "admin.html",
           "target": "admin.html",
-          "line": 233,
+          "line": 259,
           "exists": true
         },
         {
           "raw": "catalogo.html",
           "target": "catalogo.html",
-          "line": 258,
+          "line": 284,
           "exists": true
         },
         {
           "raw": "checkout.html",
           "target": "checkout.html",
-          "line": 259,
+          "line": 285,
           "exists": true
         },
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 260,
+          "line": 286,
           "exists": true
         }
       ],
@@ -12551,6 +12573,50 @@
       "tabs": [],
       "sections": [],
       "buttons": [
+        {
+          "id": "btn-cambiar-ubicacion",
+          "classes": [
+            "perfil-btn",
+            "perfil-btn-outline"
+          ],
+          "type": "button",
+          "text": "📍 Elegir ubicación",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 210
+        },
+        {
+          "id": "btn-guardar-ubicacion",
+          "classes": [
+            "perfil-btn"
+          ],
+          "type": "button",
+          "text": "Guardar ubicación",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 219
+        },
+        {
+          "id": "btn-cancelar-ubicacion",
+          "classes": [
+            "perfil-btn",
+            "perfil-btn-outline"
+          ],
+          "type": "button",
+          "text": "Cancelar",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 220
+        },
         {
           "id": "btn-guardar-perfil",
           "classes": [
@@ -12564,7 +12630,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 269
+          "line": 295
         },
         {
           "id": "btn-logout",
@@ -12579,7 +12645,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 270
+          "line": 296
         }
       ],
       "controls": [
@@ -12589,7 +12655,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 191,
+          "line": 192,
           "labeled": true
         },
         {
@@ -12598,7 +12664,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 195,
+          "line": 196,
           "labeled": true
         },
         {
@@ -12607,7 +12673,16 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 199,
+          "line": 200,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "perfil-location-search",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 214,
           "labeled": true
         }
       ]
@@ -17874,8 +17949,8 @@
     },
     {
       "path": "js/location-picker.js",
-      "bytes": 6376,
-      "sha256": "97f5610e760209e30629cd0d90f864d232575092af44c04e1d874451d3dff73c",
+      "bytes": 6373,
+      "sha256": "4b2a988ca408447206d2536295476132e96a4ce17872eac5816d3b40615ea775",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22280,6 +22355,12 @@
       "sha256": "cd1a6148ad1c0c0c436aff517eaad6a12628a2a28b210aab8070e2ee3939604e"
     },
     {
+      "path": "css/location-picker.css",
+      "extension": ".css",
+      "bytes": 1399,
+      "sha256": "8b3981fcd6b81cbe3809f00b2e021ac3efb474ff0c8b22ed122d6f8e589679f9"
+    },
+    {
       "path": "css/login-maintenance.css",
       "extension": ".css",
       "bytes": 2022,
@@ -22288,8 +22369,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 13859,
-      "sha256": "015c1d53035e601fc3ae23b67e7c0f8bcd3e12f0537ecc67d6023a3315959d67"
+      "bytes": 12423,
+      "sha256": "bd29aff7b6a7b776d682516cac0ec696541a303b0230822c736ffdbb299a58d8"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -23182,8 +23263,8 @@
     {
       "path": "js/location-picker.js",
       "extension": ".js",
-      "bytes": 6376,
-      "sha256": "97f5610e760209e30629cd0d90f864d232575092af44c04e1d874451d3dff73c"
+      "bytes": 6373,
+      "sha256": "4b2a988ca408447206d2536295476132e96a4ce17872eac5816d3b40615ea775"
     },
     {
       "path": "js/login-maintenance.js",
@@ -23482,8 +23563,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 38888,
-      "sha256": "6c17c2b6e85dcaab6c61feb80a17ac778726bd84ca704d943d8a547eb2037bf6"
+      "bytes": 38971,
+      "sha256": "b977e99832d9fd112109d23b8f47665bccd985ad6033c2e3549e81af64b0ed19"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -23686,8 +23767,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 23502,
-      "sha256": "fd3e991a0c862a8c97d5eac4d047e7d29bfab235790497fe5773f6975c4b0121"
+      "bytes": 28268,
+      "sha256": "aa46c7a370c267e2ef8e1b8f0d9bb0081090c40eba42164da994ef6584451934"
     },
     {
       "path": "playwright.config.js",
@@ -26464,28 +26545,28 @@
     },
     {
       "file": "login.html",
-      "line": 131,
+      "line": 132,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 262,
+      "line": 263,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 265,
+      "line": 266,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 265,
+      "line": 266,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -26499,63 +26580,63 @@
     },
     {
       "file": "perfil.html",
-      "line": 176,
+      "line": 177,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 233,
+      "line": 259,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 258,
+      "line": 284,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 259,
+      "line": 285,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 260,
+      "line": 286,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 358,
+      "line": 397,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 369,
+      "line": 408,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 453,
+      "line": 543,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 488,
+      "line": 578,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -27467,7 +27548,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 265
+          "line": 266
         }
       ]
     },
@@ -27489,7 +27570,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 369
+          "line": 408
         }
       ]
     },
@@ -28066,12 +28147,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 464,
+            "line": 554,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 472,
+            "line": 562,
             "operation": "collection"
           },
           {
@@ -28726,17 +28807,17 @@
           },
           {
             "file": "login.html",
-            "line": 289,
+            "line": 290,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 535,
+            "line": 536,
             "operation": "doc"
           },
           {
             "file": "perfil.html",
-            "line": 364,
+            "line": 403,
             "operation": "doc"
           },
           {
