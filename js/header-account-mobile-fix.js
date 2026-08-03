@@ -27,6 +27,12 @@ function loadResponsiveBrandStyles(){
  });
 }
 
+function bootBrandReveal(){
+ if(window.TintinBrandRevealExtensionBooted)return;
+ import(new URL('js/brand-reveal-extension.js?v=tintin-20260803-brand-reveal-1',window.location.href).href)
+  .catch(function(error){console.warn('[TintinBrand] No se pudo cargar el reveal de marca:',error);});
+}
+
 function injectLegacyStyles(){
  if(document.getElementById('tt-account-mobile-fix-style'))return;
  var st=document.createElement('style');
@@ -76,6 +82,7 @@ function accountDropdown(){
 }
 
 loadResponsiveBrandStyles();
+bootBrandReveal();
 
 ready(function(){
  cleanTabbarAvatar();
