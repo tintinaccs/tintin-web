@@ -80,6 +80,13 @@ function parseCoordinateInput(rawValue) {
   return null;
 }
 
+function usablePlace(place) {
+  if (!place) return false;
+  const lat = Number(place.lat);
+  const lng = Number(place.lng);
+  return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+}
+
 export async function createLocationMap({
   mapEl,
   searchInput,
@@ -173,13 +180,20 @@ export async function createLocationMap({
     setLocation(lat, lng, place);
   };
 
-  const applyPlace = place => {
-    if (!place || !Number.isFinite(Number(place.lat)) || !Number.isFinite(Number(place.lng))) return;
+  const closeResults = () => {
+    if (!resultsEl) return;
+    resultsEl.replaceChildren();
+    resultsEl.classList.remove('show');
+    searchInput?.setAttribute('aria-expanded', 'false');
+  };
+
+  const applyPlace = (place, { scroll = true } = {}) => {
+    if (!usablePlace(place)) return;
     map.setView([Number(place.lat), Number(place.lng)], PICKED_ZOOM, { animate: false });
     placeMarker(Number(place.lat), Number(place.lng), place);
     closeResults();
     requestAnimationFrame(() => map.invalidateSize());
-    mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   map.on('click', event => placeMarker(event.latlng.lat, event.latlng.lng));
@@ -229,13 +243,6 @@ export async function createLocationMap({
     locateCurrent();
   };
   resolvedLocateButton?.addEventListener('click', onLocateClick, true);
-
-  const closeResults = () => {
-    if (!resultsEl) return;
-    resultsEl.replaceChildren();
-    resultsEl.classList.remove('show');
-    searchInput?.setAttribute('aria-expanded', 'false');
-  };
 
   const renderMessage = message => {
     if (!resultsEl) return;
@@ -337,6 +344,19 @@ export async function createLocationMap({
   if ('ResizeObserver' in window) {
     resizeObserver = new ResizeObserver(() => map.invalidateSize());
     resizeObserver.observe(mapEl);
+  }
+
+  // Si el perfil ya tenía una ubicación, se muestra en el mapa durante el
+  // alta sin desplazar la pantalla ni obligar a marcarla otra vez. El usuario
+  // puede continuar directamente o mover el pin si necesita corregirla.
+  const onboardingSavedLocation = mapEl.id === 'login-profile-map'
+    ? globalThis.TintinOnboardingSavedLocation
+    : null;
+  if (usablePlace(onboardingSavedLocation)) {
+    requestAnimationFrame(() => {
+      applyPlace(onboardingSavedLocation, { scroll: false });
+      mapEl.dataset.ttSavedLocationLoaded = '1';
+    });
   }
 
   return {
