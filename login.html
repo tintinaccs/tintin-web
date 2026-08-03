@@ -145,7 +145,24 @@
           </a>
         </div>
       </div>
+
+
     </section>
+  </div>
+</div>
+
+      <!-- Aparece sólo si intenta irse con el alta a medias. Sin cruz ni
+     cierre por Escape: hay que elegir uno de los dos caminos. -->
+<div class="login-exit-modal" id="login-exit-modal" hidden role="dialog" aria-modal="true"
+     aria-labelledby="login-exit-title" aria-describedby="login-exit-text">
+  <div class="login-exit-card">
+    <h2 class="login-exit-title" id="login-exit-title">Te falta poco</h2>
+    <p class="login-exit-text" id="login-exit-text">
+      Para comprar necesitamos tu nombre, tu teléfono y dónde entregarte.
+      Si preferís, podés seguir mirando la tienda sin cuenta.
+    </p>
+    <button type="button" class="login-exit-primary" id="btn-exit-continue">Completar mis datos</button>
+    <button type="button" class="login-exit-secondary" id="btn-exit-logout">Cerrar sesión y seguir mirando</button>
   </div>
 </div>
 
@@ -333,19 +350,51 @@ async function ensureProfileComplete(user, role) {
   const profileBlock = document.getElementById('login-profile-block');
   profileBlock.style.display = '';
 
-  // Salida para quien no quiera completar el alta ahora: se cierra la sesión
-  // y sigue navegando como visitante. Sin esto quedaría encerrada — el
-  // guardia de js/profile-gate.js la traería de vuelta acá desde cualquier
-  // página, porque su perfil sigue incompleto.
-  const backLink = document.getElementById('login-back-link').querySelector('a');
-  backLink.textContent = '← Seguir sin crear mi cuenta';
-  backLink.setAttribute('aria-label', 'Salir sin completar la cuenta y volver a la tienda');
-  backLink.onclick = async event => {
+  // Intentar irse con el alta a medias abre una decisión explícita, no una
+  // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
+  // sin cuenta. Sin esto quedaría encerrada — el guardia de
+  // js/profile-gate.js la traería de vuelta acá desde cualquier página,
+  // porque su perfil sigue incompleto.
+  const exitModal = document.getElementById('login-exit-modal');
+
+  const openExitModal = () => {
+    exitModal.hidden = false;
+    document.body.classList.add('login-exit-open');
+    document.getElementById('btn-exit-continue').focus();
+  };
+
+  const closeExitModal = () => {
+    exitModal.hidden = true;
+    document.body.classList.remove('login-exit-open');
+  };
+
+  document.getElementById('login-back-link').querySelector('a').onclick = event => {
     event.preventDefault();
+    openExitModal();
+  };
+
+  document.getElementById('btn-exit-continue').onclick = () => {
+    closeExitModal();
+    firstNameInput.focus();
+  };
+
+  document.getElementById('btn-exit-logout').onclick = async () => {
     clearProfileGateCache();
     try { await signOut(auth); } catch {}
     window.location.replace('index.html');
   };
+
+  // El modal no se cierra con Escape ni tocando afuera: son dos caminos y hay
+  // que elegir uno. Se atrapa el foco para que el teclado tampoco lo esquive.
+  exitModal.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { event.preventDefault(); return; }
+    if (event.key !== 'Tab') return;
+    const botones = [document.getElementById('btn-exit-continue'), document.getElementById('btn-exit-logout')];
+    const primero = botones[0];
+    const ultimo = botones[botones.length - 1];
+    if (event.shiftKey && document.activeElement === primero) { event.preventDefault(); ultimo.focus(); }
+    else if (!event.shiftKey && document.activeElement === ultimo) { event.preventDefault(); primero.focus(); }
+  });
 
   const firstNameInput = document.getElementById('login-profile-first-name');
   const lastNameInput = document.getElementById('login-profile-last-name');

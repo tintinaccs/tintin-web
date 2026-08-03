@@ -520,3 +520,83 @@ body.tt-public-shell-mounted .login-page {
   color: var(--color-brand-primary, #ad3f67);
   font-weight: 650;
 }
+
+/* ---------------------------------------------------------------
+   Decisión al intentar salir con el alta a medias.
+   Sin cruz ni cierre por Escape: hay que elegir uno de los dos
+   caminos, así nadie queda navegando con la cuenta a medio crear.
+   --------------------------------------------------------------- */
+.login-exit-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(58,16,33,.55);
+  backdrop-filter: blur(3px);
+}
+
+.login-exit-modal[hidden] { display: none; }
+
+body.login-exit-open { overflow: hidden; }
+
+.login-exit-card {
+  width: min(420px, 100%);
+  padding: 28px 24px 24px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 28px 70px rgba(58,16,33,.28);
+  text-align: center;
+}
+
+.login-exit-title {
+  margin: 0 0 10px;
+  color: var(--login-ink, #2b2b2b);
+  font: 800 22px/1.2 "Montserrat", sans-serif;
+}
+
+.login-exit-text {
+  margin: 0 0 22px;
+  color: #6b5259;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.login-exit-primary,
+.login-exit-secondary {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 16px;
+  font: 700 15px/1 "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+.login-exit-primary {
+  margin-bottom: 10px;
+  border: none;
+  background: var(--color-brand-primary, #ad3f67);
+  color: #fff;
+}
+
+.login-exit-primary:hover { background: var(--color-brand-primary-hover, #8b2642); }
+
+.login-exit-secondary {
+  border: 1px solid rgba(125,23,58,.22);
+  background: #fff;
+  /* Contraste ≥ 4.5:1 sobre blanco. */
+  color: #6b5259;
+}
+
+.login-exit-secondary:hover { background: rgba(173,63,103,.06); }
+
+.login-exit-primary:focus-visible,
+.login-exit-secondary:focus-visible {
+  outline: 3px solid rgba(173,63,103,.45);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .login-exit-card { padding: 24px 18px 20px; border-radius: 20px; }
+  .login-exit-title { font-size: 20px; }
+}

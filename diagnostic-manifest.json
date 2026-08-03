@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T16:57:53.263Z",
-  "sourceFingerprint": "54fe966098b5a94a4a1318f6bebf545b493c05a42937271321e50b7160c32627",
+  "generatedAt": "2026-08-03T17:12:30.638Z",
+  "sourceFingerprint": "65a90f62ae91ae2edb615c4459601f7f5be8ee1a93a193a80b8ab0fa351dc88f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 458,
     "textFiles": 426,
-    "totalBytes": 5271837,
+    "totalBytes": 5275780,
     "pages": 18,
     "modules": 268
   },
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44128,
-      "sha256": "196fc5fc6d7139f3e2f92a6cb36653ff3d04246e133d4feb392a591d6699d56c",
+      "bytes": 46170,
+      "sha256": "4c708d5778677184fef8a28834f47eb6d812c17fe760d37f99d76c4168e6b885",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11564,13 +11564,13 @@
           "error": ""
         },
         {
-          "line": 152,
+          "line": 169,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 41,
+      "ids": 46,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 895
+          "line": 944
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 896
+          "line": 945
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 897
+          "line": 946
         }
       ],
       "styles": [
@@ -11756,19 +11756,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 895,
+          "line": 944,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 896,
+          "line": 945,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 897,
+          "line": 946,
           "exists": true
         },
         {
@@ -11888,7 +11888,14 @@
       ],
       "forms": [],
       "tables": [],
-      "modals": [],
+      "modals": [
+        {
+          "id": "login-exit-modal",
+          "role": "dialog",
+          "classes": "login-exit-modal",
+          "line": 156
+        }
+      ],
       "tabs": [],
       "sections": [],
       "buttons": [
@@ -12003,6 +12010,34 @@
           "dataAction": {},
           "hasSourceReference": true,
           "line": 137
+        },
+        {
+          "id": "btn-exit-continue",
+          "classes": [
+            "login-exit-primary"
+          ],
+          "type": "button",
+          "text": "Completar mis datos",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 164
+        },
+        {
+          "id": "btn-exit-logout",
+          "classes": [
+            "login-exit-secondary"
+          ],
+          "type": "button",
+          "text": "Cerrar sesión y seguir mirando",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 165
         }
       ],
       "controls": [
@@ -22639,8 +22674,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 12689,
-      "sha256": "b09c5f335d3b6b3e01273c8c96d5199cdef0bfee26d074a3c139af739f7e6793"
+      "bytes": 14590,
+      "sha256": "561385265b5689e642194563f3d1ab7abb0b7ab75ae08076d5d053c93a627320"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -23851,8 +23886,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 44128,
-      "sha256": "196fc5fc6d7139f3e2f92a6cb36653ff3d04246e133d4feb392a591d6699d56c"
+      "bytes": 46170,
+      "sha256": "4c708d5778677184fef8a28834f47eb6d812c17fe760d37f99d76c4168e6b885"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -26879,28 +26914,28 @@
     },
     {
       "file": "login.html",
-      "line": 276,
+      "line": 293,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 279,
+      "line": 296,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 279,
+      "line": 296,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 347,
+      "line": 384,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -27882,7 +27917,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 279
+          "line": 296
         }
       ]
     },
@@ -29165,12 +29200,12 @@
           },
           {
             "file": "login.html",
-            "line": 303,
+            "line": 320,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 630,
+            "line": 679,
             "operation": "doc"
           },
           {
