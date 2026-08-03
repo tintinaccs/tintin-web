@@ -147,6 +147,24 @@
         <div class="ck-ship-reminder-text" id="ck-ship-reminder-text"></div>
       </div>
 
+      <!-- Encomienda: cómo la quiere recibir. Retirar en la agencia y que se
+           la lleven a la puerta necesitan datos distintos, así que se pregunta
+           antes de pedirlos. Sólo aparece para las ciudades del interior. -->
+      <div class="ck-enc-modes" id="ck-enc-modes" style="display:none" role="radiogroup" aria-label="Cómo querés recibir tu pedido">
+        <button type="button" class="ck-enc-mode" id="ck-enc-agencia" role="radio" aria-checked="false">
+          <span class="ck-enc-mode-icon" aria-hidden="true">🏢</span>
+          <span class="ck-enc-mode-title">Retiro en agencia</span>
+          <span class="ck-enc-mode-sub">Lo pasás a buscar por la transportadora</span>
+        </button>
+        <button type="button" class="ck-enc-mode" id="ck-enc-puerta" role="radio" aria-checked="false">
+          <span class="ck-enc-mode-icon" aria-hidden="true">🏠</span>
+          <span class="ck-enc-mode-title">Entrega en puerta</span>
+          <span class="ck-enc-mode-sub">Te lo llevan a tu dirección</span>
+        </button>
+      </div>
+
+      <div class="ck-enc-note" id="ck-enc-note" style="display:none"></div>
+
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
         <label class="ck-label" id="ck-address-label">Dirección de entrega *</label>
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
@@ -355,6 +373,7 @@ import {
 } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
+import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
@@ -552,6 +571,8 @@ let orderData = {
   address: '',
   referencia: '',
   shippingMethod: '',
+  // 'agencia' | 'puerta' — sólo aplica a encomienda; vacío en delivery/retiro.
+  encomiendaMode: '',
   shippingCost: 0,
   mapLocation: null,
   name: '',
@@ -1048,6 +1069,7 @@ document.getElementById('ck-city').onchange = function() {
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
     reminderEl.classList.remove('show');
+    hideEncomiendaModes();
     return;
   }
 
@@ -1071,6 +1093,7 @@ document.getElementById('ck-city').onchange = function() {
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
     reminderEl.classList.remove('show');
+    hideEncomiendaModes();
   } else if (isDelivery) {
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
@@ -1087,6 +1110,7 @@ document.getElementById('ck-city').onchange = function() {
     maybeApplySavedLocation();
     reminderTextEl.innerHTML = '<strong>Recordatorio de entrega</strong>Tu pedido será entregado por nuestro delivery, en el horario de la tarde. Los pedidos realizados entre las 07:00 y las 11:00 hs se envían y entregan el mismo día — pasado ese horario, la entrega pasa para el día siguiente.';
     reminderEl.classList.add('show');
+    hideEncomiendaModes();
   } else if (isEncomienda) {
     const price = getCityPrice(val);
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
@@ -1095,15 +1119,46 @@ document.getElementById('ck-city').onchange = function() {
       : `Costo de envío: ${formatPrice(price)}`;
     orderData.shippingMethod = 'encomienda';
     orderData.shippingCost = price;
-    addressField.style.display = 'block';
-    addressLabel.textContent = 'Dirección de entrega *';
-    referenciaField.style.display = 'block';
-    mapWrap.classList.remove('show');
     reminderTextEl.innerHTML = '<strong>Recordatorio de envío</strong>Los pedidos por encomienda se envían en 24 a 48 hs, según el día de despacho y la transportadora asignada. Pagar hoy no significa que el pedido llegue hoy — el envío por encomienda tiene su propio tiempo de trámite y traslado.';
     reminderEl.classList.add('show');
+    // Los campos los decide el modo elegido (agencia o puerta), no la ciudad.
+    showEncomiendaModes();
   }
   refreshPaymentOptions();
 };
+
+// --- ENCOMIENDA: retiro en agencia o entrega en puerta -------------------
+// La decisión de qué mostrar y qué exigir vive en js/checkout-encomienda.js,
+// sin Firebase, para poder verificarla sin depender del resto del checkout.
+let encomiendaModes = null;
+
+function hideEncomiendaModes() {
+  document.getElementById('ck-enc-modes').style.display = 'none';
+  document.getElementById('ck-enc-note').style.display = 'none';
+  orderData.encomiendaMode = '';
+}
+
+function showEncomiendaModes() {
+  document.getElementById('ck-enc-modes').style.display = '';
+  if (!encomiendaModes) {
+    encomiendaModes = attachEncomiendaModes({
+      agenciaButton: document.getElementById('ck-enc-agencia'),
+      puertaButton: document.getElementById('ck-enc-puerta'),
+      noteElement: document.getElementById('ck-enc-note'),
+      addressField: document.getElementById('ck-address-field'),
+      referenceField: document.getElementById('ck-referencia-field'),
+      mapWrap: document.getElementById('ck-map-wrap'),
+    }, mode => {
+      orderData.encomiendaMode = mode;
+      document.getElementById('ck-address-label').textContent = 'Dirección de entrega *';
+      if (mode === ENCOMIENDA_MODES.PUERTA) {
+        initMap();
+        maybeApplySavedLocation();
+      }
+    });
+  }
+  encomiendaModes.setMode(orderData.encomiendaMode || '');
+}
 
 document.getElementById('btn-step2-next').onclick = () => {
   hideErrors();
@@ -1135,10 +1190,33 @@ document.getElementById('btn-step2-next').onclick = () => {
     orderData.referencia = document.getElementById('ck-referencia').value.trim();
     saveLocationToProfileIfChecked();
   } else if (orderData.shippingMethod === 'encomienda') {
-    const addr = document.getElementById('ck-address').value.trim();
-    if (!addr) { showError(1, 'Ingresá tu dirección de entrega.'); return; }
-    orderData.address = addr;
-    orderData.referencia = document.getElementById('ck-referencia').value.trim();
+    const encError = encomiendaValidationError(orderData.encomiendaMode, {
+      mapLocation: orderData.mapLocation,
+      locationName: document.getElementById('ck-location-name').value,
+      address: document.getElementById('ck-address').value,
+    });
+    if (encError) {
+      showError(1, encError);
+      const foco = !orderData.encomiendaMode ? 'ck-enc-modes'
+        : !orderData.mapLocation ? 'ck-map-wrap' : 'ck-location-name';
+      document.getElementById(foco)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (orderData.encomiendaMode === ENCOMIENDA_MODES.AGENCIA) {
+      // Retiro en agencia: no hay dirección que pedir. La sucursal se
+      // coordina por WhatsApp, así que se limpia lo que hubiera quedado
+      // escrito si antes había elegido "entrega en puerta".
+      orderData.address = '';
+      orderData.referencia = '';
+      orderData.mapLocation = null;
+    } else {
+      // Entrega en puerta: mismo requisito que el delivery de la zona central
+      // — el punto exacto en el mapa, no un texto interpretable.
+      orderData.mapLocation.name = document.getElementById('ck-location-name').value.trim();
+      orderData.address = document.getElementById('ck-address').value.trim();
+      orderData.referencia = document.getElementById('ck-referencia').value.trim();
+    }
   }
 
   orderData.city = city === RETIRO_VALUE ? 'San Lorenzo (retiro)' : city;
@@ -1323,7 +1401,7 @@ async function buildConfirmation() {
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">🚚 Envío</span>
-        <span class="ck-summary-val">${shipLabels[orderData.shippingMethod] || orderData.shippingMethod}</span>
+        <span class="ck-summary-val">${shipLabels[orderData.shippingMethod] || orderData.shippingMethod}${orderData.encomiendaMode ? ` — ${encomiendaModeLabel(orderData.encomiendaMode)}` : ''}</span>
       </div>
       <div class="ck-summary-row">
         <span class="ck-summary-label">💳 Pago</span>

@@ -707,3 +707,71 @@
       .ck-trust-bar { gap: 6px; }
       .ck-trust-item { font-size: 10px; }
     }
+
+/* ---------------------------------------------------------------
+   Encomienda: retiro en agencia o entrega en puerta.
+   Dos opciones grandes y tocables, porque cambian qué datos se le
+   piden después — no es un detalle que convenga esconder.
+   --------------------------------------------------------------- */
+.ck-enc-modes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 14px 0 4px;
+}
+
+@media (min-width: 560px) {
+  .ck-enc-modes { grid-template-columns: 1fr 1fr; }
+}
+
+.ck-enc-mode {
+  display: grid;
+  gap: 3px;
+  min-height: 44px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border, #f0d8e0);
+  border-radius: var(--radius-sm, 14px);
+  background: #fff;
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease;
+}
+
+.ck-enc-mode:hover { border-color: var(--color-brand-primary, #ad3f67); }
+
+.ck-enc-mode.is-active {
+  border-color: var(--color-brand-primary, #ad3f67);
+  background: rgba(173, 63, 103, .06);
+  box-shadow: inset 0 0 0 1px var(--color-brand-primary, #ad3f67);
+}
+
+.ck-enc-mode:focus-visible {
+  outline: 3px solid rgba(173, 63, 103, .45);
+  outline-offset: 2px;
+}
+
+.ck-enc-mode-icon { font-size: 20px; line-height: 1; }
+
+.ck-enc-mode-title {
+  color: var(--text, #2b2b2b);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.ck-enc-mode-sub {
+  /* Contraste ≥ 4.5:1 sobre blanco y sobre el fondo activo. */
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.ck-enc-note {
+  margin: 10px 0 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm, 14px);
+  background: #fdf6f9;
+  color: #6b5259;
+  font-size: 13px;
+  line-height: 1.5;
+}
