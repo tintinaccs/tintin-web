@@ -4,6 +4,7 @@ if(window.TintinBrandRevealExtensionBooted)return;
 window.TintinBrandRevealExtensionBooted=true;
 
 var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var hasIntersectionObserver='IntersectionObserver'in window;
 var selector=[
  '.login-mobile-logo',
  '.tt-map-block',
@@ -55,7 +56,7 @@ function prepare(root){
  list.filter(eligible).forEach(function(el,index){
   el.classList.add('tt-brand-reveal');
   el.style.setProperty('--tt-brand-reveal-delay',Math.min(index%5,4)*34+'ms');
-  if(reduced){reveal(el);return;}
+  if(reduced||!hasIntersectionObserver){reveal(el);return;}
   if(!observer){
    observer=new IntersectionObserver(function(entries){
     entries.forEach(function(entry){if(entry.isIntersecting)reveal(entry.target);});
