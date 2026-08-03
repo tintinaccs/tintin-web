@@ -154,17 +154,24 @@ export async function lookupUserProvidersByEmail(env, email) {
   return { exists: true, providers };
 }
 
-/** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
-export async function findOrCreateUserByEmail(env, email) {
-  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
-
+async function lookupUserByEmail(accessToken, email) {
   const lookupResp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
     method: 'POST',
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ email: [email] })
   });
   const lookupData = await lookupResp.json().catch(() => ({}));
-  const existing = Array.isArray(lookupData.users) ? lookupData.users[0] : null;
+  if (!lookupResp.ok) {
+    throw new Error('No se pudo buscar la cuenta de acceso: ' + (lookupData?.error?.message || lookupResp.status));
+  }
+  return Array.isArray(lookupData.users) ? lookupData.users[0] : null;
+}
+
+/** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
+export async function findOrCreateUserByEmail(env, email) {
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+
+  const existing = await lookupUserByEmail(accessToken, email);
   if (existing?.localId) {
     return { uid: existing.localId, isNewUser: false };
   }
@@ -175,10 +182,21 @@ export async function findOrCreateUserByEmail(env, email) {
     body: JSON.stringify({ email, emailVerified: true })
   });
   const createData = await createResp.json().catch(() => ({}));
-  if (!createResp.ok || !createData.localId) {
-    throw new Error('No se pudo crear la cuenta de acceso: ' + (createData?.error?.message || createResp.status));
+  if (createResp.ok && createData.localId) {
+    return { uid: createData.localId, isNewUser: true };
   }
-  return { uid: createData.localId, isNewUser: true };
+
+  // La cuenta pudo haberse creado entre el lookup y este signUp (doble pestaña,
+  // reintento del navegador). En vez de fallar con "EMAIL_EXISTS", se busca de
+  // nuevo antes de dar el error por real.
+  if (createData?.error?.message === 'EMAIL_EXISTS') {
+    const raceExisting = await lookupUserByEmail(accessToken, email);
+    if (raceExisting?.localId) {
+      return { uid: raceExisting.localId, isNewUser: false };
+    }
+  }
+
+  throw new Error('No se pudo crear la cuenta de acceso: ' + (createData?.error?.message || createResp.status));
 }
 
 // --- Firestore admin REST — credencial de servicio, no pasa por las reglas
