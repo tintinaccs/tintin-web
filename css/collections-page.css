@@ -393,3 +393,18 @@
 .tt-collections-page .tt-coll-page-count.is-pending {
   visibility: hidden;
 }
+
+/* El cuerpo de la tarjeta reserva su alto real desde el primer pintado.
+   El esqueleto de carga traía una sola línea de 16px y la tarjeta real lleva
+   inicial, nombre, contador, descripción y botón: al reemplazarse, cada
+   tarjeta crecía de golpe. Ese salto medía 0.234 de CLS sobre un presupuesto
+   de 0.1 y hacía fallar el CI de forma intermitente —en main pasaba sólo
+   porque el reintento caía en otro camino—. Fijando el alto acá, los dos
+   estados ocupan exactamente lo mismo y no hay nada que tunear a ojo. */
+.tt-collections-page .tt-coll-page-body {
+  min-height: 265px;
+}
+
+.tt-collections-page .tt-coll-page-card .tt-coll-page-initial.tt-skeleton-img {
+  color: transparent;
+}
