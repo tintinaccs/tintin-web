@@ -3,13 +3,26 @@ const LOGIN_RE = /(?:^|\/)login(?:\.html)?\/?$/i;
 if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBooted) {
   window.TintinLoginMaintenanceBooted = true;
 
-  function loadStyles() {
-    if (document.querySelector('link[data-tt-login-maintenance]')) return;
+  function ensureStyle(selector, href, datasetName) {
+    if (document.querySelector(selector)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/login-maintenance.css?v=tintin-20260729-apple-login-1', import.meta.url).href;
-    link.dataset.ttLoginMaintenance = '1';
+    link.href = new URL(href, import.meta.url).href;
+    link.dataset[datasetName] = '1';
     document.head.appendChild(link);
+  }
+
+  function loadStyles() {
+    ensureStyle(
+      'link[data-tt-login-maintenance]',
+      '../css/login-maintenance.css?v=tintin-20260803-login-maintenance-2',
+      'ttLoginMaintenance'
+    );
+    ensureStyle(
+      'link[data-tt-login-fluid]',
+      '../css/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1',
+      'ttLoginFluid'
+    );
   }
 
   function normalizeLocation() {
