@@ -7,11 +7,25 @@
   --bg:          #fcf0f6;
   --bg-soft:     #fcf0f6;
   --card-bg:     #fef5f8;
-  --pink-pale:   #fce4ec;
+  /* La paleta de marca vive en css/color-tokens.css, que se carga antes que
+     esta hoja en todas las páginas y es la que el panel de Super Admin
+     modifica en tiempo real (js/color-scheme.js escribe los tokens
+     --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
+     derivan de esos tokens en vez de repetir un valor propio.
+
+     Antes --pink-dark era #b84c72 y --color-brand-primary #AD3F67: dos rosas
+     distintos para el mismo color de marca. Se notaba en que al cambiar el
+     color desde el panel, lo que usaba tokens cambiaba y lo que usaba
+     --pink-dark quedaba con el rosa viejo. Además #AD3F67 contrasta mejor
+     sobre blanco (5.70:1 contra 4.87:1).
+
+     El valor viejo queda como fallback: si color-tokens.css no cargara, el
+     sitio sigue viéndose como antes en vez de quedarse sin color. */
+  --pink-pale:   var(--color-brand-accent, #fce4ec);
   --pink:        #e8a0b4;
   --pink-mid:    #d4748e;
-  --pink-dark:   #b84c72;
-  --rose:        #8b2642;
+  --pink-dark:   var(--color-brand-primary, #b84c72);
+  --rose:        var(--color-brand-primary-hover, #8b2642);
   /* --gold/--text*: css/tintin-unified-theme.css redeclara estos mismos
      nombres con !important en :root y gana en todas las páginas que la
      cargan (todas menos admin-images.html) — esos valores (#AD3F67/#2B2B2B/
