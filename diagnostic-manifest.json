@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T13:48:40.376Z",
-  "sourceFingerprint": "5aa8d34e3fcb8b2308b41292c2cba5cfe70749f55dab07f48f08945d21afafdb",
+  "generatedAt": "2026-08-03T14:11:33.902Z",
+  "sourceFingerprint": "69934db2e89203182be4e3ac0eef928f5b910bf49e4a6729cdc902cca86c578a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 450,
-    "textFiles": 418,
-    "totalBytes": 5196485,
+    "files": 448,
+    "textFiles": 416,
+    "totalBytes": 5189181,
     "pages": 18,
     "modules": 259
   },
@@ -19365,8 +19365,8 @@
     },
     {
       "path": "scripts/audit-all-navigation-surfaces.mjs",
-      "bytes": 15158,
-      "sha256": "3899ced767b6a61b8cac622e55981a8e908c1a38f1aa4c1adac4c9035f87da81",
+      "bytes": 15599,
+      "sha256": "d006c4387482c35d4aa8b422f7f3b43cb6d3b17bd52f5c8669549728ec42d12e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21885,18 +21885,6 @@
       "sha256": "20c571151aec9c1d908bf6a7c8eb9372bbd5bd1eb26e1dc2f32395fe041130c9"
     },
     {
-      "path": "README.md",
-      "extension": ".md",
-      "bytes": 4723,
-      "sha256": "fe1f259b279e79e05092b7f3a79140c152bab9237fd25d7089da4be12d606c77"
-    },
-    {
-      "path": "SECURITY.md",
-      "extension": ".md",
-      "bytes": 3022,
-      "sha256": "abd93b21dec99b4e31ff79649f8bd126f67f1e57d1098c18c1f93c7ab9e5c344"
-    },
-    {
       "path": "_routes.json",
       "extension": ".json",
       "bytes": 320,
@@ -23735,8 +23723,8 @@
     {
       "path": "scripts/audit-all-navigation-surfaces.mjs",
       "extension": ".mjs",
-      "bytes": 15158,
-      "sha256": "3899ced767b6a61b8cac622e55981a8e908c1a38f1aa4c1adac4c9035f87da81"
+      "bytes": 15599,
+      "sha256": "d006c4387482c35d4aa8b422f7f3b43cb6d3b17bd52f5c8669549728ec42d12e"
     },
     {
       "path": "scripts/audit-app-check-bootstrap.js",
