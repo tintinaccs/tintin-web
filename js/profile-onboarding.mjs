@@ -99,15 +99,33 @@ export function toSavedLocation(place = {}) {
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
+function exposeSavedLocationForOnboarding(profile = {}) {
+  if (typeof globalThis === 'undefined') return;
+  const savedLocation = hasUsableAddress(profile)
+    ? toSavedLocation(profile.savedLocation)
+    : null;
+  globalThis.TintinOnboardingSavedLocation = savedLocation;
+}
+
+function locationsAreEqual(first, second) {
+  if (!first || !second) return false;
+  return Number(first.lat).toFixed(6) === Number(second.lat).toFixed(6) &&
+    Number(first.lng).toFixed(6) === Number(second.lng).toFixed(6) &&
+    clean(first.name) === clean(second.name) &&
+    clean(first.address) === clean(second.address);
+}
+
 /**
  * Qué le falta a este perfil para estar completo.
  *
- * Sólo mira lo que ya está guardado: si el dato existe y es válido, no se
- * vuelve a pedir nunca. Lo que Google haya entregado se ofrece como sugerencia
- * para confirmar, no como dato ya guardado.
+ * Cuando el alta se abre por nombre o teléfono faltante, también se muestra
+ * la ubicación. Si ya estaba guardada se carga marcada y no se vuelve a pedir;
+ * así la persona confirma todos los datos útiles para comprar en una sola
+ * pantalla y checkout puede reutilizarlos sin otro paso obligatorio.
  */
 export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', superAdminEmail = '', requireAddress = true } = {}) {
   if (isSuperAdminProfile({ email: user.email, role }, superAdminEmail)) {
+    exposeSavedLocationForOnboarding({});
     return {
       skip: true, needsName: false, needsPhone: false, needsAddress: false,
       suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
@@ -118,6 +136,12 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
   const storedPhone = clean(profile.phone);
   const addressOk = !requireAddress || hasUsableAddress(profile);
+  const needsName = !storedNameIsValid;
+  const needsPhone = !storedPhone;
+  const addressMissing = !addressOk;
+  const onboardingRequired = needsName || needsPhone || addressMissing;
+
+  exposeSavedLocationForOnboarding(profile);
 
   // Lo que sugerimos: primero lo guardado, y si no sirve, lo que dio Google.
   const fromProvider = splitFullName(user.displayName);
@@ -127,10 +151,13 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     : (isValidNamePart(fromProvider.lastName) ? fromProvider.lastName : '');
 
   return {
-    skip: storedNameIsValid && Boolean(storedPhone) && addressOk,
-    needsName: !storedNameIsValid,
-    needsPhone: !storedPhone,
-    needsAddress: !addressOk,
+    skip: !onboardingRequired,
+    needsName,
+    needsPhone,
+    // Si el alta está abierta, se muestra el mapa aunque la ubicación ya esté
+    // guardada. location-map.js la precarga y permite continuar sin tocarla.
+    needsAddress: onboardingRequired && requireAddress,
+    addressAlreadySaved: addressOk,
     suggestedFirstName,
     suggestedLastName,
     suggestedName: clean(`${suggestedFirstName} ${suggestedLastName}`),
@@ -171,15 +198,16 @@ export function buildMissingProfilePatch({
 
   if (!currentPhone && clean(submittedPhone)) patch.phone = clean(submittedPhone);
 
-  if (submittedAddress && !hasUsableAddress(currentProfile)) {
+  if (submittedAddress) {
     const savedLocation = toSavedLocation(submittedAddress);
-    if (savedLocation) {
+    const currentSavedLocation = hasUsableAddress(currentProfile)
+      ? toSavedLocation(currentProfile.savedLocation)
+      : null;
+
+    if (savedLocation && !locationsAreEqual(savedLocation, currentSavedLocation)) {
       patch.savedLocation = savedLocation;
-      // `address` es el texto suelto que el checkout usa para prellenar el
-      // campo "Dirección de entrega" y que perfil.html muestra.
-      if (!clean(currentProfile.address)) {
-        patch.address = savedLocation.address || savedLocation.name;
-      }
+      // `address` es el texto que checkout usa para prellenar la dirección.
+      patch.address = savedLocation.address || savedLocation.name;
     }
   }
 
