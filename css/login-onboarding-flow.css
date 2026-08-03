@@ -1,0 +1,152 @@
+/* =============================================================
+   TINTIN — Flujo final del alta de cuenta
+   Se carga después de login-fluid-responsive.css para impedir que el mapa
+   estire las filas del grid y empuje nombre/teléfono hacia abajo.
+   Orden visual: datos personales → teléfono → ubicación → continuar.
+   ============================================================= */
+
+body:has(.login-page).login-setup-open #login-profile-block {
+  display: grid !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas:
+    "confirm"
+    "name"
+    "phone"
+    "address"
+    "save" !important;
+  grid-auto-rows: max-content !important;
+  align-items: start !important;
+  align-content: start !important;
+  gap: clamp(14px, 1.5vw, 22px) !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-name-confirmation {
+  grid-area: confirm !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-name-field {
+  grid-area: name !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-phone-field {
+  grid-area: phone !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-address-field {
+  grid-area: address !important;
+}
+
+body:has(.login-page).login-setup-open #btn-save-profile {
+  grid-area: save !important;
+  width: min(100%, 520px) !important;
+  justify-self: center !important;
+}
+
+body:has(.login-page).login-setup-open :is(
+  #login-profile-name-confirmation,
+  #login-profile-name-field,
+  #login-profile-phone-field,
+  #login-profile-address-field
+) {
+  min-width: 0 !important;
+  height: auto !important;
+  align-self: start !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-address-field {
+  padding: clamp(16px, 2vw, 28px) !important;
+}
+
+body:has(.login-page).login-setup-open .tt-map-block {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-rows: max-content !important;
+  align-content: start !important;
+  gap: clamp(9px, 1vw, 14px) !important;
+}
+
+body:has(.login-page).login-setup-open .tt-map-canvas {
+  width: 100% !important;
+  height: clamp(300px, 42vh, 470px) !important;
+  min-height: 300px !important;
+  margin: 0 !important;
+}
+
+/* Laptop y desktop: datos personales y teléfono comparten la primera fila.
+   La ubicación ocupa después todo el ancho, sin depender de la altura del mapa. */
+@media (min-width: 880px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr) !important;
+    grid-template-areas:
+      "confirm confirm"
+      "name phone"
+      "address address"
+      "save save" !important;
+    column-gap: clamp(18px, 2.4vw, 38px) !important;
+    row-gap: clamp(16px, 1.8vw, 26px) !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-field,
+  body:has(.login-page).login-setup-open #login-profile-phone-field {
+    height: 100% !important;
+  }
+
+  body:has(.login-page).login-setup-open .login-phone-row {
+    grid-template-columns: minmax(118px, .34fr) minmax(0, 1fr) !important;
+  }
+}
+
+/* Tablet vertical: una secuencia clara y compacta. */
+@media (min-width: 600px) and (max-width: 879px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    width: min(100%, 760px) !important;
+    margin-inline: auto !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-field {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-areas:
+      "first-label last-label"
+      "first-input last-input" !important;
+  }
+
+  body:has(.login-page).login-setup-open .tt-map-canvas {
+    height: clamp(300px, 40vh, 410px) !important;
+  }
+}
+
+/* Mobile: experiencia de app, sin tarjetas comprimidas ni espacios muertos. */
+@media (max-width: 599px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    gap: 13px !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-field {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "first-label"
+      "first-input"
+      "last-label"
+      "last-input" !important;
+  }
+
+  body:has(.login-page).login-setup-open .login-phone-row {
+    grid-template-columns: minmax(104px, .34fr) minmax(0, 1fr) !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-address-field {
+    padding: 14px !important;
+  }
+
+  body:has(.login-page).login-setup-open .tt-map-canvas {
+    height: clamp(270px, 39vh, 350px) !important;
+    min-height: 270px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  body:has(.login-page).login-setup-open .login-phone-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
