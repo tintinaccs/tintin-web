@@ -44,19 +44,34 @@ export function clearProfileGateCache() {
   try { sessionStorage.removeItem(COMPLETE_KEY); } catch {}
 }
 
+/**
+ * Nombre de la página actual, sin carpeta ni extensión.
+ *
+ * Cloudflare Pages sirve /login.html también como /login (sin extensión), y
+ * la raíz del sitio como '/'. Comparar contra 'login.html' a secas hacía que
+ * en producción —donde la URL real es /login— esta misma página no se
+ * reconociera como exenta: el guardia se redirigía a sí mismo una y otra vez,
+ * acumulando ?from=login?from=login... hasta colgar el login entero.
+ */
+function currentPageName() {
+  const last = location.pathname.split('/').pop() || 'index';
+  return last.replace(/\.html$/, '').toLowerCase();
+}
+
 function isLoginPage() {
-  return /(^|\/)login\.html$/.test(location.pathname);
+  return currentPageName() === 'login';
 }
 
 /**
  * Páginas donde el guardia no corre.
  *
- * - login.html: es justamente donde se completa el perfil.
- * - admin*.html: son del personal, que queda fuera del alcance igual, pero
- *   se listan para no gastar una lectura de Firestore en cada carga.
+ * - login: es justamente donde se completa el perfil.
+ * - admin*: son del personal, que queda fuera del alcance igual, pero se
+ *   listan para no gastar una lectura de Firestore en cada carga.
  */
 function isExemptPage() {
-  return isLoginPage() || /(^|\/)admin[a-z-]*\.html$/.test(location.pathname);
+  const page = currentPageName();
+  return page === 'login' || page.startsWith('admin');
 }
 
 let redirecting = false;
@@ -64,9 +79,17 @@ let redirecting = false;
 function goCompleteProfile() {
   if (redirecting) return;
   redirecting = true;
+
   // `from` conserva a dónde quería ir, para devolverla ahí apenas termine
-  // (login.html ya lo respeta al redirigir después del alta).
-  const from = location.pathname.split('/').pop() + location.search;
+  // (login.html ya lo respeta al redirigir después del alta). Nunca se
+  // arrastra el `from` que ya viniera en la URL: encadenarlos fue lo que
+  // produjo el bucle de ?from=login?from=login... Además, si por lo que sea
+  // el destino terminara siendo el propio login, se va a la portada — este
+  // guardia no puede ser el que deja la página colgada.
+  const page = currentPageName();
+  if (page === 'login') { location.replace('login.html'); return; }
+
+  const from = `${page}.html`;
   location.replace(`login.html?from=${encodeURIComponent(from)}`);
 }
 
