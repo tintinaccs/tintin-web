@@ -1,0 +1,374 @@
+/* Tintin Login — geometría final fluida para alta, login y mapa.
+   Esta capa se carga después de login.css y login-maintenance.css. */
+
+body:has(.login-page) {
+  --login-accent: var(--tt-brand, #CA0169);
+  --login-accent-deep: var(--tt-brand-deep, #8A2756);
+  --login-surface: var(--tt-surface, #FFFFFF);
+  --login-surface-soft: var(--tt-surface-soft, #FFF5FA);
+  --login-page-fluid: var(--tt-page-bg, #FFF8FC);
+  --login-border-fluid: color-mix(in srgb, var(--login-accent) 18%, white);
+  --login-gutter: clamp(12px, 2.3vw, 42px);
+  --login-section-gap: clamp(14px, 1.6vw, 24px);
+}
+
+body:has(.login-page) .login-page {
+  width: 100%;
+  min-height: 100dvh;
+  place-items: start center !important;
+  padding:
+    max(var(--login-gutter), env(safe-area-inset-top))
+    max(var(--login-gutter), env(safe-area-inset-right))
+    max(var(--login-gutter), env(safe-area-inset-bottom))
+    max(var(--login-gutter), env(safe-area-inset-left)) !important;
+  background:
+    radial-gradient(circle at 8% 16%, rgba(202, 1, 105, .10), transparent 31%),
+    radial-gradient(circle at 92% 78%, rgba(160, 0, 85, .08), transparent 29%),
+    linear-gradient(145deg, #FFF9FC 0%, #FFF1F7 54%, #FDE9F2 100%) !important;
+}
+
+body:has(.login-page) .login-shell {
+  width: min(100%, 760px) !important;
+  max-width: none !important;
+  margin: auto;
+  background-color: var(--login-surface) !important;
+  border: 1px solid var(--login-border-fluid) !important;
+  border-radius: clamp(22px, 2.2vw, 34px) !important;
+  box-shadow: 0 22px 64px rgba(138, 39, 86, .13) !important;
+  overflow: clip;
+}
+
+body:has(.login-page).login-setup-open .login-shell {
+  width: 100% !important;
+}
+
+body:has(.login-page) .login-form-side,
+body:has(.login-page).login-setup-open .login-form-side {
+  width: 100%;
+  padding: clamp(24px, 3vw, 44px) clamp(18px, 3.3vw, 52px) clamp(28px, 3vw, 48px) !important;
+  align-content: start !important;
+}
+
+body:has(.login-page) .login-box,
+body:has(.login-page).login-setup-open .login-box {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Marca más compacta: mantiene protagonismo sin empujar el formulario. */
+body:has(.login-page) .login-mobile-logo {
+  margin: 0 0 clamp(10px, 1.4vw, 18px) !important;
+  padding-top: clamp(60px, 6vw, 82px) !important;
+  background-size: auto clamp(54px, 5.5vw, 72px) !important;
+}
+
+body:has(.login-page) .login-mobile-logo-text {
+  font-size: clamp(22px, 2.2vw, 31px) !important;
+}
+
+body:has(.login-page).login-setup-open .login-heading {
+  margin: 0 !important;
+  font-size: clamp(28px, 3vw, 42px) !important;
+  line-height: 1.05;
+}
+
+body:has(.login-page) .login-heading-sub {
+  margin: 7px auto clamp(18px, 2vw, 26px) !important;
+}
+
+/* Base consistente para campos y acciones. */
+body:has(.login-page) #login-profile-block {
+  width: 100%;
+  min-width: 0;
+}
+
+body:has(.login-page) #login-profile-block > * {
+  min-width: 0;
+}
+
+body:has(.login-page) #login-profile-block :is(.login-email-input, .tt-map-locate, #btn-save-profile) {
+  width: 100%;
+  min-width: 0;
+}
+
+body:has(.login-page) #login-profile-block .login-email-label {
+  display: block;
+  margin: 0 0 7px !important;
+  font-size: clamp(12px, .9vw, 14px);
+  line-height: 1.35;
+}
+
+body:has(.login-page) #login-profile-block .login-email-input {
+  min-height: 52px;
+  margin: 0 !important;
+  border-radius: 15px !important;
+  padding: 12px 15px !important;
+  font-size: clamp(14px, 1vw, 16px) !important;
+}
+
+body:has(.login-page) #login-profile-name-confirmation,
+body:has(.login-page) #login-profile-name-field,
+body:has(.login-page) #login-profile-phone-field,
+body:has(.login-page) #login-profile-address-field {
+  background-color: var(--login-surface-soft) !important;
+  border: 1px solid var(--login-border-fluid);
+  border-radius: clamp(18px, 1.5vw, 24px);
+  padding: clamp(15px, 1.7vw, 22px);
+}
+
+body:has(.login-page) #login-profile-name-confirmation[style*="display:none"] {
+  display: none !important;
+}
+
+body:has(.login-page) #login-profile-name-confirmation {
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.login-page) #login-profile-name-field {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "first-label last-label"
+    "first-input last-input";
+  gap: 8px 14px;
+}
+
+body:has(.login-page) label[for="login-profile-first-name"] { grid-area: first-label; }
+body:has(.login-page) #login-profile-first-name { grid-area: first-input; }
+body:has(.login-page) label[for="login-profile-last-name"] { grid-area: last-label; }
+body:has(.login-page) #login-profile-last-name { grid-area: last-input; }
+
+body:has(.login-page) #login-profile-phone-field {
+  display: grid;
+  gap: 8px;
+}
+
+body:has(.login-page) .login-phone-row {
+  display: grid !important;
+  grid-template-columns: minmax(122px, .34fr) minmax(0, 1fr);
+  gap: 10px !important;
+  align-items: stretch;
+}
+
+body:has(.login-page) .login-phone-country {
+  width: 100% !important;
+  flex-basis: auto !important;
+}
+
+body:has(.login-page) #login-profile-address-field {
+  display: grid;
+  min-width: 0;
+}
+
+body:has(.login-page) .tt-map-block {
+  display: grid;
+  min-width: 0;
+  gap: 10px;
+}
+
+body:has(.login-page) :is(.tt-map-tip, .tt-map-coords) {
+  margin: 0 !important;
+  line-height: 1.45;
+}
+
+body:has(.login-page) .tt-map-search,
+body:has(.login-page) .tt-map-locate {
+  margin: 0 !important;
+}
+
+body:has(.login-page) .tt-map-locate {
+  min-height: 48px;
+  border-radius: 15px !important;
+  font-size: clamp(13px, .95vw, 15px);
+}
+
+body:has(.login-page) .tt-map-canvas {
+  width: 100% !important;
+  height: clamp(300px, 39vh, 440px) !important;
+  min-height: 0 !important;
+  border-radius: clamp(16px, 1.4vw, 22px) !important;
+}
+
+body:has(.login-page) #btn-save-profile {
+  min-height: 54px;
+  margin: 0 !important;
+  border-radius: 16px !important;
+}
+
+body:has(.login-page).login-setup-open :is(#login-hint, #login-back-link) {
+  margin-top: clamp(16px, 2vw, 24px) !important;
+}
+
+/* Desktop y laptop: dos columnas proporcionadas, sin huecos verticales. */
+@media (min-width: 960px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    display: grid !important;
+    grid-template-columns: minmax(300px, .82fr) minmax(440px, 1.18fr);
+    grid-template-areas:
+      "confirm address"
+      "name address"
+      "phone address"
+      "save save";
+    align-items: start;
+    gap: var(--login-section-gap) clamp(20px, 2.4vw, 38px);
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-confirmation { grid-area: confirm; }
+  body:has(.login-page).login-setup-open #login-profile-name-field { grid-area: name; }
+  body:has(.login-page).login-setup-open #login-profile-phone-field { grid-area: phone; }
+  body:has(.login-page).login-setup-open #login-profile-address-field { grid-area: address; }
+  body:has(.login-page).login-setup-open #btn-save-profile {
+    grid-area: save;
+    width: min(100%, 430px);
+    justify-self: center;
+  }
+
+  body:has(.login-page).login-setup-open .login-form-side {
+    padding-top: clamp(24px, 2.5vw, 38px) !important;
+  }
+}
+
+/* Desktop grande: ocupa el ancho disponible sin estirar la lectura. */
+@media (min-width: 1440px) {
+  body:has(.login-page).login-setup-open .login-shell {
+    width: calc(100vw - (2 * max(34px, 2.5vw))) !important;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-block {
+    grid-template-columns: minmax(360px, .76fr) minmax(560px, 1.24fr);
+    column-gap: clamp(30px, 3vw, 54px);
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    height: clamp(330px, 40vh, 460px) !important;
+  }
+}
+
+/* Tablet horizontal y pantallas medianas: dos columnas solo cuando caben. */
+@media (min-width: 800px) and (max-width: 1099px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    display: grid !important;
+    grid-template-columns: minmax(270px, .88fr) minmax(360px, 1.12fr);
+    grid-template-areas:
+      "confirm address"
+      "name address"
+      "phone address"
+      "save save";
+    align-items: start;
+    gap: 16px 20px;
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-name-confirmation { grid-area: confirm; }
+  body:has(.login-page).login-setup-open #login-profile-name-field { grid-area: name; }
+  body:has(.login-page).login-setup-open #login-profile-phone-field { grid-area: phone; }
+  body:has(.login-page).login-setup-open #login-profile-address-field { grid-area: address; }
+  body:has(.login-page).login-setup-open #btn-save-profile {
+    grid-area: save;
+    width: min(100%, 400px);
+    justify-self: center;
+  }
+
+  body:has(.login-page) #login-profile-name-field {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "first-label"
+      "first-input"
+      "last-label"
+      "last-input";
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    height: clamp(300px, 36vh, 390px) !important;
+  }
+}
+
+/* Tablet vertical y móvil: flujo único, orden natural y ancho completo. */
+@media (max-width: 799px) {
+  body:has(.login-page) {
+    --login-gutter: clamp(10px, 3.4vw, 24px);
+  }
+
+  body:has(.login-page).login-setup-open #login-profile-block {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  body:has(.login-page) #login-profile-name-field {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    height: clamp(280px, 43vh, 390px) !important;
+  }
+}
+
+/* Mobile tipo app: sin tarjeta flotante ni márgenes desperdiciados. */
+@media (max-width: 599px) {
+  body:has(.login-page) .login-page {
+    padding: 0 !important;
+    background: var(--login-page-fluid) !important;
+  }
+
+  body:has(.login-page) .login-shell,
+  body:has(.login-page).login-setup-open .login-shell {
+    min-height: 100dvh;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body:has(.login-page) .login-form-side,
+  body:has(.login-page).login-setup-open .login-form-side {
+    padding:
+      max(20px, env(safe-area-inset-top))
+      max(clamp(16px, 5vw, 24px), env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(clamp(16px, 5vw, 24px), env(safe-area-inset-left)) !important;
+  }
+
+  body:has(.login-page) .login-mobile-logo {
+    padding-top: 58px !important;
+    background-size: auto 52px !important;
+  }
+
+  body:has(.login-page) #login-profile-name-field {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "first-label"
+      "first-input"
+      "last-label"
+      "last-input";
+  }
+
+  body:has(.login-page) #login-profile-name-confirmation,
+  body:has(.login-page) #login-profile-name-field,
+  body:has(.login-page) #login-profile-phone-field,
+  body:has(.login-page) #login-profile-address-field {
+    padding: 15px;
+    border-radius: 18px;
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    height: clamp(270px, 42vh, 350px) !important;
+  }
+}
+
+@media (max-width: 359px) {
+  body:has(.login-page) .login-phone-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  body:has(.login-page) .tt-map-canvas {
+    height: 270px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.login-page) .login-shell,
+  body:has(.login-page) .login-mobile-logo {
+    animation: none !important;
+    transition: none !important;
+  }
+}
