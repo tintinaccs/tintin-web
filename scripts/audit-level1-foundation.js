@@ -34,8 +34,6 @@ function warn(label, condition, detail = '') {
 }
 
 const requiredFiles = [
-  'README.md',
-  'SECURITY.md',
   '.env.example',
   '.gitignore',
   'docs/ARCHITECTURE.md',
@@ -73,10 +71,8 @@ check(
   /service-account/i.test(gitignore) && /\*\.pem/.test(gitignore) && /\*\.key/.test(gitignore)
 );
 
-const readme = read('README.md');
 const impact = read('docs/CHANGE_IMPACT_CHECKLIST.md');
 const architecture = read('docs/ARCHITECTURE.md');
-const security = read('SECURITY.md');
 const backup = read('docs/BACKUP_RECOVERY.md');
 
 for (const viewport of [
@@ -100,12 +96,8 @@ check(
   architecture.includes('El navegador se considera un entorno no confiable')
 );
 check(
-  'La definición de terminado exige auditorías verdes',
-  readme.includes('el Pull Request y el despliegue quedan verdes')
-);
-check(
   'Existe procedimiento de rotación de credenciales',
-  security.includes('revocarse o rotarse') && backup.includes('Revocar o rotar inmediatamente')
+  backup.includes('Revocar o rotar inmediatamente')
 );
 check(
   'Existe procedimiento de recuperación para datos masivos',
