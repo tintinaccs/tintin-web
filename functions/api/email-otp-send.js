@@ -186,6 +186,16 @@ export async function onRequest(context) {
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {
-    return jsonResponse({ success: false, error: clean(error?.message || error, 300) }, 400, origin, requestUrl);
+    // Mismo criterio que email-otp-verify: el detalle interno va a los logs,
+    // nunca al cliente como código de error (no lo sabe traducir y expone
+    // información del servidor).
+    console.error('[email-otp-send] Error inesperado:', error?.message || error);
+    const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
+    return jsonResponse(
+      { success: false, error: badRequest ? 'invalid_request' : 'server_error' },
+      badRequest ? 400 : 500,
+      origin,
+      requestUrl
+    );
   }
 }

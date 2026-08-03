@@ -62,7 +62,16 @@ export async function onRequest(context) {
     }
 
     const path = docPath(email);
-    const doc = await firestoreAdminGet(env, path);
+    let doc;
+    try {
+      doc = await firestoreAdminGet(env, path);
+    } catch (error) {
+      // Firestore caído o credencial mal configurada no es "código inválido":
+      // el código puede estar perfecto. Se distingue para no mandar a la
+      // clienta a pedir otro código que tampoco va a poder verificarse.
+      console.error('[email-otp-verify] No se pudo leer el codigo:', error?.message || error);
+      return jsonResponse({ success: false, error: 'storage_unavailable' }, 503, origin, requestUrl);
+    }
     if (!doc) {
       return jsonResponse({ success: false, error: 'code_not_found' }, 400, origin, requestUrl);
     }
@@ -106,7 +115,16 @@ export async function onRequest(context) {
 
     return jsonResponse({ success: true, customToken, isNewUser }, 200, origin, requestUrl);
   } catch (error) {
+    // El mensaje interno no se devuelve como código de error: producía códigos
+    // que el cliente no sabe traducir (y terminaban en el mensaje genérico),
+    // además de exponer detalle del servidor. El detalle queda en los logs.
     console.error('[email-otp-verify] Error inesperado:', error?.message || error);
-    return jsonResponse({ success: false, error: clean(error?.message || error, 300) }, 400, origin, requestUrl);
+    const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
+    return jsonResponse(
+      { success: false, error: badRequest ? 'invalid_request' : 'server_error' },
+      badRequest ? 400 : 500,
+      origin,
+      requestUrl
+    );
   }
 }

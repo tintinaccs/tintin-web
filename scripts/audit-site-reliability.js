@@ -26,7 +26,10 @@ const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
 const welcomeAdmin = read('js/admin-welcome-control.js');
 const welcomeConfig = read('js/welcome-config.js');
 const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
-const login = read('login.html');
+// La creación del perfil vive en js/user-profile-store.js, compartida entre el
+// login con Google y el de código por correo; login.html sólo la invoca. Las
+// comprobaciones del alta miran los dos archivos como una sola unidad.
+const login = `${read('login.html')}\n${read('js/user-profile-store.js')}`;
 const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');

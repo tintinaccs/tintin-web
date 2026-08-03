@@ -22,18 +22,34 @@ export function isValidEmailFormat(email) {
 }
 
 async function postJson(path, body) {
-  const response = await fetch(path, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  let response;
+  try {
+    response = await fetch(path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (networkError) {
+    // fetch sólo rechaza cuando el pedido no llegó a destino: sin conexión,
+    // DNS caído, o una extensión del navegador bloqueando la llamada. No es
+    // lo mismo que un error del servidor y no debe leerse igual.
+    console.error(`[email-auth] ${path} no se pudo enviar:`, networkError);
+    const err = new Error('network_error');
+    err.code = 'network_error';
+    throw err;
+  }
+
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.success) {
-    const err = new Error(data?.error || 'request_failed');
-    err.code = data?.error || 'request_failed';
+    // Una respuesta sin cuerpo JSON (502/504 de la plataforma, HTML de error)
+    // dejaba `undefined` como código y caía en el mensaje genérico.
+    const code = data?.error || (response.status >= 500 ? 'server_error' : 'request_failed');
+    const err = new Error(code);
+    err.code = code;
+    err.status = response.status;
     err.retryAfterSeconds = data?.retryAfterSeconds;
     err.attemptsRemaining = data?.attemptsRemaining;
-    console.error(`[email-auth] ${path} respondió ${response.status}:`, err.code);
+    console.error(`[email-auth] ${path} respondió ${response.status}:`, code, data?.detail || '');
     throw err;
   }
   return data;
@@ -69,21 +85,42 @@ export async function checkBlockedEmailLogin(uid, email) {
   return isBlockedAccount(db, uid, email);
 }
 
-/** Traduce los códigos de error del login por correo a mensajes en español. */
+/**
+ * Traduce los códigos de error a un mensaje que explique qué pasó y qué
+ * hacer. El detalle técnico queda en la consola (ver postJson): acá va sólo
+ * lo que le sirve a la persona que está intentando entrar.
+ */
 export function otpErrorMessage(code) {
   const msgs = {
+    // Correo
     'invalid_email': 'Escribí un correo con formato válido (ej: tu@email.com).',
-    'invalid_code_format': 'El código tiene que tener 6 dígitos.',
-    'cooldown_active': 'Esperá unos segundos antes de pedir otro código.',
-    'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o usá Google.',
-    'code_not_found': 'Ese código no es válido. Pedí uno nuevo.',
-    'code_expired': 'Ese código venció. Pedí uno nuevo.',
-    'code_mismatch': 'Código incorrecto. Revisá los 6 dígitos e intentá de nuevo.',
+    'email_not_allowed': 'Ese correo no puede recibir el código. Probá con otro o entrá con Google.',
+
+    // Código
+    'invalid_code_format': 'El código son 6 dígitos, sin letras ni espacios.',
+    'code_not_found': 'No hay ningún código pendiente para este correo. Pedí uno nuevo.',
+    'code_expired': 'Ese código venció. Pedí uno nuevo y usalo dentro de los 5 minutos.',
+    'code_mismatch': 'Código incorrecto. Revisá los 6 dígitos del correo e intentá de nuevo.',
+    'code_already_used': 'Ese código ya se usó. Pedí uno nuevo para volver a entrar.',
     'too_many_attempts': 'Demasiados intentos con este código. Pedí uno nuevo.',
+
+    // Envío
+    'cooldown_active': 'Esperá unos segundos antes de pedir otro código.',
+    'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o entrá con Google.',
+    'resend_not_configured': 'El envío de correos no está disponible en este momento. Entrá con "Continuar con Google".',
+    'send_failed': 'No pudimos enviar el código a tu correo. Revisá que esté bien escrito e intentá de nuevo.',
+
+    // Método de ingreso
+    'google_account_exists': 'Este correo fue registrado con Google. Entrá con el botón "Continuar con Google".',
+    'email_account_exists': 'Este correo fue registrado con código de verificación. Entrá escribiendo tu correo.',
+
+    // Infraestructura
     'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',
-    'resend_not_configured': 'El envío de correos no está disponible en este momento. Probá con "Continuar con Google".',
-    'google_account_exists': 'Esta cuenta ya usa Google. Iniciá sesión con el botón de Google.',
+    'invalid_request': 'No pudimos procesar el pedido. Recargá la página e intentá de nuevo.',
+    'storage_unavailable': 'No pudimos leer tus datos en este momento. Probá de nuevo en unos segundos.',
     'login_failed': 'El código era correcto, pero no pudimos completar el ingreso. Probá de nuevo en unos segundos.',
+    'server_error': 'El servidor no respondió bien. Esperá unos segundos y probá de nuevo.',
+    'network_error': 'No pudimos conectarnos. Revisá tu conexión y volvé a intentar.',
   };
   return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
 }
