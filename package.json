@@ -51,6 +51,7 @@
     "test:performance": "playwright test tests/performance",
     "test:pages": "node scripts/smoke-all-pages.mjs",
     "audit:critical-healing": "node scripts/audit-critical-healing.js && node scripts/test-inventory-model.mjs",
+    "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/test-firestore-phone-unique.mjs\"",
     "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/test-firestore-critical.mjs\"",
     "audit:login-isolation": "node scripts/audit-login-isolation.js",
     "audit:login-profile": "node scripts/audit-login-profile-onboarding.js && node --test tests/login/profile-onboarding.test.mjs",

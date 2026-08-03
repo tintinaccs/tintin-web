@@ -303,6 +303,35 @@ service cloud.firestore {
         (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000));
     }
 
+    // Un teléfono no puede estar en dos cuentas, y eso tiene que valer también
+    // para quien escriba directo desde la consola del navegador saltándose el
+    // formulario. Por eso el número guardado en el perfil sólo se acepta si
+    // existe una reserva en `phoneReservations` a nombre de esta misma cuenta
+    // (ver js/phone-reservation.js). Sin esta comprobación, la unicidad
+    // dependería únicamente del código del cliente, que es modificable.
+    //
+    // La clave de la reserva es el número sin el '+': '+595981123456' guardado
+    // en el perfil corresponde al documento '595981123456'.
+    function phoneReservationKey(phone) {
+      return phone.replace('^\\+', '');
+    }
+
+    function phoneIsReservedByCaller() {
+      let data = request.resource.data;
+      return !('phone' in data) ||
+        data.phone == '' ||
+        (
+          // Un número sin cambios respecto de lo ya guardado no vuelve a
+          // verificarse: evita romper actualizaciones de otros campos (y una
+          // lectura extra) en perfiles anteriores a esta regla.
+          (resource != null && 'phone' in resource.data && resource.data.phone == data.phone) ||
+          (
+            exists(/databases/$(database)/documents/phoneReservations/$(phoneReservationKey(data.phone))) &&
+            get(/databases/$(database)/documents/phoneReservations/$(phoneReservationKey(data.phone))).data.uid == request.auth.uid
+          )
+        );
+    }
+
     function userCreateValid(userId) {
       let data = request.resource.data;
       return isSignedIn() &&
@@ -964,6 +993,43 @@ service cloud.firestore {
     }
 
     /* ============================================================
+       RESERVAS DE TELÉFONO
+       ============================================================
+       Un teléfono no puede estar en dos cuentas. El id del documento es el
+       número normalizado (595981123456), así que la unicidad la garantiza
+       Firestore: `allow create` sólo aplica cuando el documento NO existe,
+       de modo que el segundo intento de reservar el mismo número es
+       rechazado por las reglas, sin carrera posible entre dos personas
+       registrándose a la vez.
+
+       No hay `allow read` para clientas: poder leer estos documentos
+       permitiría averiguar si un número tiene cuenta. El cliente no necesita
+       leerlos — le alcanza con que la creación falle.
+
+       No hay `allow update`: un número reservado no cambia de dueña. Si
+       alguien cambia su teléfono, borra su reserva vieja (el número queda
+       libre para quien lo herede, que es lo que pasa en la vida real) y crea
+       la nueva.
+       ============================================================ */
+
+    match /phoneReservations/{phoneKey} {
+      allow read: if isSuperAdmin();
+
+      allow create: if isSignedIn() &&
+        !isBlockedUser() &&
+        request.resource.data.keys().hasOnly(['uid', 'createdAt']) &&
+        request.resource.data.uid is string &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.createdAt == request.time &&
+        phoneKey.size() >= 8 && phoneKey.size() <= 20 &&
+        phoneKey.matches('^[0-9]+$');
+
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+
+      allow update: if false;
+    }
+
+    /* ============================================================
        USERS
        ============================================================ */
 
@@ -971,13 +1037,14 @@ service cloud.firestore {
       allow read: if isSignedIn() &&
         (request.auth.uid == userId || isSuperAdmin());
 
-      allow create: if userCreateValid(userId);
+      allow create: if userCreateValid(userId) && phoneIsReservedByCaller();
 
       allow update: if isSignedIn() && (
         (
           request.auth.uid == userId &&
           !isBlockedUser() &&
           userProfileFieldsValid() &&
+          phoneIsReservedByCaller() &&
           (
             (
               isStoreOpenOrAllowed() &&

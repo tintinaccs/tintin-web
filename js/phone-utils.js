@@ -75,3 +75,59 @@ export function isValidPhone(rawInput, country) {
   const national = value.slice(1 + c.dial.length);
   return national.length >= c.minDigits && national.length <= c.maxDigits;
 }
+
+// --- Números realistas -------------------------------------------------
+// isValidPhone() sólo mira la cantidad de dígitos, así que "0000000000" o
+// "0981111111" pasaban. Para el alta de la cuenta eso no alcanza: un número
+// inventado deja un pedido que no se puede coordinar, y es justo lo que
+// escribe quien está creando cuentas de relleno.
+
+/** Prefijos de celular que existen en Paraguay (los 2 dígitos tras el 0). */
+const PY_MOBILE_PREFIXES = [
+  '96', '97', '98', '99', // Personal, Tigo, Claro
+  '91', '92', '93', '94', '95', // Vox y portabilidad
+];
+
+function looksFabricated(national) {
+  // Todos los dígitos iguales: 0000000000, 0999999999.
+  if (/^(\d)\1+$/.test(national)) return true;
+  // El cuerpo (después del prefijo de operadora) todo igual: 0981 111 111.
+  if (/^(\d)\1+$/.test(national.slice(3))) return true;
+  return false;
+  // A propósito NO se descartan las secuencias tipo 0981234567: el cuerpo de
+  // un número real puede ser correlativo (0981123456 lo es), así que esa
+  // regla rechazaba clientas de verdad. Dejar entrar un número raro es
+  // preferible a bloquear a alguien que quiere comprar.
+}
+
+/**
+ * ¿Es un número que puede existir de verdad?
+ *
+ * Para Paraguay exige un celular con prefijo de operadora real y descarta los
+ * rellenos evidentes. Para otros países se queda en la validación de largo:
+ * no tenemos el padrón de prefijos de cada uno y rechazar un número bueno de
+ * una clienta del exterior es peor que aceptar uno raro.
+ */
+export function isRealisticPhone(rawInput, country) {
+  if (!isValidPhone(rawInput, country)) return false;
+  const { value, country: detected } = normalizePhone(rawInput, country);
+  const c = detected || country;
+  if (c.code !== 'PY') return true;
+
+  const national = value.slice(1 + c.dial.length); // 981123456
+  if (!national.startsWith('9')) return false; // los fijos no reciben WhatsApp
+  if (!PY_MOBILE_PREFIXES.includes(national.slice(0, 2))) return false;
+  return !looksFabricated(national);
+}
+
+/**
+ * Clave para detectar el mismo número escrito distinto.
+ *
+ * '0981123456', '+595981123456', '0981 123 456' y '0981-123-456' devuelven
+ * todos '595981123456'. Es lo que se usa como id del documento de reserva
+ * que impide dos cuentas con el mismo teléfono.
+ */
+export function phoneKey(rawInput, country) {
+  const { value } = normalizePhone(rawInput, country);
+  return value ? value.replace(/^\+/, '') : '';
+}

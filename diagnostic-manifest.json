@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T16:34:43.549Z",
-  "sourceFingerprint": "ec8af749f8cd405e75d85549fe48d7e9d3c931bfe67c95c372def607806828e5",
+  "generatedAt": "2026-08-03T16:55:33.884Z",
+  "sourceFingerprint": "2f3c394f86f467dafb7591c22e84066d70f2c507dc7a45e592430213f87b1170",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 455,
-    "textFiles": 423,
-    "totalBytes": 5251742,
+    "files": 458,
+    "textFiles": 426,
+    "totalBytes": 5270886,
     "pages": 18,
-    "modules": 265
+    "modules": 268
   },
   "viewports": [
     {
@@ -11542,8 +11542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 42313,
-      "sha256": "3b32ca29fc7c8c7ee0d74ea4e89d081f352c0ae94b2e784d4f1a6a7b92b00a75",
+      "bytes": 44128,
+      "sha256": "196fc5fc6d7139f3e2f92a6cb36653ff3d04246e133d4feb392a591d6699d56c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11564,13 +11564,13 @@
           "error": ""
         },
         {
-          "line": 149,
+          "line": 152,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 39,
+      "ids": 41,
       "scripts": [
         {
           "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
@@ -11595,17 +11595,17 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 865
+          "line": 895
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 866
+          "line": 896
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 867
+          "line": 897
         }
       ],
       "styles": [
@@ -11708,6 +11708,16 @@
       "images": [],
       "links": [
         {
+          "raw": "https://wa.me/595981299331?text=Hola%2C%20mi%20n%C3%BAmero%20ya%20figura%20en%20otra%20cuenta%20y%20no%20puedo%20completar%20mi%20registro.",
+          "target": null,
+          "text": "Escribinos por WhatsApp",
+          "id": "login-phone-wa",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 119
+        },
+        {
           "raw": "index.html",
           "target": "index.html",
           "text": "← Volver a la tienda",
@@ -11715,7 +11725,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 140
+          "line": 143
         }
       ],
       "references": [
@@ -11746,19 +11756,19 @@
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 865,
+          "line": 895,
           "exists": true
         },
         {
           "raw": "script.js?v=tintin-20260801-unified-surfaces-16",
           "target": "script.js",
-          "line": 866,
+          "line": 896,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 867,
+          "line": 897,
           "exists": true
         },
         {
@@ -11872,7 +11882,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 140,
+          "line": 143,
           "exists": true
         }
       ],
@@ -11978,7 +11988,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 127
+          "line": 130
         },
         {
           "id": "btn-save-profile",
@@ -11992,7 +12002,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 134
+          "line": 137
         }
       ],
       "controls": [
@@ -12056,7 +12066,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 124,
+          "line": 127,
           "labeled": true
         },
         {
@@ -12065,7 +12075,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 131,
+          "line": 134,
           "labeled": true
         }
       ]
@@ -12203,8 +12213,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 28268,
-      "sha256": "aa46c7a370c267e2ef8e1b8f0d9bb0081090c40eba42164da994ef6584451934",
+      "bytes": 29578,
+      "sha256": "44f2092687d97da222f7c4ef46d1d230b2f45b629631f20d81203d29c9413006",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12261,22 +12271,22 @@
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 603
+          "line": 631
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 604
+          "line": 632
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 605
+          "line": 633
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 606
+          "line": 634
         }
       ],
       "styles": [
@@ -12453,25 +12463,25 @@
         {
           "raw": "js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/whatsapp.js",
-          "line": 603,
+          "line": 631,
           "exists": true
         },
         {
           "raw": "js/analytics.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics.js",
-          "line": 604,
+          "line": 632,
           "exists": true
         },
         {
           "raw": "js/session-guard.js?v=tintin-20260726-session-guard-1",
           "target": "js/session-guard.js",
-          "line": 605,
+          "line": 633,
           "exists": true
         },
         {
           "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/color-scheme.js",
-          "line": 606,
+          "line": 634,
           "exists": true
         },
         {
@@ -18367,9 +18377,38 @@
       "endpoints": []
     },
     {
+      "path": "js/phone-reservation.js",
+      "bytes": 3206,
+      "sha256": "7110537cf22c28caa35f9782af191949d3a0bdd49f72aaf68de28ef5a6b5504c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 20
+        },
+        {
+          "raw": "./phone-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/phone-utils.js",
+          "dynamic": false,
+          "line": 21
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 20
+        }
+      ]
+    },
+    {
       "path": "js/phone-utils.js",
-      "bytes": 3630,
-      "sha256": "0f63ca89f34cec242b2b57478cbbd26c77e29b1a6453b4d4dac4072616324cf2",
+      "bytes": 6067,
+      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21726,6 +21765,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/test-firestore-phone-unique.mjs",
+      "bytes": 3748,
+      "sha256": "86c1b1a97dde09f9a77b7f4bd4d9bddcf1aad1fee303f5a3b698496fb5bf6340",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "@firebase/rules-unit-testing",
+          "target": "scripts/@firebase/rules-unit-testing",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "firebase/firestore",
+          "target": "scripts/firebase/firestore",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/test-inventory-model.mjs",
       "bytes": 1726,
       "sha256": "ce2df045e6c19f87f47f5e024de296bb6d79db01635c9c04a26b6b8681b0e09f",
@@ -21828,6 +21897,36 @@
           "target": "js/location-picker.js",
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/login/phone-utils.test.mjs",
+      "bytes": 2909,
+      "sha256": "51694eb4257e357a8849a0ccaf03255bb720595564f5de996a57097f3025de74",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/phone-utils.js",
+          "target": "js/phone-utils.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": []
@@ -22132,8 +22231,8 @@
     {
       "path": ".github/workflows/phase12-final-release.yml",
       "extension": ".yml",
-      "bytes": 3647,
-      "sha256": "55021debc8c41d1510e761103d422086da15874dd4bffac087be12f0bd22bc00"
+      "bytes": 3736,
+      "sha256": "d220c5395d3ac78228cd424bec65b2bc28dc5ec9a7c259f01122c2582b74a4b8"
     },
     {
       "path": ".github/workflows/system-special-part2g-audit.yml",
@@ -22540,8 +22639,8 @@
     {
       "path": "css/login.css",
       "extension": ".css",
-      "bytes": 12423,
-      "sha256": "bd29aff7b6a7b776d682516cac0ec696541a303b0230822c736ffdbb299a58d8"
+      "bytes": 12689,
+      "sha256": "b09c5f335d3b6b3e01273c8c96d5199cdef0bfee26d074a3c139af739f7e6793"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -22858,8 +22957,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 50303,
-      "sha256": "c43d2c5962e6f51be2877e7173265299d94009099593b05a0080a0afd3754292"
+      "bytes": 53522,
+      "sha256": "676f4c33ec6cea86e94592461a995865bf0be9a92eb33d51526779f4f90f508e"
     },
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
@@ -23552,10 +23651,16 @@
       "sha256": "cd350e5cf0bf2176300b4d616a3eabcf8604f873a53423d1c74a53a2bb60e097"
     },
     {
+      "path": "js/phone-reservation.js",
+      "extension": ".js",
+      "bytes": 3206,
+      "sha256": "7110537cf22c28caa35f9782af191949d3a0bdd49f72aaf68de28ef5a6b5504c"
+    },
+    {
       "path": "js/phone-utils.js",
       "extension": ".js",
-      "bytes": 3630,
-      "sha256": "0f63ca89f34cec242b2b57478cbbd26c77e29b1a6453b4d4dac4072616324cf2"
+      "bytes": 6067,
+      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
     },
     {
       "path": "js/privacy-consent.js",
@@ -23746,8 +23851,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 42313,
-      "sha256": "3b32ca29fc7c8c7ee0d74ea4e89d081f352c0ae94b2e784d4f1a6a7b92b00a75"
+      "bytes": 44128,
+      "sha256": "196fc5fc6d7139f3e2f92a6cb36653ff3d04246e133d4feb392a591d6699d56c"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -23944,14 +24049,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 7478,
-      "sha256": "ac219c5f264d71e2d8fd3eca4851d3861252f3e1aa996a6e4ad6ac70556095da"
+      "bytes": 7623,
+      "sha256": "000c7a287bc9367466cde47b9d570ad35260587f37cb530b5476690fe4ea3810"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 28268,
-      "sha256": "aa46c7a370c267e2ef8e1b8f0d9bb0081090c40eba42164da994ef6584451934"
+      "bytes": 29578,
+      "sha256": "44f2092687d97da222f7c4ef46d1d230b2f45b629631f20d81203d29c9413006"
     },
     {
       "path": "playwright.config.js",
@@ -24608,6 +24713,12 @@
       "sha256": "0e9ae26d28bdac18a0f4128b9a74530655d72a9c881f93cf1e3e6fd743634a07"
     },
     {
+      "path": "scripts/test-firestore-phone-unique.mjs",
+      "extension": ".mjs",
+      "bytes": 3748,
+      "sha256": "86c1b1a97dde09f9a77b7f4bd4d9bddcf1aad1fee303f5a3b698496fb5bf6340"
+    },
+    {
       "path": "scripts/test-inventory-model.mjs",
       "extension": ".mjs",
       "bytes": 1726,
@@ -24648,6 +24759,12 @@
       "extension": ".mjs",
       "bytes": 3148,
       "sha256": "869a557e3f204ec9e8f64acf5f9fcbf2979a232fce7208d5c420fcf3ffa0a641"
+    },
+    {
+      "path": "tests/login/phone-utils.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2909,
+      "sha256": "51694eb4257e357a8849a0ccaf03255bb720595564f5de996a57097f3025de74"
     },
     {
       "path": "tests/login/profile-onboarding.test.mjs",
@@ -26741,35 +26858,35 @@
     },
     {
       "file": "login.html",
-      "line": 140,
+      "line": 143,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 272,
+      "line": 276,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 275,
+      "line": 279,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 275,
+      "line": 279,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 343,
+      "line": 347,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -26818,28 +26935,28 @@
     },
     {
       "file": "perfil.html",
-      "line": 397,
+      "line": 399,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 408,
+      "line": 410,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 543,
+      "line": 571,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 578,
+      "line": 606,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -27751,7 +27868,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 275
+          "line": 279
         }
       ]
     },
@@ -27773,7 +27890,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 408
+          "line": 410
         }
       ]
     },
@@ -28354,12 +28471,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 554,
+            "line": 582,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 562,
+            "line": 590,
             "operation": "collection"
           },
           {
@@ -28386,6 +28503,21 @@
             "file": "scripts/audit-site-reliability.js",
             "line": 149,
             "operation": "collection"
+          }
+        ]
+      },
+      {
+        "name": "phoneReservations",
+        "references": [
+          {
+            "file": "js/phone-reservation.js",
+            "line": 41,
+            "operation": "doc"
+          },
+          {
+            "file": "js/phone-reservation.js",
+            "line": 65,
+            "operation": "doc"
           }
         ]
       },
@@ -29019,17 +29151,17 @@
           },
           {
             "file": "login.html",
-            "line": 299,
+            "line": 303,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 600,
+            "line": 630,
             "operation": "doc"
           },
           {
             "file": "perfil.html",
-            "line": 403,
+            "line": 405,
             "operation": "doc"
           },
           {
@@ -29064,6 +29196,7 @@
       "history",
       "media",
       "orders",
+      "phoneReservations",
       "products",
       "rolePermissions",
       "settings",

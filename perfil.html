@@ -319,6 +319,8 @@ import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudina
 import { attachLocationPicker } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
 import { toSavedLocation } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
 import { getRegisteredMethod, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { changeReservedPhone } from "./js/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -525,17 +527,43 @@ onAuthStateChanged(auth, async user => {
 
   // Save
   document.getElementById('btn-guardar-perfil').onclick = async () => {
+    const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
+    const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
+    const country = DEFAULT_COUNTRY;
+
     try {
+      // El teléfono pasa por la misma reserva que el alta: si no, editarlo
+      // desde acá sería la forma de saltear la unicidad. Sólo se toca la
+      // reserva cuando el número realmente cambió.
+      const claveAnterior = phoneKey(userData?.phone || '', country);
+      const claveNueva = phoneKey(nuevoTelefono, country);
+
+      if (nuevoTelefono && claveNueva !== claveAnterior) {
+        if (!isRealisticPhone(nuevoTelefono, country)) {
+          toast('❌ Ese número no parece un celular válido');
+          release();
+          return;
+        }
+        await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
+      }
+
       await setDoc(ref, {
         name:      document.getElementById('perfil-nombre').value.trim(),
-        phone:     document.getElementById('perfil-tel').value.trim(),
+        phone:     nuevoTelefono,
         address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
         updatedAt: serverTimestamp(),
       }, { merge: true });
+      if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
       toast('✅ Perfil actualizado');
-    } catch(e) { toast('❌ Error al guardar'); }
-    finally { window.TintinReleaseProfileButton?.('btn-guardar-perfil'); }
+    } catch (e) {
+      if (e?.code === 'phone_already_registered') {
+        toast('❌ Ese número ya está en otra cuenta');
+      } else {
+        console.error('[perfil] No se pudo guardar:', e);
+        toast('❌ Error al guardar');
+      }
+    } finally { release(); }
   };
 
   // Logout

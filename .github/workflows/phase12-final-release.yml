@@ -63,6 +63,9 @@ jobs:
       - name: Reglas críticas de Firestore en emulador
         run: npm run test:rules-critical
 
+      - name: Un teléfono, una cuenta (emulador)
+        run: npm run test:rules-phone
+
       - name: Smoke de las 18 páginas
         run: npm run test:pages
 

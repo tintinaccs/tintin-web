@@ -115,6 +115,9 @@
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="País del teléfono"></select>
               <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" maxlength="40" />
             </div>
+            <p class="login-phone-help" id="login-phone-help" style="display:none">
+              <a id="login-phone-wa" href="https://wa.me/595981299331?text=Hola%2C%20mi%20n%C3%BAmero%20ya%20figura%20en%20otra%20cuenta%20y%20no%20puedo%20completar%20mi%20registro." target="_blank" rel="noopener">Escribinos por WhatsApp</a> y te ayudamos a recuperar tu cuenta.
+            </p>
           </div>
           <div id="login-profile-address-field">
             <label class="login-email-label" for="login-profile-address">Dirección de entrega</label>
@@ -163,7 +166,8 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { reservePhone } from "./js/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/profile-gate.js?v=tintin-20260803-profile-gate-1";
@@ -446,6 +450,13 @@ async function ensureProfileComplete(user, role) {
         phoneInput.focus();
         return;
       }
+      if (plan.needsPhone && !isRealisticPhone(phoneRaw, country)) {
+        showError(country.code === 'PY'
+          ? 'Ese número no parece un celular paraguayo. Escribilo así: 0981 123 456.'
+          : 'Ese número no parece válido. Revisalo e intentá de nuevo.');
+        phoneInput.focus();
+        return;
+      }
       if (plan.needsAddress && !point) {
         showError('Marcá tu ubicación en el mapa —buscala o tocá el punto— para poder entregarte el pedido.');
         document.getElementById('login-profile-address').focus();
@@ -460,6 +471,15 @@ async function ensureProfileComplete(user, role) {
       btn.disabled = true;
       try {
         const normalizedPhone = plan.needsPhone ? normalizePhone(phoneRaw, country).value : '';
+
+        // El número se reserva ANTES de guardar el perfil: si ya está en otra
+        // cuenta, no se escribe nada y se avisa. La unicidad la garantizan las
+        // reglas de Firestore (ver js/phone-reservation.js), no una
+        // comprobación de acá que se pueda saltear.
+        if (plan.needsPhone) {
+          await reservePhone(db, user.uid, phoneRaw, country);
+        }
+
         await runTransaction(db, async transaction => {
           const currentSnap = await transaction.get(ref);
           const currentProfile = currentSnap.exists() ? currentSnap.data() : {};
@@ -481,7 +501,17 @@ async function ensureProfileComplete(user, role) {
         resolve();
       } catch (e) {
         btn.disabled = false;
-        showError('No pudimos guardar tus datos. Probá de nuevo.');
+        if (e?.code === 'phone_already_registered') {
+          // Puede ser suyo de verdad (cambió de cuenta, se registró antes con
+          // otro correo). No hay forma de resolverlo sola sin exponer datos de
+          // la otra cuenta, así que se le ofrece escribir.
+          showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.');
+          document.getElementById('login-phone-help').style.display = '';
+          phoneInput.focus();
+        } else {
+          console.error('[login] No se pudo guardar el perfil:', e);
+          showError('No pudimos guardar tus datos. Probá de nuevo.');
+        }
       }
     };
   });
