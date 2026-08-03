@@ -220,9 +220,35 @@ if (!window.TintinImagesPhase5Booted) {
       picture.insertBefore(tabletSource, image);
     }
     tabletSource.media = '(max-width: 1120px)';
-    if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
-    if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
-    if (desktop) image.src = desktop; else image.removeAttribute('src');
+    const yaVisible = image.currentSrc && image.complete && image.naturalWidth > 0;
+    const cambiaFuente = yaVisible && desktop && image.currentSrc !== desktop;
+
+    const aplicarFuentes = () => {
+      if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
+      if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
+      if (desktop) image.src = desktop; else image.removeAttribute('src');
+    };
+
+    if (cambiaFuente) {
+      // El caché local pinta una imagen antes de que llegue la de Firestore.
+      // Si difieren, cambiar el src en el acto muestra el salto. Se decodifica
+      // la nueva fuera de pantalla y recien ahi se cambia, con un cruce corto.
+      const previa = new Image();
+      previa.decoding = 'async';
+      previa.src = desktop;
+      const cambiar = () => {
+        image.style.transition = 'opacity 180ms ease';
+        image.style.opacity = '0';
+        window.setTimeout(() => {
+          aplicarFuentes();
+          requestAnimationFrame(() => { image.style.opacity = '1'; });
+        }, 180);
+      };
+      if (previa.decode) previa.decode().then(cambiar).catch(cambiar);
+      else { previa.onload = cambiar; previa.onerror = cambiar; }
+    } else {
+      aplicarFuentes();
+    }
 
     if (!image.dataset.ttHeroPhase5ErrorBound) {
       image.dataset.ttHeroPhase5ErrorBound = '1';
