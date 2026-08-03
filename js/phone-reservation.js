@@ -18,7 +18,7 @@
 // se corta con App Check y con el límite de altas por IP, no acá.
 
 import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { phoneKey } from "./phone-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { phoneKey } from "./phone-utils.js?v=tintin-20260803-phone-unique-1";
 
 export class PhoneAlreadyRegisteredError extends Error {
   constructor() {
