@@ -429,7 +429,11 @@ function initSurfaceController() {
     if (!element) return;
     surfaceController.register(name, { element, triggerSelector, initialFocus, ...hooks });
   };
-  register('desktop-shop', 'tt-tienda-dropdown-panel', '#btn-tienda', '.tt-dropdown-card');
+  // No es un modal: es un dropdown de navegacion sobre la pagina. No debe
+  // bloquear scroll, ni poner inert el resto del sitio, ni forzar foco en el
+  // primer producto cuando se abre con mouse (ver focusFirst en el
+  // controlador, que respeta esto mismo).
+  register('desktop-shop', 'tt-tienda-dropdown-panel', '#btn-tienda', '.tt-dropdown-card', { modal: false });
   register('tablet-menu', 'tt-tablet-menu', '#btn-menu-tablet', '#btn-tablet-close');
   register('mobile-shop', 'collections-sheet', '#tabbar-tienda', '#btn-close-sheet');
   register('search', 'search-panel', '[data-nav-action="search"],#tabbar-search', '#search-input', {

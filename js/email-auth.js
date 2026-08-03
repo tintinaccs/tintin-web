@@ -34,6 +34,7 @@ async function postJson(path, body) {
     err.code = data?.error || 'request_failed';
     err.retryAfterSeconds = data?.retryAfterSeconds;
     err.attemptsRemaining = data?.attemptsRemaining;
+    console.error(`[email-auth] ${path} respondió ${response.status}:`, err.code);
     throw err;
   }
   return data;
@@ -128,6 +129,7 @@ export function otpErrorMessage(code) {
     'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',
     'resend_not_configured': 'El envío de correos no está disponible en este momento. Probá con "Continuar con Google".',
     'google_account_exists': 'Esta cuenta ya usa Google. Iniciá sesión con el botón de Google.',
+    'login_failed': 'El código era correcto, pero no pudimos completar el ingreso. Probá de nuevo en unos segundos.',
   };
   return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
 }

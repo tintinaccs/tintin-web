@@ -165,33 +165,35 @@ function customerEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
-  <div style="max-width:620px;margin:0 auto;padding:28px 16px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;overflow:hidden">
-      <div style="background:#ad3f67;padding:24px;text-align:center">
-        <div style="font-size:24px;font-weight:700;color:#ffffff">¡Recibimos tu pedido!</div>
-        <div style="margin-top:6px;color:#ffeaf2">Pedido #${escapeHtml(shortId)}</div>
+<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:560px;margin:0 auto;padding:32px 16px">
+    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:26px 24px;text-align:center">
+        <div style="width:52px;height:52px;margin:0 auto 12px;border-radius:50%;background:rgba(255,255,255,.16);line-height:52px;font-size:24px">✓</div>
+        <div style="font-size:20px;font-weight:750;color:#ffffff;letter-spacing:-.01em">¡Recibimos tu pedido!</div>
+        <div style="margin-top:6px;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.78)">PEDIDO #${escapeHtml(shortId)}</div>
       </div>
-      <div style="padding:26px">
-        <p style="margin:0 0 16px">Hola <strong>${escapeHtml(order.userName || 'Tintina')}</strong>,</p>
-        <p style="margin:0 0 20px;line-height:1.65;color:#5e5357">
+      <div style="padding:30px 28px">
+        <p style="margin:0 0 16px;font-size:14.5px">Hola <strong>${escapeHtml(order.userName || 'Tintina')}</strong>,</p>
+        <p style="margin:0 0 22px;font-size:14px;line-height:1.65;color:#5e5357">
           Tu pedido fue registrado correctamente. En breve nos comunicaremos contigo para confirmar los detalles de entrega y pago.
         </p>
-        <table style="width:100%;border-collapse:collapse;margin:18px 0">${rows}</table>
-        <table style="width:100%;border-collapse:collapse;background:#fff6fa;border-radius:12px">
-          <tr><td style="padding:12px;color:#7b6f72">Subtotal</td><td style="padding:12px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-          <tr><td style="padding:0 12px 12px;color:#7b6f72">Envío</td><td style="padding:0 12px 12px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
-          <tr><td style="padding:12px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
+        <table style="width:100%;border-collapse:collapse;margin:0 0 18px">${rows}</table>
+        <table style="width:100%;border-collapse:collapse;background:#fdf6f9;border-radius:14px">
+          <tr><td style="padding:12px 14px;font-size:13px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;font-size:13px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
+          <tr><td style="padding:0 14px 12px;font-size:13px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;font-size:13px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
+          <tr><td style="padding:12px 14px;font-size:14.5px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;font-size:14.5px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
         </table>
-        <div style="margin-top:22px;padding:16px;background:#fff9fc;border-radius:12px;line-height:1.6;color:#5e5357">
-          <strong>Entrega:</strong> ${escapeHtml(shippingLabel(order))}<br>
-          <strong>Pago:</strong> ${escapeHtml(paymentLabel(order))}
+        <div style="margin-top:18px;padding:16px 18px;background:#fdf6f9;border-radius:14px;font-size:13px;line-height:1.7;color:#5e5357">
+          <strong style="color:#2b2226">Entrega:</strong> ${escapeHtml(shippingLabel(order))}<br>
+          <strong style="color:#2b2226">Pago:</strong> ${escapeHtml(paymentLabel(order))}
         </div>
-        <p style="margin:22px 0 0;font-size:13px;line-height:1.6;color:#7b6f72">
+        <p style="margin:22px 0 0;font-size:12.5px;line-height:1.65;color:#8a7d81">
           Podés responder directamente a este correo si necesitás comunicarte con Tintin.
         </p>
       </div>
     </div>
+    <p style="margin:18px 0 0;text-align:center;font-size:11px;color:#b6a7ac">Tintin Accesorios &amp; Relojes</p>
   </div>
 </body>
 </html>`;
@@ -235,12 +237,15 @@ function adminEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat;color:#2b2b2b">
-  <div style="max-width:680px;margin:0 auto;padding:24px 14px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:18px;padding:26px">
-      <h1 style="margin:0 0 6px;color:#ad3f67;font-size:24px">Nuevo pedido #${escapeHtml(shortId)}</h1>
-      <p style="margin:0 0 22px;color:#7b6f72">${escapeHtml(fmtDate(order.createdAt))}</p>
-      <table style="width:100%;border-collapse:collapse;line-height:1.5">
+<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:640px;margin:0 auto;padding:32px 16px">
+    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:22px 24px;text-align:center">
+        <div style="font-size:18px;font-weight:750;color:#ffffff;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
+        <div style="margin-top:5px;font-size:12px;color:rgba(255,255,255,.78)">${escapeHtml(fmtDate(order.createdAt))}</div>
+      </div>
+      <div style="padding:28px">
+      <table style="width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5">
         <tr><td style="padding:5px 0;color:#7b6f72;width:150px">Cliente</td><td style="padding:5px 0"><strong>${escapeHtml(order.userName)}</strong></td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Correo</td><td style="padding:5px 0">${escapeHtml(order.userEmail)}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Teléfono</td><td style="padding:5px 0">${escapeHtml(order.userPhone)}</td></tr>
@@ -250,17 +255,19 @@ function adminEmail(order, orderId) {
         <tr><td style="padding:5px 0;color:#7b6f72">Entrega</td><td style="padding:5px 0">${escapeHtml(shippingLabel(order))}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Pago</td><td style="padding:5px 0">${escapeHtml(paymentLabel(order))}</td></tr>
       </table>
-      ${mapLink ? `<p><a href="${mapLink}" style="color:#ad3f67">Ver ubicación en Google Maps</a></p>` : ''}
-      <h2 style="margin:24px 0 8px;color:#ad3f67;font-size:18px">Productos</h2>
-      <table style="width:100%;border-collapse:collapse">${itemRows}</table>
-      <table style="width:100%;border-collapse:collapse;margin-top:14px;background:#fff6fa;border-radius:12px">
-        <tr><td style="padding:12px;color:#7b6f72">Subtotal</td><td style="padding:12px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-        <tr><td style="padding:0 12px 12px;color:#7b6f72">Envío</td><td style="padding:0 12px 12px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
-        <tr><td style="padding:12px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
+      ${mapLink ? `<p style="margin:14px 0 0;font-size:13px"><a href="${mapLink}" style="color:#ad3f67">Ver ubicación en Google Maps</a></p>` : ''}
+      <h2 style="margin:24px 0 8px;color:#2b2226;font-size:15px">Productos</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:13.5px">${itemRows}</table>
+      <table style="width:100%;border-collapse:collapse;margin-top:14px;background:#fdf6f9;border-radius:14px;font-size:13.5px">
+        <tr><td style="padding:12px 14px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
+        <tr><td style="padding:0 14px 12px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
+        <tr><td style="padding:12px 14px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
       </table>
-      ${order.notes ? `<p style="margin:18px 0 0;padding:14px;background:#fff9fc;border-radius:10px"><strong>Notas:</strong> ${escapeHtml(order.notes)}</p>` : ''}
-      <p style="margin:22px 0 0"><a href="${ADMIN_PANEL}" style="display:inline-block;background:#ad3f67;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:700">Abrir Super Admin</a></p>
+      ${order.notes ? `<p style="margin:18px 0 0;padding:14px 16px;background:#fdf6f9;border-radius:12px;font-size:13px"><strong>Notas:</strong> ${escapeHtml(order.notes)}</p>` : ''}
+      <p style="margin:24px 0 0;text-align:center"><a href="${ADMIN_PANEL}" style="display:inline-block;background:#ad3f67;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:999px;font-weight:700;font-size:13.5px">Abrir Super Admin</a></p>
+      </div>
     </div>
+    <p style="margin:18px 0 0;text-align:center;font-size:11px;color:#b6a7ac">Tintin Accesorios &amp; Relojes</p>
   </div>
 </body>
 </html>`;

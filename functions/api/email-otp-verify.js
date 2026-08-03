@@ -89,15 +89,24 @@ export async function onRequest(context) {
       }, 400, origin, requestUrl);
     }
 
-    // Código correcto y de un solo uso: se borra antes de seguir, así no
-    // sirve una segunda vez aunque alguien lo intercepte.
-    await firestoreAdminDelete(env, path);
+    // El código es correcto y de un solo uso, pero recién se borra después de
+    // completar el login (cuenta + token): si Identity Toolkit falla de forma
+    // transitoria acá, la clienta puede reintentar con el mismo código en vez
+    // de perderlo y tener que pedir uno nuevo.
+    let uid, isNewUser, customToken;
+    try {
+      ({ uid, isNewUser } = await findOrCreateUserByEmail(env, email));
+      customToken = await createFirebaseCustomToken(env, uid);
+    } catch (error) {
+      console.error('[email-otp-verify] Fallo creando la sesion:', error?.message || error);
+      return jsonResponse({ success: false, error: 'login_failed' }, 502, origin, requestUrl);
+    }
 
-    const { uid, isNewUser } = await findOrCreateUserByEmail(env, email);
-    const customToken = await createFirebaseCustomToken(env, uid);
+    await firestoreAdminDelete(env, path);
 
     return jsonResponse({ success: true, customToken, isNewUser }, 200, origin, requestUrl);
   } catch (error) {
+    console.error('[email-otp-verify] Error inesperado:', error?.message || error);
     return jsonResponse({ success: false, error: clean(error?.message || error, 300) }, 400, origin, requestUrl);
   }
 }

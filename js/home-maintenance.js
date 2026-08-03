@@ -83,7 +83,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
     node.dataset.state = state;
     node.setAttribute('role', state === 'error' ? 'alert' : 'status');
     node.setAttribute('aria-live', 'polite');
-    node.innerHTML = `<div class="tt-home-runtime-state-inner"><strong>${escapeText(title)}</strong><span>${escapeText(description)}</span>${link ? `<br><a href="${link.href}">${escapeText(link.label)}</a>` : ''}</div>`;
+    node.innerHTML = `<div class="tt-home-runtime-state-inner"><strong>${escapeText(title)}</strong><span>${escapeText(description)}</span>${link ? `<br><a href="${link.href}" class="tt-home-runtime-state-link">${escapeText(link.label)}</a>` : ''}</div>`;
     container.appendChild(node);
     return node;
   }

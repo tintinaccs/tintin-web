@@ -7,9 +7,15 @@
   nav.dataset.ttDesktopReady = '1';
 
   const items = [...nav.querySelectorAll('[data-desktop-nav-item]')];
-  const activeItem = () => items.find(item => item.classList.contains('active') || item.getAttribute('aria-current') === 'page') || items[0];
+  // Sin fallback a items[0]: en paginas auxiliares (envios, cambios, FAQ,
+  // terminos, privacidad, 404) ningun item es la ruta activa, y la pildora
+  // no debe aparecer marcando "Inicio" como si lo fuera.
+  const activeItem = () => items.find(item => item.classList.contains('active') || item.getAttribute('aria-current') === 'page') || null;
   const move = item => {
-    if (!item) return;
+    if (!item) {
+      pill.classList.remove('is-ready');
+      return;
+    }
     const navRect = nav.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
     pill.style.setProperty('--tt-pill-x', `${itemRect.left - navRect.left}px`);

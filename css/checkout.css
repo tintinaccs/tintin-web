@@ -496,34 +496,37 @@
     /* ---- CONFIRM ---- */
     .ck-confirm-check {
       text-align: center;
-      padding: 32px 24px 20px;
+      padding: 12px 8px 24px;
     }
     .ck-confirm-icon {
-      width: 80px;
-      height: 80px;
-      background: #e8f5e9;
+      width: 72px;
+      height: 72px;
+      background: #eafaf0;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 40px;
-      animation: ckPop .5s cubic-bezier(.34,1.56,.64,1);
+      margin: 0 auto 18px;
+      font-size: 34px;
+      box-shadow: 0 12px 28px rgba(46,125,50,.16);
+      animation: ckPop .45s cubic-bezier(.22,1,.36,1) both;
     }
     @keyframes ckPop {
-      from { transform: scale(0); opacity: 0; }
+      from { transform: scale(.7); opacity: 0; }
       to   { transform: scale(1); opacity: 1; }
     }
     .ck-confirm-title {
-      font-size: 20px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: #2e7d32;
-      margin-bottom: 6px;
+      font-size: 22px;
+      font-weight: 780;
+      letter-spacing: -.02em;
+      color: var(--text-strong, #2b2226);
+      margin-bottom: 8px;
     }
     .ck-confirm-sub {
-      font-size: 13px;
+      max-width: 320px;
+      margin: 0 auto;
+      font-size: 13.5px;
+      line-height: 1.5;
       color: var(--text-muted);
     }
 

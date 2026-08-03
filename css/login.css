@@ -76,146 +76,51 @@ body.tt-public-shell-mounted .login-page {
   background: rgba(173, 63, 103, .08);
 }
 
+/* Fase G: tarjeta unica centrada (sin panel lateral de marca) — el mismo
+   diseno en desktop, tablet y movil, con fondo solido para que el contraste
+   del texto no dependa de que se transparente lo que quede detras. */
 .login-shell {
-  width: min(1180px, 100%);
-  min-height: min(760px, calc(100dvh - 48px));
-  display: grid;
-  grid-template-columns: minmax(340px, .86fr) minmax(460px, 1.14fr);
+  width: min(440px, 100%);
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .78);
-  border-radius: 36px;
-  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(125, 23, 58, .09);
+  border-radius: 32px;
+  background: #fff;
   box-shadow: var(--login-shadow), inset 0 1px 0 rgba(255, 255, 255, .9);
-  -webkit-backdrop-filter: blur(24px) saturate(135%);
-  backdrop-filter: blur(24px) saturate(135%);
   animation: login-shell-in .58s cubic-bezier(.22, 1, .36, 1) both;
 }
-
-.login-brand {
-  min-width: 0;
-  position: relative;
-  display: grid;
-  place-items: center;
-  padding: clamp(44px, 5vw, 76px);
-  overflow: hidden;
-  color: #fff;
-  background:
-    radial-gradient(circle at 18% 8%, rgba(255,255,255,.2), transparent 30%),
-    linear-gradient(155deg, #c6557d 0%, #a3345d 44%, #781638 100%) !important;
-}
-
-.login-brand::before {
-  content: "";
-  position: absolute;
-  inset: 18px;
-  border: 1px solid rgba(255, 255, 255, .18);
-  border-radius: 26px;
-  pointer-events: none;
-}
-
-.login-brand-glow {
-  position: absolute;
-  width: 440px;
-  aspect-ratio: 1;
-  top: -250px;
-  right: -230px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .15);
-  box-shadow: 0 0 90px rgba(255, 255, 255, .12);
-}
-
-.login-brand-content { width: 100%; max-width: 390px; position: relative; }
-
-.login-brand-kicker {
-  margin-bottom: 28px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .72) !important;
-}
-
-.login-brand-logo {
-  margin: 0;
-  font-size: clamp(42px, 5vw, 68px);
-  font-weight: 900;
-  line-height: .95;
-  letter-spacing: .14em;
-  color: #fff !important;
-  text-transform: uppercase;
-}
-
-.login-brand-sub {
-  margin-top: 11px;
-  font-size: 11px;
-  font-weight: 650;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .66) !important;
-}
-
-.login-brand-tagline {
-  max-width: 360px;
-  margin-top: clamp(50px, 8vh, 82px);
-  font-size: clamp(25px, 3vw, 38px);
-  font-weight: 650;
-  line-height: 1.18;
-  letter-spacing: -.035em;
-  color: #fff !important;
-  text-wrap: balance;
-}
-
-.login-brand-benefits {
-  display: grid;
-  gap: 12px;
-  margin-top: 36px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, .82);
-}
-
-.login-brand-benefits span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: rgba(255, 255, 255, .84) !important;
-}
-
-.login-brand-benefits span::before {
-  content: "✓";
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  flex: 0 0 22px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.16);
-  font-size: 11px;
-}
-
-.login-brand-dots { display: flex; gap: 7px; margin-top: 52px; }
-.login-brand-dots span {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.3);
-}
-.login-brand-dots span:first-child { width: 24px; background: rgba(255,255,255,.88); }
 
 .login-form-side {
   min-width: 0;
   display: grid;
   align-content: center;
   justify-items: center;
-  padding: clamp(44px, 6vw, 86px);
-  background: rgba(255, 255, 255, .68) !important;
+  padding: clamp(40px, 7vw, 64px) clamp(28px, 7vw, 56px);
+  background: transparent !important;
 }
 
-.login-mobile-logo { display: none; }
+.login-mobile-logo {
+  display: block;
+  margin: 0 0 clamp(26px, 5vh, 40px);
+  text-align: center;
+}
+.login-mobile-logo-text {
+  color: var(--login-wine) !important;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .16em;
+}
+.login-mobile-logo-sub {
+  margin-top: 7px;
+  color: var(--login-muted) !important;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
 
 .login-box {
-  width: min(100%, 440px);
+  width: 100%;
   margin: 0 auto;
   padding: 0;
   text-align: left;
@@ -223,7 +128,8 @@ body.tt-public-shell-mounted .login-page {
   position: relative;
 }
 
-.login-google-section { position: relative; }
+.login-google-section,
+.login-email-block { position: relative; }
 
 .login-google-nudge-backdrop {
   display: none;
@@ -238,11 +144,13 @@ body.tt-public-shell-mounted .login-page {
   animation: login-nudge-fade-in .25s ease both;
 }
 
-.login-google-section.login-google-nudge-active {
+.login-nudge-active {
   position: relative;
   z-index: 16;
 }
-.login-google-section.login-google-nudge-active .login-google {
+.login-google-section.login-nudge-active .login-google,
+.login-email-block.login-nudge-active .login-email-input,
+.login-email-block.login-nudge-active .login-email-btn {
   box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 14px 34px rgba(80,31,49,.32);
 }
 
@@ -298,15 +206,17 @@ body.tt-public-shell-mounted .login-page {
   font-weight: 800;
   letter-spacing: .16em;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .login-heading {
   margin: 0;
   color: var(--login-ink) !important;
-  font-size: clamp(32px, 4vw, 46px);
+  font-size: clamp(28px, 6vw, 40px);
   font-weight: 780;
   line-height: 1.06;
   letter-spacing: -.045em;
+  text-align: center;
   text-wrap: balance;
 }
 
@@ -315,6 +225,7 @@ body.tt-public-shell-mounted .login-page {
   color: var(--login-muted) !important;
   font-size: 14px;
   line-height: 1.55;
+  text-align: center;
 }
 
 .login-google,
@@ -567,121 +478,19 @@ body.tt-public-shell-mounted .login-page {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@media (min-width: 1440px) {
-  .login-shell { width: min(1220px, 100%); }
-  .login-box { width: min(460px, 100%); }
-}
-
-@media (min-width: 1025px) and (max-width: 1439px) {
-  .login-shell { min-height: min(700px, calc(100dvh - 48px)); }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .login-page,
-  body.tt-public-shell-mounted .login-page { padding: 20px !important; }
-  .login-shell {
-    min-height: calc(100dvh - 40px);
-    grid-template-columns: minmax(285px, .78fr) minmax(420px, 1.22fr);
-    border-radius: 30px;
-  }
-  .login-brand { padding: 42px 34px; }
-  .login-brand-tagline { font-size: 27px; }
-  .login-form-side { padding: 42px; }
-}
-
-@media (max-width: 768px) {
-  .login-page,
-  body.tt-public-shell-mounted .login-page {
-    display: block;
-    min-height: 100dvh;
-    padding:
-      max(12px, env(safe-area-inset-top))
-      max(12px, env(safe-area-inset-right))
-      max(12px, env(safe-area-inset-bottom))
-      max(12px, env(safe-area-inset-left)) !important;
-    overflow: auto;
-    background:
-      radial-gradient(circle at 85% 5%, rgba(216,104,141,.18), transparent 32%),
-      linear-gradient(180deg, #fff9fc 0%, #fff2f7 100%) !important;
-  }
-
-  .login-shell {
-    width: 100%;
-    min-height: calc(100dvh - 24px);
-    display: block;
-    overflow: visible;
-    border-radius: 30px;
-    background: rgba(255,255,255,.8);
-    box-shadow: 0 18px 48px rgba(91,26,50,.12), inset 0 1px 0 #fff;
-  }
-
-  .login-brand { display: none !important; }
-  .login-form-side {
-    min-height: calc(100dvh - 24px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: max(28px, 6vh) clamp(22px, 7vw, 46px);
-    border-radius: inherit;
-    background: transparent !important;
-  }
-
-  .login-mobile-logo {
-    display: block;
-    margin: 0 0 clamp(30px, 6vh, 48px);
-    text-align: center;
-  }
-  .login-mobile-logo-text {
-    color: var(--login-wine) !important;
-    font-size: 26px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: .16em;
-  }
-  .login-mobile-logo-sub {
-    margin-top: 7px;
-    color: var(--login-muted) !important;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-  }
-
-  .login-box { width: min(100%, 480px); }
-  .login-eyebrow { text-align: center; }
-  .login-heading { font-size: clamp(30px, 9vw, 40px); text-align: center; }
-  .login-heading-sub { margin-bottom: 27px; text-align: center; }
-}
-
-@media (max-width: 420px) {
-  .login-page,
-  body.tt-public-shell-mounted .login-page { padding: 0 !important; background: #fff7fa !important; }
-  .login-shell {
-    min-height: 100dvh;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .login-form-side {
-    min-height: 100dvh;
-    padding:
-      max(24px, env(safe-area-inset-top))
-      max(20px, env(safe-area-inset-right))
-      max(22px, env(safe-area-inset-bottom))
-      max(20px, env(safe-area-inset-left));
-  }
-  .login-mobile-logo { margin-bottom: clamp(26px, 5vh, 38px); }
+/* Una sola tarjeta centrada, mismo diseño en desktop/tablet/movil — solo
+   ajusta paddings y tipografia a medida que se achica la pantalla, nunca
+   cambia de layout ni pierde el margen contra el borde. */
+@media (max-width: 480px) {
+  .login-shell { border-radius: 26px; }
+  .login-form-side { padding: clamp(30px, 9vw, 42px) clamp(20px, 7vw, 30px); }
+  .login-mobile-logo { margin-bottom: clamp(22px, 6vh, 34px); }
+  .login-heading { font-size: clamp(26px, 8vw, 32px); }
   .login-google, .login-email-btn, .login-email-input { min-height: 54px; }
-  .login-heading-sub { margin-bottom: 23px; }
-  .login-divider { margin: 20px 0; }
-  .login-hint { margin-top: 14px; }
-  .login-back { margin-top: 13px; }
 }
 
-@media (max-height: 700px) and (max-width: 768px) {
-  .login-form-side { justify-content: flex-start; padding-top: max(20px, env(safe-area-inset-top)); }
+@media (max-height: 700px) {
   .login-mobile-logo { margin-bottom: 20px; }
-  .login-heading { font-size: 29px; }
   .login-heading-sub { margin: 7px 0 18px; }
   .login-divider { margin: 16px 0; }
   .login-hint { margin-top: 10px; }
