@@ -1,19 +1,12 @@
 /* =============================================================
    TINTIN — Header hide on scroll (desktop/tablet)
-   =============================================================
-   En desktop y tablet el header se esconde suavemente al bajar y vuelve al
-   subir. Mobile queda intacto porque tiene header/menú separado.
    ============================================================= */
-
 (function () {
   'use strict';
   if (window.TintinHeaderScrollHideBooted) return;
   window.TintinHeaderScrollHideBooted = true;
 
-  function ready(fn) {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, { once: true });
-    else fn();
-  }
+  let initialized = false;
 
   function injectStyles() {
     if (document.getElementById('tt-header-scroll-hide-style')) return;
@@ -34,32 +27,30 @@
       }
       @media (prefers-reduced-motion: reduce) {
         #tt-header-desktop-tablet,
-        #tt-header-tablet {
-          transition: none !important;
-        }
+        #tt-header-tablet { transition: none !important; }
       }
     `;
     document.head.appendChild(st);
   }
 
-  ready(function () {
+  function initialize() {
+    if (initialized) return true;
     const headers = [
       document.getElementById('tt-header-desktop-tablet'),
       document.getElementById('tt-header-tablet')
     ].filter(Boolean);
-    if (!headers.length) return;
+    if (!headers.length) return false;
+
+    initialized = true;
     injectStyles();
 
     let lastY = window.scrollY || document.documentElement.scrollTop || 0;
     let ticking = false;
+    let resizeFrame = 0;
     const MIN_HIDE_Y = 96;
     const DELTA = 6;
 
     function isDesktopTablet() {
-      // Debe calzar exacto con el corte de styles.css (.tt-header{display:
-      // none!important} a <=768px) — si no, a exactamente 768px este script
-      // trata el header mobile de home (reutiliza el mismo #tt-header) como
-      // "desktop" y le agrega pointer-events:none al hacer scroll.
       return window.matchMedia ? window.matchMedia('(min-width: 768px)').matches : window.innerWidth >= 768;
     }
 
@@ -72,9 +63,9 @@
       return !!(
         (window.TintinSurfaceController?.surface || 'none') !== 'none' ||
         document.getElementById('tienda-dropdown')?.classList.contains('open') ||
-        document.getElementById('account-dropdown')?.classList.contains('open') ||
         document.getElementById('search-panel')?.classList.contains('open') ||
         document.body?.classList.contains('tt-cart-open') ||
+        document.documentElement.classList.contains('tt-surface-locked') ||
         document.documentElement.classList.contains('tt-scroll-locked') ||
         document.documentElement.classList.contains('tt-welcome-scroll-locked') ||
         focusIsInsideHeader()
@@ -85,19 +76,19 @@
       headers.forEach(header => header.classList.remove('tt-header-hidden-desktop'));
     }
 
-    function marcarCompacto(y) {
-      const compacto = y > 24;
-      headers.forEach(header => header.classList.toggle('tt-header-compact', compacto));
+    function markCompact(y) {
+      const compact = y > 24;
+      headers.forEach(header => header.classList.toggle('tt-header-compact', compact));
     }
 
     function hideHeader() {
       headers.forEach(header => header.classList.add('tt-header-hidden-desktop'));
     }
 
-    function onScroll() {
+    function updateFromScroll() {
       ticking = false;
       const y = window.scrollY || document.documentElement.scrollTop || 0;
-      marcarCompacto(y);
+      markCompact(y);
 
       if (!isDesktopTablet()) {
         showHeader();
@@ -113,30 +104,38 @@
 
       const diff = y - lastY;
       if (Math.abs(diff) < DELTA) return;
-
       if (diff > 0) hideHeader();
       else showHeader();
-
       lastY = y;
     }
 
     function requestTick() {
       if (ticking) return;
       ticking = true;
-      requestAnimationFrame(onScroll);
+      requestAnimationFrame(updateFromScroll);
     }
 
     window.addEventListener('scroll', requestTick, { passive: true });
     window.addEventListener('resize', () => {
-      if (!isDesktopTablet()) showHeader();
-      lastY = window.scrollY || document.documentElement.scrollTop || 0;
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        if (!isDesktopTablet()) showHeader();
+        lastY = window.scrollY || document.documentElement.scrollTop || 0;
+      });
     }, { passive: true });
 
-    ['focusin', 'mousemove', 'keydown'].forEach(evt => {
-      document.addEventListener(evt, () => {
-        if (!isDesktopTablet()) return;
-        if ((window.scrollY || 0) <= MIN_HIDE_Y || shouldKeepVisible()) showHeader();
-      }, { passive: true });
+    document.addEventListener('focusin', showHeader);
+    window.addEventListener('tintin:surface-change', event => {
+      if (event.detail?.surface !== 'none') showHeader();
     });
-  });
+    requestAnimationFrame(updateFromScroll);
+    return true;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize, { once: true });
+  } else {
+    initialize();
+  }
+  document.addEventListener('tintin:public-shell-ready', initialize);
 })();

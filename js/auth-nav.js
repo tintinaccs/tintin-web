@@ -65,6 +65,9 @@ onAuthStateChanged(auth,async user=>{
  renderAccountButtonPhoto(user);
  renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);
+ window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
+  detail:{authenticated:Boolean(user),role}
+ }));
 });
 
 function renderAccountButtonPhoto(user){
