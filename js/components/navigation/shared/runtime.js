@@ -101,7 +101,7 @@ export function loadSharedRuntime() {
 
   scheduleNonCritical(() => {
     Promise.allSettled([
-      import(versionedJsModule('nav-collections.js')),
+      import(versionedJsModule('components/navigation/shared/collections-runtime.js')),
       loadHomeMaintenance(),
     ]).then(reportRuntimeFailures);
   });
