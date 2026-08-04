@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T17:11:05.210Z",
-  "sourceFingerprint": "d6a94c79e215bb95d837a5acc748c37bec0f1bcf5e741789b4f81c6b035113db",
+  "generatedAt": "2026-08-04T18:38:28.596Z",
+  "sourceFingerprint": "bb355adbda48a227fc1f0d89a85bd3ca8f5960dd7b8f81129012cb08cc1e8b07",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5423708,
+    "totalBytes": 5424002,
     "pages": 18,
     "modules": 300
   },
@@ -15939,17 +15939,6 @@
       "endpoints": []
     },
     {
-      "path": "js/about-maintenance.js",
-      "bytes": 3792,
-      "sha256": "82f385072036d46a58e971572345ce16d0825b3223136782a19730e066b4c599",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "js/admin-app.js",
       "bytes": 438133,
       "sha256": "696e56a1c3a3acf97823e0249991fef49f925f5aad6b77eb48ae4e2141efb636",
@@ -17769,47 +17758,6 @@
       "endpoints": []
     },
     {
-      "path": "js/contact-maintenance.js",
-      "bytes": 12138,
-      "sha256": "607cd64938f011509bee30701d311ae6accbe68d428f96fb0a2ec08390ea94ec",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 2
-        },
-        {
-          "url": "https://wa.me/$%7Bwa%7D$%7Btext",
-          "line": 129
-        },
-        {
-          "url": "https://instagram.com/$%7Binstagram%7D",
-          "line": 135
-        },
-        {
-          "url": "https://wa.me/$%7Bconfig.whatsapp%7D",
-          "line": 173
-        }
-      ]
-    },
-    {
       "path": "js/content-schema.js",
       "bytes": 27335,
       "sha256": "b3566bf37edd8794d3a3cbac2a9f378582c963e2af63e62b708ee69517f7a273",
@@ -18473,39 +18421,6 @@
       "endpoints": []
     },
     {
-      "path": "js/legal-maintenance.js",
-      "bytes": 8074,
-      "sha256": "86b00bee18a3c16168919c2ff2c8e0e9997f9268e53a9535aa8accdf2dd184d4",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": true,
-          "line": 142
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": true,
-          "line": 143
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://wa.me/$%7Bcontact.whatsapp%7D$%7Btext",
-          "line": 111
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 143
-        }
-      ]
-    },
-    {
       "path": "js/load-images-init.js",
       "bytes": 1741,
       "sha256": "a503cfc149175ada9162ef86c7583c65c56df9f06fd3376684dc727336143ac6",
@@ -18817,8 +18732,8 @@
     },
     {
       "path": "js/page-maintenance-loader.js",
-      "bytes": 1337,
-      "sha256": "7d196a9d405772e61e1570c0488daddb725b04c8c4a48e9762b69233d4d37cf4",
+      "bytes": 1397,
+      "sha256": "27f486c2168a5d316d6e233f5e45c97edbaf1efa6d6e0ffa4811b9b26332d0c8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18838,6 +18753,91 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "js/pages/institutional/about-maintenance.js",
+      "bytes": 3812,
+      "sha256": "efe72b77fc6d8f9ebea3f1728875fee0c919955fe8f0bf4e2c4c60fc6a05164e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/pages/institutional/contact-maintenance.js",
+      "bytes": 12142,
+      "sha256": "7cb19ad1c6db25e45f4c5de00edeb694131a8c75da4920a0ab29969e831b9530",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 2
+        },
+        {
+          "url": "https://wa.me/$%7Bwa%7D$%7Btext",
+          "line": 129
+        },
+        {
+          "url": "https://instagram.com/$%7Binstagram%7D",
+          "line": 135
+        },
+        {
+          "url": "https://wa.me/$%7Bconfig.whatsapp%7D",
+          "line": 173
+        }
+      ]
+    },
+    {
+      "path": "js/pages/institutional/legal-maintenance.js",
+      "bytes": 8078,
+      "sha256": "c96235dc47617dc185cc84472803714d834fef92b3f16fa0002a25577529a09d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": true,
+          "line": 142
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": true,
+          "line": 143
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://wa.me/$%7Bcontact.whatsapp%7D$%7Btext",
+          "line": 111
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 143
+        }
+      ]
     },
     {
       "path": "js/paraguay-locations.js",
@@ -19918,8 +19918,8 @@
     },
     {
       "path": "scripts/audit-about-page.js",
-      "bytes": 2103,
-      "sha256": "743b44fa471501adfd725448fd790a50c803900b17c21b5c9f96a0d2688d84f1",
+      "bytes": 2165,
+      "sha256": "77e6cb1a87bbc4d8f06126e27549f05b259ee44331cd57456f868f820e9a62e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20060,8 +20060,8 @@
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
-      "bytes": 8869,
-      "sha256": "6ad2055728e71099e9c0cdeed79308f490afd5873bb63d0d298e490fdb6c2793",
+      "bytes": 8889,
+      "sha256": "4043d02ad9470acf4d09ce1783bd46decfd49fb2c9e4d4f6ab1f466b485551f3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20505,8 +20505,8 @@
     },
     {
       "path": "scripts/audit-contact-page.js",
-      "bytes": 1455,
-      "sha256": "eeb544a83b7ea2f36ae1ff5a6c090f6264afb7c8860ce0500d0dc6e71de9a85e",
+      "bytes": 1497,
+      "sha256": "c4f8de25bddf0f25fb9110ad8c35aa45992cac45efa61b88fad139f0d3ab8c23",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21271,8 +21271,8 @@
     },
     {
       "path": "scripts/audit-legal-pages.js",
-      "bytes": 1963,
-      "sha256": "62e5f50cfcd4e55d23610f0d47a54244b2d349d646b184b34518eb4135e7a5e7",
+      "bytes": 2025,
+      "sha256": "1bae8acf7025ceaecbff78ea7549474cadca884d6b3e781ab33f7ceed5c79bf0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21304,8 +21304,8 @@
     },
     {
       "path": "scripts/audit-level3-quality.js",
-      "bytes": 9509,
-      "sha256": "8aec01c6994d4b522a8b0e9532e7febc96eb88c1fbd08c9b3b2f5d14894a26f0",
+      "bytes": 9529,
+      "sha256": "37b24d5ad8d8070efe7ff70f41b26a927df655931e558a7d5f995288bc788a6f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23277,12 +23277,6 @@
       "sha256": "4cc8de7ed8a7adc48aa1ce6bd4e822f91ca69a3c172514b01a3e2fd9a8bd3ef5"
     },
     {
-      "path": "css/about-maintenance.css",
-      "extension": ".css",
-      "bytes": 4691,
-      "sha256": "ce38f549c0b97ea5067c9ea795acc94e2f2ba91aca0f016b80f0ee7450f6f6b5"
-    },
-    {
       "path": "css/admin-color-tokens.css",
       "extension": ".css",
       "bytes": 2019,
@@ -23467,6 +23461,12 @@
       "extension": ".css",
       "bytes": 159,
       "sha256": "1f0327234a1f318f0a745edb54919a54db403b23c6f4d3727f5c24f09ebb5ffc"
+    },
+    {
+      "path": "css/pages/institutional/about-maintenance.css",
+      "extension": ".css",
+      "bytes": 4691,
+      "sha256": "ce38f549c0b97ea5067c9ea795acc94e2f2ba91aca0f016b80f0ee7450f6f6b5"
     },
     {
       "path": "css/payment-methods.css",
@@ -23889,12 +23889,6 @@
       "sha256": "c27c0ed811a2f5c41f2a21a56893811f679d0071e0365e3abf3b99e1ace9cff0"
     },
     {
-      "path": "js/about-maintenance.js",
-      "extension": ".js",
-      "bytes": 3792,
-      "sha256": "82f385072036d46a58e971572345ce16d0825b3223136782a19730e066b4c599"
-    },
-    {
       "path": "js/admin-app.js",
       "extension": ".js",
       "bytes": 438133,
@@ -24303,12 +24297,6 @@
       "sha256": "04459b26ddbe71dda75cc02e3382271bec587f5e0e58b9a7334d369065ffffb7"
     },
     {
-      "path": "js/contact-maintenance.js",
-      "extension": ".js",
-      "bytes": 12138,
-      "sha256": "607cd64938f011509bee30701d311ae6accbe68d428f96fb0a2ec08390ea94ec"
-    },
-    {
       "path": "js/content-schema.js",
       "extension": ".js",
       "bytes": 27335,
@@ -24495,12 +24483,6 @@
       "sha256": "25420171e255c9f05c647a7b4ace9ef1a5182862c565e788432ad9e251c20c7b"
     },
     {
-      "path": "js/legal-maintenance.js",
-      "extension": ".js",
-      "bytes": 8074,
-      "sha256": "86b00bee18a3c16168919c2ff2c8e0e9997f9268e53a9535aa8accdf2dd184d4"
-    },
-    {
       "path": "js/load-images-init.js",
       "extension": ".js",
       "bytes": 1741,
@@ -24599,8 +24581,26 @@
     {
       "path": "js/page-maintenance-loader.js",
       "extension": ".js",
-      "bytes": 1337,
-      "sha256": "7d196a9d405772e61e1570c0488daddb725b04c8c4a48e9762b69233d4d37cf4"
+      "bytes": 1397,
+      "sha256": "27f486c2168a5d316d6e233f5e45c97edbaf1efa6d6e0ffa4811b9b26332d0c8"
+    },
+    {
+      "path": "js/pages/institutional/about-maintenance.js",
+      "extension": ".js",
+      "bytes": 3812,
+      "sha256": "efe72b77fc6d8f9ebea3f1728875fee0c919955fe8f0bf4e2c4c60fc6a05164e"
+    },
+    {
+      "path": "js/pages/institutional/contact-maintenance.js",
+      "extension": ".js",
+      "bytes": 12142,
+      "sha256": "7cb19ad1c6db25e45f4c5de00edeb694131a8c75da4920a0ab29969e831b9530"
+    },
+    {
+      "path": "js/pages/institutional/legal-maintenance.js",
+      "extension": ".js",
+      "bytes": 8078,
+      "sha256": "c96235dc47617dc185cc84472803714d834fef92b3f16fa0002a25577529a09d"
     },
     {
       "path": "js/paraguay-locations.js",
@@ -25079,8 +25079,8 @@
     {
       "path": "scripts/audit-about-page.js",
       "extension": ".js",
-      "bytes": 2103,
-      "sha256": "743b44fa471501adfd725448fd790a50c803900b17c21b5c9f96a0d2688d84f1"
+      "bytes": 2165,
+      "sha256": "77e6cb1a87bbc4d8f06126e27549f05b259ee44331cd57456f868f820e9a62e4"
     },
     {
       "path": "scripts/audit-account-flow-compact-part2d.mjs",
@@ -25109,8 +25109,8 @@
     {
       "path": "scripts/audit-admin-email-messaging.js",
       "extension": ".js",
-      "bytes": 8869,
-      "sha256": "6ad2055728e71099e9c0cdeed79308f490afd5873bb63d0d298e490fdb6c2793"
+      "bytes": 8889,
+      "sha256": "4043d02ad9470acf4d09ce1783bd46decfd49fb2c9e4d4f6ab1f466b485551f3"
     },
     {
       "path": "scripts/audit-admin-foundation.js",
@@ -25223,8 +25223,8 @@
     {
       "path": "scripts/audit-contact-page.js",
       "extension": ".js",
-      "bytes": 1455,
-      "sha256": "eeb544a83b7ea2f36ae1ff5a6c090f6264afb7c8860ce0500d0dc6e71de9a85e"
+      "bytes": 1497,
+      "sha256": "c4f8de25bddf0f25fb9110ad8c35aa45992cac45efa61b88fad139f0d3ab8c23"
     },
     {
       "path": "scripts/audit-content-phase6.js",
@@ -25385,8 +25385,8 @@
     {
       "path": "scripts/audit-legal-pages.js",
       "extension": ".js",
-      "bytes": 1963,
-      "sha256": "62e5f50cfcd4e55d23610f0d47a54244b2d349d646b184b34518eb4135e7a5e7"
+      "bytes": 2025,
+      "sha256": "1bae8acf7025ceaecbff78ea7549474cadca884d6b3e781ab33f7ceed5c79bf0"
     },
     {
       "path": "scripts/audit-level1-foundation.js",
@@ -25403,8 +25403,8 @@
     {
       "path": "scripts/audit-level3-quality.js",
       "extension": ".js",
-      "bytes": 9509,
-      "sha256": "8aec01c6994d4b522a8b0e9532e7febc96eb88c1fbd08c9b3b2f5d14894a26f0"
+      "bytes": 9529,
+      "sha256": "37b24d5ad8d8070efe7ff70f41b26a927df655931e558a7d5f995288bc788a6f"
     },
     {
       "path": "scripts/audit-loader-solid.js",
@@ -26791,13 +26791,6 @@
       "exists": true
     },
     {
-      "file": "js/about-maintenance.js",
-      "line": 17,
-      "raw": "about.html",
-      "target": "about.html",
-      "exists": true
-    },
-    {
       "file": "js/admin-app.js",
       "line": 758,
       "raw": "login.html",
@@ -27281,20 +27274,6 @@
       "exists": true
     },
     {
-      "file": "js/contact-maintenance.js",
-      "line": 5,
-      "raw": "contact.html",
-      "target": "contact.html",
-      "exists": true
-    },
-    {
-      "file": "js/contact-maintenance.js",
-      "line": 55,
-      "raw": "contact.html",
-      "target": "contact.html",
-      "exists": true
-    },
-    {
       "file": "js/content-schema.js",
       "line": 18,
       "raw": "index.html",
@@ -27582,20 +27561,6 @@
       "exists": true
     },
     {
-      "file": "js/legal-maintenance.js",
-      "line": 2,
-      "raw": "terminos.html",
-      "target": "terminos.html",
-      "exists": true
-    },
-    {
-      "file": "js/legal-maintenance.js",
-      "line": 2,
-      "raw": "privacidad.html",
-      "target": "privacidad.html",
-      "exists": true
-    },
-    {
       "file": "js/login-maintenance.js",
       "line": 46,
       "raw": "login.html",
@@ -27656,6 +27621,41 @@
       "line": 768,
       "raw": "/perfil.html",
       "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/pages/institutional/about-maintenance.js",
+      "line": 17,
+      "raw": "about.html",
+      "target": "about.html",
+      "exists": true
+    },
+    {
+      "file": "js/pages/institutional/contact-maintenance.js",
+      "line": 5,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
+      "file": "js/pages/institutional/contact-maintenance.js",
+      "line": 55,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
+      "file": "js/pages/institutional/legal-maintenance.js",
+      "line": 2,
+      "raw": "terminos.html",
+      "target": "terminos.html",
+      "exists": true
+    },
+    {
+      "file": "js/pages/institutional/legal-maintenance.js",
+      "line": 2,
+      "raw": "privacidad.html",
+      "target": "privacidad.html",
       "exists": true
     },
     {
@@ -29810,23 +29810,23 @@
             "operation": "doc"
           },
           {
-            "file": "js/contact-maintenance.js",
-            "line": 198,
-            "operation": "doc"
-          },
-          {
             "file": "js/email-notify.js",
             "line": 18,
             "operation": "doc"
           },
           {
-            "file": "js/legal-maintenance.js",
-            "line": 145,
+            "file": "js/media-library.js",
+            "line": 235,
             "operation": "doc"
           },
           {
-            "file": "js/media-library.js",
-            "line": 235,
+            "file": "js/pages/institutional/contact-maintenance.js",
+            "line": 198,
+            "operation": "doc"
+          },
+          {
+            "file": "js/pages/institutional/legal-maintenance.js",
+            "line": 145,
             "operation": "doc"
           },
           {

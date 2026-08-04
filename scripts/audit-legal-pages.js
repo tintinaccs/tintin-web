@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const pages = ['terminos.html', 'privacidad.html'];
-const runtimePath = 'js/legal-maintenance.js';
+const runtimePath = 'js/pages/institutional/legal-maintenance.js';
 const errors = [];
 
 for (const page of pages) {
@@ -15,7 +15,7 @@ for (const page of pages) {
   if (!/tt-footer-bottom/i.test(html)) errors.push(`${page}: falta footer`);
 }
 
-if (!fs.existsSync(runtimePath)) errors.push('falta js/legal-maintenance.js');
+if (!fs.existsSync(runtimePath)) errors.push('falta js/pages/institutional/legal-maintenance.js');
 else {
   const runtime = fs.readFileSync(runtimePath, 'utf8');
   [
@@ -33,7 +33,7 @@ else {
 }
 
 const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
-if (!/terminos\|privacidad[\s\S]*load\('legal-maintenance\.js'\)/.test(loader)) {
+if (!/terminos\|privacidad[\s\S]*load\('pages\/institutional\/legal-maintenance\.js'\)/.test(loader)) {
   errors.push('page-maintenance-loader no importa legal-maintenance en páginas legales');
 }
 

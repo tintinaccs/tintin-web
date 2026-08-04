@@ -23,10 +23,10 @@ export function loadPageMaintenance() {
   }
   if (/\/login(?:\.html)?$/.test(path)) return load('login-maintenance.js');
   if (/\/perfil(?:\.html)?$/.test(path)) return load('profile-maintenance.js');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('about-maintenance.js');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('contact-maintenance.js');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/about-maintenance.js');
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/contact-maintenance.js');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
-    return load('legal-maintenance.js');
+    return load('pages/institutional/legal-maintenance.js');
   }
   return Promise.resolve();
 }
