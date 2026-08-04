@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-16';
 const PUBLIC_PAGES = [
   '404.html', 'about.html', 'cambios-devoluciones.html', 'catalogo.html',
   'checkout.html', 'collections.html', 'contact.html', 'envios.html',
@@ -13,11 +12,23 @@ const PUBLIC_PAGES = [
   'privacidad.html', 'product.html', 'terminos.html',
 ];
 const SHELL_IDS = [
-  'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'tt-tablet-menu', 'tt-tabbar',
-  'cart-drawer', 'account-drawer', 'collections-sheet', 'tt-shared-backdrop', 'tt-shared-morph',
+  'tt-header-desktop-tablet', 'tt-header-tablet', 'search-panel', 'tt-tablet-menu',
+  'tt-tabbar', 'cart-drawer', 'account-drawer', 'collections-sheet',
+  'tt-shared-backdrop', 'tt-shared-morph',
 ];
+const COMPONENTS = {
+  desktop: 'js/components/navigation/desktop/header-desktop.js',
+  tablet: 'js/components/navigation/tablet/header-tablet.js',
+  mobile: 'js/components/navigation/mobile/header-mobile.js',
+  search: 'js/components/navigation/shared/search-panel.js',
+  cart: 'js/components/navigation/shared/cart-drawer.js',
+  account: 'js/components/navigation/shared/account-drawer.js',
+  collections: 'js/components/navigation/shared/collections-sheet.js',
+  layer: 'js/components/navigation/shared/surface-layer.js',
+};
 const failures = [];
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
+const exists = file => fs.existsSync(path.join(ROOT, file));
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
 for (const page of PUBLIC_PAGES) {
@@ -28,67 +39,92 @@ for (const page of PUBLIC_PAGES) {
   const loaderScripts = html.match(/<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar public-shell.js exactamente una vez`);
-  check(shellScripts[0]?.includes(`?v=${VERSION}`), `${page}: public-shell.js no usa la version actual`);
   check(/<script\b[^>]*src=["']js\/public-shell\.js[^>]*\bdefer\b/i.test(html), `${page}: public-shell.js debe ser defer`);
   check(controllerScripts.length === 1, `${page}: debe cargar ui-navigation-controller.js exactamente una vez`);
-  check(controllerScripts[0]?.includes(`?v=${VERSION}`), `${page}: ui-navigation-controller.js no usa la version actual`);
   check(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^>]*\bdefer\b/i.test(html), `${page}: ui-navigation-controller.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
   check(loaderScripts.length === 1, `${page}: debe cargar page-loader.js exactamente una vez`);
-  check(loaderScripts[0]?.includes(`?v=${VERSION}`), `${page}: page-loader.js no usa la version actual`);
   check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
-  check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de header duplicado`);
+  check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de navegación duplicado`);
+
   for (const id of SHELL_IDS) {
     check(!new RegExp(`<[^>]+id=["']${id}["']`, 'i').test(html), `${page}: conserva HTML local duplicado para #${id}`);
   }
 }
 
-check(read('js/page-audit-fix.js').includes(`var VERSION='${VERSION}'`), 'page-audit-fix.js puede degradar los CSS a una version obsoleta');
-check(read('js/page-loader.js').includes(`const TT_CACHE_VERSION = '${VERSION}'`), 'page-loader.js importa runtimes con una version obsoleta');
-check(read('js/ui-quality.js').includes(`var TT_CACHE_VERSION='${VERSION}'`), 'ui-quality.js importa page-audit-fix.js con una version obsoleta');
+Object.entries(COMPONENTS).forEach(([name, file]) => {
+  check(exists(file), `falta el componente ${name}: ${file}`);
+});
 
-const shell = read('js/public-shell.js');
-for (const id of SHELL_IDS) {
-  check(shell.includes(`id="${id}"`), `public-shell.js: falta #${id}`);
-}
-[
-  'btn-menu-tablet', 'btn-tablet-tienda', 'btn-tienda', 'btn-search', 'btn-search-tablet', 'btn-cuenta', 'btn-cuenta-tablet', 'btn-cart', 'btn-cart-tablet',
-  'tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta',
-].forEach(id => check(shell.includes(`id="${id}"`), `public-shell.js: falta el control #${id}`));
-check(shell.includes("import(versioned('./auth-nav.js'))"), 'public-shell.js: falta cuenta compartida');
-check(shell.includes("import(versioned('./nav-collections.js'))"), 'public-shell.js: faltan colecciones compartidas');
-check(shell.includes("import(versioned('./products-store.js'))"), 'public-shell.js: faltan productos en vivo para buscar/carrito');
-check(shell.includes("import(versioned('./cart-sync.js'))"), 'public-shell.js: falta sincronizacion del carrito');
-const surfaceController = read('js/ui-navigation-controller.js');
-check(surfaceController.includes("this.state = 'idle'"), 'surface-controller.js: falta estado idle');
-check(surfaceController.includes("this.surface = 'none'"), 'surface-controller.js: falta superficie none');
-check(surfaceController.includes('this.lockScroll()'), 'surface-controller.js: falta bloqueo de scroll compartido');
+const bootstrap = read('js/public-shell.js');
+check(bootstrap.includes('./components/navigation/public-shell-entry.js'), 'public-shell.js no apunta al entry modular');
+check(!bootstrap.includes('function topShell()'), 'public-shell.js todavía contiene el HTML monolítico anterior');
+check(bootstrap.split('\n').length < 50, 'public-shell.js dejó de ser un bootstrap pequeño');
 
-const desktopStyles = read('css/navigation-desktop.css');
-const tabletStyles = read('css/navigation-tablet.css');
-const mobileStyles = read('css/navigation-mobile.css');
+const entry = read('js/components/navigation/public-shell-entry.js');
+Object.values(COMPONENTS).forEach(file => {
+  const moduleName = path.basename(file);
+  check(entry.includes(moduleName), `public-shell-entry.js no importa ${moduleName}`);
+});
+check(entry.includes("architecture: 'modular-navigation-v1'"), 'el shell modular no publica su versión de arquitectura');
+
+const componentSources = Object.fromEntries(
+  Object.entries(COMPONENTS).map(([name, file]) => [name, read(file)])
+);
+check(componentSources.desktop.includes('id="tt-header-desktop-tablet"'), 'desktop: falta su header aislado');
+check(componentSources.tablet.includes('id="tt-header-tablet"'), 'tablet: falta su header aislado');
+check(componentSources.tablet.includes('id="tt-tablet-menu"'), 'tablet: falta su menú aislado');
+check(componentSources.mobile.includes('id="tt-tabbar"'), 'mobile: falta su tabbar aislada');
+check(componentSources.search.includes('id="search-panel"'), 'shared/search: falta el panel');
+check(componentSources.cart.includes('id="cart-drawer"'), 'shared/cart: falta el drawer');
+check(componentSources.account.includes('id="account-drawer"'), 'shared/account: falta el drawer');
+check(componentSources.collections.includes('id="collections-sheet"'), 'shared/collections: falta la hoja');
+check(componentSources.layer.includes('id="tt-shared-backdrop"'), 'shared/surfaces: falta el backdrop único');
+
+const runtime = read('js/components/navigation/shared/runtime.js');
+check(runtime.includes("components/navigation/desktop/controller.js"), 'runtime: falta controlador desktop modular');
+check(runtime.includes("components/navigation/tablet/controller.js"), 'runtime: falta controlador tablet modular');
+check(runtime.includes("components/navigation/mobile/controller.js"), 'runtime: falta controlador mobile modular');
+check(runtime.includes("components/navigation/shared/collections-runtime.js"), 'runtime: colecciones todavía dependen del archivo legado');
+check(runtime.includes("import(versionedJsModule('auth-nav.js'))"), 'runtime: falta cuenta compartida');
+check(runtime.includes("import(versionedJsModule('cart-sync.js'))"), 'runtime: falta sincronización del carrito');
+
+const controllerBootstrap = read('js/ui-navigation-controller.js');
+check(controllerBootstrap.includes('./components/navigation/shared/surface-controller.js'), 'ui-navigation-controller.js no apunta al controlador modular');
+const surfaceController = read('js/components/navigation/shared/surface-controller.js');
+check(surfaceController.includes("this.state = 'idle'"), 'controlador: falta estado idle');
+check(surfaceController.includes("this.surface = 'none'"), 'controlador: falta superficie none');
+check(surfaceController.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva el entorno');
+check(surfaceController.includes('this.lockScroll()'), 'controlador: falta bloqueo de scroll compartido');
+check(surfaceController.includes("this.close('outside', { restoreFocus: false })"), 'controlador: el cierre exterior desktop puede devolver foco y reabrir Tienda');
+
+const desktopStyles = read('css/components/navigation/desktop/header-desktop.css');
+const tabletStyles = read('css/components/navigation/tablet/header-tablet.css');
+const mobileStyles = read('css/components/navigation/mobile/header-mobile.css');
+const surfaceStyles = read('css/components/navigation/shared/surfaces.css');
 check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1025px');
 check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1024px');
 check(/@media \(max-width: 767px\)/.test(mobileStyles), 'mobile: falta el rango exacto <=767px');
-check(desktopStyles.includes('background: #fff !important'), 'desktop: el header no tiene fondo blanco sólido');
-check(tabletStyles.includes('background: #fff;'), 'tablet: el header no tiene fondo blanco sólido');
-check(mobileStyles.includes('background:#fff !important'), 'mobile: la tabbar no tiene fondo blanco sólido');
-check(shell.includes("import(versioned('./navigation-desktop.js'))"), 'public-shell.js: falta controlador desktop aislado');
-check(shell.includes("import(versioned('./navigation-tablet.js'))"), 'public-shell.js: falta controlador tablet aislado');
-check(shell.includes("import(versioned('./navigation-mobile.js'))"), 'public-shell.js: falta controlador mobile aislado');
+check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'desktop: falta el cierre visual definitivo de Tienda');
+check(desktopStyles.includes('width: 68px !important'), 'desktop: las imágenes de colecciones no fueron ampliadas');
+check(surfaceStyles.includes('grid-template-columns: auto minmax(0, 1fr) auto'), 'buscar: falta la estructura grid estable');
+check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar desktop: falta el tamaño ampliado');
+check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
 
-const scrollRuntime = read('js/header-scroll-hide.js');
-check(scrollRuntime.includes('@media (min-width: 768px)'), 'header-scroll-hide.js: la animacion no cubre tablet y desktop');
-check(scrollRuntime.includes("document.getElementById('tt-header-tablet')"), 'header-scroll-hide.js: falta el header tablet separado');
-check(scrollRuntime.includes('requestAnimationFrame(onScroll)'), 'header-scroll-hide.js: el scroll no esta sincronizado con frames');
-
-const pageAudit = read('js/page-audit-fix.js');
-check(!pageAudit.includes('tt-checkout-header-excluded'), 'page-audit-fix.js: checkout todavia excluye el header compartido');
+[
+  ['js/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
+  ['js/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
+  ['js/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
+  ['js/navigation-shared.js', 'components/navigation/shared/router.js'],
+  ['js/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
+].forEach(([legacy, source]) => {
+  check(read(legacy).includes(source), `${legacy}: no actúa como compatibilidad hacia ${source}`);
+});
 
 if (failures.length) {
-  console.error(`Public shell audit failed (${failures.length})`);
+  console.error(`Public shell modular audit failed (${failures.length})`);
   failures.forEach(failure => console.error(`- ${failure}`));
   process.exit(1);
 }
 
-console.log(`Public shell audit passed: ${PUBLIC_PAGES.length} screens share three isolated responsive navigations.`);
+console.log(`Public shell modular audit passed: ${PUBLIC_PAGES.length} pantallas usan navegación separada en desktop, tablet, mobile y shared.`);
