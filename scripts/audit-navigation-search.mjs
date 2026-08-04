@@ -9,6 +9,10 @@ const host = '127.0.0.1';
 const port = 4203;
 const baseURL = `http://${host}:${port}`;
 const mime = { '.css':'text/css', '.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.json':'application/json', '.png':'image/png', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon', '.woff2':'font/woff2' };
+const SEEDED_PRODUCTS = [
+  { id:'reloj-prueba', name:'Reloj Ovalado Dorado', category:'Relojes', price:180000, active:true, stock:2, imageUrl:'' },
+  { id:'collar-prueba', name:'Collar Corazón', category:'Collares', price:80000, active:true, stock:3, imageUrl:'' },
+];
 
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
@@ -30,14 +34,23 @@ const browser = await chromium.launch({ headless:true, executablePath:process.en
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
+async function installSeededCatalog(page) {
+  await page.evaluate(products => {
+    window.PRODUCTS = products;
+    window.dispatchEvent(new CustomEvent('tintin:products-loaded', {
+      detail: { products, source:'audit-seed' },
+    }));
+
+    if (window.__ttSearchAuditCatalogLock === true) return;
+    window.__ttSearchAuditCatalogLock = true;
+    window.addEventListener('tintin:products-loaded', event => {
+      if (event.detail?.source !== 'audit-seed') event.stopImmediatePropagation();
+    }, true);
+  }, SEEDED_PRODUCTS);
+}
+
 async function auditSearch(label, viewport, triggerSelector) {
   const context = await browser.newContext({ viewport });
-  await context.addInitScript(() => {
-    window.PRODUCTS = [
-      { id:'reloj-prueba', name:'Reloj Ovalado Dorado', category:'Relojes', price:180000, active:true, stock:2, imageUrl:'' },
-      { id:'collar-prueba', name:'Collar Corazón', category:'Collares', price:80000, active:true, stock:3, imageUrl:'' },
-    ];
-  });
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(error.message));
@@ -45,6 +58,8 @@ async function auditSearch(label, viewport, triggerSelector) {
   try {
     await page.goto(`${baseURL}/index.html`, { waitUntil:'domcontentloaded' });
     await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout:10000 });
+    await installSeededCatalog(page);
+
     await page.locator(triggerSelector).click();
     await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'false');
 
