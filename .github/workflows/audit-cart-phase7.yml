@@ -108,23 +108,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "feat: completar catálogo y sincronización de la Fase 7"
-          # Otras auditorías consolidan el mismo diagnostic-manifest.json en la
-          # misma PR. Si una empuja primero, este push sería un non-fast-forward:
-          # se reintenta sobre la punta remota. Si el manifiesto ya quedó
-          # consolidado, el rebase deja el commit vacío y lo descarta.
-          for attempt in 1 2 3; do
-            if git push origin HEAD:${GITHUB_HEAD_REF}; then
-              exit 0
-            fi
-            git fetch origin ${GITHUB_HEAD_REF}
-            if ! git rebase origin/${GITHUB_HEAD_REF}; then
-              git rebase --abort || true
-              echo 'No se pudo reconciliar la consolidación con la punta remota.'
-              exit 1
-            fi
-          done
-          echo 'No se pudo consolidar tras 3 intentos.'
-          exit 1
+          git push origin HEAD:${GITHUB_HEAD_REF}
 
       - name: Verificar manifiesto reproducible
         run: |
