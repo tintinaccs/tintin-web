@@ -208,7 +208,7 @@
       helper.id = 'tt-checkout-name-auth-sync';
       helper.type = 'module';
       helper.src = new URL(
-        'checkout-name-auth-sync.js?v=tintin-20260718-checkout-name-1',
+        'pages/checkout/checkout-name-auth-sync.js?v=tintin-20260718-checkout-name-1',
         scriptUrl || window.location.href
       ).href;
       document.head.appendChild(helper);

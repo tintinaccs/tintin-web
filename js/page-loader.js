@@ -766,7 +766,7 @@
       importSibling('admin-store-control.js', 'Admin Store State Sync');
     }
     if (current.endsWith('/perfil.html') || current.endsWith('/perfil')) {
-      importSibling('profile-order-stats-fix.js', 'Profile Order Stats Fix');
+      importSibling('pages/profile/profile-order-stats-fix.js', 'Profile Order Stats Fix');
     }
   }
 
@@ -790,7 +790,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('collections-phase4.js', 'Collections Phase 4');
+      importSibling('pages/collections/collections-phase4.js', 'Collections Phase 4');
     }
   }
 
