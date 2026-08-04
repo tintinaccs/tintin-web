@@ -1,6 +1,60 @@
 /* Shared search content. Panel geometry lives in surfaces.css. */
-.tt-search-results {
-  padding: 8px 2px 2px;
+#search-panel.tt-search-panel.open {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  grid-template-rows: minmax(48px, auto) minmax(0, 1fr) !important;
+  align-items: center !important;
+}
+
+#search-panel.tt-search-panel > svg {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  z-index: 3 !important;
+}
+
+#search-panel.tt-search-panel .tt-search-input {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  z-index: 3 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+#search-panel.tt-search-panel .tt-search-close {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  z-index: 4 !important;
+  transform: none !important;
+}
+
+#search-panel.tt-search-panel .tt-search-results {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 8px 2px 2px !important;
+  overflow: auto !important;
+  overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
 
@@ -84,7 +138,7 @@
 .tt-search-retry:focus-visible { background: #7d173a; outline: 3px solid rgba(173,63,103,.22); outline-offset: 2px; }
 
 @media (max-width: 767px) {
-  .tt-search-results { padding-top: 12px; }
+  #search-panel.tt-search-panel .tt-search-results { padding-top: 12px !important; }
   .tt-search-result-item { grid-template-columns: 62px minmax(0, 1fr); min-height: 76px; gap: 11px; padding-right: 10px; }
   .tt-search-result-image { width: 62px; height: 60px; }
 }
