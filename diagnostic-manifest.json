@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T19:06:23.775Z",
-  "sourceFingerprint": "2b243e8c9ffee47b2858040db62308df4f9bfa43d0bb37f2c3af9cc3e6323394",
+  "generatedAt": "2026-08-04T19:08:14.247Z",
+  "sourceFingerprint": "65b647d14993ea1e6c2e5ba456c76d3213509546c487a7f3ad9d419cb936d017",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 506,
-    "textFiles": 474,
-    "totalBytes": 5426506,
+    "files": 505,
+    "textFiles": 473,
+    "totalBytes": 5426461,
     "pages": 18,
     "modules": 300
   },
@@ -25747,12 +25747,6 @@
       "extension": ".html",
       "bytes": 14141,
       "sha256": "029111a1ad889209377030aa7470ef95db730530d9cf4c27a3fe65fe938849bb"
-    },
-    {
-      "path": "test-results/.last-run.json",
-      "extension": ".json",
-      "bytes": 45,
-      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
     },
     {
       "path": "tests/checkout/encomienda.test.mjs",
