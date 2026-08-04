@@ -14,6 +14,16 @@ function resetSearchPanel() {
   }
 }
 
+async function refreshCartBeforeOpen() {
+  document.dispatchEvent(new CustomEvent('tintin:cart-open-request'));
+  try {
+    await window.renderCart?.();
+    window.updateCartBadge?.();
+  } catch (error) {
+    console.warn('[Navigation] No se pudo actualizar el carrito antes de abrir.', error);
+  }
+}
+
 export async function registerNavigationSurfaces() {
   if (document.documentElement.dataset.ttModularSurfacesReady === '1') {
     return window.TintinSurfaceController || null;
@@ -54,7 +64,7 @@ export async function registerNavigationSurfaces() {
       element: element('cart-drawer'),
       triggerSelector: '[data-nav-action="cart"],#tabbar-cart',
       initialFocus: '#btn-cart-close',
-      beforeOpen: () => document.dispatchEvent(new CustomEvent('tintin:cart-open-request')),
+      beforeOpen: refreshCartBeforeOpen,
     }],
     ['account', {
       element: element('account-drawer'),
