@@ -480,11 +480,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   /**
-   * Mensaje de WhatsApp con TODO el pedido.
+   * Mensaje de WhatsApp para CONSULTAR por un pedido que ya se hizo.
    *
-   * Antes sólo llevaba los productos y los totales: al abrir WhatsApp había
-   * que volver a escribir a dónde iba, cómo pagaba y quién era. Ahora el
-   * mensaje se basta solo, que es el punto de mandarlo desde acá.
+   * Los pedidos se hacen en la página, no por WhatsApp: cuando este botón
+   * aparece, el pedido ya está registrado con su número. El mensaje lleva el
+   * detalle para que no haya que reescribirlo al preguntar algo, y arranca
+   * diciendo que es una consulta — no un pedido nuevo, para que nadie del
+   * otro lado lo cargue dos veces.
    */
   function buildWhatsAppMessage(result, draft) {
     const itemLines = (result.items || [])
@@ -495,7 +497,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       : formatPrice(result.shippingCost || 0);
 
     const lines = [
-      `🛍️ *PEDIDO TINTIN #${result.shortId}*`,
+      `Hola, consulto por mi pedido *#${result.shortId}* (ya confirmado en la web).`,
       '',
       itemLines,
       '',
