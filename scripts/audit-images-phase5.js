@@ -7,15 +7,15 @@ const read = file => fs.readFileSync(filePath(file), 'utf8');
 const exists = file => fs.existsSync(filePath(file));
 
 const files = {
-  utils: read('js/image-utils.js'),
-  images: read('js/images.js'),
-  resolver: read('js/image-resolver.js'),
-  runtime: read('js/images-phase5.js'),
+  utils: read('js/components/images/image-utils.js'),
+  images: read('js/components/images/images.js'),
+  resolver: read('js/components/images/image-resolver.js'),
+  runtime: read('js/components/images/images-phase5.js'),
   admin: read('js/admin/products/admin-images-phase5.js'),
   adminHtml: read('admin-images.html'),
-  uploadWidget: read('js/image-upload-widget.js'),
-  processing: read('js/image-processing.js'),
-  mediaLibrary: read('js/media-library.js'),
+  uploadWidget: read('js/components/images/image-upload-widget.js'),
+  processing: read('js/components/images/image-processing.js'),
+  mediaLibrary: read('js/components/images/media-library.js'),
   functionOrigin: read('js/function-origin.js'),
   firebase: read('js/firebase.js'),
   products: read('js/products-store.js'),
@@ -235,7 +235,7 @@ check(
   // site-activity.js, resend-order-notify.js y admin-email-gate-sync.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
-    files.mediaLibrary.includes("import { apiUrl } from './function-origin.js") &&
+    files.mediaLibrary.includes("import { apiUrl } from '../../function-origin.js") &&
     files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
     files.functionOrigin.includes("hostname.endsWith('github.io')") &&
     files.mediaLibrary.includes('uploadBlobToCloudinary') &&
@@ -386,7 +386,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from './image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.products.includes("from './components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'
@@ -396,7 +396,7 @@ check(
   'La Fase 5 se inicia en todas las páginas y en el panel',
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
-    files.ui.includes("'./images-phase5.js'") &&
+    files.ui.includes("'./components/images/images-phase5.js'") &&
     files.ui.includes("'./admin/products/admin-images-phase5.js'"),
   'ui-quality debe iniciar ambos módulos'
 );
@@ -493,14 +493,14 @@ check(
   files.uploadWidget.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
     files.uploadWidget.includes(`./media-library.js?${CURRENT_VERSION_QUERY}`) &&
     files.mediaLibrary.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
-    files.adminHtml.includes(`./js/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+    files.adminHtml.includes(`./js/components/images/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
     files.adminHtml.includes(`./js/admin/products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
 );
 
 check(
   'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
-  read('js/admin/admin-app.js').includes(`../image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+  read('js/admin/admin-app.js').includes(`../components/images/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
     read('js/admin/admin-app.js').includes(`./products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
 );

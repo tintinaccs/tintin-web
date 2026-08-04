@@ -9,7 +9,7 @@ const check = (name, condition, problem) => checks.push({ name, ok: Boolean(cond
 
 const products = read('js/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
-const navCollectionsAdapter = read('js/nav-collections.js');
+const navCollectionsAdapter = read('js/components/navigation/legacy/nav-collections.js');
 const navCollectionsRuntime = read('js/components/navigation/shared/collections-runtime.js');
 const pageLoader = read('js/page-maintenance-loader.js');
 const editBadge = read('js/edit-badge.js');

@@ -7,7 +7,7 @@
  * terminó la primera resolución del esquema para que el loader no revele una
  * página con un fondo cacheado y lo cambie un instante después.
  */
-import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, appCheckReady } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1';
 

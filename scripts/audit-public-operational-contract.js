@@ -25,7 +25,7 @@ check(/html\.tt-staff-session[\s\S]*?display:\s*flex\s*!important/.test(styles),
 
 const operationalSources = {
   'collections.html': 'data-tt-operational-status="collections"',
-  'js/cart-sync.js': "dataset.ttOperationalStatus = 'cart'",
+  'js/components/cart/cart-sync.js': "dataset.ttOperationalStatus = 'cart'",
   'js/pages/catalog/catalog-maintenance.js': "dataset.ttOperationalStatus = 'catalog'",
   'js/pages/collections/collections-maintenance.js': "dataset.ttOperationalStatus = 'collections'",
   'js/pages/product/product-maintenance.js': "dataset.ttOperationalStatus = 'product'",

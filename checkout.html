@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/ui-navigation-controller.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/public-shell.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -370,9 +370,9 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/phone-utils.js?v=tintin-20260803-phone-unique-1";
-import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
+} from "./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1";
+import { showBlockedModal } from "./js/components/modals/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
@@ -380,10 +380,10 @@ import {
   removeStoreClosedOverlay
 } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { searchPlaces } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
+import { searchPlaces } from "./js/components/location/location-picker.js?v=tintin-20260803-location-picker-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-saved-location.js?v=tintin-20260803-saved-location-1";
-import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeImageUrl } from "./js/components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
@@ -803,7 +803,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
+        const { addToCart } = await import('./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -862,7 +862,7 @@ function showCkToast(message) {
 }
 
 // Fase E: cuenta bloqueada — tapa todo el checkout con el mismo modal que
-// usa login.html (js/blocked-modal.js) y bloquea la interacción (no se saca
+// usa login.html (js/components/modals/blocked-modal.js) y bloquea la interacción (no se saca
 // hasta recargar/loguearse con otra cuenta).
 function showBlockedOverlay() {
   showBlockedModal();
@@ -1659,7 +1659,7 @@ function initMapSearch() {
 }
 
 // Named places, addresses, streets, barrios — matches by name/text.
-// La llamada al proxy /api/geo-search vive en js/location-picker.js, el mismo
+// La llamada al proxy /api/geo-search vive en js/components/location/location-picker.js, el mismo
 // módulo que usa el buscador de dirección del alta de cuenta y del perfil: un
 // solo lugar que sabe cómo se llama a ese endpoint y qué forma tiene su
 // respuesta. Acá sólo se traduce `lng` a `lon`, que es como lo nombra el
@@ -1818,6 +1818,6 @@ onAuthStateChanged(auth, user => {
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

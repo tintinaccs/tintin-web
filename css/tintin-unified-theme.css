@@ -3,7 +3,7 @@
 
   /* Fuente única de verdad — ahora apunta al catálogo de tokens semánticos
      de css/color-tokens.css (Super Admin → Apariencia → Esquema global),
-     que a su vez es lo que js/color-scheme.js reescribe en caliente sobre
+     que a su vez es lo que js/components/color/color-scheme.js reescribe en caliente sobre
      <html> con el esquema activo publicado en Firestore. Estos nombres
      --tt-* se mantienen como alias de compatibilidad: todo el CSS del
      sitio ya consume var(--tt-*), así que cambiar el token real basta

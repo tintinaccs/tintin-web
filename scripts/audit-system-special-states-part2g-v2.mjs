@@ -197,7 +197,7 @@ async function mountBlocked(page) {
   await page.evaluate(async url => {
     const module = await import(url);
     module.showBlockedModal();
-  }, `${baseUrl}/js/blocked-modal.js?audit=${Date.now()}-${Math.random()}`);
+  }, `${baseUrl}/js/components/modals/blocked-modal.js?audit=${Date.now()}-${Math.random()}`);
   await page.waitForSelector('#tt-blocked-overlay .tt-blocked-dialog', { state: 'visible' });
 }
 

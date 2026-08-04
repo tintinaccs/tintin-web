@@ -20,20 +20,20 @@ import {
 import { EMAIL_WEBHOOK_URL } from "../email-config.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { normalizeCollectionDoc } from "../pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1";
-import { sanitizeImageUrl } from "../image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeImageUrl } from "../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "../image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachImageUploadWidget } from "../components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 import { initSiteDiagnostics } from "./diagnostics/admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
-import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../paraguay-locations.js?v=tintin-20260725-paraguay-locations-1";
+import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/paraguay-locations.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
-} from "../color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
-import { contrastRatio, passesWcag } from "../color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachColorPicker } from "../color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
+} from "../components/color/color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
+import { contrastRatio, passesWcag } from "../components/color/color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachColorPicker } from "../components/color/color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260728-phase4-order-2";
 import './products/admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 

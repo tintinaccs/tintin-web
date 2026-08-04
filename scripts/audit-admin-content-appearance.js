@@ -42,9 +42,9 @@ function check(name, condition, problem) {
 const schema        = read('js/content-schema.js');
 const siteContent   = read('js/site-content.js');
 const adminContent  = read('js/admin/content/admin-content-phase6.js');
-const colorScheme   = read('js/color-scheme.js');
-const colorInstant  = read('js/color-scheme-instant.js');
-const colorCatalog  = read('js/color-scheme-catalog.js');
+const colorScheme   = read('js/components/color/color-scheme.js');
+const colorInstant  = read('js/components/color/color-scheme-instant.js');
+const colorCatalog  = read('js/components/color/color-scheme-catalog.js');
 const adminApp      = read('js/admin/admin-app.js');
 const rules         = read('firestore.rules');
 

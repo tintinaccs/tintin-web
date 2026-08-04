@@ -726,21 +726,21 @@
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('mobile-header-mode.js', 'Header Mode');
+      importSibling('components/navigation/legacy/mobile-header-mode.js', 'Header Mode');
     }
   }
 
   function bootHeaderDropdownFix() {
     if (window.TintinSurfaceController) return;
     if (!window.TintinHeaderDropdownFixBooted) {
-      importSibling('header-dropdown-fix.js', 'Header Dropdown Fix');
+      importSibling('components/navigation/legacy/header-dropdown-fix.js', 'Header Dropdown Fix');
     }
   }
 
   function bootHeaderAccountFix() {
     if (window.TintinSurfaceController) return;
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('header-account-mobile-fix.js', 'Header Account Fix');
+      importSibling('components/navigation/legacy/header-account-mobile-fix.js', 'Header Account Fix');
     }
   }
 
@@ -753,7 +753,7 @@
 
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
-      importSibling('header-scroll-hide.js', 'Header Scroll Hide');
+      importSibling('components/navigation/legacy/header-scroll-hide.js', 'Header Scroll Hide');
     }
   }
 
@@ -778,13 +778,13 @@
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('image-performance.js', 'Image Performance');
+      importSibling('components/images/image-performance.js', 'Image Performance');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('images-phase5.js', 'Images Phase 5');
+      importSibling('components/images/images-phase5.js', 'Images Phase 5');
     }
   }
 
@@ -795,12 +795,12 @@
   }
 
   function bootCartSyncPublic() {
-    importSibling('cart-sync.js', 'Cart Sync');
+    importSibling('components/cart/cart-sync.js', 'Cart Sync');
   }
 
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
-      importSibling('theme-color-sanitizer.js', 'Theme Color Sanitizer');
+      importSibling('components/color/theme-color-sanitizer.js', 'Theme Color Sanitizer');
     }
   }
 

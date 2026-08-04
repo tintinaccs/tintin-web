@@ -19,15 +19,15 @@ function css(){
   var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=versioned('../css/'+file);document.head.appendChild(l);
  });
 }
-function bootThemeSanitizer(){import(versioned('./theme-color-sanitizer.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
-function bootMobileHeader(){import(versioned('./header-account-mobile-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
+function bootThemeSanitizer(){import(versioned('./components/color/theme-color-sanitizer.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
+function bootMobileHeader(){import(versioned('./components/navigation/legacy/header-account-mobile-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
 function bootPageAudit(){import(versioned('./page-audit-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('./pages/collections/collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin/collections/admin-collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}
-function bootImagesPhase5(){import(versioned('./images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Images Phase 5:',e)})}
+function bootImagesPhase5(){import(versioned('./components/images/images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Images Phase 5:',e)})}
 function bootAdminImagesPhase5(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin-images.html')||path.endsWith('/admin-images')))return;import(versioned('./admin/products/admin-images-phase5.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Images Phase 5:',e)})}
 function bootAdminContentPhase6(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin/content/admin-content-phase6.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Content Phase 6:',e)})}
-function bootCartPhase7(){var path=(location.pathname||'').toLowerCase();if(path.endsWith('/admin.html')||path.endsWith('/admin')||path.endsWith('/admin-images.html')||path.endsWith('/admin-images'))return;import(versioned('./cart-sync.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Cart Sync Phase 7:',e)})}
+function bootCartPhase7(){var path=(location.pathname||'').toLowerCase();if(path.endsWith('/admin.html')||path.endsWith('/admin')||path.endsWith('/admin-images.html')||path.endsWith('/admin-images'))return;import(versioned('./components/cart/cart-sync.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Cart Sync Phase 7:',e)})}
 function bootAdminUsersPhase8(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin/users/admin-users-phase8.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Users Phase 8:',e)})}
 function bootAdminImportPhase9(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('./admin/admin-import-phase9.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Import Phase 9:',e)})}
 function parity(){var r=document.documentElement;if(r.classList.contains('tt-parity-guard'))r.classList.remove('tt-parity-guard');if(!r.classList.contains('tt-parity-safe'))r.classList.add('tt-parity-safe')}

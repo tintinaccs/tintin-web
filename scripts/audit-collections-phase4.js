@@ -6,7 +6,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const files = {
   nav: read('js/components/navigation/shared/collections-runtime.js'),
-  navCompatibility: read('js/nav-collections.js'),
+  navCompatibility: read('js/components/navigation/legacy/nav-collections.js'),
   publicPhase4: read('js/pages/collections/collections-phase4.js'),
   adminPhase4: read('js/admin/collections/admin-collections-phase4.js'),
   uiQuality: read('js/ui-quality.js'),
@@ -73,7 +73,7 @@ check(
   'El módulo legado apunta a la fuente modular',
   files.navCompatibility.includes('components/navigation/shared/collections-runtime.js') &&
     files.navCompatibility.split('\n').length < 10,
-  'js/nav-collections.js debe ser solamente un adaptador de compatibilidad'
+  'js/components/navigation/legacy/nav-collections.js debe ser solamente un adaptador de compatibilidad'
 );
 
 check(
@@ -153,7 +153,7 @@ check(
 
 check(
   'Colecciones usa el carrito compartido y valida stock',
-  files.collectionsPageRuntime.includes("import('../../cart-sync.js?v=tintin-20260716-cloudinary-fix-1") &&
+  files.collectionsPageRuntime.includes("import('../../components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1") &&
     files.collectionsPageRuntime.includes('cartSync.addToCart') &&
     files.collectionsPageRuntime.includes('Number(product.stock) <= 0'),
   'los CTA destacados deben usar la misma sincronización y disponibilidad que el resto de la tienda'

@@ -24,8 +24,8 @@ const products = read('js/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
 
 check('Montserrat mantiene swap sin FOIT', /font-display:\s*swap/.test(montserrat) && !/font-display:\s*block/.test(montserrat), 'La fuente volvió a bloquear el texto.');
-check('La primera pintura sigue protegida', read('js/color-scheme-instant.js').includes('tt-color-scheme-pending') && /visibility:\s*hidden/.test(read('js/color-scheme-instant.js')), 'El contenido puede aparecer antes del esquema.');
-check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/page-loader.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/color-scheme-instant.js')), 'El loader puede quedar infinito.');
+check('La primera pintura sigue protegida', read('js/components/color/color-scheme-instant.js').includes('tt-color-scheme-pending') && /visibility:\s*hidden/.test(read('js/components/color/color-scheme-instant.js')), 'El contenido puede aparecer antes del esquema.');
+check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/page-loader.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/color-scheme-instant.js')), 'El loader puede quedar infinito.');
 check('Autenticación pública y administrativa siguen activas', read('js/store-gate.js').includes('onAuthStateChanged') && read('js/admin/admin-app.js').includes('onAuthStateChanged'), 'La sesión dejó de controlar el acceso.');
 check('Super Admin conserva acceso total', read('js/admin/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"), 'El bypass total se perdió.');
 check('Panel Admin mantiene arranque protegido', read('admin.html').includes('js/admin/admin-app.js') && read('js/admin/admin-app.js').includes("role === 'superadmin' && user.email === SUPER_ADMIN"), 'El panel perdió su gate.');
@@ -62,7 +62,7 @@ check('Contacto usa configuración pública compartida', read('js/whatsapp.js').
 check('Header y navegación siguen montándose', read('js/page-loader.js').includes('bootHeaderMode') && read('js/page-loader.js').includes('bootPublicRuntime'), 'El header perdió su arranque.');
 check('Tienda cerrada conserva storeGate', read('js/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") && read('js/store-gate.js').includes("from './store-gate-core.js"), 'El gate perdió su fuente mínima.');
 check('Correos siguen por servidor con Resend', read('functions/api/order-email.js').includes('if (isResend && !isSuperAdmin)'), 'El canal de correo perdió protección.');
-check('Imágenes conservan lazy y async', read('js/image-performance.js').includes("image.decoding = 'async'") && read('js/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"), 'La estrategia de imágenes se degradó.');
+check('Imágenes conservan lazy y async', read('js/components/images/image-performance.js').includes("image.decoding = 'async'") && read('js/components/images/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"), 'La estrategia de imágenes se degradó.');
 check('Auditoría sigue inmutable', /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false;/.test(read('firestore.rules')), 'AuditLog quedó editable.');
 check('Respuestas obsoletas siguen protegidas', read('js/admin/admin-app.js').includes('statisticsTrafficLoadToken'), 'Una carga vieja puede pisar otra nueva.');
 

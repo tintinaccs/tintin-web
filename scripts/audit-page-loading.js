@@ -111,7 +111,7 @@ function auditHtmlPage(page) {
 
   if (/TT_PAGE_LOADER_WAIT\s*=\s*true/.test(html)) {
     if (!/js\/page-loader\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga page-loader.js.');
-    if (!isAdminPage && !/js\/color-scheme-instant\.js/.test(html)) {
+    if (!isAdminPage && !/js\/components\/color\/color-scheme-instant\.js/.test(html)) {
       fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga color-scheme-instant.js.');
     }
   }

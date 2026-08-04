@@ -25,7 +25,7 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 | Estructura de Mi Cuenta | `js/components/navigation/shared/account-drawer.js` |
 | Diseño sólido de Mi Cuenta | `css/components/navigation/shared/surfaces.css` |
 | Estructura del carrito | `js/components/navigation/shared/cart-drawer.js` |
-| Contenido y operaciones del carrito | `script.js` y `js/cart-sync.js` hasta completar su extracción modular |
+| Contenido y operaciones del carrito | `script.js` y `js/components/cart/cart-sync.js` hasta completar su extracción modular |
 | Estructura de colecciones mobile | `js/components/navigation/shared/collections-sheet.js` |
 | Carga e imágenes de colecciones | `js/components/navigation/shared/collections-runtime.js` |
 | Abrir/cerrar cualquier panel | `js/components/navigation/shared/surface-controller.js` |
@@ -50,11 +50,11 @@ Los siguientes archivos existen para no romper páginas antiguas, auditorías o 
 ```text
 js/public-shell.js
 js/ui-navigation-controller.js
-js/navigation-desktop.js
-js/navigation-tablet.js
-js/navigation-mobile.js
-js/navigation-shared.js
-js/nav-collections.js
+js/components/navigation/legacy/navigation-desktop.js
+js/components/navigation/legacy/navigation-tablet.js
+js/components/navigation/legacy/navigation-mobile.js
+js/components/navigation/legacy/navigation-shared.js
+js/components/navigation/legacy/nav-collections.js
 css/navigation-desktop.css
 css/navigation-tablet.css
 css/navigation-mobile.css

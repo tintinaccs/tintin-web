@@ -56,9 +56,9 @@ assertFile('css/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores 
 assertFile('css/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
 assertFile('js/ui-quality.js', 'Debe existir el runtime global de calidad');
 assertFile('js/page-loader.js', 'Debe existir el loader global');
-assertFile('js/header-account-mobile-fix.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
+assertFile('js/components/navigation/legacy/header-account-mobile-fix.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
 assertFile('js/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
-assertFile('js/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
+assertFile('js/components/color/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
 assertFile('scripts/fix-tintin-source.js', 'Debe existir el auto-fixer de fuente');
 assertFile('firestore.rules', 'Debe existir el archivo de reglas Firestore');
 assertFile('firebase.json', 'Debe existir firebase.json apuntando a firestore.rules');
@@ -69,7 +69,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/tintin-unified-theme.css','css/tintin-theme-cleanup.css','css/tintin-tokens.css','js/components/color/theme-color-sanitizer.js','js/page-audit-fix.js','js/page-loader.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }
@@ -177,7 +177,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   }
 }
 
-// Antirregresión: waitReady() (js/welcome-tutorial-runtime.js) resuelve
+// Antirregresión: waitReady() (js/components/welcome/welcome-tutorial-runtime.js) resuelve
 // "finish()" sincrónicamente cuando el loader/splash ya tienen .tt-out en el
 // momento en que se llama — eso ocurre ANTES de que "t" y "obs" reciban su
 // setTimeout()/MutationObserver, así que cleanup() no puede referenciarlas
@@ -185,17 +185,17 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
 // declararse con let (inicializadas antes del early-return) y el clearTimeout
 // / obs.disconnect() deben quedar guardados con un chequeo de truthiness.
 {
-  const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
+  const welcomeRuntime = read('js/components/welcome/welcome-tutorial-runtime.js');
   const fnMatch = welcomeRuntime.match(/function waitReady\(\)\{[\s\S]*?\n  \}/);
   if (!fnMatch) {
-    addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', 'No se encontró waitReady() — no se pudo verificar el antirregresión de TDZ');
+    addIssue('CRITICAL', 'js/components/welcome/welcome-tutorial-runtime.js', 'No se encontró waitReady() — no se pudo verificar el antirregresión de TDZ');
   } else {
     const fnBody = fnMatch[0];
     if (!/let\s+t\s*=\s*null/.test(fnBody) || !/let\s+obs\s*=\s*null/.test(fnBody)) {
-      addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', "waitReady() debe declarar 't' y 'obs' con let=null antes del early-return de readyNow(), o vuelve el ReferenceError de TDZ en cleanup()");
+      addIssue('CRITICAL', 'js/components/welcome/welcome-tutorial-runtime.js', "waitReady() debe declarar 't' y 'obs' con let=null antes del early-return de readyNow(), o vuelve el ReferenceError de TDZ en cleanup()");
     }
     if (/[^.]\bclearTimeout\(t\)/.test(fnBody) && !/if\s*\(\s*t\s*\)\s*clearTimeout\(t\)/.test(fnBody)) {
-      addIssue('CRITICAL', 'js/welcome-tutorial-runtime.js', 'clearTimeout(t) en waitReady() no está protegido por if(t) — puede volver a lanzar ReferenceError si finish() corre antes de asignar t');
+      addIssue('CRITICAL', 'js/components/welcome/welcome-tutorial-runtime.js', 'clearTimeout(t) en waitReady() no está protegido por if(t) — puede volver a lanzar ReferenceError si finish() corre antes de asignar t');
     }
   }
 }

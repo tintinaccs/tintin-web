@@ -21,7 +21,7 @@ function check(label, condition, detail = '') {
   console.error(`FAIL — ${label}${detail ? `: ${detail}` : ''}`);
 }
 
-const cart = read('js/cart-sync.js');
+const cart = read('js/components/cart/cart-sync.js');
 const checkout = read('js/secure-checkout-order.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const inventory = read('js/admin/products/admin-inventory-integrity.js');

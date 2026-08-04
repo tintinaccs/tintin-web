@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, appCheckReady } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   doc,
   getDoc,
@@ -19,8 +19,8 @@ import { resolveDeviceImage } from './image-resolver.js?v=tintin-20260716-cloudi
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de images.js. Ambas son idempotentes.
-import './pages/home/home-premium.js';
-import './welcome-tutorial-runtime.js';
+import '../../pages/home/home-premium.js';
+import '../welcome/welcome-tutorial-runtime.js';
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';

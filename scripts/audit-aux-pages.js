@@ -57,8 +57,8 @@ check(
 );
 check(
   '[404.html] mantiene el tema del sitio (primera pintura + motor en vivo)',
-  notFound.includes('js/color-scheme-instant.js') &&
-    notFound.includes('js/color-scheme.js'),
+  notFound.includes('js/components/color/color-scheme-instant.js') &&
+    notFound.includes('js/components/color/color-scheme.js'),
   'El 404 debe verse con el mismo esquema de color que el resto del sitio.'
 );
 check(

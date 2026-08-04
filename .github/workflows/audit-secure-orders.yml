@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - 'js/secure-checkout-order.js'
-      - 'js/cart-sync.js'
+      - 'js/components/cart/cart-sync.js'
       - 'firestore.rules'
       - 'scripts/audit-secure-orders.js'
       - 'package.json'

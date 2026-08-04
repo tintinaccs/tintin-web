@@ -1,4 +1,4 @@
-import { isAdminPage } from './admin/admin-path.js?v=tintin-20260722-level4-1';
+import { isAdminPage } from '../../admin/admin-path.js?v=tintin-20260722-level4-1';
 
 const ACTIVITY_KEY = 'tt_cart_activity_v1';
 const SESSION_KEY = 'tt_cart_recovery_shown_v1';

@@ -60,7 +60,7 @@ check(
 check(
   'El loader tiene salida garantizada',
   /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/page-loader.js')) &&
-    /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/color-scheme-instant.js')),
+    /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/color-scheme-instant.js')),
   'Los loaders deben tener tiempo máximo de espera.'
 );
 
@@ -127,8 +127,8 @@ check(
 
 check(
   'Las imágenes usan decoding async y lazy salvo prioridad',
-  read('js/image-performance.js').includes("image.decoding = 'async'") &&
-    read('js/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"),
+  read('js/components/images/image-performance.js').includes("image.decoding = 'async'") &&
+    read('js/components/images/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"),
   'Las imágenes fuera de pantalla deben diferirse.'
 );
 
@@ -161,7 +161,7 @@ check(
   `Inicializadores encontrados: ${firebaseInitializers.join(', ')}`
 );
 
-const allowedBlocking = ['js/color-scheme-instant.js', 'js/page-loader.js'];
+const allowedBlocking = ['js/components/color/color-scheme-instant.js', 'js/page-loader.js'];
 const blockingOffenders = [];
 publicPages.forEach(page => {
   if (!exists(page)) return;

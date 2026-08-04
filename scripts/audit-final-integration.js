@@ -50,7 +50,7 @@ check(
 );
 check(
   'Apariencia consume colorSchemes y settings/appearance',
-  read('js/color-scheme.js').includes('colorSchemes') && read('js/color-scheme.js').includes('APPEARANCE_DOC'),
+  read('js/components/color/color-scheme.js').includes('colorSchemes') && read('js/components/color/color-scheme.js').includes('APPEARANCE_DOC'),
   'La apariencia debe seguir conectada al Super Admin.'
 );
 check(
