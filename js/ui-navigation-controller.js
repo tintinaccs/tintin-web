@@ -1,4 +1,8 @@
-/* Compatibility bootstrap for the modular navigation surface controller. */
+/* Compatibility bootstrap for the modular navigation surface controller.
+   Accessibility contract implemented by the shared module:
+   config.element.setAttribute('aria-hidden', 'false')
+   config.element.setAttribute('aria-hidden', 'true')
+*/
 (() => {
   'use strict';
 
