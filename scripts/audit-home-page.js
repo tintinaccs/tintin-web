@@ -18,6 +18,7 @@ const html = read('index.html');
 const css = read('css/home-maintenance.css');
 const runtime = read('js/home-maintenance.js');
 const shell = read('js/public-shell.js');
+const shellRuntime = read('js/components/navigation/shared/runtime.js');
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 
 [
@@ -38,9 +39,11 @@ requireText(html, /window\.TT_PAGE_LOADER_WAIT\s*=\s*true/, 'Inicio no espera la
 requireText(html, /js\/public-shell\.js/, 'Inicio no carga el shell público compartido.');
 requireText(html, /css\/home-fit\.css/, 'Inicio no carga el CSS estructural temprano.');
 
-requireText(shell, /home-maintenance\.js/, 'El shell público no carga home-maintenance.js.');
-requireText(shell, /home-maintenance\.css/, 'El shell público no carga home-maintenance.css.');
-requireText(shell, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de Inicio no está limitada únicamente a Inicio.');
+requireText(shell, /components\/navigation\/public-shell-entry\.js/, 'El shell público no carga el entry modular.');
+requireText(shellRuntime, /home-maintenance\.js/, 'El runtime modular no carga home-maintenance.js.');
+requireText(shellRuntime, /css\/home-maintenance\.css/, 'El runtime modular no carga home-maintenance.css.');
+requireText(shellRuntime, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de Inicio no está limitada únicamente a Inicio.');
+requireText(shellRuntime, /function loadHomeMaintenance\(\)/, 'El runtime modular no encapsula la carga de Inicio.');
 
 requireText(runtime, /DOMContentLoaded/, 'El runtime de Inicio no contempla carga temprana.');
 requireText(runtime, /MutationObserver/, 'El runtime de Inicio no vigila contenido dinámico.');
