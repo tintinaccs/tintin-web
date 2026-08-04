@@ -1,0 +1,59 @@
+name: Audit modular navigation
+
+on:
+  pull_request:
+    paths:
+      - 'js/components/navigation/**'
+      - 'css/components/navigation/**'
+      - 'js/public-shell.js'
+      - 'js/ui-navigation-controller.js'
+      - 'js/navigation-*.js'
+      - 'js/nav-collections.js'
+      - 'css/navigation-*.css'
+      - 'css/surface-controller.css'
+      - 'scripts/audit-public-shell.js'
+      - 'scripts/audit-modular-architecture.js'
+      - 'package.json'
+      - '.github/workflows/audit-modular-navigation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate package JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json válido')"
+      - name: Audit modular architecture
+        run: npm run audit:modular-architecture
+      - name: Audit public shell
+        run: npm run audit:public-shell
+
+  navigation-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Responsive navigation audit
+        run: npm run audit:responsive-navigation
+      - name: All navigation surfaces audit
+        run: npm run audit:all-navigation-surfaces
