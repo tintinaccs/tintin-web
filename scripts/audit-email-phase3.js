@@ -12,7 +12,7 @@ function check(name, condition, problem) {
 }
 
 const notify = read('js/email-notify.js');
-const bridge = read('js/checkout-email-bridge.js');
+const bridge = read('js/pages/checkout/checkout-email-bridge.js');
 const adminSync = read('js/admin-email-gate-sync.js');
 const adminStore = read('js/admin-store-control.js');
 const checkout = read('checkout.html');
@@ -24,7 +24,7 @@ check(
   // checkout-email-bridge.js (no checkout.html) es quien llama a
   // sendOrderNotification tras el éxito del pedido — ver "Checkout usa un
   // solo canal Resend" en audit-admin-email-messaging.js.
-  bridge.includes("from './resend-order-notify.js?v=tintin-20260717-resend-1'") &&
+  bridge.includes("from '../../resend-order-notify.js?v=tintin-20260717-resend-1'") &&
     !checkout.includes('email-notify.js') &&
     !checkout.includes('resend-order-notify.js'),
   'El checkout debe enviar el correo del pedido por el canal Resend (resend-order-notify.js), no por el webhook viejo de Apps Script (email-notify.js).'

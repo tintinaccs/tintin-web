@@ -14,7 +14,7 @@ const roles = read('js/roles.js');
 const rules = read('firestore.rules');
 const emailConfig = read('js/email-config.js');
 const emailNotify = read('js/email-notify.js');
-const bridge = read('js/checkout-email-bridge.js');
+const bridge = read('js/pages/checkout/checkout-email-bridge.js');
 const apps = read('apps-script/Phase3Security.gs');
 const emailSetup = read('functions/EMAIL_SETUP.md');
 check('Productos se normalizan como texto plano', products.includes('cleanMultilineText') && products.includes('sanitizeVariantData'));

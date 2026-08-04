@@ -24,7 +24,7 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = versionedSiteAsset('css/home-maintenance.css');
+    link.href = versionedSiteAsset('css/pages/home/home-maintenance.css');
     document.head.appendChild(link);
   }
 

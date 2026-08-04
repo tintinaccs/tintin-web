@@ -12,11 +12,11 @@ function check(name, condition, problem) {
 }
 
 const policy = read('js/phase7-catalog-policy.js');
-const merchandising = read('js/catalog-merchandising-policy.js');
+const merchandising = read('js/pages/catalog/catalog-merchandising-policy.js');
 const products = read('js/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
-const stockPriority = read('js/catalog-stock-priority.js');
+const stockPriority = read('js/pages/catalog/catalog-stock-priority.js');
 const admin = read('js/admin-app.js');
 const sheets = read('functions/api/sheets-product-sync.js');
 const loader = read('js/page-maintenance-loader.js');

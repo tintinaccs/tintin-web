@@ -19,7 +19,7 @@ import { resolveDeviceImage } from './image-resolver.js?v=tintin-20260716-cloudi
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de images.js. Ambas son idempotentes.
-import './home-premium.js';
+import './pages/home/home-premium.js';
 import './welcome-tutorial-runtime.js';
 
 const CACHE_KEY = 'tt_images';

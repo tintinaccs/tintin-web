@@ -46,7 +46,7 @@ const productsStore = read('js/products-store.js');
 const phase7CatalogPolicy = read('js/phase7-catalog-policy.js');
 const catalog = read('catalogo.html');
 const loadImagesInit = read('js/load-images-init.js');
-const collectionsPhase4 = read('js/collections-phase4.js');
+const collectionsPhase4 = read('js/pages/collections/collections-phase4.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('El menú de cuenta arranca también en el runtime público',

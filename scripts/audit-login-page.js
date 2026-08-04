@@ -6,17 +6,17 @@ function read(path) {
 }
 
 const html = read('login.html');
-const maintenanceCss = read('css/login-maintenance.css');
-const fluidCss = read('css/login-fluid-responsive.css');
+const maintenanceCss = read('css/pages/login/login-maintenance.css');
+const fluidCss = read('css/pages/login/login-fluid-responsive.css');
 const css = `${maintenanceCss}\n${fluidCss}`;
-const runtime = read('js/login-maintenance.js');
+const runtime = read('js/pages/login/login-maintenance.js');
 const loader = read('js/page-maintenance-loader.js');
 
 const checks = [
   ['Google', html.includes('id="btn-google"')],
   ['correo', html.includes('id="login-email-input"') && html.includes('id="btn-send-otp"')],
   ['errores y éxito', html.includes('id="login-error"') && html.includes('id="login-success"')],
-  ['runtime cargado por página', /login[\s\S]*load\('login-maintenance\.js'\)/.test(loader)],
+  ['runtime cargado por página', /login[\s\S]*load\('pages\/login\/login-maintenance\.js'\)/.test(loader)],
   ['capa responsive cargada', runtime.includes('login-fluid-responsive.css')],
   ['redirección interna', runtime.includes('target.origin !== location.origin')],
   ['canonical dinámico', runtime.includes('normalizeLocation')],

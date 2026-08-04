@@ -6,9 +6,9 @@ function read(path) {
 }
 
 const html = read('checkout.html');
-const css = read('css/checkout-maintenance.css');
-const runtime = read('js/checkout-maintenance.js');
-const reliability = read('js/checkout-reliability.js');
+const css = read('css/pages/checkout/checkout-maintenance.css');
+const runtime = read('js/pages/checkout/checkout-maintenance.js');
+const reliability = read('js/pages/checkout/checkout-reliability.js');
 const loader = read('js/page-maintenance-loader.js');
 
 const checks = [
@@ -16,8 +16,8 @@ const checks = [
   ['botón confirmación', html.includes('id="ck-confirm-btn"')],
   ['mapa', html.includes('id="ck-map"') && html.includes('id="ck-map-search"')],
   ['reinicio al paso uno', reliability.includes('resetVisualStep') && reliability.includes('index === 0')],
-  ['runtime integral por página', /checkout[\s\S]*load\('checkout-maintenance\.js'\)/.test(loader)],
-  ['protección de cuota por página', /checkout[\s\S]*load\('checkout-quota-guard\.js'\)/.test(loader)],
+  ['runtime integral por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-maintenance\.js'\)/.test(loader)],
+  ['protección de cuota por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-quota-guard\.js'\)/.test(loader)],
   ['bloqueo doble confirmación', runtime.includes('confirmLocked') && runtime.includes('stopImmediatePropagation')],
   ['estado offline', runtime.includes("addEventListener('offline'") && css.includes('tt-checkout-offline')],
   ['canonical dinámico', runtime.includes('normalizeMetadata')],

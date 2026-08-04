@@ -48,7 +48,7 @@ const publicPages = [
 ];
 
 const productsStore = read('js/products-store.js');
-const collectionsStore = read('js/collections-store.js');
+const collectionsStore = read('js/pages/collections/collections-store.js');
 const readCache = read('js/firestore-read-cache.js');
 
 check(

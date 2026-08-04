@@ -5,7 +5,7 @@ import {
   encomiendaFieldPlan,
   encomiendaValidationError,
   encomiendaModeLabel,
-} from '../../js/checkout-encomienda.js';
+} from '../../js/pages/checkout/checkout-encomienda.js';
 
 test('sin elegir modo no se le pide ningún dato', () => {
   const plan = encomiendaFieldPlan('');

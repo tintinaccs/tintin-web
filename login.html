@@ -37,10 +37,10 @@
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/login.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/location-picker.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1" data-tt-login-maintenance>
+  <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
@@ -187,7 +187,7 @@ import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidP
 import { reservePhone } from "./js/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
-import { clearProfileGateCache } from "./js/profile-gate.js?v=tintin-20260803-profile-gate-1";
+import { clearProfileGateCache } from "./js/pages/profile/profile-gate.js?v=tintin-20260803-profile-gate-1";
 import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
@@ -350,13 +350,13 @@ async function ensureProfileComplete(user, role) {
   const profileBlock = document.getElementById('login-profile-block');
   profileBlock.style.display = '';
   // El alta lleva un mapa adentro: la tarjeta se ensancha para que no quede
-  // apretada (ver --login-shell-width en css/login.css).
+  // apretada (ver --login-shell-width en css/pages/login/login.css).
   document.body.classList.add('login-setup-open');
 
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/profile-gate.js la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/profile-gate.js la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 

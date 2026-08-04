@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="css/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/checkout.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
@@ -381,8 +381,8 @@ import {
 } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/location-picker.js?v=tintin-20260803-location-picker-1";
-import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
-import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/checkout-saved-location.js?v=tintin-20260803-saved-location-1";
+import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-saved-location.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
@@ -1137,7 +1137,7 @@ document.getElementById('ck-city').onchange = function() {
 };
 
 // --- ENCOMIENDA: retiro en agencia o entrega en puerta -------------------
-// La decisión de qué mostrar y qué exigir vive en js/checkout-encomienda.js,
+// La decisión de qué mostrar y qué exigir vive en js/pages/checkout/checkout-encomienda.js,
 // sin Firebase, para poder verificarla sin depender del resto del checkout.
 let encomiendaModes = null;
 

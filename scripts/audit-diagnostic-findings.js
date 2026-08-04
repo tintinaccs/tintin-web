@@ -45,7 +45,7 @@ const manifestBuilder = read('scripts/build-diagnostic-manifest.js');
 const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
 const nosotros = read('nosotros.html');
-const productExtras = read('css/product-extras.css');
+const productExtras = read('css/pages/product/product-extras.css');
 
 check('El inventario contiene las 18 rutas requeridas', manifest.pages.length === 18);
 check('El inventario contiene las siete resoluciones requeridas', manifest.viewports.length === 7);
@@ -89,8 +89,8 @@ check(
 check(
   'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
   /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin-users-phase8.js')) &&
-    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/collections-store.js')) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/collections-store.js')) &&
+    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
+    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/products-store.js'))
 );
 
@@ -156,8 +156,8 @@ const touchAssertions = [
   ['admin-images.html', /\.adm-hamburger\s*\{[\s\S]*?min-(?:width|height):\s*44px/],
   ['admin-images.html', /\.adm-nav-btn\s*\{[\s\S]*?min-height:\s*44px/],
   ['admin-images.html', /\.adm-mobile-tab\s*\{[\s\S]*?min-height:\s*44px/],
-  ['css/checkout.css', /\.ck-header-back\s*\{[\s\S]*?min-height:\s*44px/],
-  ['css/login.css', /\.login-email-resend\s*\{[\s\S]*?min-height:\s*32px/],
+  ['css/pages/checkout/checkout.css', /\.ck-header-back\s*\{[\s\S]*?min-height:\s*44px/],
+  ['css/pages/login/login.css', /\.login-email-resend\s*\{[\s\S]*?min-height:\s*32px/],
   ['perfil.html', /\.perfil-back\s*\{[\s\S]*?min-height:\s*32px/],
   ['perfil.html', /\.perfil-btn\s*\{[\s\S]*?min-height:\s*44px/]
 ];

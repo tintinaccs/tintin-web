@@ -26,11 +26,11 @@ check(/html\.tt-staff-session[\s\S]*?display:\s*flex\s*!important/.test(styles),
 const operationalSources = {
   'collections.html': 'data-tt-operational-status="collections"',
   'js/cart-sync.js': "dataset.ttOperationalStatus = 'cart'",
-  'js/catalog-maintenance.js': "dataset.ttOperationalStatus = 'catalog'",
-  'js/collections-maintenance.js': "dataset.ttOperationalStatus = 'collections'",
-  'js/product-maintenance.js': "dataset.ttOperationalStatus = 'product'",
-  'js/checkout-reliability.js': "dataset.ttOperationalStatus = 'checkout'",
-  'js/profile-maintenance.js': "dataset.ttOperationalStatus = 'profile'"
+  'js/pages/catalog/catalog-maintenance.js': "dataset.ttOperationalStatus = 'catalog'",
+  'js/pages/collections/collections-maintenance.js': "dataset.ttOperationalStatus = 'collections'",
+  'js/pages/product/product-maintenance.js': "dataset.ttOperationalStatus = 'product'",
+  'js/pages/checkout/checkout-reliability.js': "dataset.ttOperationalStatus = 'checkout'",
+  'js/pages/profile/profile-maintenance.js': "dataset.ttOperationalStatus = 'profile'"
 };
 for (const [file, marker] of Object.entries(operationalSources)) {
   check(read(file).includes(marker), `${file} no declara su estado operativo`);
