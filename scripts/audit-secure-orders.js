@@ -12,7 +12,7 @@ function check(name, condition, problem) {
 }
 
 const frontend = read('js/orders/secure-checkout-order.js');
-const serverClient = read('js/orders/create-order-client.js');
+const serverClient = read('js/create-order-client.js');
 const cart = read('js/components/cart/cart-sync.js');
 const rules = read('firestore.rules');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');

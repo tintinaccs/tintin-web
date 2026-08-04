@@ -18,7 +18,7 @@ import {
   normalizePhone,
   isValidPhone
 } from '../components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1';
-import { createOrderViaServer } from './create-order-client.js?v=tintin-20260728-phase4-order-2';
+import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260728-phase4-order-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;

@@ -8,8 +8,8 @@
  * expresiones de firestore.rules ni por ningún tope de productos —
  * ver apps-script/Phase4CreateOrder.gs para la validación completa.
  */
-import { EMAIL_WEBHOOK_URL } from '../email/email-config.js?v=tintin-20260716-cloudinary-fix-1';
-import { auth } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { EMAIL_WEBHOOK_URL } from './email/email-config.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth } from './core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 
 export async function createOrderViaServer(draft) {
   const idToken = await auth.currentUser?.getIdToken(true);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T22:18:27.710Z",
-  "sourceFingerprint": "ee0649731557900fe98fbacf3301918df9be6be2b3a3cdd5ceb196e9e6858bc8",
+  "generatedAt": "2026-08-04T22:20:22.426Z",
+  "sourceFingerprint": "6d51d8bc01f8e9807d02049892271cfe06b06abcddcac87f407bca0296515fe3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5441646,
+    "totalBytes": 5441624,
     "pages": 18,
     "modules": 300
   },
@@ -15940,8 +15940,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 438442,
-      "sha256": "608ac4b10e411326c11204f3a180da1e3ef7dd274c54f8ee46c78f60b06d9ef1",
+      "bytes": 438435,
+      "sha256": "0086f3eaebaa80bcb888063248e0ead66fa30fcb79b62aad9008dae9ab36acca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16068,8 +16068,8 @@
           "line": 36
         },
         {
-          "raw": "../orders/create-order-client.js?v=tintin-20260728-phase4-order-2",
-          "target": "js/orders/create-order-client.js",
+          "raw": "../create-order-client.js?v=tintin-20260728-phase4-order-2",
+          "target": "js/create-order-client.js",
           "dynamic": false,
           "line": 37
         },
@@ -18672,6 +18672,30 @@
       ]
     },
     {
+      "path": "js/create-order-client.js",
+      "bytes": 1372,
+      "sha256": "98a05bfa77cfd80bdd3649fb98d318292aae89d18721dc1dae86ceaa8029ef15",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./email/email-config.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/email/email-config.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
+          "raw": "./core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "js/diagnostic-shims/auth-shim.js",
       "bytes": 2464,
       "sha256": "5cd80feb1fc8025d6ef6f148626c1cab2ffc84ebc17dbd85f0cb0540adc67d56",
@@ -18931,30 +18955,6 @@
       ]
     },
     {
-      "path": "js/orders/create-order-client.js",
-      "bytes": 1374,
-      "sha256": "e8609d4ac109373bf6ffd9e5c51c31bd9443be6cc1978b7329294a9a94c8f0a7",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../email/email-config.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/email/email-config.js",
-          "dynamic": false,
-          "line": 11
-        },
-        {
-          "raw": "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/core/firebase/firebase.js",
-          "dynamic": false,
-          "line": 12
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "js/orders/payment-methods-core.js",
       "bytes": 5082,
       "sha256": "ab080e5fd40088a2532e088086fe4ce035a6aee7942904e0115d31c087120584",
@@ -18967,8 +18967,8 @@
     },
     {
       "path": "js/orders/secure-checkout-order.js",
-      "bytes": 27650,
-      "sha256": "cf7898375d9b3e96554f4c36ddaac276f2fa1cfac88cb4463b47e3a924090a6f",
+      "bytes": 27651,
+      "sha256": "2af6458cca53b84fa020bea5269b9aff4d6cc7a5229ed465fff9a1867b6f945e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19005,8 +19005,8 @@
           "line": 20
         },
         {
-          "raw": "./create-order-client.js?v=tintin-20260728-phase4-order-2",
-          "target": "js/orders/create-order-client.js",
+          "raw": "../create-order-client.js?v=tintin-20260728-phase4-order-2",
+          "target": "js/create-order-client.js",
           "dynamic": false,
           "line": 21
         },
@@ -21674,8 +21674,8 @@
     },
     {
       "path": "scripts/audit-phase6-security.js",
-      "bytes": 5244,
-      "sha256": "b6b0c270f63a12e6b94ed4db5645d540e62a831c7e30e0f13dd620da73046e73",
+      "bytes": 5237,
+      "sha256": "49177fe3391c52e49aa6558711bc24c3f79fbe508015d1286557755cab04566c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21896,8 +21896,8 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 4971,
-      "sha256": "6a7c62de11b158b2b008a744144e61958374087096b2a1417b73dd5499cb5875",
+      "bytes": 4964,
+      "sha256": "141be4cec983023ebdd311a2f06fd51a57273db3ead0bc050bdbe64a14d31c88",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23891,8 +23891,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 438442,
-      "sha256": "608ac4b10e411326c11204f3a180da1e3ef7dd274c54f8ee46c78f60b06d9ef1"
+      "bytes": 438435,
+      "sha256": "0086f3eaebaa80bcb888063248e0ead66fa30fcb79b62aad9008dae9ab36acca"
     },
     {
       "path": "js/admin/admin-import-phase9.js",
@@ -24501,6 +24501,12 @@
       "sha256": "2941e4e1c865745e30d8a0f4816a253fccf90c10ccd4cfbe6114218d1e2a4c28"
     },
     {
+      "path": "js/create-order-client.js",
+      "extension": ".js",
+      "bytes": 1372,
+      "sha256": "98a05bfa77cfd80bdd3649fb98d318292aae89d18721dc1dae86ceaa8029ef15"
+    },
+    {
       "path": "js/diagnostic-shims/auth-shim.js",
       "extension": ".js",
       "bytes": 2464,
@@ -24567,12 +24573,6 @@
       "sha256": "e91517c7a4f3bc4f5583727f60c19adf92ff598ac577c4430c8cb3a97f6b0cac"
     },
     {
-      "path": "js/orders/create-order-client.js",
-      "extension": ".js",
-      "bytes": 1374,
-      "sha256": "e8609d4ac109373bf6ffd9e5c51c31bd9443be6cc1978b7329294a9a94c8f0a7"
-    },
-    {
       "path": "js/orders/payment-methods-core.js",
       "extension": ".js",
       "bytes": 5082,
@@ -24581,8 +24581,8 @@
     {
       "path": "js/orders/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 27650,
-      "sha256": "cf7898375d9b3e96554f4c36ddaac276f2fa1cfac88cb4463b47e3a924090a6f"
+      "bytes": 27651,
+      "sha256": "2af6458cca53b84fa020bea5269b9aff4d6cc7a5229ed465fff9a1867b6f945e"
     },
     {
       "path": "js/page-loader.js",
@@ -25505,8 +25505,8 @@
     {
       "path": "scripts/audit-phase6-security.js",
       "extension": ".js",
-      "bytes": 5244,
-      "sha256": "b6b0c270f63a12e6b94ed4db5645d540e62a831c7e30e0f13dd620da73046e73"
+      "bytes": 5237,
+      "sha256": "49177fe3391c52e49aa6558711bc24c3f79fbe508015d1286557755cab04566c"
     },
     {
       "path": "scripts/audit-phase7-catalog.js",
@@ -25571,8 +25571,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 4971,
-      "sha256": "6a7c62de11b158b2b008a744144e61958374087096b2a1417b73dd5499cb5875"
+      "bytes": 4964,
+      "sha256": "141be4cec983023ebdd311a2f06fd51a57273db3ead0bc050bdbe64a14d31c88"
     },
     {
       "path": "scripts/audit-security-phase8.js",
