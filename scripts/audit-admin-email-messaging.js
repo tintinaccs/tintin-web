@@ -165,7 +165,7 @@ check(
     read('script.js').includes('encodeURIComponent(') &&
     checkout.includes('encodeURIComponent(') &&
     read('js/pages/institutional/contact-maintenance.js').includes('encodeURIComponent') &&
-    read('js/blocked-modal.js').includes('encodeURIComponent'),
+    read('js/components/modals/blocked-modal.js').includes('encodeURIComponent'),
   'Los mensajes configurables deben codificarse.'
 );
 check(

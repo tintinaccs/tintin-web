@@ -167,7 +167,7 @@ const recoveryFiles = [
   'js/pages/checkout/checkout-maintenance.js',
   'js/pages/checkout/checkout-reliability.js',
   'js/pages/institutional/contact-maintenance.js',
-  'js/cart-sync.js'
+  'js/components/cart/cart-sync.js'
 ];
 for (const file of recoveryFiles) {
   check(`${file} contempla recuperación online`, exists(file) && /addEventListener\(['"]online['"]/.test(read(file)));

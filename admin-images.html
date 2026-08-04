@@ -404,8 +404,8 @@ import { auth, db } from "./js/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "./js/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/images.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachImageUploadWidget } from "./js/components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin

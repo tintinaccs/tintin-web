@@ -1,4 +1,4 @@
-import './cart-recovery.js?v=tintin-20260722-level4-1';
+import './components/cart/cart-recovery.js?v=tintin-20260722-level4-1';
 import { isAdminPage } from './admin/admin-path.js?v=tintin-20260722-level4-1';
 
 /**

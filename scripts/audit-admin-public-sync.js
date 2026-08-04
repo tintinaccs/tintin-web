@@ -20,7 +20,7 @@ function check(name, condition, problem) {
 }
 
 const adminApp = read('js/admin/admin-app.js');
-const headerMode = read('js/mobile-header-mode.js');
+const headerMode = read('js/components/navigation/legacy/mobile-header-mode.js');
 const whatsapp = read('js/whatsapp.js');
 const publicSettings = read('js/public-settings-store.js');
 const pageLoader = read('js/page-loader.js');
@@ -69,7 +69,7 @@ check(
 );
 check(
   'page-loader monta el header en todos los arranques',
-  pageLoader.includes("importSibling('mobile-header-mode.js'") &&
+  pageLoader.includes("importSibling('components/navigation/legacy/mobile-header-mode.js'") &&
     /function bootHeaderMode\(\)/.test(pageLoader) &&
     (pageLoader.match(/bootHeaderMode\(\);/g) || []).length >= 2,
   'El header no se carga en todos los modos.'

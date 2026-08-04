@@ -14,7 +14,7 @@ import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from '../../welcome-config.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../components/welcome/welcome-config.js?v=tintin-20260716-cloudinary-fix-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 

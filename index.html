@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/ui-navigation-controller.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/public-shell.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -67,7 +67,7 @@
   <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
-  <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/images.js,
+  <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/images.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
        de las secciones de home que define) nunca se aplicaba, o se
@@ -75,7 +75,7 @@
        agrandando el scrollHeight de golpe. Directo en <head> queda
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
-       existe (ver js/images.js). -->
+       existe (ver js/components/images/images.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/home-fit.css?v=tintin-20260716-cloudinary-fix-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
@@ -590,7 +590,7 @@
 <script type="module" src="js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>
-<script type="module" src="js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">
 import { initSiteContent } from './js/site-content.js?v=tintin-20260716-cloudinary-fix-1';
 initSiteContent('index');
@@ -631,6 +631,6 @@ initSiteContent('index');
   ]
 }
 </script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

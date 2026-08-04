@@ -9,7 +9,7 @@
   --card-bg:     #fef5f8;
   /* La paleta de marca vive en css/color-tokens.css, que se carga antes que
      esta hoja en todas las páginas y es la que el panel de Super Admin
-     modifica en tiempo real (js/color-scheme.js escribe los tokens
+     modifica en tiempo real (js/components/color/color-scheme.js escribe los tokens
      --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
      derivan de esos tokens en vez de repetir un valor propio.
 

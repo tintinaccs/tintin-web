@@ -3,7 +3,7 @@
  *
  * Este script clásico se ejecuta de forma síncrona antes de las hojas CSS y
  * del loader. Aplica la última caché conocida, pero mantiene el contenido
- * cubierto por el loader hasta que js/color-scheme.js confirma el esquema
+ * cubierto por el loader hasta que js/components/color/color-scheme.js confirma el esquema
  * publicado en Firestore. Así nunca queda visible el salto entre un fondo
  * anterior/cacheado y el fondo definitivo de la página.
  */
@@ -17,7 +17,7 @@
   var released = false;
   var scriptUrl = document.currentScript && document.currentScript.src;
 
-  // Mismo enforcement que js/color-scheme.js: en la primera pintura solo se
+  // Mismo enforcement que js/components/color/color-scheme.js: en la primera pintura solo se
   // aplican valores que sean un color estricto (HEX / rgb(a) / hsl(a)). Así una
   // caché manipulada o vieja nunca inyecta un url(...) ni CSS arbitrario.
   function isSafeColorValue(value) {

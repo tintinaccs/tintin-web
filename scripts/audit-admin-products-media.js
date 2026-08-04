@@ -43,9 +43,9 @@ function check(name, condition, problem) {
 const adminApp    = read('js/admin/admin-app.js');
 const adminHtml   = read('admin.html');
 const importJs    = read('js/admin/admin-import-phase9.js');
-const mediaLib    = read('js/media-library.js');
-const imageProc   = read('js/image-processing.js');
-const imageUtils  = read('js/image-utils.js');
+const mediaLib    = read('js/components/images/media-library.js');
+const imageProc   = read('js/components/images/image-processing.js');
+const imageUtils  = read('js/components/images/image-utils.js');
 const storefront  = read('script.js');
 const productsStore = read('js/products-store.js');
 const phase7Policy = read('js/phase7-catalog-policy.js');

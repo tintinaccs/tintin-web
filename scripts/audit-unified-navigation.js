@@ -10,8 +10,8 @@ const shell = read('js/public-shell.js');
 const controller = read('js/ui-navigation-controller.js');
 const runtime = read('script.js');
 const styles = read('css/surface-controller.css');
-const collections = read('js/nav-collections.js');
-const navigation = read('js/navigation-shared.js');
+const collections = read('js/components/navigation/legacy/nav-collections.js');
+const navigation = read('js/components/navigation/legacy/navigation-shared.js');
 
 for (const id of ['tt-shared-backdrop', 'tt-shared-morph', 'account-drawer', 'cart-drawer', 'search-panel', 'collections-sheet', 'tt-tablet-menu', 'tt-tienda-dropdown-panel']) {
   check((shell.match(new RegExp(`id=["']${id}["']`, 'g')) || []).length === 1, `${id}: debe existir exactamente una vez en el shell`);

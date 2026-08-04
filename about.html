@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/ui-navigation-controller.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/public-shell.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -264,7 +264,7 @@ import { initSiteContent } from './js/site-content.js?v=tintin-20260716-cloudina
 initSiteContent('nosotros');
 </script>
 <script type="module">
-import { onImagesUpdate } from './js/images.js?v=tintin-20260716-cloudinary-fix-1';
+import { onImagesUpdate } from './js/components/images/images.js?v=tintin-20260716-cloudinary-fix-1';
 
 // Real-time: applies immediately with cached data, then re-applies live every
 // time Super Admin saves a new image — no reload needed.
@@ -293,6 +293,6 @@ onImagesUpdate((images) => {
 });
 </script>
 <script type="module" src="js/edit-badge.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

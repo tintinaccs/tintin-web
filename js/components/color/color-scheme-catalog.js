@@ -7,7 +7,7 @@
  *
  * Lo usan tanto la UI del panel (para generar los campos, categorías y el
  * buscador sin escribir 150 bloques de HTML a mano) como los motores de
- * aplicación (js/color-scheme.js y js/admin/settings/admin-color-scheme.js), así los tres
+ * aplicación (js/components/color/color-scheme.js y js/admin/settings/admin-color-scheme.js), así los tres
  * lugares nunca se desincronizan entre sí.
  */
 

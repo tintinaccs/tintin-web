@@ -95,11 +95,11 @@ if (requiredFiles.every(exists)) {
   const legacyAdapters = [
     ['js/public-shell.js', 'components/navigation/public-shell-entry.js'],
     ['js/ui-navigation-controller.js', 'components/navigation/shared/surface-controller.js'],
-    ['js/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
-    ['js/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
-    ['js/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
-    ['js/navigation-shared.js', 'components/navigation/shared/router.js'],
-    ['js/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
+    ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
+    ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
+    ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
+    ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/shared/router.js'],
+    ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
   ];
 
   legacyAdapters.forEach(([file, target]) => {

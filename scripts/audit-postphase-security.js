@@ -9,7 +9,7 @@ function check(label, ok) {
 }
 const products = read('js/products-store.js');
 const script = read('script.js');
-const cart = read('js/cart-sync.js');
+const cart = read('js/components/cart/cart-sync.js');
 const roles = read('js/roles.js');
 const rules = read('firestore.rules');
 const emailConfig = read('js/email-config.js');

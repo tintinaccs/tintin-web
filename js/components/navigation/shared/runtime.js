@@ -90,7 +90,7 @@ export function loadSharedRuntime() {
   const page = currentPage();
   const critical = [
     import(versionedJsModule('auth-nav.js')),
-    import(versionedJsModule('cart-sync.js')),
+    import(versionedJsModule('components/cart/cart-sync.js')),
   ];
 
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());

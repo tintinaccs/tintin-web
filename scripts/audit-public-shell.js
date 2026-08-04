@@ -87,7 +87,7 @@ check(runtime.includes("components/navigation/tablet/controller.js"), 'runtime: 
 check(runtime.includes("components/navigation/mobile/controller.js"), 'runtime: falta controlador mobile modular');
 check(runtime.includes("components/navigation/shared/collections-runtime.js"), 'runtime: colecciones todavía dependen del archivo legado');
 check(runtime.includes("import(versionedJsModule('auth-nav.js'))"), 'runtime: falta cuenta compartida');
-check(runtime.includes("import(versionedJsModule('cart-sync.js'))"), 'runtime: falta sincronización del carrito');
+check(runtime.includes("import(versionedJsModule('components/cart/cart-sync.js'))"), 'runtime: falta sincronización del carrito');
 
 const controllerBootstrap = read('js/ui-navigation-controller.js');
 check(controllerBootstrap.includes('./components/navigation/shared/surface-controller.js'), 'ui-navigation-controller.js no apunta al controlador modular');
@@ -112,11 +112,11 @@ check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar 
 check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
 
 [
-  ['js/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
-  ['js/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
-  ['js/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
-  ['js/navigation-shared.js', 'components/navigation/shared/router.js'],
-  ['js/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
+  ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
+  ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
+  ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
+  ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/shared/router.js'],
+  ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
 ].forEach(([legacy, source]) => {
   check(read(legacy).includes(source), `${legacy}: no actúa como compatibilidad hacia ${source}`);
 });

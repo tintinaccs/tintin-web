@@ -15,7 +15,7 @@ function check(label, ok) {
 const loader = read('js/page-loader.js');
 const solidSurfaces = read('css/solid-ui-surfaces.css');
 const parity = read('css/tintin-parity-safe.css');
-const accountFix = read('js/header-account-mobile-fix.js');
+const accountFix = read('js/components/navigation/legacy/header-account-mobile-fix.js');
 const activity = read('js/site-activity.js');
 const functionOrigin = read('js/function-origin.js');
 const privacyConsent = read('js/privacy-consent.js');
@@ -24,8 +24,8 @@ const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
 const welcomeAdmin = read('js/admin/content/admin-welcome-control.js');
-const welcomeConfig = read('js/welcome-config.js');
-const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
+const welcomeConfig = read('js/components/welcome/welcome-config.js');
+const welcomeRuntime = read('js/components/welcome/welcome-tutorial-runtime.js');
 // La creación del perfil vive en js/user-profile-store.js, compartida entre el
 // login con Google y el de código por correo; login.html sólo la invoca. Las
 // comprobaciones del alta miran los dos archivos como una sola unidad.
@@ -36,7 +36,7 @@ const styles = read('styles.css');
 const theme = read('css/tintin-unified-theme.css');
 const main = read('script.js');
 const scrollReveal = read('js/scroll-reveal-global.js');
-const imagePerformance = read('js/image-performance.js');
+const imagePerformance = read('js/components/images/image-performance.js');
 const home = read('index.html');
 const publicShell = read('js/public-shell.js');
 const surfaceController = read('js/ui-navigation-controller.js');
@@ -45,7 +45,7 @@ const siteContent = read('js/site-content.js');
 const productsStore = read('js/products-store.js');
 const phase7CatalogPolicy = read('js/phase7-catalog-policy.js');
 const catalog = read('catalogo.html');
-const loadImagesInit = read('js/load-images-init.js');
+const loadImagesInit = read('js/components/images/load-images-init.js');
 const collectionsPhase4 = read('js/pages/collections/collections-phase4.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
@@ -164,7 +164,7 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v4-unified'") &&
   welcomeRuntime.includes("from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
-  welcomeAdmin.includes("from '../../welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  welcomeAdmin.includes("from '../../components/welcome/welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));

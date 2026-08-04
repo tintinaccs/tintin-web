@@ -28,7 +28,7 @@ const REQUIRED_FILES = [
   'js/page-loader.js',
   'js/firebase.js',
   'js/ui-quality.js',
-  'js/theme-color-sanitizer.js',
+  'js/components/color/theme-color-sanitizer.js',
   'css/tintin-unified-theme.css',
   'css/tintin-tokens.css',
   'assets-tintin/images/general/logo.png'

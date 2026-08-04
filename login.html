@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/ui-navigation-controller.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/public-shell.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -183,16 +183,16 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/phone-utils.js?v=tintin-20260803-phone-unique-1";
-import { reservePhone } from "./js/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
-import { attachOtpCodeInput } from "./js/otp-code-input.js?v=tintin-20260803-otp-input-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1";
+import { reservePhone } from "./js/components/forms/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
+import { attachOtpCodeInput } from "./js/components/forms/otp-code-input.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/pages/profile/profile-gate.js?v=tintin-20260803-profile-gate-1";
-import { showBlockedModal } from "./js/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
+import { showBlockedModal } from "./js/components/modals/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
-import { createLocationMap } from "./js/location-map.js?v=tintin-20260803-location-map-1";
+import { createLocationMap } from "./js/components/location/location-map.js?v=tintin-20260803-location-map-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -416,7 +416,7 @@ async function ensureProfileComplete(user, role) {
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
 
-  // El mismo componente de mapa que usa el checkout (js/location-map.js): se
+  // El mismo componente de mapa que usa el checkout (js/components/location/location-map.js): se
   // busca o se toca el mapa, y el punto queda con sus coordenadas exactas.
   const addressNameInput = document.getElementById('login-profile-address-name');
   const addressStatus = document.getElementById('login-profile-address-selected');
@@ -526,7 +526,7 @@ async function ensureProfileComplete(user, role) {
 
         // El número se reserva ANTES de guardar el perfil: si ya está en otra
         // cuenta, no se escribe nada y se avisa. La unicidad la garantizan las
-        // reglas de Firestore (ver js/phone-reservation.js), no una
+        // reglas de Firestore (ver js/components/forms/phone-reservation.js), no una
         // comprobación de acá que se pueda saltear.
         if (plan.needsPhone) {
           await reservePhone(db, user.uid, phoneRaw, country);
@@ -905,7 +905,7 @@ document.getElementById('login-otp-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-verify-otp').click();
 });
 
-// Reglas del campo del código en un solo lugar (js/otp-code-input.js): sólo
+// Reglas del campo del código en un solo lugar (js/components/forms/otp-code-input.js): sólo
 // dígitos al teclear, y al pegar desde el correo se extraen los números del
 // texto ("Tu código es: 12 34 56." → "123456").
 attachOtpCodeInput(document.getElementById('login-otp-input'), {
@@ -947,6 +947,6 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 </script>
 <script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
-  <script type="module" src="js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

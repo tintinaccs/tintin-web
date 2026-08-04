@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T19:45:11.721Z",
-  "sourceFingerprint": "82ddffcd74ca7f6da8fb2853c1675a1497efba1093cd32200e820fd4a11466e2",
+  "generatedAt": "2026-08-04T20:02:57.178Z",
+  "sourceFingerprint": "cc8e1062a3a5cac4aaa2ec791ea66755e35880588413c3f20028a45f2d99fc3f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5428080,
+    "totalBytes": 5432683,
     "pages": 18,
     "modules": 300
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 7729,
-      "sha256": "91b73d1c5181e44b83fec87b7c726477f075685b59f4cb7eec0749cd388726f3",
+      "bytes": 7763,
+      "sha256": "1e34ff9a63323e103e50920135e99c5cd60d0396f9852b9a47e5f07b5f2d71ee",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -99,8 +99,8 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -139,8 +139,8 @@
           "line": 169
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 170
         }
       ],
@@ -311,8 +311,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -359,8 +359,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 170,
           "exists": true
         },
@@ -518,8 +518,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19217,
-      "sha256": "86ba96141198e29e50311cfb9c0beb122f434434fb72c1f0efc566e8b7b302c5",
+      "bytes": 19269,
+      "sha256": "d6fa666b1de25fc4f660abdc83699bb31b2646157cc190872ed7afb5586401c1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -549,8 +549,8 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -594,8 +594,8 @@
           "line": 295
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 296
         }
       ],
@@ -923,8 +923,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -977,8 +977,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 296,
           "exists": true
         },
@@ -1216,8 +1216,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36382,
-      "sha256": "dba9becb85ec019c4cab40cc1d75b58891850e116d24c085e3db8c26910659b2",
+      "bytes": 36418,
+      "sha256": "b4076244d39ed59281e754ea12f1618f7578818854c9c6656e699ba12110178c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6407,8 +6407,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12591,
-      "sha256": "2bc1b54d45b38a31a4ce6f3579fad4fdee417b79dfce8c2676447f161e829a7c",
+      "bytes": 12625,
+      "sha256": "6861c7e7a1d87fc9b587f26b687ec7676013e89aa4eb796101026cef5825d9e0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6432,8 +6432,8 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -6477,8 +6477,8 @@
           "line": 178
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 179
         }
       ],
@@ -6768,8 +6768,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -6822,8 +6822,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 179,
           "exists": true
         },
@@ -7023,8 +7023,8 @@
         "guest",
         "client"
       ],
-      "bytes": 49745,
-      "sha256": "cedb7a38dcf93ca799da5db32ac17cc573f90ed9d4344bbceec60e4cc7902b4e",
+      "bytes": 49813,
+      "sha256": "8fdac80ac3d7072ae305691ca1250a23cb7795094f9e4f36d903162ce620f4c2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7060,8 +7060,8 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -7105,8 +7105,8 @@
           "line": 944
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 945
         }
       ],
@@ -7366,8 +7366,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -7420,8 +7420,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 945,
           "exists": true
         },
@@ -7735,8 +7735,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 88140,
-      "sha256": "9d39c053036e78803a5d5ee21ae29f9fa00e30d5a3b7fae7c190af86b5983012",
+      "bytes": 88317,
+      "sha256": "8db3e89649a621303d876b3b83465ea003f6c03ae6f43d55c154fb9c59908d37",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7766,8 +7766,8 @@
       "ids": 72,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -7801,8 +7801,8 @@
           "line": 1820
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 1821
         }
       ],
@@ -7928,8 +7928,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -7970,8 +7970,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 1821,
           "exists": true
         },
@@ -8427,8 +8427,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14447,
-      "sha256": "e8c15e1f4fbfe408881122abade78cbb02e24b9cc5b4452ef2eeae0635c847a1",
+      "bytes": 14481,
+      "sha256": "f485ce4207987334f5c3fbedb03b3c6c7c3fdabdd5beee93380193850202d05c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8458,8 +8458,8 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -8508,8 +8508,8 @@
           "line": 193
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 194
         }
       ],
@@ -8794,8 +8794,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -8854,8 +8854,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 194,
           "exists": true
         },
@@ -9055,8 +9055,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17265,
-      "sha256": "4cc8de7ed8a7adc48aa1ce6bd4e822f91ca69a3c172514b01a3e2fd9a8bd3ef5",
+      "bytes": 17299,
+      "sha256": "34e521af3bacca70dbd796ea4a0db4e381829a8d5057d44c390a8b6d74e9f3e7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9086,8 +9086,8 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -9131,8 +9131,8 @@
           "line": 245
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 246
         }
       ],
@@ -9422,8 +9422,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -9476,8 +9476,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 246,
           "exists": true
         },
@@ -9713,8 +9713,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15922,
-      "sha256": "6ccd3630b849791a0891cb7d173b9db3ff4b94095f313088649f9da94ba4f135",
+      "bytes": 15956,
+      "sha256": "0fe0e9e0d1abbf2bd15a09e2d66b5c8886d765c9eb7e06856c92db78a8d51994",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9744,8 +9744,8 @@
       "ids": 3,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -9789,8 +9789,8 @@
           "line": 185
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 246
         }
       ],
@@ -10080,8 +10080,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -10134,8 +10134,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 246,
           "exists": true
         },
@@ -10335,8 +10335,8 @@
         "guest",
         "client"
       ],
-      "bytes": 42357,
-      "sha256": "7f0d683ac4b5600e64ca5cec24f4b765df8bb8d5e7c12434b941eb769a0c6ed4",
+      "bytes": 42445,
+      "sha256": "f09bc95eaab0c43175167195e3cf9b39eba9c21d90b5d1dc1e9e5b6f6fa39a2c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10378,8 +10378,8 @@
       "ids": 12,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -10418,8 +10418,8 @@
           "line": 592
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/load-images-init.js",
+          "raw": "js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/load-images-init.js",
           "line": 593
         },
         {
@@ -10428,8 +10428,8 @@
           "line": 598
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 634
         }
       ],
@@ -11063,8 +11063,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -11111,8 +11111,8 @@
           "exists": true
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/load-images-init.js",
+          "raw": "js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/load-images-init.js",
           "line": 593,
           "exists": true
         },
@@ -11123,8 +11123,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 634,
           "exists": true
         },
@@ -11586,8 +11586,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 46478,
-      "sha256": "ec791448b3daa7014f1c520a35b4912d22794741c4edf854513e0f0695cb85cf",
+      "bytes": 46655,
+      "sha256": "15fb0cc947758ccc4957749a54eb99ca623e7222e08f91440c804290baac9051",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11617,8 +11617,8 @@
       "ids": 46,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -11647,8 +11647,8 @@
           "line": 949
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 950
         }
       ],
@@ -11774,8 +11774,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -11810,8 +11810,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 950,
           "exists": true
         },
@@ -12292,8 +12292,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 29576,
-      "sha256": "faaf76f5d9c8d925b9517703e3bd21b3b074a2bc9d9926dda654203887139b6c",
+      "bytes": 29698,
+      "sha256": "c6ba9d9ed06c01b36829555076811b911f7d62ae45e75ff971d4705611f2e621",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12323,8 +12323,8 @@
       "ids": 28,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -12363,8 +12363,8 @@
           "line": 633
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 634
         }
       ],
@@ -12510,8 +12510,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -12558,8 +12558,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 634,
           "exists": true
         },
@@ -12817,8 +12817,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14450,
-      "sha256": "42c9c7a1dc68309bbc4ae2e267025e66cfb75b41d693aa3a29535e6438df4dc1",
+      "bytes": 14484,
+      "sha256": "575728ef3f447976b75dc0bf1bf393320d9eac3298cea1ac990c5fb48ac2b570",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12842,8 +12842,8 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -12887,8 +12887,8 @@
           "line": 207
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 208
         }
       ],
@@ -13178,8 +13178,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -13232,8 +13232,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 208,
           "exists": true
         },
@@ -13433,8 +13433,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16253,
-      "sha256": "6080fb833240c0e075ae75a0cfb77b94b00423f69129aa5a1a04f6dd91851209",
+      "bytes": 16287,
+      "sha256": "976a81567e0a76e661ac3fc39c894f2e9469a330f77fe5922300ce58bf15c201",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13458,8 +13458,8 @@
       "ids": 2,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -13498,8 +13498,8 @@
           "line": 210
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 220
         }
       ],
@@ -13819,8 +13819,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -13867,8 +13867,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 220,
           "exists": true
         },
@@ -14085,8 +14085,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18739,
-      "sha256": "39123459438fd7769c4df3a8411263dcd0e29a995a9c8ac55894d94f3363738c",
+      "bytes": 18791,
+      "sha256": "584284031209a4aa9f7322c9fcaa9a832a96d4965d24529e78c89a47c75e2aaf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14110,8 +14110,8 @@
       "ids": 52,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7
         },
         {
@@ -14135,8 +14135,8 @@
           "line": 312
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/load-images-init.js",
+          "raw": "js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/load-images-init.js",
           "line": 313
         },
         {
@@ -14170,8 +14170,8 @@
           "line": 319
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 320
         }
       ],
@@ -14456,8 +14456,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 7,
           "exists": true
         },
@@ -14486,8 +14486,8 @@
           "exists": true
         },
         {
-          "raw": "js/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/load-images-init.js",
+          "raw": "js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/load-images-init.js",
           "line": 313,
           "exists": true
         },
@@ -14528,8 +14528,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 320,
           "exists": true
         },
@@ -14897,8 +14897,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14141,
-      "sha256": "029111a1ad889209377030aa7470ef95db730530d9cf4c27a3fe65fe938849bb",
+      "bytes": 14175,
+      "sha256": "b1e2faebcc18e24a1d09a1cc2deab47e5805ae7d44e8ba6bba72f2477df87499",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14915,8 +14915,8 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6
         },
         {
@@ -14955,8 +14955,8 @@
           "line": 192
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 193
         }
       ],
@@ -15286,8 +15286,8 @@
       ],
       "references": [
         {
-          "raw": "js/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-instant.js",
+          "raw": "js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-instant.js",
           "line": 6,
           "exists": true
         },
@@ -15334,8 +15334,8 @@
           "exists": true
         },
         {
-          "raw": "js/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme.js",
+          "raw": "js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme.js",
           "line": 193,
           "exists": true
         },
@@ -15940,8 +15940,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 438213,
-      "sha256": "ebddc605912585e75b29e99381c122330a583fd3fb7d319a853c89cf1caf9c7b",
+      "bytes": 438320,
+      "sha256": "94b545764f28e78d584177c029696c0bbce4fedfbb0995b2d1188928c6718690",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16008,8 +16008,8 @@
           "line": 22
         },
         {
-          "raw": "../image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
+          "raw": "../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
           "dynamic": false,
           "line": 23
         },
@@ -16026,8 +16026,8 @@
           "line": 25
         },
         {
-          "raw": "../image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-upload-widget.js",
+          "raw": "../components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-upload-widget.js",
           "dynamic": false,
           "line": 26
         },
@@ -16044,26 +16044,26 @@
           "line": 28
         },
         {
-          "raw": "../paraguay-locations.js?v=tintin-20260725-paraguay-locations-1",
-          "target": "js/paraguay-locations.js",
+          "raw": "../components/location/paraguay-locations.js?v=tintin-20260725-paraguay-locations-1",
+          "target": "js/components/location/paraguay-locations.js",
           "dynamic": false,
           "line": 29
         },
         {
-          "raw": "../color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-catalog.js",
+          "raw": "../components/color/color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-catalog.js",
           "dynamic": false,
           "line": 34
         },
         {
-          "raw": "../color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-contrast-utils.js",
+          "raw": "../components/color/color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-contrast-utils.js",
           "dynamic": false,
           "line": 35
         },
         {
-          "raw": "../color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-picker-widget.js",
+          "raw": "../components/color/color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-picker-widget.js",
           "dynamic": false,
           "line": 36
         },
@@ -16303,8 +16303,8 @@
     },
     {
       "path": "js/admin/content/admin-welcome-control.js",
-      "bytes": 19393,
-      "sha256": "a70d5e15b929fe224c7ac276e02740b5bc70302f77e3b6c5668652051fc9fab7",
+      "bytes": 19412,
+      "sha256": "579929327baa9d621bf81d90792ccf27b60938d7b8a173276a3d8d0a21d17b9b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16341,8 +16341,8 @@
           "line": 12
         },
         {
-          "raw": "../../welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/welcome-config.js",
+          "raw": "../../components/welcome/welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/welcome/welcome-config.js",
           "dynamic": false,
           "line": 17
         }
@@ -16443,16 +16443,16 @@
     },
     {
       "path": "js/admin/products/admin-images-phase5.js",
-      "bytes": 2350,
-      "sha256": "b6920912989de78ddc765208c0ffb4c9aa36ac73390f5caf80d46a83c001d839",
+      "bytes": 2368,
+      "sha256": "148b49ba979c1d3db75196fe685508c823d8824b9688a54ac8ad8a4abfa22797",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../images.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/images.js",
+          "raw": "../../components/images/images.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/images.js",
           "dynamic": false,
           "line": 11
         }
@@ -16502,16 +16502,16 @@
     },
     {
       "path": "js/admin/products/admin-media-library-ui.js",
-      "bytes": 7795,
-      "sha256": "4f6880ae55902d449789356bfca900fb37cf738b342381a2cff4b259c08445d5",
+      "bytes": 7813,
+      "sha256": "ac9783fb43c69024cd36df947c56b134961037a980897f538708db18b1e53cd5",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../media-library.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/media-library.js",
+          "raw": "../../components/images/media-library.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/media-library.js",
           "dynamic": false,
           "line": 13
         }
@@ -16520,8 +16520,8 @@
     },
     {
       "path": "js/admin/settings/admin-color-scheme.js",
-      "bytes": 2514,
-      "sha256": "c24222aaa46b5b1ab0b153b0005bb8779b32b970c7a13a04b48cdebb427eac6f",
+      "bytes": 2548,
+      "sha256": "722896db3dc383a51b775966acbff123884d668d03f4c259d1216fb76f775e73",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16540,8 +16540,8 @@
           "line": 11
         },
         {
-          "raw": "../../color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-catalog.js",
+          "raw": "../../components/color/color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/color/color-scheme-catalog.js",
           "dynamic": false,
           "line": 12
         }
@@ -16843,29 +16843,6 @@
       ]
     },
     {
-      "path": "js/blocked-modal.js",
-      "bytes": 2471,
-      "sha256": "8e77265a6a816fc570d96f0fbc28befa98954ac5a3c560ea211d554c7488f824",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./loader-wait.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/loader-wait.js",
-          "dynamic": false,
-          "line": 8
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://wa.me/595981299331",
-          "line": 11
-        }
-      ]
-    },
-    {
       "path": "js/brand-reveal-extension.js",
       "bytes": 3816,
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980",
@@ -16877,16 +16854,16 @@
       "endpoints": []
     },
     {
-      "path": "js/cart-recovery.js",
-      "bytes": 6303,
-      "sha256": "147c98e910cdaec1b19439974642537512d1d2cfcc0ab0229271900d75b2fe2d",
+      "path": "js/components/cart/cart-recovery.js",
+      "bytes": 6307,
+      "sha256": "c1beb983def4bbf7a575035d9c686595bd2c92c8d6be673f416449d6e6509ada",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./admin/admin-path.js?v=tintin-20260722-level4-1",
+          "raw": "../../admin/admin-path.js?v=tintin-20260722-level4-1",
           "target": "js/admin/admin-path.js",
           "dynamic": false,
           "line": 1
@@ -16895,23 +16872,23 @@
       "endpoints": []
     },
     {
-      "path": "js/cart-sync.js",
-      "bytes": 36916,
-      "sha256": "2e86af80fabb048382ae404060132d92e3633a3d2cd696411b210e3029c2cc62",
+      "path": "js/components/cart/cart-sync.js",
+      "bytes": 36932,
+      "sha256": "9d7e08854acd738910599b2944e749600553996f7bfc227f06e101e4900f7658",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/firebase.js",
           "dynamic": false,
           "line": 17
         },
         {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
+          "raw": "../images/image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
           "dynamic": false,
           "line": 18
         },
@@ -16928,7 +16905,7 @@
           "line": 27
         },
         {
-          "raw": "./secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "../../secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/secure-checkout-order.js",
           "dynamic": true,
           "line": 1003
@@ -16946,7 +16923,7 @@
       ]
     },
     {
-      "path": "js/color-contrast-utils.js",
+      "path": "js/components/color/color-contrast-utils.js",
       "bytes": 4025,
       "sha256": "9cb08ef9a6e1072f05f68e21cf8817a6e264297496d1fefd34497924426899f8",
       "syntax": {
@@ -16957,7 +16934,7 @@
       "endpoints": []
     },
     {
-      "path": "js/color-picker-widget.js",
+      "path": "js/components/color/color-picker-widget.js",
       "bytes": 19910,
       "sha256": "32fc05c39890c37551335211dabbb1be8e1b860e27f7186529a6453450d0bd77",
       "syntax": {
@@ -16967,7 +16944,7 @@
       "imports": [
         {
           "raw": "./color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-contrast-utils.js",
+          "target": "js/components/color/color-contrast-utils.js",
           "dynamic": false,
           "line": 10
         }
@@ -16975,9 +16952,9 @@
       "endpoints": []
     },
     {
-      "path": "js/color-scheme-catalog.js",
-      "bytes": 32386,
-      "sha256": "6a8ad0dc326ce23f27012dbd8013eff01a973f97bdbbb6f2ab66b4e9e1ef2f3e",
+      "path": "js/components/color/color-scheme-catalog.js",
+      "bytes": 32403,
+      "sha256": "07fb0947c321b6472640455c77822ed938b5b48f4b1e315db2645c3b7eb50603",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16986,9 +16963,9 @@
       "endpoints": []
     },
     {
-      "path": "js/color-scheme-instant.js",
-      "bytes": 9269,
-      "sha256": "5280732a3a2f85f3255f05f52c22c165e18c42fce16c27df5f3bd077c7b6dc0a",
+      "path": "js/components/color/color-scheme-instant.js",
+      "bytes": 9303,
+      "sha256": "b52c23b360feed2d32f5dabb559509cd36ff74374aaf444f3beebdce983976d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16997,16 +16974,16 @@
       "endpoints": []
     },
     {
-      "path": "js/color-scheme.js",
-      "bytes": 5525,
-      "sha256": "33d27e18a6c61adef0c10b060e78cc05328220742e284c1564e79987c919fd89",
+      "path": "js/components/color/color-scheme.js",
+      "bytes": 5529,
+      "sha256": "09a0f8cbdafab32f72d54da119ad9e42e074552892a38a704138aa6644eabac0",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/firebase.js",
           "dynamic": false,
           "line": 10
@@ -17019,7 +16996,7 @@
         },
         {
           "raw": "./color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/color-scheme-catalog.js",
+          "target": "js/components/color/color-scheme-catalog.js",
           "dynamic": false,
           "line": 12
         }
@@ -17027,6 +17004,379 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "path": "js/components/color/theme-color-sanitizer.js",
+      "bytes": 2073,
+      "sha256": "d0476dff61eca8ce9b4399e7c2a70b79687947a07157941f7e8ac89190d82275",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/forms/otp-code-input.js",
+      "bytes": 3710,
+      "sha256": "4eb23480aee60f129210ccac201fb0d429730d4884f13dcb65ee4f56e30bdf03",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/forms/phone-reservation.js",
+      "bytes": 3027,
+      "sha256": "a478a9411aed841b0d1660239087c041e9fd4a120f40b9a87d3c8b051c179788",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 15
+        },
+        {
+          "raw": "./phone-utils.js?v=tintin-20260803-phone-unique-1",
+          "target": "js/components/forms/phone-utils.js",
+          "dynamic": false,
+          "line": 16
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "path": "js/components/forms/phone-utils.js",
+      "bytes": 6067,
+      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/image-performance.js",
+      "bytes": 2565,
+      "sha256": "4f13bd3b17fcd9dd38b58170e3f74ee90f8d67a5383e2bde21fdcee3f9e59df5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/image-processing.js",
+      "bytes": 6901,
+      "sha256": "bcf222ffdae0049c859392d54e772547724de9bbeaa9c642c417b065ba6a9388",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/image-resolver.js",
+      "bytes": 6282,
+      "sha256": "26366fff276f7f98ff1264c18847c948c08f8aa41b85dd171de17da35f539555",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 12
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 19
+        },
+        {
+          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
+          "dynamic": false,
+          "line": 20
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "path": "js/components/images/image-upload-widget.js",
+      "bytes": 13035,
+      "sha256": "7bb2370349fb88bb96768f1039a518b4e5fe2c32978e76bfffc24fd845210e97",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./image-processing.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-processing.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "./media-library.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/media-library.js",
+          "dynamic": false,
+          "line": 15
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/image-utils.js",
+      "bytes": 3554,
+      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/images-phase5.js",
+      "bytes": 16031,
+      "sha256": "e874f9992cc46e130cb497a0f9acacf1a24858fd96146ab1cc2eef74d8317cc1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./images.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/images.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/images.js",
+      "bytes": 21156,
+      "sha256": "2a91ed05a561899506a4b7302b093b5459e53586523ad5c6223c19b071273594",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
+          "dynamic": false,
+          "line": 17
+        },
+        {
+          "raw": "./image-resolver.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-resolver.js",
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "../../pages/home/home-premium.js",
+          "target": "js/pages/home/home-premium.js",
+          "dynamic": false,
+          "line": 22
+        },
+        {
+          "raw": "../welcome/welcome-tutorial-runtime.js",
+          "target": "js/components/welcome/welcome-tutorial-runtime.js",
+          "dynamic": false,
+          "line": 23
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "path": "js/components/images/load-images-init.js",
+      "bytes": 1741,
+      "sha256": "a503cfc149175ada9162ef86c7583c65c56df9f06fd3376684dc727336143ac6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./images.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/images.js",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/media-library.js",
+      "bytes": 11306,
+      "sha256": "2b54186b2e12cb8f0a97496f8292606d140057d5fb4a6fac97b3c9ec0337ca8e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "../../function-origin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/function-origin.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 24
+        },
+        {
+          "raw": "./image-processing.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-processing.js",
+          "dynamic": false,
+          "line": 25
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 24
+        }
+      ]
+    },
+    {
+      "path": "js/components/location/location-map.js",
+      "bytes": 13118,
+      "sha256": "46f2f8993d00d1831d343a03297d8592ad546a9b0f6a139288019c05a1ba76df",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./location-picker.js?v=tintin-20260803-location-picker-2",
+          "target": "js/components/location/location-picker.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+          "line": 9
+        },
+        {
+          "url": "https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+          "line": 102
+        },
+        {
+          "url": "https://www.openstreetmap.org/copyright",
+          "line": 103
+        }
+      ]
+    },
+    {
+      "path": "js/components/location/location-picker.js",
+      "bytes": 7565,
+      "sha256": "1ae3dadf01fd43ab5aa48f3143f8b7b407e7fa93b05fa0199689b6a5198b9bcc",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../function-origin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/function-origin.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/location/paraguay-locations.js",
+      "bytes": 7220,
+      "sha256": "a30dbb45982f9607d1282ccdd47718f764f62f29ea6dde834f252e4552aed455",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/modals/blocked-modal.js",
+      "bytes": 2475,
+      "sha256": "e5c59610a38acc6900ac0310482b1088cec5e407dcbe270753409a4a558b35ed",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../loader-wait.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/loader-wait.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://wa.me/595981299331",
           "line": 11
         }
       ]
@@ -17064,6 +17414,130 @@
           "line": 2
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/header-account-mobile-fix.js",
+      "bytes": 5260,
+      "sha256": "e66abdbf3660bb9fef3fc7cfbb07c5542095ec54037744c1273dc1b86112856f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/header-dropdown-fix.js",
+      "bytes": 7842,
+      "sha256": "094f6c2af02adef7d9d734555f98fa269e7b5a48e0a753857642eb34f4ea375a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/header-scroll-hide.js",
+      "bytes": 4581,
+      "sha256": "fbf61324bf1e02b0e6e721fe9d2c7add41ce73d375516df2b0c5d0f1c520e08f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/mobile-header-mode.js",
+      "bytes": 4413,
+      "sha256": "fe8356974083ab2bd58ea0841f7fec3637a66c2bb63ad172447a25c62e1386c6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": true,
+          "line": 79
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": true,
+          "line": 80
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 80
+        }
+      ]
+    },
+    {
+      "path": "js/components/navigation/legacy/nav-collections.js",
+      "bytes": 147,
+      "sha256": "7743afe7c6a190b851f102416b4a83f2bacff6875bbc686ce00d076a68d08eac",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../shared/collections-runtime.js",
+          "target": "js/components/navigation/shared/collections-runtime.js",
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-desktop.js",
+      "bytes": 496,
+      "sha256": "bb86c8914f501370116552cc1fce1eb528b5f646ff92725ae19be368a9bba01a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-mobile.js",
+      "bytes": 492,
+      "sha256": "b0c59397dcbd771be7cc55e7a0cbd1aadb45a7c7cba35a6ebcd4501769acb28b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-shared.js",
+      "bytes": 463,
+      "sha256": "9a2b5fd38b1c8254a46a8bf1d85147ce35831e8984e8eeab8b0b034e958decc0",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-tablet.js",
+      "bytes": 492,
+      "sha256": "dde0f15d823b92e21fa1af8aa32f5af04c4ce1d584a80a50d6a4792b8dbf037c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -17329,8 +17803,8 @@
     },
     {
       "path": "js/components/navigation/shared/runtime.js",
-      "bytes": 3991,
-      "sha256": "ad002e8276443d4b37ada1dd5ca9e2b262e7d7adc01f961ecb1d3143c91b51b5",
+      "bytes": 4007,
+      "sha256": "69c571688a08d2f70e4a90b44b3223d20257ff732bbc9f482d3472a7c35b6598",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17443,6 +17917,68 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "js/components/welcome/welcome-config.js",
+      "bytes": 1975,
+      "sha256": "e591afdc172a60c9451a655d0e07463b0c0764e5b16785be48cb5489faad5187",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/welcome/welcome-tutorial-runtime.js",
+      "bytes": 14985,
+      "sha256": "50e0a2119dcd0b438ac6a9c5cf357d620a38c28e37c702de6d72de18053a9de0",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/roles.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "./welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/welcome/welcome-config.js",
+          "dynamic": false,
+          "line": 9
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 2
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 3
+        }
+      ]
     },
     {
       "path": "js/content-schema.js",
@@ -17857,208 +18393,6 @@
       ]
     },
     {
-      "path": "js/header-account-mobile-fix.js",
-      "bytes": 5260,
-      "sha256": "e66abdbf3660bb9fef3fc7cfbb07c5542095ec54037744c1273dc1b86112856f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/header-dropdown-fix.js",
-      "bytes": 7842,
-      "sha256": "094f6c2af02adef7d9d734555f98fa269e7b5a48e0a753857642eb34f4ea375a",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/header-scroll-hide.js",
-      "bytes": 4581,
-      "sha256": "fbf61324bf1e02b0e6e721fe9d2c7add41ce73d375516df2b0c5d0f1c520e08f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/image-performance.js",
-      "bytes": 2565,
-      "sha256": "4f13bd3b17fcd9dd38b58170e3f74ee90f8d67a5383e2bde21fdcee3f9e59df5",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/image-processing.js",
-      "bytes": 6901,
-      "sha256": "bcf222ffdae0049c859392d54e772547724de9bbeaa9c642c417b065ba6a9388",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/image-resolver.js",
-      "bytes": 6278,
-      "sha256": "0e92157c2f46207cc19e76132bb06b1ec095b72c4ad03fc43210150b2a41cd5c",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": false,
-          "line": 12
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 19
-        },
-        {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
-          "dynamic": false,
-          "line": 20
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 19
-        }
-      ]
-    },
-    {
-      "path": "js/image-upload-widget.js",
-      "bytes": 13035,
-      "sha256": "7bb2370349fb88bb96768f1039a518b4e5fe2c32978e76bfffc24fd845210e97",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./image-processing.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-processing.js",
-          "dynamic": false,
-          "line": 10
-        },
-        {
-          "raw": "./media-library.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/media-library.js",
-          "dynamic": false,
-          "line": 15
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "js/image-utils.js",
-      "bytes": 3554,
-      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/images-phase5.js",
-      "bytes": 16031,
-      "sha256": "e874f9992cc46e130cb497a0f9acacf1a24858fd96146ab1cc2eef74d8317cc1",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./images.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/images.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
-          "dynamic": false,
-          "line": 10
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "js/images.js",
-      "bytes": 21139,
-      "sha256": "9e95997397997002694fe5dd9229c6796a554791b24ed7390e285d88d64bd5e3",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 16
-        },
-        {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
-          "dynamic": false,
-          "line": 17
-        },
-        {
-          "raw": "./image-resolver.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-resolver.js",
-          "dynamic": false,
-          "line": 18
-        },
-        {
-          "raw": "./pages/home/home-premium.js",
-          "target": "js/pages/home/home-premium.js",
-          "dynamic": false,
-          "line": 22
-        },
-        {
-          "raw": "./welcome-tutorial-runtime.js",
-          "target": "js/welcome-tutorial-runtime.js",
-          "dynamic": false,
-          "line": 23
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 16
-        }
-      ]
-    },
-    {
       "path": "js/import-normalization.mjs",
       "bytes": 5452,
       "sha256": "82454f2c49c4bc4d78b803817c079daff30b29e8a56f55f48f203396ac48c60b",
@@ -18081,208 +18415,9 @@
       "endpoints": []
     },
     {
-      "path": "js/load-images-init.js",
-      "bytes": 1741,
-      "sha256": "a503cfc149175ada9162ef86c7583c65c56df9f06fd3376684dc727336143ac6",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./images.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/images.js",
-          "dynamic": false,
-          "line": 10
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "js/loader-wait.js",
       "bytes": 1663,
       "sha256": "fab89d79619820d5449f9902fa166003cbc3e1457974ca8dec70dacbd7217b12",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/location-map.js",
-      "bytes": 13118,
-      "sha256": "46f2f8993d00d1831d343a03297d8592ad546a9b0f6a139288019c05a1ba76df",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./location-picker.js?v=tintin-20260803-location-picker-2",
-          "target": "js/location-picker.js",
-          "dynamic": false,
-          "line": 7
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
-          "line": 9
-        },
-        {
-          "url": "https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
-          "line": 102
-        },
-        {
-          "url": "https://www.openstreetmap.org/copyright",
-          "line": 103
-        }
-      ]
-    },
-    {
-      "path": "js/location-picker.js",
-      "bytes": 7561,
-      "sha256": "db76cea8bb35469a14ccca89567d844244a0ecf49ae6bd85aba890ff86e5208a",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./function-origin.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/function-origin.js",
-          "dynamic": false,
-          "line": 7
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "js/media-library.js",
-      "bytes": 11298,
-      "sha256": "b598a2bdd4fc85b6c96409ee2f34ca0a9ea88f5815dbf245852032e50d057de6",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "./function-origin.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/function-origin.js",
-          "dynamic": false,
-          "line": 10
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 24
-        },
-        {
-          "raw": "./image-processing.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-processing.js",
-          "dynamic": false,
-          "line": 25
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 24
-        }
-      ]
-    },
-    {
-      "path": "js/mobile-header-mode.js",
-      "bytes": 4406,
-      "sha256": "234f0e2767963aef455443aa6b543a131c9cab2bb11e4531e5286a524c0c794b",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": true,
-          "line": 79
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": true,
-          "line": 80
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 80
-        }
-      ]
-    },
-    {
-      "path": "js/nav-collections.js",
-      "bytes": 168,
-      "sha256": "f392781f338d7f67ea18f8db5e318777ed7bc6a817688088315710125492c048",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./components/navigation/shared/collections-runtime.js",
-          "target": "js/components/navigation/shared/collections-runtime.js",
-          "dynamic": false,
-          "line": 2
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "js/navigation-desktop.js",
-      "bytes": 467,
-      "sha256": "e072af6b2ac2e2b2ac7c03f5d6dec1757ff8ac1d6ec0e87f28336be2eeeb0a74",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/navigation-mobile.js",
-      "bytes": 463,
-      "sha256": "3928b60c7292eb044ac528ad2e6a7ed54756eda7a6fa89b2586cd1d4d19fc025",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/navigation-shared.js",
-      "bytes": 455,
-      "sha256": "a466ca8237b5d6d667d80abaff049f318127db7e509b8b0d08dad4804be9060d",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/navigation-tablet.js",
-      "bytes": 463,
-      "sha256": "deb2021417faf1078294b27819bd6185fd33bd9678d6573474eb2b38d85f2bb7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18326,17 +18461,6 @@
       ]
     },
     {
-      "path": "js/otp-code-input.js",
-      "bytes": 3710,
-      "sha256": "4eb23480aee60f129210ccac201fb0d429730d4884f13dcb65ee4f56e30bdf03",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "js/page-audit-fix.js",
       "bytes": 7587,
       "sha256": "68d87fe840c062c6cf6a26a62ab966b6c7add110270eb661119eac8aca0be8b5",
@@ -18349,8 +18473,8 @@
     },
     {
       "path": "js/page-loader.js",
-      "bytes": 36579,
-      "sha256": "e9854c18ef3a749f7d66c699576702c33eedae19e75ff924fc104cc7f25b4cc3",
+      "bytes": 36764,
+      "sha256": "a6c9bd8b67ab2d1d50493945d421ed7922fc754e2ca7ee8ae087beb160c74f02",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18611,16 +18735,16 @@
     },
     {
       "path": "js/pages/collections/collections-page.js",
-      "bytes": 10505,
-      "sha256": "2bf53679637a4ce8af23c4b099f8589796d91ce23c94c648f888aea2eabd8c33",
+      "bytes": 10521,
+      "sha256": "bdef2ba41ccbed89c08cf730cdde1f4a11694c5d524ea5c12c7552e2b3073cab",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/cart-sync.js",
+          "raw": "../../components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/cart/cart-sync.js",
           "dynamic": true,
           "line": 6
         }
@@ -18647,8 +18771,8 @@
     },
     {
       "path": "js/pages/collections/collections-store.js",
-      "bytes": 5951,
-      "sha256": "b02be310060be7a334a4e8e4154dad8de5f55651653aadf12b9d9a0b1cd567c0",
+      "bytes": 5987,
+      "sha256": "6f1070eac1faf137d8117999b26301b07c83b24d0b8712d11d4a354e4501daf1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18673,14 +18797,14 @@
           "line": 9
         },
         {
-          "raw": "../../image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
+          "raw": "../../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
           "dynamic": false,
           "line": 10
         },
         {
-          "raw": "../../image-resolver.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-resolver.js",
+          "raw": "../../components/images/image-resolver.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-resolver.js",
           "dynamic": false,
           "line": 11
         },
@@ -19008,17 +19132,6 @@
       ]
     },
     {
-      "path": "js/paraguay-locations.js",
-      "bytes": 7220,
-      "sha256": "a30dbb45982f9607d1282ccdd47718f764f62f29ea6dde834f252e4552aed455",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "js/payment-methods-core.js",
       "bytes": 5082,
       "sha256": "ab080e5fd40088a2532e088086fe4ce035a6aee7942904e0115d31c087120584",
@@ -19083,49 +19196,9 @@
       "endpoints": []
     },
     {
-      "path": "js/phone-reservation.js",
-      "bytes": 3027,
-      "sha256": "a478a9411aed841b0d1660239087c041e9fd4a120f40b9a87d3c8b051c179788",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 15
-        },
-        {
-          "raw": "./phone-utils.js?v=tintin-20260803-phone-unique-1",
-          "target": "js/phone-utils.js",
-          "dynamic": false,
-          "line": 16
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 15
-        }
-      ]
-    },
-    {
-      "path": "js/phone-utils.js",
-      "bytes": 6067,
-      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "js/privacy-consent.js",
-      "bytes": 8262,
-      "sha256": "f749d22146f91b4401e9c13a8b84e54a3c9a580e53e76297c08259fab0891982",
+      "bytes": 8278,
+      "sha256": "0a1d5fb3956b333c7ad6b590268197cff96690184786aed638c40a2bda06f936",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19138,8 +19211,8 @@
           "line": 2
         },
         {
-          "raw": "./cart-recovery.js?v=tintin-20260722-level4-1",
-          "target": "js/cart-recovery.js",
+          "raw": "./components/cart/cart-recovery.js?v=tintin-20260722-level4-1",
+          "target": "js/components/cart/cart-recovery.js",
           "dynamic": false,
           "line": 1
         }
@@ -19148,8 +19221,8 @@
     },
     {
       "path": "js/products-store.js",
-      "bytes": 19670,
-      "sha256": "1f8b3ee44bfc65bfff7a4d3fe0987fcb4c1a4d52f5e4d2fd35ac9670497c7f8b",
+      "bytes": 19688,
+      "sha256": "9f1e62c547914f57459ef6bd535d0bb63863e40d1c7a0f5ab2ac9a53ec386069",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19162,8 +19235,8 @@
           "line": 2
         },
         {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/image-utils.js",
+          "raw": "./components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/image-utils.js",
           "dynamic": false,
           "line": 3
         },
@@ -19340,8 +19413,8 @@
     },
     {
       "path": "js/roles.js",
-      "bytes": 6590,
-      "sha256": "4b4ce018b124099c7aaa67eb12f3651414db6dbfa8623721a05a595d1bd0446a",
+      "bytes": 6608,
+      "sha256": "f768831b041057c054cca02149c1bf38229c9f6c27c8d24e0eb4a71ed9084af4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19391,8 +19464,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 27566,
-      "sha256": "c5b6c3278681205722a7aeff091fd749a7e15ab67de1ca922b3b9317b6d4dfa6",
+      "bytes": 27615,
+      "sha256": "6c6f3ac8466e035d6e3d58a1772f94f5c5b84d583b28f51684fd9a03a14532ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19417,14 +19490,14 @@
           "line": 8
         },
         {
-          "raw": "./cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/cart-sync.js",
+          "raw": "./components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/cart/cart-sync.js",
           "dynamic": false,
           "line": 15
         },
         {
-          "raw": "./phone-utils.js?v=tintin-20260803-phone-unique-1",
-          "target": "js/phone-utils.js",
+          "raw": "./components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1",
+          "target": "js/components/forms/phone-utils.js",
           "dynamic": false,
           "line": 20
         },
@@ -19679,17 +19752,6 @@
       ]
     },
     {
-      "path": "js/theme-color-sanitizer.js",
-      "bytes": 2073,
-      "sha256": "d0476dff61eca8ce9b4399e7c2a70b79687947a07157941f7e8ac89190d82275",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "js/ui-navigation-controller.js",
       "bytes": 1242,
       "sha256": "6b03fffb72c1363bd1724fc74fe5d8568ae1bf88eceaf57bbdf964d92d566c42",
@@ -19702,8 +19764,8 @@
     },
     {
       "path": "js/ui-quality.js",
-      "bytes": 8178,
-      "sha256": "1270fb833508aa9364f5ed6451889329daaf6978170c6e6734ad1360e9c735ec",
+      "bytes": 8258,
+      "sha256": "ba35aea41a35d014f018d5c8763a83896da737da390923cbba678648c97ab305",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19737,68 +19799,6 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "line": 15
-        }
-      ]
-    },
-    {
-      "path": "js/welcome-config.js",
-      "bytes": 1975,
-      "sha256": "e591afdc172a60c9451a655d0e07463b0c0764e5b16785be48cb5489faad5187",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/welcome-tutorial-runtime.js",
-      "bytes": 14977,
-      "sha256": "6e48d9eedb01e747f9330e7faec75c330d28c11a78f3f1e51d5840f83bab5ed9",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "./firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/firebase.js",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "./roles.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/roles.js",
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "./welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/welcome-config.js",
-          "dynamic": false,
-          "line": 9
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 2
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 3
         }
       ]
     },
@@ -19851,28 +19851,28 @@
     },
     {
       "path": "script.js",
-      "bytes": 85728,
-      "sha256": "c79ec3ef599f65a0826823e7f3f98b532ee883f2c0e8b20608429357c14ce0bf",
+      "bytes": 85776,
+      "sha256": "115436513738ac298d4e226eb366b8fa73501b719cf6174df14be7da28e7d278",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/cart-sync.js",
+          "raw": "./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/cart/cart-sync.js",
           "dynamic": true,
           "line": 232
         },
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/cart-sync.js",
+          "raw": "./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/cart/cart-sync.js",
           "dynamic": true,
           "line": 845
         },
         {
-          "raw": "./js/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/cart-sync.js",
+          "raw": "./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/cart/cart-sync.js",
           "dynamic": true,
           "line": 1459
         }
@@ -20049,8 +20049,8 @@
     },
     {
       "path": "scripts/audit-admin-content-appearance.js",
-      "bytes": 9495,
-      "sha256": "a911795fea83cb5fce9b0d302cd8e494a515ce9b50873c76e076a1ea2d8fba35",
+      "bytes": 9546,
+      "sha256": "55062bdada3137cf163f72410e61975f055b48ee98636a819d6d85d88c161c34",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20060,8 +20060,8 @@
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
-      "bytes": 8933,
-      "sha256": "ec8aeb8334025bdf2469187410b2c4931eb6f29f87d180a26c9822e2db438b10",
+      "bytes": 8951,
+      "sha256": "ebcaebdb59f12276d2bcf6dee9182677d60981aba780c6f802628d4dcafc1b97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20117,8 +20117,8 @@
     },
     {
       "path": "scripts/audit-admin-products-media.js",
-      "bytes": 15393,
-      "sha256": "ec5eff2a226683d68033f40ef7b156f4b8a6986c9ccd9761b7603ca3b5b7eeac",
+      "bytes": 15447,
+      "sha256": "b0fe0ab077981746af7232a9b352ef1e914b195796d4e351004c5e27980c2466",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20128,8 +20128,8 @@
     },
     {
       "path": "scripts/audit-admin-public-sync.js",
-      "bytes": 6212,
-      "sha256": "eec940d707d46aa863452390d379d1e34d60cbcd645e456c26ead4e3a7e5d427",
+      "bytes": 6270,
+      "sha256": "80a13bf8f0124162afccfadd412592abfe661e76604132f002756282d3bfe7db",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20283,8 +20283,8 @@
     },
     {
       "path": "scripts/audit-app-check-bootstrap.js",
-      "bytes": 5643,
-      "sha256": "ed080ec10c059d9026a208fc2c49c4160dfee96a98b8cbec8e76fb87ed2ca6cc",
+      "bytes": 5661,
+      "sha256": "fa02572303d8b123cbb6e3b5fe8749569eb535249c83667eabcaeec79e31787b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20299,8 +20299,8 @@
     },
     {
       "path": "scripts/audit-aux-pages.js",
-      "bytes": 6464,
-      "sha256": "7784bb381fb43a743356a76c4067cf8d2c52409614a341dae0b46ed5e3eeb135",
+      "bytes": 6498,
+      "sha256": "0463dc56c585d0bfb3c97ceb878c8d6fe6ea63e18cc5dcb6bb73ea04a8b55f4d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20357,8 +20357,8 @@
     },
     {
       "path": "scripts/audit-cart-phase7.js",
-      "bytes": 6050,
-      "sha256": "4ccfa2b3f1a0a1fd0fe393ff068d8085635f1d8b329e2eff32a71b5124168af6",
+      "bytes": 6082,
+      "sha256": "ac82f8293c9446f28e82c8512d83e0b3433d44d13480f5662c2e2849fe61d900",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20401,8 +20401,8 @@
     },
     {
       "path": "scripts/audit-collections-phase4.js",
-      "bytes": 8455,
-      "sha256": "de746ea847fdc1227a50a3e177bd42325f772fb3ad063f1ff851456694bcc650",
+      "bytes": 8529,
+      "sha256": "c1551bc34a92103bea99ba8a2ccb2dceade9e6b0f6ef574a141ff4152bc97e46",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20421,7 +20421,7 @@
           "line": 139
         },
         {
-          "raw": "../../cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "../../components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1",
           "target": null,
           "dynamic": true,
           "line": 156
@@ -20431,8 +20431,8 @@
     },
     {
       "path": "scripts/audit-color-scheme.js",
-      "bytes": 9394,
-      "sha256": "b37a22d8da5249f89bf431abc80a20802d34f206c889cc091fae01122ff6fbce",
+      "bytes": 9530,
+      "sha256": "9476fa06a283181c38f6ae04b2a6e12aa260467f545b7d503b7031c4fa68c24c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20622,8 +20622,8 @@
     },
     {
       "path": "scripts/audit-deep.js",
-      "bytes": 15113,
-      "sha256": "f4e8f3265fb551a30ee580afe6d2fd5a4ab87f207a9f22ea398378068e0a58c1",
+      "bytes": 15130,
+      "sha256": "90cb527137a73ee6276dd5128f2a8edca40955a43c9738b8d1da78f0acd07fb5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20796,8 +20796,8 @@
     },
     {
       "path": "scripts/audit-final-integration.js",
-      "bytes": 7258,
-      "sha256": "cd39edd6492483e5afcf1e309aace4b39d31bbf45bd7f88d204e9552ab455488",
+      "bytes": 7292,
+      "sha256": "dc153bdd02f6640e7358a945ef95c69b845384914e7572eac696d8d22b609b37",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20836,8 +20836,8 @@
     },
     {
       "path": "scripts/audit-firestore-read-budget.js",
-      "bytes": 6559,
-      "sha256": "87fc29bbffaf93b63fab477ad50e0337ef71af0c9e34eb6f7ed39fa0cba31ef6",
+      "bytes": 6588,
+      "sha256": "319f035c7dbbf57756b4b91462f855661cce6e8396dd0819d8cdd37e31293f5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20995,8 +20995,8 @@
     },
     {
       "path": "scripts/audit-help-pages.js",
-      "bytes": 7875,
-      "sha256": "7d5bb9c4111c11e531cfbc9e2bf2d6ef1b848aaa7abd22faf2fb92bcc797b27e",
+      "bytes": 7909,
+      "sha256": "95ed31f4d103d9010f2311e4e8b0890ca8d4d3a880a281bf6ef8af1ee50ffe97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21109,8 +21109,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 24096,
-      "sha256": "3f781cacd85fe8496e7b251e87e2699f345289514da28f87514df70c711c70d6",
+      "bytes": 24298,
+      "sha256": "61aa11ec26294a80ce7dd79136aa81cca33034cac268762902358802dbb6ede9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21129,14 +21129,14 @@
           "line": 224
         },
         {
-          "raw": "./function-origin.js",
-          "target": "scripts/function-origin.js",
+          "raw": "../../function-origin.js",
+          "target": null,
           "dynamic": false,
           "line": 238
         },
         {
-          "raw": "./image-utils.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "scripts/image-utils.js",
+          "raw": "./components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "scripts/components/images/image-utils.js",
           "dynamic": false,
           "line": 389
         }
@@ -21205,8 +21205,8 @@
     },
     {
       "path": "scripts/audit-integral-platform.js",
-      "bytes": 6984,
-      "sha256": "96b97cc26e18955d3c27234d15258e2e9e0acad158ec67e138490c73fa13bfa0",
+      "bytes": 7036,
+      "sha256": "4ec009287ec60cc96cb072cabba15b053b8c2bc3fb5eb00d7c6e9a78c61acec9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21219,8 +21219,8 @@
           "line": 35
         },
         {
-          "raw": "./js/images.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "scripts/js/images.js",
+          "raw": "./js/components/images/images.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "scripts/js/components/images/images.js",
           "dynamic": false,
           "line": 36
         }
@@ -21293,8 +21293,8 @@
     },
     {
       "path": "scripts/audit-level2-commerce.js",
-      "bytes": 10303,
-      "sha256": "7814c9d4fa36e5a6fc573053de64a8e35bd023804f42e5b8a1b02ac28bb615d9",
+      "bytes": 10319,
+      "sha256": "4de08c9f2e945acfe323ce5f4cd13b079925f9430d9491689741b559de87458c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21304,8 +21304,8 @@
     },
     {
       "path": "scripts/audit-level3-quality.js",
-      "bytes": 9681,
-      "sha256": "8f6dcf7b008193286cf63bfa25b622c1c8e4851b3320f968b5afed3ea4453977",
+      "bytes": 9697,
+      "sha256": "fcee48a75b134e41c4a0f38ed5583c7614900123bdd2a23d50e6f6db320d8785",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21401,8 +21401,8 @@
     },
     {
       "path": "scripts/audit-modular-architecture.js",
-      "bytes": 7604,
-      "sha256": "a4901cf36615076e237554165fda25b5cd10d668632c14d746d0233c6910b7da",
+      "bytes": 7749,
+      "sha256": "1d9f5bb15d1aa049f61a274a81965c4473d0c0b1fa59e9f424a0cee2d84aaacb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21497,8 +21497,8 @@
     },
     {
       "path": "scripts/audit-page-loading.js",
-      "bytes": 9074,
-      "sha256": "39585b407cadc9cf309f2a5e2dcb8567d9d9221910121ca635e8f833d1ed8612",
+      "bytes": 9093,
+      "sha256": "76aec157479dcc35dfcb227481378b7dd18273405086bd64f082f62ab2d222be",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21561,8 +21561,8 @@
     },
     {
       "path": "scripts/audit-performance-realtime.js",
-      "bytes": 8025,
-      "sha256": "d03015a1f74181b89dba066a60461048d805c17f3e3641b98565a21c74f554ac",
+      "bytes": 8095,
+      "sha256": "09f21ef92d4a391d8f319d7395ed9023df416f0114e269c71ba2d460f75b0412",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21577,8 +21577,8 @@
     },
     {
       "path": "scripts/audit-performance-regressions.js",
-      "bytes": 7858,
-      "sha256": "a0f96f62d342136ebd3a0feb1f90ca29c2412e47b3a52e669b12a0fbd671f5c3",
+      "bytes": 7945,
+      "sha256": "32a217b0f28dcdb9e1445a9bb923291680e0c22c051efaf61df3b0519ec8633a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21723,8 +21723,8 @@
     },
     {
       "path": "scripts/audit-postphase-security.js",
-      "bytes": 2279,
-      "sha256": "432d445459983657bcd400969834121b91c11940110b5c1aface5bd902c32854",
+      "bytes": 2295,
+      "sha256": "eba0b265857ae26f4974e88a0598e0003d4ab195ae93b0602f2314c7730a5a08",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21785,8 +21785,8 @@
     },
     {
       "path": "scripts/audit-public-operational-contract.js",
-      "bytes": 3279,
-      "sha256": "d081fa12ca43a47a0de4032b86f7921da78aae3ebdc58eba13e3e46413d382b7",
+      "bytes": 3295,
+      "sha256": "35e6e8a9cf074cedc293bacbbf259185c63e759775c54f8097e645b9a7e4d156",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21843,8 +21843,8 @@
     },
     {
       "path": "scripts/audit-public-shell.js",
-      "bytes": 8758,
-      "sha256": "6509434894ca69da70323476686b0a3e5bfcf6d9f566c5b92f6d64fb950518b6",
+      "bytes": 8919,
+      "sha256": "64c76e4eb6d3b41d65a245b28af3927987b945ff746ebf7b4c4827315ae44f25",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21896,16 +21896,16 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 4930,
-      "sha256": "3ad9d6e7776c8ff332d03d5c9e6e7aec84ceb64b84adceeb368336b4fc8aa105",
+      "bytes": 4950,
+      "sha256": "d3a026c03b02ee9221a01c2ba092d1d003a439e79aeeaa09762c0f496f891a76",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "scripts/secure-checkout-order.js",
+          "raw": "../../secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": null,
           "dynamic": true,
           "line": 101
         }
@@ -21925,8 +21925,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 17296,
-      "sha256": "c4586774256d02e31cbaa176b63476f07b3eb03824821baf22a3305829d041cc",
+      "bytes": 17418,
+      "sha256": "f00030183df6f6e0650d65274d316090ac5f22c9b2e9e3fac05ac4518bed9bd1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21957,7 +21957,7 @@
           "line": 166
         },
         {
-          "raw": "../../welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "../../components/welcome/welcome-config.js?v=tintin-20260716-cloudinary-fix-1",
           "target": null,
           "dynamic": false,
           "line": 167
@@ -21994,8 +21994,8 @@
     },
     {
       "path": "scripts/audit-system-special-states-part2g-v2.mjs",
-      "bytes": 21220,
-      "sha256": "2910b45a38f733d90d443949ca3b8de3e78d19977f78402b71cf0915d64c48c1",
+      "bytes": 21238,
+      "sha256": "c5144b21e73a374c21f1328f121b989d2f69eb5f3e98de24582f8adbe6e3576d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22087,8 +22087,8 @@
     },
     {
       "path": "scripts/audit-tintin.js",
-      "bytes": 12565,
-      "sha256": "456f0f52ddda5d450620200f3562719f570e2790a97ed37dea874eb4739249c1",
+      "bytes": 12723,
+      "sha256": "ad1a2cd0e9caeeb791aa65b866ef4d5b81d2835cc2062385b995cbad22d03c68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22109,8 +22109,8 @@
     },
     {
       "path": "scripts/audit-unified-navigation.js",
-      "bytes": 3059,
-      "sha256": "4263a5a9ffd2df85ca27e2923c00e62f3afccce0da96ad0a56a2a76aeac24148",
+      "bytes": 3117,
+      "sha256": "e331bbdc06395f4c1a79a60e5bd55e255bd0cb227800153bbf342c35c2bdb180",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22591,8 +22591,8 @@
     },
     {
       "path": "tests/login/location-picker.test.mjs",
-      "bytes": 3148,
-      "sha256": "869a557e3f204ec9e8f64acf5f9fcbf2979a232fce7208d5c420fcf3ffa0a641",
+      "bytes": 3168,
+      "sha256": "8483e6d8dc1eb3d2209a954bede6234dfe816f3c84d8b033ac006fd4b1059924",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22623,8 +22623,8 @@
           "line": 4
         },
         {
-          "raw": "../../js/location-picker.js",
-          "target": "js/location-picker.js",
+          "raw": "../../js/components/location/location-picker.js",
+          "target": "js/components/location/location-picker.js",
           "dynamic": false,
           "line": 5
         }
@@ -22633,8 +22633,8 @@
     },
     {
       "path": "tests/login/phone-utils.test.mjs",
-      "bytes": 2909,
-      "sha256": "51694eb4257e357a8849a0ccaf03255bb720595564f5de996a57097f3025de74",
+      "bytes": 2926,
+      "sha256": "b1acbc907a5846f8b651f123d7ccac8717019f8126962e896d88e648b4cbef21",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22653,8 +22653,8 @@
           "line": 2
         },
         {
-          "raw": "../../js/phone-utils.js",
-          "target": "js/phone-utils.js",
+          "raw": "../../js/components/forms/phone-utils.js",
+          "target": "js/components/forms/phone-utils.js",
           "dynamic": false,
           "line": 9
         }
@@ -22841,14 +22841,14 @@
     {
       "path": ".github/workflows/audit-cart-phase7.yml",
       "extension": ".yml",
-      "bytes": 3995,
-      "sha256": "6f8444dfe3cc86fd5acfc872d8edc79d9025577fbe76a06aca3d169b09691ee8"
+      "bytes": 4027,
+      "sha256": "62280a98d4d07a307bdaf76dd69ef52766e0d26c52ea8786db78827e643ced9b"
     },
     {
       "path": ".github/workflows/audit-collections-phase4.yml",
       "extension": ".yml",
-      "bytes": 1110,
-      "sha256": "c5e9cebb7f250eb48f2ac5f214d4c9519df029b8113633b13d3f72663331d508"
+      "bytes": 1168,
+      "sha256": "232ce1538f821d52a19f8910518a5d3b1ef4ce3e0c676fef9eb80a53062920c3"
     },
     {
       "path": ".github/workflows/audit-content-phase6.yml",
@@ -22871,20 +22871,20 @@
     {
       "path": ".github/workflows/audit-images-phase5.yml",
       "extension": ".yml",
-      "bytes": 3819,
-      "sha256": "1f7e013b3e84bee91b2af0c903f3c60439cbef7c55ac6f4364a5d63b81ca49a4"
+      "bytes": 4071,
+      "sha256": "9c402ebdefab62ea0a9f9a0d9ac63b9c6281acfcfd21708e71e043d3327d7b43"
     },
     {
       "path": ".github/workflows/audit-modular-navigation.yml",
       "extension": ".yml",
-      "bytes": 2049,
-      "sha256": "1f5d44506589aedf2d8698226b2ce0c88d72e1b112790d194a734cf97700917c"
+      "bytes": 2136,
+      "sha256": "4a65a6a286004f9bb86c084df1f3b9cf6445d5aaa8f94054ba6dc38c5b8db220"
     },
     {
       "path": ".github/workflows/audit-secure-orders.yml",
       "extension": ".yml",
-      "bytes": 1204,
-      "sha256": "0809c24e840c51760bd69c5093293f336507f7d9b9e0a855216b199a23d3a460"
+      "bytes": 1220,
+      "sha256": "8e9fa53f09b1433f640a598ae7c555ec4bf006c97f0fb6d22c79258c730bce3f"
     },
     {
       "path": ".github/workflows/audit-security-phase8.yml",
@@ -22991,8 +22991,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 7729,
-      "sha256": "91b73d1c5181e44b83fec87b7c726477f075685b59f4cb7eec0749cd388726f3"
+      "bytes": 7763,
+      "sha256": "1e34ff9a63323e103e50920135e99c5cd60d0396f9852b9a47e5f07b5f2d71ee"
     },
     {
       "path": "AUDITORIA-BAJO.txt",
@@ -23033,14 +23033,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 19217,
-      "sha256": "86ba96141198e29e50311cfb9c0beb122f434434fb72c1f0efc566e8b7b302c5"
+      "bytes": 19269,
+      "sha256": "d6fa666b1de25fc4f660abdc83699bb31b2646157cc190872ed7afb5586401c1"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36382,
-      "sha256": "dba9becb85ec019c4cab40cc1d75b58891850e116d24c085e3db8c26910659b2"
+      "bytes": 36418,
+      "sha256": "b4076244d39ed59281e754ea12f1618f7578818854c9c6656e699ba12110178c"
     },
     {
       "path": "admin.html",
@@ -23237,20 +23237,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 12591,
-      "sha256": "2bc1b54d45b38a31a4ce6f3579fad4fdee417b79dfce8c2676447f161e829a7c"
+      "bytes": 12625,
+      "sha256": "6861c7e7a1d87fc9b587f26b687ec7676013e89aa4eb796101026cef5825d9e0"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 49745,
-      "sha256": "cedb7a38dcf93ca799da5db32ac17cc573f90ed9d4344bbceec60e4cc7902b4e"
+      "bytes": 49813,
+      "sha256": "8fdac80ac3d7072ae305691ca1250a23cb7795094f9e4f36d903162ce620f4c2"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 88140,
-      "sha256": "9d39c053036e78803a5d5ee21ae29f9fa00e30d5a3b7fae7c190af86b5983012"
+      "bytes": 88317,
+      "sha256": "8db3e89649a621303d876b3b83465ea003f6c03ae6f43d55c154fb9c59908d37"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -23267,20 +23267,20 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 14447,
-      "sha256": "e8c15e1f4fbfe408881122abade78cbb02e24b9cc5b4452ef2eeae0635c847a1"
+      "bytes": 14481,
+      "sha256": "f485ce4207987334f5c3fbedb03b3c6c7c3fdabdd5beee93380193850202d05c"
     },
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 17265,
-      "sha256": "4cc8de7ed8a7adc48aa1ce6bd4e822f91ca69a3c172514b01a3e2fd9a8bd3ef5"
+      "bytes": 17299,
+      "sha256": "34e521af3bacca70dbd796ea4a0db4e381829a8d5057d44c390a8b6d74e9f3e7"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
       "extension": ".css",
-      "bytes": 2019,
-      "sha256": "cb0a3f6a06edc112331299baf1a84f9f710dde6bae2267d62c579e5095698276"
+      "bytes": 2036,
+      "sha256": "55bc325326638eaf7e4423e326752ac018693c7664ef971237c9e725ff392dd9"
     },
     {
       "path": "css/admin/admin.css",
@@ -23351,8 +23351,8 @@
     {
       "path": "css/location-picker.css",
       "extension": ".css",
-      "bytes": 3427,
-      "sha256": "db8467f1c879ddfc4e86db423d3afd13af6ad011ad9e8aa8705b117e85938568"
+      "bytes": 3467,
+      "sha256": "2dba29c382a3a505d0a9ff484ffa94befa83e18a2bdf93de1cf2445f004316d5"
     },
     {
       "path": "css/mobile-header-actions-solid.css",
@@ -23555,8 +23555,8 @@
     {
       "path": "css/tintin-unified-theme.css",
       "extension": ".css",
-      "bytes": 31883,
-      "sha256": "e621689613ad79937fd35b2970815d2258defda10c22f161dca9a0cb6a4969d7"
+      "bytes": 31900,
+      "sha256": "62b24182532f514062755a9467de6f18929f08b9b106460e0e9af0be908a5c58"
     },
     {
       "path": "css/ui-quality.css",
@@ -23573,8 +23573,8 @@
     {
       "path": "docs/ARQUITECTURA.md",
       "extension": ".md",
-      "bytes": 4634,
-      "sha256": "9a8309649a283101e3121b3378101dda5b70c33b06bf4e2412b184882ec19241"
+      "bytes": 4779,
+      "sha256": "6ba3979b0310873f7cb95d0cf29ee33a870c110cb9b5b3df4721b3c37441dc30"
     },
     {
       "path": "docs/BACKUP_RECOVERY.md",
@@ -23615,8 +23615,8 @@
     {
       "path": "docs/MAPA-DE-CODIGO.md",
       "extension": ".md",
-      "bytes": 3612,
-      "sha256": "d92b353e61f61288a6d10bc06379c3b9b7582f1e0cf473473a852e47e035bac7"
+      "bytes": 3773,
+      "sha256": "11a344a85145ae8a0201716c46315e3b9c425d29373a07d252692f2cb0368309"
     },
     {
       "path": "docs/PHASE10_ACCESSIBILITY.md",
@@ -23639,8 +23639,8 @@
     {
       "path": "docs/PHASE5_IMAGES.md",
       "extension": ".md",
-      "bytes": 1896,
-      "sha256": "4bc6db3fb2172c7bbdc4a5a26aaff8f2543ea01df464a4422db0db43ab814489"
+      "bytes": 1932,
+      "sha256": "d1247d7b7b6863e063ee7e5d368d903cebfde7de1d2ce9605c2948cf83671fce"
     },
     {
       "path": "docs/PHASE6_CONTENT.md",
@@ -23699,8 +23699,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 15922,
-      "sha256": "6ccd3630b849791a0891cb7d173b9db3ff4b94095f313088649f9da94ba4f135"
+      "bytes": 15956,
+      "sha256": "0fe0e9e0d1abbf2bd15a09e2d66b5c8886d765c9eb7e06856c92db78a8d51994"
     },
     {
       "path": "favicon-16x16.png",
@@ -23885,14 +23885,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 42357,
-      "sha256": "7f0d683ac4b5600e64ca5cec24f4b765df8bb8d5e7c12434b941eb769a0c6ed4"
+      "bytes": 42445,
+      "sha256": "f09bc95eaab0c43175167195e3cf9b39eba9c21d90b5d1dc1e9e5b6f6fa39a2c"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 438213,
-      "sha256": "ebddc605912585e75b29e99381c122330a583fd3fb7d319a853c89cf1caf9c7b"
+      "bytes": 438320,
+      "sha256": "94b545764f28e78d584177c029696c0bbce4fedfbb0995b2d1188928c6718690"
     },
     {
       "path": "js/admin/admin-import-phase9.js",
@@ -23933,8 +23933,8 @@
     {
       "path": "js/admin/content/admin-welcome-control.js",
       "extension": ".js",
-      "bytes": 19393,
-      "sha256": "a70d5e15b929fe224c7ac276e02740b5bc70302f77e3b6c5668652051fc9fab7"
+      "bytes": 19412,
+      "sha256": "579929327baa9d621bf81d90792ccf27b60938d7b8a173276a3d8d0a21d17b9b"
     },
     {
       "path": "js/admin/diagnostics/admin-site-diagnostics.js",
@@ -23951,8 +23951,8 @@
     {
       "path": "js/admin/products/admin-images-phase5.js",
       "extension": ".js",
-      "bytes": 2350,
-      "sha256": "b6920912989de78ddc765208c0ffb4c9aa36ac73390f5caf80d46a83c001d839"
+      "bytes": 2368,
+      "sha256": "148b49ba979c1d3db75196fe685508c823d8824b9688a54ac8ad8a4abfa22797"
     },
     {
       "path": "js/admin/products/admin-inventory-integrity.js",
@@ -23963,14 +23963,14 @@
     {
       "path": "js/admin/products/admin-media-library-ui.js",
       "extension": ".js",
-      "bytes": 7795,
-      "sha256": "4f6880ae55902d449789356bfca900fb37cf738b342381a2cff4b259c08445d5"
+      "bytes": 7813,
+      "sha256": "ac9783fb43c69024cd36df947c56b134961037a980897f538708db18b1e53cd5"
     },
     {
       "path": "js/admin/settings/admin-color-scheme.js",
       "extension": ".js",
-      "bytes": 2514,
-      "sha256": "c24222aaa46b5b1ab0b153b0005bb8779b32b970c7a13a04b48cdebb427eac6f"
+      "bytes": 2548,
+      "sha256": "722896db3dc383a51b775966acbff123884d668d03f4c259d1216fb76f775e73"
     },
     {
       "path": "js/admin/settings/admin-email-gate-sync.js",
@@ -24015,58 +24015,154 @@
       "sha256": "e5f2a67a6adb24859e70a5dd2e4585378c484d0679e9257895b67b332456ee3c"
     },
     {
-      "path": "js/blocked-modal.js",
-      "extension": ".js",
-      "bytes": 2471,
-      "sha256": "8e77265a6a816fc570d96f0fbc28befa98954ac5a3c560ea211d554c7488f824"
-    },
-    {
       "path": "js/brand-reveal-extension.js",
       "extension": ".js",
       "bytes": 3816,
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980"
     },
     {
-      "path": "js/cart-recovery.js",
+      "path": "js/components/cart/cart-recovery.js",
       "extension": ".js",
-      "bytes": 6303,
-      "sha256": "147c98e910cdaec1b19439974642537512d1d2cfcc0ab0229271900d75b2fe2d"
+      "bytes": 6307,
+      "sha256": "c1beb983def4bbf7a575035d9c686595bd2c92c8d6be673f416449d6e6509ada"
     },
     {
-      "path": "js/cart-sync.js",
+      "path": "js/components/cart/cart-sync.js",
       "extension": ".js",
-      "bytes": 36916,
-      "sha256": "2e86af80fabb048382ae404060132d92e3633a3d2cd696411b210e3029c2cc62"
+      "bytes": 36932,
+      "sha256": "9d7e08854acd738910599b2944e749600553996f7bfc227f06e101e4900f7658"
     },
     {
-      "path": "js/color-contrast-utils.js",
+      "path": "js/components/color/color-contrast-utils.js",
       "extension": ".js",
       "bytes": 4025,
       "sha256": "9cb08ef9a6e1072f05f68e21cf8817a6e264297496d1fefd34497924426899f8"
     },
     {
-      "path": "js/color-picker-widget.js",
+      "path": "js/components/color/color-picker-widget.js",
       "extension": ".js",
       "bytes": 19910,
       "sha256": "32fc05c39890c37551335211dabbb1be8e1b860e27f7186529a6453450d0bd77"
     },
     {
-      "path": "js/color-scheme-catalog.js",
+      "path": "js/components/color/color-scheme-catalog.js",
       "extension": ".js",
-      "bytes": 32386,
-      "sha256": "6a8ad0dc326ce23f27012dbd8013eff01a973f97bdbbb6f2ab66b4e9e1ef2f3e"
+      "bytes": 32403,
+      "sha256": "07fb0947c321b6472640455c77822ed938b5b48f4b1e315db2645c3b7eb50603"
     },
     {
-      "path": "js/color-scheme-instant.js",
+      "path": "js/components/color/color-scheme-instant.js",
       "extension": ".js",
-      "bytes": 9269,
-      "sha256": "5280732a3a2f85f3255f05f52c22c165e18c42fce16c27df5f3bd077c7b6dc0a"
+      "bytes": 9303,
+      "sha256": "b52c23b360feed2d32f5dabb559509cd36ff74374aaf444f3beebdce983976d9"
     },
     {
-      "path": "js/color-scheme.js",
+      "path": "js/components/color/color-scheme.js",
       "extension": ".js",
-      "bytes": 5525,
-      "sha256": "33d27e18a6c61adef0c10b060e78cc05328220742e284c1564e79987c919fd89"
+      "bytes": 5529,
+      "sha256": "09a0f8cbdafab32f72d54da119ad9e42e074552892a38a704138aa6644eabac0"
+    },
+    {
+      "path": "js/components/color/theme-color-sanitizer.js",
+      "extension": ".js",
+      "bytes": 2073,
+      "sha256": "d0476dff61eca8ce9b4399e7c2a70b79687947a07157941f7e8ac89190d82275"
+    },
+    {
+      "path": "js/components/forms/otp-code-input.js",
+      "extension": ".js",
+      "bytes": 3710,
+      "sha256": "4eb23480aee60f129210ccac201fb0d429730d4884f13dcb65ee4f56e30bdf03"
+    },
+    {
+      "path": "js/components/forms/phone-reservation.js",
+      "extension": ".js",
+      "bytes": 3027,
+      "sha256": "a478a9411aed841b0d1660239087c041e9fd4a120f40b9a87d3c8b051c179788"
+    },
+    {
+      "path": "js/components/forms/phone-utils.js",
+      "extension": ".js",
+      "bytes": 6067,
+      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
+    },
+    {
+      "path": "js/components/images/image-performance.js",
+      "extension": ".js",
+      "bytes": 2565,
+      "sha256": "4f13bd3b17fcd9dd38b58170e3f74ee90f8d67a5383e2bde21fdcee3f9e59df5"
+    },
+    {
+      "path": "js/components/images/image-processing.js",
+      "extension": ".js",
+      "bytes": 6901,
+      "sha256": "bcf222ffdae0049c859392d54e772547724de9bbeaa9c642c417b065ba6a9388"
+    },
+    {
+      "path": "js/components/images/image-resolver.js",
+      "extension": ".js",
+      "bytes": 6282,
+      "sha256": "26366fff276f7f98ff1264c18847c948c08f8aa41b85dd171de17da35f539555"
+    },
+    {
+      "path": "js/components/images/image-upload-widget.js",
+      "extension": ".js",
+      "bytes": 13035,
+      "sha256": "7bb2370349fb88bb96768f1039a518b4e5fe2c32978e76bfffc24fd845210e97"
+    },
+    {
+      "path": "js/components/images/image-utils.js",
+      "extension": ".js",
+      "bytes": 3554,
+      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6"
+    },
+    {
+      "path": "js/components/images/images-phase5.js",
+      "extension": ".js",
+      "bytes": 16031,
+      "sha256": "e874f9992cc46e130cb497a0f9acacf1a24858fd96146ab1cc2eef74d8317cc1"
+    },
+    {
+      "path": "js/components/images/images.js",
+      "extension": ".js",
+      "bytes": 21156,
+      "sha256": "2a91ed05a561899506a4b7302b093b5459e53586523ad5c6223c19b071273594"
+    },
+    {
+      "path": "js/components/images/load-images-init.js",
+      "extension": ".js",
+      "bytes": 1741,
+      "sha256": "a503cfc149175ada9162ef86c7583c65c56df9f06fd3376684dc727336143ac6"
+    },
+    {
+      "path": "js/components/images/media-library.js",
+      "extension": ".js",
+      "bytes": 11306,
+      "sha256": "2b54186b2e12cb8f0a97496f8292606d140057d5fb4a6fac97b3c9ec0337ca8e"
+    },
+    {
+      "path": "js/components/location/location-map.js",
+      "extension": ".js",
+      "bytes": 13118,
+      "sha256": "46f2f8993d00d1831d343a03297d8592ad546a9b0f6a139288019c05a1ba76df"
+    },
+    {
+      "path": "js/components/location/location-picker.js",
+      "extension": ".js",
+      "bytes": 7565,
+      "sha256": "1ae3dadf01fd43ab5aa48f3143f8b7b407e7fa93b05fa0199689b6a5198b9bcc"
+    },
+    {
+      "path": "js/components/location/paraguay-locations.js",
+      "extension": ".js",
+      "bytes": 7220,
+      "sha256": "a30dbb45982f9607d1282ccdd47718f764f62f29ea6dde834f252e4552aed455"
+    },
+    {
+      "path": "js/components/modals/blocked-modal.js",
+      "extension": ".js",
+      "bytes": 2475,
+      "sha256": "e5c59610a38acc6900ac0310482b1088cec5e407dcbe270753409a4a558b35ed"
     },
     {
       "path": "js/components/navigation/desktop/controller.js",
@@ -24079,6 +24175,60 @@
       "extension": ".js",
       "bytes": 2816,
       "sha256": "1d72fd3b8ff3b30dd891f9ef8d25e44ae406d33d89c08aa2f31bd094895110d1"
+    },
+    {
+      "path": "js/components/navigation/legacy/header-account-mobile-fix.js",
+      "extension": ".js",
+      "bytes": 5260,
+      "sha256": "e66abdbf3660bb9fef3fc7cfbb07c5542095ec54037744c1273dc1b86112856f"
+    },
+    {
+      "path": "js/components/navigation/legacy/header-dropdown-fix.js",
+      "extension": ".js",
+      "bytes": 7842,
+      "sha256": "094f6c2af02adef7d9d734555f98fa269e7b5a48e0a753857642eb34f4ea375a"
+    },
+    {
+      "path": "js/components/navigation/legacy/header-scroll-hide.js",
+      "extension": ".js",
+      "bytes": 4581,
+      "sha256": "fbf61324bf1e02b0e6e721fe9d2c7add41ce73d375516df2b0c5d0f1c520e08f"
+    },
+    {
+      "path": "js/components/navigation/legacy/mobile-header-mode.js",
+      "extension": ".js",
+      "bytes": 4413,
+      "sha256": "fe8356974083ab2bd58ea0841f7fec3637a66c2bb63ad172447a25c62e1386c6"
+    },
+    {
+      "path": "js/components/navigation/legacy/nav-collections.js",
+      "extension": ".js",
+      "bytes": 147,
+      "sha256": "7743afe7c6a190b851f102416b4a83f2bacff6875bbc686ce00d076a68d08eac"
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-desktop.js",
+      "extension": ".js",
+      "bytes": 496,
+      "sha256": "bb86c8914f501370116552cc1fce1eb528b5f646ff92725ae19be368a9bba01a"
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-mobile.js",
+      "extension": ".js",
+      "bytes": 492,
+      "sha256": "b0c59397dcbd771be7cc55e7a0cbd1aadb45a7c7cba35a6ebcd4501769acb28b"
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-shared.js",
+      "extension": ".js",
+      "bytes": 463,
+      "sha256": "9a2b5fd38b1c8254a46a8bf1d85147ce35831e8984e8eeab8b0b034e958decc0"
+    },
+    {
+      "path": "js/components/navigation/legacy/navigation-tablet.js",
+      "extension": ".js",
+      "bytes": 492,
+      "sha256": "dde0f15d823b92e21fa1af8aa32f5af04c4ce1d584a80a50d6a4792b8dbf037c"
     },
     {
       "path": "js/components/navigation/mobile/controller.js",
@@ -24167,8 +24317,8 @@
     {
       "path": "js/components/navigation/shared/runtime.js",
       "extension": ".js",
-      "bytes": 3991,
-      "sha256": "ad002e8276443d4b37ada1dd5ca9e2b262e7d7adc01f961ecb1d3143c91b51b5"
+      "bytes": 4007,
+      "sha256": "69c571688a08d2f70e4a90b44b3223d20257ff732bbc9f482d3472a7c35b6598"
     },
     {
       "path": "js/components/navigation/shared/search-controller.js",
@@ -24205,6 +24355,18 @@
       "extension": ".js",
       "bytes": 3839,
       "sha256": "04459b26ddbe71dda75cc02e3382271bec587f5e0e58b9a7334d369065ffffb7"
+    },
+    {
+      "path": "js/components/welcome/welcome-config.js",
+      "extension": ".js",
+      "bytes": 1975,
+      "sha256": "e591afdc172a60c9451a655d0e07463b0c0764e5b16785be48cb5489faad5187"
+    },
+    {
+      "path": "js/components/welcome/welcome-tutorial-runtime.js",
+      "extension": ".js",
+      "bytes": 14985,
+      "sha256": "50e0a2119dcd0b438ac6a9c5cf357d620a38c28e37c702de6d72de18053a9de0"
     },
     {
       "path": "js/content-schema.js",
@@ -24309,66 +24471,6 @@
       "sha256": "ea474392185407669edd00ad460337039879e92e2cdd484b7834acf952fd9876"
     },
     {
-      "path": "js/header-account-mobile-fix.js",
-      "extension": ".js",
-      "bytes": 5260,
-      "sha256": "e66abdbf3660bb9fef3fc7cfbb07c5542095ec54037744c1273dc1b86112856f"
-    },
-    {
-      "path": "js/header-dropdown-fix.js",
-      "extension": ".js",
-      "bytes": 7842,
-      "sha256": "094f6c2af02adef7d9d734555f98fa269e7b5a48e0a753857642eb34f4ea375a"
-    },
-    {
-      "path": "js/header-scroll-hide.js",
-      "extension": ".js",
-      "bytes": 4581,
-      "sha256": "fbf61324bf1e02b0e6e721fe9d2c7add41ce73d375516df2b0c5d0f1c520e08f"
-    },
-    {
-      "path": "js/image-performance.js",
-      "extension": ".js",
-      "bytes": 2565,
-      "sha256": "4f13bd3b17fcd9dd38b58170e3f74ee90f8d67a5383e2bde21fdcee3f9e59df5"
-    },
-    {
-      "path": "js/image-processing.js",
-      "extension": ".js",
-      "bytes": 6901,
-      "sha256": "bcf222ffdae0049c859392d54e772547724de9bbeaa9c642c417b065ba6a9388"
-    },
-    {
-      "path": "js/image-resolver.js",
-      "extension": ".js",
-      "bytes": 6278,
-      "sha256": "0e92157c2f46207cc19e76132bb06b1ec095b72c4ad03fc43210150b2a41cd5c"
-    },
-    {
-      "path": "js/image-upload-widget.js",
-      "extension": ".js",
-      "bytes": 13035,
-      "sha256": "7bb2370349fb88bb96768f1039a518b4e5fe2c32978e76bfffc24fd845210e97"
-    },
-    {
-      "path": "js/image-utils.js",
-      "extension": ".js",
-      "bytes": 3554,
-      "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6"
-    },
-    {
-      "path": "js/images-phase5.js",
-      "extension": ".js",
-      "bytes": 16031,
-      "sha256": "e874f9992cc46e130cb497a0f9acacf1a24858fd96146ab1cc2eef74d8317cc1"
-    },
-    {
-      "path": "js/images.js",
-      "extension": ".js",
-      "bytes": 21139,
-      "sha256": "9e95997397997002694fe5dd9229c6796a554791b24ed7390e285d88d64bd5e3"
-    },
-    {
       "path": "js/import-normalization.mjs",
       "extension": ".mjs",
       "bytes": 5452,
@@ -24381,82 +24483,16 @@
       "sha256": "25420171e255c9f05c647a7b4ace9ef1a5182862c565e788432ad9e251c20c7b"
     },
     {
-      "path": "js/load-images-init.js",
-      "extension": ".js",
-      "bytes": 1741,
-      "sha256": "a503cfc149175ada9162ef86c7583c65c56df9f06fd3376684dc727336143ac6"
-    },
-    {
       "path": "js/loader-wait.js",
       "extension": ".js",
       "bytes": 1663,
       "sha256": "fab89d79619820d5449f9902fa166003cbc3e1457974ca8dec70dacbd7217b12"
     },
     {
-      "path": "js/location-map.js",
-      "extension": ".js",
-      "bytes": 13118,
-      "sha256": "46f2f8993d00d1831d343a03297d8592ad546a9b0f6a139288019c05a1ba76df"
-    },
-    {
-      "path": "js/location-picker.js",
-      "extension": ".js",
-      "bytes": 7561,
-      "sha256": "db76cea8bb35469a14ccca89567d844244a0ecf49ae6bd85aba890ff86e5208a"
-    },
-    {
-      "path": "js/media-library.js",
-      "extension": ".js",
-      "bytes": 11298,
-      "sha256": "b598a2bdd4fc85b6c96409ee2f34ca0a9ea88f5815dbf245852032e50d057de6"
-    },
-    {
-      "path": "js/mobile-header-mode.js",
-      "extension": ".js",
-      "bytes": 4406,
-      "sha256": "234f0e2767963aef455443aa6b543a131c9cab2bb11e4531e5286a524c0c794b"
-    },
-    {
-      "path": "js/nav-collections.js",
-      "extension": ".js",
-      "bytes": 168,
-      "sha256": "f392781f338d7f67ea18f8db5e318777ed7bc6a817688088315710125492c048"
-    },
-    {
-      "path": "js/navigation-desktop.js",
-      "extension": ".js",
-      "bytes": 467,
-      "sha256": "e072af6b2ac2e2b2ac7c03f5d6dec1757ff8ac1d6ec0e87f28336be2eeeb0a74"
-    },
-    {
-      "path": "js/navigation-mobile.js",
-      "extension": ".js",
-      "bytes": 463,
-      "sha256": "3928b60c7292eb044ac528ad2e6a7ed54756eda7a6fa89b2586cd1d4d19fc025"
-    },
-    {
-      "path": "js/navigation-shared.js",
-      "extension": ".js",
-      "bytes": 455,
-      "sha256": "a466ca8237b5d6d667d80abaff049f318127db7e509b8b0d08dad4804be9060d"
-    },
-    {
-      "path": "js/navigation-tablet.js",
-      "extension": ".js",
-      "bytes": 463,
-      "sha256": "deb2021417faf1078294b27819bd6185fd33bd9678d6573474eb2b38d85f2bb7"
-    },
-    {
       "path": "js/order-stats.js",
       "extension": ".js",
       "bytes": 8725,
       "sha256": "e2a062674b5cd1498e5168e30b41789a689829de0d5ad8b43c8aeb567684d134"
-    },
-    {
-      "path": "js/otp-code-input.js",
-      "extension": ".js",
-      "bytes": 3710,
-      "sha256": "4eb23480aee60f129210ccac201fb0d429730d4884f13dcb65ee4f56e30bdf03"
     },
     {
       "path": "js/page-audit-fix.js",
@@ -24467,8 +24503,8 @@
     {
       "path": "js/page-loader.js",
       "extension": ".js",
-      "bytes": 36579,
-      "sha256": "e9854c18ef3a749f7d66c699576702c33eedae19e75ff924fc104cc7f25b4cc3"
+      "bytes": 36764,
+      "sha256": "a6c9bd8b67ab2d1d50493945d421ed7922fc754e2ca7ee8ae087beb160c74f02"
     },
     {
       "path": "js/page-maintenance-loader.js",
@@ -24551,8 +24587,8 @@
     {
       "path": "js/pages/collections/collections-page.js",
       "extension": ".js",
-      "bytes": 10505,
-      "sha256": "2bf53679637a4ce8af23c4b099f8589796d91ce23c94c648f888aea2eabd8c33"
+      "bytes": 10521,
+      "sha256": "bdef2ba41ccbed89c08cf730cdde1f4a11694c5d524ea5c12c7552e2b3073cab"
     },
     {
       "path": "js/pages/collections/collections-phase4.js",
@@ -24563,8 +24599,8 @@
     {
       "path": "js/pages/collections/collections-store.js",
       "extension": ".js",
-      "bytes": 5951,
-      "sha256": "b02be310060be7a334a4e8e4154dad8de5f55651653aadf12b9d9a0b1cd567c0"
+      "bytes": 5987,
+      "sha256": "6f1070eac1faf137d8117999b26301b07c83b24d0b8712d11d4a354e4501daf1"
     },
     {
       "path": "js/pages/home/home-maintenance.js",
@@ -24645,12 +24681,6 @@
       "sha256": "cad389bfc49801f83151e52cc7512fd7a0a9ca1f2eade55507d5f0bbaa4fae77"
     },
     {
-      "path": "js/paraguay-locations.js",
-      "extension": ".js",
-      "bytes": 7220,
-      "sha256": "a30dbb45982f9607d1282ccdd47718f764f62f29ea6dde834f252e4552aed455"
-    },
-    {
       "path": "js/payment-methods-core.js",
       "extension": ".js",
       "bytes": 5082,
@@ -24675,28 +24705,16 @@
       "sha256": "cd350e5cf0bf2176300b4d616a3eabcf8604f873a53423d1c74a53a2bb60e097"
     },
     {
-      "path": "js/phone-reservation.js",
-      "extension": ".js",
-      "bytes": 3027,
-      "sha256": "a478a9411aed841b0d1660239087c041e9fd4a120f40b9a87d3c8b051c179788"
-    },
-    {
-      "path": "js/phone-utils.js",
-      "extension": ".js",
-      "bytes": 6067,
-      "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
-    },
-    {
       "path": "js/privacy-consent.js",
       "extension": ".js",
-      "bytes": 8262,
-      "sha256": "f749d22146f91b4401e9c13a8b84e54a3c9a580e53e76297c08259fab0891982"
+      "bytes": 8278,
+      "sha256": "0a1d5fb3956b333c7ad6b590268197cff96690184786aed638c40a2bda06f936"
     },
     {
       "path": "js/products-store.js",
       "extension": ".js",
-      "bytes": 19670,
-      "sha256": "1f8b3ee44bfc65bfff7a4d3fe0987fcb4c1a4d52f5e4d2fd35ac9670497c7f8b"
+      "bytes": 19688,
+      "sha256": "9f1e62c547914f57459ef6bd535d0bb63863e40d1c7a0f5ab2ac9a53ec386069"
     },
     {
       "path": "js/profile-onboarding.mjs",
@@ -24731,8 +24749,8 @@
     {
       "path": "js/roles.js",
       "extension": ".js",
-      "bytes": 6590,
-      "sha256": "4b4ce018b124099c7aaa67eb12f3651414db6dbfa8623721a05a595d1bd0446a"
+      "bytes": 6608,
+      "sha256": "f768831b041057c054cca02149c1bf38229c9f6c27c8d24e0eb4a71ed9084af4"
     },
     {
       "path": "js/scroll-debug-overlay.js",
@@ -24749,8 +24767,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 27566,
-      "sha256": "c5b6c3278681205722a7aeff091fd749a7e15ab67de1ca922b3b9317b6d4dfa6"
+      "bytes": 27615,
+      "sha256": "6c6f3ac8466e035d6e3d58a1772f94f5c5b84d583b28f51684fd9a03a14532ff"
     },
     {
       "path": "js/security-utils.js",
@@ -24789,12 +24807,6 @@
       "sha256": "43ec0a76e1520fb9965be9d2358f77aba74a4e3136c43b569e44e1fbee818baf"
     },
     {
-      "path": "js/theme-color-sanitizer.js",
-      "extension": ".js",
-      "bytes": 2073,
-      "sha256": "d0476dff61eca8ce9b4399e7c2a70b79687947a07157941f7e8ac89190d82275"
-    },
-    {
       "path": "js/ui-navigation-controller.js",
       "extension": ".js",
       "bytes": 1242,
@@ -24803,26 +24815,14 @@
     {
       "path": "js/ui-quality.js",
       "extension": ".js",
-      "bytes": 8178,
-      "sha256": "1270fb833508aa9364f5ed6451889329daaf6978170c6e6734ad1360e9c735ec"
+      "bytes": 8258,
+      "sha256": "ba35aea41a35d014f018d5c8763a83896da737da390923cbba678648c97ab305"
     },
     {
       "path": "js/user-profile-store.js",
       "extension": ".js",
       "bytes": 5115,
       "sha256": "730531be9fe939a721983929072bd5f18c84ed4ac4ca7fb8c1a8d2e64f6a19b1"
-    },
-    {
-      "path": "js/welcome-config.js",
-      "extension": ".js",
-      "bytes": 1975,
-      "sha256": "e591afdc172a60c9451a655d0e07463b0c0764e5b16785be48cb5489faad5187"
-    },
-    {
-      "path": "js/welcome-tutorial-runtime.js",
-      "extension": ".js",
-      "bytes": 14977,
-      "sha256": "6e48d9eedb01e747f9330e7faec75c330d28c11a78f3f1e51d5840f83bab5ed9"
     },
     {
       "path": "js/whatsapp.js",
@@ -24833,8 +24833,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 46478,
-      "sha256": "ec791448b3daa7014f1c520a35b4912d22794741c4edf854513e0f0695cb85cf"
+      "bytes": 46655,
+      "sha256": "15fb0cc947758ccc4957749a54eb99ca623e7222e08f91440c804290baac9051"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -25037,8 +25037,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 29576,
-      "sha256": "faaf76f5d9c8d925b9517703e3bd21b3b074a2bc9d9926dda654203887139b6c"
+      "bytes": 29698,
+      "sha256": "c6ba9d9ed06c01b36829555076811b911f7d62ae45e75ff971d4705611f2e621"
     },
     {
       "path": "playwright.config.js",
@@ -25049,20 +25049,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14450,
-      "sha256": "42c9c7a1dc68309bbc4ae2e267025e66cfb75b41d693aa3a29535e6438df4dc1"
+      "bytes": 14484,
+      "sha256": "575728ef3f447976b75dc0bf1bf393320d9eac3298cea1ac990c5fb48ac2b570"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 16253,
-      "sha256": "6080fb833240c0e075ae75a0cfb77b94b00423f69129aa5a1a04f6dd91851209"
+      "bytes": 16287,
+      "sha256": "976a81567e0a76e661ac3fc39c894f2e9469a330f77fe5922300ce58bf15c201"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 18739,
-      "sha256": "39123459438fd7769c4df3a8411263dcd0e29a995a9c8ac55894d94f3363738c"
+      "bytes": 18791,
+      "sha256": "584284031209a4aa9f7322c9fcaa9a832a96d4965d24529e78c89a47c75e2aaf"
     },
     {
       "path": "robots.txt",
@@ -25073,8 +25073,8 @@
     {
       "path": "script.js",
       "extension": ".js",
-      "bytes": 85728,
-      "sha256": "c79ec3ef599f65a0826823e7f3f98b532ee883f2c0e8b20608429357c14ce0bf"
+      "bytes": 85776,
+      "sha256": "115436513738ac298d4e226eb366b8fa73501b719cf6174df14be7da28e7d278"
     },
     {
       "path": "scripts/audit-about-page.js",
@@ -25103,14 +25103,14 @@
     {
       "path": "scripts/audit-admin-content-appearance.js",
       "extension": ".js",
-      "bytes": 9495,
-      "sha256": "a911795fea83cb5fce9b0d302cd8e494a515ce9b50873c76e076a1ea2d8fba35"
+      "bytes": 9546,
+      "sha256": "55062bdada3137cf163f72410e61975f055b48ee98636a819d6d85d88c161c34"
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
       "extension": ".js",
-      "bytes": 8933,
-      "sha256": "ec8aeb8334025bdf2469187410b2c4931eb6f29f87d180a26c9822e2db438b10"
+      "bytes": 8951,
+      "sha256": "ebcaebdb59f12276d2bcf6dee9182677d60981aba780c6f802628d4dcafc1b97"
     },
     {
       "path": "scripts/audit-admin-foundation.js",
@@ -25127,14 +25127,14 @@
     {
       "path": "scripts/audit-admin-products-media.js",
       "extension": ".js",
-      "bytes": 15393,
-      "sha256": "ec5eff2a226683d68033f40ef7b156f4b8a6986c9ccd9761b7603ca3b5b7eeac"
+      "bytes": 15447,
+      "sha256": "b0fe0ab077981746af7232a9b352ef1e914b195796d4e351004c5e27980c2466"
     },
     {
       "path": "scripts/audit-admin-public-sync.js",
       "extension": ".js",
-      "bytes": 6212,
-      "sha256": "eec940d707d46aa863452390d379d1e34d60cbcd645e456c26ead4e3a7e5d427"
+      "bytes": 6270,
+      "sha256": "80a13bf8f0124162afccfadd412592abfe661e76604132f002756282d3bfe7db"
     },
     {
       "path": "scripts/audit-admin-users-roles.js",
@@ -25163,14 +25163,14 @@
     {
       "path": "scripts/audit-app-check-bootstrap.js",
       "extension": ".js",
-      "bytes": 5643,
-      "sha256": "ed080ec10c059d9026a208fc2c49c4160dfee96a98b8cbec8e76fb87ed2ca6cc"
+      "bytes": 5661,
+      "sha256": "fa02572303d8b123cbb6e3b5fe8749569eb535249c83667eabcaeec79e31787b"
     },
     {
       "path": "scripts/audit-aux-pages.js",
       "extension": ".js",
-      "bytes": 6464,
-      "sha256": "7784bb381fb43a743356a76c4067cf8d2c52409614a341dae0b46ed5e3eeb135"
+      "bytes": 6498,
+      "sha256": "0463dc56c585d0bfb3c97ceb878c8d6fe6ea63e18cc5dcb6bb73ea04a8b55f4d"
     },
     {
       "path": "scripts/audit-canonical-viewports.mjs",
@@ -25181,8 +25181,8 @@
     {
       "path": "scripts/audit-cart-phase7.js",
       "extension": ".js",
-      "bytes": 6050,
-      "sha256": "4ccfa2b3f1a0a1fd0fe393ff068d8085635f1d8b329e2eff32a71b5124168af6"
+      "bytes": 6082,
+      "sha256": "ac82f8293c9446f28e82c8512d83e0b3433d44d13480f5662c2e2849fe61d900"
     },
     {
       "path": "scripts/audit-catalog-page.js",
@@ -25205,14 +25205,14 @@
     {
       "path": "scripts/audit-collections-phase4.js",
       "extension": ".js",
-      "bytes": 8455,
-      "sha256": "de746ea847fdc1227a50a3e177bd42325f772fb3ad063f1ff851456694bcc650"
+      "bytes": 8529,
+      "sha256": "c1551bc34a92103bea99ba8a2ccb2dceade9e6b0f6ef574a141ff4152bc97e46"
     },
     {
       "path": "scripts/audit-color-scheme.js",
       "extension": ".js",
-      "bytes": 9394,
-      "sha256": "b37a22d8da5249f89bf431abc80a20802d34f206c889cc091fae01122ff6fbce"
+      "bytes": 9530,
+      "sha256": "9476fa06a283181c38f6ae04b2a6e12aa260467f545b7d503b7031c4fa68c24c"
     },
     {
       "path": "scripts/audit-commerce-visual-part2c.mjs",
@@ -25253,8 +25253,8 @@
     {
       "path": "scripts/audit-deep.js",
       "extension": ".js",
-      "bytes": 15113,
-      "sha256": "f4e8f3265fb551a30ee580afe6d2fd5a4ab87f207a9f22ea398378068e0a58c1"
+      "bytes": 15130,
+      "sha256": "90cb527137a73ee6276dd5128f2a8edca40955a43c9738b8d1da78f0acd07fb5"
     },
     {
       "path": "scripts/audit-desktop-fixes.mjs",
@@ -25289,8 +25289,8 @@
     {
       "path": "scripts/audit-final-integration.js",
       "extension": ".js",
-      "bytes": 7258,
-      "sha256": "cd39edd6492483e5afcf1e309aace4b39d31bbf45bd7f88d204e9552ab455488"
+      "bytes": 7292,
+      "sha256": "dc153bdd02f6640e7358a945ef95c69b845384914e7572eac696d8d22b609b37"
     },
     {
       "path": "scripts/audit-final-release.js",
@@ -25307,8 +25307,8 @@
     {
       "path": "scripts/audit-firestore-read-budget.js",
       "extension": ".js",
-      "bytes": 6559,
-      "sha256": "87fc29bbffaf93b63fab477ad50e0337ef71af0c9e34eb6f7ed39fa0cba31ef6"
+      "bytes": 6588,
+      "sha256": "319f035c7dbbf57756b4b91462f855661cce6e8396dd0819d8cdd37e31293f5d"
     },
     {
       "path": "scripts/audit-global-fit-part2f.mjs",
@@ -25331,8 +25331,8 @@
     {
       "path": "scripts/audit-help-pages.js",
       "extension": ".js",
-      "bytes": 7875,
-      "sha256": "7d5bb9c4111c11e531cfbc9e2bf2d6ef1b848aaa7abd22faf2fb92bcc797b27e"
+      "bytes": 7909,
+      "sha256": "95ed31f4d103d9010f2311e4e8b0890ca8d4d3a880a281bf6ef8af1ee50ffe97"
     },
     {
       "path": "scripts/audit-hero-background-controls.js",
@@ -25361,8 +25361,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 24096,
-      "sha256": "3f781cacd85fe8496e7b251e87e2699f345289514da28f87514df70c711c70d6"
+      "bytes": 24298,
+      "sha256": "61aa11ec26294a80ce7dd79136aa81cca33034cac268762902358802dbb6ede9"
     },
     {
       "path": "scripts/audit-institutional-help-legal-part2e-v2.mjs",
@@ -25373,8 +25373,8 @@
     {
       "path": "scripts/audit-integral-platform.js",
       "extension": ".js",
-      "bytes": 6984,
-      "sha256": "96b97cc26e18955d3c27234d15258e2e9e0acad158ec67e138490c73fa13bfa0"
+      "bytes": 7036,
+      "sha256": "4ec009287ec60cc96cb072cabba15b053b8c2bc3fb5eb00d7c6e9a78c61acec9"
     },
     {
       "path": "scripts/audit-interaction-latency.mjs",
@@ -25397,14 +25397,14 @@
     {
       "path": "scripts/audit-level2-commerce.js",
       "extension": ".js",
-      "bytes": 10303,
-      "sha256": "7814c9d4fa36e5a6fc573053de64a8e35bd023804f42e5b8a1b02ac28bb615d9"
+      "bytes": 10319,
+      "sha256": "4de08c9f2e945acfe323ce5f4cd13b079925f9430d9491689741b559de87458c"
     },
     {
       "path": "scripts/audit-level3-quality.js",
       "extension": ".js",
-      "bytes": 9681,
-      "sha256": "8f6dcf7b008193286cf63bfa25b622c1c8e4851b3320f968b5afed3ea4453977"
+      "bytes": 9697,
+      "sha256": "fcee48a75b134e41c4a0f38ed5583c7614900123bdd2a23d50e6f6db320d8785"
     },
     {
       "path": "scripts/audit-loader-solid.js",
@@ -25439,8 +25439,8 @@
     {
       "path": "scripts/audit-modular-architecture.js",
       "extension": ".js",
-      "bytes": 7604,
-      "sha256": "a4901cf36615076e237554165fda25b5cd10d668632c14d746d0233c6910b7da"
+      "bytes": 7749,
+      "sha256": "1d9f5bb15d1aa049f61a274a81965c4473d0c0b1fa59e9f424a0cee2d84aaacb"
     },
     {
       "path": "scripts/audit-navigation-search.mjs",
@@ -25451,8 +25451,8 @@
     {
       "path": "scripts/audit-page-loading.js",
       "extension": ".js",
-      "bytes": 9074,
-      "sha256": "39585b407cadc9cf309f2a5e2dcb8567d9d9221910121ca635e8f833d1ed8612"
+      "bytes": 9093,
+      "sha256": "76aec157479dcc35dfcb227481378b7dd18273405086bd64f082f62ab2d222be"
     },
     {
       "path": "scripts/audit-payment-methods.js",
@@ -25469,14 +25469,14 @@
     {
       "path": "scripts/audit-performance-realtime.js",
       "extension": ".js",
-      "bytes": 8025,
-      "sha256": "d03015a1f74181b89dba066a60461048d805c17f3e3641b98565a21c74f554ac"
+      "bytes": 8095,
+      "sha256": "09f21ef92d4a391d8f319d7395ed9023df416f0114e269c71ba2d460f75b0412"
     },
     {
       "path": "scripts/audit-performance-regressions.js",
       "extension": ".js",
-      "bytes": 7858,
-      "sha256": "a0f96f62d342136ebd3a0feb1f90ca29c2412e47b3a52e669b12a0fbd671f5c3"
+      "bytes": 7945,
+      "sha256": "32a217b0f28dcdb9e1445a9bb923291680e0c22c051efaf61df3b0519ec8633a"
     },
     {
       "path": "scripts/audit-phase10-accessibility.js",
@@ -25523,8 +25523,8 @@
     {
       "path": "scripts/audit-postphase-security.js",
       "extension": ".js",
-      "bytes": 2279,
-      "sha256": "432d445459983657bcd400969834121b91c11940110b5c1aface5bd902c32854"
+      "bytes": 2295,
+      "sha256": "eba0b265857ae26f4974e88a0598e0003d4ab195ae93b0602f2314c7730a5a08"
     },
     {
       "path": "scripts/audit-product-page.js",
@@ -25547,8 +25547,8 @@
     {
       "path": "scripts/audit-public-operational-contract.js",
       "extension": ".js",
-      "bytes": 3279,
-      "sha256": "d081fa12ca43a47a0de4032b86f7921da78aae3ebdc58eba13e3e46413d382b7"
+      "bytes": 3295,
+      "sha256": "35e6e8a9cf074cedc293bacbbf259185c63e759775c54f8097e645b9a7e4d156"
     },
     {
       "path": "scripts/audit-public-operational-visibility.mjs",
@@ -25559,8 +25559,8 @@
     {
       "path": "scripts/audit-public-shell.js",
       "extension": ".js",
-      "bytes": 8758,
-      "sha256": "6509434894ca69da70323476686b0a3e5bfcf6d9f566c5b92f6d64fb950518b6"
+      "bytes": 8919,
+      "sha256": "64c76e4eb6d3b41d65a245b28af3927987b945ff746ebf7b4c4827315ae44f25"
     },
     {
       "path": "scripts/audit-responsive-navigation.mjs",
@@ -25571,8 +25571,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 4930,
-      "sha256": "3ad9d6e7776c8ff332d03d5c9e6e7aec84ceb64b84adceeb368336b4fc8aa105"
+      "bytes": 4950,
+      "sha256": "d3a026c03b02ee9221a01c2ba092d1d003a439e79aeeaa09762c0f496f891a76"
     },
     {
       "path": "scripts/audit-security-phase8.js",
@@ -25583,8 +25583,8 @@
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 17296,
-      "sha256": "c4586774256d02e31cbaa176b63476f07b3eb03824821baf22a3305829d041cc"
+      "bytes": 17418,
+      "sha256": "f00030183df6f6e0650d65274d316090ac5f22c9b2e9e3fac05ac4518bed9bd1"
     },
     {
       "path": "scripts/audit-store-gate.js",
@@ -25601,8 +25601,8 @@
     {
       "path": "scripts/audit-system-special-states-part2g-v2.mjs",
       "extension": ".mjs",
-      "bytes": 21220,
-      "sha256": "2910b45a38f733d90d443949ca3b8de3e78d19977f78402b71cf0915d64c48c1"
+      "bytes": 21238,
+      "sha256": "c5144b21e73a374c21f1328f121b989d2f69eb5f3e98de24582f8adbe6e3576d"
     },
     {
       "path": "scripts/audit-tablet-fixes.mjs",
@@ -25613,8 +25613,8 @@
     {
       "path": "scripts/audit-tintin.js",
       "extension": ".js",
-      "bytes": 12565,
-      "sha256": "456f0f52ddda5d450620200f3562719f570e2790a97ed37dea874eb4739249c1"
+      "bytes": 12723,
+      "sha256": "ad1a2cd0e9caeeb791aa65b866ef4d5b81d2835cc2062385b995cbad22d03c68"
     },
     {
       "path": "scripts/audit-typography.js",
@@ -25625,8 +25625,8 @@
     {
       "path": "scripts/audit-unified-navigation.js",
       "extension": ".js",
-      "bytes": 3059,
-      "sha256": "4263a5a9ffd2df85ca27e2923c00e62f3afccce0da96ad0a56a2a76aeac24148"
+      "bytes": 3117,
+      "sha256": "e331bbdc06395f4c1a79a60e5bd55e255bd0cb227800153bbf342c35c2bdb180"
     },
     {
       "path": "scripts/audit-unified-store-logic.js",
@@ -25739,14 +25739,14 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 120999,
-      "sha256": "f21b6e02d39d15d5c6922c3ef37768ee09c5dde3eb1a062220ad461437a0b8ff"
+      "bytes": 121016,
+      "sha256": "b3f2ab3bab3bd0b3308fffc027c019c65ea2269abbc4b2a23d8570846ca6e124"
     },
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 14141,
-      "sha256": "029111a1ad889209377030aa7470ef95db730530d9cf4c27a3fe65fe938849bb"
+      "bytes": 14175,
+      "sha256": "b1e2faebcc18e24a1d09a1cc2deab47e5805ae7d44e8ba6bba72f2477df87499"
     },
     {
       "path": "tests/checkout/encomienda.test.mjs",
@@ -25769,14 +25769,14 @@
     {
       "path": "tests/login/location-picker.test.mjs",
       "extension": ".mjs",
-      "bytes": 3148,
-      "sha256": "869a557e3f204ec9e8f64acf5f9fcbf2979a232fce7208d5c420fcf3ffa0a641"
+      "bytes": 3168,
+      "sha256": "8483e6d8dc1eb3d2209a954bede6234dfe816f3c84d8b033ac006fd4b1059924"
     },
     {
       "path": "tests/login/phone-utils.test.mjs",
       "extension": ".mjs",
-      "bytes": 2909,
-      "sha256": "51694eb4257e357a8849a0ccaf03255bb720595564f5de996a57097f3025de74"
+      "bytes": 2926,
+      "sha256": "b1acbc907a5846f8b651f123d7ccac8717019f8126962e896d88e648b4cbef21"
     },
     {
       "path": "tests/login/profile-onboarding.test.mjs",
@@ -27106,24 +27106,24 @@
       "exists": true
     },
     {
-      "file": "js/blocked-modal.js",
-      "line": 52,
-      "raw": "index.html",
-      "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "js/cart-sync.js",
+      "file": "js/components/cart/cart-sync.js",
       "line": 999,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
-      "file": "js/color-scheme-instant.js",
+      "file": "js/components/color/color-scheme-instant.js",
       "line": 73,
       "raw": "/checkout.html",
       "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "js/components/modals/blocked-modal.js",
+      "line": 52,
+      "raw": "index.html",
+      "target": "index.html",
       "exists": true
     },
     {
@@ -27236,6 +27236,13 @@
       "line": 55,
       "raw": "catalogo.html",
       "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "js/components/welcome/welcome-tutorial-runtime.js",
+      "line": 19,
+      "raw": "/index.html",
+      "target": "index.html",
       "exists": true
     },
     {
@@ -27824,13 +27831,6 @@
       "line": 32,
       "raw": "/admin.html",
       "target": "admin.html",
-      "exists": true
-    },
-    {
-      "file": "js/welcome-tutorial-runtime.js",
-      "line": 19,
-      "raw": "/index.html",
-      "target": "index.html",
       "exists": true
     },
     {
@@ -29135,7 +29135,7 @@
             "operation": "collection"
           },
           {
-            "file": "js/media-library.js",
+            "file": "js/components/images/media-library.js",
             "line": 256,
             "operation": "collection"
           },
@@ -29245,7 +29245,7 @@
             "operation": "doc"
           },
           {
-            "file": "js/color-scheme.js",
+            "file": "js/components/color/color-scheme.js",
             "line": 128,
             "operation": "doc"
           },
@@ -29540,12 +29540,12 @@
         "name": "phoneReservations",
         "references": [
           {
-            "file": "js/phone-reservation.js",
+            "file": "js/components/forms/phone-reservation.js",
             "line": 39,
             "operation": "doc"
           },
           {
-            "file": "js/phone-reservation.js",
+            "file": "js/components/forms/phone-reservation.js",
             "line": 63,
             "operation": "doc"
           }
@@ -29640,7 +29640,7 @@
             "operation": "doc"
           },
           {
-            "file": "js/media-library.js",
+            "file": "js/components/images/media-library.js",
             "line": 247,
             "operation": "collection"
           },
@@ -29810,13 +29810,18 @@
             "operation": "doc"
           },
           {
-            "file": "js/email-notify.js",
-            "line": 18,
+            "file": "js/components/images/media-library.js",
+            "line": 235,
             "operation": "doc"
           },
           {
-            "file": "js/media-library.js",
-            "line": 235,
+            "file": "js/components/welcome/welcome-tutorial-runtime.js",
+            "line": 70,
+            "operation": "doc"
+          },
+          {
+            "file": "js/email-notify.js",
+            "line": 18,
             "operation": "doc"
           },
           {
@@ -29862,11 +29867,6 @@
           {
             "file": "js/store-gate.js",
             "line": 43,
-            "operation": "doc"
-          },
-          {
-            "file": "js/welcome-tutorial-runtime.js",
-            "line": 70,
             "operation": "doc"
           },
           {
@@ -30110,18 +30110,28 @@
             "operation": "doc"
           },
           {
-            "file": "js/cart-sync.js",
+            "file": "js/components/cart/cart-sync.js",
             "line": 471,
             "operation": "collection"
           },
           {
-            "file": "js/cart-sync.js",
+            "file": "js/components/cart/cart-sync.js",
             "line": 611,
             "operation": "collection"
           },
           {
-            "file": "js/cart-sync.js",
+            "file": "js/components/cart/cart-sync.js",
             "line": 478,
+            "operation": "doc"
+          },
+          {
+            "file": "js/components/welcome/welcome-tutorial-runtime.js",
+            "line": 82,
+            "operation": "doc"
+          },
+          {
+            "file": "js/components/welcome/welcome-tutorial-runtime.js",
+            "line": 92,
             "operation": "doc"
           },
           {
@@ -30167,16 +30177,6 @@
           {
             "file": "js/user-profile-store.js",
             "line": 109,
-            "operation": "doc"
-          },
-          {
-            "file": "js/welcome-tutorial-runtime.js",
-            "line": 82,
-            "operation": "doc"
-          },
-          {
-            "file": "js/welcome-tutorial-runtime.js",
-            "line": 92,
             "operation": "doc"
           },
           {

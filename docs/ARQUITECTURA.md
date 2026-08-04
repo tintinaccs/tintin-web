@@ -93,11 +93,11 @@ css/components/navigation/
 Los siguientes archivos son adaptadores temporales:
 
 ```text
-js/navigation-desktop.js
-js/navigation-tablet.js
-js/navigation-mobile.js
-js/navigation-shared.js
-js/nav-collections.js
+js/components/navigation/legacy/navigation-desktop.js
+js/components/navigation/legacy/navigation-tablet.js
+js/components/navigation/legacy/navigation-mobile.js
+js/components/navigation/legacy/navigation-shared.js
+js/components/navigation/legacy/nav-collections.js
 css/navigation-desktop.css
 css/navigation-tablet.css
 css/navigation-mobile.css

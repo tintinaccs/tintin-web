@@ -12,12 +12,12 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from './cart-sync.js?v=tintin-20260716-cloudinary-fix-1';
+} from './components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from './phone-utils.js?v=tintin-20260803-phone-unique-1';
+} from './components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1';
 import { createOrderViaServer } from './create-order-client.js?v=tintin-20260728-phase4-order-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
@@ -29,7 +29,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   // #177) checkout.html dejó de importar ese archivo, así que el puente
   // nunca se volvía a cargar y ningún correo de pedido se disparaba desde
   // el checkout real. Este módulo ya se carga únicamente en checkout.html
-  // (ver js/cart-sync.js), así que alcanza con importarlo acá.
+  // (ver js/components/cart/cart-sync.js), así que alcanza con importarlo acá.
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
     import('./pages/checkout/checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {

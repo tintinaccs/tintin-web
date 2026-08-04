@@ -9,10 +9,10 @@ const files = {
   script: read('script.js'),
   productRelated: read('js/pages/product/product-related.js'),
   productsStore: read('js/products-store.js'),
-  imageInit: read('js/load-images-init.js'),
+  imageInit: read('js/components/images/load-images-init.js'),
   collectionsPage: read('js/pages/collections/collections-page.js'),
   checkout: read('checkout.html'),
-  cart: read('js/cart-sync.js'),
+  cart: read('js/components/cart/cart-sync.js'),
   rules: read('firestore.rules'),
   admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}`,
   adminImages: read('admin-images.html'),
@@ -33,7 +33,7 @@ function check(label, condition, detail = '') {
 check(
   'La portada no abre listeners duplicados de colecciones o imágenes',
   !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/collections-store.js?v=tintin-20260716-cloudinary-fix-1'") &&
-    !files.home.includes("import { onImagesUpdate } from './js/images.js?v=tintin-20260716-cloudinary-fix-1'"),
+    !files.home.includes("import { onImagesUpdate } from './js/components/images/images.js?v=tintin-20260716-cloudinary-fix-1'"),
   'la sincronización global debe ser la única propietaria de esas superficies'
 );
 
