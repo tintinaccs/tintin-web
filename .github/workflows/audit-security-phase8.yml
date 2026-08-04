@@ -9,7 +9,7 @@ on:
       - '_headers'
       - 'apps-script/Phase3Security.gs'
       - 'apps-script/Phase4CreateOrder.gs'
-      - 'js/orders/create-order-client.js'
+      - 'js/create-order-client.js'
       - 'scripts/audit-admin-users-roles.js'
       - 'scripts/audit-secure-orders.js'
       - 'scripts/audit-store-gate.js'
@@ -26,7 +26,7 @@ on:
       - '_headers'
       - 'apps-script/Phase3Security.gs'
       - 'apps-script/Phase4CreateOrder.gs'
-      - 'js/orders/create-order-client.js'
+      - 'js/create-order-client.js'
       - 'scripts/audit-admin-users-roles.js'
       - 'scripts/audit-secure-orders.js'
       - 'scripts/audit-store-gate.js'
@@ -74,7 +74,7 @@ jobs:
         run: |
           node --check scripts/audit-phase6-security.js
           node --check scripts/test-firestore-critical.mjs
-          node --check js/orders/create-order-client.js
+          node --check js/create-order-client.js
           cp apps-script/Phase3Security.gs /tmp/Phase3Security.js
           cp apps-script/Phase4CreateOrder.gs /tmp/Phase4CreateOrder.js
           node --check /tmp/Phase3Security.js
