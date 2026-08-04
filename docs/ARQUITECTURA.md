@@ -34,9 +34,11 @@ js/components/navigation/
     ├── config.js
     ├── footer-accordion.js
     ├── icons.js
+    ├── register-surfaces.js
     ├── route-state.js
     ├── router.js
     ├── runtime.js
+    ├── search-controller.js
     ├── search-panel.js
     ├── surface-controller.js
     └── surface-layer.js
@@ -49,6 +51,7 @@ css/components/navigation/
 ├── mobile/header-mobile.css
 └── shared/
     ├── navigation-transitions.css
+    ├── search.css
     └── surfaces.css
 ```
 
@@ -69,14 +72,17 @@ css/components/navigation/
 ### Shared
 
 - `surface-controller.js`: apertura, cierre, Escape, foco, backdrop, bloqueo de scroll y cambio entre superficies.
+- `register-surfaces.js`: conecta el controlador cuando el HTML modular ya existe y registra Tienda, Buscar, Cuenta y Carrito.
 - `search-panel.js`: estructura visual del buscador.
+- `search-controller.js`: índice reutilizable, coincidencias, teclado, estados de carga y error.
+- `search.css`: presentación de resultados, selección y reintento.
 - `account-drawer.js`: estructura de Mi Cuenta.
 - `cart-drawer.js`: estructura del carrito.
 - `collections-sheet.js`: estructura de colecciones mobile.
 - `collections-runtime.js`: datos e imágenes de colecciones con fallback.
 - `runtime.js`: carga controlada de cuenta, carrito, productos y comportamientos.
 - `route-state.js`: determina la página activa.
-- `assets.js`: carga las hojas CSS del componente.
+- `assets.js`: carga las hojas CSS del componente antes de mostrar el shell.
 
 ## Archivos de entrada y compatibilidad
 
