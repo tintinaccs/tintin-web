@@ -1,16 +1,20 @@
 import { versionedSiteAsset } from './config.js';
 
 const NAVIGATION_STYLES = Object.freeze([
-  ['tt-navigation-desktop-css', 'css/navigation-desktop.css'],
-  ['tt-navigation-tablet-css', 'css/navigation-tablet.css'],
-  ['tt-navigation-mobile-css', 'css/navigation-mobile.css'],
-  ['tt-navigation-shared-css', 'css/navigation-shared.css'],
-  ['tt-surface-controller-css', 'css/surface-controller.css'],
+  ['tt-navigation-desktop-css', 'css/components/navigation/desktop/header-desktop.css'],
+  ['tt-navigation-tablet-css', 'css/components/navigation/tablet/header-tablet.css'],
+  ['tt-navigation-mobile-css', 'css/components/navigation/mobile/header-mobile.css'],
+  ['tt-navigation-shared-css', 'css/components/navigation/shared/navigation-transitions.css'],
+  ['tt-surface-controller-css', 'css/components/navigation/shared/surfaces.css'],
 ]);
 
 function ensureStylesheet(id, path) {
   const existing = document.getElementById(id);
-  if (existing) return Promise.resolve(existing);
+  if (existing) {
+    const expectedHref = versionedSiteAsset(path);
+    if (existing.href !== expectedHref) existing.href = expectedHref;
+    return Promise.resolve(existing);
+  }
 
   return new Promise(resolve => {
     const link = document.createElement('link');
