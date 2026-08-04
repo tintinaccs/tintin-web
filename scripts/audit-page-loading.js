@@ -59,6 +59,8 @@ function extractTagReferences(html) {
   const tagPattern = /<(?:script|link|img|source|a)\b[^>]*>/gi;
   for (const match of html.matchAll(tagPattern)) {
     const tag = match[0];
+    // Exigir espacio antes del atributo evita confundir data-dynamic-src,
+    // data-src u otros nombres compuestos con un src real.
     const attrPattern = /(?:^|\s)(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
     for (const attr of tag.matchAll(attrPattern)) references.push(attr[2]);
   }
