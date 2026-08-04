@@ -1,47 +1,7 @@
-/* Tablet menu view transitions; modal ownership stays in SurfaceController. */
+/* Compatibility shim. Source of truth: components/navigation/tablet/controller.js */
 (() => {
-  const header = document.querySelector('[data-header-device="tablet"]');
-  const trigger = header?.querySelector('#btn-menu-tablet');
-  const menu = document.getElementById('tt-tablet-menu');
-  const shopButton = document.getElementById('btn-tablet-tienda');
-  const categories = document.getElementById('tablet-cats');
-  const backButton = document.getElementById('btn-tablet-cats-back');
-  const controller = window.TintinSurfaceController;
-  if (!header || !trigger || !menu || !controller || menu.dataset.ttTabletReady === '1') return;
-  menu.dataset.ttTabletReady = '1';
-
-  const setOrigin = () => {
-    const rect = trigger.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    menu.style.setProperty('--tt-menu-origin-x', `${x}px`);
-    menu.style.setProperty('--tt-menu-origin-y', `${y}px`);
-    menu.style.setProperty('--tt-menu-radius', `${Math.ceil(radius)}px`);
-  };
-
-  const showCategories = () => {
-    menu.classList.add('tt-tablet-shop-view');
-    categories?.classList.add('open');
-    shopButton?.setAttribute('aria-expanded', 'true');
-    requestAnimationFrame(() => backButton?.focus({ preventScroll: true }));
-  };
-  const showMain = ({ focus = true } = {}) => {
-    menu.classList.remove('tt-tablet-shop-view');
-    categories?.classList.remove('open');
-    shopButton?.setAttribute('aria-expanded', 'false');
-    if (focus) shopButton?.focus({ preventScroll: true });
-  };
-
-  shopButton?.addEventListener('click', showCategories);
-  backButton?.addEventListener('click', () => showMain());
-  // El cierre al navegar ya lo hace el controlador central (onClick, fase de
-  // captura sobre [data-tt-surface] a[href]) — un segundo close() aca
-  // duplicaba la operacion y podia abortar la primera limpieza a mitad de
-  // camino (token de la primera invocacion invalidado por la segunda).
-  addEventListener('tintin:surface-change', event => {
-    if (event.detail?.surface === 'tablet-menu' && event.detail?.state === 'opening') setOrigin();
-    if (event.detail?.surface === 'none') showMain({ focus: false });
-  });
-  setOrigin();
+  const scriptUrl = document.currentScript?.src || new URL('js/navigation-tablet.js', location.href).href;
+  const url = new URL('./components/navigation/tablet/controller.js', scriptUrl);
+  url.searchParams.set('v', 'tintin-20260804-modular-shell-1');
+  import(url.href).catch(error => console.error('[NavigationTablet] No se pudo cargar el módulo.', error));
 })();
