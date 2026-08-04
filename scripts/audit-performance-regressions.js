@@ -21,7 +21,7 @@ function check(name, condition, problem) {
 
 const montserrat = read('css/montserrat.css');
 const products = read('js/products-store.js');
-const collections = read('js/collections-store.js');
+const collections = read('js/pages/collections/collections-store.js');
 
 check('Montserrat mantiene swap sin FOIT', /font-display:\s*swap/.test(montserrat) && !/font-display:\s*block/.test(montserrat), 'La fuente volvió a bloquear el texto.');
 check('La primera pintura sigue protegida', read('js/color-scheme-instant.js').includes('tt-color-scheme-pending') && /visibility:\s*hidden/.test(read('js/color-scheme-instant.js')), 'El contenido puede aparecer antes del esquema.');
@@ -54,8 +54,8 @@ check('La ficha lee un producto y limita relacionados', /getDoc\(doc\(db, 'produ
 check('Colecciones públicas usan caché y Admin tiempo real', collections.includes('loadCollections') && collections.includes('readCached') && collections.includes('startAdminListener') && collections.includes('onSnapshot'), 'Las estrategias pública y administrativa se mezclaron.');
 check('Pedidos Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin-app.js')), 'Pedidos perdió su listener limitado.');
 check('Usuarios Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin-app.js')), 'Usuarios perdió su listener limitado.');
-check('Checkout conserva Resend', read('js/checkout-email-bridge.js').includes("from './resend-order-notify.js") && !read('checkout.html').includes('email-notify.js') && !read('checkout.html').includes('resend-order-notify.js'), 'Checkout volvió al canal antiguo.');
-check('Checkout protege reintentos después de agotar cuota', read('js/checkout-quota-guard.js').includes('resource-exhausted') && read('js/checkout-quota-guard.js').includes('COOLDOWN_MS') && read('js/page-maintenance-loader.js').includes('checkout-quota-guard.js'), 'Un 429 permite clics repetidos.');
+check('Checkout conserva Resend', read('js/pages/checkout/checkout-email-bridge.js').includes("from '../../resend-order-notify.js") && !read('checkout.html').includes('email-notify.js') && !read('checkout.html').includes('resend-order-notify.js'), 'Checkout volvió al canal antiguo.');
+check('Checkout protege reintentos después de agotar cuota', read('js/pages/checkout/checkout-quota-guard.js').includes('resource-exhausted') && read('js/pages/checkout/checkout-quota-guard.js').includes('COOLDOWN_MS') && read('js/page-maintenance-loader.js').includes('checkout-quota-guard.js'), 'Un 429 permite clics repetidos.');
 check('Clientas no consultan permisos administrativos', read('js/edit-badge.js').includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !read('js/edit-badge.js').includes('loadRolePermissions(true)'), 'Una cuenta client lee rolePermissions/main.');
 check('Perfil conserva cálculo desde pedidos', read('js/order-stats.js').includes('export async function recalculateUserOrderStats') && read('js/order-stats.js').includes("const validForSpent = clean.filter(o => !isCancelled(o))"), 'Se alteró el cálculo de estadísticas.');
 check('Contacto usa configuración pública compartida', read('js/whatsapp.js').includes('onPublicSettings') && read('js/public-settings-store.js').includes("doc(db, 'settings', 'general')"), 'Contacto dejó de ser administrable o duplicó su fuente.');

@@ -20,7 +20,7 @@ import {
   writeCached
 } from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
-import { sortCatalogProducts, timestampToMillis } from './catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
+import { sortCatalogProducts, timestampToMillis } from './pages/catalog/catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';

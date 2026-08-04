@@ -1,4 +1,4 @@
-import { db, appCheckReady } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, appCheckReady } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   collection,
   getDocs,
@@ -6,22 +6,22 @@ import {
   onSnapshot,
   query
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { cleanText, cleanMultilineText } from './security-utils.js?v=tintin-20260716-cloudinary-fix-1';
-import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveCollectionImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
+import { cleanText, cleanMultilineText } from '../../security-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from '../../image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { resolveCollectionImage } from '../../image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   readCached,
   readStaleCached,
   recordFirestoreRead,
   runSingleFlight,
   writeCached
-} from './firestore-read-cache.js?v=tintin-20260720-read-budget-1';
-import { listPublicCollectionRest } from './firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
+} from '../../firestore-read-cache.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from '../../firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
-    import('./admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
-    import('./admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
+    import('../../admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
+    import('../../admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
   ]);
 }
 

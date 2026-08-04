@@ -27,7 +27,7 @@ const rules = read('firestore.rules');
 const checkout = read('checkout.html');
 const restFallback = read('js/firestore-rest-fallback.js');
 const productsStore = read('js/products-store.js');
-const collectionsStore = read('js/collections-store.js');
+const collectionsStore = read('js/pages/collections/collections-store.js');
 
 check(
   'Bloqueo síncrono antes del body',

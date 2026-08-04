@@ -7,8 +7,8 @@ const errors = [];
 const requireText = (text, pattern, message) => { if (!pattern.test(text)) errors.push(message); };
 
 const html = read('collections.html');
-const css = read('css/collections-page.css');
-const runtime = read('js/collections-maintenance.js');
+const css = read('css/pages/collections/collections-page.css');
+const runtime = read('js/pages/collections/collections-maintenance.js');
 const loader = read('js/page-maintenance-loader.js');
 const record = read('maintenance/03-colecciones.txt');
 
@@ -37,7 +37,7 @@ requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado sin co
 requireText(runtime, /location\.origin/, 'Metadatos no se normalizan al dominio actual.');
 requireText(runtime, /getFullYear/, 'Footer no usa año automático.');
 requireText(runtime, /tt-collections-runtime-state/, 'Faltan estados visibles de recuperación.');
-requireText(loader, /collections[\s\S]*load\('collections-maintenance\.js'\)/, 'Runtime no se carga desde el cargador por página.');
+requireText(loader, /collections[\s\S]*load\('pages\/collections\/collections-maintenance\.js'\)/, 'Runtime no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');
 requireText(record, /tablet/i, 'Registro no contempla tablet.');
 requireText(record, /mobile/i, 'Registro no contempla mobile.');

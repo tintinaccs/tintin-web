@@ -6,8 +6,8 @@ const errors = [];
 const requireText = (text, pattern, message) => { if (!pattern.test(text)) errors.push(message); };
 
 const html = read('product.html');
-const css = read('css/product-maintenance.css');
-const runtime = read('js/product-maintenance.js');
+const css = read('css/pages/product/product-maintenance.css');
+const runtime = read('js/pages/product/product-maintenance.js');
 const loader = read('js/page-maintenance-loader.js');
 const core = read('script.js');
 const record = read('maintenance/04-producto.txt');
@@ -50,7 +50,7 @@ requireText(runtime, /window\.addEventListener\('online'/, 'Falta recuperación 
 requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado offline.');
 requireText(runtime, /location\.origin/, 'Falta normalización del dominio.');
 requireText(runtime, /getFullYear/, 'Falta año automático.');
-requireText(loader, /product[\s\S]*load\('product-maintenance\.js'\)/, 'Runtime de Producto no se carga desde el cargador por página.');
+requireText(loader, /product[\s\S]*load\('pages\/product\/product-maintenance\.js'\)/, 'Runtime de Producto no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');
 requireText(record, /tablet/i, 'Registro no contempla tablet.');
 requireText(record, /mobile/i, 'Registro no contempla mobile.');

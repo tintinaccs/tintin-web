@@ -158,14 +158,14 @@ for (const file of ['index.html', 'catalogo.html', 'collections.html', 'about.ht
 check('Existe manifest PWA', exists('manifest.json'));
 
 const recoveryFiles = [
-  'js/home-maintenance.js',
-  'js/catalog-maintenance.js',
-  'js/collections-maintenance.js',
-  'js/product-maintenance.js',
-  'js/login-maintenance.js',
-  'js/profile-maintenance.js',
-  'js/checkout-maintenance.js',
-  'js/checkout-reliability.js',
+  'js/pages/home/home-maintenance.js',
+  'js/pages/catalog/catalog-maintenance.js',
+  'js/pages/collections/collections-maintenance.js',
+  'js/pages/product/product-maintenance.js',
+  'js/pages/login/login-maintenance.js',
+  'js/pages/profile/profile-maintenance.js',
+  'js/pages/checkout/checkout-maintenance.js',
+  'js/pages/checkout/checkout-reliability.js',
   'js/pages/institutional/contact-maintenance.js',
   'js/cart-sync.js'
 ];
@@ -176,10 +176,10 @@ for (const file of recoveryFiles) {
 const accessibilityCss = [
   'styles.css',
   'css/ui-quality.css',
-  'css/home-maintenance.css',
-  'css/catalog-maintenance.css',
+  'css/pages/home/home-maintenance.css',
+  'css/pages/catalog/catalog-maintenance.css',
   'css/collections-maintenance.css',
-  'css/product-maintenance.css'
+  'css/pages/product/product-maintenance.css'
 ].filter(exists);
 check(
   'Las capas principales respetan movimiento reducido',

@@ -15,17 +15,17 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   function loadStyles() {
     ensureStyle(
       'link[data-tt-login-maintenance]',
-      '../css/login-maintenance.css?v=tintin-20260803-login-maintenance-2',
+      '../../../css/pages/login/login-maintenance.css?v=tintin-20260803-login-maintenance-2',
       'ttLoginMaintenance'
     );
     ensureStyle(
       'link[data-tt-login-fluid]',
-      '../css/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1',
+      '../../../css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1',
       'ttLoginFluid'
     );
     ensureStyle(
       'link[data-tt-login-onboarding-flow]',
-      '../css/login-onboarding-flow.css?v=tintin-20260803-onboarding-flow-1',
+      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20260803-onboarding-flow-1',
       'ttLoginOnboardingFlow'
     );
   }

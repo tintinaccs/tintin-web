@@ -107,7 +107,7 @@ try {
 const adminHtml = read('admin.html');
 const adminCss = read('css/admin.css');
 const adminJs = read('js/admin-app.js');
-const collectionsCss = read('css/collections-page.css');
+const collectionsCss = read('css/pages/collections/collections-page.css');
 const primaryTabs = adminHtml.match(/data-mobile-primary/g) || [];
 check(primaryTabs.length === 5, `La barra admin debe tener 5 accesos primarios; tiene ${primaryTabs.length}`);
 check(adminHtml.includes('id="adm-mobile-more-toggle"'), 'Falta el acceso Más del admin móvil');

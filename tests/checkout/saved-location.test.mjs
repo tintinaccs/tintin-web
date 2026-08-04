@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isConfirmableLocation, confirmPrompt } from '../../js/checkout-saved-location.js';
+import { isConfirmableLocation, confirmPrompt } from '../../js/pages/checkout/checkout-saved-location.js';
 
 const GUARDADA = { lat: -25.29, lng: -57.63, name: 'Mi casa', address: 'Av. España 1234, Asunción' };
 

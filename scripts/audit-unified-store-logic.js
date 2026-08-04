@@ -10,12 +10,12 @@ function check(label, condition, problem) {
   checks.push({ label, ok: Boolean(condition), problem });
 }
 
-const policy = read('js/catalog-merchandising-policy.js');
+const policy = read('js/pages/catalog/catalog-merchandising-policy.js');
 const productsStore = read('js/products-store.js');
 const phase7 = read('js/phase7-catalog-policy.js');
 const catalog = read('catalogo.html');
 const classic = read('script.js');
-const compatibility = read('js/catalog-stock-priority.js');
+const compatibility = read('js/pages/catalog/catalog-stock-priority.js');
 
 check(
   'Existe una sola política de merchandising reutilizable',

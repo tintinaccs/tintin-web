@@ -1,4 +1,4 @@
-import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth, db } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   collection,
   query,
@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from './resend-order-notify.js?v=tintin-20260717-resend-1';
+} from '../../resend-order-notify.js?v=tintin-20260717-resend-1';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;

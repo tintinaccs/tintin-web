@@ -40,7 +40,7 @@ check(
   'Configuración general pública tiene una sola suscripción compartida',
   read('js/public-settings-store.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
     read('js/whatsapp.js').includes('onPublicSettings') &&
-    read('js/checkout-payment-methods.js').includes('onPublicSettings'),
+    read('js/pages/checkout/checkout-payment-methods.js').includes('onPublicSettings'),
   'WhatsApp y pagos deben compartir public-settings-store.'
 );
 check(

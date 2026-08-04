@@ -1,8 +1,8 @@
 const fs = require('fs');
 
 const html = fs.readFileSync('perfil.html', 'utf8');
-const runtime = fs.readFileSync('js/profile-maintenance.js', 'utf8');
-const statsRuntime = fs.readFileSync('js/profile-order-stats-fix.js', 'utf8');
+const runtime = fs.readFileSync('js/pages/profile/profile-maintenance.js', 'utf8');
+const statsRuntime = fs.readFileSync('js/pages/profile/profile-order-stats-fix.js', 'utf8');
 const rules = fs.readFileSync('firestore.rules', 'utf8');
 const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
 
@@ -18,7 +18,7 @@ const checks = [
   ['recuperación por conexión, visibilidad y bfcache', /addEventListener\('online'/.test(runtime) && /visibilitychange/.test(runtime) && /pageshow/.test(runtime)],
   ['superficies usan tokens configurables', /var\(--surface/.test(runtime) && /var\(--pink-dark/.test(runtime)],
   ['responsive cubre siete viewports', [1440, 1024, 769, 601, 600, 360].every(value => runtime.includes(String(value)))],
-  ['runtime está cargado por el cargador de página', /perfil[\s\S]*load\('profile-maintenance\.js'\)/.test(loader)],
+  ['runtime está cargado por el cargador de página', /perfil[\s\S]*load\('pages\/profile\/profile-maintenance\.js'\)/.test(loader)],
   ['estadísticas visibles se calculan desde orders', /getOrdersForUserIdentity/.test(statsRuntime) && /calculateOrderStats/.test(statsRuntime)],
   ['el perfil no intenta escribir estadísticas protegidas', !/recalculateUserOrderStats/.test(statsRuntime) && !/setDoc\s*\(/.test(statsRuntime)],
   ['listeners de refresco se registran una sola vez', (statsRuntime.match(/addEventListener\('storage'/g) || []).length === 1 && (statsRuntime.match(/visibilitychange/g) || []).length === 1 && /scheduleRefresh/.test(statsRuntime)],

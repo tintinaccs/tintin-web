@@ -9,7 +9,7 @@ const check = (name, condition, problem) => checks.push({ name, ok: Boolean(cond
 
 const checkout       = read('checkout.html');
 const resendNotify   = read('js/resend-order-notify.js');
-const bridge         = read('js/checkout-email-bridge.js');
+const bridge         = read('js/pages/checkout/checkout-email-bridge.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
 const adminSync      = read('js/admin-email-gate-sync.js');
@@ -55,7 +55,7 @@ check(
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
-  bridge.includes("from './resend-order-notify.js?v=tintin-20260717-resend-1'") &&
+  bridge.includes("from '../../resend-order-notify.js?v=tintin-20260717-resend-1'") &&
     !bridge.includes('email-notify.js'),
   'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );

@@ -13,7 +13,7 @@ function check(label, condition, problem) {
 const products = read('js/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
-const policy = read('js/catalog-merchandising-policy.js');
+const policy = read('js/pages/catalog/catalog-merchandising-policy.js');
 
 check(
   'Catálogo y colecciones reciben la misma lista visible y ordenada',

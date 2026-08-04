@@ -178,7 +178,7 @@ for (const page of actualPages) auditHtmlPage(page);
 auditJavascriptReferences();
 
 const productHtml = exists('product.html') ? read('product.html') : '';
-const productRuntime = exists('js/product-maintenance.js') ? read('js/product-maintenance.js') : '';
+const productRuntime = exists('js/pages/product/product-maintenance.js') ? read('js/pages/product/product-maintenance.js') : '';
 const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
 const publicShellRuntime = exists('js/components/navigation/shared/runtime.js')
   ? read('js/components/navigation/shared/runtime.js')
@@ -188,8 +188,8 @@ const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
 if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta el estado #product-loading.');
 if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la ficha #product-grid.');
-if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
-if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
+if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
+if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
 if (!/components\/navigation\/public-shell-entry\.js/.test(publicShell)) {
   fail('js/public-shell.js', 'no carga el entry modular de navegación.');
 }
@@ -199,7 +199,7 @@ if (
 ) {
   fail('js/components/navigation/shared/runtime.js', 'no carga products-store.js mediante el runtime modular.');
 }
-if (!/product[\s\S]*load\('product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
+if (!/product[\s\S]*load\('pages\/product\/product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
   fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
 }
 

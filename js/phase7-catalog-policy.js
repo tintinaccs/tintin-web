@@ -4,8 +4,8 @@
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections } from './collections-store.js?v=tintin-20260726-browser-fallback-1';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
+import { loadCollections } from './pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './pages/catalog/catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
 
 const CART_KEY = 'tt_cart';
 let visibleCollectionSlugs = null;

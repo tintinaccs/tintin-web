@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "./email-notify.js?v=tintin-20260716-cloudinary-fix-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
-// automático del checkout (js/checkout-email-bridge.js), no el webhook viejo
+// automático del checkout (js/pages/checkout/checkout-email-bridge.js), no el webhook viejo
 // de Apps Script de email-notify.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
 import { sendOrderNotification } from "./resend-order-notify.js?v=tintin-20260717-resend-1";
@@ -19,7 +19,7 @@ import {
 } from "./role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "./email-config.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { normalizeCollectionDoc } from "./collections-store.js?v=tintin-20260726-browser-fallback-1";
+import { normalizeCollectionDoc } from "./pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "./image-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "./security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "./firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";

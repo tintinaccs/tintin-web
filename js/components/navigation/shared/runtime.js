@@ -24,11 +24,11 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = versionedSiteAsset('css/home-maintenance.css');
+    link.href = versionedSiteAsset('css/pages/home/home-maintenance.css');
     document.head.appendChild(link);
   }
 
-  return import(versionedJsModule('home-maintenance.js'));
+  return import(versionedJsModule('pages/home/home-maintenance.js'));
 }
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
@@ -94,7 +94,7 @@ export function loadSharedRuntime() {
   ];
 
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import(versionedJsModule('checkout-reliability.js')));
+  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-reliability.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
   attachProductsDemand();

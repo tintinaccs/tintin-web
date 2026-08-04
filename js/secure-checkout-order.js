@@ -32,7 +32,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   // (ver js/cart-sync.js), así que alcanza con importarlo acá.
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('./checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+    import('./pages/checkout/checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }

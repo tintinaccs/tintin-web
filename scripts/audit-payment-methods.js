@@ -1,11 +1,11 @@
 const fs = require('fs');
 
 const read = file => fs.readFileSync(file, 'utf8');
-const checkout = read('js/checkout-payment-methods.js');
+const checkout = read('js/pages/checkout/checkout-payment-methods.js');
 const admin = read('js/admin-payment-methods.js');
 const core = read('js/payment-methods-core.js');
 const css = read('css/payment-methods.css');
-const store = read('js/collections-store.js');
+const store = read('js/pages/collections/collections-store.js');
 const loader = read('js/page-maintenance-loader.js');
 const publicSettings = read('js/public-settings-store.js');
 const rules = read('firestore.rules');
@@ -26,7 +26,7 @@ const checks = [
   ['Firestore mantiene settings general restringido a Super Admin', /match \/settings\/general/.test(rules) && /allow write: if isSuperAdmin\(\)/.test(rules)],
   ['los identificadores y textos se normalizan y limitan', /paymentMethodId/.test(core) && /cleanPaymentText/.test(core) && /cleanPaymentMultiline/.test(core)],
   ['el catálogo conserva compatibilidad con configuración anterior', /legacyMethods/.test(core) && /paymentMethods/.test(core) && /bankAccounts/.test(core)],
-  ['Checkout carga pagos desde su cargador de página', /checkout[\s\S]*load\('checkout-payment-methods\.js'\)/.test(loader)],
+  ['Checkout carga pagos desde su cargador de página', /checkout[\s\S]*load\('pages\/checkout\/checkout-payment-methods\.js'\)/.test(loader)],
   ['Admin conserva el módulo de métodos en la ruta administrativa', /admin-payment-methods\.js/.test(store)],
   ['si no hay métodos se bloquea el avance y se informa', /next\.disabled = true/.test(checkout) && /error-3-none/.test(checkout)],
   ['la selección se conserva ante una actualización en tiempo real', /selectedMethodId/.test(checkout) && /preferred/.test(checkout)],

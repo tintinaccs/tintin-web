@@ -5,12 +5,12 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   home: read('index.html'),
-  homeFit: read('css/home-fit.css'),
+  homeFit: read('css/pages/home/home-fit.css'),
   script: read('script.js'),
-  productRelated: read('js/product-related.js'),
+  productRelated: read('js/pages/product/product-related.js'),
   productsStore: read('js/products-store.js'),
   imageInit: read('js/load-images-init.js'),
-  collectionsPage: read('js/collections-page.js'),
+  collectionsPage: read('js/pages/collections/collections-page.js'),
   checkout: read('checkout.html'),
   cart: read('js/cart-sync.js'),
   rules: read('firestore.rules'),
@@ -32,7 +32,7 @@ function check(label, condition, detail = '') {
 
 check(
   'La portada no abre listeners duplicados de colecciones o imágenes',
-  !files.home.includes("import { onCollectionsUpdate } from './js/collections-store.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/collections-store.js?v=tintin-20260716-cloudinary-fix-1'") &&
     !files.home.includes("import { onImagesUpdate } from './js/images.js?v=tintin-20260716-cloudinary-fix-1'"),
   'la sincronización global debe ser la única propietaria de esas superficies'
 );
