@@ -59,8 +59,6 @@ function extractTagReferences(html) {
   const tagPattern = /<(?:script|link|img|source|a)\b[^>]*>/gi;
   for (const match of html.matchAll(tagPattern)) {
     const tag = match[0];
-    // Exigir espacio antes del atributo evita confundir data-dynamic-src,
-    // data-src u otros nombres compuestos con un src real.
     const attrPattern = /(?:^|\s)(?:src|href)\s*=\s*(["'])(.*?)\1/gi;
     for (const attr of tag.matchAll(attrPattern)) references.push(attr[2]);
   }
@@ -180,6 +178,9 @@ auditJavascriptReferences();
 const productHtml = exists('product.html') ? read('product.html') : '';
 const productRuntime = exists('js/product-maintenance.js') ? read('js/product-maintenance.js') : '';
 const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
+const publicShellRuntime = exists('js/components/navigation/shared/runtime.js')
+  ? read('js/components/navigation/shared/runtime.js')
+  : '';
 const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js/page-maintenance-loader.js') : '';
 
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
@@ -187,8 +188,18 @@ if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta
 if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la ficha #product-grid.');
 if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
 if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
-if (!/import\(versioned\('\.\/products-store\.js'\)\)/.test(publicShell)) fail('js/public-shell.js', 'no carga products-store.js.');
-if (!/product[\s\S]*load\('product-maintenance\.js'\)/.test(pageMaintenanceLoader)) fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
+if (!/components\/navigation\/public-shell-entry\.js/.test(publicShell)) {
+  fail('js/public-shell.js', 'no carga el entry modular de navegación.');
+}
+if (
+  !/function loadProductsRuntime\(/.test(publicShellRuntime) ||
+  !/import\(versionedJsModule\(['"]products-store\.js['"]\)\)/.test(publicShellRuntime)
+) {
+  fail('js/components/navigation/shared/runtime.js', 'no carga products-store.js mediante el runtime modular.');
+}
+if (!/product[\s\S]*load\('product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
+  fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
+}
 
 if (warnings.length) {
   console.warn('\nADVERTENCIAS DE CARGA');
