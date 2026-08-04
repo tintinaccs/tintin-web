@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T18:32:28.451Z",
-  "sourceFingerprint": "f6f35c20ba9f118a51919c5216c9e23115e505b494fd8eb5bc7c7433325e873b",
+  "generatedAt": "2026-08-04T18:38:28.596Z",
+  "sourceFingerprint": "bb355adbda48a227fc1f0d89a85bd3ca8f5960dd7b8f81129012cb08cc1e8b07",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5423996,
+    "totalBytes": 5424002,
     "pages": 18,
     "modules": 300
   },
@@ -19918,11 +19918,11 @@
     },
     {
       "path": "scripts/audit-about-page.js",
-      "bytes": 2163,
-      "sha256": "234349e7ebd8e1b0861c3c753936e0f681c5533844db65b86b39c1dccfefe9f2",
+      "bytes": 2165,
+      "sha256": "77e6cb1a87bbc4d8f06126e27549f05b259ee44331cd57456f868f820e9a62e4",
       "syntax": {
-        "ok": false,
-        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-about-page.js:12\n  ['about runtime is loaded by page', /about[\\s\\S]*load\\('pages/institutional/about-maintenance\\.js'\\)/.test(loader)],\n                                      ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
+        "ok": true,
+        "error": ""
       },
       "imports": [],
       "endpoints": []
@@ -20505,11 +20505,11 @@
     },
     {
       "path": "scripts/audit-contact-page.js",
-      "bytes": 1495,
-      "sha256": "8fec55a18e17833db2eb3ceba7bb9c259af98f64f3e76a8519c4401e53bb60b3",
+      "bytes": 1497,
+      "sha256": "c4f8de25bddf0f25fb9110ad8c35aa45992cac45efa61b88fad139f0d3ab8c23",
       "syntax": {
-        "ok": false,
-        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-contact-page.js:33\nif (!/contact[\\s\\S]*load\\('pages/institutional/contact-maintenance\\.js'\\)/.test(loader)) missing.push('page-maintenance-loader.js: contact maintenance import');\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
+        "ok": true,
+        "error": ""
       },
       "imports": [],
       "endpoints": []
@@ -21271,11 +21271,11 @@
     },
     {
       "path": "scripts/audit-legal-pages.js",
-      "bytes": 2023,
-      "sha256": "a8540f596e957b2f1a385666241ab8d0c7996a10463c6eae6eb0a2108387aa0c",
+      "bytes": 2025,
+      "sha256": "1bae8acf7025ceaecbff78ea7549474cadca884d6b3e781ab33f7ceed5c79bf0",
       "syntax": {
-        "ok": false,
-        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-legal-pages.js:36\nif (!/terminos\\|privacidad[\\s\\S]*load\\('pages/institutional/legal-maintenance\\.js'\\)/.test(loader)) {\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
+        "ok": true,
+        "error": ""
       },
       "imports": [],
       "endpoints": []
@@ -25079,8 +25079,8 @@
     {
       "path": "scripts/audit-about-page.js",
       "extension": ".js",
-      "bytes": 2163,
-      "sha256": "234349e7ebd8e1b0861c3c753936e0f681c5533844db65b86b39c1dccfefe9f2"
+      "bytes": 2165,
+      "sha256": "77e6cb1a87bbc4d8f06126e27549f05b259ee44331cd57456f868f820e9a62e4"
     },
     {
       "path": "scripts/audit-account-flow-compact-part2d.mjs",
@@ -25223,8 +25223,8 @@
     {
       "path": "scripts/audit-contact-page.js",
       "extension": ".js",
-      "bytes": 1495,
-      "sha256": "8fec55a18e17833db2eb3ceba7bb9c259af98f64f3e76a8519c4401e53bb60b3"
+      "bytes": 1497,
+      "sha256": "c4f8de25bddf0f25fb9110ad8c35aa45992cac45efa61b88fad139f0d3ab8c23"
     },
     {
       "path": "scripts/audit-content-phase6.js",
@@ -25385,8 +25385,8 @@
     {
       "path": "scripts/audit-legal-pages.js",
       "extension": ".js",
-      "bytes": 2023,
-      "sha256": "a8540f596e957b2f1a385666241ab8d0c7996a10463c6eae6eb0a2108387aa0c"
+      "bytes": 2025,
+      "sha256": "1bae8acf7025ceaecbff78ea7549474cadca884d6b3e781ab33f7ceed5c79bf0"
     },
     {
       "path": "scripts/audit-level1-foundation.js",

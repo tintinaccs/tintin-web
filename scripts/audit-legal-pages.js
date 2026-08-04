@@ -33,7 +33,7 @@ else {
 }
 
 const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
-if (!/terminos\|privacidad[\s\S]*load\('pages/institutional/legal-maintenance\.js'\)/.test(loader)) {
+if (!/terminos\|privacidad[\s\S]*load\('pages\/institutional\/legal-maintenance\.js'\)/.test(loader)) {
   errors.push('page-maintenance-loader no importa legal-maintenance en páginas legales');
 }
 

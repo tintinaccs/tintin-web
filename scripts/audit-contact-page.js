@@ -30,7 +30,7 @@ const requiredRuntime = [
 const missing = [];
 for (const token of requiredHtml) if (!html.includes(token)) missing.push(`contact.html: ${token}`);
 for (const token of requiredRuntime) if (!runtime.includes(token)) missing.push(`contact-maintenance.js: ${token}`);
-if (!/contact[\s\S]*load\('pages/institutional/contact-maintenance\.js'\)/.test(loader)) missing.push('page-maintenance-loader.js: contact maintenance import');
+if (!/contact[\s\S]*load\('pages\/institutional\/contact-maintenance\.js'\)/.test(loader)) missing.push('page-maintenance-loader.js: contact maintenance import');
 if (/alert\('Por favor completá/.test(runtime)) missing.push('runtime must not use alert validation');
 if (missing.length) {
   console.error('Contact audit failed:\n- ' + missing.join('\n- '));
