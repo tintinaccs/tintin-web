@@ -27,6 +27,8 @@ const LEGACY_SHELL_IDS = Object.freeze([
   'tt-shared-morph',
 ]);
 
+let mountPromise = null;
+
 function removeLegacyShell(root = document) {
   LEGACY_SHELL_IDS.forEach(id => root.getElementById(id)?.remove());
 }
@@ -51,26 +53,39 @@ function renderBottomShell() {
 }
 
 function mountPublicShell() {
-  if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return;
+  if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return Promise.resolve();
+  if (mountPromise) return mountPromise;
 
-  ensureNavigationAssets();
-  removeLegacyShell();
-  document.body.insertAdjacentHTML('afterbegin', renderTopShell());
-  document.body.insertAdjacentHTML('beforeend', renderBottomShell());
-  document.body.classList.add('tt-public-shell-mounted');
-  document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
+  document.body.classList.add('tt-public-shell-mounting');
+  mountPromise = ensureNavigationAssets().then(() => {
+    if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
-  applyActiveState();
-  enhanceMobileFooter();
-  loadSharedRuntime();
+    removeLegacyShell();
+    document.body.insertAdjacentHTML('afterbegin', renderTopShell());
+    document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+    document.body.classList.add('tt-public-shell-mounted');
+    document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
-  document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
-    detail: { architecture: 'modular-navigation-v1' },
-  }));
+    applyActiveState();
+    enhanceMobileFooter();
+    loadSharedRuntime();
+
+    document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
+      detail: { architecture: 'modular-navigation-v1' },
+    }));
+  }).catch(error => {
+    console.error('[PublicShell] No se pudo montar la navegación.', error);
+    document.dispatchEvent(new CustomEvent('tintin:public-shell-error', { detail: { error } }));
+    throw error;
+  }).finally(() => {
+    document.body?.classList.remove('tt-public-shell-mounting');
+  });
+
+  return mountPromise;
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountPublicShell, { once: true });
+  document.addEventListener('DOMContentLoaded', () => { void mountPublicShell(); }, { once: true });
 } else {
-  mountPublicShell();
+  void mountPublicShell();
 }
