@@ -14,7 +14,8 @@ function check(name, condition, detail) {
   }
 }
 
-const shell = read('js/public-shell.js');
+const shellRuntime = read('js/components/navigation/shared/runtime.js');
+const routeState = read('js/components/navigation/shared/route-state.js');
 const products = read('js/products-store.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const html = htmlFiles.map(file => [file, read(file)]);
@@ -29,18 +30,19 @@ check(
 );
 check(
   'Páginas informativas no importan products-store al iniciar',
-  shell.includes("if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime())") &&
-    shell.includes('attachProductsDemand()'),
+  shellRuntime.includes("if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime())") &&
+    shellRuntime.includes('attachProductsDemand()'),
   'Products-store debe cargarse por demanda al abrir Buscar fuera de inicio/tienda.'
 );
 check(
   'Checkout reliability se limita a Checkout',
-  shell.includes("if (page === 'cart') critical.push(import(versioned('./checkout-reliability.js')))"),
+  shellRuntime.includes("if (page === 'cart') critical.push(import(versionedJsModule('checkout-reliability.js')))"),
   'El módulo de mapa y recuperación del checkout no debe descargarse en todas las páginas.'
 );
 check(
   'El shell reconoce URLs limpias de Cloudflare',
-  shell.includes("replace(/\\.html$/, '')") && shell.includes("['catalogo', 'collections', 'product']"),
+  routeState.includes("replace(/\\.html$/, '')") &&
+    routeState.includes("['catalogo', 'collections', 'product'].includes(file)"),
   'La carga condicional no puede depender de que la URL termine en .html.'
 );
 

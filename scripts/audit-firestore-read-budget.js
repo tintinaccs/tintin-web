@@ -9,7 +9,8 @@ const check = (name, condition, problem) => checks.push({ name, ok: Boolean(cond
 
 const products = read('js/products-store.js');
 const collections = read('js/collections-store.js');
-const navCollections = read('js/nav-collections.js');
+const navCollectionsAdapter = read('js/nav-collections.js');
+const navCollectionsRuntime = read('js/components/navigation/shared/collections-runtime.js');
 const pageLoader = read('js/page-maintenance-loader.js');
 const editBadge = read('js/edit-badge.js');
 const quotaGuard = read('js/checkout-quota-guard.js');
@@ -41,7 +42,18 @@ check('Páginas sin catálogo no cargan productos', /(?:index\|catalogo\|collect
 check('La búsqueda carga productos solo al abrirse', products.includes("['btn-search', 'tabbar-search']") && products.includes('ensureProductsForSearch') && products.includes("control.addEventListener('click', load, { once: true })"), 'La lupa no debe consultar antes de usarse.');
 check('Colecciones públicas usan getDocs y caché', collections.includes('getDocs') && collections.includes('loadCollections') && collections.includes('CACHE_TTL'), 'El menú público no debe mantener un listener.');
 check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('onSnapshot'), 'El CRUD Admin debe conservar tiempo real.');
-check('Menú Tienda carga colecciones por demanda', navCollections.includes('attachDemandLoading') && navCollections.includes("['btn-tienda', 'btn-tablet-tienda', 'tabbar-tienda', 'btn-menu-tablet']"), 'Páginas que no abren Tienda no deben leer colecciones.');
+check(
+  'Menú Tienda carga colecciones por demanda',
+  navCollectionsAdapter.includes('components/navigation/shared/collections-runtime.js') &&
+    navCollectionsRuntime.includes('function attachDemandLoading()') &&
+    navCollectionsRuntime.includes("['btn-tienda', 'btn-tablet-tienda', 'tabbar-tienda', 'btn-menu-tablet']") &&
+    navCollectionsRuntime.includes("control.addEventListener('pointerenter'") &&
+    navCollectionsRuntime.includes("control.addEventListener('focus'") &&
+    navCollectionsRuntime.includes("control.addEventListener('click'") &&
+    navCollectionsRuntime.includes('if (isCollectionPage()) initNavCollections();') &&
+    navCollectionsRuntime.includes('else attachDemandLoading();'),
+  'Páginas que no abren Tienda no deben leer colecciones y el adaptador debe apuntar a la fuente modular.'
+);
 check('Mantenimientos se cargan por página', pageLoader.includes('loadPageMaintenance') && !collections.includes("import './catalog-maintenance.js") && !collections.includes("import './product-maintenance.js"), 'Un store compartido no debe ejecutar todos los runtimes.');
 check('Clientas no leen rolePermissions/main', editBadge.includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !editBadge.includes('loadRolePermissions(true)'), 'Solo roles administrativos deben consultar la matriz.');
 check('Checkout bloquea clics repetidos tras 429', quotaGuard.includes('resource-exhausted') && quotaGuard.includes('COOLDOWN_MS') && quotaGuard.includes('stopImmediatePropagation'), 'Un 429 no debe generar nuevos intentos inmediatos.');

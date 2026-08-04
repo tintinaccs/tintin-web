@@ -25,6 +25,7 @@ const whatsapp = read('js/whatsapp.js');
 const publicSettings = read('js/public-settings-store.js');
 const pageLoader = read('js/page-loader.js');
 const publicShell = read('js/public-shell.js');
+const publicShellEntry = read('js/components/navigation/public-shell-entry.js');
 const checkout = read('checkout.html');
 const checkoutPayments = read('js/checkout-payment-methods.js');
 const secureOrder = read('js/secure-checkout-order.js');
@@ -117,11 +118,13 @@ const publicPages = [
 
 check(
   'El shell evita headers duplicados',
-  publicShell.includes('TintinPublicShellBooted') &&
-    publicShell.includes('tt-public-shell-mounted') &&
-    publicShell.includes("'tt-header-desktop-tablet'") &&
-    /\.forEach\(id => document\.getElementById\(id\)\?\.remove\(\)\)/.test(publicShell),
-  'El shell no protege el montaje único.'
+  publicShell.includes('TintinPublicShellBootstrapStarted') &&
+    publicShell.includes('./components/navigation/public-shell-entry.js') &&
+    publicShellEntry.includes('const LEGACY_SHELL_IDS = Object.freeze([') &&
+    publicShellEntry.includes('let mountPromise = null') &&
+    publicShellEntry.includes("document.body.classList.contains('tt-public-shell-mounted')") &&
+    publicShellEntry.includes('root.getElementById(id)?.remove()'),
+  'El bootstrap y el entry modular deben proteger el montaje único y retirar restos anteriores.'
 );
 check(
   'Checkout mantiene configuración de envío en vivo',
