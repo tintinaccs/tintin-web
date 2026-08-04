@@ -2,10 +2,10 @@ import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../shared/icons.js'
 import { logoUrl } from '../shared/config.js';
 
 function renderDesktopCategories() {
-  return CATEGORIES.map(({ slug, label, legacyLabel }) => `
-    <a href="catalogo.html?cat=${slug}" class="tt-dropdown-card">
+  return CATEGORIES.map(({ slug, label }) => `
+    <a href="catalogo.html?cat=${encodeURIComponent(slug)}" class="tt-dropdown-card">
       <div class="tt-dropdown-icon">${categoryIcon(slug)}</div>
-      <div class="tt-dropdown-label">${(legacyLabel || label).toUpperCase()}</div>
+      <div class="tt-dropdown-label">${label.toUpperCase()}</div>
     </a>`).join('');
 }
 
