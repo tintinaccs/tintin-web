@@ -135,6 +135,10 @@
   .tt-header-desktop .tt-header-actions { gap: 4px !important; }
   .tt-header-desktop .tt-header-actions > button,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button { width: 44px !important; height: 44px !important; }
+  .tt-header-desktop .tt-dropdown {
+    width: min(800px, calc(100vw - 32px)) !important;
+    max-width: min(800px, calc(100vw - 32px)) !important;
+  }
   .tt-header-desktop .tt-dropdown-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
