@@ -69,6 +69,22 @@ function attachProductsDemand() {
   });
 }
 
+function loadNavigationBehaviors() {
+  const controllerReady = window.TintinSurfaceControllerReady || Promise.resolve(window.TintinSurfaceController);
+  return Promise.resolve(controllerReady)
+    .catch(error => {
+      console.warn('[PublicShell] El controlador de superficies no inició.', error);
+      return null;
+    })
+    .then(() => Promise.allSettled([
+      import(versionedJsModule('components/navigation/desktop/controller.js')),
+      import(versionedJsModule('components/navigation/tablet/controller.js')),
+      import(versionedJsModule('components/navigation/mobile/controller.js')),
+      import(versionedJsModule('components/navigation/shared/router.js')),
+    ]))
+    .then(reportRuntimeFailures);
+}
+
 export function loadSharedRuntime() {
   const page = currentPage();
   const critical = [
@@ -81,13 +97,7 @@ export function loadSharedRuntime() {
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
   attachProductsDemand();
-
-  Promise.allSettled([
-    import(versionedJsModule('navigation-desktop.js')),
-    import(versionedJsModule('navigation-tablet.js')),
-    import(versionedJsModule('navigation-mobile.js')),
-    import(versionedJsModule('navigation-shared.js')),
-  ]).then(reportRuntimeFailures);
+  loadNavigationBehaviors();
 
   scheduleNonCritical(() => {
     Promise.allSettled([
