@@ -9,6 +9,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const authNav = read('js/auth-nav.js');
 const roles = read('js/roles.js');
 const shell = read('js/public-shell.js');
+const routeState = read('js/components/navigation/shared/route-state.js');
 const styles = read('styles.css');
 const packageJson = JSON.parse(read('package.json'));
 
@@ -35,9 +36,12 @@ for (const [file, marker] of Object.entries(operationalSources)) {
   check(read(file).includes(marker), `${file} no declara su estado operativo`);
 }
 
-check(shell.includes("tienda?.setAttribute('aria-current', 'page')"), 'Desktop no anuncia Tienda activa');
-check(shell.includes("mobileTienda?.setAttribute('aria-current', 'page')"), 'Tablet no anuncia Tienda activa');
-check(shell.includes("if (active) control.setAttribute('aria-current', 'page')"), 'La tabbar no anuncia la ruta activa');
+check(shell.includes('./components/navigation/public-shell-entry.js'), 'El bootstrap no apunta al entry modular');
+check(routeState.includes("setCurrentState(root.getElementById('btn-tienda'), page === 'shop')"), 'Desktop no anuncia Tienda activa');
+check(routeState.includes("setCurrentState(root.getElementById('btn-tablet-tienda'), page === 'shop')"), 'Tablet no anuncia Tienda activa');
+check(routeState.includes("root.querySelectorAll('[data-shell-tab]')"), 'La tabbar no recorre sus rutas activas');
+check(routeState.includes("if (active) control.setAttribute('aria-current', 'page')"), 'La navegación compartida no anuncia la ruta activa');
+check(routeState.includes("else control.removeAttribute('aria-current')"), 'La navegación compartida no limpia rutas inactivas');
 check(packageJson.scripts['audit:public-operational-visibility'], 'Falta la auditoria visual dedicada');
 
 if (failures.length) {
