@@ -55,12 +55,12 @@ jobs:
           node-version: 22
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --fund=false
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Responsive navigation audit
-        run: npm run audit:responsive-navigation
       - name: Search behavior audit
         run: npm run audit:navigation-search
+      - name: Responsive navigation audit
+        run: npm run audit:responsive-navigation
       - name: All navigation surfaces audit
         run: npm run audit:all-navigation-surfaces
