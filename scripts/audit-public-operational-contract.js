@@ -6,8 +6,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
-const authNav = read('js/auth-nav.js');
-const roles = read('js/roles.js');
+const authNav = read('js/core/auth/auth-nav.js');
+const roles = read('js/core/auth/roles.js');
 const shell = read('js/public-shell.js');
 const routeState = read('js/components/navigation/shared/route-state.js');
 const styles = read('styles.css');

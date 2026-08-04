@@ -11,9 +11,9 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const policy = read('js/phase7-catalog-policy.js');
+const policy = read('js/pages/catalog/phase7-catalog-policy.js');
 const merchandising = read('js/pages/catalog/catalog-merchandising-policy.js');
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
 const stockPriority = read('js/pages/catalog/catalog-stock-priority.js');
@@ -148,7 +148,7 @@ check(
 
 check(
   'La política se carga antes de products-store',
-  /^import '\.\/phase7-catalog-policy\.js/.test(loader),
+  /^import '\.\/pages\/catalog\/phase7-catalog-policy\.js/.test(loader),
   'El filtro debe estar instalado antes del primer evento de productos.'
 );
 

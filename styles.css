@@ -7,7 +7,7 @@
   --bg:          #fcf0f6;
   --bg-soft:     #fcf0f6;
   --card-bg:     #fef5f8;
-  /* La paleta de marca vive en css/color-tokens.css, que se carga antes que
+  /* La paleta de marca vive en css/core/color-tokens.css, que se carga antes que
      esta hoja en todas las páginas y es la que el panel de Super Admin
      modifica en tiempo real (js/components/color/color-scheme.js escribe los tokens
      --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
@@ -26,7 +26,7 @@
   --pink-mid:    #d4748e;
   --pink-dark:   var(--color-brand-primary, #b84c72);
   --rose:        var(--color-brand-primary-hover, #8b2642);
-  /* --gold/--text*: css/tintin-unified-theme.css redeclara estos mismos
+  /* --gold/--text*: css/core/tintin-unified-theme.css redeclara estos mismos
      nombres con !important en :root y gana en todas las páginas que la
      cargan (todas menos admin-images.html) — esos valores (#AD3F67/#2B2B2B/
      #7B6F72) son los que realmente se ven. Los de acá quedaban desalineados:
@@ -2222,7 +2222,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   }
   /* Ese margen de 86px reserva el alto de la tabbar mobile — en login.html
      la tabbar existe en el DOM pero queda oculta (display:none, ver
-     css/loader-solid-background.css), así que el banner quedaba flotando
+     css/theme/loader-solid-background.css), así que el banner quedaba flotando
      de más ahí y tapaba el botón "Continuar con Google". */
   body:has(.login-page) .tt-privacy-consent {
     bottom: max(12px, env(safe-area-inset-bottom, 0px));
@@ -4312,7 +4312,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    dos definiciones de #tt-intro/#tt-loader compitiendo entre sí.
 ═══════════════════════════════════════════════════════════ */
 
-/* Scroll reveal: lo maneja js/scroll-reveal-global.js (.tt-auto-reveal /
+/* Scroll reveal: lo maneja js/quality/scroll-reveal-global.js (.tt-auto-reveal /
    .tt-visible), cargado global vía js/page-loader.js — este bloque quedó
    retirado porque duplicaba esa misma animación con su propio sistema
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */

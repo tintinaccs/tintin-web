@@ -6,7 +6,7 @@
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 // Fuente de verdad para este runtime (Cloudflare). El cliente tiene la suya
-// en js/roles.js (SUPER_ADMIN) — no se puede compartir una entre ambos
+// en js/core/auth/roles.js (SUPER_ADMIN) — no se puede compartir una entre ambos
 // porque son plataformas de despliegue distintas.
 export const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
 

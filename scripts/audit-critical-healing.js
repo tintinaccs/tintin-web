@@ -6,14 +6,14 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 
 const rules = read('firestore.rules');
-const checkout = read('js/secure-checkout-order.js');
+const checkout = read('js/orders/secure-checkout-order.js');
 const admin = read('js/admin/admin-app.js');
-const activity = read('js/site-activity.js');
+const activity = read('js/analytics/site-activity.js');
 const loader = read('js/page-loader.js');
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
 const inventory = read('js/admin/products/admin-inventory-integrity.js');
-const model = read('js/inventory-model.mjs');
+const model = read('js/core/store/inventory-model.mjs');
 const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 

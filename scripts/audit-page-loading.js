@@ -195,7 +195,7 @@ if (!/components\/navigation\/public-shell-entry\.js/.test(publicShell)) {
 }
 if (
   !/function loadProductsRuntime\(/.test(publicShellRuntime) ||
-  !/import\(versionedJsModule\(['"]products-store\.js['"]\)\)/.test(publicShellRuntime)
+  !/import\(versionedJsModule\(['"]core\/store\/products-store\.js['"]\)\)/.test(publicShellRuntime)
 ) {
   fail('js/components/navigation/shared/runtime.js', 'no carga products-store.js mediante el runtime modular.');
 }

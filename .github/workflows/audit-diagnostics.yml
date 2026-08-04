@@ -24,7 +24,7 @@ jobs:
       - name: Validar sintaxis
         run: |
           node --check js/admin/diagnostics/admin-site-diagnostics.js
-          node --check js/diagnostic-core.js
+          node --check js/diagnostics/diagnostic-core.js
           node --check scripts/build-diagnostic-manifest.js
           node --check scripts/verify-diagnostic-manifest.js
           node --check scripts/audit-diagnostics.js

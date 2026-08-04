@@ -16,17 +16,17 @@ function check(name, condition, detail) {
 }
 
 const pageLoader = read('js/page-loader.js');
-const gateCore = read('js/store-gate-core.js');
-const gateRuntime = read('js/store-gate.js');
+const gateCore = read('js/core/store-gate/store-gate-core.js');
+const gateRuntime = read('js/core/store-gate/store-gate.js');
 const adminSync = read('js/admin/settings/admin-store-control.js');
 const adminApp = read('js/admin/admin-app.js');
-const authNav = read('js/auth-nav.js');
-const uiQuality = read('js/ui-quality.js');
-const pageAudit = read('js/page-audit-fix.js');
+const authNav = read('js/core/auth/auth-nav.js');
+const uiQuality = read('js/quality/ui-quality.js');
+const pageAudit = read('js/quality/page-audit-fix.js');
 const rules = read('firestore.rules');
 const checkout = read('checkout.html');
-const restFallback = read('js/firestore-rest-fallback.js');
-const productsStore = read('js/products-store.js');
+const restFallback = read('js/core/firebase/firestore-rest-fallback.js');
+const productsStore = read('js/core/store/products-store.js');
 const collectionsStore = read('js/pages/collections/collections-store.js');
 
 check(

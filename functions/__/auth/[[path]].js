@@ -14,7 +14,7 @@
 // Esta función reexpone esas mismas páginas bajo /__/auth/* de ESTE
 // dominio, reenviando la petición a firebaseapp.com y devolviendo la
 // respuesta tal cual. Para que sirva de algo, "authDomain" en
-// js/firebase.js tiene que apuntar a este mismo dominio (paso separado,
+// js/core/firebase/firebase.js tiene que apuntar a este mismo dominio (paso separado,
 // recién después de autorizarlo en la consola de Firebase).
 // =============================================================
 

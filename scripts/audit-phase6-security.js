@@ -9,7 +9,7 @@ const rules = read('firestore.rules');
 const headers = read('_headers');
 const server = read('apps-script/Phase4CreateOrder.gs');
 const phase3 = read('apps-script/Phase3Security.gs');
-const orderClient = read('js/create-order-client.js');
+const orderClient = read('js/orders/create-order-client.js');
 const pkg = read('package.json');
 
 let failures = 0;

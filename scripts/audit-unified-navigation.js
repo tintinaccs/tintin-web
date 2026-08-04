@@ -9,7 +9,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const shell = read('js/public-shell.js');
 const controller = read('js/ui-navigation-controller.js');
 const runtime = read('script.js');
-const styles = read('css/surface-controller.css');
+const styles = read('css/components/navigation/shared/surface-controller.css');
 const collections = read('js/components/navigation/legacy/nav-collections.js');
 const navigation = read('js/components/navigation/legacy/navigation-shared.js');
 

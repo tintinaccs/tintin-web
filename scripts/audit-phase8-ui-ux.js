@@ -11,8 +11,8 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const runtime = read('js/phase8-ui-ux.js');
-const styles = read('css/phase8-ui-ux.css');
+const runtime = read('js/quality/phase8-ui-ux.js');
+const styles = read('css/quality/phase8-ui-ux.css');
 const loader = read('js/page-loader.js');
 const packageJson = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
@@ -20,7 +20,7 @@ const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 check(
   'El runtime de Fase 8 se carga una sola vez desde page-loader',
   /function bootPhase8UiUx/.test(loader) &&
-    /importSibling\('phase8-ui-ux\.js'/.test(loader) &&
+    /importSibling\('quality\/phase8-ui-ux\.js'/.test(loader) &&
     /window\.TintinUX\?\.booted/.test(loader) &&
     (loader.match(/bootPhase8UiUx\(\);/g) || []).length === 2,
   'Público y páginas con guard propio deben compartir una sola instancia, sin reactivar ui-quality completo.'
@@ -29,7 +29,7 @@ check(
 check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
-    /resolveAsset\('css\/phase8-ui-ux\.css'\)/.test(loader) &&
+    /resolveAsset\('css\/quality\/phase8-ui-ux\.css'\)/.test(loader) &&
   /tintin-20260801-unified-surfaces-16/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );

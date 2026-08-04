@@ -26,11 +26,11 @@ const REQUIRED_FILES = [
   'firestore.rules',
   'package.json',
   'js/page-loader.js',
-  'js/firebase.js',
-  'js/ui-quality.js',
+  'js/core/firebase/firebase.js',
+  'js/quality/ui-quality.js',
   'js/components/color/theme-color-sanitizer.js',
-  'css/tintin-unified-theme.css',
-  'css/tintin-tokens.css',
+  'css/core/tintin-unified-theme.css',
+  'css/core/tintin-tokens.css',
   'assets-tintin/images/general/logo.png'
 ];
 
@@ -42,9 +42,9 @@ const LEVELS = {
 
 const issues = [];
 const LEGACY_LOGO_CLEANUP_FILES = new Set([
-  'js/page-audit-fix.js',
+  'js/quality/page-audit-fix.js',
   'js/page-loader.js',
-  'js/ui-quality.js',
+  'js/quality/ui-quality.js',
   'scripts/audit-deep.js',
   'scripts/audit-tintin.js',
   'scripts/fix-tintin-source.js'

@@ -24,7 +24,7 @@ destinatario del correo interno, pero ya no envía nada.
 > Implementar → Administrar implementaciones → ✏️ editar la implementación
 > activa → Versión: **Nueva versión** → Implementar). Si en cambio publicás
 > una implementación *nueva* con una URL distinta, acordate de actualizar
-> `js/email-config.js` con la URL nueva.
+> `js/email/email-config.js` con la URL nueva.
 
 ## 1. Crear el proyecto de Apps Script
 
@@ -88,7 +88,7 @@ implementar una nueva versión (ver paso 3 más abajo) — no alcanza con
 guardarlo en Correos → Configuración.
 
 **Sobre seguridad — el `SHARED_SECRET` ya no alcanza solo:** ese secreto viaja
-en el JS público del sitio (`js/email-config.js`), así que cualquiera que
+en el JS público del sitio (`js/email/email-config.js`), así que cualquiera que
 abra la consola del navegador puede leerlo y llamar al webhook directamente,
 sin pasar por ningún botón ni login. Eso era un riesgo aceptable cuando la
 única acción "extra" era mandar UN correo de prueba, pero no alcanza para
@@ -197,7 +197,7 @@ const ADMIN_PANEL     = 'https://tintinaccs.github.io/tintin-web/admin.html';
 const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 
 // Clave pública del proyecto Firebase (tintin-accesorios) — es la misma que
-// ya viaja en js/firebase.js del sitio. NO es secreta (Google documenta que
+// ya viaja en js/core/firebase/firebase.js del sitio. NO es secreta (Google documenta que
 // las API key de apps Firebase web no protegen nada por sí solas); acá se
 // usa únicamente para pedirle a Google que valide un idToken, nunca para
 // escribir ni leer datos.
@@ -889,7 +889,7 @@ function buildCustomerHtml(shortId, order, isTest) {
 
 ## 4. Conectar la URL al sitio
 
-**Ya hecho — estado actual (migración completada):** `js/email-config.js` ya apunta a la
+**Ya hecho — estado actual (migración completada):** `js/email/email-config.js` ya apunta a la
 implementación desplegada desde `tintinpedidos@gmail.com`:
 
 ```javascript
@@ -897,7 +897,7 @@ export const EMAIL_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxia47
 ```
 
 Si en algún momento se vuelve a implementar el script de cero (URL `/exec` nueva) o se
-rota la implementación, hay que actualizar solamente la URL en `js/email-config.js`.
+rota la implementación, hay que actualizar solamente la URL en `js/email/email-config.js`.
 El flujo actual valida la identidad de Firebase y no publica secretos en el navegador
 ni en esta documentación.
 
@@ -936,10 +936,10 @@ ahí, se puede archivar/eliminar desde ese Apps Script sin afectar el flujo actu
 
 ## Si algo falla
 - Si no llega nada: abrí la consola del navegador (F12) en el checkout y buscá mensajes que empiecen con `[email-notify]`
-- Revisá que la URL en `js/email-config.js` termine en `/exec` (no `/dev`)
+- Revisá que la URL en `js/email/email-config.js` termine en `/exec` (no `/dev`)
 - Revisá que en el paso 3 hayas elegido "Cualquier usuario" con acceso, no "Solo yo"
 - Si editaste el script después de implementarlo, tenés que crear una **nueva implementación** (Implementar → Administrar implementaciones → editar → nueva versión) para que los cambios tomen efecto
-- Si el correo sigue llegando "De: tintinaccs@gmail.com", es porque `js/email-config.js`
+- Si el correo sigue llegando "De: tintinaccs@gmail.com", es porque `js/email/email-config.js`
   todavía apunta a la URL vieja, o la implementación activa en Apps Script sigue
   siendo la del proyecto bajo `tintinaccs@gmail.com`
 - Si un envío devuelve `cooldown_active` o `daily_limit_exceeded`: es la protección

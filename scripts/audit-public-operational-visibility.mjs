@@ -57,8 +57,8 @@ try {
   await new Promise(resolve => server.close(resolve));
 }
 
-const authNav = read('js/auth-nav.js');
-const roles = read('js/roles.js');
+const authNav = read('js/core/auth/auth-nav.js');
+const roles = read('js/core/auth/roles.js');
 const styles = read('styles.css');
 for (const role of ['superadmin', 'admin', 'agent', 'viewer']) check(new RegExp(`${role}:[\\s\\S]*?viewDashboard:\\s*true`).test(roles), `Falta cobertura del rol ${role}`);
 check(/client:[\s\S]*?viewDashboard:\s*false/.test(roles), 'El rol cliente puede revelar telemetría');

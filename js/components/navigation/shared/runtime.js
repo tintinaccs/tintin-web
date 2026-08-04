@@ -33,7 +33,7 @@ function loadHomeMaintenance() {
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
   if (!productsRuntimePromise) {
-    productsRuntimePromise = import(versionedJsModule('products-store.js')).catch(error => {
+    productsRuntimePromise = import(versionedJsModule('core/store/products-store.js')).catch(error => {
       productsRuntimePromise = null;
       document.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
       throw error;
@@ -89,7 +89,7 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   const critical = [
-    import(versionedJsModule('auth-nav.js')),
+    import(versionedJsModule('core/auth/auth-nav.js')),
     import(versionedJsModule('components/cart/cart-sync.js')),
   ];
 

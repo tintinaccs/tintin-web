@@ -11,16 +11,16 @@ const moduleFiles = fs.readdirSync(path.join(root, 'js'))
   .map(file => `js/${file}`);
 
 const loader = read('js/page-loader.js');
-const firebase = read('js/firebase.js');
-const storeGate = read('js/store-gate-core.js');
-const storeGateRuntime = read('js/store-gate.js');
-const activity = read('js/site-activity.js');
-const analytics = read('js/analytics.js');
+const firebase = read('js/core/firebase/firebase.js');
+const storeGate = read('js/core/store-gate/store-gate-core.js');
+const storeGateRuntime = read('js/core/store-gate/store-gate.js');
+const activity = read('js/analytics/site-activity.js');
+const analytics = read('js/analytics/analytics.js');
 const images = read('js/components/images/images.js');
-const publicSettings = read('js/public-settings-store.js');
-const products = read('js/products-store.js');
+const publicSettings = read('js/core/store/public-settings-store.js');
+const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
-const siteContent = read('js/site-content.js');
+const siteContent = read('js/core/store/site-content.js');
 const index = read('index.html');
 const allRuntime = [...htmlFiles, ...moduleFiles].map(read).join('\n');
 

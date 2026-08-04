@@ -6,7 +6,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const rules = read('firestore.rules');
-const gateCore = read('js/store-gate-core.js');
+const gateCore = read('js/core/store-gate/store-gate-core.js');
 const admin = read('js/admin/admin-app.js');
 
 const storeRule = rules.match(/function isStoreOpenOrAllowed\(\) \{[\s\S]*?\n    \}/)?.[0] || '';

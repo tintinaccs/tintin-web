@@ -109,11 +109,11 @@ if (requiredFiles.every(exists)) {
   });
 
   const legacyCssAdapters = [
-    ['css/navigation-desktop.css', 'components/navigation/desktop/header-desktop.css'],
-    ['css/navigation-tablet.css', 'components/navigation/tablet/header-tablet.css'],
-    ['css/navigation-mobile.css', 'components/navigation/mobile/header-mobile.css'],
-    ['css/navigation-shared.css', 'components/navigation/shared/navigation-transitions.css'],
-    ['css/surface-controller.css', 'components/navigation/shared/surfaces.css'],
+    ['css/components/navigation/legacy/navigation-desktop.css', 'components/navigation/desktop/header-desktop.css'],
+    ['css/components/navigation/legacy/navigation-tablet.css', 'components/navigation/tablet/header-tablet.css'],
+    ['css/components/navigation/legacy/navigation-mobile.css', 'components/navigation/mobile/header-mobile.css'],
+    ['css/components/navigation/legacy/navigation-shared.css', 'components/navigation/shared/navigation-transitions.css'],
+    ['css/components/navigation/shared/surface-controller.css', 'components/navigation/shared/surfaces.css'],
   ];
 
   legacyCssAdapters.forEach(([file, target]) => {

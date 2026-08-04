@@ -7,10 +7,10 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const checks = [];
 function check(name, condition, problem) { checks.push({ name, ok: Boolean(condition), problem }); }
 
-const runtime = read('js/phase10-accessibility.js');
-const css = read('css/phase10-accessibility.css');
-const loader = read('js/phase8-ui-ux.js');
-const gate = read('js/store-gate-core.js');
+const runtime = read('js/quality/phase10-accessibility.js');
+const css = read('css/quality/phase10-accessibility.css');
+const loader = read('js/quality/phase8-ui-ux.js');
+const gate = read('js/core/store-gate/store-gate-core.js');
 const page404 = read('404.html');
 const privacy = read('privacidad.html');
 const pkg = JSON.parse(read('package.json'));

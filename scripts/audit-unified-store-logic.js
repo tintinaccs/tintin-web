@@ -11,8 +11,8 @@ function check(label, condition, problem) {
 }
 
 const policy = read('js/pages/catalog/catalog-merchandising-policy.js');
-const productsStore = read('js/products-store.js');
-const phase7 = read('js/phase7-catalog-policy.js');
+const productsStore = read('js/core/store/products-store.js');
+const phase7 = read('js/pages/catalog/phase7-catalog-policy.js');
 const catalog = read('catalogo.html');
 const classic = read('script.js');
 const compatibility = read('js/pages/catalog/catalog-stock-priority.js');

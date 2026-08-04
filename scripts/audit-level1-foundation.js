@@ -118,7 +118,7 @@ check(
   rules.includes('function isBlockedUser()') && rules.includes('!isBlockedUser()')
 );
 
-const firebase = read('js/firebase.js');
+const firebase = read('js/core/firebase/firebase.js');
 check(
   'Firebase importa App Check',
   firebase.includes('initializeAppCheck') &&

@@ -6,7 +6,7 @@ import {
   parseLocalizedNumber,
   parseOptionalStock,
   validateOperationalBackupEnvelope,
-} from '../../js/import-normalization.mjs';
+} from '../../js/core/store/import-normalization.mjs';
 
 test('parsea números localizados sin confundir miles y decimales', () => {
   assert.equal(parseLocalizedNumber('100.000'), 100000);

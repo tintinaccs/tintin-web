@@ -118,7 +118,7 @@ for (const page of rootPages) {
   const source = fs.readFileSync(path.join(ROOT, page), 'utf8');
   const stylesheetCount = countMatches(
     source,
-    new RegExp(`href=["']css/montserrat\\.css\\?v=${VERSION}["']`, 'gi')
+    new RegExp(`href=["']css/core/montserrat\\.css\\?v=${VERSION}["']`, 'gi')
   );
   const normalPreloadCount = countMatches(
     source,
@@ -130,7 +130,7 @@ for (const page of rootPages) {
   );
   const preloadExpected = page !== 'perfil.html';
   const expectedPreloadCount = preloadExpected ? 1 : 0;
-  check(stylesheetCount === 1, `${page}: debe cargar exactamente una vez css/montserrat.css con la versión ${VERSION}.`);
+  check(stylesheetCount === 1, `${page}: debe cargar exactamente una vez css/core/montserrat.css con la versión ${VERSION}.`);
   check(normalPreloadCount === expectedPreloadCount, `${page}: cantidad incorrecta de preload de Montserrat normal.`);
   check(italicPreloadCount === expectedPreloadCount, `${page}: cantidad incorrecta de preload de Montserrat italic.`);
   check(!/fonts\.(?:googleapis|gstatic)\.com/i.test(source), `${page}: todavía carga una fuente externa de Google Fonts.`);
@@ -160,10 +160,10 @@ for (const fontFile of localFontFiles) {
   check(/^montserrat-/i.test(fontFile), `Fuente local no permitida: assets-tintin/fonts/${fontFile}.`);
 }
 
-const globalCssPath = path.join(ROOT, 'css', 'montserrat.css');
-check(fs.existsSync(globalCssPath), 'Falta css/montserrat.css.');
+const globalCssPath = path.join(ROOT, 'css', 'core', 'montserrat.css');
+check(fs.existsSync(globalCssPath), 'Falta css/core/montserrat.css.');
 const globalCss = fs.existsSync(globalCssPath) ? fs.readFileSync(globalCssPath, 'utf8') : '';
-check(countMatches(globalCss, /@font-face\s*\{/gi) === 10, 'css/montserrat.css debe declarar 10 bloques @font-face.');
+check(countMatches(globalCss, /@font-face\s*\{/gi) === 10, 'css/core/montserrat.css debe declarar 10 bloques @font-face.');
 check(countMatches(globalCss, /font-style:\s*normal\s*;/gi) === 5, 'Deben existir 5 subconjuntos normales de Montserrat.');
 check(countMatches(globalCss, /font-style:\s*italic\s*;/gi) === 5, 'Deben existir 5 subconjuntos italic de Montserrat.');
 check(countMatches(globalCss, /font-weight:\s*100 900\s*;/gi) === 10, 'Cada @font-face debe cubrir pesos reales 100–900.');

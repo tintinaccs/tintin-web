@@ -98,11 +98,11 @@ js/components/navigation/legacy/navigation-tablet.js
 js/components/navigation/legacy/navigation-mobile.js
 js/components/navigation/legacy/navigation-shared.js
 js/components/navigation/legacy/nav-collections.js
-css/navigation-desktop.css
-css/navigation-tablet.css
-css/navigation-mobile.css
-css/navigation-shared.css
-css/surface-controller.css
+css/components/navigation/legacy/navigation-desktop.css
+css/components/navigation/legacy/navigation-tablet.css
+css/components/navigation/legacy/navigation-mobile.css
+css/components/navigation/legacy/navigation-shared.css
+css/components/navigation/shared/surface-controller.css
 ```
 
 No se agrega lógica nueva a esos archivos. La fuente de verdad está en `components/`.

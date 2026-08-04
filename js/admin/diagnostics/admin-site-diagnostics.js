@@ -1,5 +1,5 @@
-import { auth, db } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { SUPER_ADMIN } from '../../roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   doc,
@@ -18,7 +18,7 @@ import {
   modeIncludes,
   stableHash,
   summarizeReport
-} from '../../diagnostic-core.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../diagnostics/diagnostic-core.js?v=tintin-20260716-cloudinary-fix-1';
 
 const MANIFEST_URL = './diagnostic-manifest.json';
 const HISTORY_DB = 'tintin-diagnostics-readonly';
@@ -504,7 +504,7 @@ async function fetchPage(page) {
 // dentro del iframe aislado del Diagnóstico. Todo lo que no sea una función
 // que escribe/muta pasa directo al SDK real (reexportado tal cual); ver
 // js/diagnostic-shims/*.js. El importmap redirige la URL EXACTA del CDN que
-// ya usa cada módulo de la plataforma (js/firebase.js, admin-app.js, etc.),
+// ya usa cada módulo de la plataforma (js/core/firebase/firebase.js, admin-app.js, etc.),
 // así que ninguna página necesita saber que está siendo inspeccionada.
 const DIAGNOSTIC_SHIM_MAP = {
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js': 'js/diagnostic-shims/firestore-shim.js',

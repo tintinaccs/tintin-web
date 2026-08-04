@@ -3,12 +3,12 @@ name: Auditoría de contenido Fase 6
 on:
   pull_request:
     paths:
-      - 'js/content-schema.js'
-      - 'js/site-content.js'
+      - 'js/core/store/content-schema.js'
+      - 'js/core/store/site-content.js'
       - 'js/admin/content/admin-content-phase6.js'
-      - 'js/edit-badge.js'
-      - 'js/role-permissions.js'
-      - 'js/ui-quality.js'
+      - 'js/core/auth/edit-badge.js'
+      - 'js/core/auth/role-permissions.js'
+      - 'js/quality/ui-quality.js'
       - 'scripts/audit-content-phase6.js'
       - 'package.json'
       - '.github/workflows/audit-content-phase6.yml'
@@ -29,12 +29,12 @@ jobs:
           node-version: '20'
       - name: Revisar sintaxis
         run: |
-          node --check js/content-schema.js
-          node --check js/site-content.js
+          node --check js/core/store/content-schema.js
+          node --check js/core/store/site-content.js
           node --check js/admin/content/admin-content-phase6.js
-          node --check js/edit-badge.js
-          node --check js/role-permissions.js
-          node --check js/ui-quality.js
+          node --check js/core/auth/edit-badge.js
+          node --check js/core/auth/role-permissions.js
+          node --check js/quality/ui-quality.js
           node --check scripts/audit-content-phase6.js
       - name: Revisar integración
         run: npm run audit:content

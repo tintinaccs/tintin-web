@@ -8,7 +8,7 @@ import {
   splitFullName,
   readProfileName,
   hasUsableAddress,
-} from '../../js/profile-onboarding.mjs';
+} from '../../js/pages/profile/profile-onboarding.mjs';
 
 const superAdminEmail = 'tintinaccs@gmail.com';
 const ADDRESS = { savedLocation: { lat: -25.29, lng: -57.63, name: 'Av. España 1234', address: 'Av. España 1234, Asunción' }, address: 'Av. España 1234, Asunción' };

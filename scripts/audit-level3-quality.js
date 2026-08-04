@@ -175,7 +175,7 @@ for (const file of recoveryFiles) {
 
 const accessibilityCss = [
   'styles.css',
-  'css/ui-quality.css',
+  'css/quality/ui-quality.css',
   'css/pages/home/home-maintenance.css',
   'css/pages/catalog/catalog-maintenance.css',
   'css/collections-maintenance.css',
@@ -188,7 +188,7 @@ check(
 );
 check(
   'El sistema define foco visible y tamaño táctil',
-  /focus-visible/.test(read('css/ui-quality.css')) && /44px/.test(`${read('styles.css')}\n${read('css/ui-quality.css')}`)
+  /focus-visible/.test(read('css/quality/ui-quality.css')) && /44px/.test(`${read('styles.css')}\n${read('css/quality/ui-quality.css')}`)
 );
 check(
   'Las páginas tienen exactamente un H1 cuando el manifiesto lo exige',
@@ -212,7 +212,7 @@ check(
   'La integración final verifica SEO, PWA y fuentes únicas',
   finalIntegration.includes('robots bloquea páginas privadas y declara sitemap') &&
     finalIntegration.includes('manifest es válido y sus iconos existen') &&
-    finalIntegration.includes('Firebase se inicializa únicamente en js/firebase.js') &&
+    finalIntegration.includes('Firebase se inicializa únicamente en js/core/firebase/firebase.js') &&
     finalIntegration.includes('Configuración general pública tiene una sola suscripción compartida')
 );
 

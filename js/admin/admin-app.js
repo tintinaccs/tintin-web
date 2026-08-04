@@ -1,4 +1,4 @@
-import { auth, db } from "../firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -6,23 +6,23 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email-notify.js?v=tintin-20260716-cloudinary-fix-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/email-notify.js?v=tintin-20260716-cloudinary-fix-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-email-bridge.js), no el webhook viejo
 // de Apps Script de email-notify.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../resend-order-notify.js?v=tintin-20260717-resend-1";
-import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { sendOrderNotification } from "../email/resend-order-notify.js?v=tintin-20260717-resend-1";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
-import { EMAIL_WEBHOOK_URL } from "../email-config.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
+} from "../core/auth/role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
+import { EMAIL_WEBHOOK_URL } from "../email/email-config.js?v=tintin-20260716-cloudinary-fix-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { normalizeCollectionDoc } from "../pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { sanitizeVariantData } from "../security-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { getDocsPaginated } from "../firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeVariantData } from "../core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { getDocsPaginated } from "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 import { initSiteDiagnostics } from "./diagnostics/admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
@@ -34,7 +34,7 @@ import {
 } from "../components/color/color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "../components/color/color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260728-phase4-order-2";
+import { createOrderViaServer } from "../orders/create-order-client.js?v=tintin-20260728-phase4-order-2";
 import './products/admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 
 // ---- GLOBALS ----
@@ -2188,7 +2188,7 @@ window.resendOrderEmail = async (orderId) => {
   try {
     const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
     const result = await sendOrderNotification(orderId, orderForEmail, true);
-    if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email-config.js esté configurado');
+    if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email/email-config.js esté configurado');
 
     await updateDoc(doc(db, 'orders', orderId), {
       resendCount: increment(1),
@@ -4709,7 +4709,7 @@ window.fixLegacyProductNumbers = async function() {
 
 // Prueba manual y aislada del nuevo endpoint server-side de pedidos (Fase
 // 4, apps-script/Phase4CreateOrder.gs) — NO toca checkout.html ni
-// js/secure-checkout-order.js. Crea un pedido real (retiro en tienda,
+// js/orders/secure-checkout-order.js. Crea un pedido real (retiro en tienda,
 // efectivo) con un producto real para confirmar que el Apps Script
 // funciona antes de migrar el checkout de verdad. Requiere que
 // Phase4CreateOrder.gs ya esté pegado en el proyecto y que doPost(e) en
@@ -7201,7 +7201,7 @@ async function loadContenido() {
   await contRenderPage(contCurrentPage);
 }
 
-// Deep link from the public site's "✏️ editar" badge (js/edit-badge.js):
+// Deep link from the public site's "✏️ editar" badge (js/core/auth/edit-badge.js):
 // admin.html?tab=contenido&page=<id>&section=<id> — jumps straight to that
 // page/section in Contenido and highlights it.
 async function handleContentDeepLink() {

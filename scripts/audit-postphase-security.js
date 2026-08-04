@@ -7,13 +7,13 @@ function check(label, ok) {
   if (ok) console.log('OK — ' + label);
   else { failures += 1; console.error('FAIL — ' + label); }
 }
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const script = read('script.js');
 const cart = read('js/components/cart/cart-sync.js');
-const roles = read('js/roles.js');
+const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
-const emailConfig = read('js/email-config.js');
-const emailNotify = read('js/email-notify.js');
+const emailConfig = read('js/email/email-config.js');
+const emailNotify = read('js/email/email-notify.js');
 const bridge = read('js/pages/checkout/checkout-email-bridge.js');
 const apps = read('apps-script/Phase3Security.gs');
 const emailSetup = read('functions/EMAIL_SETUP.md');
