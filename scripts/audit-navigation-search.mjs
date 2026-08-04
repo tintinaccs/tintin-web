@@ -8,6 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
 const port = 4203;
 const baseURL = `http://${host}:${port}`;
+const searchModuleURL = `${baseURL}/js/components/navigation/shared/search-controller.js?v=tintin-20260804-modular-shell-1`;
 const mime = { '.css':'text/css', '.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.json':'application/json', '.png':'image/png', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon', '.woff2':'font/woff2' };
 const SEEDED_PRODUCTS = [
   { id:'reloj-prueba', name:'Reloj Ovalado Dorado', category:'Relojes', price:180000, active:true, stock:2, imageUrl:'' },
@@ -41,7 +42,7 @@ async function installSeededCatalog(page) {
     { timeout:10000 }
   );
 
-  await page.evaluate(products => {
+  await page.evaluate(async ({ products, moduleURL }) => {
     if (window.__ttSearchAuditCatalogLock !== true) {
       window.__ttSearchAuditCatalogLock = true;
       window.addEventListener('tintin:products-loaded', event => {
@@ -49,11 +50,17 @@ async function installSeededCatalog(page) {
       }, true);
     }
 
+    const searchModule = await import(moduleURL);
+    if (typeof searchModule.syncSearchCatalog !== 'function') {
+      throw new Error('El módulo de búsqueda no expone syncSearchCatalog');
+    }
+
     window.PRODUCTS = products;
-    window.dispatchEvent(new CustomEvent('tintin:products-loaded', {
-      detail: { products, source:'audit-seed' },
-    }));
-  }, SEEDED_PRODUCTS);
+    const synced = searchModule.syncSearchCatalog(products);
+    if (synced !== products.length) {
+      throw new Error(`El catálogo de prueba sincronizó ${synced} de ${products.length} productos`);
+    }
+  }, { products: SEEDED_PRODUCTS, moduleURL: searchModuleURL });
 }
 
 async function auditSearch(label, viewport, triggerSelector) {
