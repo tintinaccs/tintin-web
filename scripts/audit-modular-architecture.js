@@ -30,6 +30,7 @@ const requiredFiles = [
   'js/components/navigation/shared/route-state.js',
   'js/components/navigation/shared/router.js',
   'js/components/navigation/shared/runtime.js',
+  'js/components/navigation/shared/search-controller.js',
   'js/components/navigation/shared/search-panel.js',
   'js/components/navigation/shared/surface-controller.js',
   'js/components/navigation/shared/surface-layer.js',
@@ -74,15 +75,22 @@ if (requiredFiles.every(exists)) {
 
   const surfaces = read('js/components/navigation/shared/surface-controller.js');
   const registrations = read('js/components/navigation/shared/register-surfaces.js');
+  const runtime = read('js/components/navigation/shared/runtime.js');
+  const search = read('js/components/navigation/shared/search-controller.js');
   check(registrations.includes("['desktop-shop'"), 'registro: falta Tienda desktop');
   check(registrations.includes("['tablet-menu'"), 'registro: falta menú tablet');
   check(registrations.includes("['mobile-shop'"), 'registro: falta Tienda mobile');
   check(registrations.includes("['search'"), 'registro: falta Buscar');
   check(registrations.includes("['cart'"), 'registro: falta Carrito');
   check(registrations.includes("['account'"), 'registro: falta Cuenta');
+  check(registrations.includes('refreshCartBeforeOpen'), 'registro: el carrito no se actualiza al abrir');
   check(registrations.includes("controller.connect({"), 'registro: falta conectar backdrop y morph');
   check(surfaces.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva su entorno');
   check(surfaces.includes("this.close('outside', { restoreFocus: false })"), 'controlador: Tienda desktop puede reabrirse por foco');
+  check(runtime.includes('components/navigation/shared/search-controller.js'), 'runtime: no carga el buscador modular');
+  check(search.includes('aria-activedescendant'), 'buscar: falta navegación accesible de resultados');
+  check(search.includes('productSearchText'), 'buscar: falta índice normalizado reutilizable');
+  check(search.includes('tintin:products-error'), 'buscar: falta estado de error del catálogo');
 
   const legacyAdapters = [
     ['js/public-shell.js', 'components/navigation/public-shell-entry.js'],
