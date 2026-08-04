@@ -13,8 +13,8 @@ function check(name, condition, problem) {
 
 const notify = read('js/email-notify.js');
 const bridge = read('js/pages/checkout/checkout-email-bridge.js');
-const adminSync = read('js/admin-email-gate-sync.js');
-const adminStore = read('js/admin-store-control.js');
+const adminSync = read('js/admin/settings/admin-email-gate-sync.js');
+const adminStore = read('js/admin/settings/admin-store-control.js');
 const checkout = read('checkout.html');
 const appsScript = read('apps-script/Phase3Security.gs');
 const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');

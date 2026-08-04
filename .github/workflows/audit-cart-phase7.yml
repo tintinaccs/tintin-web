@@ -10,7 +10,7 @@ on:
       - 'js/products-store.js'
       - 'js/phase7-catalog-policy.js'
       - 'js/page-maintenance-loader.js'
-      - 'js/admin-app.js'
+      - 'js/admin/admin-app.js'
       - 'js/cart-sync.js'
       - 'js/ui-quality.js'
       - 'js/secure-checkout-order.js'
@@ -86,7 +86,7 @@ jobs:
           node --check js/phase7-catalog-policy.js
           node --check js/products-store.js
           node --check js/cart-sync.js
-          node --check js/admin-app.js
+          node --check js/admin/admin-app.js
           node --check script.js
           node --check scripts/audit-phase7-catalog.js
           node --check scripts/audit-cart-phase7.js

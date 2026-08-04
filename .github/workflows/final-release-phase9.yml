@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'js/admin-import-phase9.js'
+      - 'js/admin/admin-import-phase9.js'
       - 'js/import-normalization.mjs'
       - 'js/ui-quality.js'
       - 'tests/import/phase9-import-normalization.test.mjs'
@@ -43,7 +43,7 @@ jobs:
         run: npm install
       - name: Revisar sintaxis de Fase 9
         run: |
-          node --check js/admin-import-phase9.js
+          node --check js/admin/admin-import-phase9.js
           node --check js/import-normalization.mjs
           node --check js/ui-quality.js
           node --check scripts/audit-store-gate.js

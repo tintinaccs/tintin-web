@@ -35,10 +35,10 @@ function check(name, condition, problem) {
 }
 
 const adminHtml     = read('admin.html');
-const adminApp      = read('js/admin-app.js');
-const welcomeCtrl   = read('js/admin-welcome-control.js');
-const unsavedGuard  = read('js/admin-unsaved-guard.js');
-const adminCss      = read('css/admin.css');
+const adminApp      = read('js/admin/admin-app.js');
+const welcomeCtrl   = read('js/admin/content/admin-welcome-control.js');
+const unsavedGuard  = read('js/admin/admin-unsaved-guard.js');
+const adminCss      = read('css/admin/admin.css');
 
 // ---------------------------------------------------------------------------
 // Inventario REAL (no supuesto): se extrae del propio HTML.

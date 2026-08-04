@@ -158,7 +158,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   // mismo para poder detectarlo en el resto del sitio.
   const eyebrowRegressionExclusions = new Set([
     'admin.html',
-    'js/admin-app.js',
+    'js/admin/admin-app.js',
     'scripts/audit-tintin.js'
   ]);
   for (const file of [...htmlFiles, ...jsFiles]) {

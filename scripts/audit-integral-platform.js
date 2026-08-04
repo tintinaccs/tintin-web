@@ -14,10 +14,10 @@ const files = {
   checkout: read('checkout.html'),
   cart: read('js/cart-sync.js'),
   rules: read('firestore.rules'),
-  admin: `${read('admin.html')}\n${read('js/admin-app.js')}`,
+  admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}`,
   adminImages: read('admin-images.html'),
-  adminGuard: read('js/admin-unsaved-guard.js'),
-  welcome: read('js/admin-welcome-control.js'),
+  adminGuard: read('js/admin/admin-unsaved-guard.js'),
+  welcome: read('js/admin/content/admin-welcome-control.js'),
 };
 
 let failures = 0;

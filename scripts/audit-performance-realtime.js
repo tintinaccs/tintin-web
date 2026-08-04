@@ -106,15 +106,15 @@ check(
 
 check(
   'Los listeners de pedidos y usuarios del panel tienen límite',
-  /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin-app.js')) &&
-    /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin-app.js')),
+  /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin/admin-app.js')) &&
+    /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin/admin-app.js')),
   'Los listados administrativos deben estar acotados.'
 );
 
 check(
   'Los timers del dashboard se limpian',
-  read('js/admin-app.js').includes('clearInterval(dashboardActivityClock)') &&
-    read('js/admin-app.js').includes('clearInterval(dashboardPresenceRestart)'),
+  read('js/admin/admin-app.js').includes('clearInterval(dashboardActivityClock)') &&
+    read('js/admin/admin-app.js').includes('clearInterval(dashboardPresenceRestart)'),
   'Los temporizadores no deben acumularse al cambiar de sección.'
 );
 
@@ -148,7 +148,7 @@ check(
 
 check(
   'Las respuestas obsoletas de estadísticas están protegidas',
-  read('js/admin-app.js').includes('statisticsTrafficLoadToken'),
+  read('js/admin/admin-app.js').includes('statisticsTrafficLoadToken'),
   'Una respuesta antigua no debe pisar datos nuevos.'
 );
 

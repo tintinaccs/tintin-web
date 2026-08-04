@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const read = file => fs.readFileSync(file, 'utf8');
 const checkout = read('js/pages/checkout/checkout-payment-methods.js');
-const admin = read('js/admin-payment-methods.js');
+const admin = read('js/admin/settings/admin-payment-methods.js');
 const core = read('js/payment-methods-core.js');
 const css = read('css/payment-methods.css');
 const store = read('js/pages/collections/collections-store.js');

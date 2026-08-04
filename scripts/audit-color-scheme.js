@@ -49,13 +49,13 @@ const catalogSource = read('js/color-scheme-catalog.js');
 const globalTokens = parseTokens(arraySection(catalogSource, 'GLOBAL_TOKENS'));
 const adminTokens = parseTokens(arraySection(catalogSource, 'ADMIN_TOKENS'));
 const globalCss = read('css/color-tokens.css');
-const adminCss = read('css/admin-color-tokens.css');
+const adminCss = read('css/admin/admin-color-tokens.css');
 const adminHtml = read('admin.html');
-const adminApp = read('js/admin-app.js');
+const adminApp = read('js/admin/admin-app.js');
 const picker = read('js/color-picker-widget.js');
 const instantRuntime = read('js/color-scheme-instant.js');
 const globalRuntime = read('js/color-scheme.js');
-const adminRuntime = read('js/admin-color-scheme.js');
+const adminRuntime = read('js/admin/settings/admin-color-scheme.js');
 
 check('El catálogo global contiene todos los tokens esperados', globalTokens.length >= 150, `${globalTokens.length} encontrados`);
 check('El catálogo administrativo contiene todos los tokens esperados', adminTokens.length >= 36, `${adminTokens.length} encontrados`);
@@ -72,7 +72,7 @@ check('Todos los tokens administrativos tienen respaldo CSS', missingAdminDefaul
 const consumerFiles = [
   ...filesUnder('css', new Set(['.css'])),
   ...filesUnder('js', new Set(['.js'])),
-].filter(rel => !['css/color-tokens.css', 'css/admin-color-tokens.css', 'js/color-scheme-catalog.js'].includes(rel.replace(/\\/g, '/')));
+].filter(rel => !['css/color-tokens.css', 'css/admin/admin-color-tokens.css', 'js/color-scheme-catalog.js'].includes(rel.replace(/\\/g, '/')));
 const consumers = consumerFiles.map(read).join('\n');
 const missingGlobalConsumers = globalTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
 const missingAdminConsumers = adminTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
@@ -152,7 +152,7 @@ check('Todas las páginas públicas estabilizan el fondo antes del loader y del 
 
 check('Las páginas administrativas cargan su esquema independiente', ['admin.html', 'admin-images.html'].every(file => {
   const html = read(file);
-  return html.includes('css/admin-color-tokens.css') && html.includes('js/admin-color-scheme.js');
+  return html.includes('css/admin/admin-color-tokens.css') && html.includes('js/admin/settings/admin-color-scheme.js');
 }));
 
 if (failures) {

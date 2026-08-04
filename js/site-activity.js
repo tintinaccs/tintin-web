@@ -19,7 +19,7 @@ import {
   hasStatisticsConsent,
   onPrivacyConsentChange
 } from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1';
-import { isAdminPage } from './admin-path.js?v=tintin-20260722-level4-1';
+import { isAdminPage } from './admin/admin-path.js?v=tintin-20260722-level4-1';
 
 const appCheckAvailable = await appCheckReady;
 

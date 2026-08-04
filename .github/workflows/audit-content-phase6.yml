@@ -5,7 +5,7 @@ on:
     paths:
       - 'js/content-schema.js'
       - 'js/site-content.js'
-      - 'js/admin-content-phase6.js'
+      - 'js/admin/content/admin-content-phase6.js'
       - 'js/edit-badge.js'
       - 'js/role-permissions.js'
       - 'js/ui-quality.js'
@@ -31,7 +31,7 @@ jobs:
         run: |
           node --check js/content-schema.js
           node --check js/site-content.js
-          node --check js/admin-content-phase6.js
+          node --check js/admin/content/admin-content-phase6.js
           node --check js/edit-badge.js
           node --check js/role-permissions.js
           node --check js/ui-quality.js

@@ -185,7 +185,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   // sparkShippingRatesPath() en firestore.rules) — settings/general debe
   // quedar liviano para no superar el límite de 1000 expresiones que
   // Firestore evalúa por escritura. Si settings/shippingRates todavía no
-  // existe (recién migrado, ver js/admin-app.js), se usan los mismos
+  // existe (recién migrado, ver js/admin/admin-app.js), se usan los mismos
   // campos si siguen presentes en settings/general como respaldo.
   function mergeShippingRates(settings, shippingRatesSnap) {
     const rates = shippingRatesSnap?.exists() ? shippingRatesSnap.data() || {} : {};

@@ -760,10 +760,10 @@
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin-order-delete-fix.js', 'Admin Order Delete Fix');
-      importSibling('admin-welcome-control.js', 'Admin Welcome Control');
-      importSibling('admin-mobile-sidebar-fix.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin-store-control.js', 'Admin Store State Sync');
+      importSibling('admin/orders/admin-order-delete-fix.js', 'Admin Order Delete Fix');
+      importSibling('admin/content/admin-welcome-control.js', 'Admin Welcome Control');
+      importSibling('admin/admin-mobile-sidebar-fix.js', 'Admin Mobile Sidebar Fix');
+      importSibling('admin/settings/admin-store-control.js', 'Admin Store State Sync');
     }
     if (current.endsWith('/perfil.html') || current.endsWith('/perfil')) {
       importSibling('pages/profile/profile-order-stats-fix.js', 'Profile Order Stats Fix');

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
-  <script src="js/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
+  <script src="js/admin/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="description" content="Panel privado para gestionar las imágenes de Tintin Accesorios."><meta name="theme-color" content="#AD3F67">
@@ -29,14 +29,14 @@
   <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/admin-color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
   <style>
     :root {
       /* Esta página no carga admin.css (es autocontenida) pero SÍ participa
          del esquema de colores del Super Admin — estos alias locales ahora
-         apuntan a css/admin-color-tokens.css en vez de traer su propio
+         apuntan a css/admin/admin-color-tokens.css en vez de traer su propio
          valor fijo, así Apariencia → Esquema de Super Admin también la
          controla a ella. */
       --rose: var(--admin-color-brand);
@@ -406,7 +406,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/images.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./js/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -749,7 +749,7 @@ onAuthStateChanged(auth, async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>
 </body>
 </html>

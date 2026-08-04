@@ -22,8 +22,8 @@ const privacyConsent = read('js/privacy-consent.js');
 const analytics = read('js/analytics.js');
 const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
-const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
-const welcomeAdmin = read('js/admin-welcome-control.js');
+const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
+const welcomeAdmin = read('js/admin/content/admin-welcome-control.js');
 const welcomeConfig = read('js/welcome-config.js');
 const welcomeRuntime = read('js/welcome-tutorial-runtime.js');
 // La creación del perfil vive en js/user-profile-store.js, compartida entre el
@@ -164,7 +164,7 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v4-unified'") &&
   welcomeRuntime.includes("from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
-  welcomeAdmin.includes("from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  welcomeAdmin.includes("from '../../welcome-config.js?v=tintin-20260716-cloudinary-fix-1'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));
