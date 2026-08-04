@@ -282,6 +282,11 @@ export function initSearchController() {
   });
 
   input.addEventListener('keydown', event => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      window.clearTimeout(timer);
+      timer = 0;
+    }
+
     const items = [...results.querySelectorAll('.tt-search-result-item')];
     if (event.key === 'ArrowDown' && items.length) {
       event.preventDefault();
