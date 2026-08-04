@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T21:10:14.839Z",
-  "sourceFingerprint": "e5f317ad590b49ced811d934f192c03ea1b83c9c7222a2decbf372b1e7dc4c98",
+  "generatedAt": "2026-08-04T10:14:50.076Z",
+  "sourceFingerprint": "4848c8aa7e5894260dccbe0aa1dee7ea87e915265f2c0b760c9400b85c09c23c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 469,
     "textFiles": 437,
-    "totalBytes": 5361421,
+    "totalBytes": 5361634,
     "pages": 18,
     "modules": 274
   },
@@ -7735,8 +7735,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 88048,
-      "sha256": "6091d898762c4dfba2cb52d050bda6d383bc16ee20fc66ee96077042c2517dca",
+      "bytes": 88080,
+      "sha256": "ffe8c80c99e74ed181ec67c4c16d3ff12739b156f8016a33f0b1126e57a5cc61",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7908,7 +7908,7 @@
         {
           "raw": "https://wa.me/595981299331",
           "target": null,
-          "text": "💬 Enviar mi pedido por WhatsApp",
+          "text": "💬 Consultar por mi pedido",
           "id": "ck-wa-support",
           "ariaLabel": "",
           "title": "",
@@ -18983,8 +18983,8 @@
     },
     {
       "path": "js/secure-checkout-order.js",
-      "bytes": 27364,
-      "sha256": "9f8d5bd4d8723bb1ef4496308b419947086effdfd25e3f78784a03c296c7cc64",
+      "bytes": 27545,
+      "sha256": "a43c650161fff9c158b75030c68dd76c8e109126857a3e1b099e05c6cfd62f12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19040,7 +19040,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 543
+          "line": 545
         }
       ]
     },
@@ -22703,8 +22703,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 88048,
-      "sha256": "6091d898762c4dfba2cb52d050bda6d383bc16ee20fc66ee96077042c2517dca"
+      "bytes": 88080,
+      "sha256": "ffe8c80c99e74ed181ec67c4c16d3ff12739b156f8016a33f0b1126e57a5cc61"
     },
     {
       "path": "cloudflare/cloudinary-security.js",
@@ -24011,8 +24011,8 @@
     {
       "path": "js/secure-checkout-order.js",
       "extension": ".js",
-      "bytes": 27364,
-      "sha256": "9f8d5bd4d8723bb1ef4496308b419947086effdfd25e3f78784a03c296c7cc64"
+      "bytes": 27545,
+      "sha256": "a43c650161fff9c158b75030c68dd76c8e109126857a3e1b099e05c6cfd62f12"
     },
     {
       "path": "js/security-utils.js",
