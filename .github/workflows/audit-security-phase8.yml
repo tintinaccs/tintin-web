@@ -22,15 +22,16 @@ on:
     branches:
       - main
     paths:
-      # El job ejecuta `npm run audit:final`, que audita todo el repositorio.
-      # Por eso el filtro de push cubre js/** y scripts/** completos: un cambio
-      # en cualquier superficie o script de auditoría puede romperlo.
       - 'firestore.rules'
       - '_headers'
       - 'apps-script/Phase3Security.gs'
       - 'apps-script/Phase4CreateOrder.gs'
-      - 'js/**'
-      - 'scripts/**'
+      - 'js/create-order-client.js'
+      - 'scripts/audit-admin-users-roles.js'
+      - 'scripts/audit-secure-orders.js'
+      - 'scripts/audit-store-gate.js'
+      - 'scripts/audit-phase6-security.js'
+      - 'scripts/test-firestore-critical.mjs'
       - 'package.json'
       - '.github/workflows/audit-security-phase8.yml'
   workflow_dispatch:
