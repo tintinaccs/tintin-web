@@ -5,7 +5,8 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const files = {
-  nav: read('js/nav-collections.js'),
+  nav: read('js/components/navigation/shared/collections-runtime.js'),
+  navCompatibility: read('js/nav-collections.js'),
   publicPhase4: read('js/collections-phase4.js'),
   adminPhase4: read('js/admin-collections-phase4.js'),
   uiQuality: read('js/ui-quality.js'),
@@ -37,17 +38,20 @@ check(
 );
 
 check(
-  'El menú elimina HTML estático antes de cargar',
-  files.nav.includes('container.replaceChildren') &&
-    files.nav.includes("dataset.phase4CollectionsState = 'loading'"),
-  'no deben quedar categorías antiguas durante una falla'
+  'El menú conserva una alternativa mientras carga',
+  files.nav.includes('function hasUsableFallback') &&
+    files.nav.includes("dataset.phase4CollectionsState = 'loading'") &&
+    files.nav.includes("container.setAttribute('aria-busy', 'true')") &&
+    files.nav.includes('if (!hasUsableFallback(container))'),
+  'la navegación debe seguir siendo utilizable si Firestore tarda o falla'
 );
 
 check(
-  'El menú falla de forma explícita',
-  files.nav.includes("createStateNode('No pudimos cargar las colecciones.', 'error')") &&
-    files.nav.includes("retry.addEventListener('click'"),
-  'una falla no puede dejar la lista fija del HTML'
+  'El menú falla de forma explícita sin destruir el fallback',
+  files.nav.includes("createStateNode('No pudimos actualizar las colecciones. Podés seguir usando las opciones disponibles.', 'error')") &&
+    files.nav.includes("retry.addEventListener('click'") &&
+    files.nav.includes('container.appendChild(createStateNode'),
+  'una falla debe informar, permitir reintentar y conservar los enlaces existentes'
 );
 
 check(
@@ -63,6 +67,13 @@ check(
     files.publicPhase4.includes('name.textContent') &&
     !files.nav.includes('seedStaticSheetImages'),
   'no se debe interpolar contenido de Firestore con innerHTML'
+);
+
+check(
+  'El módulo legado apunta a la fuente modular',
+  files.navCompatibility.includes('components/navigation/shared/collections-runtime.js') &&
+    files.navCompatibility.split('\n').length < 10,
+  'js/nav-collections.js debe ser solamente un adaptador de compatibilidad'
 );
 
 check(
@@ -115,8 +126,8 @@ check(
 
 check(
   'La fase 4 se inicia globalmente',
-  files.uiQuality.includes("bootCollectionsPhase4()") &&
-    files.uiQuality.includes("bootAdminCollectionsPhase4()") &&
+  files.uiQuality.includes('bootCollectionsPhase4()') &&
+    files.uiQuality.includes('bootAdminCollectionsPhase4()') &&
     files.uiQuality.includes("'./collections-phase4.js'") &&
     files.uiQuality.includes("'./admin-collections-phase4.js'"),
   'debe ejecutarse incluso en páginas con HTML legado'
@@ -134,7 +145,7 @@ check(
 check(
   'Los destacados de colecciones tienen un límite de rendimiento',
   files.collectionsPageRuntime.includes('const FEATURED_LIMIT = 5') &&
-    files.collectionsPage.includes("id=\"collections-featured-grid\"") &&
+    files.collectionsPage.includes('id="collections-featured-grid"') &&
     !files.collectionsPage.includes('id="colls-products-grid"') &&
     files.collectionsPageRuntime.includes('.slice(0, FEATURED_LIMIT)'),
   'la página no debe intentar montar el catálogo completo debajo de las colecciones ni superar cinco recomendaciones'
