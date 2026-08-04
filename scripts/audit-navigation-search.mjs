@@ -60,11 +60,13 @@ async function installSeededCatalog(page) {
 
 async function renderSeededQuery(page, input) {
   await input.fill('reloj');
+  await page.waitForTimeout(180);
   await page.evaluate(products => {
     window.PRODUCTS = products;
     window.TintinSearchController.syncCatalog(products);
   }, SEEDED_PRODUCTS);
-  await page.waitForSelector('#search-results .tt-search-result-item', { timeout:5000 });
+  await page.waitForFunction(() => [...document.querySelectorAll('#search-results .tt-search-result-copy strong')]
+    .some(node => /Reloj Ovalado Dorado/i.test(node.textContent || '')), null, { timeout:5000 });
 }
 
 async function auditSearch(label, viewport, triggerSelector) {
@@ -76,10 +78,10 @@ async function auditSearch(label, viewport, triggerSelector) {
   try {
     await page.goto(`${baseURL}/index.html`, { waitUntil:'domcontentloaded' });
     await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout:10000 });
-    await installSeededCatalog(page);
 
     await page.locator(triggerSelector).click();
     await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'false');
+    await installSeededCatalog(page);
 
     const input = page.locator('#search-input');
     await renderSeededQuery(page, input);
@@ -88,6 +90,7 @@ async function auditSearch(label, viewport, triggerSelector) {
     check(names.some(name => /Reloj Ovalado Dorado/i.test(name)), `[${label}] no encontró el producto sembrado`);
 
     await input.press('ArrowDown');
+    await page.waitForFunction(() => Boolean(document.getElementById('search-input')?.getAttribute('aria-activedescendant')), null, { timeout:1500 });
     const activeDescendant = await input.getAttribute('aria-activedescendant');
     check(Boolean(activeDescendant), `[${label}] ArrowDown no actualizó aria-activedescendant`);
     if (activeDescendant) {
@@ -97,8 +100,11 @@ async function auditSearch(label, viewport, triggerSelector) {
 
     await page.locator('#btn-search-close').click();
     await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'true');
-    check(await input.inputValue() === '', `[${label}] el buscador no limpió el texto al cerrar`);
-    check(await page.locator('#search-results').evaluate(node => getComputedStyle(node).display === 'none'), `[${label}] los resultados siguieron visibles al cerrar`);
+    await page.waitForFunction(() => {
+      const inputNode = document.getElementById('search-input');
+      const resultsNode = document.getElementById('search-results');
+      return inputNode?.value === '' && resultsNode && getComputedStyle(resultsNode).display === 'none';
+    }, null, { timeout:1500 });
     check(pageErrors.length === 0, `[${label}] errores de página: ${pageErrors.join(' | ')}`);
   } catch (error) {
     failures.push(`[${label}] ${error.message}`);
