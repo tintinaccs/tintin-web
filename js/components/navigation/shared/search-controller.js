@@ -177,6 +177,14 @@ export function syncSearchCatalog(products) {
   return catalog.length;
 }
 
+function exposeSearchController() {
+  window.TintinSearchController = Object.freeze({
+    syncCatalog: syncSearchCatalog,
+    renderCurrentQuery: () => renderResults(document.getElementById('search-input')?.value || ''),
+    catalogSize: () => index.length,
+  });
+}
+
 function setActiveResult(nextIndex) {
   const input = document.getElementById('search-input');
   const results = document.getElementById('search-results');
@@ -271,4 +279,5 @@ export function initSearchController() {
   });
 }
 
+exposeSearchController();
 initSearchController();
