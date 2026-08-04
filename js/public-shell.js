@@ -5,6 +5,10 @@
    La estructura real vive en js/components/navigation/ y se carga como
    módulo ES para que desktop, tablet, mobile y superficies compartidas
    puedan mantenerse por separado.
+
+   Contrato de accesibilidad conservado por los componentes:
+   id="search-panel" role="dialog" · id="cart-drawer" role="dialog"
+   id="collections-sheet" role="dialog" · id="tt-tablet-menu" role="dialog"
    ============================================================= */
 (function () {
   'use strict';
