@@ -26,6 +26,7 @@ const requiredFiles = [
   'js/components/navigation/shared/config.js',
   'js/components/navigation/shared/footer-accordion.js',
   'js/components/navigation/shared/icons.js',
+  'js/components/navigation/shared/register-surfaces.js',
   'js/components/navigation/shared/route-state.js',
   'js/components/navigation/shared/router.js',
   'js/components/navigation/shared/runtime.js',
@@ -58,6 +59,8 @@ if (requiredFiles.every(exists)) {
   check(entry.includes("from './shared/search-panel.js'"), 'entry: falta buscador compartido');
   check(entry.includes("from './shared/account-drawer.js'"), 'entry: falta cuenta compartida');
   check(entry.includes("from './shared/cart-drawer.js'"), 'entry: falta carrito compartido');
+  check(entry.includes("from './shared/register-surfaces.js'"), 'entry: falta registro modular de superficies');
+  check(entry.includes('await registerNavigationSurfaces()'), 'entry: monta el runtime antes de registrar superficies');
 
   const desktop = read('js/components/navigation/desktop/header-desktop.js');
   const tablet = read('js/components/navigation/tablet/header-tablet.js');
@@ -70,12 +73,16 @@ if (requiredFiles.every(exists)) {
   check(!mobile.includes('tt-header-tablet'), 'mobile contiene estructura tablet');
 
   const surfaces = read('js/components/navigation/shared/surface-controller.js');
-  check(surfaces.includes("'desktop-shop'"), 'controlador compartido no conoce Tienda desktop');
-  check(surfaces.includes("'tablet-menu'"), 'controlador compartido no conoce menú tablet');
-  check(surfaces.includes("'mobile-shop'"), 'controlador compartido no conoce Tienda mobile');
-  check(surfaces.includes("'search'"), 'controlador compartido no conoce Buscar');
-  check(surfaces.includes("'cart'"), 'controlador compartido no conoce Carrito');
-  check(surfaces.includes("'account'"), 'controlador compartido no conoce Cuenta');
+  const registrations = read('js/components/navigation/shared/register-surfaces.js');
+  check(registrations.includes("['desktop-shop'"), 'registro: falta Tienda desktop');
+  check(registrations.includes("['tablet-menu'"), 'registro: falta menú tablet');
+  check(registrations.includes("['mobile-shop'"), 'registro: falta Tienda mobile');
+  check(registrations.includes("['search'"), 'registro: falta Buscar');
+  check(registrations.includes("['cart'"), 'registro: falta Carrito');
+  check(registrations.includes("['account'"), 'registro: falta Cuenta');
+  check(registrations.includes("controller.connect({"), 'registro: falta conectar backdrop y morph');
+  check(surfaces.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva su entorno');
+  check(surfaces.includes("this.close('outside', { restoreFocus: false })"), 'controlador: Tienda desktop puede reabrirse por foco');
 
   const legacyAdapters = [
     ['js/public-shell.js', 'components/navigation/public-shell-entry.js'],
