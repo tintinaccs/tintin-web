@@ -170,6 +170,13 @@ function renderResults(query) {
   results.appendChild(fragment);
 }
 
+export function syncSearchCatalog(products) {
+  const catalog = Array.isArray(products) ? products : [];
+  buildIndex(catalog);
+  renderResults(document.getElementById('search-input')?.value || '');
+  return catalog.length;
+}
+
 function setActiveResult(nextIndex) {
   const input = document.getElementById('search-input');
   const results = document.getElementById('search-results');
@@ -191,8 +198,7 @@ function setActiveResult(nextIndex) {
 
 async function ensureProducts(force = false) {
   if (!force && Array.isArray(window.PRODUCTS) && window.PRODUCTS.length) {
-    buildIndex(window.PRODUCTS);
-    renderResults(document.getElementById('search-input')?.value || '');
+    syncSearchCatalog(window.PRODUCTS);
     return window.PRODUCTS;
   }
   if (loadPromise && !force) return loadPromise;
@@ -209,8 +215,7 @@ async function ensureProducts(force = false) {
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];
     })
     .then(products => {
-      buildIndex(Array.isArray(products) ? products : window.PRODUCTS || []);
-      renderResults(document.getElementById('search-input')?.value || '');
+      syncSearchCatalog(Array.isArray(products) ? products : window.PRODUCTS || []);
       return products;
     })
     .catch(error => {
@@ -233,7 +238,7 @@ export function initSearchController() {
   input.setAttribute('aria-autocomplete', 'list');
   input.setAttribute('aria-controls', 'search-results');
 
-  if (Array.isArray(window.PRODUCTS)) buildIndex(window.PRODUCTS);
+  if (Array.isArray(window.PRODUCTS)) syncSearchCatalog(window.PRODUCTS);
 
   input.addEventListener('input', () => {
     window.clearTimeout(timer);
@@ -255,8 +260,7 @@ export function initSearchController() {
   });
 
   window.addEventListener('tintin:products-loaded', event => {
-    buildIndex(event.detail?.products || window.PRODUCTS || []);
-    if (input.value) renderResults(input.value);
+    syncSearchCatalog(event.detail?.products || window.PRODUCTS || []);
   });
 
   window.addEventListener('tintin:products-error', event => {
