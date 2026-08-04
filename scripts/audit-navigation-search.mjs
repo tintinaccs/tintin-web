@@ -8,7 +8,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
 const port = 4203;
 const baseURL = `http://${host}:${port}`;
-const searchModuleURL = `${baseURL}/js/components/navigation/shared/search-controller.js?v=tintin-20260804-modular-shell-1`;
 const mime = { '.css':'text/css', '.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.json':'application/json', '.png':'image/png', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon', '.woff2':'font/woff2' };
 const SEEDED_PRODUCTS = [
   { id:'reloj-prueba', name:'Reloj Ovalado Dorado', category:'Relojes', price:180000, active:true, stock:2, imageUrl:'' },
@@ -37,12 +36,13 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 async function installSeededCatalog(page) {
   await page.waitForFunction(
-    () => document.getElementById('search-input')?.dataset.ttModularSearchReady === '1',
+    () => document.getElementById('search-input')?.dataset.ttModularSearchReady === '1'
+      && typeof window.TintinSearchController?.syncCatalog === 'function',
     null,
     { timeout:10000 }
   );
 
-  await page.evaluate(async ({ products, moduleURL }) => {
+  await page.evaluate(products => {
     if (window.__ttSearchAuditCatalogLock !== true) {
       window.__ttSearchAuditCatalogLock = true;
       window.addEventListener('tintin:products-loaded', event => {
@@ -50,17 +50,21 @@ async function installSeededCatalog(page) {
       }, true);
     }
 
-    const searchModule = await import(moduleURL);
-    if (typeof searchModule.syncSearchCatalog !== 'function') {
-      throw new Error('El módulo de búsqueda no expone syncSearchCatalog');
-    }
-
     window.PRODUCTS = products;
-    const synced = searchModule.syncSearchCatalog(products);
-    if (synced !== products.length) {
+    const synced = window.TintinSearchController.syncCatalog(products);
+    if (synced !== products.length || window.TintinSearchController.catalogSize() !== products.length) {
       throw new Error(`El catálogo de prueba sincronizó ${synced} de ${products.length} productos`);
     }
-  }, { products: SEEDED_PRODUCTS, moduleURL: searchModuleURL });
+  }, SEEDED_PRODUCTS);
+}
+
+async function renderSeededQuery(page, input) {
+  await input.fill('reloj');
+  await page.evaluate(products => {
+    window.PRODUCTS = products;
+    window.TintinSearchController.syncCatalog(products);
+  }, SEEDED_PRODUCTS);
+  await page.waitForSelector('#search-results .tt-search-result-item', { timeout:5000 });
 }
 
 async function auditSearch(label, viewport, triggerSelector) {
@@ -78,9 +82,7 @@ async function auditSearch(label, viewport, triggerSelector) {
     await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'false');
 
     const input = page.locator('#search-input');
-    await input.fill('reloj');
-    await page.waitForFunction(() => [...document.querySelectorAll('#search-results .tt-search-result-copy strong')]
-      .some(node => /Reloj Ovalado Dorado/i.test(node.textContent || '')), null, { timeout:5000 });
+    await renderSeededQuery(page, input);
 
     const names = await page.locator('#search-results .tt-search-result-copy strong').allTextContents();
     check(names.some(name => /Reloj Ovalado Dorado/i.test(name)), `[${label}] no encontró el producto sembrado`);
