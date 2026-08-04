@@ -19,7 +19,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const adminApp = read('js/admin-app.js');
+const adminApp = read('js/admin/admin-app.js');
 const headerMode = read('js/mobile-header-mode.js');
 const whatsapp = read('js/whatsapp.js');
 const publicSettings = read('js/public-settings-store.js');

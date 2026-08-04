@@ -12,9 +12,9 @@ const resendNotify   = read('js/resend-order-notify.js');
 const bridge         = read('js/pages/checkout/checkout-email-bridge.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
-const adminSync      = read('js/admin-email-gate-sync.js');
+const adminSync      = read('js/admin/settings/admin-email-gate-sync.js');
 const functionOrigin = read('js/function-origin.js');
-const adminApp       = read('js/admin-app.js');
+const adminApp       = read('js/admin/admin-app.js');
 const whatsapp       = read('js/whatsapp.js');
 const settingsStore  = read('js/public-settings-store.js');
 const rules          = read('firestore.rules');
@@ -48,7 +48,7 @@ check(
   // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
   // comparten la misma resolución de origen.
   resendNotify.includes("import { apiUrl } from './function-origin.js") &&
-    adminSync.includes("import { apiUrl } from './function-origin.js") &&
+    adminSync.includes("import { apiUrl } from '../../function-origin.js") &&
     functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
     functionOrigin.includes("hostname.endsWith('github.io')"),
   'Toda ruta /api/* del cliente debe resolverse con js/function-origin.js, no con una constante relativa suelta.'

@@ -20,8 +20,8 @@ import { listPublicCollectionRest } from '../../firestore-rest-fallback.js?v=tin
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
-    import('../../admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
-    import('../../admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
+    import('../../admin/settings/admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
+    import('../../admin/settings/admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
   ]);
 }
 

@@ -68,7 +68,7 @@
 
 /* Aliases del Super Admin — a propósito YA NO apuntan a --tt-* (el
    esquema global): el panel tiene su propio esquema independiente en
-   css/admin-color-tokens.css (Super Admin → Apariencia → Esquema de
+   css/admin/admin-color-tokens.css (Super Admin → Apariencia → Esquema de
    Super Admin), cargado solo en admin.html/admin-images.html. Antes esta
    sección forzaba --adm-* = --tt-* con !important en TODAS las páginas,
    lo que hacía que el panel "heredara" el esquema público sin poder

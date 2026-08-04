@@ -39,7 +39,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const admin    = read('js/admin-app.js');
+const admin    = read('js/admin/admin-app.js');
 const activity = read('js/site-activity.js');
 const geoFn    = read('functions/api/visitor-geo.js');
 const orderStats = read('js/order-stats.js');
@@ -195,7 +195,7 @@ check(
 );
 check(
   'Las páginas de administración no se rastrean como visitas del sitio',
-  activity.includes("from './admin-path.js") &&
+  activity.includes("from './admin/admin-path.js") &&
     activity.includes('const trackablePage = !isAdminPage()'),
   'El panel no debe contarse como tráfico público.'
 );

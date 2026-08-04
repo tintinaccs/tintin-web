@@ -7,14 +7,14 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 
 const rules = read('firestore.rules');
 const checkout = read('js/secure-checkout-order.js');
-const admin = read('js/admin-app.js');
+const admin = read('js/admin/admin-app.js');
 const activity = read('js/site-activity.js');
 const loader = read('js/page-loader.js');
 const products = read('js/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
-const inventory = read('js/admin-inventory-integrity.js');
+const inventory = read('js/admin/products/admin-inventory-integrity.js');
 const model = read('js/inventory-model.mjs');
-const deleteFix = read('js/admin-order-delete-fix.js');
+const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 
 const checks = [];

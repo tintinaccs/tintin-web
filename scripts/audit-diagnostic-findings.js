@@ -39,8 +39,8 @@ function contrastRatio(hexA, hexB) {
 
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 const adminHtml = read('admin.html');
-const adminApp = read('js/admin-app.js');
-const diagnostics = read('js/admin-site-diagnostics.js');
+const adminApp = read('js/admin/admin-app.js');
+const diagnostics = read('js/admin/diagnostics/admin-site-diagnostics.js');
 const manifestBuilder = read('scripts/build-diagnostic-manifest.js');
 const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
@@ -72,8 +72,8 @@ check(
 check('admin.html pesa menos de 200 KB', Buffer.byteLength(adminHtml, 'utf8') < 200 * 1024);
 check(
   'La aplicación administrativa fue extraída a un módulo cargado de forma diferida',
-  exists('js/admin-app.js') &&
-    /<script[^>]+type=["']module["'][^>]+src=["']js\/admin-app\.js\?v=/.test(adminHtml)
+  exists('js/admin/admin-app.js') &&
+    /<script[^>]+type=["']module["'][^>]+src=["']js\/admin\/admin-app\.js\?v=/.test(adminHtml)
 );
 check('El panel administrativo conserva exactamente un H1', (adminHtml.match(/<h1\b/gi) || []).length === 1);
 check(
@@ -88,7 +88,7 @@ check(
 );
 check(
   'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin-users-phase8.js')) &&
+  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/admin-users-phase8.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
     /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/products-store.js'))
@@ -169,9 +169,9 @@ check(
 check(
   'Las exportaciones y tareas globales usan paginación acotada',
   [
-    'js/admin-app.js',
-    'js/admin-import-phase9.js',
-    'js/admin-welcome-control.js',
+    'js/admin/admin-app.js',
+    'js/admin/admin-import-phase9.js',
+    'js/admin/content/admin-welcome-control.js',
     'js/order-stats.js'
   ].every(file => read(file).includes('getDocsPaginated')) &&
     exists('js/firestore-pagination.js')

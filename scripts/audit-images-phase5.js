@@ -11,7 +11,7 @@ const files = {
   images: read('js/images.js'),
   resolver: read('js/image-resolver.js'),
   runtime: read('js/images-phase5.js'),
-  admin: read('js/admin-images-phase5.js'),
+  admin: read('js/admin/products/admin-images-phase5.js'),
   adminHtml: read('admin-images.html'),
   uploadWidget: read('js/image-upload-widget.js'),
   processing: read('js/image-processing.js'),
@@ -397,7 +397,7 @@ check(
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
     files.ui.includes("'./images-phase5.js'") &&
-    files.ui.includes("'./admin-images-phase5.js'"),
+    files.ui.includes("'./admin/products/admin-images-phase5.js'"),
   'ui-quality debe iniciar ambos módulos'
 );
 
@@ -494,14 +494,14 @@ check(
     files.uploadWidget.includes(`./media-library.js?${CURRENT_VERSION_QUERY}`) &&
     files.mediaLibrary.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
     files.adminHtml.includes(`./js/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
-    files.adminHtml.includes(`./js/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+    files.adminHtml.includes(`./js/admin/products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
 );
 
 check(
   'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
-  read('js/admin-app.js').includes(`./image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
-    read('js/admin-app.js').includes(`./admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+  read('js/admin/admin-app.js').includes(`../image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+    read('js/admin/admin-app.js').includes(`./products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
 );
 

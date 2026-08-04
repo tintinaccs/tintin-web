@@ -1,5 +1,5 @@
-import { auth, db } from './firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { SUPER_ADMIN } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { SUPER_ADMIN } from '../../roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
   doc,
@@ -18,7 +18,7 @@ import {
   modeIncludes,
   stableHash,
   summarizeReport
-} from './diagnostic-core.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../diagnostic-core.js?v=tintin-20260716-cloudinary-fix-1';
 
 const MANIFEST_URL = './diagnostic-manifest.json';
 const HISTORY_DB = 'tintin-diagnostics-readonly';

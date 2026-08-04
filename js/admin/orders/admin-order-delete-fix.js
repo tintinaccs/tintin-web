@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from './order-stats.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../order-stats.js?v=tintin-20260716-cloudinary-fix-1';
 
 (function () {
   'use strict';

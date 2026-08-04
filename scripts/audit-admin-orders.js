@@ -40,14 +40,14 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const adminApp   = read('js/admin-app.js');
+const adminApp   = read('js/admin/admin-app.js');
 const perfil     = read('perfil.html');
 const orderStats = read('js/order-stats.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/secure-checkout-order.js');
 const phase4Order = read('apps-script/Phase4CreateOrder.gs');
-const inventoryIntegrity = read('js/admin-inventory-integrity.js');
-const deleteFix = read('js/admin-order-delete-fix.js');
+const inventoryIntegrity = read('js/admin/products/admin-inventory-integrity.js');
+const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)

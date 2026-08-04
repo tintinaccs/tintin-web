@@ -14,10 +14,10 @@ function check(label, condition) {
   }
 }
 
-const runtime = read('js/admin-site-diagnostics.js');
+const runtime = read('js/admin/diagnostics/admin-site-diagnostics.js');
 const core = read('js/diagnostic-core.js');
-const admin = `${read('admin.html')}\n${read('js/admin-app.js')}`;
-const css = read('css/admin.css');
+const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
+const css = read('css/admin/admin.css');
 const pkg = JSON.parse(read('package.json'));
 const firestoreShim = read('js/diagnostic-shims/firestore-shim.js');
 const authShim = read('js/diagnostic-shims/auth-shim.js');

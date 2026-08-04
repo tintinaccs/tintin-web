@@ -3,7 +3,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
-const phase = read('js/admin-users-phase8.js');
+const phase = read('js/admin/users/admin-users-phase8.js');
 const quality = read('js/ui-quality.js');
 const roles = read('js/roles.js');
 const rules = read('firestore.rules');
@@ -82,7 +82,7 @@ check(
 check(
   'La Fase 8 se inicia solo en admin',
   quality.includes('bootAdminUsersPhase8') &&
-    quality.includes("import(versioned('./admin-users-phase8.js'))"),
+    quality.includes("import(versioned('./admin/users/admin-users-phase8.js'))"),
   'ui-quality.js debe cargar el módulo nuevo'
 );
 

@@ -18,8 +18,8 @@ function check(name, condition, detail) {
 const pageLoader = read('js/page-loader.js');
 const gateCore = read('js/store-gate-core.js');
 const gateRuntime = read('js/store-gate.js');
-const adminSync = read('js/admin-store-control.js');
-const adminApp = read('js/admin-app.js');
+const adminSync = read('js/admin/settings/admin-store-control.js');
+const adminApp = read('js/admin/admin-app.js');
 const authNav = read('js/auth-nav.js');
 const uiQuality = read('js/ui-quality.js');
 const pageAudit = read('js/page-audit-fix.js');

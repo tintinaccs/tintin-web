@@ -243,13 +243,13 @@ for (const file of walk(ROOT)) {
 
 const adminSource = [
   fs.readFileSync(path.join(ROOT, 'admin.html'), 'utf8'),
-  fs.readFileSync(path.join(ROOT, 'js', 'admin-app.js'), 'utf8')
+  fs.readFileSync(path.join(ROOT, 'js', 'admin', 'admin-app.js'), 'utf8')
 ].join('\n');
 check(/function buildPreviewHtml_/.test(adminSource), 'No se encontró la vista previa de email del Super Admin.');
 check(/fontBase = new URL\('assets-tintin\/fonts\/'/.test(adminSource), 'El iframe de vista previa no carga Montserrat local.');
 check(/srcdoc = html/.test(adminSource), 'No se encontró la conexión de la vista previa srcdoc.');
 
-const diagnosticSource = fs.readFileSync(path.join(ROOT, 'js', 'admin-site-diagnostics.js'), 'utf8');
+const diagnosticSource = fs.readFileSync(path.join(ROOT, 'js', 'admin', 'diagnostics', 'admin-site-diagnostics.js'), 'utf8');
 check(/getComputedStyle\(element\)/.test(diagnosticSource), 'Diagnóstico no comprueba la familia calculada de los textos.');
 check(/style\.fontFamily/.test(diagnosticSource), 'Diagnóstico no inspecciona fontFamily calculado.');
 check(/getComputedStyle\(element,\s*['"]::placeholder['"]\)/.test(diagnosticSource), 'Diagnóstico no comprueba placeholders.');
