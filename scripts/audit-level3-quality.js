@@ -166,7 +166,7 @@ const recoveryFiles = [
   'js/profile-maintenance.js',
   'js/checkout-maintenance.js',
   'js/checkout-reliability.js',
-  'js/contact-maintenance.js',
+  'js/pages/institutional/contact-maintenance.js',
   'js/cart-sync.js'
 ];
 for (const file of recoveryFiles) {

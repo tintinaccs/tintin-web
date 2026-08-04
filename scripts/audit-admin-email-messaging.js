@@ -164,7 +164,7 @@ check(
   adminApp.includes('encodeURIComponent(waConfirmMessageTemplate.replace(/\\{nombre\\}/g') &&
     read('script.js').includes('encodeURIComponent(') &&
     checkout.includes('encodeURIComponent(') &&
-    read('js/contact-maintenance.js').includes('encodeURIComponent') &&
+    read('js/pages/institutional/contact-maintenance.js').includes('encodeURIComponent') &&
     read('js/blocked-modal.js').includes('encodeURIComponent'),
   'Los mensajes configurables deben codificarse.'
 );

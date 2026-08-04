@@ -8,7 +8,7 @@
     if (document.querySelector('link[data-tt-about-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'css/about-maintenance.css?v=tintin-20260718-about-maintenance-1';
+    link.href = 'css/pages/institutional/about-maintenance.css?v=tintin-20260718-about-maintenance-1';
     link.dataset.ttAboutMaintenance = '1';
     document.head.appendChild(link);
   };
