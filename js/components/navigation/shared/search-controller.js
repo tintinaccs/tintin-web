@@ -138,6 +138,11 @@ function showResultsContainer(results) {
   results.style.display = 'block';
 }
 
+function hideResultsContainer(results) {
+  results.hidden = true;
+  results.style.display = 'none';
+}
+
 function renderResults(query) {
   const results = document.getElementById('search-results');
   const input = document.getElementById('search-input');
@@ -149,7 +154,7 @@ function renderResults(query) {
 
   const cleaned = String(query || '').trim();
   if (!cleaned) {
-    results.style.display = 'none';
+    hideResultsContainer(results);
     return;
   }
 
@@ -171,15 +176,35 @@ function renderResults(query) {
 }
 
 export function syncSearchCatalog(products) {
+  window.clearTimeout(timer);
+  timer = 0;
   const catalog = Array.isArray(products) ? products : [];
   buildIndex(catalog);
   renderResults(document.getElementById('search-input')?.value || '');
   return catalog.length;
 }
 
+export function resetSearchState() {
+  window.clearTimeout(timer);
+  timer = 0;
+  activeIndex = -1;
+
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (input) {
+    input.value = '';
+    input.removeAttribute('aria-activedescendant');
+  }
+  if (results) {
+    results.replaceChildren();
+    hideResultsContainer(results);
+  }
+}
+
 function exposeSearchController() {
   window.TintinSearchController = Object.freeze({
     syncCatalog: syncSearchCatalog,
+    reset: resetSearchState,
     renderCurrentQuery: () => renderResults(document.getElementById('search-input')?.value || ''),
     catalogSize: () => index.length,
   });
@@ -250,7 +275,10 @@ export function initSearchController() {
 
   input.addEventListener('input', () => {
     window.clearTimeout(timer);
-    timer = window.setTimeout(() => renderResults(input.value), INPUT_DELAY_MS);
+    timer = window.setTimeout(() => {
+      timer = 0;
+      renderResults(input.value);
+    }, INPUT_DELAY_MS);
   });
 
   input.addEventListener('keydown', event => {
