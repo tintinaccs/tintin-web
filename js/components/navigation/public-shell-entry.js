@@ -10,6 +10,7 @@ import { applyActiveState, currentPage } from './shared/route-state.js';
 import { ensureNavigationAssets } from './shared/assets.js';
 import { loadSharedRuntime } from './shared/runtime.js';
 import { enhanceMobileFooter } from './shared/footer-accordion.js';
+import { registerNavigationSurfaces } from './shared/register-surfaces.js';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',
@@ -57,7 +58,7 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
-  mountPromise = ensureNavigationAssets().then(() => {
+  mountPromise = ensureNavigationAssets().then(async () => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
     removeLegacyShell();
@@ -68,6 +69,7 @@ function mountPublicShell() {
 
     applyActiveState();
     enhanceMobileFooter();
+    await registerNavigationSurfaces();
     loadSharedRuntime();
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
