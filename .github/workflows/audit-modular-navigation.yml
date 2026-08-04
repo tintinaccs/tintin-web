@@ -9,10 +9,15 @@ on:
       - 'js/ui-navigation-controller.js'
       - 'js/navigation-*.js'
       - 'js/nav-collections.js'
+      - 'js/header-scroll-hide.js'
+      - 'js/header-account-mobile-fix.js'
+      - 'js/auth-nav.js'
       - 'css/navigation-*.css'
       - 'css/surface-controller.css'
       - 'scripts/audit-public-shell.js'
       - 'scripts/audit-modular-architecture.js'
+      - 'scripts/audit-all-navigation-surfaces-ci.mjs'
+      - 'scripts/audit-navigation-search.mjs'
       - 'package.json'
       - '.github/workflows/audit-modular-navigation.yml'
   workflow_dispatch:
@@ -40,7 +45,7 @@ jobs:
 
   navigation-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 24
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,5 +60,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Responsive navigation audit
         run: npm run audit:responsive-navigation
+      - name: Search behavior audit
+        run: npm run audit:navigation-search
       - name: All navigation surfaces audit
         run: npm run audit:all-navigation-surfaces
