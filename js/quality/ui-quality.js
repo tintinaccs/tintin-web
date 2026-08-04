@@ -11,7 +11,7 @@ function isHomePage(){var path=(location.pathname||'').toLowerCase();return path
 var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CACHE_VERSION;
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
 function css(){
- var files=[['tt-ui-quality-css','ui-quality.css'],['tt-unified-theme-css','tintin-unified-theme.css'],['tt-theme-cleanup-css','tintin-theme-cleanup.css'],['tt-parity-safe-css','tintin-parity-safe.css']];
+ var files=[['tt-ui-quality-css','quality/ui-quality.css'],['tt-unified-theme-css','core/tintin-unified-theme.css'],['tt-theme-cleanup-css','core/tintin-theme-cleanup.css'],['tt-parity-safe-css','theme/tintin-parity-safe.css']];
  files.forEach(function(f){
   var id=f[0],file=f[1];
   if(document.getElementById(id))return;
