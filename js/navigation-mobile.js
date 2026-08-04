@@ -1,29 +1,7 @@
-/* Mobile-only moving halo calculated from real item geometry. */
+/* Compatibility shim. Source of truth: components/navigation/mobile/controller.js */
 (() => {
-  const nav = document.getElementById('tt-tabbar');
-  if (!nav || nav.dataset.ttMobileReady === '1') return;
-  nav.dataset.ttMobileReady = '1';
-
-  const items = [...nav.querySelectorAll('.tt-tabbar-btn')];
-  const locate = item => {
-    if (!item) {
-      nav.classList.remove('tt-mobile-nav-ready');
-      return;
-    }
-    const navRect = nav.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
-    const width = Math.min(58, Math.max(48, itemRect.width - 8));
-    nav.style.setProperty('--tt-mobile-w', `${width}px`);
-    nav.style.setProperty('--tt-mobile-x', `${itemRect.left - navRect.left + (itemRect.width - width) / 2}px`);
-    nav.classList.add('tt-mobile-nav-ready');
-  };
-  // Sin fallback a items[0]: en paginas auxiliares ningun tab es la ruta
-  // activa y el halo/indicador movil no debe marcar "Inicio" igual.
-  const current = () => items.find(item => item.classList.contains('active')) || null;
-  const sync = () => locate(current());
-  const observer = new MutationObserver(sync);
-  items.forEach(item => observer.observe(item, { attributes:true, attributeFilter:['class','aria-expanded','aria-current'] }));
-  new ResizeObserver(sync).observe(nav);
-  addEventListener('orientationchange', sync, { passive:true });
-  requestAnimationFrame(sync);
+  const scriptUrl = document.currentScript?.src || new URL('js/navigation-mobile.js', location.href).href;
+  const url = new URL('./components/navigation/mobile/controller.js', scriptUrl);
+  url.searchParams.set('v', 'tintin-20260804-modular-shell-1');
+  import(url.href).catch(error => console.error('[NavigationMobile] No se pudo cargar el módulo.', error));
 })();
