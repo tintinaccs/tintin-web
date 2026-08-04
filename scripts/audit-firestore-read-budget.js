@@ -7,18 +7,18 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
 const navCollectionsAdapter = read('js/components/navigation/legacy/nav-collections.js');
 const navCollectionsRuntime = read('js/components/navigation/shared/collections-runtime.js');
 const pageLoader = read('js/page-maintenance-loader.js');
-const editBadge = read('js/edit-badge.js');
+const editBadge = read('js/core/auth/edit-badge.js');
 const quotaGuard = read('js/pages/checkout/checkout-quota-guard.js');
-const firebase = read('js/firebase.js');
-const settingsStore = read('js/public-settings-store.js');
-const whatsapp = read('js/whatsapp.js');
+const firebase = read('js/core/firebase/firebase.js');
+const settingsStore = read('js/core/store/public-settings-store.js');
+const whatsapp = read('js/components/contact/whatsapp.js');
 const paymentMethods = read('js/pages/checkout/checkout-payment-methods.js');
-const readCache = read('js/firestore-read-cache.js');
+const readCache = read('js/core/firebase/firestore-read-cache.js');
 
 check(
   'Productos abre un solo listener acotado en páginas comerciales',

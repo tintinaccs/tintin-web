@@ -21,28 +21,28 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js" crossorigin>
-  <link rel="modulepreload" href="js/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/login.html" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/components/navigation/legacy/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/location-picker.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/components/location/location-picker.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260716-cloudinary-fix-1" data-tt-login-maintenance>
-  <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/motion.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
 <body>
 
@@ -167,7 +167,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { auth, db, provider } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -178,20 +178,20 @@ import {
 import {
   doc, setDoc, getDoc, runTransaction, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { SUPER_ADMIN } from "./js/roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
+} from "./js/email/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/phone-reservation.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/components/forms/otp-code-input.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/pages/profile/profile-gate.js?v=tintin-20260803-profile-gate-1";
 import { showBlockedModal } from "./js/components/modals/blocked-modal.js?v=tintin-20260716-cloudinary-fix-1";
-import { markSessionStart } from "./js/session-guard.js?v=tintin-20260726-session-guard-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
+import { markSessionStart } from "./js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/profile-onboarding.mjs?v=tintin-20260803-profile-onboarding-2";
 import { createLocationMap } from "./js/components/location/location-map.js?v=tintin-20260803-location-map-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -298,7 +298,7 @@ async function redirectByRole(role, email, options = {}) {
 
 // Crea el perfil la primera vez que alguien entra con Google, o solo
 // actualiza lastLogin las siguientes veces. La lógica vive en
-// js/user-profile-store.js, compartida con el login por correo — acá sólo se
+// js/core/store/user-profile-store.js, compartida con el login por correo — acá sólo se
 // fija el método. Si la cuenta se había creado por correo, devuelve
 // `wrongMethod` y el login no avanza.
 async function guardarUsuario(user) {
@@ -945,7 +945,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   }
 };
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>

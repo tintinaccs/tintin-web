@@ -6,7 +6,7 @@
 // (Central)") y no admiten ese campo redundante. En Cloudflare Pages el
 // último sufijo .js identifica el archivo de implementación de la Function;
 // por eso este nombre doble .js.js expone exactamente la ruta pública
-// /js/secure-checkout-order.js que usa checkout.html.
+// /js/orders/secure-checkout-order.js que usa checkout.html.
 //
 // La Function obtiene el asset estático original y elimina ese único campo
 // antes de enviarlo al navegador. No cambia precios, stock, datos personales

@@ -34,8 +34,8 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const roles      = read('js/roles.js');
-const rolePerms  = read('js/role-permissions.js');
+const roles      = read('js/core/auth/roles.js');
+const rolePerms  = read('js/core/auth/role-permissions.js');
 const adminApp   = read('js/admin/admin-app.js');
 const phase8     = read('js/admin/users/admin-users-phase8.js');
 const rules      = read('firestore.rules');

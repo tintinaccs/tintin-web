@@ -15,7 +15,7 @@ const orderData = {
 
 async function callFunction(source, method = 'GET') {
   const request = new Request(
-    'https://tintinaccesorios.pages.dev/js/secure-checkout-order.js?v=test',
+    'https://tintinaccesorios.pages.dev/js/orders/secure-checkout-order.js?v=test',
     { method }
   );
   const env = {

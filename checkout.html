@@ -21,28 +21,28 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js" crossorigin>
-  <link rel="modulepreload" href="js/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/store-gate.js?v=tintin-20260801-unified-surfaces-16">
-  <link rel="modulepreload" href="js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="modulepreload" href="js/core/store-gate/store-gate.js?v=tintin-20260801-unified-surfaces-16">
+  <link rel="modulepreload" href="js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/checkout.html" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/components/navigation/legacy/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/motion.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260716-cloudinary-fix-1">
 </head>
 <body>
 <h1 class="tt-sr-only">Finalizar compra en Tintin Accesorios</h1>
@@ -359,7 +359,7 @@
 </div><!-- /ck-body -->
 
 <script type="module">
-import { auth, db } from "./js/firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -378,13 +378,13 @@ import {
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { cleanText } from "./js/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+} from "./js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
+import { cleanText } from "./js/core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/location-picker.js?v=tintin-20260803-location-picker-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-saved-location.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { apiUrl } from "./js/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
+import { apiUrl } from "./js/core/firebase/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
   return {
@@ -1815,8 +1815,8 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>
+<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>

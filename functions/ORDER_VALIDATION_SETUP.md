@@ -71,7 +71,7 @@ const ADMIN_PANEL       = 'https://tintinaccs.github.io/tintin-web/admin.html';
 const DEFAULT_STORE_WHATSAPP = '595981299331';
 
 // Proyecto de Firebase y API key pública (la misma que ya está en
-// js/firebase.js — no es un secreto, es la clave web pública de Firebase).
+// js/core/firebase/firebase.js — no es un secreto, es la clave web pública de Firebase).
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
 const FIREBASE_API_KEY    = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 
@@ -661,7 +661,7 @@ Igual que siempre que editás el script:
 1. **"Implementar"** → **"Administrar implementaciones"**
 2. Click en el ✏️ (lápiz) de la implementación activa
 3. **Versión**: "Nueva versión" → **"Implementar"**
-4. La URL (`/exec`) **no cambia** — no hace falta tocar `js/email-config.js`
+4. La URL (`/exec`) **no cambia** — no hace falta tocar `js/email/email-config.js`
    todavía.
 
 ## 6. Cómo lo pruebo yo, sin tocar `checkout.html`

@@ -16,7 +16,7 @@ function check(name, condition, detail) {
 
 const shellRuntime = read('js/components/navigation/shared/runtime.js');
 const routeState = read('js/components/navigation/shared/route-state.js');
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const html = htmlFiles.map(file => [file, read(file)]);
 

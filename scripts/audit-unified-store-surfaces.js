@@ -10,7 +10,7 @@ function check(label, condition, problem) {
   checks.push({ label, ok: Boolean(condition), problem });
 }
 
-const products = read('js/products-store.js');
+const products = read('js/core/store/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
 const policy = read('js/pages/catalog/catalog-merchandising-policy.js');

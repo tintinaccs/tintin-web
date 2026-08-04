@@ -6,7 +6,7 @@
    categorías reales y escrituras por lotes auditadas.
    ============================================================= */
 
-import { auth, db } from '../firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,
@@ -14,14 +14,14 @@ import {
   writeBatch,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { SUPER_ADMIN } from '../roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { getDocsPaginated } from '../firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { getDocsPaginated } from '../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   parseDelimitedRows,
   parseLocalizedNumber,
   parseOptionalStock,
   validateOperationalBackupEnvelope,
-} from '../import-normalization.mjs?v=tintin-20260731-phase9-import-1';
+} from '../core/store/import-normalization.mjs?v=tintin-20260731-phase9-import-1';
 
 if (!window.TintinAdminImportPhase9Booted) {
   window.TintinAdminImportPhase9Booted = true;

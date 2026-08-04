@@ -39,8 +39,8 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const schema        = read('js/content-schema.js');
-const siteContent   = read('js/site-content.js');
+const schema        = read('js/core/store/content-schema.js');
+const siteContent   = read('js/core/store/site-content.js');
 const adminContent  = read('js/admin/content/admin-content-phase6.js');
 const colorScheme   = read('js/components/color/color-scheme.js');
 const colorInstant  = read('js/components/color/color-scheme-instant.js');

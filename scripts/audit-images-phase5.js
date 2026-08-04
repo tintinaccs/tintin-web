@@ -16,10 +16,10 @@ const files = {
   uploadWidget: read('js/components/images/image-upload-widget.js'),
   processing: read('js/components/images/image-processing.js'),
   mediaLibrary: read('js/components/images/media-library.js'),
-  functionOrigin: read('js/function-origin.js'),
-  firebase: read('js/firebase.js'),
-  products: read('js/products-store.js'),
-  ui: read('js/ui-quality.js'),
+  functionOrigin: read('js/core/firebase/function-origin.js'),
+  firebase: read('js/core/firebase/firebase.js'),
+  products: read('js/core/store/products-store.js'),
+  ui: read('js/quality/ui-quality.js'),
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),
   firebaseJson: read('firebase.json'),
@@ -231,11 +231,11 @@ check(
 check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
   // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
-  // en GitHub Pages/Netlify) vive en js/function-origin.js, compartido con
+  // en GitHub Pages/Netlify) vive en js/core/firebase/function-origin.js, compartido con
   // site-activity.js, resend-order-notify.js y admin-email-gate-sync.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
-    files.mediaLibrary.includes("import { apiUrl } from '../../function-origin.js") &&
+    files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/function-origin.js") &&
     files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
     files.functionOrigin.includes("hostname.endsWith('github.io')") &&
     files.mediaLibrary.includes('uploadBlobToCloudinary') &&
@@ -386,7 +386,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from './components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.products.includes("from '../../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'
@@ -396,8 +396,8 @@ check(
   'La Fase 5 se inicia en todas las páginas y en el panel',
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
-    files.ui.includes("'./components/images/images-phase5.js'") &&
-    files.ui.includes("'./admin/products/admin-images-phase5.js'"),
+    files.ui.includes("'../components/images/images-phase5.js'") &&
+    files.ui.includes("'../admin/products/admin-images-phase5.js'"),
   'ui-quality debe iniciar ambos módulos'
 );
 

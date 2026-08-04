@@ -1,8 +1,8 @@
-import { onPublicSettings } from '../../public-settings-store.js?v=tintin-20260720-read-budget-1';
+import { onPublicSettings } from '../../core/store/public-settings-store.js?v=tintin-20260720-read-budget-1';
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../payment-methods-core.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/payment-methods-core.js?v=tintin-20260720-payment-crud-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
@@ -21,7 +21,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/payment-methods.css?v=tintin-20260720-payment-crud-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1';
   document.head.appendChild(link);
 }
 

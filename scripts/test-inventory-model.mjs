@@ -4,7 +4,7 @@ import {
   inventoryStateForStatus,
   normalizeInventoryItems,
   orderReservesInventory
-} from '../js/inventory-model.mjs';
+} from '../js/core/store/inventory-model.mjs';
 
 function entries(map) {
   return Object.fromEntries([...map.entries()].sort(([a], [b]) => a.localeCompare(b)));

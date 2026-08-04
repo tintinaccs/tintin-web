@@ -11,7 +11,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const frontend = read('js/secure-checkout-order.js');
+const frontend = read('js/orders/secure-checkout-order.js');
 const serverClient = read('js/create-order-client.js');
 const cart = read('js/components/cart/cart-sync.js');
 const rules = read('firestore.rules');
@@ -98,7 +98,7 @@ check(
 check(
   'El checkout seguro se carga solo donde corresponde',
   cart.includes("checkoutPath.endsWith('/checkout.html')") &&
-    cart.includes("import('../../secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1"),
+    cart.includes("import('../../orders/secure-checkout-order.js?v=tintin-20260716-cloudinary-fix-1"),
   'El módulo debe arrancar únicamente en checkout.'
 );
 

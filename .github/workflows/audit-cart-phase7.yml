@@ -7,13 +7,13 @@ on:
     paths:
       - 'catalogo.html'
       - 'script.js'
-      - 'js/products-store.js'
-      - 'js/phase7-catalog-policy.js'
+      - 'js/core/store/products-store.js'
+      - 'js/pages/catalog/phase7-catalog-policy.js'
       - 'js/page-maintenance-loader.js'
       - 'js/admin/admin-app.js'
       - 'js/components/cart/cart-sync.js'
-      - 'js/ui-quality.js'
-      - 'js/secure-checkout-order.js'
+      - 'js/quality/ui-quality.js'
+      - 'js/orders/secure-checkout-order.js'
       - 'functions/api/sheets-product-sync.js'
       - 'scripts/apply-phase7-*.mjs'
       - 'scripts/audit-phase7-catalog.js'
@@ -83,8 +83,8 @@ jobs:
 
       - name: Revisar sintaxis
         run: |
-          node --check js/phase7-catalog-policy.js
-          node --check js/products-store.js
+          node --check js/pages/catalog/phase7-catalog-policy.js
+          node --check js/core/store/products-store.js
           node --check js/components/cart/cart-sync.js
           node --check js/admin/admin-app.js
           node --check script.js

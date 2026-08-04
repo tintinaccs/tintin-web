@@ -117,7 +117,7 @@ try {
 }
 
 const catalog = read('catalogo.html');
-const social = read('js/whatsapp.js');
+const social = read('js/components/contact/whatsapp.js');
 const collections = read('js/pages/collections/collections-page.js');
 check(catalog.includes('Ver todo el catálogo'), 'El estado vacío conserva el CTA incorrecto');
 check(!social.includes("new URL(String(value || ''), location.href)"), 'Una red social vacía aún resuelve a la página actual');

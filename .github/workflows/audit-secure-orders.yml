@@ -3,7 +3,7 @@ name: Auditoría de pedidos seguros
 on:
   pull_request:
     paths:
-      - 'js/secure-checkout-order.js'
+      - 'js/orders/secure-checkout-order.js'
       - 'js/components/cart/cart-sync.js'
       - 'firestore.rules'
       - 'scripts/audit-secure-orders.js'
@@ -34,7 +34,7 @@ jobs:
         run: npm install
       - name: Revisar sintaxis del checkout
         run: |
-          node --check js/secure-checkout-order.js
+          node --check js/orders/secure-checkout-order.js
           node --check scripts/audit-secure-orders.js
       - name: Revisar transacción y reglas
         run: npm run audit:secure-orders

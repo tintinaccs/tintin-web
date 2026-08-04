@@ -1,5 +1,5 @@
-import { auth, db } from '../../firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   doc,
@@ -15,7 +15,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../payment-methods-core.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/payment-methods-core.js?v=tintin-20260720-payment-crud-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');
@@ -34,7 +34,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/payment-methods.css?v=tintin-20260720-payment-crud-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1';
   document.head.appendChild(link);
 }
 

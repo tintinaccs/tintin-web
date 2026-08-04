@@ -56,7 +56,7 @@ Los perfiles quedan en `users/{uid}`, la fuente que alimenta la pestaña
 - **Authentication → Templates** de Firebase: no se usa para esto, el
   correo del código lo arma y manda Resend directamente.
 - **Dominios autorizados** de Firebase Auth: `tintinaccesorios.pages.dev`
-  ya es el `authDomain` configurado en `js/firebase.js`.
+  ya es el `authDomain` configurado en `js/core/firebase/firebase.js`.
 - El correo de **reporte de pedidos** (a `tintinaccs@gmail.com` y al
   cliente) es un mecanismo aparte (`functions/api/order-email.js`, también
   Resend) sin relación con esto.

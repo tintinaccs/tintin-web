@@ -19,33 +19,40 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const jsFiles = fs.readdirSync(path.join(root, 'js')).filter(file => file.endsWith('.js')).map(file => `js/${file}`);
+function listJsFiles(dir) {
+  return fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(entry => {
+    const relative = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) return listJsFiles(relative);
+    return entry.name.endsWith('.js') ? [relative] : [];
+  });
+}
+const jsFiles = listJsFiles('js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const firebaseInitFiles = [...jsFiles, ...htmlFiles].filter(file =>
   /initializeApp\s*\(/.test(read(file)) || /apiKey:\s*["']/.test(read(file))
 );
 check(
-  'Firebase se inicializa únicamente en js/firebase.js',
-  firebaseInitFiles.length === 1 && firebaseInitFiles[0] === 'js/firebase.js',
+  'Firebase se inicializa únicamente en js/core/firebase/firebase.js',
+  firebaseInitFiles.length === 1 && firebaseInitFiles[0] === 'js/core/firebase/firebase.js',
   `Inicializadores encontrados: ${firebaseInitFiles.join(', ')}`
 );
 check(
   'El control de tienda reutiliza store-gate-core',
-  read('js/store-gate.js').includes("from './store-gate-core.js") &&
-    read('js/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") &&
+  read('js/core/store-gate/store-gate.js').includes("from './store-gate-core.js") &&
+    read('js/core/store-gate/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") &&
     read('js/page-loader.js').includes('store-gate'),
   'El gate público debe tener una sola implementación.'
 );
 check(
   'Configuración general pública tiene una sola suscripción compartida',
-  read('js/public-settings-store.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
-    read('js/whatsapp.js').includes('onPublicSettings') &&
+  read('js/core/store/public-settings-store.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
+    read('js/components/contact/whatsapp.js').includes('onPublicSettings') &&
     read('js/pages/checkout/checkout-payment-methods.js').includes('onPublicSettings'),
   'WhatsApp y pagos deben compartir public-settings-store.'
 );
 check(
   'Tienda cerrada consume settings/storeGate',
-  read('js/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')"),
+  read('js/core/store-gate/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')"),
   'La apertura de tienda debe usar el documento público mínimo.'
 );
 check(
@@ -55,7 +62,7 @@ check(
 );
 check(
   'Contenido consume site_content',
-  read('js/site-content.js').includes('site_content'),
+  read('js/core/store/site-content.js').includes('site_content'),
   'El contenido editable debe conservar Firestore como fuente.'
 );
 

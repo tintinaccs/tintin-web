@@ -9,7 +9,7 @@ const files = {
   navCompatibility: read('js/components/navigation/legacy/nav-collections.js'),
   publicPhase4: read('js/pages/collections/collections-phase4.js'),
   adminPhase4: read('js/admin/collections/admin-collections-phase4.js'),
-  uiQuality: read('js/ui-quality.js'),
+  uiQuality: read('js/quality/ui-quality.js'),
   store: read('js/pages/collections/collections-store.js'),
   collectionsPage: read('collections.html'),
   catalogPage: read('catalogo.html'),
@@ -128,8 +128,8 @@ check(
   'La fase 4 se inicia globalmente',
   files.uiQuality.includes('bootCollectionsPhase4()') &&
     files.uiQuality.includes('bootAdminCollectionsPhase4()') &&
-    files.uiQuality.includes("'./pages/collections/collections-phase4.js'") &&
-    files.uiQuality.includes("'./admin/collections/admin-collections-phase4.js'"),
+    files.uiQuality.includes("'../pages/collections/collections-phase4.js'") &&
+    files.uiQuality.includes("'../admin/collections/admin-collections-phase4.js'"),
   'debe ejecutarse incluso en páginas con HTML legado'
 );
 

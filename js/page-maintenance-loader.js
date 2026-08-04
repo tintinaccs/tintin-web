@@ -1,4 +1,4 @@
-import './phase7-catalog-policy.js?v=tintin-20260730-stock-visibility-1';
+import './pages/catalog/phase7-catalog-policy.js?v=tintin-20260730-stock-visibility-1';
 import './pages/catalog/catalog-stock-priority.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {

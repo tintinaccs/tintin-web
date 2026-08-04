@@ -715,13 +715,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('ui-quality.js', 'UI Quality');
+      importSibling('quality/ui-quality.js', 'UI Quality');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('store-gate.js', 'Store Gate', showEmergencyStoreGate);
+    importSibling('core/store-gate/store-gate.js', 'Store Gate', showEmergencyStoreGate);
   }
 
   function bootHeaderMode() {
@@ -747,7 +747,7 @@
   function bootSiteActivity() {
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('site-activity.js', 'Site Activity');
+      importSibling('analytics/site-activity.js', 'Site Activity');
     }
   }
 
@@ -772,7 +772,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('scroll-reveal-global.js', 'Scroll Reveal');
+      importSibling('quality/scroll-reveal-global.js', 'Scroll Reveal');
     }
   }
 
@@ -806,7 +806,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('page-audit-fix.js', 'Page Audit Fix');
+      importSibling('quality/page-audit-fix.js', 'Page Audit Fix');
     }
   }
 
@@ -815,11 +815,11 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = resolveAsset('css/phase8-ui-ux.css');
+      link.href = resolveAsset('css/quality/phase8-ui-ux.css');
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('phase8-ui-ux.js', 'Phase 8 UI/UX');
+      importSibling('quality/phase8-ui-ux.js', 'Phase 8 UI/UX');
     }
   }
 

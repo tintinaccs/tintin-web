@@ -47,8 +47,8 @@ jobs:
       - name: Validar sintaxis y contratos
         run: |
           node --check js/pages/catalog/catalog-merchandising-policy.js
-          node --check js/products-store.js
-          node --check js/phase7-catalog-policy.js
+          node --check js/core/store/products-store.js
+          node --check js/pages/catalog/phase7-catalog-policy.js
           node --check js/pages/catalog/catalog-stock-priority.js
           node --check script.js
           node scripts/audit-unified-store-logic.js

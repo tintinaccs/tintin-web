@@ -3,7 +3,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const login = fs.readFileSync(path.join(root, 'login.html'), 'utf8');
-const moduleSource = fs.readFileSync(path.join(root, 'js/profile-onboarding.mjs'), 'utf8');
+const moduleSource = fs.readFileSync(path.join(root, 'js/pages/profile/profile-onboarding.mjs'), 'utf8');
 
 const checks = [
   ['el login pasa el rol a las tres validaciones de perfil', (login.match(/await ensureProfileComplete\(user, role\)/g) || []).length === 3],

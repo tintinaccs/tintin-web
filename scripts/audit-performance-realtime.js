@@ -47,13 +47,13 @@ const publicPages = [
   'terminos.html', 'privacidad.html', '404.html', 'login.html', 'perfil.html', 'checkout.html'
 ];
 
-const productsStore = read('js/products-store.js');
+const productsStore = read('js/core/store/products-store.js');
 const collectionsStore = read('js/pages/collections/collections-store.js');
-const readCache = read('js/firestore-read-cache.js');
+const readCache = read('js/core/firebase/firestore-read-cache.js');
 
 check(
   'Tipografía sin FOIT',
-  !/font-display:\s*block/.test(read('css/montserrat.css')),
+  !/font-display:\s*block/.test(read('css/core/montserrat.css')),
   'Montserrat no debe usar font-display:block.'
 );
 
@@ -120,8 +120,8 @@ check(
 
 check(
   'El heartbeat se detiene al ocultar o cerrar la pestaña',
-  read('js/site-activity.js').includes('clearInterval(heartbeatTimer)') &&
-    read('js/site-activity.js').includes("addEventListener('pagehide'"),
+  read('js/analytics/site-activity.js').includes('clearInterval(heartbeatTimer)') &&
+    read('js/analytics/site-activity.js').includes("addEventListener('pagehide'"),
   'La actividad no debe seguir ejecutándose después de cerrar la página.'
 );
 
@@ -152,12 +152,19 @@ check(
   'Una respuesta antigua no debe pisar datos nuevos.'
 );
 
-const firebaseInitializers = [...fs.readdirSync(path.join(root, 'js')).map(file => `js/${file}`), ...publicPages]
+function listJsFilesDeep(dir) {
+  return fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(entry => {
+    const relative = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) return listJsFilesDeep(relative);
+    return [relative];
+  });
+}
+const firebaseInitializers = [...listJsFilesDeep('js'), ...publicPages]
   .filter(file => file.endsWith('.js') || file.endsWith('.html'))
   .filter(file => exists(file) && (/initializeApp\s*\(/.test(read(file)) || /apiKey:\s*["']/.test(read(file))));
 check(
   'Firebase se inicializa en una sola fuente',
-  firebaseInitializers.length === 1 && firebaseInitializers[0] === 'js/firebase.js',
+  firebaseInitializers.length === 1 && firebaseInitializers[0] === 'js/core/firebase/firebase.js',
   `Inicializadores encontrados: ${firebaseInitializers.join(', ')}`
 );
 

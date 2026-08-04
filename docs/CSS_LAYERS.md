@@ -13,18 +13,18 @@ especificidad gana.
 
 | # | Hoja | De qué es dueña |
 |---|---|---|
-| 1 | `css/montserrat.css` | Declaraciones `@font-face` de Montserrat. Nada más. |
-| 2 | `css/solid-ui-surfaces.css` | Fondos opacos forzados en superficies del checkout y del panel mientras el loader está visible. |
-| 3 | `css/mobile-header-actions-solid.css` | Fondo opaco del tabbar y sus botones en mobile. |
-| 4 | `css/loader-solid-background.css` | Color de fondo del loader y del splash inicial. |
-| 5 | `css/color-tokens.css` | **Fuente de verdad de los tokens de color públicos** (`--color-*`). |
+| 1 | `css/core/montserrat.css` | Declaraciones `@font-face` de Montserrat. Nada más. |
+| 2 | `css/theme/solid-ui-surfaces.css` | Fondos opacos forzados en superficies del checkout y del panel mientras el loader está visible. |
+| 3 | `css/components/navigation/legacy/mobile-header-actions-solid.css` | Fondo opaco del tabbar y sus botones en mobile. |
+| 4 | `css/theme/loader-solid-background.css` | Color de fondo del loader y del splash inicial. |
+| 5 | `css/core/color-tokens.css` | **Fuente de verdad de los tokens de color públicos** (`--color-*`). |
 | 6 | `styles.css` | **Hoja base del sitio**: layout, componentes, tipografía, responsive. La más grande (120 KB) y la que define el comportamiento por defecto de casi todo. |
-| 7 | `css/global-fit.css` | Adaptación fluida: que nada se salga del viewport ni dependa de un tamaño fijo. |
-| 8 | `css/system-special-states.css` | Estados especiales del sistema (404, tienda cerrada, sin conexión). |
-| 9 | `css/ui-quality.css` | Reset de calidad, foco visible, `prefers-reduced-motion`, ajustes de rendimiento (`content-visibility`). |
-| 10 | `css/tintin-unified-theme.css` | Unificación de marca sobre componentes ya definidos (botones, enlaces, superficies). **Concentra 312 `!important`** — es la capa que gana casi siempre sobre `styles.css`. |
-| 11 | `css/tintin-theme-cleanup.css` | Fondos sólidos obligatorios en la navegación pública. |
-| 12 | `css/tintin-parity-safe.css` | Red de seguridad de paridad: garantiza que nada quede invisible por un `display`/`visibility` mal heredado. |
+| 7 | `css/quality/global-fit.css` | Adaptación fluida: que nada se salga del viewport ni dependa de un tamaño fijo. |
+| 8 | `css/quality/system-special-states.css` | Estados especiales del sistema (404, tienda cerrada, sin conexión). |
+| 9 | `css/quality/ui-quality.css` | Reset de calidad, foco visible, `prefers-reduced-motion`, ajustes de rendimiento (`content-visibility`). |
+| 10 | `css/core/tintin-unified-theme.css` | Unificación de marca sobre componentes ya definidos (botones, enlaces, superficies). **Concentra 312 `!important`** — es la capa que gana casi siempre sobre `styles.css`. |
+| 11 | `css/core/tintin-theme-cleanup.css` | Fondos sólidos obligatorios en la navegación pública. |
+| 12 | `css/theme/tintin-parity-safe.css` | Red de seguridad de paridad: garantiza que nada quede invisible por un `display`/`visibility` mal heredado. |
 
 Después de estas van las hojas propias de cada página (`home-fit.css`,
 `checkout.css`, `login.css`, `collections-page.css`, `product-extras.css`) y,

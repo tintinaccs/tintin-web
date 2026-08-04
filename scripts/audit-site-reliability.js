@@ -13,37 +13,37 @@ function check(label, ok) {
 }
 
 const loader = read('js/page-loader.js');
-const solidSurfaces = read('css/solid-ui-surfaces.css');
-const parity = read('css/tintin-parity-safe.css');
+const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
+const parity = read('css/theme/tintin-parity-safe.css');
 const accountFix = read('js/components/navigation/legacy/header-account-mobile-fix.js');
-const activity = read('js/site-activity.js');
-const functionOrigin = read('js/function-origin.js');
-const privacyConsent = read('js/privacy-consent.js');
-const analytics = read('js/analytics.js');
+const activity = read('js/analytics/site-activity.js');
+const functionOrigin = read('js/core/firebase/function-origin.js');
+const privacyConsent = read('js/analytics/privacy-consent.js');
+const analytics = read('js/analytics/analytics.js');
 const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
 const welcomeAdmin = read('js/admin/content/admin-welcome-control.js');
 const welcomeConfig = read('js/components/welcome/welcome-config.js');
 const welcomeRuntime = read('js/components/welcome/welcome-tutorial-runtime.js');
-// La creación del perfil vive en js/user-profile-store.js, compartida entre el
+// La creación del perfil vive en js/core/store/user-profile-store.js, compartida entre el
 // login con Google y el de código por correo; login.html sólo la invoca. Las
 // comprobaciones del alta miran los dos archivos como una sola unidad.
-const login = `${read('login.html')}\n${read('js/user-profile-store.js')}`;
+const login = `${read('login.html')}\n${read('js/core/store/user-profile-store.js')}`;
 const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');
-const theme = read('css/tintin-unified-theme.css');
+const theme = read('css/core/tintin-unified-theme.css');
 const main = read('script.js');
-const scrollReveal = read('js/scroll-reveal-global.js');
+const scrollReveal = read('js/quality/scroll-reveal-global.js');
 const imagePerformance = read('js/components/images/image-performance.js');
 const home = read('index.html');
 const publicShell = read('js/public-shell.js');
 const surfaceController = read('js/ui-navigation-controller.js');
-const contentSchema = read('js/content-schema.js');
-const siteContent = read('js/site-content.js');
-const productsStore = read('js/products-store.js');
-const phase7CatalogPolicy = read('js/phase7-catalog-policy.js');
+const contentSchema = read('js/core/store/content-schema.js');
+const siteContent = read('js/core/store/site-content.js');
+const productsStore = read('js/core/store/products-store.js');
+const phase7CatalogPolicy = read('js/pages/catalog/phase7-catalog-policy.js');
 const catalog = read('catalogo.html');
 const loadImagesInit = read('js/components/images/load-images-init.js');
 const collectionsPhase4 = read('js/pages/collections/collections-phase4.js');
@@ -74,7 +74,7 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
   ].every(selector => solidSurfaces.includes(selector)) &&
   /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces));
 
-// Antes, css/loader-solid-background.css traía estas dos hojas con @import y
+// Antes, css/theme/loader-solid-background.css traía estas dos hojas con @import y
 // acá se comprobaba su cadena de versión. Los @import encadenados bloqueaban
 // el render en serie, así que ahora van como <link> en cada página. Se
 // verifica lo que de verdad garantiza el fondo blanco: que toda página que
@@ -83,11 +83,11 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
 check('Las superficies sólidas del header se cargan antes del loader en cada página',
   htmlFiles
     .map(name => ({ name, source: read(name) }))
-    .filter(page => page.source.includes('css/loader-solid-background.css'))
+    .filter(page => page.source.includes('css/theme/loader-solid-background.css'))
     .every(({ source }) => {
-      const loaderAt = source.indexOf('css/loader-solid-background.css');
-      const surfacesAt = source.indexOf('css/solid-ui-surfaces.css');
-      const headerAt = source.indexOf('css/mobile-header-actions-solid.css');
+      const loaderAt = source.indexOf('css/theme/loader-solid-background.css');
+      const surfacesAt = source.indexOf('css/theme/solid-ui-surfaces.css');
+      const headerAt = source.indexOf('css/components/navigation/legacy/mobile-header-actions-solid.css');
       return surfacesAt !== -1 && headerAt !== -1 && surfacesAt < loaderAt && headerAt < loaderAt;
     }));
 
@@ -117,7 +117,7 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
-  activity.includes("import { apiUrl } from './function-origin.js") &&
+  activity.includes("import { apiUrl } from '../core/firebase/function-origin.js") &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
   functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
@@ -180,8 +180,8 @@ check('Las reglas aceptan solo geografía aproximada y campos conocidos',
 check('El rosa principal cumple contraste AA sobre blanco',
   theme.includes('--tt-accent:var(--color-brand-primary)') &&
   theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
-  read('css/color-tokens.css').includes('--color-brand-primary: #AD3F67') &&
-  read('css/color-tokens.css').includes('--color-brand-primary-hover: #8B2642'));
+  read('css/core/color-tokens.css').includes('--color-brand-primary: #AD3F67') &&
+  read('css/core/color-tokens.css').includes('--color-brand-primary-hover: #8B2642'));
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));

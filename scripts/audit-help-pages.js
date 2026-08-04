@@ -44,7 +44,7 @@ const PAGES = [
   { file: 'preguntas-frecuentes.html', id: 'faq' }
 ];
 
-const schema = read('js/content-schema.js');
+const schema = read('js/core/store/content-schema.js');
 
 // ---------------------------------------------------------------------------
 // Comprobaciones por página
@@ -108,8 +108,8 @@ PAGES.forEach(({ file, id }) => {
     `${tag} scripts compartidos (shell, loader, contacto, analítica)`,
     html.includes('js/page-loader.js') &&
       html.includes('js/public-shell.js') &&
-      html.includes('js/whatsapp.js') &&
-      html.includes('js/analytics.js') &&
+      html.includes('js/components/contact/whatsapp.js') &&
+      html.includes('js/analytics/analytics.js') &&
       html.includes('script.js'),
     'La página debe compartir el shell público, loader, sincronización de contacto y analítica.'
   );

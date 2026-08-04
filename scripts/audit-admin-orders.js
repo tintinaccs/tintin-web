@@ -42,9 +42,9 @@ function check(name, condition, problem) {
 
 const adminApp   = read('js/admin/admin-app.js');
 const perfil     = read('perfil.html');
-const orderStats = read('js/order-stats.js');
+const orderStats = read('js/core/store/order-stats.js');
 const rules      = read('firestore.rules');
-const secureOrder = read('js/secure-checkout-order.js');
+const secureOrder = read('js/orders/secure-checkout-order.js');
 const phase4Order = read('apps-script/Phase4CreateOrder.gs');
 const inventoryIntegrity = read('js/admin/products/admin-inventory-integrity.js');
 const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');

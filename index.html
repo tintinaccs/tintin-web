@@ -14,7 +14,7 @@
        hero visible arriba — pero dos requestAnimationFrame() ejecutados
        este temprano en el <head> tampoco garantizan que el <body> ya haya
        terminado de parsearse ni que exista una estructura desplazable real
-       debajo del hero; medido con js/scroll-debug-overlay.js, se confirmó
+       debajo del hero; medido con js/diagnostics/scroll-debug-overlay.js, se confirmó
        que puede dispararse con document.readyState todavía en 'loading'.
        La señal real vive ahora al final del <body>, después de todas las
        secciones estáticas, condicionada a que existan de verdad — ver ese
@@ -46,27 +46,27 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js" crossorigin>
-  <link rel="modulepreload" href="js/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/store-gate.js?v=tintin-20260801-unified-surfaces-16">
-  <link rel="modulepreload" href="js/store-gate-core.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="stylesheet" href="css/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="modulepreload" href="js/core/store-gate/store-gate.js?v=tintin-20260801-unified-surfaces-16">
+  <link rel="modulepreload" href="js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260716-cloudinary-fix-1">
   <!-- Google Search Console (Fase 2): creá la propiedad en
        https://search.google.com/search-console con esta misma URL, elegí
        verificación por "etiqueta HTML" y pegá el content= que te dé acá
        abajo (descomentando la línea). Después, en "Sitemaps", cargá
        sitemap.xml — ya está publicado en la raíz del sitio. -->
   <!-- <meta name="google-site-verification" content="PEGAR_CODIGO_AQUI"> -->
-  <link rel="stylesheet" href="css/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/solid-ui-surfaces.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/components/navigation/legacy/mobile-header-actions-solid.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/loader-solid-background.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="styles.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/global-fit.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/system-special-states.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/ui-quality.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/core/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/theme/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/images.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
@@ -78,8 +78,8 @@
        existe (ver js/components/images/images.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/home-fit.css?v=tintin-20260716-cloudinary-fix-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/motion.css?v=tintin-20260716-cloudinary-fix-1">
-  <link rel="stylesheet" href="css/contraste.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/motion.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260716-cloudinary-fix-1">
   <script type="application/ld+json" id="tt-store-jsonld">{"@context":"https://schema.org","@type":"Store","@id":"https://tintinaccesorios.pages.dev/#store","name":"Tintin Accesorios & Relojes","url":"https://tintinaccesorios.pages.dev/index.html","logo":"https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png","image":"https://tintinaccesorios.pages.dev/assets/og-cover.jpg","description":"Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.","areaServed":{"@type":"Country","name":"Paraguay"},"currenciesAccepted":"PYG"}</script>
 </head>
 <body class="tt-home-premium">
@@ -587,15 +587,15 @@
 })();
 </script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
-<script type="module" src="js/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/session-guard.js?v=tintin-20260726-session-guard-1"></script>
+<script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
 <script type="module" src="js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">
-import { initSiteContent } from './js/site-content.js?v=tintin-20260716-cloudinary-fix-1';
+import { initSiteContent } from './js/core/store/site-content.js?v=tintin-20260716-cloudinary-fix-1';
 initSiteContent('index');
 </script>
-<script type="module" src="js/edit-badge.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/core/auth/edit-badge.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

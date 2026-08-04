@@ -48,7 +48,7 @@ function parseTokens(section) {
 const catalogSource = read('js/components/color/color-scheme-catalog.js');
 const globalTokens = parseTokens(arraySection(catalogSource, 'GLOBAL_TOKENS'));
 const adminTokens = parseTokens(arraySection(catalogSource, 'ADMIN_TOKENS'));
-const globalCss = read('css/color-tokens.css');
+const globalCss = read('css/core/color-tokens.css');
 const adminCss = read('css/admin/admin-color-tokens.css');
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin/admin-app.js');
@@ -72,7 +72,7 @@ check('Todos los tokens administrativos tienen respaldo CSS', missingAdminDefaul
 const consumerFiles = [
   ...filesUnder('css', new Set(['.css'])),
   ...filesUnder('js', new Set(['.js'])),
-].filter(rel => !['css/color-tokens.css', 'css/admin/admin-color-tokens.css', 'js/components/color/color-scheme-catalog.js'].includes(rel.replace(/\\/g, '/')));
+].filter(rel => !['css/core/color-tokens.css', 'css/admin/admin-color-tokens.css', 'js/components/color/color-scheme-catalog.js'].includes(rel.replace(/\\/g, '/')));
 const consumers = consumerFiles.map(read).join('\n');
 const missingGlobalConsumers = globalTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
 const missingAdminConsumers = adminTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
@@ -133,8 +133,8 @@ const htmlFiles = fs.readdirSync(ROOT).filter(file => file.endsWith('.html'));
 const publicPages = htmlFiles.filter(file => !['admin.html', 'admin-images.html', 'nosotros.html'].includes(file));
 const missingPublicAssets = publicPages.filter(file => {
   const html = read(file);
-  return !html.includes('css/color-tokens.css') ||
-    !html.includes('css/tintin-unified-theme.css') ||
+  return !html.includes('css/core/color-tokens.css') ||
+    !html.includes('css/core/tintin-unified-theme.css') ||
     !html.includes('js/components/color/color-scheme-instant.js') ||
     !html.includes('js/components/color/color-scheme.js');
 });

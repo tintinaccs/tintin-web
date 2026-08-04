@@ -6,8 +6,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cart = read('js/components/cart/cart-sync.js');
 const classic = read('script.js');
-const quality = read('js/ui-quality.js');
-const checkout = read('js/secure-checkout-order.js');
+const quality = read('js/quality/ui-quality.js');
+const checkout = read('js/orders/secure-checkout-order.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
@@ -138,7 +138,7 @@ check(
 check(
   'El carrito se carga en todas las páginas públicas',
   quality.includes('function bootCartPhase7()') &&
-    quality.includes("import(versioned('./components/cart/cart-sync.js'))") &&
+    quality.includes("import(versioned('../components/cart/cart-sync.js'))") &&
     quality.includes('bootCartPhase7();'),
   'No debe depender de que cada HTML recuerde importar el módulo'
 );

@@ -21,14 +21,14 @@ function check(name, condition, problem) {
 
 const adminApp = read('js/admin/admin-app.js');
 const headerMode = read('js/components/navigation/legacy/mobile-header-mode.js');
-const whatsapp = read('js/whatsapp.js');
-const publicSettings = read('js/public-settings-store.js');
+const whatsapp = read('js/components/contact/whatsapp.js');
+const publicSettings = read('js/core/store/public-settings-store.js');
 const pageLoader = read('js/page-loader.js');
 const publicShell = read('js/public-shell.js');
 const publicShellEntry = read('js/components/navigation/public-shell-entry.js');
 const checkout = read('checkout.html');
 const checkoutPayments = read('js/pages/checkout/checkout-payment-methods.js');
-const secureOrder = read('js/secure-checkout-order.js');
+const secureOrder = read('js/orders/secure-checkout-order.js');
 const adminHtml = read('admin.html');
 
 check(

@@ -40,9 +40,9 @@ function check(name, condition, problem) {
 }
 
 const admin    = read('js/admin/admin-app.js');
-const activity = read('js/site-activity.js');
+const activity = read('js/analytics/site-activity.js');
 const geoFn    = read('functions/api/visitor-geo.js');
-const orderStats = read('js/order-stats.js');
+const orderStats = read('js/core/store/order-stats.js');
 const rules    = read('firestore.rules');
 
 // ===========================================================================
@@ -195,7 +195,7 @@ check(
 );
 check(
   'Las páginas de administración no se rastrean como visitas del sitio',
-  activity.includes("from './admin/admin-path.js") &&
+  activity.includes("from '../admin/admin-path.js") &&
     activity.includes('const trackablePage = !isAdminPage()'),
   'El panel no debe contarse como tráfico público.'
 );

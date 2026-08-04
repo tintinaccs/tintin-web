@@ -8,7 +8,7 @@ const files = {
   homeFit: read('css/pages/home/home-fit.css'),
   script: read('script.js'),
   productRelated: read('js/pages/product/product-related.js'),
-  productsStore: read('js/products-store.js'),
+  productsStore: read('js/core/store/products-store.js'),
   imageInit: read('js/components/images/load-images-init.js'),
   collectionsPage: read('js/pages/collections/collections-page.js'),
   checkout: read('checkout.html'),
@@ -87,7 +87,7 @@ check(
   // apps-script/Phase4CreateOrder.gs. runTransaction() sigue en el
   // navegador solo para el guard anti-repetición (checkoutGuards).
   'La compra final conserva validación transaccional',
-  read('js/secure-checkout-order.js').includes('runTransaction') &&
+  read('js/orders/secure-checkout-order.js').includes('runTransaction') &&
     read('apps-script/Phase4CreateOrder.gs').includes('qty > stock') &&
     read('apps-script/Phase4CreateOrder.gs').includes('stock - item.qty') &&
     read('apps-script/Phase4CreateOrder.gs').includes("phase4UpdateWrite_('products/' + item.id"),
