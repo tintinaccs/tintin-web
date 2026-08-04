@@ -81,6 +81,7 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/tablet/controller.js')),
       import(versionedJsModule('components/navigation/mobile/controller.js')),
       import(versionedJsModule('components/navigation/shared/router.js')),
+      import(versionedJsModule('components/navigation/shared/search-controller.js')),
     ]))
     .then(reportRuntimeFailures);
 }
