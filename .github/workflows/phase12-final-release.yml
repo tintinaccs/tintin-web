@@ -18,6 +18,24 @@ on:
       - 'sitemap.xml'
       - 'manifest.json'
       - '.github/workflows/phase12-final-release.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.html'
+      - 'css/**'
+      - 'js/**'
+      - 'functions/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'firestore.rules'
+      - 'firebase.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - 'manifest.json'
+      - '.github/workflows/phase12-final-release.yml'
   workflow_dispatch:
 
 permissions:
