@@ -8,9 +8,9 @@ function ready(fn){
  else fn();
 }
 
-/* Estas hojas se cargan desde un módulo global para que la misma identidad
-   llegue a cuenta, carrito, buscador, colecciones, checkout, perfil y modales
-   sin repetir un <link> en cada HTML. El orden importa: safety va al final. */
+/* Estas hojas siguen cubriendo checkout, perfil y modales heredados. La
+   navegación modular ya tiene sus estilos críticos propios y no depende de
+   que estas hojas terminen de cargar para mostrarse. */
 function loadResponsiveBrandStyles(){
  var files=[
   ['tt-responsive-brand-surfaces-css','css/tintin-responsive-brand-surfaces.css?v=tintin-20260803-brand-surfaces-1'],
@@ -82,21 +82,31 @@ function accountDropdown(){
  });
 }
 
+function bindAvatarRefreshEvents(){
+ var scheduled=0;
+ function schedule(){
+  clearTimeout(scheduled);
+  scheduled=setTimeout(cleanTabbarAvatar,40);
+ }
+ [
+  'tintin:public-shell-ready',
+  'tintin:modular-surfaces-ready',
+  'tintin:auth-nav-updated',
+  'tintin:auth-state-changed',
+  'tintin:profile-updated'
+ ].forEach(function(eventName){addEventListener(eventName,schedule);});
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)schedule();});
+ schedule();
+}
+
 loadResponsiveBrandStyles();
 bootBrandReveal();
 
 ready(function(){
- cleanTabbarAvatar();
+ bindAvatarRefreshEvents();
  if(!window.TintinSurfaceController){
   injectLegacyStyles();
   accountDropdown();
- }
- if('MutationObserver'in window){
-  var t=0;
-  new MutationObserver(function(){
-   clearTimeout(t);
-   t=setTimeout(cleanTabbarAvatar,80);
-  }).observe(document.documentElement,{childList:true,subtree:true});
  }
 });
 })();
