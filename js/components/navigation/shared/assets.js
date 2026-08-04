@@ -6,6 +6,7 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-mobile-css', 'css/components/navigation/mobile/header-mobile.css'],
   ['tt-navigation-shared-css', 'css/components/navigation/shared/navigation-transitions.css'],
   ['tt-surface-controller-css', 'css/components/navigation/shared/surfaces.css'],
+  ['tt-navigation-search-css', 'css/components/navigation/shared/search.css'],
 ]);
 
 function ensureStylesheet(id, path) {
