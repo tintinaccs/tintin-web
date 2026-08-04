@@ -3,14 +3,21 @@ function element(id) {
 }
 
 function resetSearchPanel() {
+  if (typeof window.TintinSearchController?.reset === 'function') {
+    window.TintinSearchController.reset();
+    return;
+  }
+
   const input = element('search-input');
   const results = element('search-results');
-  if (input) input.value = '';
+  if (input) {
+    input.value = '';
+    input.removeAttribute('aria-activedescendant');
+  }
   if (results) {
-    results.hidden = false;
+    results.hidden = true;
     results.style.display = 'none';
     results.replaceChildren();
-    results.removeAttribute('aria-activedescendant');
   }
 }
 
