@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T22:12:23.228Z",
-  "sourceFingerprint": "bb2d0136551600406f4f3278c544214c579164b7011e3d875dc19f9bef6ef95d",
+  "generatedAt": "2026-08-04T22:14:20.097Z",
+  "sourceFingerprint": "116f5e1957050d3e985b5d716cbc6d103fdf89f97f8ac47f963ac9dd3dde6a8a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5441674,
+    "totalBytes": 5441667,
     "pages": 18,
     "modules": 300
   },
@@ -22377,8 +22377,8 @@
     },
     {
       "path": "scripts/test-checkout-schema-hotfix.mjs",
-      "bytes": 2081,
-      "sha256": "1e45619e1fad6777eb01f818b39c32a2ea0885382bb41d6538486c2d96cab162",
+      "bytes": 2074,
+      "sha256": "3b335ee727a1bc04ef18c7df58eb31d061ef11e6b21d110dda5156b1117a255c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22391,8 +22391,8 @@
           "line": 1
         },
         {
-          "raw": "../functions/js/orders/secure-checkout-order.js.js",
-          "target": "functions/js/orders/secure-checkout-order.js.js",
+          "raw": "../functions/js/secure-checkout-order.js.js",
+          "target": "functions/js/secure-checkout-order.js.js",
           "dynamic": false,
           "line": 2
         }
@@ -25703,8 +25703,8 @@
     {
       "path": "scripts/test-checkout-schema-hotfix.mjs",
       "extension": ".mjs",
-      "bytes": 2081,
-      "sha256": "1e45619e1fad6777eb01f818b39c32a2ea0885382bb41d6538486c2d96cab162"
+      "bytes": 2074,
+      "sha256": "3b335ee727a1bc04ef18c7df58eb31d061ef11e6b21d110dda5156b1117a255c"
     },
     {
       "path": "scripts/test-firestore-critical.mjs",
