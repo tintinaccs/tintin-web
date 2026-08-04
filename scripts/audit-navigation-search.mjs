@@ -35,17 +35,24 @@ const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
 async function installSeededCatalog(page) {
+  await page.waitForFunction(
+    () => document.getElementById('search-input')?.dataset.ttModularSearchReady === '1',
+    null,
+    { timeout:10000 }
+  );
+
   await page.evaluate(products => {
+    if (window.__ttSearchAuditCatalogLock !== true) {
+      window.__ttSearchAuditCatalogLock = true;
+      window.addEventListener('tintin:products-loaded', event => {
+        if (event.detail?.source !== 'audit-seed') event.stopImmediatePropagation();
+      }, true);
+    }
+
     window.PRODUCTS = products;
     window.dispatchEvent(new CustomEvent('tintin:products-loaded', {
       detail: { products, source:'audit-seed' },
     }));
-
-    if (window.__ttSearchAuditCatalogLock === true) return;
-    window.__ttSearchAuditCatalogLock = true;
-    window.addEventListener('tintin:products-loaded', event => {
-      if (event.detail?.source !== 'audit-seed') event.stopImmediatePropagation();
-    }, true);
   }, SEEDED_PRODUCTS);
 }
 
@@ -65,7 +72,8 @@ async function auditSearch(label, viewport, triggerSelector) {
 
     const input = page.locator('#search-input');
     await input.fill('reloj');
-    await page.waitForSelector('#search-results .tt-search-result-item');
+    await page.waitForFunction(() => [...document.querySelectorAll('#search-results .tt-search-result-copy strong')]
+      .some(node => /Reloj Ovalado Dorado/i.test(node.textContent || '')), null, { timeout:5000 });
 
     const names = await page.locator('#search-results .tt-search-result-copy strong').allTextContents();
     check(names.some(name => /Reloj Ovalado Dorado/i.test(name)), `[${label}] no encontró el producto sembrado`);
