@@ -19922,7 +19922,7 @@
       "sha256": "234349e7ebd8e1b0861c3c753936e0f681c5533844db65b86b39c1dccfefe9f2",
       "syntax": {
         "ok": false,
-        "error": "/home/user/tintin-web/scripts/audit-about-page.js:12\n  ['about runtime is loaded by page', /about[\\s\\S]*load\\('pages/institutional/about-maintenance\\.js'\\)/.test(loader)],\n                                      ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1637:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v22.22.2"
+        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-about-page.js:12\n  ['about runtime is loaded by page', /about[\\s\\S]*load\\('pages/institutional/about-maintenance\\.js'\\)/.test(loader)],\n                                      ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
       },
       "imports": [],
       "endpoints": []
@@ -20509,7 +20509,7 @@
       "sha256": "8fec55a18e17833db2eb3ceba7bb9c259af98f64f3e76a8519c4401e53bb60b3",
       "syntax": {
         "ok": false,
-        "error": "/home/user/tintin-web/scripts/audit-contact-page.js:33\nif (!/contact[\\s\\S]*load\\('pages/institutional/contact-maintenance\\.js'\\)/.test(loader)) missing.push('page-maintenance-loader.js: contact maintenance import');\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1637:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v22.22.2"
+        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-contact-page.js:33\nif (!/contact[\\s\\S]*load\\('pages/institutional/contact-maintenance\\.js'\\)/.test(loader)) missing.push('page-maintenance-loader.js: contact maintenance import');\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
       },
       "imports": [],
       "endpoints": []
@@ -21275,7 +21275,7 @@
       "sha256": "a8540f596e957b2f1a385666241ab8d0c7996a10463c6eae6eb0a2108387aa0c",
       "syntax": {
         "ok": false,
-        "error": "/home/user/tintin-web/scripts/audit-legal-pages.js:36\nif (!/terminos\\|privacidad[\\s\\S]*load\\('pages/institutional/legal-maintenance\\.js'\\)/.test(loader)) {\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1637:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v22.22.2"
+        "error": "/home/runner/work/tintin-web/tintin-web/scripts/audit-legal-pages.js:36\nif (!/terminos\\|privacidad[\\s\\S]*load\\('pages/institutional/legal-maintenance\\.js'\\)/.test(loader)) {\n     ^\n\nSyntaxError: Invalid regular expression flags\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2"
       },
       "imports": [],
       "endpoints": []
