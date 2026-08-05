@@ -1,17 +1,17 @@
 # Cómo hacer cambios sin romper producción
 
-## 1. Abrir el repositorio remoto
+## 1. Abrir la copia local del repositorio
 
-En Visual Studio Code usar **Open Remote Repository** y abrir `tintinaccs/tintin-web`. No hace falta clonar para leer o editar archivos pequeños.
+En Visual Studio Code abrir la carpeta local de `tintinaccs/tintin-web`. La ventana no debe mostrar `[GitHub]`, porque las herramientas que usan terminal necesitan acceso completo a los archivos locales.
 
 ## 2. Confirmar la rama
 
-Antes de editar, revisar la rama mostrada por VS Code. Nunca reorganizar directamente en `main`.
+Antes de editar, revisar la rama mostrada por Visual Studio Code. Nunca reorganizar directamente en `main`.
 
-Para la reorganización actual se usa:
+Para este bloque de nombres se usa:
 
 ```text
-refactor/modular-site-20260804
+orden/nombres-navegacion-espanol
 ```
 
 ## 3. Abrir solamente el componente afectado
@@ -19,15 +19,15 @@ refactor/modular-site-20260804
 Ejemplos:
 
 ```text
-Tienda desktop no cierra
+Tienda de escritorio no cierra
 → js/components/navigation/shared/surface-controller.js
-→ css/components/navigation/desktop/header-desktop.css
+→ css/components/navigation/escritorio/encabezado-escritorio.css
 
-Logo tablet muy grande
-→ css/components/navigation/tablet/header-tablet.css
+Logo de tableta muy grande
+→ css/components/navigation/tableta/encabezado-tableta.css
 
-Texto de la barra mobile
-→ js/components/navigation/mobile/header-mobile.js
+Texto de la barra móvil
+→ js/components/navigation/movil/encabezado-movil.js
 
 Tamaño del buscador
 → css/components/navigation/shared/surfaces.css
@@ -39,13 +39,13 @@ No agregar arreglos en los archivos antiguos de compatibilidad. Un arreglo coloc
 
 ## 5. Revisar la diferencia
 
-Antes de confirmar un cambio, abrir **Source Control** y revisar:
+Antes de confirmar un cambio, abrir **Control de código fuente** y revisar:
 
 - archivos modificados;
 - líneas agregadas;
 - líneas eliminadas;
-- rutas e imports;
-- nombres de IDs usados por JavaScript.
+- rutas e importaciones;
+- nombres de identificadores usados por JavaScript.
 
 ## 6. Ejecutar auditorías
 
@@ -58,17 +58,17 @@ npm run audit:all-navigation-surfaces
 npm run audit:headers
 ```
 
-Una auditoría estática correcta no reemplaza la prueba visual. Desktop, tablet y mobile deben revisarse de forma separada.
+Una auditoría estática correcta no reemplaza la prueba visual. Escritorio, tableta y móvil deben revisarse de forma separada.
 
 ## 7. Confirmar cambios pequeños
 
 Cada commit debe representar una sola intención. Ejemplos:
 
 ```text
-fix(desktop): cerrar Tienda al tocar afuera
-fix(tablet): corregir navegación de colecciones
-fix(mobile): mantener espacio seguro de la tabbar
-refactor(navigation): separar buscador compartido
+fix(escritorio): cerrar Tienda al tocar afuera
+fix(tableta): corregir navegación de colecciones
+fix(movil): mantener espacio seguro de la barra inferior
+refactor(navegacion): separar buscador compartido
 ```
 
 Evitar commits como `cambios`, `arreglos varios` o `todo listo`.
@@ -80,10 +80,10 @@ No fusionar con `main` mientras exista cualquiera de estos problemas:
 - errores de consola;
 - panel que no abre o no cierra;
 - contenido que desborda;
-- scroll bloqueado después de cerrar;
+- desplazamiento bloqueado después de cerrar;
 - foco perdido con teclado;
 - pruebas automáticas fallidas;
-- import o archivo 404;
+- importación o archivo 404;
 - comportamiento distinto entre recarga y navegación.
 
 ## 9. Volver atrás
@@ -97,7 +97,7 @@ editar rama
 → probar
 → revisar
 → pull request
-→ merge a main
+→ fusionar a main
 ```
 
 No editar producción como método de prueba.
