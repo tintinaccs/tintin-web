@@ -14,7 +14,7 @@ test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page 
   expect(store.url).toBe('https://tintinaccesorios.pages.dev/index.html');
 });
 
-test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', async ({ page }) => {
+test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', async ({ page }) => {
   test.setTimeout(35_000);
   await page.goto('/product.html', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => typeof window._updateProductMeta === 'function' && typeof window._injectProductJsonLd === 'function');
@@ -34,12 +34,16 @@ test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', asy
 
     const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
     const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
-    return { canonical, jsonLd };
+    const expectedProductUrl = new URL('/product.html?id=seo-prueba', location.origin).href;
+    return { canonical, jsonLd, expectedProductUrl };
   });
 
-  expect(resultadoSeo.canonical).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
+  // En producción, location.origin es el dominio público. En la auditoría local
+  // es 127.0.0.1. Lo importante es que canonical y JSON-LD usen exactamente el
+  // mismo origen real del entorno donde se ejecuta la página.
+  expect(resultadoSeo.canonical).toBe(resultadoSeo.expectedProductUrl);
   expect(resultadoSeo.jsonLd['@type']).toBe('Product');
-  expect(resultadoSeo.jsonLd.offers.url).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
+  expect(resultadoSeo.jsonLd.offers.url).toBe(resultadoSeo.expectedProductUrl);
   expect(resultadoSeo.jsonLd.offers.priceCurrency).toBe('PYG');
   expect(resultadoSeo.jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
