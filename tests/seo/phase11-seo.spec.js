@@ -14,7 +14,7 @@ test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page 
   expect(store.url).toBe('https://tintinaccesorios.pages.dev/index.html');
 });
 
-test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', async ({ page }) => {
+test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', async ({ page }) => {
   test.setTimeout(35_000);
   await page.goto('/product.html', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => typeof window._updateProductMeta === 'function' && typeof window._injectProductJsonLd === 'function');
@@ -24,17 +24,30 @@ test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', asy
   // “producto no encontrado / error” no vuelva a escribir el canonical base.
   await expect(page.locator('#product-loading')).toBeHidden({ timeout: 25_000 });
 
-  await page.evaluate(() => {
+  // Aplicar y leer el resultado dentro de la misma tarea del navegador evita
+  // que una carga asíncrona ajena a esta unidad de prueba reemplace el canonical
+  // entre la llamada a la función SEO y la afirmación de Playwright.
+  const resultadoSeo = await page.evaluate(() => {
     const product = { id: 'seo-prueba', name: 'Reloj SEO Prueba', price: 150000, desc: 'Producto de prueba SEO', category: 'Relojes' };
     window._updateProductMeta(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg');
     window._injectProductJsonLd(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg', [], 0);
+
+    const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
+    const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
+    const expectedCanonicalUrl = new URL('/product.html?id=seo-prueba', location.origin).href;
+    const expectedStructuredDataUrl = new URL('/product.html?id=seo-prueba', 'https://tintinaccesorios.pages.dev').href;
+    return { canonical, jsonLd, expectedCanonicalUrl, expectedStructuredDataUrl };
   });
-  await expect(page.locator('#link-canonical')).toHaveAttribute('href', 'https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
-  const data = JSON.parse(await page.locator('#tt-product-jsonld').textContent());
-  expect(data['@type']).toBe('Product');
-  expect(data.offers.url).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
-  expect(data.offers.priceCurrency).toBe('PYG');
-  expect(data.offers.availability).toBe('https://schema.org/OutOfStock');
+
+  // El canonical refleja el origen real donde se sirve la página. Durante la
+  // auditoría es 127.0.0.1; en producción es el dominio público. El JSON-LD,
+  // en cambio, fija deliberadamente la URL pública para no publicar localhost
+  // en los datos estructurados que consumen los buscadores.
+  expect(resultadoSeo.canonical).toBe(resultadoSeo.expectedCanonicalUrl);
+  expect(resultadoSeo.jsonLd['@type']).toBe('Product');
+  expect(resultadoSeo.jsonLd.offers.url).toBe(resultadoSeo.expectedStructuredDataUrl);
+  expect(resultadoSeo.jsonLd.offers.priceCurrency).toBe('PYG');
+  expect(resultadoSeo.jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
