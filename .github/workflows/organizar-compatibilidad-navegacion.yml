@@ -1,0 +1,44 @@
+name: Organizar compatibilidad de navegación
+
+on:
+  push:
+    branches:
+      - orden/compatibilidad-navegacion-espanol
+
+permissions:
+  contents: write
+
+jobs:
+  organizar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Descargar rama
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Renombrar y actualizar referencias
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/organizar-compatibilidad-navegacion-temporal.js
+
+          find js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          node scripts/build-diagnostic-manifest.js
+          node scripts/audit-modular-architecture.js
+          node scripts/audit-public-shell.js
+          node scripts/audit-page-loading.js
+          node scripts/audit-unified-navigation.js
+
+      - name: Guardar resultado
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "refactor: organizar compatibilidad y entrada pública de navegación"
+          git push origin HEAD
