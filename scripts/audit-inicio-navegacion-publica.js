@@ -91,7 +91,7 @@ check(runtime.includes("import(versionedJsModule('core/auth/auth-nav.js'))"), 'r
 check(runtime.includes("import(versionedJsModule('components/cart/cart-sync.js'))"), 'runtime: falta sincronización del carrito');
 
 const controllerBootstrap = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
-check(controllerBootstrap.includes('./components/navigation/compartido/control-paneles.js'), 'inicio-control-paneles.js no apunta al controlador modular');
+check(controllerBootstrap.includes('../compartido/control-paneles.js'), 'inicio-control-paneles.js no apunta al controlador modular');
 const surfaceController = read('js/components/navigation/compartido/control-paneles.js');
 check(surfaceController.includes("this.state = 'idle'"), 'controlador: falta estado idle');
 check(surfaceController.includes("this.surface = 'none'"), 'controlador: falta superficie none');
