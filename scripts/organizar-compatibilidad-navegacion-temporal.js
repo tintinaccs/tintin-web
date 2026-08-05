@@ -90,6 +90,7 @@ function walk(directory) {
 const files = walk(root).filter(file => {
   const relative = path.relative(root, file).replace(/\\/g, '/');
   if (relative === 'diagnostic-manifest.json') return false;
+  if (relative.startsWith('.github/workflows/')) return false;
   if (file === selfPath || file === workflowPath) return false;
   return textExtensions.has(path.extname(relative).toLowerCase());
 });
