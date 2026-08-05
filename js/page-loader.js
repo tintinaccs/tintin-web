@@ -726,21 +726,21 @@
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/legacy/mobile-header-mode.js', 'Header Mode');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode');
     }
   }
 
   function bootHeaderDropdownFix() {
     if (window.TintinSurfaceController) return;
     if (!window.TintinHeaderDropdownFixBooted) {
-      importSibling('components/navigation/legacy/header-dropdown-fix.js', 'Header Dropdown Fix');
+      importSibling('components/navigation/compartido/compatibilidad-menus-desplegables.js', 'Header Dropdown Fix');
     }
   }
 
   function bootHeaderAccountFix() {
     if (window.TintinSurfaceController) return;
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/legacy/header-account-mobile-fix.js', 'Header Account Fix');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix');
     }
   }
 
@@ -753,7 +753,7 @@
 
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
-      importSibling('components/navigation/legacy/header-scroll-hide.js', 'Header Scroll Hide');
+      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide');
     }
   }
 

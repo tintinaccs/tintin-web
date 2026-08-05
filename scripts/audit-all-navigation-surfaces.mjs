@@ -178,7 +178,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     await page.waitForTimeout(300);
     check(await page.evaluate(() => window.TintinSurfaceController?.surface) === 'none', 'El dropdown Tienda no cerro al tocar afuera.');
 
-    // nav-collections.js reemplaza el contenido estatico del grid por datos
+    // colecciones.js reemplaza el contenido estatico del grid por datos
     // en vivo (y de paso lo vacia un instante); se espera a que haya al
     // menos una tarjeta real antes de probar el foco, para no depender de
     // esa carrera async ajena a este test.

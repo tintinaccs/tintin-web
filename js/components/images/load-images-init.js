@@ -1,4 +1,4 @@
-// header-dropdown-fix.js, store-gate.js y scroll-reveal-global.js NO se
+// compatibilidad-menus-desplegables.js, store-gate.js y scroll-reveal-global.js NO se
 // importan acá a propósito: js/page-loader.js ya los carga (con versión) en
 // TODAS las páginas, incluida esta — importarlos de nuevo acá, sin versión,
 // resolvía a una URL distinta y el navegador los ejecutaba dos veces (dos

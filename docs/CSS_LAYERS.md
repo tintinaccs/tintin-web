@@ -15,7 +15,7 @@ especificidad gana.
 |---|---|---|
 | 1 | `css/core/montserrat.css` | Declaraciones `@font-face` de Montserrat. Nada más. |
 | 2 | `css/theme/solid-ui-surfaces.css` | Fondos opacos forzados en superficies del checkout y del panel mientras el loader está visible. |
-| 3 | `css/components/navigation/legacy/mobile-header-actions-solid.css` | Fondo opaco del tabbar y sus botones en mobile. |
+| 3 | `css/components/navigation/movil/fondos-solidos-movil.css` | Fondo opaco del tabbar y sus botones en mobile. |
 | 4 | `css/theme/loader-solid-background.css` | Color de fondo del loader y del splash inicial. |
 | 5 | `css/core/color-tokens.css` | **Fuente de verdad de los tokens de color públicos** (`--color-*`). |
 | 6 | `styles.css` | **Hoja base del sitio**: layout, componentes, tipografía, responsive. La más grande (120 KB) y la que define el comportamiento por defecto de casi todo. |

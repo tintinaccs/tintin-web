@@ -37,7 +37,7 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 
 | Necesidad | Archivo principal |
 |---|---|
-| Montaje general de la navegación | `js/components/navigation/public-shell-entry.js` |
+| Montaje general de la navegación | `js/components/navigation/entrada-navegacion-publica.js` |
 | Página activa | `js/components/navigation/compartido/estado-ruta.js` |
 | Navegación entre páginas | `js/components/navigation/compartido/enrutador.js` |
 | Carga de procesos | `js/components/navigation/compartido/carga-navegacion.js` |
@@ -50,17 +50,17 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 Los siguientes archivos existen para no romper páginas antiguas, auditorías o importaciones existentes. No son la fuente principal:
 
 ```text
-js/public-shell.js
+js/inicio-navegacion-publica.js
 js/ui-navigation-controller.js
-js/components/navigation/legacy/navigation-desktop.js
-js/components/navigation/legacy/navigation-tablet.js
-js/components/navigation/legacy/navigation-mobile.js
-js/components/navigation/legacy/navigation-shared.js
-js/components/navigation/legacy/nav-collections.js
-css/components/navigation/legacy/navigation-desktop.css
-css/components/navigation/legacy/navigation-tablet.css
-css/components/navigation/legacy/navigation-mobile.css
-css/components/navigation/legacy/navigation-shared.css
+js/components/navigation/compatibilidad/navegacion-escritorio.js
+js/components/navigation/compatibilidad/navegacion-tableta.js
+js/components/navigation/compatibilidad/navegacion-movil.js
+js/components/navigation/compatibilidad/navegacion-compartida.js
+js/components/navigation/compatibilidad/colecciones.js
+css/components/navigation/compatibilidad/navegacion-escritorio.css
+css/components/navigation/compatibilidad/navegacion-tableta.css
+css/components/navigation/compatibilidad/navegacion-movil.css
+css/components/navigation/compatibilidad/navegacion-compartida.css
 css/components/navigation/compartido/control-paneles.css
 ```
 

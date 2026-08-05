@@ -162,12 +162,12 @@ function auditJavascriptReferences() {
 const actualPages = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
 const referenceParserProbe = extractTagReferences(`
   <img id="dynamic" data-dynamic-src="true" alt="Dinámica">
-  <script src="js/public-shell.js"></script>
+  <script src="js/inicio-navegacion-publica.js"></script>
   <link rel="stylesheet" href="styles.css">
 `);
 if (
   JSON.stringify(referenceParserProbe) !==
-  JSON.stringify(['js/public-shell.js', 'styles.css'])
+  JSON.stringify(['js/inicio-navegacion-publica.js', 'styles.css'])
 ) {
   fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
 }
@@ -179,7 +179,7 @@ auditJavascriptReferences();
 
 const productHtml = exists('product.html') ? read('product.html') : '';
 const productRuntime = exists('js/pages/product/product-maintenance.js') ? read('js/pages/product/product-maintenance.js') : '';
-const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
+const publicShell = exists('js/inicio-navegacion-publica.js') ? read('js/inicio-navegacion-publica.js') : '';
 const publicShellRuntime = exists('js/components/navigation/compartido/carga-navegacion.js')
   ? read('js/components/navigation/compartido/carga-navegacion.js')
   : '';
@@ -190,8 +190,8 @@ if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta
 if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la ficha #product-grid.');
 if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
 if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
-if (!/components\/navigation\/public-shell-entry\.js/.test(publicShell)) {
-  fail('js/public-shell.js', 'no carga el entry modular de navegación.');
+if (!/components\/navigation\/entrada-navegacion-publica\.js/.test(publicShell)) {
+  fail('js/inicio-navegacion-publica.js', 'no carga el entry modular de navegación.');
 }
 if (
   !/function loadProductsRuntime\(/.test(publicShellRuntime) ||

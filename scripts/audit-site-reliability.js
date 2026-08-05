@@ -15,7 +15,7 @@ function check(label, ok) {
 const loader = read('js/page-loader.js');
 const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
 const parity = read('css/theme/tintin-parity-safe.css');
-const accountFix = read('js/components/navigation/legacy/header-account-mobile-fix.js');
+const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
 const activity = read('js/analytics/site-activity.js');
 const functionOrigin = read('js/core/firebase/function-origin.js');
 const privacyConsent = read('js/analytics/privacy-consent.js');
@@ -38,7 +38,7 @@ const main = read('script.js');
 const scrollReveal = read('js/quality/scroll-reveal-global.js');
 const imagePerformance = read('js/components/images/image-performance.js');
 const home = read('index.html');
-const publicShell = read('js/public-shell.js');
+const publicShell = read('js/inicio-navegacion-publica.js');
 const surfaceController = read('js/ui-navigation-controller.js');
 const contentSchema = read('js/core/store/content-schema.js');
 const siteContent = read('js/core/store/site-content.js');
@@ -87,7 +87,7 @@ check('Las superficies sÃ³lidas del header se cargan antes del loader en cada pÃ
     .every(({ source }) => {
       const loaderAt = source.indexOf('css/theme/loader-solid-background.css');
       const surfacesAt = source.indexOf('css/theme/solid-ui-surfaces.css');
-      const headerAt = source.indexOf('css/components/navigation/legacy/mobile-header-actions-solid.css');
+      const headerAt = source.indexOf('css/components/navigation/movil/fondos-solidos-movil.css');
       return surfacesAt !== -1 && headerAt !== -1 && surfacesAt < loaderAt && headerAt < loaderAt;
     }));
 

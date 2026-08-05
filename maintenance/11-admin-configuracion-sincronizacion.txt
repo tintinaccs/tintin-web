@@ -17,11 +17,11 @@ ARCHIVOS REVISADOS
 - admin.html  ................. formulario de Configuración (controles cfg-*).
 - js/admin-app.js  ........... carga (loadConfig) y guardado (btn-save-config,
                                writeBatch general + storeGate; saveShipCities).
-- js/mobile-header-mode.js  .. runtime del header por dispositivo.
+- js/visibilidad-navegacion-por-dispositivo.js  .. runtime del header por dispositivo.
 - js/whatsapp.js  ............ datos de contacto/redes en páginas públicas.
 - js/site-content.js  ........ textos de página (site_content/{pageId}).
 - js/page-loader.js  ......... orquestador único que carga el runtime público.
-- js/public-shell.js  ........ inyección del header y anti-duplicación.
+- js/inicio-navegacion-publica.js  ........ inyección del header y anti-duplicación.
 - js/analytics.js  ........... GA4 con consentimiento.
 - js/secure-checkout-order.js  transacción de checkout.
 - checkout.html  ............. consumo de pagos, envío, WhatsApp y apertura.
@@ -45,7 +45,7 @@ CONTRATO DE CAMPOS (admin escribe == runtime público lee)
 whatsappNumber, contactEmail, instagram, storeAddress, facebook, tiktok
   -> js/whatsapp.js (onSnapshot settings/general), clases tt-contact-*.
 headerDesktopTabletEnabled, headerMobileEnabled
-  -> js/mobile-header-mode.js (onSnapshot), aplica clases en <html>.
+  -> js/visibilidad-navegacion-por-dispositivo.js (onSnapshot), aplica clases en <html>.
 paymentMethods, bankAccounts, deliveryCities, encomiendaCities,
 deliveryCost, encomiendaCost, whatsappNumber, instagram, storeOpen
   -> checkout.html (onSnapshot) y js/secure-checkout-order.js.
@@ -60,7 +60,7 @@ PROBLEMAS YA RESUELTOS QUE NO SE TOCARON
 - Header por dispositivo: dos booleanos independientes, cada uno acotado a su
   rango (>=769px header superior; <=768px tabbar), sin solaparse. Ya estaba
   correcto y en vivo (onSnapshot). Intacto.
-- Anti-duplicación de header: public-shell.js quita cualquier header/nav previo
+- Anti-duplicación de header: inicio-navegacion-publica.js quita cualquier header/nav previo
   por id antes de inyectar el suyo, con guardas TintinPublicShellBooted y
   tt-public-shell-mounted. Ya estaba correcto. Intacto.
 - Carga universal: page-loader.js arranca el header por dispositivo tanto en el
@@ -82,7 +82,7 @@ CAMBIOS APLICADOS EN ESTA ETAPA
     * carga universal del header vía page-loader (>=2 llamadas a bootHeaderMode);
     * whatsapp.js consume los campos de contacto y usa las clases reales;
     * presencia de las marcas tt-contact-* en las páginas públicas;
-    * anti-duplicación de header en public-shell.js;
+    * anti-duplicación de header en inicio-navegacion-publica.js;
     * checkout escucha settings/general y aplica pagos/envío;
     * selector de moneda deshabilitado (sin opción muerta);
     * cada campo guardado tiene consumidor público;

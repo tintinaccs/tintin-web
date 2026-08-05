@@ -3,7 +3,7 @@
    =============================================================
    Este archivo conserva compatibilidad con todas las páginas públicas.
    La estructura real vive en js/components/navigation/ y se carga como
-   módulo ES para que desktop, tablet, mobile y superficies compartidas
+   módulo ES para que escritorio, tableta, movil y superficies compartidas
    puedan mantenerse por separado.
 
    Contrato de accesibilidad conservado por los componentes:
@@ -17,8 +17,8 @@
   window.TintinPublicShellBootstrapStarted = true;
 
   const MODULE_VERSION = 'tintin-20260804-modular-shell-1';
-  const scriptUrl = document.currentScript?.src || new URL('js/public-shell.js', window.location.href).href;
-  const entryUrl = new URL('./components/navigation/public-shell-entry.js', scriptUrl);
+  const scriptUrl = document.currentScript?.src || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
+  const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   entryUrl.searchParams.set('v', MODULE_VERSION);
 
   import(entryUrl.href).catch(error => {
