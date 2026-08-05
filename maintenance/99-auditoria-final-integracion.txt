@@ -35,7 +35,7 @@ escribe, el público lee — sin datos hardcodeados que contradigan la config):
 Fuentes ÚNICAS de verdad confirmadas:
   - Firebase se inicializa SOLO en js/firebase.js (un initializeApp, un config).
   - "Tienda abierta/cerrada" tiene un núcleo único: store-gate.js se apoya en
-    store-gate-core.js; se entrega en todas las páginas vía page-loader.js.
+    store-gate-core.js; se entrega en todas las páginas vía cargador-pagina.js.
   - Catálogo: fuente única en Firestore (sin PRODUCTS de relleno).
 
 ═══════════════════════════════════════════════════════════════════════

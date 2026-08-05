@@ -40,7 +40,7 @@ check(
   'El control de tienda reutiliza store-gate-core',
   read('js/core/store-gate/store-gate.js').includes("from './store-gate-core.js") &&
     read('js/core/store-gate/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") &&
-    read('js/page-loader.js').includes('store-gate'),
+    read('js/cargador-pagina.js').includes('store-gate'),
   'El gate público debe tener una sola implementación.'
 );
 check(

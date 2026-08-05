@@ -15,7 +15,7 @@ function check(name, condition, detail) {
   if (!condition) failures.push(`${name}${detail ? ` — ${detail}` : ''}`);
 }
 
-const pageLoader = read('js/page-loader.js');
+const pageLoader = read('js/cargador-pagina.js');
 const gateCore = read('js/core/store-gate/store-gate-core.js');
 const gateRuntime = read('js/core/store-gate/store-gate.js');
 const adminSync = read('js/admin/settings/admin-store-control.js');
@@ -32,7 +32,7 @@ const collectionsStore = read('js/pages/collections/collections-store.js');
 check(
   'Bloqueo síncrono antes del body',
   pageLoader.includes("classList.add('tt-store-gate-pending')"),
-  'page-loader.js debe ocultar páginas públicas antes de cargar Firebase'
+  'cargador-pagina.js debe ocultar páginas públicas antes de cargar Firebase'
 );
 check(
   'Fallback si falla el módulo',
@@ -80,7 +80,7 @@ check(
 check(
   'Auth nav no duplica módulos globales',
   !/import\s+['"].*(?:ui-quality|header-dropdown-fix|header-account-mobile-fix|header-scroll-hide|scroll-reveal-global)/.test(authNav),
-  'page-loader.js debe ser el único dueño del arranque global'
+  'cargador-pagina.js debe ser el único dueño del arranque global'
 );
 check(
   'Sin observadores globales de interfaz',
@@ -283,7 +283,7 @@ const htmlFiles = fs
 
 htmlFiles.forEach(file => {
   const html = read(file);
-  const loaderIndex = html.indexOf('js/page-loader.js');
+  const loaderIndex = html.indexOf('js/cargador-pagina.js');
   const headEndIndex = html.toLowerCase().indexOf('</head>');
   check(
     `Loader global en ${file}`,

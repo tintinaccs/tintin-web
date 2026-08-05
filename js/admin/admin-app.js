@@ -766,7 +766,7 @@ document.getElementById('adm-logout').onclick = () => {
 };
 
 // ======== AUTH GUARD ========
-// El loader de marca (js/page-loader.js) cubre la pantalla mientras se
+// El loader de marca (js/cargador-pagina.js) cubre la pantalla mientras se
 // resuelve esta función, pero además el CSS de <head> mantiene el sidebar,
 // la tabbar mobile y .adm-main en visibility:hidden hasta que se agregue
 // html.adm-auth-ready — eso solo pasa al final del único camino que

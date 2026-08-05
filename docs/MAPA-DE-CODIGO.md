@@ -51,7 +51,7 @@ Los siguientes archivos existen para no romper páginas antiguas, auditorías o 
 
 ```text
 js/inicio-navegacion-publica.js
-js/ui-navigation-controller.js
+js/components/navigation/compatibilidad/inicio-control-paneles.js
 js/components/navigation/compatibilidad/navegacion-escritorio.js
 js/components/navigation/compatibilidad/navegacion-tableta.js
 js/components/navigation/compatibilidad/navegacion-movil.js

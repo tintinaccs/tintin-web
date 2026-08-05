@@ -6,7 +6,7 @@ on:
       - 'js/components/navigation/**'
       - 'css/components/navigation/**'
       - 'js/inicio-navegacion-publica.js'
-      - 'js/ui-navigation-controller.js'
+      - 'js/components/navigation/compatibilidad/inicio-control-paneles.js'
       - 'js/navigation-*.js'
       - 'js/components/navigation/compatibilidad/colecciones.js'
       - 'js/components/navigation/compartido/ocultar-encabezado-al-desplazar.js'

@@ -25,7 +25,7 @@ const REQUIRED_FILES = [
   '.firebaserc',
   'firestore.rules',
   'package.json',
-  'js/page-loader.js',
+  'js/cargador-pagina.js',
   'js/core/firebase/firebase.js',
   'js/quality/ui-quality.js',
   'js/components/color/theme-color-sanitizer.js',
@@ -43,7 +43,7 @@ const LEVELS = {
 const issues = [];
 const LEGACY_LOGO_CLEANUP_FILES = new Set([
   'js/quality/page-audit-fix.js',
-  'js/page-loader.js',
+  'js/cargador-pagina.js',
   'js/quality/ui-quality.js',
   'scripts/audit-deep.js',
   'scripts/audit-tintin.js',
@@ -270,12 +270,12 @@ function checkHtml(file) {
     add(LEVELS.INFO, file, 'Falta meta description.', 'Agregar descripción breve para Google.');
   }
 
-  if (!/js\/page-loader\.js/.test(html)) {
+  if (!/js\/cargador-pagina\.js/.test(html)) {
     add(
       LEVELS.WARN,
       file,
-      'HTML sin page-loader.js.',
-      'Agregar page-loader.js para cargar tema, header y fixes globales.'
+      'HTML sin cargador-pagina.js.',
+      'Agregar cargador-pagina.js para cargar tema, header y fixes globales.'
     );
   }
 

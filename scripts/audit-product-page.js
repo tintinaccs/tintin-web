@@ -8,7 +8,7 @@ const requireText = (text, pattern, message) => { if (!pattern.test(text)) error
 const html = read('product.html');
 const css = read('css/pages/product/product-maintenance.css');
 const runtime = read('js/pages/product/product-maintenance.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 const core = read('script.js');
 const record = read('maintenance/04-producto.txt');
 

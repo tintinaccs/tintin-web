@@ -88,9 +88,9 @@ function ensureShellScript(html) {
   let out = html
     .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
     .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '');
-  const loader = /(<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>)/i;
-  if (!loader.test(out)) throw new Error('La pagina no carga js/page-loader.js');
-  return out.replace(loader, `$1\n  <script src="js/ui-navigation-controller.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${VERSION}" defer></script>`);
+  const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
+  if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
+  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {
@@ -108,7 +108,7 @@ function centralizeRuntime(html) {
 
 function versionRuntimeLoader(html) {
   return html.replace(
-    /(<script\b[^>]*src=["']js\/page-loader\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
+    /(<script\b[^>]*src=["']js\/cargador-pagina\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
     `$1?v=${VERSION}$2`
   );
 }
