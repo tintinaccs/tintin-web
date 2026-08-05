@@ -24,17 +24,24 @@ test('producto actualiza canonical y JSON-LD con URL pública, PYG y stock', asy
   // “producto no encontrado / error” no vuelva a escribir el canonical base.
   await expect(page.locator('#product-loading')).toBeHidden({ timeout: 25_000 });
 
-  await page.evaluate(() => {
+  // Aplicar y leer el resultado dentro de la misma tarea del navegador evita
+  // que una carga asíncrona ajena a esta unidad de prueba reemplace el canonical
+  // entre la llamada a la función SEO y la afirmación de Playwright.
+  const resultadoSeo = await page.evaluate(() => {
     const product = { id: 'seo-prueba', name: 'Reloj SEO Prueba', price: 150000, desc: 'Producto de prueba SEO', category: 'Relojes' };
     window._updateProductMeta(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg');
     window._injectProductJsonLd(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg', [], 0);
+
+    const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
+    const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
+    return { canonical, jsonLd };
   });
-  await expect(page.locator('#link-canonical')).toHaveAttribute('href', 'https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
-  const data = JSON.parse(await page.locator('#tt-product-jsonld').textContent());
-  expect(data['@type']).toBe('Product');
-  expect(data.offers.url).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
-  expect(data.offers.priceCurrency).toBe('PYG');
-  expect(data.offers.availability).toBe('https://schema.org/OutOfStock');
+
+  expect(resultadoSeo.canonical).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
+  expect(resultadoSeo.jsonLd['@type']).toBe('Product');
+  expect(resultadoSeo.jsonLd.offers.url).toBe('https://tintinaccesorios.pages.dev/product.html?id=seo-prueba');
+  expect(resultadoSeo.jsonLd.offers.priceCurrency).toBe('PYG');
+  expect(resultadoSeo.jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
