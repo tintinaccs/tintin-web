@@ -3,7 +3,7 @@ const fs = require('fs');
 const html = fs.readFileSync('about.html', 'utf8');
 const css = fs.readFileSync('css/pages/institutional/about-maintenance.css', 'utf8');
 const js = fs.readFileSync('js/pages/institutional/about-maintenance.js', 'utf8');
-const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
+const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 
 const checks = [
   ['about page exists', html.includes('<section class="section tt-about-section"')],

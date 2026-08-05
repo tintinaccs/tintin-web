@@ -59,7 +59,7 @@ check(
 
 check(
   'El loader tiene salida garantizada',
-  /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/page-loader.js')) &&
+  /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) &&
     /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/color-scheme-instant.js')),
   'Los loaders deben tener tiempo máximo de espera.'
 );
@@ -141,8 +141,8 @@ check(
 
 check(
   'Cloudinary tiene preconnect y dns-prefetch',
-  read('js/page-loader.js').includes("href: 'https://res.cloudinary.com'") &&
-    read('js/page-loader.js').includes("dnsPrefetch.rel = 'dns-prefetch'"),
+  read('js/cargador-pagina.js').includes("href: 'https://res.cloudinary.com'") &&
+    read('js/cargador-pagina.js').includes("dnsPrefetch.rel = 'dns-prefetch'"),
   'La conexión al CDN debe adelantarse.'
 );
 
@@ -168,7 +168,7 @@ check(
   `Inicializadores encontrados: ${firebaseInitializers.join(', ')}`
 );
 
-const allowedBlocking = ['js/components/color/color-scheme-instant.js', 'js/page-loader.js'];
+const allowedBlocking = ['js/components/color/color-scheme-instant.js', 'js/cargador-pagina.js'];
 const blockingOffenders = [];
 publicPages.forEach(page => {
   if (!exists(page)) return;

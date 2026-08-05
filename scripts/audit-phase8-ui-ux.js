@@ -13,7 +13,7 @@ function check(name, condition, problem) {
 
 const runtime = read('js/quality/phase8-ui-ux.js');
 const styles = read('css/quality/phase8-ui-ux.css');
-const loader = read('js/page-loader.js');
+const loader = read('js/cargador-pagina.js');
 const packageJson = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-  return !html.includes('js/page-loader.js') || html.includes('js/page-loader.js?v=tintin-20260801-unified-surfaces-16');
+  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260801-unified-surfaces-16');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );

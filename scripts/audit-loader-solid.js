@@ -13,13 +13,13 @@ function check(condition, message) {
   if (!condition) failures.push(message);
 }
 
-const loaderRuntime = read('js/page-loader.js');
+const loaderRuntime = read('js/cargador-pagina.js');
 const solidCss = read('css/theme/loader-solid-background.css');
 const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
 check(
   /#tt-loader\{[^}]*background:#FFADD1/i.test(loaderRuntime),
-  `js/page-loader.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
+  `js/cargador-pagina.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
 );
 // Antes esto se cargaba con un @import dentro de color-tokens.css y la
 // comprobación miraba esa única línea. Ahora va como <link> en cada página

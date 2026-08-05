@@ -29,7 +29,7 @@ const files = {
   geoFunction: read('functions/api/visitor-geo.js'),
   routes: read('_routes.json'),
   cloudinarySetup: read('CLOUDINARY_SETUP.md'),
-  loader: read('js/page-loader.js'),
+  loader: read('js/cargador-pagina.js'),
   indexHtml: read('index.html'),
 };
 

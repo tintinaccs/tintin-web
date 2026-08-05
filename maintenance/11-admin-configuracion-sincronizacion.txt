@@ -20,7 +20,7 @@ ARCHIVOS REVISADOS
 - js/visibilidad-navegacion-por-dispositivo.js  .. runtime del header por dispositivo.
 - js/whatsapp.js  ............ datos de contacto/redes en páginas públicas.
 - js/site-content.js  ........ textos de página (site_content/{pageId}).
-- js/page-loader.js  ......... orquestador único que carga el runtime público.
+- js/cargador-pagina.js  ......... orquestador único que carga el runtime público.
 - js/inicio-navegacion-publica.js  ........ inyección del header y anti-duplicación.
 - js/analytics.js  ........... GA4 con consentimiento.
 - js/secure-checkout-order.js  transacción de checkout.
@@ -63,7 +63,7 @@ PROBLEMAS YA RESUELTOS QUE NO SE TOCARON
 - Anti-duplicación de header: inicio-navegacion-publica.js quita cualquier header/nav previo
   por id antes de inyectar el suyo, con guardas TintinPublicShellBooted y
   tt-public-shell-mounted. Ya estaba correcto. Intacto.
-- Carga universal: page-loader.js arranca el header por dispositivo tanto en el
+- Carga universal: cargador-pagina.js arranca el header por dispositivo tanto en el
   runtime liviano público como en el completo (bootHeaderMode en ambos). Ya
   estaba correcto. Intacto.
 - Selector de moneda: deshabilitado a propósito con una sola opción real

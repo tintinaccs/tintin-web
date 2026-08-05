@@ -143,7 +143,7 @@ check('Todas las páginas públicas cargan tokens, bindings y runtime', missingP
 const badFirstPaintOrder = publicPages.filter(file => {
   const html = read(file);
   const instantIndex = html.indexOf('js/components/color/color-scheme-instant.js');
-  const loaderIndex = html.indexOf('js/page-loader.js');
+  const loaderIndex = html.indexOf('js/cargador-pagina.js');
   const firstStylesheetIndex = html.indexOf('<link rel="stylesheet"');
   return instantIndex < 0 || loaderIndex < 0 || firstStylesheetIndex < 0 ||
     instantIndex > loaderIndex || instantIndex > firstStylesheetIndex;

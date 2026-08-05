@@ -10,7 +10,7 @@ const moduleFiles = fs.readdirSync(path.join(root, 'js'))
   .filter(file => file.endsWith('.js'))
   .map(file => `js/${file}`);
 
-const loader = read('js/page-loader.js');
+const loader = read('js/cargador-pagina.js');
 const firebase = read('js/core/firebase/firebase.js');
 const storeGate = read('js/core/store-gate/store-gate-core.js');
 const storeGateRuntime = read('js/core/store-gate/store-gate.js');
@@ -110,7 +110,7 @@ const checks = [
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('page-loader.js?v=tintin-20260801-unified-surfaces-16')
+      read(file).includes('cargador-pagina.js?v=tintin-20260801-unified-surfaces-16')
     )
   ],
   [

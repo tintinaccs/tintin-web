@@ -90,7 +90,7 @@ css/components/navigation/
 
 `js/inicio-navegacion-publica.js` es un archivo de inicio pequeño. Su única responsabilidad es cargar `js/components/navigation/entrada-navegacion-publica.js`.
 
-`js/ui-navigation-controller.js` carga el controlador compartido modular.
+`js/components/navigation/compatibilidad/inicio-control-paneles.js` carga el controlador compartido modular.
 
 Los siguientes archivos son adaptadores temporales:
 

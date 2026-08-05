@@ -10,7 +10,7 @@ const maintenanceCss = read('css/pages/login/login-maintenance.css');
 const fluidCss = read('css/pages/login/login-fluid-responsive.css');
 const css = `${maintenanceCss}\n${fluidCss}`;
 const runtime = read('js/pages/login/login-maintenance.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 
 const checks = [
   ['Google', html.includes('id="btn-google"')],

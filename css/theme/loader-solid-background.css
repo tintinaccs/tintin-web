@@ -94,7 +94,7 @@ html body #tt-loader-spin-wrap.tt-ready #tt-loader-logo {
 /* Debajo del ícono va la palabra Tintin y, debajo de esa, la sección a la
    que se está entrando (Página Principal, Catálogo - X, Producto - X, etc.).
    Nunca deben quedar ocultas; la animación de entrada (igual a la del logo)
-   la define page-loader.js. */
+   la define cargador-pagina.js. */
 html body #tt-loader-wordmark,
 html body #tt-loader-brand-subtitle {
   visibility: visible !important;

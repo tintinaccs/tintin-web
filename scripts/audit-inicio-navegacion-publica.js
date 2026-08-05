@@ -34,16 +34,16 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 for (const page of PUBLIC_PAGES) {
   const html = read(page);
   const shellScripts = html.match(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const controllerScripts = html.match(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const controllerScripts = html.match(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const classicScripts = html.match(/<script\b[^>]*src=["']script\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const loaderScripts = html.match(/<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const loaderScripts = html.match(/<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar inicio-navegacion-publica.js exactamente una vez`);
   check(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-navegacion-publica.js debe ser defer`);
-  check(controllerScripts.length === 1, `${page}: debe cargar ui-navigation-controller.js exactamente una vez`);
-  check(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^>]*\bdefer\b/i.test(html), `${page}: ui-navigation-controller.js debe ser defer`);
+  check(controllerScripts.length === 1, `${page}: debe cargar inicio-control-paneles.js exactamente una vez`);
+  check(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-control-paneles.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
-  check(loaderScripts.length === 1, `${page}: debe cargar page-loader.js exactamente una vez`);
+  check(loaderScripts.length === 1, `${page}: debe cargar cargador-pagina.js exactamente una vez`);
   check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
   check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de navegación duplicado`);
 
@@ -90,8 +90,8 @@ check(runtime.includes("components/navigation/compartido/control-busqueda.js"), 
 check(runtime.includes("import(versionedJsModule('core/auth/auth-nav.js'))"), 'runtime: falta cuenta compartida');
 check(runtime.includes("import(versionedJsModule('components/cart/cart-sync.js'))"), 'runtime: falta sincronización del carrito');
 
-const controllerBootstrap = read('js/ui-navigation-controller.js');
-check(controllerBootstrap.includes('./components/navigation/compartido/control-paneles.js'), 'ui-navigation-controller.js no apunta al controlador modular');
+const controllerBootstrap = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
+check(controllerBootstrap.includes('./components/navigation/compartido/control-paneles.js'), 'inicio-control-paneles.js no apunta al controlador modular');
 const surfaceController = read('js/components/navigation/compartido/control-paneles.js');
 check(surfaceController.includes("this.state = 'idle'"), 'controlador: falta estado idle');
 check(surfaceController.includes("this.surface = 'none'"), 'controlador: falta superficie none');

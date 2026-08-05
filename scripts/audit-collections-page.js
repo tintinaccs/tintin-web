@@ -9,7 +9,7 @@ const requireText = (text, pattern, message) => { if (!pattern.test(text)) error
 const html = read('collections.html');
 const css = read('css/pages/collections/collections-page.css');
 const runtime = read('js/pages/collections/collections-maintenance.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 const record = read('maintenance/03-colecciones.txt');
 
 requireText(html, /id="colls-page-grid"/, 'Falta grilla de colecciones.');

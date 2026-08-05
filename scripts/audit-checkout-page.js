@@ -9,7 +9,7 @@ const html = read('checkout.html');
 const css = read('css/pages/checkout/checkout-maintenance.css');
 const runtime = read('js/pages/checkout/checkout-maintenance.js');
 const reliability = read('js/pages/checkout/checkout-reliability.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 
 const checks = [
   ['cinco paneles', [0,1,2,3,4].every(i => html.includes(`id="panel-${i}"`))],
