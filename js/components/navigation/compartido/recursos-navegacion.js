@@ -1,12 +1,12 @@
-import { versionedSiteAsset } from './config.js';
+import { versionedSiteAsset } from './configuracion.js';
 
 const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css'],
   ['tt-navigation-tablet-css', 'css/components/navigation/tableta/encabezado-tableta.css'],
   ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css'],
-  ['tt-navigation-shared-css', 'css/components/navigation/shared/navigation-transitions.css'],
-  ['tt-surface-controller-css', 'css/components/navigation/shared/surfaces.css'],
-  ['tt-navigation-search-css', 'css/components/navigation/shared/search.css'],
+  ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css'],
+  ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css'],
+  ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
 ]);
 
 function ensureStylesheet(id, path) {

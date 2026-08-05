@@ -1,16 +1,16 @@
 import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js';
 import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js';
 import { renderMobileTabbar } from './movil/encabezado-movil.js';
-import { renderSearchPanel } from './shared/panel-busqueda.js';
-import { renderCartDrawer } from './shared/panel-carrito.js';
-import { renderAccountDrawer } from './shared/panel-cuenta.js';
-import { renderCollectionsSheet } from './shared/panel-colecciones.js';
-import { renderSurfaceLayer } from './shared/surface-layer.js';
-import { applyActiveState, currentPage } from './shared/route-state.js';
-import { ensureNavigationAssets } from './shared/assets.js';
-import { loadSharedRuntime } from './shared/runtime.js';
-import { enhanceMobileFooter } from './shared/acordeon-pie-pagina.js';
-import { registerNavigationSurfaces } from './shared/register-surfaces.js';
+import { renderSearchPanel } from './compartido/panel-busqueda.js';
+import { renderCartDrawer } from './compartido/panel-carrito.js';
+import { renderAccountDrawer } from './compartido/panel-cuenta.js';
+import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
+import { renderSurfaceLayer } from './compartido/capas-paneles.js';
+import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
+import { loadSharedRuntime } from './compartido/carga-navegacion.js';
+import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
+import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',

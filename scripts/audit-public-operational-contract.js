@@ -9,7 +9,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const authNav = read('js/core/auth/auth-nav.js');
 const roles = read('js/core/auth/roles.js');
 const shell = read('js/public-shell.js');
-const routeState = read('js/components/navigation/shared/route-state.js');
+const routeState = read('js/components/navigation/compartido/estado-ruta.js');
 const styles = read('styles.css');
 const packageJson = JSON.parse(read('package.json'));
 

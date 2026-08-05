@@ -7,7 +7,7 @@ El repositorio mantiene una sola fuente oficial de código, pero divide cada ár
 ## Regla principal
 
 - La estructura visual específica de cada dispositivo vive en `escritorio/`, `tableta/` o `movil/`.
-- La lógica que utilizan varios dispositivos vive temporalmente en `shared/` hasta que ese bloque se revise por separado.
+- La lógica que utilizan varios dispositivos vive temporalmente en `compartido/` hasta que ese bloque se revise por separado.
 - Los archivos antiguos que todavía son usados por páginas o auditorías quedan como adaptadores de compatibilidad pequeños. No deben recuperar lógica propia.
 - `main` representa producción. La reorganización se prepara y prueba primero en una rama.
 - Los nombres de archivos internos se escriben en español, en minúsculas, sin tildes y separados por guiones.
@@ -26,23 +26,23 @@ js/components/navigation/
 ├── movil/
 │   ├── encabezado-movil.js
 │   └── indicador-navegacion-movil.js
-└── shared/
+└── compartido/
     ├── panel-cuenta.js
-    ├── assets.js
+    ├── recursos-navegacion.js
     ├── panel-carrito.js
-    ├── collections-runtime.js
+    ├── carga-colecciones.js
     ├── panel-colecciones.js
-    ├── config.js
+    ├── configuracion.js
     ├── acordeon-pie-pagina.js
-    ├── icons.js
-    ├── register-surfaces.js
-    ├── route-state.js
-    ├── router.js
-    ├── runtime.js
+    ├── iconos.js
+    ├── registro-paneles.js
+    ├── estado-ruta.js
+    ├── enrutador.js
+    ├── carga-navegacion.js
     ├── control-busqueda.js
     ├── panel-busqueda.js
-    ├── surface-controller.js
-    └── surface-layer.js
+    ├── control-paneles.js
+    └── capas-paneles.js
 ```
 
 ```text
@@ -50,10 +50,10 @@ css/components/navigation/
 ├── escritorio/encabezado-escritorio.css
 ├── tableta/encabezado-tableta.css
 ├── movil/encabezado-movil.css
-└── shared/
-    ├── navigation-transitions.css
-    ├── search.css
-    └── surfaces.css
+└── compartido/
+    ├── transiciones-navegacion.css
+    ├── busqueda.css
+    └── paneles.css
 ```
 
 ## Responsabilidades
@@ -72,18 +72,18 @@ css/components/navigation/
 
 ### Compartido
 
-- `surface-controller.js`: apertura, cierre, Escape, foco, fondo, bloqueo de desplazamiento y cambio entre superficies.
-- `register-surfaces.js`: conecta el controlador cuando el HTML modular ya existe y registra Tienda, Buscar, Cuenta y Carrito.
+- `control-paneles.js`: apertura, cierre, Escape, foco, fondo, bloqueo de desplazamiento y cambio entre superficies.
+- `registro-paneles.js`: conecta el controlador cuando el HTML modular ya existe y registra Tienda, Buscar, Cuenta y Carrito.
 - `panel-busqueda.js`: estructura visual del buscador.
 - `control-busqueda.js`: índice reutilizable, coincidencias, teclado, estados de carga y error.
-- `search.css`: presentación de resultados, selección y reintento.
+- `busqueda.css`: presentación de resultados, selección y reintento.
 - `panel-cuenta.js`: estructura de Mi Cuenta.
 - `panel-carrito.js`: estructura del carrito.
 - `panel-colecciones.js`: estructura de colecciones móvil.
-- `collections-runtime.js`: datos e imágenes de colecciones con respaldo.
-- `runtime.js`: carga controlada de cuenta, carrito, productos y comportamientos.
-- `route-state.js`: determina la página activa.
-- `assets.js`: carga las hojas CSS del componente antes de mostrar la navegación.
+- `carga-colecciones.js`: datos e imágenes de colecciones con respaldo.
+- `carga-navegacion.js`: carga controlada de cuenta, carrito, productos y comportamientos.
+- `estado-ruta.js`: determina la página activa.
+- `recursos-navegacion.js`: carga las hojas CSS del componente antes de mostrar la navegación.
 - `acordeon-pie-pagina.js`: mejora el pie de página móvil con secciones desplegables.
 
 ## Archivos de entrada y compatibilidad
@@ -104,7 +104,7 @@ css/components/navigation/legacy/navigation-desktop.css
 css/components/navigation/legacy/navigation-tablet.css
 css/components/navigation/legacy/navigation-mobile.css
 css/components/navigation/legacy/navigation-shared.css
-css/components/navigation/shared/surface-controller.css
+css/components/navigation/compartido/control-paneles.css
 ```
 
 No se agrega lógica nueva a esos archivos. La fuente principal está en `components/`.

@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from './icons.js';
+import { UI_ICONS, svgIcon } from './iconos.js';
 
 export function renderSearchPanel() {
   return `

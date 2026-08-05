@@ -1,5 +1,5 @@
-import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../shared/icons.js';
-import { logoUrl } from '../shared/config.js';
+import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
+import { logoUrl } from '../compartido/configuracion.js';
 
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label, background }) => `

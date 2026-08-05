@@ -180,8 +180,8 @@ auditJavascriptReferences();
 const productHtml = exists('product.html') ? read('product.html') : '';
 const productRuntime = exists('js/pages/product/product-maintenance.js') ? read('js/pages/product/product-maintenance.js') : '';
 const publicShell = exists('js/public-shell.js') ? read('js/public-shell.js') : '';
-const publicShellRuntime = exists('js/components/navigation/shared/runtime.js')
-  ? read('js/components/navigation/shared/runtime.js')
+const publicShellRuntime = exists('js/components/navigation/compartido/carga-navegacion.js')
+  ? read('js/components/navigation/compartido/carga-navegacion.js')
   : '';
 const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js/page-maintenance-loader.js') : '';
 
@@ -197,7 +197,7 @@ if (
   !/function loadProductsRuntime\(/.test(publicShellRuntime) ||
   !/import\(versionedJsModule\(['"]core\/store\/products-store\.js['"]\)\)/.test(publicShellRuntime)
 ) {
-  fail('js/components/navigation/shared/runtime.js', 'no carga products-store.js mediante el runtime modular.');
+  fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga products-store.js mediante el runtime modular.');
 }
 if (!/product[\s\S]*load\('pages\/product\/product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
   fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');

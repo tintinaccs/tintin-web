@@ -1,5 +1,5 @@
-import { currentPage } from './route-state.js';
-import { versionedJsModule, versionedSiteAsset } from './config.js';
+import { currentPage } from './estado-ruta.js';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js';
 
 let productsRuntimePromise = null;
 
@@ -80,8 +80,8 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
       import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
       import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
-      import(versionedJsModule('components/navigation/shared/router.js')),
-      import(versionedJsModule('components/navigation/shared/control-busqueda.js')),
+      import(versionedJsModule('components/navigation/compartido/enrutador.js')),
+      import(versionedJsModule('components/navigation/compartido/control-busqueda.js')),
     ]))
     .then(reportRuntimeFailures);
 }
@@ -102,7 +102,7 @@ export function loadSharedRuntime() {
 
   scheduleNonCritical(() => {
     Promise.allSettled([
-      import(versionedJsModule('components/navigation/shared/collections-runtime.js')),
+      import(versionedJsModule('components/navigation/compartido/carga-colecciones.js')),
       loadHomeMaintenance(),
     ]).then(reportRuntimeFailures);
   });

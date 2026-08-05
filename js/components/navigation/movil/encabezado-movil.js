@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from '../shared/icons.js';
+import { UI_ICONS, svgIcon } from '../compartido/iconos.js';
 
 export function renderMobileTabbar() {
   return `

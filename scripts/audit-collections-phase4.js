@@ -5,7 +5,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const files = {
-  nav: read('js/components/navigation/shared/collections-runtime.js'),
+  nav: read('js/components/navigation/compartido/carga-colecciones.js'),
   navCompatibility: read('js/components/navigation/legacy/nav-collections.js'),
   publicPhase4: read('js/pages/collections/collections-phase4.js'),
   adminPhase4: read('js/admin/collections/admin-collections-phase4.js'),
@@ -71,7 +71,7 @@ check(
 
 check(
   'El módulo legado apunta a la fuente modular',
-  files.navCompatibility.includes('components/navigation/shared/collections-runtime.js') &&
+  files.navCompatibility.includes('components/navigation/compartido/carga-colecciones.js') &&
     files.navCompatibility.split('\n').length < 10,
   'js/components/navigation/legacy/nav-collections.js debe ser solamente un adaptador de compatibilidad'
 );
