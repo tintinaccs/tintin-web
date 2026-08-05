@@ -81,6 +81,8 @@
     "audit:phase11": "node scripts/audit-phase11-seo.js",
     "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
     "monitor:production": "node scripts/audit-production-health.mjs",
+    "audit:web-push": "node scripts/audit-web-push.js",
+    "test:web-push": "node --test tests/push/web-push.test.mjs",
     "audit:headers": "node scripts/audit-headers.mjs",
     "audit:contraste": "node scripts/audit-contraste.mjs"
   },

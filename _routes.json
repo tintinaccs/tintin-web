@@ -11,6 +11,10 @@
     "/api/email-otp-send",
     "/api/email-otp-verify",
     "/api/sheets-product-sync",
+    "/api/push-config",
+    "/api/push-subscription",
+    "/api/push-test",
+    "/api/push-order-event",
     "/__/auth/*"
   ],
   "exclude": []

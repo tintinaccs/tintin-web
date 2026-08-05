@@ -9,6 +9,14 @@
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
+  <!-- Aplicación instalable propia del panel ("Tintin Pedidos"): abre
+       admin.html, no la tienda pública. El manifiesto de la tienda
+       (manifest.json) queda intacto para el resto de las páginas. -->
+  <link rel="manifest" href="admin-manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tintin Pedidos">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" crossorigin>
@@ -1583,6 +1591,33 @@
         </div>
       </div>
 
+      <!-- Notificaciones de pedidos (Web Push) — sólo Super Admin.
+           La lógica vive en js/admin/notifications/push-notifications.js;
+           la tarjeta queda oculta hasta que ese módulo confirme la cuenta. -->
+      <div class="adm-card" id="push-card" style="margin-bottom:20px;display:none">
+        <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div class="adm-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-3px"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notificaciones de pedidos</div>
+          <span class="adm-badge" id="push-status-pill">No configuradas</span>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px" id="push-status-detail">Activá las notificaciones para recibir un aviso en este dispositivo cada vez que una clienta completa un pedido, aunque el panel esté cerrado.</p>
+          <div style="display:grid;gap:12px;margin-bottom:14px">
+            <div>
+              <label class="adm-label" for="push-device-label">Nombre de este dispositivo</label>
+              <input type="text" class="adm-input" id="push-device-label" maxlength="60" placeholder="Ej: iPhone de Barbi" autocomplete="off">
+            </div>
+            <div style="font-size:12px;color:var(--adm-muted)">Último registro correcto: <strong id="push-last-register" style="color:var(--adm-text)">—</strong></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-push-enable">Activar notificaciones</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-push-test" disabled>Enviar notificación de prueba</button>
+            <button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="btn-push-disable" style="display:none">Desactivar en este dispositivo</button>
+          </div>
+          <p id="push-notice" style="display:none;font-size:12px;margin:14px 0 0;color:var(--adm-muted)"></p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 En la pantalla bloqueada sólo se ve el número de pedido, el total y el tipo de entrega. El nombre, el teléfono, el correo, la dirección y las notas de la clienta se ven únicamente después de entrar al panel.</p>
+        </div>
+      </div>
+
       <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
@@ -2033,6 +2068,8 @@
 </div>
 
 <script type="module" src="js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/admin/notifications/push-notifications.js?v=tintin-20260805-web-push-1"></script>
+<script type="module" src="js/admin/notifications/push-order-deeplink.js?v=tintin-20260805-web-push-1"></script>
 <script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
 </body>
 </html>

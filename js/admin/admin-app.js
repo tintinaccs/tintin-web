@@ -1195,6 +1195,14 @@ function refreshRealtimeConsumers() {
   }
 }
 
+// Punto de lectura mínimo para el enlace directo de las notificaciones push
+// (js/admin/notifications/push-order-deeplink.js): saber si los pedidos ya
+// están cargados y si un pedido existe, sin exponer ningún dato del pedido.
+window.TintinAdminOrders = {
+  ready: () => adminRealtimeReady.orders === true,
+  has: orderId => allOrders.some(order => order.id === orderId)
+};
+
 function stopAdminRealtimeData() {
   if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
   if (adminUsersUnsubscribe) adminUsersUnsubscribe();

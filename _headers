@@ -45,6 +45,13 @@
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
+# El service worker de Firebase Messaging NO puede quedar cacheado un año:
+# esta regla es más específica que /*.js y gana, así que una versión nueva
+# llega siempre al dispositivo en la siguiente visita.
+/firebase-messaging-sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
 /js/page-maintenance-loader.js
   Cache-Control: no-cache, no-store, must-revalidate
 
@@ -77,3 +84,9 @@
 
 /assets-tintin/fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Manifiesto de la aplicación administrativa "Tintin Pedidos": se revalida
+# siempre para que un cambio de nombre, ícono o start_url llegue enseguida.
+/admin-manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Type: application/manifest+json
