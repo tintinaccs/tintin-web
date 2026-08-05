@@ -1,6 +1,6 @@
-import { renderDesktopHeader } from './desktop/header-desktop.js';
-import { renderTabletHeader, renderTabletMenu } from './tablet/header-tablet.js';
-import { renderMobileTabbar } from './mobile/header-mobile.js';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js';
+import { renderMobileTabbar } from './movil/encabezado-movil.js';
 import { renderSearchPanel } from './shared/search-panel.js';
 import { renderCartDrawer } from './shared/cart-drawer.js';
 import { renderAccountDrawer } from './shared/account-drawer.js';
