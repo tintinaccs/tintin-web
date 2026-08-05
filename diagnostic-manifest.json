@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-05T16:55:18.390Z",
-  "sourceFingerprint": "135c06406470da1eb9f3992ac088c7d2bf679d0c7450b3ee2cbbe44ffe8562bb",
+  "generatedAt": "2026-08-05T17:21:34.421Z",
+  "sourceFingerprint": "05c10e60175bd15c168ba2013bc27057df667de7c1c80c52b36d4a092f71f793",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5447798,
+    "totalBytes": 5448097,
     "pages": 18,
     "modules": 300
   },
@@ -21153,6 +21153,17 @@
       ]
     },
     {
+      "path": "scripts/audit-inicio-navegacion-publica.js",
+      "bytes": 9471,
+      "sha256": "85e5d97543eae347ecc4434f41e09da89e2ceff301825430f334987b66ce46dc",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/audit-institutional-help-legal-part2e-v2.mjs",
       "bytes": 14663,
       "sha256": "8bbd4942090b7eb7cb4954b09195f50c21a39149b589780303180ab06f9957e3",
@@ -21842,17 +21853,6 @@
       ]
     },
     {
-      "path": "scripts/audit-public-shell.js",
-      "bytes": 9471,
-      "sha256": "85e5d97543eae347ecc4434f41e09da89e2ceff301825430f334987b66ce46dc",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "scripts/audit-responsive-navigation.mjs",
       "bytes": 17136,
       "sha256": "4e7e120d83617b721764cfb2f080d811c2f8412e54f79d1ed179a57f1709dd30",
@@ -22365,7 +22365,7 @@
       "endpoints": []
     },
     {
-      "path": "scripts/sync-public-shell.js",
+      "path": "scripts/sync-inicio-navegacion-publica.js",
       "bytes": 4533,
       "sha256": "5023ce01f45ec666d86c70806365d6c347d55f0282d457fc57ec359dae943102",
       "syntax": {
@@ -22847,8 +22847,8 @@
     {
       "path": ".github/workflows/audit-collections-phase4.yml",
       "extension": ".yml",
-      "bytes": 1184,
-      "sha256": "ba24623b313cacd13628fca0b23279aff4a82834b3ca5cd056a187b466b3834f"
+      "bytes": 1192,
+      "sha256": "6b824f78014d5663696a0638ed50eeb6cb67b2c012a98a05b3cbb9cb33dece9d"
     },
     {
       "path": ".github/workflows/audit-content-phase6.yml",
@@ -22877,8 +22877,8 @@
     {
       "path": ".github/workflows/audit-modular-navigation.yml",
       "extension": ".yml",
-      "bytes": 2176,
-      "sha256": "e28aa0452d4daf47cd9e17cee77f392f3dee607b6504344319a2404dd8e038fe"
+      "bytes": 2467,
+      "sha256": "bf256a9365a4c79c8c8ff4756babe9c455814751978dae362b8d35f2e2726c37"
     },
     {
       "path": ".github/workflows/audit-secure-orders.yml",
@@ -25365,6 +25365,12 @@
       "sha256": "590fb78550ebf57711791056e86628c1f4b1b447f3eeae7081d37548ea8e098b"
     },
     {
+      "path": "scripts/audit-inicio-navegacion-publica.js",
+      "extension": ".js",
+      "bytes": 9471,
+      "sha256": "85e5d97543eae347ecc4434f41e09da89e2ceff301825430f334987b66ce46dc"
+    },
+    {
       "path": "scripts/audit-institutional-help-legal-part2e-v2.mjs",
       "extension": ".mjs",
       "bytes": 14663,
@@ -25557,12 +25563,6 @@
       "sha256": "90978769aba6976b9a9a023277d042c6d696c92e1749da1eec24174c42e32ea0"
     },
     {
-      "path": "scripts/audit-public-shell.js",
-      "extension": ".js",
-      "bytes": 9471,
-      "sha256": "85e5d97543eae347ecc4434f41e09da89e2ceff301825430f334987b66ce46dc"
-    },
-    {
       "path": "scripts/audit-responsive-navigation.mjs",
       "extension": ".mjs",
       "bytes": 17136,
@@ -25695,7 +25695,7 @@
       "sha256": "ed83a50d7d355faf9610334764c51c9056e1eb85417af97b79ee1fcb77357677"
     },
     {
-      "path": "scripts/sync-public-shell.js",
+      "path": "scripts/sync-inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 4533,
       "sha256": "5023ce01f45ec666d86c70806365d6c347d55f0282d457fc57ec359dae943102"
