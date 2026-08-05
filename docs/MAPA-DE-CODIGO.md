@@ -20,14 +20,16 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 
 | Necesidad | Archivo principal |
 |---|---|
-| Estructura del buscador | `js/components/navigation/shared/search-panel.js` |
+| Estructura del buscador | `js/components/navigation/shared/panel-busqueda.js` |
+| Control, resultados y teclado del buscador | `js/components/navigation/shared/control-busqueda.js` |
 | Tamaño y diseño del buscador | `css/components/navigation/shared/surfaces.css` |
-| Estructura de Mi Cuenta | `js/components/navigation/shared/account-drawer.js` |
+| Estructura de Mi Cuenta | `js/components/navigation/shared/panel-cuenta.js` |
 | Diseño sólido de Mi Cuenta | `css/components/navigation/shared/surfaces.css` |
-| Estructura del carrito | `js/components/navigation/shared/cart-drawer.js` |
+| Estructura del carrito | `js/components/navigation/shared/panel-carrito.js` |
 | Contenido y operaciones del carrito | `script.js` y `js/components/cart/cart-sync.js` hasta completar su extracción modular |
-| Estructura de colecciones móvil | `js/components/navigation/shared/collections-sheet.js` |
+| Estructura de colecciones móvil | `js/components/navigation/shared/panel-colecciones.js` |
 | Carga e imágenes de colecciones | `js/components/navigation/shared/collections-runtime.js` |
+| Acordeón del pie de página móvil | `js/components/navigation/shared/acordeon-pie-pagina.js` |
 | Abrir o cerrar cualquier panel | `js/components/navigation/shared/surface-controller.js` |
 | Fondo oscuro y capas | `js/components/navigation/shared/surface-layer.js` y `css/components/navigation/shared/surfaces.css` |
 
