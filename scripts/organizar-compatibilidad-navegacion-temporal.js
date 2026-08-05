@@ -35,6 +35,12 @@ function absolute(relative) {
   return path.join(root, relative);
 }
 
+function escapedForRegexLiteral(value) {
+  return value
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/\//g, '\\/');
+}
+
 for (const [oldPath, newPath] of moves) {
   const oldAbsolute = absolute(oldPath);
   const newAbsolute = absolute(newPath);
@@ -46,13 +52,22 @@ for (const [oldPath, newPath] of moves) {
 
 const replacements = [];
 for (const [oldPath, newPath] of moves) {
+  const oldWithoutRoot = oldPath.replace(/^(?:js|css)\//, '');
+  const newWithoutRoot = newPath.replace(/^(?:js|css)\//, '');
+  const oldWithoutComponents = oldPath.replace(/^(?:js|css)\/components\//, '');
+  const newWithoutComponents = newPath.replace(/^(?:js|css)\/components\//, '');
+  const oldBase = path.basename(oldPath);
+  const newBase = path.basename(newPath);
+
   replacements.push([oldPath, newPath]);
-  replacements.push([oldPath.replace(/^(?:js|css)\//, ''), newPath.replace(/^(?:js|css)\//, '')]);
-  replacements.push([
-    oldPath.replace(/^(?:js|css)\/components\//, ''),
-    newPath.replace(/^(?:js|css)\/components\//, ''),
-  ]);
-  replacements.push([path.basename(oldPath), path.basename(newPath)]);
+  replacements.push([oldWithoutRoot, newWithoutRoot]);
+  replacements.push([oldWithoutComponents, newWithoutComponents]);
+  replacements.push([oldBase, newBase]);
+
+  replacements.push([escapedForRegexLiteral(oldPath), escapedForRegexLiteral(newPath)]);
+  replacements.push([escapedForRegexLiteral(oldWithoutRoot), escapedForRegexLiteral(newWithoutRoot)]);
+  replacements.push([escapedForRegexLiteral(oldWithoutComponents), escapedForRegexLiteral(newWithoutComponents)]);
+  replacements.push([escapedForRegexLiteral(oldBase), escapedForRegexLiteral(newBase)]);
 }
 
 replacements.push(
@@ -135,7 +150,7 @@ const stale = [];
 for (const file of files) {
   const relative = path.relative(root, file).replace(/\\/g, '/');
   const source = fs.readFileSync(file, 'utf8');
-  const matches = staleNeedles.filter(needle => source.includes(needle));
+  const matches = staleNeedles.filter(needle => source.includes(needle) || source.includes(escapedForRegexLiteral(needle)));
   if (matches.length) stale.push(`${relative}: ${matches.join(', ')}`);
 }
 
