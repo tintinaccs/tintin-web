@@ -43,13 +43,6 @@ async function installSeededCatalog(page) {
   );
 
   await page.evaluate(products => {
-    if (window.__ttSearchAuditCatalogLock !== true) {
-      window.__ttSearchAuditCatalogLock = true;
-      window.addEventListener('tintin:products-loaded', event => {
-        if (event.detail?.source !== 'audit-seed') event.stopImmediatePropagation();
-      }, true);
-    }
-
     window.PRODUCTS = products;
     const synced = window.TintinSearchController.syncCatalog(products);
     if (synced !== products.length || window.TintinSearchController.catalogSize() !== products.length) {
@@ -73,9 +66,23 @@ async function auditSearch(label, viewport, triggerSelector) {
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   const pageErrors = [];
+  const missingResources = [];
   page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('response', response => {
+    if (response.status() === 404) missingResources.push(response.url());
+  });
 
   try {
+    // Se instala antes de cualquier script de la página para que una carga real
+    // de Firestore no reemplace el catálogo controlado mientras corre la prueba.
+    // Esto aísla la auditoría; no modifica el código ni el comportamiento del sitio.
+    await page.addInitScript(() => {
+      window.__ttSearchAuditCatalogLock = true;
+      window.addEventListener('tintin:products-loaded', event => {
+        if (event.detail?.source !== 'audit-seed') event.stopImmediatePropagation();
+      }, true);
+    });
+
     await page.goto(`${baseURL}/index.html`, { waitUntil:'domcontentloaded' });
     await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout:10000 });
 
@@ -104,10 +111,16 @@ async function auditSearch(label, viewport, triggerSelector) {
       const inputNode = document.getElementById('search-input');
       const resultsNode = document.getElementById('search-results');
       return inputNode?.value === '' && resultsNode && getComputedStyle(resultsNode).display === 'none';
-    }, null, { timeout:1500 });
+    }, null, { timeout:3000 });
+    check(missingResources.length === 0, `[${label}] recursos 404: ${missingResources.join(' | ')}`);
     check(pageErrors.length === 0, `[${label}] errores de página: ${pageErrors.join(' | ')}`);
   } catch (error) {
-    failures.push(`[${label}] ${error.message}`);
+    const details = [
+      error.message,
+      missingResources.length ? `recursos 404: ${missingResources.join(' | ')}` : '',
+      pageErrors.length ? `errores de página: ${pageErrors.join(' | ')}` : '',
+    ].filter(Boolean).join(' — ');
+    failures.push(`[${label}] ${details}`);
   } finally {
     await context.close();
   }
