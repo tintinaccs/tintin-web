@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T22:24:30.501Z",
-  "sourceFingerprint": "0407cc79c94dd6b404704e9fb02cf8cad7fe888d38dc5d66e179e655027a641d",
+  "generatedAt": "2026-08-05T12:12:42.791Z",
+  "sourceFingerprint": "979663a879d5d2352f4179289e642f1a3058672e8d18ef4ea5bba2bfb193060f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 505,
     "textFiles": 473,
-    "totalBytes": 5441648,
+    "totalBytes": 5444173,
     "pages": 18,
     "modules": 300
   },
@@ -17434,18 +17434,7 @@
       ]
     },
     {
-      "path": "js/components/navigation/desktop/controller.js",
-      "bytes": 1393,
-      "sha256": "d885a27dbd593e33a40c244b396e82618cd67e2943879034392cb5a4805cf8c0",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/components/navigation/desktop/header-desktop.js",
+      "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "bytes": 2816,
       "sha256": "1d72fd3b8ff3b30dd891f9ef8d25e44ae406d33d89c08aa2f31bd094895110d1",
       "syntax": {
@@ -17466,6 +17455,17 @@
           "line": 2
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/navigation/escritorio/indicador-navegacion-escritorio.js",
+      "bytes": 1393,
+      "sha256": "d885a27dbd593e33a40c244b396e82618cd67e2943879034392cb5a4805cf8c0",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -17550,8 +17550,8 @@
     },
     {
       "path": "js/components/navigation/legacy/navigation-desktop.js",
-      "bytes": 475,
-      "sha256": "5aa3c412def099ff77436cebde1c19d49f84588b5a93fd01b063ec35d59b0083",
+      "bytes": 533,
+      "sha256": "1bf898b5ec00d35ef138753efd2d57264389e6762895408805f0da2b45c12533",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17561,8 +17561,8 @@
     },
     {
       "path": "js/components/navigation/legacy/navigation-mobile.js",
-      "bytes": 471,
-      "sha256": "8ee23a342a03ebcd52299f3455ca343be2c299c4694a724d7d97a6cd711a71a4",
+      "bytes": 511,
+      "sha256": "678d16c7a553e9dd37a6a4d8d616de9ad33495044088dcd76d2674c2c15c97d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17583,8 +17583,8 @@
     },
     {
       "path": "js/components/navigation/legacy/navigation-tablet.js",
-      "bytes": 471,
-      "sha256": "ff05d7cbe9e1b4b2c60c21f6c3e6bf7183f5a051ac1205547d00ab6acb9b4657",
+      "bytes": 503,
+      "sha256": "34811d06de644ccd56008bc2f1477b927d041f6df9a165cdbde921cabec2b854",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17593,18 +17593,7 @@
       "endpoints": []
     },
     {
-      "path": "js/components/navigation/mobile/controller.js",
-      "bytes": 1287,
-      "sha256": "d9321062b615f8fac21d3a3e729222b48e1ebde7a2cf3e3339a5076fb5cafcaf",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/components/navigation/mobile/header-mobile.js",
+      "path": "js/components/navigation/movil/encabezado-movil.js",
       "bytes": 1560,
       "sha256": "6f59a014e1fac9759230f301c65be399db303179fd8773ab3afaa69c884e228a",
       "syntax": {
@@ -17622,29 +17611,40 @@
       "endpoints": []
     },
     {
+      "path": "js/components/navigation/movil/indicador-navegacion-movil.js",
+      "bytes": 1287,
+      "sha256": "d9321062b615f8fac21d3a3e729222b48e1ebde7a2cf3e3339a5076fb5cafcaf",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/components/navigation/public-shell-entry.js",
-      "bytes": 3142,
-      "sha256": "202d83900fd62dc747383f931c8c8e8d8efc2c9abe5e0fceb1eeb2f568cfc9e4",
+      "bytes": 3160,
+      "sha256": "3d46d6637db48ec792b5003ed7a50d593ca46d3dd7c741a35a6895f3e930bcb5",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./desktop/header-desktop.js",
-          "target": "js/components/navigation/desktop/header-desktop.js",
+          "raw": "./escritorio/encabezado-escritorio.js",
+          "target": "js/components/navigation/escritorio/encabezado-escritorio.js",
           "dynamic": false,
           "line": 1
         },
         {
-          "raw": "./tablet/header-tablet.js",
-          "target": "js/components/navigation/tablet/header-tablet.js",
+          "raw": "./tableta/encabezado-tableta.js",
+          "target": "js/components/navigation/tableta/encabezado-tableta.js",
           "dynamic": false,
           "line": 2
         },
         {
-          "raw": "./mobile/header-mobile.js",
-          "target": "js/components/navigation/mobile/header-mobile.js",
+          "raw": "./movil/encabezado-movil.js",
+          "target": "js/components/navigation/movil/encabezado-movil.js",
           "dynamic": false,
           "line": 3
         },
@@ -17724,8 +17724,8 @@
     },
     {
       "path": "js/components/navigation/shared/assets.js",
-      "bytes": 1655,
-      "sha256": "0df852325b3af149e48ba2bb8955ea599ed930c380034912ac455c784dc2ea58",
+      "bytes": 1673,
+      "sha256": "5f3c196ef04ab6a8347103b228aefaa40faeddc539d50b0b9a00b32fa7709b63",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17855,8 +17855,8 @@
     },
     {
       "path": "js/components/navigation/shared/runtime.js",
-      "bytes": 4028,
-      "sha256": "8760f355be857160df04dcac21e923b44cdf792aec0737fa53ec2c010ed0e399",
+      "bytes": 4078,
+      "sha256": "a4b2a42a6c238ed1f4a1c115183af7e01e0b51c1b2d179812c3fedb6271269a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17936,7 +17936,7 @@
       "endpoints": []
     },
     {
-      "path": "js/components/navigation/tablet/controller.js",
+      "path": "js/components/navigation/tableta/control-menu-tableta.js",
       "bytes": 2075,
       "sha256": "2865cc057ff6eb4940106b4353da39b73269c0c6e0d83fc6c9de5e866a0d99a1",
       "syntax": {
@@ -17947,7 +17947,7 @@
       "endpoints": []
     },
     {
-      "path": "js/components/navigation/tablet/header-tablet.js",
+      "path": "js/components/navigation/tableta/encabezado-tableta.js",
       "bytes": 3839,
       "sha256": "04459b26ddbe71dda75cc02e3382271bec587f5e0e58b9a7334d369065ffffb7",
       "syntax": {
@@ -21401,28 +21401,28 @@
     },
     {
       "path": "scripts/audit-modular-architecture.js",
-      "bytes": 7894,
-      "sha256": "ef899ff6bb86921758ea2ea5ff72983e635a76674cc897be2bbfe73239f71e69",
+      "bytes": 8123,
+      "sha256": "5ee4f2d53e4cfef807ea4434cd7cdc126f8efed8f856914eeb8062049ea334dc",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./desktop/header-desktop.js",
-          "target": "scripts/desktop/header-desktop.js",
+          "raw": "./escritorio/encabezado-escritorio.js",
+          "target": "scripts/escritorio/encabezado-escritorio.js",
           "dynamic": false,
           "line": 57
         },
         {
-          "raw": "./tablet/header-tablet.js",
-          "target": "scripts/tablet/header-tablet.js",
+          "raw": "./tableta/encabezado-tableta.js",
+          "target": "scripts/tableta/encabezado-tableta.js",
           "dynamic": false,
           "line": 58
         },
         {
-          "raw": "./mobile/header-mobile.js",
-          "target": "scripts/mobile/header-mobile.js",
+          "raw": "./movil/encabezado-movil.js",
+          "target": "scripts/movil/encabezado-movil.js",
           "dynamic": false,
           "line": 59
         },
@@ -21455,8 +21455,8 @@
     },
     {
       "path": "scripts/audit-navigation-search.mjs",
-      "bytes": 6069,
-      "sha256": "fb7f2a417177b7044d0907a8dc9ad803e51d9acd2ae1b8b6297e72a25dc62875",
+      "bytes": 6797,
+      "sha256": "7775bd595665d30e57449393a4272e6bc7f74d4d9aaa2caf70cab9f3c86c179a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21843,8 +21843,8 @@
     },
     {
       "path": "scripts/audit-public-shell.js",
-      "bytes": 8929,
-      "sha256": "d9792e133cd9ad291ef7e2caed36b104ede2b38bcc588f87f4434a81206f4fee",
+      "bytes": 9118,
+      "sha256": "18fc64968d711bddb1eb3ce0a9349fc0f0b0d41d435a5cd5ec54df70ffc03609",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22764,8 +22764,8 @@
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
-      "bytes": 3153,
-      "sha256": "c5727efad736f8308e13cd5c24a47ccd34b44a059dc2f37c330f5d937b34be58",
+      "bytes": 3577,
+      "sha256": "9e1293a24ac1bd96d27f865af1f4ec59fcebc9defe10d8fc1243c92f220748a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22778,15 +22778,15 @@
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 29
-        },
-        {
-          "url": "https://tintinaccesorios.pages.dev/product.html",
           "line": 32
         },
         {
+          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "line": 40
+        },
+        {
           "url": "https://schema.org/OutOfStock",
-          "line": 37
+          "line": 44
         }
       ]
     },
@@ -23295,7 +23295,7 @@
       "sha256": "2dba29c382a3a505d0a9ff484ffa94befa83e18a2bdf93de1cf2445f004316d5"
     },
     {
-      "path": "css/components/navigation/desktop/header-desktop.css",
+      "path": "css/components/navigation/escritorio/encabezado-escritorio.css",
       "extension": ".css",
       "bytes": 4757,
       "sha256": "93a88ac13089474aaf5d5f6365846f9a1d511d06ff4b3447ebcefa085a44d591"
@@ -23309,14 +23309,14 @@
     {
       "path": "css/components/navigation/legacy/navigation-desktop.css",
       "extension": ".css",
-      "bytes": 163,
-      "sha256": "ca21c8ccc0b12467d77902442bebe0694a86b69976d5f2d10537d619efe08984"
+      "bytes": 172,
+      "sha256": "880e0eb61d3f1ee5a3d28d432cce1a348b643f32efa95f421c33731f4ace6d00"
     },
     {
       "path": "css/components/navigation/legacy/navigation-mobile.css",
       "extension": ".css",
-      "bytes": 159,
-      "sha256": "ee15dbc19503441d4c4588a7fe74fbb364aaee3e89170bc01a29fabfce97c593"
+      "bytes": 152,
+      "sha256": "a341ba2870c978fbea37b19001b00861f9d05b411e8bce46035584a6309e1e27"
     },
     {
       "path": "css/components/navigation/legacy/navigation-shared.css",
@@ -23327,11 +23327,11 @@
     {
       "path": "css/components/navigation/legacy/navigation-tablet.css",
       "extension": ".css",
-      "bytes": 159,
-      "sha256": "1f0327234a1f318f0a745edb54919a54db403b23c6f4d3727f5c24f09ebb5ffc"
+      "bytes": 160,
+      "sha256": "5f63828c1900f4db8c42f36eab2006be393463ca6c64d770ac34a3d23d0f9e9d"
     },
     {
-      "path": "css/components/navigation/mobile/header-mobile.css",
+      "path": "css/components/navigation/movil/encabezado-movil.css",
       "extension": ".css",
       "bytes": 3246,
       "sha256": "f4e1288da4fa9cb2b6c2f40be7872c6ab524680284e0ad63adc31b93e6696368"
@@ -23361,7 +23361,7 @@
       "sha256": "fe87a5a7356caccd9162d444f6cf5fda94e0bff5d8ec3cf590062f98144497fe"
     },
     {
-      "path": "css/components/navigation/tablet/header-tablet.css",
+      "path": "css/components/navigation/tableta/encabezado-tableta.css",
       "extension": ".css",
       "bytes": 5444,
       "sha256": "7fd809be5cc6c8115c9d4a6b75ea490d8c8d38cfebd5d6ffffb672f4ff360172"
@@ -23573,8 +23573,8 @@
     {
       "path": "docs/ARQUITECTURA.md",
       "extension": ".md",
-      "bytes": 4924,
-      "sha256": "9589b799c4abd3ebe907553c642d76ed3add9d6ab6823c1277153e2d2d3b30af"
+      "bytes": 5329,
+      "sha256": "6798ac0d603fc7ea8f9a2e653bdfc6a05275c37ac7e9eb658dad2c38ba9f68dc"
     },
     {
       "path": "docs/BACKUP_RECOVERY.md",
@@ -23597,8 +23597,8 @@
     {
       "path": "docs/COMO-HACER-CAMBIOS.md",
       "extension": ".md",
-      "bytes": 2693,
-      "sha256": "d7bd115a23b4c08bb2f6f3d94d56790e6982511d8fe6fcfd63a098d309a1894b"
+      "bytes": 2858,
+      "sha256": "e05fcc31bd7ffc49e2e69f37f1721b5126de29abce94189c93cd6ed4cbd28112"
     },
     {
       "path": "docs/CSS_LAYERS.md",
@@ -23615,8 +23615,8 @@
     {
       "path": "docs/MAPA-DE-CODIGO.md",
       "extension": ".md",
-      "bytes": 3918,
-      "sha256": "fded86302844a8ec6b0477cd73b0f33955b20d742d1897e5d2341a75efa95ebd"
+      "bytes": 4084,
+      "sha256": "8eb8ed1d4b99cc081352b1527d0e1574046701be1128720818afe31cf2599aa4"
     },
     {
       "path": "docs/PHASE10_ACCESSIBILITY.md",
@@ -24171,16 +24171,16 @@
       "sha256": "2fb610f467de8b807e4a9e36dbed1b54f5df29d2871eabcd08f3e8b96d599c02"
     },
     {
-      "path": "js/components/navigation/desktop/controller.js",
-      "extension": ".js",
-      "bytes": 1393,
-      "sha256": "d885a27dbd593e33a40c244b396e82618cd67e2943879034392cb5a4805cf8c0"
-    },
-    {
-      "path": "js/components/navigation/desktop/header-desktop.js",
+      "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "extension": ".js",
       "bytes": 2816,
       "sha256": "1d72fd3b8ff3b30dd891f9ef8d25e44ae406d33d89c08aa2f31bd094895110d1"
+    },
+    {
+      "path": "js/components/navigation/escritorio/indicador-navegacion-escritorio.js",
+      "extension": ".js",
+      "bytes": 1393,
+      "sha256": "d885a27dbd593e33a40c244b396e82618cd67e2943879034392cb5a4805cf8c0"
     },
     {
       "path": "js/components/navigation/legacy/header-account-mobile-fix.js",
@@ -24215,14 +24215,14 @@
     {
       "path": "js/components/navigation/legacy/navigation-desktop.js",
       "extension": ".js",
-      "bytes": 475,
-      "sha256": "5aa3c412def099ff77436cebde1c19d49f84588b5a93fd01b063ec35d59b0083"
+      "bytes": 533,
+      "sha256": "1bf898b5ec00d35ef138753efd2d57264389e6762895408805f0da2b45c12533"
     },
     {
       "path": "js/components/navigation/legacy/navigation-mobile.js",
       "extension": ".js",
-      "bytes": 471,
-      "sha256": "8ee23a342a03ebcd52299f3455ca343be2c299c4694a724d7d97a6cd711a71a4"
+      "bytes": 511,
+      "sha256": "678d16c7a553e9dd37a6a4d8d616de9ad33495044088dcd76d2674c2c15c97d2"
     },
     {
       "path": "js/components/navigation/legacy/navigation-shared.js",
@@ -24233,26 +24233,26 @@
     {
       "path": "js/components/navigation/legacy/navigation-tablet.js",
       "extension": ".js",
-      "bytes": 471,
-      "sha256": "ff05d7cbe9e1b4b2c60c21f6c3e6bf7183f5a051ac1205547d00ab6acb9b4657"
+      "bytes": 503,
+      "sha256": "34811d06de644ccd56008bc2f1477b927d041f6df9a165cdbde921cabec2b854"
     },
     {
-      "path": "js/components/navigation/mobile/controller.js",
-      "extension": ".js",
-      "bytes": 1287,
-      "sha256": "d9321062b615f8fac21d3a3e729222b48e1ebde7a2cf3e3339a5076fb5cafcaf"
-    },
-    {
-      "path": "js/components/navigation/mobile/header-mobile.js",
+      "path": "js/components/navigation/movil/encabezado-movil.js",
       "extension": ".js",
       "bytes": 1560,
       "sha256": "6f59a014e1fac9759230f301c65be399db303179fd8773ab3afaa69c884e228a"
     },
     {
+      "path": "js/components/navigation/movil/indicador-navegacion-movil.js",
+      "extension": ".js",
+      "bytes": 1287,
+      "sha256": "d9321062b615f8fac21d3a3e729222b48e1ebde7a2cf3e3339a5076fb5cafcaf"
+    },
+    {
       "path": "js/components/navigation/public-shell-entry.js",
       "extension": ".js",
-      "bytes": 3142,
-      "sha256": "202d83900fd62dc747383f931c8c8e8d8efc2c9abe5e0fceb1eeb2f568cfc9e4"
+      "bytes": 3160,
+      "sha256": "3d46d6637db48ec792b5003ed7a50d593ca46d3dd7c741a35a6895f3e930bcb5"
     },
     {
       "path": "js/components/navigation/shared/account-drawer.js",
@@ -24263,8 +24263,8 @@
     {
       "path": "js/components/navigation/shared/assets.js",
       "extension": ".js",
-      "bytes": 1655,
-      "sha256": "0df852325b3af149e48ba2bb8955ea599ed930c380034912ac455c784dc2ea58"
+      "bytes": 1673,
+      "sha256": "5f3c196ef04ab6a8347103b228aefaa40faeddc539d50b0b9a00b32fa7709b63"
     },
     {
       "path": "js/components/navigation/shared/cart-drawer.js",
@@ -24323,8 +24323,8 @@
     {
       "path": "js/components/navigation/shared/runtime.js",
       "extension": ".js",
-      "bytes": 4028,
-      "sha256": "8760f355be857160df04dcac21e923b44cdf792aec0737fa53ec2c010ed0e399"
+      "bytes": 4078,
+      "sha256": "a4b2a42a6c238ed1f4a1c115183af7e01e0b51c1b2d179812c3fedb6271269a9"
     },
     {
       "path": "js/components/navigation/shared/search-controller.js",
@@ -24351,13 +24351,13 @@
       "sha256": "871630dce82a24cfebf50ca451ef981447ab08ab4e1154f325bee693a19b4891"
     },
     {
-      "path": "js/components/navigation/tablet/controller.js",
+      "path": "js/components/navigation/tableta/control-menu-tableta.js",
       "extension": ".js",
       "bytes": 2075,
       "sha256": "2865cc057ff6eb4940106b4353da39b73269c0c6e0d83fc6c9de5e866a0d99a1"
     },
     {
-      "path": "js/components/navigation/tablet/header-tablet.js",
+      "path": "js/components/navigation/tableta/encabezado-tableta.js",
       "extension": ".js",
       "bytes": 3839,
       "sha256": "04459b26ddbe71dda75cc02e3382271bec587f5e0e58b9a7334d369065ffffb7"
@@ -25439,14 +25439,14 @@
     {
       "path": "scripts/audit-modular-architecture.js",
       "extension": ".js",
-      "bytes": 7894,
-      "sha256": "ef899ff6bb86921758ea2ea5ff72983e635a76674cc897be2bbfe73239f71e69"
+      "bytes": 8123,
+      "sha256": "5ee4f2d53e4cfef807ea4434cd7cdc126f8efed8f856914eeb8062049ea334dc"
     },
     {
       "path": "scripts/audit-navigation-search.mjs",
       "extension": ".mjs",
-      "bytes": 6069,
-      "sha256": "fb7f2a417177b7044d0907a8dc9ad803e51d9acd2ae1b8b6297e72a25dc62875"
+      "bytes": 6797,
+      "sha256": "7775bd595665d30e57449393a4272e6bc7f74d4d9aaa2caf70cab9f3c86c179a"
     },
     {
       "path": "scripts/audit-page-loading.js",
@@ -25559,8 +25559,8 @@
     {
       "path": "scripts/audit-public-shell.js",
       "extension": ".js",
-      "bytes": 8929,
-      "sha256": "d9792e133cd9ad291ef7e2caed36b104ede2b38bcc588f87f4434a81206f4fee"
+      "bytes": 9118,
+      "sha256": "18fc64968d711bddb1eb3ce0a9349fc0f0b0d41d435a5cd5ec54df70ffc03609"
     },
     {
       "path": "scripts/audit-responsive-navigation.mjs",
@@ -25829,8 +25829,8 @@
     {
       "path": "tests/seo/phase11-seo.spec.js",
       "extension": ".js",
-      "bytes": 3153,
-      "sha256": "c5727efad736f8308e13cd5c24a47ccd34b44a059dc2f37c330f5d937b34be58"
+      "bytes": 3577,
+      "sha256": "9e1293a24ac1bd96d27f865af1f4ec59fcebc9defe10d8fc1243c92f220748a4"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -27141,42 +27141,42 @@
       "exists": true
     },
     {
-      "file": "js/components/navigation/desktop/header-desktop.js",
+      "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "line": 6,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/desktop/header-desktop.js",
+      "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "line": 16,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/desktop/header-desktop.js",
+      "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "line": 22,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/desktop/header-desktop.js",
+      "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "line": 29,
       "raw": "about.html",
       "target": "about.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/desktop/header-desktop.js",
+      "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "line": 30,
       "raw": "contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/mobile/header-mobile.js",
+      "file": "js/components/navigation/movil/encabezado-movil.js",
       "line": 8,
       "raw": "index.html",
       "target": "index.html",
@@ -27204,49 +27204,49 @@
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 6,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 19,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 35,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 43,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 48,
       "raw": "about.html",
       "target": "about.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 49,
       "raw": "contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
-      "file": "js/components/navigation/tablet/header-tablet.js",
+      "file": "js/components/navigation/tableta/encabezado-tableta.js",
       "line": 55,
       "raw": "catalogo.html",
       "target": "catalogo.html",
@@ -28750,7 +28750,7 @@
           "line": 6690
         },
         {
-          "file": "js/components/navigation/desktop/header-desktop.js",
+          "file": "js/components/navigation/escritorio/encabezado-escritorio.js",
           "line": 6
         },
         {
@@ -28762,7 +28762,7 @@
           "line": 5
         },
         {
-          "file": "js/components/navigation/tablet/header-tablet.js",
+          "file": "js/components/navigation/tableta/encabezado-tableta.js",
           "line": 6
         },
         {
