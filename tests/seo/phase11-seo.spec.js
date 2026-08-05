@@ -34,16 +34,18 @@ test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', as
 
     const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
     const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
-    const expectedProductUrl = new URL('/product.html?id=seo-prueba', location.origin).href;
-    return { canonical, jsonLd, expectedProductUrl };
+    const expectedCanonicalUrl = new URL('/product.html?id=seo-prueba', location.origin).href;
+    const expectedStructuredDataUrl = new URL('/product.html?id=seo-prueba', 'https://tintinaccesorios.pages.dev').href;
+    return { canonical, jsonLd, expectedCanonicalUrl, expectedStructuredDataUrl };
   });
 
-  // En producción, location.origin es el dominio público. En la auditoría local
-  // es 127.0.0.1. Lo importante es que canonical y JSON-LD usen exactamente el
-  // mismo origen real del entorno donde se ejecuta la página.
-  expect(resultadoSeo.canonical).toBe(resultadoSeo.expectedProductUrl);
+  // El canonical refleja el origen real donde se sirve la página. Durante la
+  // auditoría es 127.0.0.1; en producción es el dominio público. El JSON-LD,
+  // en cambio, fija deliberadamente la URL pública para no publicar localhost
+  // en los datos estructurados que consumen los buscadores.
+  expect(resultadoSeo.canonical).toBe(resultadoSeo.expectedCanonicalUrl);
   expect(resultadoSeo.jsonLd['@type']).toBe('Product');
-  expect(resultadoSeo.jsonLd.offers.url).toBe(resultadoSeo.expectedProductUrl);
+  expect(resultadoSeo.jsonLd.offers.url).toBe(resultadoSeo.expectedStructuredDataUrl);
   expect(resultadoSeo.jsonLd.offers.priceCurrency).toBe('PYG');
   expect(resultadoSeo.jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
