@@ -21,7 +21,7 @@ Públicas: index, catalogo, collections, product, contact, about, envios,
 Super Admin: admin.html (dashboard, estadísticas, usuarios, pedidos, productos,
   colecciones, contenido, imágenes, correos, mensajes, auditoría, diagnóstico,
   configuración, permisos, apariencia) y admin-images.html.
-Módulos compartidos: page-loader.js, public-shell.js, script.js,
+Módulos compartidos: page-loader.js, inicio-navegacion-publica.js, script.js,
   color-scheme(-instant).js, store-gate(.js/-core.js), whatsapp.js,
   products-store.js, collections-store.js, site-content.js, image-performance.js,
   site-activity.js, firebase.js.

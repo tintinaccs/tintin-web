@@ -33,13 +33,13 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 for (const page of PUBLIC_PAGES) {
   const html = read(page);
-  const shellScripts = html.match(/<script\b[^>]*src=["']js\/public-shell\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const shellScripts = html.match(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const controllerScripts = html.match(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const classicScripts = html.match(/<script\b[^>]*src=["']script\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const loaderScripts = html.match(/<script\b[^>]*src=["']js\/page-loader\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
-  check(shellScripts.length === 1, `${page}: debe cargar public-shell.js exactamente una vez`);
-  check(/<script\b[^>]*src=["']js\/public-shell\.js[^>]*\bdefer\b/i.test(html), `${page}: public-shell.js debe ser defer`);
+  check(shellScripts.length === 1, `${page}: debe cargar inicio-navegacion-publica.js exactamente una vez`);
+  check(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-navegacion-publica.js debe ser defer`);
   check(controllerScripts.length === 1, `${page}: debe cargar ui-navigation-controller.js exactamente una vez`);
   check(/<script\b[^>]*src=["']js\/ui-navigation-controller\.js[^>]*\bdefer\b/i.test(html), `${page}: ui-navigation-controller.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
@@ -56,15 +56,15 @@ Object.entries(COMPONENTS).forEach(([name, file]) => {
   check(exists(file), `falta el componente ${name}: ${file}`);
 });
 
-const bootstrap = read('js/public-shell.js');
-check(bootstrap.includes('./components/navigation/public-shell-entry.js'), 'public-shell.js no apunta al entry modular');
-check(!bootstrap.includes('function topShell()'), 'public-shell.js todavía contiene el HTML monolítico anterior');
-check(bootstrap.split('\n').length < 50, 'public-shell.js dejó de ser un bootstrap pequeño');
+const bootstrap = read('js/inicio-navegacion-publica.js');
+check(bootstrap.includes('./components/navigation/entrada-navegacion-publica.js'), 'inicio-navegacion-publica.js no apunta al entry modular');
+check(!bootstrap.includes('function topShell()'), 'inicio-navegacion-publica.js todavía contiene el HTML monolítico anterior');
+check(bootstrap.split('\n').length < 50, 'inicio-navegacion-publica.js dejó de ser un bootstrap pequeño');
 
-const entry = read('js/components/navigation/public-shell-entry.js');
+const entry = read('js/components/navigation/entrada-navegacion-publica.js');
 Object.values(COMPONENTS).forEach(file => {
   const moduleName = path.basename(file);
-  check(entry.includes(moduleName), `public-shell-entry.js no importa ${moduleName}`);
+  check(entry.includes(moduleName), `entrada-navegacion-publica.js no importa ${moduleName}`);
 });
 check(entry.includes("architecture: 'modular-navigation-v1'"), 'el shell modular no publica su versión de arquitectura');
 
@@ -113,11 +113,11 @@ check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar 
 check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
 
 [
-  ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
-  ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tableta/control-menu-tableta.js'],
-  ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
-  ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/compartido/enrutador.js'],
-  ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/compartido/carga-colecciones.js'],
+  ['js/components/navigation/compatibilidad/navegacion-escritorio.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
+  ['js/components/navigation/compatibilidad/navegacion-tableta.js', 'components/navigation/tableta/control-menu-tableta.js'],
+  ['js/components/navigation/compatibilidad/navegacion-movil.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
+  ['js/components/navigation/compatibilidad/navegacion-compartida.js', 'components/navigation/compartido/enrutador.js'],
+  ['js/components/navigation/compatibilidad/colecciones.js', 'components/navigation/compartido/carga-colecciones.js'],
 ].forEach(([legacy, source]) => {
   check(read(legacy).includes(source), `${legacy}: no actúa como compatibilidad hacia ${source}`);
 });

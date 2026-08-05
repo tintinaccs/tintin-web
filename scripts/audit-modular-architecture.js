@@ -11,7 +11,7 @@ const exists = file => fs.existsSync(path.join(ROOT, file));
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
 const requiredFiles = [
-  'js/components/navigation/public-shell-entry.js',
+  'js/components/navigation/entrada-navegacion-publica.js',
   'js/components/navigation/escritorio/encabezado-escritorio.js',
   'js/components/navigation/escritorio/indicador-navegacion-escritorio.js',
   'js/components/navigation/tableta/encabezado-tableta.js',
@@ -53,7 +53,7 @@ if (requiredFiles.every(exists)) {
   check(config.includes('tabletMax: 1024'), 'config: tabletMax debe ser 1024');
   check(config.includes('desktopMin: 1025'), 'config: desktopMin debe ser 1025');
 
-  const entry = read('js/components/navigation/public-shell-entry.js');
+  const entry = read('js/components/navigation/entrada-navegacion-publica.js');
   check(entry.includes("from './escritorio/encabezado-escritorio.js'"), 'entry: falta escritorio');
   check(entry.includes("from './tableta/encabezado-tableta.js'"), 'entry: falta tableta');
   check(entry.includes("from './movil/encabezado-movil.js'"), 'entry: falta móvil');
@@ -93,13 +93,13 @@ if (requiredFiles.every(exists)) {
   check(search.includes('tintin:products-error'), 'buscar: falta estado de error del catálogo');
 
   const legacyAdapters = [
-    ['js/public-shell.js', 'components/navigation/public-shell-entry.js'],
+    ['js/inicio-navegacion-publica.js', 'components/navigation/entrada-navegacion-publica.js'],
     ['js/ui-navigation-controller.js', 'components/navigation/compartido/control-paneles.js'],
-    ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
-    ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tableta/control-menu-tableta.js'],
-    ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
-    ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/compartido/enrutador.js'],
-    ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/compartido/carga-colecciones.js'],
+    ['js/components/navigation/compatibilidad/navegacion-escritorio.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
+    ['js/components/navigation/compatibilidad/navegacion-tableta.js', 'components/navigation/tableta/control-menu-tableta.js'],
+    ['js/components/navigation/compatibilidad/navegacion-movil.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
+    ['js/components/navigation/compatibilidad/navegacion-compartida.js', 'components/navigation/compartido/enrutador.js'],
+    ['js/components/navigation/compatibilidad/colecciones.js', 'components/navigation/compartido/carga-colecciones.js'],
   ];
 
   legacyAdapters.forEach(([file, target]) => {
@@ -109,10 +109,10 @@ if (requiredFiles.every(exists)) {
   });
 
   const legacyCssAdapters = [
-    ['css/components/navigation/legacy/navigation-desktop.css', 'components/navigation/escritorio/encabezado-escritorio.css'],
-    ['css/components/navigation/legacy/navigation-tablet.css', 'components/navigation/tableta/encabezado-tableta.css'],
-    ['css/components/navigation/legacy/navigation-mobile.css', 'components/navigation/movil/encabezado-movil.css'],
-    ['css/components/navigation/legacy/navigation-shared.css', 'components/navigation/compartido/transiciones-navegacion.css'],
+    ['css/components/navigation/compatibilidad/navegacion-escritorio.css', 'components/navigation/escritorio/encabezado-escritorio.css'],
+    ['css/components/navigation/compatibilidad/navegacion-tableta.css', 'components/navigation/tableta/encabezado-tableta.css'],
+    ['css/components/navigation/compatibilidad/navegacion-movil.css', 'components/navigation/movil/encabezado-movil.css'],
+    ['css/components/navigation/compatibilidad/navegacion-compartida.css', 'components/navigation/compartido/transiciones-navegacion.css'],
     ['css/components/navigation/compartido/control-paneles.css', 'components/navigation/compartido/paneles.css'],
   ];
 

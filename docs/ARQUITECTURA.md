@@ -16,7 +16,7 @@ El repositorio mantiene una sola fuente oficial de código, pero divide cada ár
 
 ```text
 js/components/navigation/
-├── public-shell-entry.js
+├── entrada-navegacion-publica.js
 ├── escritorio/
 │   ├── encabezado-escritorio.js
 │   └── indicador-navegacion-escritorio.js
@@ -88,22 +88,22 @@ css/components/navigation/
 
 ## Archivos de entrada y compatibilidad
 
-`js/public-shell.js` es un archivo de inicio pequeño. Su única responsabilidad es cargar `js/components/navigation/public-shell-entry.js`.
+`js/inicio-navegacion-publica.js` es un archivo de inicio pequeño. Su única responsabilidad es cargar `js/components/navigation/entrada-navegacion-publica.js`.
 
 `js/ui-navigation-controller.js` carga el controlador compartido modular.
 
 Los siguientes archivos son adaptadores temporales:
 
 ```text
-js/components/navigation/legacy/navigation-desktop.js
-js/components/navigation/legacy/navigation-tablet.js
-js/components/navigation/legacy/navigation-mobile.js
-js/components/navigation/legacy/navigation-shared.js
-js/components/navigation/legacy/nav-collections.js
-css/components/navigation/legacy/navigation-desktop.css
-css/components/navigation/legacy/navigation-tablet.css
-css/components/navigation/legacy/navigation-mobile.css
-css/components/navigation/legacy/navigation-shared.css
+js/components/navigation/compatibilidad/navegacion-escritorio.js
+js/components/navigation/compatibilidad/navegacion-tableta.js
+js/components/navigation/compatibilidad/navegacion-movil.js
+js/components/navigation/compatibilidad/navegacion-compartida.js
+js/components/navigation/compatibilidad/colecciones.js
+css/components/navigation/compatibilidad/navegacion-escritorio.css
+css/components/navigation/compatibilidad/navegacion-tableta.css
+css/components/navigation/compatibilidad/navegacion-movil.css
+css/components/navigation/compatibilidad/navegacion-compartida.css
 css/components/navigation/compartido/control-paneles.css
 ```
 

@@ -8,7 +8,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 const authNav = read('js/core/auth/auth-nav.js');
 const roles = read('js/core/auth/roles.js');
-const shell = read('js/public-shell.js');
+const shell = read('js/inicio-navegacion-publica.js');
 const routeState = read('js/components/navigation/compartido/estado-ruta.js');
 const styles = read('styles.css');
 const packageJson = JSON.parse(read('package.json'));
@@ -36,7 +36,7 @@ for (const [file, marker] of Object.entries(operationalSources)) {
   check(read(file).includes(marker), `${file} no declara su estado operativo`);
 }
 
-check(shell.includes('./components/navigation/public-shell-entry.js'), 'El bootstrap no apunta al entry modular');
+check(shell.includes('./components/navigation/entrada-navegacion-publica.js'), 'El bootstrap no apunta al entry modular');
 check(routeState.includes("setCurrentState(root.getElementById('btn-tienda'), page === 'shop')"), 'Desktop no anuncia Tienda activa');
 check(routeState.includes("setCurrentState(root.getElementById('btn-tablet-tienda'), page === 'shop')"), 'Tablet no anuncia Tienda activa');
 check(routeState.includes("root.querySelectorAll('[data-shell-tab]')"), 'La tabbar no recorre sus rutas activas');

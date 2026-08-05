@@ -20,7 +20,7 @@ function css(){
  });
 }
 function bootThemeSanitizer(){import(versioned('../components/color/theme-color-sanitizer.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
-function bootMobileHeader(){import(versioned('../components/navigation/legacy/header-account-mobile-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
+function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
 function bootPageAudit(){import(versioned('./page-audit-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('../pages/collections/collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('../admin/collections/admin-collections-phase4.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}

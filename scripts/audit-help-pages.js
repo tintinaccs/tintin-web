@@ -107,7 +107,7 @@ PAGES.forEach(({ file, id }) => {
   check(
     `${tag} scripts compartidos (shell, loader, contacto, analítica)`,
     html.includes('js/page-loader.js') &&
-      html.includes('js/public-shell.js') &&
+      html.includes('js/inicio-navegacion-publica.js') &&
       html.includes('js/components/contact/whatsapp.js') &&
       html.includes('js/analytics/analytics.js') &&
       html.includes('script.js'),

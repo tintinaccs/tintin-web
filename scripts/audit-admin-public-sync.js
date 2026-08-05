@@ -20,12 +20,12 @@ function check(name, condition, problem) {
 }
 
 const adminApp = read('js/admin/admin-app.js');
-const headerMode = read('js/components/navigation/legacy/mobile-header-mode.js');
+const headerMode = read('js/components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js');
 const whatsapp = read('js/components/contact/whatsapp.js');
 const publicSettings = read('js/core/store/public-settings-store.js');
 const pageLoader = read('js/page-loader.js');
-const publicShell = read('js/public-shell.js');
-const publicShellEntry = read('js/components/navigation/public-shell-entry.js');
+const publicShell = read('js/inicio-navegacion-publica.js');
+const publicShellEntry = read('js/components/navigation/entrada-navegacion-publica.js');
 const checkout = read('checkout.html');
 const checkoutPayments = read('js/pages/checkout/checkout-payment-methods.js');
 const secureOrder = read('js/orders/secure-checkout-order.js');
@@ -69,7 +69,7 @@ check(
 );
 check(
   'page-loader monta el header en todos los arranques',
-  pageLoader.includes("importSibling('components/navigation/legacy/mobile-header-mode.js'") &&
+  pageLoader.includes("importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js'") &&
     /function bootHeaderMode\(\)/.test(pageLoader) &&
     (pageLoader.match(/bootHeaderMode\(\);/g) || []).length >= 2,
   'El header no se carga en todos los modos.'
@@ -119,7 +119,7 @@ const publicPages = [
 check(
   'El shell evita headers duplicados',
   publicShell.includes('TintinPublicShellBootstrapStarted') &&
-    publicShell.includes('./components/navigation/public-shell-entry.js') &&
+    publicShell.includes('./components/navigation/entrada-navegacion-publica.js') &&
     publicShellEntry.includes('const LEGACY_SHELL_IDS = Object.freeze([') &&
     publicShellEntry.includes('let mountPromise = null') &&
     publicShellEntry.includes("document.body.classList.contains('tt-public-shell-mounted')") &&

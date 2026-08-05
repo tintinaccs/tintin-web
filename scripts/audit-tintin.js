@@ -56,7 +56,7 @@ assertFile('css/core/tintin-theme-cleanup.css', 'Debe existir la limpieza de col
 assertFile('css/theme/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
 assertFile('js/quality/ui-quality.js', 'Debe existir el runtime global de calidad');
 assertFile('js/page-loader.js', 'Debe existir el loader global');
-assertFile('js/components/navigation/legacy/header-account-mobile-fix.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
+assertFile('js/components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
 assertFile('js/quality/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
 assertFile('js/components/color/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
 assertFile('scripts/fix-tintin-source.js', 'Debe existir el auto-fixer de fuente');
@@ -213,7 +213,7 @@ for (const file of htmlFiles) {
   if (/styles\.css["']/.test(content)) {
     addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
   }
-  if (isCheckout && !/js\/public-shell\.js/.test(content)) {
+  if (isCheckout && !/js\/inicio-navegacion-publica\.js/.test(content)) {
     addIssue('CRITICAL', file, 'Checkout no carga el mismo header publico que la portada');
   }
 }
@@ -231,7 +231,7 @@ const packageJson = fs.existsSync(path.join(ROOT, 'package.json')) ? read('packa
 const ui = fs.existsSync(path.join(ROOT, 'js/quality/ui-quality.js')) ? read('js/quality/ui-quality.js') : '';
 [
   'theme-color-sanitizer.js',
-  'header-account-mobile-fix.js',
+  'compatibilidad-cuenta-movil.js',
   'page-audit-fix.js',
   'tintin-unified-theme.css',
   'tintin-theme-cleanup.css',
