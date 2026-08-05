@@ -20,7 +20,7 @@ Ejemplos:
 
 ```text
 Tienda de escritorio no cierra
-→ js/components/navigation/shared/surface-controller.js
+→ js/components/navigation/compartido/control-paneles.js
 → css/components/navigation/escritorio/encabezado-escritorio.css
 
 Logo de tableta muy grande
@@ -30,7 +30,7 @@ Texto de la barra móvil
 → js/components/navigation/movil/encabezado-movil.js
 
 Tamaño del buscador
-→ css/components/navigation/shared/surfaces.css
+→ css/components/navigation/compartido/paneles.css
 ```
 
 ## 4. No editar adaptadores

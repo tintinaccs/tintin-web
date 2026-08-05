@@ -20,30 +20,30 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 
 | Necesidad | Archivo principal |
 |---|---|
-| Estructura del buscador | `js/components/navigation/shared/panel-busqueda.js` |
-| Control, resultados y teclado del buscador | `js/components/navigation/shared/control-busqueda.js` |
-| Tamaño y diseño del buscador | `css/components/navigation/shared/surfaces.css` |
-| Estructura de Mi Cuenta | `js/components/navigation/shared/panel-cuenta.js` |
-| Diseño sólido de Mi Cuenta | `css/components/navigation/shared/surfaces.css` |
-| Estructura del carrito | `js/components/navigation/shared/panel-carrito.js` |
+| Estructura del buscador | `js/components/navigation/compartido/panel-busqueda.js` |
+| Control, resultados y teclado del buscador | `js/components/navigation/compartido/control-busqueda.js` |
+| Tamaño y diseño del buscador | `css/components/navigation/compartido/paneles.css` |
+| Estructura de Mi Cuenta | `js/components/navigation/compartido/panel-cuenta.js` |
+| Diseño sólido de Mi Cuenta | `css/components/navigation/compartido/paneles.css` |
+| Estructura del carrito | `js/components/navigation/compartido/panel-carrito.js` |
 | Contenido y operaciones del carrito | `script.js` y `js/components/cart/cart-sync.js` hasta completar su extracción modular |
-| Estructura de colecciones móvil | `js/components/navigation/shared/panel-colecciones.js` |
-| Carga e imágenes de colecciones | `js/components/navigation/shared/collections-runtime.js` |
-| Acordeón del pie de página móvil | `js/components/navigation/shared/acordeon-pie-pagina.js` |
-| Abrir o cerrar cualquier panel | `js/components/navigation/shared/surface-controller.js` |
-| Fondo oscuro y capas | `js/components/navigation/shared/surface-layer.js` y `css/components/navigation/shared/surfaces.css` |
+| Estructura de colecciones móvil | `js/components/navigation/compartido/panel-colecciones.js` |
+| Carga e imágenes de colecciones | `js/components/navigation/compartido/carga-colecciones.js` |
+| Acordeón del pie de página móvil | `js/components/navigation/compartido/acordeon-pie-pagina.js` |
+| Abrir o cerrar cualquier panel | `js/components/navigation/compartido/control-paneles.js` |
+| Fondo oscuro y capas | `js/components/navigation/compartido/capas-paneles.js` y `css/components/navigation/compartido/paneles.css` |
 
 ## Inicio y rutas
 
 | Necesidad | Archivo principal |
 |---|---|
 | Montaje general de la navegación | `js/components/navigation/public-shell-entry.js` |
-| Página activa | `js/components/navigation/shared/route-state.js` |
-| Navegación entre páginas | `js/components/navigation/shared/router.js` |
-| Carga de procesos | `js/components/navigation/shared/runtime.js` |
-| Carga de CSS | `js/components/navigation/shared/assets.js` |
-| Logo, versión y cortes por dispositivo | `js/components/navigation/shared/config.js` |
-| Iconos y categorías base | `js/components/navigation/shared/icons.js` |
+| Página activa | `js/components/navigation/compartido/estado-ruta.js` |
+| Navegación entre páginas | `js/components/navigation/compartido/enrutador.js` |
+| Carga de procesos | `js/components/navigation/compartido/carga-navegacion.js` |
+| Carga de CSS | `js/components/navigation/compartido/recursos-navegacion.js` |
+| Logo, versión y cortes por dispositivo | `js/components/navigation/compartido/configuracion.js` |
+| Iconos y categorías base | `js/components/navigation/compartido/iconos.js` |
 
 ## Adaptadores que no deben editarse para cambios normales
 
@@ -61,7 +61,7 @@ css/components/navigation/legacy/navigation-desktop.css
 css/components/navigation/legacy/navigation-tablet.css
 css/components/navigation/legacy/navigation-mobile.css
 css/components/navigation/legacy/navigation-shared.css
-css/components/navigation/shared/surface-controller.css
+css/components/navigation/compartido/control-paneles.css
 ```
 
 Cuando un problema esté en navegación, abrir el archivo equivalente dentro de `js/components/navigation/` o `css/components/navigation/`.

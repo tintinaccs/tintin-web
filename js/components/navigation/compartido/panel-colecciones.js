@@ -1,4 +1,4 @@
-import { CATEGORIES } from './icons.js';
+import { CATEGORIES } from './iconos.js';
 
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `

@@ -18,7 +18,7 @@ const html = read('index.html');
 const css = read('css/pages/home/home-maintenance.css');
 const runtime = read('js/pages/home/home-maintenance.js');
 const shell = read('js/public-shell.js');
-const shellRuntime = read('js/components/navigation/shared/runtime.js');
+const shellRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 
 [

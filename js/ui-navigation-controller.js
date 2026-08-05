@@ -14,7 +14,7 @@
 
   const MODULE_VERSION = 'tintin-20260804-modular-shell-1';
   const scriptUrl = document.currentScript?.src || new URL('js/ui-navigation-controller.js', window.location.href).href;
-  const controllerUrl = new URL('./components/navigation/shared/surface-controller.js', scriptUrl);
+  const controllerUrl = new URL('./components/navigation/compartido/control-paneles.js', scriptUrl);
   controllerUrl.searchParams.set('v', MODULE_VERSION);
 
   window.TintinSurfaceControllerReady = import(controllerUrl.href)

@@ -10,7 +10,7 @@ const check = (name, condition, problem) => checks.push({ name, ok: Boolean(cond
 const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/collections-store.js');
 const navCollectionsAdapter = read('js/components/navigation/legacy/nav-collections.js');
-const navCollectionsRuntime = read('js/components/navigation/shared/collections-runtime.js');
+const navCollectionsRuntime = read('js/components/navigation/compartido/carga-colecciones.js');
 const pageLoader = read('js/page-maintenance-loader.js');
 const editBadge = read('js/core/auth/edit-badge.js');
 const quotaGuard = read('js/pages/checkout/checkout-quota-guard.js');
@@ -44,7 +44,7 @@ check('Colecciones públicas usan getDocs y caché', collections.includes('getDo
 check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('onSnapshot'), 'El CRUD Admin debe conservar tiempo real.');
 check(
   'Menú Tienda carga colecciones por demanda',
-  navCollectionsAdapter.includes('components/navigation/shared/collections-runtime.js') &&
+  navCollectionsAdapter.includes('components/navigation/compartido/carga-colecciones.js') &&
     navCollectionsRuntime.includes('function attachDemandLoading()') &&
     navCollectionsRuntime.includes("['btn-tienda', 'btn-tablet-tienda', 'tabbar-tienda', 'btn-menu-tablet']") &&
     navCollectionsRuntime.includes("control.addEventListener('pointerenter'") &&
