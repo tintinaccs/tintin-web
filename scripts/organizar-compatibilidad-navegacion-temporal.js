@@ -52,6 +52,7 @@ for (const [oldPath, newPath] of moves) {
     oldPath.replace(/^(?:js|css)\/components\//, ''),
     newPath.replace(/^(?:js|css)\/components\//, ''),
   ]);
+  replacements.push([path.basename(oldPath), path.basename(newPath)]);
 }
 
 replacements.push(
