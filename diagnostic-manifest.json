@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-05T17:44:36.027Z",
-  "sourceFingerprint": "a253d844104f9416c8a6fc8c55e20fc4cedca657b1ec1a8b5646aa949f7a2deb",
+  "generatedAt": "2026-08-05T18:52:49.653Z",
+  "sourceFingerprint": "587be2505f19b62f91e8cc6333d9573933cf53d20911cf425a9f43e17a93874e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 506,
-    "textFiles": 474,
-    "totalBytes": 5450923,
+    "files": 505,
+    "textFiles": 473,
+    "totalBytes": 5449434,
     "pages": 18,
     "modules": 300
   },
@@ -22841,8 +22841,8 @@
     {
       "path": ".github/workflows/audit-cart-phase7.yml",
       "extension": ".yml",
-      "bytes": 4092,
-      "sha256": "eb717c1b9577a4023beb8fa5621f482e87f64d522b156f2eddade0930f46b327"
+      "bytes": 4098,
+      "sha256": "cb82b62d8e053ff1af900a4b995dbd455a23ad5479a0704ef4378955906536b2"
     },
     {
       "path": ".github/workflows/audit-collections-phase4.yml",
@@ -22877,8 +22877,8 @@
     {
       "path": ".github/workflows/audit-modular-navigation.yml",
       "extension": ".yml",
-      "bytes": 2467,
-      "sha256": "bf256a9365a4c79c8c8ff4756babe9c455814751978dae362b8d35f2e2726c37"
+      "bytes": 2502,
+      "sha256": "6e18d7479f65731317526f2363bc9b79a1a188156a358d3db4729d6752053b9c"
     },
     {
       "path": ".github/workflows/audit-secure-orders.yml",
@@ -22957,12 +22957,6 @@
       "extension": ".yml",
       "bytes": 4052,
       "sha256": "f9cf746e047b8ef7077e31b307bdd16261607c3f1e621cda6524612896b97ebd"
-    },
-    {
-      "path": ".github/workflows/organizar-cargadores-generales.yml",
-      "extension": ".yml",
-      "bytes": 1530,
-      "sha256": "016124e1d8ab3a7888d7df057ec1800095d712a8b286ef6d5c8263361df522d8"
     },
     {
       "path": ".github/workflows/phase11-seo-production.yml",
