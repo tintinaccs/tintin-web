@@ -1,0 +1,47 @@
+name: Organizar cargadores generales
+
+on:
+  push:
+    branches:
+      - orden/cargadores-generales-espanol
+
+permissions:
+  contents: write
+
+jobs:
+  organizar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Descargar rama
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Renombrar y validar
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/organizar-cargadores-generales-temporal.js
+          find js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          node scripts/build-diagnostic-manifest.js
+          node scripts/audit-page-loading.js
+          node scripts/audit-inicio-navegacion-publica.js
+          node scripts/audit-modular-architecture.js
+          node scripts/audit-site-reliability.js
+          node scripts/audit-unified-navigation.js
+
+          echo 'WORKFLOWS_CON_REFERENCIAS_ANTIGUAS'
+          grep -RInE 'page-loader\.js|page-maintenance-loader\.js|ui-navigation-controller\.js' .github/workflows || true
+
+      - name: Guardar archivos normales
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- ':!.github/workflows'
+          git commit -m "refactor: renombrar cargadores generales en español"
+          git push origin HEAD
