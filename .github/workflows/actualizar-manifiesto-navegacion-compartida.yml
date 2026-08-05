@@ -1,0 +1,33 @@
+name: Actualizar manifiesto de navegación compartida
+
+on:
+  push:
+    branches:
+      - orden/navegacion-compartida-espanol
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar rama
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Quitar flujo temporal y regenerar manifiesto
+        run: |
+          rm .github/workflows/actualizar-manifiesto-navegacion-compartida.yml
+          node scripts/build-diagnostic-manifest.js
+
+      - name: Guardar manifiesto reproducible
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json .github/workflows/actualizar-manifiesto-navegacion-compartida.yml
+          git commit -m "chore: actualizar manifiesto tras renombrar navegación compartida"
+          git push origin HEAD

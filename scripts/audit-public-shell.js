@@ -20,10 +20,10 @@ const COMPONENTS = {
   desktop: 'js/components/navigation/escritorio/encabezado-escritorio.js',
   tablet: 'js/components/navigation/tableta/encabezado-tableta.js',
   mobile: 'js/components/navigation/movil/encabezado-movil.js',
-  search: 'js/components/navigation/shared/search-panel.js',
-  cart: 'js/components/navigation/shared/cart-drawer.js',
-  account: 'js/components/navigation/shared/account-drawer.js',
-  collections: 'js/components/navigation/shared/collections-sheet.js',
+  search: 'js/components/navigation/shared/panel-busqueda.js',
+  cart: 'js/components/navigation/shared/panel-carrito.js',
+  account: 'js/components/navigation/shared/panel-cuenta.js',
+  collections: 'js/components/navigation/shared/panel-colecciones.js',
   layer: 'js/components/navigation/shared/surface-layer.js',
 };
 const failures = [];
@@ -86,6 +86,7 @@ check(runtime.includes("components/navigation/escritorio/indicador-navegacion-es
 check(runtime.includes("components/navigation/tableta/control-menu-tableta.js"), 'runtime: falta control del menú de tableta');
 check(runtime.includes("components/navigation/movil/indicador-navegacion-movil.js"), 'runtime: falta indicador de navegación móvil');
 check(runtime.includes("components/navigation/shared/collections-runtime.js"), 'runtime: colecciones todavía dependen del archivo legado');
+check(runtime.includes("components/navigation/shared/control-busqueda.js"), 'runtime: falta el control modular de búsqueda');
 check(runtime.includes("import(versionedJsModule('core/auth/auth-nav.js'))"), 'runtime: falta cuenta compartida');
 check(runtime.includes("import(versionedJsModule('components/cart/cart-sync.js'))"), 'runtime: falta sincronización del carrito');
 

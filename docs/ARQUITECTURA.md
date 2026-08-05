@@ -27,20 +27,20 @@ js/components/navigation/
 │   ├── encabezado-movil.js
 │   └── indicador-navegacion-movil.js
 └── shared/
-    ├── account-drawer.js
+    ├── panel-cuenta.js
     ├── assets.js
-    ├── cart-drawer.js
+    ├── panel-carrito.js
     ├── collections-runtime.js
-    ├── collections-sheet.js
+    ├── panel-colecciones.js
     ├── config.js
-    ├── footer-accordion.js
+    ├── acordeon-pie-pagina.js
     ├── icons.js
     ├── register-surfaces.js
     ├── route-state.js
     ├── router.js
     ├── runtime.js
-    ├── search-controller.js
-    ├── search-panel.js
+    ├── control-busqueda.js
+    ├── panel-busqueda.js
     ├── surface-controller.js
     └── surface-layer.js
 ```
@@ -74,16 +74,17 @@ css/components/navigation/
 
 - `surface-controller.js`: apertura, cierre, Escape, foco, fondo, bloqueo de desplazamiento y cambio entre superficies.
 - `register-surfaces.js`: conecta el controlador cuando el HTML modular ya existe y registra Tienda, Buscar, Cuenta y Carrito.
-- `search-panel.js`: estructura visual del buscador.
-- `search-controller.js`: índice reutilizable, coincidencias, teclado, estados de carga y error.
+- `panel-busqueda.js`: estructura visual del buscador.
+- `control-busqueda.js`: índice reutilizable, coincidencias, teclado, estados de carga y error.
 - `search.css`: presentación de resultados, selección y reintento.
-- `account-drawer.js`: estructura de Mi Cuenta.
-- `cart-drawer.js`: estructura del carrito.
-- `collections-sheet.js`: estructura de colecciones móvil.
+- `panel-cuenta.js`: estructura de Mi Cuenta.
+- `panel-carrito.js`: estructura del carrito.
+- `panel-colecciones.js`: estructura de colecciones móvil.
 - `collections-runtime.js`: datos e imágenes de colecciones con respaldo.
 - `runtime.js`: carga controlada de cuenta, carrito, productos y comportamientos.
 - `route-state.js`: determina la página activa.
 - `assets.js`: carga las hojas CSS del componente antes de mostrar la navegación.
+- `acordeon-pie-pagina.js`: mejora el pie de página móvil con secciones desplegables.
 
 ## Archivos de entrada y compatibilidad
 

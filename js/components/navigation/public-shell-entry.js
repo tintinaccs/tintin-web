@@ -1,15 +1,15 @@
 import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js';
 import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js';
 import { renderMobileTabbar } from './movil/encabezado-movil.js';
-import { renderSearchPanel } from './shared/search-panel.js';
-import { renderCartDrawer } from './shared/cart-drawer.js';
-import { renderAccountDrawer } from './shared/account-drawer.js';
-import { renderCollectionsSheet } from './shared/collections-sheet.js';
+import { renderSearchPanel } from './shared/panel-busqueda.js';
+import { renderCartDrawer } from './shared/panel-carrito.js';
+import { renderAccountDrawer } from './shared/panel-cuenta.js';
+import { renderCollectionsSheet } from './shared/panel-colecciones.js';
 import { renderSurfaceLayer } from './shared/surface-layer.js';
 import { applyActiveState, currentPage } from './shared/route-state.js';
 import { ensureNavigationAssets } from './shared/assets.js';
 import { loadSharedRuntime } from './shared/runtime.js';
-import { enhanceMobileFooter } from './shared/footer-accordion.js';
+import { enhanceMobileFooter } from './shared/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './shared/register-surfaces.js';
 
 const LEGACY_SHELL_IDS = Object.freeze([
