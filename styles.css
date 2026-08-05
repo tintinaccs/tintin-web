@@ -4308,12 +4308,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* ═══════════════════════════════════════════════════════════
    INTRO SPLASH (home) y PAGE LOADER (todas las demás páginas)
    viven inline en index.html y se auto-inyectan desde
-   js/page-loader.js respectivamente — nunca acá, para que no haya
+   js/cargador-pagina.js respectivamente — nunca acá, para que no haya
    dos definiciones de #tt-intro/#tt-loader compitiendo entre sí.
 ═══════════════════════════════════════════════════════════ */
 
 /* Scroll reveal: lo maneja js/quality/scroll-reveal-global.js (.tt-auto-reveal /
-   .tt-visible), cargado global vía js/page-loader.js — este bloque quedó
+   .tt-visible), cargado global vía js/cargador-pagina.js — este bloque quedó
    retirado porque duplicaba esa misma animación con su propio sistema
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */
 @media (prefers-reduced-motion: reduce) {

@@ -94,7 +94,7 @@ if (requiredFiles.every(exists)) {
 
   const legacyAdapters = [
     ['js/inicio-navegacion-publica.js', 'components/navigation/entrada-navegacion-publica.js'],
-    ['js/ui-navigation-controller.js', 'components/navigation/compartido/control-paneles.js'],
+    ['js/components/navigation/compatibilidad/inicio-control-paneles.js', '../compartido/control-paneles.js'],
     ['js/components/navigation/compatibilidad/navegacion-escritorio.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
     ['js/components/navigation/compatibilidad/navegacion-tableta.js', 'components/navigation/tableta/control-menu-tableta.js'],
     ['js/components/navigation/compatibilidad/navegacion-movil.js', 'components/navigation/movil/indicador-navegacion-movil.js'],

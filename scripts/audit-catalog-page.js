@@ -12,7 +12,7 @@ function requireText(text, pattern, message) {
 const html = read('catalogo.html');
 const css = read('css/pages/catalog/catalog-maintenance.css');
 const runtime = read('js/pages/catalog/catalog-maintenance.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 const maintenance = read('maintenance/02-catalogo.txt');
 
 requireText(html, /id="cat-grid"/, 'Falta la grilla del catálogo.');

@@ -21,7 +21,7 @@ Públicas: index, catalogo, collections, product, contact, about, envios,
 Super Admin: admin.html (dashboard, estadísticas, usuarios, pedidos, productos,
   colecciones, contenido, imágenes, correos, mensajes, auditoría, diagnóstico,
   configuración, permisos, apariencia) y admin-images.html.
-Módulos compartidos: page-loader.js, inicio-navegacion-publica.js, script.js,
+Módulos compartidos: cargador-pagina.js, inicio-navegacion-publica.js, script.js,
   color-scheme(-instant).js, store-gate(.js/-core.js), whatsapp.js,
   products-store.js, collections-store.js, site-content.js, image-performance.js,
   site-activity.js, firebase.js.
@@ -70,7 +70,7 @@ FOIT — texto invisible durante la carga (css/montserrat.css)
 ═══════════════════════════════════════════════════════════════════════
 PROBLEMAS ANTERIORES YA SOLUCIONADOS (revisados, NO tocados)
 ═══════════════════════════════════════════════════════════════════════
-- Loader con salida garantizada: page-loader.js (STORE_GATE_TIMEOUT_MS=9000) +
+- Loader con salida garantizada: cargador-pagina.js (STORE_GATE_TIMEOUT_MS=9000) +
   color-scheme-instant.js (RELEASE_TIMEOUT_MS=6500). El runtime secundario
   arranca en setTimeout(0) y no retiene el loader; ante gate cerrado/indisponible
   se retira sin esperar. → No hay spinner infinito.

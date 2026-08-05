@@ -110,7 +110,7 @@ function auditHtmlPage(page) {
   }
 
   if (/TT_PAGE_LOADER_WAIT\s*=\s*true/.test(html)) {
-    if (!/js\/page-loader\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga page-loader.js.');
+    if (!/js\/cargador-pagina\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga cargador-pagina.js.');
     if (!isAdminPage && !/js\/components\/color\/color-scheme-instant\.js/.test(html)) {
       fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga color-scheme-instant.js.');
     }
@@ -183,7 +183,7 @@ const publicShell = exists('js/inicio-navegacion-publica.js') ? read('js/inicio-
 const publicShellRuntime = exists('js/components/navigation/compartido/carga-navegacion.js')
   ? read('js/components/navigation/compartido/carga-navegacion.js')
   : '';
-const pageMaintenanceLoader = exists('js/page-maintenance-loader.js') ? read('js/page-maintenance-loader.js') : '';
+const pageMaintenanceLoader = exists('js/cargador-mantenimiento-pagina.js') ? read('js/cargador-mantenimiento-pagina.js') : '';
 
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
 if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta el estado #product-loading.');
@@ -200,7 +200,7 @@ if (
   fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga products-store.js mediante el runtime modular.');
 }
 if (!/product[\s\S]*load\('pages\/product\/product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
-  fail('js/page-maintenance-loader.js', 'no carga product-maintenance.js en Producto.');
+  fail('js/cargador-mantenimiento-pagina.js', 'no carga product-maintenance.js en Producto.');
 }
 
 if (warnings.length) {

@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
-  <script src="js/page-loader.js?v=tintin-20260801-unified-surfaces-16"></script>
-  <script src="js/ui-navigation-controller.js?v=tintin-20260801-unified-surfaces-16" defer></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260801-unified-surfaces-16"></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
-       acá. page-loader.js caía al fallback window.load si no se le avisaba
+       acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
        hero visible arriba — pero dos requestAnimationFrame() ejecutados
        este temprano en el <head> tampoco garantizan que el <body> ya haya

@@ -8,7 +8,7 @@
    activo. Pensado para poder sacarse en cualquier momento sin
    tocar nada más.
 
-   Se carga muy temprano en <head>, justo después de page-loader.js
+   Se carga muy temprano en <head>, justo después de cargador-pagina.js
    (que ya definió window.ttPageReady de forma síncrona en ese punto).
    Todo lo que necesita capturar el instante real de ttPageReady()/.tt-out
    corre en el nivel superior del IIFE, SIN esperar a DOMContentLoaded —
@@ -188,7 +188,7 @@
   }
 
   // ── 1) Envolver window.ttPageReady EN EL NIVEL SUPERIOR, sin esperar a
-  // DOMContentLoaded — page-loader.js (que corre justo antes, script clásico
+  // DOMContentLoaded — cargador-pagina.js (que corre justo antes, script clásico
   // en <head>) ya lo definió sincrónicamente en este punto. El trigger de
   // dos requestAnimationFrame del <head> puede dispararlo en los primeros
   // frames, mucho antes de DOMContentLoaded, así que envolverlo tarde
@@ -206,10 +206,10 @@
     };
     log('window.ttPageReady envuelto correctamente (nivel superior, síncrono)');
   } else {
-    log('window.ttPageReady NO es función todavía en el nivel superior — page-loader.js no corrió antes, revisar orden de <script>');
+    log('window.ttPageReady NO es función todavía en el nivel superior — cargador-pagina.js no corrió antes, revisar orden de <script>');
   }
 
-  // ── 2) Loader: esperar a que exista (page-loader.js lo inserta recién
+  // ── 2) Loader: esperar a que exista (cargador-pagina.js lo inserta recién
   // cuando document.body existe, vía requestAnimationFrame) y observar
   // desde ahí .tt-out y display:none, sin esperar tampoco a DOMContentLoaded.
   (function waitForLoader(attempts) {

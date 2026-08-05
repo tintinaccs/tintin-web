@@ -88,7 +88,7 @@
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
-  // cumpliera — cargar page-loader.js → store-gate.js → Firebase Auth/
+  // cumpliera — cargar cargador-pagina.js → store-gate.js → Firebase Auth/
   // Firestore (todos módulos ES encadenados, algunos desde el CDN de
   // Google) puede tardar más que 4.5-5.2s en una red o equipo lentos. Se
   // duplica el margen sin tocar el comportamiento "fail closed": si de

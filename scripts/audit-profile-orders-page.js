@@ -4,7 +4,7 @@ const html = fs.readFileSync('perfil.html', 'utf8');
 const runtime = fs.readFileSync('js/pages/profile/profile-maintenance.js', 'utf8');
 const statsRuntime = fs.readFileSync('js/pages/profile/profile-order-stats-fix.js', 'utf8');
 const rules = fs.readFileSync('firestore.rules', 'utf8');
-const loader = fs.readFileSync('js/page-maintenance-loader.js', 'utf8');
+const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 
 const checks = [
   ['perfil.html existe y contiene la estructura principal', /class="perfil-wrap"/.test(html)],

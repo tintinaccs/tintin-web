@@ -1901,5 +1901,5 @@ window.addEventListener('tt_cart_updated', () => {
 });
 
 // El reveal-al-scrollear de esta página ahora lo maneja js/quality/scroll-reveal-global.js
-// (cargado global vía js/page-loader.js) — tenerlo acá duplicado hacía que
+// (cargado global vía js/cargador-pagina.js) — tenerlo acá duplicado hacía que
 // estos mismos elementos se animaran dos veces al entrar en pantalla.

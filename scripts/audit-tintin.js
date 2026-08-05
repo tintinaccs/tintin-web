@@ -38,7 +38,7 @@ function isAllowedLegacyLogoReference(file) {
   return [
     'js/quality/page-audit-fix.js',
     'js/quality/ui-quality.js',
-    'js/page-loader.js',
+    'js/cargador-pagina.js',
     'scripts/audit-deep.js',
     'scripts/audit-tintin.js',
     'scripts/fix-tintin-source.js'
@@ -55,7 +55,7 @@ assertFile('css/core/tintin-unified-theme.css', 'Debe existir la fuente única d
 assertFile('css/core/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores hardcodeados');
 assertFile('css/theme/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
 assertFile('js/quality/ui-quality.js', 'Debe existir el runtime global de calidad');
-assertFile('js/page-loader.js', 'Debe existir el loader global');
+assertFile('js/cargador-pagina.js', 'Debe existir el loader global');
 assertFile('js/components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
 assertFile('js/quality/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
 assertFile('js/components/color/theme-color-sanitizer.js', 'Debe existir el sanitizador de colores');
@@ -69,7 +69,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tintin-unified-theme.css','css/core/tintin-theme-cleanup.css','css/core/tintin-tokens.css','js/components/color/theme-color-sanitizer.js','js/quality/page-audit-fix.js','js/page-loader.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tintin-unified-theme.css','css/core/tintin-theme-cleanup.css','css/core/tintin-tokens.css','js/components/color/theme-color-sanitizer.js','js/quality/page-audit-fix.js','js/cargador-pagina.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }
@@ -203,12 +203,12 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
 for (const file of htmlFiles) {
   const content = read(file);
   const isCheckout = file.toLowerCase().includes('checkout');
-  const hasLoader = /js\/page-loader\.js/.test(content);
+  const hasLoader = /js\/cargador-pagina\.js/.test(content);
   if (!hasLoader && !isCheckout && file !== 'index.html') {
-    addIssue('WARN', file, 'HTML sin page-loader.js; puede no recibir tema/header/fixes globales');
+    addIssue('WARN', file, 'HTML sin cargador-pagina.js; puede no recibir tema/header/fixes globales');
   }
-  if (/js\/page-loader\.js["']/.test(content)) {
-    addIssue('INFO', file, `page-loader.js está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
+  if (/js\/cargador-pagina\.js["']/.test(content)) {
+    addIssue('INFO', file, `cargador-pagina.js está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);
   }
   if (/styles\.css["']/.test(content)) {
     addIssue('INFO', file, `styles.css está sin query ?v=${VERSION}; ejecutar npm run fix:tintin para versionarlo directo`);

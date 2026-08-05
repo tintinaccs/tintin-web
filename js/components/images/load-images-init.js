@@ -1,11 +1,11 @@
 // compatibilidad-menus-desplegables.js, store-gate.js y scroll-reveal-global.js NO se
-// importan acá a propósito: js/page-loader.js ya los carga (con versión) en
+// importan acá a propósito: js/cargador-pagina.js ya los carga (con versión) en
 // TODAS las páginas, incluida esta — importarlos de nuevo acá, sin versión,
 // resolvía a una URL distinta y el navegador los ejecutaba dos veces (dos
 // listeners de Firestore duplicados en store-gate, dos observers de scroll
 // duplicados, etc.). splash-scroll-lock.js tampoco: era solo para el viejo
 // splash bespoke de index.html (#tt-intro), que ahora usa el mismo
-// js/page-loader.js que el resto del sitio (con su propio scroll-lock ya
+// js/cargador-pagina.js que el resto del sitio (con su propio scroll-lock ya
 // incluido).
 import { loadImages } from './images.js?v=tintin-20260716-cloudinary-fix-1';
 

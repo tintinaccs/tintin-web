@@ -12,7 +12,7 @@ function check(label, ok) {
   if (!ok) failures.push(label);
 }
 
-const loader = read('js/page-loader.js');
+const loader = read('js/cargador-pagina.js');
 const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
 const parity = read('css/theme/tintin-parity-safe.css');
 const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
@@ -39,7 +39,7 @@ const scrollReveal = read('js/quality/scroll-reveal-global.js');
 const imagePerformance = read('js/components/images/image-performance.js');
 const home = read('index.html');
 const publicShell = read('js/inicio-navegacion-publica.js');
-const surfaceController = read('js/ui-navigation-controller.js');
+const surfaceController = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
 const contentSchema = read('js/core/store/content-schema.js');
 const siteContent = read('js/core/store/site-content.js');
 const productsStore = read('js/core/store/products-store.js');
@@ -271,7 +271,7 @@ check('El repositorio no contiene marcas explícitas de autoría externa',
   sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
 
 const staleVersions = [];
-for (const file of htmlFiles.concat(['script.js', 'js/page-loader.js'])) {
+for (const file of htmlFiles.concat(['script.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',

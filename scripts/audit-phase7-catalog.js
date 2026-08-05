@@ -19,7 +19,7 @@ const catalog = read('catalogo.html');
 const stockPriority = read('js/pages/catalog/catalog-stock-priority.js');
 const admin = read('js/admin/admin-app.js');
 const sheets = read('functions/api/sheets-product-sync.js');
-const loader = read('js/page-maintenance-loader.js');
+const loader = read('js/cargador-mantenimiento-pagina.js');
 const pkg = JSON.parse(read('package.json'));
 
 check(
