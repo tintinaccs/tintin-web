@@ -53,13 +53,56 @@ async function installSeededCatalog(page) {
 
 async function renderSeededQuery(page, input) {
   await input.fill('reloj');
-  await page.waitForTimeout(180);
-  await page.evaluate(products => {
+  await page.waitForFunction(products => {
+    const controller = window.TintinSearchController;
+    if (!controller || typeof controller.syncCatalog !== 'function') return false;
+
+    // Una carga real del catálogo puede terminar en paralelo con esta auditoría.
+    // En cada sondeo restauramos el catálogo controlado y renderizamos la consulta
+    // en el mismo turno del navegador para evitar una carrera ajena al buscador.
     window.PRODUCTS = products;
-    window.TintinSearchController.syncCatalog(products);
+    controller.syncCatalog(products);
+    controller.renderCurrentQuery();
+
+    return [...document.querySelectorAll('#search-results .tt-search-result-copy strong')]
+      .some(node => /Reloj Ovalado Dorado/i.test(node.textContent || ''));
+  }, SEEDED_PRODUCTS, { timeout:5000, polling:100 });
+}
+
+async function readSeededKeyboardState(page) {
+  return page.evaluate(products => {
+    const controller = window.TintinSearchController;
+    const inputNode = document.getElementById('search-input');
+    const resultsNode = document.getElementById('search-results');
+    if (!controller || !inputNode || !resultsNode) {
+      throw new Error('No están disponibles los controles del buscador');
+    }
+
+    // La sincronización, el render y el evento de teclado ocurren en un único
+    // turno. Así ninguna carga asíncrona externa puede reemplazar el catálogo
+    // entre la comprobación visual y la comprobación de accesibilidad.
+    window.PRODUCTS = products;
+    controller.syncCatalog(products);
+    controller.renderCurrentQuery();
+
+    const names = [...resultsNode.querySelectorAll('.tt-search-result-copy strong')]
+      .map(node => node.textContent || '');
+
+    inputNode.focus();
+    inputNode.dispatchEvent(new KeyboardEvent('keydown', {
+      key:'ArrowDown',
+      code:'ArrowDown',
+      bubbles:true,
+      cancelable:true,
+    }));
+
+    const activeDescendant = inputNode.getAttribute('aria-activedescendant');
+    const selected = activeDescendant
+      ? document.getElementById(activeDescendant)?.getAttribute('aria-selected') || null
+      : null;
+
+    return { names, activeDescendant, selected };
   }, SEEDED_PRODUCTS);
-  await page.waitForFunction(() => [...document.querySelectorAll('#search-results .tt-search-result-copy strong')]
-    .some(node => /Reloj Ovalado Dorado/i.test(node.textContent || '')), null, { timeout:5000 });
 }
 
 async function auditSearch(label, viewport, triggerSelector) {
@@ -93,17 +136,10 @@ async function auditSearch(label, viewport, triggerSelector) {
     const input = page.locator('#search-input');
     await renderSeededQuery(page, input);
 
-    const names = await page.locator('#search-results .tt-search-result-copy strong').allTextContents();
-    check(names.some(name => /Reloj Ovalado Dorado/i.test(name)), `[${label}] no encontró el producto sembrado`);
-
-    await input.press('ArrowDown');
-    await page.waitForFunction(() => Boolean(document.getElementById('search-input')?.getAttribute('aria-activedescendant')), null, { timeout:1500 });
-    const activeDescendant = await input.getAttribute('aria-activedescendant');
-    check(Boolean(activeDescendant), `[${label}] ArrowDown no actualizó aria-activedescendant`);
-    if (activeDescendant) {
-      const selected = await page.locator(`#${activeDescendant}`).getAttribute('aria-selected');
-      check(selected === 'true', `[${label}] el resultado activo no anunció aria-selected=true`);
-    }
+    const keyboardState = await readSeededKeyboardState(page);
+    check(keyboardState.names.some(name => /Reloj Ovalado Dorado/i.test(name)), `[${label}] no encontró el producto sembrado`);
+    check(Boolean(keyboardState.activeDescendant), `[${label}] ArrowDown no actualizó aria-activedescendant`);
+    check(keyboardState.selected === 'true', `[${label}] el resultado activo no anunció aria-selected=true`);
 
     await page.locator('#btn-search-close').click();
     await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'true');
