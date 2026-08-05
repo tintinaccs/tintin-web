@@ -77,9 +77,9 @@ function loadNavigationBehaviors() {
       return null;
     })
     .then(() => Promise.allSettled([
-      import(versionedJsModule('components/navigation/desktop/controller.js')),
-      import(versionedJsModule('components/navigation/tablet/controller.js')),
-      import(versionedJsModule('components/navigation/mobile/controller.js')),
+      import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
+      import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
+      import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
       import(versionedJsModule('components/navigation/shared/router.js')),
       import(versionedJsModule('components/navigation/shared/search-controller.js')),
     ]))

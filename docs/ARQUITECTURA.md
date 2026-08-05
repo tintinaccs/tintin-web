@@ -2,29 +2,30 @@
 
 ## Objetivo
 
-El repositorio mantiene una sola fuente oficial de código, pero divide cada área en componentes pequeños y reconocibles. La separación evita que un arreglo de desktop modifique accidentalmente tablet o mobile, y evita duplicar la lógica de Buscar, Cuenta, Carrito y Colecciones.
+El repositorio mantiene una sola fuente oficial de código, pero divide cada área en componentes pequeños y reconocibles. La separación evita que un arreglo de escritorio modifique accidentalmente tableta o móvil, y evita duplicar la lógica de Buscar, Cuenta, Carrito y Colecciones.
 
 ## Regla principal
 
-- La estructura visual específica de cada dispositivo vive en `desktop/`, `tablet/` o `mobile/`.
-- La lógica que utilizan varios dispositivos vive en `shared/`.
+- La estructura visual específica de cada dispositivo vive en `escritorio/`, `tableta/` o `movil/`.
+- La lógica que utilizan varios dispositivos vive temporalmente en `shared/` hasta que ese bloque se revise por separado.
 - Los archivos antiguos que todavía son usados por páginas o auditorías quedan como adaptadores de compatibilidad pequeños. No deben recuperar lógica propia.
 - `main` representa producción. La reorganización se prepara y prueba primero en una rama.
+- Los nombres de archivos internos se escriben en español, en minúsculas, sin tildes y separados por guiones.
 
 ## Navegación pública
 
 ```text
 js/components/navigation/
 ├── public-shell-entry.js
-├── desktop/
-│   ├── header-desktop.js
-│   └── controller.js
-├── tablet/
-│   ├── header-tablet.js
-│   └── controller.js
-├── mobile/
-│   ├── header-mobile.js
-│   └── controller.js
+├── escritorio/
+│   ├── encabezado-escritorio.js
+│   └── indicador-navegacion-escritorio.js
+├── tableta/
+│   ├── encabezado-tableta.js
+│   └── control-menu-tableta.js
+├── movil/
+│   ├── encabezado-movil.js
+│   └── indicador-navegacion-movil.js
 └── shared/
     ├── account-drawer.js
     ├── assets.js
@@ -46,9 +47,9 @@ js/components/navigation/
 
 ```text
 css/components/navigation/
-├── desktop/header-desktop.css
-├── tablet/header-tablet.css
-├── mobile/header-mobile.css
+├── escritorio/encabezado-escritorio.css
+├── tableta/encabezado-tableta.css
+├── movil/encabezado-movil.css
 └── shared/
     ├── navigation-transitions.css
     ├── search.css
@@ -57,36 +58,36 @@ css/components/navigation/
 
 ## Responsabilidades
 
-### Desktop
+### Escritorio
 
-`header-desktop.js` contiene únicamente el HTML del header de escritorio. `header-desktop.css` controla únicamente medidas desde 1025 px. `controller.js` controla la píldora activa y la geometría visual de la navegación.
+`encabezado-escritorio.js` contiene únicamente el HTML del encabezado de escritorio. `encabezado-escritorio.css` controla únicamente medidas desde 1025 px. `indicador-navegacion-escritorio.js` controla la píldora activa y la geometría visual de la navegación.
 
-### Tablet
+### Tableta
 
-`header-tablet.js` contiene el header y el menú de tablet. `header-tablet.css` controla únicamente 768–1024 px. `controller.js` controla el cambio entre la vista principal y las colecciones.
+`encabezado-tableta.js` contiene el encabezado y el menú de tableta. `encabezado-tableta.css` controla únicamente 768–1024 px. `control-menu-tableta.js` controla el cambio entre la vista principal y las colecciones.
 
-### Mobile
+### Móvil
 
-`header-mobile.js` contiene únicamente la barra inferior. `header-mobile.css` controla únicamente 0–767 px. `controller.js` calcula el halo y el indicador activo.
+`encabezado-movil.js` contiene únicamente la barra inferior. `encabezado-movil.css` controla únicamente 0–767 px. `indicador-navegacion-movil.js` calcula el halo y el indicador activo.
 
-### Shared
+### Compartido
 
-- `surface-controller.js`: apertura, cierre, Escape, foco, backdrop, bloqueo de scroll y cambio entre superficies.
+- `surface-controller.js`: apertura, cierre, Escape, foco, fondo, bloqueo de desplazamiento y cambio entre superficies.
 - `register-surfaces.js`: conecta el controlador cuando el HTML modular ya existe y registra Tienda, Buscar, Cuenta y Carrito.
 - `search-panel.js`: estructura visual del buscador.
 - `search-controller.js`: índice reutilizable, coincidencias, teclado, estados de carga y error.
 - `search.css`: presentación de resultados, selección y reintento.
 - `account-drawer.js`: estructura de Mi Cuenta.
 - `cart-drawer.js`: estructura del carrito.
-- `collections-sheet.js`: estructura de colecciones mobile.
-- `collections-runtime.js`: datos e imágenes de colecciones con fallback.
+- `collections-sheet.js`: estructura de colecciones móvil.
+- `collections-runtime.js`: datos e imágenes de colecciones con respaldo.
 - `runtime.js`: carga controlada de cuenta, carrito, productos y comportamientos.
 - `route-state.js`: determina la página activa.
-- `assets.js`: carga las hojas CSS del componente antes de mostrar el shell.
+- `assets.js`: carga las hojas CSS del componente antes de mostrar la navegación.
 
 ## Archivos de entrada y compatibilidad
 
-`js/public-shell.js` es un bootstrap pequeño. Su única responsabilidad es cargar `js/components/navigation/public-shell-entry.js`.
+`js/public-shell.js` es un archivo de inicio pequeño. Su única responsabilidad es cargar `js/components/navigation/public-shell-entry.js`.
 
 `js/ui-navigation-controller.js` carga el controlador compartido modular.
 
@@ -105,17 +106,17 @@ css/components/navigation/legacy/navigation-shared.css
 css/components/navigation/shared/surface-controller.css
 ```
 
-No se agrega lógica nueva a esos archivos. La fuente de verdad está en `components/`.
+No se agrega lógica nueva a esos archivos. La fuente principal está en `components/`.
 
-## Breakpoints oficiales
+## Cortes oficiales por dispositivo
 
 ```text
-Mobile:  0–767 px
-Tablet:  768–1024 px
-Desktop: 1025 px en adelante
+Móvil:      0–767 px
+Tableta:    768–1024 px
+Escritorio: 1025 px en adelante
 ```
 
-No se deben crear nuevos cortes 769, 1023, 1025 o 1100 para decidir qué header existe. Se permiten cortes internos adicionales únicamente para ajustes visuales dentro de un dispositivo.
+No se deben crear nuevos cortes 769, 1023, 1025 o 1100 para decidir qué encabezado existe. Se permiten cortes internos adicionales únicamente para ajustes visuales dentro de un dispositivo.
 
 ## Flujo de publicación
 
@@ -123,9 +124,9 @@ No se deben crear nuevos cortes 769, 1023, 1025 o 1100 para decidir qué header 
 rama de trabajo
 → auditorías automáticas
 → revisión de cambios
-→ preview
+→ vista previa
 → pull request
-→ merge a main
+→ fusión a main
 → producción
 ```
 

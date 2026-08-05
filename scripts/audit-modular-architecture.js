@@ -12,12 +12,12 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 const requiredFiles = [
   'js/components/navigation/public-shell-entry.js',
-  'js/components/navigation/desktop/header-desktop.js',
-  'js/components/navigation/desktop/controller.js',
-  'js/components/navigation/tablet/header-tablet.js',
-  'js/components/navigation/tablet/controller.js',
-  'js/components/navigation/mobile/header-mobile.js',
-  'js/components/navigation/mobile/controller.js',
+  'js/components/navigation/escritorio/encabezado-escritorio.js',
+  'js/components/navigation/escritorio/indicador-navegacion-escritorio.js',
+  'js/components/navigation/tableta/encabezado-tableta.js',
+  'js/components/navigation/tableta/control-menu-tableta.js',
+  'js/components/navigation/movil/encabezado-movil.js',
+  'js/components/navigation/movil/indicador-navegacion-movil.js',
   'js/components/navigation/shared/account-drawer.js',
   'js/components/navigation/shared/assets.js',
   'js/components/navigation/shared/cart-drawer.js',
@@ -34,9 +34,9 @@ const requiredFiles = [
   'js/components/navigation/shared/search-panel.js',
   'js/components/navigation/shared/surface-controller.js',
   'js/components/navigation/shared/surface-layer.js',
-  'css/components/navigation/desktop/header-desktop.css',
-  'css/components/navigation/tablet/header-tablet.css',
-  'css/components/navigation/mobile/header-mobile.css',
+  'css/components/navigation/escritorio/encabezado-escritorio.css',
+  'css/components/navigation/tableta/encabezado-tableta.css',
+  'css/components/navigation/movil/encabezado-movil.css',
   'css/components/navigation/shared/navigation-transitions.css',
   'css/components/navigation/shared/surfaces.css',
   'docs/ARQUITECTURA.md',
@@ -54,39 +54,39 @@ if (requiredFiles.every(exists)) {
   check(config.includes('desktopMin: 1025'), 'config: desktopMin debe ser 1025');
 
   const entry = read('js/components/navigation/public-shell-entry.js');
-  check(entry.includes("from './desktop/header-desktop.js'"), 'entry: falta desktop');
-  check(entry.includes("from './tablet/header-tablet.js'"), 'entry: falta tablet');
-  check(entry.includes("from './mobile/header-mobile.js'"), 'entry: falta mobile');
+  check(entry.includes("from './escritorio/encabezado-escritorio.js'"), 'entry: falta escritorio');
+  check(entry.includes("from './tableta/encabezado-tableta.js'"), 'entry: falta tableta');
+  check(entry.includes("from './movil/encabezado-movil.js'"), 'entry: falta móvil');
   check(entry.includes("from './shared/search-panel.js'"), 'entry: falta buscador compartido');
   check(entry.includes("from './shared/account-drawer.js'"), 'entry: falta cuenta compartida');
   check(entry.includes("from './shared/cart-drawer.js'"), 'entry: falta carrito compartido');
   check(entry.includes("from './shared/register-surfaces.js'"), 'entry: falta registro modular de superficies');
   check(entry.includes('await registerNavigationSurfaces()'), 'entry: monta el runtime antes de registrar superficies');
 
-  const desktop = read('js/components/navigation/desktop/header-desktop.js');
-  const tablet = read('js/components/navigation/tablet/header-tablet.js');
-  const mobile = read('js/components/navigation/mobile/header-mobile.js');
-  check(!desktop.includes('tt-header-tablet'), 'desktop contiene estructura tablet');
-  check(!desktop.includes('tt-tabbar'), 'desktop contiene estructura mobile');
-  check(!tablet.includes('tt-header-desktop-tablet'), 'tablet contiene estructura desktop');
-  check(!tablet.includes('tt-tabbar'), 'tablet contiene estructura mobile');
-  check(!mobile.includes('tt-header-desktop-tablet'), 'mobile contiene estructura desktop');
-  check(!mobile.includes('tt-header-tablet'), 'mobile contiene estructura tablet');
+  const desktop = read('js/components/navigation/escritorio/encabezado-escritorio.js');
+  const tablet = read('js/components/navigation/tableta/encabezado-tableta.js');
+  const mobile = read('js/components/navigation/movil/encabezado-movil.js');
+  check(!desktop.includes('tt-header-tablet'), 'escritorio contiene estructura de tableta');
+  check(!desktop.includes('tt-tabbar'), 'escritorio contiene estructura móvil');
+  check(!tablet.includes('tt-header-desktop-tablet'), 'tableta contiene estructura de escritorio');
+  check(!tablet.includes('tt-tabbar'), 'tableta contiene estructura móvil');
+  check(!mobile.includes('tt-header-desktop-tablet'), 'móvil contiene estructura de escritorio');
+  check(!mobile.includes('tt-header-tablet'), 'móvil contiene estructura de tableta');
 
   const surfaces = read('js/components/navigation/shared/surface-controller.js');
   const registrations = read('js/components/navigation/shared/register-surfaces.js');
   const runtime = read('js/components/navigation/shared/runtime.js');
   const search = read('js/components/navigation/shared/search-controller.js');
-  check(registrations.includes("['desktop-shop'"), 'registro: falta Tienda desktop');
-  check(registrations.includes("['tablet-menu'"), 'registro: falta menú tablet');
-  check(registrations.includes("['mobile-shop'"), 'registro: falta Tienda mobile');
+  check(registrations.includes("['desktop-shop'"), 'registro: falta Tienda escritorio');
+  check(registrations.includes("['tablet-menu'"), 'registro: falta menú tableta');
+  check(registrations.includes("['mobile-shop'"), 'registro: falta Tienda móvil');
   check(registrations.includes("['search'"), 'registro: falta Buscar');
   check(registrations.includes("['cart'"), 'registro: falta Carrito');
   check(registrations.includes("['account'"), 'registro: falta Cuenta');
   check(registrations.includes('refreshCartBeforeOpen'), 'registro: el carrito no se actualiza al abrir');
   check(registrations.includes("controller.connect({"), 'registro: falta conectar backdrop y morph');
   check(surfaces.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva su entorno');
-  check(surfaces.includes("this.close('outside', { restoreFocus: false })"), 'controlador: Tienda desktop puede reabrirse por foco');
+  check(surfaces.includes("this.close('outside', { restoreFocus: false })"), 'controlador: Tienda escritorio puede reabrirse por foco');
   check(runtime.includes('components/navigation/shared/search-controller.js'), 'runtime: no carga el buscador modular');
   check(search.includes('aria-activedescendant'), 'buscar: falta navegación accesible de resultados');
   check(search.includes('productSearchText'), 'buscar: falta índice normalizado reutilizable');
@@ -95,9 +95,9 @@ if (requiredFiles.every(exists)) {
   const legacyAdapters = [
     ['js/public-shell.js', 'components/navigation/public-shell-entry.js'],
     ['js/ui-navigation-controller.js', 'components/navigation/shared/surface-controller.js'],
-    ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
-    ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
-    ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
+    ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
+    ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tableta/control-menu-tableta.js'],
+    ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
     ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/shared/router.js'],
     ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
   ];
@@ -109,9 +109,9 @@ if (requiredFiles.every(exists)) {
   });
 
   const legacyCssAdapters = [
-    ['css/components/navigation/legacy/navigation-desktop.css', 'components/navigation/desktop/header-desktop.css'],
-    ['css/components/navigation/legacy/navigation-tablet.css', 'components/navigation/tablet/header-tablet.css'],
-    ['css/components/navigation/legacy/navigation-mobile.css', 'components/navigation/mobile/header-mobile.css'],
+    ['css/components/navigation/legacy/navigation-desktop.css', 'components/navigation/escritorio/encabezado-escritorio.css'],
+    ['css/components/navigation/legacy/navigation-tablet.css', 'components/navigation/tableta/encabezado-tableta.css'],
+    ['css/components/navigation/legacy/navigation-mobile.css', 'components/navigation/movil/encabezado-movil.css'],
     ['css/components/navigation/legacy/navigation-shared.css', 'components/navigation/shared/navigation-transitions.css'],
     ['css/components/navigation/shared/surface-controller.css', 'components/navigation/shared/surfaces.css'],
   ];

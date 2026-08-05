@@ -2,19 +2,19 @@
 
 Este documento indica qué archivo abrir según el problema. No hace falta recorrer todo el repositorio.
 
-## Header y navegación
+## Encabezado y navegación
 
 | Necesidad | Archivo principal |
 |---|---|
-| Cambiar el header desktop | `js/components/navigation/desktop/header-desktop.js` |
-| Cambiar estilos desktop | `css/components/navigation/desktop/header-desktop.css` |
-| Cambiar la píldora activa desktop | `js/components/navigation/desktop/controller.js` |
-| Cambiar el header o menú tablet | `js/components/navigation/tablet/header-tablet.js` |
-| Cambiar estilos tablet | `css/components/navigation/tablet/header-tablet.css` |
-| Cambiar transición menú/colecciones tablet | `js/components/navigation/tablet/controller.js` |
-| Cambiar la barra mobile | `js/components/navigation/mobile/header-mobile.js` |
-| Cambiar estilos mobile | `css/components/navigation/mobile/header-mobile.css` |
-| Cambiar halo/indicador mobile | `js/components/navigation/mobile/controller.js` |
+| Cambiar el encabezado de escritorio | `js/components/navigation/escritorio/encabezado-escritorio.js` |
+| Cambiar estilos de escritorio | `css/components/navigation/escritorio/encabezado-escritorio.css` |
+| Cambiar el indicador activo de escritorio | `js/components/navigation/escritorio/indicador-navegacion-escritorio.js` |
+| Cambiar el encabezado o menú de tableta | `js/components/navigation/tableta/encabezado-tableta.js` |
+| Cambiar estilos de tableta | `css/components/navigation/tableta/encabezado-tableta.css` |
+| Cambiar la transición menú/colecciones de tableta | `js/components/navigation/tableta/control-menu-tableta.js` |
+| Cambiar la barra móvil | `js/components/navigation/movil/encabezado-movil.js` |
+| Cambiar estilos móviles | `css/components/navigation/movil/encabezado-movil.css` |
+| Cambiar el halo o indicador móvil | `js/components/navigation/movil/indicador-navegacion-movil.js` |
 
 ## Buscar, Cuenta, Carrito y Colecciones
 
@@ -26,26 +26,26 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 | Diseño sólido de Mi Cuenta | `css/components/navigation/shared/surfaces.css` |
 | Estructura del carrito | `js/components/navigation/shared/cart-drawer.js` |
 | Contenido y operaciones del carrito | `script.js` y `js/components/cart/cart-sync.js` hasta completar su extracción modular |
-| Estructura de colecciones mobile | `js/components/navigation/shared/collections-sheet.js` |
+| Estructura de colecciones móvil | `js/components/navigation/shared/collections-sheet.js` |
 | Carga e imágenes de colecciones | `js/components/navigation/shared/collections-runtime.js` |
-| Abrir/cerrar cualquier panel | `js/components/navigation/shared/surface-controller.js` |
+| Abrir o cerrar cualquier panel | `js/components/navigation/shared/surface-controller.js` |
 | Fondo oscuro y capas | `js/components/navigation/shared/surface-layer.js` y `css/components/navigation/shared/surfaces.css` |
 
 ## Inicio y rutas
 
 | Necesidad | Archivo principal |
 |---|---|
-| Montaje general del shell | `js/components/navigation/public-shell-entry.js` |
+| Montaje general de la navegación | `js/components/navigation/public-shell-entry.js` |
 | Página activa | `js/components/navigation/shared/route-state.js` |
 | Navegación entre páginas | `js/components/navigation/shared/router.js` |
-| Carga de runtimes | `js/components/navigation/shared/runtime.js` |
+| Carga de procesos | `js/components/navigation/shared/runtime.js` |
 | Carga de CSS | `js/components/navigation/shared/assets.js` |
-| Logo, versión y breakpoints | `js/components/navigation/shared/config.js` |
+| Logo, versión y cortes por dispositivo | `js/components/navigation/shared/config.js` |
 | Iconos y categorías base | `js/components/navigation/shared/icons.js` |
 
 ## Adaptadores que no deben editarse para cambios normales
 
-Los siguientes archivos existen para no romper páginas antiguas, auditorías o imports existentes. No son la fuente principal:
+Los siguientes archivos existen para no romper páginas antiguas, auditorías o importaciones existentes. No son la fuente principal:
 
 ```text
 js/public-shell.js

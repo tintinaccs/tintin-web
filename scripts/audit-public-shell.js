@@ -17,9 +17,9 @@ const SHELL_IDS = [
   'tt-shared-backdrop', 'tt-shared-morph',
 ];
 const COMPONENTS = {
-  desktop: 'js/components/navigation/desktop/header-desktop.js',
-  tablet: 'js/components/navigation/tablet/header-tablet.js',
-  mobile: 'js/components/navigation/mobile/header-mobile.js',
+  desktop: 'js/components/navigation/escritorio/encabezado-escritorio.js',
+  tablet: 'js/components/navigation/tableta/encabezado-tableta.js',
+  mobile: 'js/components/navigation/movil/encabezado-movil.js',
   search: 'js/components/navigation/shared/search-panel.js',
   cart: 'js/components/navigation/shared/cart-drawer.js',
   account: 'js/components/navigation/shared/account-drawer.js',
@@ -71,10 +71,10 @@ check(entry.includes("architecture: 'modular-navigation-v1'"), 'el shell modular
 const componentSources = Object.fromEntries(
   Object.entries(COMPONENTS).map(([name, file]) => [name, read(file)])
 );
-check(componentSources.desktop.includes('id="tt-header-desktop-tablet"'), 'desktop: falta su header aislado');
-check(componentSources.tablet.includes('id="tt-header-tablet"'), 'tablet: falta su header aislado');
-check(componentSources.tablet.includes('id="tt-tablet-menu"'), 'tablet: falta su menú aislado');
-check(componentSources.mobile.includes('id="tt-tabbar"'), 'mobile: falta su tabbar aislada');
+check(componentSources.desktop.includes('id="tt-header-desktop-tablet"'), 'escritorio: falta su encabezado aislado');
+check(componentSources.tablet.includes('id="tt-header-tablet"'), 'tableta: falta su encabezado aislado');
+check(componentSources.tablet.includes('id="tt-tablet-menu"'), 'tableta: falta su menú aislado');
+check(componentSources.mobile.includes('id="tt-tabbar"'), 'móvil: falta su barra aislada');
 check(componentSources.search.includes('id="search-panel"'), 'shared/search: falta el panel');
 check(componentSources.cart.includes('id="cart-drawer"'), 'shared/cart: falta el drawer');
 check(componentSources.account.includes('id="account-drawer"'), 'shared/account: falta el drawer');
@@ -82,9 +82,9 @@ check(componentSources.collections.includes('id="collections-sheet"'), 'shared/c
 check(componentSources.layer.includes('id="tt-shared-backdrop"'), 'shared/surfaces: falta el backdrop único');
 
 const runtime = read('js/components/navigation/shared/runtime.js');
-check(runtime.includes("components/navigation/desktop/controller.js"), 'runtime: falta controlador desktop modular');
-check(runtime.includes("components/navigation/tablet/controller.js"), 'runtime: falta controlador tablet modular');
-check(runtime.includes("components/navigation/mobile/controller.js"), 'runtime: falta controlador mobile modular');
+check(runtime.includes("components/navigation/escritorio/indicador-navegacion-escritorio.js"), 'runtime: falta indicador de navegación de escritorio');
+check(runtime.includes("components/navigation/tableta/control-menu-tableta.js"), 'runtime: falta control del menú de tableta');
+check(runtime.includes("components/navigation/movil/indicador-navegacion-movil.js"), 'runtime: falta indicador de navegación móvil');
 check(runtime.includes("components/navigation/shared/collections-runtime.js"), 'runtime: colecciones todavía dependen del archivo legado');
 check(runtime.includes("import(versionedJsModule('core/auth/auth-nav.js'))"), 'runtime: falta cuenta compartida');
 check(runtime.includes("import(versionedJsModule('components/cart/cart-sync.js'))"), 'runtime: falta sincronización del carrito');
@@ -96,25 +96,25 @@ check(surfaceController.includes("this.state = 'idle'"), 'controlador: falta est
 check(surfaceController.includes("this.surface = 'none'"), 'controlador: falta superficie none');
 check(surfaceController.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva el entorno');
 check(surfaceController.includes('this.lockScroll()'), 'controlador: falta bloqueo de scroll compartido');
-check(surfaceController.includes("this.close('outside', { restoreFocus: false })"), 'controlador: el cierre exterior desktop puede devolver foco y reabrir Tienda');
+check(surfaceController.includes("this.close('outside', { restoreFocus: false })"), 'controlador: el cierre exterior de escritorio puede devolver foco y reabrir Tienda');
 
-const desktopStyles = read('css/components/navigation/desktop/header-desktop.css');
-const tabletStyles = read('css/components/navigation/tablet/header-tablet.css');
-const mobileStyles = read('css/components/navigation/mobile/header-mobile.css');
+const desktopStyles = read('css/components/navigation/escritorio/encabezado-escritorio.css');
+const tabletStyles = read('css/components/navigation/tableta/encabezado-tableta.css');
+const mobileStyles = read('css/components/navigation/movil/encabezado-movil.css');
 const surfaceStyles = read('css/components/navigation/shared/surfaces.css');
-check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'desktop: falta el corte exacto >=1025px');
-check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tablet: falta el rango exacto 768-1024px');
-check(/@media \(max-width: 767px\)/.test(mobileStyles), 'mobile: falta el rango exacto <=767px');
-check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'desktop: falta el cierre visual definitivo de Tienda');
-check(desktopStyles.includes('width: 68px !important'), 'desktop: las imágenes de colecciones no fueron ampliadas');
+check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'escritorio: falta el corte exacto >=1025px');
+check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tableta: falta el rango exacto 768-1024px');
+check(/@media \(max-width: 767px\)/.test(mobileStyles), 'móvil: falta el rango exacto <=767px');
+check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'escritorio: falta el cierre visual definitivo de Tienda');
+check(desktopStyles.includes('width: 68px !important'), 'escritorio: las imágenes de colecciones no fueron ampliadas');
 check(surfaceStyles.includes('grid-template-columns: auto minmax(0, 1fr) auto'), 'buscar: falta la estructura grid estable');
-check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar desktop: falta el tamaño ampliado');
+check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar escritorio: falta el tamaño ampliado');
 check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
 
 [
-  ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/desktop/controller.js'],
-  ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tablet/controller.js'],
-  ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/mobile/controller.js'],
+  ['js/components/navigation/legacy/navigation-desktop.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
+  ['js/components/navigation/legacy/navigation-tablet.js', 'components/navigation/tableta/control-menu-tableta.js'],
+  ['js/components/navigation/legacy/navigation-mobile.js', 'components/navigation/movil/indicador-navegacion-movil.js'],
   ['js/components/navigation/legacy/navigation-shared.js', 'components/navigation/shared/router.js'],
   ['js/components/navigation/legacy/nav-collections.js', 'components/navigation/shared/collections-runtime.js'],
 ].forEach(([legacy, source]) => {
@@ -127,4 +127,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Public shell modular audit passed: ${PUBLIC_PAGES.length} pantallas usan navegación separada en desktop, tablet, mobile y shared.`);
+console.log(`Public shell modular audit passed: ${PUBLIC_PAGES.length} pantallas usan navegación separada en escritorio, tableta, móvil y shared.`);
