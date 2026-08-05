@@ -9,7 +9,7 @@ const check = (name, condition, problem) => checks.push({ name, ok: Boolean(cond
 
 const checkout       = read('checkout.html');
 const resendNotify   = read('js/email/resend-order-notify.js');
-const bridge         = read('js/pages/checkout/checkout-email-bridge.js');
+const bridge         = read('js/pages/checkout/checkout-puente-correo.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
 const adminSync      = read('js/admin/settings/admin-email-gate-sync.js');
@@ -23,7 +23,7 @@ check(
   'Checkout usa un solo canal Resend',
   // checkout.html ya no llama a sendOrderNotification directamente (ese
   // camino murió con saveOrder(), el guardado inseguro legado que
-  // firestore.rules rechaza de todos modos) — checkout-email-bridge.js es
+  // firestore.rules rechaza de todos modos) — checkout-puente-correo.js es
   // ahora el único punto que dispara el correo tras el éxito del pedido.
   !checkout.includes('resend-order-notify.js') &&
     !checkout.includes('email-notify.js') &&
@@ -44,7 +44,7 @@ check(
   'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
   // Antes resend-order-notify.js y admin-email-gate-sync.js usaban rutas
   // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
-  // media-library.js y site-activity.js — eso daba 404 en GitHub Pages y el
+  // biblioteca-multimedia.js y site-activity.js — eso daba 404 en GitHub Pages y el
   // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
   // comparten la misma resolución de origen.
   resendNotify.includes("import { apiUrl } from '../core/firebase/function-origin.js") &&
@@ -164,8 +164,8 @@ check(
   adminApp.includes('encodeURIComponent(waConfirmMessageTemplate.replace(/\\{nombre\\}/g') &&
     read('script.js').includes('encodeURIComponent(') &&
     checkout.includes('encodeURIComponent(') &&
-    read('js/pages/institutional/contact-maintenance.js').includes('encodeURIComponent') &&
-    read('js/components/modals/blocked-modal.js').includes('encodeURIComponent'),
+    read('js/pages/institutional/mantenimiento-contacto.js').includes('encodeURIComponent') &&
+    read('js/components/modals/modal-bloqueo.js').includes('encodeURIComponent'),
   'Los mensajes configurables deben codificarse.'
 );
 check(

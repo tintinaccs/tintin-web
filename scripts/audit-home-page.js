@@ -16,7 +16,7 @@ function forbid(text, pattern, message) {
 
 const html = read('index.html');
 const css = read('css/pages/home/home-maintenance.css');
-const runtime = read('js/pages/home/home-maintenance.js');
+const runtime = read('js/pages/home/mantenimiento-inicio.js');
 const shell = read('js/inicio-navegacion-publica.js');
 const shellRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
@@ -40,7 +40,7 @@ requireText(html, /js\/inicio-navegacion-publica\.js/, 'Inicio no carga el shell
 requireText(html, /css\/pages\/home\/home-fit\.css/, 'Inicio no carga el CSS estructural temprano.');
 
 requireText(shell, /components\/navigation\/entrada-navegacion-publica\.js/, 'El shell público no carga el entry modular.');
-requireText(shellRuntime, /home-maintenance\.js/, 'El runtime modular no carga home-maintenance.js.');
+requireText(shellRuntime, /mantenimiento-inicio\.js/, 'El runtime modular no carga mantenimiento-inicio.js.');
 requireText(shellRuntime, /css\/pages\/home\/home-maintenance\.css/, 'El runtime modular no carga home-maintenance.css.');
 requireText(shellRuntime, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de Inicio no está limitada únicamente a Inicio.');
 requireText(shellRuntime, /function loadHomeMaintenance\(\)/, 'El runtime modular no encapsula la carga de Inicio.');
@@ -86,7 +86,7 @@ else {
 }
 
 if (/tintinaccs\.github\.io\/tintin-web/i.test(html)) {
-  warnings.push('index.html todavía conserva URLs históricas; home-maintenance.js las normaliza en ejecución. Conviene migrarlas estáticamente cuando se edite el HTML completo.');
+  warnings.push('index.html todavía conserva URLs históricas; mantenimiento-inicio.js las normaliza en ejecución. Conviene migrarlas estáticamente cuando se edite el HTML completo.');
 }
 
 if (errors.length) {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -67,7 +67,7 @@
   <link rel="stylesheet" href="css/core/tintin-unified-theme.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/core/tintin-theme-cleanup.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/theme/tintin-parity-safe.css?v=tintin-20260716-cloudinary-fix-1">
-  <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/images.js,
+  <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/imagenes.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
        de las secciones de home que define) nunca se aplicaba, o se
@@ -75,7 +75,7 @@
        agrandando el scrollHeight de golpe. Directo en <head> queda
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
-       existe (ver js/components/images/images.js). -->
+       existe (ver js/components/images/imagenes.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/home-fit.css?v=tintin-20260716-cloudinary-fix-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/home-hero-apple.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/quality/motion.css?v=tintin-20260716-cloudinary-fix-1">
@@ -93,7 +93,7 @@
   <!-- Cloudinary (subida desde Super Admin → Imágenes) sigue siendo la fuente
        editorial principal. Mientras llega o si la red falla, el contenedor
        conserva una imagen local responsive para que el hero nunca quede vacío;
-       la imagen administrada la cubre apenas images-phase5.js la confirma. -->
+       la imagen administrada la cubre apenas gestion-imagenes.js la confirma. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
       <img
@@ -111,10 +111,10 @@
     </picture>
   </div>
   <script>
-    // Red de seguridad independiente de images-phase5.js: si por lo que sea
+    // Red de seguridad independiente de gestion-imagenes.js: si por lo que sea
     // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
     // puede quedar invisible para siempre. Si a los 900ms ya hay una imagen
-    // en camino (images-phase5.js le asignó un src real) pero todavía no
+    // en camino (gestion-imagenes.js le asignó un src real) pero todavía no
     // terminó de descargarse, espera un poco más en vez de revelar el fondo
     // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
     // nunca de una red que jamás responda.
@@ -142,7 +142,7 @@
         }
         // Tope alcanzado sin imagen real (nunca llegó un src, llegó y
         // falló, o sigue a medio descargar): se deja el fondo oscuro. Si
-        // images-phase5.js consigue la imagen más tarde igual,
+        // gestion-imagenes.js consigue la imagen más tarde igual,
         // revealHeroWhenImageReady() en ese archivo saca la clase por su
         // cuenta apenas esté lista.
       }
@@ -537,11 +537,11 @@
   var HERO_WAIT_CEILING_MS = 4500;
 
   function heroReady() {
-    // Reusa la misma señal que ya decide cuándo se ve el hero (images-phase5.js
+    // Reusa la misma señal que ya decide cuándo se ve el hero (gestion-imagenes.js
     // o su propia red de seguridad): en vez de volver a adivinar si hay una
     // imagen en camino, simplemente espera a que esa decisión ya se haya
     // tomado — evita la carrera de creer "no hay imagen" solo porque
-    // images-phase5.js todavía no tuvo tiempo de asignar el src.
+    // gestion-imagenes.js todavía no tuvo tiempo de asignar el src.
     var media = document.getElementById('tt-hero-media');
     if (!media) return true;
     return !media.classList.contains('tt-hero-pending');
@@ -590,7 +590,7 @@
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
-<script type="module" src="js/components/images/load-images-init.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">
 import { initSiteContent } from './js/core/store/site-content.js?v=tintin-20260716-cloudinary-fix-1';
 initSiteContent('index');
@@ -631,6 +631,6 @@ initSiteContent('index');
   ]
 }
 </script>
-  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

@@ -42,9 +42,9 @@ function check(name, condition, problem) {
 const schema        = read('js/core/store/content-schema.js');
 const siteContent   = read('js/core/store/site-content.js');
 const adminContent  = read('js/admin/content/admin-content-phase6.js');
-const colorScheme   = read('js/components/color/color-scheme.js');
-const colorInstant  = read('js/components/color/color-scheme-instant.js');
-const colorCatalog  = read('js/components/color/color-scheme-catalog.js');
+const colorScheme   = read('js/components/color/esquema-color.js');
+const colorInstant  = read('js/components/color/esquema-color-instantaneo.js');
+const colorCatalog  = read('js/components/color/esquema-color-catalogo.js');
 const adminApp      = read('js/admin/admin-app.js');
 const rules         = read('firestore.rules');
 
@@ -96,7 +96,7 @@ check(
   /function isSafeColorValue\(value\)/.test(colorScheme) &&
     /out\[token\.cssVar\] = value;/.test(colorScheme) &&
     /value != null && value !== '' && isSafeColorValue\(value\)/.test(colorScheme),
-  'color-scheme.js debe validar el valor antes de setProperty (no URLs ni CSS arbitrario).'
+  'esquema-color.js debe validar el valor antes de setProperty (no URLs ni CSS arbitrario).'
 );
 check(
   'El validador de color rechaza url(), CSS arbitrario y valores largos',

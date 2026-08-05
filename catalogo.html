@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/color-scheme-instant.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260801-unified-surfaces-16"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260801-unified-surfaces-16" defer></script>
@@ -486,18 +486,18 @@ initSiteContent('catalogo');
 </script>
 <script type="module" src="js/core/auth/edit-badge.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">
-import { sanitizeImageUrl } from './js/components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 // Import dinámico (no estático): si falla la red/CDN al traer
-// collections-store.js, un import estático tira abajo TODO este módulo —
+// estado-colecciones.js, un import estático tira abajo TODO este módulo —
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/collections-store.js?v=tintin-20260720-read-budget-1')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20260720-read-budget-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 
-const cartSyncPromise = import('./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
+const cartSyncPromise = import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1');
 
 const TODOS_LABEL = 'Todo el catálogo';
 const PRODUCT_BATCH_SIZE = 48;
@@ -942,6 +942,6 @@ document.getElementById('cat-grid').addEventListener('click', async e => {
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
-  <script type="module" src="js/components/color/color-scheme.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

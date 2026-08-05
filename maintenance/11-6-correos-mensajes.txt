@@ -54,7 +54,7 @@ LEGACY (Apps Script), en contra del diseño real:
   1) checkout.html:330 importaba sendOrderNotification desde
      js/email-notify.js (Apps Script).
   2) Al importar email-notify.js, su cola (líneas 229-238) auto-cargaba
-     js/checkout-email-bridge.js, que envía el MISMO correo por Resend.
+     js/checkout-puente-correo.js, que envía el MISMO correo por Resend.
   3) checkout.html:1395 llamaba sendOrderNotification (Apps Script) apenas se
      creaba el pedido, fire-and-forget, y escribía notificationStatus.
 
@@ -78,7 +78,7 @@ CAMBIOS APLICADOS (mínimos y quirúrgicos)
      directamente, con el orderRef.id exacto, ni bien se crea el pedido, y fija
      notificationStatus con el resultado real (sent/partial/failed).
    - Como el checkout ya NO importa email-notify.js, su auto-cargador del puente
-     no se dispara → checkout-email-bridge.js no vuelve a enviar. Queda UN solo
+     no se dispara → checkout-puente-correo.js no vuelve a enviar. Queda UN solo
      canal, UN solo punto de envío. Sin duplicado, sin contradicción.
 
 2) scripts/audit-email-phase3.js — 1 comprobación actualizada
@@ -93,9 +93,9 @@ CAMBIOS APLICADOS (mínimos y quirúrgicos)
 
 4) diagnostic-manifest.json — regenerado (npm run build:diagnostics). Refleja que
    el grafo del checkout ahora usa resend-order-notify.js y ya no arrastra
-   email-notify.js ni checkout-email-bridge.js.
+   email-notify.js ni checkout-puente-correo.js.
 
-NO se borró email-notify.js ni checkout-email-bridge.js: email-notify.js sigue
+NO se borró email-notify.js ni checkout-puente-correo.js: email-notify.js sigue
 importado por admin-app.js (sendTestCustomerEmail / sendTemplatedEmail /
 sendBulkTemplatedEmail). Se comprobó que esas rutas están SUPERADAS en tiempo de
 ejecución (ver abajo), pero como el import sigue vivo no se elimina el módulo

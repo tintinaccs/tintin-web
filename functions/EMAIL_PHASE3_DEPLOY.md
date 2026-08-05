@@ -6,7 +6,7 @@ Esta fase sigue usando Google Apps Script y Gmail. No requiere Blaze.
 
 - `apps-script/Phase3Security.gs`: funciones que autentican a la persona, leen el pedido real desde Firestore y verifican permisos de reenvío.
 - `js/email/email-notify.js`: envía el identificador del pedido y una sesión válida.
-- `js/pages/checkout/checkout-email-bridge.js`: inicia el correo después de que la transacción Spark termina.
+- `js/pages/checkout/checkout-puente-correo.js`: inicia el correo después de que la transacción Spark termina.
 
 ## Actualización manual de Apps Script
 

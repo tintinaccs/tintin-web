@@ -13,7 +13,7 @@
 // mantiene la unicidad del lado del servidor.
 
 import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { phoneKey } from "./phone-utils.js?v=tintin-20260803-phone-unique-1";
+import { phoneKey } from "./utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 
 export class PhoneAlreadyRegisteredError extends Error {
   constructor() {

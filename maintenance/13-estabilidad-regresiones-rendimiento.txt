@@ -50,7 +50,7 @@ COMPATIBILIDAD DEL CAMBIO DE FUENTE (verificada estáticamente)
 ═══════════════════════════════════════════════════════════════════════
 - font-display es swap en las 10 @font-face; 0 con block. Montserrat sigue siendo
   la familia (no quedó solo el fallback).
-- La primera pintura sigue tapando el contenido (color-scheme-instant.js aplica
+- La primera pintura sigue tapando el contenido (esquema-color-instantaneo.js aplica
   tt-color-scheme-pending + visibility:hidden) hasta que el esquema resuelve, así
   que el intercambio de fuente ocurre BAJO el loader: no aparece un "flash" de
   fuente de respaldo antes de tiempo en conexiones normales; en conexiones lentas

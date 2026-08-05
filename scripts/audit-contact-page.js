@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const html = fs.readFileSync('contact.html', 'utf8');
-const runtime = fs.readFileSync('js/pages/institutional/contact-maintenance.js', 'utf8');
+const runtime = fs.readFileSync('js/pages/institutional/mantenimiento-contacto.js', 'utf8');
 const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 const requiredHtml = [
   'id="contact-form"',
@@ -29,8 +29,8 @@ const requiredRuntime = [
 
 const missing = [];
 for (const token of requiredHtml) if (!html.includes(token)) missing.push(`contact.html: ${token}`);
-for (const token of requiredRuntime) if (!runtime.includes(token)) missing.push(`contact-maintenance.js: ${token}`);
-if (!/contact[\s\S]*load\('pages\/institutional\/contact-maintenance\.js'\)/.test(loader)) missing.push('cargador-mantenimiento-pagina.js: contact maintenance import');
+for (const token of requiredRuntime) if (!runtime.includes(token)) missing.push(`mantenimiento-contacto.js: ${token}`);
+if (!/contact[\s\S]*load\('pages\/institutional\/mantenimiento-contacto\.js'\)/.test(loader)) missing.push('cargador-mantenimiento-pagina.js: contact maintenance import');
 if (/alert\('Por favor completá/.test(runtime)) missing.push('runtime must not use alert validation');
 if (missing.length) {
   console.error('Contact audit failed:\n- ' + missing.join('\n- '));

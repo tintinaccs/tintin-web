@@ -15,7 +15,7 @@
 // =============================================================
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { sanitizeImageUrl } from '../images/image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   collection,

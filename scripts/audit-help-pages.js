@@ -99,8 +99,8 @@ PAGES.forEach(({ file, id }) => {
 
   check(
     `${tag} esquema de color: primera pintura + motor en vivo`,
-    html.includes('js/components/color/color-scheme-instant.js') &&
-      html.includes('js/components/color/color-scheme.js'),
+    html.includes('js/components/color/esquema-color-instantaneo.js') &&
+      html.includes('js/components/color/esquema-color.js'),
     'Debe cargar la primera pintura estable y el motor de color en vivo para reflejar Apariencia.'
   );
 

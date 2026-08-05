@@ -1,6 +1,6 @@
 import '../../cargador-mantenimiento-pagina.js?v=tintin-20260730-stock-visibility-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
@@ -20,7 +20,7 @@ import {
   writeCached
 } from '../firebase/firestore-read-cache.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from '../firebase/firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
-import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
+import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';

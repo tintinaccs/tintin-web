@@ -36,7 +36,7 @@ check(
 );
 check(
   'Checkout reliability se limita a Checkout',
-  shellRuntime.includes("if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-reliability.js')))"),
+  shellRuntime.includes("if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')))"),
   'El módulo de mapa y recuperación del checkout no debe descargarse en todas las páginas.'
 );
 check(

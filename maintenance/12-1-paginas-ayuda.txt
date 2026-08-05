@@ -57,8 +57,8 @@ CONFIRMADO CORRECTO (sin cambios de código):
   data-tt-section, inicializa site-content con su id (envios/cambios/faq) y ese
   id está en el esquema de contenido (CONTENT_PAGE_IDS + PAGE_ID_BY_PATH). El
   editor de contenido y el edit-badge funcionan sobre ellas.
-- Colores/tokens: color-scheme-instant.js (primera pintura estable) + motor en
-  vivo color-scheme.js; superficies y acentos mediante variables --color-*/tokens.
+- Colores/tokens: esquema-color-instantaneo.js (primera pintura estable) + motor en
+  vivo esquema-color.js; superficies y acentos mediante variables --color-*/tokens.
 - Textos: editables por selector desde el panel; sin literales contradictorios.
 - Enlaces rotos: TODOS los enlaces internos .html resuelven a archivos reales.
 - Estados: envios.html lee ciudades/costos de settings/general con estado de

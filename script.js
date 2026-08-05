@@ -187,7 +187,7 @@ function getCart() {
     const serialized = JSON.stringify(normalized);
 
     // Leer el carrito no debe emitir una escritura si los datos ya están
-    // normalizados. cart-sync.js intercepta los setItem('tt_cart') y publica
+    // normalizados. sincronizacion-carrito.js intercepta los setItem('tt_cart') y publica
     // tt_cart_updated; escribir en cada lectura hacía que renderCart() se
     // llamara a sí mismo mediante una cadena infinita de microtareas.
     if (stored !== serialized) localStorage.setItem(CART_KEY, serialized);
@@ -229,7 +229,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -823,7 +823,7 @@ function initLookCombinator() {
   if (lookActions) lookActions.style.display = '';
 
   // Bind exactly once: initLookCombinator() is re-invoked on every Firestore
-  // products snapshot (script.js, products-store.js and load-images-init.js
+  // products snapshot (script.js, products-store.js and inicio-carga-imagenes.js
   // all call it so the combo refreshes with live data/images), but
   // #btn-otra-combo/#btn-add-combo are static persistent buttons — without
   // this guard each re-invocation stacked another click handler on top of
@@ -842,7 +842,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1456,7 +1456,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1661,7 +1661,7 @@ function initWaFloatVisibility() {
   window.addEventListener('scroll', requestCheck, { passive: true });
   window.addEventListener('resize', requestCheck);
   // La tabla de contenidos de términos/privacidad y la grilla de productos
-  // se insertan después de este init (legal-maintenance.js, Firestore). El
+  // se insertan después de este init (mantenimiento-legal.js, Firestore). El
   // chequeo corre SINCRÓNICO dentro del propio callback del observer (que es
   // un microtask pegado a la mutación): así el botón ya está oculto antes de
   // que cualquier otra tarea pueda ver el estado intermedio con el solape.
@@ -1894,7 +1894,7 @@ window.initLookCombinator = initLookCombinator;
 // so pages that check `if (window.PRODUCTS && window.PRODUCTS.length)` don't mistake
 // the offline sample data for a real, loaded catalog.
 
-// Re-render badge and drawer on external cart changes (cart-sync.js events)
+// Re-render badge and drawer on external cart changes (sincronizacion-carrito.js events)
 window.addEventListener('tt_cart_updated', () => {
   updateCartBadge();
   renderCart();

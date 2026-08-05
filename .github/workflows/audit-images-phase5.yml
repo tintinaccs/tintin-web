@@ -5,14 +5,14 @@ on:
     paths:
       - 'admin-images.html'
       - 'js/core/firebase/firebase.js'
-      - 'js/components/images/image-utils.js'
-      - 'js/components/images/images.js'
-      - 'js/components/images/image-resolver.js'
-      - 'js/components/images/images-phase5.js'
+      - 'js/components/images/utilidades-imagenes.js'
+      - 'js/components/images/imagenes.js'
+      - 'js/components/images/resolucion-imagenes.js'
+      - 'js/components/images/gestion-imagenes.js'
       - 'js/admin/products/admin-images-phase5.js'
-      - 'js/components/images/image-processing.js'
-      - 'js/components/images/image-upload-widget.js'
-      - 'js/components/images/media-library.js'
+      - 'js/components/images/procesamiento-imagenes.js'
+      - 'js/components/images/carga-imagenes.js'
+      - 'js/components/images/biblioteca-multimedia.js'
       - 'js/admin/products/admin-media-library-ui.js'
       - 'js/diagnostic-shims/storage-shim.js'
       - 'js/core/store/products-store.js'
@@ -23,7 +23,7 @@ on:
       - 'functions/api/cloudinary-delete.js'
       - 'functions/api/visitor-geo.js'
       - 'functions/api/geo-search.js'
-      - 'js/pages/checkout/checkout-reliability.js'
+      - 'js/pages/checkout/checkout-confiabilidad.js'
       - 'js/core/firebase/function-origin.js'
       - '_routes.json'
       - 'assets-tintin/images/README-IMAGENES.md'
@@ -52,14 +52,14 @@ jobs:
       - name: Revisar sintaxis
         run: |
           node --check js/core/firebase/firebase.js
-          node --check js/components/images/image-utils.js
-          node --check js/components/images/images.js
-          node --check js/components/images/image-resolver.js
-          node --check js/components/images/images-phase5.js
+          node --check js/components/images/utilidades-imagenes.js
+          node --check js/components/images/imagenes.js
+          node --check js/components/images/resolucion-imagenes.js
+          node --check js/components/images/gestion-imagenes.js
           node --check js/admin/products/admin-images-phase5.js
-          node --check js/components/images/image-processing.js
-          node --check js/components/images/image-upload-widget.js
-          node --check js/components/images/media-library.js
+          node --check js/components/images/procesamiento-imagenes.js
+          node --check js/components/images/carga-imagenes.js
+          node --check js/components/images/biblioteca-multimedia.js
           node --check js/admin/products/admin-media-library-ui.js
           node --check js/diagnostic-shims/storage-shim.js
           node --check js/core/store/products-store.js
@@ -70,7 +70,7 @@ jobs:
           node --check functions/api/cloudinary-delete.js
           node --check functions/api/visitor-geo.js
           node --check functions/api/geo-search.js
-          node --check js/pages/checkout/checkout-reliability.js
+          node --check js/pages/checkout/checkout-confiabilidad.js
           node --check js/core/firebase/function-origin.js
           node --check scripts/audit-images-phase5.js
           node --check scripts/audit-site-reliability.js

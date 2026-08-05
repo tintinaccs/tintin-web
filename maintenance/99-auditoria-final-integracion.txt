@@ -27,7 +27,7 @@ Integración Super Admin ↔ público (todo por documentos Firestore; el admin
 escribe, el público lee — sin datos hardcodeados que contradigan la config):
   settings/general   → contacto (whatsapp.js), ciudades de envío (envios.html).
   settings/storeGate → tienda abierta/cerrada (store-gate-core.js).
-  settings/appearance + colorSchemes → color en vivo (color-scheme.js).
+  settings/appearance + colorSchemes → color en vivo (esquema-color.js).
   site_content       → textos/imagenes editables (site-content.js).
   products/collections → catálogo y carrito (products-store/collections-store).
   emailSettings/storeGate.emailAccess → correos (admin-email-gate-sync).

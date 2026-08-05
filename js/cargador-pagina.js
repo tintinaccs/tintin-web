@@ -766,7 +766,7 @@
       importSibling('admin/settings/admin-store-control.js', 'Admin Store State Sync');
     }
     if (current.endsWith('/perfil.html') || current.endsWith('/perfil')) {
-      importSibling('pages/profile/profile-order-stats-fix.js', 'Profile Order Stats Fix');
+      importSibling('pages/profile/correccion-estadisticas-pedidos-perfil.js', 'Profile Order Stats Fix');
     }
   }
 
@@ -778,29 +778,29 @@
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('components/images/image-performance.js', 'Image Performance');
+      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/images-phase5.js', 'Images Phase 5');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/collections-phase4.js', 'Collections Phase 4');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4');
     }
   }
 
   function bootCartSyncPublic() {
-    importSibling('components/cart/cart-sync.js', 'Cart Sync');
+    importSibling('components/cart/sincronizacion-carrito.js', 'Cart Sync');
   }
 
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
-      importSibling('components/color/theme-color-sanitizer.js', 'Theme Color Sanitizer');
+      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer');
     }
   }
 

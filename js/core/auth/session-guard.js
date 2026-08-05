@@ -16,7 +16,7 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { startProfileGate } from "../../pages/profile/profile-gate.js?v=tintin-20260803-profile-gate-1";
+import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260803-profile-gate-1";
 
 const SESSION_DURATION_MS = 30 * 60 * 1000;
 const STORAGE_KEY = 'tt_session_started_at';
@@ -66,5 +66,5 @@ setInterval(() => { if (auth.currentUser) enforce(auth.currentUser); }, CHECK_IN
 // Una cuenta sin nombre, teléfono ni ubicación no puede navegar logueada:
 // se la manda a terminar el alta. Va enganchado acá porque esta hoja ya se
 // carga en todas las páginas — no hace falta otro <script> por página ni
-// otro guardia global (ver js/pages/profile/profile-gate.js).
+// otro guardia global (ver js/pages/profile/control-acceso-perfil.js).
 startProfileGate();

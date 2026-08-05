@@ -12,7 +12,7 @@ function check(name, condition, problem) {
 }
 
 const notify = read('js/email/email-notify.js');
-const bridge = read('js/pages/checkout/checkout-email-bridge.js');
+const bridge = read('js/pages/checkout/checkout-puente-correo.js');
 const adminSync = read('js/admin/settings/admin-email-gate-sync.js');
 const adminStore = read('js/admin/settings/admin-store-control.js');
 const checkout = read('checkout.html');
@@ -21,7 +21,7 @@ const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');
 
 check(
   'El checkout envía la notificación de pedido por Resend (canal único)',
-  // checkout-email-bridge.js (no checkout.html) es quien llama a
+  // checkout-puente-correo.js (no checkout.html) es quien llama a
   // sendOrderNotification tras el éxito del pedido — ver "Checkout usa un
   // solo canal Resend" en audit-admin-email-messaging.js.
   bridge.includes("from '../../email/resend-order-notify.js?v=tintin-20260717-resend-1'") &&

@@ -21,7 +21,7 @@ import {
 export const SUPER_ADMIN = 'tintinaccs@gmail.com';
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
-// js/components/modals/blocked-modal.js — showBlockedModal() — para que login.html y
+// js/components/modals/modal-bloqueo.js — showBlockedModal() — para que login.html y
 // checkout.html muestren siempre el mismo modal, no solo el mismo texto.
 
 export const ROLES = {

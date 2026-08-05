@@ -111,13 +111,13 @@ if (itemsEl) {
   });
 }
 
-// tt_cart_updated cubre cambios externos (cart-sync.js, otra pestaña, otro
+// tt_cart_updated cubre cambios externos (sincronizacion-carrito.js, otra pestaña, otro
 // dispositivo vía Firestore) — pero ese módulo se importa dinámicamente y
 // puede tardar unos instantes en cargar. El carrito lateral nativo del sitio
 // no depende de ese evento para los clics locales: updateQty/removeFromCart/
 // addToCart llaman a su propio renderCart() de inmediato. Envolvemos esas
 // mismas funciones para que "Tu selección" se actualice igual de instantáneo
-// ante un clic en esta misma página, sin esperar a que cart-sync.js cargue.
+// ante un clic en esta misma página, sin esperar a que sincronizacion-carrito.js cargue.
 ['updateQty', 'removeFromCart', 'addToCart'].forEach(function(fnName){
   var original = window[fnName];
   if (typeof original !== 'function') return;

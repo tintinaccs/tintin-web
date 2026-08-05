@@ -1,5 +1,5 @@
-import './pages/catalog/phase7-catalog-policy.js?v=tintin-20260730-stock-visibility-1';
-import './pages/catalog/catalog-stock-priority.js?v=tintin-20260731-stock-priority-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260730-stock-visibility-1';
+import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
@@ -11,22 +11,22 @@ function load(file) {
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/catalog-maintenance.js');
-  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/collections-maintenance.js');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/product-maintenance.js');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js');
+  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     return Promise.allSettled([
-      load('pages/checkout/checkout-maintenance.js'),
-      load('pages/checkout/checkout-payment-methods.js'),
-      load('pages/checkout/checkout-quota-guard.js')
+      load('pages/checkout/checkout-mantenimiento.js'),
+      load('pages/checkout/checkout-metodos-pago.js'),
+      load('pages/checkout/checkout-control-cuota.js')
     ]);
   }
-  if (/\/login(?:\.html)?$/.test(path)) return load('pages/login/login-maintenance.js');
-  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/profile-maintenance.js');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/about-maintenance.js');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/contact-maintenance.js');
+  if (/\/login(?:\.html)?$/.test(path)) return load('pages/login/mantenimiento-acceso.js');
+  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
-    return load('pages/institutional/legal-maintenance.js');
+    return load('pages/institutional/mantenimiento-legal.js');
   }
   return Promise.resolve();
 }

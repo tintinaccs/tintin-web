@@ -43,12 +43,12 @@ function check(name, condition, problem) {
 const adminApp    = read('js/admin/admin-app.js');
 const adminHtml   = read('admin.html');
 const importJs    = read('js/admin/admin-import-phase9.js');
-const mediaLib    = read('js/components/images/media-library.js');
-const imageProc   = read('js/components/images/image-processing.js');
-const imageUtils  = read('js/components/images/image-utils.js');
+const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
+const imageProc   = read('js/components/images/procesamiento-imagenes.js');
+const imageUtils  = read('js/components/images/utilidades-imagenes.js');
 const storefront  = read('script.js');
 const productsStore = read('js/core/store/products-store.js');
-const phase7Policy = read('js/pages/catalog/phase7-catalog-policy.js');
+const phase7Policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const sheetsSyncFunction = read('functions/api/sheets-product-sync.js');
 
 // ===========================================================================

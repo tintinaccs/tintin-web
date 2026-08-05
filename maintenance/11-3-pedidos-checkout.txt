@@ -31,8 +31,8 @@ Eliminación / masivas ..... js/admin-app.js (deleteOrder, bulkDeleteOrders,
                             bulkUpdateOrderStatus/Pay, bulkExportOrders)
 Reenvío de correo ......... js/admin-app.js (resendOrderEmail + cooldown) →
                             js/resend-order-notify.js / Apps Script
-Perfil del cliente ........ perfil.html, js/profile-maintenance.js,
-                            js/profile-order-stats-fix.js
+Perfil del cliente ........ perfil.html, js/mantenimiento-perfil.js,
+                            js/correccion-estadisticas-pedidos-perfil.js
 Estadísticas .............. js/order-stats.js
 WhatsApp .................. admin-app.js (link wa.me con datos del pedido),
                             checkout.html (soporte)

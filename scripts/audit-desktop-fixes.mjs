@@ -118,7 +118,7 @@ try {
 
 const catalog = read('catalogo.html');
 const social = read('js/components/contact/whatsapp.js');
-const collections = read('js/pages/collections/collections-page.js');
+const collections = read('js/pages/collections/pagina-colecciones.js');
 check(catalog.includes('Ver todo el catálogo'), 'El estado vacío conserva el CTA incorrecto');
 check(!social.includes("new URL(String(value || ''), location.href)"), 'Una red social vacía aún resuelve a la página actual');
 check(collections.includes('colecciones cargadas.'), 'El plural de colecciones sigue incorrecto');

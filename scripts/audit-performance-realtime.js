@@ -48,7 +48,7 @@ const publicPages = [
 ];
 
 const productsStore = read('js/core/store/products-store.js');
-const collectionsStore = read('js/pages/collections/collections-store.js');
+const collectionsStore = read('js/pages/collections/estado-colecciones.js');
 const readCache = read('js/core/firebase/firestore-read-cache.js');
 
 check(
@@ -60,7 +60,7 @@ check(
 check(
   'El loader tiene salida garantizada',
   /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) &&
-    /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/color-scheme-instant.js')),
+    /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/esquema-color-instantaneo.js')),
   'Los loaders deben tener tiempo máximo de espera.'
 );
 
@@ -127,8 +127,8 @@ check(
 
 check(
   'Las imágenes usan decoding async y lazy salvo prioridad',
-  read('js/components/images/image-performance.js').includes("image.decoding = 'async'") &&
-    read('js/components/images/image-performance.js').includes("image.loading = priority ? 'eager' : 'lazy'"),
+  read('js/components/images/rendimiento-imagenes.js').includes("image.decoding = 'async'") &&
+    read('js/components/images/rendimiento-imagenes.js').includes("image.loading = priority ? 'eager' : 'lazy'"),
   'Las imágenes fuera de pantalla deben diferirse.'
 );
 
@@ -168,7 +168,7 @@ check(
   `Inicializadores encontrados: ${firebaseInitializers.join(', ')}`
 );
 
-const allowedBlocking = ['js/components/color/color-scheme-instant.js', 'js/cargador-pagina.js'];
+const allowedBlocking = ['js/components/color/esquema-color-instantaneo.js', 'js/cargador-pagina.js'];
 const blockingOffenders = [];
 publicPages.forEach(page => {
   if (!exists(page)) return;

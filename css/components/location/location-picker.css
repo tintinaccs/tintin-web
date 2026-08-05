@@ -1,5 +1,5 @@
 /* ===============================================================
-   TINTIN — Buscador de dirección (js/components/location/location-picker.js)
+   TINTIN — Buscador de dirección (js/components/location/selector-ubicacion.js)
    Compartido por el alta de cuenta (login.html) y el perfil
    (perfil.html): un solo lugar con el aspecto del desplegable.
    =============================================================== */
@@ -64,7 +64,7 @@
 .tt-address-selected[hidden] { display: none; }
 
 /* ---------------------------------------------------------------
-   Mapa de ubicación (js/components/location/location-map.js) — el mismo componente que
+   Mapa de ubicación (js/components/location/mapa-ubicacion.js) — el mismo componente que
    usa el checkout, embebido en el alta de la cuenta.
    --------------------------------------------------------------- */
 .tt-map-block {

@@ -6,7 +6,7 @@ import {
   DEFAULT_WELCOME_STEPS,
   WELCOME_VERSION,
   normalizeWelcomeConfig
-} from './welcome-config.js?v=tintin-20260716-cloudinary-fix-1';
+} from './configuracion-bienvenida.js?v=tintin-20260716-cloudinary-fix-1';
 
 (function(){
   'use strict';

@@ -8,10 +8,10 @@ on:
       - 'catalogo.html'
       - 'script.js'
       - 'js/core/store/products-store.js'
-      - 'js/pages/catalog/phase7-catalog-policy.js'
+      - 'js/pages/catalog/politica-visibilidad-catalogo.js'
       - 'js/cargador-mantenimiento-pagina.js'
       - 'js/admin/admin-app.js'
-      - 'js/components/cart/cart-sync.js'
+      - 'js/components/cart/sincronizacion-carrito.js'
       - 'js/quality/ui-quality.js'
       - 'js/orders/secure-checkout-order.js'
       - 'functions/api/sheets-product-sync.js'
@@ -83,9 +83,9 @@ jobs:
 
       - name: Revisar sintaxis
         run: |
-          node --check js/pages/catalog/phase7-catalog-policy.js
+          node --check js/pages/catalog/politica-visibilidad-catalogo.js
           node --check js/core/store/products-store.js
-          node --check js/components/cart/cart-sync.js
+          node --check js/components/cart/sincronizacion-carrito.js
           node --check js/admin/admin-app.js
           node --check script.js
           node --check scripts/audit-phase7-catalog.js

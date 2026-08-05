@@ -28,7 +28,7 @@ function loadHomeMaintenance() {
     document.head.appendChild(link);
   }
 
-  return import(versionedJsModule('pages/home/home-maintenance.js'));
+  return import(versionedJsModule('pages/home/mantenimiento-inicio.js'));
 }
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
@@ -90,11 +90,11 @@ export function loadSharedRuntime() {
   const page = currentPage();
   const critical = [
     import(versionedJsModule('core/auth/auth-nav.js')),
-    import(versionedJsModule('components/cart/cart-sync.js')),
+    import(versionedJsModule('components/cart/sincronizacion-carrito.js')),
   ];
 
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-reliability.js')));
+  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
   attachProductsDemand();

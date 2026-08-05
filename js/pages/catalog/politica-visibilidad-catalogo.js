@@ -4,8 +4,8 @@
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections } from '../collections/collections-store.js?v=tintin-20260726-browser-fallback-1';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './catalog-merchandising-policy.js?v=tintin-20260731-unified-store-1';
+import { loadCollections } from '../collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const CART_KEY = 'tt_cart';
 let visibleCollectionSlugs = null;
@@ -162,7 +162,7 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
     };
   }).filter(Boolean);
 
-  // cart-sync.js intercepta este mismo localStorage.setItem/getItem con su
+  // sincronizacion-carrito.js intercepta este mismo localStorage.setItem/getItem con su
   // propio modelo de carrito (lineId, etc.), de forma normal e independiente
   // de esta política. Cuando ambos sistemas normalizan el mismo cambio de
   // forma distinta, cada uno ve al otro como "todavía desactualizado" y se
