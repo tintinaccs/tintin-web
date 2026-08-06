@@ -11,6 +11,14 @@ function runGit(args, options = {}) {
   });
 }
 
+function resolveRef(ref) {
+  try {
+    return runGit(['rev-parse', '--verify', ref], { capture: true }).trim();
+  } catch {
+    return null;
+  }
+}
+
 function sanitizeTimestamp(value) {
   return value.replaceAll(':', '-').replaceAll('.', '-');
 }
@@ -28,7 +36,25 @@ const manifestPath = join(outputDirectory, `${safeRepository}-${timestamp}.json`
 mkdirSync(outputDirectory, { recursive: true });
 
 runGit(['rev-parse', '--is-inside-work-tree']);
-runGit(['bundle', 'create', bundlePath, '--all']);
+
+let temporaryMainRef = false;
+if (!resolveRef('refs/heads/main')) {
+  const originMainSha = resolveRef('refs/remotes/origin/main');
+  if (!originMainSha) {
+    throw new Error('No se encontró main ni origin/main para incluir en el respaldo.');
+  }
+  runGit(['update-ref', 'refs/heads/main', originMainSha]);
+  temporaryMainRef = true;
+}
+
+try {
+  runGit(['bundle', 'create', bundlePath, '--all']);
+} finally {
+  if (temporaryMainRef) {
+    runGit(['update-ref', '-d', 'refs/heads/main']);
+  }
+}
+
 runGit(['bundle', 'verify', bundlePath]);
 
 const bundleBuffer = readFileSync(bundlePath);
