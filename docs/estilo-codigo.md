@@ -31,7 +31,7 @@ pull request, nunca dentro del archivo.
 
 ## Antes de tocar CSS
 
-`css/` tiene capas que se pisan entre sí a propósito. Leé `docs/CSS_LAYERS.md`
+`css/` tiene capas que se pisan entre sí a propósito. Leé `docs/capas-css.md`
 para saber qué hoja manda sobre qué antes de agregar una regla o un
 `!important` nuevo.
 

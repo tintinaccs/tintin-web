@@ -28,10 +28,10 @@ jobs:
       - name: Measure system and special states
         id: system_special_measure
         continue-on-error: true
-        run: node scripts/auditar-sistema-special-estados-parte-2g-v2.mjs > system-special-part2g-raw.log 2>&1
+        run: node scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs > system-special-part2g-raw.log 2>&1
 
       - name: Enforce actionable special state findings
-        run: node scripts/enforce-sistema-special-parte-2g.mjs > system-special-part2g.log 2>&1
+        run: node scripts/exigir-sistema-especial-parte-2g.mjs > system-special-part2g.log 2>&1
 
       - name: Upload report and screenshots
         if: always()

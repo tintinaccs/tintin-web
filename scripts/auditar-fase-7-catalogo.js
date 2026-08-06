@@ -14,7 +14,7 @@ function check(name, condition, problem) {
 const policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const merchandising = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const products = read('js/core/store/estado-productos.js');
-const storefront = read('script.js');
+const storefront = read('tienda.js');
 const catalog = read('catalogo.html');
 const stockPriority = read('js/pages/catalog/prioridad-stock-catalogo.js');
 const admin = read('js/admin/admin-app.js');

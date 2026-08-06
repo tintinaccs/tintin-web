@@ -27,7 +27,7 @@ function check(label, condition, detail = '') {
 
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 const packageJson = JSON.parse(read('package.json'));
-const contracts = read('docs/QUALITY_CONTRACTS.md');
+const contracts = read('docs/contratos-calidad.md');
 const responsiveAudit = read('scripts/auditar-global-responsive-final.mjs');
 const canonicalAudit = read('scripts/auditar-canonicos-viewports.mjs');
 const responsiveRetry = read('scripts/ejecutar-auditoria-responsive-con-reintento.mjs');
@@ -175,8 +175,8 @@ for (const file of recoveryFiles) {
 
 const accessibilityCss = [
   'styles.css',
-  'css/quality/ui-quality.css',
-  'css/pages/home/home-maintenance.css',
+  'css/quality/calidad-interfaz.css',
+  'css/pages/home/mantenimiento-inicio.css',
   'css/pages/catalog/catalog-maintenance.css',
   'css/collections-maintenance.css',
   'css/pages/product/product-maintenance.css'
@@ -188,7 +188,7 @@ check(
 );
 check(
   'El sistema define foco visible y tamaño táctil',
-  /focus-visible/.test(read('css/quality/ui-quality.css')) && /44px/.test(`${read('styles.css')}\n${read('css/quality/ui-quality.css')}`)
+  /focus-visible/.test(read('css/quality/calidad-interfaz.css')) && /44px/.test(`${read('styles.css')}\n${read('css/quality/calidad-interfaz.css')}`)
 );
 check(
   'Las páginas tienen exactamente un H1 cuando el manifiesto lo exige',

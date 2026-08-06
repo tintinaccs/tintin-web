@@ -47,7 +47,7 @@ jobs:
         run: node scripts/auditar-cargador-solid.js
 
       - name: Audit home page on all viewports
-        run: node scripts/auditar-home-pagina.js
+        run: node scripts/auditar-inicio-pagina.js
 
       - name: Audit catalog page on all viewports
         run: node scripts/auditar-catalogo-pagina.js
@@ -62,7 +62,7 @@ jobs:
         run: node scripts/auditar-checkout-pagina.js
 
       - name: Audit payment selection and Super Admin CRUD
-        run: node scripts/auditar-pago-methods.js
+        run: node scripts/auditar-pago-metodos.js
 
       - name: Audit login page on all viewports
         run: node scripts/auditar-acceso-pagina.js
@@ -71,10 +71,10 @@ jobs:
         run: node scripts/auditar-perfil-pedidos-pagina.js
 
       - name: Audit about page on all viewports
-        run: node scripts/auditar-about-pagina.js
+        run: node scripts/auditar-nosotros-pagina.js
 
       - name: Audit contact page on all viewports
-        run: node scripts/auditar-contact-pagina.js
+        run: node scripts/auditar-contacto-pagina.js
 
       - name: Audit terms and privacy pages on all viewports
         run: node scripts/auditar-legal-paginas.js

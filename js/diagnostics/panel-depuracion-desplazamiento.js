@@ -238,7 +238,7 @@
     mo.observe(loader, { attributes: true, attributeFilter: ['class', 'style'] });
   })(0);
 
-  // ── 3) home-fit.css: momento en que aparece el <link> y momento en que
+  // ── 3) ajuste-inicio.css: momento en que aparece el <link> y momento en que
   // termina de cargar. Tampoco espera a DOMContentLoaded.
   (function waitForHomeFit(attempts) {
     var link = document.getElementById('tt-home-fit-css');
@@ -248,10 +248,10 @@
       return;
     }
     log('=== tt-home-fit-css AGREGADO AL DOM === href=' + link.href);
-    logSnapshot('home-fit.css link agregado');
+    logSnapshot('ajuste-inicio.css link agregado');
     link.addEventListener('load', function () {
       log('=== tt-home-fit-css TERMINÓ DE CARGAR (evento load) ===');
-      logSnapshot('home-fit.css load');
+      logSnapshot('ajuste-inicio.css load');
     }, { once: true });
   })(0);
 

@@ -3,7 +3,7 @@
 
    Agregá este archivo al MISMO proyecto de Google Apps Script que ya
    contiene Code.gs. No reemplaza los diseños de correo existentes.
-   Ver functions/EMAIL_PHASE3_DEPLOY.md para los tres cambios pequeños
+   Ver functions/despliegue-correo-fase-3.md para los tres cambios pequeños
    que hay que hacer dentro de doPost(e).
    ============================================================= */
 

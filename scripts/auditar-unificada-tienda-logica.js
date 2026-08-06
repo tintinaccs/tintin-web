@@ -14,7 +14,7 @@ const policy = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const productsStore = read('js/core/store/estado-productos.js');
 const phase7 = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const catalog = read('catalogo.html');
-const classic = read('script.js');
+const classic = read('tienda.js');
 const compatibility = read('js/pages/catalog/prioridad-stock-catalogo.js');
 
 check(

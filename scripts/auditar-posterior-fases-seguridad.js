@@ -8,7 +8,7 @@ function check(label, ok) {
   else { failures += 1; console.error('FAIL — ' + label); }
 }
 const products = read('js/core/store/estado-productos.js');
-const script = read('script.js');
+const script = read('tienda.js');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
@@ -16,7 +16,7 @@ const emailConfig = read('js/email/configuracion-correo.js');
 const emailNotify = read('js/email/notificaciones-correo.js');
 const bridge = read('js/pages/checkout/checkout-puente-correo.js');
 const apps = read('apps-script/Seguridad.gs');
-const emailSetup = read('functions/EMAIL_SETUP.md');
+const emailSetup = read('functions/configuracion-correo.md');
 check('Productos se normalizan como texto plano', products.includes('cleanMultilineText') && products.includes('sanitizeVariantData'));
 check('Carrito local se limpia antes de renderizar', script.includes('normalizeClassicCart') && cart.includes('replace(/[<>]/g'));
 check('Descripción de producto no ejecuta HTML', !script.includes('descEl.innerHTML = product.desc'));

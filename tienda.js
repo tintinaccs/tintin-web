@@ -823,7 +823,7 @@ function initLookCombinator() {
   if (lookActions) lookActions.style.display = '';
 
   // Bind exactly once: initLookCombinator() is re-invoked on every Firestore
-  // products snapshot (script.js, estado-productos.js and inicio-carga-imagenes.js
+  // products snapshot (tienda.js, estado-productos.js and inicio-carga-imagenes.js
   // all call it so the combo refreshes with live data/images), but
   // #btn-otra-combo/#btn-add-combo are static persistent buttons — without
   // this guard each re-invocation stacked another click handler on top of
@@ -1783,7 +1783,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // if it never responds. window.PRODUCTS may already be populated here: the
   // estado-productos.js module's onSnapshot can resolve (e.g. from a warm
   // IndexedDB cache) and dispatch tintin:products-loaded before this
-  // DOMContentLoaded handler runs, since both script.js and the module
+  // DOMContentLoaded handler runs, since both tienda.js and the module
   // scripts are deferred and execute in document order before
   // DOMContentLoaded fires. Don't clobber already-rendered real data with a
   // skeleton in that case. Array.isArray (not truthiness) is what tells

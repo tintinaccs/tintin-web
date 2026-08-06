@@ -16,8 +16,8 @@ on:
       - '.firebaserc'
       - 'firebase.json'
       - 'firestore.rules'
-      - 'docs/BACKUP_RECOVERY.md'
-      - 'docs/PHASE9_FINAL_RELEASE.md'
+      - 'docs/respaldo-recuperacion.md'
+      - 'docs/entrega-final-fase-9.md'
       - '.github/workflows/entrega-final-fase-9.yml'
   workflow_dispatch:
 

@@ -15,7 +15,7 @@ function forbid(text, pattern, message) {
 }
 
 const html = read('index.html');
-const css = read('css/pages/home/home-maintenance.css');
+const css = read('css/pages/home/mantenimiento-inicio.css');
 const runtime = read('js/pages/home/mantenimiento-inicio.js');
 const shell = read('js/inicio-navegacion-publica.js');
 const shellRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
@@ -37,11 +37,11 @@ requireText(html, /<link\s+rel=["']canonical["']/i, 'Inicio no declara canonical
 requireText(html, /application\/ld\+json/i, 'Inicio no contiene JSON-LD.');
 requireText(html, /window\.TT_PAGE_LOADER_WAIT\s*=\s*true/, 'Inicio no espera la señal explícita del loader.');
 requireText(html, /js\/inicio-navegacion-publica\.js/, 'Inicio no carga el shell público compartido.');
-requireText(html, /css\/pages\/home\/home-fit\.css/, 'Inicio no carga el CSS estructural temprano.');
+requireText(html, /css\/pages\/home\/ajuste-inicio\.css/, 'Inicio no carga el CSS estructural temprano.');
 
 requireText(shell, /components\/navigation\/entrada-navegacion-publica\.js/, 'El shell público no carga el entry modular.');
 requireText(shellRuntime, /mantenimiento-inicio\.js/, 'El runtime modular no carga mantenimiento-inicio.js.');
-requireText(shellRuntime, /css\/pages\/home\/home-maintenance\.css/, 'El runtime modular no carga home-maintenance.css.');
+requireText(shellRuntime, /css\/pages\/home\/mantenimiento-inicio\.css/, 'El runtime modular no carga mantenimiento-inicio.css.');
 requireText(shellRuntime, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de Inicio no está limitada únicamente a Inicio.');
 requireText(shellRuntime, /function loadHomeMaintenance\(\)/, 'El runtime modular no encapsula la carga de Inicio.');
 

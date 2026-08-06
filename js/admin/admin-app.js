@@ -2751,7 +2751,7 @@ document.getElementById('btn-save-config').onclick = async () => {
 // correos de prueba, plantillas (CRUD), clientas registradas, promociones
 // controladas, historial y configuración. Todo persiste en Firestore
 // (emailSettings/emailTemplates/emailLogs/emailCampaigns) — ver
-// firestore.rules y functions/EMAIL_SETUP.md.
+// firestore.rules y functions/configuracion-correo.md.
 
 const EMAIL_SENDER_ADDRESS = 'pedidos@tintinaccs.com'; // fijo por Apps Script — informativo, no editable
 const TEST_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -5222,7 +5222,7 @@ async function prodGuardar() {
     price,
     priceBefore: priceBeforeValue,
     // Vacío = stock no controlado/ilimitado (el storefront ya lo trata así,
-    // ver script.js) — no lo confundimos con "0" (agotado de verdad), que
+    // ver tienda.js) — no lo confundimos con "0" (agotado de verdad), que
     // solo se guarda si la vendedora lo escribe a propósito.
     stock: stockValue,
     imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,

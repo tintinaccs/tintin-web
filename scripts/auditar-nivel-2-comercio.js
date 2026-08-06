@@ -31,7 +31,7 @@ const emailClient = read('js/email/notificacion-pedido-resend.js');
 const emailBridge = read('js/pages/checkout/checkout-puente-correo.js');
 const emailServer = read('functions/api/order-email.js');
 const rules = read('firestore.rules');
-const contracts = read('docs/COMMERCE_CONTRACTS.md');
+const contracts = read('docs/contratos-comercio.md');
 const maintenance = read('maintenance/11-3-pedidos-checkout.txt');
 
 // Carrito

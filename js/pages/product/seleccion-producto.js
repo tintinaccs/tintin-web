@@ -98,7 +98,7 @@ function render(){
   if (footerEl) footerEl.style.display = 'flex';
 }
 
-// Delegado propio (corre antes que el listener global de script.js, ya que
+// Delegado propio (corre antes que el listener global de tienda.js, ya que
 // este está más cerca del elemento clickeado en la fase de propagación):
 // solo se ocupa de mostrar el toast de "eliminado"; el cambio real de
 // cantidad/eliminación lo maneja el listener global [data-cart-action] que

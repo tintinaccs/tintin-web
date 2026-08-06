@@ -13,7 +13,7 @@ mergeados, maintenance/ y las auditorías existentes:
 - auditar-contenido-fase-6.js  → ya blinda el editor de Contenido (esquema fijo,
   Firestore guarda valores no HTML, render público con nodos de texto, enlaces
   saneados con sanitizeContentHref, campos ausentes conservan el HTML publicado).
-- auditar-color-scheme.js     → ya blinda Apariencia (catálogo de tokens completo,
+- auditar-esquema-color.js     → ya blinda Apariencia (catálogo de tokens completo,
   sin duplicados, cada token con respaldo CSS y "cada token controla un consumidor
   real", filas con nombre/variable/muestra/valor/reset, preview inmediato sin
   mutar borrador, selector HEX/RGB/HSL con validación).
@@ -91,7 +91,7 @@ F1 [MEDIO — seguridad] — El apply público de colores no validaba el valor.
   FIX: se agregó isSafeColorValue() en ambos módulos públicos. Un token solo se
   aplica si su valor es un color ESTRICTO (HEX de 3/4/6/8, rgb(a) o hsl(a),
   anclado ^...$, máx 64 chars). Cualquier otro valor se omite y el token cae a
-  su default de color-tokens.css. Así el sitio público NUNCA aplica una URL
+  su default de tokens-color.css. Así el sitio público NUNCA aplica una URL
   peligrosa ni CSS arbitrario, sin importar cómo haya llegado el valor
   (defensa en profundidad — cumple "no permitas insertar ... URLs peligrosas
   desde el editor" en el punto de enforcement).

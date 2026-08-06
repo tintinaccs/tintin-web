@@ -5,7 +5,7 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const css = read('css/theme/loader-solid-background.css');
+const css = read('css/theme/fondo-solido-cargador.css');
 const login = read('login.html');
 const authNav = read('js/core/auth/navegacion-autenticacion.js');
 

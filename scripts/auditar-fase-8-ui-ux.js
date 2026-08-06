@@ -12,7 +12,7 @@ function check(name, condition, problem) {
 }
 
 const runtime = read('js/quality/experiencia-interfaz.js');
-const styles = read('css/quality/phase8-ui-ux.css');
+const styles = read('css/quality/experiencia-interfaz.css');
 const loader = read('js/cargador-pagina.js');
 const packageJson = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
@@ -29,7 +29,7 @@ check(
 check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
-    /resolveAsset\('css\/quality\/phase8-ui-ux\.css'\)/.test(loader) &&
+    /resolveAsset\('css\/quality\/experiencia-interfaz\.css'\)/.test(loader) &&
   /tintin-20260801-unified-surfaces-16/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );

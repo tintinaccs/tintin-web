@@ -11,7 +11,7 @@ function check(label, condition, problem) {
 }
 
 const products = read('js/core/store/estado-productos.js');
-const storefront = read('script.js');
+const storefront = read('tienda.js');
 const catalog = read('catalogo.html');
 const policy = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 

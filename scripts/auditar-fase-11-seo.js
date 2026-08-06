@@ -34,7 +34,7 @@ const activeFiles = [
 const oldRefs = activeFiles.filter(file => read(file).includes('tintinaccs.github.io/tintin-web'));
 check('No quedan URLs activas de GitHub Pages', oldRefs.length === 0, 'Referencias antiguas: ' + oldRefs.join(', '));
 
-const script = read('script.js');
+const script = read('tienda.js');
 check('Producto genera canonical absoluto y estable', script.includes("new URL('/product.html', '" + origin + "')") && script.includes("canonicalProductUrl.searchParams.set('id', String(product.id))"), 'El producto no debe canonicalizar previews, localhost ni URLs sin id.');
 check('Producto publica JSON-LD vigente', /'@type': 'Product'/.test(script) && /priceCurrency: 'PYG'/.test(script) && /schema.org\/InStock/.test(script) && /schema.org\/OutOfStock/.test(script) && /canonicalProductUrl.href/.test(script), 'Los datos estructurados deben reflejar precio, moneda, URL y stock.');
 

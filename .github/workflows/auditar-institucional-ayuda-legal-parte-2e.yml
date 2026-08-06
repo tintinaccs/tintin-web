@@ -42,7 +42,7 @@ jobs:
         id: part2e_enforce
         run: |
           set -o pipefail
-          node scripts/enforce-institucional-ayuda-legal-parte-2e.mjs 2>&1 | tee institutional-help-legal-part2e.log
+          node scripts/exigir-institucional-ayuda-legal-parte-2e.mjs 2>&1 | tee institutional-help-legal-part2e.log
 
       # Se ejecuta incluso si la geometría falla, para que el artefacto final
       # contenga ambos diagnósticos. Sin continue-on-error: un fallo queda
@@ -52,7 +52,7 @@ jobs:
         if: always()
         run: |
           set -o pipefail
-          node scripts/auditar-faq-interaction-parte-2e.mjs 2>&1 | tee institutional-help-legal-part2e-faq.log
+          node scripts/auditar-faq-interaccion-parte-2e.mjs 2>&1 | tee institutional-help-legal-part2e-faq.log
 
       - name: Upload report and screenshots
         if: always()

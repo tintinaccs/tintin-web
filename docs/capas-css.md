@@ -14,29 +14,29 @@ especificidad gana.
 | # | Hoja | De qué es dueña |
 |---|---|---|
 | 1 | `css/core/montserrat.css` | Declaraciones `@font-face` de Montserrat. Nada más. |
-| 2 | `css/theme/solid-ui-surfaces.css` | Fondos opacos forzados en superficies del checkout y del panel mientras el loader está visible. |
+| 2 | `css/theme/superficies-solidas-interfaz.css` | Fondos opacos forzados en superficies del checkout y del panel mientras el loader está visible. |
 | 3 | `css/components/navigation/movil/fondos-solidos-movil.css` | Fondo opaco del tabbar y sus botones en mobile. |
-| 4 | `css/theme/loader-solid-background.css` | Color de fondo del loader y del splash inicial. |
-| 5 | `css/core/color-tokens.css` | **Fuente de verdad de los tokens de color públicos** (`--color-*`). |
+| 4 | `css/theme/fondo-solido-cargador.css` | Color de fondo del loader y del splash inicial. |
+| 5 | `css/core/tokens-color.css` | **Fuente de verdad de los tokens de color públicos** (`--color-*`). |
 | 6 | `styles.css` | **Hoja base del sitio**: layout, componentes, tipografía, responsive. La más grande (120 KB) y la que define el comportamiento por defecto de casi todo. |
-| 7 | `css/quality/global-fit.css` | Adaptación fluida: que nada se salga del viewport ni dependa de un tamaño fijo. |
-| 8 | `css/quality/system-special-states.css` | Estados especiales del sistema (404, tienda cerrada, sin conexión). |
-| 9 | `css/quality/ui-quality.css` | Reset de calidad, foco visible, `prefers-reduced-motion`, ajustes de rendimiento (`content-visibility`). |
-| 10 | `css/core/tintin-unified-theme.css` | Unificación de marca sobre componentes ya definidos (botones, enlaces, superficies). **Concentra 312 `!important`** — es la capa que gana casi siempre sobre `styles.css`. |
-| 11 | `css/core/tintin-theme-cleanup.css` | Fondos sólidos obligatorios en la navegación pública. |
-| 12 | `css/theme/tintin-parity-safe.css` | Red de seguridad de paridad: garantiza que nada quede invisible por un `display`/`visibility` mal heredado. |
+| 7 | `css/quality/ajuste-global.css` | Adaptación fluida: que nada se salga del viewport ni dependa de un tamaño fijo. |
+| 8 | `css/quality/estados-especiales-sistema.css` | Estados especiales del sistema (404, tienda cerrada, sin conexión). |
+| 9 | `css/quality/calidad-interfaz.css` | Reset de calidad, foco visible, `prefers-reduced-motion`, ajustes de rendimiento (`content-visibility`). |
+| 10 | `css/core/tema-unificado-tintin.css` | Unificación de marca sobre componentes ya definidos (botones, enlaces, superficies). **Concentra 312 `!important`** — es la capa que gana casi siempre sobre `styles.css`. |
+| 11 | `css/core/limpieza-tema-tintin.css` | Fondos sólidos obligatorios en la navegación pública. |
+| 12 | `css/theme/paridad-segura-tintin.css` | Red de seguridad de paridad: garantiza que nada quede invisible por un `display`/`visibility` mal heredado. |
 
-Después de estas van las hojas propias de cada página (`home-fit.css`,
+Después de estas van las hojas propias de cada página (`ajuste-inicio.css`,
 `checkout.css`, `login.css`, `collections-page.css`, `product-extras.css`) y,
 más tarde todavía, las que inyecta JavaScript (`navigation-*.css`,
-`surface-controller.css`, `phase8-ui-ux.css`, `phase10-accessibility.css`,
+`surface-controller.css`, `experiencia-interfaz.css`, `accesibilidad-global.css`,
 `*-maintenance.css`). Al cargarse últimas, esas **ganan sobre todo lo anterior**.
 
 ## Panel de administración
 
 `admin.html` carga la misma columna vertebral, pero intercala
-`admin-color-tokens.css`, `tintin-tokens.css` y `admin.css` en el medio, y
-**vuelve a aplicar** `global-fit.css` y `system-special-states.css` después de
+`admin-color-tokens.css`, `tokens-tintin.css` y `admin.css` en el medio, y
+**vuelve a aplicar** `ajuste-global.css` y `estados-especiales-sistema.css` después de
 `admin.css`.
 
 Esa doble aplicación es intencional en su efecto: la segunda copia gana sobre
@@ -85,11 +85,11 @@ dentro del ruido.
 ## Deuda conocida
 
 - **1303 `!important`** repartidos en las capas. El grueso está en
-  `tintin-unified-theme.css` (312), `solid-ui-surfaces.css` (115),
-  `surface-controller.css` (93) y `tintin-parity-safe.css` (92). Reducirlos
+  `tema-unificado-tintin.css` (312), `superficies-solidas-interfaz.css` (115),
+  `surface-controller.css` (93) y `paridad-segura-tintin.css` (92). Reducirlos
   exige mover la declaración a la hoja dueña de esa propiedad según la tabla de
   arriba, no agregar otra capa encima.
-- **`solid-ui-surfaces.css` carga en las 15 páginas públicas**, pero 13 de sus
+- **`superficies-solidas-interfaz.css` carga en las 15 páginas públicas**, pero 13 de sus
   23 bloques son selectores del checkout (`.ck-*`). Moverlos a `checkout.css`
   cambiaría su posición en la cascada, así que hay que hacerlo con el arnés
   puesto y verificar cero diferencias.

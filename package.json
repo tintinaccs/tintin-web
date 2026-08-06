@@ -1,7 +1,7 @@
 {
   "scripts": {
     "audit:typography": "node scripts/auditar-tipografia.js",
-    "audit:colors": "node scripts/auditar-color-scheme.js",
+    "audit:colors": "node scripts/auditar-esquema-color.js",
     "fix:tintin": "node scripts/corregir-fuente-tintin.js",
     "sync:public-shell": "node scripts/sincronizar-inicio-navegacion-publica.js",
     "audit:public-shell": "node scripts/auditar-inicio-navegacion-publica.js",
@@ -63,9 +63,9 @@
     "audit:global-responsive-geometry": "node scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
     "audit:canonical-viewports": "node scripts/auditar-canonicos-viewports.mjs",
     "audit:css-cascade": "node scripts/auditar-css-cascada.mjs",
-    "audit:desktop-fixes": "node scripts/auditar-escritorio-fixes.mjs",
-    "audit:mobile-fixes": "node scripts/auditar-movil-fixes.mjs",
-    "audit:tablet-fixes": "node scripts/auditar-tableta-fixes.mjs",
+    "audit:desktop-fixes": "node scripts/auditar-escritorio-correcciones.mjs",
+    "audit:mobile-fixes": "node scripts/auditar-movil-correcciones.mjs",
+    "audit:tablet-fixes": "node scripts/auditar-tableta-correcciones.mjs",
     "audit:public-operational-visibility": "node scripts/auditar-publico-operativo-visibilidad.mjs",
     "audit:public-operational-contract": "node scripts/auditar-publico-operativo-contrato.js",
     "audit:part2h": "node scripts/auditar-final-barrido-parte-2h.js",
@@ -82,7 +82,8 @@
     "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
     "monitor:production": "node scripts/auditar-produccion-salud.mjs",
     "audit:headers": "node scripts/auditar-encabezados.mjs",
-    "audit:contraste": "node scripts/auditar-contraste.mjs"
+    "audit:contraste": "node scripts/auditar-contraste.mjs",
+    "audit:names": "node scripts/auditar-convenciones-nombres.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "3.0.3",

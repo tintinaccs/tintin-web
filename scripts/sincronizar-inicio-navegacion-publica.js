@@ -77,7 +77,7 @@ function removeLegacyComments(html) {
 
 function ensureStyles(html) {
   if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
-  const tokens = /(<link\b[^>]*href=["']css\/tintin-tokens\.css[^"']*["'][^>]*>)/i;
+  const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
   if (tokens.test(html)) {
     return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.css?v=${VERSION}">`);
   }
@@ -98,10 +98,10 @@ function centralizeRuntime(html) {
     /\s*<script\b[^>]*src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js[^"']*["'][^>]*><\/script>/gi,
     ''
   );
-  if (!/<script\b[^>]*src=["']script\.js(?:\?|["'])/i.test(out)) {
-    out = out.replace('</body>', `<script src="script.js?v=${VERSION}" defer></script>\n</body>`);
+  if (!/<script\b[^>]*src=["']tienda\.js(?:\?|["'])/i.test(out)) {
+    out = out.replace('</body>', `<script src="tienda.js?v=${VERSION}" defer></script>\n</body>`);
   } else {
-    out = out.replace(/(<script\b[^>]*src=["']script\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
+    out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
   }
   return out;
 }
@@ -116,7 +116,7 @@ function versionRuntimeLoader(html) {
 function normalizeWhitespace(html) {
   return html
     .replace(/\n{4,}/g, '\n\n\n')
-    .replace(/>\s+<script src="script\.js/g, '>\n<script src="script.js');
+    .replace(/>\s+<script src="tienda\.js/g, '>\n<script src="tienda.js');
 }
 
 let changed = 0;

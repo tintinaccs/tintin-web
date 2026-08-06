@@ -4,7 +4,7 @@
    ============================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Fase 3: misma paleta que el resto del sitio (css/core/tintin-tokens.css) —
+    /* Fase 3: misma paleta que el resto del sitio (css/core/tokens-tintin.css) —
        estos nombres cortos se mantienen porque los usa toda la hoja de acá
        abajo, pero ahora apuntan al mismo valor real en todas las superficies. */
     :root {
@@ -14,7 +14,7 @@
       --acc-pale: var(--card-bg);
       --text: var(--ink);
       --text-muted: #888;
-      /* --border y --radius-sm ya vienen de css/core/tintin-tokens.css con el
+      /* --border y --radius-sm ya vienen de css/core/tokens-tintin.css con el
          mismo valor (#f0d8e0 / 8px) — no se redeclaran acá para no caer en
          una auto-referencia var(--x) dentro de --x, que en CSS invalida la
          propiedad en vez de heredar el valor anterior de la cascada. */

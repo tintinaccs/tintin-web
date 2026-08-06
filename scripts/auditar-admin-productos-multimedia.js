@@ -46,7 +46,7 @@ const importJs    = read('js/admin/importacion-admin.js');
 const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
 const imageUtils  = read('js/components/images/utilidades-imagenes.js');
-const storefront  = read('script.js');
+const storefront  = read('tienda.js');
 const productsStore = read('js/core/store/estado-productos.js');
 const phase7Policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const sheetsSyncFunction = read('functions/api/sheets-product-sync.js');
@@ -158,7 +158,7 @@ check(
   'La tienda escapa nombre, categoría, badge y variante del producto',
   /escapeHtml\(p\.name\)/.test(storefront) &&
     /escapeHtml\(displayBadge\)/.test(storefront),
-  'script.js debe escapar los campos de producto que renderiza.'
+  'tienda.js debe escapar los campos de producto que renderiza.'
 );
 check(
   'La tienda oculta productos inactivos, agotados y sin nombre',

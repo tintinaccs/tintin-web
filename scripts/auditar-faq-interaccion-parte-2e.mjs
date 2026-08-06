@@ -115,7 +115,7 @@ try {
     try {
       // Se conserva el HTML y CSS reales, pero se excluyen módulos de Firebase,
       // shell y analítica: no participan en el acordeón y pueden reemplazar partes
-      // del DOM durante una auditoría larga. Luego se ejecuta el script.js real.
+      // del DOM durante una auditoría larga. Luego se ejecuta el tienda.js real.
       await page.setContent(staticHtml(), { waitUntil: 'load' });
       await page.addStyleTag({ content: `
         #tt-loader,#tt-privacy-consent,.tt-store-closed-overlay,.tt-header,.tt-mobile-nav{display:none!important}
@@ -127,7 +127,7 @@ try {
         }
         *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
       ` });
-      await page.addScriptTag({ path: path.join(root, 'script.js') });
+      await page.addScriptTag({ path: path.join(root, 'tienda.js') });
       await page.evaluate(async () => {
         document.documentElement.classList.add('tt-parity-safe');
         document.body.classList.remove('tt-loading', 'tt-page-loading', 'is-loading', 'scroll-lock');

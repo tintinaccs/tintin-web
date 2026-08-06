@@ -24,7 +24,7 @@
    batchGet/commit) para que la lectura de stock y la escritura del
    pedido sean atómicas, igual que runTransaction() en el navegador.
 
-   Ver functions/EMAIL_PHASE3_DEPLOY.md para cómo se agrega un archivo
+   Ver functions/despliegue-correo-fase-3.md para cómo se agrega un archivo
    nuevo al proyecto y qué permisos necesita la cuenta dueña.
    ============================================================= */
 

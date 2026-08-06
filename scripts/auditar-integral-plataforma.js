@@ -5,8 +5,8 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   home: read('index.html'),
-  homeFit: read('css/pages/home/home-fit.css'),
-  script: read('script.js'),
+  homeFit: read('css/pages/home/ajuste-inicio.css'),
+  script: read('tienda.js'),
   productRelated: read('js/pages/product/productos-relacionados.js'),
   productsStore: read('js/core/store/estado-productos.js'),
   imageInit: read('js/components/images/inicio-carga-imagenes.js'),

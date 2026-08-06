@@ -27,7 +27,7 @@ let firstResolutionFinished = false;
 // el punto donde un valor de Firestore/caché se vuelve CSS en vivo — validarlo
 // acá garantiza que NUNCA se aplique una URL peligrosa, un url(...) ni CSS
 // arbitrario, sin importar cómo haya llegado el valor. Un valor inválido se
-// omite y el token cae a su default de color-tokens.css.
+// omite y el token cae a su default de tokens-color.css.
 function isSafeColorValue(value) {
   if (typeof value !== 'string') return false;
   const v = value.trim();

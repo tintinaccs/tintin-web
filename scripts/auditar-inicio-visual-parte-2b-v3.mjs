@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const sourcePath = path.join(directory, 'auditar-home-visual-parte-2b.mjs');
+const sourcePath = path.join(directory, 'auditar-inicio-visual-parte-2b.mjs');
 const runtimePath = path.join(directory, '.audit-home-part2b-runtime-v3.mjs');
 let source = fs.readFileSync(sourcePath, 'utf8').replace(/\r\n/g, '\n');
 

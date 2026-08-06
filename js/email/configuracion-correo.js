@@ -1,6 +1,6 @@
 /**
  * TINTIN — Configuración del webhook de emails de pedidos.
- * Ver functions/EMAIL_SETUP.md para las instrucciones paso a paso
+ * Ver functions/configuracion-correo.md para las instrucciones paso a paso
  * (Google Apps Script, gratis, sin tarjeta, sin plan Blaze).
  *
  * Pegá acá la URL que te da Apps Script al "Implementar" el proyecto,

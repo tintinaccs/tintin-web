@@ -5,8 +5,8 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const home = read('css/pages/home/home-fit.css');
-const cleanup = read('css/core/tintin-theme-cleanup.css');
+const home = read('css/pages/home/ajuste-inicio.css');
+const cleanup = read('css/core/limpieza-tema-tintin.css');
 
 const checks = [
   ['Hero con respaldo sólido', home.includes('.tt-home-premium .tt-hero-media picture') && home.includes('background-color:#FFF6FA!important')],

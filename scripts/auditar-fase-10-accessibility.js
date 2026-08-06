@@ -8,7 +8,7 @@ const checks = [];
 function check(name, condition, problem) { checks.push({ name, ok: Boolean(condition), problem }); }
 
 const runtime = read('js/quality/accesibilidad-global.js');
-const css = read('css/quality/phase10-accessibility.css');
+const css = read('css/quality/accesibilidad-global.css');
 const loader = read('js/quality/experiencia-interfaz.js');
 const gate = read('js/core/store-gate/nucleo-control-tienda.js');
 const page404 = read('404.html');

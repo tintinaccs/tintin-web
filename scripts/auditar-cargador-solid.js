@@ -14,14 +14,14 @@ function check(condition, message) {
 }
 
 const loaderRuntime = read('js/cargador-pagina.js');
-const solidCss = read('css/theme/loader-solid-background.css');
+const solidCss = read('css/theme/fondo-solido-cargador.css');
 const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
 check(
   /#tt-loader\{[^}]*background:#FFADD1/i.test(loaderRuntime),
   `js/cargador-pagina.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
 );
-// Antes esto se cargaba con un @import dentro de color-tokens.css y la
+// Antes esto se cargaba con un @import dentro de tokens-color.css y la
 // comprobación miraba esa única línea. Ahora va como <link> en cada página
 // (los @import encadenados bloqueaban el render en serie), así que se verifica
 // lo que de verdad importa: que TODA página que usa los tokens cargue también
@@ -29,20 +29,20 @@ check(
 const pagesWithTokens = fs.readdirSync(ROOT)
   .filter(name => name.endsWith('.html'))
   .map(name => ({ name, source: read(name) }))
-  .filter(page => page.source.includes('css/core/color-tokens.css'));
+  .filter(page => page.source.includes('css/core/tokens-color.css'));
 
-check(pagesWithTokens.length > 0, 'No se encontró ninguna página que cargue css/core/color-tokens.css.');
+check(pagesWithTokens.length > 0, 'No se encontró ninguna página que cargue css/core/tokens-color.css.');
 
 pagesWithTokens.forEach(({ name, source }) => {
-  const loaderAt = source.indexOf('css/theme/loader-solid-background.css');
-  const tokensAt = source.indexOf('css/core/color-tokens.css');
+  const loaderAt = source.indexOf('css/theme/fondo-solido-cargador.css');
+  const tokensAt = source.indexOf('css/core/tokens-color.css');
   check(
     loaderAt !== -1,
-    `${name} debe cargar css/theme/loader-solid-background.css (protección universal del loader).`
+    `${name} debe cargar css/theme/fondo-solido-cargador.css (protección universal del loader).`
   );
   check(
     loaderAt !== -1 && loaderAt < tokensAt,
-    `${name} debe cargar css/theme/loader-solid-background.css antes de css/core/color-tokens.css.`
+    `${name} debe cargar css/theme/fondo-solido-cargador.css antes de css/core/tokens-color.css.`
   );
 });
 check(

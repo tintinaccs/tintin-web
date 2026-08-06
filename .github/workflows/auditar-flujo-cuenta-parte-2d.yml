@@ -28,17 +28,17 @@ jobs:
       - name: Audit account flow pages
         id: account_flow_audit
         continue-on-error: true
-        run: node scripts/auditar-cuenta-flow-visual-parte-2d.mjs > account-flow-part2d-raw.log 2>&1
+        run: node scripts/auditar-cuenta-flujo-visual-parte-2d.mjs > account-flow-part2d-raw.log 2>&1
 
       - name: Enforce actionable account flow findings
         id: account_flow_enforce
         continue-on-error: true
-        run: node scripts/enforce-cuenta-flow-parte-2d.mjs > account-flow-part2d.log 2>&1
+        run: node scripts/exigir-cuenta-flujo-parte-2d.mjs > account-flow-part2d.log 2>&1
 
       - name: Audit short mobile login
         id: account_flow_compact
         continue-on-error: true
-        run: node scripts/auditar-cuenta-flow-compact-parte-2d.mjs > account-flow-part2d-compact.log 2>&1
+        run: node scripts/auditar-cuenta-flujo-compacto-parte-2d.mjs > account-flow-part2d-compact.log 2>&1
 
       - name: Upload report and screenshots
         if: always()

@@ -126,7 +126,7 @@ check(
   !exists('images/Mi cuenta.png') && !exists('images/Busqueda.png') && !exists('images/Carrito.png'),
   'Quedan imágenes reemplazadas por SVG.'
 );
-const liquid = [...jsFiles, ...htmlFiles, 'styles.css', 'script.js']
+const liquid = [...jsFiles, ...htmlFiles, 'styles.css', 'tienda.js']
   .filter(file => exists(file) && /\{%[- ]*(liquid|section|schema|render|assign)\b/.test(read(file)));
 check('No quedan plantillas Liquid', liquid.length === 0, `Archivos: ${liquid.join(', ')}`);
 

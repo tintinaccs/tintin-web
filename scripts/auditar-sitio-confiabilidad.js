@@ -13,8 +13,8 @@ function check(label, ok) {
 }
 
 const loader = read('js/cargador-pagina.js');
-const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
-const parity = read('css/theme/tintin-parity-safe.css');
+const solidSurfaces = read('css/theme/superficies-solidas-interfaz.css');
+const parity = read('css/theme/paridad-segura-tintin.css');
 const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
 const activity = read('js/analytics/actividad-sitio.js');
 const functionOrigin = read('js/core/firebase/origen-funciones.js');
@@ -33,8 +33,8 @@ const login = `${read('login.html')}\n${read('js/core/store/perfil-usuario.js')}
 const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');
-const theme = read('css/core/tintin-unified-theme.css');
-const main = read('script.js');
+const theme = read('css/core/tema-unificado-tintin.css');
+const main = read('tienda.js');
 const scrollReveal = read('js/quality/revelado-desplazamiento-global.js');
 const imagePerformance = read('js/components/images/rendimiento-imagenes.js');
 const home = read('index.html');
@@ -74,7 +74,7 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
   ].every(selector => solidSurfaces.includes(selector)) &&
   /html body \.tt-dropdown,[\s\S]*?background:\s*#FFFFFF\s*!important;[\s\S]*?background-color:\s*#FFFFFF\s*!important;/.test(solidSurfaces));
 
-// Antes, css/theme/loader-solid-background.css traía estas dos hojas con @import y
+// Antes, css/theme/fondo-solido-cargador.css traía estas dos hojas con @import y
 // acá se comprobaba su cadena de versión. Los @import encadenados bloqueaban
 // el render en serie, así que ahora van como <link> en cada página. Se
 // verifica lo que de verdad garantiza el fondo blanco: que toda página que
@@ -83,10 +83,10 @@ check('Los dropdowns del header son blancos en desktop, tablet y mobile',
 check('Las superficies sólidas del header se cargan antes del loader en cada página',
   htmlFiles
     .map(name => ({ name, source: read(name) }))
-    .filter(page => page.source.includes('css/theme/loader-solid-background.css'))
+    .filter(page => page.source.includes('css/theme/fondo-solido-cargador.css'))
     .every(({ source }) => {
-      const loaderAt = source.indexOf('css/theme/loader-solid-background.css');
-      const surfacesAt = source.indexOf('css/theme/solid-ui-surfaces.css');
+      const loaderAt = source.indexOf('css/theme/fondo-solido-cargador.css');
+      const surfacesAt = source.indexOf('css/theme/superficies-solidas-interfaz.css');
       const headerAt = source.indexOf('css/components/navigation/movil/fondos-solidos-movil.css');
       return surfacesAt !== -1 && headerAt !== -1 && surfacesAt < loaderAt && headerAt < loaderAt;
     }));
@@ -180,8 +180,8 @@ check('Las reglas aceptan solo geografía aproximada y campos conocidos',
 check('El rosa principal cumple contraste AA sobre blanco',
   theme.includes('--tt-accent:var(--color-brand-primary)') &&
   theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
-  read('css/core/color-tokens.css').includes('--color-brand-primary: #AD3F67') &&
-  read('css/core/color-tokens.css').includes('--color-brand-primary-hover: #8B2642'));
+  read('css/core/tokens-color.css').includes('--color-brand-primary: #AD3F67') &&
+  read('css/core/tokens-color.css').includes('--color-brand-primary-hover: #8B2642'));
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
@@ -271,7 +271,7 @@ check('El repositorio no contiene marcas explícitas de autoría externa',
   sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
 
 const staleVersions = [];
-for (const file of htmlFiles.concat(['script.js', 'js/cargador-pagina.js'])) {
+for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan una sola versión de caché',
