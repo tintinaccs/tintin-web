@@ -29,15 +29,15 @@ CONTENIDO
                        contUploadImage por ImgBB con clave del usuario — ver 11.3)
 - Aplicación pública . js/site-content.js (onSnapshot → selector real, nodos de
                        texto, sanitizeContentHref)
-- Bienvenida ......... js/welcome-config.js, welcome-tutorial-runtime.js,
+- Bienvenida ......... js/configuracion-bienvenida.js, tutorial-bienvenida.js,
                        admin-welcome-control.js
 APARIENCIA
-- Catálogo de tokens . js/color-scheme-catalog.js (GLOBAL_TOKENS, ADMIN_TOKENS,
+- Catálogo de tokens . js/esquema-color-catalogo.js (GLOBAL_TOKENS, ADMIN_TOKENS,
                        DEVICE_BREAKPOINTS)
-- Editor (panel) ..... sección Apariencia en admin-app.js (apar*), color-picker-widget.js,
-                       color-contrast-utils.js
-- Aplicación pública . js/color-scheme.js (onSnapshot colorSchemes + settings/appearance)
-                       + js/color-scheme-instant.js (primera pintura desde caché)
+- Editor (panel) ..... sección Apariencia en admin-app.js (apar*), selector-color.js,
+                       utilidades-contraste-color.js
+- Aplicación pública . js/esquema-color.js (onSnapshot colorSchemes + settings/appearance)
+                       + js/esquema-color-instantaneo.js (primera pintura desde caché)
 - Panel admin ........ js/admin-color-scheme.js (tokens administrativos)
 
 Un dato importante: NO existe "agregar/eliminar página". El editor de contenido
@@ -84,8 +84,8 @@ F1 [MEDIO — seguridad] — El apply público de colores no validaba el valor.
   El editor valida la entrada (HEX/RGB/HSL en el picker) y el import también,
   y solo el Super Admin puede escribir esquemas (firestore.rules). Pero el punto
   donde un valor de Firestore/caché se vuelve CSS en vivo —
-  js/color-scheme.js (keyMapToCssVarMap → setProperty) y
-  js/color-scheme-instant.js (applyMap en la primera pintura)— aplicaba CUALQUIER
+  js/esquema-color.js (keyMapToCssVarMap → setProperty) y
+  js/esquema-color-instantaneo.js (applyMap en la primera pintura)— aplicaba CUALQUIER
   string sin validar. Un token usado como `background: var(--x)` con un valor
   url(...) podría cargar una URL; y CSS arbitrario podría colarse por esa vía.
   FIX: se agregó isSafeColorValue() en ambos módulos públicos. Un token solo se
@@ -118,7 +118,7 @@ innerHTML con datos → ERROR + exit 1; al restaurar, ambos vuelven a OK. Regist
 ═══════════════════════════════════════════════════════════════════════
 PRUEBAS
 ═══════════════════════════════════════════════════════════════════════
-- node --check de color-scheme.js y color-scheme-instant.js: OK.
+- node --check de esquema-color.js y esquema-color-instantaneo.js: OK.
 - Test del validador isSafeColorValue con 13 casos (válidos e inseguros): TODOS OK.
 - npm run audit:content-appearance: 21/21 OK.
 - npm run audit:content (Fase 6) y audit:colors: OK.
@@ -128,8 +128,8 @@ PRUEBAS
   colores se aplica normal.
 
 ARCHIVOS TOCADOS
-- js/color-scheme.js                        (F1: isSafeColorValue en apply)
-- js/color-scheme-instant.js                (F1: isSafeColorValue en primera pintura)
+- js/esquema-color.js                        (F1: isSafeColorValue en apply)
+- js/esquema-color-instantaneo.js                (F1: isSafeColorValue en primera pintura)
 - scripts/audit-admin-content-appearance.js (NUEVO)
 - package.json                              (script + audit:final)
 - .github/workflows/tintin-audit.yml        (paso CI)

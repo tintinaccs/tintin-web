@@ -9,7 +9,7 @@
   --card-bg:     #fef5f8;
   /* La paleta de marca vive en css/core/color-tokens.css, que se carga antes que
      esta hoja en todas las páginas y es la que el panel de Super Admin
-     modifica en tiempo real (js/components/color/color-scheme.js escribe los tokens
+     modifica en tiempo real (js/components/color/esquema-color.js escribe los tokens
      --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
      derivan de esos tokens en vez de repetir un valor propio.
 
@@ -1129,7 +1129,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   -webkit-user-select: none;
 }
 
-/* Oculta el <img> del hero hasta que images-phase5.js confirme la URL real
+/* Oculta el <img> del hero hasta que gestion-imagenes.js confirme la URL real
    de Cloudinary Y esa foto haya terminado de descargarse — así la sección
    nunca queda revelada con el fondo oscuro a la vista mientras la imagen
    todavía carga. Queda el fondo oscuro de .tt-hero-media como transición,

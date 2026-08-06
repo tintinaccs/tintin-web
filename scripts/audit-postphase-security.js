@@ -9,12 +9,12 @@ function check(label, ok) {
 }
 const products = read('js/core/store/products-store.js');
 const script = read('script.js');
-const cart = read('js/components/cart/cart-sync.js');
+const cart = read('js/components/cart/sincronizacion-carrito.js');
 const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
 const emailConfig = read('js/email/email-config.js');
 const emailNotify = read('js/email/email-notify.js');
-const bridge = read('js/pages/checkout/checkout-email-bridge.js');
+const bridge = read('js/pages/checkout/checkout-puente-correo.js');
 const apps = read('apps-script/Phase3Security.gs');
 const emailSetup = read('functions/EMAIL_SETUP.md');
 check('Productos se normalizan como texto plano', products.includes('cleanMultilineText') && products.includes('sanitizeVariantData'));

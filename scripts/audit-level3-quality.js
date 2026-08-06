@@ -158,16 +158,16 @@ for (const file of ['index.html', 'catalogo.html', 'collections.html', 'about.ht
 check('Existe manifest PWA', exists('manifest.json'));
 
 const recoveryFiles = [
-  'js/pages/home/home-maintenance.js',
-  'js/pages/catalog/catalog-maintenance.js',
-  'js/pages/collections/collections-maintenance.js',
-  'js/pages/product/product-maintenance.js',
-  'js/pages/login/login-maintenance.js',
-  'js/pages/profile/profile-maintenance.js',
-  'js/pages/checkout/checkout-maintenance.js',
-  'js/pages/checkout/checkout-reliability.js',
-  'js/pages/institutional/contact-maintenance.js',
-  'js/components/cart/cart-sync.js'
+  'js/pages/home/mantenimiento-inicio.js',
+  'js/pages/catalog/mantenimiento-catalogo.js',
+  'js/pages/collections/mantenimiento-colecciones.js',
+  'js/pages/product/mantenimiento-producto.js',
+  'js/pages/login/mantenimiento-acceso.js',
+  'js/pages/profile/mantenimiento-perfil.js',
+  'js/pages/checkout/checkout-mantenimiento.js',
+  'js/pages/checkout/checkout-confiabilidad.js',
+  'js/pages/institutional/mantenimiento-contacto.js',
+  'js/components/cart/sincronizacion-carrito.js'
 ];
 for (const file of recoveryFiles) {
   check(`${file} contempla recuperación online`, exists(file) && /addEventListener\(['"]online['"]/.test(read(file)));

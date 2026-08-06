@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { searchPlaces } from '../../js/components/location/location-picker.js';
+import { searchPlaces } from '../../js/components/location/selector-ubicacion.js';
 
 const root = path.resolve(import.meta.dirname, '../..');
 

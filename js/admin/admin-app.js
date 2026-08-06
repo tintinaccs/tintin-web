@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/email-notify.js?v=tintin-20260716-cloudinary-fix-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
-// automático del checkout (js/pages/checkout/checkout-email-bridge.js), no el webhook viejo
+// automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de email-notify.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
 import { sendOrderNotification } from "../email/resend-order-notify.js?v=tintin-20260717-resend-1";
@@ -19,21 +19,21 @@ import {
 } from "../core/auth/role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/email-config.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { normalizeCollectionDoc } from "../pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1";
-import { sanitizeImageUrl } from "../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1";
+import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "../components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 import { initSiteDiagnostics } from "./diagnostics/admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
-import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/paraguay-locations.js?v=tintin-20260725-paraguay-locations-1";
+import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
-} from "../components/color/color-scheme-catalog.js?v=tintin-20260716-cloudinary-fix-1";
-import { contrastRatio, passesWcag } from "../components/color/color-contrast-utils.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachColorPicker } from "../components/color/color-picker-widget.js?v=tintin-20260716-cloudinary-fix-1";
+} from "../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1";
+import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260728-phase4-order-2";
 import './products/admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
 

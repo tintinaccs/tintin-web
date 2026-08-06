@@ -23,7 +23,7 @@ Super Admin: admin.html (dashboard, estadísticas, usuarios, pedidos, productos,
   configuración, permisos, apariencia) y admin-images.html.
 Módulos compartidos: cargador-pagina.js, inicio-navegacion-publica.js, script.js,
   color-scheme(-instant).js, store-gate(.js/-core.js), whatsapp.js,
-  products-store.js, collections-store.js, site-content.js, image-performance.js,
+  products-store.js, estado-colecciones.js, site-content.js, rendimiento-imagenes.js,
   site-activity.js, firebase.js.
 
 ═══════════════════════════════════════════════════════════════════════
@@ -71,13 +71,13 @@ FOIT — texto invisible durante la carga (css/montserrat.css)
 PROBLEMAS ANTERIORES YA SOLUCIONADOS (revisados, NO tocados)
 ═══════════════════════════════════════════════════════════════════════
 - Loader con salida garantizada: cargador-pagina.js (STORE_GATE_TIMEOUT_MS=9000) +
-  color-scheme-instant.js (RELEASE_TIMEOUT_MS=6500). El runtime secundario
+  esquema-color-instantaneo.js (RELEASE_TIMEOUT_MS=6500). El runtime secundario
   arranca en setTimeout(0) y no retiene el loader; ante gate cerrado/indisponible
   se retira sin esperar. → No hay spinner infinito.
-- Imágenes: image-performance.js aplica decoding=async y loading=lazy (eager solo
+- Imágenes: rendimiento-imagenes.js aplica decoding=async y loading=lazy (eager solo
   en prioritarias); product cards con loading="lazy"; preconnect+dns-prefetch a
   Cloudinary desde page-loader; entrega f_auto,q_auto. → Ya optimizado.
-- Tiempo real del catálogo: products-store.js y collections-store.js usan
+- Tiempo real del catálogo: products-store.js y estado-colecciones.js usan
   onSnapshot con limit() (no getDocs). Un cambio del Super Admin se refleja en
   vivo sin recargar. → Ya optimizado.
 - Listeners del panel: orders/users con onSnapshot limit(10000), COMPARTIDOS por

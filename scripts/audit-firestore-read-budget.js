@@ -8,16 +8,16 @@ const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
 const products = read('js/core/store/products-store.js');
-const collections = read('js/pages/collections/collections-store.js');
+const collections = read('js/pages/collections/estado-colecciones.js');
 const navCollectionsAdapter = read('js/components/navigation/compatibilidad/colecciones.js');
 const navCollectionsRuntime = read('js/components/navigation/compartido/carga-colecciones.js');
 const pageLoader = read('js/cargador-mantenimiento-pagina.js');
 const editBadge = read('js/core/auth/edit-badge.js');
-const quotaGuard = read('js/pages/checkout/checkout-quota-guard.js');
+const quotaGuard = read('js/pages/checkout/checkout-control-cuota.js');
 const firebase = read('js/core/firebase/firebase.js');
 const settingsStore = read('js/core/store/public-settings-store.js');
 const whatsapp = read('js/components/contact/whatsapp.js');
-const paymentMethods = read('js/pages/checkout/checkout-payment-methods.js');
+const paymentMethods = read('js/pages/checkout/checkout-metodos-pago.js');
 const readCache = read('js/core/firebase/firestore-read-cache.js');
 
 check(
@@ -54,10 +54,10 @@ check(
     navCollectionsRuntime.includes('else attachDemandLoading();'),
   'Páginas que no abren Tienda no deben leer colecciones y el adaptador debe apuntar a la fuente modular.'
 );
-check('Mantenimientos se cargan por página', pageLoader.includes('loadPageMaintenance') && !collections.includes("import './catalog-maintenance.js") && !collections.includes("import './product-maintenance.js"), 'Un store compartido no debe ejecutar todos los runtimes.');
+check('Mantenimientos se cargan por página', pageLoader.includes('loadPageMaintenance') && !collections.includes("import './mantenimiento-catalogo.js") && !collections.includes("import './mantenimiento-producto.js"), 'Un store compartido no debe ejecutar todos los runtimes.');
 check('Clientas no leen rolePermissions/main', editBadge.includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !editBadge.includes('loadRolePermissions(true)'), 'Solo roles administrativos deben consultar la matriz.');
 check('Checkout bloquea clics repetidos tras 429', quotaGuard.includes('resource-exhausted') && quotaGuard.includes('COOLDOWN_MS') && quotaGuard.includes('stopImmediatePropagation'), 'Un 429 no debe generar nuevos intentos inmediatos.');
-check('Protección de cuota se carga solo en Checkout', pageLoader.includes("load('pages/checkout/checkout-quota-guard.js')"), 'El guard no debe formar parte de otras páginas.');
+check('Protección de cuota se carga solo en Checkout', pageLoader.includes("load('pages/checkout/checkout-control-cuota.js')"), 'El guard no debe formar parte de otras páginas.');
 check('Settings general usa una suscripción compartida', /onSnapshot\(doc\(db, 'settings', 'general'\)/.test(settingsStore) && whatsapp.includes('onPublicSettings') && paymentMethods.includes('onPublicSettings'), 'WhatsApp y pagos no deben abrir listeners paralelos.');
 check('Páginas con configuración propia evitan el listener global', whatsapp.includes('pageOwnsSettings') && ['contact.html', 'terminos.html', 'privacidad.html', 'envios.html'].every(page => whatsapp.includes(page)), 'Las páginas con runtime propio duplicarían settings/general.');
 check('Firestore continúa sin persistencia IndexedDB', firebase.includes('getFirestore(app)') && !/initializeFirestore\s*\(/.test(firebase) && !/enableIndexedDbPersistence\s*\(/.test(firebase), 'No debe volver la persistencia que bloqueaba navegadores restrictivos.');

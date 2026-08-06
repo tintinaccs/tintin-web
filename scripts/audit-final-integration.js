@@ -47,7 +47,7 @@ check(
   'Configuración general pública tiene una sola suscripción compartida',
   read('js/core/store/public-settings-store.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
     read('js/components/contact/whatsapp.js').includes('onPublicSettings') &&
-    read('js/pages/checkout/checkout-payment-methods.js').includes('onPublicSettings'),
+    read('js/pages/checkout/checkout-metodos-pago.js').includes('onPublicSettings'),
   'WhatsApp y pagos deben compartir public-settings-store.'
 );
 check(
@@ -57,7 +57,7 @@ check(
 );
 check(
   'Apariencia consume colorSchemes y settings/appearance',
-  read('js/components/color/color-scheme.js').includes('colorSchemes') && read('js/components/color/color-scheme.js').includes('APPEARANCE_DOC'),
+  read('js/components/color/esquema-color.js').includes('colorSchemes') && read('js/components/color/esquema-color.js').includes('APPEARANCE_DOC'),
   'La apariencia debe seguir conectada al Super Admin.'
 );
 check(

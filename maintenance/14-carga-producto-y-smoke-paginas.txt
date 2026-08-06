@@ -3,7 +3,7 @@ Fecha: 20/07/2026
 Rama: fix/product-load-and-all-pages-smoke
 
 HALLAZGO CONFIRMADO
-js/product-maintenance.js observaba aria-busy en #product-grid y, dentro del callback
+js/mantenimiento-producto.js observaba aria-busy en #product-grid y, dentro del callback
 que respondía a esa mutación, volvía a ejecutar setAttribute('aria-busy','false').
 MutationObserver puede notificar una escritura aunque el valor ya coincida, por lo
 que la página podía entrar en una cadena continua de microtareas, impedir el pintado

@@ -45,16 +45,16 @@ function parseTokens(section) {
   return tokens;
 }
 
-const catalogSource = read('js/components/color/color-scheme-catalog.js');
+const catalogSource = read('js/components/color/esquema-color-catalogo.js');
 const globalTokens = parseTokens(arraySection(catalogSource, 'GLOBAL_TOKENS'));
 const adminTokens = parseTokens(arraySection(catalogSource, 'ADMIN_TOKENS'));
 const globalCss = read('css/core/color-tokens.css');
 const adminCss = read('css/admin/admin-color-tokens.css');
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin/admin-app.js');
-const picker = read('js/components/color/color-picker-widget.js');
-const instantRuntime = read('js/components/color/color-scheme-instant.js');
-const globalRuntime = read('js/components/color/color-scheme.js');
+const picker = read('js/components/color/selector-color.js');
+const instantRuntime = read('js/components/color/esquema-color-instantaneo.js');
+const globalRuntime = read('js/components/color/esquema-color.js');
 const adminRuntime = read('js/admin/settings/admin-color-scheme.js');
 
 check('El catálogo global contiene todos los tokens esperados', globalTokens.length >= 150, `${globalTokens.length} encontrados`);
@@ -72,7 +72,7 @@ check('Todos los tokens administrativos tienen respaldo CSS', missingAdminDefaul
 const consumerFiles = [
   ...filesUnder('css', new Set(['.css'])),
   ...filesUnder('js', new Set(['.js'])),
-].filter(rel => !['css/core/color-tokens.css', 'css/admin/admin-color-tokens.css', 'js/components/color/color-scheme-catalog.js'].includes(rel.replace(/\\/g, '/')));
+].filter(rel => !['css/core/color-tokens.css', 'css/admin/admin-color-tokens.css', 'js/components/color/esquema-color-catalogo.js'].includes(rel.replace(/\\/g, '/')));
 const consumers = consumerFiles.map(read).join('\n');
 const missingGlobalConsumers = globalTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
 const missingAdminConsumers = adminTokens.filter(token => !consumers.includes(`var(${token.cssVar}`));
@@ -135,14 +135,14 @@ const missingPublicAssets = publicPages.filter(file => {
   const html = read(file);
   return !html.includes('css/core/color-tokens.css') ||
     !html.includes('css/core/tintin-unified-theme.css') ||
-    !html.includes('js/components/color/color-scheme-instant.js') ||
-    !html.includes('js/components/color/color-scheme.js');
+    !html.includes('js/components/color/esquema-color-instantaneo.js') ||
+    !html.includes('js/components/color/esquema-color.js');
 });
 check('Todas las páginas públicas cargan tokens, bindings y runtime', missingPublicAssets.length === 0, missingPublicAssets.join(', '));
 
 const badFirstPaintOrder = publicPages.filter(file => {
   const html = read(file);
-  const instantIndex = html.indexOf('js/components/color/color-scheme-instant.js');
+  const instantIndex = html.indexOf('js/components/color/esquema-color-instantaneo.js');
   const loaderIndex = html.indexOf('js/cargador-pagina.js');
   const firstStylesheetIndex = html.indexOf('<link rel="stylesheet"');
   return instantIndex < 0 || loaderIndex < 0 || firstStylesheetIndex < 0 ||

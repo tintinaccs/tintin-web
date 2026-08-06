@@ -6,8 +6,8 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { onImagesUpdate, resolveSlotImage } from './images.js?v=tintin-20260716-cloudinary-fix-1';
-import { createSafeImage, sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
+import { onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinImagesPhase5Booted) {
   window.TintinImagesPhase5Booted = true;

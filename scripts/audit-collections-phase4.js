@@ -7,13 +7,13 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   nav: read('js/components/navigation/compartido/carga-colecciones.js'),
   navCompatibility: read('js/components/navigation/compatibilidad/colecciones.js'),
-  publicPhase4: read('js/pages/collections/collections-phase4.js'),
+  publicPhase4: read('js/pages/collections/presentacion-colecciones.js'),
   adminPhase4: read('js/admin/collections/admin-collections-phase4.js'),
   uiQuality: read('js/quality/ui-quality.js'),
-  store: read('js/pages/collections/collections-store.js'),
+  store: read('js/pages/collections/estado-colecciones.js'),
   collectionsPage: read('collections.html'),
   catalogPage: read('catalogo.html'),
-  collectionsPageRuntime: read('js/pages/collections/collections-page.js'),
+  collectionsPageRuntime: read('js/pages/collections/pagina-colecciones.js'),
   collectionsPageStyles: read('css/pages/collections/collections-page.css'),
   packageJson: read('package.json')
 };
@@ -128,15 +128,15 @@ check(
   'La fase 4 se inicia globalmente',
   files.uiQuality.includes('bootCollectionsPhase4()') &&
     files.uiQuality.includes('bootAdminCollectionsPhase4()') &&
-    files.uiQuality.includes("'../pages/collections/collections-phase4.js'") &&
+    files.uiQuality.includes("'../pages/collections/presentacion-colecciones.js'") &&
     files.uiQuality.includes("'../admin/collections/admin-collections-phase4.js'"),
   'debe ejecutarse incluso en páginas con HTML legado'
 );
 
 check(
   'La página de colecciones no duplica el listener de Firestore',
-  !files.collectionsPage.includes("import('./js/pages/collections/collections-store.js?v=tintin-20260716-cloudinary-fix-1')") &&
-    !files.collectionsPageRuntime.includes("import('./collections-store.js?v=tintin-20260716-cloudinary-fix-1')") &&
+  !files.collectionsPage.includes("import('./js/pages/collections/estado-colecciones.js?v=tintin-20260716-cloudinary-fix-1')") &&
+    !files.collectionsPageRuntime.includes("import('./estado-colecciones.js?v=tintin-20260716-cloudinary-fix-1')") &&
     files.collectionsPageRuntime.includes('tintin:collections-phase4-ready') &&
     files.collectionsPageRuntime.includes('phase4CollectionsOwner'),
   'collections.html debe consumir el renderer global, no abrir un segundo snapshot y competir por el mismo grid'
@@ -153,7 +153,7 @@ check(
 
 check(
   'Colecciones usa el carrito compartido y valida stock',
-  files.collectionsPageRuntime.includes("import('../../components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1") &&
+  files.collectionsPageRuntime.includes("import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1") &&
     files.collectionsPageRuntime.includes('cartSync.addToCart') &&
     files.collectionsPageRuntime.includes('Number(product.stock) <= 0'),
   'los CTA destacados deben usar la misma sincronización y disponibilidad que el resto de la tienda'
@@ -164,7 +164,7 @@ check(
   files.collectionsPage.includes('class="tt-collections-page"') &&
     files.collectionsPage.includes('aria-busy="true"') &&
     files.collectionsPage.includes('css/pages/collections/collections-page.css') &&
-    files.collectionsPage.includes('js/pages/collections/collections-page.js') &&
+    files.collectionsPage.includes('js/pages/collections/pagina-colecciones.js') &&
     files.collectionsPageStyles.includes('@media (max-width: 768px)') &&
     files.collectionsPageStyles.includes('padding: 36px 0 44px'),
   'mobile no debe reservar el espacio del header oculto y los grids deben comunicar su estado'

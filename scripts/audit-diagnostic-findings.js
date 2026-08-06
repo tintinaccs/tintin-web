@@ -89,8 +89,8 @@ check(
 check(
   'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
   /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/admin-users-phase8.js')) &&
-    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/collections-store.js')) &&
+    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
+    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/products-store.js'))
 );
 

@@ -21,14 +21,14 @@ function check(label, condition, detail = '') {
   console.error(`FAIL — ${label}${detail ? `: ${detail}` : ''}`);
 }
 
-const cart = read('js/components/cart/cart-sync.js');
+const cart = read('js/components/cart/sincronizacion-carrito.js');
 const checkout = read('js/orders/secure-checkout-order.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const inventory = read('js/admin/products/admin-inventory-integrity.js');
 const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
 const admin = read('js/admin/admin-app.js');
 const emailClient = read('js/email/resend-order-notify.js');
-const emailBridge = read('js/pages/checkout/checkout-email-bridge.js');
+const emailBridge = read('js/pages/checkout/checkout-puente-correo.js');
 const emailServer = read('functions/api/order-email.js');
 const rules = read('firestore.rules');
 const contracts = read('docs/COMMERCE_CONTRACTS.md');

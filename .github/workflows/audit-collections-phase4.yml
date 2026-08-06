@@ -4,9 +4,9 @@ on:
   pull_request:
     paths:
       - 'js/components/navigation/compatibilidad/colecciones.js'
-      - 'js/pages/collections/collections-phase4.js'
+      - 'js/pages/collections/presentacion-colecciones.js'
       - 'js/admin/collections/admin-collections-phase4.js'
-      - 'js/pages/collections/collections-store.js'
+      - 'js/pages/collections/estado-colecciones.js'
       - 'js/quality/ui-quality.js'
       - 'scripts/audit-collections-phase4.js'
       - 'package.json'
@@ -29,7 +29,7 @@ jobs:
       - name: Revisar sintaxis
         run: |
           node --check js/components/navigation/compatibilidad/colecciones.js
-          node --check js/pages/collections/collections-phase4.js
+          node --check js/pages/collections/presentacion-colecciones.js
           node --check js/admin/collections/admin-collections-phase4.js
           node --check js/quality/ui-quality.js
           node --check scripts/audit-collections-phase4.js

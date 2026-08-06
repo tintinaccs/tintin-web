@@ -199,7 +199,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/collections-store.js?v=tintin-20260726-browser-fallback-1')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

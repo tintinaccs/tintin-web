@@ -155,7 +155,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     needsName,
     needsPhone,
     // Si el alta está abierta, se muestra el mapa aunque la ubicación ya esté
-    // guardada. location-map.js la precarga y permite continuar sin tocarla.
+    // guardada. mapa-ubicacion.js la precarga y permite continuar sin tocarla.
     needsAddress: onboardingRequired && requireAddress,
     addressAlreadySaved: addressOk,
     suggestedFirstName,

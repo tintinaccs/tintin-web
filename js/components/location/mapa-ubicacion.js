@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces } from "./location-picker.js?v=tintin-20260803-location-picker-2";
+import { searchPlaces } from "./selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 const DEFAULT_CENTER = [-25.2867, -57.6467];

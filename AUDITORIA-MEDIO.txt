@@ -20,7 +20,7 @@ PROBLEMA:
 El sitio se publica en GitHub Pages (lo confirman canonical, sitemap,
 robots.txt y el enlace del admin en functions/index.js, todos hacia
 tintinaccs.github.io). Las funciones /api/* son de Cloudflare Pages y
-GitHub Pages NO las ejecuta. Dos módulos del proyecto (media-library.js y
+GitHub Pages NO las ejecuta. Dos módulos del proyecto (biblioteca-multimedia.js y
 site-activity.js) resuelven esto detectando github.io y redirigiendo a
 https://tintinaccesorios.pages.dev. Pero los módulos de correo NO tienen
 ese fallback: llaman a rutas relativas.
@@ -37,16 +37,16 @@ Además, las Cloud Functions de Firebase que harían este envío
 respaldo por ese lado.
 
 CÓMO DEBERÍA FUNCIONAR:
-Igual que media-library.js: detectar el host y, en github.io/netlify,
+Igual que biblioteca-multimedia.js: detectar el host y, en github.io/netlify,
 apuntar el fetch al origen de Cloudflare Pages (o usar
 window.TINTIN_FUNCTION_ORIGIN).
 
 DÓNDE ESTÁ EL CÓDIGO:
 - js/resend-order-notify.js (línea 8): const ORDER_EMAIL_API = '/api/order-email';
-  (usado por checkout-email-bridge.js para el aviso de pedido nuevo y por
+  (usado por checkout-puente-correo.js para el aviso de pedido nuevo y por
   admin-app.js para el reenvío).
 - js/admin-email-gate-sync.js (línea 17): const TEST_ENDPOINT = '/api/test-email';
-- Referencia de la solución correcta: js/media-library.js
+- Referencia de la solución correcta: js/biblioteca-multimedia.js
   functionOrigin() (líneas ~54-66) y js/site-activity.js geoEndpoint()
   (líneas ~136-142).
 
@@ -64,7 +64,7 @@ que resolver.
 
 [RESUELTO 2026-07-22] Se creó js/function-origin.js con la resolución de
 origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
-admin-email-gate-sync.js, media-library.js, site-activity.js) ahora
+admin-email-gate-sync.js, biblioteca-multimedia.js, site-activity.js) ahora
 importan de ahí en vez de reinventar la constante cada uno. Verificado con
 scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
 (actualizados) y el resto de `npm run audit:final`, sin regresiones.
@@ -144,7 +144,7 @@ Function, como ya existen otras) que cachee resultados y ponga un
 User-Agent/identificación válida, respetando la política de Nominatim.
 
 DÓNDE ESTÁ EL CÓDIGO:
-- js/checkout-reliability.js (líneas ~430-433): nominatimUrl y photonUrl,
+- js/checkout-confiabilidad.js (líneas ~430-433): nominatimUrl y photonUrl,
   ambos fetch directos desde el cliente.
 
 SOLUCIÓN:

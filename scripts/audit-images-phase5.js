@@ -7,15 +7,15 @@ const read = file => fs.readFileSync(filePath(file), 'utf8');
 const exists = file => fs.existsSync(filePath(file));
 
 const files = {
-  utils: read('js/components/images/image-utils.js'),
-  images: read('js/components/images/images.js'),
-  resolver: read('js/components/images/image-resolver.js'),
-  runtime: read('js/components/images/images-phase5.js'),
+  utils: read('js/components/images/utilidades-imagenes.js'),
+  images: read('js/components/images/imagenes.js'),
+  resolver: read('js/components/images/resolucion-imagenes.js'),
+  runtime: read('js/components/images/gestion-imagenes.js'),
   admin: read('js/admin/products/admin-images-phase5.js'),
   adminHtml: read('admin-images.html'),
-  uploadWidget: read('js/components/images/image-upload-widget.js'),
-  processing: read('js/components/images/image-processing.js'),
-  mediaLibrary: read('js/components/images/media-library.js'),
+  uploadWidget: read('js/components/images/carga-imagenes.js'),
+  processing: read('js/components/images/procesamiento-imagenes.js'),
+  mediaLibrary: read('js/components/images/biblioteca-multimedia.js'),
   functionOrigin: read('js/core/firebase/function-origin.js'),
   firebase: read('js/core/firebase/firebase.js'),
   products: read('js/core/store/products-store.js'),
@@ -146,7 +146,7 @@ check(
     files.indexHtml.includes('deadline') &&
     /var deadline = Date\.now\(\) \+ 4000;/.test(files.indexHtml),
   // No basta con "hay un src y no terminó de cargar": si el chequeo cae en
-  // el instante justo antes de que images-phase5.js recién asigne el src
+  // el instante justo antes de que gestion-imagenes.js recién asigne el src
   // (nunca llegó todavía, no que haya fallado), esa versión anterior
   // revelaba igual sin esperar el tope de 4s — mismo parpadeo de fondo que
   // se reportó, solo que en una ventana más angosta. Ahora solo revela
@@ -188,7 +188,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './images.js?v=tintin-20260716-cloudinary-fix-1'") &&
+    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
@@ -221,7 +221,7 @@ check(
 
 check(
   'El navegador conserva procesamiento, WebP y vista previa',
-  files.uploadWidget.includes("import { validateImageFile } from './image-processing.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.uploadWidget.includes("import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.uploadWidget.includes('pendingPreviewUrl = URL.createObjectURL(file)') &&
     files.uploadWidget.includes('uploadImageToLibrary(file') &&
     files.processing.includes('canvas.toBlob'),
@@ -386,7 +386,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from '../../components/images/image-utils.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.products.includes("from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'
@@ -396,7 +396,7 @@ check(
   'La Fase 5 se inicia en todas las páginas y en el panel',
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
-    files.ui.includes("'../components/images/images-phase5.js'") &&
+    files.ui.includes("'../components/images/gestion-imagenes.js'") &&
     files.ui.includes("'../admin/products/admin-images-phase5.js'"),
   'ui-quality debe iniciar ambos módulos'
 );
@@ -490,17 +490,17 @@ check(
 const CURRENT_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
-  files.uploadWidget.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
-    files.uploadWidget.includes(`./media-library.js?${CURRENT_VERSION_QUERY}`) &&
-    files.mediaLibrary.includes(`./image-processing.js?${CURRENT_VERSION_QUERY}`) &&
-    files.adminHtml.includes(`./js/components/images/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+  files.uploadWidget.includes(`./procesamiento-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
+    files.uploadWidget.includes(`./biblioteca-multimedia.js?${CURRENT_VERSION_QUERY}`) &&
+    files.mediaLibrary.includes(`./procesamiento-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
+    files.adminHtml.includes(`./js/components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
     files.adminHtml.includes(`./js/admin/products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
 );
 
 check(
   'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
-  read('js/admin/admin-app.js').includes(`../components/images/image-upload-widget.js?${CURRENT_VERSION_QUERY}`) &&
+  read('js/admin/admin-app.js').includes(`../components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
     read('js/admin/admin-app.js').includes(`./products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
   'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
 );

@@ -12,27 +12,27 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/cart-sync.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from '../components/forms/phone-utils.js?v=tintin-20260803-phone-unique-1';
+} from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260728-phase4-order-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
 
   // El puente que dispara el correo de confirmación del pedido
-  // (checkout-email-bridge.js) se cargaba como efecto secundario de
+  // (checkout-puente-correo.js) se cargaba como efecto secundario de
   // importar js/email/email-notify.js — pero desde la migración a Resend (PR
   // #177) checkout.html dejó de importar ese archivo, así que el puente
   // nunca se volvía a cargar y ningún correo de pedido se disparaba desde
   // el checkout real. Este módulo ya se carga únicamente en checkout.html
-  // (ver js/components/cart/cart-sync.js), así que alcanza con importarlo acá.
+  // (ver js/components/cart/sincronizacion-carrito.js), así que alcanza con importarlo acá.
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-email-bridge.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }

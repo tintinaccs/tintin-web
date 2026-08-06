@@ -11,12 +11,12 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const policy = read('js/pages/catalog/phase7-catalog-policy.js');
-const merchandising = read('js/pages/catalog/catalog-merchandising-policy.js');
+const policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
+const merchandising = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const products = read('js/core/store/products-store.js');
 const storefront = read('script.js');
 const catalog = read('catalogo.html');
-const stockPriority = read('js/pages/catalog/catalog-stock-priority.js');
+const stockPriority = read('js/pages/catalog/prioridad-stock-catalogo.js');
 const admin = read('js/admin/admin-app.js');
 const sheets = read('functions/api/sheets-product-sync.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
@@ -56,7 +56,7 @@ check(
     /TintinCatalogMerchandising\?\.sortCatalogProducts/.test(catalog) &&
     /Compatibilidad: la prioridad ya no vive en memoria/.test(stockPriority) &&
     !/previousStockById|restockedPriorityIds|trackStockTransitions/.test(stockPriority) &&
-    /catalog-stock-priority\.js/.test(loader) &&
+    /prioridad-stock-catalogo\.js/.test(loader) &&
     /tt-card-stock--in/.test(catalog) &&
     /disabled aria-disabled="true">Agotado/.test(catalog),
   'La fuente debe separar disponibles y agotados y promover por timestamps persistentes, sin depender de memoria temporal del navegador.'
@@ -148,7 +148,7 @@ check(
 
 check(
   'La política se carga antes de products-store',
-  /^import '\.\/pages\/catalog\/phase7-catalog-policy\.js/.test(loader),
+  /^import '\.\/pages\/catalog\/politica-visibilidad-catalogo\.js/.test(loader),
   'El filtro debe estar instalado antes del primer evento de productos.'
 );
 

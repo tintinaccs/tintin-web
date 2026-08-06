@@ -6,7 +6,7 @@ import {
   isValidPhone,
   isRealisticPhone,
   phoneKey,
-} from '../../js/components/forms/phone-utils.js';
+} from '../../js/components/forms/utilidades-telefono.js';
 
 const PY = findCountryByCode('PY');
 const AR = findCountryByCode('AR');

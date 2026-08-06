@@ -14,13 +14,13 @@ import {
   onSnapshot,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { sanitizeImageUrl } from './image-utils.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveDeviceImage } from './image-resolver.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
-// primera importación de images.js. Ambas son idempotentes.
-import '../../pages/home/home-premium.js';
-import '../welcome/welcome-tutorial-runtime.js';
+// primera importación de imagenes.js. Ambas son idempotentes.
+import '../../pages/home/inicio-premium.js';
+import '../welcome/tutorial-bienvenida.js';
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
@@ -213,7 +213,7 @@ export function normalizeImagePatch(data) {
 
 /**
  * Resuelve la imagen efectiva de un slot para un dispositivo dado, aplicando
- * la cascada de reutilización automática (image-resolver.js). Para el trío
+ * la cascada de reutilización automática (resolucion-imagenes.js). Para el trío
  * hero usa hero_bg_desktop/tablet/mobile + hero_bg_autoReuseDesktop; para el
  * resto usa ${id} (desktop) + ${id}_tablet + ${id}_mobile + ${id}_autoReuseDesktop.
  */

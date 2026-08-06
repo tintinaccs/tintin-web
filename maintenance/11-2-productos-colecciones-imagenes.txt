@@ -26,12 +26,12 @@ CRUD de colecciones .......... js/admin-app.js (collGuardar, collEliminar,
 Importación / copia .......... js/admin-import-phase9.js (CSV Shopify + JSON,
                                copia operativa)
 Exportación de productos ..... js/admin-app.js (bulkExportProducts → CSV)
-Biblioteca / subida .......... js/media-library.js, js/image-upload-widget.js,
-                               js/image-processing.js, js/image-resolver.js,
-                               js/images.js, admin-images.html
-Sanitización de URL/alt ...... js/image-utils.js (sanitizeImageUrl/Alt)
+Biblioteca / subida .......... js/biblioteca-multimedia.js, js/carga-imagenes.js,
+                               js/procesamiento-imagenes.js, js/resolucion-imagenes.js,
+                               js/imagenes.js, admin-images.html
+Sanitización de URL/alt ...... js/utilidades-imagenes.js (sanitizeImageUrl/Alt)
 Tienda (render + carrito) .... script.js, js/products-store.js,
-                               js/collections-store.js
+                               js/estado-colecciones.js
 
 PROVEEDORES DE IMAGEN (estado real):
 - Cloudinary — ACTIVO. Es el único destino de subida de productos, colecciones

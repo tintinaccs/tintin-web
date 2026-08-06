@@ -14,8 +14,8 @@ CAUSA PRINCIPAL ENCONTRADA
 - js/products-store.js abría un onSnapshot sobre products con límite 10.000 desde el runtime público compartido.
 - El runtime se cargaba incluso en Perfil, Login, Contacto, Checkout y páginas legales.
 - Cada página podía volver a leer todos los documentos del catálogo aunque no mostrara productos.
-- js/collections-store.js mantenía otra suscripción pública completa para colecciones.
-- js/collections-store.js importaba mantenimientos de todas las páginas, aunque la ruta no los necesitara.
+- js/estado-colecciones.js mantenía otra suscripción pública completa para colecciones.
+- js/estado-colecciones.js importaba mantenimientos de todas las páginas, aunque la ruta no los necesitara.
 - Las cuentas client intentaban leer rolePermissions/main para decidir si mostrar insignias de edición.
 - WhatsApp y métodos de pago podían abrir listeners separados al mismo settings/general.
 - Después de un error 429, Checkout habilitaba inmediatamente otro intento manual.
@@ -60,7 +60,7 @@ CAMBIOS APLICADOS
 
 6. Mantenimientos por ruta
 - Los runtimes de Catálogo, Colecciones, Producto, Checkout, Login, Perfil, Nosotros, Contacto y páginas legales se importan solamente en su página correspondiente.
-- collections-store.js deja de funcionar como cargador global de todos los mantenimientos.
+- estado-colecciones.js deja de funcionar como cargador global de todos los mantenimientos.
 
 7. Control y diagnóstico
 - window.TintinReadBudget registra una estimación de documentos leídos por los stores optimizados.

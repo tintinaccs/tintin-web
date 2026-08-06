@@ -404,8 +404,8 @@ import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260730-appch
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/images.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "./js/components/images/image-upload-widget.js?v=tintin-20260716-cloudinary-fix-1";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1";
+import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
@@ -478,7 +478,7 @@ async function saveField(patch, successMessage) {
 
 // Hero/Editorial/Nosotros son fotos grandes a pantalla completa: admiten
 // hasta 4K real (3840px) a mayor calidad. El logo y el resto usan el
-// respaldo de 2000px/0.82 de image-processing.js, de sobra para su tamaño.
+// respaldo de 2000px/0.82 de procesamiento-imagenes.js, de sobra para su tamaño.
 const FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.92 };
 
 function mountDeviceWidget(container, { slotKey, label, hint, currentUrl, maxWidth, maxHeight, quality }) {

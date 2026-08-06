@@ -11,7 +11,7 @@ function requireText(text, pattern, message) {
 
 const html = read('catalogo.html');
 const css = read('css/pages/catalog/catalog-maintenance.css');
-const runtime = read('js/pages/catalog/catalog-maintenance.js');
+const runtime = read('js/pages/catalog/mantenimiento-catalogo.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
 const maintenance = read('maintenance/02-catalogo.txt');
 
@@ -42,7 +42,7 @@ requireText(runtime, /MutationObserver/, 'Falta vigilancia de render fuera de or
 requireText(runtime, /tt-catalog-runtime-state/, 'Faltan estados de recuperación.');
 requireText(runtime, /location\.origin/, 'Los metadatos no se normalizan al dominio actual.');
 requireText(runtime, /new Date\(\)\.getFullYear/, 'El año del footer no es automático.');
-requireText(loader, /catalogo[\s\S]*load\('pages\/catalog\/catalog-maintenance\.js'\)/, 'El runtime del Catálogo no se carga desde el cargador por página.');
+requireText(loader, /catalogo[\s\S]*load\('pages\/catalog\/mantenimiento-catalogo\.js'\)/, 'El runtime del Catálogo no se carga desde el cargador por página.');
 requireText(maintenance, /Desktop grande:|Desktop grande|desktop grande/i, 'El registro no contempla desktop grande.');
 requireText(maintenance, /tablet/i, 'El registro no contempla tablet.');
 requireText(maintenance, /mobile/i, 'El registro no contempla mobile.');

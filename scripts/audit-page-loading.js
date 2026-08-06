@@ -111,8 +111,8 @@ function auditHtmlPage(page) {
 
   if (/TT_PAGE_LOADER_WAIT\s*=\s*true/.test(html)) {
     if (!/js\/cargador-pagina\.js/.test(html)) fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga cargador-pagina.js.');
-    if (!isAdminPage && !/js\/components\/color\/color-scheme-instant\.js/.test(html)) {
-      fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga color-scheme-instant.js.');
+    if (!isAdminPage && !/js\/components\/color\/esquema-color-instantaneo\.js/.test(html)) {
+      fail(page, 'activa TT_PAGE_LOADER_WAIT pero no carga esquema-color-instantaneo.js.');
     }
   }
 
@@ -178,7 +178,7 @@ for (const page of actualPages) auditHtmlPage(page);
 auditJavascriptReferences();
 
 const productHtml = exists('product.html') ? read('product.html') : '';
-const productRuntime = exists('js/pages/product/product-maintenance.js') ? read('js/pages/product/product-maintenance.js') : '';
+const productRuntime = exists('js/pages/product/mantenimiento-producto.js') ? read('js/pages/product/mantenimiento-producto.js') : '';
 const publicShell = exists('js/inicio-navegacion-publica.js') ? read('js/inicio-navegacion-publica.js') : '';
 const publicShellRuntime = exists('js/components/navigation/compartido/carga-navegacion.js')
   ? read('js/components/navigation/compartido/carga-navegacion.js')
@@ -188,8 +188,8 @@ const pageMaintenanceLoader = exists('js/cargador-mantenimiento-pagina.js') ? re
 if (!/id=["']product-detail["']/.test(productHtml)) fail('product.html', 'falta la raíz #product-detail.');
 if (!/id=["']product-loading["']/.test(productHtml)) fail('product.html', 'falta el estado #product-loading.');
 if (!/id=["']product-grid["']/.test(productHtml)) fail('product.html', 'falta la ficha #product-grid.');
-if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta reconocimiento robusto de Producto.');
-if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/pages/product/product-maintenance.js', 'falta marca de reconocimiento para el smoke test.');
+if (!/function isProductPage\(\)/.test(productRuntime)) fail('js/pages/product/mantenimiento-producto.js', 'falta reconocimiento robusto de Producto.');
+if (!/TintinProductPageRecognized/.test(productRuntime)) fail('js/pages/product/mantenimiento-producto.js', 'falta marca de reconocimiento para el smoke test.');
 if (!/components\/navigation\/entrada-navegacion-publica\.js/.test(publicShell)) {
   fail('js/inicio-navegacion-publica.js', 'no carga el entry modular de navegación.');
 }
@@ -199,8 +199,8 @@ if (
 ) {
   fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga products-store.js mediante el runtime modular.');
 }
-if (!/product[\s\S]*load\('pages\/product\/product-maintenance\.js'\)/.test(pageMaintenanceLoader)) {
-  fail('js/cargador-mantenimiento-pagina.js', 'no carga product-maintenance.js en Producto.');
+if (!/product[\s\S]*load\('pages\/product\/mantenimiento-producto\.js'\)/.test(pageMaintenanceLoader)) {
+  fail('js/cargador-mantenimiento-pagina.js', 'no carga mantenimiento-producto.js en Producto.');
 }
 
 if (warnings.length) {
