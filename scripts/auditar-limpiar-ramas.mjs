@@ -59,6 +59,21 @@ function isPermanentBranch(branch, openHeads) {
     || openHeads.has(branch);
 }
 
+function createSummary(records) {
+  return {
+    generatedAt: new Date().toISOString(),
+    repository,
+    mode,
+    total: records.length,
+    keep: records.filter(record => record.classification === 'keep').length,
+    safeDelete: records.filter(record => record.classification === 'safe-delete').length,
+    review: records.filter(record => record.classification === 'review').length,
+    deleted: records.filter(record => record.deleted).length,
+    deleteErrors: records.filter(record => record.deleteError).length,
+    deleteSkipped: records.filter(record => record.deleteSkipped).length
+  };
+}
+
 const [branches, openPulls, closedPulls] = await Promise.all([
   paginate('/branches'),
   paginate('/pulls?state=open'),
@@ -74,7 +89,13 @@ const openHeads = new Set(
 
 const mergedHeadShas = new Map();
 for (const pr of closedPulls) {
-  if (!pr.merged_at || pr.head?.repo?.full_name !== repository || !pr.head?.ref || !pr.head?.sha) continue;
+  const mergedIntoMain = pr.merged_at
+    && pr.head?.repo?.full_name === repository
+    && pr.base?.repo?.full_name === repository
+    && pr.base?.ref === 'main'
+    && pr.head?.ref
+    && pr.head?.sha;
+  if (!mergedIntoMain) continue;
   if (!mergedHeadShas.has(pr.head.ref)) mergedHeadShas.set(pr.head.ref, new Set());
   mergedHeadShas.get(pr.head.ref).add(pr.head.sha);
 }
@@ -90,7 +111,9 @@ for (const branchInfo of branches) {
     reason: 'Contiene historial no clasificado',
     aheadBy: null,
     behindBy: null,
-    deleted: false
+    deleted: false,
+    deleteError: null,
+    deleteSkipped: null
   };
 
   if (isPermanentBranch(branch, openHeads)) {
@@ -114,9 +137,9 @@ for (const branchInfo of branches) {
       record.reason = 'No contiene commits únicos respecto de main';
     } else if (currentSha && mergedHeadShas.get(branch)?.has(currentSha)) {
       record.classification = 'safe-delete';
-      record.reason = 'El Pull Request de esta misma punta fue fusionado y la rama no avanzó después';
+      record.reason = 'El Pull Request de esta misma punta fue fusionado hacia main y la rama no avanzó después';
     } else if (mergedHeadShas.has(branch)) {
-      record.reason = `Tuvo un Pull Request fusionado, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
+      record.reason = `Tuvo un Pull Request fusionado hacia main, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
     } else {
       record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en main`;
     }
@@ -127,25 +150,29 @@ for (const branchInfo of branches) {
   records.push(record);
 }
 
-const safeToDelete = records.filter(record => record.classification === 'safe-delete');
 if (mode === 'delete') {
+  const safeToDelete = records.filter(record => record.classification === 'safe-delete');
   for (const record of safeToDelete) {
-    await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
-    record.deleted = true;
+    try {
+      const currentRef = await api(`/git/ref/heads/${encodedRef(record.branch)}`);
+      const liveSha = currentRef?.object?.sha || null;
+      if (!liveSha || liveSha !== record.sha) {
+        record.classification = 'review';
+        record.reason = 'La rama cambió después de la auditoría; se omitió para evitar perder trabajo nuevo';
+        record.deleteSkipped = 'branch-changed';
+        continue;
+      }
+      await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
+      record.deleted = true;
+    } catch (error) {
+      record.classification = 'review';
+      record.reason = `No se pudo eliminar de forma segura: ${error.message}`;
+      record.deleteError = error.message;
+    }
   }
 }
 
-const summary = {
-  generatedAt: new Date().toISOString(),
-  repository,
-  mode,
-  total: records.length,
-  keep: records.filter(record => record.classification === 'keep').length,
-  safeDelete: safeToDelete.length,
-  review: records.filter(record => record.classification === 'review').length,
-  deleted: records.filter(record => record.deleted).length
-};
-
+const summary = createSummary(records);
 await fs.writeFile(outputJson, `${JSON.stringify({ summary, records }, null, 2)}\n`);
 
 const sections = [
@@ -161,7 +188,9 @@ markdown += `- Total: **${summary.total}**\n`;
 markdown += `- Conservar: **${summary.keep}**\n`;
 markdown += `- Seguras para eliminar: **${summary.safeDelete}**\n`;
 markdown += `- Revisión manual: **${summary.review}**\n`;
-markdown += `- Eliminadas: **${summary.deleted}**\n\n`;
+markdown += `- Eliminadas: **${summary.deleted}**\n`;
+markdown += `- Omitidas por cambio concurrente: **${summary.deleteSkipped}**\n`;
+markdown += `- Errores de eliminación: **${summary.deleteErrors}**\n\n`;
 
 for (const [title, classification] of sections) {
   markdown += `## ${title}\n\n`;
@@ -171,7 +200,11 @@ for (const [title, classification] of sections) {
     continue;
   }
   for (const record of matches) {
-    const status = record.deleted ? ' — eliminada' : '';
+    const statuses = [];
+    if (record.deleted) statuses.push('eliminada');
+    if (record.deleteSkipped) statuses.push(`omitida: ${record.deleteSkipped}`);
+    if (record.deleteError) statuses.push(`error: ${record.deleteError}`);
+    const status = statuses.length ? ` — ${statuses.join('; ')}` : '';
     markdown += `- \`${record.branch}\`${status}: ${record.reason}\n`;
   }
   markdown += '\n';
@@ -179,3 +212,7 @@ for (const [title, classification] of sections) {
 
 await fs.writeFile(outputMarkdown, markdown);
 console.log(JSON.stringify(summary, null, 2));
+
+if (mode === 'delete' && summary.deleteErrors > 0) {
+  throw new Error(`La limpieza terminó con ${summary.deleteErrors} error(es); revisá los artefactos antes de reintentar`);
+}
