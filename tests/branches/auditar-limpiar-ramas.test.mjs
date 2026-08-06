@@ -9,39 +9,40 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const script = path.join(root, 'scripts', 'auditar-limpiar-ramas.mjs');
+const branch = (name, sha, protectedBranch = false) => ({
+  name,
+  protected: protectedBranch,
+  commit: { sha }
+});
 
 const branches = [
-  { name: 'main', protected: true, commit: { sha: 'mainsha' } },
-  { name: 'release/stable', protected: true, commit: { sha: 'relsha' } },
-  { name: 'backup/weekly', protected: false, commit: { sha: 'backsha' } },
-  { name: 'feature/open', protected: false, commit: { sha: 'opensha' } },
-  { name: 'feature/no-unique', protected: false, commit: { sha: 'nusha' } },
-  { name: 'feature/merged', protected: false, commit: { sha: 'mergedsha' } },
-  { name: 'feature/unique', protected: false, commit: { sha: 'uniqsha' } },
-  { name: 'temp/noop-test', protected: false, commit: { sha: 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8' } },
-  { name: 'tmp/admin-cls-rebase-20260806', protected: false, commit: { sha: '1328a51a670138bb8a437bd19e62d31e7410dd9a' } }
+  branch('main', 'mainsha', true),
+  branch('release/stable', 'relsha', true),
+  branch('backup/weekly', 'backsha'),
+  branch('feature/open', 'opensha'),
+  branch('feature/no-unique', 'nusha'),
+  branch('feature/merged', 'mergedsha'),
+  branch('feature/unique', 'uniqsha'),
+  branch('temp/noop-test', 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8'),
+  branch('tmp/admin-cls-rebase-20260806', '1328a51a670138bb8a437bd19e62d31e7410dd9a')
 ];
 
-const openPulls = [
-  {
-    head: {
-      repo: { full_name: 'tintinaccs/tintin-web' },
-      ref: 'feature/open',
-      sha: 'opensha'
-    }
+const openPulls = [{
+  head: {
+    repo: { full_name: 'tintinaccs/tintin-web' },
+    ref: 'feature/open',
+    sha: 'opensha'
   }
-];
+}];
 
-const closedPulls = [
-  {
-    merged_at: '2026-08-06T00:00:00Z',
-    head: {
-      repo: { full_name: 'tintinaccs/tintin-web' },
-      ref: 'feature/merged',
-      sha: 'mergedsha'
-    }
+const closedPulls = [{
+  merged_at: '2026-08-06T00:00:00Z',
+  head: {
+    repo: { full_name: 'tintinaccs/tintin-web' },
+    ref: 'feature/merged',
+    sha: 'mergedsha'
   }
-];
+}];
 
 const comparisons = {
   'main...feature/no-unique': { ahead_by: 0, behind_by: 2 },
@@ -80,16 +81,16 @@ globalThis.fetch = async (url, options = {}) => {
   if (value.includes('/branches?')) return json(branches);
   if (value.includes('/branches/')) {
     const encoded = value.split('/branches/')[1].split('?')[0];
-    const branch = decodeURIComponent(encoded);
-    const current = liveBranches.find(item => item.name === branch);
+    const name = decodeURIComponent(encoded);
+    const current = liveBranches.find(item => item.name === name);
     return current ? json(current) : json({ message: 'Not Found' }, 404);
   }
   if (value.includes('/pulls?state=open&head=')) {
     const parsed = new URL(value);
     const head = parsed.searchParams.get('head') || '';
-    const branch = head.split(':').slice(1).join(':');
-    return json(liveOpenPullBranches.has(branch)
-      ? [{ head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: branch } }]
+    const name = head.split(':').slice(1).join(':');
+    return json(liveOpenPullBranches.has(name)
+      ? [{ head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: name } }]
       : []);
   }
   if (value.includes('/pulls?state=open')) return json(openPulls);
@@ -98,7 +99,6 @@ globalThis.fetch = async (url, options = {}) => {
   for (const [key, result] of Object.entries(comparisons)) {
     if (value.includes('/compare/' + key)) return json(result);
   }
-
   throw new Error('URL no simulada: ' + value);
 };
 `;
@@ -140,8 +140,9 @@ async function runCase({
     }
   });
 
-  let report = null;
-  if (existsSync(jsonFile)) report = JSON.parse(await readFile(jsonFile, 'utf8'));
+  const report = existsSync(jsonFile)
+    ? JSON.parse(await readFile(jsonFile, 'utf8'))
+    : null;
   const deleted = existsSync(deleteLog)
     ? (await readFile(deleteLog, 'utf8')).trim().split('\n').filter(Boolean)
     : [];
@@ -150,15 +151,20 @@ async function runCase({
   return { result, report, deleted };
 }
 
-test('el inventario revisado contiene exactamente 13 SHA válidos y únicos', async () => {
+test('el inventario contiene 15 registros y solo el duplicado operativo esperado', async () => {
   const source = await readFile(script, 'utf8');
   const start = source.indexOf('const reviewedObsoleteBranches = new Map([');
   const end = source.indexOf('\n]);\n\nif (!token)', start);
   assert.ok(start >= 0 && end > start, 'No se encontró el inventario revisado');
   const block = source.slice(start, end);
   const shas = [...block.matchAll(/sha: '([0-9a-f]{40})'/g)].map(match => match[1]);
-  assert.equal(shas.length, 13);
-  assert.equal(new Set(shas).size, 13);
+  const counts = new Map();
+  for (const sha of shas) counts.set(sha, (counts.get(sha) || 0) + 1);
+  const duplicates = [...counts.entries()].filter(([, count]) => count > 1);
+
+  assert.equal(shas.length, 15);
+  assert.equal(counts.size, 14);
+  assert.deepEqual(duplicates, [['e675da2422c94eb3382ebad206a6fd536c4e0173', 2]]);
 });
 
 test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
@@ -170,29 +176,25 @@ test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   assert.equal(report.summary.review, 1);
   assert.deepEqual(deleted, []);
 
-  const kept = new Map(
-    report.records
-      .filter(record => record.classification === 'keep')
-      .map(record => [record.branch, record.reason])
-  );
+  const kept = new Map(report.records
+    .filter(record => record.classification === 'keep')
+    .map(record => [record.branch, record.reason]));
   assert.match(kept.get('main'), /principal/);
   assert.match(kept.get('release/stable'), /protegida/);
   assert.match(kept.get('backup/weekly'), /respaldo/);
   assert.match(kept.get('feature/open'), /Pull Request abierto/);
 
-  const reviewed = new Map(
-    report.records
-      .filter(record => record.classification === 'safe-delete')
-      .map(record => [record.branch, record.reason])
-  );
+  const reviewed = new Map(report.records
+    .filter(record => record.classification === 'safe-delete')
+    .map(record => [record.branch, record.reason]));
   assert.match(reviewed.get('temp/noop-test'), /#314/);
   assert.match(reviewed.get('tmp/admin-cls-rebase-20260806'), /#319/);
 });
 
 test('una rama revisada que cambia vuelve a revisión manual', async () => {
-  const branchSet = branches.map(branch => branch.name === 'temp/noop-test'
-    ? { ...branch, commit: { sha: 'sha-nuevo-no-revisado' } }
-    : branch);
+  const branchSet = branches.map(item => item.name === 'temp/noop-test'
+    ? branch(item.name, 'sha-nuevo-no-revisado')
+    : item);
   const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge', branchSet });
   assert.equal(result.status, 0, result.stderr);
   const changed = report.records.find(record => record.branch === 'temp/noop-test');
@@ -212,7 +214,7 @@ test('delete se rechaza fuera de la rama principal', async () => {
   assert.deepEqual(deleted, []);
 });
 
-test('delete elimina solo ramas verificadas y no toca protegidas, respaldos ni PR abiertos', async () => {
+test('delete elimina solo ramas verificadas y no toca ramas sensibles', async () => {
   const { result, report, deleted } = await runCase({
     mode: 'delete',
     ref: 'main',
@@ -230,10 +232,10 @@ test('delete elimina solo ramas verificadas y no toca protegidas, respaldos ni P
   assert.ok(deleted.every(url => !url.includes('feature/open')));
 });
 
-test('delete vuelve a validar SHA y PR abierto inmediatamente antes de borrar', async () => {
-  const liveBranchSet = branches.map(branch => branch.name === 'temp/noop-test'
-    ? { ...branch, commit: { sha: 'sha-que-aparecio-despues-del-informe' } }
-    : branch);
+test('delete revalida SHA y PR abierto inmediatamente antes de borrar', async () => {
+  const liveBranchSet = branches.map(item => item.name === 'temp/noop-test'
+    ? branch(item.name, 'sha-que-aparecio-despues-del-informe')
+    : item);
   const { result, report, deleted } = await runCase({
     mode: 'delete',
     ref: 'main',
