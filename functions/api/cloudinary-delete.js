@@ -6,7 +6,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 
 async function destroyAsset(publicId, config) {
   const timestamp = Math.floor(Date.now() / 1000);

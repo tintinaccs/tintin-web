@@ -4,7 +4,7 @@ import {
   preflightResponse,
   requireSuperAdmin,
   SUPERADMIN_EMAIL
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 
 const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
 const REPLY_TO = SUPERADMIN_EMAIL;

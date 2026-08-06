@@ -41,7 +41,7 @@ Los perfiles quedan en `users/{uid}`, la fuente que alimenta la pestaña
   usa con `signInWithCustomToken` — recién ahí existe una sesión real.
 - **Nunca requirió el plan Blaze de Firebase**: todo corre en Cloudflare
   Pages Functions (gratis, mismo lugar que ya usa `order-email.js`) usando
-  Web Crypto para firmar JWTs — ver `cloudflare/firebase-admin-lite.js`.
+  Web Crypto para firmar JWTs — ver `cloudflare/firebase-admin-ligero.js`.
   La única pieza nueva de configuración fue la variable secreta
   `FIREBASE_SERVICE_ACCOUNT_KEY` en Cloudflare Pages (Settings →
   Environment variables), con el `.json` completo de una cuenta de

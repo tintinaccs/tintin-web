@@ -118,7 +118,7 @@ PLATAFORMA: Backend/seguridad (aplica a todos).
 PROBLEMA:
 "tintinaccs@gmail.com" aparece hardcodeado como Super Admin en
 firestore.rules, functions/create-order.js, functions/index.js,
-cloudflare/cloudinary-security.js y en JS del cliente.
+cloudflare/seguridad-cloudinary.js y en JS del cliente.
 
 QUÉ PROVOCA:
 Duplicación: si cambia la cuenta dueña, hay que tocar varios archivos y
@@ -128,7 +128,7 @@ depende de la seguridad de esa única cuenta de correo (conviene 2FA
 obligatorio).
 
 DÓNDE: firestore.rules (líneas 16, 39, 59, etc.), functions/create-order.js
-(línea 10), functions/index.js (línea 27), cloudflare/cloudinary-security.js
+(línea 10), functions/index.js (línea 27), cloudflare/seguridad-cloudinary.js
 (línea 8).
 
 SOLUCIÓN:

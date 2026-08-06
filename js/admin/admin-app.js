@@ -4708,11 +4708,11 @@ window.fixLegacyProductNumbers = async function() {
 };
 
 // Prueba manual y aislada del nuevo endpoint server-side de pedidos (Fase
-// 4, apps-script/Phase4CreateOrder.gs) — NO toca checkout.html ni
+// 4, apps-script/CrearPedido.gs) — NO toca checkout.html ni
 // js/orders/pedido-checkout-seguro.js. Crea un pedido real (retiro en tienda,
 // efectivo) con un producto real para confirmar que el Apps Script
 // funciona antes de migrar el checkout de verdad. Requiere que
-// Phase4CreateOrder.gs ya esté pegado en el proyecto y que doPost(e) en
+// CrearPedido.gs ya esté pegado en el proyecto y que doPost(e) en
 // Código.gs rutee action === 'createOrder' hacia phase4CreateOrder_.
 window.testServerCreateOrder = async function() {
   if (currentRole !== 'superadmin') {

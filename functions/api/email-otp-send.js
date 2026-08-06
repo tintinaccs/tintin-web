@@ -3,7 +3,7 @@ import {
   originIsAllowed,
   preflightResponse,
   SUPERADMIN_EMAIL
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
@@ -12,7 +12,7 @@ import {
   fsString,
   fsInteger,
   fsTimestamp
-} from '../../cloudflare/firebase-admin-lite.js';
+} from '../../cloudflare/firebase-admin-ligero.js';
 
 const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto

@@ -66,3 +66,10 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Se preservan nombres de proveedores y contratos técnicos como Firebase, Firestore, Resend y checkout.
 - Las carpetas arquitectónicas `analytics`, `diagnostic-shims`, `diagnostics`, `email`, `orders` y `quality` permanecen estables.
 - No se modifican eventos, claves persistidas, exports, APIs globales ni comportamiento de negocio.
+
+## Backend y contratos públicos
+
+- Los módulos internos de Cloudflare, Apps Script y funciones auxiliares usan nombres funcionales en español.
+- Los archivos dentro de `functions/api/**` conservan sus nombres cuando definen endpoints públicos; son excepciones contractuales documentadas.
+- Se preservan nombres de proveedores y protocolos como Firebase, Cloudinary, API, OTP y checkout.
+- Los renombres no modifican rutas públicas, parámetros, variables de entorno ni contratos persistidos.
