@@ -241,7 +241,7 @@ for (const branchInfo of branches) {
       record.classification = 'safe-delete';
       record.reason = `El Pull Request de esta misma punta fue fusionado hacia ${defaultBranch} y la rama no avanzó después`;
     } else if (mergedHeadShas.has(branch)) {
-      record.reason = `Tuvo un Pull Request fusionado hacia ${defaultBranch}, pero ahora contiene ${comparison.aheadBy} commit(s) únicos; requiere revisión manual`;
+      record.reason = `Tuvo un Pull Request fusionado hacia ${defaultBranch}, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
     } else {
       record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en ${defaultBranch}`;
     }
