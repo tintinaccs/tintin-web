@@ -20,8 +20,8 @@ import { listPublicCollectionRest } from '../../core/firebase/firestore-rest-fal
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
-    import('../../admin/settings/admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1'),
-    import('../../admin/settings/admin-payment-methods.js?v=tintin-20260720-payment-crud-1')
+    import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260720-payment-crud-1'),
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20260720-payment-crud-1')
   ]);
 }
 

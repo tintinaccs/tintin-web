@@ -40,7 +40,7 @@ function contrastRatio(hexA, hexB) {
 const manifest = JSON.parse(read('diagnostic-manifest.json'));
 const adminHtml = read('admin.html');
 const adminApp = read('js/admin/admin-app.js');
-const diagnostics = read('js/admin/diagnostics/admin-site-diagnostics.js');
+const diagnostics = read('js/admin/diagnostics/diagnostico-sitio-admin.js');
 const manifestBuilder = read('scripts/build-diagnostic-manifest.js');
 const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
@@ -88,7 +88,7 @@ check(
 );
 check(
   'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/admin-users-phase8.js')) &&
+  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/gestion-usuarios-admin.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/products-store.js'))
@@ -170,8 +170,8 @@ check(
   'Las exportaciones y tareas globales usan paginación acotada',
   [
     'js/admin/admin-app.js',
-    'js/admin/admin-import-phase9.js',
-    'js/admin/content/admin-welcome-control.js',
+    'js/admin/importacion-admin.js',
+    'js/admin/content/control-bienvenida-admin.js',
     'js/core/store/order-stats.js'
   ].every(file => read(file).includes('getDocsPaginated')) &&
     exists('js/core/firebase/firestore-pagination.js')

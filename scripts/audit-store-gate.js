@@ -18,7 +18,7 @@ function check(name, condition, detail) {
 const pageLoader = read('js/cargador-pagina.js');
 const gateCore = read('js/core/store-gate/store-gate-core.js');
 const gateRuntime = read('js/core/store-gate/store-gate.js');
-const adminSync = read('js/admin/settings/admin-store-control.js');
+const adminSync = read('js/admin/settings/control-tienda-admin.js');
 const adminApp = read('js/admin/admin-app.js');
 const authNav = read('js/core/auth/auth-nav.js');
 const uiQuality = read('js/quality/ui-quality.js');

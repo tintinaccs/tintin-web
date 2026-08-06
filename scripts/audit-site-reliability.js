@@ -23,7 +23,7 @@ const analytics = read('js/analytics/analytics.js');
 const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
-const welcomeAdmin = read('js/admin/content/admin-welcome-control.js');
+const welcomeAdmin = read('js/admin/content/control-bienvenida-admin.js');
 const welcomeConfig = read('js/components/welcome/configuracion-bienvenida.js');
 const welcomeRuntime = read('js/components/welcome/tutorial-bienvenida.js');
 // La creación del perfil vive en js/core/store/user-profile-store.js, compartida entre el

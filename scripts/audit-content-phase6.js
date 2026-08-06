@@ -7,7 +7,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   schema: read('js/core/store/content-schema.js'),
   publicRuntime: read('js/core/store/site-content.js'),
-  admin: read('js/admin/content/admin-content-phase6.js'),
+  admin: read('js/admin/content/gestion-contenido-admin.js'),
   badges: read('js/core/auth/edit-badge.js'),
   permissions: read('js/core/auth/role-permissions.js'),
   quality: read('js/quality/ui-quality.js'),
@@ -134,7 +134,7 @@ check(
 check(
   'La Fase 6 se inicia en el panel global',
   files.quality.includes('bootAdminContentPhase6') &&
-    files.quality.includes("'../admin/content/admin-content-phase6.js'"),
+    files.quality.includes("'../admin/content/gestion-contenido-admin.js'"),
   'ui-quality.js debe iniciar el editor en admin.html'
 );
 

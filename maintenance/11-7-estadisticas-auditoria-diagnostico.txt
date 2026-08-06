@@ -31,7 +31,7 @@ Endpoint de geo .............. functions/api/visitor-geo.js (Cloudflare edge)
 Stats por usuaria ............ js/order-stats.js
 Auditoría / Logs ............. js/admin-app.js (logAudit, loadAuditLog,
                                renderAuditLogTable, bulkExportAuditLog)
-Diagnóstico .................. js/admin-site-diagnostics.js, js/diagnostic-core.js
+Diagnóstico .................. js/diagnostico-sitio-admin.js, js/diagnostic-core.js
 Reglas server-side ........... firestore.rules (sitePresence, siteTraffic,
                                auditLog)
 

@@ -8,7 +8,7 @@ const files = {
   nav: read('js/components/navigation/compartido/carga-colecciones.js'),
   navCompatibility: read('js/components/navigation/compatibilidad/colecciones.js'),
   publicPhase4: read('js/pages/collections/presentacion-colecciones.js'),
-  adminPhase4: read('js/admin/collections/admin-collections-phase4.js'),
+  adminPhase4: read('js/admin/collections/gestion-colecciones-admin.js'),
   uiQuality: read('js/quality/ui-quality.js'),
   store: read('js/pages/collections/estado-colecciones.js'),
   collectionsPage: read('collections.html'),
@@ -129,7 +129,7 @@ check(
   files.uiQuality.includes('bootCollectionsPhase4()') &&
     files.uiQuality.includes('bootAdminCollectionsPhase4()') &&
     files.uiQuality.includes("'../pages/collections/presentacion-colecciones.js'") &&
-    files.uiQuality.includes("'../admin/collections/admin-collections-phase4.js'"),
+    files.uiQuality.includes("'../admin/collections/gestion-colecciones-admin.js'"),
   'debe ejecutarse incluso en páginas con HTML legado'
 );
 

@@ -23,7 +23,7 @@ CRUD de productos ............ js/admin-app.js (loadProductos, prodGuardar,
                                prodEliminar, prodToggleActive, bulk *)
 CRUD de colecciones .......... js/admin-app.js (collGuardar, collEliminar,
                                collMoveProduct, bulk *)
-Importación / copia .......... js/admin-import-phase9.js (CSV Shopify + JSON,
+Importación / copia .......... js/importacion-admin.js (CSV Shopify + JSON,
                                copia operativa)
 Exportación de productos ..... js/admin-app.js (bulkExportProducts → CSV)
 Biblioteca / subida .......... js/biblioteca-multimedia.js, js/carga-imagenes.js,
@@ -38,7 +38,7 @@ PROVEEDORES DE IMAGEN (estado real):
   y biblioteca. La subida se FIRMA del lado servidor con una Cloudflare Pages
   Function (`/api/cloudinary-sign-upload`); el cliente nunca lleva el secreto.
 - Firebase Storage — NO se usa para subir imágenes de catálogo (solo aparece en
-  js/admin-site-diagnostics.js como comprobación de disponibilidad).
+  js/diagnostico-sitio-admin.js como comprobación de disponibilidad).
 - ImgBB — EN USO, pero acotado al módulo "Contenido" (window.contUploadImage),
   con una clave que ingresa el propio usuario y se guarda en localStorage
   (tt_imgbb_key). No hay clave compartida embebida en el bundle. Por eso NO se

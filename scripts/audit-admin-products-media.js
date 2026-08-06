@@ -42,7 +42,7 @@ function check(name, condition, problem) {
 
 const adminApp    = read('js/admin/admin-app.js');
 const adminHtml   = read('admin.html');
-const importJs    = read('js/admin/admin-import-phase9.js');
+const importJs    = read('js/admin/importacion-admin.js');
 const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
 const imageUtils  = read('js/components/images/utilidades-imagenes.js');

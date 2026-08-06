@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-05T20:30:11.161Z",
-  "sourceFingerprint": "ce6795d9565c8661923691196928ddf68503438a62109f279218fa2d89ea8289",
+  "generatedAt": "2026-08-06T01:46:07.564Z",
+  "sourceFingerprint": "9e7d86fe6f248bd2ccdd463b74f35380ae0925888cb994d89a787b3bc2d22113",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 506,
     "textFiles": 474,
-    "totalBytes": 5453788,
+    "totalBytes": 5454694,
     "pages": 18,
     "modules": 300
   },
@@ -1216,8 +1216,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36590,
-      "sha256": "1affed33cb92512fa7811b1ecc34f09ad358440ac58c15837a90214acad73d8c",
+      "bytes": 36612,
+      "sha256": "804ad3a553e6c4c2b25cedf1df94d199597e841e5d9c744fa5f0d567c8f7ff38",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1252,13 +1252,13 @@
           "line": 7
         },
         {
-          "raw": "js/admin/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/admin-unsaved-guard.js",
+          "raw": "js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/proteccion-cambios-pendientes-admin.js",
           "line": 8
         },
         {
-          "raw": "js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/settings/admin-color-scheme.js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/settings/esquema-color-admin.js",
           "line": 752
         },
         {
@@ -1360,14 +1360,14 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/admin-unsaved-guard.js",
+          "raw": "js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/proteccion-cambios-pendientes-admin.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/settings/admin-color-scheme.js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/settings/esquema-color-admin.js",
           "line": 752,
           "exists": true
         },
@@ -1763,8 +1763,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 157340,
-      "sha256": "0fa363c97f15c3bef8990bfb84ee3a7818fdc5ca45c865220e6fbac0ed912558",
+      "bytes": 157357,
+      "sha256": "a1e14293cbcd4c6ed4afa8d9cf9ededa833485e8e88ee552452f75921fb284cc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1793,8 +1793,8 @@
           "line": 7
         },
         {
-          "raw": "js/admin/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/admin-unsaved-guard.js",
+          "raw": "js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/proteccion-cambios-pendientes-admin.js",
           "line": 8
         },
         {
@@ -1803,8 +1803,8 @@
           "line": 1837
         },
         {
-          "raw": "js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/settings/admin-color-scheme.js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2035
         },
         {
@@ -1996,8 +1996,8 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-unsaved-guard.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/admin-unsaved-guard.js",
+          "raw": "js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/proteccion-cambios-pendientes-admin.js",
           "line": 8,
           "exists": true
         },
@@ -2008,8 +2008,8 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/admin-color-scheme.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/settings/admin-color-scheme.js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2035,
           "exists": true
         },
@@ -15940,8 +15940,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 438449,
-      "sha256": "8710d8f041da921910f28cbd05da20ebf2146bcea3ce1f41276c282722013ba9",
+      "bytes": 438476,
+      "sha256": "be0eed47e5502e4f16d54e64621bf99fd0d040f5793943ed9b0cd908ce9be941",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16032,14 +16032,14 @@
           "line": 26
         },
         {
-          "raw": "./products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/products/admin-media-library-ui.js",
+          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/products/biblioteca-multimedia-admin.js",
           "dynamic": false,
           "line": 27
         },
         {
-          "raw": "./diagnostics/admin-site-diagnostics.js?v=tintin-20260722-order-delete-2",
-          "target": "js/admin/diagnostics/admin-site-diagnostics.js",
+          "raw": "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260722-order-delete-2",
+          "target": "js/admin/diagnostics/diagnostico-sitio-admin.js",
           "dynamic": false,
           "line": 28
         },
@@ -16074,8 +16074,8 @@
           "line": 37
         },
         {
-          "raw": "./products/admin-inventory-integrity.js?v=tintin-20260722-order-delete-2",
-          "target": "js/admin/products/admin-inventory-integrity.js",
+          "raw": "./products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2",
+          "target": "js/admin/products/integridad-inventario-admin.js",
           "dynamic": false,
           "line": 38
         }
@@ -16120,64 +16120,7 @@
       ]
     },
     {
-      "path": "js/admin/admin-import-phase9.js",
-      "bytes": 33672,
-      "sha256": "e813d3acfeafdf5e8a6e2a3b57fa8be16fe9b10d7f2acf46e8bcda066f0851f4",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/core/firebase/firebase.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "target": null,
-          "dynamic": false,
-          "line": 10
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 16
-        },
-        {
-          "raw": "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/auth/roles.js",
-          "dynamic": false,
-          "line": 17
-        },
-        {
-          "raw": "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/firebase/firestore-pagination.js",
-          "dynamic": false,
-          "line": 18
-        },
-        {
-          "raw": "../core/store/import-normalization.mjs?v=tintin-20260731-phase9-import-1",
-          "target": "js/core/store/import-normalization.mjs",
-          "dynamic": false,
-          "line": 24
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 10
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 16
-        }
-      ]
-    },
-    {
-      "path": "js/admin/admin-mobile-sidebar-fix.js",
+      "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
       "bytes": 320,
       "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0",
       "syntax": {
@@ -16188,29 +16131,7 @@
       "endpoints": []
     },
     {
-      "path": "js/admin/admin-path.js",
-      "bytes": 571,
-      "sha256": "211ddeab6885d69ad41fc5696cf99a845480976bc10bb70bdc854eb9e67ed79b",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/admin/admin-unsaved-guard.js",
-      "bytes": 21349,
-      "sha256": "b965b960a03de1432d5baeedf9e766ef4c11d34a31f713ef8348cd1cf58d9ed2",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/admin/collections/admin-collections-phase4.js",
+      "path": "js/admin/collections/gestion-colecciones-admin.js",
       "bytes": 8864,
       "sha256": "1130b263fd230541513728a1fb4a66afc24ba48d965534c7efc6b50f2f3a1ab4",
       "syntax": {
@@ -16245,64 +16166,7 @@
       ]
     },
     {
-      "path": "js/admin/content/admin-content-phase6.js",
-      "bytes": 19339,
-      "sha256": "81890c924b4cbc532e0f11aa03505f7422da4c50faa27839d0876fa9c4be3be7",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/core/firebase/firebase.js",
-          "dynamic": false,
-          "line": 8
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "target": null,
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 16
-        },
-        {
-          "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/auth/roles.js",
-          "dynamic": false,
-          "line": 17
-        },
-        {
-          "raw": "../../core/auth/role-permissions.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/auth/role-permissions.js",
-          "dynamic": false,
-          "line": 18
-        },
-        {
-          "raw": "../../core/store/content-schema.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/store/content-schema.js",
-          "dynamic": false,
-          "line": 32
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 9
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 16
-        }
-      ]
-    },
-    {
-      "path": "js/admin/content/admin-welcome-control.js",
+      "path": "js/admin/content/control-bienvenida-admin.js",
       "bytes": 19460,
       "sha256": "ae41b9b92355b226e1bcd909471956f120f8fdff53cd97a177402529e14fcfc4",
       "syntax": {
@@ -16359,7 +16223,64 @@
       ]
     },
     {
-      "path": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "path": "js/admin/content/gestion-contenido-admin.js",
+      "bytes": 19339,
+      "sha256": "81890c924b4cbc532e0f11aa03505f7422da4c50faa27839d0876fa9c4be3be7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 17
+        },
+        {
+          "raw": "../../core/auth/role-permissions.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/role-permissions.js",
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "../../core/store/content-schema.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/store/content-schema.js",
+          "dynamic": false,
+          "line": 32
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 9
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "bytes": 82948,
       "sha256": "50fb3a415f16cc72970776ed3189ba1364a72643b6c6cca3872480ca74447c93",
       "syntax": {
@@ -16424,7 +16345,64 @@
       ]
     },
     {
-      "path": "js/admin/orders/admin-order-delete-fix.js",
+      "path": "js/admin/importacion-admin.js",
+      "bytes": 33672,
+      "sha256": "e813d3acfeafdf5e8a6e2a3b57fa8be16fe9b10d7f2acf46e8bcda066f0851f4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 17
+        },
+        {
+          "raw": "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/firebase/firestore-pagination.js",
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "../core/store/import-normalization.mjs?v=tintin-20260731-phase9-import-1",
+          "target": "js/core/store/import-normalization.mjs",
+          "dynamic": false,
+          "line": 24
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 10
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "path": "js/admin/orders/eliminacion-pedidos-admin.js",
       "bytes": 4268,
       "sha256": "9c290bdc9a0da5ff8a4141d616a78cdabfa8cb6b75924f820fa10ddfb79e77ad",
       "syntax": {
@@ -16442,7 +16420,25 @@
       "endpoints": []
     },
     {
-      "path": "js/admin/products/admin-images-phase5.js",
+      "path": "js/admin/products/biblioteca-multimedia-admin.js",
+      "bytes": 7821,
+      "sha256": "9a4eb1249a4cfce932e5bb3bfac99e5e271d6e0d4516d8084c749f313e0c1da9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/biblioteca-multimedia.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/admin/products/gestion-imagenes-admin.js",
       "bytes": 2370,
       "sha256": "637f3455df0012450328c66506a928bafb6e59d194db5df98a5841ebbdea1fcb",
       "syntax": {
@@ -16460,7 +16456,7 @@
       "endpoints": []
     },
     {
-      "path": "js/admin/products/admin-inventory-integrity.js",
+      "path": "js/admin/products/integridad-inventario-admin.js",
       "bytes": 9126,
       "sha256": "0a4e145e23d4548290734c1e6d0a3b5faaeb8e4ae4afe7a78882a0a8e9f9ef82",
       "syntax": {
@@ -16501,25 +16497,91 @@
       ]
     },
     {
-      "path": "js/admin/products/admin-media-library-ui.js",
-      "bytes": 7821,
-      "sha256": "9a4eb1249a4cfce932e5bb3bfac99e5e271d6e0d4516d8084c749f313e0c1da9",
+      "path": "js/admin/proteccion-cambios-pendientes-admin.js",
+      "bytes": 21349,
+      "sha256": "b965b960a03de1432d5baeedf9e766ef4c11d34a31f713ef8348cd1cf58d9ed2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/admin/ruta-admin.js",
+      "bytes": 571,
+      "sha256": "211ddeab6885d69ad41fc5696cf99a845480976bc10bb70bdc854eb9e67ed79b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/admin/settings/compatibilidad-pagos-anteriores-admin.js",
+      "bytes": 1978,
+      "sha256": "811b6a7311de8ea506cb50542afcf6b9ad4687bbd0e29a08c898a6c7273924e6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/admin/settings/control-tienda-admin.js",
+      "bytes": 11731,
+      "sha256": "44ded55c7749f38b90778d62babc04bdb4cc754987c6fec62b775ee3cb28d097",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/components/images/biblioteca-multimedia.js",
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 13
+          "line": 15
+        },
+        {
+          "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 19
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 25
+        },
+        {
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/admin/settings/sincronizacion-correo-admin.js",
+          "dynamic": true,
+          "line": 412
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 19
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
+          "line": 25
+        }
+      ]
     },
     {
-      "path": "js/admin/settings/admin-color-scheme.js",
+      "path": "js/admin/settings/esquema-color-admin.js",
       "bytes": 2565,
       "sha256": "d8a2a77e49bc6f81cfe62ed21b6b063d08b9fcfb0f353a476781502c0c8fdbed",
       "syntax": {
@@ -16554,69 +16616,7 @@
       ]
     },
     {
-      "path": "js/admin/settings/admin-email-gate-sync.js",
-      "bytes": 13212,
-      "sha256": "cbfbc876514ef88bb062d04e2f122d48cc0432ddfcfbe81a2861b61c2307cb15",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
-          "target": "js/core/firebase/firebase.js",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/auth/roles.js",
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "../../core/firebase/function-origin.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/firebase/function-origin.js",
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "target": null,
-          "dynamic": false,
-          "line": 12
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 4
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 12
-        }
-      ]
-    },
-    {
-      "path": "js/admin/settings/admin-payment-legacy-preserve.js",
-      "bytes": 1978,
-      "sha256": "811b6a7311de8ea506cb50542afcf6b9ad4687bbd0e29a08c898a6c7273924e6",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
-      "path": "js/admin/settings/admin-payment-methods.js",
+      "path": "js/admin/settings/metodos-pago-admin.js",
       "bytes": 21093,
       "sha256": "c961e43c092b3b30fe074c285bd25947d50439d2a48b2bdc445547fad8e7366c",
       "syntax": {
@@ -16667,9 +16667,9 @@
       ]
     },
     {
-      "path": "js/admin/settings/admin-store-control.js",
-      "bytes": 11725,
-      "sha256": "8bc308a197bce6f66a723957082e4e87e9718423c02b4b13f5e6e13001aa5048",
+      "path": "js/admin/settings/sincronizacion-correo-admin.js",
+      "bytes": 13212,
+      "sha256": "cbfbc876514ef88bb062d04e2f122d48cc0432ddfcfbe81a2861b61c2307cb15",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16679,46 +16679,46 @@
           "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 15
+          "line": 1
         },
         {
           "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/auth/roles.js",
           "dynamic": false,
-          "line": 16
+          "line": 2
+        },
+        {
+          "raw": "../../core/firebase/function-origin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/firebase/function-origin.js",
+          "dynamic": false,
+          "line": 3
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 19
+          "line": 4
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 25
-        },
-        {
-          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/admin/settings/admin-email-gate-sync.js",
-          "dynamic": true,
-          "line": 412
+          "line": 12
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-          "line": 19
+          "line": 4
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js",
-          "line": 25
+          "line": 12
         }
       ]
     },
     {
-      "path": "js/admin/users/admin-users-phase8.js",
+      "path": "js/admin/users/gestion-usuarios-admin.js",
       "bytes": 19108,
       "sha256": "9291f57d3370e975e3b3bafffc34ddad7f930d8cc60aa531155d9a1223a80561",
       "syntax": {
@@ -16765,7 +16765,7 @@
     {
       "path": "js/analytics/analytics.js",
       "bytes": 12162,
-      "sha256": "0e3b798ec9fa13246165c3a0906589e8d1691bd19db268c85d108e4eabd2744c",
+      "sha256": "9e41639fb6056d2314389d6c5395809a7c2be76014a2091f4ed1d779f228262b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16790,8 +16790,8 @@
           "line": 6
         },
         {
-          "raw": "../admin/admin-path.js?v=tintin-20260722-level4-1",
-          "target": "js/admin/admin-path.js",
+          "raw": "../admin/ruta-admin.js?v=tintin-20260722-level4-1",
+          "target": "js/admin/ruta-admin.js",
           "dynamic": false,
           "line": 7
         }
@@ -16810,15 +16810,15 @@
     {
       "path": "js/analytics/privacy-consent.js",
       "bytes": 8287,
-      "sha256": "3855b9bfdc6e78462bfef953ba93ff18474c3d5f462bca109bcfacc5606ce46c",
+      "sha256": "009b16806df619ecc87f533aec417301ef6401177f02ca16a7cc77e86234e410",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../admin/admin-path.js?v=tintin-20260722-level4-1",
-          "target": "js/admin/admin-path.js",
+          "raw": "../admin/ruta-admin.js?v=tintin-20260722-level4-1",
+          "target": "js/admin/ruta-admin.js",
           "dynamic": false,
           "line": 2
         },
@@ -16834,7 +16834,7 @@
     {
       "path": "js/analytics/site-activity.js",
       "bytes": 12043,
-      "sha256": "e8adb71f3f8547f931528d5c697d523908099001897bfdf024846c5cb3629946",
+      "sha256": "ea0a64214e8d4ed4ac95b8ad00abdc05f146be842e6a89a0c464434a19d213c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16865,8 +16865,8 @@
           "line": 21
         },
         {
-          "raw": "../admin/admin-path.js?v=tintin-20260722-level4-1",
-          "target": "js/admin/admin-path.js",
+          "raw": "../admin/ruta-admin.js?v=tintin-20260722-level4-1",
+          "target": "js/admin/ruta-admin.js",
           "dynamic": false,
           "line": 22
         }
@@ -16904,8 +16904,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 36941,
-      "sha256": "7d2e4104fd383cfbd8b87d9a236d6e54b980a63687d12a002d95a25ad083ac59",
+      "bytes": 36956,
+      "sha256": "fc3522dd7b894f28fbd48f19f6a23e0ab9d8b8aba18c96b47d7b078e51329863",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16937,15 +16937,15 @@
     {
       "path": "js/components/cart/recuperacion-carrito.js",
       "bytes": 6307,
-      "sha256": "c1beb983def4bbf7a575035d9c686595bd2c92c8d6be673f416449d6e6509ada",
+      "sha256": "336d03db95834d47190e11df21a9baeda04c335646e3abec995a64c1fbb95e34",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../admin/admin-path.js?v=tintin-20260722-level4-1",
-          "target": "js/admin/admin-path.js",
+          "raw": "../../admin/ruta-admin.js?v=tintin-20260722-level4-1",
+          "target": "js/admin/ruta-admin.js",
           "dynamic": false,
           "line": 1
         }
@@ -17005,8 +17005,8 @@
     },
     {
       "path": "js/components/color/esquema-color-catalogo.js",
-      "bytes": 32404,
-      "sha256": "2e7e368f13f6b7383b8e56f65839967c904b8c5564958ec07d4ebce45c4773a5",
+      "bytes": 32405,
+      "sha256": "07b4fc87b3e1c15542d64e59e5ba71bfe74cb8bb3958a68086c80beb3d763244",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19327,8 +19327,8 @@
     },
     {
       "path": "js/pages/collections/estado-colecciones.js",
-      "bytes": 6052,
-      "sha256": "61fe532e818e6e2577d4bd50b1263064239d87d16d12f4b19f2893c2ecdf8445",
+      "bytes": 6057,
+      "sha256": "da441ed9308bb76de7d4651a343311852b0392135f843c726bb1107a9a2c1ef8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19377,14 +19377,14 @@
           "line": 19
         },
         {
-          "raw": "../../admin/settings/admin-payment-legacy-preserve.js?v=tintin-20260720-payment-crud-1",
-          "target": "js/admin/settings/admin-payment-legacy-preserve.js",
+          "raw": "../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260720-payment-crud-1",
+          "target": "js/admin/settings/compatibilidad-pagos-anteriores-admin.js",
           "dynamic": true,
           "line": 23
         },
         {
-          "raw": "../../admin/settings/admin-payment-methods.js?v=tintin-20260720-payment-crud-1",
-          "target": "js/admin/settings/admin-payment-methods.js",
+          "raw": "../../admin/settings/metodos-pago-admin.js?v=tintin-20260720-payment-crud-1",
+          "target": "js/admin/settings/metodos-pago-admin.js",
           "dynamic": true,
           "line": 24
         }
@@ -19820,8 +19820,8 @@
     },
     {
       "path": "js/quality/ui-quality.js",
-      "bytes": 8325,
-      "sha256": "597d56c97acd1f4c2a1f2518b267b713e4bce9b9bcfedd7083b0927ffeccfa16",
+      "bytes": 8334,
+      "sha256": "77f5dcc6d8d6abe0837ddbfc247adba21509a227a206f7117c07518bfe6d9615",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20032,15 +20032,15 @@
     {
       "path": "scripts/audit-admin-analytics-audit.js",
       "bytes": 14649,
-      "sha256": "c978530ff3665f0e1b3eeab521f29df73a8b545e20187d7fa5f2f5d126896fc9",
+      "sha256": "35a76927fbf469f9478d638d9ef9d899a2e0b0a7dfff8d04b78c3f13851d1add",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../admin/admin-path.js",
-          "target": "admin/admin-path.js",
+          "raw": "../admin/ruta-admin.js",
+          "target": "admin/ruta-admin.js",
           "dynamic": false,
           "line": 198
         }
@@ -20049,8 +20049,8 @@
     },
     {
       "path": "scripts/audit-admin-content-appearance.js",
-      "bytes": 9577,
-      "sha256": "e05f4f4ad8bc71556615b88b19f76f00baa8472b6e5916eb6abac714d6e2cb94",
+      "bytes": 9580,
+      "sha256": "9bca034ce7b83f619c16e08893024ec1324d70d156fafb5d473dfdb0d7cc7b1e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20060,8 +20060,8 @@
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
-      "bytes": 9077,
-      "sha256": "b03901d879ace24affe85d824bdd55894a6cd99014af874e22848b13a2218c70",
+      "bytes": 9089,
+      "sha256": "f6e4e30587fdcde45e4abd9c132334d6e2d94f686916c0bb47ac4e7682d0e775",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20095,8 +20095,8 @@
     },
     {
       "path": "scripts/audit-admin-foundation.js",
-      "bytes": 15150,
-      "sha256": "a02af9f68bd6372f778b726b76aa8c7164dbaac23740fcbcafb645f3ad4e3132",
+      "bytes": 15169,
+      "sha256": "1a4dde9ecb4b48e30abb6ed2ec10e8425b8ae64d66224184509fa0b9674de70d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20106,8 +20106,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 12603,
-      "sha256": "e6cad2c896436eed54cd84456f180537d8fbbf88d9718b41f394db41de70b5e2",
+      "bytes": 12610,
+      "sha256": "8a62a609d63e7458e2ad8c1594c162bca0c1ab81be78b30f5b939006eb91c855",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20117,8 +20117,8 @@
     },
     {
       "path": "scripts/audit-admin-products-media.js",
-      "bytes": 15502,
-      "sha256": "627253db42e9ae613ae5ca96f62e3299e3cc5ed970966cb8736a077d29dc0820",
+      "bytes": 15500,
+      "sha256": "edf0c9c9027386df44f0ef2d0351e7f63cb1f8d2f5bca1414e79a6e3d75f36e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20139,8 +20139,8 @@
     },
     {
       "path": "scripts/audit-admin-users-roles.js",
-      "bytes": 11623,
-      "sha256": "66549883240771ab48da7d5dffba816e01509b0fe18f19349db62523d0e6d496",
+      "bytes": 11635,
+      "sha256": "7834b1c2b13ab0bf8f9290fd4fd51671f537eaeedc61b6a6f7ee993c33dd5112",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20401,8 +20401,8 @@
     },
     {
       "path": "scripts/audit-collections-phase4.js",
-      "bytes": 8583,
-      "sha256": "0c53f1147dc45d1ebc43fa4d7e3f5659ee8e61ec69827e8b853261a149ef7a3e",
+      "bytes": 8585,
+      "sha256": "91f4f22acf2c4ba48a8e98ba8e0d927e48033e2ae8bb3b9e7733365c188f744b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20431,8 +20431,8 @@
     },
     {
       "path": "scripts/audit-color-scheme.js",
-      "bytes": 9570,
-      "sha256": "a356141d1db46e3bd33f70ae413804071b6ab544f66b13973b31c056cb1c302e",
+      "bytes": 9572,
+      "sha256": "ddabf380397a7cc71f89a3e3d7a057f95ed5eb0c4b4893e51658a07ad1a6886e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20516,8 +20516,8 @@
     },
     {
       "path": "scripts/audit-content-phase6.js",
-      "bytes": 5564,
-      "sha256": "820a9b1c34249862810ca15a274a29add20f7bd4e16242e55874f218c6e40f57",
+      "bytes": 5570,
+      "sha256": "378b9b94df3d39cc56efad405c1575b1e7f5b049ad3d42c5ea3539d06eaca472",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20569,8 +20569,8 @@
     },
     {
       "path": "scripts/audit-critical-healing.js",
-      "bytes": 7394,
-      "sha256": "aaf53c94b74260e6cafaf5fb7e7747f36fe93fdbe4e70d3addd0edf162b36b75",
+      "bytes": 7399,
+      "sha256": "5ed22e8234b7a4bd67929d974cc4a9f56a0f27c25a6db6d81232d3e060a3750a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20675,8 +20675,8 @@
     },
     {
       "path": "scripts/audit-diagnostic-findings.js",
-      "bytes": 8265,
-      "sha256": "d32b3d7adb11aca45af8b9160bc4e32f97b3e00869e9f6d99a4bbadce30b8437",
+      "bytes": 8271,
+      "sha256": "d84abdd0651e440c9297277db41102351a4bb1b427248b3a0f0300949b888d71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20686,8 +20686,8 @@
     },
     {
       "path": "scripts/audit-diagnostics.js",
-      "bytes": 9306,
-      "sha256": "06a8efa7873d8e35afbe19e574a71dbd4679612d2bb06203156124101d2243aa",
+      "bytes": 9307,
+      "sha256": "56b2dbe2e2269657b6b6f9054b850b915d5becb332d2563ed00825160404fdd3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20721,8 +20721,8 @@
     },
     {
       "path": "scripts/audit-email-phase3.js",
-      "bytes": 5035,
-      "sha256": "fdc420b60157b3a2f82278905343588e1495de28e0254b4c9f11e10d628a9f5d",
+      "bytes": 5048,
+      "sha256": "4ff4a1a580d82b0532e643342c2f3e6b66b84a736251d2057700a2391512cb84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20735,8 +20735,8 @@
           "line": 27
         },
         {
-          "raw": "./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "scripts/admin-email-gate-sync.js",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 78
         }
@@ -20814,8 +20814,8 @@
     },
     {
       "path": "scripts/audit-final-release.js",
-      "bytes": 7900,
-      "sha256": "4a2dd50afd0f3d6f7bdfa81ebb7e3648fe9111dfbf940175b00d4da786b11f9c",
+      "bytes": 7896,
+      "sha256": "12a8f0763af4e4900a03edd44e8f52ea9820c7ee6afa2f7cc0812f18bd3adfb3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21109,8 +21109,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 24442,
-      "sha256": "b85995fd1035791e216d75ccf1411870cd915a64af384702a4fb44a4d6084268",
+      "bytes": 24464,
+      "sha256": "754f3f4ffbb66767b24e95da6a97a0e22c98952ef3c755bb1cb25133ceb0b228",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21216,8 +21216,8 @@
     },
     {
       "path": "scripts/audit-integral-platform.js",
-      "bytes": 7084,
-      "sha256": "0212633e5897e89e16a05130d540825fee31626389bc52ce59c139686a8f71be",
+      "bytes": 7103,
+      "sha256": "381847941b5f4f3b6d65119b201464dd3fe107a0120d79b7e025f4f0fdc16d2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21304,8 +21304,8 @@
     },
     {
       "path": "scripts/audit-level2-commerce.js",
-      "bytes": 10346,
-      "sha256": "b9317a529cbd1eef68808fa535899ddf7b29cf78bc84ee419154bcced853ee03",
+      "bytes": 10351,
+      "sha256": "8dfb0732812e91ba1cf4dc328871a0494d49fb1f15f9a2cf33b5231ca86e734c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21519,8 +21519,8 @@
     },
     {
       "path": "scripts/audit-payment-methods.js",
-      "bytes": 4128,
-      "sha256": "c7b8556ec863a302f58f490e516fc2fd0c8ccf5ed9cbc692ca249e8d28e14667",
+      "bytes": 4122,
+      "sha256": "31b3256a277550d8c4ad6aff91d83922836d3b316b0886c65f1c5087e16ac0b3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21914,8 +21914,8 @@
     },
     {
       "path": "scripts/audit-security-phase8.js",
-      "bytes": 3912,
-      "sha256": "b38bad5e7b7b19fd92449580f4dda7b1e3815a66667649d3a3738c473cf9cf23",
+      "bytes": 3920,
+      "sha256": "1d3224c1f9698b7d40949ca7565514f76bc44461a4a6e56db7f326616cf1ed78",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21925,8 +21925,8 @@
     },
     {
       "path": "scripts/audit-site-reliability.js",
-      "bytes": 17735,
-      "sha256": "54391860099eb528e37c278b78ff638ab76d935d7e5d5768bf9c31e41d93c7f8",
+      "bytes": 17738,
+      "sha256": "600aef987315a2c421ff8d4cbcea70d48cc6520e83f83ae9204ff0e6d83d80e8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21972,8 +21972,8 @@
     },
     {
       "path": "scripts/audit-store-gate.js",
-      "bytes": 13332,
-      "sha256": "6c977f131e557b59c4b52927fb578848b5481fbf48dffd8bea151b0dd8ed0e39",
+      "bytes": 13333,
+      "sha256": "075dcdfe53e94ecaaa143b1109d1b3edde10c8c7482c6e3df9e01d5c078f1f55",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22098,8 +22098,8 @@
     },
     {
       "path": "scripts/audit-typography.js",
-      "bytes": 12218,
-      "sha256": "57cd17b0a9de26070a754fa405337dd1796b35091e9b7a76e93446ceb9e70cad",
+      "bytes": 12219,
+      "sha256": "44599a61b3578a22f64d281a68efdb340e8e5a39d54549caa29a1d6227f54f8f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22847,32 +22847,32 @@
     {
       "path": ".github/workflows/audit-collections-phase4.yml",
       "extension": ".yml",
-      "bytes": 1205,
-      "sha256": "77096e1fdad72188d043aaaa1e311f51a0ba59d0e5ad3f65d1857b7d923bdfec"
+      "bytes": 1207,
+      "sha256": "f67c2d95fe6623788ec10e0ebdd7453b3ac9220f695011f3616e7e9872b015ba"
     },
     {
       "path": ".github/workflows/audit-content-phase6.yml",
       "extension": ".yml",
-      "bytes": 1220,
-      "sha256": "2a4eae41277d0cb9cff86511ae0ed95b90d0fd500b6ff056cc4fd44e3661b53b"
+      "bytes": 1226,
+      "sha256": "ae7c9d98abfe6588aacd5ebd02cfe7e9c6d0cebc5c2fefaa024f11250a184560"
     },
     {
       "path": ".github/workflows/audit-diagnostics.yml",
       "extension": ".yml",
-      "bytes": 916,
-      "sha256": "6254fa3c9857e37501a9e87fd6639836b652e7bdc008bb3f73a7d4d09d987f59"
+      "bytes": 917,
+      "sha256": "849b1c1b93691490ce48d136a5254f82a380787849fb753b1fa375238aab41c0"
     },
     {
       "path": ".github/workflows/audit-email-phase3.yml",
       "extension": ".yml",
-      "bytes": 1143,
-      "sha256": "e6dea06a2e2e20ccfe8e8ce34c0f2f4360476cddcac17521e1659c7974c96a2f"
+      "bytes": 1157,
+      "sha256": "14602e08b865e20f2ee06bac8843343f6b71c693bd9f57f11cf81c416ca1a2f6"
     },
     {
       "path": ".github/workflows/audit-images-phase5.yml",
       "extension": ".yml",
-      "bytes": 4243,
-      "sha256": "ed84927081ca829ef9392bf32adc01f4a0593af3265df96a2cd2678735d8728f"
+      "bytes": 4259,
+      "sha256": "8cd7e67b244925de72540db6e42c4cfbff093c31401c90eb8fbc0598a26e9c92"
     },
     {
       "path": ".github/workflows/audit-modular-navigation.yml",
@@ -22919,8 +22919,8 @@
     {
       "path": ".github/workflows/final-release-phase9.yml",
       "extension": ".yml",
-      "bytes": 2467,
-      "sha256": "483a917dfa898c841200141d7e61f3f7c9d432e403aff686e0cb94af16c6cf41"
+      "bytes": 2463,
+      "sha256": "9ed86c305748d72a6c12691c2a8bbf88ad059ac2c71011e867c53e3629f7df78"
     },
     {
       "path": ".github/workflows/final-sweep-part2h-audit.yml",
@@ -23009,8 +23009,8 @@
     {
       "path": "AUDITORIA-MEDIO.txt",
       "extension": ".txt",
-      "bytes": 7749,
-      "sha256": "cd618de8c72da5b226852ae42df7be4a5c5c7ad68f2500397629e3425512b1b8"
+      "bytes": 7761,
+      "sha256": "e4db53fae826c68d9bb728e65bb16961abdf3466dc0a2a4174abe9edc49ca940"
     },
     {
       "path": "CLOUDINARY_SETUP.md",
@@ -23039,14 +23039,14 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36590,
-      "sha256": "1affed33cb92512fa7811b1ecc34f09ad358440ac58c15837a90214acad73d8c"
+      "bytes": 36612,
+      "sha256": "804ad3a553e6c4c2b25cedf1df94d199597e841e5d9c744fa5f0d567c8f7ff38"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 157340,
-      "sha256": "0fa363c97f15c3bef8990bfb84ee3a7818fdc5ca45c865220e6fbac0ed912558"
+      "bytes": 157357,
+      "sha256": "a1e14293cbcd4c6ed4afa8d9cf9ededa833485e8e88ee552452f75921fb284cc"
     },
     {
       "path": "apple-touch-icon.png",
@@ -23603,8 +23603,8 @@
     {
       "path": "docs/CONVENCIONES-DE-NOMBRES.md",
       "extension": ".md",
-      "bytes": 1357,
-      "sha256": "0a7ccc2c800f93bb03adac89bc10acab48141d0986c801fa3430214f585d1e6e"
+      "bytes": 1862,
+      "sha256": "9e7801490deb62732c4ab1dfb9c28811ab6f9a7ffeb67c8901322f72c79998be"
     },
     {
       "path": "docs/CSS_LAYERS.md",
@@ -23645,8 +23645,8 @@
     {
       "path": "docs/PHASE5_IMAGES.md",
       "extension": ".md",
-      "bytes": 1935,
-      "sha256": "ba92153a660176d78811ddf063f545b0af5cd19662cde606c35ad7541d137309"
+      "bytes": 1940,
+      "sha256": "0937f89b3aea52328d1d814ae2f09f612417e464a9ef391c5e09d479c016e395"
     },
     {
       "path": "docs/PHASE6_CONTENT.md",
@@ -23897,113 +23897,113 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 438449,
-      "sha256": "8710d8f041da921910f28cbd05da20ebf2146bcea3ce1f41276c282722013ba9"
+      "bytes": 438476,
+      "sha256": "be0eed47e5502e4f16d54e64621bf99fd0d040f5793943ed9b0cd908ce9be941"
     },
     {
-      "path": "js/admin/admin-import-phase9.js",
-      "extension": ".js",
-      "bytes": 33672,
-      "sha256": "e813d3acfeafdf5e8a6e2a3b57fa8be16fe9b10d7f2acf46e8bcda066f0851f4"
-    },
-    {
-      "path": "js/admin/admin-mobile-sidebar-fix.js",
+      "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
       "extension": ".js",
       "bytes": 320,
       "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0"
     },
     {
-      "path": "js/admin/admin-path.js",
-      "extension": ".js",
-      "bytes": 571,
-      "sha256": "211ddeab6885d69ad41fc5696cf99a845480976bc10bb70bdc854eb9e67ed79b"
-    },
-    {
-      "path": "js/admin/admin-unsaved-guard.js",
-      "extension": ".js",
-      "bytes": 21349,
-      "sha256": "b965b960a03de1432d5baeedf9e766ef4c11d34a31f713ef8348cd1cf58d9ed2"
-    },
-    {
-      "path": "js/admin/collections/admin-collections-phase4.js",
+      "path": "js/admin/collections/gestion-colecciones-admin.js",
       "extension": ".js",
       "bytes": 8864,
       "sha256": "1130b263fd230541513728a1fb4a66afc24ba48d965534c7efc6b50f2f3a1ab4"
     },
     {
-      "path": "js/admin/content/admin-content-phase6.js",
-      "extension": ".js",
-      "bytes": 19339,
-      "sha256": "81890c924b4cbc532e0f11aa03505f7422da4c50faa27839d0876fa9c4be3be7"
-    },
-    {
-      "path": "js/admin/content/admin-welcome-control.js",
+      "path": "js/admin/content/control-bienvenida-admin.js",
       "extension": ".js",
       "bytes": 19460,
       "sha256": "ae41b9b92355b226e1bcd909471956f120f8fdff53cd97a177402529e14fcfc4"
     },
     {
-      "path": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "path": "js/admin/content/gestion-contenido-admin.js",
+      "extension": ".js",
+      "bytes": 19339,
+      "sha256": "81890c924b4cbc532e0f11aa03505f7422da4c50faa27839d0876fa9c4be3be7"
+    },
+    {
+      "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "extension": ".js",
       "bytes": 82948,
       "sha256": "50fb3a415f16cc72970776ed3189ba1364a72643b6c6cca3872480ca74447c93"
     },
     {
-      "path": "js/admin/orders/admin-order-delete-fix.js",
+      "path": "js/admin/importacion-admin.js",
+      "extension": ".js",
+      "bytes": 33672,
+      "sha256": "e813d3acfeafdf5e8a6e2a3b57fa8be16fe9b10d7f2acf46e8bcda066f0851f4"
+    },
+    {
+      "path": "js/admin/orders/eliminacion-pedidos-admin.js",
       "extension": ".js",
       "bytes": 4268,
       "sha256": "9c290bdc9a0da5ff8a4141d616a78cdabfa8cb6b75924f820fa10ddfb79e77ad"
     },
     {
-      "path": "js/admin/products/admin-images-phase5.js",
-      "extension": ".js",
-      "bytes": 2370,
-      "sha256": "637f3455df0012450328c66506a928bafb6e59d194db5df98a5841ebbdea1fcb"
-    },
-    {
-      "path": "js/admin/products/admin-inventory-integrity.js",
-      "extension": ".js",
-      "bytes": 9126,
-      "sha256": "0a4e145e23d4548290734c1e6d0a3b5faaeb8e4ae4afe7a78882a0a8e9f9ef82"
-    },
-    {
-      "path": "js/admin/products/admin-media-library-ui.js",
+      "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "extension": ".js",
       "bytes": 7821,
       "sha256": "9a4eb1249a4cfce932e5bb3bfac99e5e271d6e0d4516d8084c749f313e0c1da9"
     },
     {
-      "path": "js/admin/settings/admin-color-scheme.js",
+      "path": "js/admin/products/gestion-imagenes-admin.js",
       "extension": ".js",
-      "bytes": 2565,
-      "sha256": "d8a2a77e49bc6f81cfe62ed21b6b063d08b9fcfb0f353a476781502c0c8fdbed"
+      "bytes": 2370,
+      "sha256": "637f3455df0012450328c66506a928bafb6e59d194db5df98a5841ebbdea1fcb"
     },
     {
-      "path": "js/admin/settings/admin-email-gate-sync.js",
+      "path": "js/admin/products/integridad-inventario-admin.js",
       "extension": ".js",
-      "bytes": 13212,
-      "sha256": "cbfbc876514ef88bb062d04e2f122d48cc0432ddfcfbe81a2861b61c2307cb15"
+      "bytes": 9126,
+      "sha256": "0a4e145e23d4548290734c1e6d0a3b5faaeb8e4ae4afe7a78882a0a8e9f9ef82"
     },
     {
-      "path": "js/admin/settings/admin-payment-legacy-preserve.js",
+      "path": "js/admin/proteccion-cambios-pendientes-admin.js",
+      "extension": ".js",
+      "bytes": 21349,
+      "sha256": "b965b960a03de1432d5baeedf9e766ef4c11d34a31f713ef8348cd1cf58d9ed2"
+    },
+    {
+      "path": "js/admin/ruta-admin.js",
+      "extension": ".js",
+      "bytes": 571,
+      "sha256": "211ddeab6885d69ad41fc5696cf99a845480976bc10bb70bdc854eb9e67ed79b"
+    },
+    {
+      "path": "js/admin/settings/compatibilidad-pagos-anteriores-admin.js",
       "extension": ".js",
       "bytes": 1978,
       "sha256": "811b6a7311de8ea506cb50542afcf6b9ad4687bbd0e29a08c898a6c7273924e6"
     },
     {
-      "path": "js/admin/settings/admin-payment-methods.js",
+      "path": "js/admin/settings/control-tienda-admin.js",
+      "extension": ".js",
+      "bytes": 11731,
+      "sha256": "44ded55c7749f38b90778d62babc04bdb4cc754987c6fec62b775ee3cb28d097"
+    },
+    {
+      "path": "js/admin/settings/esquema-color-admin.js",
+      "extension": ".js",
+      "bytes": 2565,
+      "sha256": "d8a2a77e49bc6f81cfe62ed21b6b063d08b9fcfb0f353a476781502c0c8fdbed"
+    },
+    {
+      "path": "js/admin/settings/metodos-pago-admin.js",
       "extension": ".js",
       "bytes": 21093,
       "sha256": "c961e43c092b3b30fe074c285bd25947d50439d2a48b2bdc445547fad8e7366c"
     },
     {
-      "path": "js/admin/settings/admin-store-control.js",
+      "path": "js/admin/settings/sincronizacion-correo-admin.js",
       "extension": ".js",
-      "bytes": 11725,
-      "sha256": "8bc308a197bce6f66a723957082e4e87e9718423c02b4b13f5e6e13001aa5048"
+      "bytes": 13212,
+      "sha256": "cbfbc876514ef88bb062d04e2f122d48cc0432ddfcfbe81a2861b61c2307cb15"
     },
     {
-      "path": "js/admin/users/admin-users-phase8.js",
+      "path": "js/admin/users/gestion-usuarios-admin.js",
       "extension": ".js",
       "bytes": 19108,
       "sha256": "9291f57d3370e975e3b3bafffc34ddad7f930d8cc60aa531155d9a1223a80561"
@@ -24012,19 +24012,19 @@
       "path": "js/analytics/analytics.js",
       "extension": ".js",
       "bytes": 12162,
-      "sha256": "0e3b798ec9fa13246165c3a0906589e8d1691bd19db268c85d108e4eabd2744c"
+      "sha256": "9e41639fb6056d2314389d6c5395809a7c2be76014a2091f4ed1d779f228262b"
     },
     {
       "path": "js/analytics/privacy-consent.js",
       "extension": ".js",
       "bytes": 8287,
-      "sha256": "3855b9bfdc6e78462bfef953ba93ff18474c3d5f462bca109bcfacc5606ce46c"
+      "sha256": "009b16806df619ecc87f533aec417301ef6401177f02ca16a7cc77e86234e410"
     },
     {
       "path": "js/analytics/site-activity.js",
       "extension": ".js",
       "bytes": 12043,
-      "sha256": "e8adb71f3f8547f931528d5c697d523908099001897bfdf024846c5cb3629946"
+      "sha256": "ea0a64214e8d4ed4ac95b8ad00abdc05f146be842e6a89a0c464434a19d213c0"
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
@@ -24035,14 +24035,14 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 36941,
-      "sha256": "7d2e4104fd383cfbd8b87d9a236d6e54b980a63687d12a002d95a25ad083ac59"
+      "bytes": 36956,
+      "sha256": "fc3522dd7b894f28fbd48f19f6a23e0ab9d8b8aba18c96b47d7b078e51329863"
     },
     {
       "path": "js/components/cart/recuperacion-carrito.js",
       "extension": ".js",
       "bytes": 6307,
-      "sha256": "c1beb983def4bbf7a575035d9c686595bd2c92c8d6be673f416449d6e6509ada"
+      "sha256": "336d03db95834d47190e11df21a9baeda04c335646e3abec995a64c1fbb95e34"
     },
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
@@ -24053,8 +24053,8 @@
     {
       "path": "js/components/color/esquema-color-catalogo.js",
       "extension": ".js",
-      "bytes": 32404,
-      "sha256": "2e7e368f13f6b7383b8e56f65839967c904b8c5564958ec07d4ebce45c4773a5"
+      "bytes": 32405,
+      "sha256": "07b4fc87b3e1c15542d64e59e5ba71bfe74cb8bb3958a68086c80beb3d763244"
     },
     {
       "path": "js/components/color/esquema-color-instantaneo.js",
@@ -24689,8 +24689,8 @@
     {
       "path": "js/pages/collections/estado-colecciones.js",
       "extension": ".js",
-      "bytes": 6052,
-      "sha256": "61fe532e818e6e2577d4bd50b1263064239d87d16d12f4b19f2893c2ecdf8445"
+      "bytes": 6057,
+      "sha256": "da441ed9308bb76de7d4651a343311852b0392135f843c726bb1107a9a2c1ef8"
     },
     {
       "path": "js/pages/collections/mantenimiento-colecciones.js",
@@ -24833,8 +24833,8 @@
     {
       "path": "js/quality/ui-quality.js",
       "extension": ".js",
-      "bytes": 8325,
-      "sha256": "597d56c97acd1f4c2a1f2518b267b713e4bce9b9bcfedd7083b0927ffeccfa16"
+      "bytes": 8334,
+      "sha256": "77f5dcc6d8d6abe0837ddbfc247adba21509a227a206f7117c07518bfe6d9615"
     },
     {
       "path": "login.html",
@@ -24893,14 +24893,14 @@
     {
       "path": "maintenance/11-1-base-super-admin.txt",
       "extension": ".txt",
-      "bytes": 13270,
-      "sha256": "e737397f38c208543d342c9eea9401e16d4b63da176ef3554b4b56af2f5ebd1b"
+      "bytes": 13333,
+      "sha256": "9fe6eff8c8095739be393b0b109045376ba48f7367791c80d8a1a3d062b3b0a2"
     },
     {
       "path": "maintenance/11-2-productos-colecciones-imagenes.txt",
       "extension": ".txt",
-      "bytes": 10400,
-      "sha256": "c21b73c454495d7b5581c3399260c148418711bd95fc21165dc72ce83b1fb5bc"
+      "bytes": 10399,
+      "sha256": "ed73b151406d72fb4de43394a86ff4d2cbbfb6de253c43780c14fc5aead0238c"
     },
     {
       "path": "maintenance/11-3-pedidos-checkout.txt",
@@ -24911,26 +24911,26 @@
     {
       "path": "maintenance/11-4-usuarios-roles-permisos.txt",
       "extension": ".txt",
-      "bytes": 10358,
-      "sha256": "7dcf7a91332d292ea5e375683e31704a265233475c5011f4cb7419ec75889b94"
+      "bytes": 10370,
+      "sha256": "f6d58ca0ae3f86d2d482c754aaed4a3474054b2180fb551a600b0bd6344635e1"
     },
     {
       "path": "maintenance/11-5-contenido-apariencia.txt",
       "extension": ".txt",
-      "bytes": 9908,
-      "sha256": "5099208b40367da343288588986ee52a2a6886cc6804c08f7019db06d44ce715"
+      "bytes": 9915,
+      "sha256": "a76e672910b834cc4ad1c20b088e2139c3219132a3ad5be1f4047f415cd66c75"
     },
     {
       "path": "maintenance/11-6-correos-mensajes.txt",
       "extension": ".txt",
-      "bytes": 13138,
-      "sha256": "9b8e341c735b479d3fc6281562307b5949c059d0261012d62dc073398029e1f5"
+      "bytes": 13168,
+      "sha256": "ca45f06df1d1e4a167c7f19d466b68497daafc336e8294e59f843857b55b61e1"
     },
     {
       "path": "maintenance/11-7-estadisticas-auditoria-diagnostico.txt",
       "extension": ".txt",
-      "bytes": 11547,
-      "sha256": "122f66a328e0655b3fb39f913b93dd4bebca00ca91fc282c856876ee06dc8cc3"
+      "bytes": 11548,
+      "sha256": "fbe2fd615572c3914eb3418df140ee1f69f3950b785834dd1033f0d217990b9e"
     },
     {
       "path": "maintenance/11-admin-configuracion-sincronizacion.txt",
@@ -25104,37 +25104,37 @@
       "path": "scripts/audit-admin-analytics-audit.js",
       "extension": ".js",
       "bytes": 14649,
-      "sha256": "c978530ff3665f0e1b3eeab521f29df73a8b545e20187d7fa5f2f5d126896fc9"
+      "sha256": "35a76927fbf469f9478d638d9ef9d899a2e0b0a7dfff8d04b78c3f13851d1add"
     },
     {
       "path": "scripts/audit-admin-content-appearance.js",
       "extension": ".js",
-      "bytes": 9577,
-      "sha256": "e05f4f4ad8bc71556615b88b19f76f00baa8472b6e5916eb6abac714d6e2cb94"
+      "bytes": 9580,
+      "sha256": "9bca034ce7b83f619c16e08893024ec1324d70d156fafb5d473dfdb0d7cc7b1e"
     },
     {
       "path": "scripts/audit-admin-email-messaging.js",
       "extension": ".js",
-      "bytes": 9077,
-      "sha256": "b03901d879ace24affe85d824bdd55894a6cd99014af874e22848b13a2218c70"
+      "bytes": 9089,
+      "sha256": "f6e4e30587fdcde45e4abd9c132334d6e2d94f686916c0bb47ac4e7682d0e775"
     },
     {
       "path": "scripts/audit-admin-foundation.js",
       "extension": ".js",
-      "bytes": 15150,
-      "sha256": "a02af9f68bd6372f778b726b76aa8c7164dbaac23740fcbcafb645f3ad4e3132"
+      "bytes": 15169,
+      "sha256": "1a4dde9ecb4b48e30abb6ed2ec10e8425b8ae64d66224184509fa0b9674de70d"
     },
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 12603,
-      "sha256": "e6cad2c896436eed54cd84456f180537d8fbbf88d9718b41f394db41de70b5e2"
+      "bytes": 12610,
+      "sha256": "8a62a609d63e7458e2ad8c1594c162bca0c1ab81be78b30f5b939006eb91c855"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
       "extension": ".js",
-      "bytes": 15502,
-      "sha256": "627253db42e9ae613ae5ca96f62e3299e3cc5ed970966cb8736a077d29dc0820"
+      "bytes": 15500,
+      "sha256": "edf0c9c9027386df44f0ef2d0351e7f63cb1f8d2f5bca1414e79a6e3d75f36e3"
     },
     {
       "path": "scripts/audit-admin-public-sync.js",
@@ -25145,8 +25145,8 @@
     {
       "path": "scripts/audit-admin-users-roles.js",
       "extension": ".js",
-      "bytes": 11623,
-      "sha256": "66549883240771ab48da7d5dffba816e01509b0fe18f19349db62523d0e6d496"
+      "bytes": 11635,
+      "sha256": "7834b1c2b13ab0bf8f9290fd4fd51671f537eaeedc61b6a6f7ee993c33dd5112"
     },
     {
       "path": "scripts/audit-admin-visual-part2f-v3.mjs",
@@ -25211,14 +25211,14 @@
     {
       "path": "scripts/audit-collections-phase4.js",
       "extension": ".js",
-      "bytes": 8583,
-      "sha256": "0c53f1147dc45d1ebc43fa4d7e3f5659ee8e61ec69827e8b853261a149ef7a3e"
+      "bytes": 8585,
+      "sha256": "91f4f22acf2c4ba48a8e98ba8e0d927e48033e2ae8bb3b9e7733365c188f744b"
     },
     {
       "path": "scripts/audit-color-scheme.js",
       "extension": ".js",
-      "bytes": 9570,
-      "sha256": "a356141d1db46e3bd33f70ae413804071b6ab544f66b13973b31c056cb1c302e"
+      "bytes": 9572,
+      "sha256": "ddabf380397a7cc71f89a3e3d7a057f95ed5eb0c4b4893e51658a07ad1a6886e"
     },
     {
       "path": "scripts/audit-commerce-visual-part2c.mjs",
@@ -25235,8 +25235,8 @@
     {
       "path": "scripts/audit-content-phase6.js",
       "extension": ".js",
-      "bytes": 5564,
-      "sha256": "820a9b1c34249862810ca15a274a29add20f7bd4e16242e55874f218c6e40f57"
+      "bytes": 5570,
+      "sha256": "378b9b94df3d39cc56efad405c1575b1e7f5b049ad3d42c5ea3539d06eaca472"
     },
     {
       "path": "scripts/audit-contraste.mjs",
@@ -25247,8 +25247,8 @@
     {
       "path": "scripts/audit-critical-healing.js",
       "extension": ".js",
-      "bytes": 7394,
-      "sha256": "aaf53c94b74260e6cafaf5fb7e7747f36fe93fdbe4e70d3addd0edf162b36b75"
+      "bytes": 7399,
+      "sha256": "5ed22e8234b7a4bd67929d974cc4a9f56a0f27c25a6db6d81232d3e060a3750a"
     },
     {
       "path": "scripts/audit-css-cascade.mjs",
@@ -25271,20 +25271,20 @@
     {
       "path": "scripts/audit-diagnostic-findings.js",
       "extension": ".js",
-      "bytes": 8265,
-      "sha256": "d32b3d7adb11aca45af8b9160bc4e32f97b3e00869e9f6d99a4bbadce30b8437"
+      "bytes": 8271,
+      "sha256": "d84abdd0651e440c9297277db41102351a4bb1b427248b3a0f0300949b888d71"
     },
     {
       "path": "scripts/audit-diagnostics.js",
       "extension": ".js",
-      "bytes": 9306,
-      "sha256": "06a8efa7873d8e35afbe19e574a71dbd4679612d2bb06203156124101d2243aa"
+      "bytes": 9307,
+      "sha256": "56b2dbe2e2269657b6b6f9054b850b915d5becb332d2563ed00825160404fdd3"
     },
     {
       "path": "scripts/audit-email-phase3.js",
       "extension": ".js",
-      "bytes": 5035,
-      "sha256": "fdc420b60157b3a2f82278905343588e1495de28e0254b4c9f11e10d628a9f5d"
+      "bytes": 5048,
+      "sha256": "4ff4a1a580d82b0532e643342c2f3e6b66b84a736251d2057700a2391512cb84"
     },
     {
       "path": "scripts/audit-faq-interaction-part2e.mjs",
@@ -25301,8 +25301,8 @@
     {
       "path": "scripts/audit-final-release.js",
       "extension": ".js",
-      "bytes": 7900,
-      "sha256": "4a2dd50afd0f3d6f7bdfa81ebb7e3648fe9111dfbf940175b00d4da786b11f9c"
+      "bytes": 7896,
+      "sha256": "12a8f0763af4e4900a03edd44e8f52ea9820c7ee6afa2f7cc0812f18bd3adfb3"
     },
     {
       "path": "scripts/audit-final-sweep-part2h.js",
@@ -25367,8 +25367,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 24442,
-      "sha256": "b85995fd1035791e216d75ccf1411870cd915a64af384702a4fb44a4d6084268"
+      "bytes": 24464,
+      "sha256": "754f3f4ffbb66767b24e95da6a97a0e22c98952ef3c755bb1cb25133ceb0b228"
     },
     {
       "path": "scripts/audit-inicio-navegacion-publica.js",
@@ -25385,8 +25385,8 @@
     {
       "path": "scripts/audit-integral-platform.js",
       "extension": ".js",
-      "bytes": 7084,
-      "sha256": "0212633e5897e89e16a05130d540825fee31626389bc52ce59c139686a8f71be"
+      "bytes": 7103,
+      "sha256": "381847941b5f4f3b6d65119b201464dd3fe107a0120d79b7e025f4f0fdc16d2e"
     },
     {
       "path": "scripts/audit-interaction-latency.mjs",
@@ -25409,8 +25409,8 @@
     {
       "path": "scripts/audit-level2-commerce.js",
       "extension": ".js",
-      "bytes": 10346,
-      "sha256": "b9317a529cbd1eef68808fa535899ddf7b29cf78bc84ee419154bcced853ee03"
+      "bytes": 10351,
+      "sha256": "8dfb0732812e91ba1cf4dc328871a0494d49fb1f15f9a2cf33b5231ca86e734c"
     },
     {
       "path": "scripts/audit-level3-quality.js",
@@ -25469,8 +25469,8 @@
     {
       "path": "scripts/audit-payment-methods.js",
       "extension": ".js",
-      "bytes": 4128,
-      "sha256": "c7b8556ec863a302f58f490e516fc2fd0c8ccf5ed9cbc692ca249e8d28e14667"
+      "bytes": 4122,
+      "sha256": "31b3256a277550d8c4ad6aff91d83922836d3b316b0886c65f1c5087e16ac0b3"
     },
     {
       "path": "scripts/audit-perf-metrics.mjs",
@@ -25583,20 +25583,20 @@
     {
       "path": "scripts/audit-security-phase8.js",
       "extension": ".js",
-      "bytes": 3912,
-      "sha256": "b38bad5e7b7b19fd92449580f4dda7b1e3815a66667649d3a3738c473cf9cf23"
+      "bytes": 3920,
+      "sha256": "1d3224c1f9698b7d40949ca7565514f76bc44461a4a6e56db7f326616cf1ed78"
     },
     {
       "path": "scripts/audit-site-reliability.js",
       "extension": ".js",
-      "bytes": 17735,
-      "sha256": "54391860099eb528e37c278b78ff638ab76d935d7e5d5768bf9c31e41d93c7f8"
+      "bytes": 17738,
+      "sha256": "600aef987315a2c421ff8d4cbcea70d48cc6520e83f83ae9204ff0e6d83d80e8"
     },
     {
       "path": "scripts/audit-store-gate.js",
       "extension": ".js",
-      "bytes": 13332,
-      "sha256": "6c977f131e557b59c4b52927fb578848b5481fbf48dffd8bea151b0dd8ed0e39"
+      "bytes": 13333,
+      "sha256": "075dcdfe53e94ecaaa143b1109d1b3edde10c8c7482c6e3df9e01d5c078f1f55"
     },
     {
       "path": "scripts/audit-storegate-deadlock.js",
@@ -25625,8 +25625,8 @@
     {
       "path": "scripts/audit-typography.js",
       "extension": ".js",
-      "bytes": 12218,
-      "sha256": "57cd17b0a9de26070a754fa405337dd1796b35091e9b7a76e93446ceb9e70cad"
+      "bytes": 12219,
+      "sha256": "44599a61b3578a22f64d281a68efdb340e8e5a39d54549caa29a1d6227f54f8f"
     },
     {
       "path": "scripts/audit-unified-navigation.js",
@@ -26916,154 +26916,154 @@
       "exists": true
     },
     {
-      "file": "js/admin/admin-mobile-sidebar-fix.js",
+      "file": "js/admin/ajuste-barra-lateral-movil-admin.js",
       "line": 6,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
-      "file": "js/admin/content/admin-content-phase6.js",
-      "line": 188,
-      "raw": "index.html",
-      "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "js/admin/content/admin-welcome-control.js",
+      "file": "js/admin/content/control-bienvenida-admin.js",
       "line": 254,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/content/gestion-contenido-admin.js",
+      "line": 188,
+      "raw": "index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 235,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 235,
       "raw": "admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 236,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 236,
       "raw": "collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 236,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 236,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 237,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 237,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 237,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 240,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 240,
       "raw": "admin-images.html",
       "target": "admin-images.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 240,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 240,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 240,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 390,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 390,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 1111,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
-      "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+      "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 1175,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
-      "file": "js/admin/products/admin-images-phase5.js",
+      "file": "js/admin/products/gestion-imagenes-admin.js",
       "line": 17,
       "raw": "/admin-images.html",
       "target": "admin-images.html",
@@ -28908,7 +28908,7 @@
       "pattern": "index.html?welcomePreview=:dynamic",
       "references": [
         {
-          "file": "js/admin/content/admin-welcome-control.js",
+          "file": "js/admin/content/control-bienvenida-admin.js",
           "line": 254
         }
       ]
@@ -29036,17 +29036,17 @@
             "operation": "collection"
           },
           {
-            "file": "js/admin/admin-import-phase9.js",
+            "file": "js/admin/importacion-admin.js",
             "line": 543,
             "operation": "collection"
           },
           {
-            "file": "js/admin/users/admin-users-phase8.js",
+            "file": "js/admin/users/gestion-usuarios-admin.js",
             "line": 102,
             "operation": "collection"
           },
           {
-            "file": "js/admin/users/admin-users-phase8.js",
+            "file": "js/admin/users/gestion-usuarios-admin.js",
             "line": 461,
             "operation": "collection"
           },
@@ -29071,7 +29071,7 @@
         "name": "checkoutGuards",
         "references": [
           {
-            "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+            "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
             "line": 1082,
             "operation": "doc"
           },
@@ -29136,7 +29136,7 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/admin-import-phase9.js",
+            "file": "js/admin/importacion-admin.js",
             "line": 469,
             "operation": "collection"
           },
@@ -29246,7 +29246,7 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/settings/admin-color-scheme.js",
+            "file": "js/admin/settings/esquema-color-admin.js",
             "line": 52,
             "operation": "doc"
           },
@@ -29316,7 +29316,7 @@
             "operation": "collection"
           },
           {
-            "file": "js/admin/settings/admin-email-gate-sync.js",
+            "file": "js/admin/settings/sincronizacion-correo-admin.js",
             "line": 207,
             "operation": "collection"
           },
@@ -29356,7 +29356,7 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/settings/admin-email-gate-sync.js",
+            "file": "js/admin/settings/sincronizacion-correo-admin.js",
             "line": 19,
             "operation": "doc"
           }
@@ -29456,22 +29456,22 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/products/admin-inventory-integrity.js",
+            "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 201,
             "operation": "collection"
           },
           {
-            "file": "js/admin/products/admin-inventory-integrity.js",
+            "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 38,
             "operation": "doc"
           },
           {
-            "file": "js/admin/products/admin-inventory-integrity.js",
+            "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 109,
             "operation": "doc"
           },
           {
-            "file": "js/admin/products/admin-inventory-integrity.js",
+            "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 168,
             "operation": "doc"
           },
@@ -29631,17 +29631,17 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/admin-import-phase9.js",
+            "file": "js/admin/importacion-admin.js",
             "line": 470,
             "operation": "collection"
           },
           {
-            "file": "js/admin/admin-import-phase9.js",
+            "file": "js/admin/importacion-admin.js",
             "line": 532,
             "operation": "collection"
           },
           {
-            "file": "js/admin/products/admin-inventory-integrity.js",
+            "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 24,
             "operation": "doc"
           },
@@ -29786,28 +29786,28 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/content/admin-welcome-control.js",
+            "file": "js/admin/content/control-bienvenida-admin.js",
             "line": 19,
             "operation": "doc"
           },
           {
-            "file": "js/admin/settings/admin-email-gate-sync.js",
-            "line": 22,
-            "operation": "doc"
-          },
-          {
-            "file": "js/admin/settings/admin-payment-methods.js",
-            "line": 21,
-            "operation": "doc"
-          },
-          {
-            "file": "js/admin/settings/admin-store-control.js",
+            "file": "js/admin/settings/control-tienda-admin.js",
             "line": 27,
             "operation": "doc"
           },
           {
-            "file": "js/admin/settings/admin-store-control.js",
+            "file": "js/admin/settings/control-tienda-admin.js",
             "line": 28,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/settings/metodos-pago-admin.js",
+            "line": 21,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/settings/sincronizacion-correo-admin.js",
+            "line": 22,
             "operation": "doc"
           },
           {
@@ -29971,12 +29971,12 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/content/admin-content-phase6.js",
+            "file": "js/admin/content/gestion-contenido-admin.js",
             "line": 242,
             "operation": "doc"
           },
           {
-            "file": "js/admin/content/admin-content-phase6.js",
+            "file": "js/admin/content/gestion-contenido-admin.js",
             "line": 284,
             "operation": "doc"
           },
@@ -30031,7 +30031,7 @@
             "operation": "collection"
           },
           {
-            "file": "js/admin/diagnostics/admin-site-diagnostics.js",
+            "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
             "line": 1087,
             "operation": "collection"
           },
@@ -30101,17 +30101,17 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/content/admin-welcome-control.js",
+            "file": "js/admin/content/control-bienvenida-admin.js",
             "line": 171,
             "operation": "collection"
           },
           {
-            "file": "js/admin/users/admin-users-phase8.js",
+            "file": "js/admin/users/gestion-usuarios-admin.js",
             "line": 455,
             "operation": "collection"
           },
           {
-            "file": "js/admin/users/admin-users-phase8.js",
+            "file": "js/admin/users/gestion-usuarios-admin.js",
             "line": 98,
             "operation": "doc"
           },

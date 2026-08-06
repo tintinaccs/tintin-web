@@ -45,7 +45,7 @@ DÓNDE ESTÁ EL CÓDIGO:
 - js/resend-order-notify.js (línea 8): const ORDER_EMAIL_API = '/api/order-email';
   (usado por checkout-puente-correo.js para el aviso de pedido nuevo y por
   admin-app.js para el reenvío).
-- js/admin-email-gate-sync.js (línea 17): const TEST_ENDPOINT = '/api/test-email';
+- js/sincronizacion-correo-admin.js (línea 17): const TEST_ENDPOINT = '/api/test-email';
 - Referencia de la solución correcta: js/biblioteca-multimedia.js
   functionOrigin() (líneas ~54-66) y js/site-activity.js geoEndpoint()
   (líneas ~136-142).
@@ -64,7 +64,7 @@ que resolver.
 
 [RESUELTO 2026-07-22] Se creó js/function-origin.js con la resolución de
 origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
-admin-email-gate-sync.js, biblioteca-multimedia.js, site-activity.js) ahora
+sincronizacion-correo-admin.js, biblioteca-multimedia.js, site-activity.js) ahora
 importan de ahí en vez de reinventar la constante cada uno. Verificado con
 scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
 (actualizados) y el resto de `npm run audit:final`, sin regresiones.

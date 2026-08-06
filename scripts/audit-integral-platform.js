@@ -16,8 +16,8 @@ const files = {
   rules: read('firestore.rules'),
   admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}`,
   adminImages: read('admin-images.html'),
-  adminGuard: read('js/admin/admin-unsaved-guard.js'),
-  welcome: read('js/admin/content/admin-welcome-control.js'),
+  adminGuard: read('js/admin/proteccion-cambios-pendientes-admin.js'),
+  welcome: read('js/admin/content/control-bienvenida-admin.js'),
 };
 
 let failures = 0;

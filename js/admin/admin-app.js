@@ -24,8 +24,8 @@ import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=
 import { sanitizeVariantData } from "../core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker } from "./products/admin-media-library-ui.js?v=tintin-20260716-cloudinary-fix-1";
-import { initSiteDiagnostics } from "./diagnostics/admin-site-diagnostics.js?v=tintin-20260722-order-delete-2";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260722-order-delete-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -35,7 +35,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260728-phase4-order-2";
-import './products/admin-inventory-integrity.js?v=tintin-20260722-order-delete-2';
+import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -553,7 +553,7 @@ function switchSection(target) {
   }
   // IMPORTANTE: se consultan en vivo (no las NodeList estáticas navItems /
   // sections capturadas al cargar el módulo). Módulos que se inicializan
-  // después — p. ej. admin-welcome-control.js agrega la sección "Mensaje de
+  // después — p. ej. control-bienvenida-admin.js agrega la sección "Mensaje de
   // bienvenida" (nav-welcome / mtab-welcome / section-welcome) recién cuando
   // resuelve el auth del Super Admin — quedan fuera de esas listas fijas. Si se
   // usaran, al salir de una sección dinámica su botón quedaría resaltado y su
@@ -648,7 +648,7 @@ window.addEventListener('hashchange', () => {
 
 // ---- ACCESIBILIDAD DE MODALES OPERATIVOS (compartido) ----
 // El modal de "cambios sin guardar" (#unsaved-modal) ya trae su propio manejo
-// de foco/Escape en admin-unsaved-guard.js. Este bloque agrega, de forma
+// de foco/Escape en proteccion-cambios-pendientes-admin.js. Este bloque agrega, de forma
 // centralizada y aditiva (sin tocar cada open/close), el mismo nivel para los
 // cuatro overlays operativos: cerrar con Escape, bloquear el scroll de fondo
 // mientras hay uno abierto, mover el foco adentro al abrir y devolverlo al

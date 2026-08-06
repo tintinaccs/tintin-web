@@ -10,7 +10,7 @@ ALCANCE
 Mantenimiento exclusivo de usuarios, roles, permisos y acceso por cuenta.
 Antes de tocar nada se revisó main, los PR mergeados, maintenance/ y las
 auditorías existentes:
-- audit-security-phase8.js   → ya blinda el módulo admin-users-phase8.js
+- audit-security-phase8.js   → ya blinda el módulo gestion-usuarios-admin.js
   (Super Admin por email, no asignar superadmin, render sin HTML, cambio+
   auditoría en batch, bloqueo degrada a client, borrado solo Firestore, listener
   realtime, reglas por UID, auditoría de solo lectura).
@@ -28,7 +28,7 @@ Matriz dinámica .............. js/role-permissions.js (PERMISSION_MODULES,
                                canDo, saveRolePermissions) + UI "Roles y Permisos"
 CRUD de usuarios ............. js/admin-app.js (updateUserRole, blockUser,
                                restoreUser, deleteUser, bulk*) y
-                               js/admin-users-phase8.js (módulo paralelo, Super
+                               js/gestion-usuarios-admin.js (módulo paralelo, Super
                                Admin real)
 Reglas server-side ........... firestore.rules (users, rolePermissions, auditLog)
 Acceso al panel .............. js/admin-app.js (guard onAuthStateChanged)
@@ -145,7 +145,7 @@ ARCHIVOS TOCADOS
 - diagnostic-manifest.json                 (regenerado)
 
 PENDIENTES REALES: ninguno crítico/alto dentro del alcance. Observación (sin
-cambio, fuera de alcance de seguridad): admin-app.js y admin-users-phase8.js
+cambio, fuera de alcance de seguridad): admin-app.js y gestion-usuarios-admin.js
 renderizan ambos en #users-tbody; conviven desde hace fases y ambos protegen al
 Super Admin — unificarlos sería una refactorización aparte, no un arreglo de
 seguridad.

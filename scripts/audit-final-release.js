@@ -9,7 +9,7 @@ const exists = file => fs.existsSync(path.join(root, file));
 const pkg = JSON.parse(read('package.json'));
 const firebaseRc = JSON.parse(read('.firebaserc'));
 const firebaseJson = JSON.parse(read('firebase.json'));
-const phase9 = read('js/admin/admin-import-phase9.js');
+const phase9 = read('js/admin/importacion-admin.js');
 const normalization = read('js/core/store/import-normalization.mjs');
 const normalizationTests = read('tests/import/phase9-import-normalization.test.mjs');
 const quality = read('js/quality/ui-quality.js');
@@ -153,7 +153,7 @@ check(
 check(
   'La Fase 9 arranca en el panel',
   quality.includes('bootAdminImportPhase9') &&
-    quality.includes("import(versioned('../admin/admin-import-phase9.js'))"),
+    quality.includes("import(versioned('../admin/importacion-admin.js'))"),
   'ui-quality.js debe iniciar el módulo final'
 );
 

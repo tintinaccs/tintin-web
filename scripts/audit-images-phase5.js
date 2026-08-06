@@ -11,7 +11,7 @@ const files = {
   images: read('js/components/images/imagenes.js'),
   resolver: read('js/components/images/resolucion-imagenes.js'),
   runtime: read('js/components/images/gestion-imagenes.js'),
-  admin: read('js/admin/products/admin-images-phase5.js'),
+  admin: read('js/admin/products/gestion-imagenes-admin.js'),
   adminHtml: read('admin-images.html'),
   uploadWidget: read('js/components/images/carga-imagenes.js'),
   processing: read('js/components/images/procesamiento-imagenes.js'),
@@ -232,7 +232,7 @@ check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
   // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
   // en GitHub Pages/Netlify) vive en js/core/firebase/function-origin.js, compartido con
-  // site-activity.js, resend-order-notify.js y admin-email-gate-sync.js para
+  // site-activity.js, resend-order-notify.js y sincronizacion-correo-admin.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
     files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/function-origin.js") &&
@@ -397,7 +397,7 @@ check(
   files.ui.includes('bootImagesPhase5()') &&
     files.ui.includes('bootAdminImagesPhase5()') &&
     files.ui.includes("'../components/images/gestion-imagenes.js'") &&
-    files.ui.includes("'../admin/products/admin-images-phase5.js'"),
+    files.ui.includes("'../admin/products/gestion-imagenes-admin.js'"),
   'ui-quality debe iniciar ambos módulos'
 );
 
@@ -494,14 +494,14 @@ check(
     files.uploadWidget.includes(`./biblioteca-multimedia.js?${CURRENT_VERSION_QUERY}`) &&
     files.mediaLibrary.includes(`./procesamiento-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
     files.adminHtml.includes(`./js/components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
-    files.adminHtml.includes(`./js/admin/products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+    files.adminHtml.includes(`./js/admin/products/biblioteca-multimedia-admin.js?${CURRENT_VERSION_QUERY}`),
   'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
 );
 
 check(
   'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
   read('js/admin/admin-app.js').includes(`../components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
-    read('js/admin/admin-app.js').includes(`./products/admin-media-library-ui.js?${CURRENT_VERSION_QUERY}`),
+    read('js/admin/admin-app.js').includes(`./products/biblioteca-multimedia-admin.js?${CURRENT_VERSION_QUERY}`),
   'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
 );
 

@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const read = file => fs.readFileSync(file, 'utf8');
 const checkout = read('js/pages/checkout/checkout-metodos-pago.js');
-const admin = read('js/admin/settings/admin-payment-methods.js');
+const admin = read('js/admin/settings/metodos-pago-admin.js');
 const core = read('js/orders/payment-methods-core.js');
 const css = read('css/components/payments/payment-methods.css');
 const store = read('js/pages/collections/estado-colecciones.js');
@@ -27,7 +27,7 @@ const checks = [
   ['los identificadores y textos se normalizan y limitan', /paymentMethodId/.test(core) && /cleanPaymentText/.test(core) && /cleanPaymentMultiline/.test(core)],
   ['el catálogo conserva compatibilidad con configuración anterior', /legacyMethods/.test(core) && /paymentMethods/.test(core) && /bankAccounts/.test(core)],
   ['Checkout carga pagos desde su cargador de página', /checkout[\s\S]*load\('pages\/checkout\/checkout-metodos-pago\.js'\)/.test(loader)],
-  ['Admin conserva el módulo de métodos en la ruta administrativa', /admin-payment-methods\.js/.test(store)],
+  ['Admin conserva el módulo de métodos en la ruta administrativa', /metodos-pago-admin\.js/.test(store)],
   ['si no hay métodos se bloquea el avance y se informa', /next\.disabled = true/.test(checkout) && /error-3-none/.test(checkout)],
   ['la selección se conserva ante una actualización en tiempo real', /selectedMethodId/.test(checkout) && /preferred/.test(checkout)],
   ['el resumen muestra el nombre configurado por Super Admin', /patchConfirmationLabel/.test(checkout) && /selected\.title/.test(checkout)]
