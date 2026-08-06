@@ -1336,7 +1336,7 @@ async function buildConfirmation() {
 
   // Summary HTML
   // El bloque de ítems/totales vive en su propio contenedor (ck-summary-quote)
-  // porque renderQuote() en secure-checkout-order.js lo reemplaza solo a él
+  // porque renderQuote() en pedido-checkout-seguro.js lo reemplaza solo a él
   // cuando cambia un precio entre la revisión y la confirmación — así los
   // datos de la clienta (nombre, teléfono, dirección) no desaparecen del
   // resumen justo cuando se le pide que lo revise de nuevo.
@@ -1419,7 +1419,7 @@ async function buildConfirmation() {
   `;
 
   // Confirm button: fallback si el guardado seguro no llegó a cargar.
-  // secure-checkout-order.js intercepta este botón en fase de captura
+  // pedido-checkout-seguro.js intercepta este botón en fase de captura
   // (stopImmediatePropagation) apenas carga, así que este onclick solo
   // llega a ejecutarse si ese módulo no llegó a cargar (falla de red poco
   // común). En ese caso no hay forma segura de guardar el pedido —el
@@ -1815,7 +1815,7 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>

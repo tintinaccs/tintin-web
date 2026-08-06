@@ -109,7 +109,7 @@ PAGES.forEach(({ file, id }) => {
     html.includes('js/cargador-pagina.js') &&
       html.includes('js/inicio-navegacion-publica.js') &&
       html.includes('js/components/contact/whatsapp.js') &&
-      html.includes('js/analytics/analytics.js') &&
+      html.includes('js/analytics/analitica.js') &&
       html.includes('script.js'),
     'La página debe compartir el shell público, loader, sincronización de contacto y analítica.'
   );

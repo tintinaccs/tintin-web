@@ -1,13 +1,13 @@
 // =============================================================
 // TINTIN — Diagnóstico integral: shim de solo lectura para Firebase Auth
 // =============================================================
-// Ver firestore-shim.js para el criterio general: reexporta el SDK real de
+// Ver adaptador-firestore.js para el criterio general: reexporta el SDK real de
 // Auth (lecturas de estado, listeners, providers) y solo reemplaza las
 // funciones que podrían cambiar la sesión real, enviar correos/SMS reales o
 // abrir popups/redirects reales, por versiones inertes que nunca llegan a
 // Firebase. `onAuthStateChanged`/`getAuth` no se tocan: el diagnóstico debe
 // ver la sesión real de quien lo ejecuta, solo sin poder modificarla.
-import { reportBlockedWrite } from './diagnostic-shim-report.js?v=tintin-20260716-cloudinary-fix-1';
+import { reportBlockedWrite } from './informe-adaptadores-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
 
 export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 

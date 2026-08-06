@@ -7,16 +7,16 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const checks = [];
 function check(name, condition, problem) { checks.push({ name, ok: Boolean(condition), problem }); }
 
-const runtime = read('js/quality/phase10-accessibility.js');
+const runtime = read('js/quality/accesibilidad-global.js');
 const css = read('css/quality/phase10-accessibility.css');
-const loader = read('js/quality/phase8-ui-ux.js');
+const loader = read('js/quality/experiencia-interfaz.js');
 const gate = read('js/core/store-gate/nucleo-control-tienda.js');
 const page404 = read('404.html');
 const privacy = read('privacidad.html');
 const pkg = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
-check('La Fase 10 se inicia desde el runtime compartido', /phase10-accessibility\.js/.test(loader) && /TintinPhase10ImportStarted/.test(loader), 'Debe cargarse una sola vez en todas las páginas que usan page-loader.');
+check('La Fase 10 se inicia desde el runtime compartido', /accesibilidad-global\.js/.test(loader) && /TintinPhase10ImportStarted/.test(loader), 'Debe cargarse una sola vez en todas las páginas que usan page-loader.');
 check('Todas las páginas usan la versión de caché de Fase 10', htmlFiles.every(file => !read(file).includes('js/cargador-pagina.js') || read(file).includes('js/cargador-pagina.js?v=tintin-20260801-unified-surfaces-16')), 'No debe quedar una página con el loader anterior.');
 check('Existe enlace para saltar al contenido', /ensureSkipLink/.test(runtime) && /Saltar al contenido principal/.test(runtime) && /tt-skip-link/.test(css), 'La navegación por teclado debe poder evitar cabeceras repetidas.');
 check(

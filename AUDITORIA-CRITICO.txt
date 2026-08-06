@@ -46,7 +46,7 @@ DÓNDE ESTÁ EL CÓDIGO:
   solo valida "stock < resource.data.stock" y "existsAfter(orderPath)".
 - firestore.rules → función sparkItemValid (líneas ~315-354): comentario
   ~338-345 documenta que se removió el getAfter que validaba el descuento.
-- js/secure-checkout-order.js (líneas ~483-493): el cliente escribe
+- js/pedido-checkout-seguro.js (líneas ~483-493): el cliente escribe
   stock: stock - qty, pero la regla no lo obliga.
 
 SOLUCIÓN:

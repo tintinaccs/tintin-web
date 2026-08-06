@@ -27,7 +27,7 @@ CANAL REAL IDENTIFICADO
 El sitio tenía DOS canales de correo conviviendo:
 
   A) Resend + Cloudflare Functions (ACTUAL / real)
-     js/resend-order-notify.js → POST /api/order-email
+     js/notificacion-pedido-resend.js → POST /api/order-email
      functions/api/order-email.js  (nuevo pedido + reenvío)
      functions/api/test-email.js   (correo de prueba)
      js/sincronizacion-correo-admin.js   (capa admin activa: remitente
@@ -35,12 +35,12 @@ El sitio tenía DOS canales de correo conviviendo:
      La clave RESEND_API_KEY solo vive en env del servidor.
 
   B) Apps Script / webhook viejo (LEGACY)
-     js/email-notify.js → EMAIL_WEBHOOK_URL (script.google.com)
-     js/email-config.js, apps-script/Phase3Security.gs
+     js/notificaciones-correo.js → EMAIL_WEBHOOK_URL (script.google.com)
+     js/configuracion-correo.js, apps-script/Phase3Security.gs
 
 El propio código ya documentaba que Resend es el canal real:
 - admin-app.js:11-14 → "el reenvío usa el mismo canal automático del checkout
-  (Resend), no el webhook viejo de Apps Script de email-notify.js".
+  (Resend), no el webhook viejo de Apps Script de notificaciones-correo.js".
 - sincronizacion-correo-admin.js → "Los correos de pedidos y las pruebas ya usan
   Resend con pedidos@tintinaccs.com"; "Promociones seguirá desactivado hasta su
   migración independiente".
@@ -52,8 +52,8 @@ checkout.html seguía enrutando el correo AUTOMÁTICO del pedido por el canal
 LEGACY (Apps Script), en contra del diseño real:
 
   1) checkout.html:330 importaba sendOrderNotification desde
-     js/email-notify.js (Apps Script).
-  2) Al importar email-notify.js, su cola (líneas 229-238) auto-cargaba
+     js/notificaciones-correo.js (Apps Script).
+  2) Al importar notificaciones-correo.js, su cola (líneas 229-238) auto-cargaba
      js/checkout-puente-correo.js, que envía el MISMO correo por Resend.
   3) checkout.html:1395 llamaba sendOrderNotification (Apps Script) apenas se
      creaba el pedido, fire-and-forget, y escribía notificationStatus.
@@ -70,21 +70,21 @@ Consecuencia por pedido nuevo:
 CAMBIOS APLICADOS (mínimos y quirúrgicos)
 ═══════════════════════════════════════════════════════════════════════
 1) checkout.html:330
-   -  import { sendOrderNotification } from "./js/email-notify.js?v=...cloudinary-fix-1";
-   +  import { sendOrderNotification } from "./js/resend-order-notify.js?v=tintin-20260717-resend-1";
+   -  import { sendOrderNotification } from "./js/notificaciones-correo.js?v=...cloudinary-fix-1";
+   +  import { sendOrderNotification } from "./js/notificacion-pedido-resend.js?v=tintin-20260717-resend-1";
 
    Efecto:
    - checkout.html:1395 ahora envía el correo del pedido por Resend
      directamente, con el orderRef.id exacto, ni bien se crea el pedido, y fija
      notificationStatus con el resultado real (sent/partial/failed).
-   - Como el checkout ya NO importa email-notify.js, su auto-cargador del puente
+   - Como el checkout ya NO importa notificaciones-correo.js, su auto-cargador del puente
      no se dispara → checkout-puente-correo.js no vuelve a enviar. Queda UN solo
      canal, UN solo punto de envío. Sin duplicado, sin contradicción.
 
 2) scripts/audit-email-phase3.js — 1 comprobación actualizada
    La comprobación #1 afirmaba el cableado viejo (checkout importa email-notify +
    auto-carga del puente). Ahora afirma el cableado correcto: el checkout envía
-   por Resend (resend-order-notify.js) y NO importa email-notify.js. El resto de
+   por Resend (notificacion-pedido-resend.js) y NO importa notificaciones-correo.js. El resto de
    la auditoría (seguridad del Apps Script legacy) se mantiene intacto.
 
 3) scripts/audit-admin-email-messaging.js — auditoría nueva (29 comprobaciones,
@@ -92,10 +92,10 @@ CAMBIOS APLICADOS (mínimos y quirúrgicos)
    audit:final) y en .github/workflows/tintin-audit.yml.
 
 4) diagnostic-manifest.json — regenerado (npm run build:diagnostics). Refleja que
-   el grafo del checkout ahora usa resend-order-notify.js y ya no arrastra
-   email-notify.js ni checkout-puente-correo.js.
+   el grafo del checkout ahora usa notificacion-pedido-resend.js y ya no arrastra
+   notificaciones-correo.js ni checkout-puente-correo.js.
 
-NO se borró email-notify.js ni checkout-puente-correo.js: email-notify.js sigue
+NO se borró notificaciones-correo.js ni checkout-puente-correo.js: notificaciones-correo.js sigue
 importado por admin-app.js (sendTestCustomerEmail / sendTemplatedEmail /
 sendBulkTemplatedEmail). Se comprobó que esas rutas están SUPERADAS en tiempo de
 ejecución (ver abajo), pero como el import sigue vivo no se elimina el módulo
@@ -131,7 +131,7 @@ CORREO DE PRUEBA (Resend)
   destinatario.
 
 REENVÍO MANUAL (admin)
-- admin-app.js reenvía por resend-order-notify.js (Resend), no por el webhook
+- admin-app.js reenvía por notificacion-pedido-resend.js (Resend), no por el webhook
   viejo. El servidor lo restringe a Super Admin.
 
 PROMOCIONES
@@ -186,7 +186,7 @@ AUDITORÍA NUEVA — scripts/audit-admin-email-messaging.js (29 checks)
 
 Pruebas negativas verificadas: el regex de secretos NO marca identificadores
 inocentes (store_closed / store_config) y SÍ marca una clave "re_..." real; el
-checkout con el import viejo (email-notify.js) haría fallar los checks #1 y #2.
+checkout con el import viejo (notificaciones-correo.js) haría fallar los checks #1 y #2.
 
 ═══════════════════════════════════════════════════════════════════════
 CI / VERIFICACIÓN

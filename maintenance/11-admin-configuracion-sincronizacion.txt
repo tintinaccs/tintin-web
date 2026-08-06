@@ -22,8 +22,8 @@ ARCHIVOS REVISADOS
 - js/contenido-sitio.js  ........ textos de página (site_content/{pageId}).
 - js/cargador-pagina.js  ......... orquestador único que carga el runtime público.
 - js/inicio-navegacion-publica.js  ........ inyección del header y anti-duplicación.
-- js/analytics.js  ........... GA4 con consentimiento.
-- js/secure-checkout-order.js  transacción de checkout.
+- js/analitica.js  ........... GA4 con consentimiento.
+- js/pedido-checkout-seguro.js  transacción de checkout.
 - checkout.html  ............. consumo de pagos, envío, WhatsApp y apertura.
 - envios.html  ............... consumo de ciudades/costos de envío.
 
@@ -48,8 +48,8 @@ headerDesktopTabletEnabled, headerMobileEnabled
   -> js/visibilidad-navegacion-por-dispositivo.js (onSnapshot), aplica clases en <html>.
 paymentMethods, bankAccounts, deliveryCities, encomiendaCities,
 deliveryCost, encomiendaCost, whatsappNumber, instagram, storeOpen
-  -> checkout.html (onSnapshot) y js/secure-checkout-order.js.
-ga4MeasurementId -> js/analytics.js (solo con consentimiento estadístico).
+  -> checkout.html (onSnapshot) y js/pedido-checkout-seguro.js.
+ga4MeasurementId -> js/analitica.js (solo con consentimiento estadístico).
 storeOpen, maintenanceAccess -> store-gate (settings/storeGate).
 
 Todos los campos que el panel guarda tienen al menos un consumidor público
@@ -113,7 +113,7 @@ LIMITACIONES / VERIFICACIÓN MANUAL PENDIENTE
 ALCANCE RESPETADO
 -----------------
 No se modificó el flujo de creación de pedidos, firestore.rules,
-secure-checkout-order.js ni la lógica de checkout. Los cambios se limitan a una
+pedido-checkout-seguro.js ni la lógica de checkout. Los cambios se limitan a una
 auditoría nueva y su integración en CI/package.json, más esta documentación.
 
 COMMIT FINAL / MERGE

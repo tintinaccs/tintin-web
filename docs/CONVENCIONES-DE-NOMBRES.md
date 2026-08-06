@@ -59,3 +59,10 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Los módulos funcionales de productos, estadísticas de pedidos y perfil de usuario de `js/core/store/**` usan nombres claros en español y `kebab-case`.
 - Se conserva la carpeta técnica `store` para mantener la arquitectura y las importaciones agrupadas.
 - No se modifican exports, eventos, colecciones, campos persistidos, claves de almacenamiento ni APIs globales.
+
+## Runtime transversal: bloques 8 a 12
+
+- Analítica, diagnóstico, correo, pedidos y calidad usan nombres funcionales claros en español y `kebab-case`.
+- Se preservan nombres de proveedores y contratos técnicos como Firebase, Firestore, Resend y checkout.
+- Las carpetas arquitectónicas `analytics`, `diagnostic-shims`, `diagnostics`, `email`, `orders` y `quality` permanecen estables.
+- No se modifican eventos, claves persistidas, exports, APIs globales ni comportamiento de negocio.

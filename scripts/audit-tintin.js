@@ -36,8 +36,8 @@ function assertFile(rel, message) {
 
 function isAllowedLegacyLogoReference(file) {
   return [
-    'js/quality/page-audit-fix.js',
-    'js/quality/ui-quality.js',
+    'js/quality/correccion-auditoria-pagina.js',
+    'js/quality/calidad-interfaz.js',
     'js/cargador-pagina.js',
     'scripts/audit-deep.js',
     'scripts/audit-tintin.js',
@@ -54,10 +54,10 @@ assertFile('assets-tintin/images/general/logo.png', 'Debe existir el logo real P
 assertFile('css/core/tintin-unified-theme.css', 'Debe existir la fuente única de tokens Tintin');
 assertFile('css/core/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores hardcodeados');
 assertFile('css/theme/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
-assertFile('js/quality/ui-quality.js', 'Debe existir el runtime global de calidad');
+assertFile('js/quality/calidad-interfaz.js', 'Debe existir el runtime global de calidad');
 assertFile('js/cargador-pagina.js', 'Debe existir el loader global');
 assertFile('js/components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
-assertFile('js/quality/page-audit-fix.js', 'Debe existir el fix de auditoría por página');
+assertFile('js/quality/correccion-auditoria-pagina.js', 'Debe existir el fix de auditoría por página');
 assertFile('js/components/color/normalizador-color-tema.js', 'Debe existir el sanitizador de colores');
 assertFile('scripts/fix-tintin-source.js', 'Debe existir el auto-fixer de fuente');
 assertFile('firestore.rules', 'Debe existir el archivo de reglas Firestore');
@@ -69,7 +69,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tintin-unified-theme.css','css/core/tintin-theme-cleanup.css','css/core/tintin-tokens.css','js/components/color/normalizador-color-tema.js','js/quality/page-audit-fix.js','js/cargador-pagina.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tintin-unified-theme.css','css/core/tintin-theme-cleanup.css','css/core/tintin-tokens.css','js/components/color/normalizador-color-tema.js','js/quality/correccion-auditoria-pagina.js','js/cargador-pagina.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }
@@ -118,31 +118,31 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   }
 }
 
-// Antirregresión: topOnReload() (js/quality/ui-quality.js) solamente puede reposicionar
+// Antirregresión: topOnReload() (js/quality/calidad-interfaz.js) solamente puede reposicionar
 // el scroll una vez, de forma síncrona, durante una recarga real — no debe
 // reaparecer ningún setTimeout ni listener de 'load' que vuelva a forzar
 // scrollTo() después de que el sitio ya sea interactivo, y el
 // requestAnimationFrame final solamente puede restaurar scrollBehavior.
 {
-  const uiQuality = read('js/quality/ui-quality.js');
+  const uiQuality = read('js/quality/calidad-interfaz.js');
   const fnMatch = uiQuality.match(/function topOnReload\(\)\{[\s\S]*?\n\}/);
   if (!fnMatch) {
-    addIssue('CRITICAL', 'js/quality/ui-quality.js', 'No se encontró topOnReload() — no se pudo verificar el antirregresión de scroll');
+    addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', 'No se encontró topOnReload() — no se pudo verificar el antirregresión de scroll');
   } else {
     const fnBody = fnMatch[0];
     if (/setTimeout\(/.test(fnBody)) {
-      addIssue('CRITICAL', 'js/quality/ui-quality.js', 'topOnReload() contiene setTimeout() — puede reposicionar el scroll tarde, después de que el usuario ya empezó a scrollear');
+      addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', 'topOnReload() contiene setTimeout() — puede reposicionar el scroll tarde, después de que el usuario ya empezó a scrollear');
     }
     if (/addEventListener\(\s*['"]load['"]/.test(fnBody)) {
-      addIssue('CRITICAL', 'js/quality/ui-quality.js', "topOnReload() contiene un listener de 'load' — no debe volver a reposicionar el scroll una vez que el sitio es interactivo");
+      addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', "topOnReload() contiene un listener de 'load' — no debe volver a reposicionar el scroll una vez que el sitio es interactivo");
     }
     const rafMatches = fnBody.match(/requestAnimationFrame\(/g) || [];
     if (rafMatches.length > 1) {
-      addIssue('CRITICAL', 'js/quality/ui-quality.js', 'topOnReload() contiene más de un requestAnimationFrame() — solamente puede haber uno, y solo para restaurar scrollBehavior');
+      addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', 'topOnReload() contiene más de un requestAnimationFrame() — solamente puede haber uno, y solo para restaurar scrollBehavior');
     }
     const rafBodyMatch = fnBody.match(/requestAnimationFrame\(function\(\)\{([\s\S]*?)\}\)/);
     if (rafBodyMatch && /scrollTo/.test(rafBodyMatch[1])) {
-      addIssue('CRITICAL', 'js/quality/ui-quality.js', 'El requestAnimationFrame() final de topOnReload() vuelve a ejecutar scrollTo() — solamente puede restaurar scrollBehavior');
+      addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', 'El requestAnimationFrame() final de topOnReload() vuelve a ejecutar scrollTo() — solamente puede restaurar scrollBehavior');
     }
   }
 }
@@ -228,16 +228,16 @@ const packageJson = fs.existsSync(path.join(ROOT, 'package.json')) ? read('packa
   if (!packageJson.includes(`"${scriptName}"`)) addIssue('CRITICAL', 'package.json', `Falta script ${scriptName}`);
 });
 
-const ui = fs.existsSync(path.join(ROOT, 'js/quality/ui-quality.js')) ? read('js/quality/ui-quality.js') : '';
+const ui = fs.existsSync(path.join(ROOT, 'js/quality/calidad-interfaz.js')) ? read('js/quality/calidad-interfaz.js') : '';
 [
   'normalizador-color-tema.js',
   'compatibilidad-cuenta-movil.js',
-  'page-audit-fix.js',
+  'correccion-auditoria-pagina.js',
   'tintin-unified-theme.css',
   'tintin-theme-cleanup.css',
   'tintin-parity-safe.css'
 ].forEach(token => {
-  if (!ui.includes(token)) addIssue('CRITICAL', 'js/quality/ui-quality.js', `No carga ${token}`);
+  if (!ui.includes(token)) addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', `No carga ${token}`);
 });
 
 const counts = issues.reduce((acc, issue) => {

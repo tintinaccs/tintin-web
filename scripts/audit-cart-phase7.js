@@ -6,8 +6,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const classic = read('script.js');
-const quality = read('js/quality/ui-quality.js');
-const checkout = read('js/orders/secure-checkout-order.js');
+const quality = read('js/quality/calidad-interfaz.js');
+const checkout = read('js/orders/pedido-checkout-seguro.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const rules = read('firestore.rules');
 const pkg = read('package.json');

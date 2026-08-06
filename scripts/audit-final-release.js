@@ -12,7 +12,7 @@ const firebaseJson = JSON.parse(read('firebase.json'));
 const phase9 = read('js/admin/importacion-admin.js');
 const normalization = read('js/core/store/normalizacion-importacion.mjs');
 const normalizationTests = read('tests/import/phase9-import-normalization.test.mjs');
-const quality = read('js/quality/ui-quality.js');
+const quality = read('js/quality/calidad-interfaz.js');
 const rules = read('firestore.rules');
 
 let failures = 0;
@@ -154,7 +154,7 @@ check(
   'La Fase 9 arranca en el panel',
   quality.includes('bootAdminImportPhase9') &&
     quality.includes("import(versioned('../admin/importacion-admin.js'))"),
-  'ui-quality.js debe iniciar el módulo final'
+  'calidad-interfaz.js debe iniciar el módulo final'
 );
 
 check(

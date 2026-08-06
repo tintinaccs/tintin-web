@@ -6,9 +6,9 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 
 const rules = read('firestore.rules');
-const checkout = read('js/orders/secure-checkout-order.js');
+const checkout = read('js/orders/pedido-checkout-seguro.js');
 const admin = read('js/admin/admin-app.js');
-const activity = read('js/analytics/site-activity.js');
+const activity = read('js/analytics/actividad-sitio.js');
 const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/estado-productos.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
@@ -39,7 +39,7 @@ check(
   activity.includes('TINTIN_ENABLE_PUBLIC_ACTIVITY === true') &&
     activity.includes("ttActivityState = 'disabled-quota-protection'") &&
     loader.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true'),
-  'site-activity.js no debe iniciar escrituras salvo habilitación explícita.'
+  'actividad-sitio.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
   // Desde la Fase 4, la creación del pedido y el descuento de stock ya no

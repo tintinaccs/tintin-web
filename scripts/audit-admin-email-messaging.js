@@ -8,7 +8,7 @@ const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
 const checkout       = read('checkout.html');
-const resendNotify   = read('js/email/resend-order-notify.js');
+const resendNotify   = read('js/email/notificacion-pedido-resend.js');
 const bridge         = read('js/pages/checkout/checkout-puente-correo.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
@@ -25,8 +25,8 @@ check(
   // camino murió con saveOrder(), el guardado inseguro legado que
   // firestore.rules rechaza de todos modos) — checkout-puente-correo.js es
   // ahora el único punto que dispara el correo tras el éxito del pedido.
-  !checkout.includes('resend-order-notify.js') &&
-    !checkout.includes('email-notify.js') &&
+  !checkout.includes('notificacion-pedido-resend.js') &&
+    !checkout.includes('notificaciones-correo.js') &&
     (checkout.match(/sendOrderNotification\(/g) || []).length === 0 &&
     (bridge.match(/sendOrderNotification\(/g) || []).length === 1,
   'El pedido no debe disparar dos proveedores de correo.'
@@ -42,9 +42,9 @@ check(
 );
 check(
   'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
-  // Antes resend-order-notify.js y sincronizacion-correo-admin.js usaban rutas
+  // Antes notificacion-pedido-resend.js y sincronizacion-correo-admin.js usaban rutas
   // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
-  // biblioteca-multimedia.js y site-activity.js — eso daba 404 en GitHub Pages y el
+  // biblioteca-multimedia.js y actividad-sitio.js — eso daba 404 en GitHub Pages y el
   // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
   // comparten la misma resolución de origen.
   resendNotify.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
@@ -55,8 +55,8 @@ check(
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
-  bridge.includes("from '../../email/resend-order-notify.js?v=tintin-20260717-resend-1'") &&
-    !bridge.includes('email-notify.js'),
+  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1'") &&
+    !bridge.includes('notificaciones-correo.js'),
   'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );
 

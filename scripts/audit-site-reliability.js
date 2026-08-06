@@ -16,10 +16,10 @@ const loader = read('js/cargador-pagina.js');
 const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
 const parity = read('css/theme/tintin-parity-safe.css');
 const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
-const activity = read('js/analytics/site-activity.js');
+const activity = read('js/analytics/actividad-sitio.js');
 const functionOrigin = read('js/core/firebase/origen-funciones.js');
-const privacyConsent = read('js/analytics/privacy-consent.js');
-const analytics = read('js/analytics/analytics.js');
+const privacyConsent = read('js/analytics/consentimiento-privacidad.js');
+const analytics = read('js/analytics/analitica.js');
 const geoFunction = read('functions/api/visitor-geo.js');
 const rules = read('firestore.rules');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
@@ -35,7 +35,7 @@ const privacy = read('privacidad.html');
 const styles = read('styles.css');
 const theme = read('css/core/tintin-unified-theme.css');
 const main = read('script.js');
-const scrollReveal = read('js/quality/scroll-reveal-global.js');
+const scrollReveal = read('js/quality/revelado-desplazamiento-global.js');
 const imagePerformance = read('js/components/images/rendimiento-imagenes.js');
 const home = read('index.html');
 const publicShell = read('js/inicio-navegacion-publica.js');
@@ -106,9 +106,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   styles.includes('width: min(400px, calc(100vw - 36px))') &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './privacy-consent.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&
   analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',

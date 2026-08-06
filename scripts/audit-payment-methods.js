@@ -3,13 +3,13 @@ const fs = require('fs');
 const read = file => fs.readFileSync(file, 'utf8');
 const checkout = read('js/pages/checkout/checkout-metodos-pago.js');
 const admin = read('js/admin/settings/metodos-pago-admin.js');
-const core = read('js/orders/payment-methods-core.js');
+const core = read('js/orders/nucleo-metodos-pago.js');
 const css = read('css/components/payments/payment-methods.css');
 const store = read('js/pages/collections/estado-colecciones.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
 const publicSettings = read('js/core/store/configuracion-publica.js');
 const rules = read('firestore.rules');
-const secureCheckout = read('js/orders/secure-checkout-order.js');
+const secureCheckout = read('js/orders/pedido-checkout-seguro.js');
 
 const checks = [
   ['Checkout carga el catálogo dinámico desde settings/general compartido', /onPublicSettings/.test(checkout) && /normalizePaymentCatalog/.test(checkout) && /onSnapshot\(doc\(db, 'settings', 'general'\)/.test(publicSettings)],

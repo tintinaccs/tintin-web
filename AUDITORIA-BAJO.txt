@@ -57,7 +57,7 @@ propias.
 
 DÓNDE:
 - firestore.rules → sparkItemValid (líneas ~327-337).
-- js/secure-checkout-order.js (líneas ~411-416): text(...).slice(180/120).
+- js/pedido-checkout-seguro.js (líneas ~411-416): text(...).slice(180/120).
 
 SOLUCIÓN:
 Normalizar/validar en el panel que todo producto tenga name<=180 y price

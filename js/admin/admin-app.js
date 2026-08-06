@@ -6,18 +6,18 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/email-notify.js?v=tintin-20260716-cloudinary-fix-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20260716-cloudinary-fix-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
-// de Apps Script de email-notify.js — evita reenviar por un canal que ya no
+// de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/resend-order-notify.js?v=tintin-20260717-resend-1";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { EMAIL_WEBHOOK_URL } from "../email/email-config.js?v=tintin-20260716-cloudinary-fix-1";
+import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
@@ -2188,7 +2188,7 @@ window.resendOrderEmail = async (orderId) => {
   try {
     const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
     const result = await sendOrderNotification(orderId, orderForEmail, true);
-    if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email/email-config.js esté configurado');
+    if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email/configuracion-correo.js esté configurado');
 
     await updateDoc(doc(db, 'orders', orderId), {
       resendCount: increment(1),
@@ -4709,7 +4709,7 @@ window.fixLegacyProductNumbers = async function() {
 
 // Prueba manual y aislada del nuevo endpoint server-side de pedidos (Fase
 // 4, apps-script/Phase4CreateOrder.gs) — NO toca checkout.html ni
-// js/orders/secure-checkout-order.js. Crea un pedido real (retiro en tienda,
+// js/orders/pedido-checkout-seguro.js. Crea un pedido real (retiro en tienda,
 // efectivo) con un producto real para confirmar que el Apps Script
 // funciona antes de migrar el checkout de verdad. Requiere que
 // Phase4CreateOrder.gs ya esté pegado en el proyecto y que doPost(e) en
@@ -4828,7 +4828,7 @@ function loadProductos() {
   // Con conexión lenta o inestable (típico en tablet/mobile con wifi débil)
   // onSnapshot puede tardar mucho en resolver, o nunca resolver, sin avisar —
   // el spinner giraba indefinidamente sin ninguna pista de qué pasaba. A los
-  // 12s (mismo umbral que BUSY_TIMEOUT_MS en phase8-ui-ux.js) se avisa y se
+  // 12s (mismo umbral que BUSY_TIMEOUT_MS en experiencia-interfaz.js) se avisa y se
   // ofrece reintentar en vez de dejar la pantalla colgada en silencio.
   clearTimeout(_productosSlowTimer);
   _productosSlowTimer = setTimeout(() => {

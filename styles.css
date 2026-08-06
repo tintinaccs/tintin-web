@@ -4312,7 +4312,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    dos definiciones de #tt-intro/#tt-loader compitiendo entre sí.
 ═══════════════════════════════════════════════════════════ */
 
-/* Scroll reveal: lo maneja js/quality/scroll-reveal-global.js (.tt-auto-reveal /
+/* Scroll reveal: lo maneja js/quality/revelado-desplazamiento-global.js (.tt-auto-reveal /
    .tt-visible), cargado global vía js/cargador-pagina.js — este bloque quedó
    retirado porque duplicaba esa misma animación con su propio sistema
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */

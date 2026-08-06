@@ -715,7 +715,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/ui-quality.js', 'UI Quality');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality');
     }
   }
 
@@ -747,7 +747,7 @@
   function bootSiteActivity() {
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/site-activity.js', 'Site Activity');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity');
     }
   }
 
@@ -772,7 +772,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/scroll-reveal-global.js', 'Scroll Reveal');
+      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal');
     }
   }
 
@@ -806,7 +806,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/page-audit-fix.js', 'Page Audit Fix');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix');
     }
   }
 
@@ -819,7 +819,7 @@
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/phase8-ui-ux.js', 'Phase 8 UI/UX');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX');
     }
   }
 

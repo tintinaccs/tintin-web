@@ -11,7 +11,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const runtime = read('js/quality/phase8-ui-ux.js');
+const runtime = read('js/quality/experiencia-interfaz.js');
 const styles = read('css/quality/phase8-ui-ux.css');
 const loader = read('js/cargador-pagina.js');
 const packageJson = JSON.parse(read('package.json'));
@@ -20,7 +20,7 @@ const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 check(
   'El runtime de Fase 8 se carga una sola vez desde page-loader',
   /function bootPhase8UiUx/.test(loader) &&
-    /importSibling\('quality\/phase8-ui-ux\.js'/.test(loader) &&
+    /importSibling\('quality\/experiencia-interfaz\.js'/.test(loader) &&
     /window\.TintinUX\?\.booted/.test(loader) &&
     (loader.match(/bootPhase8UiUx\(\);/g) || []).length === 2,
   'Público y páginas con guard propio deben compartir una sola instancia, sin reactivar ui-quality completo.'

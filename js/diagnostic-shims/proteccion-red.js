@@ -6,7 +6,7 @@
 // antes que cualquier otro script de la página real (los scripts clásicos se
 // ejecutan durante el parseo, antes de que los módulos —siempre diferidos—
 // empiecen). Es una segunda capa de seguridad, independiente de los shims de
-// firestore-shim.js/auth-shim.js/storage-shim.js: si por algún motivo un
+// adaptador-firestore.js/adaptador-autenticacion.js/adaptador-almacenamiento.js: si por algún motivo un
 // script llegara a golpear la red real de escritura sin pasar por esos
 // shims, esta guardia bloquea igual la llamada por la forma de la URL,
 // nunca por el host, así que no depende de mantener actualizada una lista de

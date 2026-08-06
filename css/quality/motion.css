@@ -115,7 +115,7 @@
     visibility 0s;
 }
 
-/* Escalonado del reveal: lo consume js/quality/scroll-reveal-global.js via
+/* Escalonado del reveal: lo consume js/quality/revelado-desplazamiento-global.js via
    --tt-r-delay. Se corta a los seis primeros para que el ultimo elemento
    nunca espere mas de un cuarto de segundo. */
 .tt-auto-reveal:nth-child(1) { --tt-r-delay: 0ms; }

@@ -7,7 +7,7 @@ on:
     paths:
       - 'js/admin/importacion-admin.js'
       - 'js/core/store/normalizacion-importacion.mjs'
-      - 'js/quality/ui-quality.js'
+      - 'js/quality/calidad-interfaz.js'
       - 'tests/import/phase9-import-normalization.test.mjs'
       - 'scripts/audit-store-gate.js'
       - 'scripts/audit-final-release.js'
@@ -45,7 +45,7 @@ jobs:
         run: |
           node --check js/admin/importacion-admin.js
           node --check js/core/store/normalizacion-importacion.mjs
-          node --check js/quality/ui-quality.js
+          node --check js/quality/calidad-interfaz.js
           node --check scripts/audit-store-gate.js
           node --check scripts/audit-final-release.js
           node --check scripts/build-diagnostic-manifest.js

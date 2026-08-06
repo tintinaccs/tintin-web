@@ -21,7 +21,7 @@ function css(){
 }
 function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
 function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
-function bootPageAudit(){import(versioned('./page-audit-fix.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
+function bootPageAudit(){import(versioned('./correccion-auditoria-pagina.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('../pages/collections/presentacion-colecciones.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('../admin/collections/gestion-colecciones-admin.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}
 function bootImagesPhase5(){import(versioned('../components/images/gestion-imagenes.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Images Phase 5:',e)})}

@@ -661,7 +661,7 @@ Igual que siempre que editás el script:
 1. **"Implementar"** → **"Administrar implementaciones"**
 2. Click en el ✏️ (lápiz) de la implementación activa
 3. **Versión**: "Nueva versión" → **"Implementar"**
-4. La URL (`/exec`) **no cambia** — no hace falta tocar `js/email/email-config.js`
+4. La URL (`/exec`) **no cambia** — no hace falta tocar `js/email/configuracion-correo.js`
    todavía.
 
 ## 6. Cómo lo pruebo yo, sin tocar `checkout.html`
