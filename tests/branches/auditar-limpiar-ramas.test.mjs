@@ -53,7 +53,9 @@ const mockFetchSource = `
 import { appendFileSync } from 'node:fs';
 
 const branches = JSON.parse(process.env.MOCK_BRANCHES);
+const liveBranches = JSON.parse(process.env.MOCK_LIVE_BRANCHES);
 const openPulls = JSON.parse(process.env.MOCK_OPEN_PULLS);
+const liveOpenPullBranches = new Set(JSON.parse(process.env.MOCK_LIVE_OPEN_PULL_BRANCHES));
 const closedPulls = JSON.parse(process.env.MOCK_CLOSED_PULLS);
 const comparisons = JSON.parse(process.env.MOCK_COMPARISONS);
 
@@ -76,6 +78,20 @@ globalThis.fetch = async (url, options = {}) => {
     return json({ default_branch: 'main' });
   }
   if (value.includes('/branches?')) return json(branches);
+  if (value.includes('/branches/')) {
+    const encoded = value.split('/branches/')[1].split('?')[0];
+    const branch = decodeURIComponent(encoded);
+    const current = liveBranches.find(item => item.name === branch);
+    return current ? json(current) : json({ message: 'Not Found' }, 404);
+  }
+  if (value.includes('/pulls?state=open&head=')) {
+    const parsed = new URL(value);
+    const head = parsed.searchParams.get('head') || '';
+    const branch = head.split(':').slice(1).join(':');
+    return json(liveOpenPullBranches.has(branch)
+      ? [{ head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: branch } }]
+      : []);
+  }
   if (value.includes('/pulls?state=open')) return json(openPulls);
   if (value.includes('/pulls?state=closed')) return json(closedPulls);
 
@@ -87,7 +103,14 @@ globalThis.fetch = async (url, options = {}) => {
 };
 `;
 
-async function runCase({ mode, ref, confirmation = '', branchSet = branches }) {
+async function runCase({
+  mode,
+  ref,
+  confirmation = '',
+  branchSet = branches,
+  liveBranchSet = branchSet,
+  liveOpenPullBranches = []
+}) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'tintin-branch-audit-'));
   const mockFile = path.join(directory, 'mock-fetch.mjs');
   const jsonFile = path.join(directory, 'branch-audit.json');
@@ -108,7 +131,9 @@ async function runCase({ mode, ref, confirmation = '', branchSet = branches }) {
       BRANCH_AUDIT_JSON: jsonFile,
       BRANCH_AUDIT_MARKDOWN: markdownFile,
       MOCK_BRANCHES: JSON.stringify(branchSet),
+      MOCK_LIVE_BRANCHES: JSON.stringify(liveBranchSet),
       MOCK_OPEN_PULLS: JSON.stringify(openPulls),
+      MOCK_LIVE_OPEN_PULL_BRANCHES: JSON.stringify(liveOpenPullBranches),
       MOCK_CLOSED_PULLS: JSON.stringify(closedPulls),
       MOCK_COMPARISONS: JSON.stringify(comparisons),
       MOCK_DELETE_LOG: deleteLog
@@ -203,4 +228,33 @@ test('delete elimina solo ramas verificadas y no toca protegidas, respaldos ni P
   assert.ok(deleted.every(url => !url.includes('release/stable')));
   assert.ok(deleted.every(url => !url.includes('backup/weekly')));
   assert.ok(deleted.every(url => !url.includes('feature/open')));
+});
+
+test('delete vuelve a validar SHA y PR abierto inmediatamente antes de borrar', async () => {
+  const liveBranchSet = branches.map(branch => branch.name === 'temp/noop-test'
+    ? { ...branch, commit: { sha: 'sha-que-aparecio-despues-del-informe' } }
+    : branch);
+  const { result, report, deleted } = await runCase({
+    mode: 'delete',
+    ref: 'main',
+    confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS',
+    liveBranchSet,
+    liveOpenPullBranches: ['feature/no-unique']
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(report.summary.deleted, 2);
+  assert.equal(deleted.length, 2);
+  assert.ok(deleted.some(url => url.endsWith('/heads/feature/merged')));
+  assert.ok(deleted.some(url => url.endsWith('/heads/tmp/admin-cls-rebase-20260806')));
+  assert.ok(deleted.every(url => !url.endsWith('/heads/feature/no-unique')));
+  assert.ok(deleted.every(url => !url.endsWith('/heads/temp/noop-test')));
+
+  const opened = report.records.find(record => record.branch === 'feature/no-unique');
+  assert.equal(opened.classification, 'keep');
+  assert.match(opened.reason, /Se abrió un Pull Request/);
+
+  const advanced = report.records.find(record => record.branch === 'temp/noop-test');
+  assert.equal(advanced.classification, 'review');
+  assert.match(advanced.reason, /avanzó después del informe/);
 });
