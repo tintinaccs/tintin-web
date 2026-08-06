@@ -257,18 +257,13 @@ const forbiddenPhrase = [
   97, 114, 116, 105, 102, 105, 99, 105, 97, 108
 ].map(character => String.fromCharCode(character)).join('');
 const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
-const operationalMetadataFiles = new Set([
-  path.join(root, 'scripts', 'auditar-limpiar-ramas.mjs')
-]);
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     if (entry.name === '.git' || entry.name === 'node_modules') return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
-    // El inventario de ramas conserva identificadores históricos exactos para
-    // clasificarlos y eliminarlos; esos nombres son metadatos, no autoría del producto.
-    if (absolute === __filename || operationalMetadataFiles.has(absolute)) return [];
+    if (absolute === __filename) return [];
     return [absolute];
   });
 }
