@@ -23,7 +23,7 @@ INVENTARIO REAL
 ═══════════════════════════════════════════════════════════════════════
 Identidad / techo de roles ... js/roles.js (SUPER_ADMIN, PERMISSIONS, can,
                                getUserRole, setUserRole)
-Matriz dinámica .............. js/role-permissions.js (PERMISSION_MODULES,
+Matriz dinámica .............. js/permisos-roles.js (PERMISSION_MODULES,
                                buildDefaultRolePermissions, loadRolePermissions,
                                canDo, saveRolePermissions) + UI "Roles y Permisos"
 CRUD de usuarios ............. js/admin-app.js (updateUserRole, blockUser,

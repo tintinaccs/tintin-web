@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const css = read('css/theme/loader-solid-background.css');
 const login = read('login.html');
-const authNav = read('js/core/auth/auth-nav.js');
+const authNav = read('js/core/auth/navegacion-autenticacion.js');
 
 const loginLoaderVisible =
   css.includes('html:has(.login-page) body #tt-loader-spin-wrap') &&
