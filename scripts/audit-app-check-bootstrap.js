@@ -17,10 +17,10 @@ const storeGateRuntime = read('js/core/store-gate/control-tienda.js');
 const activity = read('js/analytics/site-activity.js');
 const analytics = read('js/analytics/analytics.js');
 const images = read('js/components/images/imagenes.js');
-const publicSettings = read('js/core/store/public-settings-store.js');
+const publicSettings = read('js/core/store/configuracion-publica.js');
 const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
-const siteContent = read('js/core/store/site-content.js');
+const siteContent = read('js/core/store/contenido-sitio.js');
 const index = read('index.html');
 const allRuntime = [...htmlFiles, ...moduleFiles].map(read).join('\n');
 

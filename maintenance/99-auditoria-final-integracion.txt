@@ -28,7 +28,7 @@ escribe, el público lee — sin datos hardcodeados que contradigan la config):
   settings/general   → contacto (whatsapp.js), ciudades de envío (envios.html).
   settings/storeGate → tienda abierta/cerrada (nucleo-control-tienda.js).
   settings/appearance + colorSchemes → color en vivo (esquema-color.js).
-  site_content       → textos/imagenes editables (site-content.js).
+  site_content       → textos/imagenes editables (contenido-sitio.js).
   products/collections → catálogo y carrito (products-store/collections-store).
   emailSettings/storeGate.emailAccess → correos (admin-email-gate-sync).
 

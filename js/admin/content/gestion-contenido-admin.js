@@ -2,7 +2,7 @@
    TINTIN — Fase 6: editor seguro de contenido
 
    Crea la sección que faltaba en admin.html y edita únicamente los campos
-   incluidos en content-schema.js. No acepta HTML ni selectores desde Firestore.
+   incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
@@ -29,7 +29,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/content-schema.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

@@ -2,7 +2,7 @@
    TINTIN — Fase 6: contenido público seguro y sincronizado
 
    Firestore guarda solamente valores. Los selectores, tipos de campo y
-   límites están definidos en content-schema.js. Este renderer nunca inserta
+   límites están definidos en esquema-contenido.js. Este renderer nunca inserta
    HTML recibido desde la base.
    ============================================================= */
 
@@ -15,7 +15,7 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './content-schema.js?v=tintin-20260716-cloudinary-fix-1';
+} from './esquema-contenido.js?v=tintin-20260716-cloudinary-fix-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

@@ -5,8 +5,8 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const files = {
-  schema: read('js/core/store/content-schema.js'),
-  publicRuntime: read('js/core/store/site-content.js'),
+  schema: read('js/core/store/esquema-contenido.js'),
+  publicRuntime: read('js/core/store/contenido-sitio.js'),
   admin: read('js/admin/content/gestion-contenido-admin.js'),
   badges: read('js/core/auth/insignia-edicion.js'),
   permissions: read('js/core/auth/permisos-roles.js'),
@@ -34,7 +34,7 @@ check(
   'El esquema cubre las ocho páginas administrables',
   requiredPages.every(page => files.schema.includes(`${page}: {`) || files.schema.includes(`'${page}'`)) &&
     files.schema.includes('CONTENT_PAGE_IDS'),
-  'Falta una página en content-schema.js'
+  'Falta una página en esquema-contenido.js'
 );
 
 check(
@@ -51,7 +51,7 @@ check(
     !files.publicRuntime.includes('insertAdjacentHTML') &&
     files.publicRuntime.includes('document.createTextNode') &&
     files.publicRuntime.includes('replaceChildren'),
-  'site-content.js debe usar nodos de texto'
+  'contenido-sitio.js debe usar nodos de texto'
 );
 
 check(

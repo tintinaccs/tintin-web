@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'js/admin/importacion-admin.js'
-      - 'js/core/store/import-normalization.mjs'
+      - 'js/core/store/normalizacion-importacion.mjs'
       - 'js/quality/ui-quality.js'
       - 'tests/import/phase9-import-normalization.test.mjs'
       - 'scripts/audit-store-gate.js'
@@ -44,7 +44,7 @@ jobs:
       - name: Revisar sintaxis de Fase 9
         run: |
           node --check js/admin/importacion-admin.js
-          node --check js/core/store/import-normalization.mjs
+          node --check js/core/store/normalizacion-importacion.mjs
           node --check js/quality/ui-quality.js
           node --check scripts/audit-store-gate.js
           node --check scripts/audit-final-release.js

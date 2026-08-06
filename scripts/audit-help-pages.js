@@ -44,7 +44,7 @@ const PAGES = [
   { file: 'preguntas-frecuentes.html', id: 'faq' }
 ];
 
-const schema = read('js/core/store/content-schema.js');
+const schema = read('js/core/store/esquema-contenido.js');
 
 // ---------------------------------------------------------------------------
 // Comprobaciones por página

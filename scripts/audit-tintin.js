@@ -149,7 +149,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
 
 // Antirregresión: el eyebrow del Hero de home ("Bienvenidas a TINTIN") ya no
 // incluye "· Paraguay" — no debe reaparecer ni en el HTML fuente ni como
-// fallback hardcodeado en js/core/store/site-content.js.
+// fallback hardcodeado en js/core/store/contenido-sitio.js.
 {
   const oldEyebrowRe = /Bienvenidas a TINTIN\s*(&middot;|·)\s*Paraguay/;
   // admin.html conserva el string viejo únicamente como valor exacto de

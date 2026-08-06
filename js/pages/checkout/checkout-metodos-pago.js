@@ -1,4 +1,4 @@
-import { onPublicSettings } from '../../core/store/public-settings-store.js?v=tintin-20260720-read-budget-1';
+import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20260720-read-budget-1';
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,

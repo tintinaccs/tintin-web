@@ -23,11 +23,11 @@ No se rehízo nada de eso.
 INVENTARIO REAL
 ═══════════════════════════════════════════════════════════════════════
 CONTENIDO
-- Esquema ............ js/content-schema.js (CONTENT_PAGE_IDS: 8 páginas fijas,
+- Esquema ............ js/esquema-contenido.js (CONTENT_PAGE_IDS: 8 páginas fijas,
                        campos con selector + tope de longitud)
 - Editor (panel) ..... js/gestion-contenido-admin.js (+ sección Contenido en admin-app.js,
                        contUploadImage por ImgBB con clave del usuario — ver 11.3)
-- Aplicación pública . js/site-content.js (onSnapshot → selector real, nodos de
+- Aplicación pública . js/contenido-sitio.js (onSnapshot → selector real, nodos de
                        texto, sanitizeContentHref)
 - Bienvenida ......... js/configuracion-bienvenida.js, tutorial-bienvenida.js,
                        control-bienvenida-admin.js
@@ -50,7 +50,7 @@ REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
 ═══════════════════════════════════════════════════════════════════════
 CONTENIDO
 - Firestore guarda valores, nunca HTML/CSS/selectores (los selectores viven en
-  content-schema.js). El sitio público aplica cada valor a su selector real
+  esquema-contenido.js). El sitio público aplica cada valor a su selector real
   (querySelectorAll(item.selector)) → cada control produce un cambio real.
 - Render seguro: createTextNode + replaceChildren + appendPlainLines; jamás
   innerHTML de datos de Firestore. Los enlaces pasan por sanitizeContentHref

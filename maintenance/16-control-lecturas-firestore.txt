@@ -41,7 +41,7 @@ CAMBIOS APLICADOS
 - Los suscriptores administrativos comparten una sola suscripción y la cierran cuando ya no se usa.
 
 3. Configuración general
-- Se agregó public-settings-store.js.
+- Se agregó configuracion-publica.js.
 - WhatsApp y métodos de pago comparten una sola suscripción a settings/general.
 - El store entrega el último valor cacheado mientras Firestore responde.
 - Contacto, Términos, Privacidad y páginas de ayuda no abren el listener global si ya administran esa configuración con su runtime propio.

@@ -47,3 +47,9 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Los módulos internos de `js/core/store-gate/**` usan nombres claros en español y `kebab-case`.
 - Se conserva la carpeta `store-gate` para mantener estable la agrupación histórica y reducir el alcance del cambio.
 - No se modifican `settings/storeGate`, `window.TintinStoreGate`, el evento `tintin:store-gate-state`, clases CSS ni estados persistidos.
+
+## Estado, contenido e inventario
+
+- Los módulos funcionales de contenido, importación, inventario y configuración pública de `js/core/store/**` usan nombres claros en español y `kebab-case`.
+- Se conserva la carpeta técnica `store` para mantener la arquitectura y las importaciones agrupadas.
+- No se modifican colecciones, campos, esquemas persistidos, claves de configuración, exports ni APIs globales.
