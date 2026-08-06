@@ -5,13 +5,21 @@ on:
   schedule:
     # Domingo 03:30 UTC (sábado 23:30 en Paraguay durante UTC-4 / 00:30 en UTC-3).
     - cron: '30 3 * * 0'
+  pull_request:
+    paths:
+      - '.github/workflows/respaldo-repositorio.yml'
+      - 'scripts/crear-respaldo-repositorio.mjs'
+      - 'scripts/verificar-respaldo-repositorio.mjs'
+      - 'docs/plan-respaldo-recuperacion.md'
+      - 'docs/inventario-recuperacion-servicios.md'
+      - '.gitignore'
 
 permissions:
   contents: read
 
 concurrency:
-  group: respaldo-verificable-repositorio
-  cancel-in-progress: false
+  group: respaldo-verificable-repositorio-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   crear-y-verificar:
