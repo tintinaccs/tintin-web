@@ -125,6 +125,17 @@ async function runCase({ mode, ref, confirmation = '', branchSet = branches }) {
   return { result, report, deleted };
 }
 
+test('el inventario revisado contiene exactamente 13 SHA válidos y únicos', async () => {
+  const source = await readFile(script, 'utf8');
+  const start = source.indexOf('const reviewedObsoleteBranches = new Map([');
+  const end = source.indexOf('\n]);\n\nif (!token)', start);
+  assert.ok(start >= 0 && end > start, 'No se encontró el inventario revisado');
+  const block = source.slice(start, end);
+  const shas = [...block.matchAll(/sha: '([0-9a-f]{40})'/g)].map(match => match[1]);
+  assert.equal(shas.length, 13);
+  assert.equal(new Set(shas).size, 13);
+});
+
 test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge' });
   assert.equal(result.status, 0, result.stderr);
