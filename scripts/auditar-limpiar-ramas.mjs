@@ -7,26 +7,6 @@ const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
 const outputMarkdown = process.env.BRANCH_AUDIT_MARKDOWN || 'branch-audit.md';
 
-const reviewedObsoleteBranches = new Map([
-  ['agent/phase8-tree-test', 'Rama temporal con archivos y workflows de prueba de árbol'],
-  ['chatgpt/global-hardening-20260707', 'Trabajo antiguo superado por la reorganización y auditoría integral actual'],
-  ['claude/user-mgmt-bulk-organize-7u20jo', 'Implementación monolítica antigua e incompatible, reemplazada por módulos actuales de usuarios y colecciones'],
-  ['claude/user-mgmt-bulk-organize-sf4tqu', 'Duplicado de la implementación monolítica antigua de usuarios y colecciones ya revisada'],
-  ['diagnostic/prod-cls-verification-20260806', 'Diagnóstico temporal de CLS ya incorporado y validado en main'],
-  ['feature/firebase-web-push', 'Duplicado exacto de la rama conservada claude/firebase-web-push-jun4le'],
-  ['fix/catalog-stock-priority-realtime', 'Cambio antiguo de catálogo superado por el estado comercial y auditorías actuales'],
-  ['fix/hide-cookie-banner-superadmin', 'Corrección antigua de privacidad absorbida por el runtime y panel actuales'],
-  ['fix/loader-logo-background-fullscreen', 'Corrección antigua de loader superada por el sistema de carga validado'],
-  ['fix/loader-logo-oficial-instantaneo-20260731', 'Variación antigua del loader y caché sustituida por el sistema actual auditado'],
-  ['fix/phase8-users-audit-permissions', 'Implementación antigua de roles sustituida por la arquitectura modular y pruebas actuales'],
-  ['fix/phase8-users-load-permissions-rules', 'Corrección antigua de usuarios y reglas reemplazada por la arquitectura y seguridad actuales'],
-  ['fix/reactivate-analytics-throttle', 'Throttle de analítica ya incorporado en las reglas actuales de Firestore'],
-  ['refactor/integrar-cierre-nombres-global', 'Rama de integración temporal cuyo resultado final ya fue fusionado'],
-  ['temp/noop-test', 'Rama temporal de prueba sin trabajo de producto vigente'],
-  ['tmp/admin-cls-rebase', 'Rama temporal de rebase de CLS ya incorporada y validada'],
-  ['tmp/admin-cls-rebase-20260806', 'Segundo rebase temporal de CLS cuyos cambios ya están incorporados y auditados']
-]);
-
 if (!token) throw new Error('Falta GITHUB_TOKEN');
 if (!repository || !repository.includes('/')) throw new Error('Falta GITHUB_REPOSITORY');
 if (!['audit', 'delete'].includes(mode)) throw new Error(`Modo inválido: ${mode}`);
@@ -84,17 +64,27 @@ const [branches, openPulls, closedPulls] = await Promise.all([
   paginate('/pulls?state=closed&sort=updated&direction=desc')
 ]);
 
-const openHeads = new Set(openPulls.map(pr => pr.head?.ref).filter(Boolean));
-const mergedHeads = new Set(
-  closedPulls.filter(pr => pr.merged_at).map(pr => pr.head?.ref).filter(Boolean)
+const openHeads = new Set(
+  openPulls
+    .filter(pr => pr.head?.repo?.full_name === repository)
+    .map(pr => pr.head?.ref)
+    .filter(Boolean)
 );
+
+const mergedHeadShas = new Map();
+for (const pr of closedPulls) {
+  if (!pr.merged_at || pr.head?.repo?.full_name !== repository || !pr.head?.ref || !pr.head?.sha) continue;
+  if (!mergedHeadShas.has(pr.head.ref)) mergedHeadShas.set(pr.head.ref, new Set());
+  mergedHeadShas.get(pr.head.ref).add(pr.head.sha);
+}
 
 const records = [];
 for (const branchInfo of branches) {
   const branch = branchInfo.name;
+  const currentSha = branchInfo.commit?.sha || null;
   const record = {
     branch,
-    sha: branchInfo.commit?.sha || null,
+    sha: currentSha,
     classification: 'review',
     reason: 'Contiene historial no clasificado',
     aheadBy: null,
@@ -113,27 +103,19 @@ for (const branchInfo of branches) {
     continue;
   }
 
-  if (reviewedObsoleteBranches.has(branch)) {
-    record.classification = 'safe-delete';
-    record.reason = `Revisada explícitamente: ${reviewedObsoleteBranches.get(branch)}`;
-    records.push(record);
-    continue;
-  }
-
-  if (mergedHeads.has(branch)) {
-    record.classification = 'safe-delete';
-    record.reason = 'Tiene un Pull Request fusionado y no tiene PR abierto';
-    records.push(record);
-    continue;
-  }
-
   try {
     const comparison = await api(`/compare/main...${encodedRef(branch)}`);
     record.aheadBy = comparison.ahead_by;
     record.behindBy = comparison.behind_by;
+
     if (comparison.ahead_by === 0) {
       record.classification = 'safe-delete';
       record.reason = 'No contiene commits únicos respecto de main';
+    } else if (currentSha && mergedHeadShas.get(branch)?.has(currentSha)) {
+      record.classification = 'safe-delete';
+      record.reason = 'El Pull Request de esta misma punta fue fusionado y la rama no avanzó después';
+    } else if (mergedHeadShas.has(branch)) {
+      record.reason = `Tuvo un Pull Request fusionado, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
     } else {
       record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en main`;
     }
@@ -170,7 +152,7 @@ const sections = [
   ['Seguras para eliminar', 'safe-delete'],
   ['Revisión manual', 'review']
 ];
-let markdown = `# Auditoría de ramas\n\n`;
+let markdown = '# Auditoría de ramas\n\n';
 markdown += `- Repositorio: \`${repository}\`\n`;
 markdown += `- Fecha: \`${summary.generatedAt}\`\n`;
 markdown += `- Modo: \`${mode}\`\n`;
