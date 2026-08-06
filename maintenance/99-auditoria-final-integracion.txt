@@ -26,7 +26,7 @@ PLATAFORMA ........ Firebase (Auth/Firestore), reglas firestore.rules,
 Integración Super Admin ↔ público (todo por documentos Firestore; el admin
 escribe, el público lee — sin datos hardcodeados que contradigan la config):
   settings/general   → contacto (whatsapp.js), ciudades de envío (envios.html).
-  settings/storeGate → tienda abierta/cerrada (store-gate-core.js).
+  settings/storeGate → tienda abierta/cerrada (nucleo-control-tienda.js).
   settings/appearance + colorSchemes → color en vivo (esquema-color.js).
   site_content       → textos/imagenes editables (site-content.js).
   products/collections → catálogo y carrito (products-store/collections-store).
@@ -34,8 +34,8 @@ escribe, el público lee — sin datos hardcodeados que contradigan la config):
 
 Fuentes ÚNICAS de verdad confirmadas:
   - Firebase se inicializa SOLO en js/firebase.js (un initializeApp, un config).
-  - "Tienda abierta/cerrada" tiene un núcleo único: store-gate.js se apoya en
-    store-gate-core.js; se entrega en todas las páginas vía cargador-pagina.js.
+  - "Tienda abierta/cerrada" tiene un núcleo único: control-tienda.js se apoya en
+    nucleo-control-tienda.js; se entrega en todas las páginas vía cargador-pagina.js.
   - Catálogo: fuente única en Firestore (sin PRODUCTS de relleno).
 
 ═══════════════════════════════════════════════════════════════════════

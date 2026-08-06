@@ -41,3 +41,9 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - `firebase.js` se conserva como entrada técnica canónica.
 - Se mantienen los nombres de Firebase, Firestore y REST por corresponder a tecnologías y protocolos.
 - No se modifican colecciones, campos, endpoints, orígenes configurados ni contratos persistidos.
+
+## Control de acceso a la tienda
+
+- Los módulos internos de `js/core/store-gate/**` usan nombres claros en español y `kebab-case`.
+- Se conserva la carpeta `store-gate` para mantener estable la agrupación histórica y reducir el alcance del cambio.
+- No se modifican `settings/storeGate`, `window.TintinStoreGate`, el evento `tintin:store-gate-state`, clases CSS ni estados persistidos.
