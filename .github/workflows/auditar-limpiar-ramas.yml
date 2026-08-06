@@ -32,6 +32,12 @@ permissions:
   contents: read
   pull-requests: read
 
+# Una sola ejecución puede observar o modificar las ramas a la vez. Las nuevas
+# ejecuciones esperan; nunca cancelan una eliminación ya iniciada.
+concurrency:
+  group: limpieza-ramas-${{ github.repository }}
+  cancel-in-progress: false
+
 # Los Pull Requests y los cambios de esta auditoría en main solo clasifican y
 # generan informes. La eliminación exige workflow_dispatch, permiso de escritura
 # y la confirmación exacta definida abajo.
@@ -40,6 +46,7 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
     name: Clasificar ramas sin borrar
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: read
@@ -84,6 +91,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.mode == 'delete'
     name: Eliminar solo ramas verificadas
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
       pull-requests: read
