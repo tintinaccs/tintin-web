@@ -229,7 +229,21 @@ if (!window.TintinCollectionsPhase4Booted) {
     return card;
   }
 
+  function preserveCollectionsPageSkeletons(target) {
+    if (collections || collectionError) return false;
+    const skeletons = [...target.querySelectorAll(
+      '.tt-coll-page-card[aria-hidden="true"]'
+    )];
+    if (!skeletons.length) return false;
+
+    skeletons.forEach(mark);
+    target.dataset.phase4CollectionsOwner = 'collections-page';
+    target.dataset.phase4CollectionsSignature = currentSignature('collections-page');
+    return true;
+  }
+
   function renderCollectionsPage(target) {
+    if (preserveCollectionsPageSkeletons(target)) return;
     replaceOwned(
       target,
       collectionNodesOrState(
