@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-06T11:56:47.281Z",
-  "sourceFingerprint": "cd90b960a7db1ee23a834e602cde963fdfccd600274d6ad24e0d5a25690becb8",
+  "generatedAt": "2026-08-06T14:02:48.805Z",
+  "sourceFingerprint": "847e844fef90ff40bc202bfc6212ed9583ad4febdcc73e1d15bb62b4bc2e6886",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 508,
-    "textFiles": 476,
-    "totalBytes": 5494934,
+    "files": 513,
+    "textFiles": 481,
+    "totalBytes": 5511430,
     "pages": 18,
-    "modules": 300
+    "modules": 302
   },
   "viewports": [
     {
@@ -22152,6 +22152,42 @@
       "endpoints": []
     },
     {
+      "path": "scripts/crear-respaldo-repositorio.mjs",
+      "bytes": 2932,
+      "sha256": "258aa91331c0c2ffff924ad4ee6f0852cf7edf6dc49029a8f4cb1719468de726",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/enforce-account-flow-part2d.mjs",
       "bytes": 1975,
       "sha256": "a40de4b4c8cef0c5e4e5e88bfbdb4ea559e1bdc7b82600f31b69970689f531e4",
@@ -22484,6 +22520,42 @@
           "target": "js/core/store/modelo-inventario.mjs",
           "dynamic": false,
           "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/verificar-respaldo-repositorio.mjs",
+      "bytes": 2199,
+      "sha256": "f8ac9b1c98ce3f662a68db5add0062a79c247f06cab19361b5127701edbaeeb1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -22913,8 +22985,8 @@
     {
       "path": ".github/workflows/deploy-pages.yml",
       "extension": ".yml",
-      "bytes": 1687,
-      "sha256": "257176b72da0e04674e9d4da187a18fcb3be73f1802dd3a0ff87230d1785eb4c"
+      "bytes": 3199,
+      "sha256": "a69eb0a4a427465044eaf47c4553eebefa7e0cb35d98393b3f3fd7f536d34587"
     },
     {
       "path": ".github/workflows/final-release-phase9.yml",
@@ -22969,6 +23041,12 @@
       "extension": ".yml",
       "bytes": 4120,
       "sha256": "47a8c88a3b8c82d03341a995f64539ab45a0fa201708a9ef68be3c3894dd2d87"
+    },
+    {
+      "path": ".github/workflows/respaldo-repositorio.yml",
+      "extension": ".yml",
+      "bytes": 1741,
+      "sha256": "a5c45e8d040c2e0c8fac56a6d74473a080f2897d2d235cbb094d0512985e0e77"
     },
     {
       "path": ".github/workflows/system-special-part2g-audit.yml",
@@ -23697,6 +23775,12 @@
       "sha256": "5dbf19d0265ed96fd1f38b2b9e2f2d9ca5bbf28edb2ef04a30f83a8d66b0cc5c"
     },
     {
+      "path": "docs/inventario-recuperacion-servicios.md",
+      "extension": ".md",
+      "bytes": 3491,
+      "sha256": "0fef9c02bc6f01540db464f1f53f8953ebfa23c158a8fc40300738736f581445"
+    },
+    {
       "path": "docs/maintenance/05-checkout.txt",
       "extension": ".txt",
       "bytes": 2834,
@@ -23713,6 +23797,12 @@
       "extension": ".txt",
       "bytes": 2443,
       "sha256": "21e57f3b3c512205291f9c949e4649d34dbddb60859ca7e6d1c51f46b46ba678"
+    },
+    {
+      "path": "docs/plan-respaldo-recuperacion.md",
+      "extension": ".md",
+      "bytes": 4621,
+      "sha256": "60215c2c9f6e821a9658c73814534a891dca5a08865c4ef99c5ed0a499695b66"
     },
     {
       "path": "envios.html",
@@ -25665,6 +25755,12 @@
       "sha256": "efed191efb6b7b9cf561e231026aa28ed08d6ac55e45263d0dd9a71ec61ec230"
     },
     {
+      "path": "scripts/crear-respaldo-repositorio.mjs",
+      "extension": ".mjs",
+      "bytes": 2932,
+      "sha256": "258aa91331c0c2ffff924ad4ee6f0852cf7edf6dc49029a8f4cb1719468de726"
+    },
+    {
       "path": "scripts/enforce-account-flow-part2d.mjs",
       "extension": ".mjs",
       "bytes": 1975,
@@ -25741,6 +25837,12 @@
       "extension": ".mjs",
       "bytes": 1739,
       "sha256": "705cc01c661ab250daa5d63a81313427151fa0549b4cfece2a82b887115eac64"
+    },
+    {
+      "path": "scripts/verificar-respaldo-repositorio.mjs",
+      "extension": ".mjs",
+      "bytes": 2199,
+      "sha256": "f8ac9b1c98ce3f662a68db5add0062a79c247f06cab19361b5127701edbaeeb1"
     },
     {
       "path": "scripts/verify-diagnostic-manifest.js",
