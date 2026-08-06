@@ -21,13 +21,17 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: read
 
 jobs:
-  branches:
-    name: Clasificar ramas sin perder trabajo
+  audit:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
+    name: Clasificar ramas sin borrar
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,13 +39,13 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      - name: Auditar o eliminar ramas seguras
+      - name: Auditar ramas
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_CLEANUP_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'audit' }}
-          BRANCH_CLEANUP_CONFIRMATION: ${{ github.event_name == 'workflow_dispatch' && inputs.confirmation || '' }}
+          BRANCH_CLEANUP_MODE: audit
+          BRANCH_CLEANUP_CONFIRMATION: ''
         run: node scripts/auditar-limpiar-ramas.mjs
 
       - name: Publicar resumen
@@ -55,7 +59,48 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: auditoria-ramas-${{ github.run_id }}
+          name: auditoria-ramas-audit-${{ github.run_id }}
+          path: |
+            branch-audit.json
+            branch-audit.md
+          retention-days: 30
+          if-no-files-found: error
+
+  delete:
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'delete'
+    name: Eliminar solo ramas verificadas
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Eliminar ramas seguras
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_CLEANUP_MODE: delete
+          BRANCH_CLEANUP_CONFIRMATION: ${{ inputs.confirmation }}
+        run: node scripts/auditar-limpiar-ramas.mjs
+
+      - name: Publicar resumen
+        if: always()
+        run: |
+          if [ -f branch-audit.md ]; then
+            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-ramas-delete-${{ github.run_id }}
           path: |
             branch-audit.json
             branch-audit.md
