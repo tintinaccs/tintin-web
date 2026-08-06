@@ -123,7 +123,7 @@ check('GitHub Pages usa el servicio geográfico de Cloudflare',
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
-  activity.includes("const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname)") &&
+  activity.includes("const cloudflarePreview = /\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname)") &&
   activity.includes('!netlifyPreview && !cloudflarePreview'));
 check('Las reglas limitan la escritura de sesiones y presencia',
   rules.includes('presenceIsValid(visitorId)') &&
@@ -207,7 +207,7 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
 check('La portada usa la forma correcta TU ESTILO incluso con contenido histórico',
   home.includes('TU ESTILO</h1>') &&
   !home.includes('TÚ ESTILO</h1>') &&
-  contentSchema.includes("return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO')") &&
+  contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
   siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
 check('El loader de la portada espera a que la foto del hero cargue antes de ocultarse',
   home.includes('function heroReady()') &&
@@ -256,7 +256,7 @@ const forbiddenPhrase = [
   105, 110, 116, 101, 108, 105, 103, 101, 110, 99, 105, 97, 92, 115, 43,
   97, 114, 116, 105, 102, 105, 99, 105, 97, 108
 ].map(character => String.fromCharCode(character)).join('');
-const forbiddenAuthorship = new RegExp(`\b(?:${forbiddenTerms.join('|')})\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\s+(?:por|con)\s+(?:una\s+)?ia\b`, 'i');
+const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
 const operationalMetadataFiles = new Set([
   path.join(root, 'scripts', 'auditar-limpiar-ramas.mjs')
 ]);
