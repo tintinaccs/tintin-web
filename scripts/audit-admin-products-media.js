@@ -47,7 +47,7 @@ const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
 const imageUtils  = read('js/components/images/utilidades-imagenes.js');
 const storefront  = read('script.js');
-const productsStore = read('js/core/store/products-store.js');
+const productsStore = read('js/core/store/estado-productos.js');
 const phase7Policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const sheetsSyncFunction = read('functions/api/sheets-product-sync.js');
 

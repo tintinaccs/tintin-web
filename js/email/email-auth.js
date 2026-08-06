@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 export function isValidEmailFormat(email) {
@@ -78,7 +78,7 @@ export async function verifyOtpCode(email, code) {
 
 /**
  * Crea o actualiza users/{uid} para un login por correo. La lógica vive en
- * js/core/store/user-profile-store.js, compartida con el login de Google — acá sólo se
+ * js/core/store/perfil-usuario.js, compartida con el login de Google — acá sólo se
  * fija el método de acceso.
  */
 export async function ensureUserDocForEmailLogin(user) {

@@ -242,7 +242,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import('../../../core/store/products-store.js?v=tintin-20260730-stock-visibility-1')
+  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260730-stock-visibility-1')
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];

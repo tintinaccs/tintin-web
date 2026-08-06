@@ -7,7 +7,7 @@ function check(label, ok) {
   if (ok) console.log('OK — ' + label);
   else { failures += 1; console.error('FAIL — ' + label); }
 }
-const products = read('js/core/store/products-store.js');
+const products = read('js/core/store/estado-productos.js');
 const script = read('script.js');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const roles = read('js/core/auth/roles.js');

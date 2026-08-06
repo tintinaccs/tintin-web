@@ -8,7 +8,7 @@ const files = {
   homeFit: read('css/pages/home/home-fit.css'),
   script: read('script.js'),
   productRelated: read('js/pages/product/productos-relacionados.js'),
-  productsStore: read('js/core/store/products-store.js'),
+  productsStore: read('js/core/store/estado-productos.js'),
   imageInit: read('js/components/images/inicio-carga-imagenes.js'),
   collectionsPage: read('js/pages/collections/pagina-colecciones.js'),
   checkout: read('checkout.html'),

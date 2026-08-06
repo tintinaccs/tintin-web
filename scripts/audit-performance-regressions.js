@@ -20,7 +20,7 @@ function check(name, condition, problem) {
 }
 
 const montserrat = read('css/core/montserrat.css');
-const products = read('js/core/store/products-store.js');
+const products = read('js/core/store/estado-productos.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
 
 check('Montserrat mantiene swap sin FOIT', /font-display:\s*swap/.test(montserrat) && !/font-display:\s*block/.test(montserrat), 'La fuente volvió a bloquear el texto.');
@@ -57,7 +57,7 @@ check('Usuarios Admin siguen en vivo y acotados', /onSnapshot\(query\(collection
 check('Checkout conserva Resend', read('js/pages/checkout/checkout-puente-correo.js').includes("from '../../email/resend-order-notify.js") && !read('checkout.html').includes('email-notify.js') && !read('checkout.html').includes('resend-order-notify.js'), 'Checkout volvió al canal antiguo.');
 check('Checkout protege reintentos después de agotar cuota', read('js/pages/checkout/checkout-control-cuota.js').includes('resource-exhausted') && read('js/pages/checkout/checkout-control-cuota.js').includes('COOLDOWN_MS') && read('js/cargador-mantenimiento-pagina.js').includes('checkout-control-cuota.js'), 'Un 429 permite clics repetidos.');
 check('Clientas no consultan permisos administrativos', read('js/core/auth/insignia-edicion.js').includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !read('js/core/auth/insignia-edicion.js').includes('loadRolePermissions(true)'), 'Una cuenta client lee rolePermissions/main.');
-check('Perfil conserva cálculo desde pedidos', read('js/core/store/order-stats.js').includes('export async function recalculateUserOrderStats') && read('js/core/store/order-stats.js').includes("const validForSpent = clean.filter(o => !isCancelled(o))"), 'Se alteró el cálculo de estadísticas.');
+check('Perfil conserva cálculo desde pedidos', read('js/core/store/estadisticas-pedidos.js').includes('export async function recalculateUserOrderStats') && read('js/core/store/estadisticas-pedidos.js').includes("const validForSpent = clean.filter(o => !isCancelled(o))"), 'Se alteró el cálculo de estadísticas.');
 check('Contacto usa configuración pública compartida', read('js/components/contact/whatsapp.js').includes('onPublicSettings') && read('js/core/store/configuracion-publica.js').includes("doc(db, 'settings', 'general')"), 'Contacto dejó de ser administrable o duplicó su fuente.');
 check('Header y navegación siguen montándose', read('js/cargador-pagina.js').includes('bootHeaderMode') && read('js/cargador-pagina.js').includes('bootPublicRuntime'), 'El header perdió su arranque.');
 check('Tienda cerrada conserva storeGate', read('js/core/store-gate/nucleo-control-tienda.js').includes("doc(db, 'settings', 'storeGate')") && read('js/core/store-gate/control-tienda.js').includes("from './nucleo-control-tienda.js"), 'El gate perdió su fuente mínima.');

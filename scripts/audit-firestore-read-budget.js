@@ -7,7 +7,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
-const products = read('js/core/store/products-store.js');
+const products = read('js/core/store/estado-productos.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
 const navCollectionsAdapter = read('js/components/navigation/compatibilidad/colecciones.js');
 const navCollectionsRuntime = read('js/components/navigation/compartido/carga-colecciones.js');

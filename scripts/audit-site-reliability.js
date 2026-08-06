@@ -26,10 +26,10 @@ const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
 const welcomeAdmin = read('js/admin/content/control-bienvenida-admin.js');
 const welcomeConfig = read('js/components/welcome/configuracion-bienvenida.js');
 const welcomeRuntime = read('js/components/welcome/tutorial-bienvenida.js');
-// La creación del perfil vive en js/core/store/user-profile-store.js, compartida entre el
+// La creación del perfil vive en js/core/store/perfil-usuario.js, compartida entre el
 // login con Google y el de código por correo; login.html sólo la invoca. Las
 // comprobaciones del alta miran los dos archivos como una sola unidad.
-const login = `${read('login.html')}\n${read('js/core/store/user-profile-store.js')}`;
+const login = `${read('login.html')}\n${read('js/core/store/perfil-usuario.js')}`;
 const profile = read('perfil.html');
 const privacy = read('privacidad.html');
 const styles = read('styles.css');
@@ -42,7 +42,7 @@ const publicShell = read('js/inicio-navegacion-publica.js');
 const surfaceController = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
 const contentSchema = read('js/core/store/esquema-contenido.js');
 const siteContent = read('js/core/store/contenido-sitio.js');
-const productsStore = read('js/core/store/products-store.js');
+const productsStore = read('js/core/store/estado-productos.js');
 const phase7CatalogPolicy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const catalog = read('catalogo.html');
 const loadImagesInit = read('js/components/images/inicio-carga-imagenes.js');

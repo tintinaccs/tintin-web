@@ -28,7 +28,7 @@ Dashboard + Estadísticas ..... js/admin-app.js (renderDashboardData,
 Analítica del sitio .......... js/site-activity.js (sesiones/presencia/geo
                                aproximada, consentida)
 Endpoint de geo .............. functions/api/visitor-geo.js (Cloudflare edge)
-Stats por usuaria ............ js/order-stats.js
+Stats por usuaria ............ js/estadisticas-pedidos.js
 Auditoría / Logs ............. js/admin-app.js (logAudit, loadAuditLog,
                                renderAuditLogTable, bulkExportAuditLog)
 Diagnóstico .................. js/diagnostico-sitio-admin.js, js/diagnostic-core.js

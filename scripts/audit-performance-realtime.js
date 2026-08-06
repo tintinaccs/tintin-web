@@ -47,7 +47,7 @@ const publicPages = [
   'terminos.html', 'privacidad.html', '404.html', 'login.html', 'perfil.html', 'checkout.html'
 ];
 
-const productsStore = read('js/core/store/products-store.js');
+const productsStore = read('js/core/store/estado-productos.js');
 const collectionsStore = read('js/pages/collections/estado-colecciones.js');
 const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
 

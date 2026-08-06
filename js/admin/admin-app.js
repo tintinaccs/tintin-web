@@ -4841,7 +4841,7 @@ function loadProductos() {
     query(collection(db, 'products'), orderBy('name')),
     snap => {
       clearTimeout(_productosSlowTimer);
-      // A diferencia de la tienda pública (products-store.js), esto no
+      // A diferencia de la tienda pública (estado-productos.js), esto no
       // pasaba por sanitizeVariantData — un variants malformado (por
       // ejemplo un array con una entrada null, algo que ninguna pantalla
       // del propio admin puede producir pero que un editor externo directo
