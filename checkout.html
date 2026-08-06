@@ -379,7 +379,7 @@ import {
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
 } from "./js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
-import { cleanText } from "./js/core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
@@ -1816,7 +1816,7 @@ onAuthStateChanged(auth, user => {
 });
 </script>
 <script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>

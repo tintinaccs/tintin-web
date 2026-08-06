@@ -16,12 +16,12 @@ import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.j
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/role-permissions.js?v=tintin-20260716-cloudinary-fix-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/email-config.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { sanitizeVariantData } from "../core/auth/security-utils.js?v=tintin-20260716-cloudinary-fix-1";
+import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/firestore-pagination.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1";
@@ -7201,7 +7201,7 @@ async function loadContenido() {
   await contRenderPage(contCurrentPage);
 }
 
-// Deep link from the public site's "✏️ editar" badge (js/core/auth/edit-badge.js):
+// Deep link from the public site's "✏️ editar" badge (js/core/auth/insignia-edicion.js):
 // admin.html?tab=contenido&page=<id>&section=<id> — jumps straight to that
 // page/section in Contenido and highlights it.
 async function handleContentDeepLink() {

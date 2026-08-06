@@ -28,3 +28,9 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - `css/admin/admin.css` se conserva como hoja de estilos principal del panel.
 - Los nombres de proveedores, APIs, contratos persistidos, rutas públicas, IDs, clases y eventos se mantienen estables.
 - Los identificadores temporales como `phase4`, `phase5`, `phase8` o `phase9` no se usan para módulos permanentes.
+
+## Núcleo de autenticación
+
+- Los módulos funcionales de `js/core/auth/**` usan nombres claros en español y `kebab-case`.
+- `roles.js` se conserva porque el término ya es claro y válido en español.
+- No se modifican nombres de roles persistidos, permisos, eventos, claves de sesión, rutas ni contratos de autenticación.

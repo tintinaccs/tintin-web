@@ -189,7 +189,7 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260803-profile-gate-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260716-cloudinary-fix-1";
-import { markSessionStart } from "./js/core/auth/session-guard.js?v=tintin-20260726-session-guard-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/store-gate-core.js?v=tintin-20260730-appcheck-stable-4";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260803-location-map-1";
@@ -283,7 +283,7 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
-  markSessionStart(); // arranca acá la ventana de ~30 min de sesión (session-guard.js la controla en el resto del sitio)
+  markSessionStart(); // arranca acá la ventana de ~30 min de sesión (proteccion-sesion.js la controla en el resto del sitio)
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   const normalizedEmail = String(email || '').trim().toLowerCase();
   // Única regla de destino del login: solo el correo oficial entra

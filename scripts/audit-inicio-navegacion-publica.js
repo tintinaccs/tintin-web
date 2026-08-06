@@ -87,7 +87,7 @@ check(runtime.includes("components/navigation/tableta/control-menu-tableta.js"),
 check(runtime.includes("components/navigation/movil/indicador-navegacion-movil.js"), 'runtime: falta indicador de navegación móvil');
 check(runtime.includes("components/navigation/compartido/carga-colecciones.js"), 'runtime: colecciones todavía dependen del archivo legado');
 check(runtime.includes("components/navigation/compartido/control-busqueda.js"), 'runtime: falta el control modular de búsqueda');
-check(runtime.includes("import(versionedJsModule('core/auth/auth-nav.js'))"), 'runtime: falta cuenta compartida');
+check(runtime.includes("import(versionedJsModule('core/auth/navegacion-autenticacion.js'))"), 'runtime: falta cuenta compartida');
 check(runtime.includes("import(versionedJsModule('components/cart/sincronizacion-carrito.js'))"), 'runtime: falta sincronización del carrito');
 
 const controllerBootstrap = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');

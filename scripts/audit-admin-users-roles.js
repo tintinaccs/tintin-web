@@ -9,7 +9,7 @@
 
    - Identidad y techo de roles (roles.js): Super Admin por email de Firebase
      Auth, defaults seguros, sin asignar 'superadmin' desde el panel.
-   - Matriz dinámica (role-permissions.js): acotada por el techo (nunca amplía),
+   - Matriz dinámica (permisos-roles.js): acotada por el techo (nunca amplía),
      fail-safe ante documento faltante o caché vacío, Super Admin la ignora.
    - CRUD de usuarios en admin-app.js: el Super Admin real no se puede bloquear,
      eliminar ni degradar (guardas duras, no solo ocultar el botón); cada acción
@@ -35,7 +35,7 @@ function check(name, condition, problem) {
 }
 
 const roles      = read('js/core/auth/roles.js');
-const rolePerms  = read('js/core/auth/role-permissions.js');
+const rolePerms  = read('js/core/auth/permisos-roles.js');
 const adminApp   = read('js/admin/admin-app.js');
 const phase8     = read('js/admin/users/gestion-usuarios-admin.js');
 const rules      = read('firestore.rules');
@@ -68,7 +68,7 @@ check(
 );
 
 // ===========================================================================
-// 2. MATRIZ DINÁMICA (role-permissions.js) — acotada y fail-safe
+// 2. MATRIZ DINÁMICA (permisos-roles.js) — acotada y fail-safe
 // ===========================================================================
 check(
   'Solo admin/agent/viewer son columnas editables (no superadmin ni client)',

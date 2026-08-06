@@ -89,7 +89,7 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   const critical = [
-    import(versionedJsModule('core/auth/auth-nav.js')),
+    import(versionedJsModule('core/auth/navegacion-autenticacion.js')),
     import(versionedJsModule('components/cart/sincronizacion-carrito.js')),
   ];
 
