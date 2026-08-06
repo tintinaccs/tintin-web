@@ -1,0 +1,62 @@
+name: Respaldo verificable del repositorio
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Domingo 03:30 UTC (sábado 23:30 en Paraguay durante UTC-4 / 00:30 en UTC-3).
+    - cron: '30 3 * * 0'
+  pull_request:
+    paths:
+      - '.github/workflows/respaldo-repositorio.yml'
+      - 'scripts/crear-respaldo-repositorio.mjs'
+      - 'scripts/verificar-respaldo-repositorio.mjs'
+      - 'docs/plan-respaldo-recuperacion.md'
+      - 'docs/inventario-recuperacion-servicios.md'
+      - '.gitignore'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: respaldo-verificable-repositorio-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  crear-y-verificar:
+    name: Crear bundle y simular restauración
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Descargar repositorio con historial completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Obtener ramas y tags remotos
+        run: git fetch --all --tags --prune
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Crear respaldo verificable
+        id: respaldo
+        env:
+          BACKUP_OUTPUT_DIR: respaldos
+        run: node scripts/crear-respaldo-repositorio.mjs
+
+      - name: Simular restauración completa
+        env:
+          BACKUP_OUTPUT_DIR: respaldos
+        run: node scripts/verificar-respaldo-repositorio.mjs "${{ steps.respaldo.outputs.bundle_path }}"
+
+      - name: Publicar respaldo temporal
+        uses: actions/upload-artifact@v4
+        with:
+          name: respaldo-repositorio-${{ github.run_id }}
+          path: respaldos/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
