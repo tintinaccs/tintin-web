@@ -50,6 +50,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Cota de seguridad del job: siempre por encima del timeout de la acción
+    # para que sea la acción quien reporte el motivo real, no el runner.
+    timeout-minutes: 40
     permissions:
       pages: write
       id-token: write
@@ -57,6 +60,21 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Si este paso falla, relanzar el WORKFLOW COMPLETO desde la pestaña
+      # Actions ("Run workflow"), nunca el job suelto con "Re-run failed jobs".
+      # En Pages el ID del deployment ES el SHA del commit: al re-ejecutar solo
+      # el job, la acción vuelve a apuntar al mismo registro y, si el intento
+      # anterior quedó cancelado, lee ese estado y aborta en segundos con
+      # "Deployment cancelled." Un run nuevo crea un registro limpio.
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          # Por defecto son 10 min: cuando la cola de Pages se atasca, la
+          # acción agota el tiempo y cancela ella misma el deployment, dejando
+          # el SHA marcado como cancelado. Con 30 min la cola lenta solo
+          # retrasa la publicación en vez de romperla.
+          timeout: 1800000
+          # Tolera picos de errores transitorios del backend de Pages antes de
+          # darse por vencida (por defecto 10).
+          error_count: 20
