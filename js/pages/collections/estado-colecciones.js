@@ -15,8 +15,8 @@ import {
   recordFirestoreRead,
   runSingleFlight,
   writeCached
-} from '../../core/firebase/firestore-read-cache.js?v=tintin-20260720-read-budget-1';
-import { listPublicCollectionRest } from '../../core/firebase/firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
+} from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([

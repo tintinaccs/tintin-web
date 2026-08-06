@@ -18,7 +18,7 @@ const firebase = read('js/core/firebase/firebase.js');
 const settingsStore = read('js/core/store/public-settings-store.js');
 const whatsapp = read('js/components/contact/whatsapp.js');
 const paymentMethods = read('js/pages/checkout/checkout-metodos-pago.js');
-const readCache = read('js/core/firebase/firestore-read-cache.js');
+const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
 
 check(
   'Productos abre un solo listener acotado en páginas comerciales',

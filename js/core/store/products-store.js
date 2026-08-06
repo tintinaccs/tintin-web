@@ -18,8 +18,8 @@ import {
   recordFirestoreRead,
   runSingleFlight,
   writeCached
-} from '../firebase/firestore-read-cache.js?v=tintin-20260720-read-budget-1';
-import { listPublicCollectionRest } from '../firebase/firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
+} from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
+import { listPublicCollectionRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';

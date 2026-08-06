@@ -16,7 +16,7 @@ import {
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
 } from "../core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
-import { apiUrl } from "../core/firebase/function-origin.js?v=tintin-20260716-cloudinary-fix-1";
+import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
@@ -25,7 +25,7 @@ export function isValidEmailFormat(email) {
 async function postJson(name, body) {
   // apiUrl() y no una ruta relativa: el sitio también se publica en GitHub
   // Pages, donde las funciones /api/* no existen y un fetch relativo da 404
-  // (ver js/core/firebase/function-origin.js).
+  // (ver js/core/firebase/origen-funciones.js).
   const path = apiUrl(name);
   let response;
   try {
