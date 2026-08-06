@@ -108,6 +108,10 @@ function encodedRef(branch) {
   return branch.split('/').map(encodeURIComponent).join('/');
 }
 
+function encodedBranch(branch) {
+  return encodeURIComponent(branch);
+}
+
 function isBackupBranch(branch) {
   return branch.startsWith('backup/') || branch === 'backup-before-fixes-20260715';
 }
@@ -118,6 +122,10 @@ function isPermanentBranch(branchInfo, openHeads, defaultBranch) {
     || branchInfo.protected === true
     || isBackupBranch(branch)
     || openHeads.has(branch);
+}
+
+function internalOpenPulls(pulls, branch) {
+  return pulls.filter(pr => pr.head?.repo?.full_name === repository && pr.head?.ref === branch);
 }
 
 const [repositoryInfo, branches, openPulls, closedPulls] = await Promise.all([
@@ -209,14 +217,45 @@ for (const branchInfo of branches) {
   records.push(record);
 }
 
-const safeToDelete = records.filter(record => record.classification === 'safe-delete' && !record.protected);
+const deleteCandidates = records.filter(record => record.classification === 'safe-delete' && !record.protected);
 if (mode === 'delete') {
-  for (const record of safeToDelete) {
-    await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
-    record.deleted = true;
+  for (const record of deleteCandidates) {
+    try {
+      const headFilter = encodeURIComponent(`${owner}:${record.branch}`);
+      const [freshBranch, freshPulls] = await Promise.all([
+        api(`/branches/${encodedBranch(record.branch)}`),
+        paginate(`/pulls?state=open&head=${headFilter}`)
+      ]);
+      const freshSha = freshBranch.commit?.sha || null;
+      const freshInternalPulls = internalOpenPulls(freshPulls, record.branch);
+
+      if (freshBranch.protected === true) {
+        record.classification = 'review';
+        record.protected = true;
+        record.reason = 'La rama quedó protegida después del informe; no se eliminó';
+        continue;
+      }
+      if (freshSha !== record.sha) {
+        record.classification = 'review';
+        record.reason = `La rama avanzó después del informe (${record.sha || 'sin SHA'} → ${freshSha || 'sin SHA'}); no se eliminó`;
+        continue;
+      }
+      if (freshInternalPulls.length > 0) {
+        record.classification = 'keep';
+        record.reason = 'Se abrió un Pull Request después del informe; la rama se conserva';
+        continue;
+      }
+
+      await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
+      record.deleted = true;
+    } catch (error) {
+      record.classification = 'review';
+      record.reason = `No se pudo revalidar o eliminar con seguridad: ${error.message}`;
+    }
   }
 }
 
+const safeToDelete = records.filter(record => record.classification === 'safe-delete' && !record.protected);
 const summary = {
   generatedAt: new Date().toISOString(),
   repository,
