@@ -73,3 +73,11 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Los archivos dentro de `functions/api/**` conservan sus nombres cuando definen endpoints públicos; son excepciones contractuales documentadas.
 - Se preservan nombres de proveedores y protocolos como Firebase, Cloudinary, API, OTP y checkout.
 - Los renombres no modifican rutas públicas, parámetros, variables de entorno ni contratos persistidos.
+
+## Automatización, auditorías y comandos
+
+- Los archivos físicos de scripts y workflows usan nombres funcionales en español y `kebab-case`.
+- Los comandos npm existentes se conservan como aliases estables para no romper CI ni documentación externa.
+- Se preservan siglas y nombres técnicos como CI, SEO, PWA, API, Firebase, Firestore, Cloudinary, Playwright, UI, UX y checkout.
+- Las referencias, filtros de paths, expresiones regulares y manifiestos se actualizan junto con cada renombre.
+- Renombres de scripts aplicados automáticamente en este bloque: 109.

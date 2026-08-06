@@ -453,7 +453,7 @@ async function fetchPage(page) {
       evidence: `HTML: ${final.bytes} bytes · manifiesto: ${page.bytes} bytes.`,
       consequence: 'El diagnóstico estático podría describir una versión diferente de la página.',
       testName: 'Integridad página-manifiesto',
-      correctionLocation: 'scripts/build-diagnostic-manifest.js / flujo de publicación',
+      correctionLocation: 'scripts/construir-manifiesto-diagnostico.js / flujo de publicación',
       solutionStatus: 'known',
       suggestion: 'Regenerar y publicar el manifiesto junto con la misma versión del sitio.'
     }));

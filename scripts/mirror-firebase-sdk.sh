@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Descarga el SDK de Firebase a artifacts/fbmirror para que
-# scripts/audit-perf-metrics.mjs pueda medir el costo real de tener Firebase
+# scripts/auditar-perf-metrics.mjs pueda medir el costo real de tener Firebase
 # en el camino crítico, sirviéndolo con la misma latencia simulada que el
 # resto del sitio.
 #

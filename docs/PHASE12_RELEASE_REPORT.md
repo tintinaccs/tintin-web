@@ -27,7 +27,7 @@ La puerta final ejecuta:
 4. Pruebas UI, accesibilidad y SEO en Chromium.
 5. `npm run audit:canonical-viewports` para la matriz responsive.
 6. `npm audit --omit=dev --audit-level=critical` para dependencias utilizadas en producción.
-7. `node scripts/production-smoke-phase12.mjs` contra `https://tintinaccesorios.pages.dev`.
+7. `node scripts/produccion-smoke-fase-12.mjs` contra `https://tintinaccesorios.pages.dev`.
 
 El informe JSON completo de npm se conserva como evidencia aunque contenga avisos de herramientas de desarrollo.
 

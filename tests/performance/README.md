@@ -28,7 +28,7 @@ un navegador. Por eso estas pruebas **no** forman parte del CI que bloquea el
 merge: se ejecutan a demanda en un entorno con navegador + red.
 
 La invariante de rendimiento/tiempo real que sí corre en CI, sin navegador, es
-`scripts/audit-performance-realtime.js` (`npm run audit:performance`).
+`scripts/auditar-rendimiento-tiempo-real.js` (`npm run audit:performance`).
 
 Durante el mantenimiento que creó estas pruebas, el entorno de ejecución tenía
 la red externa del navegador bloqueada por el proxy del sandbox, por lo que las

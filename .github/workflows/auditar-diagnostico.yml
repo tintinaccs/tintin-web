@@ -1,0 +1,36 @@
+name: Auditoría del módulo Diagnóstico
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validar sintaxis
+        run: |
+          node --check js/admin/diagnostics/diagnostico-sitio-admin.js
+          node --check js/diagnostics/nucleo-diagnostico.js
+          node --check scripts/construir-manifiesto-diagnostico.js
+          node --check scripts/verificar-manifiesto-diagnostico.js
+          node --check scripts/auditar-diagnostico.js
+
+      - name: Regenerar y verificar inventario exacto
+        run: npm run build:pages
+
+      - name: Auditar modo de solo lectura e inventario
+        run: npm run audit:diagnostics

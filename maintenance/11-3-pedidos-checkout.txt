@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.4
 PEDIDOS Y CHECKOUT (Super Admin + checkout + perfil del cliente)
 Fecha: 19/07/2026
 Rama: maintenance/admin-orders-checkout
-Auditoría nueva: scripts/audit-admin-orders.js  (npm run audit:admin-orders)
+Auditoría nueva: scripts/auditar-admin-pedidos.js  (npm run audit:admin-orders)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -10,11 +10,11 @@ ALCANCE
 Mantenimiento exclusivo del sistema de pedidos, en Super Admin, checkout y
 perfil del cliente. Antes de tocar nada se revisó main, los PR mergeados,
 maintenance/ y las auditorías existentes:
-- audit-secure-orders.js  → ya blinda la CREACIÓN segura del pedido (transacción
+- auditar-seguro-pedidos.js  → ya blinda la CREACIÓN segura del pedido (transacción
   de Firestore, re-lectura de precios, descuento de stock atómico, dedup por
   reintento, quote_changed, insufficient_stock, reglas que validan precio/nombre/
   subtotal/total/tienda/cuenta/correo). NO se rehízo nada de eso.
-- audit-checkout-page.js y audit-profile-orders-page.js → responsive/estados.
+- auditar-checkout-pagina.js y auditar-perfil-pedidos-pagina.js → responsive/estados.
 
 Esta etapa cubre el resto del ciclo de vida (edición, estados, eliminación,
 masivas, reenvío) y la integridad/consistencia entre superficies.
@@ -112,7 +112,7 @@ Evaluado y descartado como cambio en esta etapa original:
   visible. Documentado.
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-orders.js
+AUDITORÍA NUEVA — scripts/auditar-admin-pedidos.js
 ═══════════════════════════════════════════════════════════════════════
 La auditoría comenzó con 24 comprobaciones estáticas y luego se amplió con los
 contratos de liberación idempotente de inventario y borrado parcial seguro:
@@ -122,7 +122,7 @@ estadísticas sin negativos) y reglas de Firestore.
 
 Wiring:
   - package.json: "audit:admin-orders" + incluida en "audit:final".
-  - .github/workflows/tintin-audit.yml: paso "Audit orders lifecycle".
+  - .github/workflows/auditar-tintin.yml: paso "Audit orders lifecycle".
 
 Prueba de que REALMENTE falla al romper el contrato: se anuló el chequeo de
 concurrencia (F1) → ERROR + exit 1; se relajó la regla de qty (>= 1 a >= 0) →
@@ -142,9 +142,9 @@ PRUEBAS
 
 ARCHIVOS TOCADOS EN LA ETAPA ORIGINAL
 - js/admin-app.js
-- scripts/audit-admin-orders.js
+- scripts/auditar-admin-pedidos.js
 - package.json
-- .github/workflows/tintin-audit.yml
+- .github/workflows/auditar-tintin.yml
 - maintenance/11-3-pedidos-checkout.txt
 - diagnostic-manifest.json
 

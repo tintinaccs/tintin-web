@@ -73,7 +73,7 @@ PROBLEMAS YA RESUELTOS QUE NO SE TOCARON
 
 CAMBIOS APLICADOS EN ESTA ETAPA
 -------------------------------
-- NUEVO scripts/audit-admin-public-sync.js: guardia de regresión que bloquea el
+- NUEVO scripts/auditar-admin-publico-sincronizar.js: guardia de regresión que bloquea el
   contrato Configuración ↔ público. Comprueba, por nombre de campo COMPLETO (no
   subcadena):
     * settings/general como fuente única y storeGate atómico;
@@ -88,12 +88,12 @@ CAMBIOS APLICADOS EN ESTA ETAPA
     * cada campo guardado tiene consumidor público;
     * GA4 solo con consentimiento.
 - package.json: nuevo script "audit:admin-sync" e incorporación a "audit:final".
-- .github/workflows/tintin-audit.yml: nuevo paso que corre la auditoría en CI.
+- .github/workflows/auditar-tintin.yml: nuevo paso que corre la auditoría en CI.
 
 PRUEBAS EJECUTADAS
 ------------------
-- node --check scripts/audit-admin-public-sync.js -> sin errores de sintaxis.
-- node scripts/audit-admin-public-sync.js -> 44 comprobaciones OK (exit 0).
+- node --check scripts/auditar-admin-publico-sincronizar.js -> sin errores de sintaxis.
+- node scripts/auditar-admin-publico-sincronizar.js -> 44 comprobaciones OK (exit 0).
 - Prueba NEGATIVA 1: renombrar headerDesktopTabletEnabled en el runtime público
   -> la auditoría FALLA (exit 1), 2 problemas. Confirma que no es una auditoría
   que siempre pasa.

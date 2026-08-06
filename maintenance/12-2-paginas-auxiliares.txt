@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO DE PÁGINAS PÚBLICAS
 GRUPO: PÁGINAS AUXILIARES Y RUTA LEGACY
 Fecha: 19/07/2026
 Rama: maintenance/public-aux-pages
-Auditoría nueva: scripts/audit-aux-pages.js  (npm run audit:aux-pages)
+Auditoría nueva: scripts/auditar-auxiliares-paginas.js  (npm run audit:aux-pages)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -16,7 +16,7 @@ por ser páginas de SISTEMA, no de contenido:
 
 (El grupo de páginas informativas de ayuda —envíos, cambios/devoluciones,
 preguntas frecuentes— se documenta y audita en maintenance/12-1-paginas-ayuda.txt
-y scripts/audit-help-pages.js.)
+y scripts/auditar-ayuda-paginas.js.)
 
 ═══════════════════════════════════════════════════════════════════════
 REVISIÓN (checklist completo)
@@ -59,7 +59,7 @@ nosotros.html — CONFIRMADO CORRECTO (ruta legacy)
   misma (sin bucle con la ruta legacy).
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-aux-pages.js (15 comprobaciones)
+AUDITORÍA NUEVA — scripts/auditar-auxiliares-paginas.js (15 comprobaciones)
 ═══════════════════════════════════════════════════════════════════════
 404.html (8):
   metadatos; robots noindex; tema (instant + vivo); contacto+analítica;
@@ -87,6 +87,6 @@ CI / VERIFICACIÓN
 ═══════════════════════════════════════════════════════════════════════
 - npm run audit:aux-pages → 15/15 OK
 - npm run audit:final → exit 0 (todas las auditorías verdes, CRITICAL: 0)
-- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+- Wiring CI: paso nuevo en .github/workflows/auditar-tintin.yml + audit:final.
 
 Merge únicamente con CI verde.

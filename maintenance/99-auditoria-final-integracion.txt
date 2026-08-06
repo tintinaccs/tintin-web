@@ -1,7 +1,7 @@
 TINTIN-WEB — AUDITORÍA FINAL INTEGRAL DE INTEGRACIÓN
 Fecha: 19/07/2026
 Rama: maintenance/final-integration-audit
-Auditoría nueva: scripts/audit-final-integration.js  (npm run audit:final-integration)
+Auditoría nueva: scripts/auditar-final-integracion.js  (npm run audit:final-integration)
 
 Objetivo: revisión transversal de toda la aplicación después de los
 mantenimientos previos (etapas 01–10, serie 11.x del Super Admin, correos 11.7,
@@ -49,10 +49,10 @@ A. Archivos obsoletos eliminados (código muerto / de otra plataforma):
      de header reemplazados hace tiempo por SVG inline; sin ninguna referencia.
    (No se tocó images/.gitkeep ni assets/og-cover.jpg, que sí se usa.)
 
-B. Auditoría CI nueva scripts/audit-final-integration.js (17 comprobaciones)
+B. Auditoría CI nueva scripts/auditar-final-integracion.js (17 comprobaciones)
    que fija de forma permanente las garantías de integración transversal
    (ver sección 5). Wireada en package.json (audit:final) y en el workflow
-   tintin-audit.yml.
+   auditar-tintin.yml.
 
 No hubo que corregir código de módulos funcionales: la revisión no encontró
 bugs de comportamiento nuevos. Los mantenimientos previos ya dejaron el sistema
@@ -105,7 +105,7 @@ en verde.
 Suite completa: `npm run audit:final` encadena 29 auditorías estáticas
 (41 archivos scripts/audit-*.js en total). Todas en verde; CRITICAL: 0.
 
-Auditoría nueva de integración (scripts/audit-final-integration.js, 17 checks):
+Auditoría nueva de integración (scripts/auditar-final-integracion.js, 17 checks):
   Fuente única  → Firebase (una sola init) y núcleo único de tienda.
   Admin↔público → settings/general, storeGate, appearance+colorSchemes,
                   site_content consumidos por los módulos públicos.
@@ -116,9 +116,9 @@ Auditoría nueva de integración (scripts/audit-final-integration.js, 17 checks)
   CI            → todo `node scripts/*.js` de package.json y de los workflows
                   existe en disco (sin referencias rotas).
 
-CI del repositorio (GitHub Actions): tintin-audit.yml corre las auditorías por
+CI del repositorio (GitHub Actions): auditar-tintin.yml corre las auditorías por
 dominio + esta final; existen workflows por fase (email/collections/images/etc.)
-y deploy-pages.yml. diagnostic-manifest.json regenerado y consistente
+y desplegar-pages.yml. diagnostic-manifest.json regenerado y consistente
 (audit:diagnostics verde).
 
 ═══════════════════════════════════════════════════════════════════════

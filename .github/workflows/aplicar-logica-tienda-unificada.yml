@@ -1,0 +1,72 @@
+name: Aplicar lógica unificada de tienda
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unified-store-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'audit/unified-store-logic' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Aplicar contrato único
+        shell: bash
+        run: |
+          if [ -f scripts/apply-unified-store-logic.mjs ]; then
+            node scripts/apply-unified-store-logic.mjs
+            rm scripts/apply-unified-store-logic.mjs
+          else
+            echo "La corrección central ya fue aplicada."
+          fi
+          if [ -f scripts/apply-unified-store-surfaces.mjs ]; then
+            node scripts/apply-unified-store-surfaces.mjs
+            rm scripts/apply-unified-store-surfaces.mjs
+          else
+            echo "Las superficies públicas ya fueron alineadas."
+          fi
+          rm -f maintenance/unified-store-audit-trigger.txt
+
+      - name: Validar sintaxis y contratos
+        run: |
+          node --check js/pages/catalog/politica-exhibicion-catalogo.js
+          node --check js/core/store/estado-productos.js
+          node --check js/pages/catalog/politica-visibilidad-catalogo.js
+          node --check js/pages/catalog/prioridad-stock-catalogo.js
+          node --check script.js
+          node scripts/auditar-unificada-tienda-logica.js
+          node scripts/auditar-unificada-tienda-superficies.js
+          node scripts/auditar-fase-7-catalogo.js
+          node scripts/auditar-catalogo-pagina.js
+          node scripts/auditar-colecciones-pagina.js
+          node scripts/auditar-producto-pagina.js
+
+      - name: Guardar corrección en la rama
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Sin cambios pendientes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: unificar lógica de catálogo, stock y novedades [unified-store-applied]"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}

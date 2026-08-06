@@ -2,14 +2,14 @@ TINTIN-WEB — MANTENIMIENTO DE PÁGINAS PÚBLICAS
 GRUPO: PÁGINAS INFORMATIVAS DE AYUDA
 Fecha: 19/07/2026
 Rama: maintenance/public-help-pages
-Auditoría nueva: scripts/audit-help-pages.js  (npm run audit:help-pages)
+Auditoría nueva: scripts/auditar-ayuda-paginas.js  (npm run audit:help-pages)
 
 ═══════════════════════════════════════════════════════════════════════
 INVENTARIO Y MOTIVO
 ═══════════════════════════════════════════════════════════════════════
 Se inventariaron todos los HTML públicos y se cruzó cada uno con la
 documentación de mantenimiento (maintenance/) y con las auditorías CI
-específicas (scripts/audit-*-page.js, audit-legal-pages.js).
+específicas (scripts/audit-*-page.js, auditar-legal-paginas.js).
 
 Ya tenían mantenimiento + auditoría propia:
   index (home), catalogo, collections, product, checkout, login, perfil,
@@ -69,7 +69,7 @@ CONFIRMADO CORRECTO (sin cambios de código):
   vive en módulos externos; enlaces externos con rel="noopener".
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-help-pages.js (36 comprobaciones)
+AUDITORÍA NUEVA — scripts/auditar-ayuda-paginas.js (36 comprobaciones)
 ═══════════════════════════════════════════════════════════════════════
 Por cada página (envios / cambios-devoluciones / preguntas-frecuentes):
   1. lang/viewport/título/descripción.
@@ -93,7 +93,7 @@ CI / VERIFICACIÓN
 ═══════════════════════════════════════════════════════════════════════
 - npm run audit:help-pages → 36/36 OK
 - npm run audit:final → exit 0 (todas las auditorías verdes, CRITICAL: 0)
-- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+- Wiring CI: paso nuevo en .github/workflows/auditar-tintin.yml + audit:final.
 
 Merge únicamente con CI verde. Las páginas auxiliares (404.html y la ruta
 legacy nosotros.html) se documentan y auditan en un grupo/PR aparte.

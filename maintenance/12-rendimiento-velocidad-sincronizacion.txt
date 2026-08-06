@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 12
 RENDIMIENTO, VELOCIDAD Y SINCRONIZACIÓN EN TIEMPO REAL
 Fecha: 19/07/2026
 Rama: maintenance/performance-realtime-optimization
-Auditoría nueva: scripts/audit-performance-realtime.js  (npm run audit:performance)
+Auditoría nueva: scripts/auditar-rendimiento-tiempo-real.js  (npm run audit:performance)
 Pruebas nuevas: tests/performance/*.spec.js (Playwright, a demanda)
 
 ═══════════════════════════════════════════════════════════════════════
@@ -115,9 +115,9 @@ RECURSOS PESADOS: CSS del home 279 KB raw (varias hojas). Es una ADVERTENCIA de
 CAMBIOS APLICADOS
 ═══════════════════════════════════════════════════════════════════════
 - css/montserrat.css: font-display block → swap (10 reglas) + comentario.
-- scripts/audit-performance-realtime.js: auditoría estática nueva (12 fallos
+- scripts/auditar-rendimiento-tiempo-real.js: auditoría estática nueva (12 fallos
   críticos + presupuestos como advertencias). Wireada en package.json
-  (audit:final) y en .github/workflows/tintin-audit.yml.
+  (audit:final) y en .github/workflows/auditar-tintin.yml.
 - tests/performance/: suite Playwright (public-pages, responsive, admin,
   realtime-sync, offline-recovery) + _helpers + README; playwright.config.js.
 - package.json: scripts audit:performance y test:performance.
@@ -157,7 +157,7 @@ LIMITACIONES (declaradas con honestidad)
 ═══════════════════════════════════════════════════════════════════════
 PRUEBAS AUTOMÁTICAS
 ═══════════════════════════════════════════════════════════════════════
-- scripts/audit-performance-realtime.js (estática, en CI): FOIT, timeout del
+- scripts/auditar-rendimiento-tiempo-real.js (estática, en CI): FOIT, timeout del
   loader, listeners en vivo con límite, timers limpiados, imágenes lazy/async,
   bundle admin fuera del público, preconnect Cloudinary, guardia de respuestas
   obsoletas, Firebase única fuente, scripts de <head> sin defer solo los
@@ -178,7 +178,7 @@ PRUEBAS MANUALES RECOMENDADAS (requieren sesión/entorno real):
 ARCHIVOS MODIFICADOS / CREADOS
 ═══════════════════════════════════════════════════════════════════════
 M  css/montserrat.css
-A  scripts/audit-performance-realtime.js
+A  scripts/auditar-rendimiento-tiempo-real.js
 A  tests/performance/_helpers.js
 A  tests/performance/public-pages.performance.spec.js
 A  tests/performance/responsive-performance.spec.js
@@ -188,7 +188,7 @@ A  tests/performance/offline-recovery.spec.js
 A  tests/performance/README.md
 A  playwright.config.js
 M  package.json
-M  .github/workflows/tintin-audit.yml
+M  .github/workflows/auditar-tintin.yml
 M  .gitignore
 A  maintenance/12-rendimiento-velocidad-sincronizacion.txt
 M  diagnostic-manifest.json (regenerado)

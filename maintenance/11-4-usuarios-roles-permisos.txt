@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.5
 USUARIOS, ROLES, PERMISOS Y ACCESO POR CUENTA
 Fecha: 19/07/2026
 Rama: maintenance/admin-users-permissions
-Auditoría nueva: scripts/audit-admin-users-roles.js  (npm run audit:users-roles)
+Auditoría nueva: scripts/auditar-admin-usuarios-roles.js  (npm run audit:users-roles)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -10,11 +10,11 @@ ALCANCE
 Mantenimiento exclusivo de usuarios, roles, permisos y acceso por cuenta.
 Antes de tocar nada se revisó main, los PR mergeados, maintenance/ y las
 auditorías existentes:
-- audit-security-phase8.js   → ya blinda el módulo gestion-usuarios-admin.js
+- auditar-seguridad-fase-8.js   → ya blinda el módulo gestion-usuarios-admin.js
   (Super Admin por email, no asignar superadmin, render sin HTML, cambio+
   auditoría en batch, bloqueo degrada a client, borrado solo Firestore, listener
   realtime, reglas por UID, auditoría de solo lectura).
-- audit-postphase-security.js → Super Admin depende de Firebase Auth, email
+- auditar-posterior-fases-seguridad.js → Super Admin depende de Firebase Auth, email
   protegido en reglas, creación de usuario con estadísticas en cero.
 No se rehízo nada de eso.
 
@@ -112,7 +112,7 @@ pero cierran la brecha "función global sin validar el rol" y dan un mensaje cla
 en vez de un error de reglas confuso.
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-users-roles.js
+AUDITORÍA NUEVA — scripts/auditar-admin-usuarios-roles.js
 ═══════════════════════════════════════════════════════════════════════
 27 comprobaciones estáticas: identidad/techo de roles, matriz dinámica acotada y
 fail-safe, protecciones del Super Admin en el CRUD (incluidas F1/F2), módulo Fase
@@ -120,7 +120,7 @@ fail-safe, protecciones del Super Admin en el CRUD (incluidas F1/F2), módulo Fa
 
 Wiring:
   - package.json: "audit:users-roles" + incluida en "audit:final".
-  - .github/workflows/tintin-audit.yml: paso "Audit users, roles and permissions".
+  - .github/workflows/auditar-tintin.yml: paso "Audit users, roles and permissions".
 
 Prueba de que REALMENTE falla al romper el contrato: se quitó la guarda de Super
 Admin de deleteUser (F1) → ERROR + exit 1; se abrió rolePermissions write a
@@ -138,9 +138,9 @@ PRUEBAS
 
 ARCHIVOS TOCADOS
 - js/admin-app.js                          (F1: deleteUser; F2: updateUserRole)
-- scripts/audit-admin-users-roles.js       (NUEVO)
+- scripts/auditar-admin-usuarios-roles.js       (NUEVO)
 - package.json                             (script + audit:final)
-- .github/workflows/tintin-audit.yml       (paso CI)
+- .github/workflows/auditar-tintin.yml       (paso CI)
 - maintenance/11-4-usuarios-roles-permisos.txt (este registro)
 - diagnostic-manifest.json                 (regenerado)
 
