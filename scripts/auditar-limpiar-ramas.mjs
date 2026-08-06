@@ -137,6 +137,24 @@ function internalOpenPulls(pulls, branch) {
   return pulls.filter(pr => pr.head?.repo?.full_name === repository && pr.head?.ref === branch);
 }
 
+function summarize(records, defaultBranch, deletePreflightBlocked) {
+  return {
+    generatedAt: new Date().toISOString(),
+    repository,
+    defaultBranch,
+    workflowRef,
+    mode,
+    total: records.length,
+    keep: records.filter(record => record.classification === 'keep').length,
+    safeDelete: records.filter(record => record.classification === 'safe-delete' && !record.protected).length,
+    review: records.filter(record => record.classification === 'review').length,
+    deleted: records.filter(record => record.deleted).length,
+    deleteErrors: records.filter(record => record.deleteError).length,
+    deleteSkipped: records.filter(record => record.deleteSkipped).length,
+    deletePreflightBlocked
+  };
+}
+
 const [repositoryInfo, branches, openPulls, closedPulls] = await Promise.all([
   api(''),
   paginate('/branches'),
@@ -158,7 +176,13 @@ const openHeads = new Set(
 
 const mergedHeadShas = new Map();
 for (const pr of closedPulls) {
-  if (!pr.merged_at || pr.head?.repo?.full_name !== repository || !pr.head?.ref || !pr.head?.sha) continue;
+  const mergedIntoDefault = pr.merged_at
+    && pr.head?.repo?.full_name === repository
+    && pr.base?.repo?.full_name === repository
+    && pr.base?.ref === defaultBranch
+    && pr.head?.ref
+    && pr.head?.sha;
+  if (!mergedIntoDefault) continue;
   if (!mergedHeadShas.has(pr.head.ref)) mergedHeadShas.set(pr.head.ref, new Set());
   mergedHeadShas.get(pr.head.ref).add(pr.head.sha);
 }
@@ -175,7 +199,9 @@ for (const branchInfo of branches) {
     reason: 'Contiene historial no clasificado',
     aheadBy: null,
     behindBy: null,
-    deleted: false
+    deleted: false,
+    deleteError: null,
+    deleteSkipped: null
   };
 
   if (isPermanentBranch(branchInfo, openHeads, defaultBranch)) {
@@ -213,9 +239,9 @@ for (const branchInfo of branches) {
       record.reason = `No contiene commits únicos respecto de ${defaultBranch}`;
     } else if (currentSha && mergedHeadShas.get(branch)?.has(currentSha)) {
       record.classification = 'safe-delete';
-      record.reason = 'El Pull Request de esta misma punta fue fusionado y la rama no avanzó después';
+      record.reason = `El Pull Request de esta misma punta fue fusionado hacia ${defaultBranch} y la rama no avanzó después`;
     } else if (mergedHeadShas.has(branch)) {
-      record.reason = `Tuvo un Pull Request fusionado, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
+      record.reason = `Tuvo un Pull Request fusionado hacia ${defaultBranch}, pero ahora contiene ${comparison.aheadBy} commit(s) únicos; requiere revisión manual`;
     } else {
       record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en ${defaultBranch}`;
     }
@@ -227,9 +253,10 @@ for (const branchInfo of branches) {
 }
 
 const unresolvedBeforeDelete = records.filter(record => record.classification === 'review').length;
-const deleteBlocked = mode === 'delete' && unresolvedBeforeDelete > 0;
+let deletePreflightBlocked = mode === 'delete' && unresolvedBeforeDelete > 0;
 const deleteCandidates = records.filter(record => record.classification === 'safe-delete' && !record.protected);
-if (mode === 'delete' && !deleteBlocked) {
+
+if (mode === 'delete' && !deletePreflightBlocked) {
   for (const record of deleteCandidates) {
     try {
       const headFilter = encodeURIComponent(`${owner}:${record.branch}`);
@@ -243,43 +270,44 @@ if (mode === 'delete' && !deleteBlocked) {
       if (freshBranch.protected === true) {
         record.classification = 'review';
         record.protected = true;
-        record.reason = 'La rama quedó protegida después del informe; no se eliminó';
-        continue;
-      }
-      if (freshSha !== record.sha) {
+        record.reason = 'La rama quedó protegida durante la prevalidación; no se inició ninguna eliminación';
+        record.deleteSkipped = 'branch-protected';
+        deletePreflightBlocked = true;
+      } else if (freshSha !== record.sha) {
         record.classification = 'review';
-        record.reason = `La rama avanzó después del informe (${record.sha || 'sin SHA'} → ${freshSha || 'sin SHA'}); no se eliminó`;
-        continue;
-      }
-      if (freshInternalPulls.length > 0) {
+        record.reason = `La rama avanzó durante la prevalidación (${record.sha || 'sin SHA'} → ${freshSha || 'sin SHA'}); no se inició ninguna eliminación`;
+        record.deleteSkipped = 'branch-changed';
+        deletePreflightBlocked = true;
+      } else if (freshInternalPulls.length > 0) {
         record.classification = 'keep';
-        record.reason = 'Se abrió un Pull Request después del informe; la rama se conserva';
-        continue;
+        record.reason = 'Se abrió un Pull Request durante la prevalidación; no se inició ninguna eliminación';
+        record.deleteSkipped = 'pull-request-opened';
+        deletePreflightBlocked = true;
       }
-
-      await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
-      record.deleted = true;
     } catch (error) {
       record.classification = 'review';
-      record.reason = `No se pudo revalidar o eliminar con seguridad: ${error.message}`;
+      record.reason = `No se pudo completar la prevalidación: ${error.message}`;
+      record.deleteError = error.message;
+      deletePreflightBlocked = true;
     }
   }
 }
 
-const safeToDelete = records.filter(record => record.classification === 'safe-delete' && !record.protected);
-const summary = {
-  generatedAt: new Date().toISOString(),
-  repository,
-  defaultBranch,
-  workflowRef,
-  mode,
-  total: records.length,
-  keep: records.filter(record => record.classification === 'keep').length,
-  safeDelete: safeToDelete.length,
-  review: records.filter(record => record.classification === 'review').length,
-  deleted: records.filter(record => record.deleted).length
-};
+if (mode === 'delete' && !deletePreflightBlocked) {
+  for (const record of deleteCandidates) {
+    try {
+      await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
+      record.deleted = true;
+    } catch (error) {
+      record.classification = 'review';
+      record.reason = `La eliminación falló después de la prevalidación: ${error.message}`;
+      record.deleteError = error.message;
+      break;
+    }
+  }
+}
 
+const summary = summarize(records, defaultBranch, deletePreflightBlocked);
 await fs.writeFile(outputJson, `${JSON.stringify({ summary, records }, null, 2)}\n`);
 
 const sections = [
@@ -296,7 +324,10 @@ markdown += `- Total: **${summary.total}**\n`;
 markdown += `- Conservar: **${summary.keep}**\n`;
 markdown += `- Seguras para eliminar: **${summary.safeDelete}**\n`;
 markdown += `- Revisión manual: **${summary.review}**\n`;
-markdown += `- Eliminadas: **${summary.deleted}**\n\n`;
+markdown += `- Eliminadas: **${summary.deleted}**\n`;
+markdown += `- Omitidas durante prevalidación: **${summary.deleteSkipped}**\n`;
+markdown += `- Errores: **${summary.deleteErrors}**\n`;
+markdown += `- Borrado bloqueado por prevalidación: **${summary.deletePreflightBlocked ? 'sí' : 'no'}**\n\n`;
 
 for (const [title, classification] of sections) {
   markdown += `## ${title}\n\n`;
@@ -306,7 +337,11 @@ for (const [title, classification] of sections) {
     continue;
   }
   for (const record of matches) {
-    const status = record.deleted ? ' — eliminada' : '';
+    const statuses = [];
+    if (record.deleted) statuses.push('eliminada');
+    if (record.deleteSkipped) statuses.push(`omitida: ${record.deleteSkipped}`);
+    if (record.deleteError) statuses.push(`error: ${record.deleteError}`);
+    const status = statuses.length ? ` — ${statuses.join('; ')}` : '';
     markdown += `- \`${record.branch}\`${status}: ${record.reason}\n`;
   }
   markdown += '\n';
@@ -315,8 +350,11 @@ for (const [title, classification] of sections) {
 await fs.writeFile(outputMarkdown, markdown);
 console.log(JSON.stringify(summary, null, 2));
 
-if (deleteBlocked) {
-  throw new Error(`La eliminación requiere cero ramas en revisión; quedan ${unresolvedBeforeDelete}`);
+if (mode === 'delete' && deletePreflightBlocked) {
+  throw new Error('La eliminación se bloqueó durante la prevalidación; no se borró ninguna rama');
+}
+if (mode === 'delete' && summary.deleteErrors > 0) {
+  throw new Error(`La limpieza terminó con ${summary.deleteErrors} error(es); revisá los artefactos`);
 }
 if (requireZeroReview && summary.review > 0) {
   throw new Error(`La auditoría requiere cero ramas en revisión; quedan ${summary.review}`);
