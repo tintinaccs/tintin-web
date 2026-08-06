@@ -38,6 +38,9 @@ artifacts/
 /canonical-viewports.log
 /phase5-performance.log
 
+# Respaldos locales: deben cifrarse y almacenarse fuera del repositorio.
+/respaldos/
+
 # Sistema operativo y editores
 .DS_Store
 Thumbs.db
