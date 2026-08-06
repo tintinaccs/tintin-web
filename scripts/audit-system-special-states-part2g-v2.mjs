@@ -189,7 +189,7 @@ async function mountPrivacy(page) {
     try { localStorage.removeItem('tt_activity_consent_v1'); } catch {}
     document.getElementById('tt-privacy-consent')?.remove();
   });
-  await page.evaluate(async url => { await import(url); }, `${baseUrl}/js/analytics/privacy-consent.js?audit=${Date.now()}-${Math.random()}`);
+  await page.evaluate(async url => { await import(url); }, `${baseUrl}/js/analytics/consentimiento-privacidad.js?audit=${Date.now()}-${Math.random()}`);
   await page.waitForSelector('#tt-privacy-consent', { state: 'visible' });
 }
 

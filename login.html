@@ -182,7 +182,7 @@ import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinar
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/email-auth.js?v=tintin-20260716-cloudinary-fix-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260716-cloudinary-fix-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
@@ -945,7 +945,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   }
 };
 </script>
-<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>

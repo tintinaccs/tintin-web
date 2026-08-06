@@ -28,7 +28,7 @@ const publicShell = read('js/inicio-navegacion-publica.js');
 const publicShellEntry = read('js/components/navigation/entrada-navegacion-publica.js');
 const checkout = read('checkout.html');
 const checkoutPayments = read('js/pages/checkout/checkout-metodos-pago.js');
-const secureOrder = read('js/orders/secure-checkout-order.js');
+const secureOrder = read('js/orders/pedido-checkout-seguro.js');
 const adminHtml = read('admin.html');
 
 check(

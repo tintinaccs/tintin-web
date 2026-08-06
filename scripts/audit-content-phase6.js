@@ -10,7 +10,7 @@ const files = {
   admin: read('js/admin/content/gestion-contenido-admin.js'),
   badges: read('js/core/auth/insignia-edicion.js'),
   permissions: read('js/core/auth/permisos-roles.js'),
-  quality: read('js/quality/ui-quality.js'),
+  quality: read('js/quality/calidad-interfaz.js'),
   rules: read('firestore.rules'),
   packageJson: read('package.json'),
 };
@@ -135,7 +135,7 @@ check(
   'La Fase 6 se inicia en el panel global',
   files.quality.includes('bootAdminContentPhase6') &&
     files.quality.includes("'../admin/content/gestion-contenido-admin.js'"),
-  'ui-quality.js debe iniciar el editor en admin.html'
+  'calidad-interfaz.js debe iniciar el editor en admin.html'
 );
 
 check(

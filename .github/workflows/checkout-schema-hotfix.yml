@@ -23,7 +23,7 @@ jobs:
           node-version: 20
 
       - name: Validate function syntax
-        run: node --check functions/js/secure-checkout-order.js
+        run: node --check functions/js/secure-checkout-order.js.js
 
       - name: Test checkout schema compatibility
         run: node scripts/test-checkout-schema-hotfix.mjs

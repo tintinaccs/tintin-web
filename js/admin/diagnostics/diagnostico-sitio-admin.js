@@ -18,7 +18,7 @@ import {
   modeIncludes,
   stableHash,
   summarizeReport
-} from '../../diagnostics/diagnostic-core.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../diagnostics/nucleo-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
 
 const MANIFEST_URL = './diagnostic-manifest.json';
 const HISTORY_DB = 'tintin-diagnostics-readonly';
@@ -66,8 +66,8 @@ let activeView = 'active';
 let preparationPromise = null;
 const pageHtmlCache = new Map();
 
-// Escucha los avisos que firestore-shim.js/auth-shim.js/storage-shim.js y
-// network-guard.js mandan por postMessage cada vez que el iframe aislado
+// Escucha los avisos que adaptador-firestore.js/adaptador-autenticacion.js/adaptador-almacenamiento.js y
+// proteccion-red.js mandan por postMessage cada vez que el iframe aislado
 // intenta una escritura real y la bloquean. No son hallazgos (bloquear la
 // escritura es el comportamiento correcto): son evidencia de que la página
 // intentó escribir durante la carga y de que el bloqueo funcionó de verdad.
@@ -507,9 +507,9 @@ async function fetchPage(page) {
 // ya usa cada módulo de la plataforma (js/core/firebase/firebase.js, admin-app.js, etc.),
 // así que ninguna página necesita saber que está siendo inspeccionada.
 const DIAGNOSTIC_SHIM_MAP = {
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js': 'js/diagnostic-shims/firestore-shim.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js': 'js/diagnostic-shims/auth-shim.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js': 'js/diagnostic-shims/storage-shim.js'
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js': 'js/diagnostic-shims/adaptador-firestore.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js': 'js/diagnostic-shims/adaptador-autenticacion.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js': 'js/diagnostic-shims/adaptador-almacenamiento.js'
 };
 
 function safeHtml(html, sourceUrl) {
@@ -546,7 +546,7 @@ function safeHtml(html, sourceUrl) {
   // documento para correr antes que cualquier otro script de la página real
   // (los módulos siempre se difieren hasta después de parsear el documento).
   const networkGuard = doc.createElement('script');
-  networkGuard.src = pageUrl('js/diagnostic-shims/network-guard.js');
+  networkGuard.src = pageUrl('js/diagnostic-shims/proteccion-red.js');
   doc.head.prepend(networkGuard);
 
   const csp = doc.createElement('meta');
@@ -556,7 +556,7 @@ function safeHtml(html, sourceUrl) {
     // Los scripts de la propia plataforma (mismo origen) y el SDK de
     // Firebase (gstatic) pueden ejecutarse de verdad: la seguridad contra
     // escrituras no depende de impedir que corra JavaScript, sino de que
-    // firestore-shim.js/auth-shim.js/storage-shim.js reemplacen únicamente
+    // adaptador-firestore.js/adaptador-autenticacion.js/adaptador-almacenamiento.js reemplacen únicamente
     // las funciones que escriben, más la guardia de red como segunda capa.
     "script-src 'self' 'unsafe-inline' https://www.gstatic.com",
     // Sin esto, style-src hereda de default-src (que no trae 'unsafe-inline')

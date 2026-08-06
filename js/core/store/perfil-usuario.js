@@ -3,7 +3,7 @@
 // =============================================================
 // Antes existían dos implementaciones casi idénticas de "crear el perfil si
 // no existe, si no actualizar lastLogin": guardarUsuario() en login.html
-// (Google) y ensureUserDocForEmailLogin() en js/email/email-auth.js (código por
+// (Google) y ensureUserDocForEmailLogin() en js/email/correo-autenticacion.js (código por
 // correo). Se desincronizaban con cada cambio — de hecho la de Google nunca
 // llegó a guardar el método de registro. Acá vive una sola versión, con el
 // método de acceso como parámetro.

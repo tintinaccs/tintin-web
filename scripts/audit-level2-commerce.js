@@ -22,12 +22,12 @@ function check(label, condition, detail = '') {
 }
 
 const cart = read('js/components/cart/sincronizacion-carrito.js');
-const checkout = read('js/orders/secure-checkout-order.js');
+const checkout = read('js/orders/pedido-checkout-seguro.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const admin = read('js/admin/admin-app.js');
-const emailClient = read('js/email/resend-order-notify.js');
+const emailClient = read('js/email/notificacion-pedido-resend.js');
 const emailBridge = read('js/pages/checkout/checkout-puente-correo.js');
 const emailServer = read('functions/api/order-email.js');
 const rules = read('firestore.rules');

@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from '../../email/resend-order-notify.js?v=tintin-20260717-resend-1';
+} from '../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;
@@ -81,7 +81,7 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
         value: Math.max(0, Number(order?.total) || 0),
         quantity,
         itemCount,
-        // Solo se usa localmente para evitar eventos repetidos. analytics.js
+        // Solo se usa localmente para evitar eventos repetidos. analitica.js
         // elimina cualquier identificador antes de enviar parámetros externos.
         dedupeKey: clean(shortId).slice(0, 60)
       }

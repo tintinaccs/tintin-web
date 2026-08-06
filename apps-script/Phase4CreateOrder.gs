@@ -205,7 +205,7 @@ function phase4NormalizeCities_(list, fallbackCost) {
   }).filter(function (city) { return city; });
 }
 
-// Espejo de resolveShipping() en js/secure-checkout-order.js, sobre
+// Espejo de resolveShipping() en js/pedido-checkout-seguro.js, sobre
 // settings/general (paymentMethods, storeOpen) y settings/shippingRates
 // (deliveryCities/encomiendaCities) — ver sparkShippingRatesPath() en
 // firestore.rules para por qué viven separados.
@@ -229,7 +229,7 @@ function phase4ResolveShipping_(shippingRates, selectedCity) {
 
 /**
  * action: 'createOrder'. payload es el mismo "draft" que ya arma
- * buildDraft() en js/secure-checkout-order.js: requestId, cartLines
+ * buildDraft() en js/pedido-checkout-seguro.js: requestId, cartLines
  * ([{id, qty, variants}]), name, phone, contactEmail, notes,
  * selectedCity, departamento, address, referencia, mapLocation,
  * paymentMethod, expectedSubtotal, expectedShippingCost,
@@ -403,7 +403,7 @@ function phase4CreateOrder_(payload, idToken) {
     // Respaldo en settings/general por si settings/shippingRates todavía no
     // se migró del todo (ver js/create-order-client.js y la migración
     // automática en js/admin-app.js) — el mismo respaldo que ya usa
-    // mergeShippingRates() en js/secure-checkout-order.js, para que el
+    // mergeShippingRates() en js/pedido-checkout-seguro.js, para que el
     // cliente y el servidor calculen el mismo costo de envío siempre.
     var shippingRatesMerged = {
       deliveryCities: Array.isArray(shippingRates.deliveryCities) ? shippingRates.deliveryCities : settings.deliveryCities,

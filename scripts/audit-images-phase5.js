@@ -19,7 +19,7 @@ const files = {
   functionOrigin: read('js/core/firebase/origen-funciones.js'),
   firebase: read('js/core/firebase/firebase.js'),
   products: read('js/core/store/estado-productos.js'),
-  ui: read('js/quality/ui-quality.js'),
+  ui: read('js/quality/calidad-interfaz.js'),
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),
   firebaseJson: read('firebase.json'),
@@ -232,7 +232,7 @@ check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
   // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
   // en GitHub Pages/Netlify) vive en js/core/firebase/origen-funciones.js, compartido con
-  // site-activity.js, resend-order-notify.js y sincronizacion-correo-admin.js para
+  // actividad-sitio.js, notificacion-pedido-resend.js y sincronizacion-correo-admin.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
     files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&

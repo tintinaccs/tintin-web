@@ -14,7 +14,7 @@
        hero visible arriba — pero dos requestAnimationFrame() ejecutados
        este temprano en el <head> tampoco garantizan que el <body> ya haya
        terminado de parsearse ni que exista una estructura desplazable real
-       debajo del hero; medido con js/diagnostics/scroll-debug-overlay.js, se confirmó
+       debajo del hero; medido con js/diagnostics/panel-depuracion-desplazamiento.js, se confirmó
        que puede dispararse con document.readyState todavía en 'loading'.
        La señal real vive ahora al final del <body>, después de todas las
        secciones estáticas, condicionada a que existan de verdad — ver ese
@@ -588,7 +588,7 @@
 </script>
 <script src="script.js?v=tintin-20260801-unified-surfaces-16" defer></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/analytics/analytics.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module">

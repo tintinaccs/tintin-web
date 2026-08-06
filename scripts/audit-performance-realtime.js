@@ -120,8 +120,8 @@ check(
 
 check(
   'El heartbeat se detiene al ocultar o cerrar la pestaña',
-  read('js/analytics/site-activity.js').includes('clearInterval(heartbeatTimer)') &&
-    read('js/analytics/site-activity.js').includes("addEventListener('pagehide'"),
+  read('js/analytics/actividad-sitio.js').includes('clearInterval(heartbeatTimer)') &&
+    read('js/analytics/actividad-sitio.js').includes("addEventListener('pagehide'"),
   'La actividad no debe seguir ejecutándose después de cerrar la página.'
 );
 

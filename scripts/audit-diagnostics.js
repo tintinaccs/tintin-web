@@ -15,14 +15,14 @@ function check(label, condition) {
 }
 
 const runtime = read('js/admin/diagnostics/diagnostico-sitio-admin.js');
-const core = read('js/diagnostics/diagnostic-core.js');
+const core = read('js/diagnostics/nucleo-diagnostico.js');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
 const css = read('css/admin/admin.css');
 const pkg = JSON.parse(read('package.json'));
-const firestoreShim = read('js/diagnostic-shims/firestore-shim.js');
-const authShim = read('js/diagnostic-shims/auth-shim.js');
-const storageShim = read('js/diagnostic-shims/storage-shim.js');
-const networkGuard = read('js/diagnostic-shims/network-guard.js');
+const firestoreShim = read('js/diagnostic-shims/adaptador-firestore.js');
+const authShim = read('js/diagnostic-shims/adaptador-autenticacion.js');
+const storageShim = read('js/diagnostic-shims/adaptador-almacenamiento.js');
+const networkGuard = read('js/diagnostic-shims/proteccion-red.js');
 const builder = read('scripts/build-diagnostic-manifest.js');
 
 const forbiddenWrites = [
@@ -40,10 +40,10 @@ check(
     runtime.includes("frame-src 'none'") &&
     runtime.includes("object-src 'none'") &&
     runtime.includes('DIAGNOSTIC_SHIM_MAP') &&
-    runtime.includes('js/diagnostic-shims/firestore-shim.js') &&
-    runtime.includes('js/diagnostic-shims/auth-shim.js') &&
-    runtime.includes('js/diagnostic-shims/storage-shim.js') &&
-    runtime.includes('js/diagnostic-shims/network-guard.js')
+    runtime.includes('js/diagnostic-shims/adaptador-firestore.js') &&
+    runtime.includes('js/diagnostic-shims/adaptador-autenticacion.js') &&
+    runtime.includes('js/diagnostic-shims/adaptador-almacenamiento.js') &&
+    runtime.includes('js/diagnostic-shims/proteccion-red.js')
 );
 check(
   'El shim de Firestore reexporta el SDK real y bloquea únicamente sus funciones de escritura',

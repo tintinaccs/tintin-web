@@ -22,7 +22,7 @@ masivas, reenvío) y la integridad/consistencia entre superficies.
 ═══════════════════════════════════════════════════════════════════════
 INVENTARIO REAL
 ═══════════════════════════════════════════════════════════════════════
-Creación .................. js/secure-checkout-order.js (transacción) + checkout.html
+Creación .................. js/pedido-checkout-seguro.js (transacción) + checkout.html
 Reglas de integridad ...... firestore.rules (orders)
 Edición completa .......... js/admin-app.js (openOrderEdit, saveOrderEdit,
                             renderOeItems, updateOeItemQty, removeOeItem, recalcOeTotals)
@@ -30,7 +30,7 @@ Estados / pago ............ js/admin-app.js (updateOrderStatus, updatePayStatus)
 Eliminación / masivas ..... js/admin-app.js (deleteOrder, bulkDeleteOrders,
                             bulkUpdateOrderStatus/Pay, bulkExportOrders)
 Reenvío de correo ......... js/admin-app.js (resendOrderEmail + cooldown) →
-                            js/resend-order-notify.js / Apps Script
+                            js/notificacion-pedido-resend.js / Apps Script
 Perfil del cliente ........ perfil.html, js/mantenimiento-perfil.js,
                             js/correccion-estadisticas-pedidos-perfil.js
 Estadísticas .............. js/estadisticas-pedidos.js

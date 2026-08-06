@@ -25,13 +25,13 @@ Dashboard + Estadísticas ..... js/admin-app.js (renderDashboardData,
                                renderGeneralStatistics, renderStatisticsTrend,
                                listenStatisticsTraffic, listenDashboardSessions,
                                listenDashboardPresence)
-Analítica del sitio .......... js/site-activity.js (sesiones/presencia/geo
+Analítica del sitio .......... js/actividad-sitio.js (sesiones/presencia/geo
                                aproximada, consentida)
 Endpoint de geo .............. functions/api/visitor-geo.js (Cloudflare edge)
 Stats por usuaria ............ js/estadisticas-pedidos.js
 Auditoría / Logs ............. js/admin-app.js (logAudit, loadAuditLog,
                                renderAuditLogTable, bulkExportAuditLog)
-Diagnóstico .................. js/diagnostico-sitio-admin.js, js/diagnostic-core.js
+Diagnóstico .................. js/diagnostico-sitio-admin.js, js/nucleo-diagnostico.js
 Reglas server-side ........... firestore.rules (sitePresence, siteTraffic,
                                auditLog)
 
@@ -88,7 +88,7 @@ REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
 ═══════════════════════════════════════════════════════════════════════
 ZONA HORARIA DE PARAGUAY
 - statisticsDayKey, renderStatisticsTrend, listenStatisticsTraffic y
-  paraguayDayKey (site-activity.js) agrupan por día con America/Asuncion.
+  paraguayDayKey (actividad-sitio.js) agrupan por día con America/Asuncion.
 
 CÁLCULOS
 - Cancelados/rechazados fuera de facturación (statisticsOrderIsValid) y del
@@ -97,7 +97,7 @@ CÁLCULOS
 - Conversión con guardia de denominador (uniqueVisitors) — nunca divide por 0.
 
 PRIVACIDAD (no IP / no GPS)
-- site-activity.js: guarda solo ciudad/región/país/countryCode/geoSource
+- actividad-sitio.js: guarda solo ciudad/región/país/countryCode/geoSource
   aproximados; nunca IP, GPS, coordenadas, código postal, navegador, nombre,
   correo ni referidor. ID aleatorio que ROTA por día (dailyId) y no se vincula a
   la cuenta. Todo bajo consentimiento (hasStatisticsConsent / onPrivacyConsentChange).
@@ -159,7 +159,7 @@ AUDITORÍA NUEVA — scripts/audit-admin-analytics-audit.js (31 checks)
 CI / VERIFICACIÓN
 ═══════════════════════════════════════════════════════════════════════
 - npm run audit:analytics-audit  → 31/31 OK
-- node --check js/admin-app.js / js/site-activity.js → OK
+- node --check js/admin-app.js / js/actividad-sitio.js → OK
 - npm run audit:final → exit 0 (todas las auditorías estáticas verdes, CRITICAL: 0)
 - diagnostic-manifest.json regenerado (deriva por corrimiento de líneas + índice
   de la auditoría nueva; audit:diagnostics verde).

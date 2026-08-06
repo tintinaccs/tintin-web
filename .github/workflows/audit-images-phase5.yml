@@ -14,10 +14,10 @@ on:
       - 'js/components/images/carga-imagenes.js'
       - 'js/components/images/biblioteca-multimedia.js'
       - 'js/admin/products/biblioteca-multimedia-admin.js'
-      - 'js/diagnostic-shims/storage-shim.js'
+      - 'js/diagnostic-shims/adaptador-almacenamiento.js'
       - 'js/core/store/estado-productos.js'
-      - 'js/analytics/site-activity.js'
-      - 'js/quality/ui-quality.js'
+      - 'js/analytics/actividad-sitio.js'
+      - 'js/quality/calidad-interfaz.js'
       - 'cloudflare/cloudinary-security.js'
       - 'functions/api/cloudinary-sign-upload.js'
       - 'functions/api/cloudinary-delete.js'
@@ -61,10 +61,10 @@ jobs:
           node --check js/components/images/carga-imagenes.js
           node --check js/components/images/biblioteca-multimedia.js
           node --check js/admin/products/biblioteca-multimedia-admin.js
-          node --check js/diagnostic-shims/storage-shim.js
+          node --check js/diagnostic-shims/adaptador-almacenamiento.js
           node --check js/core/store/estado-productos.js
-          node --check js/analytics/site-activity.js
-          node --check js/quality/ui-quality.js
+          node --check js/analytics/actividad-sitio.js
+          node --check js/quality/calidad-interfaz.js
           node --check cloudflare/cloudinary-security.js
           node --check functions/api/cloudinary-sign-upload.js
           node --check functions/api/cloudinary-delete.js

@@ -9,7 +9,7 @@ const files = {
   navCompatibility: read('js/components/navigation/compatibilidad/colecciones.js'),
   publicPhase4: read('js/pages/collections/presentacion-colecciones.js'),
   adminPhase4: read('js/admin/collections/gestion-colecciones-admin.js'),
-  uiQuality: read('js/quality/ui-quality.js'),
+  uiQuality: read('js/quality/calidad-interfaz.js'),
   store: read('js/pages/collections/estado-colecciones.js'),
   collectionsPage: read('collections.html'),
   catalogPage: read('catalogo.html'),

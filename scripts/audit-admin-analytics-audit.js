@@ -40,7 +40,7 @@ function check(name, condition, problem) {
 }
 
 const admin    = read('js/admin/admin-app.js');
-const activity = read('js/analytics/site-activity.js');
+const activity = read('js/analytics/actividad-sitio.js');
 const geoFn    = read('functions/api/visitor-geo.js');
 const orderStats = read('js/core/store/estadisticas-pedidos.js');
 const rules    = read('firestore.rules');

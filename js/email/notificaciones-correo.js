@@ -5,7 +5,7 @@
  * segura del Apps Script vuelve a leer el pedido desde Firestore y no confía
  * en nombres, precios, destinatarios ni totales enviados por el navegador.
  */
-import { EMAIL_WEBHOOK_URL } from './email-config.js?v=tintin-20260716-cloudinary-fix-1';
+import { EMAIL_WEBHOOK_URL } from './configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
 import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   doc,

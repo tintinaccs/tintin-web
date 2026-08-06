@@ -7,7 +7,7 @@ on:
       - 'js/pages/collections/presentacion-colecciones.js'
       - 'js/admin/collections/gestion-colecciones-admin.js'
       - 'js/pages/collections/estado-colecciones.js'
-      - 'js/quality/ui-quality.js'
+      - 'js/quality/calidad-interfaz.js'
       - 'scripts/audit-collections-phase4.js'
       - 'package.json'
       - '.github/workflows/audit-collections-phase4.yml'
@@ -31,7 +31,7 @@ jobs:
           node --check js/components/navigation/compatibilidad/colecciones.js
           node --check js/pages/collections/presentacion-colecciones.js
           node --check js/admin/collections/gestion-colecciones-admin.js
-          node --check js/quality/ui-quality.js
+          node --check js/quality/calidad-interfaz.js
           node --check scripts/audit-collections-phase4.js
       - name: Revisar integración
         run: npm run audit:collections

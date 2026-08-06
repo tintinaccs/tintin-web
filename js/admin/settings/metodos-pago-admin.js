@@ -15,7 +15,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../orders/payment-methods-core.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260720-payment-crud-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');

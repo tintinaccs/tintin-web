@@ -3,7 +3,7 @@ name: Auditoría de correos Fase 3
 on:
   pull_request:
     paths:
-      - 'js/email/email-notify.js'
+      - 'js/email/notificaciones-correo.js'
       - 'js/pages/checkout/checkout-puente-correo.js'
       - 'js/admin/settings/sincronizacion-correo-admin.js'
       - 'js/admin/settings/control-tienda-admin.js'
@@ -29,7 +29,7 @@ jobs:
           node-version: '20'
       - name: Revisar sintaxis
         run: |
-          node --check js/email/email-notify.js
+          node --check js/email/notificaciones-correo.js
           node --check js/pages/checkout/checkout-puente-correo.js
           node --check js/admin/settings/sincronizacion-correo-admin.js
           node --check js/admin/settings/control-tienda-admin.js

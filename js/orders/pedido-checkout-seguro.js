@@ -25,7 +25,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   // El puente que dispara el correo de confirmación del pedido
   // (checkout-puente-correo.js) se cargaba como efecto secundario de
-  // importar js/email/email-notify.js — pero desde la migración a Resend (PR
+  // importar js/email/notificaciones-correo.js — pero desde la migración a Resend (PR
   // #177) checkout.html dejó de importar ese archivo, así que el puente
   // nunca se volvía a cargar y ningún correo de pedido se disparaba desde
   // el checkout real. Este módulo ya se carga únicamente en checkout.html

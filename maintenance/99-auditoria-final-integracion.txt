@@ -95,7 +95,7 @@ en verde.
   de Firebase web (identificador de proyecto, no secreto). La seguridad real la
   imponen firestore.rules y las Functions del servidor.
 - Contenido legal (terminos/privacidad): revisión técnica, NO jurídica.
-- Apps Script legacy (email-notify.js): permanece importado por admin-app.js
+- Apps Script legacy (notificaciones-correo.js): permanece importado por admin-app.js
   como respaldo inerte detrás del interceptor Resend y de los botones de promo
   deshabilitados. No se elimina porque sigue con un import activo; no envía.
 

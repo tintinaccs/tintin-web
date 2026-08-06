@@ -27,7 +27,7 @@ const REQUIRED_FILES = [
   'package.json',
   'js/cargador-pagina.js',
   'js/core/firebase/firebase.js',
-  'js/quality/ui-quality.js',
+  'js/quality/calidad-interfaz.js',
   'js/components/color/normalizador-color-tema.js',
   'css/core/tintin-unified-theme.css',
   'css/core/tintin-tokens.css',
@@ -42,9 +42,9 @@ const LEVELS = {
 
 const issues = [];
 const LEGACY_LOGO_CLEANUP_FILES = new Set([
-  'js/quality/page-audit-fix.js',
+  'js/quality/correccion-auditoria-pagina.js',
   'js/cargador-pagina.js',
-  'js/quality/ui-quality.js',
+  'js/quality/calidad-interfaz.js',
   'scripts/audit-deep.js',
   'scripts/audit-tintin.js',
   'scripts/fix-tintin-source.js'

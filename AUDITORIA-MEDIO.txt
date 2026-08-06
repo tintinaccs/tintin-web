@@ -21,7 +21,7 @@ El sitio se publica en GitHub Pages (lo confirman canonical, sitemap,
 robots.txt y el enlace del admin en functions/index.js, todos hacia
 tintinaccs.github.io). Las funciones /api/* son de Cloudflare Pages y
 GitHub Pages NO las ejecuta. Dos módulos del proyecto (biblioteca-multimedia.js y
-site-activity.js) resuelven esto detectando github.io y redirigiendo a
+actividad-sitio.js) resuelven esto detectando github.io y redirigiendo a
 https://tintinaccesorios.pages.dev. Pero los módulos de correo NO tienen
 ese fallback: llaman a rutas relativas.
 
@@ -42,12 +42,12 @@ apuntar el fetch al origen de Cloudflare Pages (o usar
 window.TINTIN_FUNCTION_ORIGIN).
 
 DÓNDE ESTÁ EL CÓDIGO:
-- js/resend-order-notify.js (línea 8): const ORDER_EMAIL_API = '/api/order-email';
+- js/notificacion-pedido-resend.js (línea 8): const ORDER_EMAIL_API = '/api/order-email';
   (usado por checkout-puente-correo.js para el aviso de pedido nuevo y por
   admin-app.js para el reenvío).
 - js/sincronizacion-correo-admin.js (línea 17): const TEST_ENDPOINT = '/api/test-email';
 - Referencia de la solución correcta: js/biblioteca-multimedia.js
-  functionOrigin() (líneas ~54-66) y js/site-activity.js geoEndpoint()
+  functionOrigin() (líneas ~54-66) y js/actividad-sitio.js geoEndpoint()
   (líneas ~136-142).
 
 SOLUCIÓN:
@@ -63,8 +63,8 @@ En cualquiera de los dos casos hay una incoherencia de despliegue que hay
 que resolver.
 
 [RESUELTO 2026-07-22] Se creó js/origen-funciones.js con la resolución de
-origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
-sincronizacion-correo-admin.js, biblioteca-multimedia.js, site-activity.js) ahora
+origen (apiUrl(name)), y los cuatro llamadores (notificacion-pedido-resend.js,
+sincronizacion-correo-admin.js, biblioteca-multimedia.js, actividad-sitio.js) ahora
 importan de ahí en vez de reinventar la constante cada uno. Verificado con
 scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
 (actualizados) y el resto de `npm run audit:final`, sin regresiones.

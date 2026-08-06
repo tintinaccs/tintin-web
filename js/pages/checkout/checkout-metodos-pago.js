@@ -2,7 +2,7 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/payment-methods-core.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260720-payment-crud-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
