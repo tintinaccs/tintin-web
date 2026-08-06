@@ -7,7 +7,7 @@ on:
     paths:
       - 'catalogo.html'
       - 'script.js'
-      - 'js/core/store/products-store.js'
+      - 'js/core/store/estado-productos.js'
       - 'js/pages/catalog/politica-visibilidad-catalogo.js'
       - 'js/cargador-mantenimiento-pagina.js'
       - 'js/admin/admin-app.js'
@@ -84,7 +84,7 @@ jobs:
       - name: Revisar sintaxis
         run: |
           node --check js/pages/catalog/politica-visibilidad-catalogo.js
-          node --check js/core/store/products-store.js
+          node --check js/core/store/estado-productos.js
           node --check js/components/cart/sincronizacion-carrito.js
           node --check js/admin/admin-app.js
           node --check script.js

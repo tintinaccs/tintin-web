@@ -186,7 +186,7 @@ import {
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260803-profile-gate-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260716-cloudinary-fix-1";
 import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1";
@@ -298,7 +298,7 @@ async function redirectByRole(role, email, options = {}) {
 
 // Crea el perfil la primera vez que alguien entra con Google, o solo
 // actualiza lastLogin las siguientes veces. La lógica vive en
-// js/core/store/user-profile-store.js, compartida con el login por correo — acá sólo se
+// js/core/store/perfil-usuario.js, compartida con el login por correo — acá sólo se
 // fija el método. Si la cuenta se había creado por correo, devuelve
 // `wrongMethod` y el login no avanza.
 async function guardarUsuario(user) {

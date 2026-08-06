@@ -318,7 +318,7 @@ import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-1";
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
-import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/user-profile-store.js?v=tintin-20260803-profile-store-1";
+import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
 
@@ -458,7 +458,7 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
   }
 
-  // Datos de la cuenta — se guardan desde el alta (js/core/store/user-profile-store.js).
+  // Datos de la cuenta — se guardan desde el alta (js/core/store/perfil-usuario.js).
   document.getElementById('perfil-metodo').textContent =
     getRegisteredMethod(userData) === AUTH_METHOD.EMAIL ? 'Código por correo' : 'Google';
   document.getElementById('perfil-alta').textContent = formatProfileDate(userData?.createdAt);

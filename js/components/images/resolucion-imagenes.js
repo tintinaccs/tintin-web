@@ -135,7 +135,7 @@ export function firstEligibleProductImage(slug, products) {
  * Resuelve la imagen efectiva de una colección para CUALQUIER lugar que la
  * muestre: su propia imagen configurada -> la imagen del primer producto
  * elegible -> el respaldo global de colecciones. `products` es la lista ya
- * normalizada (la misma forma que expone products-store.js / window.PRODUCTS).
+ * normalizada (la misma forma que expone estado-productos.js / window.PRODUCTS).
  * Siempre devuelve una URL válida o '' si genuinamente no hay nada que mostrar
  * (ni imagen propia, ni producto con imagen, ni respaldo global configurado).
  */

@@ -11,7 +11,7 @@ INCIDENTE CONFIRMADO
 - La transacción fallida no crea un pedido parcial ni descuenta stock parcialmente.
 
 CAUSA PRINCIPAL ENCONTRADA
-- js/products-store.js abría un onSnapshot sobre products con límite 10.000 desde el runtime público compartido.
+- js/estado-productos.js abría un onSnapshot sobre products con límite 10.000 desde el runtime público compartido.
 - El runtime se cargaba incluso en Perfil, Login, Contacto, Checkout y páginas legales.
 - Cada página podía volver a leer todos los documentos del catálogo aunque no mostrara productos.
 - js/estado-colecciones.js mantenía otra suscripción pública completa para colecciones.

@@ -53,3 +53,9 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Los módulos funcionales de contenido, importación, inventario y configuración pública de `js/core/store/**` usan nombres claros en español y `kebab-case`.
 - Se conserva la carpeta técnica `store` para mantener la arquitectura y las importaciones agrupadas.
 - No se modifican colecciones, campos, esquemas persistidos, claves de configuración, exports ni APIs globales.
+
+## Productos, pedidos y perfiles
+
+- Los módulos funcionales de productos, estadísticas de pedidos y perfil de usuario de `js/core/store/**` usan nombres claros en español y `kebab-case`.
+- Se conserva la carpeta técnica `store` para mantener la arquitectura y las importaciones agrupadas.
+- No se modifican exports, eventos, colecciones, campos persistidos, claves de almacenamiento ni APIs globales.

@@ -23,7 +23,7 @@ Super Admin: admin.html (dashboard, estadísticas, usuarios, pedidos, productos,
   configuración, permisos, apariencia) y admin-images.html.
 Módulos compartidos: cargador-pagina.js, inicio-navegacion-publica.js, script.js,
   color-scheme(-instant).js, store-gate(.js/-core.js), whatsapp.js,
-  products-store.js, estado-colecciones.js, contenido-sitio.js, rendimiento-imagenes.js,
+  estado-productos.js, estado-colecciones.js, contenido-sitio.js, rendimiento-imagenes.js,
   site-activity.js, firebase.js.
 
 ═══════════════════════════════════════════════════════════════════════
@@ -77,7 +77,7 @@ PROBLEMAS ANTERIORES YA SOLUCIONADOS (revisados, NO tocados)
 - Imágenes: rendimiento-imagenes.js aplica decoding=async y loading=lazy (eager solo
   en prioritarias); product cards con loading="lazy"; preconnect+dns-prefetch a
   Cloudinary desde page-loader; entrega f_auto,q_auto. → Ya optimizado.
-- Tiempo real del catálogo: products-store.js y estado-colecciones.js usan
+- Tiempo real del catálogo: estado-productos.js y estado-colecciones.js usan
   onSnapshot con limit() (no getDocs). Un cambio del Super Admin se refleja en
   vivo sin recargar. → Ya optimizado.
 - Listeners del panel: orders/users con onSnapshot limit(10000), COMPARTIDOS por

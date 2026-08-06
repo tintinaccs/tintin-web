@@ -42,7 +42,7 @@ function check(name, condition, problem) {
 
 const adminApp   = read('js/admin/admin-app.js');
 const perfil     = read('perfil.html');
-const orderStats = read('js/core/store/order-stats.js');
+const orderStats = read('js/core/store/estadisticas-pedidos.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/orders/secure-checkout-order.js');
 const phase4Order = read('apps-script/Phase4CreateOrder.gs');

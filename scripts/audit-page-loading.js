@@ -195,9 +195,9 @@ if (!/components\/navigation\/entrada-navegacion-publica\.js/.test(publicShell))
 }
 if (
   !/function loadProductsRuntime\(/.test(publicShellRuntime) ||
-  !/import\(versionedJsModule\(['"]core\/store\/products-store\.js['"]\)\)/.test(publicShellRuntime)
+  !/import\(versionedJsModule\(['"]core\/store\/estado-productos\.js['"]\)\)/.test(publicShellRuntime)
 ) {
-  fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga products-store.js mediante el runtime modular.');
+  fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga estado-productos.js mediante el runtime modular.');
 }
 if (!/product[\s\S]*load\('pages\/product\/mantenimiento-producto\.js'\)/.test(pageMaintenanceLoader)) {
   fail('js/cargador-mantenimiento-pagina.js', 'no carga mantenimiento-producto.js en Producto.');

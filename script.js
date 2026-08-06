@@ -116,7 +116,7 @@ function isFeaturable(p) {
 
 /**
  * Get a product by ID from the real, live Firestore catalog. Returns null
- * until products-store.js's listener has resolved at least once — callers
+ * until estado-productos.js's listener has resolved at least once — callers
  * must handle that (loading state), not assume a product always exists.
  */
 function getProductById(id) {
@@ -823,7 +823,7 @@ function initLookCombinator() {
   if (lookActions) lookActions.style.display = '';
 
   // Bind exactly once: initLookCombinator() is re-invoked on every Firestore
-  // products snapshot (script.js, products-store.js and inicio-carga-imagenes.js
+  // products snapshot (script.js, estado-productos.js and inicio-carga-imagenes.js
   // all call it so the combo refreshes with live data/images), but
   // #btn-otra-combo/#btn-add-combo are static persistent buttons — without
   // this guard each re-invocation stacked another click handler on top of
@@ -876,7 +876,7 @@ function initProductPage() {
   if (!document.getElementById('product-detail')) return;
   // One-time only: finds the product for the current URL and does the first
   // render. Later Firestore updates for this same product go straight through
-  // _renderProductDetail (called directly from products-store.js), which is
+  // _renderProductDetail (called directly from estado-productos.js), which is
   // idempotent and safe to call any number of times — it never re-runs this
   // lookup/registration logic, so it can't stack up duplicate listeners.
   if (window._productPageInited) return;
@@ -1781,7 +1781,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Homepage specific — show skeleton while Firebase loads, real error+retry
   // if it never responds. window.PRODUCTS may already be populated here: the
-  // products-store.js module's onSnapshot can resolve (e.g. from a warm
+  // estado-productos.js module's onSnapshot can resolve (e.g. from a warm
   // IndexedDB cache) and dispatch tintin:products-loaded before this
   // DOMContentLoaded handler runs, since both script.js and the module
   // scripts are deferred and execute in document order before
@@ -1890,7 +1890,7 @@ window.renderCart = renderCart;
 window.updateCartBadge = updateCartBadge;
 window.initLookCombinator = initLookCombinator;
 // NOTE: do NOT seed window.PRODUCTS with the hardcoded fallback array here.
-// window.PRODUCTS must only ever hold real Firestore data (set by products-store.js)
+// window.PRODUCTS must only ever hold real Firestore data (set by estado-productos.js)
 // so pages that check `if (window.PRODUCTS && window.PRODUCTS.length)` don't mistake
 // the offline sample data for a real, loaded catalog.
 

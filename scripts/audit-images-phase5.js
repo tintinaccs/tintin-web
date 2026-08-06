@@ -18,7 +18,7 @@ const files = {
   mediaLibrary: read('js/components/images/biblioteca-multimedia.js'),
   functionOrigin: read('js/core/firebase/origen-funciones.js'),
   firebase: read('js/core/firebase/firebase.js'),
-  products: read('js/core/store/products-store.js'),
+  products: read('js/core/store/estado-productos.js'),
   ui: read('js/quality/ui-quality.js'),
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),

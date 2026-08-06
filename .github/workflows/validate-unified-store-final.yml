@@ -43,7 +43,7 @@ jobs:
       - name: Validar sintaxis y contratos
         run: |
           node --check js/pages/catalog/politica-exhibicion-catalogo.js
-          node --check js/core/store/products-store.js
+          node --check js/core/store/estado-productos.js
           node --check js/pages/catalog/politica-visibilidad-catalogo.js
           node --check js/pages/catalog/prioridad-stock-catalogo.js
           node --check script.js

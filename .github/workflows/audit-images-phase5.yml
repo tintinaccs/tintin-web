@@ -15,7 +15,7 @@ on:
       - 'js/components/images/biblioteca-multimedia.js'
       - 'js/admin/products/biblioteca-multimedia-admin.js'
       - 'js/diagnostic-shims/storage-shim.js'
-      - 'js/core/store/products-store.js'
+      - 'js/core/store/estado-productos.js'
       - 'js/analytics/site-activity.js'
       - 'js/quality/ui-quality.js'
       - 'cloudflare/cloudinary-security.js'
@@ -62,7 +62,7 @@ jobs:
           node --check js/components/images/biblioteca-multimedia.js
           node --check js/admin/products/biblioteca-multimedia-admin.js
           node --check js/diagnostic-shims/storage-shim.js
-          node --check js/core/store/products-store.js
+          node --check js/core/store/estado-productos.js
           node --check js/analytics/site-activity.js
           node --check js/quality/ui-quality.js
           node --check cloudflare/cloudinary-security.js

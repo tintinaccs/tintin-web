@@ -91,7 +91,7 @@ check(
   /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/gestion-usuarios-admin.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
-    /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/products-store.js'))
+    /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/estado-productos.js'))
 );
 
 check(
@@ -172,7 +172,7 @@ check(
     'js/admin/admin-app.js',
     'js/admin/importacion-admin.js',
     'js/admin/content/control-bienvenida-admin.js',
-    'js/core/store/order-stats.js'
+    'js/core/store/estadisticas-pedidos.js'
   ].every(file => read(file).includes('getDocsPaginated')) &&
     exists('js/core/firebase/paginacion-firestore.js')
 );
