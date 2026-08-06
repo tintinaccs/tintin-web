@@ -24,6 +24,8 @@ permissions:
   contents: read
   pull-requests: read
 
+# Los Pull Requests solo clasifican y generan informes. La eliminación exige
+# workflow_dispatch, permiso de escritura y la confirmación exacta definida abajo.
 jobs:
   audit:
     if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
