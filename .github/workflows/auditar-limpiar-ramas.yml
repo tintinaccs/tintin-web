@@ -1,0 +1,63 @@
+name: Auditoría y limpieza segura de ramas
+
+on:
+  pull_request:
+    paths:
+      - scripts/auditar-limpiar-ramas.mjs
+      - .github/workflows/auditar-limpiar-ramas.yml
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Acción a ejecutar
+        required: true
+        default: audit
+        type: choice
+        options:
+          - audit
+          - delete
+      confirmation:
+        description: Para eliminar, escribir ELIMINAR_SOLO_RAMAS_SEGURAS
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  branches:
+    name: Clasificar ramas sin perder trabajo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Auditar o eliminar ramas seguras
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_CLEANUP_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'audit' }}
+          BRANCH_CLEANUP_CONFIRMATION: ${{ github.event_name == 'workflow_dispatch' && inputs.confirmation || '' }}
+        run: node scripts/auditar-limpiar-ramas.mjs
+
+      - name: Publicar resumen
+        if: always()
+        run: |
+          if [ -f branch-audit.md ]; then
+            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-ramas-${{ github.run_id }}
+          path: |
+            branch-audit.json
+            branch-audit.md
+          retention-days: 30
+          if-no-files-found: error
