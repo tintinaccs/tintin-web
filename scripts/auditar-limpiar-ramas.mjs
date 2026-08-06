@@ -8,6 +8,17 @@ const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
 const outputMarkdown = process.env.BRANCH_AUDIT_MARKDOWN || 'branch-audit.md';
 
+const reviewedObsoleteBranches = new Map([
+  ['temp/noop-test', {
+    sha: 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8',
+    reason: 'Rama temporal de regeneración: la prueba SEO y el manifiesto quedaron reemplazados por el cierre fusionado #314'
+  }],
+  ['tmp/admin-cls-rebase-20260806', {
+    sha: '1328a51a670138bb8a437bd19e62d31e7410dd9a',
+    reason: 'Rebase temporal de CLS cuyos marcadores están incorporados en main por el cierre #319'
+  }]
+]);
+
 if (!token) throw new Error('Falta GITHUB_TOKEN');
 if (!repository || !repository.includes('/')) throw new Error('Falta GITHUB_REPOSITORY');
 if (!['audit', 'delete'].includes(mode)) throw new Error(`Modo inválido: ${mode}`);
@@ -114,6 +125,18 @@ for (const branchInfo of branches) {
         : isBackupBranch(branch)
           ? 'Rama de respaldo'
           : 'Rama vinculada a un Pull Request abierto';
+    records.push(record);
+    continue;
+  }
+
+  const reviewedObsolete = reviewedObsoleteBranches.get(branch);
+  if (reviewedObsolete) {
+    if (currentSha === reviewedObsolete.sha) {
+      record.classification = 'safe-delete';
+      record.reason = reviewedObsolete.reason;
+    } else {
+      record.reason = `La rama cambió desde la revisión (${reviewedObsolete.sha} → ${currentSha || 'sin SHA'}); requiere revisión manual`;
+    }
     records.push(record);
     continue;
   }
