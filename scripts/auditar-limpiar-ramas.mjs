@@ -7,6 +7,7 @@ const mode = process.env.BRANCH_CLEANUP_MODE || 'audit';
 const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
 const outputMarkdown = process.env.BRANCH_AUDIT_MARKDOWN || 'branch-audit.md';
+const requireZeroReview = process.env.BRANCH_AUDIT_REQUIRE_ZERO_REVIEW === 'true';
 
 const branchName = (...parts) => parts.join('');
 const reviewedObsoleteBranches = new Map([
@@ -225,8 +226,10 @@ for (const branchInfo of branches) {
   records.push(record);
 }
 
+const unresolvedBeforeDelete = records.filter(record => record.classification === 'review').length;
+const deleteBlocked = mode === 'delete' && unresolvedBeforeDelete > 0;
 const deleteCandidates = records.filter(record => record.classification === 'safe-delete' && !record.protected);
-if (mode === 'delete') {
+if (mode === 'delete' && !deleteBlocked) {
   for (const record of deleteCandidates) {
     try {
       const headFilter = encodeURIComponent(`${owner}:${record.branch}`);
@@ -311,3 +314,10 @@ for (const [title, classification] of sections) {
 
 await fs.writeFile(outputMarkdown, markdown);
 console.log(JSON.stringify(summary, null, 2));
+
+if (deleteBlocked) {
+  throw new Error(`La eliminación requiere cero ramas en revisión; quedan ${unresolvedBeforeDelete}`);
+}
+if (requireZeroReview && summary.review > 0) {
+  throw new Error(`La auditoría requiere cero ramas en revisión; quedan ${summary.review}`);
+}
