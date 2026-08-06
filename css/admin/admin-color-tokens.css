@@ -44,3 +44,18 @@
   --admin-color-modal-background: #FFFFFF;
   --admin-color-modal-overlay: rgba(20,10,14,0.55);
 }
+
+/*
+ * Reserva el espacio del panel exclusivo de Super Admin durante la
+ * verificación del rol. Esta hoja es bloqueante, por lo que la regla está
+ * activa antes del primer render y evita desplazar "Últimos pedidos".
+ */
+html:not(.adm-auth-ready) #dashboard-visitor-geo[hidden] {
+  display: block !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.adm-auth-ready #dashboard-visitor-geo[hidden] {
+  display: none !important;
+}

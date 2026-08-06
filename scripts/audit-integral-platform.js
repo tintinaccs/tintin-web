@@ -107,9 +107,14 @@ check(
   'la rotación debe excluir el producto actual, evitar repeticiones y tener un solo propietario'
 );
 
+const featuredLimitMatch = files.collectionsPage.match(/const\s+FEATURED_LIMIT\s*=\s*(\d+)\s*;/);
+const featuredLimit = Number(featuredLimitMatch?.[1]);
+
 check(
   'Los bloques secundarios nunca superan cinco productos',
-  files.collectionsPage.includes('const FEATURED_LIMIT = 5') &&
+  Number.isInteger(featuredLimit) &&
+    featuredLimit >= 1 &&
+    featuredLimit <= 5 &&
     files.checkout.includes("limit(5)") &&
     files.checkout.includes('.slice(0, 5)') &&
     files.productsStore.includes("featuredProducts.slice(0, 5)") &&

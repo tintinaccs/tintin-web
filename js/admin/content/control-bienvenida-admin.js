@@ -80,7 +80,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
       btn.dataset.section = 'welcome';
       btn.innerHTML = '<span class="adm-nav-icon">💌</span> Mensaje bienvenida';
       const config = document.getElementById('nav-config');
-      nav.insertBefore(btn, config || null);
+      nav.insertBefore(btn, config?.parentElement === nav ? config : null);
     }
     const tabs = document.getElementById('adm-mobile-tabs');
     if (tabs && !document.getElementById('mtab-welcome')) {
@@ -91,7 +91,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
       btn.dataset.section = 'welcome';
       btn.innerHTML = '<span class="adm-nav-icon">💌</span>Bienvenida';
       const config = document.getElementById('mtab-config');
-      tabs.insertBefore(btn, config || null);
+      tabs.insertBefore(btn, config?.parentElement === tabs ? config : null);
     }
   }
 

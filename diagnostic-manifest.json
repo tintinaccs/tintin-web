@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-06T11:26:40.962Z",
-  "sourceFingerprint": "9fabc911f937bfb7adc8d02e5d7950462035babf46a47f1c06d20769a6d1e489",
+  "generatedAt": "2026-08-06T11:56:47.281Z",
+  "sourceFingerprint": "cd90b960a7db1ee23a834e602cde963fdfccd600274d6ad24e0d5a25690becb8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 508,
     "textFiles": 476,
-    "totalBytes": 5493580,
+    "totalBytes": 5494934,
     "pages": 18,
     "modules": 300
   },
@@ -16167,8 +16167,8 @@
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
-      "bytes": 19460,
-      "sha256": "4b52e181879b2535c8277101dd2bbd5dfcfcd4967b703325127298a85b6414f7",
+      "bytes": 19523,
+      "sha256": "8a5e6983a0008f218c312d63c2b13946b9dcb64819a32809485422548dd0e7a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19410,7 +19410,7 @@
     {
       "path": "js/pages/collections/pagina-colecciones.js",
       "bytes": 10534,
-      "sha256": "c2e7fe015b1478e88eb9419d2ba2a446fd326b7962bb4a3216c739a2fb101830",
+      "sha256": "1b220ab9d276659f9bd7157e605f6db81ebdd00c21c99f0aec47e7af185d6dc2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19769,8 +19769,8 @@
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
-      "bytes": 7587,
-      "sha256": "68d87fe840c062c6cf6a26a62ab966b6c7add110270eb661119eac8aca0be8b5",
+      "bytes": 7773,
+      "sha256": "6ced03a45789bca7dc06a3891e44126a564b82b9e8b8a5d226375f8f202c6944",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19820,8 +19820,8 @@
     },
     {
       "path": "js/quality/revelado-desplazamiento-global.js",
-      "bytes": 9034,
-      "sha256": "81a99285702487b54dca6b7aea8f932766f171ebdd69b7ef8b3a0fa9452d6efa",
+      "bytes": 9314,
+      "sha256": "478149a64264d0f8b453d30f706bfaf38138e82d2bf77ef4e6cffb92ae322042",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20401,8 +20401,8 @@
     },
     {
       "path": "scripts/audit-collections-phase4.js",
-      "bytes": 8591,
-      "sha256": "22ed7220c8059c3aba4be66b36715f2d41baca7e2f0084a032131727de1ff53d",
+      "bytes": 8770,
+      "sha256": "3c8a6a9e77e8af750f4b961ca61cf18aeab48d503b2f501d1dc4244f6ffc7f21",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20424,7 +20424,7 @@
           "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": null,
           "dynamic": true,
-          "line": 156
+          "line": 161
         }
       ],
       "endpoints": []
@@ -21216,8 +21216,8 @@
     },
     {
       "path": "scripts/audit-integral-platform.js",
-      "bytes": 7082,
-      "sha256": "d40a12555ef02448c17b620bfe84c9d0c00a88641339a9670aac7e4f5de6efa1",
+      "bytes": 7261,
+      "sha256": "5502058dfafec7582cc75ebfadfed03ba926339a59c186e36f5e084a32874c2c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23291,8 +23291,8 @@
     {
       "path": "css/admin/admin-color-tokens.css",
       "extension": ".css",
-      "bytes": 2038,
-      "sha256": "e6b88ed0ba8817632c3f222ff2b61294c0f7e13cd3b9e08fcf170a7a9de01322"
+      "bytes": 2505,
+      "sha256": "57766f334dd8a160efc73f8b5585de884c0649a76561be7a6745711a82fd29d5"
     },
     {
       "path": "css/admin/admin.css",
@@ -23927,8 +23927,8 @@
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "extension": ".js",
-      "bytes": 19460,
-      "sha256": "4b52e181879b2535c8277101dd2bbd5dfcfcd4967b703325127298a85b6414f7"
+      "bytes": 19523,
+      "sha256": "8a5e6983a0008f218c312d63c2b13946b9dcb64819a32809485422548dd0e7a9"
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
@@ -24714,7 +24714,7 @@
       "path": "js/pages/collections/pagina-colecciones.js",
       "extension": ".js",
       "bytes": 10534,
-      "sha256": "c2e7fe015b1478e88eb9419d2ba2a446fd326b7962bb4a3216c739a2fb101830"
+      "sha256": "1b220ab9d276659f9bd7157e605f6db81ebdd00c21c99f0aec47e7af185d6dc2"
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
@@ -24821,8 +24821,8 @@
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
       "extension": ".js",
-      "bytes": 7587,
-      "sha256": "68d87fe840c062c6cf6a26a62ab966b6c7add110270eb661119eac8aca0be8b5"
+      "bytes": 7773,
+      "sha256": "6ced03a45789bca7dc06a3891e44126a564b82b9e8b8a5d226375f8f202c6944"
     },
     {
       "path": "js/quality/espera-cargador.js",
@@ -24845,8 +24845,8 @@
     {
       "path": "js/quality/revelado-desplazamiento-global.js",
       "extension": ".js",
-      "bytes": 9034,
-      "sha256": "81a99285702487b54dca6b7aea8f932766f171ebdd69b7ef8b3a0fa9452d6efa"
+      "bytes": 9314,
+      "sha256": "478149a64264d0f8b453d30f706bfaf38138e82d2bf77ef4e6cffb92ae322042"
     },
     {
       "path": "login.html",
@@ -25223,8 +25223,8 @@
     {
       "path": "scripts/audit-collections-phase4.js",
       "extension": ".js",
-      "bytes": 8591,
-      "sha256": "22ed7220c8059c3aba4be66b36715f2d41baca7e2f0084a032131727de1ff53d"
+      "bytes": 8770,
+      "sha256": "3c8a6a9e77e8af750f4b961ca61cf18aeab48d503b2f501d1dc4244f6ffc7f21"
     },
     {
       "path": "scripts/audit-color-scheme.js",
@@ -25397,8 +25397,8 @@
     {
       "path": "scripts/audit-integral-platform.js",
       "extension": ".js",
-      "bytes": 7082,
-      "sha256": "d40a12555ef02448c17b620bfe84c9d0c00a88641339a9670aac7e4f5de6efa1"
+      "bytes": 7261,
+      "sha256": "5502058dfafec7582cc75ebfadfed03ba926339a59c186e36f5e084a32874c2c"
     },
     {
       "path": "scripts/audit-interaction-latency.mjs",
