@@ -7,8 +7,8 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
-      - 'apps-script/Phase3Security.gs'
-      - 'apps-script/Phase4CreateOrder.gs'
+      - 'apps-script/Seguridad.gs'
+      - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
       - 'scripts/audit-admin-users-roles.js'
       - 'scripts/audit-secure-orders.js'
@@ -24,8 +24,8 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
-      - 'apps-script/Phase3Security.gs'
-      - 'apps-script/Phase4CreateOrder.gs'
+      - 'apps-script/Seguridad.gs'
+      - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
       - 'scripts/audit-admin-users-roles.js'
       - 'scripts/audit-secure-orders.js'
@@ -75,8 +75,8 @@ jobs:
           node --check scripts/audit-phase6-security.js
           node --check scripts/test-firestore-critical.mjs
           node --check js/create-order-client.js
-          cp apps-script/Phase3Security.gs /tmp/Phase3Security.js
-          cp apps-script/Phase4CreateOrder.gs /tmp/Phase4CreateOrder.js
+          cp apps-script/Seguridad.gs /tmp/Phase3Security.js
+          cp apps-script/CrearPedido.gs /tmp/Phase4CreateOrder.js
           node --check /tmp/Phase3Security.js
           node --check /tmp/Phase4CreateOrder.js
 

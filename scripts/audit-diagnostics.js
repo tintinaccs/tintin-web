@@ -192,7 +192,7 @@ check(
     manifest.roles.length >= 6 &&
     manifest.viewports.length === 7 &&
     manifest.routePatterns.length > 0 &&
-    manifest.files.some(file => file.path === 'apps-script/Phase3Security.gs') &&
+    manifest.files.some(file => file.path === 'apps-script/Seguridad.gs') &&
     manifest.files.some(file => file.path === '.github/workflows/deploy-pages.yml')
 );
 check(

@@ -15,7 +15,7 @@ const rules = read('firestore.rules');
 const emailConfig = read('js/email/configuracion-correo.js');
 const emailNotify = read('js/email/notificaciones-correo.js');
 const bridge = read('js/pages/checkout/checkout-puente-correo.js');
-const apps = read('apps-script/Phase3Security.gs');
+const apps = read('apps-script/Seguridad.gs');
 const emailSetup = read('functions/EMAIL_SETUP.md');
 check('Productos se normalizan como texto plano', products.includes('cleanMultilineText') && products.includes('sanitizeVariantData'));
 check('Carrito local se limpia antes de renderizar', script.includes('normalizeClassicCart') && cart.includes('replace(/[<>]/g'));

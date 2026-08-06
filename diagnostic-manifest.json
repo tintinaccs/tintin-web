@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-06T10:38:18.765Z",
-  "sourceFingerprint": "453199a724f09392fd4b077c6f059455532b3cbf0c177c6bbecd8e3f507f125e",
+  "generatedAt": "2026-08-06T10:44:14.876Z",
+  "sourceFingerprint": "83b2c85d0394a0c4e696ef02cd54552a2537c65572503e1b3baff9bfab54fc54",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 506,
-    "textFiles": 474,
-    "totalBytes": 5459320,
+    "files": 508,
+    "textFiles": 476,
+    "totalBytes": 5467641,
     "pages": 18,
-    "modules": 300
+    "modules": 301
   },
   "viewports": [
     {
@@ -15543,35 +15543,7 @@
   ],
   "modules": [
     {
-      "path": "cloudflare/cloudinary-security.js",
-      "bytes": 5351,
-      "sha256": "fb98ed883318e1d087c987a1006bfb53809a1c2a6cebdb23bc9b7bb4478e16a8",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/",
-          "line": 14
-        },
-        {
-          "url": "https://tintinaccs.github.io/",
-          "line": 15
-        },
-        {
-          "url": "https://tintinaccesorios.netlify.app/",
-          "line": 16
-        },
-        {
-          "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 71
-        }
-      ]
-    },
-    {
-      "path": "cloudflare/firebase-admin-lite.js",
+      "path": "cloudflare/firebase-admin-ligero.js",
       "bytes": 13117,
       "sha256": "48c5aedb59e9213a2f49f49223aa3818c08d5ed23c299f6b646eee35d177a225",
       "syntax": {
@@ -15607,6 +15579,34 @@
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
           "line": 233
+        }
+      ]
+    },
+    {
+      "path": "cloudflare/seguridad-cloudinary.js",
+      "bytes": 5351,
+      "sha256": "fb98ed883318e1d087c987a1006bfb53809a1c2a6cebdb23bc9b7bb4478e16a8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 14
+        },
+        {
+          "url": "https://tintinaccs.github.io/",
+          "line": 15
+        },
+        {
+          "url": "https://tintinaccesorios.netlify.app/",
+          "line": 16
+        },
+        {
+          "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
+          "line": 71
         }
       ]
     },
@@ -15674,16 +15674,16 @@
     },
     {
       "path": "functions/api/cloudinary-delete.js",
-      "bytes": 3011,
-      "sha256": "3f57ccf37209667a22617092b9b742b24fcfd31696676d5520076f3f585ec8aa",
+      "bytes": 3012,
+      "sha256": "6f06c84a98c9eb7eac1f42cda63b37abcef047e5d2ccedc075a15138dbf56209",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 9
         }
@@ -15697,16 +15697,16 @@
     },
     {
       "path": "functions/api/cloudinary-sign-upload.js",
-      "bytes": 1969,
-      "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1",
+      "bytes": 1970,
+      "sha256": "5397ff8066557bf8f839e8a979c699493ae822a9f33e8945006bb16bb0478cdb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 10
         }
@@ -15720,22 +15720,22 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 8609,
-      "sha256": "57b6b12b616b5f12bfd836230ddff535841a5a751b8e793c07b20390d0f248b2",
+      "bytes": 8612,
+      "sha256": "af86a7c4b7bd78fb862621d05ee56e9b6b84c4d0b61c22b4791b569831c5e631",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 6
         },
         {
-          "raw": "../../cloudflare/firebase-admin-lite.js",
-          "target": "cloudflare/firebase-admin-lite.js",
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 15
         }
@@ -15749,22 +15749,22 @@
     },
     {
       "path": "functions/api/email-otp-verify.js",
-      "bytes": 4954,
-      "sha256": "b6d1a83ff6fdd820a7b7ca9b2d023e20e180903c35cd693779be75cdc9712d3b",
+      "bytes": 4957,
+      "sha256": "7d1e493b6aa268d85dd1f5be0b4e85f08c43b81f31cc38c8ef68dba7aeffb9a8",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
         },
         {
-          "raw": "../../cloudflare/firebase-admin-lite.js",
-          "target": "cloudflare/firebase-admin-lite.js",
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 14
         }
@@ -15773,16 +15773,16 @@
     },
     {
       "path": "functions/api/geo-search.js",
-      "bytes": 5110,
-      "sha256": "73f25ae6ccc190d88e0c6371b9d383852fb54730456227e447e66132d4af1991",
+      "bytes": 5111,
+      "sha256": "4cc84ab3a50d7f337d3a4cc4be4968da2612ec5b6e139be5cd25b2b98003e564",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
         }
@@ -15826,16 +15826,16 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 19912,
-      "sha256": "8fbaf312604eadd44df10987f688b93ccedd2154773333dc0d02b39db0f2ad2c",
+      "bytes": 19913,
+      "sha256": "8a471bfe155b79ab1f92b75fccb1aaffcd5d5560391714dbafd62c15d20a0a6d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 6
         }
@@ -15865,16 +15865,16 @@
     },
     {
       "path": "functions/api/sheets-product-sync.js",
-      "bytes": 2556,
-      "sha256": "e4e91427f3219b947c4e15be7acb59512232daa22f7fd0ee327ddb7056adbec0",
+      "bytes": 2557,
+      "sha256": "e8215e58b1afe8cb27dd747f37177a4a8bc5c629dd154d17f7d13beff9bf49d4",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
         }
@@ -15888,16 +15888,16 @@
     },
     {
       "path": "functions/api/test-email.js",
-      "bytes": 5296,
-      "sha256": "4ff860d4a31b78b240bf1fc0cf54d1a1849688e272be7a0b813d5452b7817431",
+      "bytes": 5297,
+      "sha256": "2721a529b61d0c300169a83e0372859561d674133b0c9c939aa270decc94e2de",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 7
         }
@@ -15911,16 +15911,16 @@
     },
     {
       "path": "functions/api/visitor-geo.js",
-      "bytes": 1701,
-      "sha256": "932e502e5ef306355bc295e4adedd323679196e609fbc54419f0e8acdcb7ef2f",
+      "bytes": 1702,
+      "sha256": "2b56d95a6db9f522664036b8cea943b79b53823034551c90e411b96fc9d38e39",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/cloudinary-security.js",
-          "target": "cloudflare/cloudinary-security.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 6
         }
@@ -15928,7 +15928,7 @@
       "endpoints": []
     },
     {
-      "path": "functions/js/secure-checkout-order.js.js",
+      "path": "functions/js/pedido-checkout-seguro.js",
       "bytes": 1865,
       "sha256": "35fd76b3282db70c06d6aea39fe4bbf192fc51165a36b1054093e74933df31e9",
       "syntax": {
@@ -15940,8 +15940,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 438544,
-      "sha256": "2dcaf6871a9c738980d9916056b3d0d705a722d9c18d628de0cdaf206d109edd",
+      "bytes": 438532,
+      "sha256": "d692e2ea7a24a41b6ba3e67b4025d20012655607e0b27538c02f9aaef8ce3032",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18253,8 +18253,8 @@
     },
     {
       "path": "js/core/auth/roles.js",
-      "bytes": 6618,
-      "sha256": "dcf8bb5e4c363923e419b8c85d7d583da085f791aa784291a7dbad62f359c997",
+      "bytes": 6619,
+      "sha256": "c1b893c42be8d0713352cd29cd6e3d96a1236db2d7c2fbf179182ebfd16fdea8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18740,8 +18740,8 @@
     },
     {
       "path": "js/create-order-client.js",
-      "bytes": 1389,
-      "sha256": "4a3364c1f1fb2672d6191eed0f2a7854b12b01c23aeb4b1603bc55a0e3c8bd85",
+      "bytes": 1383,
+      "sha256": "79dce0a530b71a873497dadc826c2285275a5555a0cb12a74d253eeca0348f6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19045,8 +19045,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 27696,
-      "sha256": "d95239e73e00e5e87fcdabb2ac56c5b1fbb54015af2afdc31c7aa79f373e8f3e",
+      "bytes": 27690,
+      "sha256": "c3bdf0152d57fe75f9bc0f9bca84e290102650a1eda0b6d1a7d057bb13e81d65",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20106,8 +20106,8 @@
     },
     {
       "path": "scripts/audit-admin-orders.js",
-      "bytes": 12620,
-      "sha256": "903b2a5931455651365762bbd9d93ff66793f95a3bc49955d6c9a13d088504da",
+      "bytes": 12608,
+      "sha256": "1d32954221453b337635e2471b27397bfb583508eb1c93768864d271181a8acf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20357,8 +20357,8 @@
     },
     {
       "path": "scripts/audit-cart-phase7.js",
-      "bytes": 6131,
-      "sha256": "ee501a33a13f3e2697ad213330d17c1347dfb0d26fe092f9b84936c7ac9b87f7",
+      "bytes": 6119,
+      "sha256": "976c9b3995291c9495c64179d0390db54ce21d525c01aa759d4aed61f6cfcc20",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20569,8 +20569,8 @@
     },
     {
       "path": "scripts/audit-critical-healing.js",
-      "bytes": 7408,
-      "sha256": "1632a60e6441a83b938be4773ab902fab32658595715aa5149001fd1c0e83a06",
+      "bytes": 7396,
+      "sha256": "36e4eca839cfc99d080601fe1058bfd1a6d6760f38fea71e33fe6725f63836c2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20686,8 +20686,8 @@
     },
     {
       "path": "scripts/audit-diagnostics.js",
-      "bytes": 9374,
-      "sha256": "67383a23945db8908e6ccd886b91f5ccb1c65cbb5e2db510d8f6482b0948fa80",
+      "bytes": 9369,
+      "sha256": "55670e96c1dc5665f47c7d6778f8f4b3c84bec9f8eb39bcfd3df9e247ec9b3aa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20721,8 +20721,8 @@
     },
     {
       "path": "scripts/audit-email-phase3.js",
-      "bytes": 5096,
-      "sha256": "b32fbc200f8ae08b6f3c8935fe3f4608a658ad418cf4d5f2fbbc30ff0b2ff95a",
+      "bytes": 5091,
+      "sha256": "262092e6dadc5e5dae42a4a8bb3387210548941fbf0bcea60b16c6ae1cd968fd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21109,8 +21109,8 @@
     },
     {
       "path": "scripts/audit-images-phase5.js",
-      "bytes": 24484,
-      "sha256": "03f01508873923b9361ad45d18aa0ba0ea7d3d29b54d8d01611ddcff31357d39",
+      "bytes": 24485,
+      "sha256": "5966d4edf4ece439e371195ef612c047f648ba97251bb7d9c4b01c80a39e6693",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21216,8 +21216,8 @@
     },
     {
       "path": "scripts/audit-integral-platform.js",
-      "bytes": 7106,
-      "sha256": "80ccbf82d021d03e59fab8ef39b83209f3d25effae5ea75a9938996e80584d1b",
+      "bytes": 7082,
+      "sha256": "d40a12555ef02448c17b620bfe84c9d0c00a88641339a9670aac7e4f5de6efa1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21304,8 +21304,8 @@
     },
     {
       "path": "scripts/audit-level2-commerce.js",
-      "bytes": 10359,
-      "sha256": "bf1f7e98b1a9ccbda9f61c5785b5481ced0b9e28e4eb0d5821f8abd90dd06bc5",
+      "bytes": 10347,
+      "sha256": "20dbebf7dd5437611e59dccbd42e87a64ad839ce2830487b0b6677caa409a7d0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21685,8 +21685,8 @@
     },
     {
       "path": "scripts/audit-phase6-security.js",
-      "bytes": 5237,
-      "sha256": "49177fe3391c52e49aa6558711bc24c3f79fbe508015d1286557755cab04566c",
+      "bytes": 5226,
+      "sha256": "26d097fec3d53429a33b831ca4442dd0abe46618c645fa9cc576f12c23bead2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21734,8 +21734,8 @@
     },
     {
       "path": "scripts/audit-postphase-security.js",
-      "bytes": 2361,
-      "sha256": "4660d0df7c7266adaef4323ce01598c83b52f22dcb56c8f46e472c58ce77a541",
+      "bytes": 2356,
+      "sha256": "12b9ef8dc431a5c68fe9a6a3a3819bb12227ef326939af0c568b1be0b43beb9e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21896,8 +21896,8 @@
     },
     {
       "path": "scripts/audit-secure-orders.js",
-      "bytes": 4979,
-      "sha256": "55a2b34d2f976c6eb74d9d8f9a5a6323509d5a48ba73bbfa4edbb51728f61093",
+      "bytes": 4973,
+      "sha256": "06d0e855090cf259194aa6214a282b20a2347a93ba9cf4b523e823fc01e95e5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22253,6 +22253,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/organizar-nombres-backend.mjs",
+      "bytes": 5466,
+      "sha256": "0a4b5621cf34ac6a1d66616fb44ac22d9808f2e5e0163aa1af55177630fb8ad5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/prepare-hosting.js",
       "bytes": 2281,
       "sha256": "b133ec585dc7d275ae5a89205cdd668a7c07061550020a52969f26fb29a69728",
@@ -22377,8 +22407,8 @@
     },
     {
       "path": "scripts/test-checkout-schema-hotfix.mjs",
-      "bytes": 2075,
-      "sha256": "b827cd1cfcc532ae9fc8e2fca98d6d4ba4fed58a929d6d71270da769f9a524ff",
+      "bytes": 2076,
+      "sha256": "bc3859d1f6fb27bec7886d2c29ad7cfd7d2cb7e8d273306bb87a3c57ff9c2f08",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22391,8 +22421,8 @@
           "line": 1
         },
         {
-          "raw": "../functions/js/secure-checkout-order.js.js",
-          "target": "functions/js/secure-checkout-order.js.js",
+          "raw": "../functions/js/pedido-checkout-seguro.js.js",
+          "target": "functions/js/pedido-checkout-seguro.js.js",
           "dynamic": false,
           "line": 2
         }
@@ -22871,8 +22901,8 @@
     {
       "path": ".github/workflows/audit-images-phase5.yml",
       "extension": ".yml",
-      "bytes": 4305,
-      "sha256": "3f146222a0f267f4a2cac81f6d5ea3aa4332929f800ce165af9be12a711452ab"
+      "bytes": 4307,
+      "sha256": "970a3193a2c992df14443c29e682b6b44467489bb3da830660f6e22c4405823c"
     },
     {
       "path": ".github/workflows/audit-modular-navigation.yml",
@@ -22889,8 +22919,8 @@
     {
       "path": ".github/workflows/audit-security-phase8.yml",
       "extension": ".yml",
-      "bytes": 3593,
-      "sha256": "2507f0b1cb54b1e23bdf0137368f6a13c42d8b50ed2c96bc4debb132e5d530c7"
+      "bytes": 3560,
+      "sha256": "cb5fab412e245ed8c99700f06fd03f8d6f9ab585304064bc1e154530aae92baa"
     },
     {
       "path": ".github/workflows/audit-typography.yml",
@@ -22901,8 +22931,8 @@
     {
       "path": ".github/workflows/checkout-schema-hotfix.yml",
       "extension": ".yml",
-      "bytes": 648,
-      "sha256": "3c5e58be3c5e7b3a0dc994756c97cccc138aa54925a0168029ba0072f9a686a1"
+      "bytes": 646,
+      "sha256": "515f16edcf2b36779d7972aae1eeb82d02e035df6a9b23dea474d553fb132013"
     },
     {
       "path": ".github/workflows/commerce-part2c-audit.yml",
@@ -22959,6 +22989,12 @@
       "sha256": "f9cf746e047b8ef7077e31b307bdd16261607c3f1e621cda6524612896b97ebd"
     },
     {
+      "path": ".github/workflows/organizar-nombres-backend.yml",
+      "extension": ".yml",
+      "bytes": 2528,
+      "sha256": "7c5980aadcb173436d8e2f92358665f525873a2e478f9792423ad5e8a90a4e5b"
+    },
+    {
       "path": ".github/workflows/phase11-seo-production.yml",
       "extension": ".yml",
       "bytes": 1504,
@@ -22997,8 +23033,8 @@
     {
       "path": "AUDITORIA-BAJO.txt",
       "extension": ".txt",
-      "bytes": 6980,
-      "sha256": "a128df0404e6e1bbc890c5695e0adc3dbc731af62abcd61433593f033b06dfce"
+      "bytes": 6982,
+      "sha256": "0b296416de9e990ad627f0f96c51f83984a76f0821f0c0a5ca81722eee51f3ee"
     },
     {
       "path": "AUDITORIA-CRITICO.txt",
@@ -23055,16 +23091,16 @@
       "sha256": "1b889167c29be8b8b7c377d7302db517243d5aa829545032e05fdfd52f7ec332"
     },
     {
-      "path": "apps-script/Phase3Security.gs",
+      "path": "apps-script/CrearPedido.gs",
+      "extension": ".gs",
+      "bytes": 22822,
+      "sha256": "0a9b8f1ebc93a9e256153117f75ba2b1be0d0a89f3baf99ce1ef4d9423368ae9"
+    },
+    {
+      "path": "apps-script/Seguridad.gs",
       "extension": ".gs",
       "bytes": 11081,
       "sha256": "65927513439effb2ff28c9f91628170d3d0a74d4396590172d460cb255768810"
-    },
-    {
-      "path": "apps-script/Phase4CreateOrder.gs",
-      "extension": ".gs",
-      "bytes": 22832,
-      "sha256": "89e564a05a438a824ea84b4add7ed54c72795507699d02aa7421fdc03021661d"
     },
     {
       "path": "assets-tintin/fonts/OFL-1.1.txt",
@@ -23253,16 +23289,16 @@
       "sha256": "ce1e8e479784d327d1236b3b4c6aaba1955404bb9a0da175c89473a8d5d581d2"
     },
     {
-      "path": "cloudflare/cloudinary-security.js",
-      "extension": ".js",
-      "bytes": 5351,
-      "sha256": "fb98ed883318e1d087c987a1006bfb53809a1c2a6cebdb23bc9b7bb4478e16a8"
-    },
-    {
-      "path": "cloudflare/firebase-admin-lite.js",
+      "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
       "bytes": 13117,
       "sha256": "48c5aedb59e9213a2f49f49223aa3818c08d5ed23c299f6b646eee35d177a225"
+    },
+    {
+      "path": "cloudflare/seguridad-cloudinary.js",
+      "extension": ".js",
+      "bytes": 5351,
+      "sha256": "fb98ed883318e1d087c987a1006bfb53809a1c2a6cebdb23bc9b7bb4478e16a8"
     },
     {
       "path": "collections.html",
@@ -23603,8 +23639,8 @@
     {
       "path": "docs/CONVENCIONES-DE-NOMBRES.md",
       "extension": ".md",
-      "bytes": 4290,
-      "sha256": "ae46118c766b8bcfa1eafe987c7ff2833dd007b4364ee1625291da103c7ac408"
+      "bytes": 4788,
+      "sha256": "a2d657d46043e5b6d5fa924962e7c6c803d05865bb3a4c8813ee45a33092f136"
     },
     {
       "path": "docs/CSS_LAYERS.md",
@@ -23669,8 +23705,8 @@
     {
       "path": "docs/PHASE9_FINAL_RELEASE.md",
       "extension": ".md",
-      "bytes": 4317,
-      "sha256": "11955b7ef5e5ea35d2c900532aaf43208f65921ee4223e31ac7aff3a14312c4e"
+      "bytes": 4312,
+      "sha256": "6c48aaed132d513fe2154b90132c36e866810e12864a5ac277b0e111923aaa93"
     },
     {
       "path": "docs/QUALITY_CONTRACTS.md",
@@ -23789,8 +23825,8 @@
     {
       "path": "functions/EMAIL_PHASE3_DEPLOY.md",
       "extension": ".md",
-      "bytes": 2756,
-      "sha256": "bf52d2391e388b0de5fb3fa4cec19e0572fe911e9d58e32177f4dd3844030a9c"
+      "bytes": 2746,
+      "sha256": "35b0cd566947ea8f93fdc6e2ef531569f1c37294295b957deec688fb0353b0c4"
     },
     {
       "path": "functions/EMAIL_SETUP.md",
@@ -23801,8 +23837,8 @@
     {
       "path": "functions/FIREBASE_AUTH_EMAILS.md",
       "extension": ".md",
-      "bytes": 5633,
-      "sha256": "197a95b70148d3f63dc3fcc47e3ddb8638321f2bb99d540250d4ce522bc180b0"
+      "bytes": 5635,
+      "sha256": "c9575d17ac038e8771c1ae2a72efecf89d2818c88563c72601128c71132c3ab7"
     },
     {
       "path": "functions/ORDER_VALIDATION_SETUP.md",
@@ -23825,32 +23861,32 @@
     {
       "path": "functions/api/cloudinary-delete.js",
       "extension": ".js",
-      "bytes": 3011,
-      "sha256": "3f57ccf37209667a22617092b9b742b24fcfd31696676d5520076f3f585ec8aa"
+      "bytes": 3012,
+      "sha256": "6f06c84a98c9eb7eac1f42cda63b37abcef047e5d2ccedc075a15138dbf56209"
     },
     {
       "path": "functions/api/cloudinary-sign-upload.js",
       "extension": ".js",
-      "bytes": 1969,
-      "sha256": "4d9f9165fad4dc56672f0fb7a148c3574e2dbe48218510bb9f65e7ca977aedd1"
+      "bytes": 1970,
+      "sha256": "5397ff8066557bf8f839e8a979c699493ae822a9f33e8945006bb16bb0478cdb"
     },
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 8609,
-      "sha256": "57b6b12b616b5f12bfd836230ddff535841a5a751b8e793c07b20390d0f248b2"
+      "bytes": 8612,
+      "sha256": "af86a7c4b7bd78fb862621d05ee56e9b6b84c4d0b61c22b4791b569831c5e631"
     },
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 4954,
-      "sha256": "b6d1a83ff6fdd820a7b7ca9b2d023e20e180903c35cd693779be75cdc9712d3b"
+      "bytes": 4957,
+      "sha256": "7d1e493b6aa268d85dd1f5be0b4e85f08c43b81f31cc38c8ef68dba7aeffb9a8"
     },
     {
       "path": "functions/api/geo-search.js",
       "extension": ".js",
-      "bytes": 5110,
-      "sha256": "73f25ae6ccc190d88e0c6371b9d383852fb54730456227e447e66132d4af1991"
+      "bytes": 5111,
+      "sha256": "4cc84ab3a50d7f337d3a4cc4be4968da2612ec5b6e139be5cd25b2b98003e564"
     },
     {
       "path": "functions/api/location-search.js",
@@ -23861,29 +23897,29 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 19912,
-      "sha256": "8fbaf312604eadd44df10987f688b93ccedd2154773333dc0d02b39db0f2ad2c"
+      "bytes": 19913,
+      "sha256": "8a471bfe155b79ab1f92b75fccb1aaffcd5d5560391714dbafd62c15d20a0a6d"
     },
     {
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
-      "bytes": 2556,
-      "sha256": "e4e91427f3219b947c4e15be7acb59512232daa22f7fd0ee327ddb7056adbec0"
+      "bytes": 2557,
+      "sha256": "e8215e58b1afe8cb27dd747f37177a4a8bc5c629dd154d17f7d13beff9bf49d4"
     },
     {
       "path": "functions/api/test-email.js",
       "extension": ".js",
-      "bytes": 5296,
-      "sha256": "4ff860d4a31b78b240bf1fc0cf54d1a1849688e272be7a0b813d5452b7817431"
+      "bytes": 5297,
+      "sha256": "2721a529b61d0c300169a83e0372859561d674133b0c9c939aa270decc94e2de"
     },
     {
       "path": "functions/api/visitor-geo.js",
       "extension": ".js",
-      "bytes": 1701,
-      "sha256": "932e502e5ef306355bc295e4adedd323679196e609fbc54419f0e8acdcb7ef2f"
+      "bytes": 1702,
+      "sha256": "2b56d95a6db9f522664036b8cea943b79b53823034551c90e411b96fc9d38e39"
     },
     {
-      "path": "functions/js/secure-checkout-order.js.js",
+      "path": "functions/js/pedido-checkout-seguro.js",
       "extension": ".js",
       "bytes": 1865,
       "sha256": "35fd76b3282db70c06d6aea39fe4bbf192fc51165a36b1054093e74933df31e9"
@@ -23897,8 +23933,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 438544,
-      "sha256": "2dcaf6871a9c738980d9916056b3d0d705a722d9c18d628de0cdaf206d109edd"
+      "bytes": 438532,
+      "sha256": "d692e2ea7a24a41b6ba3e67b4025d20012655607e0b27538c02f9aaef8ce3032"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -24425,8 +24461,8 @@
     {
       "path": "js/core/auth/roles.js",
       "extension": ".js",
-      "bytes": 6618,
-      "sha256": "dcf8bb5e4c363923e419b8c85d7d583da085f791aa784291a7dbad62f359c997"
+      "bytes": 6619,
+      "sha256": "c1b893c42be8d0713352cd29cd6e3d96a1236db2d7c2fbf179182ebfd16fdea8"
     },
     {
       "path": "js/core/auth/utilidades-seguridad.js",
@@ -24527,8 +24563,8 @@
     {
       "path": "js/create-order-client.js",
       "extension": ".js",
-      "bytes": 1389,
-      "sha256": "4a3364c1f1fb2672d6191eed0f2a7854b12b01c23aeb4b1603bc55a0e3c8bd85"
+      "bytes": 1383,
+      "sha256": "79dce0a530b71a873497dadc826c2285275a5555a0cb12a74d253eeca0348f6d"
     },
     {
       "path": "js/diagnostic-shims/adaptador-almacenamiento.js",
@@ -24611,8 +24647,8 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 27696,
-      "sha256": "d95239e73e00e5e87fcdabb2ac56c5b1fbb54015af2afdc31c7aa79f373e8f3e"
+      "bytes": 27690,
+      "sha256": "c3bdf0152d57fe75f9bc0f9bca84e290102650a1eda0b6d1a7d057bb13e81d65"
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
@@ -24923,8 +24959,8 @@
     {
       "path": "maintenance/11-6-correos-mensajes.txt",
       "extension": ".txt",
-      "bytes": 13310,
-      "sha256": "f4bc9621ad5eefbae48dbd1efb8d2e95d401431b9590b6a057620ffecd93ff8c"
+      "bytes": 13305,
+      "sha256": "0a60031a88b2533676d9098d46a5ddb83b5c2fc7ef88218669c3f2f4f5d3a30b"
     },
     {
       "path": "maintenance/11-7-estadisticas-auditoria-diagnostico.txt",
@@ -25127,8 +25163,8 @@
     {
       "path": "scripts/audit-admin-orders.js",
       "extension": ".js",
-      "bytes": 12620,
-      "sha256": "903b2a5931455651365762bbd9d93ff66793f95a3bc49955d6c9a13d088504da"
+      "bytes": 12608,
+      "sha256": "1d32954221453b337635e2471b27397bfb583508eb1c93768864d271181a8acf"
     },
     {
       "path": "scripts/audit-admin-products-media.js",
@@ -25187,8 +25223,8 @@
     {
       "path": "scripts/audit-cart-phase7.js",
       "extension": ".js",
-      "bytes": 6131,
-      "sha256": "ee501a33a13f3e2697ad213330d17c1347dfb0d26fe092f9b84936c7ac9b87f7"
+      "bytes": 6119,
+      "sha256": "976c9b3995291c9495c64179d0390db54ce21d525c01aa759d4aed61f6cfcc20"
     },
     {
       "path": "scripts/audit-catalog-page.js",
@@ -25247,8 +25283,8 @@
     {
       "path": "scripts/audit-critical-healing.js",
       "extension": ".js",
-      "bytes": 7408,
-      "sha256": "1632a60e6441a83b938be4773ab902fab32658595715aa5149001fd1c0e83a06"
+      "bytes": 7396,
+      "sha256": "36e4eca839cfc99d080601fe1058bfd1a6d6760f38fea71e33fe6725f63836c2"
     },
     {
       "path": "scripts/audit-css-cascade.mjs",
@@ -25277,14 +25313,14 @@
     {
       "path": "scripts/audit-diagnostics.js",
       "extension": ".js",
-      "bytes": 9374,
-      "sha256": "67383a23945db8908e6ccd886b91f5ccb1c65cbb5e2db510d8f6482b0948fa80"
+      "bytes": 9369,
+      "sha256": "55670e96c1dc5665f47c7d6778f8f4b3c84bec9f8eb39bcfd3df9e247ec9b3aa"
     },
     {
       "path": "scripts/audit-email-phase3.js",
       "extension": ".js",
-      "bytes": 5096,
-      "sha256": "b32fbc200f8ae08b6f3c8935fe3f4608a658ad418cf4d5f2fbbc30ff0b2ff95a"
+      "bytes": 5091,
+      "sha256": "262092e6dadc5e5dae42a4a8bb3387210548941fbf0bcea60b16c6ae1cd968fd"
     },
     {
       "path": "scripts/audit-faq-interaction-part2e.mjs",
@@ -25367,8 +25403,8 @@
     {
       "path": "scripts/audit-images-phase5.js",
       "extension": ".js",
-      "bytes": 24484,
-      "sha256": "03f01508873923b9361ad45d18aa0ba0ea7d3d29b54d8d01611ddcff31357d39"
+      "bytes": 24485,
+      "sha256": "5966d4edf4ece439e371195ef612c047f648ba97251bb7d9c4b01c80a39e6693"
     },
     {
       "path": "scripts/audit-inicio-navegacion-publica.js",
@@ -25385,8 +25421,8 @@
     {
       "path": "scripts/audit-integral-platform.js",
       "extension": ".js",
-      "bytes": 7106,
-      "sha256": "80ccbf82d021d03e59fab8ef39b83209f3d25effae5ea75a9938996e80584d1b"
+      "bytes": 7082,
+      "sha256": "d40a12555ef02448c17b620bfe84c9d0c00a88641339a9670aac7e4f5de6efa1"
     },
     {
       "path": "scripts/audit-interaction-latency.mjs",
@@ -25409,8 +25445,8 @@
     {
       "path": "scripts/audit-level2-commerce.js",
       "extension": ".js",
-      "bytes": 10359,
-      "sha256": "bf1f7e98b1a9ccbda9f61c5785b5481ced0b9e28e4eb0d5821f8abd90dd06bc5"
+      "bytes": 10347,
+      "sha256": "20dbebf7dd5437611e59dccbd42e87a64ad839ce2830487b0b6677caa409a7d0"
     },
     {
       "path": "scripts/audit-level3-quality.js",
@@ -25517,8 +25553,8 @@
     {
       "path": "scripts/audit-phase6-security.js",
       "extension": ".js",
-      "bytes": 5237,
-      "sha256": "49177fe3391c52e49aa6558711bc24c3f79fbe508015d1286557755cab04566c"
+      "bytes": 5226,
+      "sha256": "26d097fec3d53429a33b831ca4442dd0abe46618c645fa9cc576f12c23bead2e"
     },
     {
       "path": "scripts/audit-phase7-catalog.js",
@@ -25535,8 +25571,8 @@
     {
       "path": "scripts/audit-postphase-security.js",
       "extension": ".js",
-      "bytes": 2361,
-      "sha256": "4660d0df7c7266adaef4323ce01598c83b52f22dcb56c8f46e472c58ce77a541"
+      "bytes": 2356,
+      "sha256": "12b9ef8dc431a5c68fe9a6a3a3819bb12227ef326939af0c568b1be0b43beb9e"
     },
     {
       "path": "scripts/audit-product-page.js",
@@ -25577,8 +25613,8 @@
     {
       "path": "scripts/audit-secure-orders.js",
       "extension": ".js",
-      "bytes": 4979,
-      "sha256": "55a2b34d2f976c6eb74d9d8f9a5a6323509d5a48ba73bbfa4edbb51728f61093"
+      "bytes": 4973,
+      "sha256": "06d0e855090cf259194aa6214a282b20a2347a93ba9cf4b523e823fc01e95e5d"
     },
     {
       "path": "scripts/audit-security-phase8.js",
@@ -25677,6 +25713,12 @@
       "sha256": "5077367798557a3af5fadc628312d56f598ea1d8ffcbf9b842cc974094fcdc87"
     },
     {
+      "path": "scripts/organizar-nombres-backend.mjs",
+      "extension": ".mjs",
+      "bytes": 5466,
+      "sha256": "0a4b5621cf34ac6a1d66616fb44ac22d9808f2e5e0163aa1af55177630fb8ad5"
+    },
+    {
       "path": "scripts/prepare-hosting.js",
       "extension": ".js",
       "bytes": 2281,
@@ -25709,8 +25751,8 @@
     {
       "path": "scripts/test-checkout-schema-hotfix.mjs",
       "extension": ".mjs",
-      "bytes": 2075,
-      "sha256": "b827cd1cfcc532ae9fc8e2fca98d6d4ba4fed58a929d6d71270da769f9a524ff"
+      "bytes": 2076,
+      "sha256": "bc3859d1f6fb27bec7886d2c29ad7cfd7d2cb7e8d273306bb87a3c57ff9c2f08"
     },
     {
       "path": "scripts/test-firestore-critical.mjs",

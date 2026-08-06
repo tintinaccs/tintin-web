@@ -2,7 +2,7 @@
    TINTIN — FASE 4: CREACIÓN DE PEDIDOS SIN LÍMITE DE PRODUCTOS
 
    Agregá este archivo al MISMO proyecto de Google Apps Script que ya
-   tiene Código.gs y Phase3Security.gs. Reutiliza sus constantes y
+   tiene Código.gs y Seguridad.gs. Reutiliza sus constantes y
    funciones (FIRESTORE_PROJECT_ID_, phase3DecodeFields_,
    verifyFirebaseIdToken_, SUPER_ADMIN_EMAIL, phase3EmailMatches_) — NO
    las vuelvas a declarar acá: todos los archivos .gs de un mismo
@@ -17,7 +17,7 @@
    creación del pedido a un proceso privilegiado — la cuenta dueña de
    este Apps Script, que ya tiene acceso IAM al proyecto de Firebase —
    que NO pasa por esas reglas. Es la misma técnica que ya usa
-   phase3UpdateOrderNotificationStatus_ en Phase3Security.gs (
+   phase3UpdateOrderNotificationStatus_ en Seguridad.gs (
    ScriptApp.getOAuthToken() en vez de un idToken de clienta). Acá no hay
    límite de productos ni de expresiones: es JavaScript común iterando
    un arreglo, con una transacción real de Firestore (beginTransaction/

@@ -9,7 +9,7 @@ import {
 
 // Única fuente de verdad para el cliente (importada por todo lo demás en
 // js/ que necesita identificar al Super Admin). Cloudflare Pages Functions
-// tiene su propia copia en cloudflare/cloudinary-security.js
+// tiene su propia copia en cloudflare/seguridad-cloudinary.js
 // (SUPERADMIN_EMAIL) porque corre en un runtime distinto y no puede
 // importar de acá; firestore.rules repite el literal seis veces porque el
 // lenguaje de reglas no admite imports ni constantes compartidas entre

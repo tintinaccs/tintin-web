@@ -2,7 +2,7 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
   firestoreAdminMerge,
@@ -11,7 +11,7 @@ import {
   createFirebaseCustomToken,
   findOrCreateUserByEmail,
   fsInteger
-} from '../../cloudflare/firebase-admin-lite.js';
+} from '../../cloudflare/firebase-admin-ligero.js';
 
 const MAX_ATTEMPTS = 5;
 

@@ -15,7 +15,7 @@ const collections = read('js/pages/collections/estado-colecciones.js');
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const model = read('js/core/store/modelo-inventario.mjs');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
-const phase4 = read('apps-script/Phase4CreateOrder.gs');
+const phase4 = read('apps-script/CrearPedido.gs');
 
 const checks = [];
 function check(name, condition, detail) {
@@ -47,7 +47,7 @@ check(
   // servidor (Apps Script) lee stock/precio real y escribe el pedido ya
   // "reservado" en UNA sola transacción de Firestore (beginTransaction/
   // batchGet/commit), sin las reglas de por medio — ver
-  // apps-script/Phase4CreateOrder.gs.
+  // apps-script/CrearPedido.gs.
   'El servidor crea el pedido y descuenta stock sin perder atomicidad',
   checkout.includes('async function createOrderOnServer(draft)') &&
     phase4.includes('phase4BeginTransaction_()') &&

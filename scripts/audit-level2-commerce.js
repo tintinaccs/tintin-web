@@ -23,7 +23,7 @@ function check(label, condition, detail = '') {
 
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
-const phase4 = read('apps-script/Phase4CreateOrder.gs');
+const phase4 = read('apps-script/CrearPedido.gs');
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const admin = read('js/admin/admin-app.js');
@@ -69,7 +69,7 @@ check(
   // A partir de la Fase 4, el pedido se crea server-side (Apps Script,
   // ScriptApp.getOAuthToken() en vez de reglas de Firestore) para no
   // depender del límite de 1000 expresiones por escritura — ver
-  // apps-script/Phase4CreateOrder.gs. El mismo requestId ya no reanuda un
+  // apps-script/CrearPedido.gs. El mismo requestId ya no reanuda un
   // pedido "pendiente" intermedio (ya no existe ese estado): el servidor
   // detecta que el pedido ya existe y lo devuelve tal cual, sin duplicarlo.
   'Reintentar con el mismo requestId no duplica el pedido (idempotencia server-side)',

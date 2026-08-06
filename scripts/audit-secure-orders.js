@@ -15,7 +15,7 @@ const frontend = read('js/orders/pedido-checkout-seguro.js');
 const serverClient = read('js/create-order-client.js');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const rules = read('firestore.rules');
-const phase4 = read('apps-script/Phase4CreateOrder.gs');
+const phase4 = read('apps-script/CrearPedido.gs');
 
 check(
   'No depende de Cloud Functions',

@@ -7,8 +7,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 
 const rules = read('firestore.rules');
 const headers = read('_headers');
-const server = read('apps-script/Phase4CreateOrder.gs');
-const phase3 = read('apps-script/Phase3Security.gs');
+const server = read('apps-script/CrearPedido.gs');
+const phase3 = read('apps-script/Seguridad.gs');
 const orderClient = read('js/create-order-client.js');
 const pkg = read('package.json');
 

@@ -36,7 +36,7 @@ El sitio tenía DOS canales de correo conviviendo:
 
   B) Apps Script / webhook viejo (LEGACY)
      js/notificaciones-correo.js → EMAIL_WEBHOOK_URL (script.google.com)
-     js/configuracion-correo.js, apps-script/Phase3Security.gs
+     js/configuracion-correo.js, apps-script/Seguridad.gs
 
 El propio código ya documentaba que Resend es el canal real:
 - admin-app.js:11-14 → "el reenvío usa el mismo canal automático del checkout

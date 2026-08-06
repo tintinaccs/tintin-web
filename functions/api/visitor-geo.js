@@ -3,7 +3,7 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 
 function cleanText(value, maxLength = 80) {
   return String(value || '')
