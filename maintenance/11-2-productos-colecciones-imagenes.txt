@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.3
 PRODUCTOS, COLECCIONES E IMÁGENES
 Fecha: 19/07/2026
 Rama: maintenance/admin-products-media
-Auditoría nueva: scripts/audit-admin-products-media.js  (npm run audit:products-media)
+Auditoría nueva: scripts/auditar-admin-productos-multimedia.js  (npm run audit:products-media)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -116,7 +116,7 @@ Otros puntos evaluados y descartados como cambio (para no fabricar arreglos):
   un bug visible. Se documenta como observación, sin tocar código.
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-products-media.js
+AUDITORÍA NUEVA — scripts/auditar-admin-productos-multimedia.js
 ═══════════════════════════════════════════════════════════════════════
 34 comprobaciones estáticas agrupadas en: CRUD de productos, CRUD de
 colecciones (incluida la auditoría F1), tienda/carrito, importación segura,
@@ -124,7 +124,7 @@ imágenes/Cloudinary, proveedores/secretos y campos legacy.
 
 Wiring:
   - package.json: "audit:products-media" + incluida en "audit:final".
-  - .github/workflows/tintin-audit.yml: paso "Audit products, collections and
+  - .github/workflows/auditar-tintin.yml: paso "Audit products, collections and
     images" (corre en cada push/PR a main).
 
 Prueba de que REALMENTE falla cuando se rompe el contrato: se revirtió el
@@ -142,9 +142,9 @@ PRUEBAS
 
 ARCHIVOS TOCADOS
 - js/admin-app.js                          (F1: auditoría de colección + label)
-- scripts/audit-admin-products-media.js    (NUEVO)
+- scripts/auditar-admin-productos-multimedia.js    (NUEVO)
 - package.json                             (script + audit:final)
-- .github/workflows/tintin-audit.yml       (paso CI)
+- .github/workflows/auditar-tintin.yml       (paso CI)
 - maintenance/11-2-productos-colecciones-imagenes.txt (este registro)
 - diagnostic-manifest.json                 (regenerado)
 

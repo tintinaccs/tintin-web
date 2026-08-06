@@ -4,7 +4,7 @@ La URL pública única es `https://tintinaccesorios.pages.dev`. Las páginas ind
 
 Los productos generan canonical con `id`, JSON-LD `Product`, moneda PYG y disponibilidad en tiempo real.
 
-El workflow `phase11-seo-production.yml` ejecuta contratos SEO en cada PR relevante y monitorea la producción cada hora.
+El workflow `seo-produccion-fase-11.yml` ejecuta contratos SEO en cada PR relevante y monitorea la producción cada hora.
 
 Comandos:
 

@@ -1,0 +1,37 @@
+name: Auditoría de colecciones Fase 4
+
+on:
+  pull_request:
+    paths:
+      - 'js/components/navigation/compatibilidad/colecciones.js'
+      - 'js/pages/collections/presentacion-colecciones.js'
+      - 'js/admin/collections/gestion-colecciones-admin.js'
+      - 'js/pages/collections/estado-colecciones.js'
+      - 'js/quality/calidad-interfaz.js'
+      - 'scripts/auditar-colecciones-fase-4.js'
+      - 'package.json'
+      - '.github/workflows/auditar-colecciones-fase-4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis
+        run: |
+          node --check js/components/navigation/compatibilidad/colecciones.js
+          node --check js/pages/collections/presentacion-colecciones.js
+          node --check js/admin/collections/gestion-colecciones-admin.js
+          node --check js/quality/calidad-interfaz.js
+          node --check scripts/auditar-colecciones-fase-4.js
+      - name: Revisar integración
+        run: npm run audit:collections

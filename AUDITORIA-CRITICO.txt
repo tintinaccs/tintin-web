@@ -67,7 +67,7 @@ o vía token de servicio).
 sparkStockUpdateValid() en firestore.rules para leer getAfter(orderPath)
 en una sola dirección (el pedido ya NO lee getAfter(producto), así que no
 hay ciclo) y exigir stock_nuevo == stock_anterior - qty_de_ESE_producto.
-Verificado: scripts/audit-secure-orders.js actualizado y en verde, junto
+Verificado: scripts/auditar-seguro-pedidos.js actualizado y en verde, junto
 con el resto de `npm run audit:final` (sin regresiones). Pendiente:
 desplegar con `npm run deploy:rules` para que tome efecto en producción.
 

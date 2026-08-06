@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.8
 ESTADÍSTICAS, AUDITORÍA Y DIAGNÓSTICO
 Fecha: 19/07/2026
 Rama: maintenance/admin-analytics-audit
-Auditoría nueva: scripts/audit-admin-analytics-audit.js  (npm run audit:analytics-audit)
+Auditoría nueva: scripts/auditar-admin-analitica-auditar.js  (npm run audit:analytics-audit)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -12,10 +12,10 @@ Visitantes, Ubicación aproximada, Auditoría, Logs y Diagnóstico del sitio.
 
 Antes de tocar nada se revisó main, los PR mergeados (hasta #177), maintenance/
 y las auditorías existentes:
-- audit-admin-foundation.js  → base del panel (auth, nav, limpieza de listeners).
-- audit-security-phase8.js / audit-postphase-security.js → identidad Super Admin,
+- auditar-admin-fundamentos.js  → base del panel (auth, nav, limpieza de listeners).
+- auditar-seguridad-fase-8.js / auditar-posterior-fases-seguridad.js → identidad Super Admin,
   logs, reglas por rol.
-- audit-diagnostics.js / audit-diagnostic-findings.js → diagnóstico del sitio.
+- auditar-diagnostico.js / auditar-diagnostico-hallazgos.js → diagnóstico del sitio.
 No se rehízo nada de eso.
 
 ═══════════════════════════════════════════════════════════════════════
@@ -124,7 +124,7 @@ AUDITORÍA / LOGS
 DIAGNÓSTICO
 - initSiteDiagnostics se inicia solo para el Super Admin real
   (role === 'superadmin' && email === SUPER_ADMIN). Cobertura de falsos positivos
-  y diagnóstico real ya blindada por audit-diagnostics.js / audit-diagnostic-findings.js.
+  y diagnóstico real ya blindada por auditar-diagnostico.js / auditar-diagnostico-hallazgos.js.
 
 LÍMITES / PAGINACIÓN
 - Historial de tráfico con getDocsPaginated (maxDocs 5000). Recalculación global
@@ -137,7 +137,7 @@ Paraguay) coincide con America/Asuncion; la sección Estadísticas ya normaliza
 todo a Paraguay. No se cambia para no introducir riesgo sin beneficio real.
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-analytics-audit.js (31 checks)
+AUDITORÍA NUEVA — scripts/auditar-admin-analitica-auditar.js (31 checks)
 ═══════════════════════════════════════════════════════════════════════
 1. No mostrar "0" ante fallo/carga: banderas por fuente, indicadores gateados,
    encendido/apagado con re-render, y PRUEBA NEGATIVA de que el patrón viejo
@@ -163,6 +163,6 @@ CI / VERIFICACIÓN
 - npm run audit:final → exit 0 (todas las auditorías estáticas verdes, CRITICAL: 0)
 - diagnostic-manifest.json regenerado (deriva por corrimiento de líneas + índice
   de la auditoría nueva; audit:diagnostics verde).
-- Wiring CI: paso nuevo en .github/workflows/tintin-audit.yml + audit:final.
+- Wiring CI: paso nuevo en .github/workflows/auditar-tintin.yml + audit:final.
 
 Merge únicamente con CI verde.

@@ -19,14 +19,14 @@ CORRECCIÓN
 - Se mantienen los estados real, no encontrado, error, offline y recuperación.
 
 REGRESIÓN AUTOMATIZADA
-scripts/audit-product-page.js ahora falla si:
+scripts/auditar-producto-pagina.js ahora falla si:
 - se pierde el respaldo DOM para reconocer product.html;
 - vuelve una escritura directa de aria-busy sobre #product-grid;
 - el observer común vuelve a observar aria-busy;
 - se eliminan las escrituras idempotentes o la cola de inspección.
 
 REVISIÓN DE TODAS LAS PÁGINAS
-scripts/audit-page-loading.js inventaría los 18 HTML raíz y comprueba:
+scripts/auditar-pagina-carga.js inventaría los 18 HTML raíz y comprueba:
 - estructura HTML completa y viewport;
 - cuerpo no vacío o redirección declarada;
 - IDs estáticos no duplicados;
@@ -36,7 +36,7 @@ scripts/audit-page-loading.js inventaría los 18 HTML raíz y comprueba:
 - imports y recursos relativos del runtime público;
 - cadena public-shell → products-store / collections-store → product-maintenance.
 
-scripts/smoke-all-pages.mjs abre en Chromium las 18 rutas, incluyendo Producto con
+scripts/smoke-todas-paginas.mjs abre en Chromium las 18 rutas, incluyendo Producto con
 un ID de prueba inexistente para confirmar que termina en un estado válido sin
 quedar cargando. Comprueba loader cerrado, body visible, recursos locales sin 4xx,
 ausencia de errores JavaScript no controlados, redirección legacy y capacidad de

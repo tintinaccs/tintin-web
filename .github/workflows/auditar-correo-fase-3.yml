@@ -1,0 +1,38 @@
+name: Auditoría de correos Fase 3
+
+on:
+  pull_request:
+    paths:
+      - 'js/email/notificaciones-correo.js'
+      - 'js/pages/checkout/checkout-puente-correo.js'
+      - 'js/admin/settings/sincronizacion-correo-admin.js'
+      - 'js/admin/settings/control-tienda-admin.js'
+      - 'apps-script/**'
+      - 'functions/EMAIL_PHASE3_DEPLOY.md'
+      - 'scripts/auditar-correo-fase-3.js'
+      - 'package.json'
+      - '.github/workflows/auditar-correo-fase-3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Revisar sintaxis
+        run: |
+          node --check js/email/notificaciones-correo.js
+          node --check js/pages/checkout/checkout-puente-correo.js
+          node --check js/admin/settings/sincronizacion-correo-admin.js
+          node --check js/admin/settings/control-tienda-admin.js
+          node --check scripts/auditar-correo-fase-3.js
+      - name: Revisar integración
+        run: npm run audit:emails

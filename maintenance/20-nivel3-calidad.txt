@@ -30,7 +30,7 @@ VIEWPORTS CANÓNICOS
 - 320×568
 
 AUDITORÍA NUEVA DE NAVEGADOR
-- scripts/audit-canonical-viewports.mjs lee todas las páginas desde
+- scripts/auditar-canonicos-viewports.mjs lee todas las páginas desde
   diagnostic-manifest.json y las abre en Chromium en los siete tamaños exactos.
 - Detecta página visualmente vacía, overflow horizontal, navegación equivocada
   por breakpoint, elementos fijos fuera de pantalla y diálogos visibles cortados.
@@ -42,7 +42,7 @@ Hallazgo L3-01:
   de renderizar, aunque un segundo intento pasara 204/204 combinaciones.
 
 Corrección:
-- scripts/run-responsive-audit-with-retry.mjs ejecuta la auditoría global.
+- scripts/ejecutar-auditoria-responsive-con-reintento.mjs ejecuta la auditoría global.
 - Si falla, espera un segundo y repite exactamente una vez.
 - Si vuelve a fallar, conserva el error y bloquea la integración.
 - No existe bucle infinito ni se oculta una regresión reproducible.
@@ -50,7 +50,7 @@ Corrección:
   este comportamiento sin duplicar lógica.
 
 AUDITORÍA ESTÁTICA
-- scripts/audit-level3-quality.js verifica:
+- scripts/auditar-nivel-3-calidad.js verifica:
   · siete viewports y seis roles;
   · todas las páginas incluidas en navegador;
   · geometría, superficies compartidas y límites;
@@ -67,7 +67,7 @@ AUDITORÍA ESTÁTICA
 CI
 - npm run audit:level3 forma parte de npm run audit:final.
 - npm run audit:canonical-viewports requiere Playwright y se ejecuta en
-  .github/workflows/level3-quality-audit.yml.
+  .github/workflows/auditar-calidad-nivel-3.yml.
 - El workflow sube logs, reportes y capturas como artefactos.
 
 CRITERIO DE CIERRE

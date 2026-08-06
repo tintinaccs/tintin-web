@@ -1,0 +1,111 @@
+name: Auditoría de seguridad Fase 6
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'firestore.rules'
+      - '_headers'
+      - 'apps-script/Seguridad.gs'
+      - 'apps-script/CrearPedido.gs'
+      - 'js/create-order-client.js'
+      - 'scripts/auditar-admin-usuarios-roles.js'
+      - 'scripts/auditar-seguro-pedidos.js'
+      - 'scripts/auditar-control-tienda.js'
+      - 'scripts/auditar-fase-6-seguridad.js'
+      - 'scripts/probar-firestore-critico.mjs'
+      - 'scripts/apply-phase7-phase11-*.mjs'
+      - 'package.json'
+      - '.github/workflows/auditar-seguridad-fase-8.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'firestore.rules'
+      - '_headers'
+      - 'apps-script/Seguridad.gs'
+      - 'apps-script/CrearPedido.gs'
+      - 'js/create-order-client.js'
+      - 'scripts/auditar-admin-usuarios-roles.js'
+      - 'scripts/auditar-seguro-pedidos.js'
+      - 'scripts/auditar-control-tienda.js'
+      - 'scripts/auditar-fase-6-seguridad.js'
+      - 'scripts/probar-firestore-critico.mjs'
+      - 'package.json'
+      - '.github/workflows/auditar-seguridad-fase-8.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    name: Auditar reglas, endpoint y encabezados
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar rama evaluada
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Aplicar consolidación temporal de Fase 11
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for applicator in scripts/apply-phase7-phase11-*.mjs; do
+            node "$applicator"
+          done
+          git fetch origin main
+          if git cat-file -e origin/main:.github/workflows/auditar-seguridad-fase-8.yml 2>/dev/null; then
+            git checkout origin/main -- .github/workflows/auditar-seguridad-fase-8.yml
+          fi
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Revisar sintaxis de seguridad
+        run: |
+          node --check scripts/auditar-fase-6-seguridad.js
+          node --check scripts/probar-firestore-critico.mjs
+          node --check js/create-order-client.js
+          cp apps-script/Seguridad.gs /tmp/Phase3Security.js
+          cp apps-script/CrearPedido.gs /tmp/Phase4CreateOrder.js
+          node --check /tmp/Phase3Security.js
+          node --check /tmp/Phase4CreateOrder.js
+
+      - name: Auditar invariantes de la Fase 6
+        run: npm run audit:phase6
+
+      - name: Ejecutar matriz adversarial de Firestore Rules
+        run: npm run test:rules-phase6
+
+      - name: Ejecutar auditoría integral
+        run: npm run audit:final
+
+      - name: Regenerar manifiesto de diagnóstico
+        run: npm run build:pages
+
+      - name: Consolidar Fase 11 y manifiesto en PR interna
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet; then
+            echo 'La rama ya está consolidada.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "seo: consolidar publicación y monitoreo de la Fase 11"
+          git push origin HEAD:${GITHUB_HEAD_REF}
+
+      - name: Verificar manifiesto reproducible
+        run: git diff --exit-code -- diagnostic-manifest.json

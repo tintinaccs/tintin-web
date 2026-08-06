@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.6
 CONTENIDO Y APARIENCIA (panel + sitio público)
 Fecha: 19/07/2026
 Rama: maintenance/admin-content-appearance
-Auditoría nueva: scripts/audit-admin-content-appearance.js  (npm run audit:content-appearance)
+Auditoría nueva: scripts/auditar-admin-contenido-apariencia.js  (npm run audit:content-appearance)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -10,10 +10,10 @@ ALCANCE
 Mantenimiento exclusivo de los módulos administrativos que controlan contenido
 y apariencia del sitio público. Antes de tocar nada se revisó main, los PR
 mergeados, maintenance/ y las auditorías existentes:
-- audit-content-phase6.js  → ya blinda el editor de Contenido (esquema fijo,
+- auditar-contenido-fase-6.js  → ya blinda el editor de Contenido (esquema fijo,
   Firestore guarda valores no HTML, render público con nodos de texto, enlaces
   saneados con sanitizeContentHref, campos ausentes conservan el HTML publicado).
-- audit-color-scheme.js     → ya blinda Apariencia (catálogo de tokens completo,
+- auditar-color-scheme.js     → ya blinda Apariencia (catálogo de tokens completo,
   sin duplicados, cada token con respaldo CSS y "cada token controla un consumidor
   real", filas con nombre/variable/muestra/valor/reset, preview inmediato sin
   mutar borrador, selector HEX/RGB/HSL con validación).
@@ -100,7 +100,7 @@ F1 [MEDIO — seguridad] — El apply público de colores no validaba el valor.
   "expression(...)", "<script>".
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-content-appearance.js
+AUDITORÍA NUEVA — scripts/auditar-admin-contenido-apariencia.js
 ═══════════════════════════════════════════════════════════════════════
 21 comprobaciones estáticas: esquema de contenido fijo, aplicación por selector
 real y render seguro, enforcement de color seguro en el apply público (F1),
@@ -109,7 +109,7 @@ y reglas de Firestore.
 
 Wiring:
   - package.json: "audit:content-appearance" + incluida en "audit:final".
-  - .github/workflows/tintin-audit.yml: paso "Audit content and appearance".
+  - .github/workflows/auditar-tintin.yml: paso "Audit content and appearance".
 
 Prueba de que REALMENTE falla al romper el contrato: se quitó la validación de
 color del apply (F1) → ERROR + exit 1; se hizo que el contenido público usara
@@ -130,9 +130,9 @@ PRUEBAS
 ARCHIVOS TOCADOS
 - js/esquema-color.js                        (F1: isSafeColorValue en apply)
 - js/esquema-color-instantaneo.js                (F1: isSafeColorValue en primera pintura)
-- scripts/audit-admin-content-appearance.js (NUEVO)
+- scripts/auditar-admin-contenido-apariencia.js (NUEVO)
 - package.json                              (script + audit:final)
-- .github/workflows/tintin-audit.yml        (paso CI)
+- .github/workflows/auditar-tintin.yml        (paso CI)
 - maintenance/11-5-contenido-apariencia.txt (este registro)
 - diagnostic-manifest.json                  (regenerado)
 
