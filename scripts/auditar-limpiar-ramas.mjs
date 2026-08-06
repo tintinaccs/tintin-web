@@ -18,6 +18,14 @@ const reviewedObsoleteBranches = new Map([
     sha: 'da6d89074337708de370695a898f2a2f51e8a9dc',
     reason: 'Trabajo antiguo superado por la reorganización y auditoría integral actual'
   }],
+  ['chore/cierre-maestro-ramas', {
+    sha: 'e675da2422c94eb3382ebad206a6fd536c4e0173',
+    reason: 'Rama reemplazada por el Pull Request #343; su diferencia residual era un comentario sin efecto funcional'
+  }],
+  ['chore/cierre-maestro-ramas-v2', {
+    sha: 'e675da2422c94eb3382ebad206a6fd536c4e0173',
+    reason: 'Duplicado exacto de la rama reemplazada por el Pull Request #343'
+  }],
   [branchName('clau', 'de/user-mgmt-bulk-organize-sf4tqu'), {
     sha: 'b3b854c65798c296eaf5c457fde54da8c3f662fa',
     reason: 'Duplicado de una implementación monolítica antigua de usuarios y colecciones ya reemplazada'
