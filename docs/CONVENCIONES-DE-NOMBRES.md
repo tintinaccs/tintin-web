@@ -34,3 +34,10 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Los módulos funcionales de `js/core/auth/**` usan nombres claros en español y `kebab-case`.
 - `roles.js` se conserva porque el término ya es claro y válido en español.
 - No se modifican nombres de roles persistidos, permisos, eventos, claves de sesión, rutas ni contratos de autenticación.
+
+## Núcleo Firebase y Firestore
+
+- Los auxiliares internos de `js/core/firebase/**` usan nombres claros en español y `kebab-case`.
+- `firebase.js` se conserva como entrada técnica canónica.
+- Se mantienen los nombres de Firebase, Firestore y REST por corresponder a tecnologías y protocolos.
+- No se modifican colecciones, campos, endpoints, orígenes configurados ni contratos persistidos.

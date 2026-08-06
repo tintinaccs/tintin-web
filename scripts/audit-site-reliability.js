@@ -17,7 +17,7 @@ const solidSurfaces = read('css/theme/solid-ui-surfaces.css');
 const parity = read('css/theme/tintin-parity-safe.css');
 const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
 const activity = read('js/analytics/site-activity.js');
-const functionOrigin = read('js/core/firebase/function-origin.js');
+const functionOrigin = read('js/core/firebase/origen-funciones.js');
 const privacyConsent = read('js/analytics/privacy-consent.js');
 const analytics = read('js/analytics/analytics.js');
 const geoFunction = read('functions/api/visitor-geo.js');
@@ -117,7 +117,7 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
-  activity.includes("import { apiUrl } from '../core/firebase/function-origin.js") &&
+  activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
   functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&

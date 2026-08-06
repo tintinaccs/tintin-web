@@ -9,7 +9,7 @@
      completos de Google Maps sin reemplazar la validación original del checkout.
    ============================================================= */
 
-import { apiUrl } from '../../core/firebase/function-origin.js?v=tintin-20260723-geo-proxy-1';
+import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260723-geo-proxy-1';
 
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheckoutReliabilityBooted) {

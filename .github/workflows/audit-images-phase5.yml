@@ -24,7 +24,7 @@ on:
       - 'functions/api/visitor-geo.js'
       - 'functions/api/geo-search.js'
       - 'js/pages/checkout/checkout-confiabilidad.js'
-      - 'js/core/firebase/function-origin.js'
+      - 'js/core/firebase/origen-funciones.js'
       - '_routes.json'
       - 'assets-tintin/images/README-IMAGENES.md'
       - 'CLOUDINARY_SETUP.md'
@@ -71,7 +71,7 @@ jobs:
           node --check functions/api/visitor-geo.js
           node --check functions/api/geo-search.js
           node --check js/pages/checkout/checkout-confiabilidad.js
-          node --check js/core/firebase/function-origin.js
+          node --check js/core/firebase/origen-funciones.js
           node --check scripts/audit-images-phase5.js
           node --check scripts/audit-site-reliability.js
       - name: Compilar Pages Functions

@@ -62,7 +62,7 @@ robots y las 22 URLs de OG apuntan al host equivocado (problema de SEO).
 En cualquiera de los dos casos hay una incoherencia de despliegue que hay
 que resolver.
 
-[RESUELTO 2026-07-22] Se creó js/function-origin.js con la resolución de
+[RESUELTO 2026-07-22] Se creó js/origen-funciones.js con la resolución de
 origen (apiUrl(name)), y los cuatro llamadores (resend-order-notify.js,
 sincronizacion-correo-admin.js, biblioteca-multimedia.js, site-activity.js) ahora
 importan de ahí en vez de reinventar la constante cada uno. Verificado con

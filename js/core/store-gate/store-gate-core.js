@@ -11,7 +11,7 @@ import {
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { getPublicDocumentRest } from '../firebase/firestore-rest-fallback.js?v=tintin-20260726-browser-fallback-1';
+import { getPublicDocumentRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const DEGRADED_NOTICE_ID = 'tt-store-gate-network-notice';

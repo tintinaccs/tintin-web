@@ -25,7 +25,7 @@ const uiQuality = read('js/quality/ui-quality.js');
 const pageAudit = read('js/quality/page-audit-fix.js');
 const rules = read('firestore.rules');
 const checkout = read('checkout.html');
-const restFallback = read('js/core/firebase/firestore-rest-fallback.js');
+const restFallback = read('js/core/firebase/respaldo-rest-firestore.js');
 const productsStore = read('js/core/store/products-store.js');
 const collectionsStore = read('js/pages/collections/estado-colecciones.js');
 

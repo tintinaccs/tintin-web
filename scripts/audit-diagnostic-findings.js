@@ -174,7 +174,7 @@ check(
     'js/admin/content/control-bienvenida-admin.js',
     'js/core/store/order-stats.js'
   ].every(file => read(file).includes('getDocsPaginated')) &&
-    exists('js/core/firebase/firestore-pagination.js')
+    exists('js/core/firebase/paginacion-firestore.js')
 );
 
 if (failures.length) {

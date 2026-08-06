@@ -49,7 +49,7 @@ const publicPages = [
 
 const productsStore = read('js/core/store/products-store.js');
 const collectionsStore = read('js/pages/collections/estado-colecciones.js');
-const readCache = read('js/core/firebase/firestore-read-cache.js');
+const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
 
 check(
   'Tipografía sin FOIT',

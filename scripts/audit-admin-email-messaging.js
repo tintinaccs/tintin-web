@@ -13,7 +13,7 @@ const bridge         = read('js/pages/checkout/checkout-puente-correo.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
 const adminSync      = read('js/admin/settings/sincronizacion-correo-admin.js');
-const functionOrigin = read('js/core/firebase/function-origin.js');
+const functionOrigin = read('js/core/firebase/origen-funciones.js');
 const adminApp       = read('js/admin/admin-app.js');
 const whatsapp       = read('js/components/contact/whatsapp.js');
 const settingsStore  = read('js/core/store/public-settings-store.js');
@@ -34,7 +34,7 @@ check(
 check(
   'El canal Resend llama al endpoint de Cloudflare con Bearer token',
   // El origen (relativo en Cloudflare, pages.dev en GitHub Pages/Netlify) lo
-  // resuelve js/core/firebase/function-origin.js — ver "El fallback de host..." abajo.
+  // resuelve js/core/firebase/origen-funciones.js — ver "El fallback de host..." abajo.
   resendNotify.includes("const ORDER_EMAIL_API = apiUrl('order-email')") &&
     resendNotify.includes('Authorization: `Bearer ${idToken}`') &&
     resendNotify.includes("action: isResend ? 'resendOrderEmail' : 'sendOrderEmail'"),
@@ -47,11 +47,11 @@ check(
   // biblioteca-multimedia.js y site-activity.js — eso daba 404 en GitHub Pages y el
   // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
   // comparten la misma resolución de origen.
-  resendNotify.includes("import { apiUrl } from '../core/firebase/function-origin.js") &&
-    adminSync.includes("import { apiUrl } from '../../core/firebase/function-origin.js") &&
+  resendNotify.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
+    adminSync.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&
     functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
     functionOrigin.includes("hostname.endsWith('github.io')"),
-  'Toda ruta /api/* del cliente debe resolverse con js/core/firebase/function-origin.js, no con una constante relativa suelta.'
+  'Toda ruta /api/* del cliente debe resolverse con js/core/firebase/origen-funciones.js, no con una constante relativa suelta.'
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
