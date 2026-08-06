@@ -17,7 +17,9 @@ const branches = [
   { name: 'feature/open', protected: false, commit: { sha: 'opensha' } },
   { name: 'feature/no-unique', protected: false, commit: { sha: 'nusha' } },
   { name: 'feature/merged', protected: false, commit: { sha: 'mergedsha' } },
-  { name: 'feature/unique', protected: false, commit: { sha: 'uniqsha' } }
+  { name: 'feature/unique', protected: false, commit: { sha: 'uniqsha' } },
+  { name: 'temp/noop-test', protected: false, commit: { sha: 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8' } },
+  { name: 'tmp/admin-cls-rebase-20260806', protected: false, commit: { sha: '1328a51a670138bb8a437bd19e62d31e7410dd9a' } }
 ];
 
 const openPulls = [
@@ -85,7 +87,7 @@ globalThis.fetch = async (url, options = {}) => {
 };
 `;
 
-async function runCase({ mode, ref, confirmation = '' }) {
+async function runCase({ mode, ref, confirmation = '', branchSet = branches }) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'tintin-branch-audit-'));
   const mockFile = path.join(directory, 'mock-fetch.mjs');
   const jsonFile = path.join(directory, 'branch-audit.json');
@@ -105,7 +107,7 @@ async function runCase({ mode, ref, confirmation = '' }) {
       BRANCH_CLEANUP_CONFIRMATION: confirmation,
       BRANCH_AUDIT_JSON: jsonFile,
       BRANCH_AUDIT_MARKDOWN: markdownFile,
-      MOCK_BRANCHES: JSON.stringify(branches),
+      MOCK_BRANCHES: JSON.stringify(branchSet),
       MOCK_OPEN_PULLS: JSON.stringify(openPulls),
       MOCK_CLOSED_PULLS: JSON.stringify(closedPulls),
       MOCK_COMPARISONS: JSON.stringify(comparisons),
@@ -128,7 +130,7 @@ test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   assert.equal(result.status, 0, result.stderr);
   assert.equal(report.summary.defaultBranch, 'main');
   assert.equal(report.summary.keep, 4);
-  assert.equal(report.summary.safeDelete, 2);
+  assert.equal(report.summary.safeDelete, 4);
   assert.equal(report.summary.review, 1);
   assert.deepEqual(deleted, []);
 
@@ -141,6 +143,26 @@ test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   assert.match(kept.get('release/stable'), /protegida/);
   assert.match(kept.get('backup/weekly'), /respaldo/);
   assert.match(kept.get('feature/open'), /Pull Request abierto/);
+
+  const reviewed = new Map(
+    report.records
+      .filter(record => record.classification === 'safe-delete')
+      .map(record => [record.branch, record.reason])
+  );
+  assert.match(reviewed.get('temp/noop-test'), /#314/);
+  assert.match(reviewed.get('tmp/admin-cls-rebase-20260806'), /#319/);
+});
+
+test('una rama revisada que cambia vuelve a revisión manual', async () => {
+  const branchSet = branches.map(branch => branch.name === 'temp/noop-test'
+    ? { ...branch, commit: { sha: 'sha-nuevo-no-revisado' } }
+    : branch);
+  const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge', branchSet });
+  assert.equal(result.status, 0, result.stderr);
+  const changed = report.records.find(record => record.branch === 'temp/noop-test');
+  assert.equal(changed.classification, 'review');
+  assert.match(changed.reason, /cambió desde la revisión/);
+  assert.deepEqual(deleted, []);
 });
 
 test('delete se rechaza fuera de la rama principal', async () => {
@@ -161,10 +183,12 @@ test('delete elimina solo ramas verificadas y no toca protegidas, respaldos ni P
     confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS'
   });
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(report.summary.deleted, 2);
-  assert.equal(deleted.length, 2);
+  assert.equal(report.summary.deleted, 4);
+  assert.equal(deleted.length, 4);
   assert.ok(deleted.some(url => url.endsWith('/heads/feature/no-unique')));
   assert.ok(deleted.some(url => url.endsWith('/heads/feature/merged')));
+  assert.ok(deleted.some(url => url.endsWith('/heads/temp/noop-test')));
+  assert.ok(deleted.some(url => url.endsWith('/heads/tmp/admin-cls-rebase-20260806')));
   assert.ok(deleted.every(url => !url.includes('release/stable')));
   assert.ok(deleted.every(url => !url.includes('backup/weekly')));
   assert.ok(deleted.every(url => !url.includes('feature/open')));
