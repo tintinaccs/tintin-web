@@ -5,7 +5,7 @@
 
    Bloquea las invariantes de seguridad del sistema de cuentas para que no se
    rompan en silencio. La Fase 8 (audit-security-phase8.js) ya cubre el módulo
-   admin-users-phase8.js y el render seguro; esta auditoría se centra en:
+   gestion-usuarios-admin.js y el render seguro; esta auditoría se centra en:
 
    - Identidad y techo de roles (roles.js): Super Admin por email de Firebase
      Auth, defaults seguros, sin asignar 'superadmin' desde el panel.
@@ -37,7 +37,7 @@ function check(name, condition, problem) {
 const roles      = read('js/core/auth/roles.js');
 const rolePerms  = read('js/core/auth/role-permissions.js');
 const adminApp   = read('js/admin/admin-app.js');
-const phase8     = read('js/admin/users/admin-users-phase8.js');
+const phase8     = read('js/admin/users/gestion-usuarios-admin.js');
 const rules      = read('firestore.rules');
 
 // ===========================================================================
@@ -157,7 +157,7 @@ check(
 );
 
 // ===========================================================================
-// 4. MÓDULO FASE 8 (admin-users-phase8.js) — protecciones paralelas
+// 4. MÓDULO FASE 8 (gestion-usuarios-admin.js) — protecciones paralelas
 // ===========================================================================
 check(
   'El módulo Fase 8 protege al Super Admin en bloquear/eliminar/masivas',

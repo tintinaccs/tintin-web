@@ -13,8 +13,8 @@ function check(name, condition, problem) {
 
 const notify = read('js/email/email-notify.js');
 const bridge = read('js/pages/checkout/checkout-puente-correo.js');
-const adminSync = read('js/admin/settings/admin-email-gate-sync.js');
-const adminStore = read('js/admin/settings/admin-store-control.js');
+const adminSync = read('js/admin/settings/sincronizacion-correo-admin.js');
+const adminStore = read('js/admin/settings/control-tienda-admin.js');
 const checkout = read('checkout.html');
 const appsScript = read('apps-script/Phase3Security.gs');
 const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');
@@ -75,7 +75,7 @@ check(
 
 check(
   'Super Admin inicia la sincronización de correos',
-  adminStore.includes("import('./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1')"),
+  adminStore.includes("import('./sincronizacion-correo-admin.js?v=tintin-20260716-cloudinary-fix-1')"),
   'El documento mínimo debe crearse al entrar al panel autorizado.'
 );
 

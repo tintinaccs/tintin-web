@@ -36,8 +36,8 @@ function check(name, condition, problem) {
 
 const adminHtml     = read('admin.html');
 const adminApp      = read('js/admin/admin-app.js');
-const welcomeCtrl   = read('js/admin/content/admin-welcome-control.js');
-const unsavedGuard  = read('js/admin/admin-unsaved-guard.js');
+const welcomeCtrl   = read('js/admin/content/control-bienvenida-admin.js');
+const unsavedGuard  = read('js/admin/proteccion-cambios-pendientes-admin.js');
 const adminCss      = read('css/admin/admin.css');
 
 // ---------------------------------------------------------------------------

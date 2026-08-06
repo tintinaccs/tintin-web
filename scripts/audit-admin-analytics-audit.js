@@ -195,7 +195,7 @@ check(
 );
 check(
   'Las páginas de administración no se rastrean como visitas del sitio',
-  activity.includes("from '../admin/admin-path.js") &&
+  activity.includes("from '../admin/ruta-admin.js") &&
     activity.includes('const trackablePage = !isAdminPage()'),
   'El panel no debe contarse como tráfico público.'
 );

@@ -46,8 +46,8 @@ const orderStats = read('js/core/store/order-stats.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/orders/secure-checkout-order.js');
 const phase4Order = read('apps-script/Phase4CreateOrder.gs');
-const inventoryIntegrity = read('js/admin/products/admin-inventory-integrity.js');
-const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
+const inventoryIntegrity = read('js/admin/products/integridad-inventario-admin.js');
+const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)
@@ -176,7 +176,7 @@ check(
 check(
   'El panel fuerza una versión nueva de los módulos corregidos',
   /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
-    /admin-inventory-integrity\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
+    /integridad-inventario-admin\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
     /TT_CACHE_VERSION = 'tintin-20260801-unified-surfaces-16'/.test(read('js/cargador-pagina.js')),
   'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
 );

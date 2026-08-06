@@ -12,9 +12,9 @@ const activity = read('js/analytics/site-activity.js');
 const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/products-store.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
-const inventory = read('js/admin/products/admin-inventory-integrity.js');
+const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const model = read('js/core/store/inventory-model.mjs');
-const deleteFix = read('js/admin/orders/admin-order-delete-fix.js');
+const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const phase4 = read('apps-script/Phase4CreateOrder.gs');
 
 const checks = [];

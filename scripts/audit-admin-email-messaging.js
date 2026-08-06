@@ -12,7 +12,7 @@ const resendNotify   = read('js/email/resend-order-notify.js');
 const bridge         = read('js/pages/checkout/checkout-puente-correo.js');
 const orderEmailFn   = read('functions/api/order-email.js');
 const testEmailFn    = read('functions/api/test-email.js');
-const adminSync      = read('js/admin/settings/admin-email-gate-sync.js');
+const adminSync      = read('js/admin/settings/sincronizacion-correo-admin.js');
 const functionOrigin = read('js/core/firebase/function-origin.js');
 const adminApp       = read('js/admin/admin-app.js');
 const whatsapp       = read('js/components/contact/whatsapp.js');
@@ -42,7 +42,7 @@ check(
 );
 check(
   'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
-  // Antes resend-order-notify.js y admin-email-gate-sync.js usaban rutas
+  // Antes resend-order-notify.js y sincronizacion-correo-admin.js usaban rutas
   // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
   // biblioteca-multimedia.js y site-activity.js — eso daba 404 en GitHub Pages y el
   // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores

@@ -26,14 +26,14 @@ escritorio, tabs móviles y paneles section-*):
   contenido, importar, mensajes, auditoria, diagnostico, correos,
   configuracion, permisos, apariencia
 
-+ 1 sección DINÁMICA agregada por js/admin-welcome-control.js SOLO para el
++ 1 sección DINÁMICA agregada por js/control-bienvenida-admin.js SOLO para el
   Super Admin real: "welcome" (nav-welcome / mtab-welcome / section-welcome).
 
 Enlaces (no secciones): Imágenes (admin-images.html), Ver tienda (index.html),
 Cerrar sesión.
 
 Modales / overlays:
-  - #unsaved-modal        (cambios sin guardar; lo gestiona admin-unsaved-guard.js)
+  - #unsaved-modal        (cambios sin guardar; lo gestiona proteccion-cambios-pendientes-admin.js)
   - #order-edit-overlay   (editar pedido)
   - #tpl-edit-overlay     (editar plantilla de correo)
   - #tpl-preview-overlay  (vista previa de correo)
@@ -44,7 +44,7 @@ En ≤900px la sidebar se vuelve compacta (icon-rail 84px); en ≤540px se manti
 el rail (78px) y la barra inferior .adm-mobile-tabs queda oculta. El
 #adm-hamburger y #adm-overlay existen en el markup pero están display:none en
 todos los breakpoints (modelo sin drawer) — se conservan porque
-admin-welcome-control.js los referencia de forma defensiva (null-safe) y
+control-bienvenida-admin.js los referencia de forma defensiva (null-safe) y
 quitarlos no aporta valor y sí riesgo. No son controles alcanzables ni
 enfocables (display:none ⇒ fuera del orden de tabulación).
 
@@ -75,7 +75,7 @@ HALLAZGOS CORREGIDOS
 F1 [ALTO] — Estado contradictorio al salir de la sección dinámica "welcome".
   switchSection() deactivaba usando las NodeList estáticas navItems/sections
   capturadas al cargar el módulo. Esas listas NO contienen la sección de
-  bienvenida (la agrega admin-welcome-control.js después, al resolver el auth
+  bienvenida (la agrega control-bienvenida-admin.js después, al resolver el auth
   del Super Admin). Resultado: al pasar de "Mensaje de bienvenida" a otra
   sección, section-welcome quedaba visible DEBAJO de la nueva y su botón seguía
   resaltado (dos secciones activas a la vez).
@@ -104,7 +104,7 @@ F4 [MEDIO, accesibilidad/UX] — Modales operativos sin base de accesibilidad.
       cierra el superior con Escape, bloquea el scroll del fondo, mueve el foco
       adentro al abrir y lo devuelve al cerrar, y atrapa el Tab en ciclo. Cede
       el control al #unsaved-modal cuando este está abierto (ese ya trae su
-      propio manejo de foco/Escape en admin-unsaved-guard.js). No pisa el
+      propio manejo de foco/Escape en proteccion-cambios-pendientes-admin.js). No pisa el
       scroll-lock manual de order-edit (ambos coinciden).
 
 F5 [MEJORA] — Deep-link solo para Contenido.
@@ -124,7 +124,7 @@ REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
 - Sincronización de la sección activa entre sidebar y tabs móviles: comparten
   el mismo data-section, y setupPermissions() oculta/ muestra ambas superficies
   a la vez con un solo querySelectorAll([data-section]).
-- Modal de cambios sin guardar (admin-unsaved-guard.js): role=dialog, Escape,
+- Modal de cambios sin guardar (proteccion-cambios-pendientes-admin.js): role=dialog, Escape,
   restauración de foco, semántica de pestañas (role=tablist/tab/tabpanel,
   flechas), beforeunload, intercepción de enlaces. Robusto — no se tocó.
 - Limpieza de recursos: order-edit y tpl-edit registran/DES-registran su scope
@@ -157,7 +157,7 @@ OK. Registrado.
 ═══════════════════════════════════════════════════════════════════════
 PRUEBAS
 ═══════════════════════════════════════════════════════════════════════
-- node --check de admin-app.js y admin-welcome-control.js: OK.
+- node --check de admin-app.js y control-bienvenida-admin.js: OK.
 - npm run audit:final (19 auditorías, incluida la nueva): exit 0.
 - audit:tintin: CRITICAL 0.
 - Smoke test en Chromium (Playwright) cargando admin.html sin sesión:
@@ -177,7 +177,7 @@ ARCHIVOS TOCADOS
                                       en nav, aria-current inicial en Dashboard)
 - js/admin-app.js                    (F1 live-query, F2 label, F3 aria-current,
                                       F4 helper de overlays, F5 deep-link)
-- js/admin-welcome-control.js        (aria-current en openSection)
+- js/control-bienvenida-admin.js        (aria-current en openSection)
 - scripts/audit-admin-foundation.js  (NUEVO)
 - package.json                       (script + audit:final)
 - .github/workflows/tintin-audit.yml (paso CI)

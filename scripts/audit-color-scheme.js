@@ -55,7 +55,7 @@ const adminApp = read('js/admin/admin-app.js');
 const picker = read('js/components/color/selector-color.js');
 const instantRuntime = read('js/components/color/esquema-color-instantaneo.js');
 const globalRuntime = read('js/components/color/esquema-color.js');
-const adminRuntime = read('js/admin/settings/admin-color-scheme.js');
+const adminRuntime = read('js/admin/settings/esquema-color-admin.js');
 
 check('El catálogo global contiene todos los tokens esperados', globalTokens.length >= 150, `${globalTokens.length} encontrados`);
 check('El catálogo administrativo contiene todos los tokens esperados', adminTokens.length >= 36, `${adminTokens.length} encontrados`);
@@ -152,7 +152,7 @@ check('Todas las páginas públicas estabilizan el fondo antes del loader y del 
 
 check('Las páginas administrativas cargan su esquema independiente', ['admin.html', 'admin-images.html'].every(file => {
   const html = read(file);
-  return html.includes('css/admin/admin-color-tokens.css') && html.includes('js/admin/settings/admin-color-scheme.js');
+  return html.includes('css/admin/admin-color-tokens.css') && html.includes('js/admin/settings/esquema-color-admin.js');
 }));
 
 if (failures) {

@@ -409,6 +409,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./admin-email-gate-sync.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

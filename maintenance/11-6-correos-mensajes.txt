@@ -30,7 +30,7 @@ El sitio tenía DOS canales de correo conviviendo:
      js/resend-order-notify.js → POST /api/order-email
      functions/api/order-email.js  (nuevo pedido + reenvío)
      functions/api/test-email.js   (correo de prueba)
-     js/admin-email-gate-sync.js   (capa admin activa: remitente
+     js/sincronizacion-correo-admin.js   (capa admin activa: remitente
        pedidos@tintinaccs.com, prueba por Resend, promos apagadas)
      La clave RESEND_API_KEY solo vive en env del servidor.
 
@@ -41,7 +41,7 @@ El sitio tenía DOS canales de correo conviviendo:
 El propio código ya documentaba que Resend es el canal real:
 - admin-app.js:11-14 → "el reenvío usa el mismo canal automático del checkout
   (Resend), no el webhook viejo de Apps Script de email-notify.js".
-- admin-email-gate-sync.js → "Los correos de pedidos y las pruebas ya usan
+- sincronizacion-correo-admin.js → "Los correos de pedidos y las pruebas ya usan
   Resend con pedidos@tintinaccs.com"; "Promociones seguirá desactivado hasta su
   migración independiente".
 
@@ -117,12 +117,12 @@ ENVÍO / SEGURIDAD DEL SERVIDOR (functions/api/order-email.js)
 
 REMITENTE / REPLY-TO / CONFIGURACIÓN
 - Remitente fijo "Tintin Pedidos <pedidos@tintinaccs.com>", reply-to
-  tintinaccs@gmail.com (test-email.js). admin-email-gate-sync.js fija
+  tintinaccs@gmail.com (test-email.js). sincronizacion-correo-admin.js fija
   senderEmail, emailProvider='resend', replyTo y promoEnabled=false en
   emailSettings/main.
 
 CORREO DE PRUEBA (Resend)
-- El botón #btn-test-email lo intercepta admin-email-gate-sync.js en fase de
+- El botón #btn-test-email lo intercepta sincronizacion-correo-admin.js en fase de
   captura con stopImmediatePropagation → se envía por /api/test-email (Resend);
   el handler viejo de Apps Script (admin-app.js:3239) NO llega a ejecutarse.
 - Cooldown anti-doble-clic de 120s (sessionStorage tt_resend_test_last), valida
@@ -135,7 +135,7 @@ REENVÍO MANUAL (admin)
   viejo. El servidor lo restringe a Super Admin.
 
 PROMOCIONES
-- No migradas a Resend: admin-email-gate-sync.js desactiva el toggle
+- No migradas a Resend: sincronizacion-correo-admin.js desactiva el toggle
   (promo-enabled-toggle, cec-promo-enabled) y los botones de promo
   (promo-open-confirm-btn, promo-preview-btn, etc.), y muestra el aviso de
   bloqueo. Así el canal viejo de Gmail no puede lanzar campañas. Las llamadas

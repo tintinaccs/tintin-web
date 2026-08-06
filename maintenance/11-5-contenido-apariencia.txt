@@ -25,12 +25,12 @@ INVENTARIO REAL
 CONTENIDO
 - Esquema ............ js/content-schema.js (CONTENT_PAGE_IDS: 8 páginas fijas,
                        campos con selector + tope de longitud)
-- Editor (panel) ..... js/admin-content-phase6.js (+ sección Contenido en admin-app.js,
+- Editor (panel) ..... js/gestion-contenido-admin.js (+ sección Contenido en admin-app.js,
                        contUploadImage por ImgBB con clave del usuario — ver 11.3)
 - Aplicación pública . js/site-content.js (onSnapshot → selector real, nodos de
                        texto, sanitizeContentHref)
 - Bienvenida ......... js/configuracion-bienvenida.js, tutorial-bienvenida.js,
-                       admin-welcome-control.js
+                       control-bienvenida-admin.js
 APARIENCIA
 - Catálogo de tokens . js/esquema-color-catalogo.js (GLOBAL_TOKENS, ADMIN_TOKENS,
                        DEVICE_BREAKPOINTS)
@@ -38,7 +38,7 @@ APARIENCIA
                        utilidades-contraste-color.js
 - Aplicación pública . js/esquema-color.js (onSnapshot colorSchemes + settings/appearance)
                        + js/esquema-color-instantaneo.js (primera pintura desde caché)
-- Panel admin ........ js/admin-color-scheme.js (tokens administrativos)
+- Panel admin ........ js/esquema-color-admin.js (tokens administrativos)
 
 Un dato importante: NO existe "agregar/eliminar página". El editor de contenido
 edita VALORES sobre 8 páginas fijas por selector en código — nunca crea/borra

@@ -14,7 +14,7 @@ function check(label, condition) {
   }
 }
 
-const runtime = read('js/admin/diagnostics/admin-site-diagnostics.js');
+const runtime = read('js/admin/diagnostics/diagnostico-sitio-admin.js');
 const core = read('js/diagnostics/diagnostic-core.js');
 const admin = `${read('admin.html')}\n${read('js/admin/admin-app.js')}`;
 const css = read('css/admin/admin.css');
