@@ -13,16 +13,29 @@ const branch = (name, sha, protectedBranch = false) => ({ name, protected: prote
 const branches = [
   branch('main', 'mainsha', true), branch('release/stable', 'relsha', true), branch('backup/weekly', 'backsha'),
   branch('feature/open', 'opensha'), branch('feature/no-unique', 'nusha'), branch('feature/merged', 'mergedsha'),
-  branch('feature/unique', 'uniqsha'), branch('temp/noop-test', 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8'),
+  branch('feature/merged-develop', 'developsha'), branch('feature/unique', 'uniqsha'),
+  branch('temp/noop-test', 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8'),
   branch('tmp/admin-cls-rebase-20260806', '1328a51a670138bb8a437bd19e62d31e7410dd9a')
 ];
-const deletableBranches = branches.filter(item => item.name !== 'feature/unique');
+const deletableBranches = branches.filter(item => !['feature/unique', 'feature/merged-develop'].includes(item.name));
 
 const openPulls = [{ head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'feature/open', sha: 'opensha' } }];
-const closedPulls = [{ merged_at: '2026-08-06T00:00:00Z', head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'feature/merged', sha: 'mergedsha' } }];
+const closedPulls = [
+  {
+    merged_at: '2026-08-06T00:00:00Z',
+    base: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'main' },
+    head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'feature/merged', sha: 'mergedsha' }
+  },
+  {
+    merged_at: '2026-08-06T00:00:00Z',
+    base: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'develop' },
+    head: { repo: { full_name: 'tintinaccs/tintin-web' }, ref: 'feature/merged-develop', sha: 'developsha' }
+  }
+];
 const comparisons = {
   'main...feature/no-unique': { ahead_by: 0, behind_by: 2 },
   'main...feature/merged': { ahead_by: 1, behind_by: 0 },
+  'main...feature/merged-develop': { ahead_by: 1, behind_by: 0 },
   'main...feature/unique': { ahead_by: 3, behind_by: 0 }
 };
 const mockFetchSource = `
@@ -71,7 +84,12 @@ test('el inventario contiene 15 registros y solo el duplicado operativo esperado
 });
 test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge' }); assert.equal(result.status, 0, result.stderr);
-  assert.equal(report.summary.keep, 4); assert.equal(report.summary.safeDelete, 4); assert.equal(report.summary.review, 1); assert.deepEqual(deleted, []);
+  assert.equal(report.summary.keep, 4); assert.equal(report.summary.safeDelete, 4); assert.equal(report.summary.review, 2); assert.deepEqual(deleted, []);
+});
+test('un PR fusionado hacia otra base no autoriza el borrado', async () => {
+  const { result, report } = await runCase({ mode: 'audit', ref: '343/merge' }); assert.equal(result.status, 0, result.stderr);
+  const record = report.records.find(item => item.branch === 'feature/merged-develop');
+  assert.equal(record.classification, 'review'); assert.match(record.reason, /no presentes en main/);
 });
 test('una rama revisada que cambia vuelve a revisión manual', async () => {
   const branchSet = branches.map(item => item.name === 'temp/noop-test' ? branch(item.name, 'sha-nuevo-no-revisado') : item);
@@ -84,22 +102,24 @@ test('delete se rechaza fuera de la rama principal', async () => {
 });
 test('delete se bloquea por completo mientras exista una rama en revisión', async () => {
   const { result, report, deleted } = await runCase({ mode: 'delete', ref: 'main', confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS' });
-  assert.notEqual(result.status, 0); assert.equal(report.summary.review, 1); assert.deepEqual(deleted, []);
+  assert.notEqual(result.status, 0); assert.equal(report.summary.review, 2); assert.deepEqual(deleted, []);
 });
-
 test('audit puede exigir cero revisiones y conserva el informe al fallar', async () => {
   const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge', requireZeroReview: true });
-  assert.notEqual(result.status, 0); assert.equal(report.summary.review, 1); assert.deepEqual(deleted, []);
+  assert.notEqual(result.status, 0); assert.equal(report.summary.review, 2); assert.deepEqual(deleted, []);
 });
-
 test('delete elimina solo ramas verificadas y no toca ramas sensibles', async () => {
   const { result, report, deleted } = await runCase({ mode: 'delete', ref: 'main', confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS', branchSet: deletableBranches });
   assert.equal(result.status, 0, result.stderr); assert.equal(report.summary.deleted, 4); assert.equal(deleted.length, 4);
 });
-test('delete revalida SHA y PR abierto inmediatamente antes de borrar', async () => {
+test('una carrera detectada en prevalidación bloquea todo el lote', async () => {
   const liveBranchSet = deletableBranches.map(item => item.name === 'temp/noop-test' ? branch(item.name, 'sha-que-aparecio-despues-del-informe') : item);
-  const { result, report, deleted } = await runCase({ mode: 'delete', ref: 'main', confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS', branchSet: deletableBranches, liveBranchSet, liveOpenPullBranches: ['feature/no-unique'] });
-  assert.equal(result.status, 0, result.stderr); assert.equal(report.summary.deleted, 2); assert.equal(deleted.length, 2);
-  const opened = report.records.find(r => r.branch === 'feature/no-unique'); assert.equal(opened.classification, 'keep');
+  const { result, report, deleted } = await runCase({ mode: 'delete', ref: 'main', confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS', branchSet: deletableBranches, liveBranchSet });
+  assert.notEqual(result.status, 0); assert.equal(report.summary.deleted, 0); assert.equal(report.summary.deletePreflightBlocked, true); assert.deepEqual(deleted, []);
   const advanced = report.records.find(r => r.branch === 'temp/noop-test'); assert.equal(advanced.classification, 'review');
+});
+test('un PR abierto durante la prevalidación bloquea todo el lote', async () => {
+  const { result, report, deleted } = await runCase({ mode: 'delete', ref: 'main', confirmation: 'ELIMINAR_SOLO_RAMAS_SEGURAS', branchSet: deletableBranches, liveOpenPullBranches: ['feature/no-unique'] });
+  assert.notEqual(result.status, 0); assert.equal(report.summary.deleted, 0); assert.equal(report.summary.deletePreflightBlocked, true); assert.deepEqual(deleted, []);
+  const opened = report.records.find(r => r.branch === 'feature/no-unique'); assert.equal(opened.classification, 'keep');
 });
