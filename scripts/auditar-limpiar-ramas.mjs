@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 
 const token = process.env.GITHUB_TOKEN;
 const repository = process.env.GITHUB_REPOSITORY;
+const workflowRef = process.env.GITHUB_REF_NAME || '';
 const mode = process.env.BRANCH_CLEANUP_MODE || 'audit';
 const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
@@ -51,18 +52,29 @@ function encodedRef(branch) {
   return branch.split('/').map(encodeURIComponent).join('/');
 }
 
-function isPermanentBranch(branch, openHeads) {
-  return branch === 'main'
-    || branch.startsWith('backup/')
-    || branch === 'backup-before-fixes-20260715'
+function isBackupBranch(branch) {
+  return branch.startsWith('backup/') || branch === 'backup-before-fixes-20260715';
+}
+
+function isPermanentBranch(branchInfo, openHeads, defaultBranch) {
+  const branch = branchInfo.name;
+  return branch === defaultBranch
+    || branchInfo.protected === true
+    || isBackupBranch(branch)
     || openHeads.has(branch);
 }
 
-const [branches, openPulls, closedPulls] = await Promise.all([
+const [repositoryInfo, branches, openPulls, closedPulls] = await Promise.all([
+  api(''),
   paginate('/branches'),
   paginate('/pulls?state=open'),
   paginate('/pulls?state=closed&sort=updated&direction=desc')
 ]);
+
+const defaultBranch = repositoryInfo.default_branch || 'main';
+if (mode === 'delete' && workflowRef !== defaultBranch) {
+  throw new Error(`La eliminación solo puede ejecutarse desde la rama principal ${defaultBranch}`);
+}
 
 const openHeads = new Set(
   openPulls
@@ -85,6 +97,7 @@ for (const branchInfo of branches) {
   const record = {
     branch,
     sha: currentSha,
+    protected: branchInfo.protected === true,
     classification: 'review',
     reason: 'Contiene historial no clasificado',
     aheadBy: null,
@@ -92,32 +105,34 @@ for (const branchInfo of branches) {
     deleted: false
   };
 
-  if (isPermanentBranch(branch, openHeads)) {
+  if (isPermanentBranch(branchInfo, openHeads, defaultBranch)) {
     record.classification = 'keep';
-    record.reason = branch === 'main'
+    record.reason = branch === defaultBranch
       ? 'Rama principal'
-      : branch.startsWith('backup/') || branch === 'backup-before-fixes-20260715'
-        ? 'Rama de respaldo'
-        : 'Rama vinculada a un Pull Request abierto';
+      : branchInfo.protected === true
+        ? 'Rama protegida por GitHub'
+        : isBackupBranch(branch)
+          ? 'Rama de respaldo'
+          : 'Rama vinculada a un Pull Request abierto';
     records.push(record);
     continue;
   }
 
   try {
-    const comparison = await api(`/compare/main...${encodedRef(branch)}`);
+    const comparison = await api(`/compare/${encodedRef(defaultBranch)}...${encodedRef(branch)}`);
     record.aheadBy = comparison.ahead_by;
     record.behindBy = comparison.behind_by;
 
     if (comparison.ahead_by === 0) {
       record.classification = 'safe-delete';
-      record.reason = 'No contiene commits únicos respecto de main';
+      record.reason = `No contiene commits únicos respecto de ${defaultBranch}`;
     } else if (currentSha && mergedHeadShas.get(branch)?.has(currentSha)) {
       record.classification = 'safe-delete';
       record.reason = 'El Pull Request de esta misma punta fue fusionado y la rama no avanzó después';
     } else if (mergedHeadShas.has(branch)) {
       record.reason = `Tuvo un Pull Request fusionado, pero ahora contiene ${comparison.ahead_by} commit(s) únicos; requiere revisión manual`;
     } else {
-      record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en main`;
+      record.reason = `Contiene ${comparison.ahead_by} commit(s) no presentes en ${defaultBranch}`;
     }
   } catch (error) {
     record.classification = 'review';
@@ -126,7 +141,7 @@ for (const branchInfo of branches) {
   records.push(record);
 }
 
-const safeToDelete = records.filter(record => record.classification === 'safe-delete');
+const safeToDelete = records.filter(record => record.classification === 'safe-delete' && !record.protected);
 if (mode === 'delete') {
   for (const record of safeToDelete) {
     await api(`/git/refs/heads/${encodedRef(record.branch)}`, { method: 'DELETE' });
@@ -137,6 +152,8 @@ if (mode === 'delete') {
 const summary = {
   generatedAt: new Date().toISOString(),
   repository,
+  defaultBranch,
+  workflowRef,
   mode,
   total: records.length,
   keep: records.filter(record => record.classification === 'keep').length,
@@ -154,6 +171,7 @@ const sections = [
 ];
 let markdown = '# Auditoría de ramas\n\n';
 markdown += `- Repositorio: \`${repository}\`\n`;
+markdown += `- Rama principal: \`${defaultBranch}\`\n`;
 markdown += `- Fecha: \`${summary.generatedAt}\`\n`;
 markdown += `- Modo: \`${mode}\`\n`;
 markdown += `- Total: **${summary.total}**\n`;
