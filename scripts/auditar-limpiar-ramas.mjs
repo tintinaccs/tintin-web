@@ -7,6 +7,7 @@ const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
 const outputMarkdown = process.env.BRANCH_AUDIT_MARKDOWN || 'branch-audit.md';
 
+// La clasificación usa únicamente evidencia de GitHub; no existen listas manuales de excepciones.
 if (!token) throw new Error('Falta GITHUB_TOKEN');
 if (!repository || !repository.includes('/')) throw new Error('Falta GITHUB_REPOSITORY');
 if (!['audit', 'delete'].includes(mode)) throw new Error(`Modo inválido: ${mode}`);
