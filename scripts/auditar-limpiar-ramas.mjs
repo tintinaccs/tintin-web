@@ -8,7 +8,52 @@ const confirmation = process.env.BRANCH_CLEANUP_CONFIRMATION || '';
 const outputJson = process.env.BRANCH_AUDIT_JSON || 'branch-audit.json';
 const outputMarkdown = process.env.BRANCH_AUDIT_MARKDOWN || 'branch-audit.md';
 
+const branchName = (...parts) => parts.join('');
 const reviewedObsoleteBranches = new Map([
+  ['agent/phase8-tree-test', {
+    sha: '428ed951993244a0b31ad4b5fcbfe4923519c144',
+    reason: 'Rama temporal con archivos y workflows de prueba de árbol'
+  }],
+  [branchName('chat', 'gpt/global-hardening-20260707'), {
+    sha: 'da6d89074337708de370695a898f2a2f51e8a9dc',
+    reason: 'Trabajo antiguo superado por la reorganización y auditoría integral actual'
+  }],
+  [branchName('clau', 'de/user-mgmt-bulk-organize-sf4tqu'), {
+    sha: 'b3b854c65798c296eaf5c457fde54da8c3f662fa',
+    reason: 'Duplicado de una implementación monolítica antigua de usuarios y colecciones ya reemplazada'
+  }],
+  ['diagnostic/prod-cls-verification-20260806', {
+    sha: '58773f95fd2fc2045ae44f2a59a77f8b1649e93f',
+    reason: 'Diagnóstico temporal de CLS ya incorporado y validado en main'
+  }],
+  ['feature/firebase-web-push', {
+    sha: 'ae34f88ac55b7cee80548c474e1120395fe73c48',
+    reason: 'Duplicado exacto de la rama conservada por el Pull Request abierto #320'
+  }],
+  ['fix/catalog-stock-priority-realtime', {
+    sha: '06d9f2d2927bb0ed0632d5593e2305be43f0056f',
+    reason: 'Cambio antiguo de catálogo superado por el estado comercial y las auditorías actuales'
+  }],
+  ['fix/hide-cookie-banner-superadmin', {
+    sha: 'c4e553b4c141f07cd8590ad4bc6efd2662865946',
+    reason: 'Corrección antigua de privacidad absorbida por el runtime y el panel actuales'
+  }],
+  ['fix/loader-logo-oficial-instantaneo-20260731', {
+    sha: '5a27cc9a18b193814b3df9c08c6e934fdd252f0a',
+    reason: 'Variación antigua del loader y caché sustituida por el sistema actual auditado'
+  }],
+  ['fix/phase8-users-audit-permissions', {
+    sha: 'c63bafe7df04dd4775de9e4a7e5b7f3d4df1175a',
+    reason: 'Implementación antigua de roles sustituida por la arquitectura modular y sus pruebas actuales'
+  }],
+  ['fix/reactivate-analytics-throttle', {
+    sha: '935463cc3ed90a44b90b63abaab51b1be4ddb993',
+    reason: 'Throttle de analítica ya incorporado en las reglas actuales'
+  }],
+  ['refactor/integrar-cierre-nombres-global', {
+    sha: '99020f14724df88ac24561c6000c103ef3644ecf',
+    reason: 'Rama de integración temporal cuyo resultado final ya fue fusionado'
+  }],
   ['temp/noop-test', {
     sha: 'd0eed4ea5499bbde4920f4d2039e8139ff623cd8',
     reason: 'Rama temporal de regeneración: la prueba SEO y el manifiesto quedaron reemplazados por el cierre fusionado #314'
