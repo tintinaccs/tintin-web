@@ -23,7 +23,7 @@ function base64UrlFromString(str) {
 // Quita las líneas delimitadoras PEM (-----BEGIN...-----/-----END...-----)
 // sin dejar el texto completo de ninguna de las dos como substring literal
 // en este archivo — evita un falso positivo del escáner de secretos
-// (scripts/audit-phase6-security.js), que busca exactamente esa cabecera
+// (scripts/auditar-fase-6-seguridad.js), que busca exactamente esa cabecera
 // como señal de una clave privada pegada a mano en el repo. Acá nunca hay
 // una clave real: el PEM llega en tiempo de ejecución desde la variable de
 // entorno FIREBASE_SERVICE_ACCOUNT_KEY.

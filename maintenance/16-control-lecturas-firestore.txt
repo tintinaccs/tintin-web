@@ -64,7 +64,7 @@ CAMBIOS APLICADOS
 
 7. Control y diagnóstico
 - window.TintinReadBudget registra una estimación de documentos leídos por los stores optimizados.
-- Se agregó scripts/audit-firestore-read-budget.js.
+- Se agregó scripts/auditar-firestore-lecturas-presupuesto.js.
 - La auditoría bloquea la reaparición de listeners públicos completos, consultas administrativas para clientas, módulos globales innecesarios y reintentos consecutivos tras 429.
 - Las auditorías anteriores de rendimiento y regresiones se actualizaron para distinguir tiempo real crítico de datos públicos cacheables.
 
@@ -101,7 +101,7 @@ VALIDACIÓN PENDIENTE AL ABRIR EL PR
 - audit-performance-realtime.
 - audit-firestore-read-budget.
 - audit-performance-regressions.
-- Audit typography.
+- Auditoría tipográfica.
 - Auditoría de colecciones Fase 4.
 - Smoke de todas las rutas en Chromium.
 

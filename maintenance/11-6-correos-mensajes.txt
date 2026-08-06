@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.7
 CORREOS Y MENSAJES
 Fecha: 19/07/2026
 Rama: maintenance/admin-email-messaging
-Auditoría nueva: scripts/audit-admin-email-messaging.js  (npm run audit:email-messaging)
+Auditoría nueva: scripts/auditar-admin-correo-mensajeria.js  (npm run audit:email-messaging)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -14,11 +14,11 @@ notificaciones de pedidos.
 
 Antes de tocar nada se revisó main, los PR mergeados (hasta #176), maintenance/
 y las auditorías existentes:
-- audit-email-phase3.js → cubre la seguridad del Apps Script legacy (vuelve a
+- auditar-correo-fase-3.js → cubre la seguridad del Apps Script legacy (vuelve a
   leer el pedido real, verifica identidad/propiedad, reenvío con rol+permiso) y
   el registro de intentos. No se rehízo nada de eso; solo se ajustó UNA
   comprobación (ver "CAMBIOS").
-- audit-postphase-security.js / audit-security-phase8.js → identidad Super Admin
+- auditar-posterior-fases-seguridad.js / auditar-seguridad-fase-8.js → identidad Super Admin
   por Firebase Auth, logs inmutables, reglas por rol. No se rehízo.
 
 ═══════════════════════════════════════════════════════════════════════
@@ -81,15 +81,15 @@ CAMBIOS APLICADOS (mínimos y quirúrgicos)
      no se dispara → checkout-puente-correo.js no vuelve a enviar. Queda UN solo
      canal, UN solo punto de envío. Sin duplicado, sin contradicción.
 
-2) scripts/audit-email-phase3.js — 1 comprobación actualizada
+2) scripts/auditar-correo-fase-3.js — 1 comprobación actualizada
    La comprobación #1 afirmaba el cableado viejo (checkout importa email-notify +
    auto-carga del puente). Ahora afirma el cableado correcto: el checkout envía
    por Resend (notificacion-pedido-resend.js) y NO importa notificaciones-correo.js. El resto de
    la auditoría (seguridad del Apps Script legacy) se mantiene intacto.
 
-3) scripts/audit-admin-email-messaging.js — auditoría nueva (29 comprobaciones,
+3) scripts/auditar-admin-correo-mensajeria.js — auditoría nueva (29 comprobaciones,
    con pruebas negativas). Wireada en package.json (audit:email-messaging +
-   audit:final) y en .github/workflows/tintin-audit.yml.
+   audit:final) y en .github/workflows/auditar-tintin.yml.
 
 4) diagnostic-manifest.json — regenerado (npm run build:diagnostics). Refleja que
    el grafo del checkout ahora usa notificacion-pedido-resend.js y ya no arrastra
@@ -165,7 +165,7 @@ WHATSAPP / MENSAJES (js/whatsapp.js + orígenes de mensaje)
   hardcodeados, sin duplicar el ítem).
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-email-messaging.js (29 checks)
+AUDITORÍA NUEVA — scripts/auditar-admin-correo-mensajeria.js (29 checks)
 ═══════════════════════════════════════════════════════════════════════
 1. Canal único de pedidos (Resend), checkout ya NO usa Apps Script, un solo
    disparo, Bearer token al endpoint, el puente usa el mismo canal.  (5)
@@ -195,7 +195,7 @@ CI / VERIFICACIÓN
 - npm run audit:emails (phase3, actualizada) → OK
 - npm run audit:final → exit 0 (todas las auditorías estáticas verdes, CRITICAL: 0)
 - diagnostic-manifest.json regenerado y consistente.
-- Wiring CI: .github/workflows/tintin-audit.yml (paso nuevo) y
-  .github/workflows/audit-email-phase3.yml (se dispara por package.json/scripts).
+- Wiring CI: .github/workflows/auditar-tintin.yml (paso nuevo) y
+  .github/workflows/auditar-correo-fase-3.yml (se dispara por package.json/scripts).
 
 Merge únicamente con CI verde.

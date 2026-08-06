@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 13
 ESTABILIDAD Y REGRESIONES POSTERIORES A LA OPTIMIZACIÓN DE RENDIMIENTO
 Fecha: 19/07/2026
 Rama: maintenance/performance-regression-validation
-Auditoría nueva: scripts/audit-performance-regressions.js  (npm run audit:performance-regressions)
+Auditoría nueva: scripts/auditar-rendimiento-regresiones.js  (npm run audit:performance-regressions)
 
 ═══════════════════════════════════════════════════════════════════════
 REVISIÓN PREVIA (obligatoria) — qué cambió el PR de rendimiento
@@ -11,9 +11,9 @@ Se revisó el PR mergeado #182 (merge SHA 67aee27), su documentación
 (maintenance/12-rendimiento-velocidad-sincronizacion.txt), sus métricas y todos
 los workflows. Confirmación de los cambios aplicados por #182:
   - ÚNICO cambio de runtime: css/montserrat.css → font-display block → swap.
-  - Todo lo demás fue ADITIVO: scripts/audit-performance-realtime.js,
+  - Todo lo demás fue ADITIVO: scripts/auditar-rendimiento-tiempo-real.js,
     tests/performance/*, playwright.config.js, doc, wiring de CI, actualización
-    de la invariante en scripts/audit-typography.js, regeneración del manifest.
+    de la invariante en scripts/auditar-tipografia.js, regeneración del manifest.
 Conclusión: la superficie de regresión de la optimización es EXCLUSIVAMENTE el
 comportamiento de pintado de la fuente. No se reescribió rendimiento en esta
 etapa; solo se comprobó estabilidad.
@@ -127,7 +127,7 @@ LIMITACIONES (declaradas con honestidad)
 ═══════════════════════════════════════════════════════════════════════
 PRUEBAS AUTOMÁTICAS (esta etapa)
 ═══════════════════════════════════════════════════════════════════════
-- scripts/audit-performance-regressions.js (nueva, en CI): 25 comprobaciones —
+- scripts/auditar-rendimiento-regresiones.js (nueva, en CI): 25 comprobaciones —
   compatibilidad del cambio de fuente con el loader + tripwire por dominio +
   invariantes de rendimiento preservadas.
 - npm run audit:final → verde (incluye las 30 auditorías por dominio + la nueva).
@@ -136,10 +136,10 @@ PRUEBAS AUTOMÁTICAS (esta etapa)
 ═══════════════════════════════════════════════════════════════════════
 ARCHIVOS MODIFICADOS / CREADOS
 ═══════════════════════════════════════════════════════════════════════
-A  scripts/audit-performance-regressions.js
+A  scripts/auditar-rendimiento-regresiones.js
 A  maintenance/13-estabilidad-regresiones-rendimiento.txt
 M  package.json (audit:performance-regressions + audit:final)
-M  .github/workflows/tintin-audit.yml (paso nuevo)
+M  .github/workflows/auditar-tintin.yml (paso nuevo)
 M  diagnostic-manifest.json (regenerado)
 
 ═══════════════════════════════════════════════════════════════════════

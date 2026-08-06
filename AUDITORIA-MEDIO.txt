@@ -66,7 +66,7 @@ que resolver.
 origen (apiUrl(name)), y los cuatro llamadores (notificacion-pedido-resend.js,
 sincronizacion-correo-admin.js, biblioteca-multimedia.js, actividad-sitio.js) ahora
 importan de ahí en vez de reinventar la constante cada uno. Verificado con
-scripts/audit-admin-email-messaging.js y scripts/audit-site-reliability.js
+scripts/auditar-admin-correo-mensajeria.js y scripts/auditar-sitio-confiabilidad.js
 (actualizados) y el resto de `npm run audit:final`, sin regresiones.
 Sigue pendiente confirmar/corregir la NOTA de arriba: desde qué host se
 sirve realmente el sitio en producción (no se puede saber solo leyendo el

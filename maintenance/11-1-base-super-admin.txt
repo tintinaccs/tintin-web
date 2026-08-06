@@ -2,7 +2,7 @@ TINTIN-WEB — MANTENIMIENTO INTEGRAL 11.2
 BASE Y SEGURIDAD DEL SUPER ADMIN (admin.html + su fundación)
 Fecha: 19/07/2026
 Rama: maintenance/admin-foundation-security
-Auditoría nueva: scripts/audit-admin-foundation.js  (npm run audit:admin-foundation)
+Auditoría nueva: scripts/auditar-admin-fundamentos.js  (npm run audit:admin-foundation)
 
 ═══════════════════════════════════════════════════════════════════════
 ALCANCE
@@ -135,7 +135,7 @@ REVISADO Y CONFIRMADO YA CORRECTO (sin cambios)
   de accesibilidad no cambia layout.
 
 ═══════════════════════════════════════════════════════════════════════
-AUDITORÍA NUEVA — scripts/audit-admin-foundation.js
+AUDITORÍA NUEVA — scripts/auditar-admin-fundamentos.js
 ═══════════════════════════════════════════════════════════════════════
 40 comprobaciones estáticas agrupadas en: autenticación, protección inicial,
 navegación (correspondencia data-section↔section-*, ids únicos, deactivación en
@@ -146,7 +146,7 @@ una lista fija).
 
 Wiring:
   - package.json: "audit:admin-foundation" + incluida en "audit:final".
-  - .github/workflows/tintin-audit.yml: paso "Audit Super Admin foundation"
+  - .github/workflows/auditar-tintin.yml: paso "Audit Super Admin foundation"
     (corre en cada push/PR a main).
 
 Prueba de que la auditoría REALMENTE falla (no siempre pasa): se reintrodujo
@@ -178,9 +178,9 @@ ARCHIVOS TOCADOS
 - js/admin-app.js                    (F1 live-query, F2 label, F3 aria-current,
                                       F4 helper de overlays, F5 deep-link)
 - js/control-bienvenida-admin.js        (aria-current en openSection)
-- scripts/audit-admin-foundation.js  (NUEVO)
+- scripts/auditar-admin-fundamentos.js  (NUEVO)
 - package.json                       (script + audit:final)
-- .github/workflows/tintin-audit.yml (paso CI)
+- .github/workflows/auditar-tintin.yml (paso CI)
 - maintenance/11-1-base-super-admin.txt (este registro)
 
 PENDIENTES REALES: ninguno dentro del alcance de la base del Super Admin.

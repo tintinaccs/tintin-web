@@ -73,13 +73,13 @@ PLATAFORMA: Repo/infra.
 
 PROBLEMA:
 diagnostic-manifest.json pesa ~590 KB y está commiteado. Es un artefacto
-generado (scripts/build-diagnostic-manifest.js).
+generado (scripts/construir-manifiesto-diagnostico.js).
 
 QUÉ PROVOCA:
 Infla el repo y los diffs; se regenera, no debería vivir en el control de
 versiones.
 
-DÓNDE: /diagnostic-manifest.json, scripts/build-diagnostic-manifest.js.
+DÓNDE: /diagnostic-manifest.json, scripts/construir-manifiesto-diagnostico.js.
 
 SOLUCIÓN:
 Agregarlo a .gitignore y generarlo en el build/CI, o moverlo a un

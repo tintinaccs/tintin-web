@@ -191,7 +191,7 @@ export function buildStaticAnalysis(manifest, scope = { mode: 'full' }) {
         evidence: `Manifiesto generado ${manifest.generatedAt}.`,
         consequence: 'El diagnóstico no puede descubrir ni cubrir la plataforma.',
         testName: 'Inventario generado desde el repositorio',
-        correctionLocation: 'scripts/build-diagnostic-manifest.js',
+        correctionLocation: 'scripts/construir-manifiesto-diagnostico.js',
         solutionStatus: 'known',
         suggestion: 'Regenerar el manifiesto y revisar el recorrido de archivos.'
       }));

@@ -34,13 +34,13 @@ HALLAZGOS CORREGIDOS
 ARCHIVOS AÑADIDOS
 - css/home-maintenance.css
 - js/mantenimiento-inicio.js
-- scripts/audit-home-page.js
+- scripts/auditar-home-pagina.js
 - maintenance/00-cronograma-general.txt
 - maintenance/01-pagina-principal.txt
 
 ARCHIVOS ACTUALIZADOS
 - js/inicio-navegacion-publica.js
-- .github/workflows/tintin-audit.yml
+- .github/workflows/auditar-tintin.yml
 
 COMPORTAMIENTO RESPONSIVE
 - 1920x1080: cubierto por estructura fluida y límites máximos.
