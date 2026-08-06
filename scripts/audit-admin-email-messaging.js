@@ -16,7 +16,7 @@ const adminSync      = read('js/admin/settings/sincronizacion-correo-admin.js');
 const functionOrigin = read('js/core/firebase/origen-funciones.js');
 const adminApp       = read('js/admin/admin-app.js');
 const whatsapp       = read('js/components/contact/whatsapp.js');
-const settingsStore  = read('js/core/store/public-settings-store.js');
+const settingsStore  = read('js/core/store/configuracion-publica.js');
 const rules          = read('firestore.rules');
 
 check(

@@ -45,7 +45,7 @@ check(
 );
 check(
   'Configuración general pública tiene una sola suscripción compartida',
-  read('js/core/store/public-settings-store.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
+  read('js/core/store/configuracion-publica.js').includes("onSnapshot(doc(db, 'settings', 'general')") &&
     read('js/components/contact/whatsapp.js').includes('onPublicSettings') &&
     read('js/pages/checkout/checkout-metodos-pago.js').includes('onPublicSettings'),
   'WhatsApp y pagos deben compartir public-settings-store.'
@@ -62,7 +62,7 @@ check(
 );
 check(
   'Contenido consume site_content',
-  read('js/core/store/site-content.js').includes('site_content'),
+  read('js/core/store/contenido-sitio.js').includes('site_content'),
   'El contenido editable debe conservar Firestore como fuente.'
 );
 

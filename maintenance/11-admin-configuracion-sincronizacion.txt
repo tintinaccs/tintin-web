@@ -19,7 +19,7 @@ ARCHIVOS REVISADOS
                                writeBatch general + storeGate; saveShipCities).
 - js/visibilidad-navegacion-por-dispositivo.js  .. runtime del header por dispositivo.
 - js/whatsapp.js  ............ datos de contacto/redes en páginas públicas.
-- js/site-content.js  ........ textos de página (site_content/{pageId}).
+- js/contenido-sitio.js  ........ textos de página (site_content/{pageId}).
 - js/cargador-pagina.js  ......... orquestador único que carga el runtime público.
 - js/inicio-navegacion-publica.js  ........ inyección del header y anti-duplicación.
 - js/analytics.js  ........... GA4 con consentimiento.
@@ -32,7 +32,7 @@ FUENTE ÚNICA DE VERDAD
 Configuración general: documento Firestore settings/general.
 Estado de tienda/acceso: settings/storeGate (espejo público mínimo escrito en
   el MISMO commit que settings/general, vía writeBatch).
-Textos de página: colección site_content/{pageId} (esquema en content-schema.js).
+Textos de página: colección site_content/{pageId} (esquema en esquema-contenido.js).
 Apariencia/colores: settings/appearance (fuera del alcance de esta etapa).
 
 No se encontraron valores de la misma configuración duplicados en HTML + JS +

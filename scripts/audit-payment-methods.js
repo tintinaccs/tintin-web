@@ -7,7 +7,7 @@ const core = read('js/orders/payment-methods-core.js');
 const css = read('css/components/payments/payment-methods.css');
 const store = read('js/pages/collections/estado-colecciones.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
-const publicSettings = read('js/core/store/public-settings-store.js');
+const publicSettings = read('js/core/store/configuracion-publica.js');
 const rules = read('firestore.rules');
 const secureCheckout = read('js/orders/secure-checkout-order.js');
 

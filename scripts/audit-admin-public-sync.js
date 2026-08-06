@@ -22,7 +22,7 @@ function check(name, condition, problem) {
 const adminApp = read('js/admin/admin-app.js');
 const headerMode = read('js/components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js');
 const whatsapp = read('js/components/contact/whatsapp.js');
-const publicSettings = read('js/core/store/public-settings-store.js');
+const publicSettings = read('js/core/store/configuracion-publica.js');
 const pageLoader = read('js/cargador-pagina.js');
 const publicShell = read('js/inicio-navegacion-publica.js');
 const publicShellEntry = read('js/components/navigation/entrada-navegacion-publica.js');
