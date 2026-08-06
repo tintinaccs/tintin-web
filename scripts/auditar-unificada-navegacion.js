@@ -18,7 +18,7 @@ const shell = [
 ].map(read).join('\n');
 
 const controller = read('js/components/navigation/compartido/control-paneles.js');
-const runtime = read('script.js');
+const runtime = read('tienda.js');
 const styles = [
   'css/components/navigation/escritorio/encabezado-escritorio.css',
   'css/components/navigation/tableta/encabezado-tableta.css',

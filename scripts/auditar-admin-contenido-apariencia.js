@@ -4,7 +4,7 @@
    TINTIN — Auditoría de Contenido y Apariencia (panel + sitio público)
 
    Los editores de Contenido (Fase 6) y Apariencia (esquemas de color) ya tienen
-   auditorías propias (auditar-contenido-fase-6.js, auditar-color-scheme.js) que cubren
+   auditorías propias (auditar-contenido-fase-6.js, auditar-esquema-color.js) que cubren
    el catálogo de tokens, el render seguro y la sanitización de enlaces. Esta
    auditoría fija las invariantes de seguridad y de "cada control produce un
    cambio real" que faltaban blindar de punta a punta:

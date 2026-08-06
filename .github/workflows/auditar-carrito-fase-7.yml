@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'catalogo.html'
-      - 'script.js'
+      - 'tienda.js'
       - 'js/core/store/estado-productos.js'
       - 'js/pages/catalog/politica-visibilidad-catalogo.js'
       - 'js/cargador-mantenimiento-pagina.js'
@@ -37,7 +37,7 @@ on:
       # ninguna PR puede modificarla. Para revalidarlo sobre main hay que
       # lanzarlo con workflow_dispatch.
       - 'catalogo.html'
-      - 'script.js'
+      - 'tienda.js'
       - 'js/**'
       - 'functions/api/sheets-product-sync.js'
       - 'scripts/**'
@@ -87,7 +87,7 @@ jobs:
           node --check js/core/store/estado-productos.js
           node --check js/components/cart/sincronizacion-carrito.js
           node --check js/admin/admin-app.js
-          node --check script.js
+          node --check tienda.js
           node --check scripts/auditar-fase-7-catalogo.js
           node --check scripts/auditar-carrito-fase-7.js
           node --check scripts/auditar-sitio-confiabilidad.js

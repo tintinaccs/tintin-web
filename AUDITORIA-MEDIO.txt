@@ -110,7 +110,7 @@ pero uno solo). Verificar después en 768px que header, nav y tabbar
 queden en un único modo.
 
 [RESUELTO 2026-07-22] Se unificaron los 6 puntos que usaban 767px
-(styles.css: 3 · css/home-fit.css: 2 · css/ui-quality.css: 1, este último
+(styles.css: 3 · css/ajuste-inicio.css: 2 · css/calidad-interfaz.css: 1, este último
 crítico porque fijaba font-size:16px en inputs para evitar el zoom
 automático de iOS) a 768px, alineados con el resto del sitio. Verificado
 con un arnés estático (solo CSS, sin JS/Firebase) midiendo estilos

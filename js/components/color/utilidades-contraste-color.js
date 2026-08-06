@@ -2,7 +2,7 @@
  * TINTIN — Utilidades de contraste WCAG, compartidas por el módulo de
  * Apariencia (Super Admin) para el chequeo automático de contraste.
  * Misma fórmula de luminancia relativa usada en la auditoría de contraste
- * de toda la plataforma (script.js/scanner de esa fase) — un solo lugar,
+ * de toda la plataforma (tienda.js/scanner de esa fase) — un solo lugar,
  * sin reimplementar la matemática dos veces.
  */
 

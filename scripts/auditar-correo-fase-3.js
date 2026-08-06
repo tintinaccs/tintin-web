@@ -17,7 +17,7 @@ const adminSync = read('js/admin/settings/sincronizacion-correo-admin.js');
 const adminStore = read('js/admin/settings/control-tienda-admin.js');
 const checkout = read('checkout.html');
 const appsScript = read('apps-script/Seguridad.gs');
-const docs = read('functions/EMAIL_PHASE3_DEPLOY.md');
+const docs = read('functions/despliegue-correo-fase-3.md');
 
 check(
   'El checkout envía la notificación de pedido por Resend (canal único)',

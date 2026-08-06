@@ -35,14 +35,14 @@ for (const page of PUBLIC_PAGES) {
   const html = read(page);
   const shellScripts = html.match(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const controllerScripts = html.match(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const classicScripts = html.match(/<script\b[^>]*src=["']script\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const classicScripts = html.match(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/gi) || [];
   const loaderScripts = html.match(/<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar inicio-navegacion-publica.js exactamente una vez`);
   check(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-navegacion-publica.js debe ser defer`);
   check(controllerScripts.length === 1, `${page}: debe cargar inicio-control-paneles.js exactamente una vez`);
   check(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-control-paneles.js debe ser defer`);
-  check(classicScripts.length === 1, `${page}: debe cargar script.js exactamente una vez`);
+  check(classicScripts.length === 1, `${page}: debe cargar tienda.js exactamente una vez`);
   check(loaderScripts.length === 1, `${page}: debe cargar cargador-pagina.js exactamente una vez`);
   check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
   check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de navegación duplicado`);

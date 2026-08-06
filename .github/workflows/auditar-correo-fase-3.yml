@@ -8,7 +8,7 @@ on:
       - 'js/admin/settings/sincronizacion-correo-admin.js'
       - 'js/admin/settings/control-tienda-admin.js'
       - 'apps-script/**'
-      - 'functions/EMAIL_PHASE3_DEPLOY.md'
+      - 'functions/despliegue-correo-fase-3.md'
       - 'scripts/auditar-correo-fase-3.js'
       - 'package.json'
       - '.github/workflows/auditar-correo-fase-3.yml'

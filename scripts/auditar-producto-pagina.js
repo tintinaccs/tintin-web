@@ -9,7 +9,7 @@ const html = read('product.html');
 const css = read('css/pages/product/product-maintenance.css');
 const runtime = read('js/pages/product/mantenimiento-producto.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
-const core = read('script.js');
+const core = read('tienda.js');
 const record = read('maintenance/04-producto.txt');
 
 ['product-loading','product-not-found','product-load-error','product-grid','gallery-main','product-name','product-price','product-variants','btn-product-add-cart','btn-product-buy-now','related-grid'].forEach(id => {

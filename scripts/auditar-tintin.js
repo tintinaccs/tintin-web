@@ -51,9 +51,9 @@ const cssFiles = files.filter(f => f.endsWith('.css'));
 const jsFiles = files.filter(f => f.endsWith('.js') && !f.startsWith('functions/'));
 
 assertFile('assets-tintin/images/general/logo.png', 'Debe existir el logo real PNG usado por loader/header');
-assertFile('css/core/tintin-unified-theme.css', 'Debe existir la fuente única de tokens Tintin');
-assertFile('css/core/tintin-theme-cleanup.css', 'Debe existir la limpieza de colores hardcodeados');
-assertFile('css/theme/tintin-parity-safe.css', 'Debe existir la paridad responsive segura');
+assertFile('css/core/tema-unificado-tintin.css', 'Debe existir la fuente única de tokens Tintin');
+assertFile('css/core/limpieza-tema-tintin.css', 'Debe existir la limpieza de colores hardcodeados');
+assertFile('css/theme/paridad-segura-tintin.css', 'Debe existir la paridad responsive segura');
 assertFile('js/quality/calidad-interfaz.js', 'Debe existir el runtime global de calidad');
 assertFile('js/cargador-pagina.js', 'Debe existir el loader global');
 assertFile('js/components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Debe existir el fix de account-dropdown/tabbar-avatar');
@@ -69,7 +69,7 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
   if (/logo-splash|logo-tintin/i.test(content) && !isAllowedLegacyLogoReference(file)) {
     addIssue('WARN', file, 'Contiene referencia a logo viejo: logo-splash/logo-tintin');
   }
-  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tintin-unified-theme.css','css/core/tintin-theme-cleanup.css','css/core/tintin-tokens.css','js/components/color/normalizador-color-tema.js','js/quality/correccion-auditoria-pagina.js','js/cargador-pagina.js'].includes(file)) {
+  if (/\.(html|css|js)$/.test(file) && /#[0-9a-fA-F]{3,8}/.test(content) && !['css/core/tema-unificado-tintin.css','css/core/limpieza-tema-tintin.css','css/core/tokens-tintin.css','js/components/color/normalizador-color-tema.js','js/quality/correccion-auditoria-pagina.js','js/cargador-pagina.js'].includes(file)) {
     addIssue('INFO', file, 'Contiene colores hex directos; verificar que pasen por variables o sanitizador');
   }
 }
@@ -233,9 +233,9 @@ const ui = fs.existsSync(path.join(ROOT, 'js/quality/calidad-interfaz.js')) ? re
   'normalizador-color-tema.js',
   'compatibilidad-cuenta-movil.js',
   'correccion-auditoria-pagina.js',
-  'tintin-unified-theme.css',
-  'tintin-theme-cleanup.css',
-  'tintin-parity-safe.css'
+  'tema-unificado-tintin.css',
+  'limpieza-tema-tintin.css',
+  'paridad-segura-tintin.css'
 ].forEach(token => {
   if (!ui.includes(token)) addIssue('CRITICAL', 'js/quality/calidad-interfaz.js', `No carga ${token}`);
 });

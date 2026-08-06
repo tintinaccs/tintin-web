@@ -21,7 +21,7 @@ Cambios
 - Checkout conserva las opciones anteriores hasta que Firestore responde.
 - Las opciones configurables se traducen a los tipos seguros efectivo o transferencia para conservar las validaciones actuales del pedido.
 - Si no hay opciones activas, Checkout informa el estado y bloquea el avance.
-- Auditoría automática scripts/auditar-pago-methods.js incorporada a Auditoría integral Tintin.
+- Auditoría automática scripts/auditar-pago-metodos.js incorporada a Auditoría integral Tintin.
 
 Seguridad
 - Solo la cuenta Super Admin puede escribir settings/general.

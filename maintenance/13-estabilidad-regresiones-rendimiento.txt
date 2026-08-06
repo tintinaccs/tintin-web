@@ -67,7 +67,7 @@ como click real en navegador (ver LIMITACIONES). Cobertura:
 PÚBLICO
   - Inicio/Catálogo/Colección/Producto: catálogo y colecciones en vivo
     (onSnapshot+limit) intactos; imágenes lazy/async intactas.
-  - Carrito/cantidad: cart-sync/script.js sin cambios (no tocados por #182).
+  - Carrito/cantidad: cart-sync/tienda.js sin cambios (no tocados por #182).
   - Checkout: correo del pedido por Resend (no webhook viejo) intacto.
   - Login/perfil/historial: onAuthStateChanged y recálculo de estadísticas por
     usuaria (sin contar cancelados) intactos.

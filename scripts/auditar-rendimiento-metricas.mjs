@@ -1,7 +1,7 @@
 // TINTIN — Medición de rendimiento real (no estimaciones)
 //
-//   node scripts/auditar-perf-metrics.mjs antes
-//   node scripts/auditar-perf-metrics.mjs despues antes
+//   node scripts/auditar-rendimiento-metricas.mjs antes
+//   node scripts/auditar-rendimiento-metricas.mjs despues antes
 //
 // Sirve el sitio localmente con latencia simulada por request, porque en
 // localhost (0 ms de ida y vuelta) los problemas de encadenamiento de red
@@ -30,13 +30,13 @@ fs.mkdirSync(outDir, { recursive: true });
 // conservador y deja ver el costo de encadenar descargas.
 const LATENCY_MS = 60;
 const RUNS = 3; // se reporta la mediana, para que un pico no ensucie el número
-// Espejo local del SDK de Firebase (ver mirror-firebase-sdk.sh). Si no existe,
+// Espejo local del SDK de Firebase (ver replicar-firebase-sdk.sh). Si no existe,
 // los pedidos a gstatic se cortan y la medición excluye el camino de Firebase.
 const MIRROR_DIR = path.join(root, 'artifacts', 'fbmirror');
 const MIRROR = fs.existsSync(MIRROR_DIR) ? MIRROR_DIR : '';
 // Latencia aparte para el SDK de Firebase: permite simular una conexión mala
 // hacia el tercero sin tocar la del sitio propio, que es el escenario donde
-// la tienda se degradaba (FB_LATENCY=2000 node scripts/auditar-perf-metrics.mjs ...).
+// la tienda se degradaba (FB_LATENCY=2000 node scripts/auditar-rendimiento-metricas.mjs ...).
 const FB_LATENCY = Number(process.env.FB_LATENCY || LATENCY_MS);
 
 const routes = [
@@ -73,7 +73,7 @@ async function measure(browser, route) {
   page.on('dialog', d => d.dismiss().catch(() => {}));
 
   // El SDK de Firebase se sirve desde un espejo local (artifacts/fbmirror,
-  // poblado con scripts/mirror-firebase-sdk.sh) con la MISMA latencia
+  // poblado con scripts/replicar-firebase-sdk.sh) con la MISMA latencia
   // simulada que el resto. Sin esto no se puede medir el costo real de tener
   // Firebase en el camino crítico, que es justamente lo que se quiere
   // optimizar. El resto de los terceros se corta al instante: su latencia no

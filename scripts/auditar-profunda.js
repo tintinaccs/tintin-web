@@ -29,8 +29,8 @@ const REQUIRED_FILES = [
   'js/core/firebase/firebase.js',
   'js/quality/calidad-interfaz.js',
   'js/components/color/normalizador-color-tema.js',
-  'css/core/tintin-unified-theme.css',
-  'css/core/tintin-tokens.css',
+  'css/core/tema-unificado-tintin.css',
+  'css/core/tokens-tintin.css',
   'assets-tintin/images/general/logo.png'
 ];
 

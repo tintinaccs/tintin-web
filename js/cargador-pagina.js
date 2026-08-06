@@ -815,7 +815,7 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = resolveAsset('css/quality/phase8-ui-ux.css');
+      link.href = resolveAsset('css/quality/experiencia-interfaz.css');
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {

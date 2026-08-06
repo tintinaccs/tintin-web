@@ -298,7 +298,7 @@ function createRuntime() {
   }
 
   // Empareja cada fila del DOM con su item real por id (+ variante cuando la
-  // fila la expone), nunca por posición: script.js (carrito) y checkout.html
+  // fila la expone), nunca por posición: tienda.js (carrito) y checkout.html
   // renderizan sus propias filas con la lista "cruda" del carrito, mientras
   // que acá se lee currentLocalCart() (ya pasada por enforceStockLimits, que
   // puede recortar/eliminar líneas). Si esas dos listas difieren en longitud

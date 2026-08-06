@@ -30,7 +30,7 @@ Biblioteca / subida .......... js/biblioteca-multimedia.js, js/carga-imagenes.js
                                js/procesamiento-imagenes.js, js/resolucion-imagenes.js,
                                js/imagenes.js, admin-images.html
 Sanitización de URL/alt ...... js/utilidades-imagenes.js (sanitizeImageUrl/Alt)
-Tienda (render + carrito) .... script.js, js/estado-productos.js,
+Tienda (render + carrito) .... tienda.js, js/estado-productos.js,
                                js/estado-colecciones.js
 
 PROVEEDORES DE IMAGEN (estado real):
@@ -74,7 +74,7 @@ TIENDA / CARRITO
 - Oculta productos inactivos, agotados (stock ≤ 0) y sin nombre.
 - syncCartWithCatalog quita del carrito lo borrado/desactivado y refresca
   precio/nombre. El comportamiento "producto agotado que sigue activo permanece
-  en el carrito" es DELIBERADO y consistente entre script.js y checkout.html
+  en el carrito" es DELIBERADO y consistente entre tienda.js y checkout.html
   (el stock final lo confirma la vendedora; addToCart ya clampa al agregar). Se
   deja como está a propósito.
 

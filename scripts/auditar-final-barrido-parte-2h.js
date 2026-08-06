@@ -100,8 +100,8 @@ const partContracts = [
   {
     part: '2B',
     workflow: '.github/workflows/auditar-inicio-parte-2b.yml',
-    scripts: ['scripts/auditar-home-visual-parte-2b-v3.mjs'],
-    workflowNeedles: ['scripts/auditar-home-visual-parte-2b-v3.mjs']
+    scripts: ['scripts/auditar-inicio-visual-parte-2b-v3.mjs'],
+    workflowNeedles: ['scripts/auditar-inicio-visual-parte-2b-v3.mjs']
   },
   {
     part: '2C',
@@ -113,14 +113,14 @@ const partContracts = [
     part: '2D',
     workflow: '.github/workflows/auditar-flujo-cuenta-parte-2d.yml',
     scripts: [
-      'scripts/auditar-cuenta-flow-visual-parte-2d.mjs',
-      'scripts/enforce-cuenta-flow-parte-2d.mjs',
-      'scripts/auditar-cuenta-flow-compact-parte-2d.mjs'
+      'scripts/auditar-cuenta-flujo-visual-parte-2d.mjs',
+      'scripts/exigir-cuenta-flujo-parte-2d.mjs',
+      'scripts/auditar-cuenta-flujo-compacto-parte-2d.mjs'
     ],
     workflowNeedles: [
-      'scripts/auditar-cuenta-flow-visual-parte-2d.mjs',
-      'scripts/enforce-cuenta-flow-parte-2d.mjs',
-      'scripts/auditar-cuenta-flow-compact-parte-2d.mjs'
+      'scripts/auditar-cuenta-flujo-visual-parte-2d.mjs',
+      'scripts/exigir-cuenta-flujo-parte-2d.mjs',
+      'scripts/auditar-cuenta-flujo-compacto-parte-2d.mjs'
     ]
   },
   {
@@ -128,13 +128,13 @@ const partContracts = [
     workflow: '.github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml',
     scripts: [
       'scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs',
-      'scripts/enforce-institucional-ayuda-legal-parte-2e.mjs',
-      'scripts/auditar-faq-interaction-parte-2e.mjs'
+      'scripts/exigir-institucional-ayuda-legal-parte-2e.mjs',
+      'scripts/auditar-faq-interaccion-parte-2e.mjs'
     ],
     workflowNeedles: [
       'scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs',
-      'scripts/enforce-institucional-ayuda-legal-parte-2e.mjs',
-      'scripts/auditar-faq-interaction-parte-2e.mjs'
+      'scripts/exigir-institucional-ayuda-legal-parte-2e.mjs',
+      'scripts/auditar-faq-interaccion-parte-2e.mjs'
     ]
   },
   {
@@ -153,12 +153,12 @@ const partContracts = [
     part: '2G',
     workflow: '.github/workflows/auditar-sistema-especial-parte-2g.yml',
     scripts: [
-      'scripts/auditar-sistema-special-estados-parte-2g-v2.mjs',
-      'scripts/enforce-sistema-special-parte-2g.mjs'
+      'scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs',
+      'scripts/exigir-sistema-especial-parte-2g.mjs'
     ],
     workflowNeedles: [
-      'scripts/auditar-sistema-special-estados-parte-2g-v2.mjs',
-      'scripts/enforce-sistema-special-parte-2g.mjs'
+      'scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs',
+      'scripts/exigir-sistema-especial-parte-2g.mjs'
     ]
   }
 ];

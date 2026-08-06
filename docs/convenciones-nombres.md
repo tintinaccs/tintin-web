@@ -81,3 +81,12 @@ Todo renombre debe actualizar referencias en código, HTML, estilos, pruebas, au
 - Se preservan siglas y nombres técnicos como CI, SEO, PWA, API, Firebase, Firestore, Cloudinary, Playwright, UI, UX y checkout.
 - Las referencias, filtros de paths, expresiones regulares y manifiestos se actualizan junto con cada renombre.
 - Renombres de scripts aplicados automáticamente en este bloque: 109.
+
+## Cierre global verificable
+
+- La entrada pública principal se llama `tienda.js`.
+- CSS y documentación elegibles usan minúsculas, español funcional y `kebab-case`.
+- Los residuos mixtos de scripts se normalizan sin cambiar comandos npm compatibles.
+- Las excepciones contractuales se documentan en `docs/excepciones-contractuales-nombres.md`.
+- `npm run audit:names` verifica permanentemente estas convenciones.
+- Nombres renombrados en el cierre global: 66.

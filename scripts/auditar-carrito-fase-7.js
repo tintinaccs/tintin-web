@@ -5,7 +5,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cart = read('js/components/cart/sincronizacion-carrito.js');
-const classic = read('script.js');
+const classic = read('tienda.js');
 const quality = read('js/quality/calidad-interfaz.js');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
 const phase4 = read('apps-script/CrearPedido.gs');

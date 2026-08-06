@@ -47,10 +47,10 @@ check(
 );
 
 const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260726-login-session-1'));
-const staleScript = html.filter(([, source]) => source.includes('script.js?v=tintin-20260716-cloudinary-fix-1'));
+const staleScript = html.filter(([, source]) => source.includes('tienda.js?v=tintin-20260716-cloudinary-fix-1'));
 const italicPreloads = html.filter(([, source]) => source.includes('montserrat-latin-wght-italic.woff2" as="font"'));
 check('Public shell tiene cache bust nuevo en todos los HTML', staleShell.length === 0, staleShell.map(([file]) => file).join(', '));
-check('script.js optimizado por Cloudinary tiene cache bust nuevo', staleScript.length === 0, staleScript.map(([file]) => file).join(', '));
+check('tienda.js optimizado por Cloudinary tiene cache bust nuevo', staleScript.length === 0, staleScript.map(([file]) => file).join(', '));
 check('Montserrat italic conserva el preload contractual', italicPreloads.length === html.filter(([, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"')).length, html.filter(([file, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"') && !source.includes('montserrat-latin-wght-italic.woff2\" as=\"font\"')).map(([file]) => file).join(', '));
 
 const perfHelpers = read('tests/performance/_helpers.js');

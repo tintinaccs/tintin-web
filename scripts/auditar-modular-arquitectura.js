@@ -39,9 +39,9 @@ const requiredFiles = [
   'css/components/navigation/movil/encabezado-movil.css',
   'css/components/navigation/compartido/transiciones-navegacion.css',
   'css/components/navigation/compartido/paneles.css',
-  'docs/ARQUITECTURA.md',
-  'docs/MAPA-DE-CODIGO.md',
-  'docs/COMO-HACER-CAMBIOS.md',
+  'docs/arquitectura.md',
+  'docs/mapa-codigo.md',
+  'docs/como-hacer-cambios.md',
 ];
 
 requiredFiles.forEach(file => check(exists(file), `falta ${file}`));

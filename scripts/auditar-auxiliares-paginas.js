@@ -65,7 +65,7 @@ check(
   '[404.html] contacto y analítica compartidos',
   notFound.includes('js/components/contact/whatsapp.js') &&
     notFound.includes('js/analytics/analitica.js') &&
-    notFound.includes('script.js'),
+    notFound.includes('tienda.js'),
   'El enlace de WhatsApp debe sincronizarse y la visita debe poder medirse.'
 );
 check(

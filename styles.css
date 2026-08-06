@@ -7,7 +7,7 @@
   --bg:          #fcf0f6;
   --bg-soft:     #fcf0f6;
   --card-bg:     #fef5f8;
-  /* La paleta de marca vive en css/core/color-tokens.css, que se carga antes que
+  /* La paleta de marca vive en css/core/tokens-color.css, que se carga antes que
      esta hoja en todas las páginas y es la que el panel de Super Admin
      modifica en tiempo real (js/components/color/esquema-color.js escribe los tokens
      --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
@@ -19,14 +19,14 @@
      --pink-dark quedaba con el rosa viejo. Además #AD3F67 contrasta mejor
      sobre blanco (5.70:1 contra 4.87:1).
 
-     El valor viejo queda como fallback: si color-tokens.css no cargara, el
+     El valor viejo queda como fallback: si tokens-color.css no cargara, el
      sitio sigue viéndose como antes en vez de quedarse sin color. */
   --pink-pale:   var(--color-brand-accent, #fce4ec);
   --pink:        #e8a0b4;
   --pink-mid:    #d4748e;
   --pink-dark:   var(--color-brand-primary, #b84c72);
   --rose:        var(--color-brand-primary-hover, #8b2642);
-  /* --gold/--text*: css/core/tintin-unified-theme.css redeclara estos mismos
+  /* --gold/--text*: css/core/tema-unificado-tintin.css redeclara estos mismos
      nombres con !important en :root y gana en todas las páginas que la
      cargan (todas menos admin-images.html) — esos valores (#AD3F67/#2B2B2B/
      #7B6F72) son los que realmente se ven. Los de acá quedaban desalineados:
@@ -2016,7 +2016,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   animation: ttn-wa-breathe 3.2s ease-in-out 2s infinite;
 }
 
-/* initWaFloatVisibility (script.js) aplica esta clase cuando el botón fijo
+/* initWaFloatVisibility (tienda.js) aplica esta clase cuando el botón fijo
    queda encima de un enlace o botón del contenido (índice de términos/
    privacidad, última fila de tarjetas, footer en páginas cortas). El ocultado
    es INSTANTÁNEO a propósito — sin transición: mientras dura un fade el botón
@@ -2222,7 +2222,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   }
   /* Ese margen de 86px reserva el alto de la tabbar mobile — en login.html
      la tabbar existe en el DOM pero queda oculta (display:none, ver
-     css/theme/loader-solid-background.css), así que el banner quedaba flotando
+     css/theme/fondo-solido-cargador.css), así que el banner quedaba flotando
      de más ahí y tapaba el botón "Continuar con Google". */
   body:has(.login-page) .tt-privacy-consent {
     bottom: max(12px, env(safe-area-inset-bottom, 0px));
@@ -3496,7 +3496,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   /* El panel que envuelve esto (.tt-product-info-panel) queda blanco puro vía
      --color-background-surface con !important (product-maintenance.css) —
      un sistema de variables totalmente aparte del --white de acá abajo (que
-     tintin-unified-theme.css reescribe a un tono rosado de su propio "surface").
+     tema-unificado-tintin.css reescribe a un tono rosado de su propio "surface").
      Sin esto, el hueco entre las dos píldoras de abajo mostraba ese rosado en
      vez del blanco del panel — se fuerza el mismo blanco literal para que no
      se note la costura. */

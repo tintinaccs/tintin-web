@@ -50,7 +50,7 @@ jobs:
           node --check js/core/store/estado-productos.js
           node --check js/pages/catalog/politica-visibilidad-catalogo.js
           node --check js/pages/catalog/prioridad-stock-catalogo.js
-          node --check script.js
+          node --check tienda.js
           node scripts/auditar-unificada-tienda-logica.js
           node scripts/auditar-unificada-tienda-superficies.js
           node scripts/auditar-fase-7-catalogo.js

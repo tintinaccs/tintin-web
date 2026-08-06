@@ -2,7 +2,7 @@
   color-scheme:light;
 
   /* Fuente única de verdad — ahora apunta al catálogo de tokens semánticos
-     de css/core/color-tokens.css (Super Admin → Apariencia → Esquema global),
+     de css/core/tokens-color.css (Super Admin → Apariencia → Esquema global),
      que a su vez es lo que js/components/color/esquema-color.js reescribe en caliente sobre
      <html> con el esquema activo publicado en Firestore. Estos nombres
      --tt-* se mantienen como alias de compatibilidad: todo el CSS del

@@ -162,7 +162,7 @@ check(
 check(
   'Mensajes de WhatsApp se codifican',
   adminApp.includes('encodeURIComponent(waConfirmMessageTemplate.replace(/\\{nombre\\}/g') &&
-    read('script.js').includes('encodeURIComponent(') &&
+    read('tienda.js').includes('encodeURIComponent(') &&
     checkout.includes('encodeURIComponent(') &&
     read('js/pages/institutional/mantenimiento-contacto.js').includes('encodeURIComponent') &&
     read('js/components/modals/modal-bloqueo.js').includes('encodeURIComponent'),

@@ -18,7 +18,7 @@ const required = [
   'scripts/auditar-fase-11-seo.js',
   'scripts/auditar-fase-12-entrega.mjs',
   'scripts/produccion-smoke-fase-12.mjs',
-  'docs/PHASE12_RELEASE_REPORT.md',
+  'docs/informe-entrega-fase-12.md',
   '.github/workflows/entrega-final-fase-12.yml'
 ];
 required.forEach(file => check('Existe ' + file, exists(file), 'Falta un entregable permanente de la validación final.'));
@@ -85,7 +85,7 @@ check('Firebase solo despliega reglas en Spark', Boolean(firebase.firestore?.rul
 const rules = read('firestore.rules');
 check('Firestore mantiene denegación por defecto', /match \/\{document=\*\*\}[\s\S]*allow read, write: if false/.test(rules), 'Las reglas deben conservar el cierre por defecto.');
 
-const report = read('docs/PHASE12_RELEASE_REPORT.md');
+const report = read('docs/informe-entrega-fase-12.md');
 const normalizedReport = report.replace(/\s+/g, ' ');
 for (const section of ['Problemas y causas', 'Cambios realizados', 'Pruebas ejecutadas', 'Controles externos', 'Riesgos residuales']) {
   check('El reporte incluye ' + section, report.includes('## ' + section), 'El informe final debe ser explícito y auditable.');

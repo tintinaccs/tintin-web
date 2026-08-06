@@ -36,9 +36,9 @@ function warn(label, condition, detail = '') {
 const requiredFiles = [
   '.env.example',
   '.gitignore',
-  'docs/ARCHITECTURE.md',
-  'docs/CHANGE_IMPACT_CHECKLIST.md',
-  'docs/BACKUP_RECOVERY.md',
+  'docs/arquitectura-tecnica.md',
+  'docs/lista-impacto-cambios.md',
+  'docs/respaldo-recuperacion.md',
   'firestore.rules',
   'firebase.json',
   '.github/workflows/desplegar-pages.yml',
@@ -71,9 +71,9 @@ check(
   /service-account/i.test(gitignore) && /\*\.pem/.test(gitignore) && /\*\.key/.test(gitignore)
 );
 
-const impact = read('docs/CHANGE_IMPACT_CHECKLIST.md');
-const architecture = read('docs/ARCHITECTURE.md');
-const backup = read('docs/BACKUP_RECOVERY.md');
+const impact = read('docs/lista-impacto-cambios.md');
+const architecture = read('docs/arquitectura-tecnica.md');
+const backup = read('docs/respaldo-recuperacion.md');
 
 for (const viewport of [
   '1920 × 1080',

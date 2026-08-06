@@ -70,7 +70,7 @@ const publicPages = ['index.html', 'catalogo.html', 'collections.html', 'product
 const adminOnPublic = publicPages.filter(page => exists(page) && read(page).includes('admin-app.js'));
 check('Bundle Admin fuera de páginas públicas', adminOnPublic.length === 0, `Páginas afectadas: ${adminOnPublic.join(', ')}`);
 check('No existe Service Worker con caché vieja', !exists('sw.js') && !exists('service-worker.js'), 'Un Service Worker puede servir archivos anteriores.');
-check('La interfaz respeta reducción de movimiento', /prefers-reduced-motion/.test(read('css/quality/ui-quality.css')), 'Se perdió prefers-reduced-motion.');
+check('La interfaz respeta reducción de movimiento', /prefers-reduced-motion/.test(read('css/quality/calidad-interfaz.css')), 'Se perdió prefers-reduced-motion.');
 check(
   'El presupuesto de estilos no cuenta dos veces un archivo preparado',
   read('scripts/auditar-rendimiento-tiempo-real.js').includes('const homeCssUrls = new Set('),

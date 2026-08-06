@@ -8,10 +8,10 @@ disponibles solo bajo el plan Blaze (pago por uso).
 
 El sitio usa en su lugar:
 - **Pedidos y stock:** una transacción de Firestore iniciada desde el
-  navegador y validada por `firestore.rules` (ver `SECURE_ORDER_DEPLOY.md`
+  navegador y validada por `firestore.rules` (ver `despliegue-pedido-seguro.md`
   en `functions/`, un nivel arriba).
 - **Correos:** Google Apps Script + Gmail, gratis (ver
-  `functions/EMAIL_SETUP.md`).
+  `functions/configuracion-correo.md`).
 
 Este código se separó del directorio `functions/` porque Cloudflare Pages
 usa ese mismo nombre de carpeta por convención para sus propias Pages

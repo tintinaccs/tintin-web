@@ -26,7 +26,7 @@ Este documento indica qué archivo abrir según el problema. No hace falta recor
 | Estructura de Mi Cuenta | `js/components/navigation/compartido/panel-cuenta.js` |
 | Diseño sólido de Mi Cuenta | `css/components/navigation/compartido/paneles.css` |
 | Estructura del carrito | `js/components/navigation/compartido/panel-carrito.js` |
-| Contenido y operaciones del carrito | `script.js` y `js/components/cart/sincronizacion-carrito.js` hasta completar su extracción modular |
+| Contenido y operaciones del carrito | `tienda.js` y `js/components/cart/sincronizacion-carrito.js` hasta completar su extracción modular |
 | Estructura de colecciones móvil | `js/components/navigation/compartido/panel-colecciones.js` |
 | Carga e imágenes de colecciones | `js/components/navigation/compartido/carga-colecciones.js` |
 | Acordeón del pie de página móvil | `js/components/navigation/compartido/acordeon-pie-pagina.js` |
@@ -68,6 +68,6 @@ Cuando un problema esté en navegación, abrir el archivo equivalente dentro de 
 
 ## Áreas todavía en migración
 
-El archivo `script.js` conserva funciones históricas de catálogo, carrito, búsqueda y elementos de páginas. No debe crecer. Las correcciones nuevas se colocan en módulos específicos y, cuando una sección se extraiga, `script.js` queda como adaptador temporal.
+El archivo `tienda.js` conserva funciones históricas de catálogo, carrito, búsqueda y elementos de páginas. No debe crecer. Las correcciones nuevas se colocan en módulos específicos y, cuando una sección se extraiga, `tienda.js` queda como adaptador temporal.
 
 El panel administrativo tiene sus propios archivos y no debe mezclarse con componentes públicos.

@@ -28,7 +28,7 @@ const files = {
   cloudinaryDelete: read('functions/api/cloudinary-delete.js'),
   geoFunction: read('functions/api/visitor-geo.js'),
   routes: read('_routes.json'),
-  cloudinarySetup: read('CLOUDINARY_SETUP.md'),
+  cloudinarySetup: read('configuracion-cloudinary.md'),
   loader: read('js/cargador-pagina.js'),
   indexHtml: read('index.html'),
 };

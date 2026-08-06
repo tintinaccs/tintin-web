@@ -18,8 +18,8 @@ function isKnownStaticFalsePositive(failure) {
   if (!failure || typeof failure !== 'object') return false;
 
   // La auditoría geométrica carga HTML sin scripts. Las respuestas FAQ quedan
-  // colapsadas por diseño hasta que script.js agrega .tt-faq-open. Su apertura
-  // real se valida por separado en auditar-faq-interaction-parte-2e.mjs.
+  // colapsadas por diseño hasta que tienda.js agrega .tt-faq-open. Su apertura
+  // real se valida por separado en auditar-faq-interaccion-parte-2e.mjs.
   if (
     failure.page === 'faq'
     && failure.message === 'Preguntas y respuestas no se renderizan completas.'

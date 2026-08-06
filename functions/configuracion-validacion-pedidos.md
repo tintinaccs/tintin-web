@@ -1,7 +1,7 @@
 # Tintin — Validación de pedidos server-side (Fase 0 de la auditoría)
 
 Este documento agrega **dos capacidades nuevas** al mismo Google Apps Script
-que ya usás para los correos (`functions/EMAIL_SETUP.md`) — no es un proyecto
+que ya usás para los correos (`functions/configuracion-correo.md`) — no es un proyecto
 nuevo, ni una cuenta nueva, ni un plan pago:
 
 1. **`createOrder`** — el checkout deja de crear el pedido directo en
@@ -459,7 +459,7 @@ function fromFirestoreDoc_(doc) {
 
 // ============================================================
 // Helpers de correo — IDÉNTICOS a los que ya tenías (sin cambios), para no
-// arriesgar nada de lo que ya funciona. Ver functions/EMAIL_SETUP.md.
+// arriesgar nada de lo que ya funciona. Ver functions/configuracion-correo.md.
 // ============================================================
 function jsonOut(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
