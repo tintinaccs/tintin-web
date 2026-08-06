@@ -4,12 +4,14 @@ on:
   pull_request:
     paths:
       - scripts/auditar-limpiar-ramas.mjs
+      - tests/branches/auditar-limpiar-ramas.test.mjs
       - .github/workflows/auditar-limpiar-ramas.yml
   push:
     branches:
       - main
     paths:
       - scripts/auditar-limpiar-ramas.mjs
+      - tests/branches/auditar-limpiar-ramas.test.mjs
       - .github/workflows/auditar-limpiar-ramas.yml
   workflow_dispatch:
     inputs:
@@ -49,6 +51,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Probar protecciones del limpiador
+        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
 
       - name: Auditar ramas
         env:
@@ -90,6 +95,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Probar protecciones antes de borrar
+        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
 
       - name: Eliminar ramas seguras
         env:
