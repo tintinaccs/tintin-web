@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Test branch cleanup guard rails
+        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
+
       - name: Audit load contracts for every HTML page
         id: page_load_audit
         continue-on-error: true
