@@ -84,13 +84,13 @@ check(
 check(
   // La validación final de stock/precio ahora corre server-side (Apps
   // Script) en una sola transacción de Firestore — ver
-  // apps-script/Phase4CreateOrder.gs. runTransaction() sigue en el
+  // apps-script/CrearPedido.gs. runTransaction() sigue en el
   // navegador solo para el guard anti-repetición (checkoutGuards).
   'La compra final conserva validación transaccional',
   read('js/orders/pedido-checkout-seguro.js').includes('runTransaction') &&
-    read('apps-script/Phase4CreateOrder.gs').includes('qty > stock') &&
-    read('apps-script/Phase4CreateOrder.gs').includes('stock - item.qty') &&
-    read('apps-script/Phase4CreateOrder.gs').includes("phase4UpdateWrite_('products/' + item.id"),
+    read('apps-script/CrearPedido.gs').includes('qty > stock') &&
+    read('apps-script/CrearPedido.gs').includes('stock - item.qty') &&
+    read('apps-script/CrearPedido.gs').includes("phase4UpdateWrite_('products/' + item.id"),
   'el servidor debe volver a validar el total solicitado'
 );
 
