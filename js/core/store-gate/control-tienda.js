@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './store-gate-core.js?v=tintin-20260730-appcheck-stable-4';
+} from './nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4';
 
 export {
   isAccessAllowed,

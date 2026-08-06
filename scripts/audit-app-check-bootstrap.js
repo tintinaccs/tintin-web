@@ -12,8 +12,8 @@ const moduleFiles = fs.readdirSync(path.join(root, 'js'))
 
 const loader = read('js/cargador-pagina.js');
 const firebase = read('js/core/firebase/firebase.js');
-const storeGate = read('js/core/store-gate/store-gate-core.js');
-const storeGateRuntime = read('js/core/store-gate/store-gate.js');
+const storeGate = read('js/core/store-gate/nucleo-control-tienda.js');
+const storeGateRuntime = read('js/core/store-gate/control-tienda.js');
 const activity = read('js/analytics/site-activity.js');
 const analytics = read('js/analytics/analytics.js');
 const images = read('js/components/images/imagenes.js');

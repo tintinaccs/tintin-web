@@ -38,8 +38,8 @@ check(
 );
 check(
   'El control de tienda reutiliza store-gate-core',
-  read('js/core/store-gate/store-gate.js').includes("from './store-gate-core.js") &&
-    read('js/core/store-gate/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')") &&
+  read('js/core/store-gate/control-tienda.js').includes("from './nucleo-control-tienda.js") &&
+    read('js/core/store-gate/nucleo-control-tienda.js').includes("doc(db, 'settings', 'storeGate')") &&
     read('js/cargador-pagina.js').includes('store-gate'),
   'El gate público debe tener una sola implementación.'
 );
@@ -52,7 +52,7 @@ check(
 );
 check(
   'Tienda cerrada consume settings/storeGate',
-  read('js/core/store-gate/store-gate-core.js').includes("doc(db, 'settings', 'storeGate')"),
+  read('js/core/store-gate/nucleo-control-tienda.js').includes("doc(db, 'settings', 'storeGate')"),
   'La apertura de tienda debe usar el documento público mínimo.'
 );
 check(
