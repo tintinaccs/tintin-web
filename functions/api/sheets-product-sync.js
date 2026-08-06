@@ -2,7 +2,7 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 
 const APPS_SCRIPT_SYNC_URL =
   'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';

@@ -4,7 +4,7 @@ Esta fase sigue usando Google Apps Script y Gmail. No requiere Blaze.
 
 ## Archivos
 
-- `apps-script/Phase3Security.gs`: funciones que autentican a la persona, leen el pedido real desde Firestore y verifican permisos de reenvío.
+- `apps-script/Seguridad.gs`: funciones que autentican a la persona, leen el pedido real desde Firestore y verifican permisos de reenvío.
 - `js/email/notificaciones-correo.js`: envía el identificador del pedido y una sesión válida.
 - `js/pages/checkout/checkout-puente-correo.js`: inicia el correo después de que la transacción Spark termina.
 
@@ -13,7 +13,7 @@ Esta fase sigue usando Google Apps Script y Gmail. No requiere Blaze.
 1. Entrar a Google Apps Script con la cuenta que administra el proyecto de correos.
 2. Abrir el proyecto existente `Tintin - Emails de pedidos`.
 3. Crear un archivo de secuencia de comandos llamado `Phase3Security`.
-4. Copiar dentro todo el contenido de `apps-script/Phase3Security.gs`.
+4. Copiar dentro todo el contenido de `apps-script/Seguridad.gs`.
 5. En `doPost(e)`, después de validar que existe un `idToken`, cargar el pedido mediante `phase3LoadOrderContext_(orderId, data.idToken, isResend)`.
 6. Usar `secureContext.order` en lugar de `data.order`.
 7. Mantener los límites diarios y el cooldown existentes; la identidad, el rol y el permiso de reenvío ya quedan comprobados por `phase3LoadOrderContext_`.

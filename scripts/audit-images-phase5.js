@@ -23,7 +23,7 @@ const files = {
   readme: read('assets-tintin/images/README-IMAGENES.md'),
   packageJson: read('package.json'),
   firebaseJson: read('firebase.json'),
-  cloudinarySecurity: read('cloudflare/cloudinary-security.js'),
+  cloudinarySecurity: read('cloudflare/seguridad-cloudinary.js'),
   cloudinarySign: read('functions/api/cloudinary-sign-upload.js'),
   cloudinaryDelete: read('functions/api/cloudinary-delete.js'),
   geoFunction: read('functions/api/visitor-geo.js'),

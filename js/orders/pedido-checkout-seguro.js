@@ -431,7 +431,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, { maxAttempts: 2 });
   }
 
-  // El pedido se crea server-side (Apps Script, apps-script/Phase4CreateOrder.gs)
+  // El pedido se crea server-side (Apps Script, apps-script/CrearPedido.gs)
   // en vez de con una transacción de Firestore desde el navegador: ese
   // proceso corre con la identidad de su dueño (ScriptApp.getOAuthToken()),
   // así que no pasa por el límite de 1000 expresiones de firestore.rules ni

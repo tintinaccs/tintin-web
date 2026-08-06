@@ -7,7 +7,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin
-} from '../../cloudflare/cloudinary-security.js';
+} from '../../cloudflare/seguridad-cloudinary.js';
 
 export async function onRequest(context) {
   const { request, env } = context;

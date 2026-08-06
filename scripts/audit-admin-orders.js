@@ -45,7 +45,7 @@ const perfil     = read('perfil.html');
 const orderStats = read('js/core/store/estadisticas-pedidos.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/orders/pedido-checkout-seguro.js');
-const phase4Order = read('apps-script/Phase4CreateOrder.gs');
+const phase4Order = read('apps-script/CrearPedido.gs');
 const inventoryIntegrity = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 
@@ -198,7 +198,7 @@ check(
 // ===========================================================================
 check(
   // El pedido lo crea el servidor (Apps Script) en una sola transacción de
-  // Firestore, no el navegador — ver apps-script/Phase4CreateOrder.gs.
+  // Firestore, no el navegador — ver apps-script/CrearPedido.gs.
   'El pedido se crea autocontenido con ítems, precios, subtotal y total',
   /phase4CreateWrite_\('orders\/' \+ orderId, orderData\)/.test(phase4Order) &&
     /subtotal/.test(phase4Order) &&

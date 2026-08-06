@@ -18,7 +18,7 @@ on:
       - 'js/core/store/estado-productos.js'
       - 'js/analytics/actividad-sitio.js'
       - 'js/quality/calidad-interfaz.js'
-      - 'cloudflare/cloudinary-security.js'
+      - 'cloudflare/seguridad-cloudinary.js'
       - 'functions/api/cloudinary-sign-upload.js'
       - 'functions/api/cloudinary-delete.js'
       - 'functions/api/visitor-geo.js'
@@ -65,7 +65,7 @@ jobs:
           node --check js/core/store/estado-productos.js
           node --check js/analytics/actividad-sitio.js
           node --check js/quality/calidad-interfaz.js
-          node --check cloudflare/cloudinary-security.js
+          node --check cloudflare/seguridad-cloudinary.js
           node --check functions/api/cloudinary-sign-upload.js
           node --check functions/api/cloudinary-delete.js
           node --check functions/api/visitor-geo.js
