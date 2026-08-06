@@ -84,13 +84,13 @@ check(
 check(
   // La validación final de stock/precio ahora corre server-side (Apps
   // Script) en una sola transacción de Firestore — ver
-  // apps-script/CrearPedido.gs. runTransaction() sigue en el
+  // apps-script/Phase4CreateOrder.gs. runTransaction() sigue en el
   // navegador solo para el guard anti-repetición (checkoutGuards).
   'La compra final conserva validación transaccional',
   read('js/orders/pedido-checkout-seguro.js').includes('runTransaction') &&
-    read('apps-script/CrearPedido.gs').includes('qty > stock') &&
-    read('apps-script/CrearPedido.gs').includes('stock - item.qty') &&
-    read('apps-script/CrearPedido.gs').includes("phase4UpdateWrite_('products/' + item.id"),
+    read('apps-script/Phase4CreateOrder.gs').includes('qty > stock') &&
+    read('apps-script/Phase4CreateOrder.gs').includes('stock - item.qty') &&
+    read('apps-script/Phase4CreateOrder.gs').includes("phase4UpdateWrite_('products/' + item.id"),
   'el servidor debe volver a validar el total solicitado'
 );
 
@@ -107,9 +107,14 @@ check(
   'la rotación debe excluir el producto actual, evitar repeticiones y tener un solo propietario'
 );
 
+const featuredLimitMatch = files.collectionsPage.match(/const\s+FEATURED_LIMIT\s*=\s*(\d+)\s*;/);
+const featuredLimit = Number(featuredLimitMatch?.[1]);
+
 check(
   'Los bloques secundarios nunca superan cinco productos',
-  files.collectionsPage.includes('const FEATURED_LIMIT = 5') &&
+  Number.isInteger(featuredLimit) &&
+    featuredLimit >= 1 &&
+    featuredLimit <= 5 &&
     files.checkout.includes("limit(5)") &&
     files.checkout.includes('.slice(0, 5)') &&
     files.productsStore.includes("featuredProducts.slice(0, 5)") &&

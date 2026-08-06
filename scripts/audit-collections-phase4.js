@@ -142,9 +142,14 @@ check(
   'collections.html debe consumir el renderer global, no abrir un segundo snapshot y competir por el mismo grid'
 );
 
+const featuredLimitMatch = files.collectionsPageRuntime.match(/const\s+FEATURED_LIMIT\s*=\s*(\d+)\s*;/);
+const featuredLimit = Number(featuredLimitMatch?.[1]);
+
 check(
   'Los destacados de colecciones tienen un límite de rendimiento',
-  files.collectionsPageRuntime.includes('const FEATURED_LIMIT = 5') &&
+  Number.isInteger(featuredLimit) &&
+    featuredLimit >= 1 &&
+    featuredLimit <= 5 &&
     files.collectionsPage.includes('id="collections-featured-grid"') &&
     !files.collectionsPage.includes('id="colls-products-grid"') &&
     files.collectionsPageRuntime.includes('.slice(0, FEATURED_LIMIT)'),

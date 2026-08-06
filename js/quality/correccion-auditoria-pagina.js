@@ -11,8 +11,9 @@ var WA_REQUIRED_EVENT=/\/(?:terminos|privacidad)(?:\.html)?$/.test(WA_PATH)
   ? 'tintin:collections-layout-ready'
   : '';
 function isHome(){var p=(location.pathname||'').toLowerCase();return p.endsWith('/')||p.endsWith('/index.html')||p==='';}
+function isAdminPage(){var p=(location.pathname||'').toLowerCase().replace(/\/+$/,'');return /\/admin(?:\.html)?$/.test(p)||/\/admin-images(?:\.html)?$/.test(p);}
 function versionUrl(url){try{var u=new URL(url,location.href);if(u.origin!==location.origin)return url;if(!/\.css$/i.test(u.pathname))return url;if(u.searchParams.get('v')===VERSION)return url;u.searchParams.set('v',VERSION);return u.href}catch(e){return url;}}
-function versionLocalCssLinks(){document.querySelectorAll('link[href$=".css"],link[href*=".css?"]').forEach(function(link){var href=link.getAttribute('href')||'';var next=versionUrl(href);if(next!==href){link.setAttribute('href',next);link.setAttribute('data-tt-css-versioned','true');}})}
+function versionLocalCssLinks(){if(isAdminPage())return;document.querySelectorAll('link[href$=".css"],link[href*=".css?"]').forEach(function(link){var href=link.getAttribute('href')||'';var next=versionUrl(href);if(next!==href){link.setAttribute('href',next);link.setAttribute('data-tt-css-versioned','true');}})}
 function addStyle(){
  if(document.getElementById('tt-page-audit-fix-style'))return;
  var st=document.createElement('style');st.id='tt-page-audit-fix-style';

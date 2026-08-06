@@ -5,6 +5,8 @@
   window.TintinGlobalScrollRevealBooted = true;
 
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+  const currentPath = (window.location.pathname || '').toLowerCase().replace(/\/+$/, '');
+  const isAdminPage = /\/(?:admin|admin-images)(?:\.html)?$/.test(currentPath);
   const fixedExclusions = '#tt-loader,#tt-intro,#tt-welcome-tutorial,#tt-privacy-consent,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
   const revealSelectors = [
     'main>section', '.section', '.section-sm', '.tt-section', '.tt-page-hero', '.tt-hero', '.tt-trust-bar', '.tt-editorial', '.tt-products-section', '.tt-reviews-section', '.tt-footer',
@@ -33,7 +35,6 @@
       .tt-reveal-scale{transform:translate3d(0,10px,0) scale(.97)!important}
       .tt-reveal-soft{transform:translate3d(0,12px,0)!important}
       .tt-reveal-text{transform:translate3d(0,14px,0)!important}
-      
       .tt-reveal-img{transform:translate3d(0,16px,0) scale(1.012)!important}
       .tt-reveal-img.tt-visible{transform:translate3d(0,0,0) scale(1)!important}
       .tt-premium-hover{transition:transform var(--mo-hover,220ms) var(--mo-enter,cubic-bezier(.16,1,.3,1))}
@@ -129,6 +130,10 @@
   function boot() {
     injectStyles();
     bindPressFeedback();
+    if (isAdminPage) {
+      document.documentElement.classList.add('tt-reveal-admin-disabled');
+      return;
+    }
     if (reducedMotion) {
       document.documentElement.classList.add('tt-reveal-reduced-motion');
       return;

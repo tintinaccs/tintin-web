@@ -1,4 +1,4 @@
-const FEATURED_LIMIT = 5;
+const FEATURED_LIMIT = 4;
 const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
