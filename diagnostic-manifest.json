@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-07T12:51:57.615Z",
-  "sourceFingerprint": "abb459adaa517b4a9fa294016734b06b424be3f9895e5bd60daab2a48d30e9a6",
+  "generatedAt": "2026-08-07T13:34:19.897Z",
+  "sourceFingerprint": "21f348fc8e14fc66ee42c3d67c63b03cb0ba0e270d64716d6341fc11d6eb1f37",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 514,
-    "textFiles": 482,
-    "totalBytes": 5509481,
+    "files": 517,
+    "textFiles": 485,
+    "totalBytes": 5529217,
     "pages": 18,
     "modules": 305
   },
@@ -23830,6 +23830,12 @@
       "sha256": "d24831cec0d57b098e26fd6c542db33e11b971c2cb8113130b84212379ba10cc"
     },
     {
+      "path": "docs/linea-base-revision-seguridad.md",
+      "extension": ".md",
+      "bytes": 7098,
+      "sha256": "af4a09ee6fe3961cfc255c14939bdbb3f2386ae69ec822060abffea620e74862"
+    },
+    {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
       "bytes": 4581,
@@ -23870,6 +23876,18 @@
       "extension": ".md",
       "bytes": 4621,
       "sha256": "60215c2c9f6e821a9658c73814534a891dca5a08865c4ef99c5ed0a499695b66"
+    },
+    {
+      "path": "docs/prueba-compra-real.md",
+      "extension": ".md",
+      "bytes": 5949,
+      "sha256": "0339159e7668a8c749f7a0e70712e3ebf00ca7f878206590becf6292e052cfa1"
+    },
+    {
+      "path": "docs/recuperacion-firestore.md",
+      "extension": ".md",
+      "bytes": 6689,
+      "sha256": "7ae77f4ad962342f30ff5082e652b898b0109fdd47da962d2d3a71dca0cd0ba2"
     },
     {
       "path": "docs/respaldo-recuperacion.md",
