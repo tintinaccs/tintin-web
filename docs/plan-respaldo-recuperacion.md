@@ -73,11 +73,21 @@ Cada ejecución genera:
 
 ## Firestore
 
-- Configurar exportaciones periódicas hacia un bucket separado de producción.
+> **Estado real y procedimiento ejecutable: `docs/recuperacion-firestore.md`.**
+>
+> La exportación periódica hacia un bucket **requiere plan Blaze**, y el proyecto está
+> deliberadamente en Spark. Los objetivos de abajo describen la meta, no algo que se
+> pueda ejecutar hoy sin decidir antes cómo cerrar ese hueco.
+
+- Objetivo: exportaciones periódicas hacia un bucket separado de producción. **Requiere
+  Blaze**; ver las opciones A, B y C del documento de recuperación.
 - Conservar una política de retención y acceso mínimo.
 - Probar una restauración en un proyecto o base de datos no productiva.
 - Comparar conteos y muestras de productos, pedidos, usuarios, configuraciones y permisos.
 - Nunca ensayar una importación directamente sobre producción.
+
+Cobertura actual: el panel exporta `products`, `collections`, `site_content`, `settings`
+y `rolePermissions`. **`orders`, `users`, `auditLog` y `emailLogs` no tienen copia.**
 
 ## Imágenes
 

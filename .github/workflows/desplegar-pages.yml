@@ -31,7 +31,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Regenerar y verificar inventario de diagnóstico
         run: npm run build:pages
