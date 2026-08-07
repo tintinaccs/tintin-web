@@ -49,7 +49,7 @@ const comparisons = JSON.parse(process.env.MOCK_COMPARISONS);
 function json(data, status = 200) { return new Response(status === 204 ? null : JSON.stringify(data), { status, headers: { 'content-type': 'application/json' } }); }
 globalThis.fetch = async (url, options = {}) => {
   const value = String(url); const method = options.method || 'GET';
-  if (method === 'DELETE') { appendFileSync(process.env.MOCK_DELETE_LOG, value + '\n'); return json(null, 204); }
+  if (method === 'DELETE') { appendFileSync(process.env.MOCK_DELETE_LOG, value + '\\n'); return json(null, 204); }
   if (value.endsWith('/repos/tintinaccs/tintin-web')) return json({ default_branch: 'main' });
   if (value.includes('/branches?')) return json(branches);
   if (value.includes('/branches/')) { const encoded = value.split('/branches/')[1].split('?')[0]; const name = decodeURIComponent(encoded); const current = liveBranches.find(item => item.name === name); return current ? json(current) : json({ message: 'Not Found' }, 404); }
