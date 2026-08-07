@@ -4,7 +4,7 @@ Este documento registra qué debe recuperarse y dónde verificarlo. No debe cont
 
 | Servicio | Activos críticos | Responsable | Método de recuperación | Copia externa | Última prueba | Estado |
 | --- | --- | --- | --- | --- | --- | --- |
-| GitHub | Código, historial, ramas, tags, Releases, Actions y Pages | Propietaria de Tintin | Snapshot, Release y bundle verificado | Pendiente | Pendiente | En preparación |
+| GitHub | Código, historial, ramas, tags, Releases, Actions y Pages | Propietaria de Tintin | Snapshot, Release y bundle verificado | Pendiente | 2026-08-06 | Código restaurable verificado; falta copia externa |
 | Firebase | Proyecto, reglas, índices, Authentication y configuración | Propietaria de Tintin | Consola Firebase y configuración versionada | Pendiente | Pendiente | Requiere revisión manual |
 | Firestore | Productos, colecciones, usuarios, pedidos, configuración y auditoría | Propietaria de Tintin | Exportación administrada y restauración en entorno separado | Pendiente | Pendiente | Requiere configuración |
 | Cloudinary / imágenes | Originales, identificadores públicos, carpetas y URLs activas | Propietaria de Tintin | Exportación o copia de originales | Pendiente | Pendiente | Requiere inventario |
@@ -37,7 +37,7 @@ Registrar únicamente metadatos, nunca valores reales.
 
 | Fecha | Activo | Entorno de prueba | Resultado | Tiempo real | Evidencia | Responsable |
 | --- | --- | --- | --- | --- | --- | --- |
-| Pendiente | Código | Carpeta temporal aislada | Pendiente | Pendiente | Log del verificador | Propietaria de Tintin |
+| 2026-08-06 | Código | Carpeta temporal aislada | Bundle verificado, restauración completada y `git fsck --full` aprobado | Automático en CI | Workflow `respaldo-repositorio.yml` y artefacto de respaldo | Propietaria de Tintin |
 | Pendiente | Firestore | Proyecto o base no productiva | Pendiente | Pendiente | Conteos y muestra verificada | Propietaria de Tintin |
 | Pendiente | Imágenes | Carpeta temporal | Pendiente | Pendiente | Muestra restaurada | Propietaria de Tintin |
 

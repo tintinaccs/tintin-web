@@ -1,0 +1,134 @@
+name: Auditoría y limpieza segura de ramas
+
+on:
+  pull_request:
+    paths:
+      - scripts/auditar-limpiar-ramas.mjs
+      - tests/branches/auditar-limpiar-ramas.test.mjs
+      - .github/workflows/auditar-limpiar-ramas.yml
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/auditar-limpiar-ramas.mjs
+      - tests/branches/auditar-limpiar-ramas.test.mjs
+      - .github/workflows/auditar-limpiar-ramas.yml
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Acción a ejecutar
+        required: true
+        default: audit
+        type: choice
+        options:
+          - audit
+          - delete
+      confirmation:
+        description: Para eliminar, escribir ELIMINAR_SOLO_RAMAS_SEGURAS
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: limpieza-ramas-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
+    name: Clasificar ramas sin borrar
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Probar protecciones del limpiador
+        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
+
+      - name: Auditar ramas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_CLEANUP_MODE: audit
+          BRANCH_CLEANUP_CONFIRMATION: ''
+          BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: 'true'
+        run: node scripts/auditar-limpiar-ramas.mjs
+
+      - name: Publicar resumen
+        if: always()
+        run: |
+          if [ -f branch-audit.md ]; then
+            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-ramas-audit-${{ github.run_id }}
+          path: |
+            branch-audit.json
+            branch-audit.md
+          retention-days: 30
+          if-no-files-found: error
+
+  delete:
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'delete'
+    name: Eliminar solo ramas verificadas
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Probar protecciones antes de borrar
+        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
+
+      - name: Eliminar ramas seguras
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_CLEANUP_MODE: delete
+          BRANCH_CLEANUP_CONFIRMATION: ${{ inputs.confirmation }}
+          BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: 'true'
+        run: node scripts/auditar-limpiar-ramas.mjs
+
+      - name: Publicar resumen
+        if: always()
+        run: |
+          if [ -f branch-audit.md ]; then
+            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-ramas-delete-${{ github.run_id }}
+          path: |
+            branch-audit.json
+            branch-audit.md
+          retention-days: 30
+          if-no-files-found: error
