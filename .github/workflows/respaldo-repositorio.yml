@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Descargar repositorio con historial completo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -37,7 +37,7 @@ jobs:
         run: git fetch --all --tags --prune
 
       - name: Preparar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -53,7 +53,7 @@ jobs:
         run: node scripts/verificar-respaldo-repositorio.mjs "${{ steps.respaldo.outputs.bundle_path }}"
 
       - name: Publicar respaldo temporal
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: respaldo-repositorio-${{ github.run_id }}
           path: respaldos/

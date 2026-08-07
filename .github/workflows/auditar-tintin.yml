@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Upload page-load audit log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: page-loading-audit-log
           path: page-loading-audit.log
@@ -139,7 +139,7 @@ jobs:
 
       - name: Upload adversarial Firestore report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: firestore-critical-report
           path: firestore-critical.log
@@ -166,7 +166,7 @@ jobs:
 
       - name: Upload global responsive report and failure screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: global-responsive-geometry
           path: |
@@ -187,7 +187,7 @@ jobs:
 
       - name: Upload Chromium smoke report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: chromium-smoke-report
           path: chromium-smoke.log
