@@ -6,10 +6,17 @@ on:
       - main
   workflow_dispatch:
 
+# Esta auditoría instala navegadores y consume el runner durante varios minutos.
+# Solo la ejecución más reciente aporta valor; una nueva reemplaza a la anterior.
+concurrency:
+  group: responsive-global
+  cancel-in-progress: true
+
 jobs:
   geometry:
     name: Geometría pública en 7 pantallas y límites
     runs-on: ubuntu-latest
+    timeout-minutes: 50
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,14 +27,27 @@ jobs:
           node-version: 20
 
       - name: Install Playwright
-        run: npm install --no-save --package-lock=false
+        timeout-minutes: 25
+        run: |
+          for attempt in 1 2 3; do
+            if timeout 7m npm install --no-save --package-lock=false; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "No se pudo instalar Playwright después de 3 intentos" >&2
+              exit 1
+            fi
+            sleep $((attempt * 15))
+          done
 
       - name: Install Chromium
+        timeout-minutes: 20
         run: npx playwright install --with-deps chromium
 
       - name: Audit all public pages and shared surfaces
         id: geometry
         continue-on-error: true
+        timeout-minutes: 20
         run: npm run audit:global-responsive-geometry > global-responsive-geometry.log 2>&1
 
       - name: Upload report and failure screenshots
