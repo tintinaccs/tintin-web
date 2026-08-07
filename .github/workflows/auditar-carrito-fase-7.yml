@@ -37,6 +37,7 @@ on:
       # ninguna PR puede modificarla. Para revalidarlo sobre main hay que
       # lanzarlo con workflow_dispatch.
       - 'catalogo.html'
+      - 'admin.html'
       - 'tienda.js'
       - 'js/**'
       - 'functions/api/sheets-product-sync.js'
