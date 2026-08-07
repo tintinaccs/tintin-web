@@ -11,9 +11,21 @@ const requireZeroReview = process.env.BRANCH_AUDIT_REQUIRE_ZERO_REVIEW === 'true
 
 const branchName = (...parts) => parts.join('');
 const reviewedObsoleteBranches = new Map([
+  ['agent/fix-mobile-ui-parity', {
+    sha: '1a55452998b8d1258862972c58dd294be5d8e605',
+    reason: 'El PR #261 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
+  }],
+  ['agent/login-profile-completion', {
+    sha: 'aa92972879f7371ed35dd4b2e6f597e97b02b445',
+    reason: 'El PR #265 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
+  }],
   ['agent/phase8-tree-test', {
     sha: '428ed951993244a0b31ad4b5fcbfe4923519c144',
     reason: 'Rama temporal con archivos y workflows de prueba de árbol'
+  }],
+  ['agent/unified-nav-ci-contract', {
+    sha: 'd66bb9297577801e7fe97208e75bd3878c651775',
+    reason: 'El PR #267 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
   }],
   [branchName('chat', 'gpt/global-hardening-20260707'), {
     sha: 'da6d89074337708de370695a898f2a2f51e8a9dc',
@@ -24,8 +36,8 @@ const reviewedObsoleteBranches = new Map([
     reason: 'Rama reemplazada por el Pull Request #343; su diferencia residual era un comentario sin efecto funcional'
   }],
   ['chore/cierre-maestro-ramas-v2', {
-    sha: 'e675da2422c94eb3382ebad206a6fd536c4e0173',
-    reason: 'Duplicado exacto de la rama reemplazada por el Pull Request #343'
+    sha: '37dcf6cbd7f651b8c4612f08a26dae39569135a1',
+    reason: 'El PR #344 fue cerrado sin fusionar y reemplazado por el PR #343; esta punta exacta fue revisada y queda supersedida por la implementación validada del cierre actual'
   }],
   [branchName('clau', 'de/user-mgmt-bulk-organize-sf4tqu'), {
     sha: 'b3b854c65798c296eaf5c457fde54da8c3f662fa',
@@ -43,6 +55,14 @@ const reviewedObsoleteBranches = new Map([
     sha: '06d9f2d2927bb0ed0632d5593e2305be43f0056f',
     reason: 'Cambio antiguo de catálogo superado por el estado comercial y las auditorías actuales'
   }],
+  ['fix/catalog-stock-priority-realtime-v2', {
+    sha: '13b19d2196df592c18af26fd1878686aca4c75d5',
+    reason: 'El PR #250 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
+  }],
+  ['fix/contraste', {
+    sha: 'e86044be7f801f4ea440cfc0cb5ccab26babf2af',
+    reason: 'El PR #292 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
+  }],
   ['fix/hide-cookie-banner-superadmin', {
     sha: 'c4e553b4c141f07cd8590ad4bc6efd2662865946',
     reason: 'Corrección antigua de privacidad absorbida por el runtime y el panel actuales'
@@ -50,6 +70,10 @@ const reviewedObsoleteBranches = new Map([
   ['fix/loader-logo-oficial-instantaneo-20260731', {
     sha: '5a27cc9a18b193814b3df9c08c6e934fdd252f0a',
     reason: 'Variación antigua del loader y caché sustituida por el sistema actual auditado'
+  }],
+  ['fix/loader-logo-oficial-instantaneo-v2-20260731', {
+    sha: '1c8525adff84a393fe54d51b4096373dcab9da9e',
+    reason: 'El PR #259 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
   }],
   ['fix/phase8-users-audit-permissions', {
     sha: 'c63bafe7df04dd4775de9e4a7e5b7f3d4df1175a',
