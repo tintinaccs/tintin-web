@@ -30,11 +30,32 @@ confirmarlas o cambiarlas, actualizar esta tabla y marcar el punto 10 de #340.
 
 ## 2. Revisión semanal — monitor de producción
 
-- [ ] El sitio público carga: `https://tintinaccs.github.io/tintin-web/` y
-      `https://tintinaccesorios.pages.dev`.
+La disponibilidad del sitio **ya está vigilada automáticamente**. El workflow
+`.github/workflows/seo-produccion-fase-11.yml` ejecuta `npm run monitor:production`
+**cada hora** (`cron: '17 * * * *'`) contra el origen público, definido por
+`TINTIN_PUBLIC_ORIGIN` con `https://tintinaccesorios.pages.dev` por defecto.
+
+`scripts/auditar-produccion-salud.mjs` comprueba en cada corrida:
+
+- Inicio, catálogo, colecciones y ficha de producto responden y son HTML.
+- El canonical de inicio apunta al origen correcto.
+- El HTML público **no** expone la URL antigua de GitHub Pages.
+- `robots.txt` apunta al sitemap vigente.
+- `sitemap.xml` no está vacío y todas sus URL usan el mismo origen.
+- `manifest.json` responde como JSON.
+
+Hace **3 intentos con backoff** y trata cualquier 5xx como reintentable, así
+que un 503 pasajero no dispara una falsa alarma. Si tras los tres intentos algo
+sigue fallando, el job sale con código 1 y GitHub notifica. Cada corrida sube
+el artefacto `phase11-production-health` con el detalle y los tiempos.
+
+Por eso la revisión semanal manual se reduce a lo que el monitor no cubre:
+
 - [ ] El último workflow de `main` terminó en verde.
 - [ ] El último despliegue de Cloudflare Pages terminó correctamente.
 - [ ] No hay pedidos atascados sin cambio de estado en Admin.
+- [ ] Las Pages Functions (`/api/*`) responden: el monitor horario cubre las
+      páginas estáticas y los metadatos, no los endpoints de Functions.
 
 ## 3. Revisión mensual
 
@@ -115,14 +136,22 @@ exige Blaze. Cambiar de plan es una decisión explícita, no un efecto lateral.
 | Evento | Detección actual | Estado |
 | --- | --- | --- |
 | Fallo de workflow en `main` | Notificación de GitHub Actions al propietario | Activo |
+| Caída del sitio público | `seo-produccion-fase-11.yml`, cada hora, con 3 reintentos | Activo |
+| Metadatos públicos rotos (canonical, robots, sitemap, manifest) | El mismo monitor horario | Activo |
 | Fallo de despliegue de Cloudflare Pages | Notificación del panel de Cloudflare | Requiere confirmar que esté habilitada |
-| Fallo de una Pages Function | Sin alerta automática | Pendiente de definir |
-| Cuota cerca del límite | Sin alerta automática | Pendiente de definir |
-| Caída del sitio público | Sin monitor externo | Pendiente de definir |
+| Fallo de una Pages Function (`/api/*`) | Sin alerta automática | Hueco real |
+| Cuota cerca del límite | Sin alerta automática | Hueco real |
 
-Las tres últimas filas son huecos reales. Cubrirlas requiere configurar algo
-fuera del repositorio (alertas de proveedor o un monitor externo), así que
-quedan como pendiente manual del punto 10.
+Quedan **dos huecos reales**. Ninguno se puede cerrar desde el repositorio:
+
+- **Pages Functions**: el monitor horario consulta páginas estáticas y
+  metadatos, no los endpoints de Functions. Vigilarlos exige o bien un
+  endpoint de salud pensado para eso, o las alertas del panel de Cloudflare.
+- **Cuotas**: cada proveedor las expone en su propio panel. Requiere activar
+  las alertas de Firebase, Cloudflare, Cloudinary y Resend a mano.
+
+No se agregó un monitor nuevo de disponibilidad: ya existe uno y es más
+completo que un simple ping.
 
 ## 8. Alta y baja de accesos
 
