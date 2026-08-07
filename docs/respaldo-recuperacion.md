@@ -37,9 +37,17 @@ No se considera respaldo un archivo que nunca fue revisado ni una copia guardada
 
 ## Firestore
 
+> **Antes de aplicar esta sección, leer `docs/recuperacion-firestore.md`.** Lo que se
+> puede restaurar hoy depende de la colección: catálogo y configuración tienen copia
+> descargable desde el panel; **`orders`, `users`, `auditLog` y `emailLogs` no la tienen**.
+> Un procedimiento de restauración solo funciona si existe una copia de la que restaurar.
+
 ### Recuperación de cambios puntuales
 
-Usar historial de auditoría, exportaciones administrativas y documentos afectados para restaurar únicamente el alcance necesario.
+Usar historial de auditoría, la copia operativa del panel y los documentos afectados para
+restaurar únicamente el alcance necesario. Para pedidos y usuarios no hay copia de
+respaldo: la recuperación se limita a lo que quede en `auditLog` y en los correos ya
+enviados.
 
 ### Recuperación de cambios masivos
 
