@@ -44,9 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
       - name: Revisar sintaxis
@@ -81,7 +81,7 @@ jobs:
           npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=. 2>&1 | tee wrangler-build.log
       - name: Guardar registro de Wrangler
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: wrangler-build-log
           path: wrangler-build.log
@@ -95,7 +95,7 @@ jobs:
         run: npm run audit:reliability > image-reliability-audit.log 2>&1
       - name: Guardar informe de confiabilidad
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: image-reliability-audit-log
           path: image-reliability-audit.log
