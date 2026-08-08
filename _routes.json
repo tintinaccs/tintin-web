@@ -12,6 +12,10 @@
     "/api/email-otp-verify",
     "/api/admin-delete-user",
     "/api/sheets-product-sync",
+    "/api/paypal-config",
+    "/api/paypal-create-order",
+    "/api/paypal-capture-order",
+    "/api/paypal-webhook",
     "/__/auth/*"
   ],
   "exclude": []
