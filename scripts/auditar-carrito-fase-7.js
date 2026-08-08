@@ -8,6 +8,7 @@ const cart = read('js/components/cart/sincronizacion-carrito.js');
 const classic = read('tienda.js');
 const quality = read('js/quality/calidad-interfaz.js');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
+const checkoutPolicy = read('js/orders/politica-checkout.js');
 const phase4 = read('apps-script/CrearPedido.gs');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
@@ -127,7 +128,9 @@ check(
   // (Apps Script) en vez de en una transacción de Firestore desde el
   // navegador — ver apps-script/CrearPedido.gs.
   'Precio y stock siguen validados por el checkout seguro',
-  checkout.includes('expectedSubtotal') &&
+  checkout.includes("import { composeCheckoutDraft } from './politica-checkout.js") &&
+    checkoutPolicy.includes('expectedSubtotal') &&
+    checkoutPolicy.includes('aggregateCheckoutCart') &&
     checkout.includes("code === 'quote_changed'") &&
     checkout.includes("code === 'insufficient_stock'") &&
     phase4.includes('phase4ParseMoney_(product.price)') &&
