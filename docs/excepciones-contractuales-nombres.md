@@ -26,7 +26,8 @@ Los nombres de estos archivos definen endpoints públicos y permanecen estables:
 
 ## Archivos estándar y arquitectura
 
-- `README.md`, `LICENSE`, `package.json`, `firebase.json`, `manifest.webmanifest`, `sw.js`, `_headers` y `_redirects`.
+- `README.md`, `AGENTS.md`, `LICENSE`, `package.json`, `firebase.json`, `manifest.webmanifest`, `sw.js`, `_headers` y `_redirects`.
+- `AGENTS.md` conserva exactamente ese nombre porque Codex lo descubre como archivo contractual de instrucciones del repositorio.
 - Carpetas arquitectónicas convencionales como `js`, `css`, `pages`, `components`, `core`, `admin`, `scripts`, `functions` y `.github/workflows`.
 - Nombres de proveedores, protocolos y siglas: Firebase, Firestore, Cloudinary, Resend, WhatsApp, API, OTP, PWA, SEO, UI, UX, CI, SDK y Playwright.
 
