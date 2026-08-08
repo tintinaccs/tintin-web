@@ -103,6 +103,11 @@
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
+# El service worker no puede conservar una versión obsoleta durante un año.
+/firebase-messaging-sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
 /js/page-maintenance-loader.js
   Cache-Control: no-cache, no-store, must-revalidate
 
@@ -135,6 +140,10 @@
 
 /assets-tintin/fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+/admin-manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Type: application/manifest+json
 
 /assets-tintin/images/*
   Cache-Control: public, max-age=31536000, immutable

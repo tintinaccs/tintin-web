@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T17:15:07.586Z",
-  "sourceFingerprint": "f4dc04ce8646dc34f553bcc94bbeec9b1c9dffbae6122d08bd2fa9335d71926a",
+  "generatedAt": "2026-08-08T17:16:13.292Z",
+  "sourceFingerprint": "35e309b10955348a92f0a21d399d7727e1618c464df8a6504a3c52c4acd472b5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 538,
-    "textFiles": 506,
-    "totalBytes": 5707832,
+    "files": 539,
+    "textFiles": 507,
+    "totalBytes": 5709312,
     "pages": 18,
     "modules": 321
   },
@@ -15663,8 +15663,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 16045,
-      "sha256": "3b046de6a0599362d91ff7ec376ad6c53afbe6158242282ff4ada79c4889c0c4",
+      "bytes": 16043,
+      "sha256": "ff97a0ad8e26bfd19ff3c4ed98832f95888a0f5c968fab1f2ab21cad8f7ede3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22066,8 +22066,8 @@
     },
     {
       "path": "scripts/auditar-push-web.js",
-      "bytes": 14674,
-      "sha256": "c64c03e3bee31a99dae371cfc7db2a18cc1cdcb422e8c797e27ca19f0766fba1",
+      "bytes": 14721,
+      "sha256": "f6110fd2defead6c0cdb255860c5248372a6461b3f4df35df8e6667e65920fd8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22076,6 +22076,10 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/",
+          "line": 74
+        },
+        {
+          "url": "https://*.gstatic.com/",
           "line": 74
         },
         {
@@ -23099,8 +23103,8 @@
     },
     {
       "path": "tests/checkout/order-contract.test.mjs",
-      "bytes": 8830,
-      "sha256": "b5992a41d5603ff1f851f26a39c315914be01887f8e34e1acb686840d20f813f",
+      "bytes": 8923,
+      "sha256": "88e2fc9c0fa286b3d119979c8ed216b8082122c96770cfca63a9ef42891a9f6a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23386,8 +23390,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 14335,
-      "sha256": "a5b277a9e35d89beb261f151f9b725eb421fa6fc254a51d8645d99cf136cbab0",
+      "bytes": 14674,
+      "sha256": "b35ded648e60eb5814dcd58002f3531f4f5b892f7537b4ac8450d1ed9b2e38c6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23428,16 +23432,22 @@
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
           "line": 27
+        },
+        {
+          "raw": "../../cloudflare/servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 28
         }
       ],
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 284
+          "line": 291
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 285
+          "line": 292
         }
       ]
     },
@@ -23679,6 +23689,12 @@
       "extension": ".yml",
       "bytes": 1365,
       "sha256": "fcbf59dc80c27081e7f6073b4c161dacca8514d52b67920657ff1d8478473c4b"
+    },
+    {
+      "path": ".github/workflows/auditar-push-web.yml",
+      "extension": ".yml",
+      "bytes": 1003,
+      "sha256": "e7ae5eb1cc35de64679126299b08b2af123fef8c6337e67fab5264e863bbe20d"
     },
     {
       "path": ".github/workflows/auditar-responsive-global.yml",
@@ -24025,8 +24041,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 16045,
-      "sha256": "3b046de6a0599362d91ff7ec376ad6c53afbe6158242282ff4ada79c4889c0c4"
+      "bytes": 16043,
+      "sha256": "ff97a0ad8e26bfd19ff3c4ed98832f95888a0f5c968fab1f2ab21cad8f7ede3e"
     },
     {
       "path": "collections.html",
@@ -26443,8 +26459,8 @@
     {
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
-      "bytes": 14674,
-      "sha256": "c64c03e3bee31a99dae371cfc7db2a18cc1cdcb422e8c797e27ca19f0766fba1"
+      "bytes": 14721,
+      "sha256": "f6110fd2defead6c0cdb255860c5248372a6461b3f4df35df8e6667e65920fd8"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -26683,8 +26699,8 @@
     {
       "path": "tests/checkout/order-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 8830,
-      "sha256": "b5992a41d5603ff1f851f26a39c315914be01887f8e34e1acb686840d20f813f"
+      "bytes": 8923,
+      "sha256": "88e2fc9c0fa286b3d119979c8ed216b8082122c96770cfca63a9ef42891a9f6a"
     },
     {
       "path": "tests/checkout/saved-location.test.mjs",
@@ -26761,8 +26777,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 14335,
-      "sha256": "a5b277a9e35d89beb261f151f9b725eb421fa6fc254a51d8645d99cf136cbab0"
+      "bytes": 14674,
+      "sha256": "b35ded648e60eb5814dcd58002f3531f4f5b892f7537b4ac8450d1ed9b2e38c6"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",

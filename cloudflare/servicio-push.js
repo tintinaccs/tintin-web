@@ -34,7 +34,7 @@ const MAX_DEVICES_PER_SEND = 20;
 
 export function pushEnabled(env) {
   const flag = cleanText(env?.TINTIN_PUSH_ENABLED, 10).toLowerCase();
-  return flag !== 'false' && flag !== '0' && flag !== 'off';
+  return flag === 'true' || flag === '1' || flag === 'on';
 }
 
 function documentsUrl(projectId) {
