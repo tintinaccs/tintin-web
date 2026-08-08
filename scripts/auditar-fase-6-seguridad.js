@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 
@@ -87,6 +88,28 @@ check(
   headers.includes('https://script.google.com') &&
     headers.includes('https://script.googleusercontent.com'),
   'Apps Script y su redirección deben estar en connect-src'
+);
+
+const inlineScriptHashes = new Set();
+for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
+  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (/\bsrc\s*=/.test(match[1])) continue;
+    inlineScriptHashes.add(
+      `'sha256-${crypto.createHash('sha256').update(match[2], 'utf8').digest('base64')}'`
+    );
+  }
+}
+const scriptSrc = headers.match(/script-src\s+([^;]+);/)?.[1] || '';
+check(
+  'La CSP fija cada bloque script inline por hash',
+  inlineScriptHashes.size > 0 && [...inlineScriptHashes].every(hash => scriptSrc.includes(hash)),
+  'todo cambio en un script inline debe actualizar su hash CSP'
+);
+check(
+  'script-src no permite ejecución inline arbitraria',
+  !scriptSrc.includes("'unsafe-inline'"),
+  'unsafe-inline solo puede permanecer temporalmente en script-src-attr'
 );
 
 check(
