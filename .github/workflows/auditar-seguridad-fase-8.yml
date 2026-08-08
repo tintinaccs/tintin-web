@@ -56,6 +56,12 @@ jobs:
           node-version: '20'
           cache: npm
 
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: Aplicar consolidación temporal de Fase 11
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         shell: bash
