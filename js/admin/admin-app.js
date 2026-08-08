@@ -26,6 +26,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260722-order-delete-2";
+import { initAiDeveloper } from "./ai/desarrollador-ia-admin.js?v=tintin-20260808-ai-developer-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -486,6 +487,7 @@ const SECTION_LABELS = {
   mensajes: 'Mensajes',
   auditoria: 'Auditoría',
   diagnostico: 'Diagnóstico',
+  'desarrollador-ia': 'Desarrollador IA',
   correos: 'Correos',
   configuracion: 'Configuración',
   importar: 'Import / Export',
@@ -514,6 +516,7 @@ const SECTION_PERMISSION = {
   // acciones se anotan igual), pero no puede abrir esta sección a verlo.
   auditoria:     'manageSettings',
   diagnostico:   'manageSettings',
+  'desarrollador-ia': 'manageSettings',
   // Correos: mismo criterio que Usuarios/Configuración/Auditoría — exclusivo
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
@@ -825,6 +828,7 @@ onAuthStateChanged(auth, async user => {
     if (role === 'superadmin' && user.email === SUPER_ADMIN) {
       initSiteDiagnostics({ role });
     }
+    if (role === 'superadmin') initAiDeveloper({ role });
     startAdminRealtimeData();
     loadDashboard();
     // Load eagerly (not just on nav click) so category/collection selects in

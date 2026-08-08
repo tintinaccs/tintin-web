@@ -2189,3 +2189,11 @@
     max-width: none !important;
   }
 }
+
+.adm-ai-form { display:grid; gap:12px; margin:18px 0; }
+.adm-ai-form .adm-btn { justify-self:start; }
+.adm-ai-jobs { display:grid; gap:10px; }
+.adm-ai-job { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 16px; padding:14px; border:1px solid var(--adm-border); border-radius:10px; background:var(--adm-surface, #fff); }
+.adm-ai-job progress { grid-column:1 / -1; width:100%; accent-color:var(--adm-primary); }
+.adm-ai-job a, .adm-ai-job small { grid-column:1 / -1; overflow-wrap:anywhere; }
+@media (max-width:620px) { .adm-ai-job { grid-template-columns:1fr; } .adm-ai-job span { justify-self:start; } }

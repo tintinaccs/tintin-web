@@ -15,6 +15,7 @@
     "audit:secure-orders": "node scripts/auditar-seguro-pedidos.js && npm run test:checkout-contract",
     "audit:checkout-delivery": "node scripts/auditar-checkout-entrega.js",
     "test:checkout-contract": "node --test tests/checkout/*.test.mjs",
+    "test:ai-developer": "node --test tests/ai-developer/*.test.mjs",
     "audit:emails": "node scripts/auditar-correo-fase-3.js",
     "audit:collections": "node scripts/auditar-colecciones-fase-4.js",
     "audit:images": "node scripts/auditar-imagenes-fase-5.js",

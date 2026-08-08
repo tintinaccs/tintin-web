@@ -53,7 +53,7 @@ export function preflightResponse(origin, requestUrl = '', methods = 'POST, OPTI
   return new Response(null, { status: 204, headers });
 }
 
-function getBearerToken(request) {
+export function getBearerToken(request) {
   const authorization = request.headers.get('authorization') || '';
   const match = authorization.match(/^Bearer\s+(.+)$/i);
   if (!match) throw new Error('Falta la autenticación de Super Admin');
@@ -88,6 +88,22 @@ export async function requireSuperAdmin(request) {
     throw new Error('Solo el Super Admin puede administrar imágenes');
   }
 
+  return { uid: String(user.localId), email };
+}
+
+export async function requireVerifiedFirebaseUser(request) {
+  const token = getBearerToken(request);
+  const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ idToken: token })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error('La sesión no es válida o venció');
+  const user = Array.isArray(data.users) ? data.users[0] : null;
+  const email = String(user?.email || '').trim().toLowerCase();
+  if (!user?.localId || !email || user.emailVerified !== true) throw new Error('La cuenta no tiene un correo verificado');
   return { uid: String(user.localId), email };
 }
 
