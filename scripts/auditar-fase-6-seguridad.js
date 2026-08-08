@@ -85,9 +85,16 @@ check(
 ].forEach(header => check('Encabezado presente: ' + header, headers.includes(header)));
 check(
   'La CSP permite el endpoint server-side de pedidos',
-  headers.includes('https://script.google.com') &&
-    headers.includes('https://script.googleusercontent.com'),
+  (headers.includes('https://script.google.com') || headers.includes('https://*.google.com')) &&
+    (headers.includes('https://script.googleusercontent.com') || headers.includes('https://*.googleusercontent.com')),
   'Apps Script y su redirección deben estar en connect-src'
+);
+
+const overlongHeaderLines = headers.split('\n').filter(line => line.length > 2000);
+check(
+  'Cada línea de _headers respeta el límite de Cloudflare Pages',
+  overlongHeaderLines.length === 0,
+  overlongHeaderLines.map(line => `${line.slice(0, 40)}... (${line.length} caracteres)`).join(', ')
 );
 
 const inlineScriptHashes = new Set();
