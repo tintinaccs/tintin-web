@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T14:43:04.639Z",
-  "sourceFingerprint": "833bffedaeb137f952b7080284ae3893cba263bec8bca110060f531c6cc446c6",
+  "generatedAt": "2026-08-08T15:13:01.925Z",
+  "sourceFingerprint": "5cc605960b003460a74e07c409720d49683bbc825185474add49b45b64ca9084",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 521,
     "textFiles": 489,
-    "totalBytes": 5566763,
+    "totalBytes": 5567558,
     "pages": 18,
     "modules": 307
   },
@@ -20810,8 +20810,8 @@
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
-      "bytes": 6347,
-      "sha256": "253868d315581afebdb511788d4a33ac1ceb3268e31bff83d1a45ec1ae24d178",
+      "bytes": 6692,
+      "sha256": "373d486bd9dc3078b1b9617718b25d0ef9d287eec1df6bd86c0d81b66c31fbde",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20856,8 +20856,8 @@
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
-      "bytes": 6366,
-      "sha256": "b0c96a02f3269eac10423b1c5c452150cd92c7852ca7bc327fbd952ee40b7985",
+      "bytes": 6768,
+      "sha256": "6e62994d151e5987f881a401b64bef4d8dcb6d4e62659ff7ee736f58a9f1cbdd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20869,7 +20869,15 @@
           "line": 88
         },
         {
+          "url": "https://*.google.com/",
+          "line": 88
+        },
+        {
           "url": "https://script.googleusercontent.com/",
+          "line": 89
+        },
+        {
+          "url": "https://*.googleusercontent.com/",
           "line": 89
         }
       ]
@@ -23166,8 +23174,8 @@
     {
       "path": ".github/workflows/entrega-final-fase-12.yml",
       "extension": ".yml",
-      "bytes": 4289,
-      "sha256": "0b2b79cbd02a648825d7c160b350b2caa066022cad9701862f1e7392c3c2d113"
+      "bytes": 4337,
+      "sha256": "b8c6142f811c67dff350946330100a044c9523bf896c1e7049342f3c9257d19b"
     },
     {
       "path": ".github/workflows/entrega-final-fase-9.yml",
@@ -25578,8 +25586,8 @@
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
       "extension": ".mjs",
-      "bytes": 6347,
-      "sha256": "253868d315581afebdb511788d4a33ac1ceb3268e31bff83d1a45ec1ae24d178"
+      "bytes": 6692,
+      "sha256": "373d486bd9dc3078b1b9617718b25d0ef9d287eec1df6bd86c0d81b66c31fbde"
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
@@ -25590,8 +25598,8 @@
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
       "extension": ".js",
-      "bytes": 6366,
-      "sha256": "b0c96a02f3269eac10423b1c5c452150cd92c7852ca7bc327fbd952ee40b7985"
+      "bytes": 6768,
+      "sha256": "6e62994d151e5987f881a401b64bef4d8dcb6d4e62659ff7ee736f58a9f1cbdd"
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
