@@ -74,6 +74,10 @@
     "/api/visual-studio-global",
     "/api/visual-studio-global-public",
     "/api/code-studio/*",
+    "/api/push-config",
+    "/api/push-subscription",
+    "/api/push-test",
+    "/api/push-order-event",
     "/__/auth/*"
   ],
   "exclude": []

@@ -1560,6 +1560,20 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Notificaciones push del panel. Estas dos colecciones se tocan
+    // ÚNICAMENTE desde Cloudflare Pages Functions con la cuenta de servicio
+    // (cloudflare/push-service.js), que no pasa por estas reglas. La regla
+    // explícita está para que quede escrito que ningún cliente — clienta,
+    // admin común ni el propio Super Admin desde el navegador — puede leer
+    // los tokens ni escribir el estado de los eventos.
+    match /adminPushDevices/{deviceId} {
+      allow read, write: if false;
+    }
+
+    match /pushEvents/{eventId} {
+      allow read, write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
