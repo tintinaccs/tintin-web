@@ -33,8 +33,13 @@ function pagePolicy(file) {
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
     "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
     "manifest-src 'self'",
-    "worker-src 'self' blob:"
+    "worker-src 'self' blob:",
+    "upgrade-insecure-requests"
   ].join('; ') + ';';
 }
 
