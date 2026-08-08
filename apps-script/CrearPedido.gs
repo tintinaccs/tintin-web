@@ -41,6 +41,76 @@ var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
   'expectedShippingPending', 'expectedTotal'
 ];
 
+var PHASE4_PUSH_MAX_ATTEMPTS_ = 3;
+
+/**
+ * Aviso push del pedido recién creado. Se llama SIEMPRE después de que el
+ * commit del pedido ya fue exitoso — nunca antes, para no avisar de un
+ * pedido que todavía no existe.
+ *
+ * Firma `<timestamp>.<rawBody>` con HMAC-SHA256 usando el mismo secreto que
+ * tiene Cloudflare. Las dos propiedades se leen de Script Properties: acá no
+ * se declara ningún secreto.
+ *
+ * Un fallo de esta función NO afecta al pedido: se registra sanitizado y
+ * listo. El endpoint de Cloudflare decide por `eventId` si el aviso ya se
+ * mandó, así que reintentar es seguro (y por eso la rama de idempotencia,
+ * donde el pedido ya existía, también lo llama).
+ */
+function phase4NotifyOrderCreated_(orderId) {
+  try {
+    var properties = PropertiesService.getScriptProperties();
+    var url = String(properties.getProperty('TINTIN_PUSH_WEBHOOK_URL') || '').trim();
+    var secret = String(properties.getProperty('TINTIN_PUSH_WEBHOOK_SECRET') || '').trim();
+    if (!url || !secret) return { ok: false, error: 'push_not_configured' };
+
+    var timestamp = String(Date.now());
+    // Sin PII: sólo identificadores y el momento del evento.
+    var rawBody = JSON.stringify({
+      eventId: 'order.created:' + orderId,
+      type: 'order.created',
+      orderId: orderId,
+      occurredAt: new Date().toISOString()
+    });
+    var signature = phase4HmacHex_(secret, timestamp + '.' + rawBody);
+
+    for (var attempt = 1; attempt <= PHASE4_PUSH_MAX_ATTEMPTS_; attempt++) {
+      var response = UrlFetchApp.fetch(url, {
+        method: 'post',
+        contentType: 'application/json',
+        headers: {
+          'X-Tintin-Timestamp': timestamp,
+          'X-Tintin-Signature': signature,
+          'X-Tintin-Event-Id': 'order.created:' + orderId
+        },
+        payload: rawBody,
+        muteHttpExceptions: true
+      });
+      var code = response.getResponseCode();
+      if (code >= 200 && code < 300) return { ok: true, status: code };
+      // 4xx es un problema de contrato o de firma: reintentar no lo arregla.
+      if (code < 500) {
+        console.error('[Phase4CreateOrder] Aviso push rechazado. HTTP ' + code);
+        return { ok: false, error: 'push_rejected', status: code };
+      }
+      if (attempt < PHASE4_PUSH_MAX_ATTEMPTS_) Utilities.sleep(500 * attempt);
+    }
+    console.error('[Phase4CreateOrder] Aviso push sin respuesta después de ' + PHASE4_PUSH_MAX_ATTEMPTS_ + ' intentos.');
+    return { ok: false, error: 'push_unavailable' };
+  } catch (error) {
+    // Nunca se registra el secreto ni el cuerpo firmado.
+    console.error('[Phase4CreateOrder] Aviso push falló: ' + (error && error.name ? error.name : 'error'));
+    return { ok: false, error: 'push_failed' };
+  }
+}
+
+function phase4HmacHex_(secret, message) {
+  var bytes = Utilities.computeHmacSha256Signature(message, secret);
+  return bytes.map(function (byte) {
+    return ('0' + (byte & 0xff).toString(16)).slice(-2);
+  }).join('');
+}
+
 function phase4AuthHeaders_() {
   return { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
 }
@@ -433,6 +503,10 @@ function phase4CreateOrder_(payload, idToken) {
     if (existingOrder) {
       phase4Rollback_(transactionId);
       if (existingOrder.inventoryState === 'pending' || existingOrder.inventoryState === 'reserved') {
+        // El pedido ya existía (reintento de la misma clienta). Se vuelve a
+        // intentar el aviso por si el envío anterior falló: Cloudflare
+        // descarta el duplicado por eventId.
+        phase4NotifyOrderCreated_(orderId);
         return { ok: true, orderId: orderId, order: existingOrder, created: false };
       }
       return { ok: false, error: 'order_state_invalid' };
@@ -616,6 +690,10 @@ function phase4CreateOrder_(payload, idToken) {
 
     var commit = phase4Commit_(writes, transactionId);
     if (!commit.ok) return commit;
+
+    // Recién acá: el pedido y el descuento de stock ya están confirmados.
+    // Si el aviso falla, el pedido igual es exitoso para la clienta.
+    phase4NotifyOrderCreated_(orderId);
 
     return { ok: true, orderId: orderId, order: orderData, created: true };
   } catch (error) {
