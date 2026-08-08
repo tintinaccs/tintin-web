@@ -109,6 +109,14 @@ for (const line of headers.split('\n')) {
 const missingRoutePolicies = [];
 const missingRouteHashes = [];
 const unsafeInlineRoutes = [];
+const missingStructuralDirectives = [];
+const structuralDirectives = [
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  'upgrade-insecure-requests'
+];
 for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
   // GitHub y Cloudflare sirven los blobs con LF. Normalizar aquí evita que un
   // checkout local de Windows calcule hashes CRLF que fallen luego en Linux.
@@ -127,6 +135,8 @@ for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) 
   const missing = [...inlineScriptHashes].filter(hash => !scriptSrc.includes(hash));
   if (missing.length) missingRouteHashes.push(`${route}: ${missing.length}`);
   if (scriptSrc.includes("'unsafe-inline'")) unsafeInlineRoutes.push(route);
+  const structuralMissing = structuralDirectives.filter(directive => !policy.includes(directive));
+  if (structuralMissing.length) missingStructuralDirectives.push(`${route}: ${structuralMissing.join(', ')}`);
 }
 check(
   'Cada página tiene una CSP exacta para su ruta pública',
@@ -142,6 +152,11 @@ check(
   'Ninguna CSP por ruta permite ejecución inline arbitraria',
   unsafeInlineRoutes.length === 0,
   'unsafe-inline solo puede permanecer temporalmente en script-src-attr'
+);
+check(
+  'Cada CSP por ruta conserva las protecciones estructurales',
+  missingStructuralDirectives.length === 0,
+  missingStructuralDirectives.join('; ')
 );
 check(
   'La CSP por ruta es reproducible',
