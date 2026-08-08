@@ -19,6 +19,7 @@ import {
   isValidPhone
 } from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260728-phase4-order-2';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260808-contract-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -270,35 +271,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return normalizePhone(raw, country).value;
   }
 
-  function aggregateCart(items) {
-    const byProduct = new Map();
-    for (const item of items) {
-      const id = text(item?.id);
-      const qty = Number(item?.qty || 1);
-      if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
-        throw appError('invalid_cart', 'Encontramos una cantidad no válida en el carrito.');
-      }
-      const existing = byProduct.get(id);
-      if (existing) {
-        existing.qty += qty;
-        const variant = text(item.variant);
-        if (variant && !existing.variants.includes(variant)) existing.variants.push(variant);
-      } else {
-        byProduct.set(id, {
-          id,
-          qty,
-          variants: text(item.variant) ? [text(item.variant)] : []
-        });
-      }
-    }
-
-    const result = [...byProduct.values()];
-    if (result.some(item => item.qty > 99)) {
-      throw appError('invalid_cart', 'La cantidad de uno de los productos es demasiado alta.');
-    }
-    return result;
-  }
-
   async function buildDraft() {
     const user = auth.currentUser;
     if (!user || user.isAnonymous || !user.emailVerified) {
@@ -341,10 +313,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
 
     const localSubtotal = cartTotal(items);
-    const localShippingCost = shipping.cost === null ? 0 : shipping.cost;
-    return {
+    return composeCheckoutDraft({
       requestId: requestId(),
-      cartLines: aggregateCart(items),
+      items,
       name,
       phone: readPhone(),
       contactEmail: text(document.getElementById('ck-email')?.value).toLowerCase(),
@@ -353,17 +324,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       departamento: selectedDepartamento,
       address,
       referencia: text(document.getElementById('ck-referencia')?.value),
-      mapLocation: shipping.mapLocation,
-      // Se llevan al borrador para que el mensaje de WhatsApp pueda contar
-      // cómo se entrega el pedido, no sólo qué se compró.
-      shippingMethod: shipping.method,
-      encomiendaMode: shipping.encomiendaMode || '',
+      shipping,
       paymentMethod,
-      expectedSubtotal: Math.round(localSubtotal),
-      expectedShippingCost: Math.round(localShippingCost),
-      expectedShippingPending: shipping.pending,
-      expectedTotal: Math.round(localSubtotal + localShippingCost)
-    };
+      subtotal: localSubtotal
+    });
   }
 
   function authoritativeCartFromQuote(quote) {

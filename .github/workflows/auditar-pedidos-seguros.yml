@@ -4,7 +4,10 @@ on:
   pull_request:
     paths:
       - 'js/orders/pedido-checkout-seguro.js'
+      - 'js/orders/politica-checkout.js'
       - 'js/components/cart/sincronizacion-carrito.js'
+      - 'apps-script/CrearPedido.gs'
+      - 'tests/checkout/**'
       - 'firestore.rules'
       - 'scripts/auditar-seguro-pedidos.js'
       - 'package.json'
