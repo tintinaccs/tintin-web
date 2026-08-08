@@ -1,5 +1,5 @@
 import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange

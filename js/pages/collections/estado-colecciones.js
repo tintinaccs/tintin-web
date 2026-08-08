@@ -5,7 +5,7 @@ import {
   limit,
   onSnapshot,
   query
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
@@ -82,27 +82,15 @@ function publishPublic(collections, source) {
 
 async function fetchPublicCollections() {
   let list;
-  if (!await appCheckReady) {
-    const documents = await listPublicCollectionRest('collections', 200);
-    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
-    writeCached(CACHE_KEY, list);
-    return publishPublic(list, 'rest-fallback');
-  }
   try {
-    const snapshot = await Promise.race([
-      getDocs(query(collection(db, 'collections'), limit(200))),
-      new Promise((_, reject) => window.setTimeout(
-        () => reject(new Error('Firestore SDK tardó demasiado')),
-        3500
-      ))
-    ]);
-    recordFirestoreRead('collections:public', snapshot.size);
-    list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
-  } catch (sdkError) {
-    console.warn('[collections-store] Se usa el respaldo compatible de colecciones:', sdkError);
     const documents = await listPublicCollectionRest('collections', 200);
     recordFirestoreRead('collections:public-rest-fallback', documents.length);
     list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+  } catch (restError) {
+    if (!await appCheckReady) throw restError;
+    const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
+    recordFirestoreRead('collections:public', snapshot.size);
+    list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
   }
   writeCached(CACHE_KEY, list);
   return publishPublic(list, 'server-or-rest-fallback');

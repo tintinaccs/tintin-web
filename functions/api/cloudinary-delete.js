@@ -49,7 +49,7 @@ export async function onRequest(context) {
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
-  if (!originIsAllowed(origin, requestUrl)) {
+  if (!origin || !originIsAllowed(origin, requestUrl)) {
     return jsonResponse({ error: 'Origen no permitido' }, 403, origin, requestUrl);
   }
   if (request.method === 'OPTIONS') {

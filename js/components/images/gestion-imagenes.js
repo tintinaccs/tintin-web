@@ -12,6 +12,12 @@ import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=ti
 if (!window.TintinImagesPhase5Booted) {
   window.TintinImagesPhase5Booted = true;
 
+  const debugImageFlow = (...args) => {
+    try {
+      if (localStorage.getItem('tt_debug_images') === '1') console.debug(...args);
+    } catch {}
+  };
+
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -200,11 +206,11 @@ if (!window.TintinImagesPhase5Booted) {
     ].join('|');
 
     if (image.dataset.ttHeroPhase5Signature === signature) {
-      console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
+      debugImageFlow('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
       if (heroDataConfirmed) revealHeroWhenImageReady(image);
       return;
     }
-    console.debug('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
+    debugImageFlow('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
 
     let mobileSource = picture.querySelector('source[media*="767"]');
     let tabletSource = picture.querySelector('source[data-tt-hero-device="tablet"],source[media*="1023"],source[media*="1120"]');
@@ -357,7 +363,7 @@ if (!window.TintinImagesPhase5Booted) {
       // La primera llamada es el caché local (posiblemente vacío o viejo); de
       // la segunda en adelante ya es el snapshot real de Firestore.
       if (imagesUpdateCount >= 2) heroDataConfirmed = true;
-      console.debug('[images-phase5] onImagesUpdate: datos recibidos de Firestore', {
+      debugImageFlow('[images-phase5] onImagesUpdate: datos recibidos de Firestore', {
         hero_bg_desktop: images.hero_bg_desktop || null,
         hero_bg_tablet: images.hero_bg_tablet || null,
         hero_bg_mobile: images.hero_bg_mobile || null,

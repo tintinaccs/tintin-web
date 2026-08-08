@@ -16,7 +16,7 @@
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
   doc,
@@ -24,7 +24,7 @@ import {
   onSnapshot,
   serverTimestamp,
   writeBatch,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const existingRuntime = window.__TintinCartSyncV2 || null;
 

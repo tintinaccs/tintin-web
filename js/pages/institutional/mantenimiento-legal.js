@@ -140,7 +140,7 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   // resto del contenido ya están en pantalla, en vez de bloquearlos.
   Promise.all([
     import('../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4'),
-    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
   ]).then(([{ db }, { doc, onSnapshot }]) => {
     onSnapshot(doc(db, 'settings', 'general'), snap => {
       if (snap.exists()) updateContact(snap.data());

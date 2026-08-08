@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/Asuncion
+    open-pull-requests-limit: 5
+    groups:
+      firebase-tooling:
+        patterns:
+          - "firebase*"
+          - "@firebase/*"
+      browser-tests:
+        patterns:
+          - "playwright"
+          - "@playwright/*"
+    labels:
+      - dependencies
+      - security

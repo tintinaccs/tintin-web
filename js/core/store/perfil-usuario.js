@@ -12,7 +12,7 @@
 // del sitio los lee: rol, cuenta bloqueada, reglas de seguridad, checkout y
 // pedidos. Google Sheets en este proyecto sincroniza productos, no usuarios.
 
-import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 
 /** Métodos de acceso válidos, tal como quedan guardados en `users.provider`. */

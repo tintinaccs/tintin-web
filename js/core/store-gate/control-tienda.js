@@ -10,11 +10,11 @@
 import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   doc,
   onSnapshot
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getUserRole } from '../auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   isAccessAllowed,

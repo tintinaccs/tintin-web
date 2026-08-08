@@ -10,11 +10,9 @@ const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 // porque son plataformas de despliegue distintas.
 export const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
 
-const TRUSTED_CROSS_ORIGINS = new Set([
-  'https://tintinaccesorios.pages.dev',
-  'https://tintinaccs.github.io',
-  'https://tintinaccesorios.netlify.app'
-]);
+// Las funciones privadas solo aceptan el mismo origen que las sirve. Un futuro
+// dominio propio funcionará sin otra lista porque requestUrl y Origin coincidirán.
+const TRUSTED_CROSS_ORIGINS = new Set();
 
 export function originIsAllowed(origin, requestUrl = '') {
   if (!origin) return true;

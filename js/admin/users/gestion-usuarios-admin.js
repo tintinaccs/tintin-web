@@ -10,7 +10,7 @@
    ============================================================= */
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
   doc,
@@ -20,7 +20,7 @@ import {
   limit,
   writeBatch,
   serverTimestamp,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinAdminUsersPhase8Booted) {
@@ -221,12 +221,19 @@ if (!window.TintinAdminUsersPhase8Booted) {
 
   async function deleteOne(user) {
     if (isSuperRecord(user)) return toast('El perfil del Super Admin no se puede eliminar', true);
-    if (!confirm(`¿Eliminar la ficha de ${user.name || user.email} de Firestore?\n\nLa cuenta de Firebase Authentication seguirá existiendo.`)) return;
+    if (!confirm(`¿Eliminar definitivamente a ${user.name || user.email}?\n\nSe borrarán la cuenta de acceso, el perfil, el carrito y la reserva telefónica. Esta acción no se puede deshacer.`)) return;
     try {
-      await commitUserAction([
-        { uid: user.uid, delete: true }
-      ], auditPayload('eliminar_usuario', user, 'Eliminó la ficha de Firestore; Auth no fue eliminada'));
-      toast('Ficha eliminada y acción auditada');
+      const token = await state.user.getIdToken();
+      const response = await fetch('/api/admin-delete-user', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'authorization': `Bearer ${token}`, 'content-type': 'application/json' },
+        body: JSON.stringify({ uid: user.uid })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo eliminar la cuenta.');
+      await commitUserAction([], auditPayload('eliminar_usuario', user, 'Eliminó Auth, perfil, carrito y reserva telefónica'));
+      toast('Cuenta y datos asociados eliminados');
     } catch (error) {
       toast(error.message || 'No se pudo eliminar', true);
     }

@@ -180,8 +180,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     try {
       const [{ auth, db }, firestore, authApi] = await Promise.all([
         import(`./firebase.js?v=${VERSION}`),
-        import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
-        import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
+        import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
       ]);
       const user = auth.currentUser || await new Promise(resolve => {
         const stop = authApi.onAuthStateChanged(auth, current => { stop(); resolve(current); });

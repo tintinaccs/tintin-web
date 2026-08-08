@@ -5,7 +5,7 @@
 import { auth, db } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   doc, getDoc, setDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // Única fuente de verdad para el cliente (importada por todo lo demás en
 // js/ que necesita identificar al Super Admin). Cloudflare Pages Functions

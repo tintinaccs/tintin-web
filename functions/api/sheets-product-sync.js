@@ -7,13 +7,14 @@ import {
 const APPS_SCRIPT_SYNC_URL =
   'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
 const MAX_BODY_BYTES = 64 * 1024;
+const SHEETS_TIMEOUT_MS = 12_000;
 
 export async function onRequest(context) {
   const { request } = context;
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
-  if (!originIsAllowed(origin, requestUrl)) {
+  if (!origin || !originIsAllowed(origin, requestUrl)) {
     return jsonResponse({ ok: false, error: 'Origen no permitido.' }, 403, origin, requestUrl);
   }
   if (request.method === 'OPTIONS') {
@@ -46,6 +47,7 @@ export async function onRequest(context) {
     const response = await fetch(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
       redirect: 'follow',
+      signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify({
         action: 'syncProducts',

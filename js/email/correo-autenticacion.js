@@ -12,7 +12,7 @@
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   signInWithCustomToken
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
 } from "../core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";

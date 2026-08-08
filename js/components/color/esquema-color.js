@@ -8,7 +8,7 @@
  * página con un fondo cacheado y lo cambie un instante después.
  */
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1';
 
 const CACHE_KEY = 'tt_color_scheme_global';

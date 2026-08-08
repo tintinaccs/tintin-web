@@ -8,6 +8,7 @@ const quality = read('js/quality/calidad-interfaz.js');
 const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
+const deleteUserEndpoint = read('functions/api/admin-delete-user.js');
 
 let failures = 0;
 function check(label, condition, detail = '') {
@@ -66,10 +67,12 @@ check(
 );
 
 check(
-  'La eliminación aclara que solo borra la ficha Firestore',
-  phase.includes('La cuenta de Firebase Authentication seguirá existiendo') &&
-    phase.includes('Eliminó la ficha de Firestore; Auth no fue eliminada'),
-  'Spark no permite borrar Authentication desde el navegador'
+  'La eliminación borra identidad y datos asociados desde el servidor',
+  phase.includes("fetch('/api/admin-delete-user'") &&
+    deleteUserEndpoint.includes('deleteFirebaseUser(env, uid)') &&
+    deleteUserEndpoint.includes('phoneReservations/') &&
+    deleteUserEndpoint.includes('/cart'),
+  'el navegador no debe limitarse a borrar solo la ficha Firestore'
 );
 
 check(

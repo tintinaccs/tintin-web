@@ -221,6 +221,23 @@ export async function findOrCreateUserByEmail(env, email) {
   throw new Error('No se pudo crear la cuenta de acceso: ' + (createData?.error?.message || createResp.status));
 }
 
+/** Elimina una cuenta real de Firebase Authentication por UID. */
+export async function deleteFirebaseUser(env, uid) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:delete', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: safeUid })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    if (data?.error?.message === 'USER_NOT_FOUND') return;
+    throw new Error('No se pudo eliminar la cuenta de acceso: ' + (data?.error?.message || response.status));
+  }
+}
+
 // --- Firestore admin REST — credencial de servicio, no pasa por las reglas
 // de seguridad del cliente (mismo nivel de acceso que el SDK Admin normal).
 // Se usa ÚNICAMENTE para la colección emailOtpCodes, que no tiene ninguna
@@ -280,10 +297,24 @@ export async function firestoreAdminMerge(env, path, fields) {
 export async function firestoreAdminDelete(env, path) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
-  await fetch(firestoreDocUrl(sa, path), {
+  const response = await fetch(firestoreDocUrl(sa, path), {
     method: 'DELETE',
     headers: { authorization: `Bearer ${accessToken}` }
-  }).catch(() => {});
+  });
+  if (response.status !== 404 && !response.ok) {
+    throw new Error(`Firestore DELETE falló (${response.status})`);
+  }
+}
+
+export async function firestoreAdminList(env, path, pageSize = 300) {
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const url = `${firestoreDocUrl(sa, path)}?pageSize=${Math.max(1, Math.min(300, Number(pageSize) || 300))}`;
+  const response = await fetch(url, { headers: { authorization: `Bearer ${accessToken}` } });
+  if (response.status === 404) return [];
+  if (!response.ok) throw new Error(`Firestore LIST falló (${response.status})`);
+  const data = await response.json().catch(() => ({}));
+  return Array.isArray(data.documents) ? data.documents : [];
 }
 
 export function decodeFirestoreFields(fields) {

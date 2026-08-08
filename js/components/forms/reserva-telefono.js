@@ -12,7 +12,7 @@
 // La escritura posterior del perfil vuelve a validar el dueño de la reserva y
 // mantiene la unicidad del lado del servidor.
 
-import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { phoneKey } from "./utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 
 export class PhoneAlreadyRegisteredError extends Error {

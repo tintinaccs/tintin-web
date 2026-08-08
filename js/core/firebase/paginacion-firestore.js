@@ -5,7 +5,7 @@ import {
   orderBy,
   query,
   startAfter
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 /**
  * Lee una colección en páginas acotadas y conserva una forma compatible con
