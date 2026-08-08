@@ -60,6 +60,24 @@ function getBearerToken(request) {
   return match[1].trim();
 }
 
+export async function requireFirebaseUser(request) {
+  const token = getBearerToken(request);
+  const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ idToken: token })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error('La sesión venció; volvé a iniciar sesión');
+  const user = Array.isArray(data.users) ? data.users[0] : null;
+  const email = String(user?.email || '').trim().toLowerCase();
+  if (!user?.localId || !email || user.emailVerified !== true) {
+    throw new Error('La cuenta debe tener un correo verificado');
+  }
+  return { uid: String(user.localId), email, idToken: token };
+}
+
 /**
  * Firebase valida la firma, proyecto, vencimiento y existencia de la cuenta.
  * La función comprueba después el correo verificado del único Super Admin.
