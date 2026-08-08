@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T16:14:02.526Z",
-  "sourceFingerprint": "fba03cb8c6c3f7c7d2c77ae502c8097a6f449a2b8e3609662b57b558466faddf",
+  "generatedAt": "2026-08-08T16:21:18.344Z",
+  "sourceFingerprint": "e6db0755b284079f9c0e263f31846731b6c3ebf8655bfd6da969be45f1c1f5d8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 524,
     "textFiles": 492,
-    "totalBytes": 5586779,
+    "totalBytes": 5586993,
     "pages": 18,
     "modules": 310
   },
@@ -20165,13 +20165,20 @@
     },
     {
       "path": "scripts/auditar-carrito-fase-7.js",
-      "bytes": 6124,
-      "sha256": "db85e1e279dc08fd26b1a10f376a45c84d7aef0f05897cec6a1529b34a4a277b",
+      "bytes": 6338,
+      "sha256": "ff07928366d066ff5a1fa430538b79d0a9f1252564ce2579d39e461e52e5db29",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./politica-checkout.js",
+          "target": "scripts/politica-checkout.js",
+          "dynamic": false,
+          "line": 131
+        }
+      ],
       "endpoints": []
     },
     {
@@ -25563,8 +25570,8 @@
     {
       "path": "scripts/auditar-carrito-fase-7.js",
       "extension": ".js",
-      "bytes": 6124,
-      "sha256": "db85e1e279dc08fd26b1a10f376a45c84d7aef0f05897cec6a1529b34a4a277b"
+      "bytes": 6338,
+      "sha256": "ff07928366d066ff5a1fa430538b79d0a9f1252564ce2579d39e461e52e5db29"
     },
     {
       "path": "scripts/auditar-catalogo-pagina.js",
@@ -30625,7 +30632,7 @@
           },
           {
             "file": "scripts/auditar-carrito-fase-7.js",
-            "line": 51,
+            "line": 52,
             "operation": "collection"
           },
           {
