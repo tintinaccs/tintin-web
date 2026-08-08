@@ -17,6 +17,7 @@ const required = [
   'scripts/auditar-fase-10-accessibility.js',
   'scripts/auditar-fase-11-seo.js',
   'scripts/auditar-fase-12-entrega.mjs',
+  'scripts/generar-csp-cloudflare.js',
   'scripts/produccion-smoke-fase-12.mjs',
   'docs/informe-entrega-fase-12.md',
   '.github/workflows/entrega-final-fase-12.yml'
@@ -31,6 +32,11 @@ for (const command of ['audit:phase5', 'audit:phase6', 'audit:phase7-catalog', '
 check('Existe prueba crítica de reglas', Boolean(pkg.scripts?.['test:rules-critical']), 'Las reglas deben probarse en emulador.');
 check('Existe smoke de todas las páginas', Boolean(pkg.scripts?.['test:pages']), 'Las 18 páginas deben abrirse en el barrido final.');
 check('Existe matriz responsive canónica', Boolean(pkg.scripts?.['audit:canonical-viewports']), 'La matriz responsive debe quedar ejecutable.');
+check(
+  'El build de Pages genera y verifica la CSP por ruta',
+  String(pkg.scripts?.['build:pages'] || '').includes('build:csp') && String(pkg.scripts?.['build:pages'] || '').includes('verify:csp'),
+  'Cloudflare debe recibir un _headers reproducible antes de publicar.'
+);
 
 const workflow = read('.github/workflows/entrega-final-fase-12.yml');
 for (const token of [
