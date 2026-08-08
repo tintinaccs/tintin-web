@@ -93,32 +93,74 @@ Requieren una decisión de la propietaria. Ninguna se puede tomar desde el repos
 
 La única ruta que da respaldo **completo y programado** de todas las colecciones.
 
-```
-# Una vez: crear el bucket de destino
-gcloud storage buckets create gs://tintin-accesorios-respaldos \
-  --project=tintin-accesorios --location=southamerica-east1
+No hace falta instalar nada: **Cloud Shell** (<https://shell.cloud.google.com>) ya trae
+`gcloud` autenticado en el navegador.
 
-# Exportación completa
+```
+# 0. Fijar el proyecto
+gcloud config set project tintin-accesorios
+
+# 1. Averiguar en qué región vive la base ANTES de crear nada.
+#    El bucket de destino tiene que estar en una región compatible con la
+#    base; si no coincide, el export falla con INVALID_ARGUMENT. La cercanía
+#    geográfica no importa: importa que coincidan.
+gcloud firestore databases list --project=tintin-accesorios
+
+# 2. Crear el bucket usando el locationId que devolvió el paso anterior.
+#    Una base en nam5 o us-east1 necesita un bucket en "us" o "us-east1".
+gcloud storage buckets create gs://tintin-accesorios-respaldos \
+  --project=tintin-accesorios --location=REGION_DE_LA_BASE
+
+# 2. Exportación completa
 gcloud firestore export gs://tintin-accesorios-respaldos/$(date +%Y-%m-%d) \
   --project=tintin-accesorios
 
-# Exportación de colecciones puntuales
+# 3. La exportación no bloquea: se corre en segundo plano.
+#    Esperar a que aparezca "done: true" antes de intentar restaurar.
+gcloud firestore operations list --project=tintin-accesorios
+gcloud storage ls gs://tintin-accesorios-respaldos/
+
+# Exportación de colecciones puntuales, si solo interesan esas
 gcloud firestore export gs://tintin-accesorios-respaldos/$(date +%Y-%m-%d) \
   --project=tintin-accesorios \
   --collection-ids=orders,users,auditLog,emailLogs
 
-# Restaurar SIEMPRE en una base no productiva
+# 4. Crear la base de prueba ANTES de importar.
+#    Sin este paso el import falla: la base de destino tiene que existir.
+gcloud firestore databases create \
+  --database=restauracion-prueba \
+  --location=REGION_DE_LA_BASE \
+  --type=firestore-native \
+  --project=tintin-accesorios
+
+# 5. Restaurar SIEMPRE en esa base, nunca sobre producción.
+#    Reemplazar AAAA-MM-DD por la carpeta real listada en el paso 3.
 gcloud firestore import gs://tintin-accesorios-respaldos/AAAA-MM-DD \
   --project=tintin-accesorios --database=restauracion-prueba
+
+# 6. Opcional: borrar la base de prueba cuando la verificación terminó
+gcloud firestore databases delete \
+  --database=restauracion-prueba --project=tintin-accesorios
 ```
+
+La verificación real no es que la exportación corra, sino que lo exportado se pueda
+volver a leer: en la consola de Firestore hay un selector de base de datos arriba a la
+izquierda; cambiando a `restauracion-prueba` tienen que verse `orders` y `users` con
+documentos adentro.
 
 La exportación administrada corre del lado del servidor con IAM, así que **no la afecta
 App Check**.
 
 Consideraciones antes de decidir:
 
-- Blaze es de pago por uso; conviene configurar un **presupuesto con alerta** en Google
-  Cloud Billing antes de habilitarlo.
+- Blaze es de pago por uso, pero **no elimina el nivel gratuito**: las mismas cuotas que
+  hoy cubre Spark siguen sin costo y solo se paga el consumo por encima. Conviene
+  configurar un **presupuesto con alerta** en Google Cloud Billing
+  (<https://console.cloud.google.com/billing> → *Budgets & alerts*) **antes** de
+  habilitarlo, no después.
+- La exportación se cobra por documento leído, y el respaldo ocupa espacio en Cloud
+  Storage. Con el volumen actual el costo es mínimo; la alerta de presupuesto es lo que
+  cubre cualquier sorpresa.
 - Habilitar Blaze **no** obliga a activar Firebase Storage. La verificación de
   `audit:images` seguiría pasando mientras `firebase.json` no declare `storage` ni exista
   `storage.rules`.
