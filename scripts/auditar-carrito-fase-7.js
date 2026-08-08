@@ -128,7 +128,8 @@ check(
   // (Apps Script) en vez de en una transacción de Firestore desde el
   // navegador — ver apps-script/CrearPedido.gs.
   'Precio y stock siguen validados por el checkout seguro',
-  checkout.includes("import { composeCheckoutDraft } from './politica-checkout.js") &&
+  checkout.includes('composeCheckoutDraft') &&
+    checkout.includes('politica-checkout.js?v=') &&
     checkoutPolicy.includes('expectedSubtotal') &&
     checkoutPolicy.includes('aggregateCheckoutCart') &&
     checkout.includes("code === 'quote_changed'") &&
