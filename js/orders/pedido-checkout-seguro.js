@@ -214,7 +214,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (selectedCity === '__retiro__') {
       return {
         method: 'retiro',
-        city: 'San Lorenzo (retiro)',
+        city: 'Retiro coordinado',
         cost: 0,
         pending: false,
         rateIndex: -1,
@@ -249,8 +249,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         // el retiro en agencia no tiene dirección que guardar.
         encomiendaMode: mode,
         city: encomienda.name,
-        cost: encomienda.price,
-        pending: encomienda.price === null,
+        // La transportadora cobra la encomienda al recibir. No forma parte
+        // del importe cobrado por Tintin ni del total que verá una pasarela.
+        cost: 0,
+        pending: false,
         rateIndex: encomienda.sourceIndex,
         mapLocation: mode === 'puerta' ? location : null
       };
@@ -329,8 +331,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
       throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
     }
-    if (shipping.method === 'encomienda' && address.length < 5) {
-      throw appError('address_required', 'Ingresá la dirección para la encomienda.');
+    if (shipping.method === 'encomienda' && shipping.encomiendaMode === 'puerta') {
+      if (address.length < 5) {
+        throw appError('address_required', 'Ingresá la dirección para la entrega en puerta.');
+      }
+      if (!shipping.mapLocation || !shipping.mapLocation.name) {
+        throw appError('map_required', 'Marcá y nombrá la ubicación para la entrega en puerta.');
+      }
     }
 
     const localSubtotal = cartTotal(items);
@@ -458,7 +465,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   const SHIPPING_LABELS = {
-    retiro: 'Retiro en tienda (San Lorenzo)',
+    retiro: 'Retiro en tienda',
     delivery: 'Delivery a domicilio',
     encomienda: 'Encomienda al interior',
   };
@@ -507,6 +514,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       '',
       `📦 Entrega: ${shippingSummary(draft)}`,
     ];
+
+    if (draft?.shippingMethod === 'retiro') {
+      lines.push('📍 Solicito la ubicación exacta y el horario disponible para retirar.');
+    }
 
     const city = text(draft?.selectedCity);
     if (city && city !== '__retiro__') lines.push(`📍 Ciudad: ${city}`);

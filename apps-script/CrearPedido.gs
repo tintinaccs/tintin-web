@@ -211,7 +211,7 @@ function phase4NormalizeCities_(list, fallbackCost) {
 // firestore.rules para por qué viven separados.
 function phase4ResolveShipping_(shippingRates, selectedCity) {
   if (selectedCity === '__retiro__') {
-    return { ok: true, method: 'retiro', city: 'San Lorenzo (retiro)', cost: 0, pending: false, rateIndex: -1 };
+    return { ok: true, method: 'retiro', city: 'Retiro coordinado', cost: 0, pending: false, rateIndex: -1 };
   }
   var wanted = String(selectedCity || '').trim().toLowerCase();
   var delivery = phase4NormalizeCities_(shippingRates.deliveryCities, shippingRates.deliveryCost)
@@ -222,7 +222,9 @@ function phase4ResolveShipping_(shippingRates, selectedCity) {
   var encomienda = phase4NormalizeCities_(shippingRates.encomiendaCities, shippingRates.encomiendaCost)
     .filter(function (city) { return city.name.toLowerCase() === wanted; })[0];
   if (encomienda) {
-    return { ok: true, method: 'encomienda', city: encomienda.name, cost: encomienda.price, pending: encomienda.price === null, rateIndex: encomienda.sourceIndex };
+    // El costo de la transportadora se abona al recibir y no se suma al
+    // pedido ni a una futura pasarela de pago.
+    return { ok: true, method: 'encomienda', city: encomienda.name, cost: 0, pending: false, rateIndex: encomienda.sourceIndex };
   }
   return { ok: false, error: 'shipping_invalid' };
 }
@@ -232,6 +234,7 @@ function phase4ResolveShipping_(shippingRates, selectedCity) {
  * buildDraft() en js/pedido-checkout-seguro.js: requestId, cartLines
  * ([{id, qty, variants}]), name, phone, contactEmail, notes,
  * selectedCity, departamento, address, referencia, mapLocation,
+ * shippingMethod, encomiendaMode,
  * paymentMethod, expectedSubtotal, expectedShippingCost,
  * expectedShippingPending, expectedTotal.
  *
@@ -261,7 +264,8 @@ function phase4CreateOrder_(payload, idToken) {
   if (!phase4HasOnlyKeys_(payload, [
     'action', 'idToken', 'requestId', 'cartLines', 'name', 'phone',
     'contactEmail', 'notes', 'selectedCity', 'departamento', 'address',
-    'referencia', 'mapLocation', 'paymentMethod', 'expectedSubtotal',
+    'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
+    'paymentMethod', 'expectedSubtotal',
     'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
   ])) {
     return { ok: false, error: 'invalid_payload' };
@@ -413,13 +417,24 @@ function phase4CreateOrder_(payload, idToken) {
     };
     var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity);
     if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
+    var encomiendaMode = phase4CleanText_(payload.encomiendaMode, 20);
+    if (shipping.method === 'encomienda' && encomiendaMode !== 'agencia' && encomiendaMode !== 'puerta') {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'shipping_invalid' };
+    }
     if (shipping.method === 'delivery' && (!mapLocation || !mapLocation.name)) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'map_required' };
     }
-    if (shipping.method === 'encomienda' && address.length < 5) {
-      phase4Rollback_(transactionId);
-      return { ok: false, error: 'address_required' };
+    if (shipping.method === 'encomienda' && encomiendaMode === 'puerta') {
+      if (address.length < 5) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'address_required' };
+      }
+      if (!mapLocation || !mapLocation.name) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'map_required' };
+      }
     }
 
     var resolvedItems = [];
@@ -487,13 +502,14 @@ function phase4CreateOrder_(payload, idToken) {
       storeInstagram: phase4CleanText_(settings.instagram, 120),
       shipping: {
         method: shipping.method,
+        encomiendaMode: shipping.method === 'encomienda' ? encomiendaMode : '',
         city: shipping.city,
         departamento: departamento,
         rateIndex: shipping.rateIndex,
         address: address,
         referencia: referencia,
         zone: shipping.method === 'encomienda' ? 'interior' : 'central',
-        mapLocation: shipping.method === 'delivery' ? mapLocation : null
+        mapLocation: shipping.method === 'delivery' || (shipping.method === 'encomienda' && encomiendaMode === 'puerta') ? mapLocation : null
       },
       payment: { method: paymentMethod, status: 'pendiente' },
       paymentStatus: 'pendiente',
