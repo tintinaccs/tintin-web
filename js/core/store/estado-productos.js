@@ -25,7 +25,7 @@ import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/poli
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
 const HOME_CACHE_TTL = 60 * 1000;
-const HOME_PRODUCT_LIMIT = 24;
+const HOME_PRODUCT_LIMIT = 18;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
