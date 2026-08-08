@@ -92,7 +92,9 @@ check(
 
 const inlineScriptHashes = new Set();
 for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
-  const html = fs.readFileSync(path.join(root, file), 'utf8');
+  // GitHub y Cloudflare sirven los blobs con LF. Normalizar aquí evita que un
+  // checkout local de Windows calcule hashes CRLF que fallen luego en Linux.
+  const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (/\bsrc\s*=/.test(match[1])) continue;
     inlineScriptHashes.add(
