@@ -86,8 +86,17 @@ Cada ejecución genera:
 - Comparar conteos y muestras de productos, pedidos, usuarios, configuraciones y permisos.
 - Nunca ensayar una importación directamente sobre producción.
 
-Cobertura actual: el panel exporta `products`, `collections`, `site_content`, `settings`
-y `rolePermissions`. **`orders`, `users`, `auditLog` y `emailLogs` no tienen copia.**
+Cobertura actual, verificada el 2026-08-08 contra el proyecto real: la base tiene
+**Point-in-Time Recovery activo con 7 días de retención**, un **respaldo programado
+diario** con 30 días y otro **semanal** con 84. `orders`, `users`, `auditLog` y
+`emailLogs` están cubiertos por esos mecanismos.
+
+El panel exporta además `products`, `collections`, `site_content`, `settings` y
+`rolePermissions` a un archivo descargable.
+
+Lo que falta no es cobertura sino **prueba y externalización**: la restauración nunca se
+ensayó, y todos esos respaldos viven dentro de la misma cuenta de Google que la base de
+producción. Detalle en `docs/recuperacion-firestore.md`.
 
 ## Imágenes
 
