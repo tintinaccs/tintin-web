@@ -33,6 +33,13 @@ var PHASE4_FIRESTORE_BASE_URL_ =
 var PHASE4_MAX_ITEMS_ = 60; // Tope generoso contra payloads absurdos — no es el límite artificial de 4 que esto reemplaza.
 var PHASE4_CHECKOUT_GUARD_WINDOW_MS_ = 5 * 60 * 1000;
 var PHASE4_DEFAULT_STORE_WHATSAPP_ = '595981299331';
+var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
+  'action', 'idToken', 'requestId', 'cartLines', 'name', 'phone',
+  'contactEmail', 'notes', 'selectedCity', 'departamento', 'address',
+  'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
+  'paymentMethod', 'expectedSubtotal', 'expectedShippingCost',
+  'expectedShippingPending', 'expectedTotal'
+];
 
 function phase4AuthHeaders_() {
   return { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
@@ -194,6 +201,89 @@ function phase4ParseStock_(value) {
   return isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : null;
 }
 
+function phase4NormalizeCartLines_(cartLines) {
+  if (!Array.isArray(cartLines) || !cartLines.length) return { ok: false, error: 'empty_cart' };
+  if (cartLines.length > PHASE4_MAX_ITEMS_) return { ok: false, error: 'too_many_products' };
+  var byId = Object.create(null);
+  var orderedIds = [];
+  for (var i = 0; i < cartLines.length; i++) {
+    var rawLine = cartLines[i];
+    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) {
+      return { ok: false, error: 'invalid_cart' };
+    }
+    var id = phase4CleanText_(rawLine.id, 180);
+    var qty = Number(rawLine.qty);
+    var rawVariants = Array.isArray(rawLine.variants)
+      ? rawLine.variants
+      : (rawLine.variant ? [rawLine.variant] : []);
+    if (
+      !id || !isFinite(qty) || !Number.isInteger(qty) || qty < 1 || qty > 99 ||
+      rawVariants.length > 10 || rawVariants.some(function (variant) {
+        return typeof variant !== 'string' || !phase4CleanText_(variant, 120) || variant.length > 120;
+      })
+    ) {
+      return { ok: false, error: 'invalid_cart' };
+    }
+    if (!byId[id]) {
+      byId[id] = { id: id, qty: 0, variants: [] };
+      orderedIds.push(id);
+    }
+    byId[id].qty += qty;
+    if (byId[id].qty > 99) return { ok: false, error: 'invalid_cart' };
+    rawVariants.forEach(function (variant) {
+      var cleanVariant = phase4CleanText_(variant, 120);
+      if (byId[id].variants.indexOf(cleanVariant) === -1) byId[id].variants.push(cleanVariant);
+    });
+    if (byId[id].variants.length > 10) return { ok: false, error: 'invalid_cart' };
+  }
+  return { ok: true, lines: orderedIds.map(function (id) { return byId[id]; }) };
+}
+
+function phase4VariantGroups_(value) {
+  var groups = [];
+  var positions = Object.create(null);
+  function add(keyRaw, valueRaw) {
+    var key = phase4CleanText_(keyRaw, 60);
+    if (!key) return;
+    var values = Array.isArray(valueRaw) ? valueRaw : String(valueRaw == null ? '' : valueRaw).split(',');
+    var normalized = [];
+    values.forEach(function (item) {
+      var option = phase4CleanText_(item, 120);
+      if (option && normalized.indexOf(option) === -1) normalized.push(option);
+    });
+    if (!normalized.length) return;
+    if (positions[key] === undefined) {
+      positions[key] = groups.length;
+      groups.push([]);
+    }
+    var target = groups[positions[key]];
+    normalized.forEach(function (option) {
+      if (target.indexOf(option) === -1) target.push(option);
+    });
+  }
+  if (Array.isArray(value)) {
+    value.slice(0, 100).forEach(function (item) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) return;
+      Object.keys(item).forEach(function (key) {
+        if (['price', 'sku', 'imageUrl', 'stock', 'active'].indexOf(key) === -1) add(key, item[key]);
+      });
+    });
+  } else if (value && typeof value === 'object') {
+    Object.keys(value).slice(0, 20).forEach(function (key) { add(key, value[key]); });
+  }
+  return groups;
+}
+
+function phase4VariantIsValid_(product, selectedVariant) {
+  var groups = phase4VariantGroups_(product && product.variants);
+  var selected = phase4CleanText_(selectedVariant, 120);
+  if (!groups.length) return !selected;
+  if (!selected) return false;
+  var parts = selected.split('/').map(function (part) { return phase4CleanText_(part, 120); }).filter(Boolean);
+  if (parts.length !== groups.length) return false;
+  return parts.every(function (part, index) { return groups[index].indexOf(part) !== -1; });
+}
+
 function phase4NormalizeCities_(list, fallbackCost) {
   return (Array.isArray(list) ? list : []).map(function (item, index) {
     if (typeof item === 'string') {
@@ -261,13 +351,7 @@ function phase4CreateOrder_(payload, idToken) {
   var isSuperAdmin = phase3EmailMatches_(email, SUPER_ADMIN_EMAIL);
 
   payload = payload && typeof payload === 'object' ? payload : {};
-  if (!phase4HasOnlyKeys_(payload, [
-    'action', 'idToken', 'requestId', 'cartLines', 'name', 'phone',
-    'contactEmail', 'notes', 'selectedCity', 'departamento', 'address',
-    'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
-    'paymentMethod', 'expectedSubtotal',
-    'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
-  ])) {
+  if (!phase4HasOnlyKeys_(payload, PHASE4_ALLOWED_PAYLOAD_KEYS_)) {
     return { ok: false, error: 'invalid_payload' };
   }
 
@@ -277,33 +361,9 @@ function phase4CreateOrder_(payload, idToken) {
   }
   var orderId = uid + '_' + requestId;
 
-  var cartLines = Array.isArray(payload.cartLines) ? payload.cartLines : [];
-  if (!cartLines.length) return { ok: false, error: 'empty_cart' };
-  if (cartLines.length > PHASE4_MAX_ITEMS_) return { ok: false, error: 'too_many_products' };
-  for (var i = 0; i < cartLines.length; i++) {
-    var rawLine = cartLines[i];
-    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) {
-      return { ok: false, error: 'invalid_cart' };
-    }
-    var rawQty = Number(rawLine && rawLine.qty);
-    var rawId = phase4CleanText_(rawLine && rawLine.id, 180);
-    var rawVariants = Array.isArray(rawLine && rawLine.variants)
-      ? rawLine.variants
-      : (rawLine && rawLine.variant ? [rawLine.variant] : []);
-    if (
-      !rawId ||
-      !isFinite(rawQty) ||
-      !Number.isInteger(rawQty) ||
-      rawQty < 1 ||
-      rawQty > 99 ||
-      rawVariants.length > 10 ||
-      rawVariants.some(function (variant) {
-        return typeof variant !== 'string' || variant.length > 120;
-      })
-    ) {
-      return { ok: false, error: 'invalid_cart' };
-    }
-  }
+  var normalizedCart = phase4NormalizeCartLines_(payload.cartLines);
+  if (!normalizedCart.ok) return normalizedCart;
+  var cartLines = normalizedCart.lines;
 
   var name = phase4CleanText_(payload.name, 120);
   if (name.length < 2) return { ok: false, error: 'name_required' };
@@ -417,7 +477,16 @@ function phase4CreateOrder_(payload, idToken) {
     };
     var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity);
     if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
+    var requestedShippingMethod = phase4CleanText_(payload.shippingMethod, 20);
+    if (requestedShippingMethod !== shipping.method) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'shipping_changed' };
+    }
     var encomiendaMode = phase4CleanText_(payload.encomiendaMode, 20);
+    if (shipping.method !== 'encomienda' && encomiendaMode) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'shipping_invalid' };
+    }
     if (shipping.method === 'encomienda' && encomiendaMode !== 'agencia' && encomiendaMode !== 'puerta') {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'shipping_invalid' };
@@ -454,6 +523,14 @@ function phase4CreateOrder_(payload, idToken) {
         return { ok: false, error: 'insufficient_stock', productId: productId, available: stock, requested: qty };
       }
       var variants = Array.isArray(line.variants) ? line.variants : (line.variant ? [line.variant] : []);
+      if (!variants.length && !phase4VariantIsValid_(product, '')) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'variant_required', productId: productId };
+      }
+      if (variants.some(function (variant) { return !phase4VariantIsValid_(product, variant); })) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'invalid_variant', productId: productId };
+      }
       resolvedItems.push({
         id: productId,
         name: phase4CleanText_(product.name || product.title || 'Producto', 180),
@@ -484,6 +561,7 @@ function phase4CreateOrder_(payload, idToken) {
 
     var shortId = requestId.replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
     var nowIso = new Date().toISOString();
+    var keepsAddress = shipping.method === 'delivery' || (shipping.method === 'encomienda' && encomiendaMode === 'puerta');
     var orderData = {
       requestId: requestId,
       source: 'spark-checkout-v1',
@@ -506,8 +584,8 @@ function phase4CreateOrder_(payload, idToken) {
         city: shipping.city,
         departamento: departamento,
         rateIndex: shipping.rateIndex,
-        address: address,
-        referencia: referencia,
+        address: keepsAddress ? address : '',
+        referencia: keepsAddress ? referencia : '',
         zone: shipping.method === 'encomienda' ? 'interior' : 'central',
         mapLocation: shipping.method === 'delivery' || (shipping.method === 'encomienda' && encomiendaMode === 'puerta') ? mapLocation : null
       },

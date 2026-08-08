@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T15:46:47.760Z",
-  "sourceFingerprint": "ca5f7b521a852e4f72ddc0adc397b8f361e8dab832ee7236987b50a0cef12e89",
+  "generatedAt": "2026-08-08T16:14:02.526Z",
+  "sourceFingerprint": "fba03cb8c6c3f7c7d2c77ae502c8097a6f449a2b8e3609662b57b558466faddf",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 522,
-    "textFiles": 490,
-    "totalBytes": 5573356,
+    "files": 524,
+    "textFiles": 492,
+    "totalBytes": 5586779,
     "pages": 18,
-    "modules": 308
+    "modules": 310
   },
   "viewports": [
     {
@@ -19030,8 +19030,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 28181,
-      "sha256": "5bbcb4cd467748a2e7eb83c9469b2578e14a9d49f47b16aee9bb0de9e89cc877",
+      "bytes": 26788,
+      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19074,10 +19074,16 @@
           "line": 21
         },
         {
+          "raw": "./politica-checkout.js?v=tintin-20260808-contract-1",
+          "target": "js/orders/politica-checkout.js",
+          "dynamic": false,
+          "line": 22
+        },
+        {
           "raw": "../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/checkout/checkout-puente-correo.js",
           "dynamic": true,
-          "line": 35
+          "line": 36
         }
       ],
       "endpoints": [
@@ -19087,9 +19093,20 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 556
+          "line": 520
         }
       ]
+    },
+    {
+      "path": "js/orders/politica-checkout.js",
+      "bytes": 2205,
+      "sha256": "e961366e4cadbcf38353df7c9a5531f214e32680b65a5817d71dca01b4ce314c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
@@ -22714,6 +22731,60 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/order-contract.test.mjs",
+      "bytes": 8830,
+      "sha256": "b5992a41d5603ff1f851f26a39c315914be01887f8e34e1acb686840d20f813f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../js/orders/politica-checkout.js",
+          "target": "js/orders/politica-checkout.js",
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/checkout/saved-location.test.mjs",
       "bytes": 1912,
       "sha256": "4fa88f97be49f49b196e2dfb42e12a3d520d17329c14b90208e87295f7867c21",
@@ -23182,8 +23253,8 @@
     {
       "path": ".github/workflows/auditar-pedidos-seguros.yml",
       "extension": ".yml",
-      "bytes": 1259,
-      "sha256": "50988d8b33b787213e95fa4fc55e7c6aa9038a859046617bbc7383de84b8fbf5"
+      "bytes": 1365,
+      "sha256": "fcbf59dc80c27081e7f6073b4c161dacca8514d52b67920657ff1d8478473c4b"
     },
     {
       "path": ".github/workflows/auditar-responsive-global.yml",
@@ -23302,8 +23373,8 @@
     {
       "path": "apps-script/CrearPedido.gs",
       "extension": ".gs",
-      "bytes": 23612,
-      "sha256": "2f6ba83e05634ae88fa30f38ce01e60a2440d6935a8746bb63504d96c64f83fa"
+      "bytes": 27182,
+      "sha256": "72fc489722fab4f72567d13f2036c8a36326d757a742ed48daed18ddd040acef"
     },
     {
       "path": "apps-script/Seguridad.gs",
@@ -24916,8 +24987,14 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 28181,
-      "sha256": "5bbcb4cd467748a2e7eb83c9469b2578e14a9d49f47b16aee9bb0de9e89cc877"
+      "bytes": 26788,
+      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9"
+    },
+    {
+      "path": "js/orders/politica-checkout.js",
+      "extension": ".js",
+      "bytes": 2205,
+      "sha256": "e961366e4cadbcf38353df7c9a5531f214e32680b65a5817d71dca01b4ce314c"
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
@@ -25342,8 +25419,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 8652,
-      "sha256": "7f5b35d8ba037723d65ffc76030605f4fb8d0bcea65c03989e7be4f24c66eb47"
+      "bytes": 8757,
+      "sha256": "2b9197b946ce5a5f7de64a4dce96cb93faa84b3fbfdefbc51080f655c1482365"
     },
     {
       "path": "perfil.html",
@@ -26100,6 +26177,12 @@
       "extension": ".mjs",
       "bytes": 2735,
       "sha256": "5b58863c36072d946eddeb65a0f9019412a2769c061e3021fb265b936c414a43"
+    },
+    {
+      "path": "tests/checkout/order-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 8830,
+      "sha256": "b5992a41d5603ff1f851f26a39c315914be01887f8e34e1acb686840d20f813f"
     },
     {
       "path": "tests/checkout/saved-location.test.mjs",
@@ -29417,7 +29500,7 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 409,
+            "line": 373,
             "operation": "doc"
           },
           {
@@ -30197,12 +30280,12 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 312,
+            "line": 284,
             "operation": "doc"
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 313,
+            "line": 285,
             "operation": "doc"
           },
           {
