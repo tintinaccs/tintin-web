@@ -150,7 +150,7 @@ function paymentLabel(order) {
   return {
     efectivo: 'Efectivo contra entrega',
     transferencia: 'Transferencia bancaria',
-    pagopark: 'PagoPark',
+    pagopark: 'PagoPar',
     tarjeta: 'Tarjeta'
   }[method] || method || 'A coordinar';
 }

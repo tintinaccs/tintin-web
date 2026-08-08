@@ -505,7 +505,7 @@ function shipMethodLabel(order) {
 }
 function payMethodLabel(order) {
   const m = (order.payment && order.payment.method) || '';
-  return { efectivo: '💵 Efectivo (contra entrega)', transferencia: '🏦 Transferencia bancaria', pagopark: '📱 PagoPark', tarjeta: '💳 Tarjeta' }[m] || m || '—';
+  return { efectivo: '💵 Efectivo (contra entrega)', transferencia: '🏦 Transferencia bancaria', pagopark: '📱 PagoPar', tarjeta: '💳 Tarjeta' }[m] || m || '—';
 }
 function discountAmount(order) {
   const d = Number(order.discount || 0);
