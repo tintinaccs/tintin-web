@@ -1,4 +1,11 @@
-# Tintin — Emails de pedidos con Google Apps Script (gratis, sin tarjeta)
+# Tintin — Archivo histórico de correos con Google Apps Script
+
+> **OBSOLETO — NO USAR PARA PRODUCCIÓN.** Los correos de pedidos se envían
+> actualmente mediante Cloudflare Pages Functions + Resend, con remitente
+> `Tintin Pedidos <pedidos@tintinaccs.com>`. La cuenta
+> `tintinpedidos@gmail.com` ya no forma parte de la operación. Este documento
+> se conserva solo como referencia histórica hasta retirar los envíos
+> auxiliares heredados del panel administrativo.
 
 Esta es la forma que usa el sitio HOY para mandar el correo de cada pedido y
 para el botón "Reenviar" de Super Admin → Pedidos. No requiere el plan Blaze
