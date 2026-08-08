@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T15:13:01.925Z",
-  "sourceFingerprint": "5cc605960b003460a74e07c409720d49683bbc825185474add49b45b64ca9084",
+  "generatedAt": "2026-08-08T15:32:59.127Z",
+  "sourceFingerprint": "8bb9b2c6696ce01487ab5fedbd3ee4862b0b052391c91969a252700b385fd1d9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 521,
-    "textFiles": 489,
-    "totalBytes": 5567558,
+    "files": 522,
+    "textFiles": 490,
+    "totalBytes": 5572651,
     "pages": 18,
-    "modules": 307
+    "modules": 308
   },
   "viewports": [
     {
@@ -20810,8 +20810,8 @@
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
-      "bytes": 6692,
-      "sha256": "373d486bd9dc3078b1b9617718b25d0ef9d287eec1df6bd86c0d81b66c31fbde",
+      "bytes": 7007,
+      "sha256": "c6c7eb94eae09dbfca470d85dc72e077c799134d130293a4e39ecfe5550ecd79",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20856,8 +20856,8 @@
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
-      "bytes": 6768,
-      "sha256": "6e62994d151e5987f881a401b64bef4d8dcb6d4e62659ff7ee736f58a9f1cbdd",
+      "bytes": 8007,
+      "sha256": "fc9d41114adfd3afe35d3eb4424f893cacdc30e41db4196bcbb37ea130c98978",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20866,19 +20866,19 @@
       "endpoints": [
         {
           "url": "https://script.google.com/",
-          "line": 88
+          "line": 89
         },
         {
           "url": "https://*.google.com/",
-          "line": 88
+          "line": 89
         },
         {
           "url": "https://script.googleusercontent.com/",
-          "line": 89
+          "line": 90
         },
         {
           "url": "https://*.googleusercontent.com/",
-          "line": 89
+          "line": 90
         }
       ]
     },
@@ -22307,6 +22307,62 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "scripts/generar-csp-cloudflare.js",
+      "bytes": 3369,
+      "sha256": "20bd3a908dcda42935754d9b23d259a0ae891aae990118f79344fe03b89078cc",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://*.gstatic.com/",
+          "line": 12
+        },
+        {
+          "url": "https://*.google.com/",
+          "line": 12
+        },
+        {
+          "url": "https://unpkg.com/",
+          "line": 12
+        },
+        {
+          "url": "https://www.googletagmanager.com/",
+          "line": 12
+        },
+        {
+          "url": "https://*.googleapis.com/",
+          "line": 13
+        },
+        {
+          "url": "https://*.googleusercontent.com/",
+          "line": 13
+        },
+        {
+          "url": "https://res.cloudinary.com/",
+          "line": 13
+        },
+        {
+          "url": "https://api.imgbb.com/",
+          "line": 13
+        },
+        {
+          "url": "https://*.google-analytics.com/",
+          "line": 13
+        },
+        {
+          "url": "https://*.analytics.google.com/",
+          "line": 13
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 35
+        }
+      ]
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -25286,8 +25342,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 8482,
-      "sha256": "cd36fab746d1c2ff03e76bb94b8bf1aa1a4919da5ebf095569bc602f0e4e6bc9"
+      "bytes": 8652,
+      "sha256": "7f5b35d8ba037723d65ffc76030605f4fb8d0bcea65c03989e7be4f24c66eb47"
     },
     {
       "path": "perfil.html",
@@ -25586,8 +25642,8 @@
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
       "extension": ".mjs",
-      "bytes": 6692,
-      "sha256": "373d486bd9dc3078b1b9617718b25d0ef9d287eec1df6bd86c0d81b66c31fbde"
+      "bytes": 7007,
+      "sha256": "c6c7eb94eae09dbfca470d85dc72e077c799134d130293a4e39ecfe5550ecd79"
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
@@ -25598,8 +25654,8 @@
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
       "extension": ".js",
-      "bytes": 6768,
-      "sha256": "6e62994d151e5987f881a401b64bef4d8dcb6d4e62659ff7ee736f58a9f1cbdd"
+      "bytes": 8007,
+      "sha256": "fc9d41114adfd3afe35d3eb4424f893cacdc30e41db4196bcbb37ea130c98978"
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
@@ -25948,6 +26004,12 @@
       "extension": ".mjs",
       "bytes": 3029,
       "sha256": "80a603e463076aa19b8dfb90602fb5cf7cc0220d930b71c19d3eb6dc91c97a93"
+    },
+    {
+      "path": "scripts/generar-csp-cloudflare.js",
+      "extension": ".js",
+      "bytes": 3369,
+      "sha256": "20bd3a908dcda42935754d9b23d259a0ae891aae990118f79344fe03b89078cc"
     },
     {
       "path": "scripts/preparar-hosting.js",

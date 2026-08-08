@@ -5,6 +5,7 @@ const path = require('path');
 const crypto = require('crypto');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
+const exists = file => fs.existsSync(path.join(root, file));
 
 const rules = read('firestore.rules');
 const headers = read('_headers');
@@ -97,28 +98,55 @@ check(
   overlongHeaderLines.map(line => `${line.slice(0, 40)}... (${line.length} caracteres)`).join(', ')
 );
 
-const inlineScriptHashes = new Set();
+const routePolicies = new Map();
+let currentHeaderRoute = '';
+for (const line of headers.split('\n')) {
+  if (line && !/^\s/.test(line) && !line.startsWith('#')) currentHeaderRoute = line.trim();
+  const policy = line.match(/^\s+Content-Security-Policy:\s*(.*)$/)?.[1];
+  if (policy && currentHeaderRoute) routePolicies.set(currentHeaderRoute, policy);
+}
+
+const missingRoutePolicies = [];
+const missingRouteHashes = [];
+const unsafeInlineRoutes = [];
 for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
   // GitHub y Cloudflare sirven los blobs con LF. Normalizar aquí evita que un
   // checkout local de Windows calcule hashes CRLF que fallen luego en Linux.
   const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
+  const inlineScriptHashes = new Set();
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (/\bsrc\s*=/.test(match[1])) continue;
     inlineScriptHashes.add(
       `'sha256-${crypto.createHash('sha256').update(match[2], 'utf8').digest('base64')}'`
     );
   }
+  const route = file === 'index.html' ? '/' : '/' + path.basename(file, '.html');
+  const policy = routePolicies.get(route) || '';
+  if (!policy) missingRoutePolicies.push(route);
+  const scriptSrc = policy.match(/script-src\s+([^;]+);/)?.[1] || '';
+  const missing = [...inlineScriptHashes].filter(hash => !scriptSrc.includes(hash));
+  if (missing.length) missingRouteHashes.push(`${route}: ${missing.length}`);
+  if (scriptSrc.includes("'unsafe-inline'")) unsafeInlineRoutes.push(route);
 }
-const scriptSrc = headers.match(/script-src\s+([^;]+);/)?.[1] || '';
 check(
-  'La CSP fija cada bloque script inline por hash',
-  inlineScriptHashes.size > 0 && [...inlineScriptHashes].every(hash => scriptSrc.includes(hash)),
-  'todo cambio en un script inline debe actualizar su hash CSP'
+  'Cada página tiene una CSP exacta para su ruta pública',
+  missingRoutePolicies.length === 0,
+  missingRoutePolicies.join(', ')
 );
 check(
-  'script-src no permite ejecución inline arbitraria',
-  !scriptSrc.includes("'unsafe-inline'"),
+  'Cada CSP por ruta fija sus scripts inline por hash',
+  missingRouteHashes.length === 0,
+  missingRouteHashes.join(', ')
+);
+check(
+  'Ninguna CSP por ruta permite ejecución inline arbitraria',
+  unsafeInlineRoutes.length === 0,
   'unsafe-inline solo puede permanecer temporalmente en script-src-attr'
+);
+check(
+  'La CSP por ruta es reproducible',
+  headers.includes('# CSP_ROUTE_POLICIES_START') && headers.includes('# CSP_ROUTE_POLICIES_END') && exists('scripts/generar-csp-cloudflare.js'),
+  'Ejecutá npm run build:csp para regenerar las políticas'
 );
 
 check(
