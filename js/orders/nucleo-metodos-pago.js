@@ -140,7 +140,6 @@ export function legacyPaymentMirrors(methods) {
     paymentMethods: {
       efectivo: enabledCash,
       transferencia: enabledTransfer,
-      pagopark: false,
     },
     bankAccounts: {
       ueno: details[0]?.value || '',

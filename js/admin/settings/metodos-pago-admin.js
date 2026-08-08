@@ -43,7 +43,6 @@ function legacyInputsHtml() {
     <div hidden aria-hidden="true">
       <input type="checkbox" id="cfg-pay-efectivo" />
       <input type="checkbox" id="cfg-pay-transferencia" />
-      <input type="checkbox" id="cfg-pay-pagopark" />
       <textarea id="cfg-bank-ueno"></textarea>
       <textarea id="cfg-bank-atlas"></textarea>
     </div>
@@ -150,7 +149,6 @@ function boot() {
     const mirrors = legacyPaymentMirrors(methods);
     document.getElementById('cfg-pay-efectivo').checked = mirrors.paymentMethods.efectivo;
     document.getElementById('cfg-pay-transferencia').checked = mirrors.paymentMethods.transferencia;
-    document.getElementById('cfg-pay-pagopark').checked = false;
     document.getElementById('cfg-bank-ueno').value = mirrors.bankAccounts.ueno;
     document.getElementById('cfg-bank-atlas').value = mirrors.bankAccounts.atlas;
   }

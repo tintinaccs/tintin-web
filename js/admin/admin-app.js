@@ -2582,7 +2582,7 @@ function serializeGeneralConfig_() {
     'cfg-currency', 'cfg-delivery-cost', 'cfg-encomienda-cost', 'cfg-instagram',
     'cfg-facebook', 'cfg-tiktok', 'cfg-ga4-id', 'cfg-store-open',
     'cfg-header-desktop-tablet', 'cfg-header-mobile', 'cfg-pay-efectivo',
-    'cfg-pay-transferencia', 'cfg-pay-pagopark', 'cfg-bank-ueno', 'cfg-bank-atlas',
+    'cfg-pay-transferencia', 'cfg-bank-ueno', 'cfg-bank-atlas',
     ...MAINTENANCE_ROLE_KEYS.map(role => 'ma-' + role),
   ];
   return JSON.stringify(ids.map(id => {
@@ -2619,10 +2619,9 @@ async function loadConfig() {
     _lastKnownHeaderMode = { desktopTablet: headerDesktopTablet, mobile: headerMobile };
     updateHeaderModeWarning_();
     // Payment methods
-    const pays = d.paymentMethods || { efectivo: true, transferencia: true, pagopark: false };
+    const pays = d.paymentMethods || { efectivo: true, transferencia: true };
     document.getElementById('cfg-pay-efectivo').checked = pays.efectivo !== false;
     document.getElementById('cfg-pay-transferencia').checked = pays.transferencia !== false;
-    document.getElementById('cfg-pay-pagopark').checked = !!pays.pagopark;
     const bankAccounts = d.bankAccounts || {};
     document.getElementById('cfg-bank-ueno').value = bankAccounts.ueno || '';
     document.getElementById('cfg-bank-atlas').value = bankAccounts.atlas || '';
@@ -2698,7 +2697,6 @@ document.getElementById('btn-save-config').onclick = async () => {
       paymentMethods: {
         efectivo:       document.getElementById('cfg-pay-efectivo').checked,
         transferencia:  document.getElementById('cfg-pay-transferencia').checked,
-        pagopark:       document.getElementById('cfg-pay-pagopark').checked,
       },
       bankAccounts: {
         ueno:  document.getElementById('cfg-bank-ueno').value.trim(),
@@ -7499,7 +7497,19 @@ window.openOrderEdit = function(orderId) {
     oeMapWrap.style.display = 'none';
   }
   document.getElementById('oe-ship-method').value = o.shipping?.method || o.shippingMethod || 'delivery';
-  document.getElementById('oe-pay-method').value = o.payment?.method || o.paymentMethod || 'efectivo';
+  // Un pedido viejo puede tener guardado un método que ya no se ofrece —por
+  // ejemplo PagoPar, retirado mientras no esté integrado—. Sin esta opción de
+  // respaldo el select quedaría sin selección y, al guardar, escribiría una
+  // cadena vacía encima del método real del pedido.
+  const oePayMethod = document.getElementById('oe-pay-method');
+  const oePayMethodValue = o.payment?.method || o.paymentMethod || 'efectivo';
+  if (!Array.from(oePayMethod.options).some(option => option.value === oePayMethodValue)) {
+    const retired = document.createElement('option');
+    retired.value = oePayMethodValue;
+    retired.textContent = `${oePayMethodValue} (método retirado)`;
+    oePayMethod.appendChild(retired);
+  }
+  oePayMethod.value = oePayMethodValue;
   document.getElementById('oe-pay-status').value = o.payment?.status || o.paymentStatus || 'pendiente';
   document.getElementById('oe-status').value = o.status || 'pendiente';
   document.getElementById('oe-notes').value = o.adminNotes || o.notes || '';

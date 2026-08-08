@@ -322,22 +322,6 @@
       </button>
       <div class="ck-error" id="error-4"></div>
 
-      <!-- PAGOPARK — Preparado para integración futura -->
-      <!--
-        TODO: Integración PagoPark
-        Cuando tengas las credenciales, descomentar y completar:
-
-        const PAGOPARK_CONFIG = {
-          merchantId:  'TU_MERCHANT_ID',
-          publicKey:   'TU_PUBLIC_KEY',
-          environment: 'sandbox',
-          currency:    'PYG',
-          callbackUrl: 'https://tintinaccesorios.pages.dev/checkout.html?status=success',
-          cancelUrl:   'https://tintinaccesorios.pages.dev/checkout.html?status=cancel',
-        };
-
-        Estados del pedido: 'pendiente' → 'pagado' / 'rechazado' / 'error'
-      -->
 
       <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
       <div id="ck-post-confirm" style="display:none;margin-top:18px">
@@ -507,9 +491,8 @@ function subscribeStoreConfig() {
 }
 
 // Muestra/oculta Efectivo y Transferencia según Super Admin → Configuración
-// → Métodos de pago. PagoPark no forma parte de esto — no está integrado,
-// así que nunca se ofrece como opción seleccionable real (ver nota fija
-// "Próximamente" en el HTML), sin importar lo que diga ese toggle.
+// → Métodos de pago. PagoPar fue retirado mientras no esté integrado: no se
+// ofrece, no se anuncia y no aparece en el panel.
 let efectivoAdminOn = true;
 let transferenciaAdminOn = true;
 

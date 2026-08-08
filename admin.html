@@ -1552,11 +1552,7 @@
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
               <input type="checkbox" id="cfg-pay-transferencia" class="tt-mini-switch" role="switch" checked> Transferencia bancaria
             </label>
-            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
-              <input type="checkbox" id="cfg-pay-pagopark" class="tt-mini-switch" role="switch"> Pasarela de pago con tarjeta (requiere integración backend — pendiente)
-            </label>
           </div>
-          <p style="font-size:12px;color:var(--adm-muted);margin-top:12px">ℹ️ La integración de pagos online (tarjeta) requiere un backend seguro con credenciales privadas. Está pendiente de implementación.</p>
           <div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--adm-border)">
             <label class="adm-label">Datos para transferencia — Ueno (Banco GNB)</label>
             <textarea class="adm-input" id="cfg-bank-ueno" rows="2" placeholder="Ej: CI 1.234.567 — Nombre Apellido" style="resize:vertical;margin-bottom:12px"></textarea>
@@ -1906,7 +1902,6 @@
         <select id="oe-pay-method" class="adm-input">
           <option value="efectivo">Efectivo</option>
           <option value="transferencia">Transferencia</option>
-          <option value="pagopark">PagoPark</option>
         </select>
       </div>
       <div style="display:flex;flex-direction:column;gap:5px">

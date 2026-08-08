@@ -64,7 +64,7 @@ function payMethodLabel(order) {
   return {
     efectivo:      '💵 Efectivo (contra entrega)',
     transferencia: '🏦 Transferencia bancaria',
-    pagopark:      '📱 PagoPark',
+    pagopark:      '📱 PagoPar',
     tarjeta:       '💳 Tarjeta'
   }[order.payment?.method || ''] || order.payment?.method || '—';
 }
