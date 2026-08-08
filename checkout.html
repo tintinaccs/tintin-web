@@ -147,6 +147,15 @@
         <div class="ck-ship-reminder-text" id="ck-ship-reminder-text"></div>
       </div>
 
+      <div class="ck-pickup-notice" id="ck-pickup-notice" role="note" aria-live="polite">
+        <div class="ck-pickup-notice-icon" aria-hidden="true">🔐</div>
+        <div>
+          <strong>Ubicación de retiro protegida</strong>
+          <p>Por seguridad, no publicamos la dirección exacta. Confirmá primero tu pedido y luego solicitá la ubicación a uno de nuestros agentes por WhatsApp.</p>
+          <p class="ck-pickup-notice-detail">Te enviaremos el punto y el horario disponible después de verificar el pedido. El retiro no tiene costo de envío.</p>
+        </div>
+      </div>
+
       <!-- Encomienda: cómo la quiere recibir. Retirar en la agencia y que se
            la lleven a la puerta necesitan datos distintos, así que se pregunta
            antes de pedirlos. Sólo aparece para las ciudades del interior. -->
@@ -651,7 +660,7 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   if (dep === 'Central') {
     const retiroOpt = document.createElement('option');
     retiroOpt.value = RETIRO_VALUE;
-    retiroOpt.textContent = '🏪 Retiro en tienda — San Lorenzo';
+    retiroOpt.textContent = '🏪 Retiro en tienda';
     select.appendChild(retiroOpt);
   }
   if (delivery.length) {
@@ -1061,6 +1070,7 @@ document.getElementById('ck-city').onchange = function() {
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
     reminderEl.classList.remove('show');
+    document.getElementById('ck-pickup-notice').classList.remove('show');
     hideEncomiendaModes();
     return;
   }
@@ -1077,7 +1087,7 @@ document.getElementById('ck-city').onchange = function() {
   }
 
   if (val === '__retiro__') {
-    methodEl.textContent = '🏪 Retiro en tienda — San Lorenzo';
+    methodEl.textContent = '🏪 Retiro en tienda';
     costEl.textContent = '✅ Sin costo de envío';
     orderData.shippingMethod = 'retiro';
     orderData.shippingCost = 0;
@@ -1085,8 +1095,10 @@ document.getElementById('ck-city').onchange = function() {
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
     reminderEl.classList.remove('show');
+    document.getElementById('ck-pickup-notice').classList.add('show');
     hideEncomiendaModes();
   } else if (isDelivery) {
+    document.getElementById('ck-pickup-notice').classList.remove('show');
     const price = getCityPrice(val);
     methodEl.textContent = '🚚 Delivery a domicilio — Zona Central';
     costEl.textContent = price == null
@@ -1104,13 +1116,11 @@ document.getElementById('ck-city').onchange = function() {
     reminderEl.classList.add('show');
     hideEncomiendaModes();
   } else if (isEncomienda) {
-    const price = getCityPrice(val);
+    document.getElementById('ck-pickup-notice').classList.remove('show');
     methodEl.textContent = '📦 Envío por encomienda — Interior del país';
-    costEl.textContent = price == null
-      ? '📞 Consultar por el precio con algún vendedor'
-      : `Costo de envío: ${formatPrice(price)}`;
+    costEl.textContent = 'Se abona a la transportadora al recibir';
     orderData.shippingMethod = 'encomienda';
-    orderData.shippingCost = price;
+    orderData.shippingCost = 0;
     reminderTextEl.innerHTML = '<strong>Recordatorio de envío</strong>Los pedidos por encomienda se envían en 24 a 48 hs, según el día de despacho y la transportadora asignada. Pagar hoy no significa que el pedido llegue hoy — el envío por encomienda tiene su propio tiempo de trámite y traslado.';
     reminderEl.classList.add('show');
     // Los campos los decide el modo elegido (agencia o puerta), no la ciudad.
@@ -1211,7 +1221,7 @@ document.getElementById('btn-step2-next').onclick = () => {
     }
   }
 
-  orderData.city = city === RETIRO_VALUE ? 'San Lorenzo (retiro)' : city;
+  orderData.city = city === RETIRO_VALUE ? 'Retiro coordinado' : city;
   orderData.departamento = departamento;
   goToStep(2);
 
@@ -1340,7 +1350,7 @@ async function buildConfirmation() {
       </div>
       <div class="ck-summary-total">
         <span>Costo de envío</span>
-        <span class="ck-summary-total-val">${shippingPending ? '📞 A confirmar' : formatPrice(orderData.shippingCost)}</span>
+        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : shippingPending ? '📞 A confirmar' : formatPrice(orderData.shippingCost)}</span>
       </div>
       <div class="ck-summary-total" style="font-size:18px">
         <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
@@ -1389,6 +1399,10 @@ async function buildConfirmation() {
         <span class="ck-summary-label">🚚 Envío</span>
         <span class="ck-summary-val">${shipLabels[orderData.shippingMethod] || orderData.shippingMethod}${orderData.encomiendaMode ? ` — ${encomiendaModeLabel(orderData.encomiendaMode)}` : ''}</span>
       </div>
+      ${orderData.shippingMethod === 'retiro' ? `
+      <div class="ck-summary-private-location" role="note">
+        🔐 La ubicación exacta y el horario de retiro se envían por WhatsApp después de confirmar el pedido.
+      </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">💳 Pago</span>
         <span class="ck-summary-val">${payLabels[orderData.paymentMethod] || orderData.paymentMethod}</span>
