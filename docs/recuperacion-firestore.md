@@ -43,22 +43,23 @@ Mecanismos activos sobre la base `(default)` en `us-east1`:
 | Copia operativa del panel | Catálogo y configuración | Manual, descargable |
 | Exportación administrada a bucket | Todo, y **se puede sacar de Google** | Manual |
 
+Prueba de restauración verificada el 2026-08-08:
+
+- Exportación completa: 960 documentos en
+  `gs://tintin-accesorios-respaldos/2026-08-08`.
+- Importación aislada: 960/960 documentos en la base
+  `restauracion-prueba`, operación `SUCCESSFUL`.
+- Conteos iguales entre producción y restauración: `products` 397,
+  `orders` 10, `users` 11, `collections` 12 y `settings` 6.
+- La base productiva tiene `DELETE_PROTECTION_ENABLED`.
+
 ## Lo que sigue faltando de verdad
 
-1. **La restauración nunca se probó.** Hay respaldos en estado `READY`, pero nadie
-   confirmó que se puedan volver a leer. Un respaldo sin restauración probada es una
-   suposición, no una copia.
-2. **Todo vive en la misma cuenta de Google.** PITR, los respaldos programados y el
+1. **Todo vive en la misma cuenta de Google.** PITR, los respaldos programados y el
    bucket de exportación dependen de la misma cuenta que la base de producción. Si se
    pierde el acceso a esa cuenta, se pierden la base y todos sus respaldos a la vez. Por
    eso el 2FA de Google no es solo protección de producción: es también la única
    protección de los respaldos.
-3. **La protección contra borrado estaba desactivada**
-   (`deleteProtectionState: DELETE_PROTECTION_DISABLED`). Se activa con:
-
-   ```
-   gcloud firestore databases update --database='(default)' --delete-protection
-   ```
 
 La exportación administrada sigue teniendo valor pese a PITR y a los respaldos
 programados: es el **único** mecanismo cuyo resultado se puede descargar y guardar fuera
