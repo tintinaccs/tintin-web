@@ -368,7 +368,7 @@ function phase4CreateOrder_(payload, idToken) {
   var name = phase4CleanText_(payload.name, 120);
   if (name.length < 2) return { ok: false, error: 'name_required' };
   var paymentMethod = String(payload.paymentMethod || '');
-  if (paymentMethod !== 'efectivo' && paymentMethod !== 'transferencia') {
+  if (paymentMethod !== 'efectivo' && paymentMethod !== 'transferencia' && paymentMethod !== 'paypal') {
     return { ok: false, error: 'payment_required' };
   }
   var phone = phase4CleanText_(payload.phone, 40);
@@ -459,7 +459,11 @@ function phase4CreateOrder_(payload, idToken) {
       }
     }
 
-    if ((settings.paymentMethods || {})[paymentMethod] === false) {
+    if (paymentMethod === 'paypal' && !(settings.paypal && settings.paypal.enabled === true)) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'payment_unavailable' };
+    }
+    if (paymentMethod !== 'paypal' && (settings.paymentMethods || {})[paymentMethod] === false) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'payment_unavailable' };
     }

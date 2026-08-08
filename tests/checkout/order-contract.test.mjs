@@ -117,6 +117,35 @@ test('servidor rechaza variante inexistente y exige variante cuando corresponde'
   assert.equal(server.phase4VariantIsValid_({ variants: null }, ''), true);
 });
 
+test('PayPal queda rechazado en Apps Script hasta habilitarlo expresamente', () => {
+  const server = phase4Context();
+  server.SUPER_ADMIN_EMAIL = 'teamdinas@gmail.com';
+  server.verifyFirebaseIdToken_ = () => ({ ok: true, emailVerified: true, uid: 'admin-uid', email: 'teamdinas@gmail.com' });
+  server.phase3EmailMatches_ = (email, expected) => email === expected;
+  server.phase4BeginTransaction_ = () => ({ ok: true, transaction: 'tx' });
+  server.phase4Rollback_ = () => {};
+  server.phase4BatchGet_ = () => ({ ok: true, documents: {
+    'orders/admin-uid_request_123456789': null,
+    'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
+    'settings/shippingRates': {},
+    'users/admin-uid': { role: 'superadmin' },
+    'checkoutGuards/admin-uid': null,
+    'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true }
+  }});
+  server.phase4Commit_ = () => { throw new Error('No debe escribir un pedido PayPal deshabilitado'); };
+
+  const result = server.phase4CreateOrder_({
+    requestId: 'request_123456789', cartLines: [{ id: 'p1', qty: 5, variant: '' }],
+    name: 'Admin Tintin', phone: '595981123456', contactEmail: 'teamdinas@gmail.com', notes: '',
+    selectedCity: '__retiro__', departamento: '', address: '', referencia: '', mapLocation: null,
+    shippingMethod: 'retiro', encomiendaMode: '', paymentMethod: 'paypal',
+    expectedSubtotal: 50000, expectedShippingCost: 0, expectedShippingPending: false, expectedTotal: 50000
+  }, 'token');
+
+  assert.equal(result.ok, false);
+  assert.equal(result.error, 'payment_unavailable');
+});
+
 test('pedido manipulado con productId repetido descuenta stock agregado una sola vez', () => {
   const server = phase4Context();
   let committedWrites = null;

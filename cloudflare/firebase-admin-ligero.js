@@ -326,6 +326,10 @@ export function decodeFirestoreFields(fields) {
     if ('integerValue' in value) return Number(value.integerValue);
     if ('doubleValue' in value) return Number(value.doubleValue);
     if ('timestampValue' in value) return value.timestampValue;
+    if ('arrayValue' in value) return (value.arrayValue.values || []).map(decode);
+    if ('mapValue' in value) return Object.fromEntries(
+      Object.entries(value.mapValue.fields || {}).map(([key, nested]) => [key, decode(nested)])
+    );
     return null;
   };
   return Object.fromEntries(Object.entries(fields || {}).map(([key, value]) => [key, decode(value)]));
