@@ -1,5 +1,5 @@
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { readStaleCached, recordFirestoreRead, writeCached } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 
 const CACHE_KEY = 'settings:general';

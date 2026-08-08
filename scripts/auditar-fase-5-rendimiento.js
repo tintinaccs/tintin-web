@@ -22,7 +22,7 @@ const html = htmlFiles.map(file => [file, read(file)]);
 
 check(
   'La portada usa una consulta acotada sin listener masivo',
-  products.includes("HOME_PRODUCT_LIMIT = 24") &&
+  products.includes("HOME_PRODUCT_LIMIT = 18") &&
     products.includes("where('destacado', '==', true)") &&
     products.includes("return loadHomeProducts()") &&
     /catalogo\|collections/.test(products),

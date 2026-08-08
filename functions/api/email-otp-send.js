@@ -18,6 +18,8 @@ const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
 const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;
+const MAX_CODES_PER_IP_DAY = 30;
+const IP_COOLDOWN_MS = 10 * 1000;
 
 function clean(value, maxLength = 254) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
@@ -38,6 +40,36 @@ function docPath(email) {
 async function hashCode(code) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code));
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function hashRateKey(value) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function enforceIpRateLimit(request, env, now) {
+  const ip = clean(request.headers.get('CF-Connecting-IP'), 80);
+  if (!ip) throw new Error('rate_identity_missing');
+  const key = await hashRateKey(`${env.OTP_RATE_SALT || 'tintin-otp'}:${ip}`);
+  const path = `emailOtpRateLimits/${key}`;
+  const existingDoc = await firestoreAdminGet(env, path);
+  const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;
+  const dateKey = todayKey();
+  const sameDay = existing?.dateKey === dateKey;
+  const count = sameDay ? Number(existing?.sendCountToday || 0) : 0;
+  const elapsed = existing?.lastSentAt ? now - new Date(existing.lastSentAt).getTime() : Infinity;
+  if (elapsed < IP_COOLDOWN_MS || count >= MAX_CODES_PER_IP_DAY) {
+    const error = new Error('ip_rate_limit');
+    error.retryAfterSeconds = elapsed < IP_COOLDOWN_MS
+      ? Math.ceil((IP_COOLDOWN_MS - elapsed) / 1000)
+      : 86400;
+    throw error;
+  }
+  await firestoreAdminReplace(env, path, {
+    lastSentAt: fsTimestamp(new Date(now)),
+    dateKey: fsString(dateKey),
+    sendCountToday: fsInteger(count + 1)
+  });
 }
 
 function generateCode() {
@@ -111,7 +143,7 @@ export async function onRequest(context) {
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
-  if (!originIsAllowed(origin, requestUrl)) {
+  if (!origin || !originIsAllowed(origin, requestUrl)) {
     return jsonResponse({ success: false, error: 'origin_not_allowed' }, 403, origin, requestUrl);
   }
   if (request.method === 'OPTIONS') {
@@ -133,6 +165,20 @@ export async function onRequest(context) {
     const email = clean(body.email, 254).toLowerCase();
     if (!emailIsValid(email)) {
       return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
+    }
+
+    const now = Date.now();
+    try {
+      await enforceIpRateLimit(request, env, now);
+    } catch (rateError) {
+      if (rateError?.message === 'ip_rate_limit') {
+        return jsonResponse({
+          success: false,
+          error: 'rate_limit_exceeded',
+          retryAfterSeconds: rateError.retryAfterSeconds
+        }, 429, origin, requestUrl);
+      }
+      throw rateError;
     }
 
     // El correo normal no es un segundo camino hacia una cuenta que ya usa
@@ -158,8 +204,6 @@ export async function onRequest(context) {
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
     const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;
-    const now = Date.now();
-
     if (existing?.lastSentAt) {
       const elapsed = now - new Date(existing.lastSentAt).getTime();
       if (elapsed < RESEND_COOLDOWN_MS) {

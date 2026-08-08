@@ -2,15 +2,15 @@
 // TINTIN ACCESORIOS — Firebase Config
 // =============================================
 
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
   getToken as getAppCheckToken,
   setTokenAutoRefreshEnabled
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
 // functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de

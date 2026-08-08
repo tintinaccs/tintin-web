@@ -21,7 +21,7 @@ import {
   serverTimestamp,
   setDoc,
   where,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const MEDIA_COLLECTION = 'media';
@@ -68,7 +68,6 @@ async function callSecureFunction(name, payload) {
   const user = auth.currentUser;
   if (!user) throw new Error('Tu sesión venció. Volvé a iniciar sesión.');
 
-  console.debug(`[media-library] requesting ${name}`);
   const token = await withTimeout(
     () => user.getIdToken(),
     TOKEN_TIMEOUT_MS,
@@ -104,7 +103,6 @@ async function uploadBlobToCloudinary(blob, mediaId, variant) {
   form.append('public_id', authorization.publicId);
   form.append('overwrite', 'true');
 
-  console.debug(`[media-library] uploading ${variant}`);
   const response = await withTimeout(
     signal => fetch(authorization.uploadUrl, { method: 'POST', body: form, signal }),
     UPLOAD_TIMEOUT_MS,
@@ -187,7 +185,6 @@ export async function uploadImageToLibrary(file, options = {}) {
       uploadedAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-    console.debug('[media-library] saving firestore');
     await withTimeout(
       () => setDoc(doc(db, MEDIA_COLLECTION, mediaId), record),
       TOKEN_TIMEOUT_MS,

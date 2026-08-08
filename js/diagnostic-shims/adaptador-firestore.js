@@ -15,8 +15,8 @@
 // espera, sin tocar Firestore.
 import { reportBlockedWrite } from './informe-adaptadores-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
 
-export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+export * from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 export async function addDoc(reference) {
   reportBlockedWrite('addDoc', reference?.path || null);

@@ -37,17 +37,17 @@ No se considera respaldo un archivo que nunca fue revisado ni una copia guardada
 
 ## Firestore
 
-> **Antes de aplicar esta sección, leer `docs/recuperacion-firestore.md`.** Lo que se
-> puede restaurar hoy depende de la colección: catálogo y configuración tienen copia
-> descargable desde el panel; **`orders`, `users`, `auditLog` y `emailLogs` no la tienen**.
-> Un procedimiento de restauración solo funciona si existe una copia de la que restaurar.
+> **Antes de aplicar esta sección, leer `docs/recuperacion-firestore.md`, que es la
+> fuente canónica del estado real.** Firestore dispone de PITR por 7 días y respaldos
+> programados diario/semanal para `orders`, `users`, `auditLog` y `emailLogs`; catálogo
+> y configuración cuentan además con exportación operativa desde el panel. Falta aún
+> probar una restauración aislada y guardar una copia independiente de la cuenta Google.
 
 ### Recuperación de cambios puntuales
 
-Usar historial de auditoría, la copia operativa del panel y los documentos afectados para
-restaurar únicamente el alcance necesario. Para pedidos y usuarios no hay copia de
-respaldo: la recuperación se limita a lo que quede en `auditLog` y en los correos ya
-enviados.
+Usar PITR o el respaldo programado para pedidos y usuarios, y la copia operativa del
+panel para catálogo/configuración, restaurando únicamente el alcance necesario en un
+entorno separado antes de tocar producción.
 
 ### Recuperación de cambios masivos
 

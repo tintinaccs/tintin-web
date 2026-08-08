@@ -20,7 +20,7 @@
 import { db } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   doc, getDoc, setDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { PERMISSIONS } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };

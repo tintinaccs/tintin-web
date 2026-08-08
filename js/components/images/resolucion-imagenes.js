@@ -16,7 +16,7 @@ import {
   onSnapshot,
   serverTimestamp,
   setDoc,
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];

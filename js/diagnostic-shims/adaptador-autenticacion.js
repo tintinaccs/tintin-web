@@ -9,7 +9,7 @@
 // ver la sesión real de quien lo ejecuta, solo sin poder modificarla.
 import { reportBlockedWrite } from './informe-adaptadores-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
 
-export * from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+export * from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const blockedResolve = name => async (...args) => {
   reportBlockedWrite(name, null);

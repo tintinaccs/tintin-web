@@ -7,7 +7,7 @@ import {
   getDocs,
   limit,
   query
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   buildStaticAnalysis,
   compareReports,
@@ -507,9 +507,9 @@ async function fetchPage(page) {
 // ya usa cada módulo de la plataforma (js/core/firebase/firebase.js, admin-app.js, etc.),
 // así que ninguna página necesita saber que está siendo inspeccionada.
 const DIAGNOSTIC_SHIM_MAP = {
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js': 'js/diagnostic-shims/adaptador-firestore.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js': 'js/diagnostic-shims/adaptador-autenticacion.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js': 'js/diagnostic-shims/adaptador-almacenamiento.js'
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js': 'js/diagnostic-shims/adaptador-firestore.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js': 'js/diagnostic-shims/adaptador-autenticacion.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js': 'js/diagnostic-shims/adaptador-almacenamiento.js'
 };
 
 function safeHtml(html, sourceUrl) {

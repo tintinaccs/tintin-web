@@ -8,7 +8,7 @@
 # Firebase queda fuera del número, que es justo el que más pesa.
 set -euo pipefail
 
-VERSION="${1:-10.12.0}"
+VERSION="${1:-10.14.1}"
 BASE="https://www.gstatic.com/firebasejs/${VERSION}"
 DEST="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/artifacts/fbmirror"
 

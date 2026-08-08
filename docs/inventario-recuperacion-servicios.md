@@ -44,7 +44,7 @@ que se confundan con una filtración y que se intente «rotarlos» sin necesidad
 | --- | --- | --- |
 | `firebaseConfig.apiKey` | `js/core/firebase/firebase.js` | Identificador de proyecto de Firebase Web, no una credencial de acceso. La seguridad la dan las reglas de Firestore y App Check. |
 | Clave de sitio de reCAPTCHA Enterprise | `js/core/firebase/firebase.js` | Clave *de sitio* de App Check, pensada para el cliente. La clave secreta vive en Google. |
-| `EMAIL_WEBHOOK_URL` | `js/email/configuracion-correo.js` | URL de despliegue de Apps Script. La autorización la da la verificación del idToken en el servidor, no el secreto de la URL. |
+| `EMAIL_WEBHOOK_URL` | `js/email/configuracion-correo.js` | Integración heredada para pruebas/promociones del panel; los pedidos usan Cloudflare + Resend con `pedidos@tintinaccs.com`. La autorización la da la verificación del idToken en el servidor, no el secreto de la URL. |
 
 Si alguna vez se decide que la URL de Apps Script no debería ser pública, hay
 que rediseñar la autorización de ese endpoint, no solo ocultar la URL.

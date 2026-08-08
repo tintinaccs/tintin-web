@@ -4,7 +4,7 @@ import {
   collection,
   addDoc,
   serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ORDER_EMAIL_API = apiUrl('order-email');
 const MAX_DELIVERY_ATTEMPTS = 3;

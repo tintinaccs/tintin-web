@@ -11,7 +11,7 @@ import {
   onSnapshot,
   query,
   where
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   readCached,
   readStaleCached,
@@ -25,7 +25,7 @@ import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/poli
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
 const HOME_CACHE_TTL = 60 * 1000;
-const HOME_PRODUCT_LIMIT = 24;
+const HOME_PRODUCT_LIMIT = 18;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
@@ -190,22 +190,15 @@ async function fetchHomeProductsFromRest() {
 }
 
 async function fetchHomeProducts() {
+  // La API REST pública evita bloquear el primer render esperando a que
+  // App Check y el canal persistente del SDK terminen de inicializarse.
+  // Las reglas de Firestore siguen aplicándose exactamente igual.
   let products;
-  if (!await appCheckReady) {
+  try {
     products = await fetchHomeProductsFromRest();
-  } else {
-    try {
-      products = await Promise.race([
-        fetchHomeProductsFromSdk(),
-        new Promise((_, reject) => window.setTimeout(
-          () => reject(new Error('La portada tardó demasiado en obtener productos')),
-          2800
-        ))
-      ]);
-    } catch (error) {
-      console.warn('[products-store] La portada usa el respaldo acotado:', error);
-      products = await fetchHomeProductsFromRest();
-    }
+  } catch (restError) {
+    if (!await appCheckReady) throw restError;
+    products = await fetchHomeProductsFromSdk();
   }
 
   products = normalizeList(products);
@@ -216,22 +209,11 @@ async function fetchHomeProducts() {
 
 async function fetchAllProducts() {
   let products;
-  if (!await appCheckReady) {
-    products = normalizeList(await fetchAllProductsFromRest());
-    writeCached(ALL_CACHE_KEY, products.map(compactProduct));
-    return publish(products, 'rest-fallback');
-  }
   try {
-    products = await Promise.race([
-      fetchAllProductsFromSdk(),
-      new Promise((_, reject) => window.setTimeout(
-        () => reject(new Error('Firestore SDK tardó demasiado')),
-        3500
-      ))
-    ]);
-  } catch (sdkError) {
-    console.warn('[products-store] Se usa el respaldo compatible del catálogo:', sdkError);
     products = await fetchAllProductsFromRest();
+  } catch (restError) {
+    if (!await appCheckReady) throw restError;
+    products = await fetchAllProductsFromSdk();
   }
   products = normalizeList(products);
   const cards = products.map(compactProduct);
@@ -249,7 +231,12 @@ async function startPublicProductsRealtime() {
   if (!await appCheckReady) return loadAllProducts({ force: true });
 
   const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-  if (Array.isArray(cached) && cached.length) publish(cached, 'cache');
+  if (Array.isArray(cached) && cached.length) {
+    publish(cached, 'cache');
+  } else {
+    // Primer contenido útil antes de abrir el listener persistente.
+    await loadAllProducts();
+  }
 
   publicProductsReady = new Promise((resolve, reject) => {
     publicProductsUnsubscribe = onSnapshot(

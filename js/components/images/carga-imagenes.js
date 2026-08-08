@@ -21,6 +21,12 @@ const STAGE_LABELS = {
   saving: 'Guardando…',
 };
 
+function debugImageFlow(...args) {
+  try {
+    if (localStorage.getItem('tt_debug_images') === '1') console.debug(...args);
+  } catch {}
+}
+
 function ensureStyles() {
   if (document.getElementById('tt-image-upload-widget-style')) return;
   const style = document.createElement('style');
@@ -267,13 +273,12 @@ export function attachImageUploadWidget(container, options = {}) {
   }
 
   async function commitPendingFile() {
-    console.debug('[image-upload-widget] confirm clicked', { hasPendingFile: Boolean(pendingFile), busy });
+    debugImageFlow('[image-upload-widget] confirm clicked', { hasPendingFile: Boolean(pendingFile), busy });
     if (!pendingFile) {
       setStatus('Elegí una imagen antes de confirmar.', 'error');
       return;
     }
     if (busy) return;
-    console.debug('[image-upload-widget] pending file', pendingFile.name, pendingFile.size);
     const file = pendingFile;
     const previousUrl = currentUrl;
     let result = null;

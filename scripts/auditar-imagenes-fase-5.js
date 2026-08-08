@@ -439,7 +439,7 @@ check(
 
 check(
   'El clic en confirmar siempre deja evidencia y usa el flujo real de subida',
-  files.uploadWidget.includes("console.debug('[image-upload-widget] confirm clicked'") &&
+  files.uploadWidget.includes("debugImageFlow('[image-upload-widget] confirm clicked'") &&
     files.uploadWidget.includes("result = await uploadImageToLibrary(file") &&
     files.uploadWidget.includes("setStatus('Imagen guardada correctamente', 'success')") &&
     files.uploadWidget.includes("setStatus(error?.message || 'No se pudo subir la imagen"),
@@ -457,9 +457,10 @@ check(
 
 check(
   'El renderizado del hero y del resto de slots públicos deja evidencia de qué datos llegaron y si se aplicaron',
-  files.runtime.includes("console.debug('[images-phase5] onImagesUpdate: datos recibidos de Firestore'") &&
-    files.runtime.includes("console.debug('[images-phase5] applyHero: aplicando URLs nuevas'") &&
-    files.runtime.includes("console.debug('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM'"),
+  files.runtime.includes("debugImageFlow('[images-phase5] onImagesUpdate: datos recibidos de Firestore'") &&
+    files.runtime.includes("debugImageFlow('[images-phase5] applyHero: aplicando URLs nuevas'") &&
+    files.runtime.includes("debugImageFlow('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM'") &&
+    files.runtime.includes("localStorage.getItem('tt_debug_images') === '1'"),
   'sin esta traza no hay forma de saber, desde la consola del navegador, si el problema está en Firestore o en el DOM'
 );
 
@@ -475,8 +476,9 @@ check(
 
 check(
   'La lista de orígenes confiables incluye el dominio real de producción',
-  files.cloudinarySecurity.includes("'https://tintinaccesorios.pages.dev'"),
-  'el dominio publicado en Cloudflare Pages debe estar en TRUSTED_CROSS_ORIGINS'
+  files.cloudinarySecurity.includes('origin === new URL(requestUrl).origin') &&
+    files.cloudinarySecurity.includes('const TRUSTED_CROSS_ORIGINS = new Set();'),
+  'las funciones deben aceptar su mismo origen sin conservar hosts heredados'
 );
 
 check(

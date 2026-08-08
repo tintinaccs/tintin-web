@@ -26,7 +26,10 @@ El Super Admin se reconoce por la cuenta oficial. Los demás roles operativos se
 
 ### 5. Integraciones externas
 
-- Google Apps Script procesa correos operativos autenticados.
+- Cloudflare Pages Functions y Resend procesan los correos de pedidos con el
+  remitente oficial `pedidos@tintinaccs.com`.
+- Google Apps Script conserva únicamente integraciones operativas heredadas y
+  la sincronización con Google Sheets; no es el remitente de pedidos.
 - Google Apps Script mantiene el espejo operativo de catálogo y clientas en
   Google Sheets. Firestore sigue siendo la fuente de verdad: las ediciones de
   `Catálogo web` usan el valor capturado por el evento `onEdit`, no una lectura
