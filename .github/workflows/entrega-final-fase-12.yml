@@ -143,6 +143,7 @@ jobs:
         run: npm audit --json > artifacts/npm-audit-full.json || true
 
       - name: Smoke real de producción
+        if: github.event_name != 'pull_request'
         run: node scripts/produccion-smoke-fase-12.mjs
 
       - name: Guardar evidencias

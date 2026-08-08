@@ -48,6 +48,11 @@ for (const token of [
 }
 check('El workflow conserva evidencias', workflow.includes('phase12-final-evidence') && workflow.includes('retention-days: 30'), 'Las evidencias deben quedar disponibles para revisión.');
 check('El workflow usa Node 22', workflow.includes('node-version: 22'), 'Las herramientas actuales requieren Node 22.');
+check(
+  'El smoke real corre solo fuera de pull requests',
+  /- name: Smoke real de producci[^\n]*\n\s+if: github\.event_name != ['"]pull_request['"]\n\s+run: node scripts\/produccion-smoke-fase-12\.mjs/.test(workflow),
+  'Un PR todavía no está en producción; el smoke del dominio vivo debe ejecutarse después del merge a main.'
+);
 
 const scriptDir = path.join(root, 'scripts');
 const temporary = fs.readdirSync(scriptDir).filter(name => /^apply-phase\d|^apply-phase7-phase/i.test(name));
