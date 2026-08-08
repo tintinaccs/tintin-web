@@ -45,15 +45,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar rama evaluada
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
 
       - name: Configurar Java para emuladores Firebase

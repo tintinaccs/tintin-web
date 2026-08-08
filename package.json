@@ -90,11 +90,14 @@
     "audit:names": "node scripts/auditar-convenciones-nombres.mjs"
   },
   "devDependencies": {
-    "@firebase/rules-unit-testing": "3.0.3",
+    "@firebase/rules-unit-testing": "5.0.1",
     "@playwright/test": "^1.62.1",
-    "firebase": "^10.14.1",
+    "firebase": "^12.17.1",
     "firebase-tools": "^15.26.0",
     "playwright": "^1.62.1"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "private": true
 }
