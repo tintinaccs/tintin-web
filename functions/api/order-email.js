@@ -4,6 +4,7 @@ import {
   preflightResponse,
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -446,7 +447,23 @@ export async function onRequest(context) {
       sendCustomer
     });
 
-    return jsonResponse(result, result.success ? 200 : 502, origin, requestUrl);
+    // Respaldo del aviso push: este camino ya validó a la usuaria y leyó el
+    // pedido real desde Firestore, así que sirve para recuperar los casos en
+    // que el webhook de Apps Script falló. Usa exactamente el mismo eventId,
+    // por lo que la idempotencia impide un segundo aviso. Un reenvío manual
+    // de correo NO vuelve a notificar. Que falle el push no impide el correo,
+    // ni al revés: son dos caminos independientes.
+    const pushResult = (!isResend && pushEnabled(env))
+      ? await dispatchOrderPushEvent(env, 'order.created', orderId, `order.created:${orderId}`)
+          .catch(() => ({ ok: false, error: 'push_failed' }))
+      : null;
+
+    // `push` es aditivo: notificationStatusFromResult() y el resto de los
+    // consumidores siguen leyendo success/adminSent/customerSent/error igual.
+    const responseBody = pushResult
+      ? { ...result, push: { attempted: pushResult.attempted || 0, sent: pushResult.successCount || 0, duplicate: Boolean(pushResult.duplicate) } }
+      : result;
+    return jsonResponse(responseBody, result.success ? 200 : 502, origin, requestUrl);
   } catch (error) {
     return jsonResponse({
       success: false,

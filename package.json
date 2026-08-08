@@ -10,6 +10,8 @@
     "audit:navigation-search": "node scripts/auditar-navegacion-busqueda.mjs",
     "audit:unified-navigation": "node scripts/auditar-modular-arquitectura.js && node scripts/auditar-inicio-navegacion-publica.js && node scripts/auditar-unificada-navegacion.js && node scripts/auditar-responsive-navegacion.mjs && node scripts/auditar-navegacion-busqueda.mjs",
     "audit:all-navigation-surfaces": "node scripts/auditar-todas-navegacion-superficies-ci.mjs",
+    "audit:web-push": "node scripts/auditar-push-web.js",
+    "test:web-push": "node --test tests/push/push-web.test.mjs",
     "audit:tintin": "node scripts/auditar-tintin.js",
     "audit:store-gate": "node scripts/auditar-control-tienda.js",
     "audit:secure-orders": "node scripts/auditar-seguro-pedidos.js && npm run test:checkout-contract",
