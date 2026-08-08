@@ -6,22 +6,63 @@ lo que el proyecto **puede ejecutar hoy**.
 
 No debe contener secretos, claves ni credenciales.
 
+## Advertencia sobre este documento
+
+Una versión anterior afirmaba que `orders` y `users` **no tenían ningún respaldo**. Era
+falso. Esa conclusión salió de auditar únicamente el repositorio —el export del panel
+excluye esas colecciones, el plan era Spark y App Check bloquea el acceso externo— sin
+consultar el estado real de la base.
+
+**Los respaldos de Firestore se configuran en la consola de Google y no dejan ningún
+rastro en el código.** Ninguna auditoría de este repositorio puede verlos. Para conocer
+la cobertura real hay que preguntarle a la infraestructura:
+
+```
+gcloud firestore databases list --project=tintin-accesorios
+gcloud firestore backups schedules list --database='(default)'
+gcloud firestore backups list
+```
+
 ## Resumen
 
-| Datos | Copia disponible | Cómo | Cobertura |
-| --- | --- | --- | --- |
-| `products` | Sí | Copia operativa del panel | Completa |
-| `collections` | Sí | Copia operativa del panel | Completa |
-| `site_content` | Sí | Copia operativa del panel | Completa |
-| `settings` | Sí | Copia operativa del panel | Completa |
-| `rolePermissions` | Sí | Copia operativa del panel | Completa |
-| `orders` | **No** | — | **Sin respaldo** |
-| `users` | **No** | — | **Sin respaldo** |
-| `auditLog` | **No** | — | **Sin respaldo** |
-| `emailLogs` | **No** | — | **Sin respaldo** |
-| `cart` | No | — | Sin respaldo (efímero, no crítico) |
+Verificado el 2026-08-08 contra el proyecto real.
 
-El catálogo y la configuración se recuperan hoy mismo. **Los pedidos y los usuarios no.**
+| Datos | Cobertura real |
+| --- | --- |
+| `products`, `collections`, `site_content`, `settings`, `rolePermissions` | Copia operativa del panel, descargable + todo lo de abajo |
+| `orders`, `users`, `auditLog`, `emailLogs` | **Sí tienen respaldo**: PITR 7 días, diario 30 días, semanal 84 días |
+| `cart` | Cubierto igual, aunque es efímero y no crítico |
+
+Mecanismos activos sobre la base `(default)` en `us-east1`:
+
+| Mecanismo | Alcance | Estado |
+| --- | --- | --- |
+| Point-in-Time Recovery | Cualquier instante de los últimos **7 días** | `POINT_IN_TIME_RECOVERY_ENABLED`, `versionRetentionPeriod: 604800s` |
+| Respaldo programado diario | Retención **30 días** | Activo desde 2026-08-05 |
+| Respaldo programado semanal (domingos) | Retención **84 días** | Activo desde 2026-08-05 |
+| Copia operativa del panel | Catálogo y configuración | Manual, descargable |
+| Exportación administrada a bucket | Todo, y **se puede sacar de Google** | Manual |
+
+## Lo que sigue faltando de verdad
+
+1. **La restauración nunca se probó.** Hay respaldos en estado `READY`, pero nadie
+   confirmó que se puedan volver a leer. Un respaldo sin restauración probada es una
+   suposición, no una copia.
+2. **Todo vive en la misma cuenta de Google.** PITR, los respaldos programados y el
+   bucket de exportación dependen de la misma cuenta que la base de producción. Si se
+   pierde el acceso a esa cuenta, se pierden la base y todos sus respaldos a la vez. Por
+   eso el 2FA de Google no es solo protección de producción: es también la única
+   protección de los respaldos.
+3. **La protección contra borrado estaba desactivada**
+   (`deleteProtectionState: DELETE_PROTECTION_DISABLED`). Se activa con:
+
+   ```
+   gcloud firestore databases update --database='(default)' --delete-protection
+   ```
+
+La exportación administrada sigue teniendo valor pese a PITR y a los respaldos
+programados: es el **único** mecanismo cuyo resultado se puede descargar y guardar fuera
+de Google. Son redes distintas, no redundantes.
 
 ## Lo que sí existe: copia operativa
 
@@ -64,7 +105,10 @@ Esto es una decisión de diseño, no un olvido: esas colecciones contienen datos
 personales y transaccionales, y descargarlas a un archivo local tiene implicancias de
 privacidad que no se resuelven con un botón.
 
-Pero implica que **hoy un borrado accidental de `orders` no se puede revertir**.
+Esa exclusión **no** deja a los pedidos sin protección: PITR y los respaldos programados
+los cubren igual, como se detalla en el resumen. Lo que la exclusión sí implica es que
+`orders` y `users` no entran en el archivo descargable del panel, que es la única copia
+que hoy se puede sacar de Google sin usar la exportación administrada.
 
 ## Por qué no se puede resolver con un script
 
@@ -182,10 +226,15 @@ Antes de implementarla hay que resolver:
 No se implementó en este cierre precisamente porque es una decisión de privacidad, no
 una tarea técnica.
 
-### Opción C — Aceptar el riesgo
+### Opción C — Quedarse con lo que ya hay
 
-Documentar que los pedidos no tienen respaldo y asumirlo. **No recomendada**: los pedidos
-son el registro comercial del negocio y su pérdida no es reconstruible.
+Dejar PITR y los respaldos programados como única cobertura, sin exportaciones a bucket.
+
+Es defendible: cubre 7 días a cualquier instante, 30 días de copias diarias y 84 de
+semanales. **Lo que no cubre es la pérdida de la cuenta de Google**, porque todos esos
+respaldos viven dentro de ella. Si se elige esta opción, la contrapartida obligatoria es
+tratar el 2FA y los códigos de recuperación de Google como crítico, y probar al menos una
+restauración para confirmar que los respaldos sirven.
 
 ## Registro de pruebas
 
