@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T16:25:33.068Z",
-  "sourceFingerprint": "d023c65c80bd2887cd6d2a5b313d481c75bf6052d2163aeff533f970b2a51f62",
+  "generatedAt": "2026-08-08T16:36:59.422Z",
+  "sourceFingerprint": "a56f2c2497f8e5b073d69d2c692b686336eaaaea62c48b534b497fd4fe67a075",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 524,
-    "textFiles": 492,
-    "totalBytes": 5587005,
+    "files": 525,
+    "textFiles": 493,
+    "totalBytes": 5591792,
     "pages": 18,
     "modules": 310
   },
@@ -20399,8 +20399,8 @@
     },
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
-      "bytes": 4658,
-      "sha256": "7d49ffd10962efb0258fc0bd1385f7905e0d79ec51015a10bb7fddb350db45b8",
+      "bytes": 4758,
+      "sha256": "a36816500cc83082b971d296233af56da16288eca1fa62813bc1386e7d523e86",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23335,6 +23335,12 @@
       "sha256": "3da309d070bfc32e6c935d901be74204d43050b9706bdd9cb91d7cd92dace4c1"
     },
     {
+      "path": "AGENTS.md",
+      "extension": ".md",
+      "bytes": 4544,
+      "sha256": "de39f86bc016a2dc26a4430ab18132c618dabcaf160cf6b766110ea0f8f58484"
+    },
+    {
       "path": "README.md",
       "extension": ".md",
       "bytes": 1104,
@@ -23973,8 +23979,8 @@
     {
       "path": "docs/excepciones-contractuales-nombres.md",
       "extension": ".md",
-      "bytes": 1586,
-      "sha256": "46e4daf91caaaa95502c4ed3d8de7f2effce63e5c6968cd89775dcece498a095"
+      "bytes": 1729,
+      "sha256": "9a06290b4472d30ce01997c94c762466dcb879a7ae59b95fcf6ae7a64be66e9e"
     },
     {
       "path": "docs/imagenes-fase-5.md",
@@ -25635,8 +25641,8 @@
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
       "extension": ".mjs",
-      "bytes": 4658,
-      "sha256": "7d49ffd10962efb0258fc0bd1385f7905e0d79ec51015a10bb7fddb350db45b8"
+      "bytes": 4758,
+      "sha256": "a36816500cc83082b971d296233af56da16288eca1fa62813bc1386e7d523e86"
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",

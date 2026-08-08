@@ -9,6 +9,7 @@ const ignoredReferenceFiles = new Set([
   'scripts/cerrar-organizacion-nombres.mjs',
   'scripts/completar-cierre-nombres.mjs',
 ]);
+const contractualDocumentNames = new Set(['AGENTS.md']);
 
 function repositoryFiles() {
   return execFileSync(
@@ -88,6 +89,7 @@ for (const file of files) {
       || /^[^/]+\.md$/i.test(file)
       || /^functions\/[^/]+\.md$/i.test(file))
     && base.toLowerCase() !== 'readme.md'
+    && !contractualDocumentNames.has(base)
   );
   if (isEligibleDoc) {
     if (base !== base.toLowerCase()) fail(`Documento sin minúsculas: ${file}`);
