@@ -1348,6 +1348,7 @@ function renderFinding(item) {
       </div>
       <p>${escapeHtml(item.description)}</p>
       <p class="adm-diagnostic-evidence"><strong>Evidencia:</strong> ${escapeHtml(item.evidence)}</p>
+      <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-ai-finding-id="${escapeHtml(item.id)}">Analizar con IA</button>
       <details>
         <summary>Ver información completa y ubicación de corrección</summary>
         <div class="adm-diagnostic-detail-grid">
@@ -1431,6 +1432,10 @@ function renderActiveResults() {
       <summary><span>${escapeHtml(label)}</span><small>${items.length} resultado(s)</small></summary>
       <div class="adm-diagnostic-page-body">${items.map(renderFinding).join('')}</div>
     </details>`).join('');
+  root.querySelectorAll('[data-ai-finding-id]').forEach(button => button.addEventListener('click', () => {
+    const finding = lastReport.findings.find(item => item.id === button.dataset.aiFindingId);
+    if (finding) window.dispatchEvent(new CustomEvent('tintin:ai-developer-finding', { detail: finding }));
+  }));
 }
 
 function renderCoverageResults() {

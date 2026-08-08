@@ -1321,6 +1321,11 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Solo Cloudflare (Admin REST) persiste el historial del Desarrollador IA.
+    match /aiDeveloperJobs/{jobId} {
+      allow read, write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
