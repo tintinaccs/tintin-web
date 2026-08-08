@@ -71,7 +71,7 @@ check('Regla no-cache para el service worker', swHeaderBlock.includes('no-cache,
 check('La regla del service worker va después de la genérica /*.js', headers.indexOf('/firebase-messaging-sw.js') > headers.indexOf('/*.js'));
 check('Regla para admin-manifest.json', headers.includes('/admin-manifest.json'));
 check('La CSP existente se conserva', headers.includes("frame-ancestors 'none'") && headers.includes('upgrade-insecure-requests'));
-check('La CSP ya permite gstatic y googleapis', headers.includes('https://www.gstatic.com') && headers.includes('https://*.googleapis.com'));
+check('La CSP ya permite gstatic y googleapis', (headers.includes('https://www.gstatic.com') || headers.includes('https://*.gstatic.com')) && headers.includes('https://*.googleapis.com'));
 for (const route of ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event']) {
   check(`Ruta declarada: ${route}`, routes.includes(`"${route}"`));
 }

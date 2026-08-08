@@ -25,6 +25,13 @@ import {
   verifyWebhookSignature,
   webhookSigningPayload
 } from '../../cloudflare/nucleo-push.js';
+import { pushEnabled } from '../../cloudflare/servicio-push.js';
+
+test('Push queda cerrado por defecto y sólo acepta una habilitación explícita', () => {
+  assert.equal(pushEnabled({}), false);
+  assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'false' }), false);
+  assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'true' }), true);
+});
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
