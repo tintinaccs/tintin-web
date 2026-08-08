@@ -36,16 +36,18 @@ jobs:
       - name: Regenerar y verificar inventario de diagnóstico
         run: npm run build:pages
 
+      - name: Preparar artefacto público sin archivos internos
+        run: npm run prepare:hosting
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Sube exactamente el mismo árbol sobre el que se generó y verificó el
-      # manifiesto. Así perfil.html y diagnostic-manifest.json pertenecen
-      # siempre a una única versión atómica del despliegue.
+      # Publica la misma lista permitida que Firebase Hosting. Así no quedan
+      # accesibles docs internos, workflows, pruebas, reglas ni herramientas.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "public"
 
   deploy:
     needs: build

@@ -259,11 +259,14 @@ const forbiddenPhrase = [
 const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-    if (entry.name === '.git' || entry.name === 'node_modules') return [];
+    // Este control protege el producto publicado, no la documentación ni las
+    // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
+    // nombrar proveedores explícitamente para configurar y auditar su uso.
+    if (dir === root && ['.git', 'node_modules', '.github', '.codex', 'docs'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
-    if (absolute === __filename) return [];
+    if (absolute === __filename || (dir === root && entry.name === 'AGENTS.md')) return [];
     return [absolute];
   });
 }
