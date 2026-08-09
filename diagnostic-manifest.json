@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T19:53:20.098Z",
-  "sourceFingerprint": "c512b190b99e752c69dd9e39650a24b59903cd43d337f1cf4e0f6d45aa0d8ba1",
+  "generatedAt": "2026-08-09T20:00:21.067Z",
+  "sourceFingerprint": "becb0a716503eae918ccde98c638e6178ed7f725d6e44c112a495e85b64ab0b0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 550,
-    "textFiles": 518,
-    "totalBytes": 5717208,
+    "files": 553,
+    "textFiles": 521,
+    "totalBytes": 5744481,
     "pages": 18,
-    "modules": 331
+    "modules": 332
   },
   "viewports": [
     {
@@ -19751,15 +19751,15 @@
     },
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
-      "bytes": 27192,
-      "sha256": "e51b00492cb0bec79253317229118dd14275287c73544424b6a56e432201ddc4",
+      "bytes": 27197,
+      "sha256": "4daf10281b7d96ed731ad76082f2cd7615f43f1971f85a691ece753b8ec499e4",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../core/firebase/origen-funciones.js?v=tintin-20260723-geo-proxy-1",
+          "raw": "../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/firebase/origen-funciones.js",
           "dynamic": false,
           "line": 12
@@ -22725,6 +22725,42 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-versionado-cache.mjs",
+      "bytes": 7712,
+      "sha256": "536af8022ab892439531818c498dce25fae91d4bd41e27a29b2394f2bf3fa974",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 36
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 37
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 38
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 39
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "bytes": 24339,
       "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd",
@@ -24083,6 +24119,12 @@
       "extension": ".yml",
       "bytes": 1178,
       "sha256": "cfd7af10c1d9eaa4c0c12f1df800d022759916e1c6f4cab97a5beef8c9c84184"
+    },
+    {
+      "path": ".github/workflows/auditar-versionado-cache.yml",
+      "extension": ".yml",
+      "bytes": 712,
+      "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
     },
     {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
@@ -25935,8 +25977,8 @@
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
       "extension": ".js",
-      "bytes": 27192,
-      "sha256": "e51b00492cb0bec79253317229118dd14275287c73544424b6a56e432201ddc4"
+      "bytes": 27197,
+      "sha256": "4daf10281b7d96ed731ad76082f2cd7615f43f1971f85a691ece753b8ec499e4"
     },
     {
       "path": "js/pages/checkout/checkout-control-cuota.js",
@@ -26331,8 +26373,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 9114,
-      "sha256": "f691da2e533fb749e273ed400094d2954084104477edc4d3ef35f8b88e746b37"
+      "bytes": 9340,
+      "sha256": "a18c5e54399238bdf5ab9e984da73d3cdbf5b3db16a3c23fce7c5706f045a4bc"
     },
     {
       "path": "perfil.html",
@@ -26951,6 +26993,18 @@
       "extension": ".js",
       "bytes": 2718,
       "sha256": "03407d285de1fd68e9f39d6d318e8c54c1c4284d47e406303f14027dbe40ec48"
+    },
+    {
+      "path": "scripts/auditar-versionado-cache.mjs",
+      "extension": ".mjs",
+      "bytes": 7712,
+      "sha256": "536af8022ab892439531818c498dce25fae91d4bd41e27a29b2394f2bf3fa974"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "extension": ".json",
+      "bytes": 18618,
+      "sha256": "d3c04c555d95efc433254062e13a987f29eb7c34bf084714e8c659b95262a3ab"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

@@ -1,0 +1,31 @@
+name: Auditoría de versionado de caché
+
+on:
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'js/**/*.js'
+      - 'js/**/*.mjs'
+      - 'css/**/*.css'
+      - 'scripts/auditar-versionado-cache.mjs'
+      - 'scripts/cache-version-baseline.json'
+      - 'package.json'
+      - '.github/workflows/auditar-versionado-cache.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cache-versioning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Audit cache versioning
+        run: npm run audit:cache-versioning
