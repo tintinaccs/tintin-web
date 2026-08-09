@@ -197,7 +197,8 @@ check(
 );
 check(
   'El inventario excluye capturas y reportes temporales de las pruebas',
-  builder.includes("new Set(['.git', 'artifacts', 'node_modules', 'public'])") &&
+  ['.git', 'artifacts', 'coverage', 'node_modules', 'playwright-report', 'public', 'test-results']
+    .every(directory => builder.includes(`'${directory}'`)) &&
     builder.includes("new Set(['firebase-debug.log', 'firestore-debug.log', 'ui-debug.log'])")
 );
 
