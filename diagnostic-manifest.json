@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T13:04:37.318Z",
-  "sourceFingerprint": "d7b0cd49589c7f8c3d98d3a92d7f732915cf4c51e880c35750324eab543b7f98",
+  "generatedAt": "2026-08-09T13:08:27.131Z",
+  "sourceFingerprint": "e92621aeee385a8bc5fcedcbb3e5e456c7891f86f996e531c1413c9c1856f6a8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 549,
-    "textFiles": 517,
-    "totalBytes": 5699042,
+    "files": 550,
+    "textFiles": 518,
+    "totalBytes": 5700217,
     "pages": 18,
-    "modules": 330
+    "modules": 331
   },
   "viewports": [
     {
@@ -22726,8 +22726,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 24274,
-      "sha256": "9cf66fb9da1c1d11d9677b0e8f8b36d690cabc9aba362fb3aae2062f5e66efde",
+      "bytes": 24339,
+      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23541,6 +23541,48 @@
       "endpoints": []
     },
     {
+      "path": "tests/diagnostics/manifest-exclusions.test.mjs",
+      "bytes": 919,
+      "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "bytes": 2536,
       "sha256": "af18579fbb58c27ca297b49b65128073739cef569128973872aeb2770d354b1c",
@@ -23997,8 +24039,8 @@
     {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
-      "bytes": 3730,
-      "sha256": "98ab43ebd97d0e97d8714071551f22e1ed486b3bee5e92d08b4b883eea05bf45"
+      "bytes": 3921,
+      "sha256": "7fbb07a5b5741f18f65e4589bd5b8583927883e90faf20c568a0143662f41820"
     },
     {
       "path": ".github/workflows/auditar-navegacion-modular.yml",
@@ -26913,8 +26955,8 @@
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 24274,
-      "sha256": "9cf66fb9da1c1d11d9677b0e8f8b36d690cabc9aba362fb3aae2062f5e66efde"
+      "bytes": 24339,
+      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
@@ -27089,6 +27131,12 @@
       "extension": ".mjs",
       "bytes": 1912,
       "sha256": "4fa88f97be49f49b196e2dfb42e12a3d520d17329c14b90208e87295f7867c21"
+    },
+    {
+      "path": "tests/diagnostics/manifest-exclusions.test.mjs",
+      "extension": ".mjs",
+      "bytes": 919,
+      "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
