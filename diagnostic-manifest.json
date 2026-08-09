@@ -15824,7 +15824,7 @@
           "line": 11
         },
         {
-          "url": "https://${branch.replace(/[%5Ea-z0-9-]/gi",
+          "url": "https://${branch.replace(/[^a-z0-9-]/gi",
           "line": 59
         }
       ]
