@@ -61,6 +61,7 @@ test('solo una entrada de historial con snapshot y versión real es restaurable'
   assert.equal(isRestorableHistoryEntry({ action: 'modify', snapshot: [], version: 0 }), false);
   assert.equal(isRestorableHistoryEntry({ action: 'cancel', snapshot: [], version: 0 }), false);
   assert.equal(isRestorableHistoryEntry({ action: 'technical_pr', snapshot: [], version: 0 }), false);
-  assert.equal(isRestorableHistoryEntry({ action: 'publish', snapshot: [], version: 1 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'propose', snapshot: [{ type: 'section' }], version: 1 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'publish', snapshot: [], version: 1 }), true);
   assert.equal(isRestorableHistoryEntry(null), false);
 });

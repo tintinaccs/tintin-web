@@ -69,7 +69,7 @@ function renderHistory(items) {
   items.forEach(item => {
     const node = document.createElement('div');
     node.className = 'ai-builder-history-item';
-    const canRestore = Array.isArray(item.snapshot) && item.snapshot.length && Number(item.version) > 0;
+    const canRestore = ['publish', 'restore'].includes(item.action) && Array.isArray(item.snapshot) && Number(item.version) > 0;
     node.innerHTML = `<div><strong>v${Number(item.version) || '—'} · ${escapeHtml(item.action)}</strong><small>${escapeHtml(item.actorEmail || '')} · ${new Date(item.createdAt).toLocaleString('es-PY')}</small><div>${escapeHtml(item.request || item.result || '')}</div></div>${canRestore ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-restore="${escapeHtml(item.id)}">Restaurar</button>` : ''}`;
     root.appendChild(node);
   });

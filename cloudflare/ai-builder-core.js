@@ -148,14 +148,15 @@ export function validateProposal(raw, fallbackRequest = '') {
   };
 }
 
-// Solo 'publish' y 'restore' guardan un snapshot publicable en el
-// historial: 'propose', 'modify', 'cancel' y 'technical_pr' se registran con
-// snapshot:[] y version:0 porque nunca llegaron a publicarse. Restaurar una
-// de esas entradas sobreescribiría aiBuilder/state con un array vacío y
-// vaciaría el contenido publicado — este chequeo es lo que distingue una
-// versión real restaurable de una entrada de auditoría sin contenido.
+// Solo 'publish' y 'restore' representan versiones publicadas. El snapshot
+// puede estar vacío cuando la dueña elimina todos los bloques, por eso el tipo
+// de evento y la versión —no la longitud del array— distinguen una versión
+// restaurable de una entrada de auditoría sin contenido publicable.
 export function isRestorableHistoryEntry(entry) {
-  return Boolean(entry) && Array.isArray(entry.snapshot) && entry.snapshot.length > 0 && Number(entry.version) > 0;
+  return Boolean(entry)
+    && ['publish', 'restore'].includes(entry.action)
+    && Array.isArray(entry.snapshot)
+    && Number(entry.version) > 0;
 }
 
 export function isRateAllowed(usage, now = Date.now()) {

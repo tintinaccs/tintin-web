@@ -20,8 +20,10 @@ test('el backend valida Super Admin y la API pública no acepta escrituras', () 
 
 test('restaurar valida que la entrada de historial sea un snapshot publicado', () => {
   const adminApi = read('functions/api/ai-builder.js');
+  const adminUi = read('js/admin/ai-builder-admin.js');
   const restoreBlock = adminApi.slice(adminApi.indexOf("action === 'restore'"), adminApi.indexOf("action === 'cancel'"));
   assert.match(restoreBlock, /isRestorableHistoryEntry\(previous\)/);
+  assert.match(adminUi, /\['publish', 'restore'\]\.includes\(item\.action\)/);
 });
 
 test('las claves permanecen exclusivamente en env del backend', () => {
