@@ -20,6 +20,10 @@ const server = http.createServer((request, response) => {
     response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
     return response.end('{"blocks":[],"version":0}');
   }
+  if (pathname === '/api/visual-builder-public') {
+    response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
+    return response.end('{"ok":true,"config":null,"version":0}');
+  }
   const absolute = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
   if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) return response.writeHead(403).end();
   fs.stat(absolute, (error, stat) => {
