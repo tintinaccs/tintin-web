@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T02:20:57.283Z",
-  "sourceFingerprint": "47dd16b8b0a72798f9e1f2d6d1456cab114a9bb7b541f262308aa3ffd0d65acd",
+  "generatedAt": "2026-08-09T02:22:10.804Z",
+  "sourceFingerprint": "507bafb10d7a617eb76613d7ebe9e348f25dd088bdaff2045d38a2664c3f7651",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 549,
-    "textFiles": 517,
-    "totalBytes": 5692597,
+    "files": 548,
+    "textFiles": 516,
+    "totalBytes": 5692552,
     "pages": 18,
     "modules": 329
   },
@@ -15824,7 +15824,7 @@
           "line": 11
         },
         {
-          "url": "https://${branch.replace(/[%5Ea-z0-9-]/gi",
+          "url": "https://${branch.replace(/[^a-z0-9-]/gi",
           "line": 59
         }
       ]
@@ -26993,12 +26993,6 @@
       "extension": ".html",
       "bytes": 14462,
       "sha256": "e5ef66281a9ab54d981795ebff43a4dad4d3f5986c4b1d3593611b6b95fdb019"
-    },
-    {
-      "path": "test-results/.last-run.json",
-      "extension": ".json",
-      "bytes": 45,
-      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
