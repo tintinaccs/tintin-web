@@ -306,6 +306,9 @@ function updateCartBadge() {
 function syncCartWithCatalog() {
   const pool = window.PRODUCTS;
   if (!Array.isArray(pool)) return getCart();
+  const path = String(window.location.pathname || '').toLowerCase();
+  const hasCompleteCatalog = /(^|\/)(catalogo|collections)(?:\.html)?$/.test(path);
+  if (!hasCompleteCatalog) return getCart();
   if (window.TintinCatalogPolicy?.reconcileCart) {
     return window.TintinCatalogPolicy.reconcileCart(pool);
   }
@@ -335,6 +338,21 @@ function renderCart() {
   if (!body) return;
 
   const cart = syncCartWithCatalog();
+  const favorites = window.TintinFavorites?.getAll?.() || [];
+  const favoritesHtml = favorites.length ? `
+    <section class="tt-cart-favorites" aria-label="Tus favoritos">
+      <h3>Tus favoritos</h3>
+      ${favorites.map(item => {
+        const safeFavoriteId = escapeAttribute(item.id);
+        const favoriteImage = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 120);
+        return `<div class="tt-cart-favorite-item">
+          <a href="product.html?id=${encodeURIComponent(String(item.id))}" class="tt-cart-favorite-img" aria-label="Ver ${escapeAttribute(item.name)}">${favoriteImage ? `<img src="${escapeAttribute(favoriteImage)}" alt="${escapeAttribute(item.name)}" loading="lazy">` : ''}</a>
+          <div class="tt-cart-favorite-info"><strong>${escapeHtml(item.name)}</strong><span>${formatPrice(item.price)}</span></div>
+          <button type="button" class="tt-cart-favorite-add" data-favorite-add-cart="${safeFavoriteId}" aria-label="Agregar ${escapeAttribute(item.name)} al carrito">+ Carrito</button>
+          <button type="button" class="tt-cart-favorite-toggle is-favorite" data-favorite-id="${safeFavoriteId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" aria-pressed="true"><span data-favorite-icon aria-hidden="true">♥</span></button>
+        </div>`;
+      }).join('')}
+    </section>` : '';
 
   if (cart.length === 0) {
     body.innerHTML = `
@@ -345,6 +363,7 @@ function renderCart() {
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
         <a href="checkout.html" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
       </div>
+      ${favoritesHtml}
     `;
     if (footer) footer.style.display = 'none';
     return;
@@ -356,6 +375,7 @@ function renderCart() {
     const safeName = escapeHtml(item.name);
     const safeVariant = escapeHtml(item.variant || '');
     const safeVariantAttr = escapeAttribute(item.variant || '');
+    const isFavorite = Boolean(window.TintinFavorites?.has?.(item.id));
     const imgHtml = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
@@ -372,10 +392,13 @@ function renderCart() {
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar">+</button>
         </div>
       </div>
-      <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar">✕</button>
+      <div class="tt-cart-item-actions">
+        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
+        <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar">✕</button>
+      </div>
     </div>
   `;
-  }).join('');
+  }).join('') + favoritesHtml;
 
   if (footer) {
     footer.style.display = 'block';
@@ -724,6 +747,7 @@ function renderProductCardMarkup(p, options = {}) {
   const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
+  const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
   const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
@@ -743,6 +767,7 @@ function renderProductCardMarkup(p, options = {}) {
 
   return `
     <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
+      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}
         ${imgContent}
@@ -1159,6 +1184,15 @@ function _renderProductDetail(product) {
 
   // Gallery
   const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
+  const favoriteButton = document.getElementById('btn-product-favorite');
+  if (favoriteButton) {
+    favoriteButton.dataset.favoriteId = String(product.id);
+    favoriteButton.dataset.favoriteName = product.name || '';
+    favoriteButton.dataset.favoritePrice = String(product.price || 0);
+    favoriteButton.dataset.favoriteImage = mainImgUrl;
+    favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
+    window.TintinFavorites?.refresh?.();
+  }
   const extraImages = Array.isArray(product.imagesExtra)
     ? product.imagesExtra.map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean)
     : [];
@@ -1899,6 +1933,7 @@ window.addEventListener('tt_cart_updated', () => {
   updateCartBadge();
   renderCart();
 });
+window.addEventListener('tintin:favorites-updated', renderCart);
 
 // El reveal-al-scrollear de esta página ahora lo maneja js/quality/revelado-desplazamiento-global.js
 // (cargado global vía js/cargador-pagina.js) — tenerlo acá duplicado hacía que

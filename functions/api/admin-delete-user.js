@@ -42,14 +42,18 @@ export async function onRequest(context) {
     // Revoca primero el acceso; los reintentos son idempotentes si Auth ya no existe.
     await deleteFirebaseUser(env, uid);
     const cartDocs = await firestoreAdminList(env, `users/${encodeURIComponent(uid)}/cart`, 300);
-    await Promise.all(cartDocs.map(item => {
+    const favoriteDocs = await firestoreAdminList(env, `users/${encodeURIComponent(uid)}/favorites`, 300);
+    await Promise.all([...cartDocs.map(item => {
       const id = String(item.name || '').split('/').pop();
       return id ? firestoreAdminDelete(env, `users/${encodeURIComponent(uid)}/cart/${encodeURIComponent(id)}`) : null;
-    }));
+    }), ...favoriteDocs.map(item => {
+      const id = String(item.name || '').split('/').pop();
+      return id ? firestoreAdminDelete(env, `users/${encodeURIComponent(uid)}/favorites/${encodeURIComponent(id)}`) : null;
+    })]);
     const phone = String(user.phone || user.phoneNormalized || '').replace(/\D/g, '');
     if (phone) await firestoreAdminDelete(env, `phoneReservations/${encodeURIComponent(phone)}`);
     await firestoreAdminDelete(env, `users/${encodeURIComponent(uid)}`);
-    return jsonResponse({ ok: true, deleted: { auth: true, profile: true, cart: cartDocs.length, phone: Boolean(phone) } }, 200, origin, requestUrl);
+    return jsonResponse({ ok: true, deleted: { auth: true, profile: true, cart: cartDocs.length, favorites: favoriteDocs.length, phone: Boolean(phone) } }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-delete-user]', error?.message || error);
     const safeMessage = /^(Solicitud inválida|Usuario inválido|La cuenta Super Admin está protegida)\.?$/.test(String(error?.message || ''))

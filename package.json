@@ -21,6 +21,7 @@
     "audit:images": "node scripts/auditar-imagenes-fase-5.js",
     "audit:content": "node scripts/auditar-contenido-fase-6.js",
     "audit:cart": "node scripts/auditar-carrito-fase-7.js",
+    "test:cart-persistence": "node --test tests/cart/*.test.mjs",
     "audit:security": "node scripts/auditar-seguridad-fase-8.js",
     "audit:release": "node scripts/auditar-final-entrega.js",
     "audit:integral": "node scripts/auditar-integral-plataforma.js",

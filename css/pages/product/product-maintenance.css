@@ -43,6 +43,12 @@ body.tt-product-maintenance .tt-product-state {
   box-shadow: 0 10px 32px var(--color-card-shadow, rgba(212,106,138,.10));
 }
 
+body.tt-product-maintenance .tt-product-info-panel {
+  padding: clamp(24px, 3vw, 36px);
+  border: 1px solid var(--color-card-border, #F1E4E7);
+  border-radius: 24px;
+}
+
 body.tt-product-maintenance .tt-gallery-main,
 body.tt-product-maintenance .tt-gallery-main img,
 body.tt-product-maintenance .tt-gallery-thumb,
@@ -299,11 +305,11 @@ body.tt-product-maintenance .tt-footer-tagline {
   }
 
   body.tt-product-maintenance .tinsel-item {
-    grid-template-columns: 58px minmax(0, 1fr) auto;
+    grid-template-columns: 58px minmax(0, 1fr) auto auto;
   }
 
-  body.tt-product-maintenance .tinsel-del {
-    grid-column: 3;
+  body.tt-product-maintenance .tinsel-item-actions {
+    grid-column: 4;
   }
 }
 

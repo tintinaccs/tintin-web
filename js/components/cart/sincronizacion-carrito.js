@@ -16,6 +16,7 @@
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
@@ -32,6 +33,7 @@ function createRuntime() {
   const PUBLIC_CART_KEY = 'tt_cart';
   const GUEST_CART_KEY = 'tt_cart_guest';
   const USER_CART_PREFIX = 'tt_cart_user_';
+  const GUEST_ACTIVITY_KEY = 'tt_cart_guest_activity_v1';
   const DEVICE_KEY = 'tt_cart_device_v2';
   const MIGRATED_PREFIX = 'tt_cart_v2_migrated_';
   const DIRTY_PREFIX = 'tt_cart_v2_dirty_';
@@ -64,6 +66,8 @@ function createRuntime() {
   let readyPromise = new Promise(resolve => { readyResolve = resolve; });
   let mutationChain = Promise.resolve();
   let feedbackTimer = 0;
+  let guestExpiryTimer = 0;
+  let lastGuestActivityTouch = 0;
 
   function rawString(key) {
     try { return nativeGetItem.call(window.localStorage, key); } catch { return null; }
@@ -215,7 +219,66 @@ function createRuntime() {
     return user?.uid ? `${USER_CART_PREFIX}${user.uid}` : GUEST_CART_KEY;
   }
 
+  function clearGuestExpiryTimer() {
+    window.clearTimeout(guestExpiryTimer);
+    guestExpiryTimer = 0;
+  }
+
+  function scheduleGuestExpiry(updatedAt = Number(rawString(GUEST_ACTIVITY_KEY))) {
+    clearGuestExpiryTimer();
+    if (currentUser || !rawGet(GUEST_CART_KEY).length) return;
+    const timestamp = Number(updatedAt);
+    if (!Number.isFinite(timestamp) || timestamp <= 0) return;
+    const remaining = Math.max(0, GUEST_CART_TTL_MS - (Date.now() - timestamp));
+    guestExpiryTimer = window.setTimeout(() => {
+      guestExpiryTimer = 0;
+      if (currentUser) return;
+      const savedAt = Number(rawString(GUEST_ACTIVITY_KEY));
+      if (!guestCartIsExpired(savedAt)) {
+        scheduleGuestExpiry(savedAt);
+        return;
+      }
+      rawSet(GUEST_CART_KEY, []);
+      rawRemove(GUEST_ACTIVITY_KEY);
+      dispatchCartUpdated();
+      showFeedback('El carrito temporal se vació después de 30 minutos sin actividad.', 'info');
+    }, Math.min(remaining + 50, 2147483647));
+  }
+
+  function touchGuestActivity(force = false) {
+    if (currentUser || !rawGet(GUEST_CART_KEY).length) return;
+    const now = Date.now();
+    if (!force && now - lastGuestActivityTouch < 60000) return;
+    lastGuestActivityTouch = now;
+    rawStringSet(GUEST_ACTIVITY_KEY, now);
+    scheduleGuestExpiry(now);
+  }
+
+  function expireGuestCartIfNeeded() {
+    if (currentUser) return false;
+    const guest = rawGet(GUEST_CART_KEY);
+    if (!guest.length) {
+      rawRemove(GUEST_ACTIVITY_KEY);
+      clearGuestExpiryTimer();
+      return false;
+    }
+    const updatedAt = Number(rawString(GUEST_ACTIVITY_KEY));
+    if (!updatedAt) {
+      touchGuestActivity(true);
+      return false;
+    }
+    if (!guestCartIsExpired(updatedAt)) {
+      scheduleGuestExpiry(updatedAt);
+      return false;
+    }
+    rawSet(GUEST_CART_KEY, []);
+    rawRemove(GUEST_ACTIVITY_KEY);
+    clearGuestExpiryTimer();
+    return true;
+  }
+
   function currentLocalCart() {
+    if (activeCartKey === GUEST_CART_KEY) expireGuestCartIfNeeded();
     const normalized = enforceStockLimits(rawGet(activeCartKey));
     const before = rawString(activeCartKey) || '[]';
     const after = JSON.stringify(normalized);
@@ -226,6 +289,13 @@ function createRuntime() {
   function writeLocal(items, { notify = true } = {}) {
     const normalized = enforceStockLimits(items);
     rawSet(activeCartKey, normalized);
+    if (activeCartKey === GUEST_CART_KEY) {
+      if (normalized.length) touchGuestActivity(true);
+      else {
+        rawRemove(GUEST_ACTIVITY_KEY);
+        clearGuestExpiryTimer();
+      }
+    }
     if (notify) dispatchCartUpdated();
     return normalized;
   }
@@ -516,6 +586,7 @@ function createRuntime() {
       }
       if (guestAtLogin.length) {
         rawSet(GUEST_CART_KEY, []);
+        rawRemove(GUEST_ACTIVITY_KEY);
         guestAtLogin = [];
       }
     }).catch(error => {
@@ -581,6 +652,7 @@ function createRuntime() {
       rawStringSet(migratedKey(uid), '1');
       if (guestAtLogin.length) {
         rawSet(GUEST_CART_KEY, []);
+        rawRemove(GUEST_ACTIVITY_KEY);
         guestAtLogin = [];
       }
     }
@@ -660,10 +732,12 @@ function createRuntime() {
       lastRemoteProjection = '[]';
       setStatus('guest');
       dispatchCartUpdated();
+      scheduleGuestExpiry();
       readyResolve?.();
       return;
     }
 
+    clearGuestExpiryTimer();
     guestAtLogin = normalizeCart(rawGet(GUEST_CART_KEY));
     activeCartKey = cartKeyForUser(currentUser);
     desiredCart = currentLocalCart();
@@ -903,6 +977,7 @@ function createRuntime() {
 
   function boot() {
     migrateLegacyGuestCart();
+    expireGuestCartIfNeeded();
     patchClassicCartStorage();
     document.addEventListener('click', interceptLegacyCartButtons, true);
     document.addEventListener('DOMContentLoaded', () => {
@@ -925,6 +1000,12 @@ function createRuntime() {
     window.addEventListener('offline', () => {
       if (currentUser) setStatus('offline');
     });
+    ['pointerdown', 'keydown', 'touchstart'].forEach(eventName => {
+      window.addEventListener(eventName, () => touchGuestActivity(false), { passive: true });
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) touchGuestActivity(true);
+    }, { passive: true });
     window.addEventListener('tintin:products-loaded', () => {
       const enriched = currentLocalCart().map(richerFromCatalog);
       writeLocal(enriched, { notify: true });

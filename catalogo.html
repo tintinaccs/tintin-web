@@ -69,12 +69,20 @@
       border: 1.5px solid #f0e0e8;
       display: flex;
       flex-direction: column;
+      position: relative;
       height: 100%;
       content-visibility: auto;
       contain-intrinsic-size: 340px 500px;
       transition: box-shadow .24s ease, transform .24s ease, border-color .24s ease;
     }
     .tt-card:hover { box-shadow: 0 12px 36px rgba(173,63,103,.14); border-color: #e8bfd0; }
+    .tt-card-favorite {
+      position: absolute; z-index: 3; top: 10px; right: 10px;
+      width: 44px; height: 44px; border: 1px solid rgba(173,63,103,.22);
+      border-radius: 50%; background: rgba(255,255,255,.94); color: var(--acc);
+      box-shadow: 0 5px 16px rgba(86,32,51,.12); font-size: 22px; cursor: pointer;
+    }
+    .tt-card-favorite.is-favorite { background: var(--acc-pale); }
 
     .tt-card-img-wrap {
       display: block;
@@ -706,8 +714,10 @@ function renderGrid(lista) {
         ? `<span class="tt-card-badge">NUEVO</span>`
         : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
     const catLabel = p.category || p.cat || '';
+    const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
     return `
       <article class="tt-card">
+        <button type="button" class="tt-card-favorite${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${safeAlt}" data-favorite-price="${escapeCatalogHtml(p.price)}" data-favorite-image="${escapeCatalogHtml(imageUrl)}" data-favorite-cat="${escapeCatalogHtml(catLabel)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
         <a href="${productHref}" class="tt-card-img-wrap" aria-label="Ver ${safeAlt}">
           ${imgHtml}
           ${badgeHtml}

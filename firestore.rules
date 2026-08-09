@@ -399,6 +399,26 @@ service cloud.firestore {
         );
     }
 
+    function favoriteItemValid(productId) {
+      let data = request.resource.data;
+      let productPath = /databases/$(database)/documents/products/$(productId);
+      return data.keys().hasAll([
+          'schemaVersion', 'productId', 'name', 'cat', 'price', 'imageUrl', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'schemaVersion', 'productId', 'name', 'cat', 'price', 'imageUrl', 'updatedAt'
+        ]) &&
+        data.schemaVersion == 1 &&
+        data.productId == productId &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 180 &&
+        data.cat is string && data.cat.size() <= 120 &&
+        data.price is number && data.price >= 0 &&
+        data.imageUrl is string && data.imageUrl.size() <= 1200 &&
+        data.updatedAt == request.time &&
+        exists(productPath) &&
+        get(productPath).data.get('active', true) != false;
+    }
+
     /* ============================================================
        TINTIN — PEDIDOS SIN BLAZE (SPARK)
 
@@ -1088,6 +1108,23 @@ service cloud.firestore {
           request.auth.uid == userId &&
           isStoreOpenOrAllowed() &&
           cartItemValid(itemId);
+        allow delete: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
+      }
+
+
+      match /favorites/{productId} {
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
+        allow create, update: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed() &&
+          favoriteItemValid(productId);
         allow delete: if isSignedIn() &&
           !isBlockedUser() &&
           request.auth.uid == userId &&
