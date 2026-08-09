@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T18:05:26.353Z",
-  "sourceFingerprint": "83a5338d14488e133b0ae4625555d978f9d571b2c5028c2b860fc2a2f21d2e28",
+  "generatedAt": "2026-08-09T01:18:14.008Z",
+  "sourceFingerprint": "4ec1154915b002a39915bcc341c59643a87de51649fc026694c4a2471f53038d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 532,
     "textFiles": 500,
-    "totalBytes": 5612383,
+    "totalBytes": 5613341,
     "pages": 18,
     "modules": 316
   },
@@ -7704,8 +7704,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 89043,
-      "sha256": "172e6f827a1b6572430ec26b12b963708e427027f6d127e181d61432c3e6f02c",
+      "bytes": 89283,
+      "sha256": "ef9b640598a02c89cdf20ef77c16a384eed7d16230494028cf5fe959ddb78a0d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19153,8 +19153,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 26788,
-      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9",
+      "bytes": 27324,
+      "sha256": "259e4640bfe04857c132920f741a3d666ea4485dd2817a19b965cfe7f94dc006",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19216,7 +19216,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 520
+          "line": 529
         }
       ]
     },
@@ -23222,8 +23222,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 85880,
-      "sha256": "564e29c6c33a561dfde190f1cfe2e010ddb0fd5c6127e0f6d768be8f5f797544",
+      "bytes": 86062,
+      "sha256": "78249218cfe4915af6d1bd883f61152d346af4af1ac0478717ff2376bbd70abe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23233,57 +23233,57 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 232
+          "line": 237
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 845
+          "line": 850
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1459
+          "line": 1464
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 498
-        },
-        {
-          "url": "https://wa.me/$%7BWA_NUMBER%7D",
           "line": 503
         },
         {
+          "url": "https://wa.me/$%7BWA_NUMBER%7D",
+          "line": 508
+        },
+        {
           "url": "https://schema.org/",
-          "line": 1036
+          "line": 1041
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1049
+          "line": 1054
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1049
+          "line": 1054
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1050
+          "line": 1055
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1075
+          "line": 1080
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1179
+          "line": 1184
         },
         {
           "url": "https://wa.me/",
-          "line": 1304
+          "line": 1309
         }
       ]
     }
@@ -23724,8 +23724,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 89043,
-      "sha256": "172e6f827a1b6572430ec26b12b963708e427027f6d127e181d61432c3e6f02c"
+      "bytes": 89283,
+      "sha256": "ef9b640598a02c89cdf20ef77c16a384eed7d16230494028cf5fe959ddb78a0d"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -25182,8 +25182,8 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 26788,
-      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9"
+      "bytes": 27324,
+      "sha256": "259e4640bfe04857c132920f741a3d666ea4485dd2817a19b965cfe7f94dc006"
     },
     {
       "path": "js/orders/politica-checkout.js",
@@ -26478,8 +26478,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 85880,
-      "sha256": "564e29c6c33a561dfde190f1cfe2e010ddb0fd5c6127e0f6d768be8f5f797544"
+      "bytes": 86062,
+      "sha256": "78249218cfe4915af6d1bd883f61152d346af4af1ac0478717ff2376bbd70abe"
     }
   ],
   "sitemapRoutes": [
@@ -29039,21 +29039,14 @@
     },
     {
       "file": "tienda.js",
-      "line": 346,
+      "line": 351,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 387,
-      "raw": "checkout.html",
-      "target": "checkout.html",
-      "exists": true
-    },
-    {
-      "file": "tienda.js",
-      "line": 493,
+      "line": 392,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -29061,48 +29054,55 @@
     {
       "file": "tienda.js",
       "line": 498,
+      "raw": "checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "tienda.js",
+      "line": 503,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 621,
+      "line": 626,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 727,
+      "line": 732,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 790,
+      "line": 795,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1033,
+      "line": 1038,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1071,
+      "line": 1076,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1427,
+      "line": 1432,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -29587,19 +29587,19 @@
         },
         {
           "file": "tienda.js",
-          "line": 621
+          "line": 626
         },
         {
           "file": "tienda.js",
-          "line": 727
+          "line": 732
         },
         {
           "file": "tienda.js",
-          "line": 790
+          "line": 795
         },
         {
           "file": "tienda.js",
-          "line": 1056
+          "line": 1061
         }
       ]
     }
@@ -29701,7 +29701,7 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 373,
+            "line": 382,
             "operation": "doc"
           },
           {
@@ -30481,12 +30481,12 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 284,
+            "line": 293,
             "operation": "doc"
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 285,
+            "line": 294,
             "operation": "doc"
           },
           {
