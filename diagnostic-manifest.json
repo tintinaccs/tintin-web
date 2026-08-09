@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T18:12:29.998Z",
-  "sourceFingerprint": "526fcd8ec0a3d36df64283c1c70cdf4d3cc9c038b96030101afb3e2512c7349c",
+  "generatedAt": "2026-08-09T18:30:26.202Z",
+  "sourceFingerprint": "540f57b64560aa1cee5f9988f2dedc74b675afcebb3c6dab3ad981f4a66e54c0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 564,
-    "textFiles": 532,
-    "totalBytes": 5789388,
+    "files": 565,
+    "textFiles": 533,
+    "totalBytes": 5792517,
     "pages": 18,
     "modules": 342
   },
@@ -22380,8 +22380,8 @@
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
-      "bytes": 16320,
-      "sha256": "6b34c5b38e5c2cf650989b1762c3fabb49e2bec62ae6e2bc05edb6cadfe3bfc9",
+      "bytes": 17385,
+      "sha256": "839253d6a896239f46fa7eaddfa84206ee4a27621202c8bc060efbf8de495342",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22397,7 +22397,7 @@
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Bowner%7D/$%7Brepo%7D",
-          "line": 108
+          "line": 124
         }
       ]
     },
@@ -23758,8 +23758,8 @@
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
-      "bytes": 10276,
-      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7",
+      "bytes": 10341,
+      "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24693,6 +24693,12 @@
       "extension": ".yml",
       "bytes": 1507,
       "sha256": "ade7ca9990d83639dd4b24f33e12f8da3b435108452db43532b4605b6b417342"
+    },
+    {
+      "path": ".github/workflows/validar-editor-visual-seguro.yml",
+      "extension": ".yml",
+      "bytes": 1999,
+      "sha256": "822e9203afb324f389386fd246f32b361208afe6da9dbfc4ce701caa429057ab"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
@@ -27385,8 +27391,8 @@
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
       "extension": ".mjs",
-      "bytes": 16320,
-      "sha256": "6b34c5b38e5c2cf650989b1762c3fabb49e2bec62ae6e2bc05edb6cadfe3bfc9"
+      "bytes": 17385,
+      "sha256": "839253d6a896239f46fa7eaddfa84206ee4a27621202c8bc060efbf8de495342"
     },
     {
       "path": "scripts/auditar-modular-arquitectura.js",
@@ -27733,8 +27739,8 @@
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
       "extension": ".mjs",
-      "bytes": 10276,
-      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7"
+      "bytes": 10341,
+      "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248"
     },
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
