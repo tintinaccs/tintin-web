@@ -15,7 +15,7 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260716-cloudinary-fix-1';
+} from './esquema-contenido.js?v=tintin-20260809-visual-builder-1';
 import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260809-visual-builder-1';
 
 const subscriptions = new Map();
