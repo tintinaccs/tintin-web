@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T13:11:21.395Z",
-  "sourceFingerprint": "ed94d82be5f2c894a20a20e7ec5e09edb635ccd109291544eba8e44a3ee16184",
+  "generatedAt": "2026-08-09T14:29:03.933Z",
+  "sourceFingerprint": "22e991e37e286f78714194f2e62c5523dc69e5f5dc0dd999a42e630c22348e7d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 550,
     "textFiles": 518,
-    "totalBytes": 5700297,
+    "totalBytes": 5701427,
     "pages": 18,
     "modules": 331
   },
@@ -21942,8 +21942,8 @@
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
-      "bytes": 16320,
-      "sha256": "6b34c5b38e5c2cf650989b1762c3fabb49e2bec62ae6e2bc05edb6cadfe3bfc9",
+      "bytes": 17385,
+      "sha256": "839253d6a896239f46fa7eaddfa84206ee4a27621202c8bc060efbf8de495342",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21959,7 +21959,7 @@
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Bowner%7D/$%7Brepo%7D",
-          "line": 108
+          "line": 124
         }
       ]
     },
@@ -23284,8 +23284,8 @@
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
-      "bytes": 10276,
-      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7",
+      "bytes": 10341,
+      "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26757,8 +26757,8 @@
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
       "extension": ".mjs",
-      "bytes": 16320,
-      "sha256": "6b34c5b38e5c2cf650989b1762c3fabb49e2bec62ae6e2bc05edb6cadfe3bfc9"
+      "bytes": 17385,
+      "sha256": "839253d6a896239f46fa7eaddfa84206ee4a27621202c8bc060efbf8de495342"
     },
     {
       "path": "scripts/auditar-modular-arquitectura.js",
@@ -27099,8 +27099,8 @@
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
       "extension": ".mjs",
-      "bytes": 10276,
-      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7"
+      "bytes": 10341,
+      "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248"
     },
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
