@@ -268,7 +268,7 @@ function sourceFiles(dir) {
     // Este control protege el producto publicado, no la documentación ni las
     // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
     // nombrar proveedores explícitamente para configurar y auditar su uso.
-    if (dir === root && ['.git', 'node_modules', '.github', '.codex', 'docs'].includes(entry.name)) return [];
+    if (dir === root && ['.git', 'node_modules', '.github', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'test-results'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
