@@ -1,0 +1,80 @@
+name: Editor visual seguro
+
+on:
+  push:
+    branches:
+      - feature/tintin-visual-builder
+  pull_request:
+    branches:
+      - main
+    paths:
+      - admin.html
+      - css/admin/**
+      - js/admin/visual-builder-admin.js
+      - js/core/store/editor-visual-**
+      - js/visual-builder-bootstrap.js
+      - cloudflare/visual-builder-core.js
+      - functions/api/visual-builder*.js
+      - firestore.rules
+      - tests/visual-builder/**
+      - package.json
+      - package-lock.json
+      - .github/workflows/validar-editor-visual-seguro.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-builder-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Núcleo, regresión y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/*/*.test.mjs
+      - run: npm run audit:final
+      - run: npm run build:pages
+
+  ui:
+    name: Responsive, accesibilidad y rendimiento
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:visual-builder-ui
+      - run: npm run test:ai-builder-ui
+      - run: npm run test:phase10-a11y
+      - run: npm run test:performance
+
+  firestore-rules:
+    name: Permisos y reglas de Firestore
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run test:rules-critical

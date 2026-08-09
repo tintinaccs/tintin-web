@@ -250,6 +250,10 @@ function firestoreDocUrl(sa, path) {
   return `https://firestore.googleapis.com/v1/projects/${sa.project_id}/databases/(default)/documents/${path}`;
 }
 
+function firestoreDatabaseUrl(sa) {
+  return `https://firestore.googleapis.com/v1/projects/${sa.project_id}/databases/(default)`;
+}
+
 export async function firestoreAdminGet(env, path) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
@@ -315,6 +319,55 @@ export async function firestoreAdminList(env, path, pageSize = 300) {
   if (!response.ok) throw new Error(`Firestore LIST falló (${response.status})`);
   const data = await response.json().catch(() => ({}));
   return Array.isArray(data.documents) ? data.documents : [];
+}
+
+function encodeFirestoreValue(value) {
+  if (value === null || value === undefined) return { nullValue: null };
+  if (typeof value === 'string') return { stringValue: value };
+  if (typeof value === 'boolean') return { booleanValue: value };
+  if (Number.isInteger(value)) return { integerValue: String(value) };
+  if (typeof value === 'number' && Number.isFinite(value)) return { doubleValue: value };
+  if (value instanceof Date) return { timestampValue: value.toISOString() };
+  if (Array.isArray(value)) return { arrayValue: { values: value.map(encodeFirestoreValue) } };
+  if (typeof value === 'object') return { mapValue: { fields: encodeFirestoreFields(value) } };
+  return { stringValue: String(value) };
+}
+
+export function encodeFirestoreFields(object) {
+  return Object.fromEntries(Object.entries(object || {}).map(([key, value]) => [key, encodeFirestoreValue(value)]));
+}
+
+/** Commit atómico de documentos completos. Cada write es {path, fields} o {path, delete:true}. */
+export async function firestoreAdminCommit(env, writes) {
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const prefix = `projects/${sa.project_id}/databases/(default)/documents/`;
+  const body = {
+    writes: (Array.isArray(writes) ? writes : []).map(write => {
+      const path = String(write?.path || '');
+      if (!/^[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+$/.test(path)) throw new Error('Ruta de documento inválida para commit');
+      const currentDocument = write.currentDocument && typeof write.currentDocument === 'object'
+        ? { currentDocument: write.currentDocument }
+        : {};
+      if (write.delete) return { delete: prefix + path, ...currentDocument };
+      return { update: { name: prefix + path, fields: write.fields || {} }, ...currentDocument };
+    })
+  };
+  if (!body.writes.length || body.writes.length > 20) throw new Error('Cantidad de escrituras inválida');
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:commit`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    const conflict = data?.error?.status === 'FAILED_PRECONDITION' || response.status === 409;
+    throw Object.assign(new Error(conflict ? 'Conflicto de versión en Firestore.' : `Firestore COMMIT falló (${response.status}).`), {
+      status: conflict ? 409 : 502,
+      code: conflict ? 'version_conflict' : 'firestore_commit_failed',
+    });
+  }
+  return response.json();
 }
 
 export function decodeFirestoreFields(fields) {

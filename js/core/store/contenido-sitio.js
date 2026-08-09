@@ -16,6 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260716-cloudinary-fix-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260809-visual-builder-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -204,6 +205,7 @@ export function initSiteContent(pageId) {
   });
 
   initGlobalFooter(pageId);
+  initVisualBuilderRuntime(pageId);
   return startSubscription(`page:${pageId}`, pageId, data => applyPage(pageId, data));
 }
 

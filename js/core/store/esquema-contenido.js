@@ -437,10 +437,11 @@ export function sanitizeContentHref(value, fallback = '') {
   if (/^(?:javascript|data|vbscript|file):/i.test(candidate)) return fallback;
 
   try {
-    const parsed = new URL(candidate, window.location.href);
+    const baseHref = globalThis.location?.href || 'https://tintin.local/';
+    const parsed = new URL(candidate, baseHref);
     if (!['http:', 'https:'].includes(parsed.protocol)) return fallback;
     if (candidate.startsWith('//')) return fallback;
-    if (parsed.origin !== window.location.origin && !/^https:\/\//i.test(candidate)) return fallback;
+    if (parsed.origin !== new URL(baseHref).origin && !/^https:\/\//i.test(candidate)) return fallback;
     return candidate;
   } catch {
     return fallback;
