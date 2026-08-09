@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T02:48:04.877Z",
-  "sourceFingerprint": "7a6aa25262c3693bae543dcddaddc2f53022da4fc46113976051fe1ed8de5d1a",
+  "generatedAt": "2026-08-09T02:50:02.891Z",
+  "sourceFingerprint": "f23330fc25a473d9b86793661084f52955ea41e86bd769bf4575e61cbd3b84a9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 549,
-    "textFiles": 517,
-    "totalBytes": 5694873,
+    "files": 548,
+    "textFiles": 516,
+    "totalBytes": 5695082,
     "pages": 18,
     "modules": 329
   },
@@ -24837,8 +24837,8 @@
     {
       "path": "docs/tintin-ai-builder.md",
       "extension": ".md",
-      "bytes": 2952,
-      "sha256": "53062e88537f54ac2831fce79535a417bb78dcb989f4259b9c28b8916ec5977c"
+      "bytes": 3206,
+      "sha256": "21f8c8fd5b4a4ec22f0ac278aed1e98d2b0af75ea1520ee02f154c67aaefd2d2"
     },
     {
       "path": "envios.html",
@@ -26993,12 +26993,6 @@
       "extension": ".html",
       "bytes": 14462,
       "sha256": "e5ef66281a9ab54d981795ebff43a4dad4d3f5986c4b1d3593611b6b95fdb019"
-    },
-    {
-      "path": "test-results/.last-run.json",
-      "extension": ".json",
-      "bytes": 45,
-      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
