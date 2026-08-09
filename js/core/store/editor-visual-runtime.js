@@ -235,12 +235,18 @@ export async function initVisualBuilderRuntime(pageId) {
   if (initializedPages.has(pageId)) return;
   initializedPages.add(pageId);
   ensureCss();
-  try {
-    const response = await fetch(`/api/visual-builder-public?page=${encodeURIComponent(pageId)}`, { headers: { accept: 'application/json' } });
-    const data = response.ok ? await response.json() : null;
-    if (data?.config) applyVisualBuilderConfig(pageId, data.config);
-    else document.documentElement.dataset.ttVisualBuilder = 'fallback';
-  } catch { document.documentElement.dataset.ttVisualBuilder = 'fallback'; }
+  const isStaticLocalHost = ['127.0.0.1', 'localhost', '::1'].includes(location.hostname);
+  const shouldFetchPublishedConfig = !isStaticLocalHost || window.TT_VISUAL_BUILDER_FETCH_LOCAL === true;
+  if (shouldFetchPublishedConfig) {
+    try {
+      const response = await fetch(`/api/visual-builder-public?page=${encodeURIComponent(pageId)}`, { headers: { accept: 'application/json' } });
+      const data = response.ok ? await response.json() : null;
+      if (data?.config) applyVisualBuilderConfig(pageId, data.config);
+      else document.documentElement.dataset.ttVisualBuilder = 'fallback';
+    } catch { document.documentElement.dataset.ttVisualBuilder = 'fallback'; }
+  } else {
+    document.documentElement.dataset.ttVisualBuilder = 'fallback';
+  }
 
   const preview = new URLSearchParams(location.search).get('ttVisualPreview') === '1' && window.parent !== window;
   if (preview) {
