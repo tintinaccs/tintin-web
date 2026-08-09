@@ -29,11 +29,18 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    display: flex;
+    display:flex;
+    align-items:center;
+    gap:8px;
     transform: translate(-50%,-50%);
+    color:#8b2642;
+    text-decoration:none;
   }
 
-  .tt-tablet-logo-img { width: auto; height: 46px; object-fit: contain; }
+  .tt-tablet-logo-img { width:auto; height:42px; object-fit:contain; }
+  .tt-header-brand-copy { display:grid; gap:1px; }
+  .tt-header-brand-copy strong { font:800 1rem/1 Montserrat,sans-serif; letter-spacing:.14em; color:#9f1f50; }
+  .tt-header-brand-copy small { font:650 .42rem/1.2 Montserrat,sans-serif; letter-spacing:.1em; color:#745e67; white-space:nowrap; }
   .tt-tablet-menu-toggle,
   .tt-tablet-actions button,
   .tt-tablet-actions a {
@@ -94,8 +101,8 @@
   }
 
   .tt-tablet-menu-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:clamp(30px,5vh,58px); }
-  .tt-tablet-menu-logo { display:flex; }
-  .tt-tablet-menu-logo-img { height:50px; width:auto; }
+  .tt-tablet-menu-logo { display:flex; align-items:center; gap:9px; color:#8b2642; text-decoration:none; }
+  .tt-tablet-menu-logo-img { height:46px; width:auto; }
   .tt-tablet-menu-close { display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid #efc2d2; border-radius:50%; background:#fff; color:#292429; cursor:pointer; }
   .tt-tablet-nav { width:min(100%,780px); margin:auto; }
   .tt-tablet-nav > a,

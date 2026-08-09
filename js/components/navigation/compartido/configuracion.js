@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260804-modular-shell-1';
+export const SHELL_VERSION = 'tintin-20260809-responsive-header-2';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

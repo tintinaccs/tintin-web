@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260809-loader-motion-fix-1">
   <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260809-loader-motion-fix-1">
   <link rel="stylesheet" href="css/admin/ai-builder.css?v=tintin-20260809-loader-motion-fix-1">
+  <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260809-loader-motion-fix-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260809-loader-motion-fix-1">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260809-loader-motion-fix-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260809-loader-motion-fix-1">
@@ -1637,6 +1638,59 @@
 
     <!-- ===================== APARIENCIA Y ESQUEMAS DE COLOR ===================== -->
     <div class="adm-section" id="section-apariencia">
+      <section class="visual-editor" id="visual-editor" aria-labelledby="visual-editor-title">
+        <header class="visual-editor-topbar">
+          <div>
+            <h2 id="visual-editor-title">Editor visual seguro</h2>
+            <p>Armá la tienda con bloques y controles protegidos. No acepta código, CSS ni HTML.</p>
+          </div>
+          <div class="visual-editor-actions" role="group" aria-label="Acciones del editor visual">
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="visual-undo" disabled>Deshacer</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="visual-redo" disabled>Rehacer</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="visual-save">Guardar borrador</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="visual-cancel">Cancelar</button>
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="visual-publish">Revisar y publicar</button>
+          </div>
+        </header>
+        <div class="visual-editor-status" id="visual-status" role="status" aria-live="polite">Cargando editor…</div>
+        <div class="visual-editor-layout">
+          <aside class="visual-editor-sidebar" aria-label="Páginas y secciones">
+            <label class="adm-label" for="visual-page">Página completa</label>
+            <select class="adm-select" id="visual-page"></select>
+            <div class="visual-add-row">
+              <select class="adm-select" id="visual-new-block" aria-label="Tipo de bloque nuevo">
+                <option value="banner">Banner</option><option value="text">Texto</option><option value="products">Productos reales</option>
+                <option value="gallery">Galería</option><option value="promotion">Promoción</option><option value="button">Botón</option>
+                <option value="section">Sección libre segura</option><option value="collections">Colecciones</option>
+              </select>
+              <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="visual-add">Agregar</button>
+            </div>
+            <div class="visual-section-list" id="visual-section-list" aria-label="Secciones de la página"></div>
+          </aside>
+          <section class="visual-editor-properties" aria-labelledby="visual-properties-title">
+            <h3 id="visual-properties-title">Propiedades</h3>
+            <div id="visual-properties"></div>
+          </section>
+          <section class="visual-editor-preview" aria-labelledby="visual-preview-title">
+            <div class="visual-preview-head">
+              <div><h3 id="visual-preview-title">Página real</h3><small id="visual-version">Versión publicada: 0</small></div>
+              <div class="visual-devices" role="group" aria-label="Tamaño de vista previa">
+                <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-visual-device="mobile" aria-pressed="false">Celular</button>
+                <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-visual-device="tablet" aria-pressed="false">Tablet</button>
+                <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-visual-device="desktop" aria-pressed="true">Escritorio</button>
+              </div>
+            </div>
+            <div class="visual-preview-stage" id="visual-preview-stage" data-device="desktop">
+              <iframe id="visual-preview-frame" title="Vista previa real de la página" referrerpolicy="same-origin"></iframe>
+            </div>
+          </section>
+        </div>
+        <details class="visual-history">
+          <summary>Historial y restauración</summary>
+          <div id="visual-history-list"></div>
+        </details>
+      </section>
+
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
           <div class="adm-card-title">🎨 Apariencia y esquemas de colores</div>
@@ -1879,6 +1933,7 @@
 
 <script type="module" src="js/admin/admin-app.js?v=tintin-20260722-order-delete-2-sheets-realtime-1"></script>
 <script type="module" src="js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
 
 
 <!-- ══════════════════════════════════════

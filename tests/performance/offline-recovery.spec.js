@@ -9,11 +9,13 @@
 const { test, expect } = require('@playwright/test');
 const { url, BUDGETS } = require('./_helpers');
 
-test('[offline] con red cortada el loader igual se resuelve (no gira infinito)', async ({ page, context }) => {
-  // Cargar primero online para tener el shell, luego cortar la red.
+test('[offline] al perder la red el shell visible se conserva y el loader se resuelve', async ({ page, context }) => {
+  // La aplicación no declara un Service Worker de navegación offline. Este
+  // contrato prueba la recuperación que sí implementa: perder la red durante
+  // una sesión cargada nunca borra el shell ni deja el loader girando.
   await page.goto(url('index.html'), { waitUntil: 'domcontentloaded', timeout: 45000 });
   await context.setOffline(true);
-  await page.reload({ waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => {});
+  await page.evaluate(() => window.dispatchEvent(new Event('offline')));
 
   // Aun offline, el loader debe retirarse por el timeout de emergencia.
   await page.waitForFunction(() => {

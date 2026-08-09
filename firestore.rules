@@ -994,6 +994,19 @@ service cloud.firestore {
       }
     }
 
+    /* Editor visual: no existe acceso directo desde ningún navegador.
+       El backend valida Super Admin, esquema y límites antes de usar la
+       cuenta de servicio. La tienda pública recibe solo el JSON saneado. */
+    match /visualBuilderPages/{pageId} {
+      allow read, write: if false;
+    }
+    match /visualBuilderDrafts/{pageId} {
+      allow read, write: if false;
+    }
+    match /visualBuilderHistory/{entryId} {
+      allow read, write: if false;
+    }
+
     /* ============================================================
        CHECKOUT GUARDS
        ============================================================ */

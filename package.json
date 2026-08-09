@@ -24,6 +24,9 @@
     "test:cart-persistence": "node --test tests/cart/*.test.mjs",
     "test:ai-builder": "node --test tests/ai-builder/*.test.mjs",
     "test:ai-builder-ui": "playwright test tests/ai-builder/ai-builder-ui.spec.js --project=chromium",
+    "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
+    "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",
+    "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js --project=chromium",
     "audit:security": "node scripts/auditar-seguridad-fase-8.js",
     "audit:release": "node scripts/auditar-final-entrega.js",
     "audit:integral": "node scripts/auditar-integral-plataforma.js",
@@ -101,6 +104,11 @@
     "firebase": "^12.17.1",
     "firebase-tools": "^15.26.0",
     "playwright": "^1.62.1"
+  },
+  "overrides": {
+    "gaxios": {
+      "uuid": "11.1.1"
+    }
   },
   "engines": {
     "node": ">=22"
