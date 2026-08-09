@@ -75,12 +75,13 @@ async function runCase({ mode, ref, confirmation = '', branchSet = branches, liv
   const deleted = existsSync(deleteLog) ? (await readFile(deleteLog, 'utf8')).trim().split('\n').filter(Boolean) : [];
   await rm(directory, { recursive: true, force: true }); return { result, report, deleted };
 }
-test('el inventario contiene 21 registros fijados a SHA únicos', async () => {
+test('el inventario contiene 25 registros y solo el alias Web Push comparte SHA', async () => {
   const source = (await readFile(script, 'utf8')).replace(/\r\n/g, '\n'); const start = source.indexOf('const reviewedObsoleteBranches = new Map([');
   const end = source.indexOf('\n]);\n\nif (!token)', start); assert.ok(start >= 0 && end > start);
   const shas = [...source.slice(start, end).matchAll(/sha: '([0-9a-f]{40})'/g)].map(m => m[1]); const counts = new Map();
   for (const sha of shas) counts.set(sha, (counts.get(sha) || 0) + 1); const duplicates = [...counts.entries()].filter(([, count]) => count > 1);
-  assert.equal(shas.length, 21); assert.equal(counts.size, 21); assert.deepEqual(duplicates, []);
+  assert.equal(shas.length, 25); assert.equal(counts.size, 24);
+  assert.deepEqual(duplicates, [['ae34f88ac55b7cee80548c474e1120395fe73c48', 2]]);
 });
 test('audit clasifica sin borrar y conserva ramas sensibles', async () => {
   const { result, report, deleted } = await runCase({ mode: 'audit', ref: '343/merge' }); assert.equal(result.status, 0, result.stderr);

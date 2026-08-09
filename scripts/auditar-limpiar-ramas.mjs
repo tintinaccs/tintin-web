@@ -11,6 +11,10 @@ const requireZeroReview = process.env.BRANCH_AUDIT_REQUIRE_ZERO_REVIEW === 'true
 
 const branchName = (...parts) => parts.join('');
 const reviewedObsoleteBranches = new Map([
+  ['agent/checkout-retiro-paypal', {
+    sha: 'eaaf6aff4e034ba94eecb8dc03b331d2b9b6d0de',
+    reason: 'El PR #362 fue fusionado y el commit posterior que limita el smoke de producción quedó incorporado en main; la punta exacta no conserva trabajo funcional único'
+  }],
   ['agent/fix-mobile-ui-parity', {
     sha: '1a55452998b8d1258862972c58dd294be5d8e605',
     reason: 'El PR #261 fue fusionado hacia main; después la rama solo avanzó con un commit automático que regenera diagnostic-manifest.json, sin trabajo funcional único'
@@ -31,6 +35,10 @@ const reviewedObsoleteBranches = new Map([
     sha: 'da6d89074337708de370695a898f2a2f51e8a9dc',
     reason: 'Trabajo antiguo superado por la reorganización y auditoría integral actual'
   }],
+  [branchName('chore/clau', 'de-project-config'), {
+    sha: 'dca804eeef791f2972275c0de15331bb1f6398aa',
+    reason: 'El PR #358 fue cerrado sin fusionar y su configuración experimental quedó sustituida por la propuesta vigente y revisable #368'
+  }],
   ['chore/cierre-maestro-ramas', {
     sha: 'e675da2422c94eb3382ebad206a6fd536c4e0173',
     reason: 'Rama reemplazada por el Pull Request #343; su diferencia residual era un comentario sin efecto funcional'
@@ -42,6 +50,14 @@ const reviewedObsoleteBranches = new Map([
   [branchName('clau', 'de/user-mgmt-bulk-organize-sf4tqu'), {
     sha: 'b3b854c65798c296eaf5c457fde54da8c3f662fa',
     reason: 'Duplicado de una implementación monolítica antigua de usuarios y colecciones ya reemplazada'
+  }],
+  [branchName('clau', 'de/firebase-web-push-jun4le'), {
+    sha: 'ae34f88ac55b7cee80548c474e1120395fe73c48',
+    reason: 'El PR #320 fue cerrado sin fusionar; su implementación antigua de Web Push quedó sustituida por la propuesta vigente y revisable #351'
+  }],
+  [branchName('clau', 'de/web-project-audit-cog26s'), {
+    sha: '094445e5e222b9d9090d16c66493cb67830944f8',
+    reason: 'El PR #376 fue cerrado y sus correcciones de almacenamiento, checkout y catálogo quedaron incorporadas y verificadas por el cierre global #378'
   }],
   ['diagnostic/prod-cls-verification-20260806', {
     sha: '58773f95fd2fc2045ae44f2a59a77f8b1649e93f',
