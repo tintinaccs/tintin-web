@@ -39,8 +39,11 @@ test('[realtime] el catálogo se alimenta por onSnapshot (canal en vivo)', async
 test('[realtime] una re-emisión del snapshot no requiere recargar la página', async ({ page }) => {
   await page.goto(url('catalogo.html'), { waitUntil: 'load', timeout: 45000 });
   await waitLoaderGone(page, BUDGETS.loaderMaxMs);
-  // La página no debe forzar location.reload() como mecanismo de actualización.
-  const usesReload = await page.evaluate(() =>
-    /location\.reload\(/.test(document.documentElement.innerHTML));
-  expect(usesReload, 'la sincronización no debe depender de recargar la página').toBeFalsy();
+  // Los botones de recuperación pueden ofrecer una recarga manual. Lo que no
+  // debe recargar es una nueva emisión del canal de productos.
+  let navigations = 0;
+  page.on('framenavigated', frame => { if (frame === page.mainFrame()) navigations += 1; });
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: window.PRODUCTS || [] } })));
+  await page.waitForTimeout(350);
+  expect(navigations, 'una re-emisión debe actualizar en vivo sin navegar').toBe(0);
 });

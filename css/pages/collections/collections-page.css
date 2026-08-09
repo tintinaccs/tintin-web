@@ -75,6 +75,16 @@
   min-height: 260px;
 }
 
+/* Reserva el alto de los esqueletos para que la respuesta en vivo no desplace
+   las secciones siguientes cuando el resultado sea vacío o más corto. */
+.tt-collections-page .tt-colls-page-grid {
+  min-height: 390px;
+}
+
+.tt-collections-page .tt-products-grid {
+  min-height: 360px;
+}
+
 .tt-collections-page .tt-coll-page-card,
 .tt-collections-page .tt-product-card {
   height: 100%;
@@ -82,6 +92,14 @@
   border-color: var(--color-card-border, #F1E4E7) !important;
   color: var(--color-text-primary, #2B2B2B) !important;
   box-shadow: 0 8px 28px var(--color-card-shadow, rgba(212,106,138,.10));
+}
+
+/* Los placeholders son efímeros: aislarlos con contain/translateZ hace que
+   Chromium atribuya su reemplazo fuera de pantalla como un shift en (0,0). */
+.tt-collections-page .tt-skeleton-card {
+  contain: none;
+  transform: none;
+  backface-visibility: visible;
 }
 
 .tt-collections-page .tt-coll-page-img,
@@ -319,6 +337,14 @@
   .tt-collections-page .tt-products-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+  }
+
+  .tt-collections-page .tt-colls-page-grid {
+    min-height: 350px;
+  }
+
+  .tt-collections-page .tt-products-grid {
+    min-height: 330px;
   }
 
   .tt-collections-page .tt-coll-page-body {
