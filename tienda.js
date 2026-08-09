@@ -198,7 +198,12 @@ function getCart() {
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(normalizeClassicCart(cart)));
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(normalizeClassicCart(cart)));
+  } catch (e) {
+    // Storage bloqueado/lleno (privado, in-app browsers): el carrito sigue
+    // funcionando en memoria para esta pantalla en vez de romper el click.
+  }
 }
 
 function showCartToast(message) {

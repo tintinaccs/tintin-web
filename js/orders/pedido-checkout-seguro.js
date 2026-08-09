@@ -72,6 +72,12 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return Number.isFinite(parsed) ? Math.round(parsed) : NaN;
   }
 
+  // Si sessionStorage no persiste (Safari privado, navegadores in-app con
+  // storage bloqueado), el id de idempotencia igual tiene que sobrevivir a
+  // reintentos dentro de la misma carga de página — si no, un reintento tras
+  // un corte de red genera un orderId distinto y duplica el pedido (y el
+  // descuento de stock) en vez de que el servidor lo reconozca como el mismo.
+  let inMemoryRequestId = null;
   function requestId() {
     try {
       let value = sessionStorage.getItem(REQUEST_KEY);
@@ -83,7 +89,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       return value;
     } catch {
-      return `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
+      if (!inMemoryRequestId) {
+        inMemoryRequestId = `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
+      }
+      return inMemoryRequestId;
     }
   }
 
@@ -581,6 +590,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const result = await createOrderOnServer(draft);
       await clearCart();
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
+      inMemoryRequestId = null;
       success(result, draft);
     } catch (error) {
       console.error('[spark-checkout]', error);

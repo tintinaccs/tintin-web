@@ -91,7 +91,7 @@
         <span>Subtotal:</span>
         <span class="ck-subtotal-val" id="ck-subtotal-val">Gs. 0</span>
       </div>
-      <div class="ck-error" id="error-0"></div>
+      <div class="ck-error" id="error-0" role="alert"></div>
       <button type="button" class="ck-btn" id="btn-step1-next">Elegir cómo lo recibo →</button>
       <div class="ck-trust-bar">
         <div class="ck-trust-item">
@@ -118,14 +118,14 @@
     </div>
     <div class="ck-panel-body">
       <div class="ck-field">
-        <label class="ck-label">Departamento *</label>
+        <label class="ck-label" for="ck-departamento">Departamento *</label>
         <select class="ck-select" id="ck-departamento">
           <option value="">— Elegí tu departamento —</option>
           <!-- filled by JS: solo departamentos con ciudades cargadas + Retiro en tienda -->
         </select>
       </div>
       <div class="ck-field" id="ck-city-field" style="margin-top:16px">
-        <label class="ck-label">Ciudad *</label>
+        <label class="ck-label" for="ck-city">Ciudad *</label>
         <select class="ck-select" id="ck-city" disabled>
           <option value="">— Primero elegí tu departamento —</option>
           <optgroup label="🚚 Delivery a domicilio" id="ck-city-delivery-group">
@@ -175,12 +175,12 @@
       <div class="ck-enc-note" id="ck-enc-note" style="display:none"></div>
 
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
-        <label class="ck-label" id="ck-address-label">Dirección de entrega *</label>
+        <label class="ck-label" id="ck-address-label" for="ck-address">Dirección de entrega *</label>
         <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
       </div>
 
       <div class="ck-field" id="ck-referencia-field" style="display:none">
-        <label class="ck-label">Referencia (opcional)</label>
+        <label class="ck-label" for="ck-referencia">Referencia (opcional)</label>
         <input type="text" class="ck-input" id="ck-referencia" placeholder="Ej: casa azul, frente al semáforo" />
       </div>
 
@@ -210,7 +210,7 @@
         <div id="ck-map"></div>
         <div class="ck-map-coords ck-map-coords-missing" id="ck-map-coords">⚠️ Todavía no marcaste tu ubicación — es obligatoria para continuar</div>
         <div class="ck-map-name-wrap">
-          <label class="ck-label">Nombre de esta ubicación *</label>
+          <label class="ck-label" for="ck-location-name">Nombre de esta ubicación *</label>
           <input type="text" class="ck-input" id="ck-location-name" placeholder="Ej: Mi casa, Local del trabajo, Casa de mi tía" maxlength="60" />
           <label class="ck-checkbox-row" id="ck-save-location-row">
             <input type="checkbox" id="ck-save-location" checked />
@@ -219,7 +219,7 @@
         </div>
       </div>
 
-      <div class="ck-error" id="error-1"></div>
+      <div class="ck-error" id="error-1" role="alert"></div>
       <button type="button" class="ck-btn" id="btn-step2-next">Ir a mis datos →</button>
       <button type="button" class="ck-btn-back" id="btn-step2-back">← Volver al carrito</button>
     </div>
@@ -233,26 +233,26 @@
     </div>
     <div class="ck-panel-body">
       <div class="ck-field">
-        <label class="ck-label">Nombre completo *</label>
+        <label class="ck-label" for="ck-name">Nombre completo *</label>
         <input type="text" class="ck-input" id="ck-name" placeholder="Tu nombre y apellido" />
       </div>
       <div class="ck-field">
-        <label class="ck-label">Teléfono / WhatsApp *</label>
+        <label class="ck-label" for="ck-phone-number">Teléfono / WhatsApp *</label>
         <div style="display:flex;gap:8px">
           <select class="ck-select" id="ck-phone-country" style="flex:0 0 128px"></select>
           <input type="tel" class="ck-input" id="ck-phone-number" placeholder="Ej: 0981 123 456" style="flex:1" />
         </div>
       </div>
       <div class="ck-field">
-        <label class="ck-label">Email (opcional)</label>
+        <label class="ck-label" for="ck-email">Email (opcional)</label>
         <input type="email" class="ck-input" id="ck-email" placeholder="Ej: nombre@email.com" />
       </div>
       <div class="ck-field">
-        <label class="ck-label">Notas opcionales</label>
+        <label class="ck-label" for="ck-notes">Notas opcionales</label>
         <textarea class="ck-textarea" id="ck-notes" placeholder="Ej: Entregar después de las 17hs, timbre no funciona…"></textarea>
       </div>
 
-      <div class="ck-error" id="error-2"></div>
+      <div class="ck-error" id="error-2" role="alert"></div>
       <button type="button" class="ck-btn" id="btn-step3-next">Elegir forma de pago →</button>
       <button type="button" class="ck-btn-back" id="btn-step3-back">← Volver al envío</button>
     </div>
@@ -301,8 +301,8 @@
         🔒 Próximamente habilitamos el pago con tarjeta mediante una pasarela segura. Por ahora usá efectivo o transferencia.
       </div>
 
-      <div class="ck-error" id="error-3"></div>
-      <div class="ck-error" id="error-3-none" style="display:none">No hay métodos de pago disponibles en este momento — escribinos por WhatsApp para coordinar tu compra.</div>
+      <div class="ck-error" id="error-3" role="alert"></div>
+      <div class="ck-error" id="error-3-none" style="display:none" role="alert">No hay métodos de pago disponibles en este momento — escribinos por WhatsApp para coordinar tu compra.</div>
       <button type="button" class="ck-btn" id="btn-step4-next">Ver resumen del pedido →</button>
       <button type="button" class="ck-btn-back" id="btn-step4-back">← Volver a tus datos</button>
     </div>
@@ -329,7 +329,7 @@
       <button type="button" id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
         ✓ Confirmar pedido
       </button>
-      <div class="ck-error" id="error-4"></div>
+      <div class="ck-error" id="error-4" role="alert"></div>
 
 
       <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
