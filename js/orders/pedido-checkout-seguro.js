@@ -72,6 +72,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return Number.isFinite(parsed) ? Math.round(parsed) : NaN;
   }
 
+  // Conserva la misma clave de idempotencia durante la carga aunque el
+  // navegador bloquee sessionStorage (modo privado o navegador embebido).
+  let inMemoryRequestId = null;
   function requestId() {
     try {
       let value = sessionStorage.getItem(REQUEST_KEY);
@@ -83,7 +86,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       return value;
     } catch {
-      return `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
+      if (!inMemoryRequestId) {
+        inMemoryRequestId = `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
+      }
+      return inMemoryRequestId;
     }
   }
 
@@ -581,6 +587,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const result = await createOrderOnServer(draft);
       await clearCart();
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
+      inMemoryRequestId = null;
       success(result, draft);
     } catch (error) {
       console.error('[spark-checkout]', error);
