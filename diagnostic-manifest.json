@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T02:05:18.238Z",
-  "sourceFingerprint": "77b2384c5cf325674ac9c846b72ccbc27453d99d28f38be24f94269012809771",
+  "generatedAt": "2026-08-09T02:20:57.283Z",
+  "sourceFingerprint": "47dd16b8b0a72798f9e1f2d6d1456cab114a9bb7b541f262308aa3ffd0d65acd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 548,
-    "textFiles": 516,
-    "totalBytes": 5692024,
+    "files": 549,
+    "textFiles": 517,
+    "totalBytes": 5692597,
     "pages": 18,
     "modules": 329
   },
@@ -15824,7 +15824,7 @@
           "line": 11
         },
         {
-          "url": "https://${branch.replace(/[^a-z0-9-]/gi",
+          "url": "https://${branch.replace(/[%5Ea-z0-9-]/gi",
           "line": 59
         }
       ]
@@ -23124,8 +23124,8 @@
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
-      "bytes": 15975,
-      "sha256": "ed83a50d7d355faf9610334764c51c9056e1eb85417af97b79ee1fcb77357677",
+      "bytes": 16503,
+      "sha256": "c1f0aa9b2a5b5c71a233cf55c56c35ca33a52517e3e20595680e372ea557f676",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26961,8 +26961,8 @@
     {
       "path": "scripts/smoke-todas-paginas.mjs",
       "extension": ".mjs",
-      "bytes": 15975,
-      "sha256": "ed83a50d7d355faf9610334764c51c9056e1eb85417af97b79ee1fcb77357677"
+      "bytes": 16503,
+      "sha256": "c1f0aa9b2a5b5c71a233cf55c56c35ca33a52517e3e20595680e372ea557f676"
     },
     {
       "path": "scripts/verificar-manifiesto-diagnostico.js",
@@ -26993,6 +26993,12 @@
       "extension": ".html",
       "bytes": 14462,
       "sha256": "e5ef66281a9ab54d981795ebff43a4dad4d3f5986c4b1d3593611b6b95fdb019"
+    },
+    {
+      "path": "test-results/.last-run.json",
+      "extension": ".json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",

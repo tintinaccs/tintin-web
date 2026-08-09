@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
-const port = 4173;
+const port = Number(process.env.TT_SMOKE_PORT || 4173);
 const baseURL = `http://${host}:${port}`;
 
 const routes = [
@@ -57,6 +57,12 @@ function safeLocalPath(requestURL) {
 }
 
 const server = http.createServer((request, response) => {
+  const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
+  if (pathname === '/api/ai-builder-public') {
+    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
+    response.end('{"blocks":[],"version":0}');
+    return;
+  }
   const absolute = safeLocalPath(request.url || '/');
   if (!absolute) {
     response.writeHead(403).end('Forbidden');
@@ -112,6 +118,8 @@ try {
       // la transición cross-document automática; no proviene del JavaScript
       // de la aplicación. Cualquier otro error sigue siendo bloqueante.
       if (/^Transition was skipped\.?$/.test(message)) return;
+      // Un iframe de vista previa sin allow-same-origin debe impedir Service Worker.
+      if (/Service worker is disabled because the context is sandboxed/i.test(message)) return;
       pageErrors.push(message);
     });
     page.on('response', response => {
