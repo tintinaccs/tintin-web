@@ -5,7 +5,20 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-16';
+const VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
+// Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
+// esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
+// ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
+// acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
+const NAV_SHELL_VERSION = 'tintin-20260809-responsive-header-2';
+const NAVIGATION_PRELOAD_STYLES = [
+  'css/components/navigation/escritorio/encabezado-escritorio.css',
+  'css/components/navigation/tableta/encabezado-tableta.css',
+  'css/components/navigation/movil/encabezado-movil.css',
+  'css/components/navigation/compartido/transiciones-navegacion.css',
+  'css/components/navigation/compartido/paneles.css',
+  'css/components/navigation/compartido/busqueda.css',
+];
 const PUBLIC_PAGES = [
   '404.html',
   'about.html',
@@ -84,10 +97,37 @@ function ensureStyles(html) {
   return html.replace('</head>', `  <link rel="stylesheet" href="styles.css?v=${VERSION}">\n</head>`);
 }
 
+function ensureNavigationPreloads(html) {
+  let out = html.replace(
+    /\s*<link\b[^>]*rel=["']modulepreload["'][^>]*href=["']js\/components\/navigation\/entrada-navegacion-publica\.js[^"']*["'][^>]*>/gi,
+    ''
+  );
+  out = out.replace(
+    /\s*<link\b[^>]*rel=["']preload["'][^>]*href=["']css\/components\/navigation\/[^"']*["'][^>]*>/gi,
+    ''
+  );
+
+  const preloadTags = [
+    `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_SHELL_VERSION}">`,
+    ...NAVIGATION_PRELOAD_STYLES.map(
+      href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
+    ),
+  ].map(tag => `  ${tag}`).join('\n');
+
+  const anchor = /(<link\b[^>]*href=["']js\/core\/store-gate\/nucleo-control-tienda\.js[^"']*["'][^>]*>)/i;
+  if (anchor.test(out)) return out.replace(anchor, `$1\n${preloadTags}`);
+
+  const firebaseAnchor = /(<link\b[^>]*href=["']js\/core\/firebase\/firebase\.js[^"']*["'][^>]*>)/i;
+  if (firebaseAnchor.test(out)) return out.replace(firebaseAnchor, `$1\n${preloadTags}`);
+
+  return out.replace('</head>', `${preloadTags}\n</head>`);
+}
+
 function ensureShellScript(html) {
   let out = html
     .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '');
+    .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '')
+    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
   return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${VERSION}" defer></script>`);
@@ -128,6 +168,7 @@ for (const page of PUBLIC_PAGES) {
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
   html = ensureStyles(html);
+  html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
   html = centralizeRuntime(html);
   html = versionRuntimeLoader(html);

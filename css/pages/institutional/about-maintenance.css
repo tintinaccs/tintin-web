@@ -83,10 +83,18 @@
   .tt-about-maintained .tt-trust-item { padding: 22px 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tt-about-maintained *, .tt-about-maintained *::before, .tt-about-maintained *::after {
+  /* #tt-loader queda afuera: su spinner es estado del sistema, no una
+     animación decorativa — apagarlo lo deja congelado en vez de sobrio. */
+  .tt-about-maintained *:not(#tt-loader):not(#tt-loader *), .tt-about-maintained *::before, .tt-about-maintained *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+
+  .tt-about-maintained #tt-loader .tt-loader-spinner::before,
+  .tt-about-maintained #tt-loader .tt-loader-spinner::after {
+    animation-duration: 1.6s !important;
+    animation-iteration-count: infinite !important;
   }
 }

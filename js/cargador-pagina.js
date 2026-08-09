@@ -83,7 +83,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260801-unified-surfaces-16';
+  const TT_CACHE_VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
   const MIN_SHOW_MS = 900;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -344,7 +344,12 @@
     '@media (min-width:601px) and (max-width:1024px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(178px,29vw,220px);--tt-loader-spinner-size:38px;--tt-loader-spinner-border:7px;width:min(100%,310px)}#tt-loader-brand-subtitle{font-size:clamp(12px,1.8vw,15px);margin-top:11px}.tt-loader-spinner{margin-top:25px}}',
     '@media (max-width:600px){#tt-loader{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(120px,43vw,158px);--tt-loader-spinner-size:30px;--tt-loader-spinner-border:5px;width:min(100%,230px);max-width:calc(100vw - 28px)}#tt-loader-brand-subtitle{font-size:clamp(10px,3.2vw,12px);margin-top:8px;letter-spacing:.045em}.tt-loader-spinner{margin-top:20px}#tt-loader-status{margin-top:14px;padding:0 8px}#tt-loader-title{font-size:clamp(10px,3.1vw,12px)}#tt-loader-subtitle{font-size:clamp(9px,2.8vw,11px)}}',
     '@media (max-width:360px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(112px,42vw,140px);--tt-loader-spinner-size:27px;--tt-loader-spinner-border:4px}#tt-loader-brand-subtitle{font-size:10px}.tt-loader-spinner{margin-top:17px}}',
-    '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark,#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle,#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:none;opacity:1;transform:none;clip-path:none}.tt-loader-spinner::before,.tt-loader-spinner::after{animation-duration:1.6s}}',
+    // css/quality/calidad-interfaz.css aplica *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}
+    // bajo reduced-motion — sin !important acá, ese reset gana y el anillo se ve congelado
+    // (una vuelta imperceptible y listo) en vez de seguir señalando "todavía estoy cargando".
+    // Un spinner de progreso es estado del sistema, no una animación decorativa: se lo excluye
+    // a propósito del apagado general de movimiento.
+    '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark,#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle,#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:none;opacity:1;transform:none;clip-path:none}.tt-loader-spinner::before,.tt-loader-spinner::after{animation-duration:1.6s!important;animation-iteration-count:infinite!important}}',
     '#tt-store-gate-emergency-dialog{width:min(100%,460px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:20px;padding:clamp(28px,5vw,40px) clamp(20px,5vw,32px);text-align:center;box-shadow:0 18px 60px rgba(35,12,22,.28);box-sizing:border-box}',
     '#tt-store-gate-emergency-actions{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}',
     '.tt-store-gate-emergency-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;min-width:146px;padding:11px 24px;border-radius:999px;font:700 13px/1.2 Montserrat;text-decoration:none;cursor:pointer;touch-action:manipulation;box-sizing:border-box}',
@@ -840,6 +845,9 @@
     bootImagePerformance();
     bootSiteActivity();
     bootPhase8UiUx();
+
+    documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+    documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
   }
 
   function bootPublicRuntime() {
@@ -905,6 +913,13 @@
       showEmergencyStoreGate();
     }
     hideNow();
+    // Si el store gate nunca emitió ningún estado (ni "allowed", ni
+    // "degraded", ni bloqueado), bootPublicRuntime()/bootPageRuntime()
+    // jamás corrieron: sin esto, tt-initializing quedaba pegado para
+    // siempre y body.tt-home-premium seguía con visibility:hidden bajo
+    // un loader ya oculto (ver css/pages/home/ajuste-inicio.css).
+    if (isAdminImagesPage) bootPageRuntime();
+    else bootPublicRuntime();
   }, SAFETY_MS);
 
   window.TintinLoader = {

@@ -29,7 +29,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260809-visual-builder-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

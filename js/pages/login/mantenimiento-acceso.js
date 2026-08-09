@@ -15,7 +15,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   function loadStyles() {
     ensureStyle(
       'link[data-tt-login-maintenance]',
-      '../../../css/pages/login/login-maintenance.css?v=tintin-20260803-login-maintenance-2',
+      '../../../css/pages/login/login-maintenance.css?v=tintin-20260809-loader-motion-fix-1',
       'ttLoginMaintenance'
     );
     ensureStyle(

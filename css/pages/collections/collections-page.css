@@ -403,13 +403,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tt-collections-page *,
+  /* #tt-loader queda afuera: su spinner es estado del sistema ("todavía
+     estoy cargando"), no una animación decorativa — apagarlo lo deja
+     congelado en vez de simplemente sobrio. */
+  .tt-collections-page *:not(#tt-loader):not(#tt-loader *),
   .tt-collections-page *::before,
   .tt-collections-page *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+
+  .tt-collections-page #tt-loader .tt-loader-spinner::before,
+  .tt-collections-page #tt-loader .tt-loader-spinner::after {
+    animation-duration: 1.6s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 

@@ -177,7 +177,7 @@ check(
   'El panel fuerza una versión nueva de los módulos corregidos',
   /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
     /integridad-inventario-admin\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
-    /TT_CACHE_VERSION = 'tintin-20260801-unified-surfaces-16'/.test(read('js/cargador-pagina.js')),
+    /TT_CACHE_VERSION = 'tintin-20260809-loader-lifecycle-fix-1'/.test(read('js/cargador-pagina.js')),
   'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
 );
 check(
