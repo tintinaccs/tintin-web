@@ -378,7 +378,9 @@ function extractEndpoints(file, source) {
       const url = new URL(value);
       url.search = '';
       url.hash = '';
-      value = url.href;
+      // Node normaliza `^` de forma distinta segun plataforma/version. La
+      // forma legible es tambien la historica del manifiesto en CI (Linux).
+      value = url.href.replace(/%5E/gi, '^');
     } catch (_) {
       continue;
     }
