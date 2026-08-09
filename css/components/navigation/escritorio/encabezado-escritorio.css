@@ -22,8 +22,19 @@
     gap: 28px;
   }
 
-  .tt-header-desktop .tt-logo-link { justify-self: start; }
-  .tt-header-desktop .tt-logo-img { width: auto; height: 52px; }
+  .tt-header-desktop .tt-logo-link {
+    justify-self:start;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+    color:#8b2642;
+    text-decoration:none;
+  }
+  .tt-header-desktop .tt-logo-img { width:auto; height:48px; flex:0 0 auto; }
+  .tt-header-desktop .tt-header-brand-copy { display:grid; gap:1px; min-width:0; }
+  .tt-header-desktop .tt-header-brand-copy strong { font:800 1.18rem/1 Montserrat,sans-serif; letter-spacing:.15em; color:#9f1f50; }
+  .tt-header-desktop .tt-header-brand-copy small { font:650 .47rem/1.2 Montserrat,sans-serif; letter-spacing:.12em; color:#745e67; white-space:nowrap; }
   .tt-header-desktop .tt-nav-desktop {
     position: relative;
     justify-self: center;
@@ -129,7 +140,10 @@
     gap: 10px !important;
     padding-inline: 14px !important;
   }
-  .tt-header-desktop .tt-logo-img { height: 42px !important; max-width: 120px; object-fit: contain; }
+  .tt-header-desktop .tt-logo-img { height:38px !important; max-width:48px; object-fit:contain; }
+  .tt-header-desktop .tt-logo-link { gap:6px; }
+  .tt-header-desktop .tt-header-brand-copy strong { font-size:.9rem; }
+  .tt-header-desktop .tt-header-brand-copy small { display:none; }
   .tt-header-desktop .tt-nav > a,
   .tt-header-desktop .tt-nav-dropdown > button { padding-inline: 11px !important; font-size: .72rem !important; }
   .tt-header-desktop .tt-header-actions { gap: 4px !important; }

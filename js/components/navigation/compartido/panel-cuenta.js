@@ -6,7 +6,9 @@ export function renderAccountDrawer() {
         <button type="button" id="btn-account-close" aria-label="Cerrar cuenta">✕</button>
       </div>
       <div class="tt-account-panel" id="account-panel">
-        <p class="tt-account-loading" role="status">Cargando tu cuenta…</p>
+        <p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p>
+        <a class="tt-account-item" href="login.html">Iniciar sesión</a>
+        <a class="tt-account-item" href="login.html">Crear una cuenta</a>
       </div>
     </div>`;
 }
