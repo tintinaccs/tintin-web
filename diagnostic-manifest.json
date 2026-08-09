@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T19:50:21.697Z",
-  "sourceFingerprint": "08f970f642452319773491f8e1cf578e252e999b89bb263c08c89c23a5b1e14e",
+  "generatedAt": "2026-08-09T20:19:25.297Z",
+  "sourceFingerprint": "e2837f6cff9e303e651d4792cd0cfb113acbeaaf5b2544539d292637a6fe9971",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 568,
-    "textFiles": 536,
-    "totalBytes": 5805580,
+    "files": 569,
+    "textFiles": 537,
+    "totalBytes": 5936545,
     "pages": 18,
     "modules": 344
   },
@@ -25623,10 +25623,16 @@
       "sha256": "aa5fd6aa9449c12c5322afefd471748c0aeeb16d1295ce839d6107741e69794e"
     },
     {
+      "path": "firebase-cloud-functions-inactive/package-lock.json",
+      "extension": ".json",
+      "bytes": 131088,
+      "sha256": "18c15eeb7e1750f67e81b93c7af242a0ab710d8874ac019149dd44a1461ebd02"
+    },
+    {
       "path": "firebase-cloud-functions-inactive/package.json",
       "extension": ".json",
-      "bytes": 342,
-      "sha256": "adc15c1ff999c3b7bb77db5f03f7d8b51c27d7895630e84269cdc5ab55965f41"
+      "bytes": 382,
+      "sha256": "3ea5af1742a4caa342496b0b272708ff433f9d2d3443c34c0f5444128ce70573"
     },
     {
       "path": "firebase.json",
@@ -26993,14 +26999,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 330887,
-      "sha256": "c253e3a4c8b14270df197cb7d67e04fc652a6fe3e70f843b7224f8b1159b7990"
+      "bytes": 330657,
+      "sha256": "7c75ee530c617da1530bf8fb1ab0f14225b24c073519d065082db76bef5353d1"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 9466,
-      "sha256": "60a0aefb026180d422b43c744446cd07ba819f2bd389e873764b8922915f58ad"
+      "bytes": 9533,
+      "sha256": "3636e0626147a723085f4f386adedef2ca2b3214307d33bb8142ca6ec8e1bb42"
     },
     {
       "path": "perfil.html",
