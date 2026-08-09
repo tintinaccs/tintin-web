@@ -57,13 +57,16 @@ function walkDir(dir, exts) {
 
 const JS_FILES = walkDir('js', ['.js', '.mjs']);
 
-const VERSIONED_ATTR_RE = /(?:href|src)=["']([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)["']/g;
-const VERSIONED_IMPORT_RE = /from\s+["']([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)["']/g;
+// Sin anclar a href=/src=/from — un archivo puede quedar versionado dentro
+// de un new URL(...), un link.href = '...' suelto, o cualquier otro string
+// literal. Cualquier "ruta.css?v=tag" o "ruta.js?v=tag" entre comillas cuenta,
+// sea cual sea la sintaxis que lo rodea.
+const VERSIONED_LITERAL_RE = /["']([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)["']/g;
 
 function collectFromHtml(file) {
   const text = fs.readFileSync(path.join(ROOT, file), 'utf8');
   const found = [];
-  for (const match of text.matchAll(VERSIONED_ATTR_RE)) {
+  for (const match of text.matchAll(VERSIONED_LITERAL_RE)) {
     const ref = match[1];
     if (ref.startsWith('http://') || ref.startsWith('https://')) continue;
     found.push({ localPath: ref.replace(/^\.?\//, ''), tag: match[2], sourceFile: file });
@@ -74,7 +77,7 @@ function collectFromHtml(file) {
 function collectFromJs(file) {
   const text = fs.readFileSync(path.join(ROOT, file), 'utf8');
   const found = [];
-  for (const match of text.matchAll(VERSIONED_IMPORT_RE)) {
+  for (const match of text.matchAll(VERSIONED_LITERAL_RE)) {
     const ref = match[1];
     if (ref.startsWith('http://') || ref.startsWith('https://')) continue;
     const resolved = ref.startsWith('.')

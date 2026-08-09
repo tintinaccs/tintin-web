@@ -331,12 +331,21 @@ body.tt-home-premium .tt-wa-float * {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.tt-home-premium *,
+  /* #tt-loader queda afuera a propósito: su spinner señala "todavía estoy
+     cargando" (estado del sistema), no es una animación decorativa — apagarlo
+     hace que el loader se vea congelado/roto en vez de simplemente sobrio. */
+  body.tt-home-premium *:not(#tt-loader):not(#tt-loader *),
   body.tt-home-premium *::before,
   body.tt-home-premium *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+
+  body.tt-home-premium #tt-loader .tt-loader-spinner::before,
+  body.tt-home-premium #tt-loader .tt-loader-spinner::after {
+    animation-duration: 1.6s !important;
+    animation-iteration-count: infinite !important;
   }
 }

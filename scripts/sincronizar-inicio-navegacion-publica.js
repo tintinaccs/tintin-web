@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260801-unified-surfaces-16';
+const VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no

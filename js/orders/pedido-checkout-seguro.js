@@ -12,7 +12,7 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1';
 import {
   findCountryByCode,
   normalizePhone,

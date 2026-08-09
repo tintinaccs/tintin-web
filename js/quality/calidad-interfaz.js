@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260801-unified-surfaces-16';
+var TT_CACHE_VERSION='tintin-20260809-loader-lifecycle-fix-1';
 function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
@@ -52,6 +52,15 @@ var refreshTimer=0;
 function refresh(){parity();singleLogoLoader();media();links()}
 function scheduleRefresh(){clearTimeout(refreshTimer);refreshTimer=setTimeout(refresh,80)}
 function bindRefreshEvents(){document.addEventListener('tintin:page-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:products-loaded',scheduleRefresh,{passive:true});window.addEventListener('tintin:collections-phase4-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:images-phase5-ready',scheduleRefresh,{passive:true});window.addEventListener('tintin:content-phase6-ready',scheduleRefresh,{passive:true})}
-function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();bootAdminUsersPhase8();bootAdminImportPhase9();refresh();document.documentElement.classList.add('tt-ui-ready');forms();topOnReload();document.documentElement.classList.remove('tt-initializing');bindRefreshEvents();setTimeout(refresh,420)}
+// cargador-pagina.js es la única dueña real del ciclo de vida de #tt-loader
+// (evento tintin:store-gate-state + su propio fallback de seguridad). Si acá
+// se saca tt-initializing apenas corre DOMContentLoaded —mucho antes de que
+// el store gate resuelva—, body.tt-home-premium (ver ajuste-inicio.css) deja
+// de estar oculto mientras el splash todavía sigue activo: dos sistemas
+// independientes tocando la misma bandera, sin coordinarse. Mientras el
+// loader siga mostrado (existe y no tiene .tt-out), se le deja la limpieza a
+// su dueño; si no hay loader o ya terminó, no hay carrera y se saca de una.
+function clearInitializing(){var loader=document.getElementById('tt-loader');if(loader&&!loader.classList.contains('tt-out'))return;document.documentElement.classList.remove('tt-initializing')}
+function boot(){css();bootThemeSanitizer();bootMobileHeader();bootPageAudit();bootCollectionsPhase4();bootAdminCollectionsPhase4();bootImagesPhase5();bootAdminImagesPhase5();bootAdminContentPhase6();bootCartPhase7();bootAdminUsersPhase8();bootAdminImportPhase9();refresh();document.documentElement.classList.add('tt-ui-ready');forms();topOnReload();clearInitializing();bindRefreshEvents();setTimeout(refresh,420)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

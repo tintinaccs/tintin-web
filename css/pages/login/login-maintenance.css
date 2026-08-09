@@ -414,11 +414,19 @@ body:has(.login-page).tt-login-offline .login-box::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body:has(.login-page) *,
+  /* #tt-loader queda afuera a propósito: su spinner es estado del sistema
+     ("todavía estoy cargando"), no una animación decorativa de la pantalla
+     de login — apagarlo lo deja congelado en vez de simplemente sobrio. */
+  body:has(.login-page) *:not(#tt-loader):not(#tt-loader *),
   body:has(.login-page) *::before,
   body:has(.login-page) *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+
+  body:has(.login-page) #tt-loader .tt-loader-spinner::before,
+  body:has(.login-page) #tt-loader .tt-loader-spinner::after {
+    animation: tt-loader-spinner-ring 1.6s infinite linear !important;
   }
 }

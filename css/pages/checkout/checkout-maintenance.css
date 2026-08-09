@@ -171,7 +171,14 @@ body:has(.ck-body).tt-checkout-submitting #ck-confirm-btn {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body:has(.ck-body) *,
+  /* #tt-loader queda afuera: su spinner es estado del sistema, no una
+     animación decorativa — apagarlo lo deja congelado en vez de sobrio. */
+  body:has(.ck-body) *:not(#tt-loader):not(#tt-loader *),
   body:has(.ck-body) *::before,
   body:has(.ck-body) *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+
+  body:has(.ck-body) #tt-loader .tt-loader-spinner::before,
+  body:has(.ck-body) #tt-loader .tt-loader-spinner::after {
+    animation: tt-loader-spinner-ring 1.6s infinite linear !important;
+  }
 }
