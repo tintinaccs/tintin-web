@@ -798,6 +798,10 @@
     importSibling('components/cart/sincronizacion-carrito.js', 'Cart Sync');
   }
 
+  function bootFavoritesPublic() {
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites');
+  }
+
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
       importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer');
@@ -852,6 +856,7 @@
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
     bootCartSyncPublic();
+    bootFavoritesPublic();
     bootThemeColorSanitizerPublic();
     bootPageAuditFixPublic();
     bootPhase8UiUx();

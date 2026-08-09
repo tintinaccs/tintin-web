@@ -1653,7 +1653,26 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   transition: var(--transition);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
+
+.tt-product-favorite-button {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(173,63,103,.22);
+  border-radius: 50%;
+  background: rgba(255,255,255,.94);
+  color: var(--pink-dark);
+  font-size: 1.45rem;
+  cursor: pointer;
+  box-shadow: 0 5px 16px rgba(86,32,51,.12);
+}
+
+.tt-product-favorite-button.is-favorite { background: var(--pink-pale); }
 
 .tt-product-card:hover {
   box-shadow: var(--shadow-lg);
@@ -2467,6 +2486,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   align-items: center;
   justify-content: center;
 }
+.tt-cart-body:has(.tt-cart-empty):has(.tt-cart-favorites) { display: block; }
 
 .tt-cart-empty {
   text-align: center;
@@ -2566,6 +2586,27 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-cart-item-remove:hover { color: var(--pink-dark); }
+
+.tt-cart-item-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.tt-cart-favorite-toggle {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--pink-pale);
+  color: var(--pink-dark);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.tt-cart-favorites { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.tt-cart-favorites h3 { margin: 0 0 12px; color: var(--text); font: 700 .85rem/1.3 Montserrat, sans-serif; text-transform: uppercase; letter-spacing: .06em; }
+.tt-cart-favorite-item { display: grid; grid-template-columns: 54px minmax(0,1fr) auto 40px; gap: 9px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.tt-cart-favorite-img { width: 54px; height: 60px; border-radius: 10px; overflow: hidden; background: var(--pink-pale); }
+.tt-cart-favorite-img img { width: 100%; height: 100%; object-fit: contain; }
+.tt-cart-favorite-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.tt-cart-favorite-info strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .72rem; color: var(--text); }
+.tt-cart-favorite-info span { font-size: .75rem; color: var(--pink-dark); font-weight: 700; }
+.tt-cart-favorite-add { min-height: 40px; padding: 7px 10px; border: 1px solid var(--pink-dark); border-radius: 999px; background: #fff; color: var(--pink-dark); font: 700 .68rem Montserrat, sans-serif; cursor: pointer; }
 
 .tt-cart-footer {
   padding: 20px 24px;
@@ -3474,6 +3515,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 20px;
 }
 
+.tt-product-favorite-main {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--pink);
+  border-radius: var(--radius-pill);
+  background: var(--pink-pale);
+  color: var(--pink-dark);
+  font: 700 .78rem/1.3 Montserrat, sans-serif;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.tt-product-favorite-main span { margin-right: 8px; font-size: 1.2rem; }
+.tt-product-favorite-main.is-favorite { background: #f8dce7; border-color: var(--pink-dark); }
+
 .tt-product-wa-link {
   min-width: 44px;
   min-height: 40px;
@@ -3515,7 +3570,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* Redundante a propósito junto con el gap de .tt-product-trust-badges: si
    algo neutraliza el gap del contenedor, las dos tarjetas igual no quedan
    pegadas — nunca deben tocarse. */
-.tt-trust-badge-item:not(:last-child) { margin-bottom: 10px; }
+.tt-trust-badge-item:not(:last-child) { margin-bottom: 0; }
 
 .tt-trust-badge-icon { font-size: 1.1rem; }
 

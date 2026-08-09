@@ -72,6 +72,7 @@ function render(){
       var safeVariantAttr = escapeHtml(item.variant || '');
       var img = item.imageUrl || item.imgUrl || '';
       var url = 'product.html?id=' + encodeURIComponent(item.id);
+      var isFavorite = Boolean(window.TintinFavorites && window.TintinFavorites.has && window.TintinFavorites.has(item.id));
       return (
         '<div class="tinsel-item" data-id="' + safeId + '">' +
           '<a class="tinsel-item-img" href="' + url + '">' +
@@ -87,9 +88,12 @@ function render(){
             '<span class="tinsel-qnum">' + item.qty + '</span>' +
             '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-cart-delta="1" aria-label="Sumar">+</button>' +
           '</div>' +
-          '<button type="button" class="tinsel-del" data-cart-action="remove" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-tinsel-remove="1" aria-label="Eliminar">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
-          '</button>' +
+          '<div class="tinsel-item-actions">' +
+            '<button type="button" class="tinsel-favorite' + (isFavorite ? ' is-favorite' : '') + '" data-favorite-id="' + safeId + '" data-favorite-name="' + safeName + '" data-favorite-price="' + escapeHtml(item.price) + '" data-favorite-image="' + escapeHtml(img) + '" aria-pressed="' + isFavorite + '"><span data-favorite-icon aria-hidden="true">' + (isFavorite ? '♥' : '♡') + '</span></button>' +
+            '<button type="button" class="tinsel-del" data-cart-action="remove" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-tinsel-remove="1" aria-label="Eliminar">' +
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
+            '</button>' +
+          '</div>' +
         '</div>'
       );
     }).join('');
@@ -129,6 +133,7 @@ if (itemsEl) {
 });
 
 window.addEventListener('tt_cart_updated', render);
+window.addEventListener('tintin:favorites-updated', render);
 window.addEventListener('tintin:products-loaded', render);
 
 document.addEventListener('visibilitychange', function(){

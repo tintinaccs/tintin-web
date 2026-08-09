@@ -6,6 +6,7 @@
    ============================================================= */
 import { loadCollections } from '../collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
+import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 
 const CART_KEY = 'tt_cart';
 let visibleCollectionSlugs = null;
@@ -133,6 +134,14 @@ function sameJson(a, b) {
 
 let reconcilingCart = false;
 export function reconcileCatalogCart(products = window.PRODUCTS || []) {
+  if (!pageHasCompleteCatalog(window.location.pathname)) {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      return Array.isArray(saved) ? saved : [];
+    } catch {
+      return [];
+    }
+  }
   const catalog = new Map(products.filter(isPurchasable).map(raw => {
     const product = normalizeProduct(raw);
     return [String(product.id), product];
