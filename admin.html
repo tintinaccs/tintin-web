@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260716-cloudinary-fix-1">
+  <link rel="stylesheet" href="css/admin/ai-builder.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260716-cloudinary-fix-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260716-cloudinary-fix-1">
@@ -118,6 +119,9 @@
     <button type="button" class="adm-nav-item" data-section="apariencia" id="nav-apariencia">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 100 20 3 3 0 003-3 2 2 0 012-2h1a5 5 0 000-10h-1a2 2 0 01-2-2 3 3 0 00-3-3z"/></svg></span> Apariencia
     </button>
+    <button type="button" class="adm-nav-item" data-section="ai-builder" id="nav-ai-builder" hidden>
+      <span class="adm-nav-icon" aria-hidden="true">✦</span> TINTÍN AI Builder
+    </button>
   </nav>
 
   <div class="adm-nav-bottom">
@@ -148,6 +152,7 @@
   <button type="button" class="adm-mobile-tab" data-section="configuracion" id="mtab-config"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>Config</button>
   <button type="button" class="adm-mobile-tab" data-section="permisos" id="mtab-permisos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>Permisos</button>
   <button type="button" class="adm-mobile-tab" data-section="apariencia" id="mtab-apariencia"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 100 20 3 3 0 003-3 2 2 0 012-2h1a5 5 0 000-10h-1a2 2 0 01-2-2 3 3 0 00-3-3z"/></svg></span>Apariencia</button>
+  <button type="button" class="adm-mobile-tab" data-section="ai-builder" id="mtab-ai-builder" hidden><span class="adm-nav-icon" aria-hidden="true">✦</span>AI Builder</button>
   <a href="index.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Tienda</a>
   <button type="button" class="adm-mobile-tab" id="mtab-logout"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Salir</button>
   <button type="button" class="adm-mobile-tab" id="adm-mobile-more-toggle" aria-expanded="false" aria-controls="adm-mobile-more-sheet"><span class="adm-nav-icon" aria-hidden="true">•••</span>Más</button>
@@ -1782,6 +1787,50 @@
       </div>
     </div>
 
+    <!-- ===================== TINTÍN AI BUILDER ===================== -->
+    <div class="adm-section" id="section-ai-builder">
+      <div class="ai-builder-shell">
+        <section class="ai-builder-panel" aria-labelledby="ai-builder-title">
+          <header class="ai-builder-head">
+            <h2 id="ai-builder-title">TINTÍN AI Builder <span class="ai-builder-status" id="ai-builder-classification">Borrador seguro</span></h2>
+            <p id="ai-builder-version">Versión publicada: 0</p>
+          </header>
+          <div class="ai-builder-chat" id="ai-builder-chat" aria-live="polite"></div>
+          <div class="ai-builder-composer">
+            <label for="ai-builder-request" class="adm-label">¿Qué querés cambiar?</label>
+            <textarea class="adm-input" id="ai-builder-request" maxlength="1200" placeholder="Ej.: Agregá debajo del banner una sección con tres productos destacados, fondo rosado, título y botón para abrir el catálogo."></textarea>
+            <div class="ai-builder-meta"><span>Ctrl/⌘ + Enter para enviar</span><span id="ai-builder-count">0/1200</span></div>
+            <button type="button" class="adm-btn adm-btn-primary" id="ai-builder-send" style="margin-top:12px;width:100%">Preparar propuesta</button>
+            <div id="ai-builder-summary" class="ai-builder-alert">Nada se publica sin tu aprobación explícita.</div>
+            <div id="ai-builder-tech" class="ai-builder-tech" hidden></div>
+            <div class="ai-builder-actions" id="ai-builder-actions" hidden>
+              <button type="button" class="adm-btn adm-btn-primary" id="ai-builder-approve">Aprobar y publicar</button>
+              <button type="button" class="adm-btn adm-btn-outline" id="ai-builder-modify">Pedir modificación</button>
+              <button type="button" class="adm-btn adm-btn-danger" id="ai-builder-cancel">Cancelar</button>
+            </div>
+            <span class="ai-builder-live" id="ai-builder-live" aria-live="assertive"></span>
+          </div>
+        </section>
+        <section class="ai-builder-panel" aria-labelledby="ai-builder-preview-title">
+          <header class="ai-builder-head">
+            <h3 id="ai-builder-preview-title">Vista previa responsive</h3>
+            <div class="ai-builder-preview-toolbar" role="group" aria-label="Tamaño de vista previa">
+              <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-ai-device="mobile">Celular</button>
+              <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-ai-device="tablet">Tablet</button>
+              <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-ai-device="desktop">Escritorio</button>
+            </div>
+          </header>
+          <div class="ai-builder-device" id="ai-builder-device" data-device="desktop">
+            <iframe class="ai-builder-device-frame" id="ai-builder-preview" title="Vista previa de la propuesta" sandbox=""></iframe>
+          </div>
+        </section>
+      </div>
+      <section class="ai-builder-panel ai-builder-history" aria-labelledby="ai-builder-history-title">
+        <header class="ai-builder-head"><h3 id="ai-builder-history-title">Historial y restauración</h3><p>Usuario, fecha, solicitud, resultado y versión. Restaurar crea una versión nueva sin borrar el historial.</p></header>
+        <div class="ai-builder-history-list" id="ai-builder-history-list"></div>
+      </section>
+    </div>
+
     <!-- ===================== CONTENIDO ===================== -->
     <div class="adm-section" id="section-contenido">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
@@ -1829,6 +1878,7 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module" src="js/admin/admin-app.js?v=tintin-20260722-order-delete-2-sheets-realtime-1"></script>
+<script type="module" src="js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
 
 
 <!-- ══════════════════════════════════════

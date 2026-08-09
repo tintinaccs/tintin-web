@@ -257,16 +257,24 @@ const forbiddenPhrase = [
   97, 114, 116, 105, 102, 105, 99, 105, 97, 108
 ].map(character => String.fromCharCode(character)).join('');
 const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
+const technicalProviderFiles = new Set([
+  '.env.example',
+  'cloudflare/ai-provider.js',
+  'diagnostic-manifest.json',
+  'tests/ai-builder/ai-builder-contract.test.mjs'
+]);
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     // Este control protege el producto publicado, no la documentación ni las
     // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
     // nombrar proveedores explícitamente para configurar y auditar su uso.
-    if (dir === root && ['.git', 'node_modules', '.github', '.codex', 'docs'].includes(entry.name)) return [];
+    if (dir === root && ['.git', 'node_modules', '.github', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'test-results'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
     if (absolute === __filename || (dir === root && entry.name === 'AGENTS.md')) return [];
+    const repositoryPath = path.relative(root, absolute).replaceAll('\\', '/');
+    if (technicalProviderFiles.has(repositoryPath)) return [];
     return [absolute];
   });
 }

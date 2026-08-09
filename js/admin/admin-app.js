@@ -493,7 +493,8 @@ const SECTION_LABELS = {
   // Sin esta entrada el topbar mostraba la clave cruda "permisos" en lugar de
   // un título legible al entrar a Roles y Permisos.
   permisos: 'Roles y Permisos',
-  apariencia: 'Apariencia y esquemas de colores'
+  apariencia: 'Apariencia y esquemas de colores',
+  'ai-builder': 'TINTÍN AI Builder'
 };
 
 // Secciones sensibles y el permiso que hace falta para entrar — una sola
@@ -527,7 +528,8 @@ const SECTION_PERMISSION = {
   // pero además se blinda con un chequeo de EMAIL exacto más abajo — no
   // alcanza con role==='superadmin' en Firestore, tiene que ser literalmente
   // tintinaccs@gmail.com (pedido explícito de seguridad).
-  permisos:      'manageSettings'
+  permisos:      'manageSettings',
+  'ai-builder':  'manageSettings'
 };
 
 // Evita el bucle switchSection → replaceState(#x) → hashchange → switchSection.
@@ -549,6 +551,10 @@ function switchSection(target) {
   }
   if (target === 'diagnostico' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
     toast('Diagnóstico es exclusivo de Super Admin');
+    target = 'dashboard';
+  }
+  if (target === 'ai-builder' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
+    toast('TINTÍN AI Builder es exclusivo de Super Admin');
     target = 'dashboard';
   }
   // IMPORTANTE: se consultan en vivo (no las NodeList estáticas navItems /

@@ -16,6 +16,10 @@ const SEEDED_PRODUCTS = [
 
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
+  if (pathname === '/api/ai-builder-public') {
+    response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
+    return response.end('{"blocks":[],"version":0}');
+  }
   const absolute = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
   if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) return response.writeHead(403).end();
   fs.stat(absolute, (error, stat) => {
@@ -127,6 +131,7 @@ async function auditSearch(label, viewport, triggerSelector) {
     });
 
     await page.goto(`${baseURL}/index.html`, { waitUntil:'domcontentloaded' });
+    await page.addStyleTag({ content:'#tt-store-gate-network-notice{display:none!important}' });
     await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout:10000 });
 
     await page.locator(triggerSelector).click();
