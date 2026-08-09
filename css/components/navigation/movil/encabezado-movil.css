@@ -25,6 +25,8 @@
     box-shadow:0 14px 38px rgba(56,21,34,.18),0 0 0 1px rgba(255,255,255,.72) inset;
     overflow:visible;
     isolation:isolate;
+    transition:width .34s cubic-bezier(.2,.85,.2,1),min-height .34s cubic-bezier(.2,.85,.2,1),padding .34s cubic-bezier(.2,.85,.2,1),border-radius .34s cubic-bezier(.2,.85,.2,1),box-shadow .34s ease;
+    will-change:width,min-height,padding;
   }
 
   #tt-tabbar .tt-tabbar-btn {
@@ -50,9 +52,48 @@
   }
 
   #tt-tabbar .tt-tabbar-btn span:last-child {
+    display:block !important;
+    max-height:16px;
+    opacity:1;
     font-size:clamp(.54rem,2.25vw,.64rem);
     letter-spacing:.025em;
+    line-height:1.1;
     white-space:nowrap;
+    transform:translateY(0);
+    transition:max-height .28s cubic-bezier(.2,.85,.2,1),opacity .18s ease,transform .28s cubic-bezier(.2,.85,.2,1);
+  }
+
+  #tt-tabbar.tt-tabbar-compact {
+    width:min(316px,calc(100vw - 54px));
+    min-height:58px;
+    padding:5px 8px;
+    border-radius:25px;
+    box-shadow:0 10px 28px rgba(56,21,34,.16),0 0 0 1px rgba(255,255,255,.8) inset;
+  }
+
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn {
+    min-height:48px;
+    padding:5px 2px;
+    gap:0;
+  }
+
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn span:last-child {
+    max-height:0;
+    opacity:0;
+    transform:translateY(5px);
+  }
+
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn svg,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-avatar {
+    width:24px !important;
+    height:24px !important;
+  }
+
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active svg,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active .tt-tabbar-avatar,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] svg,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar {
+    transform:translateY(-4px) scale(1.08);
   }
 
   #tt-tabbar .tt-tabbar-btn.active,
@@ -92,13 +133,20 @@
     background:#a3154b;
   }
 
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:-8px; height:48px; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-indicator { bottom:3px; }
+
   #tt-tabbar.tt-mobile-nav-ready .tt-mobile-nav-halo,
   #tt-tabbar.tt-mobile-nav-ready .tt-mobile-nav-indicator { opacity:1; }
+  #tt-store-gate-network-notice {
+    bottom:max(92px,calc(82px + env(safe-area-inset-bottom))) !important;
+  }
   body { padding-bottom:max(96px,calc(84px + env(safe-area-inset-bottom))) !important; }
 }
 
 @media (max-width: 350px) {
-  #tt-tabbar { width:calc(100vw - 12px); padding-inline:5px; }
+  #tt-tabbar:not(.tt-tabbar-compact) { width:calc(100vw - 12px); padding-inline:5px; }
+  #tt-tabbar.tt-tabbar-compact { width:calc(100vw - 42px); padding-inline:6px; }
   #tt-tabbar .tt-tabbar-btn span:last-child { font-size:.52rem; }
 }
 
@@ -106,5 +154,7 @@
   .tt-mobile-nav-halo,
   .tt-mobile-nav-indicator,
   #tt-tabbar .tt-tabbar-btn svg,
-  #tt-tabbar .tt-tabbar-avatar { transition:none !important; }
+  #tt-tabbar .tt-tabbar-avatar,
+  #tt-tabbar .tt-tabbar-btn span:last-child,
+  #tt-tabbar { transition:none !important; }
 }

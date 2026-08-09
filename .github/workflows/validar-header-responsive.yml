@@ -1,0 +1,55 @@
+name: Validar header responsive
+
+on:
+  pull_request:
+    paths:
+      - 'css/components/navigation/**'
+      - 'js/components/navigation/**'
+      - 'tests/navigation/**'
+      - 'styles.css'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validar-header-responsive.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'css/components/navigation/**'
+      - 'js/components/navigation/**'
+      - 'tests/navigation/**'
+      - 'styles.css'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/validar-header-responsive.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  header-responsive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Servir la aplicación
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/tintin-header-http.log 2>&1 &
+          for attempt in {1..20}; do
+            curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-header-http.log
+          exit 1
+      - name: Auditorías de navegación
+        run: npm run audit:unified-navigation
+      - name: Header mobile, tablet y desktop
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:navigation-header

@@ -3987,7 +3987,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     min-height: 44px;
     padding: 10px;
   }
-  .tt-tabbar-btn span { display: none; }
+  .tt-tabbar-btn span { display: block; }
 
   .tt-editorial-content { padding: 32px 20px; }
   .tt-watch-feature-content { padding: 32px 20px; }
