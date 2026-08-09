@@ -5,7 +5,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const script = path.join(root, 'scripts', 'auditar-limpiar-ramas.mjs');
@@ -64,7 +64,7 @@ async function runCase({ mode, ref, confirmation = '', branchSet = branches, liv
   const mockFile = path.join(directory, 'mock-fetch.mjs'); const jsonFile = path.join(directory, 'branch-audit.json');
   const markdownFile = path.join(directory, 'branch-audit.md'); const deleteLog = path.join(directory, 'deleted.log');
   await writeFile(mockFile, mockFetchSource);
-  const result = spawnSync(process.execPath, ['--import', mockFile, script], { cwd: root, encoding: 'utf8', env: {
+  const result = spawnSync(process.execPath, ['--import', pathToFileURL(mockFile).href, script], { cwd: root, encoding: 'utf8', env: {
     ...process.env, GITHUB_TOKEN: 'test-token', GITHUB_REPOSITORY: 'tintinaccs/tintin-web', GITHUB_REF_NAME: ref,
     BRANCH_CLEANUP_MODE: mode, BRANCH_CLEANUP_CONFIRMATION: confirmation, BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: String(requireZeroReview), BRANCH_AUDIT_JSON: jsonFile,
     BRANCH_AUDIT_MARKDOWN: markdownFile, MOCK_BRANCHES: JSON.stringify(branchSet), MOCK_LIVE_BRANCHES: JSON.stringify(liveBranchSet),
@@ -76,7 +76,7 @@ async function runCase({ mode, ref, confirmation = '', branchSet = branches, liv
   await rm(directory, { recursive: true, force: true }); return { result, report, deleted };
 }
 test('el inventario contiene 21 registros fijados a SHA únicos', async () => {
-  const source = await readFile(script, 'utf8'); const start = source.indexOf('const reviewedObsoleteBranches = new Map([');
+  const source = (await readFile(script, 'utf8')).replace(/\r\n/g, '\n'); const start = source.indexOf('const reviewedObsoleteBranches = new Map([');
   const end = source.indexOf('\n]);\n\nif (!token)', start); assert.ok(start >= 0 && end > start);
   const shas = [...source.slice(start, end).matchAll(/sha: '([0-9a-f]{40})'/g)].map(m => m[1]); const counts = new Map();
   for (const sha of shas) counts.set(sha, (counts.get(sha) || 0) + 1); const duplicates = [...counts.entries()].filter(([, count]) => count > 1);

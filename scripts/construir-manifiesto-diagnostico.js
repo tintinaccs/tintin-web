@@ -5,7 +5,15 @@ const childProcess = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'diagnostic-manifest.json');
-const EXCLUDED_DIRS = new Set(['.git', 'artifacts', 'node_modules', 'public']);
+const EXCLUDED_DIRS = new Set([
+  '.git',
+  'artifacts',
+  'coverage',
+  'node_modules',
+  'playwright-report',
+  'public',
+  'test-results'
+]);
 
 // Cualquier carpeta punto salvo .github es herramienta/sesión local (editor,
 // CLI asistida, etc.): no está versionada y no es contenido del sitio, así

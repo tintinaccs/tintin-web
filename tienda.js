@@ -198,7 +198,12 @@ function getCart() {
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(normalizeClassicCart(cart)));
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(normalizeClassicCart(cart)));
+  } catch {
+    // Una restricción de almacenamiento no debe romper el carrito de esta
+    // pantalla; el estado en memoria continúa disponible durante la sesión.
+  }
 }
 
 function showCartToast(message) {

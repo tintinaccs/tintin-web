@@ -64,7 +64,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_CLEANUP_MODE: audit
           BRANCH_CLEANUP_CONFIRMATION: ''
-          BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: 'true'
+          # Una PR activa siempre puede dejar ramas en revisión. Allí se
+          # informa el inventario sin bloquear; main conserva el gate estricto.
+          BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: ${{ github.event_name != 'pull_request' }}
         run: node scripts/auditar-limpiar-ramas.mjs
 
       - name: Publicar resumen

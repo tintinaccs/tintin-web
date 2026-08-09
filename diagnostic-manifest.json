@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T04:05:36.300Z",
-  "sourceFingerprint": "81f8fc100106a31310f4fb2662d64869f5cc4a139023b049fe84c82a06443443",
+  "generatedAt": "2026-08-09T13:11:21.395Z",
+  "sourceFingerprint": "ed94d82be5f2c894a20a20e7ec5e09edb635ccd109291544eba8e44a3ee16184",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 548,
-    "textFiles": 516,
-    "totalBytes": 5695462,
+    "files": 550,
+    "textFiles": 518,
+    "totalBytes": 5700297,
     "pages": 18,
-    "modules": 329
+    "modules": 331
   },
   "viewports": [
     {
@@ -7886,8 +7886,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 89043,
-      "sha256": "172e6f827a1b6572430ec26b12b963708e427027f6d127e181d61432c3e6f02c",
+      "bytes": 89283,
+      "sha256": "ef9b640598a02c89cdf20ef77c16a384eed7d16230494028cf5fe959ddb78a0d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19601,8 +19601,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 26788,
-      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9",
+      "bytes": 27086,
+      "sha256": "9ff4b2b284e7422bbe720cf02fdf77fc6783d87b6ee25fdc18af91b363684782",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19664,7 +19664,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 520
+          "line": 526
         }
       ]
     },
@@ -21196,8 +21196,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico.js",
-      "bytes": 9393,
-      "sha256": "ed536219f34d2d26975cb4975da395e5d1b5c4d63493b1aff51037a538a8f522",
+      "bytes": 9473,
+      "sha256": "b7319621f0e92648d4249414b024460745007cf9cc9fca7f7145cd23d045a5f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22726,8 +22726,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 24274,
-      "sha256": "9cf66fb9da1c1d11d9677b0e8f8b36d690cabc9aba362fb3aae2062f5e66efde",
+      "bytes": 24339,
+      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23284,8 +23284,8 @@
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
-      "bytes": 10216,
-      "sha256": "31900a2fa79710f210eaaca29863ba614811a1a50605ffd25849c14130cca9fd",
+      "bytes": 10276,
+      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23380,6 +23380,48 @@
           "target": "js/components/cart/politica-persistencia-carrito.js",
           "dynamic": false,
           "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/checkout/browser-resilience.test.mjs",
+      "bytes": 1589,
+      "sha256": "cdee6622802789fd4cc695e4ca057e2a74127ce84d470dd23615cbba8f9d420b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -23494,6 +23536,48 @@
           "target": "js/pages/checkout/checkout-ubicacion-guardada.js",
           "dynamic": false,
           "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/diagnostics/manifest-exclusions.test.mjs",
+      "bytes": 919,
+      "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -23783,8 +23867,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 89236,
-      "sha256": "18bd156438f9957f0d831d08253ec3000e4ef47f0ab027c1d79c91968a57e769",
+      "bytes": 89417,
+      "sha256": "c44314a05060a7ac42499f516615484f469859cb9a8f35f84acb45fd463882aa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23794,57 +23878,57 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 232
+          "line": 237
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 870
+          "line": 875
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1493
+          "line": 1498
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 521
-        },
-        {
-          "url": "https://wa.me/$%7BWA_NUMBER%7D",
           "line": 526
         },
         {
+          "url": "https://wa.me/$%7BWA_NUMBER%7D",
+          "line": 531
+        },
+        {
           "url": "https://schema.org/",
-          "line": 1061
+          "line": 1066
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1074
+          "line": 1079
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1074
+          "line": 1079
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1075
+          "line": 1080
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1100
+          "line": 1105
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1213
+          "line": 1218
         },
         {
           "url": "https://wa.me/",
-          "line": 1338
+          "line": 1343
         }
       ]
     }
@@ -23955,8 +24039,8 @@
     {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
-      "bytes": 3730,
-      "sha256": "98ab43ebd97d0e97d8714071551f22e1ed486b3bee5e92d08b4b883eea05bf45"
+      "bytes": 3921,
+      "sha256": "7fbb07a5b5741f18f65e4589bd5b8583927883e90faf20c568a0143662f41820"
     },
     {
       "path": ".github/workflows/auditar-navegacion-modular.yml",
@@ -23991,8 +24075,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 6830,
-      "sha256": "523dfa8a7f471f2585c7bf56de9baff06868919b0eab8cb488d98ebffd36b00c"
+      "bytes": 6893,
+      "sha256": "df45dd8868a751f698b8f8cbdd2e62bd82034e34346be8adea1f08623f0f8059"
     },
     {
       "path": ".github/workflows/auditar-tipografia.yml",
@@ -24285,8 +24369,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 89043,
-      "sha256": "172e6f827a1b6572430ec26b12b963708e427027f6d127e181d61432c3e6f02c"
+      "bytes": 89283,
+      "sha256": "ef9b640598a02c89cdf20ef77c16a384eed7d16230494028cf5fe959ddb78a0d"
     },
     {
       "path": "cloudflare/ai-builder-core.js",
@@ -25815,8 +25899,8 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 26788,
-      "sha256": "b6c80a3e812fbe3e36096b268f6dd77b2558a65d1a40496a4d57fd07771562b9"
+      "bytes": 27086,
+      "sha256": "9ff4b2b284e7422bbe720cf02fdf77fc6783d87b6ee25fdc18af91b363684782"
     },
     {
       "path": "js/orders/politica-checkout.js",
@@ -26241,14 +26325,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 329777,
-      "sha256": "6c03a8591f33f7e531aa93acb920d4ad96e911c02c7ed939031adc388caa56d3"
+      "bytes": 330887,
+      "sha256": "c253e3a4c8b14270df197cb7d67e04fc652a6fe3e70f843b7224f8b1159b7990"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 9075,
-      "sha256": "6f0c051387b1e185f923a1835cacd6def8ad4e9151bace0a1cc4188d6cb55904"
+      "bytes": 9114,
+      "sha256": "f691da2e533fb749e273ed400094d2954084104477edc4d3ef35f8b88e746b37"
     },
     {
       "path": "perfil.html",
@@ -26505,8 +26589,8 @@
     {
       "path": "scripts/auditar-diagnostico.js",
       "extension": ".js",
-      "bytes": 9393,
-      "sha256": "ed536219f34d2d26975cb4975da395e5d1b5c4d63493b1aff51037a538a8f522"
+      "bytes": 9473,
+      "sha256": "b7319621f0e92648d4249414b024460745007cf9cc9fca7f7145cd23d045a5f8"
     },
     {
       "path": "scripts/auditar-encabezados.mjs",
@@ -26871,8 +26955,8 @@
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 24274,
-      "sha256": "9cf66fb9da1c1d11d9677b0e8f8b36d690cabc9aba362fb3aae2062f5e66efde"
+      "bytes": 24339,
+      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
@@ -27015,14 +27099,20 @@
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
       "extension": ".mjs",
-      "bytes": 10216,
-      "sha256": "31900a2fa79710f210eaaca29863ba614811a1a50605ffd25849c14130cca9fd"
+      "bytes": 10276,
+      "sha256": "0f54c3b121f5c7533218b59cfd67a6a24acfa0bc9bf8d8444cdff5e06a4809a7"
     },
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
       "extension": ".mjs",
       "bytes": 1970,
       "sha256": "e1f0f7bb02b4ba75265dca3210e17bfc258f8955c60a3c45a02eb861d85717d0"
+    },
+    {
+      "path": "tests/checkout/browser-resilience.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1589,
+      "sha256": "cdee6622802789fd4cc695e4ca057e2a74127ce84d470dd23615cbba8f9d420b"
     },
     {
       "path": "tests/checkout/encomienda.test.mjs",
@@ -27041,6 +27131,12 @@
       "extension": ".mjs",
       "bytes": 1912,
       "sha256": "4fa88f97be49f49b196e2dfb42e12a3d520d17329c14b90208e87295f7867c21"
+    },
+    {
+      "path": "tests/diagnostics/manifest-exclusions.test.mjs",
+      "extension": ".mjs",
+      "bytes": 919,
+      "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
@@ -27135,8 +27231,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 89236,
-      "sha256": "18bd156438f9957f0d831d08253ec3000e4ef47f0ab027c1d79c91968a57e769"
+      "bytes": 89417,
+      "sha256": "c44314a05060a7ac42499f516615484f469859cb9a8f35f84acb45fd463882aa"
     }
   ],
   "sitemapRoutes": [
@@ -29710,28 +29806,21 @@
     },
     {
       "file": "tienda.js",
-      "line": 349,
+      "line": 354,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 364,
+      "line": 369,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 410,
-      "raw": "checkout.html",
-      "target": "checkout.html",
-      "exists": true
-    },
-    {
-      "file": "tienda.js",
-      "line": 516,
+      "line": 415,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -29739,48 +29828,55 @@
     {
       "file": "tienda.js",
       "line": 521,
+      "raw": "checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "tienda.js",
+      "line": 526,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 644,
+      "line": 649,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 751,
+      "line": 756,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 815,
+      "line": 820,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1058,
+      "line": 1063,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1096,
+      "line": 1101,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "tienda.js",
-      "line": 1461,
+      "line": 1466,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -30265,23 +30361,23 @@
         },
         {
           "file": "tienda.js",
-          "line": 349
+          "line": 354
         },
         {
           "file": "tienda.js",
-          "line": 644
+          "line": 649
         },
         {
           "file": "tienda.js",
-          "line": 751
+          "line": 756
         },
         {
           "file": "tienda.js",
-          "line": 815
+          "line": 820
         },
         {
           "file": "tienda.js",
-          "line": 1081
+          "line": 1086
         }
       ]
     }
@@ -30395,7 +30491,7 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 373,
+            "line": 379,
             "operation": "doc"
           },
           {
@@ -31175,12 +31271,12 @@
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 284,
+            "line": 290,
             "operation": "doc"
           },
           {
             "file": "js/orders/pedido-checkout-seguro.js",
-            "line": 285,
+            "line": 291,
             "operation": "doc"
           },
           {
