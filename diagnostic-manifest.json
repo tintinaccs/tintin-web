@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T02:22:10.804Z",
-  "sourceFingerprint": "507bafb10d7a617eb76613d7ebe9e348f25dd088bdaff2045d38a2664c3f7651",
+  "generatedAt": "2026-08-09T02:48:04.877Z",
+  "sourceFingerprint": "7a6aa25262c3693bae543dcddaddc2f53022da4fc46113976051fe1ed8de5d1a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 548,
-    "textFiles": 516,
-    "totalBytes": 5692552,
+    "files": 549,
+    "textFiles": 517,
+    "totalBytes": 5694873,
     "pages": 18,
     "modules": 329
   },
@@ -15733,8 +15733,8 @@
   "modules": [
     {
       "path": "cloudflare/ai-builder-core.js",
-      "bytes": 7898,
-      "sha256": "a7f33535838f5e09a9dae8a1e28e05e499e56acc43e74eef028fd2019068d47d",
+      "bytes": 8514,
+      "sha256": "16e4632ff201ac75926b4a37303a698c2a46b5616262d1eaa28f9418e5984637",
       "syntax": {
         "ok": true,
         "error": ""
@@ -15978,8 +15978,8 @@
     },
     {
       "path": "functions/api/ai-builder.js",
-      "bytes": 9963,
-      "sha256": "ed276e4a60ecb6cee2ed216c3b6aad75fd1b1090f0447441e3133abf9a354f09",
+      "bytes": 10079,
+      "sha256": "f85c07fb5f2447ab1b50ec9e8af47397e0a5a406b9173ad706fa167bf344865f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23213,8 +23213,8 @@
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
-      "bytes": 1872,
-      "sha256": "98339abc3ecaef7698f66f59629ae13c3dde20eecf94b5977cfa371976e3ba4a",
+      "bytes": 2212,
+      "sha256": "4d50e48a4b5f87e1cadf5f75595a08eabcfa36c4f2e26a101498840d1b928b51",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23243,8 +23243,8 @@
     },
     {
       "path": "tests/ai-builder/ai-builder-core.test.mjs",
-      "bytes": 2740,
-      "sha256": "260632ad899e9500f213fb36c4d540aede032377fd9562ba8d44a1471c566245",
+      "bytes": 3944,
+      "sha256": "a9f9b987920fc7af7b4e7baa579f9985bf046d83b5692a15164c7e9450456414",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24291,8 +24291,8 @@
     {
       "path": "cloudflare/ai-builder-core.js",
       "extension": ".js",
-      "bytes": 7898,
-      "sha256": "a7f33535838f5e09a9dae8a1e28e05e499e56acc43e74eef028fd2019068d47d"
+      "bytes": 8514,
+      "sha256": "16e4632ff201ac75926b4a37303a698c2a46b5616262d1eaa28f9418e5984637"
     },
     {
       "path": "cloudflare/ai-provider.js",
@@ -24945,8 +24945,8 @@
     {
       "path": "functions/api/ai-builder.js",
       "extension": ".js",
-      "bytes": 9963,
-      "sha256": "ed276e4a60ecb6cee2ed216c3b6aad75fd1b1090f0447441e3133abf9a354f09"
+      "bytes": 10079,
+      "sha256": "f85c07fb5f2447ab1b50ec9e8af47397e0a5a406b9173ad706fa167bf344865f"
     },
     {
       "path": "functions/api/cloudinary-delete.js",
@@ -26995,16 +26995,22 @@
       "sha256": "e5ef66281a9ab54d981795ebff43a4dad4d3f5986c4b1d3593611b6b95fdb019"
     },
     {
+      "path": "test-results/.last-run.json",
+      "extension": ".json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 1872,
-      "sha256": "98339abc3ecaef7698f66f59629ae13c3dde20eecf94b5977cfa371976e3ba4a"
+      "bytes": 2212,
+      "sha256": "4d50e48a4b5f87e1cadf5f75595a08eabcfa36c4f2e26a101498840d1b928b51"
     },
     {
       "path": "tests/ai-builder/ai-builder-core.test.mjs",
       "extension": ".mjs",
-      "bytes": 2740,
-      "sha256": "260632ad899e9500f213fb36c4d540aede032377fd9562ba8d44a1471c566245"
+      "bytes": 3944,
+      "sha256": "a9f9b987920fc7af7b4e7baa579f9985bf046d83b5692a15164c7e9450456414"
     },
     {
       "path": "tests/ai-builder/ai-builder-ui.spec.js",

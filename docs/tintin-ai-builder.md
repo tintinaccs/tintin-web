@@ -42,3 +42,4 @@ El sitio ya requiere `FIREBASE_SERVICE_ACCOUNT_KEY` para Pages Functions existen
 - Bloqueo previo de prompt injection y solicitudes sobre pagos, precios, pedidos, usuarios, credenciales, Firestore Rules, producción y `main`.
 - Sólo se renderizan siete tipos de bloque con URLs internas y colores validados.
 - Los cambios complejos crean rama y PR borrador; nunca modifican `main` ni publican contenido directamente.
+- Restaurar solo acepta entradas de historial con una versión publicada real (`isRestorableHistoryEntry` en `cloudflare/ai-builder-core.js`): una entrada de propuesta, modificación, cancelación o PR técnico nunca puede vaciar el contenido publicado.

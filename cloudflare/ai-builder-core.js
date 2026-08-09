@@ -148,6 +148,16 @@ export function validateProposal(raw, fallbackRequest = '') {
   };
 }
 
+// Solo 'publish' y 'restore' guardan un snapshot publicable en el
+// historial: 'propose', 'modify', 'cancel' y 'technical_pr' se registran con
+// snapshot:[] y version:0 porque nunca llegaron a publicarse. Restaurar una
+// de esas entradas sobreescribiría aiBuilder/state con un array vacío y
+// vaciaría el contenido publicado — este chequeo es lo que distingue una
+// versión real restaurable de una entrada de auditoría sin contenido.
+export function isRestorableHistoryEntry(entry) {
+  return Boolean(entry) && Array.isArray(entry.snapshot) && entry.snapshot.length > 0 && Number(entry.version) > 0;
+}
+
 export function isRateAllowed(usage, now = Date.now()) {
   const timestamps = Array.isArray(usage?.timestamps) ? usage.timestamps.map(Number).filter(Number.isFinite) : [];
   const recent = timestamps.filter(value => now - value < 3_600_000);

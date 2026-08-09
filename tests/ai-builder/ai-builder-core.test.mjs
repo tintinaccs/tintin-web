@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  assessRequest, classifyRequest, deterministicProposal, isRateAllowed, sanitizeBlocks, validateProposal
+  assessRequest, classifyRequest, deterministicProposal, isRateAllowed, isRestorableHistoryEntry, sanitizeBlocks, validateProposal
 } from '../../cloudflare/ai-builder-core.js';
 
 test('clasifica contenido, visual y código complejo', () => {
@@ -48,4 +48,19 @@ test('limita frecuencia y consumo horario', () => {
   assert.equal(isRateAllowed({ timestamps: [now - 2_000] }, now).ok, false);
   assert.equal(isRateAllowed({ timestamps: Array.from({ length: 10 }, (_, i) => now - 20_000 - i) }, now).ok, false);
   assert.equal(isRateAllowed({ timestamps: [now - 20_000] }, now).ok, true);
+});
+
+// Regresión: restaurar una entrada de historial sin snapshot publicado
+// (propose/modify/cancel/technical_pr, que se registran con snapshot:[] y
+// version:0) sobreescribía aiBuilder/state con un array vacío y vaciaba el
+// contenido publicado del sitio. Solo 'publish'/'restore' son restaurables.
+test('solo una entrada de historial con snapshot y versión real es restaurable', () => {
+  assert.equal(isRestorableHistoryEntry({ action: 'publish', snapshot: [{ type: 'section' }], version: 1 }), true);
+  assert.equal(isRestorableHistoryEntry({ action: 'restore', snapshot: [{ type: 'section' }], version: 2 }), true);
+  assert.equal(isRestorableHistoryEntry({ action: 'propose', snapshot: [], version: 0 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'modify', snapshot: [], version: 0 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'cancel', snapshot: [], version: 0 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'technical_pr', snapshot: [], version: 0 }), false);
+  assert.equal(isRestorableHistoryEntry({ action: 'publish', snapshot: [], version: 1 }), false);
+  assert.equal(isRestorableHistoryEntry(null), false);
 });

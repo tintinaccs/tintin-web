@@ -3,7 +3,7 @@ import {
   decodeFirestoreFields, firestoreAdminGet, firestoreAdminList, firestoreAdminMerge,
   firestoreAdminReplace, fsInteger, fsString, fsTimestamp
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { assessRequest, BUILDER_LIMITS, isRateAllowed, validateProposal } from '../../cloudflare/ai-builder-core.js';
+import { assessRequest, BUILDER_LIMITS, isRateAllowed, isRestorableHistoryEntry, validateProposal } from '../../cloudflare/ai-builder-core.js';
 import { createAiProvider } from '../../cloudflare/ai-provider.js';
 import { createComplexChangePr } from '../../cloudflare/github-ai-proposal.js';
 
@@ -114,6 +114,7 @@ export async function onRequest(context) {
       const historyDoc = await firestoreAdminGet(env, `aiBuilderHistory/${encodeURIComponent(historyId)}`);
       if (!historyDoc) throw new Error('La versión no existe.');
       const previous = historyFromDoc(historyDoc);
+      if (!isRestorableHistoryEntry(previous)) throw new Error('La versión no existe.');
       const state = await currentState(env);
       const version = state.version + 1;
       await firestoreAdminReplace(env, 'aiBuilder/state', {
