@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T01:40:36.743Z",
-  "sourceFingerprint": "7a1a1078fe3756fa11c77068a5fe37ccb6a093a9f28f5591eb137dd51ebd54fb",
+  "generatedAt": "2026-08-09T01:57:48.105Z",
+  "sourceFingerprint": "3e294911f29ae874415430ed049a2bdc7491865cf18a04cef2eeab3b2a42633d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 548,
-    "textFiles": 516,
-    "totalBytes": 5691322,
+    "files": 549,
+    "textFiles": 517,
+    "totalBytes": 5692005,
     "pages": 18,
     "modules": 329
   },
@@ -1763,8 +1763,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 160639,
-      "sha256": "65230df4c3632358e3bf5b1cdea2af6acb1d82ee2d5ab924661b4e317c32c5ac",
+      "bytes": 160647,
+      "sha256": "885fdfccc09531f3563d181dc857bda5a44e2e1268472b8858eda26b8e629c96",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1803,7 +1803,7 @@
           "line": 1880
         },
         {
-          "raw": "js/admin/ai-builder-admin.js?v=tintin-20260808-ai-builder-1",
+          "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
           "line": 1881
         },
@@ -1870,7 +1870,7 @@
           "line": 32
         },
         {
-          "raw": "css/admin/ai-builder.css?v=tintin-20260808-ai-builder-1",
+          "raw": "css/admin/ai-builder.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/admin/ai-builder.css",
           "line": 33
         },
@@ -2008,7 +2008,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/ai-builder-admin.js?v=tintin-20260808-ai-builder-1",
+          "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
           "line": 1881,
           "exists": true
@@ -2086,7 +2086,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/ai-builder.css?v=tintin-20260808-ai-builder-1",
+          "raw": "css/admin/ai-builder.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/admin/ai-builder.css",
           "line": 33,
           "exists": true
@@ -10486,8 +10486,8 @@
         "guest",
         "client"
       ],
-      "bytes": 43075,
-      "sha256": "e23793658b108c50af22d1ca558c3dfe7fedb8d8396a5fcab4b333b8446f0bfa",
+      "bytes": 43083,
+      "sha256": "d09fa51af76206b179daf2fadfd68c6bde92f583a5560f258afedb5b056bc5eb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10554,7 +10554,7 @@
           "line": 592
         },
         {
-          "raw": "js/ai-builder-public.js?v=tintin-20260808-ai-builder-1",
+          "raw": "js/ai-builder-public.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/ai-builder-public.js",
           "line": 593
         },
@@ -10671,7 +10671,7 @@
           "line": 82
         },
         {
-          "raw": "css/components/ai-builder-public.css?v=tintin-20260808-ai-builder-1",
+          "raw": "css/components/ai-builder-public.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/components/ai-builder-public.css",
           "line": 83
         }
@@ -11254,7 +11254,7 @@
           "exists": true
         },
         {
-          "raw": "js/ai-builder-public.js?v=tintin-20260808-ai-builder-1",
+          "raw": "js/ai-builder-public.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/ai-builder-public.js",
           "line": 593,
           "exists": true
@@ -11392,7 +11392,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/ai-builder-public.css?v=tintin-20260808-ai-builder-1",
+          "raw": "css/components/ai-builder-public.css?v=tintin-20260716-cloudinary-fix-1",
           "target": "css/components/ai-builder-public.css",
           "line": 83,
           "exists": true
@@ -16563,8 +16563,8 @@
     },
     {
       "path": "js/admin/ai-builder-admin.js",
-      "bytes": 9389,
-      "sha256": "ae2a6691bc3f18f5e3187251b3582c4ba8e2782ff95410750d0bf4e2145209df",
+      "bytes": 9396,
+      "sha256": "b8dc2677df71a79127e7caf6e127c43dca6705972a510a5c94fc9d02ee377981",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22061,8 +22061,8 @@
     },
     {
       "path": "scripts/auditar-navegacion-busqueda.mjs",
-      "bytes": 8117,
-      "sha256": "dc88a1453b42f01c38614ea34c9f45d306c2475f6a404f35a640c2a886b84051",
+      "bytes": 8415,
+      "sha256": "c95b44bbd9a9a2ba76f5a906c3c473068411fa0b720880c16973e9de07a0d92b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22504,8 +22504,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 18120,
-      "sha256": "6921d47145f9b3dc1bfd80f196bfe20e3e790c7f9760f1e61625f7d31bb7e7d2",
+      "bytes": 18437,
+      "sha256": "fbef1bf0f6a091ffb99ec09bba0447dad02004ccd9249b96b00f37eb68fc8e6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24081,8 +24081,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 160639,
-      "sha256": "65230df4c3632358e3bf5b1cdea2af6acb1d82ee2d5ab924661b4e317c32c5ac"
+      "bytes": 160647,
+      "sha256": "885fdfccc09531f3563d181dc857bda5a44e2e1268472b8858eda26b8e629c96"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25071,8 +25071,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 43075,
-      "sha256": "e23793658b108c50af22d1ca558c3dfe7fedb8d8396a5fcab4b333b8446f0bfa"
+      "bytes": 43083,
+      "sha256": "d09fa51af76206b179daf2fadfd68c6bde92f583a5560f258afedb5b056bc5eb"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -25083,8 +25083,8 @@
     {
       "path": "js/admin/ai-builder-admin.js",
       "extension": ".js",
-      "bytes": 9389,
-      "sha256": "ae2a6691bc3f18f5e3187251b3582c4ba8e2782ff95410750d0bf4e2145209df"
+      "bytes": 9396,
+      "sha256": "b8dc2677df71a79127e7caf6e127c43dca6705972a510a5c94fc9d02ee377981"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -26691,8 +26691,8 @@
     {
       "path": "scripts/auditar-navegacion-busqueda.mjs",
       "extension": ".mjs",
-      "bytes": 8117,
-      "sha256": "dc88a1453b42f01c38614ea34c9f45d306c2475f6a404f35a640c2a886b84051"
+      "bytes": 8415,
+      "sha256": "c95b44bbd9a9a2ba76f5a906c3c473068411fa0b720880c16973e9de07a0d92b"
     },
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
@@ -26817,8 +26817,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 18120,
-      "sha256": "6921d47145f9b3dc1bfd80f196bfe20e3e790c7f9760f1e61625f7d31bb7e7d2"
+      "bytes": 18437,
+      "sha256": "fbef1bf0f6a091ffb99ec09bba0447dad02004ccd9249b96b00f37eb68fc8e6d"
     },
     {
       "path": "scripts/auditar-tableta-correcciones.mjs",
@@ -26993,6 +26993,12 @@
       "extension": ".html",
       "bytes": 14462,
       "sha256": "e5ef66281a9ab54d981795ebff43a4dad4d3f5986c4b1d3593611b6b95fdb019"
+    },
+    {
+      "path": "test-results/.last-run.json",
+      "extension": ".json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
