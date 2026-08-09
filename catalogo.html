@@ -505,7 +505,7 @@ import('./js/pages/collections/estado-colecciones.js?v=tintin-20260720-read-budg
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 
-const cartSyncPromise = import('./js/components/cart/sincronizacion-carrito.js');
+const cartSyncPromise = import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1');
 
 const TODOS_LABEL = 'Todo el catálogo';
 const PRODUCT_BATCH_SIZE = 48;

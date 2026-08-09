@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T19:46:39.775Z",
-  "sourceFingerprint": "cb88733076e0a9510a2bc19562daba91e48170cf3e12fdebf85a89e86d5a1e43",
+  "generatedAt": "2026-08-09T19:50:21.697Z",
+  "sourceFingerprint": "08f970f642452319773491f8e1cf578e252e999b89bb263c08c89c23a5b1e14e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 568,
     "textFiles": 536,
-    "totalBytes": 5805510,
+    "totalBytes": 5805580,
     "pages": 18,
     "modules": 344
   },
@@ -7386,8 +7386,8 @@
         "guest",
         "client"
       ],
-      "bytes": 51138,
-      "sha256": "0f3004e59fd16daac11ea1a8510adcfd65b480f207b5f6d1c0a76a83564ba272",
+      "bytes": 51173,
+      "sha256": "e6ac36fc8845e365d687fca6898515737a47afa979adf6bc42472e8bc4ccad4f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20419,15 +20419,15 @@
     },
     {
       "path": "js/pages/collections/pagina-colecciones.js",
-      "bytes": 10499,
-      "sha256": "b25f51082487d967918e86eea47e28c6a5f4178aef62c958d4e06e6b2ef1d37f",
+      "bytes": 10534,
+      "sha256": "1b220ab9d276659f9bd7157e605f6db81ebdd00c21c99f0aec47e7af185d6dc2",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/cart/sincronizacion-carrito.js",
+          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
           "line": 6
@@ -24971,8 +24971,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 51138,
-      "sha256": "0f3004e59fd16daac11ea1a8510adcfd65b480f207b5f6d1c0a76a83564ba272"
+      "bytes": 51173,
+      "sha256": "e6ac36fc8845e365d687fca6898515737a47afa979adf6bc42472e8bc4ccad4f"
     },
     {
       "path": "checkout.html",
@@ -26657,8 +26657,8 @@
     {
       "path": "js/pages/collections/pagina-colecciones.js",
       "extension": ".js",
-      "bytes": 10499,
-      "sha256": "b25f51082487d967918e86eea47e28c6a5f4178aef62c958d4e06e6b2ef1d37f"
+      "bytes": 10534,
+      "sha256": "1b220ab9d276659f9bd7157e605f6db81ebdd00c21c99f0aec47e7af185d6dc2"
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
