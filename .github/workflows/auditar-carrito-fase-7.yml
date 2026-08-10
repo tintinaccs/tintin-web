@@ -50,10 +50,11 @@ on:
 permissions:
   contents: write
 
-# Comparte el grupo con la auditoría de seguridad porque ambos jobs pueden
-# regenerar y consolidar los mismos artefactos sobre una PR interna.
+# Evita solapar dos ejecuciones de Catálogo sobre la misma PR. Las carreras
+# con otros workflows se resuelven al consolidar mediante relectura del head y
+# reintento, sin compartir un grupo que pueda cancelar otros checks.
 concurrency:
-  group: tintin-generated-files-${{ github.event.pull_request.number || github.ref }}
+  group: tintin-catalog-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
