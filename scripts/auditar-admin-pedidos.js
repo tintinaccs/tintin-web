@@ -173,13 +173,12 @@ check(
     !/recalculateAllUserOrderStats/.test(deleteFix),
   'Un fallo intermedio no debe ocultar los pedidos ya eliminados ni disparar una lectura global de usuarios y pedidos.'
 );
-check(
-  'El panel fuerza una versión nueva de los módulos corregidos',
-  /admin-app\.js\?v=tintin-20260722-order-delete-2/.test(read('admin.html')) &&
-    /integridad-inventario-admin\.js\?v=tintin-20260722-order-delete-2/.test(adminApp) &&
-    /TT_CACHE_VERSION = 'tintin-20260809-loader-lifecycle-fix-1'/.test(read('js/cargador-pagina.js')),
-  'El navegador no debe conservar en caché la versión que todavía fallaba al eliminar.'
-);
+// La comprobación de que el navegador no sirve una versión vieja en caché ya
+// la cubre de forma general `auditar-versionado-cache.mjs` (compara hash de
+// contenido contra el tag ?v= de cada referencia). Fijar acá el tag exacto de
+// un fix puntual (admin-app.js/integridad-inventario-admin.js/cargador-pagina.js)
+// rompía esta auditoría cada vez que ese archivo recibía una versión nueva y
+// legítima por cualquier otro motivo — por eso se retiró.
 check(
   'Las acciones masivas de pedidos exigen el permiso accionesMasivas',
   /roleCanDo\('pedidos', 'accionesMasivas'\)/.test(adminApp),
