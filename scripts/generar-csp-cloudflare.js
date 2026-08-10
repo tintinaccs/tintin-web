@@ -11,6 +11,17 @@ const endMarker = '# CSP_ROUTE_POLICIES_END';
 const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
 const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
+// El editor visual (Apariencia) previsualiza estas páginas dentro de un
+// <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
+// frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
+// distingue "me embebe mi propio panel admin" de "me embebe un sitio ajeno".
+// Solo estas páginas (las que existen en SITE_CONTENT_SCHEMA, ver
+// js/core/store/esquema-contenido.js) aflojan a 'self'; el resto conserva
+// 'none' porque nunca se cargan en un iframe.
+const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
+  'index.html', 'about.html', 'catalogo.html', 'collections.html',
+  'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
+]);
 
 function inlineHashes(file) {
   const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
@@ -36,7 +47,7 @@ function pagePolicy(file) {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
+    `frame-ancestors ${VISUAL_BUILDER_PREVIEWABLE_PAGES.has(file) ? "'self'" : "'none'"}`,
     "manifest-src 'self'",
     "worker-src 'self' blob:",
     "upgrade-insecure-requests"
