@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T20:03:02.875Z",
-  "sourceFingerprint": "5e685bf0a465133d5e66b32e760fd1992b6b769ed1c6796625a1279a87484585",
+  "generatedAt": "2026-08-10T20:08:26.302Z",
+  "sourceFingerprint": "3847b51fc8ac1109abd7f8ece62f7a55ea6d07f1f276b40ca221d551eabbee91",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 585,
-    "textFiles": 553,
-    "totalBytes": 6184417,
+    "files": 586,
+    "textFiles": 554,
+    "totalBytes": 6193043,
     "pages": 18,
     "modules": 354
   },
@@ -16833,8 +16833,8 @@
     },
     {
       "path": "functions/api/visual-studio-global.js",
-      "bytes": 10830,
-      "sha256": "673570fb042fadbd515ba0106edd32983a89f6986324a6c1502cc5ddcfc88efc",
+      "bytes": 12481,
+      "sha256": "b901367ec8c0935eafb49b0579efece551326ca94964d66672734d5541b7833b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24916,6 +24916,12 @@
       "sha256": "d008c5817e008af8ffaa08493bd5ad4244d7d10505958f30c0f91f14706b1a80"
     },
     {
+      "path": ".github/workflows/ampliar-paginas-visual-temporal.yml",
+      "extension": ".yml",
+      "bytes": 6975,
+      "sha256": "873827048d45c22ca3f5f2018b7a44bab41ace6d0bc2ff8b33bd0096a1ffe146"
+    },
+    {
       "path": ".github/workflows/aplicar-logica-tienda-unificada.yml",
       "extension": ".yml",
       "bytes": 2568,
@@ -26184,8 +26190,8 @@
     {
       "path": "functions/api/visual-studio-global.js",
       "extension": ".js",
-      "bytes": 10830,
-      "sha256": "673570fb042fadbd515ba0106edd32983a89f6986324a6c1502cc5ddcfc88efc"
+      "bytes": 12481,
+      "sha256": "b901367ec8c0935eafb49b0579efece551326ca94964d66672734d5541b7833b"
     },
     {
       "path": "functions/configuracion-correo.md",
