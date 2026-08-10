@@ -119,3 +119,45 @@ test('los bloques nuevos (testimonio, video, FAQ, columnas, separador) se render
   expect(topIndex).toBeGreaterThanOrEqual(0);
   expect(heroIndex).toBeGreaterThan(topIndex);
 });
+
+test('las secciones fijas de la página real se reordenan según sectionOrder, y el pie de página nunca se mueve', async ({ page }) => {
+  await page.goto(`${baseUrl}/index.html`);
+  await page.evaluate(() => {
+    document.body.replaceChildren();
+    const frame = document.createElement('iframe');
+    frame.id = 'real-preview';
+    frame.src = '/index.html?ttVisualPreview=1';
+    document.body.appendChild(frame);
+  });
+  const frame = page.frameLocator('#real-preview');
+  await expect(frame.locator('.tt-hero-title')).toBeVisible({ timeout: 30000 });
+  await page.locator('#real-preview').evaluate(node => new Promise(resolve => {
+    if (node.contentDocument?.readyState === 'complete') resolve();
+    else node.addEventListener('load', resolve, { once: true });
+  }));
+  await expect(frame.locator('html')).toHaveAttribute('data-tt-visual-builder', /ready|fallback/, { timeout: 30000 });
+  const labelsOf = nodes => nodes.map(node => `${node.id} ${node.getAttribute('data-tt-section') || ''} ${node.className}`.toLowerCase());
+  const findIndex = (labels, needle) => labels.findIndex(item => item.includes(needle));
+  const orderBefore = await frame.locator('body > *').evaluateAll(labelsOf);
+  expect(findIndex(orderBefore, 'hero')).toBeLessThan(findIndex(orderBefore, 'reviews'));
+
+  await page.evaluate(() => {
+    const frame = document.getElementById('real-preview');
+    frame.contentWindow.postMessage({
+      type: 'tintin:visual-preview', pageId: 'index',
+      // "reviews" pasa a ir justo después del hero, invirtiendo su posición natural.
+      config: { sections: {}, sectionOrder: ['hero', 'reviews', 'trust', 'editorial_bag', 'collections_header', 'editorial_relojes', 'products_header'], customBlocks: [] },
+      content: {},
+    }, location.origin);
+  });
+  await page.waitForTimeout(300);
+  const orderAfter = await frame.locator('body > *').evaluateAll(labelsOf);
+  expect(findIndex(orderAfter, 'hero')).toBeLessThan(findIndex(orderAfter, 'reviews'));
+  expect(findIndex(orderAfter, 'reviews')).toBeLessThan(findIndex(orderAfter, 'trust'));
+  // El pie de página (sección "global") sigue después de todas las secciones reordenables, nunca se mueve entre ellas.
+  expect(findIndex(orderAfter, 'tt-footer')).toBeGreaterThan(findIndex(orderAfter, 'trust'));
+  expect(findIndex(orderAfter, 'tt-footer')).toBeGreaterThan(findIndex(orderAfter, 'reviews'));
+  // El contenido real (título del hero) sigue intacto — reordenar no borra nada.
+  await expect(frame.locator('.tt-hero-title')).toBeVisible();
+  await expect(frame.locator('.tt-reviews-section')).toBeVisible();
+});
