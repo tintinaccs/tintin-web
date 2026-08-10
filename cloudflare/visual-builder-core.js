@@ -38,7 +38,7 @@ export const VISUAL_STYLE_OPTIONS = Object.freeze({
 });
 
 const SAFE_PAGE_IDS = new Set(CONTENT_PAGE_IDS);
-const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|contact|envios|preguntas-frecuentes|cambios-devoluciones)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
+const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
 const SAFE_ASSET = /^assets-tintin\/[A-Za-z0-9_./-]+$/;
 const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[A-Za-z0-9_-]{6,20}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
