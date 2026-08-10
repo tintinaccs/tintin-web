@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T21:16:21.895Z",
-  "sourceFingerprint": "92fc01107752480af6de6505977b15ed8d6d47020d96b8876e52ba0562622915",
+  "generatedAt": "2026-08-10T10:53:40.874Z",
+  "sourceFingerprint": "e546c06c47311eb295166b66aaa623ab98572a97573368a03716ab37651a49ad",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 572,
     "textFiles": 540,
-    "totalBytes": 5993362,
+    "totalBytes": 5995206,
     "pages": 18,
     "modules": 345
   },
@@ -16136,8 +16136,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 6259,
-      "sha256": "3d2cd8c2d1c0540f501cdde16e8d8ace1ea5bdbbb27ee2093d824bf455e6568c",
+      "bytes": 6550,
+      "sha256": "5accbc16a3c77cc595dc711da85130556c9d8fa1dcba4c989f1a2eeb60746d58",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21899,8 +21899,8 @@
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
-      "bytes": 8575,
-      "sha256": "f7b9e924d4a589eb34a87112af4495f30c17d74d3b93ca547c17f1e9329fd700",
+      "bytes": 9352,
+      "sha256": "f4efd4ac17099f104c0574c7492dff2baa762a033ade1242db40b2953f087f94",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23389,8 +23389,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 3506,
-      "sha256": "f5fef129c62b4294dd550a1f08e1a4cc8d7c9695131aed0a03bb41af9290705c",
+      "bytes": 4282,
+      "sha256": "686407160e7e034aa82e0fab4761aab50acaf31691b2c559c746fae61e5849fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23439,7 +23439,7 @@
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 35
+          "line": 46
         }
       ]
     },
@@ -25055,8 +25055,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 6259,
-      "sha256": "3d2cd8c2d1c0540f501cdde16e8d8ace1ea5bdbbb27ee2093d824bf455e6568c"
+      "bytes": 6550,
+      "sha256": "5accbc16a3c77cc595dc711da85130556c9d8fa1dcba4c989f1a2eeb60746d58"
     },
     {
       "path": "cloudflare/visual-builder-core.js",
@@ -27359,8 +27359,8 @@
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
       "extension": ".js",
-      "bytes": 8575,
-      "sha256": "f7b9e924d4a589eb34a87112af4495f30c17d74d3b93ca547c17f1e9329fd700"
+      "bytes": 9352,
+      "sha256": "f4efd4ac17099f104c0574c7492dff2baa762a033ade1242db40b2953f087f94"
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
@@ -27725,8 +27725,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 3506,
-      "sha256": "f5fef129c62b4294dd550a1f08e1a4cc8d7c9695131aed0a03bb41af9290705c"
+      "bytes": 4282,
+      "sha256": "686407160e7e034aa82e0fab4761aab50acaf31691b2c559c746fae61e5849fe"
     },
     {
       "path": "scripts/preparar-hosting.js",

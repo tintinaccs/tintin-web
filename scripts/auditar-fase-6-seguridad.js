@@ -110,13 +110,19 @@ const missingRoutePolicies = [];
 const missingRouteHashes = [];
 const unsafeInlineRoutes = [];
 const missingStructuralDirectives = [];
+const unsafeFrameAncestorsRoutes = [];
 const structuralDirectives = [
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
-  "frame-ancestors 'none'",
   'upgrade-insecure-requests'
 ];
+// El editor visual (Apariencia) previsualiza sus páginas propias en un
+// <iframe> dentro de admin.html — mismo origen, ya autenticado como Super
+// Admin. frame-ancestors 'self' sigue bloqueando cualquier clickjacking desde
+// un sitio ajeno (el objetivo real de esta protección); solo 'none' o 'self'
+// cuentan como seguros acá, cualquier otra cosa (o ausencia total) falla.
+const SAFE_FRAME_ANCESTORS = ["frame-ancestors 'none'", "frame-ancestors 'self'"];
 for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
   // GitHub y Cloudflare sirven los blobs con LF. Normalizar aquí evita que un
   // checkout local de Windows calcule hashes CRLF que fallen luego en Linux.
@@ -137,6 +143,9 @@ for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) 
   if (scriptSrc.includes("'unsafe-inline'")) unsafeInlineRoutes.push(route);
   const structuralMissing = structuralDirectives.filter(directive => !policy.includes(directive));
   if (structuralMissing.length) missingStructuralDirectives.push(`${route}: ${structuralMissing.join(', ')}`);
+  if (!SAFE_FRAME_ANCESTORS.some(directive => policy.includes(directive))) {
+    unsafeFrameAncestorsRoutes.push(route);
+  }
 }
 check(
   'Cada página tiene una CSP exacta para su ruta pública',
@@ -157,6 +166,11 @@ check(
   'Cada CSP por ruta conserva las protecciones estructurales',
   missingStructuralDirectives.length === 0,
   missingStructuralDirectives.join('; ')
+);
+check(
+  "Cada CSP por ruta bloquea el clickjacking (frame-ancestors 'none' o 'self')",
+  unsafeFrameAncestorsRoutes.length === 0,
+  unsafeFrameAncestorsRoutes.join(', ')
 );
 check(
   'La CSP por ruta es reproducible',
