@@ -5,6 +5,12 @@ import {
   mergeContent,
   sanitizeSection,
 } from '../js/core/store/esquema-contenido.js';
+import {
+  VISUAL_BLOCK_TYPES,
+  VISUAL_STYLE_OPTIONS,
+} from '../js/core/store/contratos-visual-builder.js';
+
+export { VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS };
 
 export const VISUAL_BUILDER_LIMITS = Object.freeze({
   bodyBytes: 256_000,
@@ -16,26 +22,8 @@ export const VISUAL_BUILDER_LIMITS = Object.freeze({
   maxFeatureItems: 12,
 });
 
-export const VISUAL_BLOCK_TYPES = Object.freeze([
-  'banner', 'text', 'products', 'gallery', 'promotion', 'button', 'section', 'collections',
-  'testimonial', 'video', 'faq', 'columns', 'divider', 'spacer', 'marquee', 'features', 'countdown',
-]);
-
 export const VISUAL_TOP_ANCHOR = '__top__';
 export const VISUAL_DEVICES = Object.freeze(['desktop', 'tablet', 'mobile']);
-
-export const VISUAL_STYLE_OPTIONS = Object.freeze({
-  spacing: ['flush', 'compact', 'normal', 'roomy', 'dramatic'],
-  width: ['narrow', 'contained', 'wide', 'full'],
-  align: ['left', 'center', 'right'],
-  radius: ['none', 'small', 'medium', 'large', 'pill'],
-  shadow: ['none', 'soft', 'medium', 'large', 'floating'],
-  animation: ['none', 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'scale', 'pop', 'reveal'],
-  variant: ['default', 'minimal', 'editorial', 'cards', 'carousel', 'mosaic', 'split', 'spotlight', 'glass', 'outline', 'bar'],
-  imageFit: ['cover', 'contain'],
-  visibility: ['inherit', 'show', 'hide'],
-  columns: ['inherit', '1', '2', '3', '4', '5', '6'],
-});
 
 const SAFE_PAGE_IDS = new Set(CONTENT_PAGE_IDS);
 const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;

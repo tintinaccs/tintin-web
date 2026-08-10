@@ -2,24 +2,15 @@ import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
 } from './esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
+import {
+  VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
+} from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
 
 const DEVICES = ['desktop', 'tablet', 'mobile'];
-const OPTIONS = Object.freeze({
-  spacing: new Set(['flush', 'compact', 'normal', 'roomy', 'dramatic']),
-  width: new Set(['narrow', 'contained', 'wide', 'full']),
-  align: new Set(['left', 'center', 'right']),
-  radius: new Set(['none', 'small', 'medium', 'large', 'pill']),
-  shadow: new Set(['none', 'soft', 'medium', 'large', 'floating']),
-  animation: new Set(['none', 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'scale', 'pop', 'reveal']),
-  variant: new Set(['default', 'minimal', 'editorial', 'cards', 'carousel', 'mosaic', 'split', 'spotlight', 'glass', 'outline', 'bar']),
-  imageFit: new Set(['cover', 'contain']),
-  visibility: new Set(['inherit', 'show', 'hide']),
-  columns: new Set(['inherit', '1', '2', '3', '4', '5', '6']),
-});
-const BLOCK_TYPES = new Set([
-  'banner', 'text', 'products', 'gallery', 'promotion', 'button', 'section', 'collections',
-  'testimonial', 'video', 'faq', 'columns', 'divider', 'spacer', 'marquee', 'features', 'countdown',
-]);
+const OPTIONS = Object.freeze(
+  Object.fromEntries(Object.entries(VISUAL_STYLE_OPTIONS).map(([key, values]) => [key, new Set(values)]))
+);
+const BLOCK_TYPES = new Set(VISUAL_BLOCK_TYPES);
 const TOP_ANCHOR = '__top__';
 const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[A-Za-z0-9_-]{6,20}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;

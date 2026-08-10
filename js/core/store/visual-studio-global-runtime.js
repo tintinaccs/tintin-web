@@ -1,3 +1,5 @@
+import { isGlobalStudioActiveWindow, pickHighestPriority } from './contratos-visual-studio-global.js?v=tintin-20260810-visual-studio-v2-1';
+
 const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4';
 const PAGE_BY_FILE = Object.freeze({
   '': 'index', 'index.html': 'index', 'about.html': 'nosotros', 'nosotros.html': 'nosotros',
@@ -19,16 +21,8 @@ function currentDevice() {
   if (window.matchMedia('(max-width: 1024px)').matches) return 'tablet';
   return 'desktop';
 }
-function activeWindow(item, now = Date.now()) {
-  if (!item?.enabled) return false;
-  const start = item.startAt ? new Date(item.startAt).getTime() : -Infinity;
-  const end = item.endAt ? new Date(item.endAt).getTime() : Infinity;
-  if ((!Number.isFinite(start) && start !== -Infinity) || (!Number.isFinite(end) && end !== Infinity)) return false;
-  return now >= start && now <= end;
-}
-function highest(items) {
-  return [...items].sort((a, b) => Number(b.priority || 0) - Number(a.priority || 0) || String(b.startAt || '').localeCompare(String(a.startAt || '')))[0] || null;
-}
+const activeWindow = isGlobalStudioActiveWindow;
+const highest = pickHighestPriority;
 function ensureCss() {
   if (document.getElementById('tt-global-studio-runtime-css')) return;
   const link = document.createElement('link');
