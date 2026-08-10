@@ -1,5 +1,6 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
+import '../compartido/apariencia-global.js';
 
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
