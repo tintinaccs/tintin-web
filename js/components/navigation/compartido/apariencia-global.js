@@ -67,6 +67,14 @@ function setCustomColor(root, attribute, cssVar, value) {
   else root.style.removeProperty(cssVar);
 }
 
+function setDirectColor(selector, property, value) {
+  const color = safeColor(value);
+  document.querySelectorAll(selector).forEach(node => {
+    if (color) node.style.setProperty(property, color, 'important');
+    else node.style.removeProperty(property);
+  });
+}
+
 function applyHeader(raw = {}) {
   const root = document.documentElement;
   root.dataset.ttHeaderDensity = ['compact', 'normal', 'roomy'].includes(raw.density) ? raw.density : 'normal';
@@ -75,6 +83,8 @@ function applyHeader(raw = {}) {
   setCustomColor(root, 'data-tt-header-bg-custom', '--tt-global-header-bg', raw.background);
   setCustomColor(root, 'data-tt-header-text-custom', '--tt-global-header-text', raw.textColor);
   setCustomColor(root, 'data-tt-header-accent-custom', '--tt-global-header-accent', raw.accentColor);
+  setDirectColor('#tt-header-desktop-tablet,#tt-header-tablet,#tt-tablet-menu,#tt-tabbar', 'background-color', raw.background);
+  setDirectColor('#tt-header-desktop-tablet,#tt-header-tablet,#tt-tablet-menu,#tt-tabbar', 'color', raw.textColor);
 
   const brandName = safeText(raw.brandName, 'TINTÍN', 60);
   const brandTagline = safeText(raw.brandTagline, 'ACCESORIOS & RELOJES', 80);
@@ -114,6 +124,8 @@ function applyFooter(raw = {}) {
   setCustomColor(root, 'data-tt-footer-bg-custom', '--tt-global-footer-bg', raw.background);
   setCustomColor(root, 'data-tt-footer-text-custom', '--tt-global-footer-text', raw.textColor);
   setCustomColor(root, 'data-tt-footer-accent-custom', '--tt-global-footer-accent', raw.accentColor);
+  setDirectColor('.tt-footer', 'background-color', raw.background);
+  setDirectColor('.tt-footer', 'color', raw.textColor);
   document.querySelectorAll('.tt-footer-wa').forEach(node => { node.hidden = raw.showWhatsapp === false; });
 }
 
