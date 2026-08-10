@@ -42,6 +42,7 @@ jobs:
             ['js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-section-reorder-1', `js/admin/appearance/editor-visual-admin.js?v=${VISUAL_BUILDER}`],
             ['js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1', `js/admin/settings/esquema-color-admin.js?v=${PUBLIC_SHELL}`],
             ['./core/store/editor-visual-runtime.js?v=tintin-20260810-section-reorder-1', `./core/store/editor-visual-runtime.js?v=${VISUAL_BUILDER}`],
+            ['./editor-visual-runtime.js?v=tintin-20260810-section-reorder-1', `./editor-visual-runtime.js?v=${VISUAL_BUILDER}`],
           ];
 
           function update(file) {
@@ -52,6 +53,12 @@ jobs:
             for (const [from, to] of replacements) text = text.split(from).join(to);
             if (file === 'js/inicio-navegacion-publica.js') {
               text = text.replace(/const MODULE_VERSION = '[^']+';/, `const MODULE_VERSION = '${PUBLIC_SHELL}';`);
+            }
+            if (file === 'js/core/store/editor-visual-runtime.js') {
+              text = text.replace(
+                'index|about|nosotros|catalogo|collections|contact|envios|preguntas-frecuentes|cambios-devoluciones',
+                'index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad'
+              );
             }
             if (text !== before) fs.writeFileSync(abs, text, 'utf8');
           }
