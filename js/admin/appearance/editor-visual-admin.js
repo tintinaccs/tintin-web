@@ -98,7 +98,8 @@ async function api(method = 'GET', body) {
 }
 
 function snapshot() { return clone({ config,content,selected }); }
-function remember() { undoStack.push(snapshot()); if (undoStack.length > 60) undoStack.shift(); redoStack = []; }
+function pushUndo(entry) { undoStack.push(entry); if (undoStack.length > 60) undoStack.shift(); }
+function remember() { pushUndo(snapshot()); redoStack = []; }
 function changed(message = 'Tenés cambios sin publicar.') { dirty = true; setStatus(message); updateActions(); postPreview(); }
 function mutate(callback, options = {}) { remember(); callback(); changed(options.message); renderSectionList(); if (options.properties !== false) renderProperties(); }
 function restoreSnapshot(value) { config=clone(value.config); content=clone(value.content); selected=clone(value.selected); dirty=true; renderAll(); setStatus('Cambio restaurado en el borrador.'); }
@@ -176,7 +177,7 @@ function renderContentProperties(root){
   if(!['divider','spacer'].includes(block.type))grid.appendChild(field('Nombre interno',inputControl(block.label||'',value=>{block.label=value;},{max:80}),true,'Solo sirve para reconocer el bloque dentro del editor.'));
   if(!['divider','spacer','marquee'].includes(block.type)){const labels=block.type==='testimonial'?{eyebrow:'Dato breve',title:'Nombre',text:'Testimonio'}:{eyebrow:'Texto pequeño',title:'Título',text:'Descripción'};grid.append(field(labels.eyebrow,inputControl(block.eyebrow,value=>{block.eyebrow=value;},{max:80}),true),field(labels.title,inputControl(block.title,value=>{block.title=value;},{max:180}),true),field(labels.text,inputControl(block.text,value=>{block.text=value;},{multiline:true,max:1200}),true));}
   if(block.type==='marquee')grid.appendChild(field('Frase',inputControl(block.title,value=>{block.title=value;},{max:180}),true));
-  if(['banner','promotion','button','section','columns'].includes(block.type))grid.append(field('Texto del botón',inputControl(block.buttonLabel,value=>{block.buttonLabel=value;},{max:80}),true),field('Destino del botón',inputControl(block.href,value=>{block.href=value;},{type:'url',max:500}),true));
+  if(['banner','text','promotion','button','section','columns','faq'].includes(block.type))grid.append(field('Texto del botón',inputControl(block.buttonLabel,value=>{block.buttonLabel=value;},{max:80}),true),field('Destino del botón',inputControl(block.href,value=>{block.href=value;},{type:'url',max:500}),true));
   if(['banner','section','columns'].includes(block.type))grid.append(field('Imagen',inputControl(block.image,value=>{block.image=value;},{type:'url',max:1000}),true,'Usá una imagen de Cloudinary o de la biblioteca.'),field('Texto alternativo',inputControl(block.imageAlt,value=>{block.imageAlt=value;},{max:140}),true));
   if(block.type==='testimonial')grid.appendChild(field('Foto (opcional)',inputControl(block.image,value=>{block.image=value;},{type:'url',max:1000}),true));
   if(block.type==='columns')grid.appendChild(field('Imagen a la',selectControl(block.imageSide,[['left','Izquierda'],['right','Derecha']],value=>{block.imageSide=value;})));
@@ -219,11 +220,11 @@ function openAdminSection(section){const nav=document.querySelector(`.adm-nav-it
 function bind(){
   sectionListNode.addEventListener('click',event=>{const button=event.target.closest('[data-select-kind]');if(!button)return;selected={kind:button.dataset.selectKind,id:button.dataset.selectId};renderSectionList();renderProperties();postPreview();});
   $('visual-add')?.addEventListener('click',addBlock);$('visual-page')?.addEventListener('change',event=>switchPage(event.target.value));$('visual-save').addEventListener('click',saveDraft);$('visual-publish').addEventListener('click',publish);$('visual-cancel').addEventListener('click',cancel);
-  $('visual-undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push(snapshot());restoreSnapshot(undoStack.pop());});$('visual-redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push(snapshot());restoreSnapshot(redoStack.pop());});
+  $('visual-undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push(snapshot());restoreSnapshot(undoStack.pop());});$('visual-redo').addEventListener('click',()=>{if(!redoStack.length)return;pushUndo(snapshot());restoreSnapshot(redoStack.pop());});
   document.querySelectorAll('[data-visual-device]').forEach(button=>button.addEventListener('click',()=>{editDevice=button.dataset.visualDevice;renderDeviceState();if(inspectorTab==='responsive')renderProperties();postPreview();}));
   $('visual-history-list').addEventListener('click',event=>{const button=event.target.closest('[data-restore]');if(button)restore(button.dataset.restore);});
   window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='tintin:visual-select')return;const{kind,id}=event.data;if(!['section','block'].includes(kind)||!id)return;selected={kind,id};renderSectionList();renderProperties();postPreview();});
-  window.addEventListener('keydown',event=>{const mod=event.ctrlKey||event.metaKey;if(event.key==='Escape'&&libraryOpen){event.preventDefault();toggleLibrary(false);return;}if(!mod)return;const key=event.key.toLowerCase();if(key==='s'){event.preventDefault();saveDraft();}else if(key==='z'&&!event.shiftKey&&undoStack.length){event.preventDefault();redoStack.push(snapshot());restoreSnapshot(undoStack.pop());}else if((key==='y'||(key==='z'&&event.shiftKey))&&redoStack.length){event.preventDefault();undoStack.push(snapshot());restoreSnapshot(redoStack.pop());}else if(key==='d'&&selected?.kind==='block'){event.preventDefault();duplicateBlock(selected.id);}});
+  window.addEventListener('keydown',event=>{const mod=event.ctrlKey||event.metaKey;if(event.key==='Escape'&&libraryOpen){event.preventDefault();toggleLibrary(false);return;}if(!mod)return;const key=event.key.toLowerCase();if(key==='s'){event.preventDefault();saveDraft();}else if(key==='z'&&!event.shiftKey&&undoStack.length){event.preventDefault();redoStack.push(snapshot());restoreSnapshot(undoStack.pop());}else if((key==='y'||(key==='z'&&event.shiftKey))&&redoStack.length){event.preventDefault();pushUndo(snapshot());restoreSnapshot(redoStack.pop());}else if(key==='d'&&selected?.kind==='block'){event.preventDefault();duplicateBlock(selected.id);}});
   window.addEventListener('beforeunload',event=>{if(!dirty)return;event.preventDefault();event.returnValue='';});window.AdminUnsaved?.register?.('visual-builder',{hasChanges:()=>dirty,message:'CAMBIOS SIN PUBLICAR en el editor visual.'});
 }
 

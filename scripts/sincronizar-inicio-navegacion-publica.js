@@ -6,8 +6,8 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-4';
-const NAV_ENTRY_VERSION = 'tintin-20260810-global-studio-4';
+const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-7';
+const NAV_ENTRY_VERSION = 'tintin-20260810-global-studio-8';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no

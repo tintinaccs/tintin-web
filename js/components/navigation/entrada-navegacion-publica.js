@@ -12,7 +12,7 @@ import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import './compartido/apariencia-global.js?v=tintin-20260810-global-layout-3';
-import { initGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-4';
+import { initGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-5';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',

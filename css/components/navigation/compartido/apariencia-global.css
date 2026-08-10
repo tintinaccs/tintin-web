@@ -16,6 +16,8 @@ html[data-tt-header-text-custom] #tt-tabbar a,
 html[data-tt-header-text-custom] #tt-tabbar button{color:inherit}
 html[data-tt-header-accent-custom] .tt-desktop-active-pill,
 html[data-tt-header-accent-custom] .tt-mobile-nav-indicator{background:var(--tt-global-header-accent)!important}
+html[data-tt-header-accent-custom] .tt-tablet-nav>.active,
+html[data-tt-header-accent-custom] .tt-tablet-nav>[aria-current="page"]{background:color-mix(in srgb,var(--tt-global-header-accent) 16%,#fff)!important;color:var(--tt-global-header-accent)!important}
 
 html[data-tt-header-density="compact"] .tt-header-inner,
 html[data-tt-header-density="compact"] .tt-tablet-header-inner{min-height:58px!important}

@@ -191,3 +191,87 @@ test('campaña prioritaria y pop-up global se aplican sobre la tienda y Escape r
   const overflow = await page.locator('html').evaluate(node => node.style.overflow);
   expect(overflow).toBe('');
 });
+
+test('pop-up con targeting de dispositivo no aparece fuera de sus dispositivos elegidos', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto(`${baseUrl}/index.html`);
+  await page.evaluate(async () => {
+    const runtimePath = ['js', 'core', 'store', 'visual-studio-global-runtime.js'].join('/');
+    const module = await import(new URL(runtimePath, `${location.origin}/`).href);
+    module.disposeGlobalVisualStudio();
+    module.applyGlobalVisualStudio({
+      popups: [
+        {
+          id: 'desktop-only', name: 'Solo desktop', enabled: true, priority: 50, kind: 'center', title: 'Oferta de escritorio',
+          trigger: 'immediate', triggerValue: 0, frequency: 'always', pages: ['*'], devices: ['desktop'], animation: 'fade',
+        },
+      ],
+    });
+  });
+  await page.waitForTimeout(300);
+  await expect(page.locator('[data-tt-global-popup="desktop-only"]')).toHaveCount(0);
+});
+
+test('pop-up con frecuencia "once" no vuelve a mostrarse tras cerrarse', async ({ page }) => {
+  await page.goto(`${baseUrl}/index.html`);
+  const config = {
+    popups: [
+      {
+        id: 'once-popup', name: 'Una vez', enabled: true, priority: 50, kind: 'center', title: 'Solo una vez',
+        trigger: 'immediate', triggerValue: 0, frequency: 'once', pages: ['*'], devices: ['desktop', 'tablet', 'mobile'], animation: 'fade',
+      },
+    ],
+  };
+  await page.evaluate(async cfg => {
+    const runtimePath = ['js', 'core', 'store', 'visual-studio-global-runtime.js'].join('/');
+    const module = await import(new URL(runtimePath, `${location.origin}/`).href);
+    module.disposeGlobalVisualStudio();
+    module.applyGlobalVisualStudio(cfg);
+  }, config);
+  await expect(page.locator('[data-tt-global-popup="once-popup"]')).toBeVisible();
+  await page.locator('[data-tt-global-popup="once-popup"] .tt-global-popup-close').click();
+  await expect(page.locator('[data-tt-global-popup="once-popup"]')).toHaveCount(0);
+
+  await page.evaluate(async cfg => {
+    const runtimePath = ['js', 'core', 'store', 'visual-studio-global-runtime.js'].join('/');
+    const module = await import(new URL(runtimePath, `${location.origin}/`).href);
+    module.disposeGlobalVisualStudio();
+    module.applyGlobalVisualStudio(cfg);
+  }, config);
+  await page.waitForTimeout(300);
+  await expect(page.locator('[data-tt-global-popup="once-popup"]')).toHaveCount(0);
+});
+
+test('barra de campaña y pop-up top-bar simultáneos no se superponen', async ({ page }) => {
+  await page.goto(`${baseUrl}/index.html`);
+  await page.evaluate(async () => {
+    const runtimePath = ['js', 'core', 'store', 'visual-studio-global-runtime.js'].join('/');
+    const module = await import(new URL(runtimePath, `${location.origin}/`).href);
+    module.disposeGlobalVisualStudio();
+    module.applyGlobalVisualStudio({
+      campaigns: [
+        { id: 'bar-campaign', name: 'Barra', enabled: true, priority: 10, announcement: 'Envío gratis hoy', effect: 'none', closable: false },
+      ],
+      popups: [
+        {
+          id: 'top-bar-popup', name: 'Aviso superior', enabled: true, priority: 50, kind: 'top-bar', title: 'Últimas unidades',
+          trigger: 'immediate', triggerValue: 0, frequency: 'always', pages: ['*'], devices: ['desktop', 'tablet', 'mobile'], animation: 'fade',
+        },
+      ],
+    });
+  });
+  await expect(page.locator('[data-tt-global-campaign="bar-campaign"]')).toBeVisible();
+  await expect(page.locator('[data-tt-global-popup="top-bar-popup"]')).toBeVisible();
+
+  const layout = await page.evaluate(() => {
+    const bar = document.querySelector('[data-tt-global-campaign]');
+    const popup = document.querySelector('[data-tt-global-popup] .tt-global-popup');
+    return {
+      barHeight: bar.getBoundingClientRect().height,
+      popupTop: popup.getBoundingClientRect().top,
+      offsetVar: getComputedStyle(document.documentElement).getPropertyValue('--tt-global-campaign-bar-h').trim(),
+    };
+  });
+  expect(layout.offsetVar).toBe(`${Math.round(layout.barHeight)}px`);
+  expect(layout.popupTop).toBeGreaterThanOrEqual(layout.barHeight - 1);
+});

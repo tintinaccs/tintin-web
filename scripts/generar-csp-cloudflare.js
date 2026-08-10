@@ -54,7 +54,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
-    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com",
+    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

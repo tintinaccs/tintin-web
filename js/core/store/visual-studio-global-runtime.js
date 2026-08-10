@@ -1,4 +1,4 @@
-const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-3';
+const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4';
 const PAGE_BY_FILE = Object.freeze({
   '': 'index', 'index.html': 'index', 'about.html': 'nosotros', 'nosotros.html': 'nosotros',
   'catalogo.html': 'catalogo', 'collections.html': 'collections', 'product.html': 'product', 'checkout.html': 'checkout',
@@ -78,11 +78,22 @@ function make(tag, className = '', text = '') {
   const node = document.createElement(tag); if (className) node.className = className; if (text) node.textContent = text; return node;
 }
 
+function syncCampaignBarOffset() {
+  const bar = document.querySelector('[data-tt-global-campaign]');
+  if (bar instanceof HTMLElement && bar.offsetHeight) {
+    document.documentElement.style.setProperty('--tt-global-campaign-bar-h', `${bar.offsetHeight}px`);
+  } else {
+    document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
+  }
+}
+window.addEventListener('resize', syncCampaignBarOffset, { passive: true });
+
 function renderCampaign(config) {
   const campaign = highest((config.campaigns || []).filter(item => activeWindow(item)));
   document.querySelectorAll('[data-tt-global-campaign]').forEach(node => node.remove());
   document.querySelectorAll('[data-tt-global-effects]').forEach(node => node.remove());
   document.documentElement.removeAttribute('data-tt-global-campaign-active');
+  document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
   if (!campaign) return;
   document.documentElement.dataset.ttGlobalCampaignActive = campaign.id;
   document.documentElement.style.setProperty('--tt-global-campaign-accent', campaign.accentColor || '#ad3f67');
@@ -96,9 +107,10 @@ function renderCampaign(config) {
     if (campaign.href) label.href = campaign.href; bar.appendChild(label);
     if (campaign.closable !== false) {
       const close = make('button', '', '×'); close.type = 'button'; close.setAttribute('aria-label', 'Cerrar anuncio');
-      close.addEventListener('click', () => { storageSet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`, 'closed'); bar.remove(); }); bar.appendChild(close);
+      close.addEventListener('click', () => { storageSet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`, 'closed'); bar.remove(); syncCampaignBarOffset(); }); bar.appendChild(close);
     }
     document.body.prepend(bar);
+    syncCampaignBarOffset();
   }
   renderEffect(campaign);
 }
