@@ -139,8 +139,24 @@ test('layout global vacío hereda el diseño existente y los overrides explícit
   await expect(page.locator('.tt-footer')).toHaveCSS('background-color', 'rgb(34, 51, 68)');
   await expect(page.locator('[data-shell-tab="home"]')).toBeHidden();
   await expect(page.locator('#tt-header-desktop-tablet .tt-header-brand-copy strong')).toHaveText('TINTIN TEST');
-  const columns = await page.locator('#tt-tabbar').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+  let columns = await page.locator('#tt-tabbar').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
   expect(columns).toBe(4);
+
+  await page.evaluate(async () => {
+    const module = await import(new URL('js/components/navigation/compartido/apariencia-global.js', `${location.origin}/`).href);
+    module.applyGlobalLayout({ header: {}, footer: {} });
+  });
+  await expect(page.locator('#tt-tabbar')).toHaveCSS('background-color', before.tabbarBackground);
+  await expect(page.locator('.tt-footer')).toHaveCSS('background-color', before.footerBackground);
+  await expect(page.locator('[data-shell-tab="home"]')).toBeVisible();
+  columns = await page.locator('#tt-tabbar').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+  expect(columns).toBe(5);
+  const restored = await page.evaluate(() => ({
+    headerCustom: document.documentElement.hasAttribute('data-tt-header-bg-custom'),
+    footerCustom: document.documentElement.hasAttribute('data-tt-footer-bg-custom'),
+  }));
+  expect(restored.headerCustom).toBe(false);
+  expect(restored.footerCustom).toBe(false);
 });
 
 test('campaña prioritaria y pop-up global se aplican sobre la tienda y Escape restaura la interacción', async ({ page }) => {
