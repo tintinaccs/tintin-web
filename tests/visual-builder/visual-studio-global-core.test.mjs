@@ -7,6 +7,7 @@ import {
   isGlobalStudioActiveWindow,
   pickHighestPriority,
   sanitizeGlobalCampaign,
+  sanitizeGlobalLayout,
   sanitizeGlobalPopup,
   sanitizeGlobalStudioConfig,
 } from '../../cloudflare/visual-studio-global-core.js';
@@ -63,14 +64,43 @@ test('campañas saneadas no aceptan efectos ni colores arbitrarios', () => {
   assert.equal(campaign.closable, false);
 });
 
-test('configuración global limita cantidad y deduplica ids', () => {
+test('layout global sanea logo, colores, opciones y textos antes de publicar', () => {
+  const layout = sanitizeGlobalLayout({
+    header: {
+      logo: 'javascript:alert(1)', brandName: '  TINTÍN\u0000 NUEVO  ', brandTagline: 'JOYAS',
+      homeLabel: 'HOME', showAbout: false, background: 'url(evil)', textColor: '#AABBCC', accentColor: '#AD3F67',
+      density: 'gigante', navStyle: 'script', logoSize: 'xxl',
+    },
+    footer: { background: '#112233', textColor: 'red', accentColor: '#DDEEFF', density: 'compact', style: 'boxed', showWhatsapp: false },
+  });
+  assert.equal(layout.header.logo, '');
+  assert.equal(layout.header.brandName, 'TINTÍN NUEVO');
+  assert.equal(layout.header.homeLabel, 'HOME');
+  assert.equal(layout.header.showAbout, false);
+  assert.equal(layout.header.background, '');
+  assert.equal(layout.header.textColor, '#aabbcc');
+  assert.equal(layout.header.accentColor, '#ad3f67');
+  assert.equal(layout.header.density, 'normal');
+  assert.equal(layout.header.navStyle, 'default');
+  assert.equal(layout.header.logoSize, 'medium');
+  assert.equal(layout.footer.background, '#112233');
+  assert.equal(layout.footer.textColor, '');
+  assert.equal(layout.footer.accentColor, '#ddeeff');
+  assert.equal(layout.footer.density, 'compact');
+  assert.equal(layout.footer.style, 'boxed');
+  assert.equal(layout.footer.showWhatsapp, false);
+});
+
+test('configuración global limita cantidad, deduplica ids y siempre conserva layout saneado', () => {
   const popups = Array.from({ length: GLOBAL_STUDIO_LIMITS.maxPopups + 5 }, (_, index) => ({ id: index < 2 ? 'same' : `p-${index}`, enabled: true }));
   const campaigns = Array.from({ length: GLOBAL_STUDIO_LIMITS.maxCampaigns + 5 }, (_, index) => ({ id: index < 2 ? 'same-c' : `c-${index}`, enabled: true }));
-  const clean = sanitizeGlobalStudioConfig({ popups, campaigns });
+  const clean = sanitizeGlobalStudioConfig({ popups, campaigns, layout: { header: { navStyle: 'pills' } } });
   assert.ok(clean.popups.length <= GLOBAL_STUDIO_LIMITS.maxPopups);
   assert.ok(clean.campaigns.length <= GLOBAL_STUDIO_LIMITS.maxCampaigns);
   assert.equal(clean.popups.filter(item => item.id === 'same').length, 1);
   assert.equal(clean.campaigns.filter(item => item.id === 'same-c').length, 1);
+  assert.equal(clean.layout.header.navStyle, 'pills');
+  assert.equal(clean.layout.footer.style, 'default');
 });
 
 test('ventanas temporales respetan inicio y fin', () => {
