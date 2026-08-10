@@ -13,6 +13,7 @@ const HISTORY_COLLECTION = 'visualStudioGlobalHistory';
 const jsonField = value => fsString(JSON.stringify(value));
 const safeJson = (value, fallback) => { try { return JSON.parse(value); } catch { return fallback; } };
 const eventId = () => `global-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 10)}`;
+const sameConfig = (a, b) => JSON.stringify(sanitizeGlobalStudioConfig(a)) === JSON.stringify(sanitizeGlobalStudioConfig(b));
 
 function decodeState(doc) {
   const data = decodeFirestoreFields(doc?.fields || {});
@@ -72,8 +73,44 @@ export async function onRequest(context) {
       await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
       return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config}},200,origin,requestUrl);
     }
+    if (action === 'save-layout') {
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc); const base=draft?.config || current.config;
+      const config=sanitizeGlobalStudioConfig({...base,layout:body.layout});
+      await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
+      return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config},layout:config.layout},200,origin,requestUrl);
+    }
+    if (action === 'discard-layout') {
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc);
+      if (!draft) return jsonResponse({ok:true,draft:null,layout:current.config.layout},200,origin,requestUrl);
+      const config=sanitizeGlobalStudioConfig({...draft.config,layout:current.config.layout});
+      if (sameConfig(config,current.config)) {
+        await firestoreAdminDelete(env,DRAFT_PATH);
+        return jsonResponse({ok:true,draft:null,layout:current.config.layout},200,origin,requestUrl);
+      }
+      await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
+      return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config},layout:current.config.layout},200,origin,requestUrl);
+    }
     if (action === 'cancel') {
       await firestoreAdminDelete(env,DRAFT_PATH); return jsonResponse({ok:true,...(await loadAll(env))},200,origin,requestUrl);
+    }
+    if (action === 'publish-layout') {
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc);
+      if (Number(body.expectedVersion) !== current.version) return conflict(origin,requestUrl);
+      const config=sanitizeGlobalStudioConfig({...current.config,layout:body.layout});
+      const version=current.version+1; const id=eventId(); const snapshot={config};
+      const writes=[
+        { path:STATE_PATH,currentDocument:current.precondition,fields:{version:fsInteger(version),configJson:jsonField(config),updatedAt:fsTimestamp(new Date()),updatedBy:fsString(user.email)} },
+        { path:`${HISTORY_COLLECTION}/${id}`,currentDocument:{exists:false},fields:historyFields(id,user,'publish',version,snapshot,'Diseño global publicado') },
+      ];
+      if (draft) {
+        const rebased=sanitizeGlobalStudioConfig({...draft.config,layout:config.layout});
+        writes.push({path:DRAFT_PATH,fields:{basedOnVersion:fsInteger(version),configJson:jsonField(rebased),updatedAt:fsTimestamp(new Date()),updatedBy:fsString(user.email)}});
+      }
+      await firestoreAdminCommit(env,writes);
+      return jsonResponse({ok:true,version,config,layout:config.layout,draftPreserved:Boolean(draft)},200,origin,requestUrl);
     }
     if (action === 'publish') {
       const config=sanitizeGlobalStudioConfig(body.config); const stateDoc=await firestoreAdminGet(env,STATE_PATH); const current=decodeState(stateDoc);
