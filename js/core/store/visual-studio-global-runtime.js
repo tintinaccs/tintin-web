@@ -190,12 +190,6 @@ export async function initGlobalVisualStudio() {
   if (initialized) return; initialized = true;
   if (new URLSearchParams(location.search).get('ttVisualPreview') === '1' && window.parent !== window) return;
   ensureCss();
-  const isStaticLocalHost = ['127.0.0.1', 'localhost', '::1'].includes(location.hostname);
-  const shouldFetchPublishedConfig = !isStaticLocalHost || window.TT_GLOBAL_VISUAL_STUDIO_FETCH_LOCAL === true;
-  if (!shouldFetchPublishedConfig) {
-    document.documentElement.dataset.ttGlobalStudio = 'fallback';
-    return;
-  }
   try {
     const response = await fetch('/api/visual-studio-global-public', { headers: { accept: 'application/json' } });
     const data = response.ok ? await response.json() : null;
