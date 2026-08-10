@@ -9,6 +9,13 @@ import {
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));
 const defaultStyle = () => ({ background: '', textColor: '', accentColor: '', spacing: 'normal', width: 'contained', align: 'center', radius: 'none', shadow: 'none', animation: 'none' });
+// Debe coincidir con VISUAL_TOP_ANCHOR en cloudflare/visual-builder-core.js.
+const TOP_ANCHOR = '__top__';
+const BLOCK_TYPE_LABELS = {
+  banner: 'Banner', text: 'Texto', products: 'Productos reales', gallery: 'Galería', promotion: 'Promoción',
+  button: 'Botón', section: 'Sección libre segura', collections: 'Colecciones', testimonial: 'Testimonio de clienta',
+  video: 'Video', faq: 'Preguntas frecuentes', columns: 'Imagen y texto en columnas', divider: 'Separador',
+};
 let pageId = 'index';
 let config = null;
 let content = null;
@@ -84,6 +91,12 @@ function renderPages() {
   select.value = pageId;
 }
 
+function renderBlockTypeOptions() {
+  const select = $('visual-new-block'); if (!select.childElementCount) {
+    Object.entries(BLOCK_TYPE_LABELS).forEach(([type, label]) => { const option = make('option', '', label); option.value = type; select.appendChild(option); });
+  }
+}
+
 function renderSectionList() {
   const root = $('visual-section-list'); root.replaceChildren();
   Object.entries(getPageSchema(pageId)?.sections || {}).forEach(([id, schema]) => {
@@ -96,7 +109,7 @@ function renderSectionList() {
     const row = make('div', 'visual-section-item');
     const button = make('button', `visual-section-select${selected?.kind === 'block' && selected.id === block.id ? ' active' : ''}`, block.title || `Bloque ${index + 1}`);
     button.type = 'button'; button.dataset.kind = 'block'; button.dataset.id = block.id;
-    button.appendChild(make('span', 'visual-section-badge', block.type)); row.appendChild(button); root.appendChild(row);
+    button.appendChild(make('span', 'visual-section-badge', BLOCK_TYPE_LABELS[block.type] || block.type)); row.appendChild(button); root.appendChild(row);
   });
 }
 
@@ -133,10 +146,13 @@ function appendStyleFields(grid, style) {
     field('Fondo', colorControl(style, 'background'), true), field('Texto', colorControl(style, 'textColor'), true), field('Acento y botones', colorControl(style, 'accentColor'), true),
     field('Espacio', selectControl(style.spacing, [['compact','Compacto'],['normal','Normal'],['roomy','Amplio']], value => { style.spacing = value; })),
     field('Ancho', selectControl(style.width, [['contained','Contenido'],['wide','Ancho'],['full','Pantalla completa']], value => { style.width = value; })),
-    field('Alineación', selectControl(style.align, [['left','Izquierda'],['center','Centro']], value => { style.align = value; })),
+    field('Alineación', selectControl(style.align, [['left','Izquierda'],['center','Centro'],['right','Derecha']], value => { style.align = value; })),
     field('Bordes', selectControl(style.radius, [['none','Sin redondeo'],['small','Suave'],['medium','Medio'],['large','Grande']], value => { style.radius = value; })),
-    field('Sombra', selectControl(style.shadow, [['none','Sin sombra'],['soft','Suave'],['medium','Marcada']], value => { style.shadow = value; })),
-    field('Animación', selectControl(style.animation, [['none','Sin animación'],['fade','Aparecer'],['slide-up','Subir suavemente'],['scale','Zoom suave']], value => { style.animation = value; }))
+    field('Sombra', selectControl(style.shadow, [['none','Sin sombra'],['soft','Suave'],['medium','Marcada'],['large','Grande']], value => { style.shadow = value; })),
+    field('Animación', selectControl(style.animation, [
+      ['none','Sin animación'], ['fade','Aparecer'], ['slide-up','Subir suavemente'], ['slide-down','Bajar suavemente'],
+      ['slide-left','Entrar desde la derecha'], ['slide-right','Entrar desde la izquierda'], ['scale','Zoom suave'], ['pop','Rebote suave'],
+    ], value => { style.animation = value; }))
   );
 }
 
@@ -167,20 +183,43 @@ function renderExistingProperties(root, sectionId) {
   appendStyleFields(grid, config.sections[sectionId]); root.appendChild(grid);
 }
 
+const TEXT_BLOCK_LABELS = {
+  testimonial: { eyebrow: 'Cargo o dato breve', title: 'Nombre de la clienta', text: 'Testimonio' },
+  faq: { eyebrow: 'Texto pequeño (opcional)', title: 'Título de la lista', text: 'Introducción (opcional)' },
+};
+
 function renderBlockProperties(root, block) {
   const grid = make('div', 'visual-property-grid');
-  const sectionOptions = Object.entries(getPageSchema(pageId).sections).map(([id, schema]) => [id, `Debajo de ${schema.label}`]);
-  grid.append(
-    field('Ubicación', selectControl(block.afterSection, sectionOptions, value => { block.afterSection = value; }), true),
-    field('Texto pequeño', inputControl(block.eyebrow, value => { block.eyebrow = value; }, { max: 80 }), true),
-    field('Título', inputControl(block.title, value => { block.title = value; }, { max: 180 }), true),
-    field('Descripción', inputControl(block.text, value => { block.text = value; }, { multiline: true, max: 1200 }), true)
-  );
-  if (['banner','promotion','button','section'].includes(block.type)) {
+  const sectionOptions = [
+    [TOP_ANCHOR, 'Arriba de todo (antes de la primera sección)'],
+    ...Object.entries(getPageSchema(pageId).sections).map(([id, schema]) => [id, `Debajo de ${schema.label}`]),
+  ];
+  grid.appendChild(field('Ubicación', selectControl(block.afterSection, sectionOptions, value => { block.afterSection = value; }), true));
+  if (block.type !== 'divider') {
+    const labels = TEXT_BLOCK_LABELS[block.type] || { eyebrow: 'Texto pequeño', title: 'Título', text: 'Descripción' };
+    grid.append(
+      field(labels.eyebrow, inputControl(block.eyebrow, value => { block.eyebrow = value; }, { max: 80 }), true),
+      field(labels.title, inputControl(block.title, value => { block.title = value; }, { max: 180 }), true),
+      field(labels.text, inputControl(block.text, value => { block.text = value; }, { multiline: true, max: 1200 }), true)
+    );
+  } else {
+    root.appendChild(make('p', 'visual-property-help', 'El separador solo usa una línea fina para marcar el corte entre secciones — no lleva texto.'));
+  }
+  if (['banner','promotion','button','section','columns'].includes(block.type)) {
     grid.append(field('Texto del botón', inputControl(block.buttonLabel, value => { block.buttonLabel = value; }, { max: 80 }), true), field('Destino del botón', inputControl(block.href, value => { block.href = value; }, { type: 'url', max: 500 }), true));
   }
-  if (['banner','section'].includes(block.type)) {
+  if (['banner','section','columns'].includes(block.type)) {
     grid.append(field('Imagen (Cloudinary o biblioteca)', inputControl(block.image, value => { block.image = value; }, { type: 'url', max: 1000 }), true), field('Descripción de imagen', inputControl(block.imageAlt, value => { block.imageAlt = value; }, { max: 140 }), true));
+  }
+  if (block.type === 'testimonial') {
+    grid.append(field('Foto de la clienta (opcional)', inputControl(block.image, value => { block.image = value; }, { type: 'url', max: 1000 }), true));
+  }
+  if (block.type === 'columns') {
+    grid.appendChild(field('Imagen a la', selectControl(block.imageSide, [['left','Izquierda'],['right','Derecha']], value => { block.imageSide = value; })));
+  }
+  if (block.type === 'video') {
+    grid.appendChild(field('Video (link "insertar" de YouTube, Vimeo o Cloudinary)', inputControl(block.videoUrl, value => { block.videoUrl = value; }, { type: 'url', max: 500 }), true));
+    root.appendChild(make('p', 'visual-property-help', 'Pegá el link para insertar/embed (por ejemplo https://www.youtube.com/embed/XXXXXXXXXXX), no el link normal del video.'));
   }
   if (['products','collections'].includes(block.type)) {
     const count = document.createElement('input'); count.className = 'adm-input'; count.type = 'number'; count.min = '1'; count.max = '8'; count.value = block.count || 4;
@@ -194,10 +233,22 @@ function renderBlockProperties(root, block) {
     }, { multiline: true, max: 8000 });
     grid.appendChild(field('Imágenes (una URL por línea; | descripción)', images, true));
   }
+  if (block.type === 'faq') {
+    const items = inputControl((block.items || []).map(item => `${item.q}|${item.a}`).join('\n'), value => {
+      block.items = value.split('\n').slice(0, 8).map(line => { const [q, ...a] = line.split('|'); return { q: q.trim(), a: a.join('|').trim() }; }).filter(item => item.q && item.a);
+    }, { multiline: true, max: 8000 });
+    grid.appendChild(field('Preguntas y respuestas (una por línea: Pregunta | Respuesta)', items, true));
+  }
   appendStyleFields(grid, block.style); root.appendChild(grid);
   const zone = make('div', 'visual-danger-zone');
   const index = config.customBlocks.findIndex(item => item.id === block.id);
-  [['Subir', -1], ['Bajar', 1]].forEach(([label, direction]) => { const button = make('button', 'adm-btn adm-btn-outline adm-btn-sm', label); button.type = 'button'; button.disabled = index + direction < 0 || index + direction >= config.customBlocks.length; button.addEventListener('click', () => mutate(() => { const [item] = config.customBlocks.splice(index, 1); config.customBlocks.splice(index + direction, 0, item); })); zone.appendChild(button); });
+  const last = config.customBlocks.length - 1;
+  const reorder = (from, to) => mutate(() => { const [item] = config.customBlocks.splice(from, 1); config.customBlocks.splice(to, 0, item); });
+  [['⇑ Al principio', 0], ['↑ Subir', index - 1], ['↓ Bajar', index + 1], ['⇓ Al final', last]].forEach(([label, target]) => {
+    const button = make('button', 'adm-btn adm-btn-outline adm-btn-sm', label); button.type = 'button';
+    button.disabled = target < 0 || target > last || target === index;
+    button.addEventListener('click', () => reorder(index, target)); zone.appendChild(button);
+  });
   const remove = make('button', 'adm-btn adm-btn-danger adm-btn-sm', 'Quitar bloque'); remove.type = 'button'; remove.addEventListener('click', () => { if (confirm('¿Quitar este bloque del borrador?')) mutate(() => { config.customBlocks = config.customBlocks.filter(item => item.id !== block.id); selected = { kind: 'section', id: Object.keys(getPageSchema(pageId).sections)[0] }; }); }); zone.appendChild(remove); root.appendChild(zone);
 }
 
@@ -232,7 +283,7 @@ function loadPreview() {
 }
 
 function renderAll() {
-  renderPages(); renderSectionList(); renderProperties(); renderHistory(); $('visual-version').textContent = `Versión publicada: ${version}`; updateActions(); postPreview();
+  renderPages(); renderBlockTypeOptions(); renderSectionList(); renderProperties(); renderHistory(); $('visual-version').textContent = `Versión publicada: ${version}`; updateActions(); postPreview();
 }
 
 async function loadPage() {
@@ -252,7 +303,12 @@ async function loadPage() {
 
 function addBlock() {
   const type = $('visual-new-block').value; const ids = Object.keys(getPageSchema(pageId).sections);
-  const block = { id: `${type}-${crypto.randomUUID().slice(0, 8)}`, type, afterSection: selected?.kind === 'section' ? selected.id : ids[0], eyebrow: 'TINTÍN', title: type === 'products' ? 'Productos destacados' : 'Nueva sección', text: '', buttonLabel: ['banner','promotion','button','section'].includes(type) ? 'Ver más' : '', href: 'catalogo.html', image: '', imageAlt: '', count: 4, category: '', images: [], style: defaultStyle() };
+  const block = {
+    id: `${type}-${crypto.randomUUID().slice(0, 8)}`, type, afterSection: selected?.kind === 'section' ? selected.id : ids[0],
+    eyebrow: 'TINTÍN', title: type === 'products' ? 'Productos destacados' : 'Nueva sección', text: '',
+    buttonLabel: ['banner','promotion','button','section','columns'].includes(type) ? 'Ver más' : '', href: 'catalogo.html',
+    image: '', imageAlt: '', count: 4, category: '', videoUrl: '', imageSide: 'left', images: [], items: [], style: defaultStyle(),
+  };
   mutate(() => { config.customBlocks.push(block); selected = { kind: 'block', id: block.id }; });
 }
 

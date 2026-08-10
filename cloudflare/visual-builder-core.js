@@ -12,24 +12,37 @@ export const VISUAL_BUILDER_LIMITS = Object.freeze({
   maxHistory: 100,
   maxText: 4000,
   maxImages: 8,
+  maxFaqItems: 8,
 });
 
 export const VISUAL_BLOCK_TYPES = Object.freeze([
   'banner', 'text', 'products', 'gallery', 'promotion', 'button', 'section', 'collections',
+  'testimonial', 'video', 'faq', 'columns', 'divider',
 ]);
+
+// Ancla especial: un bloque con esta ubicación se inserta antes de la
+// primera sección de la página en vez de después de una sección existente.
+export const VISUAL_TOP_ANCHOR = '__top__';
 
 export const VISUAL_STYLE_OPTIONS = Object.freeze({
   spacing: ['compact', 'normal', 'roomy'],
   width: ['contained', 'wide', 'full'],
-  align: ['left', 'center'],
+  align: ['left', 'center', 'right'],
   radius: ['none', 'small', 'medium', 'large'],
-  shadow: ['none', 'soft', 'medium'],
-  animation: ['none', 'fade', 'slide-up', 'scale'],
+  shadow: ['none', 'soft', 'medium', 'large'],
+  animation: ['none', 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'scale', 'pop'],
 });
 
 const SAFE_PAGE_IDS = new Set(CONTENT_PAGE_IDS);
 const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|contact|envios|preguntas-frecuentes|cambios-devoluciones)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
 const SAFE_ASSET = /^assets-tintin\/[A-Za-z0-9_./-]+$/;
+// Embeds de video: solo se acepta un puñado de orígenes de confianza (nunca
+// una URL arbitraria) para que el iframe nunca pueda apuntar a un sitio
+// ajeno — la misma lógica de "lista blanca, nunca lista negra" que ya usa
+// safeVisualHref/safeVisualImage.
+const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[A-Za-z0-9_-]{6,20}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
+const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
+const SAFE_CLOUDINARY_VIDEO = /^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_./,%~-]+\/video\/upload\/[A-Za-z0-9_./,%~-]+$/i;
 
 function text(value, max = VISUAL_BUILDER_LIMITS.maxText) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
@@ -60,6 +73,12 @@ export function safeVisualImage(value) {
   return '';
 }
 
+export function safeVisualVideoUrl(value) {
+  const src = String(value || '').trim();
+  if (SAFE_YOUTUBE_EMBED.test(src) || SAFE_VIMEO_EMBED.test(src) || SAFE_CLOUDINARY_VIDEO.test(src)) return src;
+  return '';
+}
+
 function option(group, value, fallback) {
   return VISUAL_STYLE_OPTIONS[group].includes(value) ? value : fallback;
 }
@@ -82,10 +101,11 @@ function sanitizeBlock(raw, index, pageSchema) {
   const type = VISUAL_BLOCK_TYPES.includes(raw?.type) ? raw.type : 'section';
   const sectionIds = Object.keys(pageSchema.sections || {});
   const id = text(raw?.id || `${type}-${index + 1}`, 64).replace(/[^a-z0-9_-]/gi, '-').toLowerCase() || `${type}-${index + 1}`;
+  const validAnchor = raw?.afterSection === VISUAL_TOP_ANCHOR || sectionIds.includes(raw?.afterSection);
   const block = {
     id,
     type,
-    afterSection: sectionIds.includes(raw?.afterSection) ? raw.afterSection : (sectionIds[0] || ''),
+    afterSection: validAnchor ? raw.afterSection : (sectionIds[0] || VISUAL_TOP_ANCHOR),
     eyebrow: text(raw?.eyebrow || 'TINTÍN', 80),
     title: text(raw?.title || 'Nueva sección', 180),
     text: text(raw?.text || '', 1200),
@@ -95,6 +115,8 @@ function sanitizeBlock(raw, index, pageSchema) {
     imageAlt: text(raw?.imageAlt || '', 140),
     count: Math.max(1, Math.min(8, Number(raw?.count) || 4)),
     category: text(raw?.category || '', 120),
+    videoUrl: safeVisualVideoUrl(raw?.videoUrl),
+    imageSide: raw?.imageSide === 'right' ? 'right' : 'left',
     style: sanitizeVisualStyle(raw?.style),
   };
   if (type === 'gallery') {
@@ -102,6 +124,12 @@ function sanitizeBlock(raw, index, pageSchema) {
       .slice(0, VISUAL_BUILDER_LIMITS.maxImages)
       .map(item => ({ src: safeVisualImage(item?.src), alt: text(item?.alt || '', 140) }))
       .filter(item => item.src);
+  }
+  if (type === 'faq') {
+    block.items = (Array.isArray(raw?.items) ? raw.items : [])
+      .slice(0, VISUAL_BUILDER_LIMITS.maxFaqItems)
+      .map(item => ({ q: text(item?.q || '', 180), a: text(item?.a || '', 1200) }))
+      .filter(item => item.q && item.a);
   }
   return block;
 }

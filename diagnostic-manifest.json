@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T13:14:47.696Z",
-  "sourceFingerprint": "95e72f23fdcefc4997ee37068874e621456621af7ce0d57d3639bcfc6ff5d69f",
+  "generatedAt": "2026-08-10T14:20:30.697Z",
+  "sourceFingerprint": "8b1be880b9e4ec410de7e5b29e96c4d252e03d7271144678d260091b10b59cae",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 572,
     "textFiles": 540,
-    "totalBytes": 5998554,
+    "totalBytes": 6016287,
     "pages": 18,
     "modules": 345
   },
@@ -518,8 +518,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20661,
-      "sha256": "20a592e841016319ea5f323bff7baa034eb4c9c946b7a3e448d55b19fd68348a",
+      "bytes": 20659,
+      "sha256": "adf554ee8731d30f35a37e6abf9a280b5ddda8a9672408582f6d146e47aaff59",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -599,7 +599,7 @@
           "line": 303
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 304
         }
@@ -988,7 +988,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 304,
           "exists": true
@@ -1774,8 +1774,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 165957,
-      "sha256": "cd520d4138941b4bf5fb16eaa1aae60a2be229e4b22c4753e38e11b53c894b77",
+      "bytes": 165541,
+      "sha256": "c4831934694036b0d77897ea4ea7bc36a71b3952e011d357cd21c2d8828e93b0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1811,27 +1811,27 @@
         {
           "raw": "js/admin/admin-app.js?v=tintin-20260810-apariencia-tabs-1",
           "target": "js/admin/admin-app.js",
-          "line": 1949
+          "line": 1945
         },
         {
           "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
-          "line": 1950
+          "line": 1946
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-visual-blocks-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1951
+          "line": 1947
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2148
+          "line": 2144
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2149
+          "line": 2145
         }
       ],
       "styles": [
@@ -1996,7 +1996,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1912
+          "line": 1908
         },
         {
           "raw": "https://api.imgbb.com",
@@ -2006,7 +2006,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1924
+          "line": 1920
         }
       ],
       "references": [
@@ -2025,31 +2025,31 @@
         {
           "raw": "js/admin/admin-app.js?v=tintin-20260810-apariencia-tabs-1",
           "target": "js/admin/admin-app.js",
-          "line": 1949,
+          "line": 1945,
           "exists": true
         },
         {
           "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
-          "line": 1950,
+          "line": 1946,
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-visual-blocks-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1951,
+          "line": 1947,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2148,
+          "line": 2144,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2149,
+          "line": 2145,
           "exists": true
         },
         {
@@ -2193,7 +2193,7 @@
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 1912,
+          "line": 1908,
           "exists": true
         }
       ],
@@ -2252,7 +2252,7 @@
         {
           "id": "csv-preview-table",
           "classes": "adm-table",
-          "line": 1813
+          "line": 1809
         }
       ],
       "modals": [
@@ -2266,31 +2266,31 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 1957
+          "line": 1953
         },
         {
           "id": "order-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 1973
+          "line": 1969
         },
         {
           "id": "tpl-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2075
+          "line": 2071
         },
         {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2121
+          "line": 2117
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2134
+          "line": 2130
         }
       ],
       "tabs": [
@@ -2489,22 +2489,22 @@
         {
           "id": "apar-panel-colores",
           "classes": "correos-panel",
-          "line": 1706
+          "line": 1702
         },
         {
           "id": "section-importar",
           "classes": "adm-section",
-          "line": 1754
+          "line": 1750
         },
         {
           "id": "section-ai-builder",
           "classes": "adm-section",
-          "line": 1860
+          "line": 1856
         },
         {
           "id": "section-contenido",
           "classes": "adm-section",
-          "line": 1904
+          "line": 1900
         }
       ],
       "buttons": [
@@ -4763,7 +4763,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1677
+          "line": 1673
         },
         {
           "id": "",
@@ -4781,7 +4781,7 @@
             "data-visual-device": "mobile"
           },
           "hasSourceReference": true,
-          "line": 1689
+          "line": 1685
         },
         {
           "id": "",
@@ -4799,7 +4799,7 @@
             "data-visual-device": "tablet"
           },
           "hasSourceReference": true,
-          "line": 1690
+          "line": 1686
         },
         {
           "id": "",
@@ -4817,7 +4817,7 @@
             "data-visual-device": "desktop"
           },
           "hasSourceReference": true,
-          "line": 1691
+          "line": 1687
         },
         {
           "id": "",
@@ -4834,7 +4834,7 @@
             "data-apar-scope": "global"
           },
           "hasSourceReference": true,
-          "line": 1715
+          "line": 1711
         },
         {
           "id": "",
@@ -4850,7 +4850,7 @@
             "data-apar-scope": "admin"
           },
           "hasSourceReference": true,
-          "line": 1716
+          "line": 1712
         },
         {
           "id": "btn-exportar",
@@ -4865,7 +4865,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1761
+          "line": 1757
         },
         {
           "id": "btn-exportar-pedidos",
@@ -4880,7 +4880,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1772
+          "line": 1768
         },
         {
           "id": "btn-exportar-usuarios",
@@ -4895,7 +4895,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1783
+          "line": 1779
         },
         {
           "id": "btn-csv-limpiar",
@@ -4911,7 +4911,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1807
+          "line": 1803
         },
         {
           "id": "btn-csv-importar-seleccionados",
@@ -4926,7 +4926,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1808
+          "line": 1804
         },
         {
           "id": "btn-csv-importar",
@@ -4941,7 +4941,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1809
+          "line": 1805
         },
         {
           "id": "btn-importar",
@@ -4956,7 +4956,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1851
+          "line": 1847
         },
         {
           "id": "btn-importar-sample",
@@ -4971,7 +4971,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1852
+          "line": 1848
         },
         {
           "id": "ai-builder-send",
@@ -4986,7 +4986,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1872
+          "line": 1868
         },
         {
           "id": "ai-builder-approve",
@@ -5001,7 +5001,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1876
+          "line": 1872
         },
         {
           "id": "ai-builder-modify",
@@ -5016,7 +5016,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1877
+          "line": 1873
         },
         {
           "id": "ai-builder-cancel",
@@ -5031,7 +5031,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1878
+          "line": 1874
         },
         {
           "id": "",
@@ -5049,7 +5049,7 @@
             "data-ai-device": "mobile"
           },
           "hasSourceReference": true,
-          "line": 1887
+          "line": 1883
         },
         {
           "id": "",
@@ -5067,7 +5067,7 @@
             "data-ai-device": "tablet"
           },
           "hasSourceReference": true,
-          "line": 1888
+          "line": 1884
         },
         {
           "id": "",
@@ -5085,7 +5085,7 @@
             "data-ai-device": "desktop"
           },
           "hasSourceReference": true,
-          "line": 1889
+          "line": 1885
         },
         {
           "id": "cont-save-all",
@@ -5101,7 +5101,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1911
+          "line": 1907
         },
         {
           "id": "cont-add-page",
@@ -5117,7 +5117,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1919
+          "line": 1915
         },
         {
           "id": "",
@@ -5133,7 +5133,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1926
+          "line": 1922
         },
         {
           "id": "",
@@ -5147,7 +5147,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1931
+          "line": 1927
         },
         {
           "id": "unsaved-modal-save",
@@ -5162,7 +5162,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1963
+          "line": 1959
         },
         {
           "id": "unsaved-modal-discard",
@@ -5177,7 +5177,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1964
+          "line": 1960
         },
         {
           "id": "unsaved-modal-stay",
@@ -5192,7 +5192,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1965
+          "line": 1961
         },
         {
           "id": "",
@@ -5206,7 +5206,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1977
+          "line": 1973
         },
         {
           "id": "",
@@ -5220,7 +5220,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2066
+          "line": 2062
         },
         {
           "id": "oe-save-btn",
@@ -5235,7 +5235,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2067
+          "line": 2063
         },
         {
           "id": "",
@@ -5249,7 +5249,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2079
+          "line": 2075
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -5265,7 +5265,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2110
+          "line": 2106
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -5281,7 +5281,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2111
+          "line": 2107
         },
         {
           "id": "",
@@ -5295,7 +5295,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2114
+          "line": 2110
         },
         {
           "id": "tpl-edit-save-btn",
@@ -5310,7 +5310,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2115
+          "line": 2111
         },
         {
           "id": "",
@@ -5324,7 +5324,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2125
+          "line": 2121
         },
         {
           "id": "",
@@ -5338,7 +5338,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2142
+          "line": 2138
         },
         {
           "id": "promo-confirm-send-btn",
@@ -5353,7 +5353,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2143
+          "line": 2139
         }
       ],
       "controls": [
@@ -6515,7 +6515,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1724,
+          "line": 1720,
           "labeled": true
         },
         {
@@ -6524,7 +6524,7 @@
           "name": "",
           "type": "file",
           "ariaLabel": "",
-          "line": 1800,
+          "line": 1796,
           "labeled": true
         },
         {
@@ -6533,7 +6533,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1816,
+          "line": 1812,
           "labeled": true
         },
         {
@@ -6542,7 +6542,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1849,
+          "line": 1845,
           "labeled": true
         },
         {
@@ -6551,7 +6551,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1870,
+          "line": 1866,
           "labeled": true
         },
         {
@@ -6560,7 +6560,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1925,
+          "line": 1921,
           "labeled": true
         },
         {
@@ -6569,7 +6569,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 1980,
+          "line": 1976,
           "labeled": true
         },
         {
@@ -6578,7 +6578,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1984,
+          "line": 1980,
           "labeled": true
         },
         {
@@ -6587,7 +6587,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1988,
+          "line": 1984,
           "labeled": true
         },
         {
@@ -6596,7 +6596,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1992,
+          "line": 1988,
           "labeled": true
         },
         {
@@ -6605,7 +6605,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1997,
+          "line": 1993,
           "labeled": true
         },
         {
@@ -6614,7 +6614,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2001,
+          "line": 1997,
           "labeled": true
         },
         {
@@ -6623,7 +6623,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2009,
+          "line": 2005,
           "labeled": true
         },
         {
@@ -6632,7 +6632,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2013,
+          "line": 2009,
           "labeled": true
         },
         {
@@ -6641,7 +6641,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2022,
+          "line": 2018,
           "labeled": true
         },
         {
@@ -6650,7 +6650,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2029,
+          "line": 2025,
           "labeled": true
         },
         {
@@ -6659,7 +6659,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2039,
+          "line": 2035,
           "labeled": true
         },
         {
@@ -6668,7 +6668,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2052,
+          "line": 2048,
           "labeled": true
         },
         {
@@ -6677,7 +6677,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2082,
+          "line": 2078,
           "labeled": true
         },
         {
@@ -6686,7 +6686,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2085,
+          "line": 2081,
           "labeled": true
         },
         {
@@ -6695,7 +6695,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2087,
+          "line": 2083,
           "labeled": true
         },
         {
@@ -6704,7 +6704,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2088,
+          "line": 2084,
           "labeled": true
         },
         {
@@ -6713,7 +6713,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2089,
+          "line": 2085,
           "labeled": true
         },
         {
@@ -6722,7 +6722,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2090,
+          "line": 2086,
           "labeled": true
         },
         {
@@ -6731,7 +6731,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2091,
+          "line": 2087,
           "labeled": true
         },
         {
@@ -6740,7 +6740,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2092,
+          "line": 2088,
           "labeled": true
         },
         {
@@ -6749,7 +6749,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2094,
+          "line": 2090,
           "labeled": true
         },
         {
@@ -6758,7 +6758,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2095,
+          "line": 2091,
           "labeled": true
         },
         {
@@ -6767,7 +6767,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2097,
+          "line": 2093,
           "labeled": true
         },
         {
@@ -6776,7 +6776,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2098,
+          "line": 2094,
           "labeled": true
         },
         {
@@ -6785,7 +6785,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2100,
+          "line": 2096,
           "labeled": true
         },
         {
@@ -6794,7 +6794,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2140,
+          "line": 2136,
           "labeled": true
         }
       ]
@@ -6812,8 +6812,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14015,
-      "sha256": "2de7aab862714a521ca9f182f1c9d8fea5c8b255cb07e7898e11e0081a7c48a4",
+      "bytes": 14013,
+      "sha256": "1c792191a299d513942d8a7020f15d22db39f92203783cb15d822fae0d86e674",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6887,7 +6887,7 @@
           "line": 186
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 187
         }
@@ -7238,7 +7238,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 187,
           "exists": true
@@ -7439,8 +7439,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52145,
-      "sha256": "f56d8746373f092672ae3cb00e44b75b46151d0777ea253d3c6c1cecd8e14446",
+      "bytes": 52143,
+      "sha256": "e97d6912875acc8d1347508087f208f777c8aeb866397e6bca4868c2da95ed79",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7526,7 +7526,7 @@
           "line": 962
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 963
         }
@@ -7847,7 +7847,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 963,
           "exists": true
@@ -8854,8 +8854,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15873,
-      "sha256": "5718e901c6d0df3731ba58d352975044c1be634d2bbe1cdaec0a35eeee89df6b",
+      "bytes": 15871,
+      "sha256": "522d945f2d32be090891ef47fbe37533fe0a8431b00455c01882c4258bf72d08",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8940,7 +8940,7 @@
           "line": 201
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 202
         }
@@ -9292,7 +9292,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 202,
           "exists": true
@@ -9493,8 +9493,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18689,
-      "sha256": "a46112c0eef850f8836ae7b0f3f1ef51e53c295896f7ffad4a8c15a03dad837c",
+      "bytes": 18687,
+      "sha256": "6caa9efc7fd89a6ed5dd76efcc2112ff1871b5cf13a2f6800d263655a5187a80",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9574,7 +9574,7 @@
           "line": 253
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 254
         }
@@ -9925,7 +9925,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 254,
           "exists": true
@@ -10162,8 +10162,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17360,
-      "sha256": "5ae7f3767a41d4dde195a76d399c4c4c7e631376a3e3b58708446da67c2e93c2",
+      "bytes": 17358,
+      "sha256": "49c9d545df68d702108c5f8d25176f2faa2fdb284bb6d04b1d6c288455743e2d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10243,7 +10243,7 @@
           "line": 253
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 254
         }
@@ -10594,7 +10594,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 254,
           "exists": true
@@ -10795,8 +10795,8 @@
         "guest",
         "client"
       ],
-      "bytes": 44161,
-      "sha256": "c7089abfa3b745b237292d8ccce37ab942d20ff44ff72fbf81aa04c58fcc0b86",
+      "bytes": 44159,
+      "sha256": "3c3bd26eb79887817244c57689a468159f584c3d62f41f63f0498a21800dae4f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10893,7 +10893,7 @@
           "line": 609
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 645
         },
@@ -11604,7 +11604,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 645,
           "exists": true
@@ -13310,8 +13310,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15864,
-      "sha256": "6b77b7638523dcaa15dd0a2402b4514eb13a01ae40f4eaba8a0214d880fd8dfe",
+      "bytes": 15862,
+      "sha256": "c580cf0483fa423b0405a25ed9ad383d978d54649fb9fe7b4c7f20e757b62ed8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13385,7 +13385,7 @@
           "line": 215
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 216
         }
@@ -13736,7 +13736,7 @@
           "exists": true
         },
         {
-          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/visual-builder-bootstrap.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/visual-builder-bootstrap.js",
           "line": 216,
           "exists": true
@@ -16205,8 +16205,8 @@
     },
     {
       "path": "cloudflare/visual-builder-core.js",
-      "bytes": 5592,
-      "sha256": "c08d8599c57ad721ed47653382c5049c2e608f220cc2b898a490572e90177be9",
+      "bytes": 7233,
+      "sha256": "aaf8bd5fe51cd23f3dfc5f43a051e114ff4eb408a4867f3b7f049df2b4516c13",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17012,8 +17012,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 21549,
-      "sha256": "7ccfb6e6d2fa70f1cf54ad725955cab4aa6c13187ed47b57f0af34200849b034",
+      "bytes": 24756,
+      "sha256": "dab9076897c39535191033d31bb98ba0a6052b7edbeff3bea0edd00a719002e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17048,6 +17048,10 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "line": 2
+        },
+        {
+          "url": "https://www.youtube.com/embed/XXXXXXXXXXX",
+          "line": 222
         }
       ]
     },
@@ -19554,8 +19558,8 @@
     },
     {
       "path": "js/core/store/contenido-sitio.js",
-      "bytes": 7454,
-      "sha256": "91f02c11fcdbc95942b371d7608076f940b362842ef0f424bef8edda818e7d52",
+      "bytes": 7453,
+      "sha256": "acf0cafde391d8ed7e20b91ced7dfbb44641029b0a473c6270442e1dc667f94b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19580,7 +19584,7 @@
           "line": 18
         },
         {
-          "raw": "./editor-visual-runtime.js?v=tintin-20260809-visual-builder-1",
+          "raw": "./editor-visual-runtime.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/core/store/editor-visual-runtime.js",
           "dynamic": false,
           "line": 19
@@ -19595,8 +19599,8 @@
     },
     {
       "path": "js/core/store/editor-visual-runtime.js",
-      "bytes": 13637,
-      "sha256": "331acb52642272478ef58288a234161441c1b02606a4d5aba8c14109c8837261",
+      "bytes": 19028,
+      "sha256": "03be5c7bb524bb46ebc0ea62f83f318f9618d202848964b744f6b3a95d9925dc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20894,15 +20898,15 @@
     },
     {
       "path": "js/visual-builder-bootstrap.js",
-      "bytes": 154,
-      "sha256": "62a55db769690cfeda8e7106159dd300feafd5e58c6080996d69ceb096ecb686",
+      "bytes": 153,
+      "sha256": "4ebd64b4a2ed4d29d0d4982547cce91ccc5d05256398f8f52f93f1a08e1d8d71",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./core/store/editor-visual-runtime.js?v=tintin-20260809-visual-builder-1",
+          "raw": "./core/store/editor-visual-runtime.js?v=tintin-20260810-visual-blocks-2",
           "target": "js/core/store/editor-visual-runtime.js",
           "dynamic": false,
           "line": 1
@@ -24482,8 +24486,8 @@
     },
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",
-      "bytes": 3813,
-      "sha256": "5e8008ff57fc177b808eea1a988f8b51e9951911f483c979584aede1f6eace4d",
+      "bytes": 5480,
+      "sha256": "36b332394ab275b4e181cd970f5456b47aadc0704cc120df143067be66364108",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24520,13 +24524,33 @@
         {
           "url": "https://res.cloudinary.com/demo/image/upload/a.webp",
           "line": 44
+        },
+        {
+          "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          "line": 59
+        },
+        {
+          "url": "https://player.vimeo.com/video/76979871",
+          "line": 60
+        },
+        {
+          "url": "https://res.cloudinary.com/demo/video/upload/dog.mp4",
+          "line": 61
+        },
+        {
+          "url": "https://www.youtube.com/watch",
+          "line": 62
+        },
+        {
+          "url": "https://evil.test/embed",
+          "line": 63
         }
       ]
     },
     {
       "path": "tests/visual-builder/visual-builder-runtime.spec.js",
-      "bytes": 4504,
-      "sha256": "23700da369a6eec8f634c73f0f4d0507ce6aab6fb78155e51b01a679c0db6987",
+      "bytes": 7817,
+      "sha256": "004513f366ef1245a4b726cc420c325f956f822cf04a377bb8fbe42d99142cba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24536,6 +24560,14 @@
         {
           "url": "http://local/",
           "line": 13
+        },
+        {
+          "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          "line": 98
+        },
+        {
+          "url": "https://evil.test/embed",
+          "line": 99
         }
       ]
     },
@@ -24856,8 +24888,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 20661,
-      "sha256": "20a592e841016319ea5f323bff7baa034eb4c9c946b7a3e448d55b19fd68348a"
+      "bytes": 20659,
+      "sha256": "adf554ee8731d30f35a37e6abf9a280b5ddda8a9672408582f6d146e47aaff59"
     },
     {
       "path": "admin-images.html",
@@ -24868,8 +24900,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 165957,
-      "sha256": "cd520d4138941b4bf5fb16eaa1aae60a2be229e4b22c4753e38e11b53c894b77"
+      "bytes": 165541,
+      "sha256": "c4831934694036b0d77897ea4ea7bc36a71b3952e011d357cd21c2d8828e93b0"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25060,14 +25092,14 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 14015,
-      "sha256": "2de7aab862714a521ca9f182f1c9d8fea5c8b255cb07e7898e11e0081a7c48a4"
+      "bytes": 14013,
+      "sha256": "1c792191a299d513942d8a7020f15d22db39f92203783cb15d822fae0d86e674"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52145,
-      "sha256": "f56d8746373f092672ae3cb00e44b75b46151d0777ea253d3c6c1cecd8e14446"
+      "bytes": 52143,
+      "sha256": "e97d6912875acc8d1347508087f208f777c8aeb866397e6bca4868c2da95ed79"
     },
     {
       "path": "checkout.html",
@@ -25114,14 +25146,14 @@
     {
       "path": "cloudflare/visual-builder-core.js",
       "extension": ".js",
-      "bytes": 5592,
-      "sha256": "c08d8599c57ad721ed47653382c5049c2e608f220cc2b898a490572e90177be9"
+      "bytes": 7233,
+      "sha256": "aaf8bd5fe51cd23f3dfc5f43a051e114ff4eb408a4867f3b7f049df2b4516c13"
     },
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15873,
-      "sha256": "5718e901c6d0df3731ba58d352975044c1be634d2bbe1cdaec0a35eeee89df6b"
+      "bytes": 15871,
+      "sha256": "522d945f2d32be090891ef47fbe37533fe0a8431b00455c01882c4258bf72d08"
     },
     {
       "path": "configuracion-cloudinary.md",
@@ -25132,8 +25164,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 18689,
-      "sha256": "a46112c0eef850f8836ae7b0f3f1ef51e53c295896f7ffad4a8c15a03dad837c"
+      "bytes": 18687,
+      "sha256": "6caa9efc7fd89a6ed5dd76efcc2112ff1871b5cf13a2f6800d263655a5187a80"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -25168,8 +25200,8 @@
     {
       "path": "css/components/editor-visual-runtime.css",
       "extension": ".css",
-      "bytes": 3467,
-      "sha256": "30e4849eb0523541c2882c2f0a508b5d3c6535be820dd3d4bb30e2077bcc26eb"
+      "bytes": 6420,
+      "sha256": "24ea93ab0fe9926e7ebb89c76987c1a3fe996cc293c9fd5d13ad42024c211efd"
     },
     {
       "path": "css/components/location/selector-ubicacion.css",
@@ -25654,8 +25686,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 17360,
-      "sha256": "5ae7f3767a41d4dde195a76d399c4c4c7e631376a3e3b58708446da67c2e93c2"
+      "bytes": 17358,
+      "sha256": "49c9d545df68d702108c5f8d25176f2faa2fdb284bb6d04b1d6c288455743e2d"
     },
     {
       "path": "favicon-16x16.png",
@@ -25900,8 +25932,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 44161,
-      "sha256": "c7089abfa3b745b237292d8ccce37ab942d20ff44ff72fbf81aa04c58fcc0b86"
+      "bytes": 44159,
+      "sha256": "3c3bd26eb79887817244c57689a468159f584c3d62f41f63f0498a21800dae4f"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -25924,8 +25956,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 21549,
-      "sha256": "7ccfb6e6d2fa70f1cf54ad725955cab4aa6c13187ed47b57f0af34200849b034"
+      "bytes": 24756,
+      "sha256": "dab9076897c39535191033d31bb98ba0a6052b7edbeff3bea0edd00a719002e4"
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
@@ -26530,14 +26562,14 @@
     {
       "path": "js/core/store/contenido-sitio.js",
       "extension": ".js",
-      "bytes": 7454,
-      "sha256": "91f02c11fcdbc95942b371d7608076f940b362842ef0f424bef8edda818e7d52"
+      "bytes": 7453,
+      "sha256": "acf0cafde391d8ed7e20b91ced7dfbb44641029b0a473c6270442e1dc667f94b"
     },
     {
       "path": "js/core/store/editor-visual-runtime.js",
       "extension": ".js",
-      "bytes": 13637,
-      "sha256": "331acb52642272478ef58288a234161441c1b02606a4d5aba8c14109c8837261"
+      "bytes": 19028,
+      "sha256": "03be5c7bb524bb46ebc0ea62f83f318f9618d202848964b744f6b3a95d9925dc"
     },
     {
       "path": "js/core/store/esquema-contenido.js",
@@ -26896,8 +26928,8 @@
     {
       "path": "js/visual-builder-bootstrap.js",
       "extension": ".js",
-      "bytes": 154,
-      "sha256": "62a55db769690cfeda8e7106159dd300feafd5e58c6080996d69ceb096ecb686"
+      "bytes": 153,
+      "sha256": "4ebd64b4a2ed4d29d0d4982547cce91ccc5d05256398f8f52f93f1a08e1d8d71"
     },
     {
       "path": "login.html",
@@ -27118,8 +27150,8 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 15864,
-      "sha256": "6b77b7638523dcaa15dd0a2402b4514eb13a01ae40f4eaba8a0214d880fd8dfe"
+      "bytes": 15862,
+      "sha256": "c580cf0483fa423b0405a25ed9ad383d978d54649fb9fe7b4c7f20e757b62ed8"
     },
     {
       "path": "privacidad.html",
@@ -27730,8 +27762,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 25692,
-      "sha256": "73f9d3c09c0e5f91cd5b2448e78e314a9b0373fa2a20301f5c85b93b88a7e610"
+      "bytes": 25687,
+      "sha256": "5315ab35160fe313ec9e0a98a69b2ba93b843bd23626ce9d4e70df3893dc95aa"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28030,14 +28062,14 @@
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",
       "extension": ".mjs",
-      "bytes": 3813,
-      "sha256": "5e8008ff57fc177b808eea1a988f8b51e9951911f483c979584aede1f6eace4d"
+      "bytes": 5480,
+      "sha256": "36b332394ab275b4e181cd970f5456b47aadc0704cc120df143067be66364108"
     },
     {
       "path": "tests/visual-builder/visual-builder-runtime.spec.js",
       "extension": ".js",
-      "bytes": 4504,
-      "sha256": "23700da369a6eec8f634c73f0f4d0507ce6aab6fb78155e51b01a679c0db6987"
+      "bytes": 7817,
+      "sha256": "004513f366ef1245a4b726cc420c325f956f822cf04a377bb8fbe42d99142cba"
     },
     {
       "path": "tests/visual-builder/visual-builder-ui.spec.js",
@@ -28278,7 +28310,7 @@
     },
     {
       "file": "admin.html",
-      "line": 1912,
+      "line": 1908,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -29125,14 +29157,14 @@
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 229,
+      "line": 280,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 255,
+      "line": 309,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -29643,28 +29675,28 @@
     },
     {
       "file": "js/core/store/editor-visual-runtime.js",
-      "line": 29,
+      "line": 39,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "js/core/store/editor-visual-runtime.js",
-      "line": 143,
+      "line": 160,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "js/core/store/editor-visual-runtime.js",
-      "line": 169,
+      "line": 186,
       "raw": "collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "js/core/store/editor-visual-runtime.js",
-      "line": 169,
+      "line": 186,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -31065,7 +31097,7 @@
         },
         {
           "file": "js/core/store/editor-visual-runtime.js",
-          "line": 169
+          "line": 186
         },
         {
           "file": "js/core/store/esquema-contenido.js",
@@ -31244,7 +31276,7 @@
         },
         {
           "file": "js/core/store/editor-visual-runtime.js",
-          "line": 149
+          "line": 166
         },
         {
           "file": "js/pages/product/productos-relacionados.js",
