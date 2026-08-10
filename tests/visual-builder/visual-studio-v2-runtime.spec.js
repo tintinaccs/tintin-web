@@ -96,7 +96,8 @@ test('el shell público carga el runtime global en una página real y falla de f
 test('campaña prioritaria y pop-up global se aplican sobre la tienda y Escape restaura la interacción', async ({ page }) => {
   await page.goto(`${baseUrl}/index.html`);
   await page.evaluate(async () => {
-    const module = await import('/js/core/store/visual-studio-global-runtime.js');
+    const runtimePath = ['js', 'core', 'store', 'visual-studio-global-runtime.js'].join('/');
+    const module = await import(new URL(runtimePath, `${location.origin}/`).href);
     module.disposeGlobalVisualStudio();
     module.applyGlobalVisualStudio({
       campaigns: [
