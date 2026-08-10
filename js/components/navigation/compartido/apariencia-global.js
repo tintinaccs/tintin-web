@@ -1,4 +1,4 @@
-const LAYOUT_CSS_VERSION = 'tintin-20260810-global-layout-1';
+const LAYOUT_CSS_VERSION = 'tintin-20260810-global-layout-2';
 let loaded = false;
 
 function ensureCss() {
@@ -56,17 +56,25 @@ function setMobileLabel(tab, label) {
   });
 }
 
+function setMobileVisibility(tab, visible) {
+  document.querySelectorAll(`[data-shell-tab="${tab}"]`).forEach(node => { node.hidden = visible === false; });
+}
+
+function setCustomColor(root, attribute, cssVar, value) {
+  const color = safeColor(value);
+  root.toggleAttribute(attribute, Boolean(color));
+  if (color) root.style.setProperty(cssVar, color);
+  else root.style.removeProperty(cssVar);
+}
+
 function applyHeader(raw = {}) {
   const root = document.documentElement;
-  const background = safeColor(raw.background);
-  const textColor = safeColor(raw.textColor);
-  const accentColor = safeColor(raw.accentColor);
   root.dataset.ttHeaderDensity = ['compact', 'normal', 'roomy'].includes(raw.density) ? raw.density : 'normal';
   root.dataset.ttHeaderNavStyle = ['default', 'minimal', 'pills'].includes(raw.navStyle) ? raw.navStyle : 'default';
   root.dataset.ttHeaderLogoSize = ['small', 'medium', 'large'].includes(raw.logoSize) ? raw.logoSize : 'medium';
-  if (background) root.style.setProperty('--tt-global-header-bg', background); else root.style.removeProperty('--tt-global-header-bg');
-  if (textColor) root.style.setProperty('--tt-global-header-text', textColor); else root.style.removeProperty('--tt-global-header-text');
-  if (accentColor) root.style.setProperty('--tt-global-header-accent', accentColor); else root.style.removeProperty('--tt-global-header-accent');
+  setCustomColor(root, 'data-tt-header-bg-custom', '--tt-global-header-bg', raw.background);
+  setCustomColor(root, 'data-tt-header-text-custom', '--tt-global-header-text', raw.textColor);
+  setCustomColor(root, 'data-tt-header-accent-custom', '--tt-global-header-accent', raw.accentColor);
 
   const brandName = safeText(raw.brandName, 'TINTÍN', 60);
   const brandTagline = safeText(raw.brandTagline, 'ACCESORIOS & RELOJES', 80);
@@ -81,11 +89,12 @@ function applyHeader(raw = {}) {
     });
   }
 
+  const homeVisible = raw.showHome !== false;
   const homeLabel = safeText(raw.homeLabel, 'INICIO', 40);
   const shopLabel = safeText(raw.shopLabel, 'TIENDA', 40);
   const aboutLabel = safeText(raw.aboutLabel, 'NOSOTROS', 40);
   const contactLabel = safeText(raw.contactLabel, 'CONTACTO', 40);
-  setOptionalRoute('home', homeLabel, raw.showHome !== false);
+  setOptionalRoute('home', homeLabel, homeVisible);
   setDesktopShopLabel(shopLabel);
   setOptionalRoute('about', aboutLabel, raw.showAbout !== false);
   setOptionalRoute('contact', contactLabel, raw.showContact !== false);
@@ -94,18 +103,17 @@ function applyHeader(raw = {}) {
   setMobileLabel('search', safeText(raw.searchLabel, 'Buscar', 40));
   setMobileLabel('cart', safeText(raw.cartLabel, 'Carrito', 40));
   setMobileLabel('account', safeText(raw.accountLabel, 'Cuenta', 40));
+  setMobileVisibility('home', homeVisible);
+  root.dataset.ttMobileHome = homeVisible ? 'visible' : 'hidden';
 }
 
 function applyFooter(raw = {}) {
   const root = document.documentElement;
-  const background = safeColor(raw.background);
-  const textColor = safeColor(raw.textColor);
-  const accentColor = safeColor(raw.accentColor);
   root.dataset.ttFooterDensity = ['compact', 'normal', 'roomy'].includes(raw.density) ? raw.density : 'normal';
   root.dataset.ttFooterStyle = ['default', 'minimal', 'boxed'].includes(raw.style) ? raw.style : 'default';
-  if (background) root.style.setProperty('--tt-global-footer-bg', background); else root.style.removeProperty('--tt-global-footer-bg');
-  if (textColor) root.style.setProperty('--tt-global-footer-text', textColor); else root.style.removeProperty('--tt-global-footer-text');
-  if (accentColor) root.style.setProperty('--tt-global-footer-accent', accentColor); else root.style.removeProperty('--tt-global-footer-accent');
+  setCustomColor(root, 'data-tt-footer-bg-custom', '--tt-global-footer-bg', raw.background);
+  setCustomColor(root, 'data-tt-footer-text-custom', '--tt-global-footer-text', raw.textColor);
+  setCustomColor(root, 'data-tt-footer-accent-custom', '--tt-global-footer-accent', raw.accentColor);
   document.querySelectorAll('.tt-footer-wa').forEach(node => { node.hidden = raw.showWhatsapp === false; });
 }
 
