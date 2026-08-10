@@ -1,0 +1,90 @@
+name: Reconciliar tipografía Visual Studio
+
+on:
+  push:
+    branches:
+      - feat/apariencia-visual-studio-v2
+    paths:
+      - .github/workflows/zz-visual-studio-font-cache.yml
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Ajustar Montserrat y propagar versiones
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const root = process.cwd();
+          const VERSION = 'tintin-20260810-global-studio-3';
+
+          for (const file of ['css/admin/visual-studio-global-admin.css','css/components/visual-studio-global-runtime.css']) {
+            const abs = path.join(root, file);
+            let source = fs.readFileSync(abs, 'utf8');
+            source = source.replaceAll('font-family:Montserrat,sans-serif', 'font-family:Montserrat');
+            fs.writeFileSync(abs, source, 'utf8');
+          }
+
+          const replacements = [
+            ['visual-studio-global-admin.css?v=tintin-20260810-global-studio-1', `visual-studio-global-admin.css?v=${VERSION}`],
+            ['visual-studio-global-runtime.css?v=tintin-20260810-global-studio-1', `visual-studio-global-runtime.css?v=${VERSION}`],
+            ['visual-studio-global-admin.js?v=tintin-20260810-global-studio-1', `visual-studio-global-admin.js?v=${VERSION}`],
+            ['visual-studio-global-runtime.js?v=tintin-20260810-global-studio-1', `visual-studio-global-runtime.js?v=${VERSION}`],
+            ['esquema-color-admin.js?v=tintin-20260810-global-studio-2', `esquema-color-admin.js?v=${VERSION}`],
+            ['entrada-navegacion-publica.js?v=tintin-20260810-global-studio-2', `entrada-navegacion-publica.js?v=${VERSION}`],
+            ['inicio-navegacion-publica.js?v=tintin-20260810-global-studio-2', `inicio-navegacion-publica.js?v=${VERSION}`],
+          ];
+          function update(file) {
+            const abs = path.join(root, file); if (!fs.existsSync(abs)) return;
+            let source = fs.readFileSync(abs, 'utf8'); const before = source;
+            for (const [from,to] of replacements) source = source.split(from).join(to);
+            if (file === 'js/inicio-navegacion-publica.js') source = source.replace(/const MODULE_VERSION = '[^']+';/, `const MODULE_VERSION = '${VERSION}';`);
+            if (source !== before) fs.writeFileSync(abs, source, 'utf8');
+          }
+          for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) update(file);
+          function walk(dir) {
+            for (const entry of fs.readdirSync(dir, {withFileTypes:true})) {
+              const abs = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(abs);
+              else if (/\.(?:js|mjs)$/.test(entry.name)) update(path.relative(root,abs));
+            }
+          }
+          walk(path.join(root,'js'));
+
+          const syncPath = path.join(root,'scripts/sincronizar-inicio-navegacion-publica.js');
+          let sync = fs.readFileSync(syncPath,'utf8');
+          sync = sync.replace(/const PUBLIC_SHELL_VERSION = '[^']+';/, `const PUBLIC_SHELL_VERSION = '${VERSION}';`);
+          sync = sync.replace(/const NAV_ENTRY_VERSION = '[^']+';/, `const NAV_ENTRY_VERSION = '${VERSION}';`);
+          fs.writeFileSync(syncPath,sync,'utf8');
+          NODE
+
+      - name: Verificar tipografía y regenerar baseline
+        run: |
+          node scripts/auditar-tipografia.js
+          node scripts/auditar-versionado-cache.mjs --write
+          node scripts/auditar-versionado-cache.mjs
+
+      - name: Autoeliminar workflow temporal
+        shell: bash
+        run: |
+          rm .github/workflows/zz-visual-studio-font-cache.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(visual-studio): alinear tipografía y caché global [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
