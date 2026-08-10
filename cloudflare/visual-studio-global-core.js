@@ -13,6 +13,10 @@ const FREQUENCIES = ['always', 'session', 'daily', 'once'];
 const ANIMATIONS = ['fade', 'slide-up', 'slide-down', 'zoom', 'pop'];
 const EFFECTS = ['none', 'hearts', 'snow', 'sparkles', 'confetti'];
 const INTENSITIES = ['low', 'medium', 'high'];
+const DENSITIES = ['compact', 'normal', 'roomy'];
+const NAV_STYLES = ['default', 'minimal', 'pills'];
+const LOGO_SIZES = ['small', 'medium', 'large'];
+const FOOTER_STYLES = ['default', 'minimal', 'boxed'];
 
 function text(value, max = 1200) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
@@ -89,13 +93,49 @@ export function sanitizeGlobalCampaign(raw = {}, index = 0) {
   };
 }
 
+export function sanitizeGlobalLayout(raw = {}) {
+  const header = raw?.header && typeof raw.header === 'object' ? raw.header : {};
+  const footer = raw?.footer && typeof raw.footer === 'object' ? raw.footer : {};
+  return {
+    header: {
+      logo: safeVisualImage(header.logo),
+      brandName: text(header.brandName || 'TINTÍN', 60),
+      brandTagline: text(header.brandTagline || 'ACCESORIOS & RELOJES', 80),
+      homeLabel: text(header.homeLabel || 'INICIO', 40),
+      shopLabel: text(header.shopLabel || 'TIENDA', 40),
+      aboutLabel: text(header.aboutLabel || 'NOSOTROS', 40),
+      contactLabel: text(header.contactLabel || 'CONTACTO', 40),
+      searchLabel: text(header.searchLabel || 'Buscar', 40),
+      cartLabel: text(header.cartLabel || 'Carrito', 40),
+      accountLabel: text(header.accountLabel || 'Cuenta', 40),
+      showHome: header.showHome !== false,
+      showAbout: header.showAbout !== false,
+      showContact: header.showContact !== false,
+      background: safeVisualColor(header.background),
+      textColor: safeVisualColor(header.textColor),
+      accentColor: safeVisualColor(header.accentColor),
+      density: option(DENSITIES, header.density, 'normal'),
+      navStyle: option(NAV_STYLES, header.navStyle, 'default'),
+      logoSize: option(LOGO_SIZES, header.logoSize, 'medium'),
+    },
+    footer: {
+      background: safeVisualColor(footer.background),
+      textColor: safeVisualColor(footer.textColor),
+      accentColor: safeVisualColor(footer.accentColor),
+      density: option(DENSITIES, footer.density, 'normal'),
+      style: option(FOOTER_STYLES, footer.style, 'default'),
+      showWhatsapp: footer.showWhatsapp !== false,
+    },
+  };
+}
+
 export function sanitizeGlobalStudioConfig(raw = {}) {
   const popupSeen = new Set(); const campaignSeen = new Set();
   const popups = (Array.isArray(raw.popups) ? raw.popups : []).slice(0, GLOBAL_STUDIO_LIMITS.maxPopups)
     .map(sanitizeGlobalPopup).filter(item => !popupSeen.has(item.id) && popupSeen.add(item.id));
   const campaigns = (Array.isArray(raw.campaigns) ? raw.campaigns : []).slice(0, GLOBAL_STUDIO_LIMITS.maxCampaigns)
     .map(sanitizeGlobalCampaign).filter(item => !campaignSeen.has(item.id) && campaignSeen.add(item.id));
-  return { popups, campaigns };
+  return { popups, campaigns, layout: sanitizeGlobalLayout(raw.layout) };
 }
 
 export function isGlobalStudioActiveWindow(item, now = Date.now()) {
