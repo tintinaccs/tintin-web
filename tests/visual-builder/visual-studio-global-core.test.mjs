@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { safeVisualHref } from '../../cloudflare/visual-builder-core.js';
 import {
   GLOBAL_PAGE_IDS,
   GLOBAL_STUDIO_LIMITS,
@@ -33,6 +34,13 @@ test('enlaces opcionales no inventan destinos', () => {
   assert.equal(sanitizeGlobalPopup({ href: '' }).href, '');
   assert.equal(sanitizeGlobalCampaign({ href: 'catalogo.html' }).href, 'catalogo.html');
   assert.equal(sanitizeGlobalPopup({ href: 'https://tintinaccs.com' }).href, 'https://tintinaccs.com');
+});
+
+test('safeVisualHref conserva compatibilidad fuera del centro global', () => {
+  assert.equal(safeVisualHref(''), 'catalogo.html');
+  assert.equal(safeVisualHref('javascript:alert(1)'), 'catalogo.html');
+  assert.equal(safeVisualHref('', ''), '');
+  assert.equal(safeVisualHref('about.html', ''), 'about.html');
 });
 
 test('segmentación global reconoce páginas comerciales además de páginas de contenido', () => {
