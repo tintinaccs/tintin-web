@@ -1,9 +1,12 @@
-import { CONTENT_PAGE_IDS } from '../js/core/store/esquema-contenido.js';
 import { safeVisualColor, safeVisualHref, safeVisualImage } from './visual-builder-core.js';
 
-export const GLOBAL_STUDIO_LIMITS = Object.freeze({ bodyBytes: 192_000, maxPopups: 12, maxCampaigns: 12, maxHistory: 80 });
+export const GLOBAL_STUDIO_LIMITS = Object.freeze({ bodyBytes: 192_000, maxPopups: 12, maxCampaigns: 12, maxHistory: 80, maxTargets: 32 });
+export const GLOBAL_PAGE_IDS = Object.freeze([
+  'index', 'nosotros', 'catalogo', 'collections', 'product', 'checkout', 'login', 'perfil',
+  'contact', 'envios', 'faq', 'cambios', 'terminos', 'privacidad', '404',
+]);
 const DEVICES = ['desktop', 'tablet', 'mobile'];
-const PAGE_IDS = new Set(CONTENT_PAGE_IDS);
+const PAGE_IDS = new Set(GLOBAL_PAGE_IDS);
 const POPUP_KINDS = ['center', 'bottom-sheet', 'top-bar', 'bottom-bar', 'floating'];
 const TRIGGERS = ['immediate', 'delay', 'scroll', 'exit'];
 const FREQUENCIES = ['always', 'session', 'daily', 'once'];
@@ -30,6 +33,12 @@ function safeDevices(raw) {
   if (!Array.isArray(raw)) return [...DEVICES];
   const set = new Set(raw.filter(device => DEVICES.includes(device))); return set.size ? DEVICES.filter(device => set.has(device)) : [...DEVICES];
 }
+function safeTargetList(raw) {
+  const seen = new Set();
+  return (Array.isArray(raw) ? raw : []).slice(0, GLOBAL_STUDIO_LIMITS.maxTargets)
+    .map(value => text(value, 120).toLowerCase())
+    .filter(value => value && /^[a-z0-9áéíóúüñ _.-]+$/i.test(value) && !seen.has(value) && seen.add(value));
+}
 
 export function sanitizeGlobalPopup(raw = {}, index = 0) {
   const trigger = option(TRIGGERS, raw.trigger, 'immediate');
@@ -37,6 +46,7 @@ export function sanitizeGlobalPopup(raw = {}, index = 0) {
     id: id(raw.id, `popup-${index + 1}`),
     name: text(raw.name || `Pop-up ${index + 1}`, 100),
     enabled: boolean(raw.enabled),
+    priority: Math.round(clamp(raw.priority, 0, 100, 50)),
     kind: option(POPUP_KINDS, raw.kind, 'center'),
     title: text(raw.title, 180),
     text: text(raw.text, 1200),
@@ -49,6 +59,8 @@ export function sanitizeGlobalPopup(raw = {}, index = 0) {
     frequency: option(FREQUENCIES, raw.frequency, 'session'),
     pages: safePages(raw.pages),
     devices: safeDevices(raw.devices),
+    productIds: safeTargetList(raw.productIds),
+    categories: safeTargetList(raw.categories),
     startAt: safeDate(raw.startAt),
     endAt: safeDate(raw.endAt),
     background: safeVisualColor(raw.background),
@@ -63,12 +75,14 @@ export function sanitizeGlobalCampaign(raw = {}, index = 0) {
     id: id(raw.id, `campaign-${index + 1}`),
     name: text(raw.name || `Campaña ${index + 1}`, 100),
     enabled: boolean(raw.enabled),
+    priority: Math.round(clamp(raw.priority, 0, 100, 50)),
     startAt: safeDate(raw.startAt),
     endAt: safeDate(raw.endAt),
     effect: option(EFFECTS, raw.effect, 'none'),
     intensity: option(INTENSITIES, raw.intensity, 'medium'),
     announcement: text(raw.announcement, 220),
     href: safeVisualHref(raw.href),
+    closable: raw.closable !== false,
     background: safeVisualColor(raw.background),
     textColor: safeVisualColor(raw.textColor),
     accentColor: safeVisualColor(raw.accentColor),
@@ -88,7 +102,18 @@ export function isGlobalStudioActiveWindow(item, now = Date.now()) {
   if (!item?.enabled) return false;
   const start = item.startAt ? new Date(item.startAt).getTime() : -Infinity;
   const end = item.endAt ? new Date(item.endAt).getTime() : Infinity;
-  return Number.isFinite(start) || start === -Infinity ? (now >= start && now <= end) : false;
+  if ((!Number.isFinite(start) && start !== -Infinity) || (!Number.isFinite(end) && end !== Infinity)) return false;
+  return now >= start && now <= end;
+}
+
+export function pickHighestPriority(items = [], now = Date.now()) {
+  return items.filter(item => isGlobalStudioActiveWindow(item, now)).sort((a, b) => {
+    const priority = Number(b.priority || 0) - Number(a.priority || 0);
+    if (priority) return priority;
+    const startA = a.startAt ? new Date(a.startAt).getTime() : 0;
+    const startB = b.startAt ? new Date(b.startAt).getTime() : 0;
+    return startB - startA;
+  })[0] || null;
 }
 
 export function isRestorableGlobalHistory(entry) {
