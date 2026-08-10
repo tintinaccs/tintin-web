@@ -69,7 +69,10 @@ export async function requireFirebaseUser(request) {
     body: JSON.stringify({ idToken: token })
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error('La sesión venció; volvé a iniciar sesión');
+  if (!response.ok) {
+    console.error(JSON.stringify({ message: 'identitytoolkit lookup falló', reason: data?.error?.message || 'sin detalle', status: response.status }));
+    throw new Error('La sesión venció; volvé a iniciar sesión');
+  }
   const user = Array.isArray(data.users) ? data.users[0] : null;
   const email = String(user?.email || '').trim().toLowerCase();
   if (!user?.localId || !email || user.emailVerified !== true) {
@@ -94,6 +97,7 @@ export async function requireSuperAdmin(request) {
 
   if (!response.ok) {
     const reason = data?.error?.message || 'INVALID_ID_TOKEN';
+    console.error(JSON.stringify({ message: 'identitytoolkit lookup falló (Super Admin)', reason, status: response.status }));
     if (/INVALID_ID_TOKEN|TOKEN_EXPIRED|USER_NOT_FOUND/i.test(reason)) {
       throw new Error('La sesión venció; volvé a iniciar sesión');
     }
