@@ -69,3 +69,53 @@ test('preview rechaza mensajes enviados con otro pageId', async ({ page }) => {
   await page.evaluate(() => window.postMessage({ type: 'tintin:visual-preview', pageId: 'checkout', config: { customBlocks: [{ id: 'bad', type: 'section' }] } }, location.origin));
   await expect(page.locator('[data-tt-visual-block="bad"]')).toHaveCount(0);
 });
+
+test('los bloques nuevos (testimonio, video, FAQ, columnas, separador) se renderizan y el ancla "arriba de todo" funciona', async ({ page }) => {
+  await page.goto(`${baseUrl}/index.html`);
+  await page.evaluate(() => {
+    document.body.replaceChildren();
+    const frame = document.createElement('iframe');
+    frame.id = 'real-preview';
+    frame.src = '/index.html?ttVisualPreview=1';
+    document.body.appendChild(frame);
+  });
+  const frame = page.frameLocator('#real-preview');
+  await expect(frame.locator('.tt-hero-title')).toBeVisible({ timeout: 30000 });
+  await page.locator('#real-preview').evaluate(node => new Promise(resolve => {
+    if (node.contentDocument?.readyState === 'complete') resolve();
+    else node.addEventListener('load', resolve, { once: true });
+  }));
+  await expect(frame.locator('html')).toHaveAttribute('data-tt-visual-builder', /ready|fallback/, { timeout: 30000 });
+  await page.evaluate(() => {
+    const frame = document.getElementById('real-preview');
+    frame.contentWindow.postMessage({
+      type: 'tintin:visual-preview', pageId: 'index',
+      config: {
+        sections: {},
+        customBlocks: [
+          { id: 'top-block', type: 'text', afterSection: '__top__', title: 'Arriba de todo', text: '', style: {} },
+          { id: 'testimonial-1', type: 'testimonial', afterSection: 'hero', title: 'Ana', eyebrow: 'Clienta feliz', text: 'Me encantó', style: {} },
+          { id: 'video-safe', type: 'video', afterSection: 'hero', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', style: {} },
+          { id: 'video-unsafe', type: 'video', afterSection: 'hero', videoUrl: 'https://evil.test/embed', style: {} },
+          { id: 'faq-1', type: 'faq', afterSection: 'hero', items: [{ q: '¿Envían a todo el país?', a: 'Sí' }], style: {} },
+          { id: 'columns-1', type: 'columns', afterSection: 'hero', title: 'Columna', text: 'Texto lateral', imageSide: 'right', style: {} },
+          { id: 'divider-1', type: 'divider', afterSection: 'hero', style: {} },
+        ],
+      },
+      content: {},
+    }, location.origin);
+  });
+  await expect(frame.locator('[data-tt-visual-block="top-block"]')).toBeVisible();
+  await expect(frame.locator('[data-tt-visual-block="testimonial-1"] .tt-visual-testimonial-quote')).toContainText('Me encantó');
+  await expect(frame.locator('[data-tt-visual-block="video-safe"] iframe')).toHaveAttribute('src', 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+  await expect(frame.locator('[data-tt-visual-block="video-unsafe"] iframe')).toHaveCount(0);
+  await expect(frame.locator('[data-tt-visual-block="faq-1"] summary')).toContainText('¿Envían a todo el país?');
+  await expect(frame.locator('[data-tt-visual-block="columns-1"] .tt-visual-columns-right')).toHaveCount(1);
+  await expect(frame.locator('[data-tt-visual-block="divider-1"] hr.tt-visual-divider-rule')).toHaveCount(1);
+  // El bloque anclado a "arriba de todo" debe quedar antes de la primera sección real de la página.
+  const order = await frame.locator('body > *').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-tt-visual-block') || node.id));
+  const topIndex = order.indexOf('top-block');
+  const heroIndex = order.indexOf('hero');
+  expect(topIndex).toBeGreaterThanOrEqual(0);
+  expect(heroIndex).toBeGreaterThan(topIndex);
+});

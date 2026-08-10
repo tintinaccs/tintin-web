@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  isRestorableVisualHistory, requireVisualPageId, safeVisualHref, safeVisualImage,
-  sanitizeVisualConfig, sanitizeVisualContent, sanitizeVisualDraft, VISUAL_BUILDER_LIMITS,
+  isRestorableVisualHistory, requireVisualPageId, safeVisualHref, safeVisualImage, safeVisualVideoUrl,
+  sanitizeVisualConfig, sanitizeVisualContent, sanitizeVisualDraft, VISUAL_BUILDER_LIMITS, VISUAL_TOP_ANCHOR,
 } from '../../cloudflare/visual-builder-core.js';
 
 test('solo admite páginas registradas', () => {
@@ -14,7 +14,7 @@ test('solo admite páginas registradas', () => {
 test('sanea estilos y nunca conserva CSS arbitrario', () => {
   const clean = sanitizeVisualConfig('index', { sections: { hero: {
     background: 'url(https://evil.test)', textColor: '#AABBCC', accentColor: '#fff;display:none',
-    spacing: '999px', width: 'expression(alert(1))', align: 'right', animation: 'spin',
+    spacing: '999px', width: 'expression(alert(1))', align: 'justify', animation: 'spin',
   } } });
   assert.equal(clean.sections.hero.background, '');
   assert.equal(clean.sections.hero.textColor, '#aabbcc');
@@ -53,6 +53,29 @@ test('contenido queda limitado al esquema existente', () => {
   assert.equal(clean.hero.unknown, undefined);
   assert.equal(clean.checkout, undefined);
   assert.equal(clean.hero.primaryHref, 'catalogo.html');
+});
+
+test('los embeds de video solo admiten YouTube, Vimeo o Cloudinary', () => {
+  assert.equal(safeVisualVideoUrl('https://www.youtube.com/embed/dQw4w9WgXcQ'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+  assert.equal(safeVisualVideoUrl('https://player.vimeo.com/video/76979871'), 'https://player.vimeo.com/video/76979871');
+  assert.equal(safeVisualVideoUrl('https://res.cloudinary.com/demo/video/upload/dog.mp4'), 'https://res.cloudinary.com/demo/video/upload/dog.mp4');
+  assert.equal(safeVisualVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'), '');
+  assert.equal(safeVisualVideoUrl('https://evil.test/embed'), '');
+  assert.equal(safeVisualVideoUrl('javascript:alert(1)'), '');
+  assert.equal(safeVisualVideoUrl('data:text/html,<script>alert(1)</script>'), '');
+});
+
+test('un bloque nuevo admite tipos ampliados y el ancla especial de "arriba de todo"', () => {
+  const clean = sanitizeVisualConfig('index', { customBlocks: [
+    { id: 'faq-1', type: 'faq', afterSection: VISUAL_TOP_ANCHOR, items: [{ q: 'A', a: 'B' }, { q: '', a: 'sin pregunta' }] },
+    { id: 'video-1', type: 'video', afterSection: 'not-a-real-section', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+    { id: 'columns-1', type: 'columns', imageSide: 'weird-value' },
+  ] });
+  assert.equal(clean.customBlocks[0].afterSection, VISUAL_TOP_ANCHOR);
+  assert.deepEqual(clean.customBlocks[0].items, [{ q: 'A', a: 'B' }]);
+  assert.equal(clean.customBlocks[1].afterSection, 'hero');
+  assert.equal(clean.customBlocks[1].videoUrl, 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+  assert.equal(clean.customBlocks[2].imageSide, 'left');
 });
 
 test('draft no puede cambiar de página ni restaurar auditoría no publicada', () => {

@@ -1,3 +1,3 @@
-import { autoInitVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260809-visual-builder-1';
+import { autoInitVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260810-visual-blocks-2';
 
 autoInitVisualBuilderRuntime();
