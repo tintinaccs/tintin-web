@@ -39,12 +39,11 @@ on:
 permissions:
   contents: write
 
-# Este workflow y el de catálogo pueden consolidar archivos generados sobre la
-# misma PR. Compartir el grupo evita pushes simultáneos y falsos rojos por
-# non-fast-forward. El reintento del paso de consolidación cubre además pushes
-# externos que ocurran entre fetch y push.
+# Evita solapar dos ejecuciones de Seguridad sobre la misma PR. Las carreras
+# con otros workflows se resuelven en el paso de consolidación mediante
+# fetch/reset/rebuild/retry, sin cancelar checks distintos entre sí.
 concurrency:
-  group: tintin-generated-files-${{ github.event.pull_request.number || github.ref }}
+  group: tintin-security-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
