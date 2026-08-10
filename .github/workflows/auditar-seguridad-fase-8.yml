@@ -39,6 +39,14 @@ on:
 permissions:
   contents: write
 
+# Este workflow y el de catálogo pueden consolidar archivos generados sobre la
+# misma PR. Compartir el grupo evita pushes simultáneos y falsos rojos por
+# non-fast-forward. El reintento del paso de consolidación cubre además pushes
+# externos que ocurran entre fetch y push.
+concurrency:
+  group: tintin-generated-files-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   audit:
     name: Auditar reglas, endpoint y encabezados
@@ -53,7 +61,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
 
       - name: Configurar Java para emuladores Firebase
@@ -98,16 +106,41 @@ jobs:
 
       - name: Consolidar Fase 11 y manifiesto en PR interna
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
         run: |
-          if git diff --quiet; then
-            echo 'La rama ya está consolidada.'
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "seo: consolidar publicación y monitoreo de la Fase 11"
-          git push origin HEAD:${GITHUB_HEAD_REF}
+          branch="${GITHUB_HEAD_REF}"
+
+          for attempt in 1 2 3; do
+            echo "Intento de consolidación ${attempt}/3 sobre ${branch}"
+            git fetch origin "${branch}"
+            git reset --hard "origin/${branch}"
+
+            shopt -s nullglob
+            for applicator in scripts/apply-phase7-phase11-*.mjs; do
+              node "$applicator"
+            done
+            npm run build:pages
+
+            if git diff --quiet; then
+              echo 'La consolidación ya fue incorporada por otra ejecución.'
+              exit 0
+            fi
+
+            git add -A
+            git commit -m "seo: consolidar publicación y monitoreo de la Fase 11"
+            if git push origin HEAD:"${branch}"; then
+              echo 'Consolidación publicada correctamente.'
+              exit 0
+            fi
+
+            echo 'La rama avanzó durante el push; se recalculará sobre el nuevo head.'
+            sleep $((attempt * 2))
+          done
+
+          echo 'No se pudo consolidar después de 3 intentos por cambios concurrentes.' >&2
+          exit 1
 
       - name: Verificar manifiesto reproducible
         run: git diff --exit-code -- diagnostic-manifest.json
