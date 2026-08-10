@@ -7,9 +7,11 @@ on:
   workflow_dispatch:
 
 # Esta auditoría instala navegadores y consume el runner durante varios minutos.
-# Solo la ejecución más reciente aporta valor; una nueva reemplaza a la anterior.
+# Solo la ejecución más reciente POR RAMA/PR aporta valor; se cancela la anterior
+# de esa misma rama. El group va atado a la rama (no un string fijo) para que
+# un push en otra rama/PR no cancele esta ejecución.
 concurrency:
-  group: responsive-global
+  group: responsive-global-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
