@@ -7723,6 +7723,18 @@ document.addEventListener('change', e => {
 ttSyncSwitchAria();
 setInterval(ttSyncSwitchAria, 1200);
 
+// ---- Tabs de nivel superior de Apariencia (contenido vs. colores) ----
+// Solo alternan qué panel se ve — ninguno de los dos pierde su estado al
+// cambiar de pestaña, así que no hace falta confirmar nada acá.
+document.querySelectorAll('#apar-main-tabs .correos-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#apar-main-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('#section-apariencia > .correos-panel').forEach(p => {
+      p.classList.toggle('active', p.id === `apar-panel-${btn.dataset.aparMainTab}`);
+    });
+  });
+});
+
 // ══════════════════════════════════════════════════════════════
 // APARIENCIA Y ESQUEMAS DE COLOR (Super Admin, exclusivo — mismo
 // criterio de acceso que Configuración/Correos, ver SECTION_PERMISSION)

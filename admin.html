@@ -16,28 +16,28 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260810-visual-builder-fullwidth-1">
+  <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260810-apariencia-tabs-1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/admin/ai-builder.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260810-visual-builder-fullwidth-1">
-  <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260810-visual-builder-fullwidth-1">
+  <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/admin/ai-builder.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260810-apariencia-tabs-1">
+  <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260810-apariencia-tabs-1">
   <style>
     /* Oculto por defecto hasta que el guard de autenticación confirme que
        hay algo seguro para mostrar. No depende solo del timing del loader
@@ -1638,6 +1638,17 @@
 
     <!-- ===================== APARIENCIA Y ESQUEMAS DE COLOR ===================== -->
     <div class="adm-section" id="section-apariencia">
+      <div class="apar-intro">
+        <h2 class="apar-intro-title">Apariencia</h2>
+        <p class="apar-intro-text">Elegí qué querés cambiar: el <strong>contenido</strong> de las páginas (banners, textos, productos) o los <strong>colores</strong> de toda la tienda. Cada uno se guarda y se publica por separado.</p>
+      </div>
+      <div class="correos-tabs apar-main-tabs" id="apar-main-tabs">
+        <button type="button" class="correos-tab-btn active" data-apar-main-tab="diseno">🧩 Contenido de las páginas</button>
+        <button type="button" class="correos-tab-btn" data-apar-main-tab="colores">🎨 Colores de la tienda</button>
+      </div>
+
+      <div class="correos-panel active" id="apar-panel-diseno">
+      <p class="apar-panel-help">Agregá, editá u ordená banners, textos, productos destacados y otros bloques de cada página. Elegí la página en <strong>“Página completa”</strong> y tocá un bloque de la lista para editarlo.</p>
       <section class="visual-editor" id="visual-editor" aria-labelledby="visual-editor-title">
         <header class="visual-editor-topbar">
           <div>
@@ -1690,10 +1701,13 @@
           <div id="visual-history-list"></div>
         </details>
       </section>
+      </div>
 
+      <div class="correos-panel" id="apar-panel-colores">
+      <p class="apar-panel-help">Cambiá los colores de fondo, texto, botones y hover de toda la tienda (o solo del panel de Super Admin). Los cambios no se ven en el sitio hasta que tocás <strong>“Publicar cambios”</strong>.</p>
       <div class="adm-card" style="margin-bottom:20px">
         <div class="adm-card-head">
-          <div class="adm-card-title">🎨 Apariencia y esquemas de colores</div>
+          <div class="adm-card-title">🎨 Esquemas de colores</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap" id="apar-toolbar"></div>
         </div>
         <div class="adm-card-body">
@@ -1732,6 +1746,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -1931,7 +1946,7 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260722-order-delete-2-sheets-realtime-1"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260810-apariencia-tabs-1"></script>
 <script type="module" src="js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
 
