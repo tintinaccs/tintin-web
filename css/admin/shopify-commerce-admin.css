@@ -1,0 +1,622 @@
+/* ========================================================================
+   TINTIN — Productos, Colecciones y Pedidos
+   Experiencia inspirada en los patrones operativos de Shopify, adaptada al
+   lenguaje visual, colores y contratos reales del panel Tintin.
+   Alcance deliberado: SOLO #section-productos, #section-colecciones y
+   #section-pedidos. No modifica Apariencia ni el resto del administrador.
+   ======================================================================== */
+
+:root {
+  --tt-commerce-brand: var(--admin-color-brand, #AD3F67);
+  --tt-commerce-brand-hover: var(--admin-color-brand-hover, #8B2642);
+  --tt-commerce-page: var(--admin-color-background-page, #FFF6FA);
+  --tt-commerce-surface: var(--admin-color-background-surface, #FFFFFF);
+  --tt-commerce-border: var(--admin-color-border, #F1E4E7);
+  --tt-commerce-text: var(--admin-color-text-primary, #2B2B2B);
+  --tt-commerce-muted: var(--admin-color-text-secondary, #7B6F72);
+  --tt-commerce-soft: var(--admin-color-background-sidebar-active, #FDECF2);
+  --tt-commerce-hover: var(--admin-color-table-row-hover, #FFF9FC);
+  --tt-commerce-success-bg: var(--admin-color-success-background, #e0f5e6);
+  --tt-commerce-success: var(--admin-color-success-text, #166534);
+  --tt-commerce-warning-bg: var(--admin-color-warning-background, #fff3e0);
+  --tt-commerce-warning: var(--admin-color-warning-text, #bf360c);
+  --tt-commerce-error-bg: var(--admin-color-error-background, #fde3e1);
+  --tt-commerce-error: var(--admin-color-error-text, #b8341f);
+  --tt-commerce-shadow: 0 1px 2px rgba(35, 20, 27, .05), 0 8px 28px rgba(74, 30, 48, .045);
+}
+
+/* Oculta solamente los listados legacy. Los formularios y modales existentes
+   siguen siendo la fuente de verdad para crear/editar y mantienen toda su
+   validación, auditoría, permisos e integridad de inventario. */
+#section-productos.tt-commerce-mounted #prod-list-card,
+#section-colecciones.tt-commerce-mounted #coll-list-card {
+  display: none !important;
+}
+
+.tt-commerce-shell {
+  color: var(--tt-commerce-text);
+  min-width: 0;
+}
+
+.tt-commerce-shell[hidden] { display: none !important; }
+
+.tt-commerce-pagehead {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin: 0 0 16px;
+}
+
+.tt-commerce-titlegroup { min-width: 0; }
+.tt-commerce-title {
+  margin: 0;
+  color: var(--admin-color-text-title, var(--tt-commerce-text));
+  font-size: clamp(23px, 2.2vw, 31px);
+  line-height: 1.12;
+  font-weight: 780;
+  letter-spacing: -.035em;
+}
+.tt-commerce-subtitle {
+  margin-top: 5px;
+  color: var(--tt-commerce-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.tt-commerce-count {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 8px;
+  margin-left: 7px;
+  border-radius: 999px;
+  background: var(--tt-commerce-soft);
+  color: var(--tt-commerce-brand);
+  font-size: 11px;
+  font-weight: 750;
+  vertical-align: middle;
+}
+
+.tt-commerce-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.tt-commerce-btn {
+  appearance: none;
+  min-height: 36px;
+  border: 1px solid var(--tt-commerce-border);
+  border-radius: 9px;
+  padding: 7px 12px;
+  background: var(--tt-commerce-surface);
+  color: var(--tt-commerce-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 680;
+  line-height: 1.15;
+  cursor: pointer;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease, transform .12s ease;
+}
+.tt-commerce-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--tt-commerce-brand) 35%, var(--tt-commerce-border));
+  background: var(--tt-commerce-hover);
+}
+.tt-commerce-btn:active:not(:disabled) { transform: translateY(1px); }
+.tt-commerce-btn:focus-visible,
+.tt-commerce-input:focus-visible,
+.tt-commerce-select:focus-visible,
+.tt-commerce-tab:focus-visible,
+.tt-commerce-iconbtn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--tt-commerce-brand) 22%, transparent);
+  outline-offset: 1px;
+}
+.tt-commerce-btn.primary {
+  background: var(--admin-color-button-primary-background, var(--tt-commerce-brand));
+  border-color: var(--admin-color-button-primary-background, var(--tt-commerce-brand));
+  color: var(--admin-color-button-primary-text, #fff);
+}
+.tt-commerce-btn.primary:hover:not(:disabled) {
+  background: var(--admin-color-button-primary-hover, var(--tt-commerce-brand-hover));
+  border-color: var(--admin-color-button-primary-hover, var(--tt-commerce-brand-hover));
+}
+.tt-commerce-btn.danger { color: var(--tt-commerce-error); }
+.tt-commerce-btn:disabled { opacity: .52; cursor: not-allowed; }
+
+.tt-commerce-card {
+  overflow: hidden;
+  border: 1px solid var(--tt-commerce-border);
+  border-radius: 14px;
+  background: var(--tt-commerce-surface);
+  box-shadow: var(--tt-commerce-shadow);
+}
+
+.tt-commerce-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  min-height: 48px;
+  padding: 0 12px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--tt-commerce-border);
+  scrollbar-width: thin;
+}
+.tt-commerce-tab {
+  appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 47px;
+  padding: 0 11px;
+  border: 0;
+  background: transparent;
+  color: var(--tt-commerce-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.tt-commerce-tab:hover { color: var(--tt-commerce-text); }
+.tt-commerce-tab.active { color: var(--tt-commerce-text); font-weight: 760; }
+.tt-commerce-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--tt-commerce-brand);
+}
+.tt-commerce-tab .n {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--tt-commerce-muted);
+}
+
+.tt-commerce-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(130px, auto));
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--tt-commerce-border);
+  background: color-mix(in srgb, var(--tt-commerce-surface) 94%, var(--tt-commerce-soft));
+}
+.tt-commerce-search { position: relative; min-width: 0; }
+.tt-commerce-search::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  border: 1.8px solid var(--tt-commerce-muted);
+  border-radius: 50%;
+  opacity: .72;
+  pointer-events: none;
+}
+.tt-commerce-search::after {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: calc(50% + 5px);
+  width: 6px;
+  height: 1.8px;
+  transform: rotate(45deg);
+  transform-origin: left center;
+  background: var(--tt-commerce-muted);
+  opacity: .72;
+  pointer-events: none;
+}
+.tt-commerce-input,
+.tt-commerce-select {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--admin-color-field-border, var(--tt-commerce-border));
+  border-radius: 9px;
+  background: var(--admin-color-field-background, #fff);
+  color: var(--tt-commerce-text);
+  font: inherit;
+  font-size: 12px;
+}
+.tt-commerce-input { padding: 7px 10px; }
+.tt-commerce-search .tt-commerce-input { padding-left: 35px; }
+.tt-commerce-select { padding: 6px 30px 6px 10px; cursor: pointer; }
+.tt-commerce-input::placeholder { color: color-mix(in srgb, var(--tt-commerce-muted) 72%, transparent); }
+
+.tt-commerce-bulkbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--tt-commerce-border);
+  background: var(--tt-commerce-soft);
+}
+.tt-commerce-bulkbar[hidden] { display: none !important; }
+.tt-commerce-bulkcount {
+  margin-right: auto;
+  color: var(--tt-commerce-brand);
+  font-size: 12px;
+  font-weight: 780;
+}
+
+.tt-commerce-tablewrap { overflow: auto; }
+.tt-commerce-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+}
+.tt-commerce-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--tt-commerce-border);
+  background: var(--admin-color-table-header-background, var(--tt-commerce-soft));
+  color: var(--tt-commerce-muted);
+  text-align: left;
+  white-space: nowrap;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 780;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.tt-commerce-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--tt-commerce-border);
+  color: var(--tt-commerce-text);
+  font-size: 12px;
+  vertical-align: middle;
+}
+.tt-commerce-table tbody tr:last-child td { border-bottom: 0; }
+.tt-commerce-table tbody tr { transition: background .12s ease; }
+.tt-commerce-table tbody tr:hover { background: var(--tt-commerce-hover); }
+.tt-commerce-table tbody tr[data-open] { cursor: pointer; }
+.tt-commerce-table tbody tr.is-selected { background: var(--tt-commerce-soft); }
+.tt-commerce-table .checkcol { width: 42px; text-align: center; }
+.tt-commerce-table input[type='checkbox'] { accent-color: var(--tt-commerce-brand); }
+
+.tt-commerce-productcell,
+.tt-commerce-collectioncell,
+.tt-commerce-customercell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.tt-commerce-thumb {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid var(--tt-commerce-border);
+  border-radius: 8px;
+  background: var(--tt-commerce-soft);
+  display: grid;
+  place-items: center;
+  color: var(--tt-commerce-muted);
+  font-size: 9px;
+}
+.tt-commerce-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tt-commerce-maintext {
+  overflow: hidden;
+  color: var(--tt-commerce-text);
+  font-size: 12px;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tt-commerce-subtext {
+  overflow: hidden;
+  margin-top: 2px;
+  color: var(--tt-commerce-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tt-commerce-money { font-variant-numeric: tabular-nums; font-weight: 720; white-space: nowrap; }
+.tt-commerce-stock { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tt-commerce-stock.low { color: var(--tt-commerce-warning); font-weight: 700; }
+.tt-commerce-stock.out { color: var(--tt-commerce-error); font-weight: 700; }
+.tt-commerce-stock.ok { color: var(--tt-commerce-success); }
+
+.tt-commerce-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--admin-color-badge-background, var(--tt-commerce-soft));
+  color: var(--admin-color-badge-text, var(--tt-commerce-brand));
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 740;
+  white-space: nowrap;
+}
+.tt-commerce-badge.success { background: var(--tt-commerce-success-bg); color: var(--tt-commerce-success); }
+.tt-commerce-badge.warning { background: var(--tt-commerce-warning-bg); color: var(--tt-commerce-warning); }
+.tt-commerce-badge.error { background: var(--tt-commerce-error-bg); color: var(--tt-commerce-error); }
+.tt-commerce-badge.neutral { background: #f2f2f2; color: #5d5d5d; }
+
+.tt-commerce-iconbtn {
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tt-commerce-muted);
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tt-commerce-iconbtn:hover { background: var(--tt-commerce-soft); color: var(--tt-commerce-text); }
+
+.tt-commerce-empty,
+.tt-commerce-loading {
+  padding: 42px 24px;
+  text-align: center;
+  color: var(--tt-commerce-muted);
+  font-size: 12px;
+}
+.tt-commerce-loading::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid var(--tt-commerce-border);
+  border-top-color: var(--tt-commerce-brand);
+  border-radius: 50%;
+  vertical-align: -3px;
+  animation: tt-commerce-spin .75s linear infinite;
+}
+@keyframes tt-commerce-spin { to { transform: rotate(360deg); } }
+
+.tt-commerce-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--tt-commerce-border);
+  color: var(--tt-commerce-muted);
+  font-size: 10px;
+}
+
+/* Menú contextual */
+.tt-commerce-menu {
+  position: fixed;
+  z-index: 10040;
+  min-width: 205px;
+  max-width: min(280px, calc(100vw - 24px));
+  padding: 6px;
+  border: 1px solid var(--tt-commerce-border);
+  border-radius: 11px;
+  background: var(--tt-commerce-surface);
+  box-shadow: 0 16px 45px rgba(45, 20, 31, .16);
+}
+.tt-commerce-menu[hidden] { display: none !important; }
+.tt-commerce-menu button {
+  appearance: none;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--tt-commerce-text);
+  text-align: left;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tt-commerce-menu button:hover { background: var(--tt-commerce-soft); }
+.tt-commerce-menu button.danger { color: var(--tt-commerce-error); }
+.tt-commerce-menu hr { border: 0; border-top: 1px solid var(--tt-commerce-border); margin: 5px 3px; }
+
+/* Drawer lateral al estilo de la ficha rápida de Shopify. */
+.tt-commerce-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  background: rgba(36, 22, 28, .18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+.tt-commerce-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+.tt-commerce-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10030;
+  width: min(440px, 94vw);
+  transform: translateX(102%);
+  border-left: 1px solid var(--tt-commerce-border);
+  background: var(--tt-commerce-surface);
+  box-shadow: -18px 0 50px rgba(38, 18, 27, .12);
+  transition: transform .22s cubic-bezier(.2,.7,.2,1);
+  display: flex;
+  flex-direction: column;
+}
+.tt-commerce-drawer.open { transform: translateX(0); }
+.tt-commerce-drawer-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--tt-commerce-border);
+}
+.tt-commerce-drawer-heading { min-width: 0; flex: 1; }
+.tt-commerce-drawer-title {
+  overflow: hidden;
+  margin: 0;
+  color: var(--tt-commerce-text);
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 780;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tt-commerce-drawer-kicker { margin-top: 3px; color: var(--tt-commerce-muted); font-size: 10px; }
+.tt-commerce-drawer-body { flex: 1; overflow: auto; padding: 15px 18px 22px; }
+.tt-commerce-drawer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--tt-commerce-border);
+  background: color-mix(in srgb, var(--tt-commerce-surface) 96%, var(--tt-commerce-soft));
+}
+.tt-commerce-drawer-section {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--tt-commerce-border);
+}
+.tt-commerce-drawer-section:last-child { border-bottom: 0; }
+.tt-commerce-drawer-section h4 {
+  margin: 0 0 9px;
+  color: var(--tt-commerce-text);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+.tt-commerce-kv {
+  display: grid;
+  grid-template-columns: minmax(105px, .75fr) minmax(0, 1.25fr);
+  gap: 7px 12px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.tt-commerce-kv dt { color: var(--tt-commerce-muted); }
+.tt-commerce-kv dd { margin: 0; color: var(--tt-commerce-text); font-weight: 600; overflow-wrap: anywhere; }
+.tt-commerce-lineitem {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 7px 0;
+}
+.tt-commerce-lineitem + .tt-commerce-lineitem { border-top: 1px dashed var(--tt-commerce-border); }
+.tt-commerce-lineitem .tt-commerce-thumb { width: 36px; height: 36px; }
+.tt-commerce-lineitem-price { white-space: nowrap; font-size: 10px; font-weight: 720; }
+
+/* Adaptación visual de los formularios existentes. Mantiene exactamente los
+   mismos IDs/campos/eventos: solo cambia presentación y jerarquía. */
+#section-productos.tt-commerce-mounted #prod-form-card,
+#section-colecciones.tt-commerce-mounted #coll-form-card,
+#section-colecciones.tt-commerce-mounted #coll-products-card,
+#section-colecciones.tt-commerce-mounted #coll-picker-card {
+  border: 1px solid var(--tt-commerce-border) !important;
+  border-radius: 14px !important;
+  background: var(--tt-commerce-surface) !important;
+  box-shadow: var(--tt-commerce-shadow) !important;
+}
+#section-productos.tt-commerce-mounted #prod-form-card .adm-card-head,
+#section-colecciones.tt-commerce-mounted #coll-form-card .adm-card-head,
+#section-colecciones.tt-commerce-mounted #coll-products-card .adm-card-head,
+#section-colecciones.tt-commerce-mounted #coll-picker-card .adm-card-head {
+  min-height: 58px;
+  padding: 13px 16px !important;
+  border-bottom: 1px solid var(--tt-commerce-border) !important;
+  background: var(--tt-commerce-surface) !important;
+}
+#section-productos.tt-commerce-mounted #prod-form-card .adm-card-title,
+#section-colecciones.tt-commerce-mounted #coll-form-card .adm-card-title,
+#section-colecciones.tt-commerce-mounted #coll-products-card .adm-card-title,
+#section-colecciones.tt-commerce-mounted #coll-picker-card .adm-card-title {
+  font-size: 17px !important;
+  letter-spacing: -.02em;
+}
+#section-productos.tt-commerce-mounted #prod-form-card .adm-card-body,
+#section-colecciones.tt-commerce-mounted #coll-form-card .adm-card-body {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: 20px !important;
+}
+#section-productos.tt-commerce-mounted #prod-form-card .adm-input,
+#section-productos.tt-commerce-mounted #prod-form-card .adm-select,
+#section-colecciones.tt-commerce-mounted #coll-form-card .adm-input,
+#section-colecciones.tt-commerce-mounted #coll-form-card .adm-select {
+  border-radius: 9px !important;
+  border-color: var(--tt-commerce-border) !important;
+}
+#section-productos.tt-commerce-mounted #prod-form-card label,
+#section-colecciones.tt-commerce-mounted #coll-form-card label {
+  color: var(--tt-commerce-text);
+}
+
+.tt-commerce-form-context {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--tt-commerce-muted);
+  font-size: 11px;
+}
+.tt-commerce-form-context button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--tt-commerce-brand);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Pedidos legacy permanece debajo como respaldo operacional, pero se oculta la
+   tabla/listado para que no haya dos superficies distintas para lo mismo. El
+   modal/editor de pedidos no se toca. */
+#section-pedidos.tt-commerce-mounted > .adm-card:not(.tt-commerce-keep),
+#section-pedidos.tt-commerce-mounted > .adm-table-wrap {
+  display: none !important;
+}
+/* Si la estructura de pedidos no es un único card directo, el JS marca el
+   contenedor legacy exacto con esta clase antes de ocultarlo. */
+.tt-commerce-legacy-hidden { display: none !important; }
+
+@media (max-width: 980px) {
+  .tt-commerce-toolbar { grid-template-columns: minmax(190px, 1fr) repeat(2, minmax(120px, auto)); }
+  .tt-commerce-toolbar > :nth-child(4) { grid-column: auto; }
+}
+
+@media (max-width: 720px) {
+  .tt-commerce-pagehead { flex-direction: column; align-items: stretch; }
+  .tt-commerce-actions { justify-content: flex-start; }
+  .tt-commerce-toolbar { grid-template-columns: 1fr 1fr; }
+  .tt-commerce-search { grid-column: 1 / -1; }
+  .tt-commerce-table { min-width: 680px; }
+  .tt-commerce-title { font-size: 24px; }
+  .tt-commerce-drawer { width: min(100vw, 440px); }
+}
+
+@media (max-width: 480px) {
+  .tt-commerce-toolbar { grid-template-columns: 1fr; }
+  .tt-commerce-search { grid-column: auto; }
+  .tt-commerce-actions .tt-commerce-btn { flex: 1 1 auto; }
+  .tt-commerce-bulkbar { flex-wrap: wrap; }
+  .tt-commerce-bulkcount { flex-basis: 100%; }
+  .tt-commerce-drawer-head,
+  .tt-commerce-drawer-body,
+  .tt-commerce-drawer-actions { padding-left: 14px; padding-right: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-commerce-btn,
+  .tt-commerce-table tbody tr,
+  .tt-commerce-drawer,
+  .tt-commerce-drawer-backdrop { transition: none !important; }
+  .tt-commerce-loading::before { animation-duration: 1.5s; }
+}
