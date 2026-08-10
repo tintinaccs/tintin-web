@@ -10,6 +10,7 @@
 import { db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1';
+import '../appearance/visual-studio-global-admin.js?v=tintin-20260810-global-studio-1';
 
 const CACHE_KEY = 'tt_color_scheme_admin';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };
