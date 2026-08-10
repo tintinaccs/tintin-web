@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T10:53:40.874Z",
-  "sourceFingerprint": "e546c06c47311eb295166b66aaa623ab98572a97573368a03716ab37651a49ad",
+  "generatedAt": "2026-08-10T12:07:40.773Z",
+  "sourceFingerprint": "3ad8fc6b5fd1b5d8fa4caba3787493fc0799516391543f044aca06ab55ce1015",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 572,
     "textFiles": 540,
-    "totalBytes": 5995206,
+    "totalBytes": 5995888,
     "pages": 18,
     "modules": 345
   },
@@ -21899,8 +21899,8 @@
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
-      "bytes": 9352,
-      "sha256": "f4efd4ac17099f104c0574c7492dff2baa762a033ade1242db40b2953f087f94",
+      "bytes": 9330,
+      "sha256": "75944d068f995d9ea3dd24b7a808eef080175de718612f1aed818e8be9714221",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21909,19 +21909,19 @@
       "endpoints": [
         {
           "url": "https://script.google.com/",
-          "line": 89
+          "line": 88
         },
         {
           "url": "https://*.google.com/",
-          "line": 89
+          "line": 88
         },
         {
           "url": "https://script.googleusercontent.com/",
-          "line": 90
+          "line": 89
         },
         {
           "url": "https://*.googleusercontent.com/",
-          "line": 90
+          "line": 89
         }
       ]
     },
@@ -23389,8 +23389,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 4282,
-      "sha256": "686407160e7e034aa82e0fab4761aab50acaf31691b2c559c746fae61e5849fe",
+      "bytes": 4986,
+      "sha256": "ccaa22cefad0d53b556a67cca15bbec5db057a4e7f18dd73e29d0cfd748f14b7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23399,47 +23399,47 @@
       "endpoints": [
         {
           "url": "https://*.gstatic.com/",
-          "line": 12
+          "line": 22
         },
         {
           "url": "https://*.google.com/",
-          "line": 12
+          "line": 22
         },
         {
           "url": "https://unpkg.com/",
-          "line": 12
+          "line": 22
         },
         {
           "url": "https://www.googletagmanager.com/",
-          "line": 12
+          "line": 22
         },
         {
           "url": "https://*.googleapis.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://*.googleusercontent.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://res.cloudinary.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://api.imgbb.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://*.google-analytics.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://*.analytics.google.com/",
-          "line": 13
+          "line": 23
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 46
+          "line": 56
         }
       ]
     },
@@ -27359,8 +27359,8 @@
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
       "extension": ".js",
-      "bytes": 9352,
-      "sha256": "f4efd4ac17099f104c0574c7492dff2baa762a033ade1242db40b2953f087f94"
+      "bytes": 9330,
+      "sha256": "75944d068f995d9ea3dd24b7a808eef080175de718612f1aed818e8be9714221"
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
@@ -27725,8 +27725,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 4282,
-      "sha256": "686407160e7e034aa82e0fab4761aab50acaf31691b2c559c746fae61e5849fe"
+      "bytes": 4986,
+      "sha256": "ccaa22cefad0d53b556a67cca15bbec5db057a4e7f18dd73e29d0cfd748f14b7"
     },
     {
       "path": "scripts/preparar-hosting.js",

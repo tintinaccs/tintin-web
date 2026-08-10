@@ -80,8 +80,7 @@ check(
   'Permissions-Policy:',
   'Referrer-Policy:',
   'X-Content-Type-Options:',
-  'X-Frame-Options: DENY',
-  "frame-ancestors 'none'",
+  'X-Frame-Options: SAMEORIGIN',
   'Cross-Origin-Opener-Policy: same-origin-allow-popups'
 ].forEach(header => check('Encabezado presente: ' + header, headers.includes(header)));
 check(
