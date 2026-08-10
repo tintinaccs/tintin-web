@@ -1,0 +1,62 @@
+html[data-tt-global-layout="ready"] #tt-header-desktop-tablet,
+html[data-tt-global-layout="ready"] #tt-header-tablet,
+html[data-tt-global-layout="ready"] #tt-tablet-menu,
+html[data-tt-global-layout="ready"] #tt-tabbar{
+  --tt-global-layout-accent:var(--tt-global-header-accent,#ad3f67);
+  background:var(--tt-global-header-bg,#fff)!important;
+  color:var(--tt-global-header-text,#30282c)!important;
+}
+html[data-tt-global-layout="ready"] #tt-header-desktop-tablet a,
+html[data-tt-global-layout="ready"] #tt-header-desktop-tablet button,
+html[data-tt-global-layout="ready"] #tt-header-tablet a,
+html[data-tt-global-layout="ready"] #tt-header-tablet button,
+html[data-tt-global-layout="ready"] #tt-tablet-menu a,
+html[data-tt-global-layout="ready"] #tt-tablet-menu button,
+html[data-tt-global-layout="ready"] #tt-tabbar a,
+html[data-tt-global-layout="ready"] #tt-tabbar button{color:inherit}
+html[data-tt-global-layout="ready"] .tt-desktop-active-pill,
+html[data-tt-global-layout="ready"] .tt-mobile-nav-indicator{background:var(--tt-global-header-accent,#ad3f67)!important}
+
+html[data-tt-header-density="compact"] .tt-header-inner,
+html[data-tt-header-density="compact"] .tt-tablet-header-inner{min-height:58px!important}
+html[data-tt-header-density="roomy"] .tt-header-inner,
+html[data-tt-header-density="roomy"] .tt-tablet-header-inner{min-height:86px!important}
+html[data-tt-header-density="compact"] #tt-tabbar{min-height:58px!important}
+html[data-tt-header-density="roomy"] #tt-tabbar{min-height:76px!important}
+
+html[data-tt-header-logo-size="small"] .tt-logo-img,
+html[data-tt-header-logo-size="small"] .tt-tablet-logo-img,
+html[data-tt-header-logo-size="small"] .tt-tablet-menu-logo-img{max-height:34px!important}
+html[data-tt-header-logo-size="medium"] .tt-logo-img,
+html[data-tt-header-logo-size="medium"] .tt-tablet-logo-img,
+html[data-tt-header-logo-size="medium"] .tt-tablet-menu-logo-img{max-height:46px!important}
+html[data-tt-header-logo-size="large"] .tt-logo-img,
+html[data-tt-header-logo-size="large"] .tt-tablet-logo-img,
+html[data-tt-header-logo-size="large"] .tt-tablet-menu-logo-img{max-height:58px!important}
+
+html[data-tt-header-nav-style="minimal"] .tt-nav-desktop [data-desktop-nav-item],
+html[data-tt-header-nav-style="minimal"] .tt-tablet-nav>a,
+html[data-tt-header-nav-style="minimal"] .tt-tablet-tienda-btn{border-color:transparent!important;background:transparent!important;box-shadow:none!important}
+html[data-tt-header-nav-style="pills"] .tt-nav-desktop [data-desktop-nav-item],
+html[data-tt-header-nav-style="pills"] .tt-tablet-nav>a,
+html[data-tt-header-nav-style="pills"] .tt-tablet-tienda-btn{border-radius:999px!important}
+
+html[data-tt-global-layout="ready"] .tt-footer{
+  background:var(--tt-global-footer-bg,inherit)!important;
+  color:var(--tt-global-footer-text,inherit)!important;
+}
+html[data-tt-global-layout="ready"] .tt-footer a,
+html[data-tt-global-layout="ready"] .tt-footer-col-title,
+html[data-tt-global-layout="ready"] .tt-footer-tagline{color:inherit!important}
+html[data-tt-global-layout="ready"] .tt-footer-wa{background:var(--tt-global-footer-accent,#ad3f67)!important}
+html[data-tt-footer-density="compact"] .tt-footer{padding-top:28px!important}
+html[data-tt-footer-density="compact"] .tt-footer-grid{gap:20px!important}
+html[data-tt-footer-density="roomy"] .tt-footer{padding-top:72px!important;padding-bottom:30px!important}
+html[data-tt-footer-density="roomy"] .tt-footer-grid{gap:52px!important}
+html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:1px solid color-mix(in srgb,var(--tt-global-footer-text,currentColor) 15%,transparent)!important}
+html[data-tt-footer-style="boxed"] .tt-footer .container{max-width:min(1180px,calc(100% - 32px));border-radius:22px;padding:28px;background:color-mix(in srgb,var(--tt-global-footer-bg,#fff) 92%,var(--tt-global-footer-accent,#ad3f67) 8%)}
+
+@media(max-width:767px){
+  html[data-tt-header-logo-size="large"] .tt-tablet-menu-logo-img{max-height:48px!important}
+  html[data-tt-footer-style="boxed"] .tt-footer .container{padding:20px;border-radius:18px}
+}
