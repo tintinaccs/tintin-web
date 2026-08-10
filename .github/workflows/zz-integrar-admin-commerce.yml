@@ -1,0 +1,70 @@
+name: Integrar admin commerce
+
+on:
+  push:
+    branches:
+      - feat/shopify-productos-colecciones-pedidos
+
+permissions:
+  contents: write
+
+jobs:
+  integrar-y-validar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: feat/shopify-productos-colecciones-pedidos
+          fetch-depth: 0
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Integrar módulo en admin.html
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('admin.html')
+          text = path.read_text(encoding='utf-8')
+          script = '<script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260810-shopify-core-1"></script>'
+
+          if script not in text:
+              pattern = r'(<script type="module" src="js/admin/admin-app\.js\?v=[^"]+"></script>)'
+              updated, count = re.subn(pattern, r'\1\n' + script, text, count=1)
+              if count != 1:
+                  raise SystemExit('No se encontró exactamente una carga de js/admin/admin-app.js en admin.html')
+              path.write_text(updated, encoding='utf-8')
+          PY
+
+      - name: Aprobar baseline de caché de los assets nuevos
+        run: npm run cache-versioning:write
+
+      - name: Validar sintaxis e integración
+        run: |
+          node --check js/admin/shopify-commerce-admin.js
+          node scripts/auditar-admin-commerce-shopify.js
+          npm run audit:products-media
+          npm run audit:admin-orders
+          npm run audit:collections
+          npm run audit:cache-versioning
+
+      - name: Retirar workflow temporal y guardar integración
+        shell: bash
+        run: |
+          rm -f .github/workflows/zz-integrar-admin-commerce.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html scripts/cache-version-baseline.json .github/workflows/zz-integrar-admin-commerce.yml
+          if git diff --cached --quiet; then
+            echo "No hay cambios adicionales que guardar."
+            exit 0
+          fi
+          git commit -m "feat(admin): integrar experiencia Shopify de comercio"
+          git push origin HEAD:feat/shopify-productos-colecciones-pedidos
