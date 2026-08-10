@@ -15,6 +15,16 @@ const safeJson = (value, fallback) => { try { return JSON.parse(value); } catch 
 const eventId = () => `global-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 10)}`;
 const sameConfig = (a, b) => JSON.stringify(sanitizeGlobalStudioConfig(a)) === JSON.stringify(sanitizeGlobalStudioConfig(b));
 
+function mergeCampaignArea(base, incoming) {
+  const cleanBase = sanitizeGlobalStudioConfig(base);
+  const cleanIncoming = sanitizeGlobalStudioConfig(incoming);
+  return sanitizeGlobalStudioConfig({
+    ...cleanBase,
+    campaigns: cleanIncoming.campaigns,
+    popups: cleanIncoming.popups,
+  });
+}
+
 function decodeState(doc) {
   const data = decodeFirestoreFields(doc?.fields || {});
   return {
@@ -58,6 +68,9 @@ async function loadAll(env) {
 function conflict(origin, requestUrl) {
   return jsonResponse({ ok:false, code:'version_conflict', error:'La configuración global cambió en otra sesión. Recargá antes de publicar.' }, 409, origin, requestUrl);
 }
+function draftFields(version, config, user) {
+  return { basedOnVersion:fsInteger(version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) };
+}
 
 export async function onRequest(context) {
   const { request, env } = context; const origin=request.headers.get('origin') || ''; const requestUrl=request.url;
@@ -68,16 +81,22 @@ export async function onRequest(context) {
     if (request.method === 'GET') return jsonResponse({ok:true,...(await loadAll(env))},200,origin,requestUrl);
     if (request.method !== 'POST') return jsonResponse({ok:false,error:'Método no permitido.'},405,origin,requestUrl);
     const body=await parseBody(request); const action=String(body.action || 'save');
+
+    // El Centro de campañas administra únicamente campañas + pop-ups. Si hay
+    // un borrador paralelo de Diseño global, se conserva y nunca se publica,
+    // descarta ni sobreescribe accidentalmente desde esta superficie.
     if (action === 'save') {
-      const config=sanitizeGlobalStudioConfig(body.config); const stateDoc=await firestoreAdminGet(env,STATE_PATH); const current=decodeState(stateDoc);
-      await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc); const base=draft?.config || current.config;
+      const config=mergeCampaignArea(base,body.config);
+      await firestoreAdminReplace(env,DRAFT_PATH,draftFields(current.version,config,user));
       return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config}},200,origin,requestUrl);
     }
     if (action === 'save-layout') {
       const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
       const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc); const base=draft?.config || current.config;
       const config=sanitizeGlobalStudioConfig({...base,layout:body.layout});
-      await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
+      await firestoreAdminReplace(env,DRAFT_PATH,draftFields(current.version,config,user));
       return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config},layout:config.layout},200,origin,requestUrl);
     }
     if (action === 'discard-layout') {
@@ -89,11 +108,20 @@ export async function onRequest(context) {
         await firestoreAdminDelete(env,DRAFT_PATH);
         return jsonResponse({ok:true,draft:null,layout:current.config.layout},200,origin,requestUrl);
       }
-      await firestoreAdminReplace(env,DRAFT_PATH,{ basedOnVersion:fsInteger(current.version), configJson:jsonField(config), updatedAt:fsTimestamp(new Date()), updatedBy:fsString(user.email) });
+      await firestoreAdminReplace(env,DRAFT_PATH,draftFields(current.version,config,user));
       return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config},layout:current.config.layout},200,origin,requestUrl);
     }
     if (action === 'cancel') {
-      await firestoreAdminDelete(env,DRAFT_PATH); return jsonResponse({ok:true,...(await loadAll(env))},200,origin,requestUrl);
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc);
+      if (!draft) return jsonResponse({ok:true,draft:null},200,origin,requestUrl);
+      const config=mergeCampaignArea(draft.config,current.config);
+      if (sameConfig(config,current.config)) {
+        await firestoreAdminDelete(env,DRAFT_PATH);
+        return jsonResponse({ok:true,draft:null},200,origin,requestUrl);
+      }
+      await firestoreAdminReplace(env,DRAFT_PATH,draftFields(current.version,config,user));
+      return jsonResponse({ok:true,draft:{basedOnVersion:current.version,config}},200,origin,requestUrl);
     }
     if (action === 'publish-layout') {
       const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
@@ -105,23 +133,33 @@ export async function onRequest(context) {
         { path:STATE_PATH,currentDocument:current.precondition,fields:{version:fsInteger(version),configJson:jsonField(config),updatedAt:fsTimestamp(new Date()),updatedBy:fsString(user.email)} },
         { path:`${HISTORY_COLLECTION}/${id}`,currentDocument:{exists:false},fields:historyFields(id,user,'publish',version,snapshot,'Diseño global publicado') },
       ];
+      let draftPreserved=false;
       if (draft) {
         const rebased=sanitizeGlobalStudioConfig({...draft.config,layout:config.layout});
-        writes.push({path:DRAFT_PATH,fields:{basedOnVersion:fsInteger(version),configJson:jsonField(rebased),updatedAt:fsTimestamp(new Date()),updatedBy:fsString(user.email)}});
+        if (sameConfig(rebased,config)) writes.push({path:DRAFT_PATH,delete:true});
+        else { writes.push({path:DRAFT_PATH,fields:draftFields(version,rebased,user)}); draftPreserved=true; }
       }
       await firestoreAdminCommit(env,writes);
-      return jsonResponse({ok:true,version,config,layout:config.layout,draftPreserved:Boolean(draft)},200,origin,requestUrl);
+      return jsonResponse({ok:true,version,config,layout:config.layout,draftPreserved},200,origin,requestUrl);
     }
     if (action === 'publish') {
-      const config=sanitizeGlobalStudioConfig(body.config); const stateDoc=await firestoreAdminGet(env,STATE_PATH); const current=decodeState(stateDoc);
+      const [stateDoc,draftDoc]=await Promise.all([firestoreAdminGet(env,STATE_PATH),firestoreAdminGet(env,DRAFT_PATH)]);
+      const current=decodeState(stateDoc); const draft=decodeDraft(draftDoc);
       if (Number(body.expectedVersion) !== current.version) return conflict(origin,requestUrl);
+      const config=mergeCampaignArea(current.config,body.config);
       const version=current.version+1; const id=eventId(); const snapshot={config};
-      await firestoreAdminCommit(env,[
+      const writes=[
         { path:STATE_PATH,currentDocument:current.precondition,fields:{version:fsInteger(version),configJson:jsonField(config),updatedAt:fsTimestamp(new Date()),updatedBy:fsString(user.email)} },
-        { path:`${HISTORY_COLLECTION}/${id}`,currentDocument:{exists:false},fields:historyFields(id,user,'publish',version,snapshot,'Publicado') },
-        { path:DRAFT_PATH,delete:true },
-      ]);
-      return jsonResponse({ok:true,version,config},200,origin,requestUrl);
+        { path:`${HISTORY_COLLECTION}/${id}`,currentDocument:{exists:false},fields:historyFields(id,user,'publish',version,snapshot,'Campañas y pop-ups publicados') },
+      ];
+      let draftPreserved=false;
+      if (draft) {
+        const rebased=mergeCampaignArea(draft.config,config);
+        if (sameConfig(rebased,config)) writes.push({path:DRAFT_PATH,delete:true});
+        else { writes.push({path:DRAFT_PATH,fields:draftFields(version,rebased,user)}); draftPreserved=true; }
+      }
+      await firestoreAdminCommit(env,writes);
+      return jsonResponse({ok:true,version,config,draftPreserved},200,origin,requestUrl);
     }
     if (action === 'restore') {
       const id=String(body.historyId || '').trim(); if (!/^global-[a-z0-9-]{12,80}$/i.test(id)) throw new Error('La versión no existe.');
