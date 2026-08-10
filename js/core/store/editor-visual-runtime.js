@@ -60,10 +60,27 @@ function cleanStyle(raw = {}) {
   };
 }
 
+function reorderableSectionIds(schema) {
+  return Object.entries(schema.sections || {}).filter(([, sectionSchema]) => !sectionSchema.global).map(([id]) => id);
+}
+
+// Mismo criterio que sanitizeSectionOrder en cloudflare/visual-builder-core.js:
+// nunca confía ciegamente en el orden recibido — descarta ids inválidos/duplicados
+// y completa cualquier sección real que falte, para que nunca desaparezca nada.
+function sanitizeSectionOrderClient(raw, schema) {
+  const reorderable = reorderableSectionIds(schema);
+  const seen = new Set();
+  const order = (Array.isArray(raw) ? raw : [])
+    .filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
+  reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
+  return order;
+}
+
 function sanitizeRuntimeConfig(pageId, raw = {}) {
   const schema = getPageSchema(pageId);
-  if (!schema) return { sections: {}, customBlocks: [] };
+  if (!schema) return { sections: {}, sectionOrder: [], customBlocks: [] };
   const sections = Object.fromEntries(Object.keys(schema.sections).map(id => [id, cleanStyle(raw?.sections?.[id])]));
+  const sectionOrder = sanitizeSectionOrderClient(raw?.sectionOrder, schema);
   const sectionIds = new Set(Object.keys(schema.sections));
   const seen = new Set();
   const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : []).slice(0, 24).map((item, index) => {
@@ -80,7 +97,51 @@ function sanitizeRuntimeConfig(pageId, raw = {}) {
       items: (Array.isArray(item?.items) ? item.items : []).slice(0, 8).map(pair => ({ q: plain(pair?.q || '', 180), a: plain(pair?.a || '', 1200) })).filter(pair => pair.q && pair.a),
     };
   }).filter(block => block.id && !seen.has(block.id) && seen.add(block.id));
-  return { sections, customBlocks };
+  return { sections, sectionOrder, customBlocks };
+}
+
+// Mueve los nodos raíz de cada sección para que queden en el orden pedido,
+// SIN tocar nada que no sea una sección reordenable (header, nav, footer,
+// etc. quedan exactamente donde están). Si las secciones no comparten un
+// único padre directo en el DOM real de la página, no se toca nada — mejor
+// no reordenar que romper el layout de una página con una estructura distinta
+// a la esperada.
+function reorderSections(schema, order) {
+  if (!Array.isArray(order) || order.length < 2) return;
+  const groups = new Map();
+  order.forEach(id => {
+    const sectionSchema = schema.sections[id];
+    if (!sectionSchema) return;
+    const roots = findRoots(sectionSchema);
+    if (roots.length) groups.set(id, roots);
+  });
+  if (groups.size < 2) return;
+  // Algunas secciones son un sub-encabezado ANIDADO dentro de otra sección
+  // (ej.: el título de "Colecciones" vive adentro de .tt-collections-section),
+  // no una sección de nivel superior — su padre real es distinto al de hero/
+  // trust/reseñas/etc. Solo se reordenan entre sí las que de verdad son
+  // hermanas en el DOM (mismo padre); una sección sin hermanas reordenables
+  // simplemente se queda donde está, sin tocarla.
+  const byParent = new Map();
+  groups.forEach((roots, id) => {
+    const parent = roots[0].parentNode;
+    if (!byParent.has(parent)) byParent.set(parent, []);
+    byParent.get(parent).push(id);
+  });
+  byParent.forEach((ids, parent) => {
+    if (ids.length < 2) return;
+    const localOrder = order.filter(id => ids.includes(id));
+    const allNodes = ids.flatMap(id => groups.get(id));
+    if (!allNodes.every(node => node.parentNode === parent)) return;
+    const siblings = [...parent.children];
+    let anchor = null;
+    for (const child of siblings) { if (allNodes.includes(child)) { anchor = child.previousElementSibling; break; } }
+    allNodes.forEach(node => node.remove());
+    let cursor = anchor;
+    localOrder.forEach(id => {
+      groups.get(id).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
+    });
+  });
 }
 
 function findRoots(sectionSchema) {
@@ -306,9 +367,11 @@ export function applyVisualBuilderConfig(pageId, rawConfig) {
   Object.entries(schema.sections).forEach(([sectionId, sectionSchema]) => {
     findRoots(sectionSchema).forEach(root => applyStyle(root, config.sections[sectionId]));
   });
+  reorderSections(schema, config.sectionOrder);
   document.querySelectorAll('[data-tt-visual-block]').forEach(node => node.remove());
   const insertionTails = new Map();
-  const firstSectionSchema = Object.values(schema.sections)[0];
+  const firstSectionId = config.sectionOrder[0] || Object.keys(schema.sections)[0];
+  const firstSectionSchema = schema.sections[firstSectionId];
   const firstRoot = firstSectionSchema ? findRoots(firstSectionSchema)[0] : null;
   config.customBlocks.forEach(block => {
     const node = buildBlock(block);

@@ -35,13 +35,34 @@ function setStatus(message, kind = '') {
   node.className = `visual-editor-status${kind ? ` is-${kind}` : ''}`;
 }
 
+// El pie de página (y cualquier otra sección "global", compartida por todo
+// el sitio) siempre queda al final — reordenarla rompería la consistencia
+// entre páginas, así que ni siquiera se ofrece como opción.
+function reorderableSectionIds() {
+  return Object.entries(getPageSchema(pageId)?.sections || {}).filter(([, schema]) => !schema.global).map(([id]) => id);
+}
+function pinnedSectionIds() {
+  return Object.entries(getPageSchema(pageId)?.sections || {}).filter(([, schema]) => schema.global).map(([id]) => id);
+}
+
 function defaultConfig(id) {
-  return { pageId: id, sections: Object.fromEntries(Object.keys(getPageSchema(id)?.sections || {}).map(sectionId => [sectionId, defaultStyle()])), customBlocks: [] };
+  return {
+    pageId: id,
+    sections: Object.fromEntries(Object.keys(getPageSchema(id)?.sections || {}).map(sectionId => [sectionId, defaultStyle()])),
+    sectionOrder: reorderableSectionIds(),
+    customBlocks: [],
+  };
 }
 
 function normalizedConfig(raw) {
   const base = defaultConfig(pageId);
   Object.keys(base.sections).forEach(id => { base.sections[id] = { ...defaultStyle(), ...(raw?.sections?.[id] || {}) }; });
+  const reorderable = reorderableSectionIds();
+  const seen = new Set();
+  const order = (Array.isArray(raw?.sectionOrder) ? raw.sectionOrder : [])
+    .filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
+  reorderable.forEach(id => { if (!seen.has(id)) order.push(id); });
+  base.sectionOrder = order;
   base.customBlocks = Array.isArray(raw?.customBlocks) ? raw.customBlocks : [];
   return base;
 }
@@ -97,19 +118,43 @@ function renderBlockTypeOptions() {
   }
 }
 
+// Arma la lista en el MISMO orden visual en que el runtime público arma la
+// página: primero los bloques anclados "arriba de todo", después cada
+// sección de config.sectionOrder seguida de sus bloques propios, y al final
+// las secciones fijas (el pie de página). Así la lista de la izquierda
+// siempre coincide con lo que se ve en la vista previa de la derecha.
+function visualOrderList() {
+  const list = [];
+  const blocks = config?.customBlocks || [];
+  blocks.filter(block => block.afterSection === TOP_ANCHOR).forEach(block => list.push({ kind: 'block', id: block.id }));
+  (config?.sectionOrder || []).forEach(sectionId => {
+    list.push({ kind: 'section', id: sectionId });
+    blocks.filter(block => block.afterSection === sectionId).forEach(block => list.push({ kind: 'block', id: block.id }));
+  });
+  pinnedSectionIds().forEach(id => list.push({ kind: 'section', id, pinned: true }));
+  return list;
+}
+
 function renderSectionList() {
   const root = $('visual-section-list'); root.replaceChildren();
-  Object.entries(getPageSchema(pageId)?.sections || {}).forEach(([id, schema]) => {
+  visualOrderList().forEach(entry => {
     const row = make('div', 'visual-section-item');
-    const button = make('button', `visual-section-select${selected?.kind === 'section' && selected.id === id ? ' active' : ''}`, schema.label);
-    button.type = 'button'; button.dataset.kind = 'section'; button.dataset.id = id;
-    const badge = make('span', 'visual-section-badge', 'existente'); button.appendChild(badge); row.appendChild(button); root.appendChild(row);
-  });
-  (config?.customBlocks || []).forEach((block, index) => {
-    const row = make('div', 'visual-section-item');
-    const button = make('button', `visual-section-select${selected?.kind === 'block' && selected.id === block.id ? ' active' : ''}`, block.title || `Bloque ${index + 1}`);
-    button.type = 'button'; button.dataset.kind = 'block'; button.dataset.id = block.id;
-    button.appendChild(make('span', 'visual-section-badge', BLOCK_TYPE_LABELS[block.type] || block.type)); row.appendChild(button); root.appendChild(row);
+    if (entry.kind === 'section') {
+      const schema = getPageSchema(pageId).sections[entry.id];
+      const button = make('button', `visual-section-select${selected?.kind === 'section' && selected.id === entry.id ? ' active' : ''}`, schema.label);
+      button.type = 'button'; button.dataset.kind = 'section'; button.dataset.id = entry.id;
+      button.appendChild(make('span', 'visual-section-badge', entry.pinned ? 'fija' : 'existente'));
+      row.appendChild(button);
+    } else {
+      const block = (config?.customBlocks || []).find(item => item.id === entry.id);
+      if (!block) return;
+      const index = config.customBlocks.indexOf(block);
+      const button = make('button', `visual-section-select${selected?.kind === 'block' && selected.id === block.id ? ' active' : ''}`, block.title || `Bloque ${index + 1}`);
+      button.type = 'button'; button.dataset.kind = 'block'; button.dataset.id = block.id;
+      button.appendChild(make('span', 'visual-section-badge', BLOCK_TYPE_LABELS[block.type] || block.type));
+      row.appendChild(button);
+    }
+    root.appendChild(row);
   });
 }
 
@@ -181,6 +226,21 @@ function renderExistingProperties(root, sectionId) {
     grid.appendChild(field(item.label, control, true));
   });
   appendStyleFields(grid, config.sections[sectionId]); root.appendChild(grid);
+  if (schema.global) {
+    root.appendChild(make('p', 'visual-property-help', 'Esta sección es compartida por todas las páginas (pie de página) y siempre queda al final — no se puede reordenar.'));
+  } else {
+    const zone = make('div', 'visual-danger-zone');
+    const order = config.sectionOrder;
+    const index = order.indexOf(sectionId);
+    const last = order.length - 1;
+    [['⇑ Al principio', 0], ['↑ Subir', index - 1], ['↓ Bajar', index + 1], ['⇓ Al final', last]].forEach(([label, target]) => {
+      const button = make('button', 'adm-btn adm-btn-outline adm-btn-sm', label); button.type = 'button';
+      button.disabled = index < 0 || target < 0 || target > last || target === index;
+      button.addEventListener('click', () => mutate(() => { const [item] = order.splice(index, 1); order.splice(target, 0, item); }));
+      zone.appendChild(button);
+    });
+    root.appendChild(zone);
+  }
 }
 
 const TEXT_BLOCK_LABELS = {
@@ -190,9 +250,10 @@ const TEXT_BLOCK_LABELS = {
 
 function renderBlockProperties(root, block) {
   const grid = make('div', 'visual-property-grid');
+  const sections = getPageSchema(pageId).sections;
   const sectionOptions = [
     [TOP_ANCHOR, 'Arriba de todo (antes de la primera sección)'],
-    ...Object.entries(getPageSchema(pageId).sections).map(([id, schema]) => [id, `Debajo de ${schema.label}`]),
+    ...[...config.sectionOrder, ...pinnedSectionIds()].map(id => [id, `Debajo de ${sections[id].label}`]),
   ];
   grid.appendChild(field('Ubicación', selectControl(block.afterSection, sectionOptions, value => { block.afterSection = value; }), true));
   if (block.type !== 'divider') {

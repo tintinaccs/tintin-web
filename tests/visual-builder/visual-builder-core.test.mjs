@@ -78,6 +78,19 @@ test('un bloque nuevo admite tipos ampliados y el ancla especial de "arriba de t
   assert.equal(clean.customBlocks[2].imageSide, 'left');
 });
 
+test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pierde una sección, y el pie de página nunca se reordena', () => {
+  const clean = sanitizeVisualConfig('index', { sectionOrder: ['reviews', 'reviews', 'not-a-real-section', 'hero', 'footer'] });
+  // "reviews" duplicado se queda con la primera aparición; "not-a-real-section" y "footer" se descartan de la lista reordenable.
+  assert.deepEqual(clean.sectionOrder.slice(0, 2), ['reviews', 'hero']);
+  // Las secciones que faltaban en el pedido (trust, editorial_bag, etc.) se agregan al final, nunca desaparecen.
+  assert.equal(clean.sectionOrder.length, Object.keys(clean.sections).length - 1); // -1 porque "footer" es global y no entra acá
+  assert.ok(!clean.sectionOrder.includes('footer'));
+  assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
+
+  const empty = sanitizeVisualConfig('index', {});
+  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'editorial_bag', 'collections_header', 'editorial_relojes', 'products_header', 'reviews']);
+});
+
 test('draft no puede cambiar de página ni restaurar auditoría no publicada', () => {
   const draft = sanitizeVisualDraft('faq', { pageId: 'checkout' }, { questions: { visible: false } });
   assert.equal(draft.pageId, 'faq');

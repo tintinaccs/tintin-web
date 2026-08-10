@@ -134,6 +134,25 @@ function sanitizeBlock(raw, index, pageSchema) {
   return block;
 }
 
+function reorderableSectionIds(pageSchema) {
+  return Object.entries(pageSchema.sections || {}).filter(([, schema]) => !schema.global).map(([id]) => id);
+}
+
+// Nunca confía en el orden que manda el cliente a ciegas: descarta ids
+// inventados/duplicados y, si falta alguna sección real de la página, la
+// agrega al final — así una sección nunca puede "desaparecer" del sitio por
+// un sectionOrder incompleto o corrupto. Las secciones "global" (el pie de
+// página compartido por todo el sitio) nunca entran acá: siempre quedan
+// ancladas al final, reordenarlas rompería la consistencia entre páginas.
+function sanitizeSectionOrder(raw, pageSchema) {
+  const reorderable = reorderableSectionIds(pageSchema);
+  const seen = new Set();
+  const order = (Array.isArray(raw) ? raw : [])
+    .filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
+  reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
+  return order;
+}
+
 export function sanitizeVisualConfig(pageIdValue, raw = {}) {
   const pageId = requireVisualPageId(pageIdValue);
   const pageSchema = getPageSchema(pageId);
@@ -146,7 +165,7 @@ export function sanitizeVisualConfig(pageIdValue, raw = {}) {
     .slice(0, VISUAL_BUILDER_LIMITS.maxCustomBlocks)
     .map((block, index) => sanitizeBlock(block, index, pageSchema))
     .filter(block => !seen.has(block.id) && seen.add(block.id));
-  return { pageId, sections, customBlocks };
+  return { pageId, sections, sectionOrder: sanitizeSectionOrder(raw?.sectionOrder, pageSchema), customBlocks };
 }
 
 export function sanitizeVisualContent(pageIdValue, raw = {}) {
