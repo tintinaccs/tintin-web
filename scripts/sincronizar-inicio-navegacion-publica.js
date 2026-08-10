@@ -6,6 +6,8 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-2';
+const NAV_ENTRY_VERSION = 'tintin-20260810-global-studio-2';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
@@ -108,7 +110,7 @@ function ensureNavigationPreloads(html) {
   );
 
   const preloadTags = [
-    `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_SHELL_VERSION}">`,
+    `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
       href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
     ),
@@ -130,7 +132,7 @@ function ensureShellScript(html) {
     .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
-  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${VERSION}" defer></script>`);
+  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {

@@ -40,7 +40,7 @@ function option(group, value, fallback) { return OPTIONS[group].has(value) ? val
 function plain(value, max) { return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max); }
 function safeHref(value) {
   const href = String(value || '').trim();
-  if (/^(?:index|about|nosotros|catalogo|collections|contact|envios|preguntas-frecuentes|cambios-devoluciones)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;
+  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;
   if (/^https:\/\//i.test(href)) return href;
   return 'catalogo.html';
 }
