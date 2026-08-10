@@ -1,0 +1,68 @@
+name: Migración temporal de layout global
+
+on:
+  push:
+    branches:
+      - feat/apariencia-visual-studio-v2
+    paths:
+      - .github/workflows/migrar-layout-global-temporal.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/apariencia-visual-studio-v2
+          fetch-depth: 0
+
+      - name: Alinear navegación, Admin y baseline
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const root = process.cwd();
+          const oldBootstrap = 'js/inicio-navegacion-publica.js?v=tintin-20260810-global-studio-4';
+          const newBootstrap = 'js/inicio-navegacion-publica.js?v=tintin-20260810-global-studio-5';
+          const oldEntry = 'js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260810-global-studio-4';
+          const newEntry = 'js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260810-global-studio-5';
+
+          for (const name of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
+            const file = path.join(root, name);
+            let text = fs.readFileSync(file, 'utf8');
+            const before = text;
+            text = text.split(oldBootstrap).join(newBootstrap).split(oldEntry).join(newEntry);
+            if (text !== before) fs.writeFileSync(file, text, 'utf8');
+          }
+
+          const adminPath = path.join(root, 'admin.html');
+          let admin = fs.readFileSync(adminPath, 'utf8');
+          const layoutScript = '<script type="module" src="js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260810-global-layout-1"></script>';
+          if (!admin.includes(layoutScript)) {
+            const anchor = '<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260810-global-studio-4"></script>';
+            if (!admin.includes(anchor)) throw new Error('No se encontró el ancla del módulo de Apariencia en admin.html');
+            admin = admin.replace(anchor, `${layoutScript}\n${anchor}`);
+            fs.writeFileSync(adminPath, admin, 'utf8');
+          }
+          NODE
+
+          node scripts/auditar-versionado-cache.mjs --write
+          node --check js/components/navigation/compartido/apariencia-global.js
+          node --check js/admin/appearance/visual-studio-layout-admin.js
+          node --check functions/api/visual-studio-global.js
+          node --check cloudflare/visual-studio-global-core.js
+
+          rm .github/workflows/migrar-layout-global-temporal.yml
+
+          git config user.name "tintinaccs-ci"
+          git config user.email "tintinaccs@gmail.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "feat(apariencia): integrar header y footer globales con caché segura"
+            git push origin HEAD:feat/apariencia-visual-studio-v2
+          fi
